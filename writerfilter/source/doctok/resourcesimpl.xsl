@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:34 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:34 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,12 @@ rtl::OUString getDffOptName(sal_uInt32 nPid)
     <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='dffopt']">
       <xsl:text>
       case </xsl:text>
-      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='fopid']//UML:TaggedValue.dataValue"/>
+      <xsl:variable name="optname">
+        <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='optname']//UML:TaggedValue.dataValue"/>
+      </xsl:variable>
+      <xsl:call-template name="idtoqname">
+        <xsl:with-param name="id" select="$optname"/>
+      </xsl:call-template>
       <xsl:text>:
       result = rtl::OUString::createFromAscii("</xsl:text>
       <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='optname']//UML:TaggedValue.dataValue"/>
@@ -654,7 +659,13 @@ WW8Value::Pointer_t WW8FOPTE::get_value()
         </xsl:variable>
         <xsl:text>
         case </xsl:text>
-        <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='fopid']//UML:TaggedValue.dataValue"/>
+        <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='dffid']//UML:TaggedValue.dataValue"/>  
+<xsl:variable name="optname">
+          <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='optname']//UML:TaggedValue.dataValue"/>
+        </xsl:variable>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="$optname"/>
+        </xsl:call-template>
         <xsl:text>:
         {
         </xsl:text>
@@ -804,7 +815,12 @@ bool isBooleanDffOpt(sal_uInt32 nId)
     <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffopt"]'>
       <xsl:if test=".//UML:TagDefinition[@xmi.idref='isbool']">
         <xsl:text>    case </xsl:text>
-        <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='fopid']/UML:TaggedValue.dataValue"/>
+        <xsl:variable name="optname">
+          <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='optname']//UML:TaggedValue.dataValue"/>
+        </xsl:variable>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="$optname"/>
+        </xsl:call-template>
         <xsl:text>:&#xa;</xsl:text>
       </xsl:if>
     </xsl:for-each>

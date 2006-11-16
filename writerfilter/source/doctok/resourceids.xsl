@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 14:15:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 14:15:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,28 @@ namespace NS_rtf {
       </xsl:for-each>
       <xsl:text>
 }
+
+namespace NS_dff
+{
+      </xsl:text>
+      <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffopt"]'>
+        <xsl:variable name ="optname">
+          <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="optname"]/UML:TaggedValue.dataValue'/>
+        </xsl:variable>
+        <xsl:variable name="fopid">          
+          <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="fopid"]/UML:TaggedValue.dataValue'/>
+        </xsl:variable>
+        <xsl:text>const QName_t </xsl:text>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id"><xsl:value-of select="$optname"/></xsl:with-param>
+        </xsl:call-template>
+        <xsl:text> = </xsl:text>
+        <xsl:value-of select="$fopid"/>
+        <xsl:text>;&#xa;</xsl:text>
+      </xsl:for-each>
+      <xsl:text>
+}
+
 }
 #endif // INCLUDED_RESOURCESIDS&#xa;</xsl:text></out>
 </xsl:template>

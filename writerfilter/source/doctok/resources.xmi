@@ -19963,10 +19963,10 @@
         </UML:Generalization>
         <!--Class Fib-->
         <!--Class BKD-->
-<UML:Class xmi.id="BKD" name="BKD">
-<UML:ModelElement.stereotype>
-<UML:Stereotype xmi.idref="ww8resource"/>
-</UML:ModelElement.stereotype>
+        <UML:Class xmi.id="BKD" name="BKD">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8resource"/>
+          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>6</UML:TaggedValue.dataValue>
@@ -19975,302 +19975,302 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
-<UML:Classifier.feature>
-<UML:Attribute name="ibkl">
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>index to BKL entry in plcfbkl that describes the
-ending position of this bookmark in the CP stream.</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="comment"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="offset"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="shift"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue/>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="mask"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue/>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="bits"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>rtf:IBKL</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="attrid"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:StructuralFeature.type>
-<UML:DataType xmi.idref="S16"/>
-</UML:StructuralFeature.type>
-<UML:ModelElement.stereotype>
-<UML:Stereotype xmi.idref="attribute"/>
-</UML:ModelElement.stereotype>
-</UML:Attribute>
-</UML:Classifier.feature>
-<UML:Classifier.feature>
-<UML:Attribute name="itcFirst">
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>when bkf.fCol is 1, this is the index to the first column of a
-table column bookmark.</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="comment"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="offset"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="shift"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>007F</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="mask"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>:7</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="bits"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>rtf:ITCFIRST</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="attrid"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:StructuralFeature.type>
-<UML:DataType xmi.idref="U16"/>
-</UML:StructuralFeature.type>
-<UML:ModelElement.stereotype>
-<UML:Stereotype xmi.idref="attribute"/>
-</UML:ModelElement.stereotype>
-</UML:Attribute>
-</UML:Classifier.feature>
-<UML:Classifier.feature>
-<UML:Attribute name="fPub">
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>when 1, this indicates that this bookmark is marking the range
-of a Macintosh Publisher section.</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="comment"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="offset"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>7</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="shift"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>0080</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="mask"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>:1</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="bits"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>rtf:FPUB</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="attrid"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:StructuralFeature.type>
-<UML:DataType xmi.idref="U16"/>
-</UML:StructuralFeature.type>
-<UML:ModelElement.stereotype>
-<UML:Stereotype xmi.idref="attribute"/>
-</UML:ModelElement.stereotype>
-</UML:Attribute>
-</UML:Classifier.feature>
-<UML:Classifier.feature>
-<UML:Attribute name="itcLim">
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>when bkf.fCol is 1, this is the index to limit column of a
-table column bookmark.</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="comment"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="offset"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>8</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="shift"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>7F00</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="mask"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>:7</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="bits"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>rtf:ITCLIM</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="attrid"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:StructuralFeature.type>
-<UML:DataType xmi.idref="U16"/>
-</UML:StructuralFeature.type>
-<UML:ModelElement.stereotype>
-<UML:Stereotype xmi.idref="attribute"/>
-</UML:ModelElement.stereotype>
-</UML:Attribute>
-</UML:Classifier.feature>
-<UML:Classifier.feature>
-<UML:Attribute name="fCol">
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>when 1, this bookmark marks a range of columns in a table
-specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="comment"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="offset"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>15</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="shift"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>8000</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="mask"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>:1</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="bits"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:ModelElement.taggedValue>
-<UML:TaggedValue>
-<UML:TaggedValue.dataValue>rtf:FCOL</UML:TaggedValue.dataValue>
-<UML:TaggedValue.type>
-<UML:TagDefinition xmi.idref="attrid"/>
-</UML:TaggedValue.type>
-</UML:TaggedValue>
-</UML:ModelElement.taggedValue>
-<UML:StructuralFeature.type>
-<UML:DataType xmi.idref="U16"/>
-</UML:StructuralFeature.type>
-<UML:ModelElement.stereotype>
-<UML:Stereotype xmi.idref="attribute"/>
-</UML:ModelElement.stereotype>
-</UML:Attribute>
-</UML:Classifier.feature>
-</UML:Class>
+          <UML:Classifier.feature>
+            <UML:Attribute name="ibkl">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>index to BKL entry in plcfbkl that describes the
+                  ending position of this bookmark in the CP stream.</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:IBKL</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="S16"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Attribute name="itcFirst">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>when bkf.fCol is 1, this is the index to the first column of a
+                  table column bookmark.</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>007F</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>:7</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:ITCFIRST</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U16"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Attribute name="fPub">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>when 1, this indicates that this bookmark is marking the range
+                  of a Macintosh Publisher section.</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>7</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0080</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>:1</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:FPUB</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U16"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Attribute name="itcLim">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>when bkf.fCol is 1, this is the index to limit column of a
+                  table column bookmark.</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>8</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>7F00</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>:7</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:ITCLIM</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U16"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Attribute name="fCol">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>when 1, this bookmark marks a range of columns in a table
+                  specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>15</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>8000</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>:1</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:FCOL</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U16"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+        </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="BKD-Properties">
           <UML:Generalization.child>
             <UML:Class xmi.idref="BKD"/>
@@ -37594,7 +37594,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shprotation</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shprotation</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -37642,7 +37642,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockRotation</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockRotation</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -37697,7 +37697,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockAspectRatio</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockAspectRatio</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -37753,7 +37753,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockPosition</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockPosition</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -37809,7 +37809,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockAgainstSelect</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockAgainstSelect</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -37865,7 +37865,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockCropping</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockCropping</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -37921,7 +37921,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockVertices</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockVertices</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -37977,7 +37977,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38033,7 +38033,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockAdjustHandles</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockAdjustHandles</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38088,7 +38088,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockAgainstGrouping</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockAgainstGrouping</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38144,7 +38144,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplTxid</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplTxid</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38192,7 +38192,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdxTextLeft</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdxTextLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38240,7 +38240,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdyTextTop</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdyTextTop</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38287,7 +38287,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdxTextRight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdxTextRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38334,7 +38334,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdyTextBottom</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdyTextBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38381,7 +38381,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpWrapText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpWrapText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38429,7 +38429,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpscaleText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpscaleText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38477,7 +38477,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpanchorText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpanchorText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38525,7 +38525,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shptxflTextFlow</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shptxflTextFlow</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38572,7 +38572,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpcdirFont</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpcdirFont</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38619,7 +38619,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shphspNext</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shphspNext</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38667,7 +38667,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shptxdir</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shptxdir</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38715,7 +38715,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfSelectText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfSelectText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38771,7 +38771,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfAutoTextMargin</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfAutoTextMargin</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38827,7 +38827,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfRotateText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfRotateText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38883,7 +38883,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfFitShapeToText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfFitShapeToText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38939,7 +38939,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfFitTextToShape</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfFitTextToShape</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -38995,7 +38995,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextUNICODE</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextUNICODE</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39043,7 +39043,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextRTF</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextRTF</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39091,7 +39091,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextAlign</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextAlign</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39139,7 +39139,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextSize</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextSize</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39187,7 +39187,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextSpacing</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextSpacing</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39235,7 +39235,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFont</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFont</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39283,7 +39283,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFReverseRows</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFReverseRows</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39339,7 +39339,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfGtext</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfGtext</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39395,7 +39395,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFVertical</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFVertical</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39451,7 +39451,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFKern</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFKern</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39507,7 +39507,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFTight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFTight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39563,7 +39563,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFStretch</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFStretch</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39619,7 +39619,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFShrinkFit</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFShrinkFit</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39675,7 +39675,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFBestFit</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFBestFit</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39731,7 +39731,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFNormalize</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFNormalize</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39787,7 +39787,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFDxMeasure</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFDxMeasure</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39843,7 +39843,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFBold</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFBold</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39898,7 +39898,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFItalic</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFItalic</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -39953,7 +39953,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFUnderline</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFUnderline</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40009,7 +40009,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFShadow</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFShadow</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40064,7 +40064,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFSmallcaps</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFSmallcaps</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40120,7 +40120,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgtextFStrikethrough</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgtextFStrikethrough</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40176,7 +40176,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpcropFromTop</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpcropFromTop</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40225,7 +40225,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpcropFromBottom</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpcropFromBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40272,7 +40272,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpcropFromLeft</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpcropFromLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40319,7 +40319,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpcropFromRight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpcropFromRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40366,7 +40366,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppib</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppib</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40414,7 +40414,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppibName</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppibName</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40462,7 +40462,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppibFlags</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppibFlags</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40510,7 +40510,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureTransparent</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureTransparent</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40558,7 +40558,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureContrast</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureContrast</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40606,7 +40606,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureBrightness</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureBrightness</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40654,7 +40654,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureGamma</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureGamma</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40702,7 +40702,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureId</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureId</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40750,7 +40750,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureDblCrMod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureDblCrMod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40798,7 +40798,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureFillCrMod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureFillCrMod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40845,7 +40845,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureLineCrMod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureLineCrMod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40892,7 +40892,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppibPrint</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppibPrint</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40940,7 +40940,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppibPrintName</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppibPrintName</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -40988,7 +40988,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppibPrintFlags</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppibPrintFlags</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41036,7 +41036,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfNoHitTestPicture</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfNoHitTestPicture</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41092,7 +41092,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureGray</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureGray</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41148,7 +41148,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureBiLevel</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureBiLevel</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41204,7 +41204,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppictureActive</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppictureActive</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41260,7 +41260,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgeoLeft</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgeoLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41308,7 +41308,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgeoTop</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgeoTop</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41355,7 +41355,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgeoRight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgeoRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41402,7 +41402,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpgeoBottom</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpgeoBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41449,7 +41449,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshapePath</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshapePath</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41496,7 +41496,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppVertices</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppVertices</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41544,7 +41544,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppSegmentInfo</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppSegmentInfo</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41591,7 +41591,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjustValue</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjustValue</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41641,7 +41641,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust2Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust2Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41688,7 +41688,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust3Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust3Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41735,7 +41735,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust4Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust4Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41782,7 +41782,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust5Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust5Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41829,7 +41829,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust6Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust6Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41876,7 +41876,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust7Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust7Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41923,7 +41923,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust8Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust8Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -41970,7 +41970,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust9Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust9Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42017,7 +42017,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpadjust10Value</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpadjust10Value</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42064,7 +42064,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfShadowOK</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfShadowOK</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42120,7 +42120,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpf3DOK</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpf3DOK</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42175,7 +42175,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLineOK</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLineOK</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42231,7 +42231,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfGtextOK</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfGtextOK</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42287,7 +42287,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfFillShadeShapeOK</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfFillShadeShapeOK</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42342,7 +42342,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfFillOK</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfFillOK</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42398,7 +42398,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillType</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillType</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42446,7 +42446,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillColor</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42494,7 +42494,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillOpacity</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillOpacity</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42542,7 +42542,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillBackColor</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillBackColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42590,7 +42590,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillBackOpacity</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillBackOpacity</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42638,7 +42638,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillCrMod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillCrMod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42686,7 +42686,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillBlip</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillBlip</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42733,7 +42733,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillBlipName</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillBlipName</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42781,7 +42781,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillBlipFlags</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillBlipFlags</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42829,7 +42829,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillWidth</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillWidth</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42877,7 +42877,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillHeight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillHeight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42924,7 +42924,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillAngle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillAngle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -42972,7 +42972,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillFocus</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillFocus</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43020,7 +43020,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillToLeft</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillToLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43068,7 +43068,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillToTop</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillToTop</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43116,7 +43116,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillToRight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillToRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43164,7 +43164,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillToBottom</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillToBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43212,7 +43212,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillRectLeft</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillRectLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43261,7 +43261,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillRectTop</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillRectTop</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43308,7 +43308,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillRectRight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillRectRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43355,7 +43355,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillRectBottom</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillRectBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43402,7 +43402,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillDztype</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillDztype</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43449,7 +43449,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillShadePreset</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillShadePreset</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43497,7 +43497,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillShadeColors</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillShadeColors</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43545,7 +43545,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillOriginX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillOriginX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43592,7 +43592,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillOriginY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillOriginY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43639,7 +43639,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillShapeOriginX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillShapeOriginX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43686,7 +43686,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillShapeOriginY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillShapeOriginY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43733,7 +43733,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillShadeType</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillShadeType</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43781,7 +43781,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfFilled</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfFilled</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43837,7 +43837,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfHitTestFill</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfHitTestFill</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43893,7 +43893,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillShape</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillShape</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -43949,7 +43949,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfillUseRect</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfillUseRect</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44005,7 +44005,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfNoFillHitTest</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfNoFillHitTest</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44061,7 +44061,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineColor</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44108,7 +44108,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineOpacity</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineOpacity</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44156,7 +44156,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineBackColor</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineBackColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44204,7 +44204,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineCrMod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineCrMod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44252,7 +44252,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineType</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineType</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44299,7 +44299,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineFillBlip</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineFillBlip</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44346,7 +44346,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineFillBlipName</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineFillBlipName</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44394,7 +44394,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineFillBlipFlags</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineFillBlipFlags</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44441,7 +44441,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineFillWidth</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineFillWidth</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44489,7 +44489,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineFillHeight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineFillHeight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44536,7 +44536,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineFillDztype</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineFillDztype</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44584,7 +44584,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineWidth</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineWidth</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44632,7 +44632,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineMiterLimit</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineMiterLimit</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44680,7 +44680,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineStyle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineStyle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44728,7 +44728,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineDashing</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineDashing</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44776,7 +44776,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineDashStyle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineDashStyle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44824,7 +44824,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineStartArrowhead</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineStartArrowhead</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44872,7 +44872,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineEndArrowhead</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineEndArrowhead</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44919,7 +44919,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineStartArrowWidth</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineStartArrowWidth</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -44967,7 +44967,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineStartArrowLength</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineStartArrowLength</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45014,7 +45014,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineEndArrowWidth</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineEndArrowWidth</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45062,7 +45062,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineEndArrowLength</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineEndArrowLength</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45109,7 +45109,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineJoinStyle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineJoinStyle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45157,7 +45157,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineEndCapStyle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineEndCapStyle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45205,7 +45205,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfArrowheadsOK</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfArrowheadsOK</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45261,7 +45261,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLine</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLine</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45316,7 +45316,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfHitTestLine</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfHitTestLine</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45372,7 +45372,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplineFillShape</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplineFillShape</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45428,7 +45428,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfNoLineDrawDash</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfNoLineDrawDash</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45484,7 +45484,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowType</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowType</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45532,7 +45532,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowColor</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45580,7 +45580,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowHighlight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowHighlight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45628,7 +45628,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowCrMod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowCrMod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45676,7 +45676,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowOpacity</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowOpacity</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45723,7 +45723,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowOffsetX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowOffsetX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45770,7 +45770,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowOffsetY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowOffsetY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45817,7 +45817,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowSecondOffsetX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowSecondOffsetX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45865,7 +45865,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowSecondOffsetY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowSecondOffsetY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45913,7 +45913,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowScaleXToX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowScaleXToX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -45960,7 +45960,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowScaleYToX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowScaleYToX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46007,7 +46007,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowScaleXToY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowScaleXToY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46054,7 +46054,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowScaleYToY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowScaleYToY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46101,7 +46101,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowPerspectiveX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowPerspectiveX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46149,7 +46149,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowPerspectiveY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowPerspectiveY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46197,7 +46197,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowWeight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowWeight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46245,7 +46245,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowOriginX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowOriginX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46292,7 +46292,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpshadowOriginY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpshadowOriginY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46339,7 +46339,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfShadow</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfShadow</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46394,7 +46394,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfshadowObscured</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfshadowObscured</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46450,7 +46450,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveType</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveType</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46498,7 +46498,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveOffsetX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveOffsetX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46547,7 +46547,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveOffsetY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveOffsetY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46594,7 +46594,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveScaleXToX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveScaleXToX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46641,7 +46641,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveScaleYToX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveScaleYToX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46688,7 +46688,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveScaleXToY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveScaleXToY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46735,7 +46735,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveScaleYToY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveScaleYToY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46782,7 +46782,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectivePerspectiveX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectivePerspectiveX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46829,7 +46829,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectivePerspectiveY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectivePerspectiveY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46876,7 +46876,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveWeight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveWeight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46924,7 +46924,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveOriginX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveOriginX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -46971,7 +46971,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpperspectiveOriginY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpperspectiveOriginY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47018,7 +47018,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfPerspective</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfPerspective</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47073,7 +47073,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DSpecularAmt</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DSpecularAmt</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47121,7 +47121,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DDiffuseAmt</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DDiffuseAmt</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47169,7 +47169,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DShininess</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DShininess</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47217,7 +47217,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DEdgeThickness</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DEdgeThickness</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47265,7 +47265,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DExtrudeForward</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DExtrudeForward</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47313,7 +47313,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DExtrudeBackward</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DExtrudeBackward</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47360,7 +47360,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DExtrudePlane</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DExtrudePlane</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47408,7 +47408,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DExtrusionColor</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DExtrusionColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47457,7 +47457,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DCrMod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DCrMod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47505,7 +47505,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpf3D</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpf3D</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47561,7 +47561,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DMetallic</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DMetallic</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47617,7 +47617,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DUseExtrusionColor</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DUseExtrusionColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47672,7 +47672,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DLightFace</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DLightFace</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47727,7 +47727,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DYRotationAngle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DYRotationAngle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47775,7 +47775,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DXRotationAngle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DXRotationAngle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47823,7 +47823,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRotationAxisX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRotationAxisX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47871,7 +47871,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRotationAxisY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRotationAxisY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47918,7 +47918,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRotationAxisZ</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRotationAxisZ</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -47965,7 +47965,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRotationAngle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRotationAngle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48013,7 +48013,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRotationCenterX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRotationCenterX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48061,7 +48061,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRotationCenterY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRotationCenterY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48109,7 +48109,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRotationCenterZ</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRotationCenterZ</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48157,7 +48157,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DRenderMode</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DRenderMode</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48205,7 +48205,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DTolerance</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DTolerance</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48253,7 +48253,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DXViewpoint</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DXViewpoint</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48301,7 +48301,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DYViewpoint</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DYViewpoint</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48349,7 +48349,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DZViewpoint</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DZViewpoint</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48397,7 +48397,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DOriginX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DOriginX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48444,7 +48444,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DOriginY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DOriginY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48491,7 +48491,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DSkewAngle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DSkewAngle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48539,7 +48539,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DSkewAmount</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DSkewAmount</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48587,7 +48587,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DAmbientIntensity</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DAmbientIntensity</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48635,7 +48635,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DKeyX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DKeyX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48683,7 +48683,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DKeyY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DKeyY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48731,7 +48731,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DKeyZ</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DKeyZ</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48779,7 +48779,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DKeyIntensity</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DKeyIntensity</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48827,7 +48827,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DFillX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DFillX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48875,7 +48875,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DFillY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DFillY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48923,7 +48923,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DFillZ</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DFillZ</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -48971,7 +48971,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpc3DFillIntensity</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpc3DFillIntensity</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49019,7 +49019,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DConstrainRotation</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DConstrainRotation</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49074,7 +49074,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DRotationCenterAuto</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DRotationCenterAuto</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49129,7 +49129,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DParallel</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DParallel</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49185,7 +49185,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DKeyHarsh</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DKeyHarsh</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49241,7 +49241,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfc3DFillHarsh</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfc3DFillHarsh</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49297,7 +49297,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shphspMaster</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shphspMaster</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49345,7 +49345,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpcxstyle</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpcxstyle</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49393,7 +49393,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpbWMode</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpbWMode</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49442,7 +49442,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpbWModePureBW</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpbWModePureBW</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49489,7 +49489,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpbWModeBW</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpbWModeBW</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49536,7 +49536,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfOleIcon</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfOleIcon</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49592,7 +49592,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfPreferRelativeResize</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfPreferRelativeResize</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49648,7 +49648,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfLockShapeType</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfLockShapeType</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49704,7 +49704,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfDeleteAttachedObject</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfDeleteAttachedObject</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49759,7 +49759,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfBackground</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfBackground</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49815,7 +49815,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpspcot</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpspcot</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49862,7 +49862,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdxyCalloutGap</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdxyCalloutGap</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49910,7 +49910,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpspcoa</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpspcoa</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -49957,7 +49957,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpspcod</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpspcod</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50005,7 +50005,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdxyCalloutDropSpecified</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdxyCalloutDropSpecified</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50053,7 +50053,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdxyCalloutLengthSpecified</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdxyCalloutLengthSpecified</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50101,7 +50101,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfCallout</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfCallout</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50157,7 +50157,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfCalloutAccentBar</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfCalloutAccentBar</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50213,7 +50213,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfCalloutTextBorder</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfCalloutTextBorder</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50269,7 +50269,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfCalloutMinusX</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfCalloutMinusX</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50324,7 +50324,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfCalloutMinusY</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfCalloutMinusY</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50379,7 +50379,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfCalloutDropAuto</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfCalloutDropAuto</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50435,7 +50435,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfCalloutLengthSpecified</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfCalloutLengthSpecified</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50491,7 +50491,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpwzName</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpwzName</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50539,7 +50539,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpwzDescription</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpwzDescription</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50587,7 +50587,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppihlShape</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppihlShape</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50635,7 +50635,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shppWrapPolygonVertices</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shppWrapPolygonVertices</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50683,7 +50683,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdxWrapDistLeft</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdxWrapDistLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50731,7 +50731,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdyWrapDistTop</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdyWrapDistTop</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50779,7 +50779,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdxWrapDistRight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdxWrapDistRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50827,7 +50827,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpdyWrapDistBottom</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpdyWrapDistBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50875,7 +50875,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shplidRegroup</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shplidRegroup</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50922,7 +50922,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfEditedWrap</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfEditedWrap</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -50978,7 +50978,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfBehindDocument</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfBehindDocument</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -51034,7 +51034,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfOnDblClickNotify</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfOnDblClickNotify</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -51090,7 +51090,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfIsButton</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfIsButton</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -51147,7 +51147,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfOneD</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfOneD</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -51202,7 +51202,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfHidden</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfHidden</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
@@ -51258,7 +51258,7 @@ specified by [bkf.itcFirst, bkf.itcLim).</UML:TaggedValue.dataValue>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:shpfPrint</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>dff:shpfPrint</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="optname"/>
               </UML:TaggedValue.type>
