@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:35:50 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-16 15:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,26 @@ namespace doctok
 {
 
 using namespace ::std;
+
+template <class T>
+struct PLCFHelper
+{
+    static void processPLCFCpAndFcs(WW8DocumentImpl & rDoc,
+                                    WW8PieceTable::Pointer_t pPieceTable,
+                                    typename PLCF<T>::Pointer_t pPLCF,
+                                    PropertyType eType,
+                                    sal_uInt32 nOffset)
+    {
+        sal_uInt32 nCount = pPLCF->getEntryCount();
+        for (sal_uInt32 n = 0; n < nCount; ++n)
+        {
+            Cp aCp(pPLCF->getFc(n) + nOffset);
+            CpAndFc aCpAndFc = pPieceTable->createCpAndFc(aCp, eType);
+
+            rDoc.insertCpAndFc(aCpAndFc);
+        }
+    }
+};
 
 // WW8DocumentIteratorImpl
 bool operator == (const WW8DocumentIterator & rA,
@@ -265,14 +285,8 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
     //mpSEDs->dump(clog);
 
     {
-        sal_uInt32 nSEDs = mpSEDs->getEntryCount();
-        for (sal_uInt32 n = 0; n < nSEDs; ++n)
-        {
-            Cp aCp(mpSEDs->getFc(n));
-            CpAndFc aCpAndFc(aCp, mpPieceTable->cp2fc(aCp), PROP_SEC);
-
-            mCpAndFcs.insert(aCpAndFc);
-        }
+        PLCFHelper<WW8SED>::processPLCFCpAndFcs
+            (*this, mpPieceTable, mpSEDs, PROP_SEC, 0);
     }
 
     sal_uInt32 nHeaders = getHeaderCount();
@@ -407,6 +421,25 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
               mpFib->get_lcbPlcspaHdr()));
     }
 
+    mpShapeHelper = ShapeHelper::Pointer_t
+        (new ShapeHelper(pPlcspaMom, pPlcspaHdr, this));
+
+    mpShapeHelper->init();
+
+    PLCF<WW8BKD>::Pointer_t pPlcbkdMother;
+    if (mpFib->get_fcBkdMother() > 0)
+    {
+        pPlcbkdMother = PLCF<WW8BKD>::Pointer_t
+            (new PLCF<WW8BKD>
+             (*mpTableStream, mpFib->get_fcBkdMother(),
+              mpFib->get_lcbBkdMother()));
+    }
+
+    mpBreakHelper = BreakHelper::Pointer_t
+        (new BreakHelper(pPlcbkdMother, this));
+
+    mpBreakHelper->init();
+
     if (mpFib->get_fcDggInfo() != 0 && mpFib->get_lcbDggInfo() > 0)
     {
         mpDffBlock = DffBlock::Pointer_t
@@ -423,22 +456,10 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
                                  mpFib->get_fcPlcftxbxTxt(),
                                  mpFib->get_lcbPlcftxbxTxt()));
 
-        sal_uInt32 nCount = mpTextBoxStories->getEntryCount();
-
-        for (sal_uInt32 n = 0; n < nCount; ++n)
-        {
-            Cp aCp(mpTextBoxStories->getFc(n));
-            aCp += mEndnoteEndCpAndFc.getCp().get();
-            CpAndFc aCpAndFc(mpPieceTable->createCpAndFc(aCp, PROP_DOC));
-
-            insertCpAndFc(aCpAndFc);
-        }
+        PLCFHelper<WW8FTXBXS>::processPLCFCpAndFcs
+            (*this, mpPieceTable, mpTextBoxStories, PROP_DOC,
+             mEndnoteEndCpAndFc.getCp().get());
     }
-
-    mpShapeHelper = ShapeHelper::Pointer_t
-        (new ShapeHelper(pPlcspaMom, pPlcspaHdr, this));
-
-    mpShapeHelper->init();
 
     if (mCpAndFcs.size() > 0)
     {
@@ -866,6 +887,12 @@ doctok::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
         {
             pResult = getShape(rCpAndFc);
         }
+        break;
+    case PROP_BRK:
+        {
+            pResult = getBreak(rCpAndFc);
+        }
+        break;
     default:
         break;
     }
@@ -1162,6 +1189,12 @@ WW8DocumentImpl::getShape(sal_uInt32 nSpid)
 }
 
 doctok::Reference<Properties>::Pointer_t
+WW8DocumentImpl::getBreak(const CpAndFc & rCpAndFc) const
+{
+    return mpBreakHelper->getBreak(rCpAndFc);
+}
+
+doctok::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getBlip(sal_uInt32 nBid)
 {
     doctok::Reference<Properties>::Pointer_t pResult;
@@ -1311,6 +1344,18 @@ void WW8DocumentImpl::resolvePicture(Stream & rStream)
     }
 }
 
+void WW8DocumentImpl::resolveSpecialChar(sal_uInt32 nChar, Stream & rStream)
+{
+    switch (nChar)
+    {
+    case 0x1:
+        resolvePicture(rStream);
+        break;
+    default:
+        break;
+    }
+}
+
 void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
                                   Stream & rStream)
 {
@@ -1321,7 +1366,8 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
 
 #if 1
     /*
-      Assumption: Special characters are always at the end of a run.
+      Assumption: Special characters are always at the beginning or end of a
+      run.
      */
     if (nCount > 0)
     {
@@ -1336,33 +1382,52 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
 
         if (isSpecial(nChar))
         {
-            switch (nChar)
-            {
-            case 0x1:
-                resolvePicture(rStream);
-                break;
-            default:
-                break;
-            }
+            resolveSpecialChar(nChar, rStream);
 
             if (bComplex)
             {
-                rStream.text(&aSeq[0], nIndex);
+                if (nIndex > 0)
+                    rStream.text(&aSeq[0], nIndex);
                 rStream.text(&aSeq[nIndex], 1);
             }
             else
             {
-                rStream.utext(&aSeq[0], nIndex / 2);
+                if (nIndex > 0)
+                    rStream.utext(&aSeq[0], nIndex / 2);
                 rStream.utext(&aSeq[nIndex], 1);
             }
         }
         else
         {
-            if (bComplex)
-                rStream.text(&aSeq[0], nCount);
-            else
-                rStream.utext(&aSeq[0], nCount/2);
+            nChar = aSeq[0];
 
+            if (!bComplex)
+                nChar += aSeq[1] << 8;
+
+            if (isSpecial(nChar))
+            {
+                resolveSpecialChar(nChar, rStream);
+
+                if (bComplex)
+                {
+                    rStream.text(&aSeq[0], 1);
+                    if (nCount > 1)
+                        rStream.text(&aSeq[1], nCount - 1);
+                }
+                else
+                {
+                    rStream.utext(&aSeq[0], 1);
+                    if (nCount > 2)
+                        rStream.utext(&aSeq[2], (nCount - 2) / 2);
+                }
+            }
+            else
+            {
+                if (bComplex)
+                    rStream.text(&aSeq[0], nCount);
+                else
+                    rStream.utext(&aSeq[0], nCount/2);
+            }
         }
     }
 #else
@@ -2048,6 +2113,33 @@ ShapeHelper::getShape(const CpAndFc & rCpAndFc)
 
     return doctok::Reference<Properties>::Pointer_t
         (new WW8FSPA(*pFSPA));
+}
+
+BreakHelper::BreakHelper(PLCF<WW8BKD>::Pointer_t pPlcfbkdMom,
+                         WW8DocumentImpl * pDoc)
+: mpDoc(pDoc)
+{
+    ProcessPLCF2Map<WW8BKD, BreakHelper> process;
+    process.process(pPlcfbkdMom, mMap, PROP_BRK, pDoc);
+}
+
+void BreakHelper::init()
+{
+    Map_t::iterator aIt;
+
+    for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
+    {
+        mpDoc->insertCpAndFc(aIt->first);
+    }
+}
+
+doctok::Reference<Properties>::Pointer_t
+BreakHelper::getBreak(const CpAndFc & rCpAndFc)
+{
+    WW8BKD::Pointer_t pBKD = mMap[rCpAndFc];
+
+    return doctok::Reference<Properties>::Pointer_t
+        (new WW8BKD(*pBKD));
 }
 
 
