@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2006-11-20 12:19:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,30 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_TITLE                 :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")); break;
             case PROP_CONTENT               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content")); break;
             case PROP_DATA_COLUMN_NAME      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataColumnName")); break;
-
+            case PROP_INPUT_STREAM          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")); break;
+            case PROP_GRAPHIC               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Graphic")); break;
+            case PROP_ANCHOR_TYPE           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType")); break;
+            case PROP_SIZE                  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")); break;
+            case PROP_HORI_ORIENT           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")); break;
+            case PROP_HORI_ORIENT_POSITTION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")); break;
+            case PROP_HORI_ORIENT_RELATION  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")); break;
+            case PROP_VERT_ORIENT           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")); break;
+            case PROP_VERT_ORIENT_POSITTION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")); break;
+            case PROP_VERT_ORIENT_RELATION  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")); break;
+            case PROP_GRAPHIC_CROP          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicCrop")); break;
+            case PROP_SIZE100th_M_M         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size100thMM")); break;
+            case PROP_SIZE_PIXEL            :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel")); break;
+            case PROP_SURROUND              :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Surround")); break;
+            case PROP_SURROUND_CONTOUR      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SurroundContour")); break;
+            case PROP_ADJUST_CONTRAST       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AdjustContrast")); break;
+            case PROP_ADJUST_LUMINANCE      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AdjustLuminance")); break;
+            case PROP_GRAPHIC_COLOR_MODE    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicColorMode")); break;
+            case PROP_GAMMA                 :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Gamma")); break;
+            case PROP_HORI_MIRRORED_ON_EVEN_PAGES:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriMirroredOnEvenPages")); break;
+            case PROP_HORI_MIRRORED_ON_ODD_PAGES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriMirroredOnOddPages")); break;
+            case PROP_VERT_MIRRORED              :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertMirrored")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =

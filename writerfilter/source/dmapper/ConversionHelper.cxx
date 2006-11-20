@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
+ *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 using namespace com::sun::star;
 
 namespace dmapper{
+namespace ConversionHelper{
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -106,7 +107,7 @@ namespace dmapper{
 #define DOUBLE_LINE10_IN    LINE_WIDTH_0
 #define DOUBLE_LINE10_DIST  LINE_WIDTH_2
 
-sal_Int32 ConversionHelper::MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine& rToFill )
+sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine& rToFill )
 {
     //Border
     //borders are defined as:
@@ -127,7 +128,7 @@ sal_Int32 ConversionHelper::MakeBorderLine( sal_Int32 nSprmValue, table::BorderL
     sal_Int32 nLineThickness = TWIP_TO_MM100(nLineThicknessTwip);
     return MakeBorderLine( nLineThickness, nLineType, nLineColor, nLineDistance, rToFill);
 }
-sal_Int32 ConversionHelper::MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
+sal_Int32 MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
                                             sal_Int32 nLineColor,       sal_Int32 nLineDistance,
                                             table::BorderLine& rToFill )
 {
@@ -346,7 +347,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
         );
 }
 
-::rtl::OUString ConversionHelper::ConvertMSFormatStringToSO(
+::rtl::OUString ConvertMSFormatStringToSO(
         const ::rtl::OUString& rFormat, lang::Locale& rLocale, bool bHijri)
 {
     ::rtl::OUString sFormat(rFormat);
@@ -452,5 +453,12 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
     return aNewFormat.makeStringAndClear();
 
 }
+/*-------------------------------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+sal_Int32 convertToMM100(sal_Int32 _t)
+{
+    return TWIP_TO_MM100( _t );
+}
+} // namespace ConversionHelper
 } //namespace dmapper

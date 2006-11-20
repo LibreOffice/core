@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
+ *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1582,11 +1582,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             rContext->Insert(
                              eSprmType == SPRM_DEFAULT ? PROP_PARA_LEFT_MARGIN : PROP_LEFT_MARGIN,
 
-                             uno::makeAny( lcl_convertToMM100(nIntValue ) ));
+                             uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ));
         else if(eSprmType == SPRM_DEFAULT)
             rContext->Insert(
                              PROP_PARA_RIGHT_MARGIN,
-                             uno::makeAny( lcl_convertToMM100(nIntValue ) ));
+                             uno::makeAny( ConversionHelper::convertToMM100(nIntValue ) ));
         //TODO: what happens to the right margins in numberings?
         break;
     case 18: // sprmPNest
@@ -1599,7 +1599,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 1 */
         rContext->Insert(
                          eSprmType == SPRM_DEFAULT ? PROP_PARA_FIRST_LINE_INDENT : PROP_FIRST_LINE_OFFSET,
-                         uno::makeAny( lcl_convertToMM100(nIntValue ) ));
+                         uno::makeAny( ConversionHelper::convertToMM100(nIntValue ) ));
         break;
     case 20 : // sprmPDyaLine
     case 0x6412:   // sprmPDyaLine
@@ -1618,12 +1618,12 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                 if(nDistance < 0)
                 {
                     aSpacing.Mode = style::LineSpacingMode::FIX;
-                    aSpacing.Height = sal_Int16(lcl_convertToMM100(-nDistance));
+                    aSpacing.Height = sal_Int16(ConversionHelper::convertToMM100(-nDistance));
                 }
                 else if(nDistance >0)
                 {
                     aSpacing.Mode = style::LineSpacingMode::MINIMUM;
-                    aSpacing.Height = sal_Int16(lcl_convertToMM100(nDistance));
+                    aSpacing.Height = sal_Int16(ConversionHelper::convertToMM100(nDistance));
                 }
             }
             rContext->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ));
@@ -1632,12 +1632,12 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 21 : // legacy version
     case 0xA413:   // sprmPDyaBefore
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 1 */
-        rContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( lcl_convertToMM100( nIntValue ) ));
+        rContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ));
         break;
     case 22 :
     case 0xA414:   // sprmPDyaAfter
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 1 */
-        rContext->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( lcl_convertToMM100( nIntValue ) ));
+        rContext->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ));
         break;
 
     case  23: //sprmPChgTabs
@@ -2142,7 +2142,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         //Kerning half point values
         //TODO: there are two kerning values -
         // in ww8par6.cxx 0x484b is used as boolean AutoKerning
-        rContext->Insert(PROP_CHAR_CHAR_KERNING, uno::makeAny( sal_Int16(lcl_convertToMM100(sal_Int16(nIntValue))) ) );
+        rContext->Insert(PROP_CHAR_CHAR_KERNING, uno::makeAny( sal_Int16(ConversionHelper::convertToMM100(sal_Int16(nIntValue))) ) );
         break;
     case 0x484B:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
@@ -2777,7 +2777,11 @@ void DomainMapper::props(doctok::Reference<Properties>::Pointer_t ref)
     string sType = ref->getType();
     if( sType == "PICF" )
     {
-        m_pImpl->ImportGraphic(ref);
+        m_pImpl->ImportGraphic(ref, false);
+    }
+    else if( sType == "FSPA" )
+    {
+        m_pImpl->ImportGraphic(ref, true);
     }
     else
         ref->resolve(*this);

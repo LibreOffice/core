@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,14 +505,14 @@ void DomainMapper_Impl::ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue)
     {
         case NS_rtf::LN_dxaAdd: //set tab
             m_aCurrentTabStops.push_back(
-                    DeletableTabStop(style::TabStop(lcl_convertToMM100(nValue), style::TabAlign_LEFT, ' ', ' ')));
+                    DeletableTabStop(style::TabStop(ConversionHelper::convertToMM100(nValue), style::TabAlign_LEFT, ' ', ' ')));
         break;
         case NS_rtf::LN_dxaDel: //deleted tab
         {
             //mark the tab stop at the given position as deleted
             ::std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();
             ::std::vector<DeletableTabStop>::iterator aEndIt = m_aCurrentTabStops.end();
-            sal_Int32 nConverted = lcl_convertToMM100(nValue);
+            sal_Int32 nConverted = ConversionHelper::convertToMM100(nValue);
             for( ; aIt != aEndIt; ++aIt)
             {
                 if( aIt->Position == nConverted )
@@ -783,13 +783,6 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 void DomainMapper_Impl::PopPageHeaderFooter()
 {
     m_aTextAppendStack.pop();
-}
-/*-------------------------------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Int32 lcl_convertToMM100(sal_Int32 _t)
-{
-    return TWIP_TO_MM100( _t );
 }
 /*-- 12.09.2006 08:07:55---------------------------------------------------
 
@@ -1602,19 +1595,19 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
 /*-- 01.11.2006 14:57:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-GraphicImportPtr DomainMapper_Impl::GetGraphicImport()
+GraphicImportPtr DomainMapper_Impl::GetGraphicImport(bool bIsShape)
 {
     if(!m_pGraphicImport)
-        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory ) );
+        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, bIsShape ) );
     return m_pGraphicImport;
 }
 /*-- 01.11.2006 09:25:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void  DomainMapper_Impl::ImportGraphic(doctok::Reference< doctok::Properties >::Pointer_t ref)
+void  DomainMapper_Impl::ImportGraphic(doctok::Reference< doctok::Properties >::Pointer_t ref, bool bIsShape)
 {
     //create the graphic
-    ref->resolve( *GetGraphicImport() );
+    ref->resolve( *GetGraphicImport(bIsShape) );
     //insert it into the document at the current cursor position
     appendTextContent( m_pGraphicImport->GetGraphicObject() );
     m_pGraphicImport.reset();

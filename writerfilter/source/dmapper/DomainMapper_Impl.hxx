@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,8 @@ namespace dmapper {
 using namespace writerfilter;
 using namespace com::sun::star;
 
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-sal_Int32 lcl_convertToMM100(sal_Int32 _t);
+//#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+//sal_Int32 lcl_convertToMM100(sal_Int32 _t);
 
 /*-- 14.06.2006 07:42:52---------------------------------------------------
     property stack element
@@ -236,9 +236,9 @@ public:
                     m_pLFOTable.reset( new LFOTable );
                 return m_pLFOTable;
             }
-    GraphicImportPtr GetGraphicImport();
+    GraphicImportPtr GetGraphicImport(bool bIsShape );
     // this method deletes the current m_pGraphicImport after import
-    void    ImportGraphic(doctok::Reference< doctok::Properties>::Pointer_t );
+    void    ImportGraphic(doctok::Reference< doctok::Properties>::Pointer_t, bool bIsShape );
 
     void    InitTabStopFromStyle( const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >& rInitTabStops );
     void    ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue);

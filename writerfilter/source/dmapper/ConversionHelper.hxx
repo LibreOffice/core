@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
+ *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ namespace ConversionHelper{
     //convert the number format string form MS format to SO format
     ::rtl::OUString ConvertMSFormatStringToSO(
             const ::rtl::OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);
+    sal_Int32 convertToMM100(sal_Int32 _t);
 
 } // namespace ConversionHelper
 } //namespace dmapper

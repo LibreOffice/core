@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2006-11-20 12:19:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,13 +130,35 @@ enum PropertyIds
 /*88*/ , PROP_TITLE
 /*89*/ , PROP_CONTENT
 /*90*/ , PROP_DATA_COLUMN_NAME
-///*91*/ , PROP_
-///*92*/ , PROP_
-///*93*/ , PROP_
-///*94*/ , PROP_
-///*95*/ , PROP_
-///*96*/ , PROP_
-///*97*/ , PROP_
+/*91*/ , PROP_INPUT_STREAM
+/*92*/ , PROP_GRAPHIC
+/*93*/ , PROP_ANCHOR_TYPE
+/*94*/ , PROP_SIZE
+/*95*/ , PROP_HORI_ORIENT
+/*96*/ , PROP_HORI_ORIENT_POSITTION
+/*97*/ , PROP_HORI_ORIENT_RELATION
+/*98*/ , PROP_VERT_ORIENT
+/*99*/ , PROP_VERT_ORIENT_POSITTION
+/*100*/ ,PROP_VERT_ORIENT_RELATION
+/*101*/ , PROP_GRAPHIC_CROP
+/*102*/ , PROP_SIZE100th_M_M
+/*103*/ , PROP_SIZE_PIXEL
+/*104*/ , PROP_SURROUND
+/*105*/ , PROP_SURROUND_CONTOUR
+/*106*/ , PROP_ADJUST_CONTRAST
+/*107*/ , PROP_ADJUST_LUMINANCE
+/*108*/ , PROP_GRAPHIC_COLOR_MODE
+/*109*/ , PROP_GAMMA
+/*110*/ , PROP_HORI_MIRRORED_ON_EVEN_PAGES
+/*111*/ , PROP_HORI_MIRRORED_ON_ODD_PAGES
+/*112*/ , PROP_VERT_MIRRORED
+///*113*/ , PROP_
+///*114*/ , PROP_
+///*115*/ , PROP_
+///*116*/ , PROP_
+///*117*/ , PROP_
+///*118*/ , PROP_
+///*119*/ , PROP_
 
 };
 struct PropertyNameSupplier_Impl;
