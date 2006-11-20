@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 13:38:24 $
+#   last change: $Author: vg $ $Date: 2006-11-20 16:37:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,7 @@ SLOFILES=\
          $(SLO)$/gradtrns.obj         \
          $(SLO)$/svdattr.obj         \
          $(SLO)$/svddrag.obj         \
-         $(SLO)$/svddrgmt.obj        \
          $(SLO)$/svddrgv.obj         \
-         $(SLO)$/svdedtv.obj         \
          $(SLO)$/svdedtv2.obj        \
          $(SLO)$/svdedxv.obj         \
          $(SLO)$/svdetc.obj          \
@@ -109,18 +107,16 @@ SLOFILES=\
          $(SLO)$/sdrcomment.obj         \
          $(SLO)$/sdrmasterpagedescriptor.obj         \
          $(SLO)$/sdrpagewindow.obj         \
-         $(SLO)$/svdpntv.obj         \
          $(SLO)$/sdrpaintwindow.obj         \
          $(SLO)$/svdpoev.obj         \
          $(SLO)$/svdscrol.obj        \
-         $(SLO)$/svdsnpv.obj         \
          $(SLO)$/svdtouch.obj        \
          $(SLO)$/svdtrans.obj        \
          $(SLO)$/svdtxhdl.obj        \
          $(SLO)$/svdundo.obj         \
-         $(SLO)$/svdview.obj         \
-         $(SLO)$/svdviter.obj        \
+     $(SLO)$/svdviter.obj        \
          $(SLO)$/clonelist.obj		 \
+     $(SLO)$/svdedtv.obj         \
          $(SLO)$/svdomedia.obj		 
 
 SRS1NAME=svdstr
