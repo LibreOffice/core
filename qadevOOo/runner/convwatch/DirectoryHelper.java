@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DirectoryHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:10:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,4 +147,18 @@ public class DirectoryHelper
                 }
             }
         }
+
+    // tests
+    // public static void main(String[] args)
+    //     {
+    //         String sDirectory = "/misc/convwatch/gfxcmp/data/doc-pool/demo";
+    //         Object[] aDirectoryList = DirectoryHelper.traverse( sDirectory, false );
+    //
+    //         for (int i=0;i<aDirectoryList.length;i++)
+    //         {
+    //             String sEntry = (String)aDirectoryList[i];
+    //             System.out.println(sEntry);
+    //         }
+    //     }
 }
+
