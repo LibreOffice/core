@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:57:19 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1707,7 +1707,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         case OWN_ATTR_ZORDER:
         {
-            sal_Int32 nNewOrdNum;
+            sal_Int32 nNewOrdNum = 0;
             if(rVal >>= nNewOrdNum)
             {
                 SdrObjList* pObjList = mpObj->GetObjList();
@@ -1842,7 +1842,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 case OWN_ATTR_GLUEID_HEAD:
                 case OWN_ATTR_GLUEID_TAIL:
                     {
-                        sal_Int32 nId;
+                        sal_Int32 nId = 0;
                         if( rVal >>= nId )
                         {
                             pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_HEAD, nId );
@@ -1878,7 +1878,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 drawing::BitmapMode eMode;
                 if(!(rVal >>= eMode) )
                 {
-                    sal_Int32 nMode;
+                    sal_Int32 nMode = 0;
                     if(!(rVal >>= nMode))
                         break;
 
@@ -1922,7 +1922,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case SDRATTR_ROTATEANGLE:
         {
-            sal_Int32 nAngle;
+            sal_Int32 nAngle = 0;
             if( rVal >>= nAngle )
             {
                 Point aRef1(mpObj->GetSnapRect().Center());
@@ -1941,7 +1941,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         case SDRATTR_SHEARANGLE:
         {
-            sal_Int32 nShear;
+            sal_Int32 nShear = 0;
             if( rVal >>= nShear )
             {
                 nShear -= mpObj->GetShearAngle();
@@ -1999,7 +1999,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case OWN_ATTR_PAGE_NUMBER:
         {
-            sal_Int32 nPageNum;
+            sal_Int32 nPageNum = 0;
             if( (rVal >>= nPageNum) && ( nPageNum >= 0 ) && ( nPageNum <= 0xffff ) )
             {
                 SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(mpObj.get());
@@ -2051,7 +2051,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case OWN_ATTR_OLE_ASPECT:
         {
-            sal_Int64 nAspect;
+            sal_Int64 nAspect = 0;
             if( (rVal >>= nAspect) && mpObj->ISA(SdrOle2Obj))
             {
                 ((SdrOle2Obj*)mpObj.get())->SetAspect( nAspect );
@@ -2089,7 +2089,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
             if( pMap->nWID == SDRATTR_ECKENRADIUS )
             {
-                sal_Int32 nCornerRadius;
+                sal_Int32 nCornerRadius = 0;
                 if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) || (nCornerRadius > 5000000))
                     throw IllegalArgumentException();
             }
@@ -2930,7 +2930,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pM
             // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
             if( ( *pMap->pType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 aAny >>= nValue;
                 aAny <<= (sal_Int16)nValue;
             }
