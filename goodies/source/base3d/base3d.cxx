@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:09:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -667,6 +667,7 @@ void Base3D::AddVertex(basegfx::B3DPoint& rVertex)
 
     // geometrische Daten
     rEntity.Point() = rVertex;
+    rEntity.PlaneNormal() = basegfx::B3DVector(); // #i68442# Init PlaneNormal
     rEntity.SetValid();
 
     // Nachbehandlung
@@ -681,6 +682,7 @@ void Base3D::AddVertex(basegfx::B3DPoint& rVertex, basegfx::B3DVector& rNormal)
 
     // geometrische Daten
     rEntity.Point() = rVertex;
+    rEntity.PlaneNormal() = basegfx::B3DVector(); // #i68442# Init PlaneNormal
     rEntity.SetValid();
 
     // Normale
@@ -702,6 +704,7 @@ void Base3D::AddVertex(basegfx::B3DPoint& rVertex, basegfx::B3DVector& rNormal, 
 
     // geometrische Daten
     rEntity.Point() = rVertex;
+    rEntity.PlaneNormal() = basegfx::B3DVector(); // #i68442# Init PlaneNormal
     rEntity.SetValid();
 
     // Normale
