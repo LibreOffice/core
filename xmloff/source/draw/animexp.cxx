@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:26:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:32:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,7 +463,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
                     aEffect.meSpeed = AnimationSpeed_MEDIUM;
                     if( bDimPrev )
                     {
-                        sal_Int32 nColor;
+                        sal_Int32 nColor = 0;
                         xProps->getPropertyValue( mpImpl->msDimColor ) >>= nColor;
                         aEffect.maDimColor.SetColor( nColor );
                     }
