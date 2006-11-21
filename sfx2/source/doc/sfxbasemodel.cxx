@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:53:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1718,7 +1718,7 @@ void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,Sfx
 
     // new Printer-Name available?
     nChangeFlags = 0;
-    sal_Int32 lDummy;
+    sal_Int32 lDummy = 0;
     for ( int n = 0; n < rPrinter.getLength(); ++n )
     {
         // get Property-Value from printer description
