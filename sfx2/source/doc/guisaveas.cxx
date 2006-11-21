@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:55:10 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1524,7 +1524,7 @@ void SfxStoringHelper::FillCopy( const uno::Reference< frame::XModel >& xModel,
     uno::Any aVal;
     ::rtl::OUString aStrVal;
     util::DateTime aDateTime;
-    sal_Int32 nInt32Val;
+    sal_Int32 nInt32Val = 0;
 
     // ==== Author property ====
     ::rtl::OUString aStringAuthor = ::rtl::OUString::createFromAscii( "Author" );
