@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StandaloneDocumentInfo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:20:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ public class StandaloneDocumentInfo extends TestCase {
             the_info.loadFromURL(destUrl);
         } catch (com.sun.star.io.IOException e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't load document",e);
+            throw new StatusException("Couldn't load document: " + destUrl,e);
         }
         tEnv.addObjRelation("DOCURL",destUrl);
         return tEnv;
