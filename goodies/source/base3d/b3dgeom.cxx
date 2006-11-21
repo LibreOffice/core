@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dgeom.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:07:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,6 +237,7 @@ void B3dGeometry::AddEdge(const basegfx::B3DPoint& rPoint)
 
         rNew.Reset();
         rNew.Point() = rPoint;
+        rNew.PlaneNormal() = Vector3D(); // #i68442# Init PlaneNormal
         rNew.SetValid();
         rNew.SetEdgeVisible(sal_True);
 
@@ -248,6 +249,7 @@ void B3dGeometry::AddEdge(const basegfx::B3DPoint& rPoint)
 
         rNew.Reset();
         rNew.Point() = rPoint;
+        rNew.PlaneNormal() = Vector3D(); // #i68442# Init PlaneNormal
         rNew.SetValid();
         rNew.SetEdgeVisible(sal_True);
     }
@@ -261,6 +263,7 @@ void B3dGeometry::AddEdge(const basegfx::B3DPoint& rPoint, const basegfx::B3DVec
 
         rNew.Reset();
         rNew.Point() = rPoint;
+        rNew.PlaneNormal() = Vector3D(); // #i68442# Init PlaneNormal
         rNew.SetValid();
         rNew.Normal() = rNormal;
         rNew.SetNormalUsed();
@@ -274,6 +277,7 @@ void B3dGeometry::AddEdge(const basegfx::B3DPoint& rPoint, const basegfx::B3DVec
 
         rNew.Reset();
         rNew.Point() = rPoint;
+        rNew.PlaneNormal() = Vector3D(); // #i68442# Init PlaneNormal
         rNew.SetValid();
         rNew.Normal() = rNormal;
         rNew.SetNormalUsed();
@@ -289,6 +293,7 @@ void B3dGeometry::AddEdge(const basegfx::B3DPoint& rPoint, const basegfx::B3DVec
 
         rNew.Reset();
         rNew.Point() = rPoint;
+        rNew.PlaneNormal() = Vector3D(); // #i68442# Init PlaneNormal
         rNew.SetValid();
         rNew.Normal() = rNormal;
         rNew.SetNormalUsed();
@@ -304,6 +309,7 @@ void B3dGeometry::AddEdge(const basegfx::B3DPoint& rPoint, const basegfx::B3DVec
 
         rNew.Reset();
         rNew.Point() = rPoint;
+        rNew.PlaneNormal() = Vector3D(); // #i68442# Init PlaneNormal
         rNew.SetValid();
         rNew.Normal() = rNormal;
         rNew.SetNormalUsed();
