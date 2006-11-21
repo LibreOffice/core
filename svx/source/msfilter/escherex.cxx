@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:28:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2193,7 +2193,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 }
                 else if ( rProp.Name.equals( sTextRotateAngle ) )
                 {
-                    double f, fTextRotateAngle;
+                    double f = 0, fTextRotateAngle;
                     if ( rProp.Value >>= f )
                     {
                         fTextRotateAngle = fmod( f, 360.0 );
@@ -2262,14 +2262,14 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionBrightness ) )
                             {
-                                double fExtrusionBrightness;
+                                double fExtrusionBrightness = 0;
                                 if ( rrProp.Value >>= fExtrusionBrightness )
                                     AddOpt( DFF_Prop_c3DAmbientIntensity, (sal_Int32)( fExtrusionBrightness * 655.36 ) );
                             }
                             else if ( rrProp.Name.equals( sExtrusionDepth ) )
                             {
-                                double fDepth;
-                                double fFraction;
+                                double fDepth = 0;
+                                double fFraction = 0;
                                 com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
                                 if ( ( rrProp.Value >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
                                 {
@@ -2289,13 +2289,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionDiffusion ) )
                             {
-                                double fExtrusionDiffusion;
+                                double fExtrusionDiffusion = 0;
                                 if ( rrProp.Value >>= fExtrusionDiffusion )
                                     AddOpt( DFF_Prop_c3DDiffuseAmt, (sal_Int32)( fExtrusionDiffusion * 655.36 ) );
                             }
                             else if ( rrProp.Name.equals( sExtrusionNumberOfLineSegments ) )
                             {
-                                sal_Int32 nExtrusionNumberOfLineSegments;
+                                sal_Int32 nExtrusionNumberOfLineSegments = 0;
                                 if ( rrProp.Value >>= nExtrusionNumberOfLineSegments )
                                     AddOpt( DFF_Prop_c3DTolerance, nExtrusionNumberOfLineSegments );
                             }
@@ -2337,13 +2337,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionFirstLightLevel ) )
                             {
-                                double fExtrusionFirstLightLevel;
+                                double fExtrusionFirstLightLevel = 0;
                                 if ( rrProp.Value >>= fExtrusionFirstLightLevel )
                                     AddOpt( DFF_Prop_c3DKeyIntensity, (sal_Int32)( fExtrusionFirstLightLevel * 655.36 ) );
                             }
                             else if ( rrProp.Name.equals( sExtrusionSecondLightLevel ) )
                             {
-                                double fExtrusionSecondLightLevel;
+                                double fExtrusionSecondLightLevel = 0;
                                 if ( rrProp.Value >>= fExtrusionSecondLightLevel )
                                     AddOpt( DFF_Prop_c3DFillIntensity, (sal_Int32)( fExtrusionSecondLightLevel * 655.36 ) );
                             }
@@ -2404,8 +2404,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionRotateAngle ) )
                             {
-                                double fExtrusionAngleX;
-                                double fExtrusionAngleY;
+                                double fExtrusionAngleX = 0;
+                                double fExtrusionAngleY = 0;
                                 com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAnglePair;
                                 if ( ( rrProp.Value >>= aRotateAnglePair ) && ( aRotateAnglePair.First.Value >>= fExtrusionAngleX ) && ( aRotateAnglePair.Second.Value >>= fExtrusionAngleY ) )
                                 {
@@ -2428,14 +2428,14 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionShininess ) )
                             {
-                                double fExtrusionShininess;
+                                double fExtrusionShininess = 0;
                                 if ( rrProp.Value >>= fExtrusionShininess )
                                     AddOpt( DFF_Prop_c3DShininess, (sal_Int32)( fExtrusionShininess * 655.36 ) );
                             }
                             else if ( rrProp.Name.equals( sExtrusionSkew ) )
                             {
-                                double fSkewAmount;
-                                double fSkewAngle;
+                                double fSkewAmount = 0;
+                                double fSkewAngle = 0;
                                 com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
                                 if ( ( rrProp.Value >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= fSkewAmount ) && ( aSkewParaPair.Second.Value >>= fSkewAngle ) )
                                 {
@@ -2445,7 +2445,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionSpecularity ) )
                             {
-                                double fExtrusionSpecularity;
+                                double fExtrusionSpecularity = 0;
                                 if ( rrProp.Value >>= fExtrusionSpecularity )
                                     AddOpt( DFF_Prop_c3DSpecularAmt, (sal_Int32)( fExtrusionSpecularity * 1333 ) );
                             }
@@ -2476,8 +2476,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionOrigin ) )
                             {
-                                double fExtrusionOriginX;
-                                double fExtrusionOriginY;
+                                double fExtrusionOriginX = 0;
+                                double fExtrusionOriginY = 0;
                                 com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginPair;
                                 if ( ( rrProp.Value >>= aOriginPair ) && ( aOriginPair.First.Value >>= fExtrusionOriginX ) && ( aOriginPair.Second.Value >>= fExtrusionOriginY ) )
                                 {
@@ -2806,7 +2806,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 if ( !bIsDefaultObject )
                                 {
-                                    sal_Int32 nStretchX;
+                                    sal_Int32 nStretchX = 0;
                                     if ( rrProp.Value >>= nStretchX )
                                         AddOpt( DFF_Prop_stretchPointX, nStretchX );
                                 }
@@ -2815,7 +2815,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 if ( !bIsDefaultObject )
                                 {
-                                    sal_Int32 nStretchY;
+                                    sal_Int32 nStretchY = 0;
                                     if ( rrProp.Value >>= nStretchY )
                                         AddOpt( DFF_Prop_stretchPointY, nStretchY );
                                 }
@@ -2998,7 +2998,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), sal_True ) )
                             {
-                                float fFontWidth;
+                                float fFontWidth = 0;
                                 if ( aAny >>= fFontWidth )
                                 {
                                     nTextPathFlags |= 0x200020;
@@ -3245,7 +3245,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                         }
                     }
-                    sal_Int32 k, nValue, nAdjustmentValues = aAdjustmentSeq.getLength();
+                    sal_Int32 k, nValue = 0, nAdjustmentValues = aAdjustmentSeq.getLength();
                     for ( k = 0; k < nAdjustmentValues; k++ )
                     {
                         const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp = aAdjustmentSeq[ k ];
