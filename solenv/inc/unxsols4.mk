@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:07:32 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:11:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -210,10 +210,11 @@ STDSHLCUIST=$(DYNAMIC) CPPRUNTIME -lm -lc
 STDSHLGUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 STDSHLCUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 
-STDLIBGUIST+=-lX11
-STDLIBGUIMT+=-lX11
-STDSHLGUIST+=-lX11
-STDSHLGUIMT+=-lX11
+# libdl.so - no really an GUI library but required in this context
+STDLIBGUIST+=-lX11 -ldl
+STDLIBGUIMT+=-lX11 -ldl
+STDSHLGUIST+=-lX11 -ldl
+STDSHLGUIMT+=-lX11 -ldl
 
 # @@@ interposer needed for -Bdirect @@@
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
