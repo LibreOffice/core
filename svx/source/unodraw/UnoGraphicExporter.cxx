@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1114,7 +1114,9 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 sdr::contact::ObjectContactOfPagePainter aObjectContact( pPage, false );
                 sdr::contact::ViewObjectContact aOriginal( aObjectContact, aViewContact);
 
-                if( aDisplayInfo.GetProcessLayers().IsSet(pObj->SdrObject::GetLayer()) )
+                // #i70852# why was this pObj->SdrObject::GetLayer()? This would not use the correct GetLayer()
+                // for FmFormObj. Changed.
+                if( aDisplayInfo.GetProcessLayers().IsSet(pObj->GetLayer()) )
                     if( (pObj->GetPage() == 0) || pObj->GetPage()->checkVisibility(aOriginal, aDisplayInfo, false) )
                         pObj->SingleObjectPainter(aXOut,aInfoRec); // #110094#-17
 
