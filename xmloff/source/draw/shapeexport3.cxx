@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,7 +435,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 
     // distance
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
-    sal_Int32 nDistance;
+    sal_Int32 nDistance = 0;
     aAny >>= nDistance;
     mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
     aStr = sStringBuffer.makeStringAndClear();
@@ -443,7 +443,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 
     // focalLength
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
-    sal_Int32 nFocalLength;
+    sal_Int32 nFocalLength = 0;
     aAny >>= nFocalLength;
     mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
     aStr = sStringBuffer.makeStringAndClear();
@@ -480,7 +480,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 
     // ambientColor
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
-    sal_Int32 aColTemp;
+    sal_Int32 aColTemp = 0;
     Color aAmbientColor;
     aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
     mrExport.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
@@ -509,7 +509,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
 
     OUString aPropName;
     OUString aIndexStr;
-    sal_Int32 aColTemp;
+    sal_Int32 aColTemp = 0;
     Color aLightColor;
     ::basegfx::B3DVector aLightDirection;
     drawing::Direction3D xLightDir;
