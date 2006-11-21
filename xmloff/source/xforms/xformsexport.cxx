@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:32:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:39:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,7 +650,7 @@ template<typename T, void (*FUNC)( OUStringBuffer&, T )>
 OUString lcl_convert( const Any& rAny )
 {
     OUStringBuffer aBuffer;
-    T aData;
+    T aData = T();
     if( rAny >>= aData )
     {
         FUNC( aBuffer, aData );
