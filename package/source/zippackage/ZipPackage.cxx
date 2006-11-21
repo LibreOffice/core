@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: mav $ $Date: 2006-10-19 14:30:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,7 @@ void ZipPackage::parseManifest()
                                         if (pSalt && pVector && pCount && pSize)
                                         {
                                             Sequence < sal_uInt8 > aSequence;
-                                            sal_Int32 nCount, nSize;
+                                            sal_Int32 nCount = 0, nSize = 0;
                                                                            pStream->SetToBeEncrypted ( sal_True );
 
                                             *pSalt >>= aSequence;
@@ -654,7 +654,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 
                     Content aContent ( sURL, Reference < XCommandEnvironment >() );
                     Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
-                    sal_uInt64 aSize;
+                    sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
                     // and write to such files directly
                     if( ( aAny >>= aSize ) && aSize )
