@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:35:02 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,7 +470,7 @@ PPDParser::PPDParser( const String& rFile ) :
     // of rasterizing them appropriately.
     if ( m_bType42Capable == false )
     {
-        if ( pKey = getKey( String(RTL_CONSTASCII_USTRINGPARAM("cupsFilter")) ) )
+        if ( ( pKey = getKey( String(RTL_CONSTASCII_USTRINGPARAM("cupsFilter")) ) ) )
         {
             ByteString    aCupsFilterString( pKey->getValue( 0 )->m_aValue, RTL_TEXTENCODING_ISO_8859_1 );
             if ( strstr(aCupsFilterString.GetBuffer(), "application/pdf") > 0 )
