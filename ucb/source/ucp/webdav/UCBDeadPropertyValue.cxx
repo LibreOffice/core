@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:07:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,7 +485,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
     {
         // long
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         rInData >>= nValue;
         aStringValue = rtl::OUString::valueOf( nValue );
         aStringType = aTypeLong;
@@ -493,7 +493,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
     {
         // short
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         rInData >>= nValue;
         aStringValue = rtl::OUString::valueOf( nValue );
         aStringType = aTypeShort;
@@ -525,7 +525,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
     {
         // hyper
-        sal_Int64 nValue;
+        sal_Int64 nValue = 0;
         rInData >>= nValue;
         aStringValue = rtl::OUString::valueOf( nValue );
         aStringType = aTypeHyper;
@@ -533,7 +533,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
     {
         // float
-        float nValue;
+        float nValue = 0;
         rInData >>= nValue;
         aStringValue = rtl::OUString::valueOf( nValue );
         aStringType = aTypeFloat;
@@ -541,7 +541,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
     {
         // double
-        double nValue;
+        double nValue = 0;
         rInData >>= nValue;
         aStringValue = rtl::OUString::valueOf( nValue );
         aStringType = aTypeDouble;
