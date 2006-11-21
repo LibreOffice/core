@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:31:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1078,7 +1078,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                 ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
 #if defined UNX
-                                sal_Int32 x11_id;
+                                sal_Int32 x11_id = 0;
 
                                             if (anyHandle >>= x11_id)
                                             {
@@ -1141,7 +1141,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
 #if defined UNX
-            sal_Int32 x11_id;
+            sal_Int32 x11_id = 0;
             if ( Parent >>= x11_id )
             {
                 printf("x11_id = %ld\n", x11_id);
