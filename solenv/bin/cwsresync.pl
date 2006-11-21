@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:55:29 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:09:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.26 $ ';
+my $id_str = ' $Revision: 1.27 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1075,11 +1075,15 @@ sub relink_cws_action
                 my $c_dir = "$sourceroot/".$cws_master;
                 $destfile =~ s#$m_dir#$c_dir#;
 
-                if ( -d dirname( $destfile ))
+                if ( ! -d dirname( $destfile ))
                 {
-                    $result = copy( $onefile,  $destfile);
-                    if ( !$result ){ print_error ("Copying $onefile to CWS failed: $!", 1) };
+                    mkdir dirname( $destfile );
                 }
+                $result = copy( $onefile,  $destfile);
+                if ( !$result ){ print_error ("Copying $onefile to CWS failed: $!", 1) };
+                # preserve timestamp
+                my @from_stat = stat($onefile);
+                utime($from_stat[9], $from_stat[9], $destfile);
             }
         }
 
