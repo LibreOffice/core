@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:34:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  14: rSwFlags.bChgEnumNum = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeToBullets/Enable",
                     case  15:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.cBullet =
                             sal::static_int_cast< sal_Unicode >(nVal);
                     }
@@ -469,19 +469,19 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/Font",
                     case  17:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aBulletFont.SetFamily(FontFamily(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily",
                     case  18:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aBulletFont.SetCharSet(CharSet(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset",
                     case  19:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                                            sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
@@ -489,7 +489,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  21: rSwFlags.bRightMargin = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/CombineParagraphs",
                     case  22:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nRightMargin =
                             sal::static_int_cast< BYTE >(nVal);
                     }
@@ -507,14 +507,14 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  33: rSwFlags.bAutoCompleteWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/Enable",
                     case  34:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltWordLen =
                             sal::static_int_cast< USHORT >(nVal);
                     }
                     break; // "Completion/MinWordLen",
                     case  35:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltListLen =
                             sal::static_int_cast< USHORT >(nVal);
                     }
@@ -525,7 +525,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  39: rSwFlags.bAutoCmpltShowAsTip = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/ShowAsTip",
                     case  40:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltExpandKey =
                             sal::static_int_cast< USHORT >(nVal);
                     }
@@ -533,7 +533,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case 41 :rSwFlags.bAutoCmpltKeepList = *(sal_Bool*)pValues[nProp].getValue(); break;//"Completion/KeepList"
                     case 42 :
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.cByInputBullet =
                             sal::static_int_cast< sal_Unicode >(nVal);
                     }
@@ -546,19 +546,19 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
                     case 44 :
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aByInputBulletFont.SetFamily(FontFamily(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",
                     case 45 :
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aByInputBulletFont.SetCharSet(CharSet(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",
                     case 46 :
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
