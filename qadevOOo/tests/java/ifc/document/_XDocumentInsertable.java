@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XDocumentInsertable.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:27:39 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package ifc.document;
 
+import com.sun.star.io.IOException;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
@@ -140,9 +141,10 @@ public class _XDocumentInsertable extends MultiMethodTest {
     * checked for existance of loaded document content. In case
     * if relation was found, then its <code>isInserted</code>
     * method is used to check insertion.<p>
+    * A Second test uses an invalid URL and checks for correct exceptions.
     *
-    * Has <b> OK </b> status if insertion was completed successfully
-    * and no exceptions were thrown. <p>
+    * Has <b> OK </b> status if at first insertion was completed successfully
+    * and no exceptions were thrown and as second a expected excption was thrown. <p>
     */
     public void _insertDocumentFromURL() {
         boolean result = true ;
@@ -175,6 +177,21 @@ public class _XDocumentInsertable extends MultiMethodTest {
             ex.printStackTrace(log);
             result = false ;
         }
+
+        try {
+            PropertyValue [] szEmptyArgs = new PropertyValue [0];
+            String docURL = "file:///c:/ThisIsAnInvaldURL";
+            log.println("Inserting document from URL '" + docURL + "'");
+            oObj.insertDocumentFromURL(docURL, szEmptyArgs);
+
+            result=false;
+
+        } catch (IOException ex) {
+            log.println("expected exception was thrown -> ok");
+        } catch (com.sun.star.lang.IllegalArgumentException ex) {
+            log.println("expected exception was thrown -> ok");
+        }
+
 
         tRes.tested("insertDocumentFromURL()", result);
     }
