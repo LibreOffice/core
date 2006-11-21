@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:54:09 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,7 @@ sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_SIZE_WIDTH:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if(!(rVal >>= nVal ))
                 return sal_False;
 
@@ -381,7 +381,7 @@ sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_SIZE_HEIGHT:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if(!(rVal >>= nVal))
                 return sal_True;
 
@@ -607,7 +607,7 @@ sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_L_REL_MARGIN:
         case MID_R_REL_MARGIN:
         {
-            sal_Int32 nRel;
+            sal_Int32 nRel = 0;
             if((rVal >>= nRel) && nRel >= 0 && nRel < USHRT_MAX)
             {
                 if(MID_L_REL_MARGIN== nMemberId)
@@ -965,7 +965,7 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     switch( nMemberId )
     {
         case 0:
@@ -996,7 +996,7 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_UP_REL_MARGIN:
         case MID_LO_REL_MARGIN:
         {
-            sal_Int32 nRel;
+            sal_Int32 nRel = 0;
             if((rVal >>= nRel) && nRel > 1 )
             {
                 if(MID_UP_REL_MARGIN == nMemberId)
@@ -2025,7 +2025,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ))
             {
                 // 4 Borders and 5 distances
-                sal_Int32 nDist;
+                sal_Int32 nDist = 0;
                 SvxBorderLine aLine;
                 table::BorderLine aBorderLine;
                 if ( aSeq[0] >>= aBorderLine )
@@ -2109,7 +2109,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
     if( bDistMember || nMemberId == BORDER_DISTANCE )
     {
-        sal_Int32 nDist;
+        sal_Int32 nDist = 0;
         if(!(rVal >>= nDist))
             return sal_False;
 
@@ -2148,7 +2148,7 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             aNew >>= aSeq;
             if ( aSeq.getLength() == 4 )
             {
-                sal_Int32 nVal;
+                sal_Int32 nVal = 0;
                 if ( aSeq[0] >>= nVal )
                     aBorderLine.Color = nVal;
                 if ( aSeq[1] >>= nVal )
@@ -3006,7 +3006,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
                 if( (aNew >>= aSeq) && aSeq.getLength() == 4 )
                 {
-                    sal_Int32 nVal;
+                    sal_Int32 nVal = 0;
                     if ( aSeq[0] >>= nVal )
                         aBorderLine.Color = nVal;
                     if ( aSeq[1] >>= nVal )
@@ -3066,7 +3066,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
         case MID_DISTANCE:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             bRet = (rVal >>= nVal);
             if ( bRet && nVal>=0 )
             {
@@ -3151,7 +3151,7 @@ sal_Bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 
     if(!(rVal >>= nBreak))
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
             return sal_False;
 
@@ -3362,7 +3362,7 @@ sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
 {
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if ( nMemId == 0 )
     {
         table::BorderLine aLine;
@@ -3892,7 +3892,7 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_BACK_COLOR:
         case MID_BACK_COLOR_R_G_B:
         {
-            sal_Int32 nCol;
+            sal_Int32 nCol = 0;
             if ( !( rVal >>= nCol ) )
                 return sal_False;
             if(MID_BACK_COLOR_R_G_B == nMemberId)
@@ -3905,7 +3905,7 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_BACK_COLOR_TRANSPARENCY:
         {
-            sal_Int32 nTrans;
+            sal_Int32 nTrans = 0;
             if ( !( rVal >>= nTrans ) || nTrans < 0 || nTrans > 100 )
                 return sal_False;
             aColor.SetTransparency(lcl_PercentToTransparency(nTrans));
@@ -3917,7 +3917,7 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             style::GraphicLocation eLocation;
             if ( !( rVal>>=eLocation ) )
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if ( !( rVal >>= nValue ) )
                     return sal_False;
                 eLocation = (style::GraphicLocation)nValue;
@@ -3982,7 +3982,7 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_GRAPHIC_TRANSPARENCY :
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             rVal >>= nTmp;
             if(nTmp >= 0 && nTmp <= 100)
             {
