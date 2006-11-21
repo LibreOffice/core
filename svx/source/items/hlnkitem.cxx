@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:20:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,7 +403,7 @@ BOOL SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMem
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     ::rtl::OUString aStr;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     switch(nMemberId)
     {
         case MID_HLINK_NAME   :
