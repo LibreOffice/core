@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,7 +586,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     break;
                     case EAS_TextRotateAngle :
                     {
-                        double fTextRotateAngle;
+                        double fTextRotateAngle = 0;
                         if ( rGeoProp.Value >>= fTextRotateAngle )
                         {
                             rUnitConverter.convertDouble( aStrBuffer, fTextRotateAngle );
@@ -616,7 +616,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Brightness :
                                     {
-                                        double fExtrusionBrightness;
+                                        double fExtrusionBrightness = 0;
                                         if ( rProp.Value >>= fExtrusionBrightness )
                                         {
                                             rUnitConverter.convertDouble( aStrBuffer, fExtrusionBrightness, sal_False, MAP_RELATIVE, MAP_RELATIVE );
@@ -631,7 +631,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
                                         if ( rProp.Value >>= aDepthParaPair )
                                         {
-                                            double fDepth;
+                                            double fDepth = 0;
                                             if ( aDepthParaPair.First.Value >>= fDepth )
                                             {
                                                 rExport.GetMM100UnitConverter().convertDouble( aStrBuffer, fDepth, sal_True );
@@ -644,7 +644,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Diffusion :
                                     {
-                                        double fExtrusionDiffusion;
+                                        double fExtrusionDiffusion = 0;
                                         if ( rProp.Value >>= fExtrusionDiffusion )
                                         {
                                             rUnitConverter.convertDouble( aStrBuffer, fExtrusionDiffusion, sal_False, MAP_RELATIVE, MAP_RELATIVE );
@@ -656,7 +656,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_NumberOfLineSegments :
                                     {
-                                        sal_Int32 nExtrusionNumberOfLineSegments;
+                                        sal_Int32 nExtrusionNumberOfLineSegments = 0;
                                         if ( rProp.Value >>= nExtrusionNumberOfLineSegments )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_NUMBER_OF_LINE_SEGMENTS, rtl::OUString::valueOf( nExtrusionNumberOfLineSegments ) );
                                     }
@@ -687,7 +687,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_FirstLightLevel :
                                     {
-                                        double fExtrusionFirstLightLevel;
+                                        double fExtrusionFirstLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionFirstLightLevel )
                                         {
                                             rUnitConverter.convertDouble( aStrBuffer, fExtrusionFirstLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
@@ -699,7 +699,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_SecondLightLevel :
                                     {
-                                        double fExtrusionSecondLightLevel;
+                                        double fExtrusionSecondLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionSecondLightLevel )
                                         {
                                             rUnitConverter.convertDouble( aStrBuffer, fExtrusionSecondLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
@@ -793,7 +793,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Shininess :
                                     {
-                                        double fExtrusionShininess;
+                                        double fExtrusionShininess = 0;
                                         if ( rProp.Value >>= fExtrusionShininess )
                                         {
                                             rUnitConverter.convertDouble( aStrBuffer, fExtrusionShininess, sal_False, MAP_RELATIVE, MAP_RELATIVE );
@@ -817,7 +817,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Specularity :
                                     {
-                                        double fExtrusionSpecularity;
+                                        double fExtrusionSpecularity = 0;
                                         if ( rProp.Value >>= fExtrusionSpecularity )
                                         {
                                             rUnitConverter.convertDouble( aStrBuffer, fExtrusionSpecularity, sal_False, MAP_RELATIVE, MAP_RELATIVE );
@@ -1019,14 +1019,14 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_StretchX :
                                     {
-                                        sal_Int32 nStretchPoint;
+                                        sal_Int32 nStretchPoint = 0;
                                         if ( rProp.Value >>= nStretchPoint )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_X, rtl::OUString::valueOf( nStretchPoint ) );
                                     }
                                     break;
                                     case EAS_StretchY :
                                     {
-                                        sal_Int32 nStretchPoint;
+                                        sal_Int32 nStretchPoint = 0;
                                         if ( rProp.Value >>= nStretchPoint )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_Y, rtl::OUString::valueOf( nStretchPoint ) );
                                     }
@@ -1084,7 +1084,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
             sal_Int32 nAdjustmentValues = aAdjustmentValues.getLength();
             if ( nAdjustmentValues )
             {
-                sal_Int32 i, nValue;
+                sal_Int32 i, nValue = 0;
                 for ( i = 0; i < nAdjustmentValues; i++ )
                 {
                     if ( i )
