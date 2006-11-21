@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:19:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ sal_Bool SvxColorTableItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
-    sal_Int64 aValue;
+    sal_Int64 aValue = 0;
     if ( rVal >>= aValue )
     {
         pColorTable = (XColorTable *)(ULONG)aValue;
@@ -220,7 +220,7 @@ sal_Bool SvxGradientListItem::PutValue( const com::sun::star::uno::Any& rVal, BY
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
-    sal_Int64 aValue;
+    sal_Int64 aValue = 0;
     if ( rVal >>= aValue )
     {
         pGradientList = (XGradientList *)(ULONG)aValue;
@@ -304,7 +304,7 @@ sal_Bool SvxHatchListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE 
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
-    sal_Int64 aValue;
+    sal_Int64 aValue = 0;
     if ( rVal >>= aValue )
     {
         pHatchList = (XHatchList *)(ULONG)aValue;
@@ -388,7 +388,7 @@ sal_Bool SvxBitmapListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
-    sal_Int64 aValue;
+    sal_Int64 aValue = 0;
     if ( rVal >>= aValue )
     {
         pBitmapList = (XBitmapList *)(ULONG)aValue;
@@ -472,7 +472,7 @@ sal_Bool SvxDashListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
-    sal_Int64 aValue;
+    sal_Int64 aValue = 0;
     if ( rVal >>= aValue )
     {
         pDashList = (XDashList *)(ULONG)aValue;
@@ -561,7 +561,7 @@ sal_Bool SvxLineEndListItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
-    sal_Int64 aValue;
+    sal_Int64 aValue = 0;
     if ( rVal >>= aValue )
     {
         pLineEndList = (XLineEndList *)(ULONG)aValue;
