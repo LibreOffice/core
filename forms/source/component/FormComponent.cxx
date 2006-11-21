@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:11:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1915,7 +1915,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
         // darf ich mich ueberhaupt an dieses Feld binden (Typ-Check)
         if (xFieldCandidate.is())
         {
-            sal_Int32 nFieldType;
+            sal_Int32 nFieldType = 0;
             xFieldCandidate->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
             if (approveDbColumnType(nFieldType))
                 setField(xFieldCandidate,sal_False);
