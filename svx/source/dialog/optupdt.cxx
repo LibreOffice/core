@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:23:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
     m_aEveryWeekButton.Enable(bValue);
     m_aEveryMonthButton.Enable(bValue);
 
-    sal_Int64 nValue;
+    sal_Int64 nValue = 0;
     m_xUpdateAccess->getByName( UNISTRING("CheckInterval") ) >>= nValue;
 
     if( nValue == 86400 )
