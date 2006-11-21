@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLPercentOrMeasurePropertyHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:51:21 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ sal_Bool XMLPercentOrMeasurePropertyHandler::exportXML(
 {
       OUStringBuffer aOut;
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if( !(rValue >>= nValue ) )
         return sal_False;
 
