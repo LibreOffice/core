@@ -4,9 +4,9 @@
  *
  *  $RCSfile: togglebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:25:14 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
             {
                 if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
                 {
-                    sal_Int32 nTmpPos;
+                    sal_Int32 nTmpPos = 0;
                     if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
                     {
                         if (( nTmpPos >= 0 ) && ( nTmpPos < sal_Int32( nSize )))
