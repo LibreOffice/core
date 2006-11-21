@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:32:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -790,18 +790,18 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             break;
         }
         case TypeClass_STRING:          { OUString val; aValue >>= val; pVar->PutString( String( val ) ); } break;
-        case TypeClass_FLOAT:           { float val; aValue >>= val; pVar->PutSingle( val ); } break;
-        case TypeClass_DOUBLE:          { double val; aValue >>= val; pVar->PutDouble( val ); } break;
+        case TypeClass_FLOAT:           { float val = 0; aValue >>= val; pVar->PutSingle( val ); } break;
+        case TypeClass_DOUBLE:          { double val = 0; aValue >>= val; pVar->PutDouble( val ); } break;
         //case TypeClass_OCTET:         break;
         case TypeClass_BYTE:            { sal_Int8 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
         //case TypeClass_INT:           break;
         case TypeClass_SHORT:           { sal_Int16 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
-        case TypeClass_LONG:            { sal_Int32 val; aValue >>= val; pVar->PutLong( val ); } break;
-        case TypeClass_HYPER:           { sal_Int64 val; aValue >>= val; pVar->PutInt64( val ); } break;
+        case TypeClass_LONG:            { sal_Int32 val = 0; aValue >>= val; pVar->PutLong( val ); } break;
+        case TypeClass_HYPER:           { sal_Int64 val = 0; aValue >>= val; pVar->PutInt64( val ); } break;
         //case TypeClass_UNSIGNED_OCTET:break;
         case TypeClass_UNSIGNED_SHORT:  { sal_uInt16 val = 0; aValue >>= val; pVar->PutUShort( val ); } break;
-        case TypeClass_UNSIGNED_LONG:   { sal_uInt32 val; aValue >>= val; pVar->PutULong( val ); } break;
-        case TypeClass_UNSIGNED_HYPER:  { sal_uInt64 val; aValue >>= val; pVar->PutUInt64( val ); } break;
+        case TypeClass_UNSIGNED_LONG:   { sal_uInt32 val = 0; aValue >>= val; pVar->PutULong( val ); } break;
+        case TypeClass_UNSIGNED_HYPER:  { sal_uInt64 val = 0; aValue >>= val; pVar->PutUInt64( val ); } break;
         //case TypeClass_UNSIGNED_INT:  break;
         //case TypeClass_UNSIGNED_BYTE: break;
         default:                        pVar->PutEmpty();                       break;
