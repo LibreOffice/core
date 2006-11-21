@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:09:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ void XMLLineNumberingExport::Export()
 
             // Distance
             aAny = xLineNumbering->getPropertyValue(sDistance);
-            sal_Int32 nLength;
+            sal_Int32 nLength = 0;
             aAny >>= nLength;
             if (nLength != 0)
             {
