@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:43:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:46:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -996,16 +996,16 @@ SvStream* SdrModel::GetDocumentStream(SdrDocumentStreamInfo& /*rStreamInfo*/) co
 }
 
 // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
-void SdrModel::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
+void SdrModel::BurnInStyleSheetAttributes()
 {
     USHORT nAnz=GetMasterPageCount();
     USHORT nNum;
     for (nNum=0; nNum<nAnz; nNum++) {
-        GetMasterPage(nNum)->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
+        GetMasterPage(nNum)->BurnInStyleSheetAttributes();
     }
     nAnz=GetPageCount();
     for (nNum=0; nNum<nAnz; nNum++) {
-        GetPage(nNum)->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
+        GetPage(nNum)->BurnInStyleSheetAttributes();
     }
 }
 
@@ -1287,39 +1287,43 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
 
 void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, sal_Int32 nNumDigits) const
 {
-    if(!bUIOnlyKomma)
-        nVal = (nVal * aUIUnitFact.GetNumerator()) / aUIUnitFact.GetDenominator();
-
-    BOOL bNeg(nVal < 0);
-
-    if(bNeg)
-        nVal = -nVal;
-
+    // #i22167#
+    // change to double precision usage to not loose decimal places after comma
+    const bool bNegative(nVal < 0L);
     SvtSysLocale aSysLoc;
-    const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
-    sal_Int32 nKomma(nUIUnitKomma);
-    if( -1 == nNumDigits )
-        nNumDigits = rLoc.getNumDigits();
+    const LocaleDataWrapper& rLoc(aSysLoc.GetLocaleData());
+    double fLocalValue(double(nVal) * double(aUIUnitFact));
 
-    while(nKomma > nNumDigits)
+    if(bNegative)
     {
-        // das bedeutet teilen und runden
-        sal_Int32 nDiff(nKomma - nNumDigits);
-
-        switch(nDiff)
-        {
-            case 1: nVal = (nVal+5)/10; nKomma--; break;
-            case 2: nVal = (nVal+50)/100; nKomma-=2; break;
-            case 3: nVal = (nVal+500)/1000; nKomma-=3; break;
-            case 4: nVal = (nVal+5000)/10000; nKomma-=4; break;
-            case 5: nVal = (nVal+50000)/100000; nKomma-=5; break;
-            case 6: nVal = (nVal+500000)/1000000; nKomma-=6; break;
-            case 7: nVal = (nVal+5000000)/10000000; nKomma-=7; break;
-            default:nVal = (nVal+50000000)/100000000; nKomma-=8; break;
-        }
+        fLocalValue = -fLocalValue;
     }
 
-    rStr = UniString::CreateFromInt32(nVal);
+    if( -1 == nNumDigits )
+    {
+        nNumDigits = rLoc.getNumDigits();
+    }
+
+    sal_Int32 nKomma(nUIUnitKomma);
+
+    if(nKomma > nNumDigits)
+    {
+        const sal_Int32 nDiff(nKomma - nNumDigits);
+        const double fFactor(pow(10.0, nDiff));
+
+        fLocalValue /= fFactor;
+        nKomma = nNumDigits;
+    }
+    else if(nKomma < nNumDigits)
+    {
+        const sal_Int32 nDiff(nNumDigits - nKomma);
+        const double fFactor(pow(10.0, nDiff));
+
+        fLocalValue *= fFactor;
+        nKomma = nNumDigits;
+    }
+
+    rStr = UniString::CreateFromInt32(static_cast<sal_Int32>(fLocalValue + 0.5));
 
     if(nKomma < 0)
     {
@@ -1386,7 +1390,7 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, 
         rStr += sal_Unicode('0');
     }
 
-    if(bNeg)
+    if(bNegative)
     {
         rStr.Insert(sal_Unicode('-'), 0);
     }
