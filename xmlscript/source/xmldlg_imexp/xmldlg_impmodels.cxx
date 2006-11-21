@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:38:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1242,7 +1242,7 @@ void TitledBoxElement::endElement()
                                    xAttributes );
 
         sal_Int16 nVal = 0;
-        sal_Bool bChecked;
+        sal_Bool bChecked = sal_False;
         if (getBoolAttr( &bChecked,
                          OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ),
                          xAttributes,
@@ -1370,7 +1370,7 @@ void RadioGroupElement::endElement()
                                    xAttributes );
 
         sal_Int16 nVal = 0;
-        sal_Bool bChecked;
+        sal_Bool bChecked = sal_False;
         if (getBoolAttr( &bChecked,
                          OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ),
                          xAttributes,
@@ -1816,7 +1816,7 @@ void ButtonElement::endElement()
                                 _xAttributes ))
         ctx.getControlModel()->setPropertyValue(
             OUSTR("Repeat"), makeAny(true) );
-    sal_Int32 toggled;
+    sal_Int32 toggled = 0;
     if (getLongAttr( &toggled, OUSTR("toggled"), _xAttributes,
                      _pImport->XMLNS_DIALOGS_UID ) && toggled == 1)
         ctx.getControlModel()->setPropertyValue(OUSTR("Toggle"), makeAny(true));
@@ -1827,7 +1827,7 @@ void ButtonElement::endElement()
                                _xAttributes );
 
     // State
-    sal_Bool bChecked;
+    sal_Bool bChecked = sal_False;
     if (getBoolAttr(
             &bChecked,
             OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ),
