@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -815,7 +815,7 @@ void SvxShapeControl::valueAlignToParaAdjust(Any& rValue)
 
 void SvxShapeControl::valueParaAdjustToAlign(Any& rValue)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rValue >>= nValue;
     sal_uInt16 i = 0;
     while (-1 != SvxShapeControlPropertyValueMapping[i].nAPIValue)
