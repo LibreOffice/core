@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -836,7 +836,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchX );
     if ( pAny )
     {
-        sal_Int32 nStretchX;
+        sal_Int32 nStretchX = 0;
         if ( *pAny >>= nStretchX )
             nXRef = nStretchX;
     }
@@ -850,7 +850,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchY );
     if ( pAny )
     {
-        sal_Int32 nStretchY;
+        sal_Int32 nStretchY = 0;
         if ( *pAny >>= nStretchY )
             nYRef = nStretchY;
     }
@@ -1263,7 +1263,7 @@ double EnhancedCustomShape2d::GetAdjustValueAsDouble( const sal_Int32 nIndex ) c
             seqAdjustmentValues[ nIndex ].Value >>= fNumber;
         else
         {
-            sal_Int32 nNumber;
+            sal_Int32 nNumber = 0;
             seqAdjustmentValues[ nIndex ].Value >>= nNumber;
             fNumber = (double)nNumber;
         }
@@ -1373,7 +1373,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
     {
         case EnhancedCustomShapeParameterType::ADJUSTMENT :
         {
-            sal_Int32 nAdjustmentIndex;
+            sal_Int32 nAdjustmentIndex = 0;
             if ( rParameter.Value >>= nAdjustmentIndex )
             {
                 rRetValue = GetAdjustValueAsDouble( nAdjustmentIndex );
@@ -1383,7 +1383,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
         break;
         case EnhancedCustomShapeParameterType::EQUATION :
         {
-            sal_Int32 nEquationIndex;
+            sal_Int32 nEquationIndex = 0;
             if ( rParameter.Value >>= nEquationIndex )
             {
                 rRetValue = GetEquationValueAsDouble( nEquationIndex );
@@ -1404,7 +1404,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
             }
             else
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if ( rParameter.Value >>= nValue )
                 {
                     rRetValue = nValue;
@@ -1615,7 +1615,7 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                     }
                 }
 
-                sal_Int32 nFirstAdjustmentValue, nSecondAdjustmentValue;
+                sal_Int32 nFirstAdjustmentValue = 0, nSecondAdjustmentValue = 0;
                 aHandle.aPosition.First.Value >>= nFirstAdjustmentValue;
                 aHandle.aPosition.Second.Value>>= nSecondAdjustmentValue;
 
