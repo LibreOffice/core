@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:11:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
             OSL_ENSURE(xColumn.is(),"Column is null!");
             if ( xColumn.is() )
             {
-                sal_Int32 nDataType;
+                sal_Int32 nDataType = 0;
                 xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
                 sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
                 if(eColumnSearch != ColumnSearch::NONE)
