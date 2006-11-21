@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:57:16 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:12:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,16 +39,27 @@ TARGET=inter
 LIBTARGET=NO
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 USE_DEFFILE=TRUE
 
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+
+# output directory (one dir for each project)
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
+
+# adding to inludeoath
+INCPRE+=$(UNOUCROUT)
+
+UNOTYPESTYPES := \
+        com.sun.star.lang.IllegalArgumentException \
+        com.sun.star.uno.DeploymentException
 
 SLOFILES=$(SLO)$/starter.obj $(SLO)$/thrower.obj
 
@@ -75,20 +86,5 @@ APP1STDLIBS+=\
         $(SALLIB)	\
         $(LIBCIMT)
 
-#APP1DEF=	$(MISC)$/$(APP1TARGET).def
-
-.IF "$(depend)" == ""
-ALL : $(OUT)$/misc/inter_libs.flag ALLTAR 
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
-
 .INCLUDE :  target.mk
 
-TYPES :=	-Tcom.sun.star.lang.IllegalArgumentException \
-        -Tcom.sun.star.uno.DeploymentException
-
-$(OUT)$/misc/inter_libs.flag : $(SOLARBINDIR)$/udkapi.rdb
-    $(RM) $(OUT)$/misc/inter_libs.flag
-    +cppumaker $(CPPUMAKERFLAGS) -C -BUCR -O$(UNOUCROUT) $(TYPES) $(SOLARBINDIR)$/udkapi.rdb
-    touch $(OUT)$/misc/inter_libs.flag
