@@ -4,9 +4,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:35:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     // switch on caching for DYNAMIC_ONLY and ON (sharable multi-user process)
     if (ON == m_mode || DYNAMIC_ONLY == m_mode)
     {
-        sal_Int32 cacheSize; // multi-user cache size
+        sal_Int32 cacheSize = 0; // multi-user cache size
         if (! (m_xComponentContext->getValueByName(
             OUSTR("/services/" SERVICE_NAME "/user-cache-size") ) >>= cacheSize))
         {
