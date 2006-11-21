@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:29:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1436,7 +1436,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                         {
                                             nId = 4;
                                             com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
-                                            sal_Int32 nX, nY;
+                                            sal_Int32 nX = 0, nY = 0;
                                             if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
                                             {
                                                 const rtl::OUString sGluePoints( RTL_CONSTASCII_USTRINGPARAM ( "GluePoints" ) );
@@ -5036,7 +5036,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
                                 {
                                     Point aP;
-                                    sal_Int32 nX, nY;
+                                    sal_Int32 nX = 0, nY = 0;
                                     seqCoordinates[ nPtNum ].First.Value >>= nX;
                                     seqCoordinates[ nPtNum ].Second.Value >>= nY;
                                     aP.X() = nX;
