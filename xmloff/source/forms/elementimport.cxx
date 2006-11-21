@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:43:19 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,7 @@ namespace xmloff
                     {
                     case TypeClass_DOUBLE:
                     {
-                        double nVal;
+                        double nVal = 0;
                         aPropValues->Value >>= nVal;
                         switch( ePropTypeClass )
                         {
