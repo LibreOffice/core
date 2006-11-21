@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,7 +494,7 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
 SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
     {
         return NULL;
     }
