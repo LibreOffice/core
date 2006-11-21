@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:31:43 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package util;
 
+import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
 import com.sun.star.uno.UnoRuntime;
 
@@ -56,6 +57,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import java.util.Vector;
+import share.LogWriter;
 import util.AccessibilityTools;
 
 import util.DesktopTools;
@@ -313,8 +315,11 @@ public class UITools {
             }
             XAccessible xListBoxAccess = (XAccessible)
                          UnoRuntime.queryInterface(XAccessible.class, xListBox);
+
+            // if a List is not pulled to be open all entries are not visiblle, therefore the
+            // boolean argument
             XAccessibleContext xList =mAT.getAccessibleObjectForRole(
-                                          xListBoxAccess, AccessibleRole.LIST);
+                                          xListBoxAccess, AccessibleRole.LIST, true);
             XAccessibleSelection xListSelect = (XAccessibleSelection)
                    UnoRuntime.queryInterface(XAccessibleSelection.class, xList);
 
@@ -358,8 +363,10 @@ public class UITools {
 
                 XAccessible xListBoxAccess = (XAccessible)
                              UnoRuntime.queryInterface(XAccessible.class, xListBox);
+                // if a List is not pulled to be open all entries are not visiblle, therefore the
+                // boolean argument
                 xList =mAT.getAccessibleObjectForRole(
-                                              xListBoxAccess, AccessibleRole.LIST);
+                                              xListBoxAccess, AccessibleRole.LIST, true);
             }
 
             for (int i=0;i<xList.getAccessibleChildCount();i++) {
@@ -420,8 +427,10 @@ public class UITools {
 
                 XAccessible xListBoxAccess = (XAccessible)
                              UnoRuntime.queryInterface(XAccessible.class, xListBox);
+                // if a List is not pulled to be open all entries are not visiblle, therefore the
+                // boolean argument
                 xList =mAT.getAccessibleObjectForRole(
-                                              xListBoxAccess, AccessibleRole.LIST);
+                                              xListBoxAccess, AccessibleRole.LIST, true);
             }
 
             for (int i=0;i<xList.getAccessibleChildCount();i++) {
@@ -598,6 +607,11 @@ public class UITools {
       * set a value to a named check box
       * @param CheckBoxName the name of the check box
       * @param Value the value to set
+      *<ul>
+      *    <li>0: not checked </li>
+      *    <li>1: checked </li>
+      *    <li>2: don't know </li>
+      *</ul>
       * @throws java.lang.Exception if something fail
       */
      public void setCheckBoxValue(String CheckBoxName, Integer Value)
@@ -683,6 +697,51 @@ public class UITools {
     }
 
     /**
+     * fetch the window which is equal to the given <CODE>WindowName</CODE>
+     * @return the named window
+     * @throws java.lang.Exception if something fail
+     */
+    public XWindow getTopWindow(String WindowName, boolean debug) throws java.lang.Exception
+    {
+        XInterface xToolKit = null;
+        try {
+            xToolKit = (XInterface) mMSF.createInstance("com.sun.star.awt.Toolkit") ;
+        } catch (com.sun.star.uno.Exception e) {
+          throw new Exception("Could not toolkit: " + e.toString());
+        }
+        XExtendedToolkit tk = (XExtendedToolkit)
+            UnoRuntime.queryInterface(XExtendedToolkit.class, xToolKit);
+
+        int count = tk.getTopWindowCount();
+
+        XTopWindow retWindow = null;
+
+        if (debug) System.out.println("getTopWindow ->");
+
+        for (int i=0; i < count ; i++){
+            XTopWindow xTopWindow = tk.getTopWindow(i);
+            XAccessible xAcc = mAT.getAccessibleObject(xTopWindow);
+            String accName = xAcc.getAccessibleContext().getAccessibleName();
+
+            if (debug){
+                System.out.println("AccessibleName: " + accName);
+            }
+
+            if (WindowName.equals(accName)){
+                if (debug) System.out.println("-> found window with name '" + WindowName + "'");
+                retWindow = xTopWindow;
+            }
+        }
+
+
+        if (debug) {
+            if (retWindow == null) System.out.println("could not found window with name '" + WindowName + "'");
+            System.out.println("<- getTopWindow ");
+        }
+        return (XWindow) UnoRuntime.queryInterface(XWindow.class, retWindow);
+    }
+
+    /**
      * <B>DEPRECATED</B>
      * Since <CODE>AccessibilityTools</CODE> handle parameter <CODE>debugIsActive</CODE>
      * this function does not work anymore.
@@ -705,6 +764,5 @@ public class UITools {
     public void printAccessibleTree(PrintWriter log, boolean debugIsActive) {
         mAT.printAccessibleTree(log, mXRoot, debugIsActive);
     }
-
 
 }
