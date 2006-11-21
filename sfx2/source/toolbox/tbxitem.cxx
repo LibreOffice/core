@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:58:21 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,7 +647,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
                 }
                 else if ( pType == ::getCppuType((const sal_uInt32*)0) )
                 {
-                    sal_uInt32 nTemp ;
+                    sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
@@ -1202,7 +1202,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
                 }
                 else if ( pType == ::getCppuType((const sal_uInt32*)0) )
                 {
-                    sal_uInt32 nTemp ;
+                    sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
