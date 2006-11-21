@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:52:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -735,7 +735,7 @@ namespace presentation
                 }
                 else
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
 
                     if( !(rAny >>= nValue) )
                     {
