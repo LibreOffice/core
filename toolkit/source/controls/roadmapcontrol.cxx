@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapcontrol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:32:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:03:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         Reference< XPropertySet > xProps( xRoadmapItem, UNO_QUERY );
         if ( xProps.is() )
         {
-            sal_Int32 LocID;
+            sal_Int32 LocID = 0;
             Any aValue = xPropertySet->getPropertyValue( ::rtl::OUString::createFromAscii( "ID" ) );
             aValue >>= LocID;
             if (LocID < 0)              // index may not be smaller than zero
@@ -270,7 +270,7 @@ static void lcl_throwIndexOutOfBoundsException( )
           Any aAny;
           sal_Bool bIncrement = sal_True;
           sal_Int32 CurID = 0;
-          sal_Int32 n_CurItemID;
+          sal_Int32 n_CurItemID = 0;
           Reference< XInterface > CurRoadmapItem;
           while ( bIncrement )
           {
