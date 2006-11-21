@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlAutoStyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:44:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
             {
                 case CTF_DB_NUMBERFORMAT :
                 {
-                    sal_Int32 nNumberFormat;
+                    sal_Int32 nNumberFormat = 0;
                     if ( i->maValue >>= nNumberFormat )
                     {
                         rtl::OUString sAttrValue = rODBExport.getDataStyleName(nNumberFormat);
