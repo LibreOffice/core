@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:19:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -942,7 +942,7 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue(  ) throw(InvalidRegi
 
     case TypeClass_DOUBLE:
         {
-            double fNativeValue;
+            double fNativeValue = 0;
             aValue >>= fNativeValue;
 
             // find a reasonable allowed imprecision
