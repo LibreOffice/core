@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:26:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
             }
             else if ( pType == ::getCppuType((const sal_uInt32*)0) )
             {
-                sal_uInt32 nTemp ;
+                sal_uInt32 nTemp = 0;
                 rEvent.State >>= nTemp ;
                 pItem = new SfxUInt32Item( pCtrlItem->GetId(), nTemp );
             }
