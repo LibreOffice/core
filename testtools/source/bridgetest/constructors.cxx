@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constructors.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:37:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,8 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     ::sal_uInt32 arg5 = sal_uInt32();
     ::sal_Int64 arg6 = sal_Int64();
     ::sal_uInt64 arg7 = sal_uInt64();
-    float arg8;
-    double arg9;
+    float arg8 = float();
+    double arg9 = double();
     ::rtl::OUString arg11;
     css::uno::Type arg12;
     ::sal_Bool arg13 = sal_Bool();
