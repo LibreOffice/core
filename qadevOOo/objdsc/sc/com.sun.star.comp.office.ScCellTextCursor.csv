@@ -155,6 +155,7 @@
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"ScCellTextCursor";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "ScCellTextCursor";"com::sun::star::document::XDocumentInsertable#optional";"insertDocumentFromURL()"
 "ScCellTextCursor";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScCellTextCursor";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
