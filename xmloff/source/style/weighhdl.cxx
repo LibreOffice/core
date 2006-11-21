@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weighhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:09:25 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
     float fValue = float();
     if( !( rValue >>= fValue ) )
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if( rValue >>= nValue )
         {
             fValue = (float)nValue;
