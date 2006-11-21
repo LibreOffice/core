@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:11:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:44:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -957,7 +957,7 @@ shell::setv( const rtl::OUString& aUnqPath,
             // Setting of physical file properties
             if( values[i].Name == Size )
             {
-                sal_Int64 newSize;
+                sal_Int64 newSize = 0;
                 if( values[i].Value >>= newSize )
                 {   // valid value for the size
                     osl::File aFile(aUnqPath);
