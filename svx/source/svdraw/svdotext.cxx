@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:47:09 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1525,7 +1525,7 @@ SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
         return NULL;
     }
 
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
     {
         return NULL;
     }
