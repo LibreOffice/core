@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:51:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,7 +374,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
             }
             else if ( pType == ::getCppuType((const sal_Int32*)0) )
             {
-                sal_uInt32 nTemp;
+                sal_uInt32 nTemp = 0;
                 rValue >>= nTemp;
                 aArg = String::CreateFromInt32( nTemp );
             }
