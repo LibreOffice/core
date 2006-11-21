@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anydata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:47:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ AnyData allocSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimple
 
     case Type::value_long:
         {
-            sal_Int64 nValue;
+            sal_Int64 nValue = 0;
             OSL_VERIFY(_aAny >>= nValue);
 
             Address aStorage = _anAllocator.allocate( sizeof nValue );
@@ -242,7 +242,7 @@ AnyData allocSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimple
 
     case Type::value_double:
         {
-            double dValue;
+            double dValue = 0;
             OSL_VERIFY(_aAny >>= dValue);
 
             Address aStorage = _anAllocator.allocate( sizeof dValue );
