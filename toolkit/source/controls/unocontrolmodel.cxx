@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:15:18 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -716,19 +716,19 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             }
             else if ( rType == ::getCppuType((const sal_uInt32*)0) )
             {
-                sal_uInt32 n;
+                sal_uInt32 n = 0;
                 rValue >>= n;
                 OutStream->writeLong( n );
             }
             else if ( rType == ::getCppuType((const sal_Int32*)0) )
             {
-                sal_Int32 n;
+                sal_Int32 n = 0;
                 rValue >>= n;
                 OutStream->writeLong( n );
             }
             else if ( rType == ::getCppuType((const double*)0) )
             {
-                double n;
+                double n = 0;
                 rValue >>= n;
                 OutStream->writeDouble( n );
             }
