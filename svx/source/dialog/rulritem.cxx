@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:25:41 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ sal_Bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if ( nMemberId == 0 )
     {
         ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
@@ -242,7 +242,7 @@ sal_Bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if ( nMemberId == 0 )
     {
         ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
@@ -359,7 +359,7 @@ sal_Bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
 {
     nMemberId &= ~CONVERT_TWIPS;
 
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if ( nMemberId == 0 )
     {
         com::sun::star::awt::Rectangle aPagePosSize;
@@ -636,7 +636,7 @@ sal_Bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
 sal_Bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     switch ( nMemberId )
     {
         case MID_COLUMNARRAY:
