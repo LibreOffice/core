@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rotmodit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:55:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
     table::CellVertJustify eUno;
     if(!(rVal >>= eUno))
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
             return sal_False;
         eUno = (table::CellVertJustify)nValue;
