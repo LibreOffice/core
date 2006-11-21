@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConstantsPropertyHandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:46:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ sal_Bool XMLConstantsPropertyHandler::exportXML(
 
     sal_Bool bRet = false;
 
-    sal_Int32 nEnum;
+    sal_Int32 nEnum = 0;
 
     if( rValue.hasValue() && (rValue.getValueTypeClass() == TypeClass_ENUM))
     {
