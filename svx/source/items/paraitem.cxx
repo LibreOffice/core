@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:55:21 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1105,7 +1105,7 @@ sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                         if (!(rAnySeq[0] >>= aSeq[n].Position)) return sal_False;
                         if (!(rAnySeq[1] >>= aSeq[n].Alignment))
                         {
-                            sal_Int32 nVal;
+                            sal_Int32 nVal = 0;
                             if (rAnySeq[1] >>= nVal)
                                 aSeq[n].Alignment = (com::sun::star::style::TabAlign) nVal;
                             else
@@ -1159,7 +1159,7 @@ sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
         case MID_STD_TAB:
         {
-            sal_Int32 nNewPos;
+            sal_Int32 nNewPos = 0;
             if (!(rVal >>= nNewPos) )
                 return sal_False;
             const SvxTabStop& rTab = *(GetStart());
