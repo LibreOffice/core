@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:56:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ UINT16 SdrObjGroup::GetObjIdentifier() const
 SdrLayerID SdrObjGroup::GetLayer() const
 {
     FASTBOOL b1st=TRUE;
-    SdrLayerID nLay=SdrLayerID(nLayerId);
+    SdrLayerID nLay=SdrLayerID(SdrObject::GetLayer());
     SdrObjList* pOL=pSub;
     ULONG nObjAnz=pOL->GetObjCount();
     for (ULONG i=0; i<nObjAnz; i++) {
@@ -354,7 +354,7 @@ SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte
     if (pSub->GetObjCount()!=0) {
         return pSub->CheckHit(rPnt,nTol,pVisiLayer);
     } else { // ansonsten ist es eine leere Gruppe
-        if(!pVisiLayer || pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+        if(!pVisiLayer || pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
         {
             Rectangle aAussen(aOutRect);
             aAussen.Top()   -=nTol;
