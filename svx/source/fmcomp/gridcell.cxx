@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:40:51 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,7 +415,7 @@ sal_Int16 DbGridColumn::SetAlignment(sal_Int16 _nAlign)
     {   // 'Standard'
         if (m_xField.is())
         {
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             m_xField->getPropertyValue(FM_PROP_FIELDTYPE) >>= nType;
 
             switch (nType)
