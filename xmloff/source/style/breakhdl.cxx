@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:47:51 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
 
     if( !( rValue >>= eBreak ) )
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if( !( rValue >>= nValue ) )
             return sal_False;
 
@@ -190,7 +190,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
 
     if( !( rValue >>= eBreak ) )
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if( !( rValue >>= nValue ) )
             return sal_False;
 
