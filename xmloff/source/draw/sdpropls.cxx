@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 10:59:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -856,7 +856,7 @@ sal_Bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any&
 
 sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if( !(rValue >>= nValue ) )
         return sal_False;
 
@@ -1414,7 +1414,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_FRAME_MARGIN_HORI:
             case CTF_FRAME_MARGIN_VERT:
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     if( (property->maValue >>= nValue) && (nValue < 0) )
                         property->mnIndex = -1;
                 }
@@ -1470,7 +1470,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
     if( pRepeatOffsetX && pRepeatOffsetY )
     {
-        sal_Int32 nOffset;
+        sal_Int32 nOffset = 0;
         if( ( pRepeatOffsetX->maValue >>= nOffset ) && ( nOffset == 0 ) )
             pRepeatOffsetX->mnIndex = -1;
         else
@@ -1480,7 +1480,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     if(pFontWorkStyle)
     {
         // #FontWork#
-        sal_Int32 nStyle;
+        sal_Int32 nStyle = 0;
 
         if(pFontWorkStyle->maValue >>= nStyle)
         {
@@ -1736,7 +1736,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
 
     if( pRepeatOffsetX && pRepeatOffsetY )
     {
-        sal_Int32 nOffset;
+        sal_Int32 nOffset = 0;
         if( ( pRepeatOffsetX->maValue >>= nOffset ) && ( nOffset == 0 ) )
             pRepeatOffsetX->mnIndex = -1;
         else
