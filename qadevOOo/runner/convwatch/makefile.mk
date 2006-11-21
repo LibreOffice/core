@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-17 13:30:32 $
+#   last change: $Author: vg $ $Date: 2006-11-21 14:10:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,10 @@ JAVAFILES = \
  DocumentConverter.java\
  DBHelper.java\
  DB.java\
- ValueNotFoundException.java\
- GlobalLogWriter.java
+ ValueNotFoundException.java \
+ GlobalLogWriter.java \
+ CrashLoopTest.java 
+
 
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
