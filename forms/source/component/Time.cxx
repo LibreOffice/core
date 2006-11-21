@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:53:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
         m_bDateTimeField = sal_False;
         try
         {
-            sal_Int32 nFieldType;
+            sal_Int32 nFieldType = 0;
             xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
             m_bDateTimeField = (nFieldType == DataType::TIMESTAMP);
         }
