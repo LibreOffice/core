@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 12:38:56 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:11:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -479,7 +479,6 @@ $(SHL$(TNR)IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL$(TNR)IMPLIBN) \
     -def:$(SHL$(TNR)DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +$(TOUCH) $@
     +@echo build of $(SHL$(TNR)TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
