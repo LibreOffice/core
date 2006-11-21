@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proptypehlp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:56:22 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:04:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
     if( ::com::sun::star::uno::TypeClass_LONG == tc ) {
-        sal_Int32 i32;
+        sal_Int32 i32 = 0;
         a >>= i32;
         b = ( sal_Bool )i32;
     }
@@ -100,7 +100,7 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
         b = ( sal_Bool  ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_LONG == tc ) {
-        sal_uInt32 i32;
+        sal_uInt32 i32 = 0;
         a >>= i32;
         b = ( sal_Bool ) i32;
     }
@@ -252,7 +252,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::st
         i = ( sal_Int32 ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_LONG == tc ) {
-        sal_uInt32 i32;
+        sal_uInt32 i32 = 0;
         a >>= i32;
         i = ( sal_Int32 ) i32;
     }
@@ -398,12 +398,12 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
         a >>= f;
     }
     else if( ::com::sun::star::uno::TypeClass_DOUBLE == tc ) {
-         double d;
+         double d = 0;
          a >>= d;
          f = ( float ) d;
     }
     else if( ::com::sun::star::uno::TypeClass_HYPER == tc ) {
-        sal_Int64 i64;
+        sal_Int64 i64 = 0;
         a >>= i64;
         f = ( float ) i64;
     }
@@ -414,7 +414,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
         f = ( float ) i64;
     }
 */  else if( ::com::sun::star::uno::TypeClass_LONG == tc ) {
-        sal_Int32 i32;
+        sal_Int32 i32 = 0;
         a >>= i32;
         f = ( float )i32;
     }
@@ -444,7 +444,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
         f = ( float ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_LONG == tc ) {
-        sal_uInt32 i32;
+        sal_uInt32 i32 = 0;
         a >>= i32;
         f = ( float ) i32;
     }
