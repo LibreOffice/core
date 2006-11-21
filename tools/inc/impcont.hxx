@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impcont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:25:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:46:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,11 @@ inline void* Container::ImpGetObject( ULONG nIndex ) const
 |*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
+
+// #i70651#: Prevent warnings on Mac OS X
+#ifdef MACOSX
+#pragma GCC system_header
+#endif
 
 inline void** Container::ImpGetOnlyNodes() const
 {
