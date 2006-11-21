@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:59:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -722,7 +722,7 @@ namespace configmgr
 
         case ARG_DEPTH:
             {
-                sal_Int32 nIntVal;
+                sal_Int32 nIntVal = 0;
                 if (aValue >>= nIntVal)
                     _nLevels = nIntVal;
                 else
