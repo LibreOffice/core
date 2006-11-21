@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:38:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:32:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1825,7 +1825,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
 
     // variables for autostyles
     const ::rtl::OUString sNumFormat( ::rtl::OUString::createFromAscii( "NumberFormat" ));
-    sal_Int32 nNumberFormat;
+    sal_Int32 nNumberFormat = 0;
     uno::Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
     rtl::OUString aASName;
