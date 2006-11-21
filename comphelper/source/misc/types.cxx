@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:15:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ sal_Bool getBOOL(const Any& _rAny)
 //------------------------------------------------------------------------------
 sal_Int32 getEnumAsINT32(const Any& _rAny) throw(IllegalArgumentException)
 {
-    sal_Int32 nReturn;
+    sal_Int32 nReturn = 0;
     if (! ::cppu::enum2int(nReturn,_rAny) )
         throw IllegalArgumentException();
     return nReturn;
@@ -293,7 +293,7 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
             }
             case TypeClass_ENUM:
             {
-                sal_Int32 nAsInt32;
+                sal_Int32 nAsInt32 = 0;
                 bConversionSuccess = ::cppu::enum2int(nAsInt32, _rValue);
                 bRes = bConversionSuccess && (nAsInt32== *reinterpret_cast<const sal_Int32*>(pData));
                 break;
