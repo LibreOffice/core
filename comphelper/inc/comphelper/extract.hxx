@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extract.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:51:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny
     if (! (rAny >>= eRet))
     {
         // if not enum, maybe integer?
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if (! (rAny >>= nValue))
             throw ::com::sun::star::lang::IllegalArgumentException();
 
@@ -161,7 +161,7 @@ inline sal_Bool SAL_CALL any2bool( const ::com::sun::star::uno::Any & rAny )
     }
     else
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if (! (rAny >>= nValue))
             throw ::com::sun::star::lang::IllegalArgumentException();
         return nValue != 0;
