@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,11 +712,11 @@ void SdrObjList::ReformatAllEdgeObjects()
     }
 }
 
-void SdrObjList::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
+void SdrObjList::BurnInStyleSheetAttributes()
 {
     for(sal_uInt32 a(0L); a < GetObjCount(); a++)
     {
-        GetObj(a)->BurnInStyleSheetAttributes(bPseudoSheetsOnly);
+        GetObj(a)->BurnInStyleSheetAttributes();
     }
 }
 
@@ -1189,6 +1189,19 @@ void SdrPage::SetModel(SdrModel* pNewModel)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// #i68775# React on PageNum changes (from Model in most cases)
+void SdrPage::SetPageNum(sal_uInt16 nNew)
+{
+    if(nNew != nPageNum)
+    {
+        // change
+        nPageNum = nNew;
+
+        // notify visualisations, also notifies e.g. buffered MasterPages
+        ActionChanged();
+    }
+}
 
 USHORT SdrPage::GetPageNum() const
 {
