@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datatypes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:03:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,7 @@ namespace xforms
         {
             // check string constraints
             sal_Int32 nLength = rValue.getLength();
-            sal_Int32 nLimit;
+            sal_Int32 nLimit = 0;
             if ( m_aLength >>= nLimit )
             {
                 if ( nLimit != nLength )
@@ -636,7 +636,7 @@ namespace xforms
     //--------------------------------------------------------------------
     ::rtl::OUString OStringType::_explainInvalid( sal_uInt16 nReason )
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         ::rtl::OUStringBuffer sInfo;
         switch( nReason )
         {
@@ -758,7 +758,7 @@ namespace xforms
                     nFractionDigits++;
             nTotalDigits += nFractionDigits;
 
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if( ( m_aTotalDigits >>= nValue ) &&  nTotalDigits > nValue )
                 nReason = RID_STR_XFORMS_VALUE_TOTAL_DIGITS;
             else if( ( m_aFractionDigits >>= nValue ) &&
@@ -772,7 +772,7 @@ namespace xforms
     //--------------------------------------------------------------------
     ::rtl::OUString ODecimalType::_explainInvalid( sal_uInt16 nReason )
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         ::rtl::OUStringBuffer sInfo;
         switch( nReason )
         {
