@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _CharacterProperties.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:00:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,14 @@
 package ifc.style;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.xml.AttributeData;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import lib.MultiPropertyTest;
+import lib.MultiPropertyTest.PropertyTester;
 
 import util.ValueChanger;
 import util.utils;
@@ -88,6 +95,7 @@ import util.utils;
 *  <li><code> HyperLinkURL</code></li>
 *  <li><code> HyperLinkTarget</code></li>
 *  <li><code> HyperLinkName</code></li>
+*  <li><code> TextUserDefinedAttributes</code></li>
 * </ul> <p>
 * This test needs the following object relations :
 * <ul>
@@ -435,6 +443,111 @@ public class _CharacterProperties extends MultiPropertyTest {
             tRes.tested(name, false);
         }
     }// end of changeProp
+
+    public void _TextUserDefinedAttributes() {
+        XNameContainer uda = null;
+        boolean res = false;
+
+        try {
+            try{
+                uda = (XNameContainer) AnyConverter.toObject(
+                          new Type(XNameContainer.class),
+                          oObj.getPropertyValue("TextUserDefinedAttributes"));
+            } catch (com.sun.star.lang.IllegalArgumentException e){
+                log.println("TextUserDefinedAttributes is empty.");
+                uda = new _CharacterProperties.OwnUserDefinedAttributes();
+            }
+            AttributeData attr = new AttributeData();
+            attr.Namespace = "http://www.sun.com/staroffice/apitest/Cellprop";
+            attr.Type = "CDATA";
+            attr.Value = "true";
+            uda.insertByName("Cellprop:has-first-alien-attribute", attr);
+
+            String[] els = uda.getElementNames();
+            oObj.setPropertyValue("TextUserDefinedAttributes", uda);
+            uda = (XNameContainer) AnyConverter.toObject(
+                          new Type(XNameContainer.class),
+                          oObj.getPropertyValue("TextUserDefinedAttributes"));
+            els = uda.getElementNames();
+
+            Object obj = uda.getByName("Cellprop:has-first-alien-attribute");
+            res = true;
+        } catch (com.sun.star.beans.UnknownPropertyException upe) {
+            if (isOptional("TextUserDefinedAttributes")) {
+                log.println("Property is optional and not supported");
+                res = true;
+            } else {
+                log.println("Don't know the Property 'TextUserDefinedAttributes'");
+            }
+        } catch (com.sun.star.lang.WrappedTargetException wte) {
+            log.println(
+                    "WrappedTargetException while getting Property 'TextUserDefinedAttributes'");
+        } catch (com.sun.star.container.NoSuchElementException nee) {
+            log.println("added Element isn't part of the NameContainer");
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            log.println(
+                    "IllegalArgumentException while getting Property 'TextUserDefinedAttributes'");
+        } catch (com.sun.star.beans.PropertyVetoException pve) {
+            log.println(
+                    "PropertyVetoException while getting Property 'TextUserDefinedAttributes'");
+        } catch (com.sun.star.container.ElementExistException eee) {
+            log.println(
+                    "ElementExistException while getting Property 'TextUserDefinedAttributes'");
+        }
+
+        tRes.tested("TextUserDefinedAttributes", res);
+    }
+
+    private class OwnUserDefinedAttributes implements XNameContainer{
+        Hashtable members = null;
+
+
+        public OwnUserDefinedAttributes() {
+            members = new Hashtable();
+        }
+
+        public Object getByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
+            return members.get(str);
+        }
+
+        public String[] getElementNames() {
+            Enumeration oEnum = members.keys();
+            int count = members.size();
+            String[] res = new String[count];
+            int i=0;
+            while(oEnum.hasMoreElements())
+                res[i] = (String)oEnum.nextElement();
+            return res;
+        }
+
+        public com.sun.star.uno.Type getElementType() {
+            Enumeration oEnum = members.keys();
+            String key = (String)oEnum.nextElement();
+            Object o = members.get(key);
+            return new Type(o.getClass());
+        }
+
+        public boolean hasByName(String str) {
+            return members.get(str) != null;
+        }
+
+        public boolean hasElements() {
+            return members.size() > 0;
+        }
+
+        public void insertByName(String str, Object obj) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.ElementExistException, com.sun.star.lang.WrappedTargetException {
+            members.put(str, obj);
+        }
+
+        public void removeByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
+            members.remove(str);
+        }
+
+        public void replaceByName(String str, Object obj) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
+            members.put(str, obj);
+        }
+
+    }
 
 } //finish class _CharacterProperties
 
