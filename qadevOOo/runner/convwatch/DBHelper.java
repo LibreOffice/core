@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:17:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@ import java.util.GregorianCalendar;
 import java.text.FieldPosition;
 import java.util.Locale;
 
+import java.lang.Thread;
+
 class ShareConnection
 {
     private static Connection m_aConnection = null;
@@ -70,6 +72,41 @@ class ShareConnection
             return m_aConnection;
         }
 }
+
+    class MySQLThread extends Thread
+    {
+        Connection m_aCon = null;
+        String m_sSQL;
+        public MySQLThread(Connection _aCon, String _sSQL)
+            {
+                m_aCon = _aCon;
+                m_sSQL = _sSQL;
+            }
+
+        public void run()
+            {
+                Statement oStmt = null;
+                if (m_aCon == null)
+                {
+                    GlobalLogWriter.get().println("ERROR: in ExecSQL, connection not established.");
+                    return;
+                }
+
+                // Connection oCon = null;
+                try
+                {
+                    // oCon = getMySQLConnection();
+                    oStmt = m_aCon.createStatement();
+
+                    GlobalLogWriter.get().println(m_sSQL);
+                    ResultSet oResult = oStmt.executeQuery(m_sSQL);
+                }
+                catch(Exception e)
+                {
+                    GlobalLogWriter.get().println("Couldn't execute sql string " + m_sSQL);
+                }
+            }
+    }
 
 public class DBHelper
 {
@@ -129,6 +166,7 @@ public class DBHelper
             return null;
         }
 
+
     /**
      * This method removes all entries of the given<br>
      * module/platform combination
@@ -148,29 +186,12 @@ public class DBHelper
     // LLA:         // ExecSQL(_aCon, sSQL);
     // LLA:     }
 
-    public static void ExecSQL(Connection _aCon, String _sSQL)
-        {
-            Statement oStmt = null;
-            if (_aCon == null)
+    public static synchronized void ExecSQL(Connection _aCon, String _sSQL)
             {
-                GlobalLogWriter.get().println("ERROR: in ExecSQL, connection not established.");
-                return;
+                MySQLThread aSQLThread = new MySQLThread(_aCon, _sSQL);
+                aSQLThread.start();
             }
 
-            // Connection oCon = null;
-            try
-            {
-                // oCon = getMySQLConnection();
-                oStmt = _aCon.createStatement();
-
-                GlobalLogWriter.get().println(_sSQL);
-                ResultSet oResult = oStmt.executeQuery(_sSQL);
-            }
-            catch(Exception e)
-            {
-                GlobalLogWriter.get().println("Couldn't execute sql string " + _sSQL);
-            }
-        }
 
 
     // public static int QueryIntFromSQL(String _sSQL, String _sColumnName, String _sValue)

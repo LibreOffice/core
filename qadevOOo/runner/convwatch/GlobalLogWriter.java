@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GlobalLogWriter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:18:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ import stats.SimpleLogWriter;
 public class GlobalLogWriter
 {
     private static LogWriter m_aGlobalLogWriter = null;
-    public static LogWriter get()
+    public static synchronized LogWriter get()
         {
             if (m_aGlobalLogWriter == null)
             {
@@ -51,7 +51,7 @@ public class GlobalLogWriter
             return m_aGlobalLogWriter;
         }
 
-    public static void set(LogWriter _aLog)
+    public static synchronized void set(LogWriter _aLog)
         {
             m_aGlobalLogWriter = _aLog;
         }
