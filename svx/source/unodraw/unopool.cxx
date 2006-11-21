@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
                 drawing::BitmapMode eMode;
                 if(!(aValue >>= eMode) )
                 {
-                    sal_Int32 nMode;
+                    sal_Int32 nMode = 0;
                     if(!(aValue >>= nMode))
                         throw IllegalArgumentException();
 
