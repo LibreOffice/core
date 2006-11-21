@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2454,7 +2454,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     Reference<XPropertySet> xRowSetProps(getRowSet(),UNO_QUERY);
     ::rtl::OUString aOldName;
     xRowSetProps->getPropertyValue(PROPERTY_COMMAND) >>= aOldName;
-    sal_Int32 nOldType;
+    sal_Int32 nOldType = 0;
     xRowSetProps->getPropertyValue(PROPERTY_COMMANDTYPE) >>= nOldType;
     Reference<XConnection> xOldConnection;
     ::cppu::extractInterface(xOldConnection,xRowSetProps->getPropertyValue(PROPERTY_ACTIVECONNECTION));
