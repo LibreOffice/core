@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:24:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2192,7 +2192,7 @@ void FmXFormController::loaded(const EventObject& rEvent) throw( RuntimeExceptio
         if (xSet.is())
         {
             Any aVal        = xSet->getPropertyValue(FM_PROP_CYCLE);
-            sal_Int32 aVal2;
+            sal_Int32 aVal2 = 0;
             ::cppu::enum2int(aVal2,aVal);
             m_bCycle        = !aVal.hasValue() || aVal2 == TabulatorCycle_RECORDS;
             m_bCanUpdate    = aStaticTools.canUpdate(xSet);
