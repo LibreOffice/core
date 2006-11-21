@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:56:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:27:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,7 @@ namespace presentation
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
             {
-                double nTmp;
+                double nTmp = 0;
                 if( (rSourceAny >>= nTmp) )
                 {
                     sal_uInt32 aIntColor( static_cast< sal_uInt32 >(nTmp) );
