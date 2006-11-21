@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:44:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ SdrObjGeoData::SdrObjGeoData():
     bSizProt(FALSE),
     bNoPrint(FALSE),
     bClosedObj(FALSE),
-    nLayerId(0)
+    mnLayerID(0)
 {
     DBG_CTOR(SdrObjGeoData,NULL);
 }
@@ -475,7 +475,7 @@ SdrObject::SdrObject()
     pUserCall(NULL),
     pPlusData(NULL),
     nOrdNum(0),
-    nLayerId(0)
+    mnLayerID(0)
 {
     DBG_CTOR(SdrObject,NULL);
     bVirtObj         =FALSE;
@@ -665,24 +665,27 @@ void SdrObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrLayerID SdrObject::GetLayer() const
 {
-    return SdrLayerID(nLayerId);
+    return mnLayerID;
 }
 
-void SdrObject::GetLayerSet(SetOfByte& rSet) const
+void SdrObject::getMergedHierarchyLayerSet(SetOfByte& rSet) const
 {
-    rSet.Set((BYTE)nLayerId);
+    rSet.Set(GetLayer());
     SdrObjList* pOL=GetSubList();
     if (pOL!=NULL) {
         ULONG nObjAnz=pOL->GetObjCount();
         for (ULONG nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
-            pOL->GetObj(nObjNum)->GetLayerSet(rSet);
+            pOL->GetObj(nObjNum)->getMergedHierarchyLayerSet(rSet);
         }
     }
 }
 
 void SdrObject::NbcSetLayer(SdrLayerID nLayer)
 {
-    nLayerId=nLayer;
+    if(GetLayer() != nLayer)
+    {
+        mnLayerID = nLayer;
+    }
 }
 
 void SdrObject::SetLayer(SdrLayerID nLayer)
@@ -1401,7 +1404,7 @@ BOOL SdrObject::LineGeometryUsageIsNecessary() const
 
 SdrObject* SdrObject::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
     {
         return 0L;
     }
@@ -1445,7 +1448,7 @@ void SdrObject::operator=(const SdrObject& rObj)
 
     pModel  =rObj.pModel;
     aOutRect=rObj.GetCurrentBoundRect();
-    nLayerId=rObj.GetLayer();
+    mnLayerID = rObj.mnLayerID;
     aAnchor =rObj.aAnchor;
     bVirtObj=rObj.bVirtObj;
     bSizProt=rObj.bSizProt;
@@ -2253,9 +2256,9 @@ void SdrObject::ReformatText()
     }
 }
 
-void SdrObject::BurnInStyleSheetAttributes(sal_Bool bPseudoSheetsOnly)
+void SdrObject::BurnInStyleSheetAttributes()
 {
-    GetProperties().ForceStyleToHardAttributes(bPseudoSheetsOnly);
+    GetProperties().ForceStyleToHardAttributes();
 }
 
 #define Imp2ndKennung (0x434F4D43)
@@ -2350,7 +2353,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.bSizProt      =bSizProt      ;
     rGeo.bNoPrint      =bNoPrint      ;
     rGeo.bClosedObj    =bClosedObj    ;
-    rGeo.nLayerId      =nLayerId      ;
+    rGeo.mnLayerID = mnLayerID;
 
     // Benutzerdefinierte Klebepunkte
     if (pPlusData!=NULL && pPlusData->pGluePoints!=NULL) {
@@ -2376,7 +2379,7 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
     bSizProt      =rGeo.bSizProt      ;
     bNoPrint      =rGeo.bNoPrint      ;
     bClosedObj    =rGeo.bClosedObj    ;
-    nLayerId      =rGeo.nLayerId      ;
+    mnLayerID = rGeo.mnLayerID;
 
     // Benutzerdefinierte Klebepunkte
     if (rGeo.pGPL!=NULL) {
@@ -2664,10 +2667,10 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, FASTBOOL bMerge) const
         }
     }
 
-    lcl_SetItem(rAttr,bMerge,SdrLayerIdItem(nLayerId));
+    lcl_SetItem(rAttr,bMerge,SdrLayerIdItem(GetLayer()));
     const SdrLayerAdmin* pLayAd=pPage!=NULL ? &pPage->GetLayerAdmin() : pModel!=NULL ? &pModel->GetLayerAdmin() : NULL;
     if (pLayAd!=NULL) {
-        const SdrLayer* pLayer=pLayAd->GetLayerPerID(nLayerId);
+        const SdrLayer* pLayer=pLayAd->GetLayerPerID(GetLayer());
         if (pLayer!=NULL) {
             lcl_SetItem(rAttr,bMerge,SdrLayerNameItem(pLayer->GetName()));
         }
