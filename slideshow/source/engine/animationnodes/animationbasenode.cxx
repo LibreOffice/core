@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:58:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,7 +404,7 @@ AnimationBaseNode::fillCommonParameters() const
     const bool bAutoReverse( mxAnimateNode->getAutoReverse() );
 
     boost::optional<double> aRepeats;
-    double nRepeats;
+    double nRepeats = 0;
     if( (mxAnimateNode->getRepeatCount() >>= nRepeats) ) {
         aRepeats.reset( nRepeats );
     }
