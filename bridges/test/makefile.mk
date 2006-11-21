@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 23:54:07 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:12:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,20 +40,18 @@ TARGET=test
 LIBTARGET=NO
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 ALLIDLFILES = test_bridge.idl
 CPPUMAKERFLAGS += -C
 
 
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb  $(BIN)$/test.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb  $(BIN)$/test.rdb
 
 # output directory (one dir for each project)
@@ -93,33 +91,7 @@ UNOTYPES = \
         com.sun.star.lang.XMultiComponentFactory \
         com.sun.star.lang.XSingleComponentFactory
 
-#UNOTYPES= com.sun.star.corba.giop.MsgType_1_1
-#UNOTYPES=	com.sun.star.uno.XInterface \
-#	  	com.sun.star.uno.TypeClass \
-#		com.sun.star.corba.CorbaString8 
-#com.sun.star.corba.giop.RequestHeader_1_1
-
 JARFILES = jurt.jar unoil.jar
-
-
-
-# GENJAVACLASSFILES = \
-# 	$(CLASSDIR)$/test$/TestTypes.class \
-# 	$(CLASSDIR)$/test$/TestBridgeException.class \
-# 	$(CLASSDIR)$/test$/XCallMe.class \
-# 	$(CLASSDIR)$/test$/XInterfaceTest.class \
-# 	$(CLASSDIR)$/test$/XTestFactory.class \
-    
-
-# JAVACLASSFILES= \
-# 	$(CLASSDIR)$/testclient.class
-
-
-
-# TYPES={$(subst,.class, $(subst,$/,.  $(subst,$(CLASSDIR)$/,-T  $(GENJAVACLASSFILES))))}
-# GENJAVAFILES = {$(subst,.class,.java $(subst,$/class, $(GENJAVACLASSFILES)))}
-# JAVAFILES= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) $(GENJAVAFILES) 
-
 
 OBJFILES=	\
             $(OBJ)$/testserver.obj \
@@ -142,8 +114,6 @@ APP2STDLIBS+=	\
             $(SALLIB)	\
             $(LIBCIMT) 
 
-#APP2DEF=	$(MISC)$/$(APP2TARGET).def
-
 APP3TARGET=	testclient
 APP3OBJS=	$(OBJ)$/testclient.obj \
         $(OBJ)$/testcomp.obj
@@ -157,9 +127,6 @@ APP3STDLIBS+=	\
             $(CPPUHELPERLIB)	\
             $(SALLIB)	\
             $(LIBCIMT) 
-#			imsci_uno.lib
-
-#APP3DEF=	$(MISC)$/$(APP3TARGET).def
 
 #----------------------------------
 
@@ -200,18 +167,11 @@ APP4DEF=	$(MISC)$/$(APP4TARGET).def
 
 # --- Targets ------------------------------------------------------
 
-#.IF "$(depend)" == ""
-ALL : 	$(BIN)$/test.rdb	\
-    $(BIN)$/server.rdb	\
-    $(BIN)$/client.rdb	\
-    $(GENJAVAFILES)		\
-        ALLTAR 
-
-#.ELSE
-#ALL: 	ALLDEP
-#.ENDIF
-
 .INCLUDE :  target.mk
+
+ALLTAR : 	$(BIN)$/test.rdb	\
+    $(BIN)$/server.rdb	\
+    $(BIN)$/client.rdb	
 
 $(BIN)$/test.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
@@ -225,7 +185,4 @@ $(BIN)$/client.rdb: $(BIN)$/test.rdb
 $(BIN)$/server.rdb: $(BIN)$/test.rdb
     +rm -f $(BIN)$/client.rdb
     +regmerge $@ / $(BIN)$/test.rdb $(SOLARBINDIR)$/udkapi.rdb
-
-# $(GENJAVAFILES) : $(RDB)
-# 	+javamaker -BUCR -O$(OUT) $(TYPES) $(UNOUCRRDB)
 
