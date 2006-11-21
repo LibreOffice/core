@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:38:05 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -924,7 +924,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
 
     // format spec
-    sal_Int32 nKey;
+    sal_Int32 nKey = 0;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ) ) >>= nKey)
     {
         Reference< util::XNumberFormatsSupplier > xSupplier;
