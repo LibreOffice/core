@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:25:36 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -950,7 +950,7 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
     if ( m_pColumns )
     {
         Reference<XPropertySet> xColumn(m_pColumns->getByIndex(columnIndex-1),UNO_QUERY);
-        sal_Int32 nColType;
+        sal_Int32 nColType = 0;
         xColumn->getPropertyValue(PROPERTY_TYPE) >>= nColType;
         switch( nColType )
         {
@@ -958,7 +958,7 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
             case DataType::TIME:
             case DataType::TIMESTAMP:
             {
-                double nValue;
+                double nValue = 0;
                 if ( x >>= nValue )
                 {
                     if ( DataType::TIMESTAMP == nColType )
