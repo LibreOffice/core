@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:41 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ void GetSkew( SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rS
 void GetExtrusionDepth( SdrCustomShapeGeometryItem& rItem, const double* pMap, double& rBackwardDepth, double& rForwardDepth )
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
-    double fDepth, fFraction;
+    double fDepth = 0, fFraction = 0;
     const rtl::OUString sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
     Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sDepth );
     if ( pAny && ( *pAny >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
