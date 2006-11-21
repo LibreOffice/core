@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:29:18 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,7 +503,7 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_False;
-    sal_Int32 nInt;
+    sal_Int32 nInt = 0;
     switch ( nMemberId )
     {
         case MID_SEARCH_COMMAND:
