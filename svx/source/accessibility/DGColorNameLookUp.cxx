@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DGColorNameLookUp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:04:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
             try
             {
                 uno::Any aColor (xNA->getByName (aNames[i]));
-                long nColor;
+                long nColor = 0;
                 aColor >>= nColor;
                 maColorValueToNameMap[nColor] = aNames[i];
             }
