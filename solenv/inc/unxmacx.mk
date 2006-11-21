@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-11-08 14:03:43 $
+#   last change: $Author: vg $ $Date: 2006-11-21 17:22:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,61 +144,26 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    agg \
     autodoc \
-    avmedia \
     b_server \
     basctl \
-    basebmp \
-    basic \
-    bridges \
-    canvas \
     chart2 \
-    comphelper \
-    configmgr \
-    connectivity \
-    cppcanvas \
-    dbaccess \
-    desktop \
     devtools \
-    dxcanvas \
     dtrans \
     extensions \
     filter \
-    forms \
     fpicker \
-    framework \
-    glcanvas \
-    i18npool \
     lingu \
-    package \
-    psprint \
-    pyuno \
     r_tools \
-    registry \
-    remotebridges \
     sal \
     sc \
     sd \
-    sfx2 \
-    slideshow \
     starmath \
-    stoc \
     svtools \
-    svx \
     sw \
-    testtools \
-    toolkit \
-    tools \
-    ucb \
-    ucbhelper \
-    uui \
     vcl \
     writerperfect \
-    xmlscript \
-    xmlsecurity \
-    xmltrans \
-    xmloff
+    xmlsecurity
 
 # Currently, there is no nas support for OS X...
 CDEFS+= -DNO_AUDIO
