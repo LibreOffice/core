@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:27:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,7 +588,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
         {
             // Laengen je nach Datentyp:
             sal_Int32   nLen,
-                        nType;
+                        nType = 0;
             if(bIsTable)
             {
                 nLen    = m_aPrecisions[i];
