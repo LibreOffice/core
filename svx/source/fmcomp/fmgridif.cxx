@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:42:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1503,7 +1503,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
                 // GetDefaultColumnWidth already considerd the zoom factor
             else
             {
-                sal_Int32 nTest;
+                sal_Int32 nTest = 0;
                 if (evt.NewValue >>= nTest)
                 {
                     nWidth = pGrid->LogicToPixel(Point(nTest,0),MAP_10TH_MM).X();
