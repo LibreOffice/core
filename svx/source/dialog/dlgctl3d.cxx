@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,11 @@
 #include "dlgctl3d.hxx"
 #include <goodies/base3d.hxx>
 #include <tools/link.hxx>
+
+// #i58240#
+#ifndef _SVX_HELPID_HRC
+#include "helpid.hrc"
+#endif
 
 /*************************************************************************
 |*  3D Preview Control
@@ -1202,6 +1207,11 @@ SvxLightCtl3D::SvxLightCtl3D( Window* pParent, WinBits nStyle )
 
 void SvxLightCtl3D::Init()
 {
+    // #i58240# set HelpIDs for scrollbars and switcher
+    aHorScroller.SetHelpId(HID_CTRL3D_HSCROLL);
+    aVerScroller.SetHelpId(HID_CTRL3D_VSCROLL);
+    aSwitcher.SetHelpId(HID_CTRL3D_SWITCHER);
+
     // Lokale Parameter setzen
     bSphereUsed = TRUE;
     bVectorValid = FALSE;
@@ -1350,10 +1360,10 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
             ;
             break;
         case KEY_LEFT:
-            move(  4.0,  0.0 );
+            move(  -4.0,  0.0 ); // #i58242# changed move direction in X
             break;
         case KEY_RIGHT:
-            move( -4.0,  0.0 );
+            move( 4.0,  0.0 ); // #i58242# changed move direction in X
             break;
         case KEY_UP:
             move(  0.0,  4.0 );
