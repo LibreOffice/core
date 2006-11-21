@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:35:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ String GetCommandLineToken( int nToken, const String& rLine )
     int nActualToken = 0;
     sal_Unicode* pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*( nLen + 1 ) );
     const sal_Unicode* pRun = rLine.GetBuffer();
-    sal_Unicode* pLeap;
+    sal_Unicode* pLeap = NULL;
 
     while( *pRun && nActualToken <= nToken )
     {
@@ -198,7 +198,7 @@ ByteString GetCommandLineToken( int nToken, const ByteString& rLine )
     int nActualToken = 0;
     char* pBuffer = (char*)alloca( nLen + 1 );
     const char* pRun = rLine.GetBuffer();
-    char* pLeap;
+    char* pLeap = NULL;
 
     while( *pRun && nActualToken <= nToken )
     {
