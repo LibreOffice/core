@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:05:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,10 @@ protected:
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     DECL_LINK(OnCreate, void* );
+
+    // #i70852# overload Layer interface to force to FormColtrol layer
+    virtual SdrLayerID GetLayer() const;
+    virtual void NbcSetLayer(SdrLayerID nLayer);
 };
 
 
