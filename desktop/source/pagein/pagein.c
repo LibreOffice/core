@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagein.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:44:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ int  main (int argc, char **argv)
                 }
 
                 if (v >= 2)
-                    fprintf (stderr, "pagein(\"%s\") = %d bytes\n", path, k);
+                    fprintf (stderr, "pagein(\"%s\") = %d bytes\n", path, (int) k);
                 nfiles += 1;
             }
             fclose (fp);
@@ -146,12 +146,12 @@ int  main (int argc, char **argv)
             }
 
             if (v >= 2)
-                fprintf (stderr, "pagein(\"%s\") = %d bytes\n", argv[i], k);
+                fprintf (stderr, "pagein(\"%s\") = %d bytes\n", argv[i], (int) k);
             nfiles += 1;
         }
     }
 
     if (v >= 1)
-        fprintf (stderr, "Total: %d files (%d bytes)\n", nfiles, nbytes);
+        fprintf (stderr, "Total: %d files (%d bytes)\n", (int) nfiles, (int) nbytes);
     return (0);
 }
