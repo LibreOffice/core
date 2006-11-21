@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:16:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1044,7 +1044,7 @@ void UnoDialogControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
 {
     Reference< XPropertySet > xP( rxCtrl->getModel(), UNO_QUERY );
 
-    sal_Int32 nX, nY, nWidth, nHeight;
+    sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nX;
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nY;
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
