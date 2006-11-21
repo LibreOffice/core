@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:31:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:25:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1167,7 +1167,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetProxyType")))
     {
         // Proxy none, manually
-        sal_Int32 value;
+        sal_Int32 value = 0;
         rEvent.Element >>= value;
         setINetSettingsInVM(value != 0);
         return;
@@ -1218,7 +1218,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "appletviewer.security.mode"));
-        sal_Int32 n;
+        sal_Int32 n = 0;
         if (rEvent.Element >>= n)
             switch (n)
             {
