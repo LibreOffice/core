@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:50:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:47:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2669,7 +2669,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                     }
                     else if ( pType == ::getCppuType((const sal_uInt32*)0) )
                     {
-                        sal_uInt32 nTemp ;
+                        sal_uInt32 nTemp = 0;
                         aAny >>= nTemp ;
                         pItem = new SfxUInt32Item( nSlot, nTemp );
                     }
