@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:47:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,7 +407,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
         if(pPathObj)
         {
             pPathObj->ImpSetAnchorPos(aAnchor);
-            pPathObj->NbcSetLayer(SdrLayerID(nLayerId));
+            pPathObj->NbcSetLayer(SdrLayerID(GetLayer()));
 
             if(pModel)
             {
