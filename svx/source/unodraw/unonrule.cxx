@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:26:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_LEFT_MARGIN)))
         {
-            sal_Int32 nMargin;
+            sal_Int32 nMargin = 0;
             if( aVal >>= nMargin )
             {
                 aFmt.SetAbsLSpace((sal_uInt16)nMargin);
@@ -505,7 +505,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_FIRST_LINE_OFFSET)))
         {
-            sal_Int32 nMargin;
+            sal_Int32 nMargin = 0;
             if( aVal >>= nMargin )
             {
                 aFmt.SetFirstLineOffset((sal_uInt16)nMargin);
@@ -514,7 +514,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SymbolTextDistance")))
         {
-            sal_Int32 nTextDistance;
+            sal_Int32 nTextDistance = 0;
             if( aVal >>= nTextDistance )
             {
                 aFmt.SetCharTextDistance((sal_uInt16)nTextDistance);
@@ -523,7 +523,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_COLOR)))
         {
-            sal_Int32 nColor;
+            sal_Int32 nColor = 0;
             if( aVal >>= nColor )
             {
                 aFmt.SetBulletColor( (Color) nColor );
