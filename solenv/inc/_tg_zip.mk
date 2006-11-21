@@ -63,7 +63,8 @@ $(ZIP1DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP1DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR))) $(command_seperator) $(ZIPDEP) $(ZIP1FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP1EXT)/))) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP1TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP1DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR))) $(command_seperator) $(ZIPDEP) $(ZIP1FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP1EXT)/))) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP1TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP1DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP1FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP1EXT)/))) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP1TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -71,7 +72,8 @@ $(ZIP1DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP1DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR))) $(command_seperator) $(ZIPDEP) $(ZIP1FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP1TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP1DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR))) $(command_seperator) $(ZIPDEP) $(ZIP1FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP1TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP1DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP1FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP1TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -178,7 +180,8 @@ $(ZIP2DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP2DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR))) $(command_seperator) $(ZIPDEP) $(ZIP2FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP2EXT)/))) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP2TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP2DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR))) $(command_seperator) $(ZIPDEP) $(ZIP2FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP2EXT)/))) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP2TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP2DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP2FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP2EXT)/))) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP2TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -186,7 +189,8 @@ $(ZIP2DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP2DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR))) $(command_seperator) $(ZIPDEP) $(ZIP2FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP2TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP2DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR))) $(command_seperator) $(ZIPDEP) $(ZIP2FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP2TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP2DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP2FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP2TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -293,7 +297,8 @@ $(ZIP3DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP3DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR))) $(command_seperator) $(ZIPDEP) $(ZIP3FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP3EXT)/))) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP3TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP3DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR))) $(command_seperator) $(ZIPDEP) $(ZIP3FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP3EXT)/))) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP3TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP3DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP3FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP3EXT)/))) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP3TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -301,7 +306,8 @@ $(ZIP3DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP3DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR))) $(command_seperator) $(ZIPDEP) $(ZIP3FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP3TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP3DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR))) $(command_seperator) $(ZIPDEP) $(ZIP3FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP3TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP3DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP3FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP3TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -408,7 +414,8 @@ $(ZIP4DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP4DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR))) $(command_seperator) $(ZIPDEP) $(ZIP4FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP4EXT)/))) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP4TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP4DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR))) $(command_seperator) $(ZIPDEP) $(ZIP4FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP4EXT)/))) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP4TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP4DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP4FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP4EXT)/))) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP4TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -416,7 +423,8 @@ $(ZIP4DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP4DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR))) $(command_seperator) $(ZIPDEP) $(ZIP4FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP4TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP4DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR))) $(command_seperator) $(ZIPDEP) $(ZIP4FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP4TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP4DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP4FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP4TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -523,7 +531,8 @@ $(ZIP5DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP5DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR))) $(command_seperator) $(ZIPDEP) $(ZIP5FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP5EXT)/))) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP5TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP5DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR))) $(command_seperator) $(ZIPDEP) $(ZIP5FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP5EXT)/))) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP5TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP5DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP5FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP5EXT)/))) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP5TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -531,7 +540,8 @@ $(ZIP5DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP5DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR))) $(command_seperator) $(ZIPDEP) $(ZIP5FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP5TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP5DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR))) $(command_seperator) $(ZIPDEP) $(ZIP5FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP5TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP5DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP5FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP5TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -638,7 +648,8 @@ $(ZIP6DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP6DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR))) $(command_seperator) $(ZIPDEP) $(ZIP6FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP6EXT)/))) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP6TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP6DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR))) $(command_seperator) $(ZIPDEP) $(ZIP6FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP6EXT)/))) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP6TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP6DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP6FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP6EXT)/))) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP6TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -646,7 +657,8 @@ $(ZIP6DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP6DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR))) $(command_seperator) $(ZIPDEP) $(ZIP6FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP6TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP6DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR))) $(command_seperator) $(ZIPDEP) $(ZIP6FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP6TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP6DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP6FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP6TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -753,7 +765,8 @@ $(ZIP7DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP7DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR))) $(command_seperator) $(ZIPDEP) $(ZIP7FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP7EXT)/))) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP7TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP7DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR))) $(command_seperator) $(ZIPDEP) $(ZIP7FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP7EXT)/))) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP7TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP7DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP7FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP7EXT)/))) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP7TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -761,7 +774,8 @@ $(ZIP7DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP7DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR))) $(command_seperator) $(ZIPDEP) $(ZIP7FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP7TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP7DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR))) $(command_seperator) $(ZIPDEP) $(ZIP7FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP7TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP7DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP7FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP7TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -868,7 +882,8 @@ $(ZIP8DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP8DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR))) $(command_seperator) $(ZIPDEP) $(ZIP8FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP8EXT)/))) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP8TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP8DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR))) $(command_seperator) $(ZIPDEP) $(ZIP8FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP8EXT)/))) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP8TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP8DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP8FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP8EXT)/))) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP8TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -876,7 +891,8 @@ $(ZIP8DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP8DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR))) $(command_seperator) $(ZIPDEP) $(ZIP8FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP8TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP8DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR))) $(command_seperator) $(ZIPDEP) $(ZIP8FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP8TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP8DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP8FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP8TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -983,7 +999,8 @@ $(ZIP9DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP9DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR))) $(command_seperator) $(ZIPDEP) $(ZIP9FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP9EXT)/))) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP9TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP9DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR))) $(command_seperator) $(ZIPDEP) $(ZIP9FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP9EXT)/))) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP9TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP9DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP9FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP9EXT)/))) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP9TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -991,7 +1008,8 @@ $(ZIP9DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP9DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR))) $(command_seperator) $(ZIPDEP) $(ZIP9FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP9TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP9DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR))) $(command_seperator) $(ZIPDEP) $(ZIP9FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP9TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP9DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP9FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP9TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -1098,7 +1116,8 @@ $(ZIP10DEPFILE) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP10DIR)" != ""
     @echo type 1
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR))) $(command_seperator) $(ZIPDEP) $(ZIP10FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP10EXT)/))) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP10TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP10DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR))) $(command_seperator) $(ZIPDEP) $(ZIP10FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR)))$/ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP10EXT)/))) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP10TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP10DIR)" != ""
     @echo type 2
     +-$(ZIPDEP) $(ZIP10FLAGS) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP10EXT)/))) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(ZIP10TARGET)_, $(@:f:b))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
@@ -1106,7 +1125,8 @@ $(ZIP10DEPFILE) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP10DIR)" != ""
     @echo type 3
-    +-$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR))) $(command_seperator) $(ZIPDEP) $(ZIP10FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP10TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
+    -$(MKDIRHIER) $(ZIP10DIR)
+    +$(CDD) $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR))) $(command_seperator) $(ZIPDEP) $(ZIP10FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR)))$/ $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP10TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(PWD)$/$(PRJ)$/$(ROUT)$/misc$/$(@:f)
 .ELSE			# "$(ZIP10DIR)" != ""
     @echo type 4
     +-$(ZIPDEP) $(ZIP10FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP10TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
