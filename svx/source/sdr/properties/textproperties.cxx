@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:46:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,11 +412,17 @@ namespace sdr
             }
         }
 
-        void TextProperties::ForceStyleToHardAttributes(sal_Bool bPseudoSheetsOnly)
+        void TextProperties::ForceStyleToHardAttributes()
         {
-            // call parent
-            AttributeProperties::ForceStyleToHardAttributes(bPseudoSheetsOnly);
+            // #i61284# call parent first to get the hard ObjectItemSet
+            AttributeProperties::ForceStyleToHardAttributes();
 
+            // #i61284# push hard ObjectItemSet to OutlinerParaObject attributes
+            // using existing functionality
+            GetObjectItemSet(); // force ItemSet
+            ItemSetChanged(*mpItemSet);
+
+            // now the standard TextProperties stuff
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
 
@@ -438,7 +444,7 @@ namespace sdr
                     {
                         SfxStyleSheet* pSheet = pOutliner->GetStyleSheet(nPara);
 
-                        if(pSheet && (!bPseudoSheetsOnly || (SFX_STYLE_FAMILY_PSEUDO == pSheet->GetFamily())))
+                        if(pSheet)
                         {
                             SfxItemSet aParaSet(pOutliner->GetParaAttribs(nPara));
                             SfxItemSet aSet(*aParaSet.GetPool());
