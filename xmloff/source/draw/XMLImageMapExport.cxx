@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:40:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,7 +376,7 @@ void XMLImageMapExport::ExportCircle(
 
     // radius
     aAny = rPropertySet->getPropertyValue(msRadius);
-    sal_Int32 nRadius;
+    sal_Int32 nRadius = 0;
     aAny >>= nRadius;
     mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nRadius);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_R,
