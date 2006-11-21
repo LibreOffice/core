@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 18:21:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:39:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     case typelib_TypeClass_UNSIGNED_SHORT:
     case typelib_TypeClass_LONG:
     {
-        sal_Int32 l;
+        sal_Int32 l = 0;
         a >>= l;
         return PyRef( PyInt_FromLong (l), SAL_NO_ACQUIRE );
     }
