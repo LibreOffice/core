@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:17:19 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:38:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 {
     if( pCharPropHeightState )
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         pCharPropHeightState->maValue >>= nTemp;
         if( nTemp == 100 )
         {
@@ -317,7 +317,7 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
     }
     if( pCharDiffHeightState )
     {
-        float nTemp;
+        float nTemp = 0;
         pCharDiffHeightState->maValue >>= nTemp;
         if( nTemp == 0. )
         {
@@ -759,7 +759,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     {
         if( pLeftBorderDistanceState && pRightBorderDistanceState && pTopBorderDistanceState && pBottomBorderDistanceState )
         {
-            sal_Int32 aLeft, aRight, aTop, aBottom;
+            sal_Int32 aLeft = 0, aRight = 0, aTop = 0, aBottom = 0;
 
             pLeftBorderDistanceState->maValue >>= aLeft;
             pRightBorderDistanceState->maValue >>= aRight;
