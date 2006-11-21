@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupproperties.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:11:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ namespace sdr
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
-            virtual void ForceStyleToHardAttributes(sal_Bool bPseudoSheetsOnly = sal_False);
+            virtual void ForceStyleToHardAttributes();
         };
     } // end of namespace properties
 } // end of namespace sdr
