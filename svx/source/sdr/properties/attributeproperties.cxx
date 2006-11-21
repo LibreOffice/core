@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributeproperties.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:35:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:45:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,7 +535,7 @@ namespace sdr
             }
         }
 
-        void AttributeProperties::ForceStyleToHardAttributes(sal_Bool /*bPseudoSheetsOnly*/)
+        void AttributeProperties::ForceStyleToHardAttributes()
         {
             if(GetStyleSheet() && HAS_BASE(SfxStyleSheet, mpStyleSheet))
             {
@@ -548,33 +548,20 @@ namespace sdr
                 EndListening(*mpStyleSheet);
                 EndListening(mpStyleSheet->GetPool());
 
-                // get itemset of the stylesheet
-                const SfxItemSet& rSet = mpStyleSheet->GetItemSet();
-
                 // prepare the iter; use the mpObjectItemSet which may have less
                 // WhichIDs than the style.
                 SfxWhichIter aIter(*pDestItemSet);
                 sal_uInt16 nWhich(aIter.FirstWhich());
                 const SfxPoolItem *pItem = NULL;
 
-                // set all attributes of the stylesheet at the new itemset
-                while(nWhich)
-                {
-                    if(SFX_ITEM_SET == rSet.GetItemState(nWhich, TRUE, &pItem))
-                    {
-                        pDestItemSet->Put(*pItem);
-                    }
-
-                    nWhich = aIter.NextWhich();
-                }
-
-                // prepare 2nd loop
-                nWhich = aIter.FirstWhich();
-
                 // now set all hard attributes of the current at the new itemset
+                static bool bUseParents(true);
+
                 while(nWhich)
                 {
-                    if(SFX_ITEM_SET == mpItemSet->GetItemState(nWhich, FALSE, &pItem))
+                    // #i61284# use mpItemSet with parents, makes things easier and reduces to
+                    // one loop
+                    if(SFX_ITEM_SET == mpItemSet->GetItemState(nWhich, true, &pItem))
                     {
                         pDestItemSet->Put(*pItem);
                     }
