@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:33:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL OStaticSet::moveRelativeToBookmark( const Any& bookmark, sal_I
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nFirst,nSecond;
+    sal_Int32 nFirst = 0, nSecond = 0;
     _first >>= nFirst;
     _second >>= nSecond;
     return (nFirst < nSecond) ? CompareBookmark::LESS : ((nFirst > nSecond) ? CompareBookmark::GREATER : CompareBookmark::EQUAL);
