@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binarywritehandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:03:22 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,37 +212,37 @@ namespace configmgr
             {
                 case uno::TypeClass_BOOLEAN:
                 {
-                    sal_Bool bValue;
+                    sal_Bool bValue = sal_False;
                     writeFromAny(_rWriter, _aValue, bValue);
                     break;
                 }
                 case uno::TypeClass_BYTE:
                 {
-                    sal_Int8 nValue;
+                    sal_Int8 nValue = 0;
                     writeFromAny(_rWriter, _aValue, nValue);
                     break;
                 }
                 case uno::TypeClass_SHORT:
                 {
-                    sal_Int16 nValue;
+                    sal_Int16 nValue = 0;
                     writeFromAny(_rWriter, _aValue, nValue);
                     break;
                 }
                 case uno::TypeClass_LONG:
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     writeFromAny(_rWriter, _aValue, nValue);
                     break;
                 }
                 case uno::TypeClass_HYPER:
                 {
-                    sal_Int64 nValue;
+                    sal_Int64 nValue = 0;
                     writeFromAny(_rWriter, _aValue, nValue);
                     break;
                 }
                 case uno::TypeClass_DOUBLE:
                 {
-                    double nValue;
+                    double nValue = 0;
                     writeFromAny(_rWriter, _aValue, nValue);
                     break;
                 }
