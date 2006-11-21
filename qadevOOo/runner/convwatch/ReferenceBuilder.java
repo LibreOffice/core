@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceBuilder.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:30:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,15 +266,23 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     assure(e.getMessage(), false);
                     DB.ref_failedFile(aGTA.getDBInfoString(), _sInputPath);
                 }
+                catch(com.sun.star.lang.DisposedException e)
+                {
+                    assure(e.getMessage(), false, true);
+                    DB.ref_failedFile(aGTA.getDBInfoString(), _sInputPath);
+                }
 
                 // Office shutdown
                 if (aProvider != null)
                 {
-                    aProvider.closeExistingOffice(param, true);
+                    boolean bClosed = aProvider.closeExistingOffice(param, true);
+                    // Hope I can check that the close of the office fails
+                    assure("Office closed", bClosed, true);
                 }
             }
             else
             {
+                // Reference already exist, do nothing, but DB change
                 DB.ref_finishedFile(aGTA.getDBInfoString(), _sInputPath);
             }
         }
