@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:16:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:39:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1735,7 +1735,7 @@ void XMLTextParagraphExport::exportParagraph(
                                  ("NumberingStartValue"));
 
 
-                            sal_Int32 nStartValue;
+                            sal_Int32 nStartValue = 0;
 
                             if (xPropSetInfo->
                                 hasPropertyByName(sNumberingStartValue))
@@ -2212,7 +2212,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     OUString sZOrder( RTL_CONSTASCII_USTRINGPARAM( "ZOrder" ) );
     if( xPropSetInfo->hasPropertyByName( sZOrder ) )
     {
-        sal_Int32 nZIndex;
+        sal_Int32 nZIndex = 0;
         rPropSet->getPropertyValue( sZOrder ) >>= nZIndex;
         if( -1 != nZIndex )
         {
