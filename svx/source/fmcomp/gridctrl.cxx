@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:43:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1310,7 +1310,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     if (xDataSourceSet.is())
     {
         // feststellen welche Updatemöglichkeiten bestehen
-        sal_Int32 nPrivileges;
+        sal_Int32 nPrivileges = 0;
         xDataSourceSet->getPropertyValue(FM_PROP_PRIVILEGES) >>= nPrivileges;
         if ((nPrivileges & Privilege::INSERT) == 0)
             nOpt &= ~OPT_INSERT;
@@ -1876,7 +1876,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
 
     // Cache an den sichtbaren Bereich anpassen
     Reference< XPropertySet > xSet = m_pSeekCursor->getPropertySet();
-    sal_Int32 nCacheSize;
+    sal_Int32 nCacheSize = 0;
     xSet->getPropertyValue(FM_PROP_FETCHSIZE) >>= nCacheSize;
     sal_Bool bCacheAligned   = sal_False;
     // Nach der Initialisierung (m_nSeekPos < 0) keine Cursorbewegung, da bereits auf den ersten
@@ -1966,7 +1966,7 @@ void DbGridControl::AdjustRows()
     Reference< XPropertySet > xSet = m_pDataCursor->getPropertySet();
 
     // Aktualisieren des RecordCounts
-    sal_Int32 nRecordCount;
+    sal_Int32 nRecordCount = 0;
     xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
     if (!m_bRecordCountFinal)
         m_bRecordCountFinal = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
@@ -2794,7 +2794,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
         if (bIsNew && m_xCurrentRow.Is())
         {
             DBG_ASSERT(::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ROWCOUNTFINAL)), "DbGridControl::DataSourcePropertyChanged : somebody moved the form to a new record before the row count was final !");
-            sal_Int32 nRecordCount;
+            sal_Int32 nRecordCount = 0;
             xSource->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
             if (::comphelper::getBOOL(evt.NewValue))
             {   // modified state changed from sal_False to sal_True and we're on a insert row
