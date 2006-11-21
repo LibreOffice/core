@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:14:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1643,7 +1643,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
              case BASEPROPERTY_PLUGINPARENT:
              {
                 // correct data type?
-                 sal_Int64 nHandle;
+                 sal_Int64 nHandle = 0;
                  if ( ! (Value >>= nHandle) )
                 {
                     ::com::sun::star::uno::Exception *pException =
@@ -1761,7 +1761,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
                 else
                 {
-                    sal_Int32 nColor;
+                    sal_Int32 nColor = 0;
                     if ( Value >>= nColor )
                     {
                         Color aColor( nColor );
@@ -1778,7 +1778,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
                 else
                 {
-                    sal_Int32 nColor;
+                    sal_Int32 nColor = 0;
                     if ( Value >>= nColor )
                     {
                         Color aColor( nColor );
@@ -1794,7 +1794,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
                 else
                 {
-                    sal_Int32 nColor;
+                    sal_Int32 nColor = 0;
                     if ( Value >>= nColor )
                     {
                         Color aColor( nColor );
@@ -1807,7 +1807,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     pWindow->SetFillColor();
                 else
                 {
-                    sal_Int32 nColor;
+                    sal_Int32 nColor = 0;
                     if ( Value >>= nColor )
                     {
                         Color aColor( nColor );
@@ -1820,7 +1820,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     pWindow->SetLineColor();
                 else
                 {
-                    sal_Int32 nColor;
+                    sal_Int32 nColor = 0;
                     if ( Value >>= nColor )
                     {
                         Color aColor( nColor );
@@ -1946,7 +1946,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 {
                     case WINDOW_FIXEDLINE:
                     {
-                        sal_Int32 nOrientation;
+                        sal_Int32 nOrientation = 0;
                         if ( Value >>= nOrientation )
                         {
                             WinBits nStyle = pWindow->GetStyle();
@@ -2001,7 +2001,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
             case BASEPROPERTY_REPEAT_DELAY:
             {
-                sal_Int32 nRepeatDelay;
+                sal_Int32 nRepeatDelay = 0;
                 if ( Value >>= nRepeatDelay )
                 {
                     AllSettings aSettings = pWindow->GetSettings();
