@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:56:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
 
         case MID_VALUE:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if ( rVal >>= nVal )
             {
                 SetValue( (UINT16)nVal );
