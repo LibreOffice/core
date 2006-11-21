@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupproperties.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,14 +313,14 @@ namespace sdr
             }
         }
 
-        void GroupProperties::ForceStyleToHardAttributes(sal_Bool bPseudoSheetsOnly)
+        void GroupProperties::ForceStyleToHardAttributes()
         {
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                pSub->GetObj(a)->GetProperties().ForceStyleToHardAttributes(bPseudoSheetsOnly);
+                pSub->GetObj(a)->GetProperties().ForceStyleToHardAttributes();
             }
         }
     } // end of namespace properties
