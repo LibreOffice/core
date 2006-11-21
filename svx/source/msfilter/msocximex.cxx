@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:59:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5083,7 +5083,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     if (bHasFont)
     {
         aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontWeight"));
-        float nBold;
+        float nBold = 0;
         aTmp >>= nBold;
 
         if (nBold >= 150)
@@ -5098,7 +5098,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
         }
 
         aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontHeight"));
-        float nFontHeight;
+        float nFontHeight = 0;
         aTmp >>= nFontHeight;
         if (nFontHeight)
         {
@@ -5672,7 +5672,7 @@ void OCX_SpinButton::GetInt32Property(
         sal_Int32& rnCoreValue, const uno::Reference< beans::XPropertySet>& rxPropSet,
         const OUString& rPropName, sal_Int32 nBlockFlag )
 {
-    sal_Int32 nNewValue;
+    sal_Int32 nNewValue = 0;
     if( rxPropSet->getPropertyValue( rPropName ) >>= nNewValue )
         UpdateInt32Property( rnCoreValue, nNewValue, nBlockFlag );
 }
