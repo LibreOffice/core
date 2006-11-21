@@ -27,7 +27,7 @@ $(SDI1TARGET): $(SVSDI1DEPEND) $(SDI1NAME).sdi
     -fx$(SDI1EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI1NAME).sid	\
-    $(SDI1NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI1NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI1TARGET)"!=""
 
 # Instruction for ???
@@ -60,7 +60,7 @@ $(SDI2TARGET): $(SVSDI2DEPEND) $(SDI2NAME).sdi
     -fx$(SDI2EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI2NAME).sid	\
-    $(SDI2NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI2NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI2TARGET)"!=""
 
 # Instruction for ???
@@ -93,7 +93,7 @@ $(SDI3TARGET): $(SVSDI3DEPEND) $(SDI3NAME).sdi
     -fx$(SDI3EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI3NAME).sid	\
-    $(SDI3NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI3NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI3TARGET)"!=""
 
 # Instruction for ???
@@ -126,7 +126,7 @@ $(SDI4TARGET): $(SVSDI4DEPEND) $(SDI4NAME).sdi
     -fx$(SDI4EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI4NAME).sid	\
-    $(SDI4NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI4NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI4TARGET)"!=""
 
 # Instruction for ???
@@ -159,7 +159,7 @@ $(SDI5TARGET): $(SVSDI5DEPEND) $(SDI5NAME).sdi
     -fx$(SDI5EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI5NAME).sid	\
-    $(SDI5NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI5NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI5TARGET)"!=""
 
 # Instruction for ???
@@ -192,7 +192,7 @@ $(SDI6TARGET): $(SVSDI6DEPEND) $(SDI6NAME).sdi
     -fx$(SDI6EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI6NAME).sid	\
-    $(SDI6NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI6NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI6TARGET)"!=""
 
 # Instruction for ???
@@ -225,7 +225,7 @@ $(SDI7TARGET): $(SVSDI7DEPEND) $(SDI7NAME).sdi
     -fx$(SDI7EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI7NAME).sid	\
-    $(SDI7NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI7NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI7TARGET)"!=""
 
 # Instruction for ???
@@ -258,7 +258,7 @@ $(SDI8TARGET): $(SVSDI8DEPEND) $(SDI8NAME).sdi
     -fx$(SDI8EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI8NAME).sid	\
-    $(SDI8NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI8NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI8TARGET)"!=""
 
 # Instruction for ???
@@ -291,7 +291,7 @@ $(SDI9TARGET): $(SVSDI9DEPEND) $(SDI9NAME).sdi
     -fx$(SDI9EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI9NAME).sid	\
-    $(SDI9NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI9NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI9TARGET)"!=""
 
 # Instruction for ???
@@ -324,7 +324,7 @@ $(SDI10TARGET): $(SVSDI10DEPEND) $(SDI10NAME).sdi
     -fx$(SDI10EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI10NAME).sid	\
-    $(SDI10NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI10NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI10TARGET)"!=""
 
 # Instruction for ???
