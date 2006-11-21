@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:17:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1078,7 +1078,7 @@ UUIInteractionHandler::handle_impl(
         star::ucb::InteractiveWrongMediumException aWrongMediumException;
         if (aAnyRequest >>= aWrongMediumException)
         {
-            sal_Int32 nMedium;
+            sal_Int32 nMedium = 0;
             aWrongMediumException.Medium >>= nMedium;
             std::vector< rtl::OUString > aArguments;
             aArguments.push_back(UniString::CreateFromInt32(nMedium + 1));
