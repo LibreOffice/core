@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_storage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:03:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -478,7 +478,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) );
 
-            sal_Int32 nOpenMode;
+            sal_Int32 nOpenMode = 0;
             if ( aPropValue >>= nOpenMode )
             {
                 switch ( eMode )
