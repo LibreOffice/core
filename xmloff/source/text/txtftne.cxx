@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:18:02 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
         // export reference Id (for reference fields)
         Reference<XPropertySet> xPropSet(rFootnote, UNO_QUERY);
         Any aAny = xPropSet->getPropertyValue(sReferenceId);
-        sal_Int32 nNumber;
+        sal_Int32 nNumber = 0;
         aAny >>= nNumber;
         OUStringBuffer aBuf;
         aBuf.appendAscii("ftn");
