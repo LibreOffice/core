@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:16:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1436,7 +1436,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                         aWindowState[n].Value >>= rElementData.m_aUIName;
                     else if ( aWindowState[n].Name == m_aPropStyle )
                     {
-                        sal_Int32 nStyle;
+                        sal_Int32 nStyle = 0;
                         if ( aWindowState[n].Value >>= nStyle )
                             rElementData.m_nStyle = sal_Int16( nStyle );
                     }
