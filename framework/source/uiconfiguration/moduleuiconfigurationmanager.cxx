@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:42:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -916,7 +916,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
             Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
             if ( xPropSet.is() )
             {
-                long nOpenMode;
+                long nOpenMode = 0;
                 Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" )));
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
