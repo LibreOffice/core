@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 15:26:46 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:16:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..
 
 PRJNAME=vcl
 TARGET=vcl
+TARGETTYPE=GUI
 VERSION=$(UPD)
 USE_DEFFILE=TRUE
 
@@ -187,8 +188,6 @@ SHL1USE_EXPORTS=ordinal
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
 SHL1OBJS=   $(SLO)$/salshl.obj
-.ELIF "$(OS)"!="FREEBSD"
-SHL1STDLIBS+=-ldl
 .ENDIF
 
 .IF "$(GUI)" != "MAC"
@@ -225,24 +224,6 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 
 
 # --- UNX ----------------------------------------------------------------
-
-.IF "$(GUI)"=="UNX"
-
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD"
-SHL1STDLIBS+= -ldl
-.ENDIF
-
-.IF "$(GUIBASE)"=="aqua"
-SHL1STDLIBS += -framework Cocoa
-.ENDIF
-
-SHL1STDLIBS += -lX11
-
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += -framework Foundation -framework CoreFoundation
-.ENDIF # "$(OS)"=="MACOSX"
-
-.ENDIF          # "$(GUI)"=="UNX"
 
 # UNX sal plugins
 .IF "$(GUI)" == "UNX"
@@ -373,11 +354,7 @@ SHL4NOCHECK=TRUE
 
 
 SHL4STDLIBS+=-l$(SHL2TARGET)
-.IF "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
-SHL4STDLIBS+=$(SHL3STDLIBS) -lX11
-.ELSE
-SHL4STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
-.ENDIF # "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
+SHL4STDLIBS+=$(SHL3STDLIBS)
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin
@@ -391,11 +368,7 @@ SHL5DEPN=$(SHL2TARGETN)
 # libs for KDE plugin
 SHL5STDLIBS=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
-.IF "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
-SHL5STDLIBS+=$(SHL3STDLIBS) -lX11
-.ELSE
-SHL5STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
-.ENDIF # "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
+SHL5STDLIBS+=$(SHL3STDLIBS)
 .ENDIF # "$(ENABLE_KDE)" != ""
 
 .ENDIF # UNX
