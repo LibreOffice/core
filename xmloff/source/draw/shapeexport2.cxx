@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -936,8 +936,8 @@ void XMLShapeExport::ImpExportEllipseShape(
         if( eKind != drawing::CircleKind_FULL )
         {
             OUStringBuffer sStringBuffer;
-            sal_Int32 nStartAngle;
-            sal_Int32 nEndAngle;
+            sal_Int32 nStartAngle = 0;
+            sal_Int32 nEndAngle = 0;
             xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleStartAngle")) ) >>= nStartAngle;
             xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleEndAngle")) ) >>= nEndAngle;
 
@@ -1405,7 +1405,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_SHAPE, rShapeId);
 
         aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")) );
-        sal_Int32 nGluePointId;
+        sal_Int32 nGluePointId = 0;
         if( aAny >>= nGluePointId )
         {
             if( nGluePointId != -1 )
@@ -1423,7 +1423,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_SHAPE, rShapeId);
 
         aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex")) );
-        sal_Int32 nGluePointId;
+        sal_Int32 nGluePointId = 0;
         if( aAny >>= nGluePointId )
         {
             if( nGluePointId != -1 )
