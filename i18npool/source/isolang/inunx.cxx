@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inunx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:20:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
         {
 #ifdef MACOSX
             rtl_Locale    *procLocale;
+            (void) pGetLangFromEnv; /* unused */
 
             if ( osl_getProcessLocale(&procLocale) == osl_Process_E_None )
             {
