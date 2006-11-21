@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _ParagraphProperties.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:02:13 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,15 +34,22 @@
  ************************************************************************/
 package ifc.style;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.container.XIndexReplace;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.table.BorderLine;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.xml.AttributeData;
+import ifc.text._NumberingLevel;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import lib.MultiPropertyTest;
+import lib.Status;
+import share.LogWriter;
 
 
 import util.utils;
@@ -354,16 +361,52 @@ public class _ParagraphProperties extends MultiPropertyTest {
     }
 
     /**
-     * Tested with custom property tester. <p>
+     * Tested with com.sun.star.text.NumberingLevel <p>
+     * The value of this property is a com.sun.star.container.XIndexReplace which is represneted by
+     * com.sun.star.text.NumberingLevel.
      * The following property tests are to be completed successfully before :
      * <ul>
      *  <li> <code> NumberingStyleName </code> : a numbering style must
      *  be set before testing this property </li>
      * </ul>
+     * @see com.sun.star.text.NumberlingLevel
+     * @see com.sun.star.container.XIndexReplace
+     * @see ifc.text._NumberingLevel
      */
     public void _NumberingRules() {
         requiredMethod("NumberingStyleName");
-        testProperty("NumberingRules", rules);
+
+        XIndexReplace NumberingRules = null;
+        PropertyValue[] propertyValues = null;
+        try {
+            NumberingRules = (XIndexReplace) AnyConverter.toObject(
+                           new Type(XIndexReplace.class), oObj.getPropertyValue("NumberingRules"));
+        } catch (com.sun.star.lang.IllegalArgumentException ex) {
+            Status.failed( "could not get NumberingRuels: "+ ex.toString() );
+            return;
+        } catch (UnknownPropertyException ex) {
+            Status.failed( "could not get NumberingRuels: "+ ex.toString() );
+            return;
+        } catch (WrappedTargetException ex) {
+            Status.failed( "could not get NumberingRuels: "+ ex.toString() );
+            return;
+        }
+        try {
+            propertyValues = (PropertyValue[]) NumberingRules.getByIndex(0);
+
+        } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
+            Status.failed( "could not get NumberlingLevel-Array from NumberingRuels: "+ ex.toString() );
+            return;
+        } catch (WrappedTargetException ex) {
+            Status.failed( "could not get NumberlingLevel-Array from NumberingRuels: "+ ex.toString() );
+            return;
+        }
+
+        _NumberingLevel numb = new _NumberingLevel((LogWriter)log, tParam, propertyValues);
+
+        boolean result = numb.testPropertieArray();
+
+        tRes.tested("NumberingRules", result);
     }
 
     public void _ParaUserDefinedAttributes() {
