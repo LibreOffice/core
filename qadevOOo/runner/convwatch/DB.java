@@ -90,13 +90,15 @@ public class DB extends DBHelper
                 return "unxsols";
             }
             else if (System.getProperty("os.name").toLowerCase().startsWith("linux") &&
-                     System.getProperty("os.arch").equals("x86"))
+                     System.getProperty("os.arch").equals("i386"))
             {
                 return "unxlngi";
             }
             else
             {
                 GlobalLogWriter.get().println("Unknown environment.");
+                GlobalLogWriter.get().println("os.name := " + System.getProperty("os.name").toLowerCase());
+                GlobalLogWriter.get().println("os.arch := " + System.getProperty("os.arch"));
                 return "";
             }
         }
