@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:37:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,7 +613,7 @@ namespace xmloff
             case TypeClass_ENUM:
             {
                 // convert it into an int32
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 ::cppu::enum2int(nValue, _rValue);
                 m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, nValue);
             }
