@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:58:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ BOOL MediaItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 
     if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ) )
     {
-        sal_Int32 nInt32;
+        sal_Int32 nInt32 = 0;
 
         aSeq[ 0 ] >>= maURL;
         aSeq[ 1 ] >>= mnMaskSet;
