@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:47:58 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:50:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
                 }
                 else if ( pType == ::getCppuType((const sal_uInt32*)0) )
                 {
-                    sal_uInt32 nTemp ;
+                    sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotID, nTemp );
                 }
