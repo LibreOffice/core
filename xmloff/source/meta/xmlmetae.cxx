@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:51:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,7 +426,7 @@ void SfxXMLMetaExport::Export()
     //  editing cycles
     aPropVal = xInfoProp->getPropertyValue(
                     ::rtl::OUString::createFromAscii(PROP_EDITINGCYCLES) );
-    sal_Int32 nCycles;
+    sal_Int32 nCycles = 0;
     if ( aPropVal >>= nCycles )
     {
         sValue = rtl::OUString::valueOf( nCycles );
@@ -441,7 +441,7 @@ void SfxXMLMetaExport::Export()
     //  property is a int32 with the Time::GetTime value
     aPropVal = xInfoProp->getPropertyValue(
                     ::rtl::OUString::createFromAscii(PROP_EDITINGDURATION) );
-    sal_Int32 nDurVal;
+    sal_Int32 nDurVal = 0;
     if ( aPropVal >>= nDurVal )
     {
         Time aDurTime( nDurVal );
@@ -494,7 +494,7 @@ void SfxXMLMetaExport::Export()
 
         aPropVal = xInfoProp->getPropertyValue(
                             ::rtl::OUString::createFromAscii(PROP_RELOADSECS) );
-        sal_Int32 nSecs;
+        sal_Int32 nSecs = 0;
         if ( aPropVal >>= nSecs )
         {
             Time aTime;
