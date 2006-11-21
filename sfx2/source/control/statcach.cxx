@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:29:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
             }
             else if ( pType == ::getCppuType((const sal_uInt32*)0) )
             {
-                sal_uInt32 nTemp ;
+                sal_uInt32 nTemp = 0;
                 aAny >>= nTemp ;
                 pItem = new SfxUInt32Item( nId, nTemp );
             }
