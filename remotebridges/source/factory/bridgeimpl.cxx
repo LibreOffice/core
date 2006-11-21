@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgeimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:17:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ namespace remotebridges_factory {
         }
         if( pContext )
         {
-            sal_Int32 nIndex;
+            sal_Int32 nIndex = 0;
             OUString sProtocol = OUString( m_pContext->m_pProtocol ).getToken( 0 , ',' , nIndex );
 
             // get the appropriate remote environment
