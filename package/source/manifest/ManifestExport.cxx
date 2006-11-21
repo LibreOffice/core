@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:47:36 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             }
             else if (pValue->Name.equals (sSizeProperty) )
             {
-                sal_Int32 nSize;
+                sal_Int32 nSize = 0;
                 pValue->Value >>= nSize;
                 OUStringBuffer aBuffer;
                 aBuffer.append ( nSize );
@@ -261,7 +261,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
 
             pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2 );
 
-            sal_Int32 nCount;
+            sal_Int32 nCount = 0;
             pIterationCount->Value >>= nCount;
             aBuffer.append (nCount);
             pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
