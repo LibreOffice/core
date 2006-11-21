@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:54:10 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
-BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
+BOOL GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
     return FALSE;
@@ -581,9 +581,6 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
 const char *TempDirImpl( char *pBuf )
 {
 #ifdef MACOSX
-    // On Mac OS X, use only TMPDIR environment variable
-    const char *pValue = getenv( "TMPDIR" );
-
     // P_tmpdir is /var/tmp on Mac OS X, and it is not cleaned up on system
     // startup
     strcpy( pBuf, "/tmp" );
