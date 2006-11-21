@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,14 @@
 #endif
 
 #include <vector>
+
+// #i68523#
+#ifndef _E3D_LATHE3D_HXX
+#include "lathe3d.hxx"
+#endif
+#ifndef _E3D_EXTRUD3D_HXX
+#include "extrud3d.hxx"
+#endif
 
 #include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
@@ -3165,12 +3173,24 @@ void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException)
     if( !mpObj.is() )
         throw lang::DisposedException();
     mpObj->ClearMergedItem(); // nWhich == 0 => all
-    if (mpObj->ISA( SdrGrafObj ))
+
+    if(mpObj->ISA(SdrGrafObj))
     {
         // defaults for graphic objects have changed:
         mpObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
         mpObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
     }
+
+    // #i68523# special handling for Svx3DCharacterModeItem, this is not saved
+    // but needs to be TRUE in svx, pool default (false) in sch. Since sch
+    // does not load lathe or extrude objects, it is possible to set the items
+    // here.
+    // For other solution possibilities, see task description.
+    if(mpObj->ISA(E3dLatheObj) || mpObj->ISA(E3dExtrudeObj))
+    {
+        mpObj->SetMergedItem(Svx3DCharacterModeItem(true));
+    }
+
     mpModel->SetChanged();
 }
 
