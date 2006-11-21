@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:56:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,9 @@ SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 :   mpDisplayInfo(0L),
     mrView(rNewView),
-    maDocumentColor( COL_AUTO )
+    // #103911# col_auto color lets the view takes the default SvxColorConfig entry
+    maDocumentColor( COL_AUTO ),
+    maBackgroundColor(COL_AUTO ) // #i48367# also react on autocolor
 {
     DBG_CTOR(SdrPageView,NULL);
     mpPage = pPage1;
