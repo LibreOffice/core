@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:06:32 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
     if (!_xTypes.is() || !_xColumn.is())
         return NumberFormat::UNDEFINED;
 
-    sal_Int32 nDataType;
+    sal_Int32 nDataType = 0;
     sal_Int32 nScale = 0;
     try
     {
@@ -1974,7 +1974,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 break;
             case DataType::BIGINT:
                 {
-                    sal_Int64 nValue;
+                    sal_Int64 nValue = 0;
                     if(x >>= nValue)
                     {
                         _xParams->setLong(parameterIndex,nValue);
@@ -1986,7 +1986,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
             case DataType::FLOAT:
             case DataType::REAL:
                 {
-                    float nValue;
+                    float nValue = 0;
                     if(x >>= nValue)
                     {
                         _xParams->setFloat(parameterIndex,nValue);
