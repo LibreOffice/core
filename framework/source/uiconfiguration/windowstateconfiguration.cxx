@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowstateconfiguration.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:17:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -772,7 +772,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
 
                 case PROPERTY_DOCKINGAREA:
                 {
-                    sal_Int32 nDockingArea;
+                    sal_Int32 nDockingArea = 0;
                     if ( a >>= nDockingArea )
                     {
                         if (( nDockingArea >= 0 ) &&
@@ -864,7 +864,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
 
                 case PROPERTY_INTERNALSTATE:
                 {
-                    sal_uInt32 nValue;
+                    sal_uInt32 nValue = 0;
                     if ( a >>= nValue )
                     {
                         nMask |= WINDOWSTATE_MASK_INTERNALSTATE;
@@ -876,7 +876,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
 
                 case PROPERTY_STYLE:
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     if ( a >>= nValue )
                     {
                         nMask |= WINDOWSTATE_MASK_STYLE;
@@ -968,7 +968,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
 
                 case PROPERTY_DOCKINGAREA:
                 {
-                    sal_Int32 nDockingArea;
+                    sal_Int32 nDockingArea = 0;
                     if ( a >>= nDockingArea )
                     {
                         if (( nDockingArea >= 0 ) &&
@@ -1051,7 +1051,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
 
                 case PROPERTY_INTERNALSTATE:
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     if ( a >>= nValue )
                     {
                         nMask |= WINDOWSTATE_MASK_INTERNALSTATE;
@@ -1062,7 +1062,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
 
                 case PROPERTY_STYLE:
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     if ( a >>= nValue )
                     {
                         nMask |= WINDOWSTATE_MASK_STYLE;
@@ -1242,7 +1242,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
 
                     case PROPERTY_INTERNALSTATE:
                     {
-                        sal_Int32 nValue;
+                        sal_Int32 nValue = 0;
                         if ( rSeq[i].Value >>= nValue )
                         {
                             rWinStateInfo.nInternalState = sal_uInt32( nValue );
@@ -1253,7 +1253,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
 
                     case PROPERTY_STYLE:
                     {
-                        sal_Int32 nValue;
+                        sal_Int32 nValue = 0;
                         if ( rSeq[i].Value >>= nValue )
                         {
                             rWinStateInfo.nStyle = sal_uInt16( nValue );
