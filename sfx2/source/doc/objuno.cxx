@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 15:21:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -889,7 +889,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
     }
     else if ( _pInfo && aValue.getValueType() == ::getCppuType((const sal_Int32*)0) )
     {
-        sal_Int32 nIntVal ;
+        sal_Int32 nIntVal = 0;
         aValue >>= nIntVal ;
         switch ( nHandle )
         {
