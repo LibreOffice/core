@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:00:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ SvxHtmlOptions::SvxHtmlOptions() :
                     case  8: pValues[nProp] >>= pImp->aFontSizeArr[6]; break;//"Import/FontSize/Size_7",
                     case  9://"Export/Browser",
                         {
-                            sal_Int32 nExpMode;
+                            sal_Int32 nExpMode = 0;
 //                          pValues[nProp] >>= pImp->nExportMode;
                             pValues[nProp] >>= nExpMode;
                             switch( nExpMode )
