@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generateevent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:59:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ EventSharedPtr generateEvent(
     animations::Timing eTiming;
     animations::Event aEvent;
     uno::Sequence<uno::Any> aSequence;
-    double nDelay1;
+    double nDelay1 = 0;
 
     if (rEventDescription >>= eTiming) {
         switch (eTiming) {
