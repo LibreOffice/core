@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-16 07:38:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -673,7 +673,7 @@ sal_Bool FirstStartWizard::showOnlineUpdatePage()
 
         if ( xUpdateAccess.is() )
         {
-            sal_Bool bAutoUpdChk;
+            sal_Bool bAutoUpdChk = sal_False;
             Any result = xUpdateAccess->getByName( UNISTRING( "AutoCheckEnabled" ) );
             result >>= bAutoUpdChk;
             if ( bAutoUpdChk == sal_False )
