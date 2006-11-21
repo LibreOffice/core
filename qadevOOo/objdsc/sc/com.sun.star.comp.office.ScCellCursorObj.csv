@@ -206,6 +206,7 @@
 "ScCellCursorObj";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "ScCellCursorObj";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ScCellCursorObj";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"ScCellCursorObj";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
