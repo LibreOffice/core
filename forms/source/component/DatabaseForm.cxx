@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:09:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -802,7 +802,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 ::rtl::OUString aText;
                 Any aVal  = xComponentSet->getPropertyValue( PROPERTY_VALUE );
 
-                double aDoubleVal;
+                double aDoubleVal = 0;
                 if (aVal >>= aDoubleVal)
                 {
                     sal_Int16 nScale = 0;
@@ -820,7 +820,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             {
                 ::rtl::OUString aText;
                 Any aVal  = xComponentSet->getPropertyValue( PROPERTY_DATE );
-                sal_Int32 nInt32Val;
+                sal_Int32 nInt32Val = 0;
                 if (aVal >>= nInt32Val)
                 {
                     ::Date aDate( nInt32Val );
@@ -843,7 +843,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             {
                 ::rtl::OUString aText;
                 Any aVal  = xComponentSet->getPropertyValue( PROPERTY_TIME );
-                sal_Int32 nInt32Val;
+                sal_Int32 nInt32Val = 0;
                 if (aVal >>= nInt32Val)
                 {
                     ::Time aTime(nInt32Val);
@@ -2428,7 +2428,7 @@ sal_Bool SAL_CALL ODatabaseForm::getGroupControl() throw(com::sun::star::uno::Ru
     // Sollen Controls in einer TabOrder gruppe zusammengefasst werden?
     if (m_aCycle.hasValue())
     {
-        sal_Int32 nCycle;
+        sal_Int32 nCycle = 0;
         ::cppu::enum2int(nCycle, m_aCycle);
         return nCycle != TabulatorCycle_PAGE;
     }
@@ -3787,7 +3787,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     DataSelectionType eTranslated = DataSelectionType_TABLE;
     if (m_xAggregateSet.is())
     {
-        sal_Int32 nCommandType;
+        sal_Int32 nCommandType = 0;
         m_xAggregateSet->getPropertyValue(PROPERTY_COMMANDTYPE) >>= nCommandType;
         switch (nCommandType)
         {
@@ -3862,7 +3862,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
 
     if (nAnyMask & CYCLE)
     {
-        sal_Int32 nRealCycle;
+        sal_Int32 nRealCycle = 0;
         ::cppu::enum2int(nRealCycle, m_aCycle);
         _rxOutStream->writeShort((sal_Int16)nRealCycle);
     }
