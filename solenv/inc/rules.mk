@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:03:15 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:10:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -535,7 +535,8 @@ $(OBJ)$/%.obj : %.asm
 #	$(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $<
 #.ENDIF
 
-.SOURCE.idl : . $(SOLARVER)$/$(INPATH)$/idl$/remote $(SOLARVER)$/$(INPATH)$/idl $(SOLARVER)$/$(INPATH)$/idl$(UPDMINOREXT)$/$(PACKAGE)
+# currently unused...
+.SOURCE.idl : . $(SOLARVERSION)$/$(INPATH)$/idl$/remote $(SOLARVERSION)$/$(INPATH)$/idl $(SOLARVERSION)$/$(INPATH)$/idl$(UPDMINOREXT)$/$(PACKAGE)
 
 $(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
         +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $< )
