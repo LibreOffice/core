@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:40:51 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
 
     if(rValue >>= nVal)
     {
