@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:29:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:17:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1213,7 +1213,7 @@ void OTableController::alterColumns()
             xColumns->getByName(pField->GetName()) >>= xColumn;
             OSL_ENSURE(xColumn.is(),"Column is null!");
 
-            sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey=0,nAlignment=0;
+            sal_Int32 nType=0,nPrecision=0,nScale=0,nNullable=0,nFormatKey=0,nAlignment=0;
             sal_Bool bAutoIncrement = false;
             ::rtl::OUString sDescription, sTypeName;
             Any aControlDefault;
