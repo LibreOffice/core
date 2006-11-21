@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XCalendar.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:06:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,11 +75,12 @@ import com.sun.star.uno.UnoRuntime;
 * @see com.sun.star.i18n.XCalendar
 */
 public class _XCalendar extends MultiMethodTest {
+    private boolean debug = false;
     public XCalendar oObj = null;
     public String[][] calendars;
     public int[] count;
     public double newDTime = 1000.75;
-    public short newValue = 0;
+    public short newValue = 2;
     public short firstDay = 2;
     public short mdfw = 3;
     double aOriginalDTime = 0;
@@ -100,6 +101,8 @@ public class _XCalendar extends MultiMethodTest {
         count = new int[installed_locales.length];
         oObj.loadDefaultCalendar(installed_locales[0]);
         aOriginalDTime = oObj.getDateTime();
+
+        debug = tParam.getBool("DebugIsActive");
     }
 
     /**
@@ -310,7 +313,7 @@ public class _XCalendar extends MultiMethodTest {
             String error = "";
             String lang = "Language: "+installed_locales[i].Language +
                           ", Country: "+ installed_locales[i].Country +
-                          ", Variant: "+ installed_locales[i].Country +
+                          ", Variant: "+ installed_locales[i].Variant +
                           ", Name: "+calendars[i][count[i]];
             String[] names = new String[]{"DAY_OF_MONTH",
                 "HOUR","MINUTE","SECOND","MILLISECOND",
@@ -325,18 +328,37 @@ public class _XCalendar extends MultiMethodTest {
                                          CalendarFieldIndex.MONTH
             };
             for (int k=0; k<fields.length;k++) {
-                //log.println("Setting: " + names[k]+" to "+ valueSet[k]);
+
                 oObj.setDateTime(0.0);
+
+                // save the current values for debug purposes
+                short[] oldValues = new short[fields.length];
+                for (int n=0; n < oldValues.length; n++){
+                    oldValues[n] = oObj.getValue(fields[n]);
+                }
+
                 short set = oObj.getValue(fields[k]);
+                if (fields[k] == CalendarFieldIndex.MONTH) set = newValue;
                 oObj.setValue(fields[k],set);
                 short get = oObj.getValue(fields[k]);
                 if (get != set) {
+                    if (debug)
+                        log.println("ERROR occure: tried to set " + names[k] + " to value " + set);
+                        log.println("list of values BEFORE set " + names[k] + " to value " + set + ":");
+                        for (int n=0; n < oldValues.length; n++){
+                            log.println(names[n] + ":" + oldValues[n]);
+                        }
+                        log.println("list of values AFTER set " + names[k] + " to value " + set + ":");
+                        for (int n=0; n < fields.length;n++){
+                            log.println(names[n] + ":" + oObj.getValue(fields[n]));
+                        }
+
                     error += "failed for "+names[k]+" expected "+
-                                set+" gained "+get+" ; ";
+                                set+" gained "+get+" ; \n";
                 }
             }
             if (error.equals("")) {
-                //log.println(lang + " ... OK");
+                log.println(lang + " ... OK");
             } else {
                 log.println("*** "+lang + " ... FAILED ***");
                 log.println(error);
@@ -359,6 +381,10 @@ public class _XCalendar extends MultiMethodTest {
         requiredMethod("setValue()");
         short aValue = oObj.getValue(CalendarFieldIndex.MONTH);
         res &= (aValue == newValue);
+        if (!res){
+            log.println("the returned value is not the expected value:");
+            log.println("expexted: " + newValue + "  returned value: " + aValue);
+        }
         tRes.tested("getValue()", res);
     }
 
@@ -379,6 +405,10 @@ public class _XCalendar extends MultiMethodTest {
         oObj.addValue(CalendarFieldIndex.MONTH, 1);
         short aValue = oObj.getValue(CalendarFieldIndex.MONTH);
         res &= (aValue > newValue);
+        if (!res){
+            log.println("the returned value is not the expected value:");
+            log.println("expexted: " + newValue + "  returned value: " + aValue);
+        }
         tRes.tested("addValue()", res);
     }
 
@@ -518,6 +548,7 @@ public class _XCalendar extends MultiMethodTest {
     public void _isValid() {
         boolean res = true;
 
+        oObj.loadDefaultCalendar(installed_locales[0]);
         oObj.setValue(CalendarFieldIndex.MONTH, (short) 37);
         res &= !oObj.isValid();
         oObj.setValue(CalendarFieldIndex.MONTH, (short) 10);
