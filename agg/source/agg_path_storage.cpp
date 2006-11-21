@@ -217,12 +217,12 @@ namespace agg
     //------------------------------------------------------------------------
     void path_storage::curve3(double x_to, double y_to)
     {
-        double x0;
-        double y0;
+        double x0 = 0;
+        double y0 = 0;
         if(is_vertex(last_vertex(&x0, &y0)))
         {
-            double x_ctrl;
-            double y_ctrl;
+            double x_ctrl = 0;
+            double y_ctrl = 0;
             unsigned cmd = prev_vertex(&x_ctrl, &y_ctrl);
             if(is_curve(cmd))
             {
@@ -275,12 +275,12 @@ namespace agg
     void path_storage::curve4(double x_ctrl2, double y_ctrl2,
                               double x_to,    double y_to)
     {
-        double x0;
-        double y0;
+        double x0 = 0;
+        double y0 = 0;
         if(is_vertex(last_vertex(&x0, &y0)))
         {
-            double x_ctrl1;
-            double y_ctrl1;
+            double x_ctrl1 = 0;
+            double y_ctrl1 = 0;
             unsigned cmd = prev_vertex(&x_ctrl1, &y_ctrl1);
             if(is_curve(cmd))
             {
