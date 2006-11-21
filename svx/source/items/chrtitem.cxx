@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:52:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal
     if(!(rVal >>= eAO))
     {
         // also try an int (for Basic)
-        sal_Int32 nAO;
+        sal_Int32 nAO = 0;
         if(!(rVal >>= nAO))
             return sal_False;
         eAO = static_cast< ::com::sun::star::chart::ChartAxisArrangeOrderType >( nAO );
