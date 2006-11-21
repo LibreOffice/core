@@ -166,6 +166,7 @@
 "OEditModel";"com::sun::star::style::CharacterProperties#optional";"CharUnderlineHasColor"
 "OEditModel";"com::sun::star::style::CharacterProperties#optional";"CharStyleNames#optional"
 "OEditModel";"com::sun::star::style::CharacterProperties#optional";"CharHidden#optional"
+"OEditModel";"com::sun::star::style::CharacterProperties#optional";"TextUserDefinedAttributes#optional"
 "OEditModel";"com::sun::star::awt::UnoControlEditModel";"Align"
 "OEditModel";"com::sun::star::awt::UnoControlEditModel";"BackgroundColor"
 "OEditModel";"com::sun::star::awt::UnoControlEditModel";"Border"
