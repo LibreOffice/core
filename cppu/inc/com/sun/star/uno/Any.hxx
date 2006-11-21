@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:53:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -584,7 +584,7 @@ extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
 template <typename T>
 T Any::get() const
 {
-    T value;
+    T value = T();
     if (! (*this >>= value)) {
         throw RuntimeException(
             ::rtl::OUString(
