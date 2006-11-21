@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:44:11 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1496,7 +1496,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sStretchX );
             if ( pAny && pDefCustomShape )
             {
-                sal_Int32 nStretchX;
+                sal_Int32 nStretchX = 0;
                 if ( *pAny >>= nStretchX )
                 {
                     if ( pDefCustomShape->nXRef == nStretchX )
@@ -1514,7 +1514,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sStretchY );
             if ( pAny && pDefCustomShape )
             {
-                sal_Int32 nStretchY;
+                sal_Int32 nStretchY = 0;
                 if ( *pAny >>= nStretchY )
                 {
                     if ( pDefCustomShape->nYRef == nStretchY )
