@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pageitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:21:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_PAGE_NUMTYPE:
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
                 return sal_False;
 
@@ -242,7 +242,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             style::PageStyleLayout eLayout;
             if(!(rVal >>= eLayout))
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return sal_False;
                 eLayout = (style::PageStyleLayout)nValue;
