@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:41:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
     }
     else if ( aPropertyName.equalsAscii("FrameMarginWidth") )
     {
-        sal_Int32 nMargin;
+        sal_Int32 nMargin = 0;
         Size aSize = maFrmDescr.GetMargin();
         if ( aAny >>= nMargin )
         {
@@ -279,7 +279,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
     }
     else if ( aPropertyName.equalsAscii("FrameMarginHeight") )
     {
-        sal_Int32 nMargin;
+        sal_Int32 nMargin = 0;
         Size aSize = maFrmDescr.GetMargin();
         if ( aAny >>= nMargin )
         {
