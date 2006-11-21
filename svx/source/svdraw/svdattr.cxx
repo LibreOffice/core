@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:39:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1160,7 +1160,7 @@ sal_Bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, BYTE /*nMembe
     drawing::TextFitToSizeType eFS;
     if(!(rVal >>= eFS))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -1210,7 +1210,7 @@ sal_Bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId
     drawing::TextVerticalAdjust eAdj;
     if(!(rVal >>= eAdj))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -1260,7 +1260,7 @@ sal_Bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId
     drawing::TextHorizontalAdjust eAdj;
     if(!(rVal >>= eAdj))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -1310,7 +1310,7 @@ sal_Bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
     drawing::TextAnimationKind eKind;
     if(!(rVal >>= eKind))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
         eKind = (drawing::TextAnimationKind)nEnum;
@@ -1359,7 +1359,7 @@ sal_Bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, BYTE /*nMember
     drawing::TextAnimationDirection eDir;
     if(!(rVal >>= eDir))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -1762,7 +1762,7 @@ sal_Bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
     drawing::ConnectorType eCT;
     if(!(rVal >>= eCT))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -1792,7 +1792,7 @@ sal_Bool SdrEdgeNode1HorzDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*
 
 sal_Bool SdrEdgeNode1HorzDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -1808,7 +1808,7 @@ BOOL SdrEdgeNode1VertDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) c
 
 BOOL SdrEdgeNode1VertDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -1824,7 +1824,7 @@ BOOL SdrEdgeNode2HorzDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) c
 
 BOOL SdrEdgeNode2HorzDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -1840,7 +1840,7 @@ BOOL SdrEdgeNode2VertDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) c
 
 BOOL SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -1856,7 +1856,7 @@ BOOL SdrEdgeLine1DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) cons
 
 BOOL SdrEdgeLine1DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -1872,7 +1872,7 @@ BOOL SdrEdgeLine2DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) cons
 
 BOOL SdrEdgeLine2DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -1888,7 +1888,7 @@ BOOL SdrEdgeLine3DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) cons
 
 BOOL SdrEdgeLine3DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -1939,7 +1939,7 @@ sal_Bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
     drawing::MeasureKind eKind;
     if(!(rVal >>= eKind))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -1988,7 +1988,7 @@ sal_Bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberI
     drawing::MeasureTextHorzPos ePos;
     if(!(rVal >>= ePos))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -2037,7 +2037,7 @@ sal_Bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberI
     drawing::MeasureTextVertPos ePos;
     if(!(rVal >>= ePos))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -2095,7 +2095,7 @@ sal_Bool SdrMeasureUnitItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) con
 
 sal_Bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nMeasure;
+    sal_Int32 nMeasure = 0;
     if(!(rVal >>= nMeasure))
         return sal_False;
 
@@ -2146,7 +2146,7 @@ sal_Bool SdrCircKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
     drawing::CircleKind eKind;
     if(!(rVal >>= eKind))
     {
-        sal_Int32 nEnum;
+        sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
             return sal_False;
 
@@ -2306,7 +2306,7 @@ sal_Bool SdrGrafGamma100Item::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) co
 
 sal_Bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    double nGamma;
+    double nGamma = 0;
     if(!(rVal >>= nGamma))
         return sal_False;
 
