@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:12:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
         {
             // style:width
             aAny = xPropSet->getPropertyValue( sSeparatorLineWidth );
-            sal_Int32 nWidth;
+            sal_Int32 nWidth = 0;
             aAny >>= nWidth;
             GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                                 nWidth );
@@ -148,7 +148,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
             // style:color
             aAny = xPropSet->getPropertyValue( sSeparatorLineColor );
-            sal_Int32 nColor;
+            sal_Int32 nColor = 0;
             aAny >>= nColor;
             GetExport().GetMM100UnitConverter().convertColor( sValue,
                                                               nColor );
