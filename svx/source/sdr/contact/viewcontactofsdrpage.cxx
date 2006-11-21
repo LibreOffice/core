@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:31:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:44:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,13 @@ namespace sdr
 
                             if(rView.IsPageVisible())
                             {
+                                // #i48367# also react on autocolor here
                                 aInitColor = pPageView->GetApplicationBackgroundColor();
+
+                                if(Color(COL_AUTO) == aInitColor)
+                                {
+                                    aInitColor = Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor);
+                                }
                             }
                             else
                             {
