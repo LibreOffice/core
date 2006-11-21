@@ -129,6 +129,7 @@
 "SwXTextRange";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "SwXTextRange";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SwXTextRange";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"SwXTextRange";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "SwXTextRange";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextRange";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXTextRange";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

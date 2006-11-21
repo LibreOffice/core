@@ -132,6 +132,7 @@
 "SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "SwXTextTableCursor";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextTableCursor";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXTextTableCursor";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
