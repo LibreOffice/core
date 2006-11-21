@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:08:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -708,7 +708,7 @@ sal_Bool SvxPostureItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             awt::FontSlant eSlant;
             if(!(rVal >>= eSlant))
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return sal_False;
 
@@ -867,10 +867,10 @@ sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_WEIGHT:
         {
-            double fValue;
+            double fValue = 0;
             if(!(rVal >>= fValue))
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return sal_False;
                 fValue = (float)nValue;
@@ -1128,10 +1128,10 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             ePropUnit = SFX_MAPUNIT_RELATIVE;
             nProp = 100;
-            double fPoint;
+            double fPoint = 0;
             if(!(rVal >>= fPoint))
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return sal_False;
                 fPoint = (float)nValue;
@@ -1164,7 +1164,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             float fValue = 0;
             if(!(rVal >>= fValue))
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
                     return sal_False;
                 fValue = (float)nValue;
@@ -1563,7 +1563,7 @@ sal_Bool SvxUnderlineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     break;
     case MID_UNDERLINE:
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
             bRet = sal_False;
         else
@@ -1572,7 +1572,7 @@ sal_Bool SvxUnderlineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     break;
     case MID_UL_COLOR:
     {
-        sal_Int32 nCol;
+        sal_Int32 nCol = 0;
         if( !( rVal >>= nCol ) )
             bRet = sal_False;
         else
@@ -1722,7 +1722,7 @@ sal_Bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_CROSS_OUT:
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
                 return sal_False;
             SetValue((sal_Int16)nValue);
@@ -2092,7 +2092,7 @@ sal_Bool SvxColorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 
 sal_Bool SvxColorItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
     if(!(rVal >>= nColor))
         return sal_False;
 
@@ -2755,7 +2755,7 @@ sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_LANG_INT:  // for basic conversions!
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
                 return sal_False;
 
