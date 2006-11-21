@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:06:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:59:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,13 +290,13 @@ namespace connectivity
                 throw Exception(); // -5
             else
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 jvmaccess::VirtualMachine* pJVM = NULL;
                 if ( uaJVM >>= nValue )
                     pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nValue);
                 else
                 {
-                    sal_Int64 nTemp;
+                    sal_Int64 nTemp = 0;
                     uaJVM >>= nTemp;
                     pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nTemp);
                 }
