@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:42:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,7 +553,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         // Vom Feld werden nun zwei Informationen benoetigt:
         // a.) Name des Feldes fuer Label und ControlSource
         // b.) FormatKey, um festzustellen, welches Feld erzeugt werden soll
-        sal_Int32 nDataType;
+        sal_Int32 nDataType = 0;
         xField->getPropertyValue(FM_PROP_FIELDTYPE) >>= nDataType;
         // diese Datentypen koennen im Gridcontrol nicht verarbeitet werden
         switch (nDataType)
@@ -695,7 +695,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
             Reference< XPropertySetInfo > xPSI( xField->getPropertySetInfo() );
             if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_FORMATKEY ) )
             {
-                sal_Int32 nFormatKey;
+                sal_Int32 nFormatKey = 0;
                 xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
                 Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
                 xCol->setPropertyValue(FM_PROP_DECIMAL_ACCURACY,aScaleVal);
