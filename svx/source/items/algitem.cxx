@@ -4,9 +4,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:52:11 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 table::CellHoriJustify eUno;
                 if(!(rVal >>= eUno))
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     if(!(rVal >>= nValue))
                         return sal_False;
                     eUno = (table::CellHoriJustify)nValue;
@@ -322,7 +322,7 @@ sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
     table::CellVertJustify eUno;
     if(!(rVal >>= eUno))
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
             return sal_False;
         eUno = (table::CellVertJustify)nValue;
@@ -431,7 +431,7 @@ sal_Bool SvxOrientationItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ 
     table::CellOrientation eOrient;
     if(!(rVal >>= eOrient))
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
             return sal_False;
         eOrient = (table::CellOrientation)nValue;
@@ -687,7 +687,7 @@ sal_Bool SvxMarginItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
     long nMaxVal = bConvert ? TWIP_TO_MM100(SHRT_MAX) : SHRT_MAX;   // Members sind sal_Int16
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if(!(rVal >>= nVal) || (nVal > nMaxVal))
         return sal_False;
 
