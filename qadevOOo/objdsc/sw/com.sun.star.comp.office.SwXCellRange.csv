@@ -135,6 +135,7 @@
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"SwXCellRange";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "SwXCellRange";"com::sun::star::sheet::XCellRangeData#optional";"getDataArray()"
 "SwXCellRange";"com::sun::star::sheet::XCellRangeData#optional";"setDataArray()"
 "SwXCellRange";"com::sun::star::style::ParagraphPropertiesAsian#optional";"ParaIsHangingPunctuation"
