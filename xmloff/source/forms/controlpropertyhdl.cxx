@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:42:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:34:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,7 +425,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool ORotationAngleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        float fAngle;
+        float fAngle = 0;
         sal_Bool bSuccess = (_rValue >>= fAngle);
 
         if (bSuccess)
