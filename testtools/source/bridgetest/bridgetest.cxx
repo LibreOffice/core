@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: vg $ $Date: 2006-09-25 12:47:30 $
-#*    $Revision: 1.18 $
+#*    last change   $Author: vg $ $Date: 2006-11-21 17:17:40 $
+#*    $Revision: 1.19 $
 #*
 #*    $Logfile: $
 #*
@@ -551,7 +551,7 @@ static sal_Bool performTest(
         xLBT->transportPolySequence(tps2, tps3);
         bRet &= check(
             tps3.member.getLength() == 2, "transportPolySequence, length");
-        sal_uInt32 v0;
+        sal_uInt32 v0 = sal_uInt32();
         tps3.member[0] >>= v0;
         bRet &= check(v0 == 33, "transportPolySequence, element 0");
         rtl::OUString v1;
