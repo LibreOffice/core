@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:21:47 $
+#   last change: $Author: vg $ $Date: 2006-11-21 17:00:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,8 @@ CDEFS     += -DTRACING
 .ELIF "$(OS)" == "NETBSD" || "$(OS)" == "MACOSX"
 CFLAGS +=   -fPIC
 CFLAGSCXX += \
-            -fno-rtti -Wall -Wconversion -Wpointer-arith \
-            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
+            -fno-rtti -Wconversion -Wpointer-arith \
+            -Wcast-align -Woverloaded-virtual -Wsynth \
             -Wno-long-long
 CDEFS     += -DTRACING
 .ENDIF
