@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2006-10-19 11:17:48 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:10:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     -fx$(SDI$(TNR)EXPORT).sdi		\
     -fy$(MISC)$/xx$(PRJNAME).csv		\
     -fz$(MISC)$/$(SDI$(TNR)NAME).sid	\
-    $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) $(INCLUDE))
 .ENDIF # "$(SDI$(TNR)TARGET)"!=""
 
 # Instruction for ???
