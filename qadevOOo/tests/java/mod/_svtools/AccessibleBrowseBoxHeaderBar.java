@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxHeaderBar.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:29:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 package mod._svtools;
 
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.view.XSelectionSupplier;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.io.PrintWriter;
@@ -92,8 +96,8 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-        (XMultiServiceFactory) Param.getMSF()));
+            DesktopTools.createDesktop(
+            (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -129,7 +133,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+        PrintWriter log) {
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
@@ -151,13 +155,13 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
         shortWait();
 
         XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
-                                                            xTextDoc);
+            xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
         XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                          XDispatchProvider.class,
-                                          secondController);
+            XDispatchProvider.class,
+            secondController);
 
         XDispatch getting = null;
 
@@ -167,10 +171,11 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
         the_url.Complete = ".component:DB/DataSourceBrowser";
         getting = aProv.queryDispatch(the_url, "_beamer", 12);
 
+        //am controller ein XSelectionSupplier->mit params rufen
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
-        Object[] params = new Object[3];
+        PropertyValue[] params = new PropertyValue[3];
         PropertyValue param1 = new PropertyValue();
         param1.Name = "DataSourceName";
         param1.Value = "Bibliography";
@@ -198,55 +203,54 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
 
         the_frame2.setName("DatasourceBrowser");
 
-        XInitialization xInit = (XInitialization) UnoRuntime.queryInterface(
-                                        XInitialization.class,
-                                        the_frame2.getController());
+        XController xCont = the_frame2.getController();
+
+        XSelectionSupplier xSelect = (XSelectionSupplier) UnoRuntime.queryInterface(
+            XSelectionSupplier.class, xCont);
+
+        try {
+            xSelect.select(params);
+        } catch (com.sun.star.lang.IllegalArgumentException ex) {
+            throw new StatusException("Could not select Biblio-Database", ex);
+        }
 
         XInterface oObj = null;
 
         try {
             oObj = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
-                                      .createInstance("com.sun.star.awt.Toolkit");
+            .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
             throw new StatusException("Couldn't get toolkit", e);
         }
 
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
+            XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
-                                                              tk.getActiveTopWindow());
+            tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
 
-            at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        try {
-            xInit.initialize(params);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't select table");
-        }
-
         shortWait();
 
         XAccessibleComponent accComp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                               XAccessibleComponent.class,
-                                               oObj);
+            XAccessibleComponent.class,
+            oObj);
         final Point point = accComp.getLocationOnScreen();
 
         shortWait();
 
         tEnv.addObjRelation("EventProducer",
-                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {
                     Robot rob = new Robot();
@@ -262,9 +266,9 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
     }
 
     /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
+     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
+     * reset</code> call.
+     */
     private void shortWait() {
         try {
             Thread.currentThread().sleep(500);
