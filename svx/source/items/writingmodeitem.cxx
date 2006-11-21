@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writingmodeitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:24:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePr
 
 sal_Bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     sal_Bool bRet = ( rVal >>= nVal );
 
     if( !bRet )
