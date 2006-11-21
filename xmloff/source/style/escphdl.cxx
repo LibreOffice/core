@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escphdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:49:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
 
 sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     OUStringBuffer aOut;
 
     if( rValue >>= nValue )
@@ -178,7 +178,7 @@ sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const un
 {
     OUStringBuffer aOut( rStrExpValue );
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if( rValue >>= nValue )
     {
         if( rStrExpValue.getLength() )
