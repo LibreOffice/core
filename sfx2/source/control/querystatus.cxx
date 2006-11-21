@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querystatus.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:27:58 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ throw( RuntimeException )
         }
         else if ( pType == ::getCppuType((const sal_uInt32*)0) )
         {
-            sal_uInt32 nTemp ;
+            sal_uInt32 nTemp = 0;
             rEvent.State >>= nTemp ;
             m_pItem = new SfxUInt32Item( m_nSlotID, nTemp );
         }
