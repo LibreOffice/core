@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:14:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,7 +281,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                     property->mnIndex = -1;
                 else
                 {
-                    double fValue, fMainStep = 0.0;
+                    double fValue = 0.0, fMainStep = 0.0;
                     sal_Bool bIsLogarithmic = sal_False;
                     (*property).maValue >>= fValue;
                     sal_Int32 nDivisor = static_cast< sal_Int32 >( fValue );
