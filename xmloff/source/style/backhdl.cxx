@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:47:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const
     style::GraphicLocation eLocation;
     if( !( rValue >>= eLocation ) )
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if( rValue >>= nValue )
             eLocation = (style::GraphicLocation)nValue;
         else
