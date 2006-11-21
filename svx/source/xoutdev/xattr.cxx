@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:56:32 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:14:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,7 +553,7 @@ sal_Bool XColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMembe
 
 sal_Bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetColorValue( nValue );
 
@@ -683,7 +683,7 @@ sal_Bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
     if(!(rVal >>= eLS ))
     {
         // also try an int (for Basic)
-        sal_Int32 nLS;
+        sal_Int32 nLS = 0;
         if(!(rVal >>= nLS))
             return sal_False;
         eLS = (::com::sun::star::drawing::LineStyle)nLS;
@@ -1393,7 +1393,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         case MID_LINEDASH_DASHLEN:
         case MID_LINEDASH_DISTANCE:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if(!(rVal >>= nVal))
                 return sal_False;
 
@@ -1546,7 +1546,7 @@ sal_Bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 
 sal_Bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     if( 0 != (nMemberId&CONVERT_TWIPS) )
         nValue = MM100_TO_TWIP(nValue);
@@ -1667,7 +1667,7 @@ sal_Bool XLineColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nM
 
 sal_Bool XLineColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
         return sal_False;
 
@@ -2798,7 +2798,7 @@ sal_Bool XLineStartWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE
 
 sal_Bool XLineStartWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue( nValue );
     return sal_True;
@@ -2905,7 +2905,7 @@ sal_Bool XLineEndWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /
 
 sal_Bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue( nValue );
     return sal_True;
@@ -3271,7 +3271,7 @@ sal_Bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
     if(!(rVal >>= eFS))
     {
         // also try an int (for Basic)
-        sal_Int32 nFS;
+        sal_Int32 nFS = 0;
         if(!(rVal >>= nFS))
             return sal_False;
         eFS = (::com::sun::star::drawing::FillStyle)nFS;
@@ -3400,7 +3400,7 @@ sal_Bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nM
 
 sal_Bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if(!(rVal >>= nValue ))
         return sal_False;
 
@@ -3983,7 +3983,7 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
         case MID_GRADIENT_STARTCOLOR:
         case MID_GRADIENT_ENDCOLOR:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if(!(rVal >>= nVal ))
                 return sal_False;
 
@@ -4662,7 +4662,7 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         case MID_HATCH_DISTANCE:
         case MID_HATCH_ANGLE:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if (!(rVal >>= nVal ))
                 return sal_False;
 
@@ -4810,7 +4810,7 @@ sal_Bool XFormTextStyleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) con
 // #FontWork#
 sal_Bool XFormTextStyleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
@@ -4915,7 +4915,7 @@ sal_Bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) co
 // #FontWork#
 sal_Bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
@@ -5277,7 +5277,7 @@ sal_Bool XFormTextShadowItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) co
 // #FontWork#
 sal_Bool XFormTextShadowItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
@@ -5596,7 +5596,7 @@ sal_Bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) c
 // #FontWork#
 sal_Bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
