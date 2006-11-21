@@ -224,6 +224,7 @@
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"ScAnnotationShapeObj";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "ScAnnotationShapeObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScAnnotationShapeObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScAnnotationShapeObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
