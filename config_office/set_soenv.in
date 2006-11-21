@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.124 $
-# Date:        $Date: 2006-11-07 15:29:19 $
+# Version:     $Revision: 1.125 $
+# Date:        $Date: 2006-11-21 15:13:02 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -921,13 +921,13 @@ else
 }
 # Location of the solver tree.
 if ('@LOCAL_SOLVER@' eq "DEFAULT")
-{  $SOLARVER          = $SRC_ROOT.$SOLVER;
+{  $SOLARVER          = $SRC_ROOT.$SOLVER.$ds.$UPD;
 }
 else
-{  $SOLARVER          = PosixFormat('@LOCAL_SOLVER@');
+{  $SOLARVER          = PosixFormat('@LOCAL_SOLVER@').$ds.$UPD;
 }
 #Location of Solar version.
-$SOLARVERSION         = '$SOLARVER'.$ds.$UPD;
+$SOLARVERSION         = '$SOLARVER';
 
 $SOLARENVINC          = '$SOLARENV'.$INC;
 # Location of 
@@ -943,7 +943,7 @@ $STAR_SSCOMMON        = '$SOLARENV'.$CONFIG.$ds."ssolar.cmn";
 # Location of 
 $STAR_SSOLARINI       = '$SOLARENV'.$CONFIG.$ds."ssolar.ini";
 # Path to the OpenOffice.org recourses.
-$STAR_RESOURCEPATH    = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN;
+$STAR_RESOURCEPATH    = '$SOLARVER'.$ds.'$INPATH'.$BIN;
 # Location of the registry file.
 $STAR_REGISTRY        = '$STAR_RESOURCEPATH'.$ds."applicat.rdb";
 # Location of dmake resource. 
@@ -967,7 +967,7 @@ if ($platform =~ m/solaris/)
 			$ps.$JREEXTRALIBDIR.
                         $ps.$JRETOOLKITDIR.
                         $ps.$JRETHREADDIR.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB;
 }
 elsif ($platform =~ m/linux-gnu|netbsd|osf1|freebsd|aix/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
@@ -978,7 +978,7 @@ elsif ($platform =~ m/linux-gnu|netbsd|osf1|freebsd|aix/)
                         $ps.$JRETHREADDIR.
                         $ps.$par_dir.$LIB64.
                         $ps_STLPORT_LIB.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                        $ps.$ENV{'LD_LIBRARY_PATH'};
 }
 elsif ($platform =~ m/irix/)
@@ -990,11 +990,11 @@ elsif ($platform =~ m/irix/)
                         $ps.$JRETHREADDIR.
                         $ps.$USR_LOCAL.$LIB.
                         $ps.$par_dir.$LIB.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB;
 }
 elsif ($platform =~ m/darwin/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $ps_STLPORT_LIB;
 }
 elsif ($platform !~ m/cygwin/)
@@ -1074,7 +1074,7 @@ if ($platform =~ m/cygwin/)
    $JAVAHOME          = '$JAVA_HOME';
 
    $ILIB             = $cur_dir.$ps_STLPORT_LIB.
-                        $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
+                        $ps.$SOLARVER.$ds.$INPATH.$LIB.
                         $ps.$JAVA_HOME.$LIB.
                         $ps.'$PSDK_HOME'.$LIB.
                         $ps.'$FRAME_HOME'.$LIB;
@@ -1093,7 +1093,7 @@ if ($platform =~ m/cygwin/)
 # The general environment path.
 if ($platform =~ m/linux-gnu|netbsd|odf1|irix|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1126,7 +1126,7 @@ elsif ($platform =~ m/cygwin/)
    $noldPATH = PosixFormat($noldPATH);
 
    $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds."bin".
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
 
@@ -1216,7 +1216,7 @@ elsif ($platform =~ m/cygwin/)
 
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.$USR.$BIN.
                         $ps.$BIN.
@@ -1245,7 +1245,7 @@ else
 if ($platform =~ m/solaris/) 
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB."solaris.2.6".
                         $L.$LIB.
@@ -1268,7 +1268,7 @@ if ($platform =~ m/solaris/)
 elsif ($platform =~ m/linux-gnu|netbasd|osf1|irix|aix|freebsd/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$JAVA_HOME'.$LIB64.
                         $L.$JRELIBDIR.
@@ -1278,13 +1278,13 @@ elsif ($platform =~ m/linux-gnu|netbasd|osf1|irix|aix|freebsd/)
                         $L.$XLIB;
 }
 elsif ($platform =~ m/cygwin/)
-{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L.$par_dir.$LIB.
                         $L_STLPORT_LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
 } 
 elsif ($platform =~ m/darwin/) 
-{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L_STLPORT_LIB.
                         $L.$USR_LIB;
     # [ed] 6/15/02 Add in X11 libraries onto the library path
@@ -1301,9 +1301,9 @@ if ($SYSTEM_MOZILLA eq "YES")
 
 # Location of the compiler include search directory paths.
 $SOLARINC             = $I.$cur_dir.
-                        $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.$ds."stl".
-                        $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.$ds."external".
-                        $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.
+                        $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."stl".
+                        $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".
+                        $I.'$SOLARVER'.$ds.'$INPATH'.$INC.
                         $I.'$SOLARENV'.$ds.'$OUTPATH'.$INC.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
@@ -1400,8 +1400,8 @@ else
 
 if ($SYSTEM_PYTHON eq "NO")
 {
-	$PYTHONPATH           = '.'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'pyuno'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'bin'.$ds.'pyuno';
-	$PYTHONHOME           = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH';
+	$PYTHONPATH           = '.'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ds.'pyuno'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'bin'.$ds.'pyuno';
+	$PYTHONHOME           = '$SOLARVER'.$ds.'$INPATH';
 }
 
 #
