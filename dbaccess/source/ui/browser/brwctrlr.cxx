@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:56:13 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1061,7 +1061,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     // a new record count ? -> may be our search availability has changed
     if (evt.PropertyName.equals(PROPERTY_ROWCOUNT))
     {
-        sal_Int32 nNewValue,nOldValue;
+        sal_Int32 nNewValue = 0, nOldValue = 0;
         evt.NewValue >>= nNewValue;
         evt.OldValue >>= nOldValue;
         if((nOldValue == 0 && nNewValue != 0) || (nOldValue != 0 && nNewValue == 0))
