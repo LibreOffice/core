@@ -4,9 +4,9 @@
 #
 #   $RCSfile: macro.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 13:52:02 $
+#   last change: $Author: vg $ $Date: 2006-11-21 15:16:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -248,6 +248,9 @@ sub startup_check
     usage() if $i<2;
     usage() if "$outfile" eq "";
     if ( -f "$outfile" ) {
+        # changed script - run allways
+        return if (stat($0))[9] > (stat("$outfile"))[9] ;
+
         open OLDFILE, "$outfile" or die "$0 - ERROR: $outfile exists but isn't readable.\n";
         while ( $line = <OLDFILE> ) {
             if ( $line =~ /^\/\/.*completelangiso:/ ) {
