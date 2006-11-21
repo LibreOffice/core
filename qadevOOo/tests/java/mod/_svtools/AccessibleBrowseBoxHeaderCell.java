@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxHeaderCell.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:29:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package mod._svtools;
 
+import com.sun.star.view.XSelectionSupplier;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -81,8 +82,8 @@ import com.sun.star.util.URL;
  */
 public class AccessibleBrowseBoxHeaderCell extends TestCase {
 
-    XDesktop the_Desk;
-    XTextDocument xTextDoc;
+    static XDesktop the_Desk;
+    static XTextDocument xTextDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
@@ -184,7 +185,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
                 UnoRuntime.queryInterface(
                         XInitialization.class, the_frame2.getController());
 
-        Object[] params = new Object[3];
+        PropertyValue[] params = new PropertyValue[3];
         PropertyValue param1 = new PropertyValue();
         param1.Name = "DataSourceName";
         param1.Value = "Bibliography";
@@ -198,14 +199,22 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
         param3.Value = "biblio";
         params[2] = param3;
 
+        XController xCont = the_frame2.getController();
+
+        XSelectionSupplier xSelect = (XSelectionSupplier) UnoRuntime.queryInterface(
+            XSelectionSupplier.class, xCont);
+
+        try {
+            xSelect.select(params);
+        } catch (com.sun.star.lang.IllegalArgumentException ex) {
+            throw new StatusException("Could not select Biblio-Database", ex);
+        }
+
 
         try {
             oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit");
-            xInit.initialize(params);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
             throw new StatusException("Couldn't get toolkit", e );
         }
 
