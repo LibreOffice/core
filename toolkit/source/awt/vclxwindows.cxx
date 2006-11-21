@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:15:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2532,7 +2532,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
             {
                 if ( !bVoid )
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                         setValue( n );
                 }
@@ -2543,7 +2543,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
             {
                 if ( !bVoid )
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                     {
                         if ( nPropType == BASEPROPERTY_SCROLLVALUE_MAX )
@@ -2558,7 +2558,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
             {
                 if ( !bVoid )
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                         setLineIncrement( n );
                 }
@@ -2568,7 +2568,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
             {
                 if ( !bVoid )
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                         setBlockIncrement( n );
                 }
@@ -2578,7 +2578,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
             {
                 if ( !bVoid )
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                         setVisibleSize( n );
                 }
@@ -2588,7 +2588,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
             {
                 if ( !bVoid )
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                         setOrientation( n );
                 }
@@ -3590,7 +3590,7 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 }
                 else
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                          setDate( n );
                 }
@@ -3598,14 +3598,14 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             break;
             case BASEPROPERTY_DATEMIN:
             {
-                sal_Int32 n;
+                sal_Int32 n = 0;
                 if ( Value >>= n )
                      setMin( n );
             }
             break;
             case BASEPROPERTY_DATEMAX:
             {
-                sal_Int32 n;
+                sal_Int32 n = 0;
                 if ( Value >>= n )
                      setMax( n );
             }
@@ -4037,7 +4037,7 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 }
                 else
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                          setTime( n );
                 }
@@ -4045,14 +4045,14 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             break;
             case BASEPROPERTY_TIMEMIN:
             {
-                sal_Int32 n;
+                sal_Int32 n = 0;
                 if ( Value >>= n )
                      setMin( n );
             }
             break;
             case BASEPROPERTY_TIMEMAX:
             {
-                sal_Int32 n;
+                sal_Int32 n = 0;
                 if ( Value >>= n )
                      setMax( n );
             }
@@ -4329,7 +4329,7 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
                 }
                 else
                 {
-                    double d;
+                    double d = 0;
                     if ( Value >>= d )
                          setValue( d );
                 }
@@ -4337,21 +4337,21 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
             break;
             case BASEPROPERTY_VALUEMIN_DOUBLE:
             {
-                double d;
+                double d = 0;
                 if ( Value >>= d )
                      setMin( d );
             }
             break;
             case BASEPROPERTY_VALUEMAX_DOUBLE:
             {
-                double d;
+                double d = 0;
                 if ( Value >>= d )
                      setMax( d );
             }
             break;
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
-                double d;
+                double d = 0;
                 if ( Value >>= d )
                      setSpinSize( d );
             }
@@ -4635,7 +4635,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
                 }
                 else
                 {
-                    double d;
+                    double d = 0;
                     if ( Value >>= d )
                          setValue( d );
                 }
@@ -4643,21 +4643,21 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             break;
             case BASEPROPERTY_VALUEMIN_DOUBLE:
             {
-                double d;
+                double d = 0;
                 if ( Value >>= d )
                      setMin( d );
             }
             break;
             case BASEPROPERTY_VALUEMAX_DOUBLE:
             {
-                double d;
+                double d = 0;
                 if ( Value >>= d )
                      setMax( d );
             }
             break;
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
-                double d;
+                double d = 0;
                 if ( Value >>= d )
                      setSpinSize( d );
             }
