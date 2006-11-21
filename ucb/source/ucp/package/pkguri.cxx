@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:00:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ inline bool isLowSurrogate(sal_uInt32 nUTF16)
     return nUTF16 >= 0xDC00 && nUTF16 <= 0xDFFF;
 }
 
-inline sal_uInt32 getUTF32Character(sal_Unicode const *& rBegin,
+sal_uInt32 getUTF32Character(sal_Unicode const *& rBegin,
                                     sal_Unicode const * pEnd)
 {
     OSL_ASSERT(rBegin && rBegin < pEnd);
