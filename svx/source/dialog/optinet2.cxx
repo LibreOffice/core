@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:21:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,7 +441,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
     try {
         Reference< container::XNameAccess > xNameAccess(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
 
-        sal_Int32 nIntValue;
+        sal_Int32 nIntValue = 0;
         OUString  aStringValue;
 
         if( xNameAccess->getByName(aProxyModePN) >>= nIntValue )
@@ -499,7 +499,7 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
     {
         Reference< beans::XPropertyState > xPropertyState(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
 
-        sal_Int32 nIntValue;
+        sal_Int32 nIntValue = 0;
         OUString  aStringValue;
 
         if( xPropertyState->getPropertyDefault(aHttpProxyPN) >>= aStringValue )
