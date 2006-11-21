@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:30:51 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
             if ( xSet.is() )
             {
                 // get the open mode from the parent storage
-                sal_Int32 nMode;
+                sal_Int32 nMode = 0;
                 uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("OpenMode") );
                 if ( aAny >>= nMode )
                     bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
