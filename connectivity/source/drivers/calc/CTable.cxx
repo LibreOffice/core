@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:19:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,7 +321,7 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
             try
             {
                 Any aNumAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii("NumberFormat") );
-                sal_Int32 nKey;
+                sal_Int32 nKey = 0;
                 if ( aNumAny >>= nKey )
                 {
                     Reference<XPropertySet> xFormat = xFormats->getByKey( nKey );
@@ -864,7 +864,7 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     {
         if ( (*_rRow)[i]->isBound() )
         {
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             if ( _bUseTableDefs )
                 nType = m_aTypes[i-1];
             else
