@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:26:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,7 +747,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_BEGIN, sTmp.makeStringAndClear() );
         }
 
-        double fTemp;
+        double fTemp = 0;
         sal_Int32 nTemp;
 
         aTemp = xNode->getDuration();
@@ -917,7 +917,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                 }
                 else if( IsXMLToken( pValue->Name, XML_GROUP_ID ) )
                 {
-                    sal_Int32 nGroupId;
+                    sal_Int32 nGroupId = 0;
                     if( pValue->Value >>= nGroupId )
                         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_GROUP_ID, OUString::valueOf( nGroupId ) );
                 }
