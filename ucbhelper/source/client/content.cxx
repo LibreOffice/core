@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:19:25 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1515,7 +1515,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
 
     // Execute command "globalTransfer" at UCB.
 
-    TransferCommandOperation eTransOp;
+    TransferCommandOperation eTransOp = TransferCommandOperation();
     switch ( eOperation )
     {
         case InsertOperation_COPY:
