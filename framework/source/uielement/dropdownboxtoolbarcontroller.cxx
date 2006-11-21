@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dropdownboxtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:19:05 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
             {
-                sal_Int32 nTmpPos;
+                sal_Int32 nTmpPos = 0;
                 if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
                 {
                     if (( nTmpPos >= 0 ) &&
