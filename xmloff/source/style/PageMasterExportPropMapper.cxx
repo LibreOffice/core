@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:44:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
     {
         if( pPMPaddingTop && pPMPaddingBottom && pPMPaddingLeft && pPMPaddingRight )
         {
-            sal_Int32 nTop, nBottom, nLeft, nRight;
+            sal_Int32 nTop = 0, nBottom = 0, nLeft = 0, nRight = 0;
 
             pPMPaddingTop->maValue >>= nTop;
             pPMPaddingBottom->maValue >>= nBottom;
