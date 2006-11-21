@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:09:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:35:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
 
-    sal_Int64 nAspect;
+    sal_Int64 nAspect = 0;
     if( ( rValue >>= nAspect ) && nAspect > 0 )
     {
         // store the aspect as an integer value
