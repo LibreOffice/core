@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:46:05 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -878,7 +878,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 
 SdrObject* SdrMeasureObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
     {
         return NULL;
     }
