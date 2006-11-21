@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyName.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:22:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,4 +62,6 @@ public interface PropertyName
     final public static String DOC_COMPARATOR_LEAVE_OUT_FILES =            "DOC_COMPARATOR_LEAVE_OUT_FILES";
 
     final public static String DOC_COMPARATOR_DB_INFO_STRING =             "DOC_COMPARATOR_DB_INFO_STRING";
+
+    final public static String TEMPPATH =                                   "TEMPPATH";
 }

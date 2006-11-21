@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTMLOutputter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:19:32 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,8 @@ public class HTMLOutputter
                 m_aOut.write( "<html>" + ls);
                 m_aOut.write( "<head>"  + ls);
                 m_aOut.write( "<title>" + _sTitle + "</title>" + ls);
-                m_aOut.write( "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://mahler.germany.sun.com/qadev/css/xmloff.css\" media=\"screen\" />" + ls);
-                m_aOut.write( "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://mahler.germany.sun.com/qadev/css/style.css\" media=\"screen\" />" + ls);
+                m_aOut.write( "<link rel=\"stylesheet\" type=\"text/css\" href=\"/gfxcmp_ui/xmloff.css\" media=\"screen\" />" + ls);
+                m_aOut.write( "<link rel=\"stylesheet\" type=\"text/css\" href=\"/gfxcmp_ui/style.css\" media=\"screen\" />" + ls);
                 m_aOut.write( "</head>" + ls);
                 m_aOut.write( "<body bgcolor=white>" + ls);
                 m_aOut.flush();
