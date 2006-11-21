@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:31:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -758,7 +758,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
     Reference<XPropertySet> xColumn = getColumn(aName);
     if ( xColumn.is() )
     {
-        sal_Int32 nDataType;
+        sal_Int32 nDataType = 0;
         xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
         sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
 
