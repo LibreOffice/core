@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:31:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int3
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nFirst,nSecond;
+    sal_Int32 nFirst = 0, nSecond = 0;
     _first >>= nFirst;
     _second >>= nSecond;
 
@@ -422,7 +422,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
 
         for(;pBegin != pEnd;++pBegin)
         {
-            sal_Int32 nPos;
+            sal_Int32 nPos = 0;
             *pBegin >>= nPos;
             if(m_aKeyIter == m_aKeyMap.find(nPos) && m_aKeyIter != m_aKeyMap.end())
                 ++m_aKeyIter;
@@ -1326,7 +1326,7 @@ namespace dbaccess
             {
                 if(bCase(sRealName,*pTableBegin) && bCase(_rsUpdateTableName,sTableName) && _rColumnNames.find(*pTableBegin) == _rColumnNames.end())
                 {
-                    sal_Int32 nType;
+                    sal_Int32 nType = 0;
                     xColumnProp->getPropertyValue(PROPERTY_TYPE)    >>= nType;
                     ::rtl::OUString sColumnDefault;
                     if ( xColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
