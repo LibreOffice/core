@@ -218,6 +218,7 @@
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "SvxShapePolyPolygonBezier";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SvxShapePolyPolygonBezier";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SvxShapePolyPolygonBezier";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
