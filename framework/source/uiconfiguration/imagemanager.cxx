@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:15:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ void SAL_CALL ImageManager::initialize( const Sequence< Any >& aArguments ) thro
             uno::Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
             if ( xPropSet.is() )
             {
-                long nOpenMode;
+                long nOpenMode = 0;
                 Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" )));
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
