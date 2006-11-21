@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DesktopTools.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:49:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 14:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,17 @@ public class DesktopTools {
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
                                     XDesktop.class, createDesktop(xMSF));
         return xDesktop.getComponents().createEnumeration();
+    }
+
+    /**
+     * returns the current component on the desktop
+     * @param xMSF the XMultiServiceFactory
+     * @return XComponent of the current component on the desktop
+     */
+    public static XComponent getCurrentComponent(XMultiServiceFactory xMSF) {
+        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+                                    XDesktop.class, createDesktop(xMSF));
+        return xDesktop.getCurrentComponent();
     }
 
     /**
