@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,7 @@ Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
 XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const Any& rAny ) const throw()
 {
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
     if( !(rAny >>= nColor) )
         return NULL;
 
