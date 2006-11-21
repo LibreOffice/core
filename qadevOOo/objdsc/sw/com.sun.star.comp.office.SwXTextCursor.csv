@@ -155,6 +155,7 @@
 "SwXTextCursor";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "SwXTextCursor";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SwXTextCursor";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"SwXTextCursor";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "SwXTextCursor";"com::sun::star::document::XDocumentInsertable#optional";"insertDocumentFromURL()"
 "SwXTextCursor";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextCursor";"com::sun::star::beans::XPropertySet";"setPropertyValue()"

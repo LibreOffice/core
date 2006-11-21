@@ -122,6 +122,7 @@
 "SwXTextDefaults";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "SwXTextDefaults";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SwXTextDefaults";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
+"SwXTextDefaults";"com::sun::star::style::CharacterProperties";"TextUserDefinedAttributes#optional"
 "SwXTextDefaults";"com::sun::star::text::Defaults";"TabStopDistance"
 "SwXTextDefaults";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextDefaults";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
