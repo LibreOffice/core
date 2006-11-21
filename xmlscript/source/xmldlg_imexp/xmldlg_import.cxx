@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:38:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 17:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1554,7 +1554,7 @@ void ImportContext::importDefaults(
                          OUString( RTL_CONSTASCII_USTRINGPARAM("tab-index") ),
                          xAttributes );
 
-    sal_Bool bDisable;
+    sal_Bool bDisable = sal_False;
     if (getBoolAttr(
             &bDisable, OUString( RTL_CONSTASCII_USTRINGPARAM("disabled") ),
             xAttributes, _pImport->XMLNS_DIALOGS_UID ) &&
