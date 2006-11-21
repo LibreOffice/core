@@ -4,9 +4,9 @@
  *
  *  $RCSfile: properties.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:11:32 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ namespace sdr
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
-            virtual void ForceStyleToHardAttributes(sal_Bool bPseudoSheetsOnly = sal_False);
+            virtual void ForceStyleToHardAttributes();
 
             // syntactical sugar for ItemSet accesses. Broadcasts before and after the changes
             // to invalidate views in old and new BoundRects. As soon as the repaint mechanism
