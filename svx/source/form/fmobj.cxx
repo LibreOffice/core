@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:24:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-21 16:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,7 +624,36 @@ sal_Int32 FmFormObj::getType() const
 {
     return m_nType;
 }
+
 // -----------------------------------------------------------------------------
+// #i70852# overload Layer interface to force to FormColtrol layer
 
+SdrLayerID FmFormObj::GetLayer() const
+{
+    if(GetPage())
+    {
+        // use the SdrLayerAdmin from the page, it's parent is the model one
+        const SdrLayerAdmin& rAdmin(GetPage()->GetLayerAdmin());
+        return rAdmin.GetLayerID(rAdmin.GetControlLayerName(), TRUE);
+    }
+    else if(GetModel())
+    {
+        // use the SdrLayerAdmin from the model. No parents to visit.
+        const SdrLayerAdmin& rAdmin(GetModel()->GetLayerAdmin());
+        return rAdmin.GetLayerID(rAdmin.GetControlLayerName(), FALSE);
+    }
 
+    // return parent's knowledge when no page and no model. Without page and model
+    // there is no SdrLayerAdmin for this object anyways, so return member.
+    return SdrUnoObj::GetLayer();
+}
 
+void FmFormObj::NbcSetLayer(SdrLayerID nLayer)
+{
+    // nothing to do, Layer cannot be changed for FmFormObj. Parents
+    // do not need to be called, SdrUnoObj::NbcSetLayer will not do
+    // it's special handling, but call SdrObject::NbcSetLayer which
+    // will not change since it also uses GetLayer() to test for change
+}
+
+// eof
