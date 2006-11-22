@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:52:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include "dinfdlg.hxx"
 #include "sfxresid.hxx"
@@ -106,6 +106,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
 // STATIC DATA -----------------------------------------------------------
@@ -489,19 +490,23 @@ sal_Bool SfxDocumentInfoItem::PutValue( const com::sun::star::uno::Any& rVal, BY
 
 //------------------------------------------------------------------------
 
-SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet &rItemSet)
-     : SfxTabPage( pParent, SfxResId(TP_DOCINFODESC), rItemSet),
-     aTitleFt( this, ResId( FT_TITLE ) ),
-     aTitleEd( this, ResId( ED_TITLE ) ),
-     aThemaFt( this, ResId( FT_THEMA ) ),
-     aThemaEd( this, ResId( ED_THEMA ) ),
-     aKeywordsFt( this, ResId( FT_KEYWORDS ) ),
-     aKeywordsEd( this, ResId( ED_KEYWORDS ) ),
-     aCommentFt( this, ResId( FT_COMMENT ) ),
-     aCommentEd( this, ResId( ED_COMMENT ) ),
-     pInfoItem(0)
+SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )  :
+
+    SfxTabPage( pParent, SfxResId( TP_DOCINFODESC ), rItemSet ),
+
+    aTitleFt    ( this, ResId( FT_TITLE ) ),
+    aTitleEd    ( this, ResId( ED_TITLE ) ),
+    aThemaFt    ( this, ResId( FT_THEMA ) ),
+    aThemaEd    ( this, ResId( ED_THEMA ) ),
+    aKeywordsFt ( this, ResId( FT_KEYWORDS ) ),
+    aKeywordsEd ( this, ResId( ED_KEYWORDS ) ),
+    aCommentFt  ( this, ResId( FT_COMMENT ) ),
+    aCommentEd  ( this, ResId( ED_COMMENT ) ),
+
+    pInfoItem   ( NULL )
+
 {
-     FreeResource();
+    FreeResource();
 }
 
 //------------------------------------------------------------------------
@@ -1010,8 +1015,9 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aCBFrame            ( this, ResId( CB_FRAME             ) ),
 
     aForwardErrorMessg  (       ResId( STR_FORWARD_ERRMSSG  ) ),
-    pInfoItem( NULL ),
-    eState( S_Init )
+    pInfoItem           ( NULL ),
+    pFileDlg            ( NULL ),
+    eState              ( S_Init )
 
 {
     FreeResource();
@@ -1046,6 +1052,12 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
     ChangeState( S_NoUpdate );
 }
 
+//------------------------------------------------------------------------
+
+SfxInternetPage::~SfxInternetPage()
+{
+    delete pFileDlg;
+}
 
 //------------------------------------------------------------------------
 
@@ -1098,7 +1110,6 @@ void SfxInternetPage::EnableNoUpdate( BOOL bEnable )
     if( bEnable )
         aRBNoAutoUpdate.Check();
 }
-
 
 //------------------------------------------------------------------------
 
@@ -1158,16 +1169,24 @@ IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, pButton )
+IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, EMPTYARG )
 {
-    (void)pButton; //unused
-    sfx2::FileDialogHelper aHelper(
-        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-        WB_OPEN );
-    aHelper.SetDisplayDirectory( aEDForwardURL.GetText() );
+    if ( !pFileDlg )
+        pFileDlg = new sfx2::FileDialogHelper( TemplateDescription::FILEOPEN_SIMPLE, WB_OPEN );
+    pFileDlg->SetDisplayDirectory( aEDForwardURL.GetText() );
+    pFileDlg->StartExecuteModal( LINK( this, SfxInternetPage, DialogClosedHdl ) );
 
-    if( ERRCODE_NONE == aHelper.Execute() )
-        aEDForwardURL.SetText( aHelper.GetPath() );
+    return 0;
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SfxInternetPage, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG )
+{
+    DBG_ASSERT( pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
+
+    if ( ERRCODE_NONE == pFileDlg->GetError() )
+        aEDForwardURL.SetText( pFileDlg->GetPath() );
 
     return 0;
 }
