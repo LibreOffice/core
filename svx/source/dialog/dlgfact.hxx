@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:48:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
 #endif
+
+#include "tools/link.hxx"
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
@@ -103,11 +105,24 @@ USHORT Class::Execute()                             \
 }
 
 //for GalleryThemeProperties begin
+class VclAbstractDialog2_Impl : public VclAbstractDialog2
+{
+    Dialog*         m_pDlg;
+    Link            m_aEndDlgHdl;
+public:
+                    VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}                             \
+    virtual         ~VclAbstractDialog2_Impl();
+    virtual void    StartExecuteModal( const Link& rEndDialogHdl );
+    virtual long    GetResult();
+private:
+                    DECL_LINK( EndDialogHdl, Dialog* );
+};
+//for GalleryThemeProperties end
+
 class VclAbstractDialog_Impl : public VclAbstractDialog
 {
     DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
 };
-//for GalleryThemeProperties end
 
 //for ActualizeProgress begin
 class VclAbstractRefreshableDialog_Impl : public VclAbstractRefreshableDialog
@@ -657,7 +672,7 @@ public:
     virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( Window* pParent,  //add for SvxZoomDialog
                                             GalleryTheme* pThm,
                                             const ResId& rResId);
-    virtual VclAbstractDialog * CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
+    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet,
                                             const ResId& rResId);
