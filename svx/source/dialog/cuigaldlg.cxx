@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:42:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,19 +80,21 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HDL_
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XASYNCHRONOUSEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
+#endif
 
 // --------------
 // - Namespaces -
@@ -102,6 +104,7 @@ using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -172,12 +175,12 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                const ::std::vector< String >& rFormats,
                                BOOL bRecursive )
 {
-    ::vos::IMutex&  rMutex = Application::GetSolarMutex();
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    rMutex.acquire();
-    mpProgress->SetDirectory( rStartURL );
-    mpProgress->Sync();
-    rMutex.release();
+        mpProgress->SetDirectory( rStartURL );
+        mpProgress->Sync();
+    }
 
     try
     {
@@ -190,30 +193,50 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 
         if( xResultSet.is() )
         {
-            Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+            ::com::sun::star::uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
+            ::com::sun::star::uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
 
-            if( xContentAccess.is() )
+            while( xResultSet->next() && schedule() )
             {
-                while( xResultSet->next() && schedule() )
-                {
-                    INetURLObject   aFoundURL( xContentAccess->queryContentIdentifierString() );
-                    DBG_ASSERT( aFoundURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-                    Content         aFoundCnt( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                INetURLObject   aFoundURL( xContentAccess->queryContentIdentifierString() );
+                DBG_ASSERT( aFoundURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                    if( bRecursive && aFoundCnt.isFolder() )
-                        ImplSearch( aFoundURL, rFormats, TRUE );
-                    else if( aFoundCnt.isDocument() )
+                sal_Bool bFolder = xRow->getBoolean( 1 ); // property "IsFolder"
+                if ( xRow->wasNull() )
+                    bFolder = sal_False;
+
+                if( bRecursive && bFolder )
+                    ImplSearch( aFoundURL, rFormats, TRUE );
+                else
+                {
+                    sal_Bool bDocument = xRow->getBoolean( 2 ); // property "IsDocument"
+                    if ( xRow->wasNull() )
+                        bDocument = sal_False;
+
+                    if( bDocument )
                     {
                         GraphicDescriptor   aDesc( aFoundURL );
                         String              aFileName;
 
-                        if( ( aDesc.Detect() && ::std::find( rFormats.begin(), rFormats.end(), aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ).ToLowerAscii() ) != rFormats.end() ) ||
-                            ::std::find( rFormats.begin(), rFormats.end(), String(aFoundURL.GetExtension().toAsciiLowerCase()) ) != rFormats.end() )
+                        if( ( aDesc.Detect() &&
+                              ::std::find( rFormats.begin(),
+                                           rFormats.end(),
+                                           aDesc.GetImportFormatShortName(
+                                               aDesc.GetFileFormat() ).ToLowerAscii() )
+                              != rFormats.end() ) ||
+                            ::std::find( rFormats.begin(),
+                                         rFormats.end(),
+                                         String(aFoundURL.GetExtension().toAsciiLowerCase()) )
+                            != rFormats.end() )
                         {
-                            rMutex.acquire();
-                            mpBrowser->aFoundList.Insert( new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) ), LIST_APPEND );
-                            mpBrowser->aLbxFound.InsertEntry( GetReducedString( aFoundURL, 50 ), (USHORT) mpBrowser->aFoundList.Count() - 1 );
-                            rMutex.release();
+                            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+                            mpBrowser->aFoundList.Insert(
+                                new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) ),
+                                LIST_APPEND );
+                            mpBrowser->aLbxFound.InsertEntry(
+                                GetReducedString( aFoundURL, 50 ),
+                                (USHORT) mpBrowser->aFoundList.Count() - 1 );
                         }
                     }
                 }
@@ -226,7 +249,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
     }
-    catch( const ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
     {
     }
 }
@@ -268,6 +291,7 @@ IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
 IMPL_LINK( SearchProgress, CleanUpHdl, void*, EMPTYARG )
 {
     EndDialog( RET_OK );
+    delete this;
     return 0L;
 }
 
@@ -275,8 +299,18 @@ IMPL_LINK( SearchProgress, CleanUpHdl, void*, EMPTYARG )
 
 short SearchProgress::Execute()
 {
+    DBG_ERROR( "SearchProgress cannot be executed via Dialog::Execute!\n"
+               "It creates a thread that will call back to VCL apartment => deadlock!\n"
+               "Use Dialog::StartExecuteModal to execute the dialog!" );
+    return RET_CANCEL;
+}
+
+// ------------------------------------------------------------------------
+
+void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
+{
     maSearchThread.create();
-    return ModalDialog::Execute();
+    ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
 // --------------
@@ -304,15 +338,15 @@ void SAL_CALL TakeThread::run()
     INetURLObject       aURL;
     USHORT              nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    ::vos::IMutex&      rMutex = Application::GetSolarMutex();
     USHORT              nPos;
     GalleryProgress*    pStatusProgress;
 
-    rMutex.acquire();
-    pStatusProgress = new GalleryProgress;
-    nEntries = mpBrowser->bTakeAll ? mpBrowser->aLbxFound.GetEntryCount() : mpBrowser->aLbxFound.GetSelectEntryCount();
-    pThm->LockBroadcaster();
-    rMutex.release();
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        pStatusProgress = new GalleryProgress;
+        nEntries = mpBrowser->bTakeAll ? mpBrowser->aLbxFound.GetEntryCount() : mpBrowser->aLbxFound.GetSelectEntryCount();
+        pThm->LockBroadcaster();
+    }
 
     for( USHORT i = 0; i < nEntries && schedule(); i++ )
     {
@@ -325,18 +359,22 @@ void SAL_CALL TakeThread::run()
         // Position in Taken-Liste uebernehmen
         mrTakenList.Insert( (void*) (ULONG)nPos, LIST_APPEND );
 
-        rMutex.acquire();
-        mpProgress->SetFile( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
-        pStatusProgress->Update( i, nEntries - 1 );
-        mpProgress->Sync();
-        pThm->InsertURL( aURL );
-        rMutex.release();
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+            mpProgress->SetFile( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+            pStatusProgress->Update( i, nEntries - 1 );
+            mpProgress->Sync();
+            pThm->InsertURL( aURL );
+        }
     }
 
-    rMutex.acquire();
-    pThm->UnlockBroadcaster();
-    delete pStatusProgress;
-    rMutex.release();
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        pThm->UnlockBroadcaster();
+        delete pStatusProgress;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -427,7 +465,9 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
     mpBrowser->aLbxFound.SetUpdateMode( TRUE );
     mpBrowser->SelectFoundHdl( NULL );
     GetParent()->LeaveWait();
+
     EndDialog( RET_OK );
+    delete this;
     return 0L;
 }
 
@@ -435,8 +475,18 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
 
 short TakeProgress::Execute()
 {
+    DBG_ERROR( "TakeProgress cannot be executed via Dialog::Execute!\n"
+               "It creates a thread that will call back to VCL apartment => deadlock!\n"
+               "Use Dialog::StartExecuteModal to execute the dialog!" );
+    return RET_CANCEL;
+}
+
+// ------------------------------------------------------------------------
+
+void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
+{
     maTakeThread.create();
-    return ModalDialog::Execute();
+    ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
 // ---------------------
@@ -750,9 +800,12 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxIt
         nFirstExtFilterPos  (0),
         bEntriesFound       (FALSE),
         bInputAllowed       (TRUE),
-        bSearchRecursive    (FALSE)
+        bSearchRecursive    (FALSE),
+        xDialogListener     ( new ::svt::DialogClosedListener() )
 {
     FreeResource();
+
+    xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
 }
 
 // ------------------------------------------------------------------------
@@ -781,12 +834,26 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     aCbxPreview.Disable();
 }
 
+// ------------------------------------------------------------------------
+
+void TPGalleryThemeProperties::StartSearchFiles( const String& _rFolderURL, short _nDlgResult )
+{
+    if ( RET_OK == _nDlgResult )
+    {
+        aURL = INetURLObject( _rFolderURL );
+        bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
+        SearchFiles();
+    }
+
+    nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
+}
 
 // ------------------------------------------------------------------------
 
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
     xMediaPlayer.clear();
+    xDialogListener.clear();
 
     for( String* pStr = aFoundList.First(); pStr; pStr = aFoundList.Next() )
         delete pStr;
@@ -892,8 +959,7 @@ void TPGalleryThemeProperties::FillFilterList()
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aFilters[ l ].second.getToken( 0, ';', nIndex );
             nFirstExtFilterPos = aCbbFileType.InsertEntry( addExtension( aFilters[ l ].first,
-                                                                         aFilterWildcard += pFilterEntry->aFilterName ) );
-
+                                                           aFilterWildcard += pFilterEntry->aFilterName ) );
             aFilterEntryList.Insert( pFilterEntry, nFirstExtFilterPos );
         }
     }
@@ -928,7 +994,6 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             if ( aExtensions.Len() )
                 aExtensions += sal_Unicode( ';' );
-
             ( aExtensions += String( aWildcard ) ) += String( aFilters[ k ].second.getToken( 0, ';', nIndex ) );
         }
      }
@@ -978,23 +1043,8 @@ void TPGalleryThemeProperties::SearchFiles()
     pProgress->SetFileType( aCbbFileType.GetText() );
     pProgress->SetDirectory( rtl::OUString() );
     pProgress->Update();
-    pProgress->Execute();
-    delete pProgress;
 
-    if( aFoundList.Count() )
-    {
-        aLbxFound.SelectEntryPos( 0 );
-        aBtnTakeAll.Enable();
-        aCbxPreview.Enable();
-        bEntriesFound = TRUE;
-    }
-    else
-    {
-        aLbxFound.InsertEntry( String( GAL_RESID( RID_SVXSTR_GALLERY_NOFILES ) ) );
-        aBtnTakeAll.Disable();
-        aCbxPreview.Disable();
-        bEntriesFound = FALSE;
-    }
+    pProgress->StartExecuteModal( LINK( this, TPGalleryThemeProperties, EndSearchProgressHdl ) );
 }
 
 // ------------------------------------------------------------------------
@@ -1016,28 +1066,34 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
         try
         {
             // setup folder picker
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            ::com::sun::star::uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             if( xMgr.is() )
             {
-                Reference< XFolderPicker >  xFolderDlg = Reference< XFolderPicker >(
+                xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
                     xMgr->createInstance( OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" )), UNO_QUERY );
 
-                if ( xFolderDlg.is() )
+                if ( xFolderPicker.is() )
                 {
-//                  svt::SetDialogHelpId( xFolderDlg, HID_GALLERY_NEWTHEME_FINDFILES );
+//                  svt::SetDialogHelpId( xFolderPicker, HID_GALLERY_NEWTHEME_FINDFILES );
                     String  aDlgPathName( SvtPathOptions().GetGraphicPath() );
-                    xFolderDlg->setDisplayDirectory(aDlgPathName);
+                    xFolderPicker->setDisplayDirectory(aDlgPathName);
 
                     aPreviewTimer.Stop();
 
-                    if( xFolderDlg->execute() == RET_OK )
+                    ::com::sun::star::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+                    if ( xAsyncDlg.is() )
+                        xAsyncDlg->startExecuteModal( xDialogListener.get() );
+                    else
                     {
-                        aURL = INetURLObject( xFolderDlg->getDirectory() );
-                        bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
-                        SearchFiles();
-                    }
+                        if( xFolderPicker->execute() == RET_OK )
+                        {
+                            aURL = INetURLObject( xFolderPicker->getDirectory() );
+                            bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
+                            SearchFiles();
+                        }
 
-                    nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
+                        nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
+                    }
                 }
             }
         }
@@ -1060,8 +1116,10 @@ void TPGalleryThemeProperties::TakeFiles()
     {
         TakeProgress* pTakeProgress = new TakeProgress( this );
         pTakeProgress->Update();
-        pTakeProgress->Execute();
-        delete pTakeProgress;
+
+        pTakeProgress->StartExecuteModal(
+            Link() /* no postprocessing needed, pTakeProgress
+                      will be deleted in TakeProgress::CleanupHdl */ );
     }
 }
 
@@ -1103,9 +1161,7 @@ void TPGalleryThemeProperties::DoPreview()
         if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
         {
             aGraphic = BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) );
-
             xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
             if( xMediaPlayer.is() )
                 xMediaPlayer->start();
         }
@@ -1225,6 +1281,39 @@ IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
 {
     aPreviewTimer.Stop();
     DoPreview();
+    return 0L;
+}
+
+// ------------------------------------------------------------------------
+
+IMPL_LINK( TPGalleryThemeProperties, EndSearchProgressHdl, SearchProgress *, EMPTYARG )
+{
+  if( aFoundList.Count() )
+  {
+      aLbxFound.SelectEntryPos( 0 );
+      aBtnTakeAll.Enable();
+      aCbxPreview.Enable();
+      bEntriesFound = TRUE;
+  }
+  else
+  {
+      aLbxFound.InsertEntry( String( GAL_RESID( RID_SVXSTR_GALLERY_NOFILES ) ) );
+      aBtnTakeAll.Disable();
+      aCbxPreview.Disable();
+      bEntriesFound = FALSE;
+  }
+  return 0L;
+}
+
+// ------------------------------------------------------------------------
+
+IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent*, pEvt )
+{
+    DBG_ASSERT( xFolderPicker.is() == sal_True, "TPGalleryThemeProperties::DialogClosedHdl(): no folder picker" );
+
+    String sURL = String( xFolderPicker->getDirectory() );
+    StartSearchFiles( sURL, pEvt->DialogResult );
+
     return 0L;
 }
 
