@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-07 10:23:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 #ifndef __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
 #define __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
-
-#include <hash_map>
-#include <vector>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
