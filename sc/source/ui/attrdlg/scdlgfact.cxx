@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:15:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ IMPL_ABSTDLG_BASE(AbstractScInsertCellDlg_Impl); //add for ScInsertCellDlg
 IMPL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl); //add for ScInsertContentsDlg
 IMPL_ABSTDLG_BASE(AbstractScInsertTableDlg_Impl); //add for ScInsertTableDlg
 IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl); //add for ScSelEntryDlg
-IMPL_ABSTDLG_BASE(AbstractScLinkedAreaDlg_Impl); //add for ScLinkedAreaDlg
+IMPL_ABSTDLG2_BASE(AbstractScLinkedAreaDlg_Impl); //add for ScLinkedAreaDlg
 IMPL_ABSTDLG_BASE(AbstractScMetricInputDlg_Impl); //add for ScMetricInputDlg
 IMPL_ABSTDLG_BASE(AbstractScMoveTableDlg_Impl); //add for ScMoveTableDlg
 IMPL_ABSTDLG_BASE(AbstractScNameCreateDlg_Impl); //add for ScNameCreateDlg
