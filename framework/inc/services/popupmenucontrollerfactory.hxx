@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:33:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,6 @@
 
 #ifndef __FRAMEWORK_SERVICES_POPUPMENUCONTROLLERFACTORY_HXX_
 #define __FRAMEWORK_SERVICES_POPUPMENUCONTROLLERFACTORY_HXX_
-
-/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
-               with solaris headers ...
-*/
-#include <vector>
-#include <list>
-#include <hash_map>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
