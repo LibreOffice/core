@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:32:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:53:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 #ifndef _SFXCFG_HXX
 #define _SFXCFG_HXX
 
-#include <hash_map>
 #include <vector>
 #include <algorithm>
 
