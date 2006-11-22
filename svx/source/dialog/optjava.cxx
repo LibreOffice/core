@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:51:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,12 @@
 #include "dialogs.hrc"
 #include "helpid.hrc"
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
+#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -80,13 +85,15 @@
 #ifndef  _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #endif
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XASYNCHRONOUSEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
@@ -207,7 +214,9 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_nParamSize        ( 0 ),
     m_sInstallText      (       ResId( STR_INSTALLED_IN ) ),
     m_sAccessibilityText(       ResId( STR_ACCESSIBILITY ) ),
-    m_sAddDialogText    (       ResId( STR_ADDDLGTEXT ) )
+    m_sAddDialogText    (       ResId( STR_ADDDLGTEXT ) ),
+
+    xDialogListener     ( new ::svt::DialogClosedListener() )
 
 {
     m_aJavaEnableCB.SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
@@ -240,6 +249,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 
     FreeResource();
 
+    xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
+
     EnableHdl_Impl( &m_aJavaEnableCB );
     jfw_lock();
 
@@ -263,10 +274,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
         Size aSize = m_aJavaList.GetSizePixel();
         aSize.Width() -= nDiff;
         m_aJavaList.SetSizePixel(aSize);
-
     }
-
-
 }
 
 // -----------------------------------------------------------------------
@@ -339,86 +347,29 @@ IMPL_LINK( SvxJavaOptionsPage, SelectHdl_Impl, SvxSimpleTable *, EMPTYARG )
 
 IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
 {
-    rtl::OUString sService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) );
-    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( sService ), UNO_QUERY );
-
-    String sWorkFolder = SvtPathOptions().GetWorkPath();
-    xFolderPicker->setDisplayDirectory( sWorkFolder );
-    xFolderPicker->setDescription( m_sAddDialogText );
-    bool bFinished = false;
-    while ( !bFinished )
+    try
     {
-        if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
-        {
-            sal_Int32 nPos = 0;
-            ::rtl::OUString sFolder( xFolderPicker->getDirectory() );
-            JavaInfo* pInfo = NULL;
-            javaFrameworkError eErr = jfw_getJavaInfoByPath( sFolder.pData, &pInfo );
-            if ( JFW_E_NONE == eErr && pInfo )
-            {
-                bool bFound = false;
-                JavaInfo** parInfo = m_parJavaInfo;
-                for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
-                {
-                    JavaInfo* pCmpInfo = *parInfo++;
-                    if ( jfw_areEqualJavaInfo( pCmpInfo, pInfo ) )
-                    {
-                        bFound = true;
-                        nPos = i;
-                        break;
-                    }
-                }
+        Reference < XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+        xFolderPicker = Reference< XFolderPicker >(
+            xMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" ) ), UNO_QUERY );
 
-                if ( !bFound )
-                {
-                    std::vector< JavaInfo* >::iterator pIter;
-                    for ( pIter = m_aAddedInfos.begin(); pIter != m_aAddedInfos.end(); ++pIter )
-                    {
-                        JavaInfo* pCmpInfo = *pIter;
-                        if ( jfw_areEqualJavaInfo( pCmpInfo, pInfo ) )
-                        {
-                            bFound = true;
-                            break;
-                        }
-                    }
-                }
+        String sWorkFolder = SvtPathOptions().GetWorkPath();
+        xFolderPicker->setDisplayDirectory( sWorkFolder );
+        xFolderPicker->setDescription( m_sAddDialogText );
 
-                if ( !bFound )
-                {
-                    jfw_addJRELocation( pInfo->sLocation );
-                    AddJRE( pInfo );
-                    m_aAddedInfos.push_back( pInfo );
-                    nPos = m_aJavaList.GetEntryCount() - 1;
-                }
-                else
-                    jfw_freeJavaInfo( pInfo );
-
-                SvLBoxEntry* pEntry = m_aJavaList.GetEntry( nPos );
-                if ( pEntry )
-                {
-                    m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
-                    m_aJavaList.HandleEntryChecked( pEntry );
-                }
-                bFinished = true;
-            }
-            else if ( JFW_E_NOT_RECOGNIZED == eErr )
-            {
-                ErrorBox aErrBox( this, SVX_RES( RID_SVXERR_JRE_NOT_RECOGNIZED ) );
-                aErrBox.Execute();
-            }
-            else if ( JFW_E_FAILED_VERSION == eErr )
-            {
-                ErrorBox aErrBox( this, SVX_RES( RID_SVXERR_JRE_FAILED_VERSION ) );
-                aErrBox.Execute();
-            }
-
-            if ( !bFinished )
-                xFolderPicker->setDisplayDirectory( sFolder );
-        }
-        else
-            bFinished = true;
+        Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+        if ( xAsyncDlg.is() )
+            xAsyncDlg->startExecuteModal( xDialogListener.get() );
+        else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
+            AddFolder( xFolderPicker->getDirectory() );
     }
+    catch ( Exception& )
+    {
+#ifdef DBG_UTIL
+        DBG_ERRORFILE( "SvxJavaOptionsPage::AddHdl_Impl(): caught exception" );
+#endif
+    }
+
     return 0;
 }
 
@@ -524,6 +475,41 @@ IMPL_LINK( SvxJavaOptionsPage, ResetHdl_Impl, Timer *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SvxJavaOptionsPage, StartFolderPickerHdl, void*, EMPTYARG )
+{
+    try
+    {
+        Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+        if ( xAsyncDlg.is() )
+            xAsyncDlg->startExecuteModal( xDialogListener.get() );
+        else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
+            AddFolder( xFolderPicker->getDirectory() );
+    }
+    catch ( Exception& )
+    {
+#ifdef DBG_UTIL
+        DBG_ERRORFILE( "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception" );
+#endif
+    }
+
+    return 0L;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
+{
+    if ( RET_OK == pEvt->DialogResult )
+    {
+        DBG_ASSERT( xFolderPicker.is() == sal_True, "SvxJavaOptionsPage::DialogClosedHdl(): no folder picker" );
+
+        AddFolder( xFolderPicker->getDirectory() );
+    }
+    return 0L;
+}
+
+// -----------------------------------------------------------------------
+
 void SvxJavaOptionsPage::ClearJavaInfo()
 {
     if ( m_parJavaInfo )
@@ -614,6 +600,99 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     INetURLObject aLocObj( ::rtl::OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
+{
+    m_aJavaList.Select( _pEntry, TRUE );
+    SvButtonState eState = m_aJavaList.GetCheckButtonState( _pEntry );
+
+    if ( SV_BUTTON_CHECKED == eState )
+    {
+        // we have radio button behavior -> so uncheck the other entries
+        SvLBoxEntry* pEntry = m_aJavaList.First();
+        while ( pEntry )
+        {
+            if ( pEntry != _pEntry )
+                m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
+            pEntry = m_aJavaList.Next( pEntry );
+        }
+    }
+    else
+        m_aJavaList.SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
+{
+    bool bStartAgain = true;
+    sal_Int32 nPos = 0;
+    JavaInfo* pInfo = NULL;
+    javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
+    if ( JFW_E_NONE == eErr && pInfo )
+    {
+        bool bFound = false;
+        JavaInfo** parInfo = m_parJavaInfo;
+        for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
+        {
+            JavaInfo* pCmpInfo = *parInfo++;
+            if ( jfw_areEqualJavaInfo( pCmpInfo, pInfo ) )
+            {
+                bFound = true;
+                nPos = i;
+                break;
+            }
+        }
+
+        if ( !bFound )
+        {
+            std::vector< JavaInfo* >::iterator pIter;
+            for ( pIter = m_aAddedInfos.begin(); pIter != m_aAddedInfos.end(); ++pIter )
+            {
+                JavaInfo* pCmpInfo = *pIter;
+                if ( jfw_areEqualJavaInfo( pCmpInfo, pInfo ) )
+                {
+                    bFound = true;
+                    break;
+                }
+            }
+        }
+
+        if ( !bFound )
+        {
+            jfw_addJRELocation( pInfo->sLocation );
+            AddJRE( pInfo );
+            m_aAddedInfos.push_back( pInfo );
+            nPos = m_aJavaList.GetEntryCount() - 1;
+        }
+        else
+            jfw_freeJavaInfo( pInfo );
+
+        SvLBoxEntry* pEntry = m_aJavaList.GetEntry( nPos );
+        m_aJavaList.Select( pEntry );
+        m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+        HandleCheckEntry( pEntry );
+        bStartAgain = false;
+    }
+    else if ( JFW_E_NOT_RECOGNIZED == eErr )
+    {
+        ErrorBox aErrBox( this, SVX_RES( RID_SVXERR_JRE_NOT_RECOGNIZED ) );
+        aErrBox.Execute();
+    }
+    else if ( JFW_E_FAILED_VERSION == eErr )
+    {
+        ErrorBox aErrBox( this, SVX_RES( RID_SVXERR_JRE_FAILED_VERSION ) );
+        aErrBox.Execute();
+    }
+
+    if ( bStartAgain )
+    {
+        xFolderPicker->setDisplayDirectory( _rFolder );
+        Application::PostUserEvent( LINK( this, SvxJavaOptionsPage, StartFolderPickerHdl ) );
+    }
 }
 
 // -----------------------------------------------------------------------
