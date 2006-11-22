@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:27:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,11 @@ friend class SfxOrganizeListBox_Impl;
     sal_Int8                nDropAction;
     bool                    bExecDropFinished;
 
+    // save some variables for the asynchronous file dialog
+    USHORT                  m_nRegion;
+    USHORT                  m_nIndex;
+    String                  m_sExtension4Save;
+
     SfxOrganizeListBox_Impl aLeftLb;
     ListBox                 aLeftTypLb;
 
@@ -202,12 +207,14 @@ friend class SfxOrganizeListBox_Impl;
 
     String                  aLastDir;
     SfxOrganizeMgr          aMgr;
+    sfx2::FileDialogHelper* pFileDlg;
 
     SvStringsDtor*          GetAllFactoryURLs_Impl() const;
     sal_Bool                GetServiceName_Impl( String& rFactoryURL, String& rFileURL ) const;
     long                    Dispatch_Impl( USHORT nId, Menu* _pMenu );
     String                  GetPath_Impl( BOOL bOpen, const String& rFileName );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPaths_Impl( const String& rFileName );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                            GetPaths_Impl( const String& rFileName );
     void                    InitBitmaps( void );
 
     DECL_LINK( GetFocus_Impl, SfxOrganizeListBox_Impl * );
@@ -218,12 +225,17 @@ friend class SfxOrganizeListBox_Impl;
     DECL_LINK( MenuActivate_Impl, Menu * );
     DECL_LINK( AddFiles_Impl, Button * );
     DECL_LINK( OnAddressTemplateClicked, Button * );
-    BOOL                    DontDelete_Impl( SvLBoxEntry *pEntry);
-    void                    OkHdl(Button *);
+
+    DECL_LINK( ImportHdl, sfx2::FileDialogHelper* );
+    DECL_LINK( ExportHdl, sfx2::FileDialogHelper* );
+    DECL_LINK( AddFilesHdl, sfx2::FileDialogHelper* );
+
+    BOOL        DontDelete_Impl( SvLBoxEntry* pEntry );
+    void        OkHdl( Button* );
 
 public:
-                            SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
-                                                 SfxDocumentTemplates* pTempl );
+    SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent, SfxDocumentTemplates* pTempl );
+    ~SfxOrganizeDlg_Impl();
 };
 
 //-------------------------------------------------------------------------
@@ -254,7 +266,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aFilesBtn           ( pParent, ResId( BTN_FILES ) ),
 
     aEditAcc    ( ResId( ACC_EDIT ) ),
-    aMgr        ( &aLeftLb, &aRightLb, pTempl )
+    aMgr        ( &aLeftLb, &aRightLb, pTempl ),
+    pFileDlg    ( NULL )
 
 {
     // update the SfxDocumentTemplates the manager works with
@@ -339,6 +352,13 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aLeftLb.SelectAll( FALSE );
     aRightLb.SelectAll( FALSE );
     aRightLb.GrabFocus();
+}
+
+//-------------------------------------------------------------------------
+
+SfxOrganizeDlg_Impl::~SfxOrganizeDlg_Impl()
+{
+    delete pFileDlg;
 }
 
 //-------------------------------------------------------------------------
@@ -1576,15 +1596,17 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
 {
     String aPath;
-    String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
-    short nDialogType = bOpen
+    m_sExtension4Save = DEFINE_CONST_UNICODE( "vor" );
+    sal_Int16 nDialogType = bOpen
         ? com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE
         : com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE;
-    sfx2::FileDialogHelper aFileDlg( nDialogType, 0L );
+    if ( pFileDlg )
+        delete pFileDlg;
+    pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0L );
 
     // add "All" filter
-    aFileDlg.AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
-                        DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    pFileDlg->AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
+                         DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     // add template filter
     String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
     String sFilterExt;
@@ -1617,8 +1639,8 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     sFilterName += DEFINE_CONST_UNICODE( " (" );
     sFilterName += sFilterExt;
     sFilterName += ')';
-    aFileDlg.AddFilter( sFilterName, sFilterExt );
-    aFileDlg.SetCurrentFilter( sFilterName );
+    pFileDlg->AddFilter( sFilterName, sFilterExt );
+    pFileDlg->SetCurrentFilter( sFilterName );
 
     if ( aLastDir.Len() || rFileName.Len() )
     {
@@ -1634,40 +1656,24 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
         if ( aObj.hasExtension() )
         {
-            aExtension = aObj.getExtension( INetURLObject::LAST_SEGMENT, true,
-                                            INetURLObject::DECODE_WITH_CHARSET );
+            m_sExtension4Save = aObj.getExtension(
+                INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
             aObj.removeExtension();
         }
 
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-        aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        pFileDlg->SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 
-    if ( ERRCODE_NONE == aFileDlg.Execute() )
-    {
-        aPath = aFileDlg.GetPath();
-        INetURLObject aObj( aPath );
+    pFileDlg->StartExecuteModal( LINK( this, SfxOrganizeDlg_Impl, ImportHdl ) );
 
-        // we want to keep the original extension when exporting, the file open dialog
-        // always sets the extension to *.vor
-        if ( ! bOpen )
-        {
-            if ( aObj.hasExtension() )
-                aObj.removeExtension();
-
-            aObj.setExtension( aExtension );
-            aPath = aObj.GetMainURL(INetURLObject::DECODE_TO_IURI);
-        }
-
-        aObj.removeSegment();
-        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    }
     return aPath;
 }
 
 //-------------------------------------------------------------------------
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SfxOrganizeDlg_Impl::GetPaths_Impl( const String& rFileName )
+::com::sun::star::uno::Sequence< ::rtl::OUString >
+    SfxOrganizeDlg_Impl::GetPaths_Impl( const String& rFileName )
 
 /*  [Description]
 
@@ -1687,14 +1693,16 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
-    String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
-    sfx2::FileDialogHelper aFileDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-        SFXWB_MULTISELECTION );
+    m_sExtension4Save = DEFINE_CONST_UNICODE( "vor" );
+    if ( pFileDlg )
+            delete pFileDlg;
+    pFileDlg = new sfx2::FileDialogHelper(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, SFXWB_MULTISELECTION );
 
     // add "All" filter
-    aFileDlg.AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
-                        DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    pFileDlg->AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
+                         DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+
     // add template filter
     String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
     String sFilterExt;
@@ -1727,8 +1735,8 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     sFilterName += DEFINE_CONST_UNICODE( " (" );
     sFilterName += sFilterExt;
     sFilterName += ')';
-    aFileDlg.AddFilter( sFilterName, sFilterExt );
-    aFileDlg.SetCurrentFilter( sFilterName );
+    pFileDlg->AddFilter( sFilterName, sFilterExt );
+    pFileDlg->SetCurrentFilter( sFilterName );
 
     if ( aLastDir.Len() || rFileName.Len() )
     {
@@ -1744,30 +1752,23 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
         if ( aObj.hasExtension() )
         {
-            aExtension = aObj.getExtension( INetURLObject::LAST_SEGMENT, true,
-                                            INetURLObject::DECODE_WITH_CHARSET );
+            m_sExtension4Save = aObj.getExtension(
+                 INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
             aObj.removeExtension();
         }
 
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-        aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        pFileDlg->SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 
-    if ( ERRCODE_NONE == aFileDlg.Execute() )
-    {
-        aPaths = aFileDlg.GetMPath();
-        sal_Int32 lastCount = aPaths.getLength() - 1;
-        INetURLObject aObj( aPaths.getArray()[ lastCount ] );
+    pFileDlg->StartExecuteModal( LINK( this, SfxOrganizeDlg_Impl, ExportHdl ) );
 
-        aObj.removeSegment();
-        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    }
     return aPaths;
 }
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry *pEntry)
+BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry* pEntry )
 {
     USHORT nDepth = pFocusBox->GetModel()->GetDepth(pEntry);
     if(SfxOrganizeListBox_Impl::VIEW_FILES ==
@@ -1962,48 +1963,10 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
         {
             if ( !pEntry )
                 return 1;
-            USHORT nRegion = 0, nIndex = 0;
-            GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
-
-            ::com::sun::star::uno::Sequence < ::rtl::OUString > Paths = GetPaths_Impl( String() );
-            sal_Int32 nCount = Paths.getLength();
-            if( nCount == 1 )
-             {
-               String aPath = String( Paths.getArray()[0] );
-               if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, nRegion, nIndex, aPath ) )
-               {
-                   String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
-                   aText.SearchAndReplaceAscii( "$1", aPath );
-                   ErrorBox( pDialog, WB_OK, aText ).Execute();
-               }
-            }
-            else if( nCount > 1)
-            {
-                INetURLObject aPathObj( Paths[0] );
-                aPathObj.setFinalSlash();
-                for ( USHORT i = 1; i<nCount; ++i )
-                {
-                    if ( i == 1 )
-                        aPathObj.Append( Paths[i] );
-                    else
-                        aPathObj.setName( Paths[i] );
-                    String aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
-                    if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, nRegion, nIndex, aPath ) )
-                    {
-                        String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
-                        aText.SearchAndReplaceAscii( "$1", aPath );
-                        ErrorBox( pDialog, WB_OK, aText ).Execute();
-                    }
-                }
-            }
-
-            /*String aPath = GetPath_Impl( TRUE, String() );
-            if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, nRegion, nIndex, aPath ) )
-            {
-                String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
-                aText.SearchAndReplaceAscii( "$1", aPath );
-                ErrorBox( pDialog, WB_OK, aText ).Execute();
-            }*/
+            m_nRegion = 0;
+            m_nIndex = 0;
+            GetIndices_Impl( pFocusBox, pEntry, m_nRegion, m_nIndex );
+            GetPaths_Impl( String() );
             break;
         }
 
@@ -2011,16 +1974,10 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
         {
             if ( !pEntry )
                 return 1;
-            USHORT nRegion = 0, nIndex = 0;
-            GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
-            String aPath = GetPath_Impl( FALSE, aMgr.GetTemplates()->GetFileName( nRegion, nIndex ) );
-
-            if ( aPath.Len() && !aMgr.CopyTo( nRegion, nIndex, aPath ) )
-            {
-                String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
-                aText.SearchAndReplaceAscii( "$1", aPath );
-                ErrorBox( pDialog, WB_OK, aText ).Execute();
-            }
+            m_nRegion = 0;
+            m_nIndex = 0;
+            GetIndices_Impl( pFocusBox, pEntry, m_nRegion, m_nIndex );
+            GetPath_Impl( FALSE, aMgr.GetTemplates()->GetFileName( m_nRegion, m_nIndex ) );
             break;
         }
 
@@ -2366,7 +2323,9 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 */
 {
     (void)pButton; //unused
-    sfx2::FileDialogHelper aFileDlg( WB_OPEN, String() );
+    if ( pFileDlg )
+        delete pFileDlg;
+    pFileDlg = new sfx2::FileDialogHelper( WB_OPEN, String() );
 
     // add config and basic filter
     static String sOpenBracket( DEFINE_CONST_UNICODE( " (" ) );
@@ -2378,23 +2337,120 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
     sFilterName += sOpenBracket;
     sFilterName += sConfigExt;
     sFilterName += sCloseBracket;
-    aFileDlg.AddFilter( sFilterName, sConfigExt );
+    pFileDlg->AddFilter( sFilterName, sConfigExt );
 
     sFilterName = String( SfxResId( RID_STR_FILTBASIC ) );
     sFilterName += sOpenBracket;
     sFilterName += sBasicExt;
     sFilterName += sCloseBracket;
-    aFileDlg.AddFilter( sFilterName, sBasicExt );
+    pFileDlg->AddFilter( sFilterName, sBasicExt );
 
     // set "All" filter as current
-    aFileDlg.SetCurrentFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ) );
+    pFileDlg->SetCurrentFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ) );
 
     if ( aLastDir.Len() )
-        aFileDlg.SetDisplayDirectory( aLastDir );
+        pFileDlg->SetDisplayDirectory( aLastDir );
 
-    if ( ERRCODE_NONE == aFileDlg.Execute() )
+    pFileDlg->StartExecuteModal( LINK( this, SfxOrganizeDlg_Impl, AddFilesHdl ) );
+
+    return 0;
+}
+
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxOrganizeDlg_Impl, ImportHdl, sfx2::FileDialogHelper *, EMPTYARG )
+{
+    DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
+
+    if ( ERRCODE_NONE == pFileDlg->GetError() )
     {
-        String aPath = aFileDlg.GetPath();
+        String aPath = pFileDlg->GetPath();
+        INetURLObject aObj( aPath );
+
+        // we want to keep the original extension when exporting, the file open dialog
+        // always sets the extension to *.vor
+        if ( pFileDlg->GetDialogType() ==
+                com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE )
+        {
+            if ( aObj.hasExtension() )
+                aObj.removeExtension();
+
+            aObj.setExtension( m_sExtension4Save );
+            aPath = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        }
+
+        aObj.removeSegment();
+        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+
+        if ( aPath.Len() && !aMgr.CopyTo( m_nRegion, m_nIndex, aPath ) )
+        {
+            String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+            aText.SearchAndReplaceAscii( "$1", aPath );
+            ErrorBox( pDialog, WB_OK, aText ).Execute();
+        }
+    }
+
+    return 0L;
+}
+
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxOrganizeDlg_Impl, ExportHdl, sfx2::FileDialogHelper *, EMPTYARG )
+{
+    DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
+
+    if ( ERRCODE_NONE == pFileDlg->GetError() )
+    {
+        aPaths = pFileDlg->GetMPath();
+        sal_Int32 lastCount = aPaths.getLength() - 1;
+        INetURLObject aObj( aPaths.getArray()[ lastCount ] );
+
+        aObj.removeSegment();
+        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    }
+
+    sal_Int32 nCount = aPaths.getLength();
+    if ( 1 == nCount )
+    {
+       String aPath = String( aPaths.getArray()[0] );
+       if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, m_nRegion, m_nIndex, aPath ) )
+       {
+           String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+           aText.SearchAndReplaceAscii( "$1", aPath );
+           ErrorBox( pDialog, WB_OK, aText ).Execute();
+       }
+    }
+    else if ( nCount > 1 )
+    {
+        INetURLObject aPathObj( aPaths[0] );
+        aPathObj.setFinalSlash();
+        for ( USHORT i = 1; i < nCount; ++i )
+        {
+            if ( 1 == i )
+                aPathObj.Append( aPaths[i] );
+            else
+                aPathObj.setName( aPaths[i] );
+            String aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
+            if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, m_nRegion, m_nIndex, aPath ) )
+            {
+                String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+                aText.SearchAndReplaceAscii( "$1", aPath );
+                ErrorBox( pDialog, WB_OK, aText ).Execute();
+            }
+        }
+    }
+
+    return 0L;
+}
+
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxOrganizeDlg_Impl, AddFilesHdl, sfx2::FileDialogHelper *, EMPTYARG )
+{
+    if ( ERRCODE_NONE == pFileDlg->GetError() )
+    {
+        String aPath = pFileDlg->GetPath();
         aMgr.InsertFile( pFocusBox, aPath );
         INetURLObject aObj( aPath );
         aObj.removeSegment();
@@ -2402,7 +2458,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
         aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }
 
-    return 0;
+    return 0L;
 }
 
 //-------------------------------------------------------------------------
