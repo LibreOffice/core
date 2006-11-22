@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:48 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,7 +415,7 @@ void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyC
     throw( uno::RuntimeException)
 {
     // evt.PropertyName HAS to be "Step" because we only use the listener for that
-    sal_Int32 nDialogStep;
+    sal_Int32 nDialogStep = 0;
     evt.NewValue >>= nDialogStep;
     implUpdateVisibility( nDialogStep, mxControlContainer );
 }
@@ -799,8 +799,8 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
             ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
-                uno::Any aVal = xPSet->getPropertyValue( aPropName );
-                sal_Int32 nDialogStep;
+                ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+                sal_Int32 nDialogStep = 0;
                 aVal >>= nDialogStep;
                 uno::Reference< awt::XControlContainer > xContainer =
                     SAL_STATIC_CAST( awt::XControlContainer*, this );
