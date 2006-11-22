@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:08:14 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:43:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <hash_map>
 #include <memory> /* auto_ptr */
 #include "tools/isofallback.hxx"
-#include <vector>
 
 
 
