@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 17:48:18 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2308,7 +2308,7 @@ namespace cppcanvas
                 }
             }
 #if defined __GNUC__
-#if __GNUC__ == 4 && __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ == 1
+#if __GNUC__ == 4 && __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ <= 2
             // Unreachable; to avoid bogus warning:
             return ActionSharedPtr();
 #endif
