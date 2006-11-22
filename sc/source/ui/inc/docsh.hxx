@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:03:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,9 @@ class VirtualDevice;
 class ScImportOptions;
 class ScDocShellModificator;
 
+namespace sfx2 { class FileDialogHelper; }
+struct DocShell_Impl;
+
 //==================================================================
 
 //enum ScDBFormat { SC_FORMAT_SDF, SC_FORMAT_DBF };
@@ -118,7 +121,8 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     String              aConvFilterName; //@ #BugId 54198
 
     double              nPrtToScreenFactor;
-    FontList*           pFontList;
+//!   FontList*           pFontList;
+    DocShell_Impl*      pImpl;
     SfxUndoManager*     pUndoManager;
     ScDocFunc*          pDocFunc;
 
@@ -347,6 +351,7 @@ public:
     void            UnlockDocument();
 
     DECL_LINK( ChartSelectionHdl, ChartSelectionInfo* );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
 
