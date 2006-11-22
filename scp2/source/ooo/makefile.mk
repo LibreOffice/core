@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-07 15:32:54 $
+#   last change: $Author: vg $ $Date: 2006-11-22 10:44:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ SCPDEFS+=-DSYSTEM_LIBXML
 SCPDEFS+=-DSYSTEM_DB
 .ENDIF
 
-.IF "$(USE_SYSTEM_STL)" == "YES"
+.IF "$(USE_SYSTEM_STL)" == "YES" || "$(STLPORT4)" != "NO_STLPORT4"
 SCPDEFS+=-DUSE_SYSTEM_STL
 .ENDIF
 
