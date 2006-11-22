@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:57:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,12 @@
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
+#endif
+#ifndef _SFX_DOCINSERT_HXX
+#include <sfx2/docinsert.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 #ifndef _SVX_ZOOMITEM_HXX //autogen
@@ -773,6 +779,22 @@ SmCmdBoxWrapper::~SmCmdBoxWrapper()
 
 /**************************************************************************/
 
+struct SmViewShell_Impl
+{
+    sfx2::DocumentInserter* pDocInserter;
+    SfxRequest*             pRequest;
+
+    SmViewShell_Impl() :
+          pDocInserter( NULL )
+        , pRequest( NULL )
+    {}
+
+    ~SmViewShell_Impl()
+    {
+        delete pDocInserter;
+        delete pRequest;
+    }
+};
 
 TYPEINIT1( SmViewShell, SfxViewShell );
 
@@ -1620,25 +1642,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_INSERT_FORMULA:
         {
-            SmDocShell *pDoc = GetDoc();
-            SfxMedium *pMedium = SFX_APP()->
-                    InsertDocumentDialog( 0, pDoc->GetFactory().GetFactoryName() );
-
-            if (pMedium != NULL)
-            {
-                if (pMedium->IsStorage())
-                    Insert(*pMedium);
-                else
-                    InsertFrom(*pMedium);
-                delete pMedium;
-
-                pDoc->UpdateText();
-                pDoc->ArrangeFormula();
-                pDoc->Repaint();
-                // Fenster anpassen, neuzeichnen, ModifyCount erhoehen,...
-                GetViewFrame()->GetBindings().Invalidate(SID_GAPHIC_SM);
-            }
-            rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), TRUE));
+            delete pImpl->pRequest;
+            pImpl->pRequest = new SfxRequest( rReq );
+            delete pImpl->pDocInserter;
+            pImpl->pDocInserter =
+                new ::sfx2::DocumentInserter( 0, GetDoc()->GetFactory().GetFactoryName(), 0 );
+            pImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
+            return ;
         }
         break;
 
@@ -1864,11 +1874,12 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 SmViewShell::SmViewShell(SfxViewFrame *pFrame, SfxViewShell *):
     SfxViewShell(pFrame, SFX_VIEW_DISABLE_ACCELS | SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
     aGraphic(this),
-    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame->GetBindings())
+    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame->GetBindings()),
+    pImpl( new SmViewShell_Impl )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SmViewShell" );
 
-    pViewFrame = &pFrame->GetWindow();
+//   pViewFrame = &pFrame->GetWindow();
 
     SetStatusText(String());
     SetWindow(&aGraphic);
@@ -1890,6 +1901,7 @@ SmViewShell::~SmViewShell()
     SmEditWindow *pEditWin = GetEditWindow();
     if (pEditWin)
         pEditWin->DeleteEditView( *this );
+    delete pImpl;
 }
 
 void SmViewShell::Deactivate( BOOL bIsMDIActivate )
@@ -1925,4 +1937,37 @@ void SmViewShell::Activate( BOOL bIsMDIActivate )
     }
 }
 
+//------------------------------------------------------------------
+
+IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+{
+    DBG_ASSERT( _pFileDlg, "SmViewShell::DialogClosedHdl(): no file dialog" );
+    DBG_ASSERT( pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
+
+    if ( ERRCODE_NONE == _pFileDlg->GetError() )
+    {
+        USHORT nSlot = pImpl->pRequest->GetSlot();
+        SfxMedium* pMedium = pImpl->pDocInserter->CreateMedium();
+
+        if ( pMedium != NULL )
+        {
+            if ( pMedium->IsStorage() )
+                Insert( *pMedium );
+            else
+                InsertFrom( *pMedium );
+            delete pMedium;
+
+            SmDocShell* pDoc = GetDoc();
+            pDoc->UpdateText();
+            pDoc->ArrangeFormula();
+            pDoc->Repaint();
+            // adjust window, repaint, increment ModifyCount,...
+            GetViewFrame()->GetBindings().Invalidate(SID_GAPHIC_SM);
+        }
+    }
+
+    pImpl->pRequest->SetReturnValue( SfxBoolItem( pImpl->pRequest->GetSlot(), TRUE ) );
+    pImpl->pRequest->Done();
+    return 0;
+}
 
