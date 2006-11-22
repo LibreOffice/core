@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:20:43 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,11 +307,6 @@ SfxPrinter* XclRoot::GetPrinter() const
     return GetDoc().GetPrinter();
 }
 
-SvNumberFormatter& XclRoot::GetFormatter() const
-{
-    return *GetDoc().GetFormatTable();
-}
-
 ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
 {
     return *GetDoc().GetStyleSheetPool();
@@ -331,6 +326,34 @@ SdrPage* XclRoot::GetSdrPage( SCTAB nScTab ) const
 {
     return GetDoc().GetDrawLayer() ?
         GetDoc().GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( nScTab ) ) : 0;
+}
+
+SvNumberFormatter& XclRoot::GetFormatter() const
+{
+    return *GetDoc().GetFormatTable();
+}
+
+DateTime XclRoot::GetNullDate() const
+{
+    return *GetFormatter().GetNullDate();
+}
+
+double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
+{
+    double fValue = rDateTime - GetNullDate();
+    // adjust dates before 1900-03-01 to get correct time values in the range [0.0,1.0)
+    if( rDateTime < DateTime( Date( 1, 3, 1900 ) ) )
+        fValue -= 1.0;
+    return fValue;
+}
+
+DateTime XclRoot::GetDateTimeFromDouble( double fValue ) const
+{
+    DateTime aDateTime = GetNullDate() + fValue;
+    // adjust dates before 1900-03-01 to get correct time values
+    if( aDateTime < DateTime( Date( 1, 3, 1900 ) ) )
+        aDateTime += 1L;
+    return aDateTime;
 }
 
 ScEditEngineDefaulter& XclRoot::GetEditEngine() const
