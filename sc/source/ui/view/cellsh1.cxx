@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 15:29:14 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2131,53 +2131,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                    AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pTabViewShell->GetDialogParent(), ResId(RID_SCDLG_LINKAREA));
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
-                    if (pDlg->Execute() == RET_OK)
-                    {
-                        aFile = pDlg->GetURL();
-                        aFilter = pDlg->GetFilter();
-                        aOptions = pDlg->GetOptions();
-                        aSource = pDlg->GetSource();
-                        nRefresh = pDlg->GetRefresh();
-                        if ( aFile.Len() )
-                            rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFile ) );
-                        if ( aFilter.Len() )
-                            rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
-                        if ( aOptions.Len() )
-                            rReq.AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
-                        if ( aSource.Len() )
-                            rReq.AppendItem( SfxStringItem( FN_PARAM_1, aSource ) );
-                        if ( nRefresh )
-                            rReq.AppendItem( SfxUInt32Item( FN_PARAM_2, nRefresh ) );
-                    }
-
-                    delete pDlg;
+                    delete pImpl->m_pLinkedDlg;
+                    pImpl->m_pLinkedDlg =
+                        pFact->CreateScLinkedAreaDlg( pTabViewShell->GetDialogParent(),
+                                                      ResId(RID_SCDLG_LINKAREA));
+                    DBG_ASSERT(pImpl->m_pLinkedDlg, "Dialog create fail!");//CHINA001
+                    delete pImpl->m_pRequest;
+                    pImpl->m_pRequest = new SfxRequest( rReq );
+                    pImpl->m_pLinkedDlg->StartExecuteModal( LINK( this, ScCellShell, DialogClosed ) );
+                    return;
                 }
 
-                if ( aFile.Len() && aSource.Len() )         // filter may be empty
-                {
-                    ScRange aLinkRange;
-                    BOOL bMove = FALSE;
-
-                    ScViewData* pViewData = GetViewData();
-                    ScMarkData& rMark = pViewData->GetMarkData();
-                    rMark.MarkToSimple();
-                    if ( rMark.IsMarked() )
-                    {
-                        rMark.GetMarkArea( aLinkRange );
-                        bMove = TRUE;                       // insert/delete cells to fit range
-                    }
-                    else
-                        aLinkRange = ScRange( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
-
-                    ScDocFunc aFunc(*pViewData->GetDocShell());
-                    aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource,
-                                            aLinkRange, nRefresh, bMove, FALSE );
-                    rReq.Done();
-                }
-                else
-                    rReq.Ignore();
+                ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefresh, rReq );
             }
             break;
 
@@ -2201,4 +2166,62 @@ void ScCellShell::ExecuteTrans( SfxRequest& rReq )
     }
 }
 
+void ScCellShell::ExecuteExternalSource(
+    const String& _rFile, const String& _rFilter, const String& _rOptions,
+    const String& _rSource, ULONG _nRefresh, SfxRequest& _rRequest )
+{
+    if ( _rFile.Len() && _rSource.Len() )         // filter may be empty
+    {
+        ScRange aLinkRange;
+        BOOL bMove = FALSE;
+
+        ScViewData* pViewData = GetViewData();
+        ScMarkData& rMark = pViewData->GetMarkData();
+        rMark.MarkToSimple();
+        if ( rMark.IsMarked() )
+        {
+            rMark.GetMarkArea( aLinkRange );
+            bMove = TRUE;                       // insert/delete cells to fit range
+        }
+        else
+            aLinkRange = ScRange( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
+
+        ScDocFunc aFunc(*pViewData->GetDocShell());
+        aFunc.InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
+                                aLinkRange, _nRefresh, bMove, FALSE );
+        _rRequest.Done();
+    }
+    else
+        _rRequest.Ignore();
+}
+
+IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )
+{
+    DBG_ASSERT( pImpl->m_pLinkedDlg, "ScCellShell::DialogClosed(): invalid request" );
+    DBG_ASSERT( pImpl->m_pRequest, "ScCellShell::DialogClosed(): invalid request" );
+    String sFile, sFilter, sOptions, sSource;
+    ULONG nRefresh = 0;
+
+    if ( pImpl->m_pLinkedDlg->GetResult() == RET_OK )
+    {
+        sFile = pImpl->m_pLinkedDlg->GetURL();
+        sFilter = pImpl->m_pLinkedDlg->GetFilter();
+        sOptions = pImpl->m_pLinkedDlg->GetOptions();
+        sSource = pImpl->m_pLinkedDlg->GetSource();
+        nRefresh = pImpl->m_pLinkedDlg->GetRefresh();
+        if ( sFile.Len() )
+            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_NAME, sFile ) );
+        if ( sFilter.Len() )
+            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILTER_NAME, sFilter ) );
+        if ( sOptions.Len() )
+            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
+        if ( sSource.Len() )
+            pImpl->m_pRequest->AppendItem( SfxStringItem( FN_PARAM_1, sSource ) );
+        if ( nRefresh )
+            pImpl->m_pRequest->AppendItem( SfxUInt32Item( FN_PARAM_2, nRefresh ) );
+    }
+
+    ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
+    return 0;
+}
 
