@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-08-07 14:00:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:14:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #ifndef INCLUDED_SVT_FILEPICKER_HXX
 #define INCLUDED_SVT_FILEPICKER_HXX
 
-#ifndef  _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef  _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
@@ -56,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERLISTENER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XASYNCHRONOUSEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #endif
 
 #ifndef  _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -82,6 +85,8 @@
 
 #include <list>
 
+class Dialog;
+
 struct FilterEntry;
 struct ElementEntry_Impl;
 
@@ -93,12 +98,13 @@ typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // c
 
 // class SvtFilePicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper6 <   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
                             ,   ::com::sun::star::ui::dialogs::XFilePickerNotifier
                             ,   ::com::sun::star::ui::dialogs::XFilePreview
                             ,   ::com::sun::star::ui::dialogs::XFilterManager
                             ,   ::com::sun::star::ui::dialogs::XFilterGroupManager
                             ,   ::com::sun::star::lang::XServiceInfo
+                            ,   ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
                             >   SvtFilePicker_Base;
 
 class SvtFilePicker :public SvtFilePicker_Base
@@ -120,6 +126,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
                         m_xListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >
+                        m_xDlgClosedListener;
 
 public:
                        SvtFilePicker( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
@@ -140,6 +148,12 @@ public:
     //------------------------------------------------------------------------------------
     virtual void SAL_CALL setTitle( const ::rtl::OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------------------------------------------
+    // XAsynchronousExecutableDialog functions
+    //------------------------------------------------------------------------------------
+    virtual void SAL_CALL setDialogTitle( const ::rtl::OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XFilePicker functions
@@ -239,6 +253,10 @@ private:
     sal_Bool            FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
     void                ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter );
+
+    void                prepareExecute( );
+
+    DECL_LINK(          DialogClosedHdl, Dialog* );
 };
 
 #endif // INCLUDED_SVT_FILEPICKER_HXX
