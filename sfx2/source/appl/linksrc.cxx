@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linksrc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:18:58 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,15 +409,13 @@ BOOL SvLinkSource::Connect( SvBaseLink* )
     return TRUE;
 }
 
-BOOL SvLinkSource::GetData( ::com::sun::star::uno::Any & ,
-                        const String & , BOOL )
+BOOL SvLinkSource::GetData( ::com::sun::star::uno::Any &, const String &, BOOL )
 {
     return FALSE;
 }
 
-String SvLinkSource::Edit( Window *, SvBaseLink * )
+void SvLinkSource::Edit( Window *, SvBaseLink *, const Link& )
 {
-    return String();
 }
 
 }
