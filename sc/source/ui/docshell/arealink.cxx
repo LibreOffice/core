@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:32:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,15 @@
 
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+
+struct AreaLink_Impl
+{
+    ScDocShell* m_pDocSh;
+    Link        m_aEndEditLink;
+
+    AreaLink_Impl() : m_pDocSh( NULL ) {}
+};
+
 TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
 
 //------------------------------------------------------------------------
@@ -78,7 +87,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                         ULONG nRefresh ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer  ( nRefresh ),
-    pDocShell       ((ScDocShell*)pShell),
+    pImpl           ( new AreaLink_Impl() ),
     aFileName       (rFile),
     aFilterName     (rFilter),
     aOptions        (rOpt),
@@ -89,42 +98,30 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
     bDoInsert       (TRUE)
 {
     DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
+    pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
-    SetRefreshControl( pDocShell->GetDocument()->GetRefreshTimerControlAddress() );
+    SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );
 }
 
 __EXPORT ScAreaLink::~ScAreaLink()
 {
     StopRefreshTimer();
+    delete pImpl;
 }
 
-BOOL __EXPORT ScAreaLink::Edit(Window* pParent)
+void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& rEndEditHdl )
 {
     //  use own dialog instead of SvBaseLink::Edit...
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
     //  ein Optionen-Dialog kommt...
 
-    BOOL bRet = FALSE;
-    //CHINA001 ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pParent );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
     AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pParent, ResId(RID_SCDLG_LINKAREA));
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
-    if (pDlg->Execute() == RET_OK)
-    {
-        aOptions = pDlg->GetOptions();
-        bRet = Refresh( pDlg->GetURL(), pDlg->GetFilter(), pDlg->GetSource(), pDlg->GetRefresh() );
-
-        //  copy source data from members (set in Refresh) into link name for dialog
-        String aLinkName;
-        sfx2::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
-        SetName( aLinkName );
-    }
-    delete pDlg;
-
-    return bRet;
+    pDlg->StartExecuteModal( LINK( this, ScAreaLink, EndEditHdl ) );
 }
 
 void __EXPORT ScAreaLink::DataChanged( const String&,
@@ -136,7 +133,7 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
     if (bInCreate)
         return;
 
-    SvxLinkManager* pLinkManager=pDocShell->GetDocument()->GetLinkManager();
+    SvxLinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
         String aFile;
@@ -167,11 +164,11 @@ void __EXPORT ScAreaLink::Closed()
 {
     // Verknuepfung loeschen: Undo
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
     if (bAddUndo && bUndo)
     {
-        pDocShell->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( pDocShell,
+        pImpl->m_pDocSh->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( pImpl->m_pDocSh,
                                                         aFileName, aFilterName, aOptions,
                                                         aSourceArea, aDestArea, GetRefreshDelay() ) );
 
@@ -251,14 +248,14 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     if (!rNewFile.Len() || !rNewFilter.Len())
         return FALSE;
 
-    String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pDocShell ) );
+    String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
     BOOL bNewUrlName = (aNewUrl != aFileName);
 
-    const SfxFilter* pFilter = pDocShell->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
+    const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return FALSE;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
 
     BOOL bUndo (pDoc->IsUndoEnabled());
     pDoc->SetInLinkUpdate( TRUE );
@@ -332,7 +329,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     BOOL bCanDo = pDoc->CanFitBlock( aOldRange, aNewRange );    //! nach bDoInsert unterscheiden
     if (bCanDo)
     {
-        ScDocShellModificator aModificator( *pDocShell );
+        ScDocShellModificator aModificator( *pImpl->m_pDocSh );
 
         SCCOL nStartX = aDestPos.Col();
         SCROW nStartY = aDestPos.Row();
@@ -434,8 +431,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
             pRedoDoc->InitUndo( pDoc, nDestTab, nDestTab );
             pDoc->CopyToDocument( aNewRange, IDF_ALL, FALSE, pRedoDoc );
 
-            pDocShell->GetUndoManager()->AddUndoAction(
-                new ScUndoUpdateAreaLink( pDocShell,
+            pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
+                new ScUndoUpdateAreaLink( pImpl->m_pDocSh,
                                             aFileName, aFilterName, aOptions,
                                             aSourceArea, aOldRange, GetRefreshDelay(),
                                             aNewUrl, rNewFilter, aNewOpt,
@@ -468,8 +465,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if ( aOldRange.aEnd.Row() != aNewRange.aEnd.Row() )
             nPaintEndY = MAXROW;
 
-        if ( !pDocShell->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
-            pDocShell->PostPaint( aDestPos.Col(),aDestPos.Row(),nDestTab,
+        if ( !pImpl->m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
+            pImpl->m_pDocSh->PostPaint( aDestPos.Col(),aDestPos.Row(),nDestTab,
                                     nPaintEndX,nPaintEndY,nDestTab, PAINT_GRID );
         aModificator.SetDocumentModified();
     }
@@ -510,5 +507,24 @@ IMPL_LINK( ScAreaLink, RefreshHdl, ScAreaLink*, pCaller )
     long nRes = Refresh( aFileName, aFilterName, aSourceArea,
         GetRefreshDelay() ) != 0;
     return nRes;
+}
+
+IMPL_LINK( ScAreaLink, EndEditHdl, AbstractScLinkedAreaDlg*, _pDlg )
+{
+    if ( _pDlg->GetResult() == RET_OK )
+    {
+        aOptions = _pDlg->GetOptions();
+        Refresh( _pDlg->GetURL(), _pDlg->GetFilter(), _pDlg->GetSource(), _pDlg->GetRefresh() );
+
+        //  copy source data from members (set in Refresh) into link name for dialog
+        String aLinkName;
+        sfx2::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+        SetName( aLinkName );
+    }
+
+    if ( pImpl->m_aEndEditLink.IsSet() )
+        pImpl->m_aEndEditLink.Call( this );
+
+    return 0;
 }
 
