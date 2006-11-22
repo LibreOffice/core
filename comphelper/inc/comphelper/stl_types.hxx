@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:40:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 
 #include <vector>
 #include <map>
-#include <hash_map>
 
 #include <stack>
 #include <set>
