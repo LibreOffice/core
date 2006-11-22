@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:45:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,6 +291,36 @@ static sal_Bool       osl_getFloppyMountEntry(const sal_Char* pszPath, oslVolume
 static void           osl_printFloppyHandle(oslVolumeDeviceHandleImpl* hFloppy);
 #endif
 
+#ifdef MACOSX
+
+/*******************************************************************
+ *  adjustLockFlags
+ ******************************************************************/
+
+/* The AFP implementation of MacOS X 10.4 treats O_EXLOCK in a way
+ * that makes it impossible for OOo to create a backup copy of the
+ * file it keeps opened. OTOH O_SHLOCK for AFP behaves as desired by
+ * the OOo file handling, so we need to check the path of the file
+ * for the filesystem name.
+ */
+
+static int adjustLockFlags(const char * path, int flags)
+{
+    struct statfs s;
+
+    if( 0 <= statfs( path, &s ) )
+    {
+        if( 0 == strncmp("afpfs", s.f_fstypename, 5) )
+        {
+            flags &= ~O_EXLOCK;
+            flags |= O_SHLOCK;
+        }
+    }
+
+    return flags;
+}
+
+#endif
 
 
 /*******************************************************************
@@ -556,6 +586,14 @@ oslFileHandle osl_createFileHandleFromFD( int fd )
  *  osl_openFile
  ***************************************************************************/
 
+#ifdef HAVE_O_EXLOCK
+#define OPEN_WRITE_FLAGS ( O_RDWR | O_EXLOCK | O_NONBLOCK )
+#define OPEN_CREATE_FLAGS ( O_CREAT | O_EXCL | O_RDWR | O_EXLOCK | O_NONBLOCK )
+#else
+#define OPEN_WRITE_FLAGS ( O_RDWR )
+#define OPEN_CREATE_FLAGS ( O_CREAT | O_EXCL | O_RDWR )
+#endif
+
 oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags )
 {
     oslFileHandleImpl* pHandleImpl = NULL;
@@ -622,9 +660,9 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
             if ( uFlags & osl_File_OpenFlag_Write )
             {
                 mode |= S_IWUSR | S_IWGRP | S_IWOTH;
-                flags = O_RDWR;
-#ifdef HAVE_O_EXLOCK
-                flags |= O_EXLOCK | O_NONBLOCK;
+                flags = OPEN_WRITE_FLAGS;
+#ifdef MACOSX
+                flags = adjustLockFlags(buffer, flags);
 #endif
                 aflock.l_type = F_WRLCK;
             }
@@ -632,9 +670,9 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
             if ( uFlags & osl_File_OpenFlag_Create )
             {
                 mode |= S_IWUSR | S_IWGRP | S_IWOTH;
-                flags = O_CREAT | O_EXCL | O_RDWR;
-#ifdef HAVE_O_EXLOCK
-                flags |= O_EXLOCK | O_NONBLOCK;
+                flags = OPEN_CREATE_FLAGS;
+#ifdef MACOSX
+                flags = adjustLockFlags(buffer, flags);
 #endif
             }
 
