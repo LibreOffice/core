@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:07:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include "vcl/msgbox.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
+#include "com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp"
 
 #include "boost/bind.hpp"
 #include "license_dialog.hxx"
@@ -88,7 +89,7 @@ void MyApp::Main()
 
 //==============================================================================
 class ServiceImpl
-    : public ::cppu::WeakImplHelper2<ui::dialogs::XExecutableDialog,
+    : public ::cppu::WeakImplHelper2<ui::dialogs::XAsynchronousExecutableDialog,
                                      task::XJobExecutor>
 {
     Reference<XComponentContext> const m_xComponentContext;
@@ -100,10 +101,12 @@ public:
     ServiceImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
 
-    // XExecutableDialog
-    virtual void SAL_CALL setTitle( OUString const & title )
+    // XAsynchronousExecutableDialog
+    virtual void SAL_CALL setDialogTitle( OUString const & aTitle )
         throw (RuntimeException);
-    virtual sal_Int16 SAL_CALL execute() throw (RuntimeException);
+    virtual void SAL_CALL startExecuteModal(
+        Reference< ui::dialogs::XDialogClosedListener > const & xListener )
+        throw (RuntimeException);
 
     // XJobExecutor
     virtual void SAL_CALL trigger( OUString const & event )
@@ -118,9 +121,10 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     comphelper::unwrapArgs( args, m_parent, m_view );
 }
 
-// XExecutableDialog
+// XAsynchronousExecutableDialog
 //______________________________________________________________________________
-void ServiceImpl::setTitle( OUString const & title ) throw (RuntimeException)
+void ServiceImpl::setDialogTitle( OUString const & title )
+    throw (RuntimeException)
 {
     if (::dp_gui::DialogImpl::s_dialog.is()) {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
@@ -134,7 +138,9 @@ void ServiceImpl::setTitle( OUString const & title ) throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-sal_Int16 ServiceImpl::execute() throw (RuntimeException)
+void ServiceImpl::startExecuteModal(
+    Reference< ui::dialogs::XDialogClosedListener > const & xListener )
+    throw (RuntimeException)
 {
     ::std::auto_ptr<Application> app;
     if (! dp_gui::DialogImpl::s_dialog.is())
@@ -194,14 +200,18 @@ sal_Int16 ServiceImpl::execute() throw (RuntimeException)
         DeInitVCL();
     }
 
-    return 0;
+    if (xListener.is())
+        xListener->dialogClosed(
+            ui::dialogs::DialogClosedEvent(
+                static_cast< ::cppu::OWeakObject * >(this),
+                sal_Int16(0)) );
 }
 
 // XJobExecutor
 //______________________________________________________________________________
 void ServiceImpl::trigger( OUString const & ) throw (RuntimeException)
 {
-    execute();
+    startExecuteModal( Reference< ui::dialogs::XDialogClosedListener >() );
 }
 
 namespace sdecl = comphelper::service_decl;
