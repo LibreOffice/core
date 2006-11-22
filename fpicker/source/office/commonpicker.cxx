@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpicker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:50:25 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,16 @@ namespace svt
     {
         if ( GetBroadcastHelper().bInDispose || GetBroadcastHelper().bDisposed )
             throw DisposedException();
+    }
+
+    void OCommonPicker::prepareDialog()
+    {
+        if ( !getDialog() )
+            createPicker();
+
+        // set the title
+        if ( m_aTitle.getLength() > 0 )
+            getDialog()->SetText( m_aTitle );
     }
 
     //---------------------------------------------------------------------
@@ -377,12 +387,7 @@ namespace svt
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        if ( !getDialog() )
-            createPicker();
-
-        // set the title
-        if ( m_aTitle.getLength() > 0 )
-            getDialog()->SetText( m_aTitle );
+        prepareDialog();
 
         {
             ::osl::MutexGuard aOwnGuard( m_aMutex );
