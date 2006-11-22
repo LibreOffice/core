@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:55:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:23:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,8 @@ class XclExpPCItem : public XclExpRecord, public XclPCItem
 {
 public:
     explicit            XclExpPCItem( const String& rText );
-    explicit            XclExpPCItem( double fValue, bool bDate );
+    explicit            XclExpPCItem( double fValue );
+    explicit            XclExpPCItem( const DateTime& rDateTime );
     explicit            XclExpPCItem( sal_Int16 nValue );
     explicit            XclExpPCItem( bool bValue );
 
@@ -74,7 +75,7 @@ public:
 
     bool                EqualsText( const String& rText ) const;
     bool                EqualsDouble( double fValue ) const;
-    bool                EqualsDate( double fDate ) const;
+    bool                EqualsDateTime( const DateTime& rDateTime ) const;
     bool                EqualsBool( bool bValue ) const;
 
 private:
@@ -100,6 +101,7 @@ public:
                             const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
                             const ScDPObject& rDPObj, const ScDPSaveGroupDimension& rGroupDim,
                             const XclExpPCField& rBaseField );
+    virtual             ~XclExpPCField();
 
     /** Sets the passed field as direct grouping child field of this field. */
     void                SetGroupChildField( const XclExpPCField& rChildField );
@@ -118,7 +120,7 @@ public:
 
     /** Returns the size an item index needs to write out. */
     sal_Size            GetIndexSize() const;
-    /** Writes the item index at the passed source row position as part of the SXIDARRAY record. */
+    /** Writes the item index at the passed source row position as part of the SXINDEXLIST record. */
     void                WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const;
 
     /** Writes the pivot cache field and all items and other related records. */
@@ -150,7 +152,7 @@ private:
     /** Inserts an original value item, if it is not contained already. */
     void                InsertOrigDoubleItem( double fValue );
     /** Inserts an original date/time item, if it is not contained already. */
-    void                InsertOrigDateItem( double fDate );
+    void                InsertOrigDateTimeItem( const DateTime& rDateTime );
     /** Inserts an original boolean item, if it is not contained already. */
     void                InsertOrigBoolItem( bool bValue );
 
@@ -210,7 +212,7 @@ public:
     const XclExpPCField* GetField( sal_uInt16 nFieldIdx ) const;
     /** Returns a pivot cache field by its name. */
     const XclExpPCField* GetField( const String& rFieldName ) const;
-    /** Returns true, if this pivot cache contains non-standard fields (i.e. grouping fields). */
+    /** Returns true, if this pivot cache contains non-standard fields (e.g. grouping fields). */
     bool                HasAddFields() const;
 
     /** Returns true, if the passed DP object has the same data source as this cache. */
@@ -244,8 +246,8 @@ private:
     void                WriteSxdb( XclExpStream& rStrm ) const;
     /** Writes the SXDBEX record. */
     void                WriteSxdbex( XclExpStream& rStrm ) const;
-    /** Writes the SXIDARRAY record list containing the item index table. */
-    void                WriteSxidarrayList( XclExpStream& rStrm ) const;
+    /** Writes the SXINDEXLIST record list containing the item index table. */
+    void                WriteSxindexlistList( XclExpStream& rStrm ) const;
 
 private:
     typedef XclExpRecordList< XclExpPCField >   XclExpPCFieldList;
