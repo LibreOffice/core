@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:04:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:24:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@
 #endif
 
 // Forward declarations of objects in public use ==============================
+
+class DateTime;
 
 struct XclAddress;
 struct XclRange;
@@ -222,8 +224,6 @@ public:
     ScModelObj*         GetDocModelObj() const;
     /** Returns pointer to the printer of the Calc document. */
     SfxPrinter*         GetPrinter() const;
-    /** Returns the number formatter of the Calc document. */
-    SvNumberFormatter&  GetFormatter() const;
     /** Returns the style sheet pool of the Calc document. */
     ScStyleSheetPool&   GetStyleSheetPool() const;
     /** Returns the defined names container of the Calc document. */
@@ -232,6 +232,15 @@ public:
     ScDBCollection&     GetDatabaseRanges() const;
     /** Returns the drawing layer page of the passed sheet, if present. */
     SdrPage*            GetSdrPage( SCTAB nScTab ) const;
+
+    /** Returns the number formatter of the Calc document. */
+    SvNumberFormatter&  GetFormatter() const;
+    /** Returns the null date of the current number formatter. */
+    DateTime            GetNullDate() const;
+    /** Converts a date/time value to a floating-point value. */
+    double              GetDoubleFromDateTime( const DateTime& rDateTime ) const;
+    /** Converts a floating-point value to a date/time value. */
+    DateTime            GetDateTimeFromDouble( double fValue ) const;
 
     /** Returns the edit engine for import/export of rich strings etc. */
     ScEditEngineDefaulter& GetEditEngine() const;
