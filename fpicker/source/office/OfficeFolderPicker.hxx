@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFolderPicker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:29:40 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:14:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,15 @@
 #ifndef INCLUDED_SVT_FOLDERPICKER_HXX
 #define INCLUDED_SVT_FOLDERPICKER_HXX
 
-#ifndef  _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef  _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XASYNCHRONOUSEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -59,10 +62,12 @@
 #include "commonpicker.hxx"
 #endif
 
+class Dialog;
 
 // class SvtFolderPicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::ui::dialogs::XFolderPicker
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::ui::dialogs::XFolderPicker
+                            ,   ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
                             ,   ::com::sun::star::lang::XServiceInfo
                             >   SvtFolderPicker_Base;
 
@@ -71,6 +76,12 @@ class SvtFolderPicker   :public SvtFolderPicker_Base
 {
 private:
     ::rtl::OUString         m_aDescription;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >
+                            m_xListener;
+
+    void                            prepareExecute( );
+    DECL_LINK(                      DialogClosedHdl, Dialog* );
 
 public:
                                     SvtFolderPicker( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
@@ -100,6 +111,12 @@ public:
     //------------------------------------------------------------------------------------
     virtual void SAL_CALL setTitle( const ::rtl::OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------------------------------------------
+    // XAsynchronousExecutableDialog functions
+    //------------------------------------------------------------------------------------
+    virtual void SAL_CALL       setDialogTitle( const ::rtl::OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL       startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XServiceInfo functions
