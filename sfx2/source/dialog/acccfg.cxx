@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:52:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:56:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
 
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 //-----------------------------------------------
 // include other projects
@@ -498,11 +498,10 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 }
 
 //-----------------------------------------------
-SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(      Window*     pParent,
-                                                   const SfxItemSet& aSet   )
-
+SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxItemSet& aSet )
     : SfxTabPage              (pParent, SfxResId(TP_CONFIG_ACCEL), aSet)
     , m_pMacroInfoItem        ()
+    , m_pFileDlg              (NULL)
     , aEntriesBox             (this   , this, ResId(BOX_ACC_ENTRIES   ))
     , aKeyboardGroup          (this   , ResId(GRP_ACC_KEYBOARD        ))
     , aOfficeButton           (this   , ResId(RB_OFFICE               ))
@@ -578,6 +577,8 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 
     aEntriesBox.Clear();
     aKeyBox.Clear();
+
+    delete m_pFileDlg;
 }
 
 //-----------------------------------------------
@@ -770,31 +771,207 @@ void SfxAcceleratorConfigPage::ResetConfig()
     aEntriesBox.Clear();
 }
 
-String FileDialog_Impl( Window* /*pParent*/, WinBits nBits, const String& rTitle )
+//-----------------------------------------------
+IMPL_LINK( SfxAcceleratorConfigPage, Load, Button*, EMPTYARG )
 {
-    BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
-    short nDialogType = bSave
-        ? css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE
-        : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-
-    sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
-    aFileDlg.SetTitle( rTitle );
-//  aFileDlg.SetDialogHelpId( bSave? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
-    aFileDlg.AddFilter( String(SfxResId(STR_SFX_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
-    aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
-    if ( ERRCODE_NONE == aFileDlg.Execute() )
-        return aFileDlg.GetPath();
-    else
-        return String();
+    // ask for filename, where we should load the new config data from
+    StartFileDialog( WB_OPEN | WB_STDMODAL | WB_3DLOOK,
+                     String( SfxResId( STR_LOADACCELCONFIG ) ) );
+    return 0;
 }
 
 //-----------------------------------------------
-IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
+IMPL_LINK( SfxAcceleratorConfigPage, Save, Button*, EMPTYARG )
 {
-    (void)pButton; // unused
-    // ask for filename, where we should load the new config data from
-    ::rtl::OUString sCfgName = FileDialog_Impl(this, WB_OPEN | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_LOADACCELCONFIG)));
-    if (!sCfgName.getLength())
+    StartFileDialog( WB_SAVEAS | WB_STDMODAL | WB_3DLOOK,
+                     String( SfxResId( STR_SAVEACCELCONFIG ) ) );
+    return 0;
+}
+
+//-----------------------------------------------
+IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, EMPTYARG)
+{
+    css::uno::Reference< css::form::XReset > xReset(m_xAct, css::uno::UNO_QUERY);
+    if (xReset.is())
+        xReset->reset();
+
+    aEntriesBox.SetUpdateMode(FALSE);
+    ResetConfig();
+    Init(m_xAct);
+    aEntriesBox.SetUpdateMode(TRUE);
+    aEntriesBox.Invalidate();
+    aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
+
+    return 0;
+}
+
+//-----------------------------------------------
+IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
+{
+    USHORT    nPos        = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
+    String    sNewCommand = aFunctionBox.GetCurCommand();
+    String    sLabel      = aFunctionBox.GetCurLabel();
+    if (!sLabel.Len())
+        sLabel = GetLabel4Command(sNewCommand);
+
+    pEntry->m_sCommand = sNewCommand;
+    USHORT nCol = aEntriesBox.TabCount() - 1;
+    aEntriesBox.SetEntryText(sLabel, nPos, nCol);
+
+    ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
+    return 0;
+}
+
+//-----------------------------------------------
+IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, EMPTYARG )
+{
+    // get selected entry
+    USHORT    nPos   = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
+
+    // remove function name from selected entry
+    USHORT nCol = aEntriesBox.TabCount() - 1;
+    aEntriesBox.SetEntryText( String(), nPos, nCol );
+    pEntry->m_sCommand = ::rtl::OUString();
+
+    ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
+    return 0;
+}
+
+//-----------------------------------------------
+IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
+{
+    // disable help
+    Help::ShowBalloon( this, Point(), String() );
+    if ( pListBox == &aEntriesBox )
+    {
+        USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+        TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
+        ::rtl::OUString sPossibleNewCommand = aFunctionBox.GetCurCommand();
+
+        aRemoveButton.Enable( FALSE );
+        aChangeButton.Enable( FALSE );
+
+        if (pEntry->m_bIsConfigurable)
+        {
+            if (pEntry->isConfigured())
+                aRemoveButton.Enable( TRUE );
+            aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
+        }
+    }
+    else if ( pListBox == &aGroupLBox )
+    {
+        aGroupLBox.GroupSelected();
+        if ( !aFunctionBox.FirstSelected() )
+            aChangeButton.Enable( FALSE );
+    }
+    else if ( pListBox == &aFunctionBox )
+    {
+        aRemoveButton.Enable( FALSE );
+        aChangeButton.Enable( FALSE );
+
+        // #i36994 First selected can return zero!
+        SvLBoxEntry*    pLBEntry = aEntriesBox.FirstSelected();
+        if ( pLBEntry != 0 )
+        {
+            USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
+            TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
+            ::rtl::OUString sPossibleNewCommand = aFunctionBox.GetCurCommand();
+
+            if (pEntry->m_bIsConfigurable)
+            {
+                if (pEntry->isConfigured())
+                    aRemoveButton.Enable( TRUE );
+                aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
+            }
+
+            // update key box
+            aKeyBox.Clear();
+            SvLBoxEntry* pIt = aEntriesBox.First();
+            while ( pIt )
+            {
+                TAccInfo* pUserData = (TAccInfo*)pIt->GetUserData();
+                if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
+                {
+                    TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
+                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, TRUE, LIST_APPEND );
+                    pE1->SetUserData(pU1);
+                    pE1->EnableChildsOnDemand( FALSE );
+                }
+                pIt = aEntriesBox.Next(pIt);
+            }
+        }
+    }
+    else
+    {
+        // goto selected "key" entry of the key box
+        SvLBoxEntry* pE2 = 0;
+        TAccInfo*    pU2 = 0;
+        USHORT       nP2 = LISTBOX_ENTRY_NOTFOUND;
+        SvLBoxEntry* pE3 = 0;
+
+        pE2 = aKeyBox.FirstSelected();
+        if (pE2)
+            pU2 = (TAccInfo*)pE2->GetUserData();
+        if (pU2)
+            nP2 = MapKeyCodeToPos(pU2->m_aKey);
+        if (nP2 != LISTBOX_ENTRY_NOTFOUND)
+            pE3 = aEntriesBox.GetEntry( 0, nP2 );
+        if (pE3)
+        {
+            aEntriesBox.Select( pE3 );
+            aEntriesBox.MakeVisible( pE3 );
+        }
+    }
+
+    return 0;
+}
+
+//-----------------------------------------------
+IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, EMPTYARG )
+{
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
+
+    if (aOfficeButton.IsChecked())
+        m_xAct = m_xGlobal;
+    else if (aModuleButton.IsChecked())
+        m_xAct = m_xModule;
+
+    // nothing changed? => do nothing!
+    if ( m_xAct.is() && ( xOld == m_xAct ) )
+        return 0;
+
+    aEntriesBox.SetUpdateMode( FALSE );
+    ResetConfig();
+    Init(m_xAct);
+    aEntriesBox.SetUpdateMode( TRUE );
+    aEntriesBox.Invalidate();
+
+     aGroupLBox.Init(m_xSMGR, m_xFrame, m_sModuleLongName);
+
+    // pb: #133213# do not select NULL entries
+    SvLBoxEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
+    if ( pEntry )
+        aEntriesBox.Select( pEntry );
+    pEntry = aGroupLBox.GetEntry( 0, 0 );
+    if ( pEntry )
+        aGroupLBox.Select( pEntry );
+
+    ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
+    return 1L;
+}
+
+//-----------------------------------------------
+IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG )
+{
+    DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
+
+    ::rtl::OUString sCfgName;
+    if ( ERRCODE_NONE == m_pFileDlg->GetError() )
+        sCfgName = m_pFileDlg->GetPath();
+
+    if ( !sCfgName.getLength() )
         return 0;
 
     GetTabDialog()->EnterWait();
@@ -870,11 +1047,15 @@ IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
 }
 
 //-----------------------------------------------
-IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
+IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG )
 {
-    (void)pButton; // unused
-    ::rtl::OUString sCfgName = FileDialog_Impl(this, WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, String(SfxResId(STR_SAVEACCELCONFIG)));
-    if (!sCfgName.getLength())
+    DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
+
+    ::rtl::OUString sCfgName;
+    if ( ERRCODE_NONE == m_pFileDlg->GetError() )
+        sCfgName = m_pFileDlg->GetPath();
+
+    if ( !sCfgName.getLength() )
         return 0;
 
     GetTabDialog()->EnterWait();
@@ -968,186 +1149,6 @@ IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
 }
 
 //-----------------------------------------------
-IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, pPushButton)
-{
-    (void)pPushButton; // unused
-    css::uno::Reference< css::form::XReset > xReset(m_xAct, css::uno::UNO_QUERY);
-    if (xReset.is())
-        xReset->reset();
-
-    aEntriesBox.SetUpdateMode(FALSE);
-    ResetConfig();
-    Init(m_xAct);
-    aEntriesBox.SetUpdateMode(TRUE);
-    aEntriesBox.Invalidate();
-    aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
-
-    return 0;
-}
-
-//-----------------------------------------------
-IMPL_LINK(SfxAcceleratorConfigPage, ChangeHdl, Button*, pButton)
-{
-    (void)pButton; // unused
-    USHORT    nPos        = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-    TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-    String    sNewCommand = aFunctionBox.GetCurCommand();
-    String    sLabel      = aFunctionBox.GetCurLabel();
-    if (!sLabel.Len())
-        sLabel = GetLabel4Command(sNewCommand);
-
-    pEntry->m_sCommand = sNewCommand;
-    USHORT nCol = aEntriesBox.TabCount() - 1;
-    aEntriesBox.SetEntryText(sLabel, nPos, nCol);
-
-    ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
-    return 0;
-}
-
-//-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, pButton )
-{
-    (void)pButton; // unused
-    // get selected entry
-    USHORT    nPos   = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-    TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-
-    // remove function name from selected entry
-    USHORT nCol = aEntriesBox.TabCount() - 1;
-    aEntriesBox.SetEntryText( String(), nPos, nCol );
-    pEntry->m_sCommand = ::rtl::OUString();
-
-    ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
-    return 0;
-}
-
-//-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
-{
-    // disable help
-    Help::ShowBalloon( this, Point(), String() );
-    if ( pListBox == &aEntriesBox )
-    {
-        USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-        TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-        ::rtl::OUString sPossibleNewCommand = aFunctionBox.GetCurCommand();
-
-        aRemoveButton.Enable( FALSE );
-        aChangeButton.Enable( FALSE );
-
-        if (pEntry->m_bIsConfigurable)
-        {
-            if (pEntry->isConfigured())
-                aRemoveButton.Enable( TRUE );
-            aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
-        }
-    }
-    else if ( pListBox == &aGroupLBox )
-    {
-        aGroupLBox.GroupSelected();
-        if ( !aFunctionBox.FirstSelected() )
-            aChangeButton.Enable( FALSE );
-    }
-    else if ( pListBox == &aFunctionBox )
-    {
-        aRemoveButton.Enable( FALSE );
-        aChangeButton.Enable( FALSE );
-
-        // #i36994 First selected can return zero!
-        SvLBoxEntry*    pLBEntry = aEntriesBox.FirstSelected();
-        if ( pLBEntry != 0 )
-        {
-            USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
-            TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-            ::rtl::OUString sPossibleNewCommand = aFunctionBox.GetCurCommand();
-
-            if (pEntry->m_bIsConfigurable)
-            {
-                if (pEntry->isConfigured())
-                    aRemoveButton.Enable( TRUE );
-                aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
-            }
-
-            // update key box
-            aKeyBox.Clear();
-            SvLBoxEntry* pIt = aEntriesBox.First();
-            while (pIt)
-            {
-                TAccInfo* pUserData = (TAccInfo*)pIt->GetUserData();
-                if (
-                    (pUserData                                   ) &&
-                    (pUserData->m_sCommand == sPossibleNewCommand)
-                )
-                {
-                    TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, TRUE, LIST_APPEND );
-                    pE1->SetUserData(pU1);
-                    pE1->EnableChildsOnDemand( FALSE );
-                }
-                pIt = aEntriesBox.Next(pIt);
-            }
-        }
-    }
-    else
-    {
-        // goto selected "key" entry of the key box
-        SvLBoxEntry* pE2 = 0;
-        TAccInfo*    pU2 = 0;
-        USHORT       nP2 = LISTBOX_ENTRY_NOTFOUND;
-        SvLBoxEntry* pE3 = 0;
-
-        pE2 = aKeyBox.FirstSelected();
-        if (pE2)
-            pU2 = (TAccInfo*)pE2->GetUserData();
-        if (pU2)
-            nP2 = MapKeyCodeToPos(pU2->m_aKey);
-        if (nP2 != LISTBOX_ENTRY_NOTFOUND)
-            pE3 = aEntriesBox.GetEntry( 0, nP2 );
-        if (pE3)
-        {
-            aEntriesBox.Select( pE3 );
-            aEntriesBox.MakeVisible( pE3 );
-        }
-    }
-
-    return 0;
-}
-
-//-----------------------------------------------
-IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, EMPTYARG )
-{
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
-
-    if (aOfficeButton.IsChecked())
-        m_xAct = m_xGlobal;
-    else if (aModuleButton.IsChecked())
-        m_xAct = m_xModule;
-
-    // nothing changed? => do nothing!
-    if ( m_xAct.is() && ( xOld == m_xAct ) )
-        return 0;
-
-    aEntriesBox.SetUpdateMode( FALSE );
-    ResetConfig();
-    Init(m_xAct);
-    aEntriesBox.SetUpdateMode( TRUE );
-    aEntriesBox.Invalidate();
-
-     aGroupLBox.Init(m_xSMGR, m_xFrame, m_sModuleLongName);
-
-    // pb: #133213# do not select NULL entries
-    SvLBoxEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
-    if ( pEntry )
-        aEntriesBox.Select( pEntry );
-    pEntry = aGroupLBox.GetEntry( 0, 0 );
-    if ( pEntry )
-        aGroupLBox.Select( pEntry );
-
-    ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
-    return 1L;
-}
-
-//-----------------------------------------------
 String SfxAcceleratorConfigPage::GetFunctionName(KeyFuncType eType) const
 {
     ::rtl::OUStringBuffer sName(256);
@@ -1230,6 +1231,28 @@ String SfxAcceleratorConfigPage::GetFunctionName(KeyFuncType eType) const
     }
     sName.appendAscii("\"");
     return String(sName.makeStringAndClear());
+}
+
+//-----------------------------------------------
+void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTitle )
+{
+    bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
+    short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE
+                              : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+    if ( m_pFileDlg )
+        delete m_pFileDlg;
+    m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
+
+    m_pFileDlg->SetTitle( rTitle );
+//  m_pFileDlg->SetDialogHelpId( bSave ? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
+    m_pFileDlg->AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
+                           DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    m_pFileDlg->AddFilter( String( SfxResId( STR_FILTERNAME_CFG ) ),
+                           DEFINE_CONST_UNICODE( "*.cfg" ) );
+
+    Link aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
+                                : LINK( this, SfxAcceleratorConfigPage, LoadHdl );
+    m_pFileDlg->StartExecuteModal( aDlgClosedLink );
 }
 
 //-----------------------------------------------
