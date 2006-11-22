@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
+ *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ namespace ConversionHelper{
     ::rtl::OUString ConvertMSFormatStringToSO(
             const ::rtl::OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);
     sal_Int32 convertToMM100(sal_Int32 _t);
+    sal_Int32 ConvertColor(sal_Int32 nWordColor );
 
 } // namespace ConversionHelper
 } //namespace dmapper

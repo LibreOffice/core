@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
+ *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
+#include <com/sun/star/table/BorderLine.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
 #endif
@@ -103,16 +106,15 @@ using namespace writerfilter;
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
 {
-    const sal_uInt8* pBuffer;
-    const sal_Int32  nLength;
-    sal_Int32        nPosition;
+    const sal_uInt8* m_pBuffer;
+    const sal_Int32  m_nLength;
+    sal_Int32        m_nPosition;
+    bool             m_bBmp;
+
+    const sal_uInt8* m_pBMPHeader; //default BMP-header
+    sal_Int32        m_nHeaderLength;
 public:
-    XInputStreamHelper(const sal_uInt8* buf, size_t len) :
-        pBuffer( buf ),
-        nLength( len ),
-        nPosition( 0 )
-        {
-        }
+    XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp);
     ~XInputStreamHelper();
 
     virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException);
@@ -121,6 +123,21 @@ public:
     virtual ::sal_Int32 SAL_CALL available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
     virtual void SAL_CALL closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
 };
+/*-- 01.11.2006 13:56:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp) :
+        m_pBuffer( buf ),
+        m_nLength( len ),
+        m_nPosition( 0 ),
+        m_bBmp( bBmp )
+{
+    static const sal_uInt8 aHeader[] =
+        {0x42, 0x4d, 0xe6, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
+    m_pBMPHeader = aHeader;
+    m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof sal_uInt8 : 0;
+
+}
 /*-- 01.11.2006 13:56:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -133,7 +150,7 @@ XInputStreamHelper::~XInputStreamHelper()
 ::sal_Int32 XInputStreamHelper::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
-    return readSomeBytes( aData, nBytesToRead);
+    return readSomeBytes( aData, nBytesToRead );
 }
 /*-- 01.11.2006 13:56:21---------------------------------------------------
 
@@ -144,14 +161,26 @@ XInputStreamHelper::~XInputStreamHelper()
     sal_Int32 nRet = 0;
     if( nMaxBytesToRead > 0 )
     {
-        if( nMaxBytesToRead > nLength - nPosition )
-            nRet = nLength - nPosition;
+        if( nMaxBytesToRead > (m_nLength + m_nHeaderLength) - m_nPosition )
+            nRet = (m_nLength + m_nHeaderLength) - m_nPosition;
         else
             nRet = nMaxBytesToRead;
         aData.realloc( nRet );
         sal_Int8* pData = aData.getArray();
-        memcpy( pData, pBuffer+nPosition, nRet );
-        nPosition += nRet;
+        sal_Int32 nHeaderRead = 0;
+        if( m_nPosition < m_nHeaderLength)
+        {
+            //copy header content first
+            nHeaderRead = m_nHeaderLength - m_nPosition;
+            memcpy( pData, m_pBMPHeader + (m_nPosition ), nHeaderRead );
+            nRet -= nHeaderRead;
+            m_nPosition += nHeaderRead;
+        }
+        if( nRet )
+        {
+            memcpy( pData + nHeaderRead, m_pBuffer + (m_nPosition - m_nHeaderLength), nRet );
+            m_nPosition += nRet;
+        }
     }
     return nRet;
 }
@@ -160,16 +189,16 @@ XInputStreamHelper::~XInputStreamHelper()
   -----------------------------------------------------------------------*/
 void XInputStreamHelper::skipBytes( ::sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
-    if( nBytesToSkip < 0 || nPosition + nBytesToSkip > nLength )
+    if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > (m_nLength + m_nHeaderLength))
         throw io::BufferSizeExceededException();
-    nPosition += nBytesToSkip;
+    m_nPosition += nBytesToSkip;
 }
 /*-- 01.11.2006 13:56:22---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 ::sal_Int32 XInputStreamHelper::available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
-    return nLength - nPosition;
+    return ( m_nLength + m_nHeaderLength ) - m_nPosition;
 }
 /*-- 01.11.2006 13:56:22---------------------------------------------------
 
@@ -183,14 +212,14 @@ void XInputStreamHelper::closeInput(  ) throw (io::NotConnectedException, io::IO
 struct GraphicBorderLine
 {
     sal_Int32   nLineWidth;
-    sal_Int32   nLineType;
+//    sal_Int32   nLineType;
     sal_Int32   nLineColor;
     sal_Int32   nLineDistance;
     bool        bHasShadow;
 
     GraphicBorderLine() :
         nLineWidth(0)
-        ,nLineType(0)
+//        ,nLineType(0)
         ,nLineColor(0)
         ,nLineDistance(0)
         ,bHasShadow(false)
@@ -263,7 +292,7 @@ struct GraphicImport_Impl
         ,bContour(false)
         ,bIgnoreWRK(true)
         ,nContrast(0)
-        ,nBrightness(100)
+        ,nBrightness(0)
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,fGamma( -1.0 )
         {}
@@ -295,17 +324,29 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
     /* WRITERFILTERSTATUS: table: PICFattribute */
     switch( Name )
     {
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_LCB: break;//byte count
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_CBHEADER: break;//ignored
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_MFP: //MetafilePict
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_DffRecord: //dff record - expands to an sprm which expands to ...
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_shpopt: //shape options
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfbse: //BLIP store entry
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTOP: //top border
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCLEFT: //left border
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCBOTTOM: //bottom border
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCRIGHT: //right border
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_shape: //shape
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_blip: //the binary graphic data in a shape
             {
                 switch(Name)
@@ -341,197 +382,176 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
                 }
         }
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         case NS_rtf::LN_BM_RCWINMF: //windows bitmap structure - if it's a bitmap
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_DXAGOAL: //x-size in twip
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_DYAGOAL: //y-size in twip
             break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_MX: m_pImpl->nHoriScaling = nIntValue; break;// hori scaling in 0.001%
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_MY: m_pImpl->nVertScaling = nIntValue; break;// vert scaling in 0.001%
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_DXACROPLEFT:    m_pImpl->nLeftCrop  = ConversionHelper::convertToMM100(nIntValue); break;// left crop in twips
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_DYACROPTOP:     m_pImpl->nTopCrop   = ConversionHelper::convertToMM100(nIntValue); break;// top crop in twips
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_DXACROPRIGHT:   m_pImpl->nRightCrop = ConversionHelper::convertToMM100(nIntValue); break;// right crop in twips
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_DYACROPBOTTOM:  m_pImpl->nBottomCrop = ConversionHelper::convertToMM100(nIntValue); break;// bottom crop in twips
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCL:           break;//border type - legacy -
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FFRAMEEMPTY:    break;// picture consists of a single frame
-        case NS_rtf::LN_FBITMAP:        break;//1 if it's a bitmap ???
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_FBITMAP:
+            m_pImpl->bIsBitmap = nIntValue > 0 ? true : false;
+        break;//1 if it's a bitmap ???
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FDRAWHATCH:     break;//1 if it's an active OLE object
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FERROR:         break;// 1 if picture is an error message
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_BPP: m_pImpl->nBitsPerPixel = nIntValue; break;//bits per pixel 0 - unknown, 1- mono, 4 - VGA
 
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_DXAORIGIN: //horizontal offset of hand annotation origin
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_DYAORIGIN: //vertical offset of hand annotation origin
         break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_CPROPS:break;// unknown - ignored
         //metafilepict
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_MM:
-            m_pImpl->bIsBitmap = 99 == nIntValue ? true : false;
-            m_pImpl->bIsTiff = 98 == nIntValue ? true : false;
+//      according to the documentation 99 or 98 are provided - but they are not!
+//            m_pImpl->bIsBitmap = 99 == nIntValue ? true : false;
+//            m_pImpl->bIsTiff = 98 == nIntValue ? true : false;
 
         break; //mapmode
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_XEXT: m_pImpl->nXSize = nIntValue; break; // x-size
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_YEXT: m_pImpl->nYSize = nIntValue; break; // y-size
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_HMF: break; //identifier - ignored
 
         //sprm 0xf004 and 0xf008, 0xf00b
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_dfftype:// ignored
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_dffinstance:// ignored
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_dffversion://  ignored
         break;
 
         //sprm 0xf008
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shptype:        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpid:          break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfGroup:      break;// This shape is a group shape
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfChild:      break;// Not a top-level shape
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfPatriarch:  break;// This is the topmost group shape. Exactly one of these per drawing.
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfDeleted:    break;// The shape has been deleted
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfOleShape:   break;// The shape is an OLE object
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfHaveMaster: break;// Shape has a hspMaster property
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfFlipH:       // Shape is flipped horizontally
             m_pImpl->bHoriFlip = nIntValue ? true : false;
         break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfFlipV:       // Shape is flipped vertically
             m_pImpl->bVertFlip = nIntValue ? true : false;
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfConnector:   break;// Connector type of shape
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfHaveAnchor:  break;// Shape has an anchor of some kind
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfBackground:  break;// Background shape
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfHaveSpt:     break;// Shape has a shape type property
-
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shptypename: break;// shape type name
-
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_shppid:     m_pImpl->nShapeOptionType = nIntValue; break; //type of shape option
-        case NS_rtf::LN_shpfBid:    break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_shpfBid:    break; //ignored
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfComplex:break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 10, spent: 5 */
         case NS_rtf::LN_shpop:
         {
-            sal_Int32 nTwipValue = ConversionHelper::convertToMM100(nIntValue);
-            switch( m_pImpl->nShapeOptionType )
-            {
-                case 256 : m_pImpl->nTopCrop   = nTwipValue; break;// rtf:shpcropFromTop
-                case 257 : m_pImpl->nBottomCrop= nTwipValue; break;// rtf:shpcropFromBottom
-                case 258 : m_pImpl->nLeftCrop  = nTwipValue; break;// rtf:shpcropFromLeft
-                case 259 : m_pImpl->nRightCrop = nTwipValue;break;// rtf:shpcropFromRight
-                case 260:  break;  // rtf:shppib
-                case 261:  break;  // rtf:shppibName
-                case 262:  // rtf:shppibFlags
-                /*
-                 * // MSOBLIPFLAGS – flags for pictures
-                    typedef enum
-                       {
-                       msoblipflagDefault = 0,
-                       msoblipflagComment = 0,   // Blip name is a comment
-                       msoblipflagFile,          // Blip name is a file name
-                       msoblipflagURL,           // Blip name is a full URL
-                       msoblipflagType = 3,      // Mask to extract type
-                       // Or the following flags with any of the above.
-                       msoblipflagDontSave = 4,  // A "dont" is the depression in the metal
-                                                 // body work of an automobile caused when a
-                                                 // cyclist violently thrusts his or her nose
-                                                 // at it, thus a DontSave is another name for
-                                                 // a cycle lane.
-                       msoblipflagDoNotSave = 4, // For those who prefer English
-                       msoblipflagLinkToFile = 8,
-                       };
-                                     *
-                 * */
-                break;
-                case 264: // rtf:shppictureContrast docu: "1<<16"
-                /*
-                0x10000 is msoffice 50%
-                < 0x10000 is in units of 1/50th of 0x10000 per 1%
-                > 0x10000 is in units where
-                a msoffice x% is stored as 50/(100-x) * 0x10000
-
-                plus, a (ui) microsoft % ranges from 0 to 100, OOO
-                from -100 to 100, so also normalize into that range
-                */
-                if ( nIntValue > 0x10000 )
-                {
-                    double fX = nIntValue;
-                    fX /= 0x10000;
-                    fX /= 51;   // 50 + 1 to round
-                    fX = 1/fX;
-                    m_pImpl->nContrast = static_cast<sal_Int32>(fX);
-                    m_pImpl->nContrast -= 100;
-                    m_pImpl->nContrast = -m_pImpl->nContrast;
-                    m_pImpl->nContrast = (m_pImpl->nContrast-50)*2;
-                }
-                else if ( nIntValue == 0x10000 )
-                    m_pImpl->nContrast = 0;
-                else
-                {
-                    m_pImpl->nContrast = nIntValue * 101;   //100 + 1 to round
-                    m_pImpl->nContrast /= 0x10000;
-                    m_pImpl->nContrast -= 100;
-                }
-                break;
-                case 265:  // rtf:shppictureBrightness
-                    m_pImpl->nBrightness     = ( (sal_Int32) nIntValue / 327 );
-                break;
-                case 266: // rtf:shppictureGamma
-                    m_pImpl->fGamma = double(nIntValue/655);
-                break;
-                case 267:  break;  // rtf:shppictureId
-                case 268:  break;  // rtf:shppictureDblCrMod
-                case 269:  break;  // rtf:shppictureFillCrMod
-                case 270:  break;  // rtf:shppictureLineCrMod
-
-                case 319: // rtf:shppictureActive
-                    switch( nIntValue & 0x06 )
-                    {
-                        case 0 : m_pImpl->eColorMode = drawing::ColorMode_STANDARD; break;
-                        case 4 : m_pImpl->eColorMode = drawing::ColorMode_GREYS; break;
-                        case 6 : m_pImpl->eColorMode = drawing::ColorMode_MONO; break;
-                        default:;
-                    }
-                break;
-                case 385:  break;  // rtf:shpfillColor
-                case 386:  break;  // rtf:shpfillOpacity
-                case 447:  break;  // rtf:shpfNoFillHitTest
-                case 511:  break;  // rtf:shpfNoLineDrawDash
-                case 899:  break;  // rtf:shppWrapPolygonVertices
-                case 959:  break;  // rtf:shpfPrint
-                default:;
-            }
+            ProcessShapeOptions( val );
         }
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpname:    break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpvalue:   break;
 
         //BLIP store entry
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpbtWin32: break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpbtMacOS: break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shprgbUid:  break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shptag:     break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpsize:    break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpcRef:    break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpfoDelay: break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpusage:   break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpcbName:  break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpunused2: break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpunused3: break;
 
         //border properties
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpblipbname : break;
 
+        /* WRITERFILTERSTATUS: done: 100, planned: 1, spent: 1 */
         case NS_rtf::LN_DPTLINEWIDTH:  // 0x1759
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTYPE:   // 0x175a
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineType = nIntValue;
+            //graphic borders don't support different line types
+            //m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineType = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 1, spent: 1 */
         case NS_rtf::LN_ICO:   // 0x175b
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = nIntValue;;
+            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
         break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 1, spent: 1 */
         case NS_rtf::LN_DPTSPACE:  // 0x175c
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineDistance = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 1, spent: 0 */
         case NS_rtf::LN_FSHADOW:   // 0x175d
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue ? true : false;
         break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_FFRAME:            // ignored
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED2_15: break;// ignored
         break;
 
@@ -556,43 +576,29 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
 //    case NS_rtf::LN_LINEWIDTH = 10373;
 //    case NS_rtf::LN_LINETYPE = 10374;
 
-    case NS_rtf::LN_SPID:
-    case NS_rtf::LN_XALEFT: m_pImpl->nLeftPosition = ConversionHelper::convertToMM100(nIntValue); break; //left position
-    case NS_rtf::LN_YATOP:  m_pImpl->nTopPosition = ConversionHelper::convertToMM100(nIntValue); break; //top position
-    case NS_rtf::LN_XARIGHT:  m_pImpl->nRightPosition = ConversionHelper::convertToMM100(nIntValue); break; //right position
-    case NS_rtf::LN_YABOTTOM: m_pImpl->nBottomPosition = ConversionHelper::convertToMM100(nIntValue); break;//bottom position
-    case NS_rtf::LN_FHDR:
-    case NS_rtf::LN_BX:
-    case NS_rtf::LN_BY: break;
-    case NS_rtf::LN_WR: //wrapping
-        switch( nIntValue )
-        {
-            case 0: //0 like 2, but doesn't require absolute object
-                m_pImpl->bIgnoreWRK = false;
-            case 2: //2 wrap around absolute object
-                m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                break;
-            case 1: //1 no text next to shape
-                m_pImpl->nWrap = text::WrapTextMode_NONE;
-                break;
-            case 3: //3 wrap as if no object present
-                m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
-                break;
-            case 4: //4 wrap tightly around object
-                m_pImpl->bIgnoreWRK = false;
-            case 5: //5 wrap tightly, but allow holes
-                m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                m_pImpl->bContour = true;
-            break;
-            default:;
-        }
-    break;
-
-    case NS_rtf::LN_WRK:
-        if( !m_pImpl->bIgnoreWRK )
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_SPID: break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_XALEFT: m_pImpl->nLeftPosition = ConversionHelper::convertToMM100(nIntValue); break; //left position
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_YATOP:  m_pImpl->nTopPosition = ConversionHelper::convertToMM100(nIntValue); break; //top position
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_XARIGHT:  m_pImpl->nRightPosition = ConversionHelper::convertToMM100(nIntValue); break; //right position
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_YABOTTOM: m_pImpl->nBottomPosition = ConversionHelper::convertToMM100(nIntValue); break;//bottom position
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_FHDR:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_BX:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_BY: break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_WR: //wrapping
             switch( nIntValue )
             {
                 case 0: //0 like 2, but doesn't require absolute object
+                    m_pImpl->bIgnoreWRK = false;
                 case 2: //2 wrap around absolute object
                     m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
                     break;
@@ -603,31 +609,714 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
                     m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
                     break;
                 case 4: //4 wrap tightly around object
+                    m_pImpl->bIgnoreWRK = false;
                 case 5: //5 wrap tightly, but allow holes
                     m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
                     m_pImpl->bContour = true;
                 break;
                 default:;
             }
-    break;
-    case NS_rtf::LN_FRCASIMPLE:
-    case NS_rtf::LN_FBELOWTEXT:
-    case NS_rtf::LN_FANCHORLOCK:
-    case NS_rtf::LN_CTXBX:
-    {
-        sal_Int32 nValue1 = val.getInt();
-        nValue1++;
-    }
-    break;
-/*    case NS_rtf::LN_CH = 10421;
-    case NS_rtf::LN_UNUSED0_5 = 10422;
-    case NS_rtf::LN_FLT = 10423;
-    case NS_rtf::LN_shpLeft = 10424;
-    case NS_rtf::LN_shpTop = 10425;
-        break;*/
+        break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_WRK:
+            if( !m_pImpl->bIgnoreWRK )
+                switch( nIntValue )
+                {
+                    case 0: //0 like 2, but doesn't require absolute object
+                    case 2: //2 wrap around absolute object
+                        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
+                        break;
+                    case 1: //1 no text next to shape
+                        m_pImpl->nWrap = text::WrapTextMode_NONE;
+                        break;
+                    case 3: //3 wrap as if no object present
+                        m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
+                        break;
+                    case 4: //4 wrap tightly around object
+                    case 5: //5 wrap tightly, but allow holes
+                        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
+                        m_pImpl->bContour = true;
+                    break;
+                    default:;
+                }
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_FRCASIMPLE:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_FBELOWTEXT:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_FANCHORLOCK:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_CTXBX:
+//        {
+//            sal_Int32 nValue1 = val.getInt();
+//            nValue1++;
+//        }
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_rtf::LN_shptxt:
+            //todo: text content
+        break;
+    /*    case NS_rtf::LN_CH = 10421;
+        case NS_rtf::LN_UNUSED0_5 = 10422;
+        case NS_rtf::LN_FLT = 10423;
+        case NS_rtf::LN_shpLeft = 10424;
+        case NS_rtf::LN_shpTop = 10425;
+            break;*/
         default: val.getInt();
     }
 
+}
+/*-- 22.11.2006 09:46:48---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void GraphicImport::ProcessShapeOptions(doctok::Value& val)
+{
+    sal_Int32 nIntValue = val.getInt();
+    sal_Int32 nTwipValue = ConversionHelper::convertToMM100(nIntValue);
+    /* WRITERFILTERSTATUS: table: ShapeOptionsAttribute */
+    switch( m_pImpl->nShapeOptionType )
+    {
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shprotation /*4*/:              break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockRotation /*119*/:       break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockAspectRatio /*120*/:    break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockPosition /*121*/:       break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockAgainstSelect /*122*/:  break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockCropping /*123*/:       break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockVertices /*124*/:       break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockText /*125*/:          break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockAdjustHandles /*126*/: break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockAgainstGrouping /*127*/: break;
+
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockAgainstGrouping /*127*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplTxid /*128*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdxTextLeft /*129*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdyTextTop /*130*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdxTextRight /*131*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdyTextBottom /*132*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpWrapText /*133*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpscaleText /*134*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpanchorText /*135*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shptxflTextFlow /*136*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpcdirFont /*137*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shphspNext /*138*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shptxdir /*139*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfSelectText /*187*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfAutoTextMargin /*188*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfRotateText /*189*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfFitShapeToText /*190*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfFitTextToShape /*191*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextUNICODE /*192*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextRTF /*193*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextAlign /*194*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextSize /*195*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextSpacing /*196*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFont /*197*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFReverseRows /*240*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfGtext /*241*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFVertical /*242*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFKern /*243*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFTight /*244*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFStretch /*245*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFShrinkFit /*246*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFBestFit /*247*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFNormalize /*248*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFDxMeasure /*249*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFBold /*250*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFItalic /*251*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFUnderline /*252*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFShadow /*253*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFSmallcaps /*254*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgtextFStrikethrough /*255*/:
+
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shpcropFromTop /*256*/ : m_pImpl->nTopCrop   = nTwipValue; break;// rtf:shpcropFromTop
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shpcropFromBottom /*257*/ : m_pImpl->nBottomCrop= nTwipValue; break;// rtf:shpcropFromBottom
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shpcropFromLeft   /*258*/ : m_pImpl->nLeftCrop  = nTwipValue; break;// rtf:shpcropFromLeft
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shpcropFromRight/*259*/ : m_pImpl->nRightCrop = nTwipValue;break;// rtf:shpcropFromRight
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shppib/*260*/:  break;  // rtf:shppib
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shppibName/*261*/:  break;  // rtf:shppibName
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shppibFlags/*262*/:  // rtf:shppibFlags
+        /*
+         * // MSOBLIPFLAGS – flags for pictures
+            typedef enum
+               {
+               msoblipflagDefault = 0,
+               msoblipflagComment = 0,   // Blip name is a comment
+               msoblipflagFile,          // Blip name is a file name
+               msoblipflagURL,           // Blip name is a full URL
+               msoblipflagType = 3,      // Mask to extract type
+               // Or the following flags with any of the above.
+               msoblipflagDontSave = 4,  // A "dont" is the depression in the metal
+                                         // body work of an automobile caused when a
+                                         // cyclist violently thrusts his or her nose
+                                         // at it, thus a DontSave is another name for
+                                         // a cycle lane.
+               msoblipflagDoNotSave = 4, // For those who prefer English
+               msoblipflagLinkToFile = 8,
+               };
+                             *
+         * */
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppictureTransparent /*263*/:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureContrast/*264*/: // rtf:shppictureContrast docu: "1<<16"
+            /*
+            0x10000 is msoffice 50%
+            < 0x10000 is in units of 1/50th of 0x10000 per 1%
+            > 0x10000 is in units where
+            a msoffice x% is stored as 50/(100-x) * 0x10000
+
+            plus, a (ui) microsoft % ranges from 0 to 100, OOO
+            from -100 to 100, so also normalize into that range
+            */
+            if ( nIntValue > 0x10000 )
+            {
+                double fX = nIntValue;
+                fX /= 0x10000;
+                fX /= 51;   // 50 + 1 to round
+                fX = 1/fX;
+                m_pImpl->nContrast = static_cast<sal_Int32>(fX);
+                m_pImpl->nContrast -= 100;
+                m_pImpl->nContrast = -m_pImpl->nContrast;
+                m_pImpl->nContrast = (m_pImpl->nContrast-50)*2;
+            }
+            else if ( nIntValue == 0x10000 )
+                m_pImpl->nContrast = 0;
+            else
+            {
+                m_pImpl->nContrast = nIntValue * 101;   //100 + 1 to round
+                m_pImpl->nContrast /= 0x10000;
+                m_pImpl->nContrast -= 100;
+            }
+        break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureBrightness/*265*/:  // rtf:shppictureBrightness
+            m_pImpl->nBrightness     = ( (sal_Int32) nIntValue / 327 );
+        break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureGamma/*266*/: // rtf:shppictureGamma
+            //todo check gamma value with _real_ document
+            m_pImpl->fGamma = double(nIntValue/655);
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureId        /*267*/:  break;  // rtf:shppictureId
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureDblCrMod  /*268*/:  break;  // rtf:shppictureDblCrMod
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureFillCrMod /*269*/:  break;  // rtf:shppictureFillCrMod
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureLineCrMod /*270*/:  break;  // rtf:shppictureLineCrMod
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppibPrint /*271*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppibPrintName /*272*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppibPrintFlags /*273*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfNoHitTestPicture /*316*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppictureGray /*317*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppictureBiLevel /*318*/:
+
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shppictureActive/*319*/: // rtf:shppictureActive
+            switch( nIntValue & 0x06 )
+            {
+                case 0 : m_pImpl->eColorMode = drawing::ColorMode_STANDARD; break;
+                case 4 : m_pImpl->eColorMode = drawing::ColorMode_GREYS; break;
+                case 6 : m_pImpl->eColorMode = drawing::ColorMode_MONO; break;
+                default:;
+            }
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgeoLeft /*320*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgeoTop /*321*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgeoRight /*322*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpgeoBottom /*323*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshapePath /*324*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppVertices /*325*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppSegmentInfo /*326*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjustValue /*327*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust2Value /*328*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust3Value /*329*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust4Value /*330*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust5Value /*331*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust6Value /*332*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust7Value /*333*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust8Value /*334*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust9Value /*335*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpadjust10Value /*336*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfShadowOK /*378*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpf3DOK /*379*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLineOK /*380*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfGtextOK /*381*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfFillShadeShapeOK /*382*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfFillOK /*383*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillType /*384*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shpfillColor           /*385*/:  break;  // rtf:shpfillColor
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shpfillOpacity         /*386*/:  break;  // rtf:shpfillOpacity
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillBackColor /*387*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillBackOpacity /*388*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillCrMod /*389*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillBlip /*390*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillBlipName /*391*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillBlipFlags /*392*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillWidth /*393*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillHeight /*394*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillAngle /*395*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillFocus /*396*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillToLeft /*397*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillToTop /*398*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillToRight /*399*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillToBottom /*400*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillRectLeft /*401*/:
+          /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillRectTop /*402*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillRectRight /*403*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillRectBottom /*404*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillDztype /*405*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillShadePreset /*406*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillShadeColors /*407*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillOriginX /*408*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillOriginY /*409*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillShapeOriginX /*410*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillShapeOriginY /*411*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillShadeType /*412*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfFilled /*443*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfHitTestFill /*444*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillShape /*445*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfillUseRect /*446*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shpfNoFillHitTest      /*447*/:  break;  // rtf:shpfNoFillHitTest
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shplineColor           /*448*/:
+            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineOpacity /*449*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineBackColor /*450*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineCrMod /*451*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineType /*452*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineFillBlip /*453*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineFillBlipName /*454*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineFillBlipFlags /*455*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineFillWidth /*456*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineFillHeight /*457*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineFillDztype /*458*/:
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_dff::LN_shplineWidth           /*459*/:
+            //1pt == 12700 units
+            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = ConversionHelper::convertToMM100(nIntValue / 635);
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineMiterLimit /*460*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineStyle /*461*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shplineDashing         /*462*/:
+            //graphic borders don't support different dashing
+            /*MSOLINEDASHING
+                msolineSolid,              // Solid (continuous) pen
+                msolineDashSys,            // PS_DASH system   dash style
+                msolineDotSys,             // PS_DOT system   dash style
+                msolineDashDotSys,         // PS_DASHDOT system dash style
+                msolineDashDotDotSys,      // PS_DASHDOTDOT system dash style
+                msolineDotGEL,             // square dot style
+                msolineDashGEL,            // dash style
+                msolineLongDashGEL,        // long dash style
+                msolineDashDotGEL,         // dash short dash
+                msolineLongDashDotGEL,     // long dash short dash
+                msolineLongDashDotDotGEL   // long dash short dash short dash*/
+            //m_pImpl->aBorders[nCurrentBorderLine].nLineType = nIntValue;
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineDashStyle /*463*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineStartArrowhead /*464*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineEndArrowhead /*465*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineStartArrowWidth /*466*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineStartArrowLength /*467*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineEndArrowWidth /*468*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineEndArrowLength /*469*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineJoinStyle /*470*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineEndCapStyle /*471*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfArrowheadsOK /*507*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLine /*508*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfHitTestLine /*509*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplineFillShape /*510*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shpfNoLineDrawDash     /*511*/:  break;  // rtf:shpfNoLineDrawDash
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowType /*512*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowColor /*513*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowHighlight /*514*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowCrMod /*515*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowOpacity /*516*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowOffsetX /*517*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowOffsetY /*518*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowSecondOffsetX /*519*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowSecondOffsetY /*520*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowScaleXToX /*521*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowScaleYToX /*522*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowScaleXToY /*523*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowScaleYToY /*524*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowPerspectiveX /*525*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowPerspectiveY /*526*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowWeight /*527*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowOriginX /*528*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpshadowOriginY /*529*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfShadow /*574*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfshadowObscured /*575*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveType /*576*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveOffsetX /*577*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveOffsetY /*578*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveScaleXToX /*579*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveScaleYToX /*580*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveScaleXToY /*581*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveScaleYToY /*582*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectivePerspectiveX /*583*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectivePerspectiveY /*584*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveWeight /*585*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveOriginX /*586*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpperspectiveOriginY /*587*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfPerspective /*639*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DSpecularAmt /*640*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DDiffuseAmt /*641*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DShininess /*642*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DEdgeThickness /*643*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DExtrudeForward /*644*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DExtrudeBackward /*645*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DExtrudePlane /*646*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DExtrusionColor /*647*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DCrMod /*648*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpf3D /*700*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DMetallic /*701*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DUseExtrusionColor /*702*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DLightFace /*703*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DYRotationAngle /*704*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DXRotationAngle /*705*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRotationAxisX /*706*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRotationAxisY /*707*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRotationAxisZ /*708*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRotationAngle /*709*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRotationCenterX /*710*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRotationCenterY /*711*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRotationCenterZ /*712*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DRenderMode /*713*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DTolerance /*714*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DXViewpoint /*715*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DYViewpoint /*716*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DZViewpoint /*717*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DOriginX /*718*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DOriginY /*719*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DSkewAngle /*720*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DSkewAmount /*721*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DAmbientIntensity /*722*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DKeyX /*723*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DKeyY /*724*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DKeyZ /*725*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DKeyIntensity /*726*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DFillX /*727*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DFillY /*728*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DFillZ /*729*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpc3DFillIntensity /*730*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DConstrainRotation /*763*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DRotationCenterAuto /*764*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DParallel /*765*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DKeyHarsh /*766*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfc3DFillHarsh /*767*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shphspMaster /*769*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpcxstyle /*771*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpbWMode /*772*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpbWModePureBW /*773*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpbWModeBW /*774*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfOleIcon /*826*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfPreferRelativeResize /*827*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfLockShapeType /*828*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfDeleteAttachedObject /*830*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfBackground /*831*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpspcot /*832*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdxyCalloutGap /*833*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpspcoa /*834*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpspcod /*835*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdxyCalloutDropSpecified /*836*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdxyCalloutLengthSpecified /*837*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfCallout /*889*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfCalloutAccentBar /*890*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfCalloutTextBorder /*891*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfCalloutMinusX /*892*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfCalloutMinusY /*893*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfCalloutDropAuto /*894*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfCalloutLengthSpecified /*895*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpwzName /*896*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpwzDescription /*897*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shppihlShape /*898*/:
+        case NS_dff::LN_shppWrapPolygonVertices/*899*/:  break;  // rtf:shppWrapPolygonVertices
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdxWrapDistLeft /*900*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdyWrapDistTop /*901*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdxWrapDistRight /*902*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpdyWrapDistBottom /*903*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shplidRegroup /*904*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfEditedWrap /*953*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfBehindDocument /*954*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfOnDblClickNotify /*955*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfIsButton /*956*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfOneD /*957*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+//        case NS_dff::LN_shpfHidden /*958*/:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_dff::LN_shpfPrint              /*959*/:  break;  // rtf:shpfPrint
+
+        default:
+            OSL_ASSERT("shape option unsupported?");
+    }
 }
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
@@ -696,7 +1385,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")),
                                 m_xComponentContext),
                             uno::UNO_QUERY_THROW );
-        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len );
+        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );
 
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
@@ -718,6 +1407,28 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
             m_xGraphicObject = uno::Reference< text::XTextContent >( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
+
+            //shapes have only one border, PICF might have four
+            table::BorderLine aBorderLine;
+            for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
+            {
+                if( !m_pImpl->bIsShapeImport || !nBorder )
+                {
+                    aBorderLine.Color = m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : nBorder ].nLineColor;
+                    aBorderLine.InnerLineWidth = 0;
+                    aBorderLine.OuterLineWidth = (sal_Int16)m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : nBorder ].nLineWidth;
+                    aBorderLine.LineDistance = 0;
+                }
+                PropertyIds aBorderProps[4] =
+                {
+                    PROP_LEFT_BORDER,
+                    PROP_RIGHT_BORDER,
+                    PROP_TOP_BORDER,
+                    PROP_BOTTOM_BORDER
+                };
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
+            }
+
             if( m_pImpl->bIsShapeImport )
             {
                 sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;

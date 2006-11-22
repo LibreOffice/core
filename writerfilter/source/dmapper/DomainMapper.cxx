@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
+ *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,17 +96,6 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::writerfilter;
 namespace dmapper{
-sal_Int32 lcl_ConvertColor(sal_Int32 nIntValue)
-{
-
-    sal_uInt8
-        r(static_cast<sal_uInt8>(nIntValue&0xFF)),
-        g(static_cast<sal_uInt8>(((nIntValue)>>8)&0xFF)),
-        b(static_cast<sal_uInt8>((nIntValue>>16)&0xFF)),
-        t(static_cast<sal_uInt8>((nIntValue>>24)&0xFF));
-    sal_Int32 nRet = (t<<24) + (r<<16) + (g<<8) + b;
-    return nRet;
-}
 
 /*-- 09.06.2006 09:52:11---------------------------------------------------
 
@@ -2573,7 +2562,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             //contains a color as 0xTTRRGGBB while SO uses 0xTTRRGGBB
-            sal_Int32 nColor = lcl_ConvertColor(nIntValue);
+            sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);
             rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
         }
         break;
@@ -2586,7 +2575,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x6877: //underlining color
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
-            sal_Int32 nColor = lcl_ConvertColor(nIntValue);
+            sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);
             rContext->Insert(PROP_CHAR_UNDERLINE_HAS_COLOR, uno::makeAny( true ) );
             rContext->Insert(PROP_CHAR_UNDERLINE_COLOR, uno::makeAny( nColor ) );
         }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
+ *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@ class WRITERFILTER_DLLPRIVATE GraphicImport : public doctok::Properties, public 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xTextFactory;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > m_xGraphicObject;
+
+    void ProcessShapeOptions(doctok::Value & val);
+
 public:
     explicit GraphicImport(::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    xComponentContext,
                   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory,

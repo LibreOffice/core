@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
+ *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,5 +460,19 @@ sal_Int32 convertToMM100(sal_Int32 _t)
 {
     return TWIP_TO_MM100( _t );
 }
+/*-- 21.11.2006 08:47:12---------------------------------------------------
+    contains a color from 0xTTRRGGBB to 0xTTRRGGBB
+  -----------------------------------------------------------------------*/
+sal_Int32 ConvertColor(sal_Int32 nWordColor)
+{
+    sal_uInt8
+        r(static_cast<sal_uInt8>(nWordColor&0xFF)),
+        g(static_cast<sal_uInt8>(((nWordColor)>>8)&0xFF)),
+        b(static_cast<sal_uInt8>((nWordColor>>16)&0xFF)),
+        t(static_cast<sal_uInt8>((nWordColor>>24)&0xFF));
+    sal_Int32 nRet = (t<<24) + (r<<16) + (g<<8) + b;
+    return nRet;
+}
+
 } // namespace ConversionHelper
 } //namespace dmapper
