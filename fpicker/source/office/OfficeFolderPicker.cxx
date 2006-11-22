@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFolderPicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:49:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,26 @@ sal_Int16 SAL_CALL SvtFolderPicker::execute(  ) throw (RuntimeException)
 }
 
 //------------------------------------------------------------------------------------
+// XAsynchronousExecutableDialog functions
+//------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------
+void SAL_CALL SvtFolderPicker::setDialogTitle( const ::rtl::OUString& _rTitle) throw (RuntimeException)
+{
+    setTitle( _rTitle );
+}
+
+//------------------------------------------------------------------------------------
+void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (RuntimeException)
+{
+    m_xListener = xListener;
+    prepareDialog();
+    prepareExecute();
+    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->StartExecuteModal( LINK( this, SvtFolderPicker, DialogClosedHdl ) );
+}
+
+//------------------------------------------------------------------------------------
 SvtFileDialog* SvtFolderPicker::implCreateDialog( Window* _pParent )
 {
     return new SvtFileDialog( _pParent, SFXWB_PATHDIALOG );
@@ -126,6 +146,18 @@ SvtFileDialog* SvtFolderPicker::implCreateDialog( Window* _pParent )
 //------------------------------------------------------------------------------------
 sal_Int16 SvtFolderPicker::implExecutePicker( )
 {
+    prepareExecute();
+
+    // now we are ready to execute the dialog
+    getDialog()->EnableAutocompletion( FALSE );
+    sal_Int16 nRet = getDialog()->Execute();
+
+    return nRet;
+}
+
+//------------------------------------------------------------------------------------
+void SvtFolderPicker::prepareExecute()
+{
     // set the default directory
     if ( m_aDisplayDirectory.getLength() > 0 )
         getDialog()->SetPath( m_aDisplayDirectory );
@@ -133,14 +165,22 @@ sal_Int16 SvtFolderPicker::implExecutePicker( )
     {
         // Default-Standard-Dir setzen
         INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-        getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE) );
     }
-
-    // now we are ready to execute the dialog
-    sal_Int16 nRet = getDialog()->Execute();
-
-    return nRet;
 }
+
+//-----------------------------------------------------------------------------
+IMPL_LINK( SvtFolderPicker, DialogClosedHdl, Dialog*, pDlg )
+{
+    if ( m_xListener.is() )
+    {
+        sal_Int16 nRet = static_cast< sal_Int16 >( pDlg->GetResult() );
+        ::com::sun::star::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
+        m_xListener->dialogClosed( aEvent );
+        m_xListener.clear();
+    }
+    return 0;
+  }
 
 //------------------------------------------------------------------------------------
 // XFolderPicker functions
