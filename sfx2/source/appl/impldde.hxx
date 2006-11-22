@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impldde.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:41:41 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ public:
                                 BOOL bSynchron = FALSE );
 
     virtual BOOL    Connect( SvBaseLink * );
-    virtual String  Edit( Window*, SvBaseLink * );
+    virtual void    Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl );
 
     virtual BOOL    IsPending() const;
     virtual BOOL    IsDataComplete() const;
