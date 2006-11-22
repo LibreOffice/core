@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logoimagestatusbarcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:44:14 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,6 @@
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
 #endif
-
-#include <hash_map>
 
 #ifndef _SVTOOLS_STATUSBARCONTROLLER_HXX
 #include <svtools/statusbarcontroller.hxx>
