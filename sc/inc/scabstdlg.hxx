@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scabstdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:52:40 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:44:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,10 +186,9 @@ public:
     virtual String GetSelectEntry() const = 0;
 };
 
-class AbstractScLinkedAreaDlg : public VclAbstractDialog  //add for ScLinkedAreaDlg
+class AbstractScLinkedAreaDlg : public VclAbstractDialog2  //add for ScLinkedAreaDlg
 {
 public:
-
     virtual void            InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
                                         ULONG nRefresh ) = 0;
