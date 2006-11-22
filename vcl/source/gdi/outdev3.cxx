@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.224 $
+ *  $Revision: 1.225 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4109,6 +4109,8 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
         {
             nStrikeoutWidth = (pLayout->GetTextWidth() + 2) / 4;
             pLayout->Release();
+            if( nStrikeoutWidth <= 0 ) // sanity check
+                nStrikeoutWidth = 1;
         }
         // calculate acceptable strikeout length
         // allow the strikeout to be one pixel larger than the text it strikes out
