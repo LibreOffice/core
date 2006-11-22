@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpivot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:20:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,11 @@ namespace ScDPGroupBy = ::com::sun::star::sheet::DataPilotFieldGroupBy;
 // ============================================================================
 
 XclPCItem::XclPCItem() :
-    meType( EXC_PCITEM_INVALID ),
-    mfValue( 0.0 ),
-    mnValue( 0 ),
-    mnError( EXC_ERR_NULL ),
-    mbValue( false )
+    meType( EXC_PCITEM_INVALID )
+{
+}
+
+XclPCItem::~XclPCItem()
 {
 }
 
@@ -84,53 +84,35 @@ void XclPCItem::SetEmpty()
 {
     meType = EXC_PCITEM_EMPTY;
     maText.Erase();
-    mfValue = 0.0;
-    mnValue = 0;
-    mnError = EXC_ERR_NULL;
-    mbValue = false;
 }
 
 void XclPCItem::SetText( const String& rText )
 {
     meType = EXC_PCITEM_TEXT;
     maText = rText;
-    //! TODO convert string to double
-    mfValue = 0.0;
-    mnValue = 0;
-    mnError = EXC_ERR_NULL;
-    mbValue = rText.Len() != 0;
 }
 
 void XclPCItem::SetDouble( double fValue )
 {
-    meType = EXC_PCITEM_VALUE;
+    meType = EXC_PCITEM_DOUBLE;
     //! TODO convert double to string
     maText.Erase();
     mfValue = fValue;
-    mnValue = limit_cast< sal_Int16 >( fValue );
-    mnError = EXC_ERR_NULL;
-    mbValue = fValue != 0.0;
+}
+
+void XclPCItem::SetDateTime( const DateTime& rDateTime )
+{
+    meType = EXC_PCITEM_DATETIME;
+    //! TODO convert date to string
+    maText.Erase();
+    maDateTime = rDateTime;
 }
 
 void XclPCItem::SetInteger( sal_Int16 nValue )
 {
     meType = EXC_PCITEM_INTEGER;
     maText = String::CreateFromInt32( nValue );
-    mfValue = nValue;
     mnValue = nValue;
-    mnError = EXC_ERR_NULL;
-    mbValue = nValue != 0;
-}
-
-void XclPCItem::SetDate( double fDate )
-{
-    meType = EXC_PCITEM_DATE;
-    //! TODO convert date to string
-    maText.Erase();
-    mfValue = fDate;
-    mnValue = limit_cast< sal_Int16 >( fDate );
-    mnError = EXC_ERR_NULL;
-    mbValue = fDate != 0.0;
 }
 
 void XclPCItem::SetError( sal_uInt16 nError )
@@ -138,10 +120,7 @@ void XclPCItem::SetError( sal_uInt16 nError )
     meType = EXC_PCITEM_ERROR;
     //! TODO convert error to string
     maText.Erase();
-    mfValue = nError;
-    mnValue = limit_cast< sal_Int16 >( nError );
     mnError = nError;
-    mbValue = false;
 }
 
 void XclPCItem::SetBool( bool bValue )
@@ -149,13 +128,27 @@ void XclPCItem::SetBool( bool bValue )
     meType = EXC_PCITEM_BOOL;
     //! TODO convert boolean to string
     maText.Erase();
-    mfValue = bValue ? 1.0 : 0.0;
-    mnValue = bValue ? 1 : 0;
-    mnError = EXC_ERR_NULL;
     mbValue = bValue;
 }
 
 // ----------------------------------------------------------------------------
+
+bool XclPCItem::IsEqual( const XclPCItem& rItem ) const
+{
+    if( meType == rItem.meType ) switch( meType )
+    {
+        case EXC_PCITEM_INVALID:    return true;
+        case EXC_PCITEM_EMPTY:      return true;
+        case EXC_PCITEM_TEXT:       return maText     == rItem.maText;
+        case EXC_PCITEM_DOUBLE:     return mfValue    == rItem.mfValue;
+        case EXC_PCITEM_DATETIME:   return maDateTime == rItem.maDateTime;
+        case EXC_PCITEM_INTEGER:    return mnValue    == rItem.mnValue;
+        case EXC_PCITEM_BOOL:       return mbValue    == rItem.mbValue;
+        case EXC_PCITEM_ERROR:      return mnError    == rItem.mnError;
+        default:    DBG_ERRORFILE( "XclPCItem::IsEqual - unknown pivot cache item type" );
+    }
+    return false;
+}
 
 bool XclPCItem::IsEmpty() const
 {
@@ -169,17 +162,17 @@ const String* XclPCItem::GetText() const
 
 const double* XclPCItem::GetDouble() const
 {
-    return (meType == EXC_PCITEM_VALUE) ? &mfValue : 0;
+    return (meType == EXC_PCITEM_DOUBLE) ? &mfValue : 0;
+}
+
+const DateTime* XclPCItem::GetDateTime() const
+{
+    return (meType == EXC_PCITEM_DATETIME) ? &maDateTime : 0;
 }
 
 const sal_Int16* XclPCItem::GetInteger() const
 {
     return (meType == EXC_PCITEM_INTEGER) ? &mnValue : 0;
-}
-
-const double* XclPCItem::GetDate() const
-{
-    return (meType == EXC_PCITEM_DATE) ? &mfValue : 0;
 }
 
 const sal_uInt16* XclPCItem::GetError() const
@@ -190,27 +183,6 @@ const sal_uInt16* XclPCItem::GetError() const
 const bool* XclPCItem::GetBool() const
 {
     return (meType == EXC_PCITEM_BOOL) ? &mbValue : 0;
-}
-
-// ----------------------------------------------------------------------------
-
-bool operator==( const XclPCItem& rLeft, const XclPCItem& rRight )
-{
-    if( rLeft.GetType() != rRight.GetType() )
-        return false;
-    switch( rLeft.GetType() )
-    {
-        case EXC_PCITEM_INVALID:    return true;
-        case EXC_PCITEM_EMPTY:      return true;
-        case EXC_PCITEM_TEXT:       return rLeft.ConvertToText()    == rRight.ConvertToText();
-        case EXC_PCITEM_VALUE:      return rLeft.ConvertToDouble()  == rRight.ConvertToDouble();
-        case EXC_PCITEM_INTEGER:    return rLeft.ConvertToInteger() == rRight.ConvertToInteger();
-        case EXC_PCITEM_DATE:       return rLeft.ConvertToDate()    == rRight.ConvertToDate();
-        case EXC_PCITEM_BOOL:       return rLeft.ConvertToBool()    == rRight.ConvertToBool();
-        case EXC_PCITEM_ERROR:      return rLeft.ConvertToError()   == rRight.ConvertToError();
-        default:    DBG_ERRORFILE( "operator== - unknown pivot cache item type" );
-    }
-    return false;
 }
 
 // Field settings =============================================================
@@ -337,6 +309,10 @@ XclPCField::XclPCField( XclPCFieldType eFieldType, sal_uInt16 nFieldIdx ) :
 {
 }
 
+XclPCField::~XclPCField()
+{
+}
+
 bool XclPCField::IsSupportedField() const
 {
     return (meFieldType != EXC_PCFIELD_CALCED) && (meFieldType != EXC_PCFIELD_UNKNOWN);
@@ -387,9 +363,24 @@ sal_uInt16 XclPCField::GetBaseFieldIndex() const
     return IsGroupChildField() ? maFieldInfo.mnGroupBase : mnFieldIdx;
 }
 
+bool XclPCField::HasOrigItems() const
+{
+    return IsSupportedField() && ((maFieldInfo.mnOrigItems > 0) || HasPostponedItems());
+}
+
+bool XclPCField::HasInlineItems() const
+{
+    return (IsStandardField() || IsGroupField()) && ((maFieldInfo.mnGroupItems > 0) || (maFieldInfo.mnOrigItems > 0));
+}
+
 bool XclPCField::HasPostponedItems() const
 {
-    return ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_POSTPONE );
+    return IsStandardField() && ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_POSTPONE );
+}
+
+bool XclPCField::Has16BitIndexes() const
+{
+    return IsStandardField() && ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_16BIT );
 }
 
 // Pivot cache settings =======================================================
@@ -688,8 +679,9 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
     rStrm   << rInfo.mnFlags
             << rInfo.mnSortField
             << rInfo.mnShowField
-            << EXC_SXVDEX_FORMAT_NONE;
-    rStrm.WriteZeroBytes( 10 );                 // unknown
+            << EXC_SXVDEX_FORMAT_NONE
+            << sal_uInt16( 0xFFFF );    // unknown
+    rStrm.WriteZeroBytes( 8 );          // unknown
     return rStrm;
 }
 
