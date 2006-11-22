@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:14:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:47:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,17 +59,33 @@
 class SvxClipboardFmtItem;
 class TransferableDataHelper;
 class TransferableClipboardListener;
+class AbstractScLinkedAreaDlg;
 
+struct CellShell_Impl
+{
+    TransferableClipboardListener*  m_pClipEvtLstnr;
+    AbstractScLinkedAreaDlg*        m_pLinkedDlg;
+    SfxRequest*                     m_pRequest;
+
+    CellShell_Impl() :
+        m_pClipEvtLstnr( NULL ),
+        m_pLinkedDlg( NULL ),
+        m_pRequest( NULL ) {}
+};
 
 class ScCellShell: public ScFormatShell
 {
 private:
-    TransferableClipboardListener* pClipEvtLstnr;
-    BOOL        bPastePossible;
+    CellShell_Impl* pImpl;
+    BOOL            bPastePossible;
 
     void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
+    void        ExecuteExternalSource(
+                    const String& _rFile, const String& _rFilter, const String& _rOptions,
+                    const String& _rSource, ULONG _nRefresh, SfxRequest& _rRequest );
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
+    DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
 
 public:
 
