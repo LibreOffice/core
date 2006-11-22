@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:10:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,6 +715,10 @@ void XclImpUrlHelper::DecodeUrl(
                     case EXC_URLSTART_SELFENCODED:
                         rbSameWb = true;
                         eState = xlUrlSheetName;
+                    break;
+                    case '[':
+                        bEncoded = false;
+                        eState = xlUrlFileName;
                     break;
                     default:
                         bEncoded = false;
