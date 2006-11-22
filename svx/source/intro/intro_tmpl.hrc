@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-09 15:52:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,6 @@ ItemList = \
     < "Cristian Driga" ; > ; \
     < "Petr Dudacek" ; > ; \
     < "Herbert Duerr" ; > ; \
-    < "Oliver-Rainer Duesterhoeft" ; > ; \
     < "Marc Durdin" ; > ; \
     < "Dolores Eccles" ; > ; \
     < "Craig Eddy" ; > ; \
@@ -822,11 +821,11 @@ ItemList = \
     < "Joerg Wartenberg" ; > ; \
     < "Jean Hollis Weber" ; > ; \
     < "Martin Webermann" ; > ; \
-    < "Law Yee Wei" ; > ; \
-    < "Michael Wever" ; > ; \
-    < "Prof. Dr. Eduard Werner" ; > ; \
-    < "Brendan Whelan" ; > ; \
     < "Donata Wegener" ; > ; \
+    < "Law Yee Wei" ; > ; \
+    < "Prof. Dr. Eduard Werner" ; > ; \
+    < "Michael Wever" ; > ; \
+    < "Brendan Whelan" ; > ; \
     < "Arnulf Wiedemann" ; > ; \
     < "Franz Wieser" ; > ; \
     < "Dan Williams" ; > ; \
@@ -834,6 +833,7 @@ ItemList = \
     < "Miljenko Williams" ; > ; \
     < "David Noel Wilson" ; > ; \
     < "Jennifer Winger" ; > ; \
+    < "Oliver-Rainer Wittmann" ; > ; \
     < "Hans Witvliet" ; > ; \
     < "Goetz Wohlberg" ; > ; \
     < "Luciano Miguel Wolf" ; > ; \
@@ -928,7 +928,7 @@ ItemList = \
     < "Andreas Martens" ; > ; \
     < "" ; > ; \
     < "Henning Brinkmann" ; > ; \
-    < "Oliver-Rainer Duesterhoeft" ; > ; \
+    < "Oliver-Rainer Wittmann" ; > ; \
     < "Steffen Grund" ; > ; \
     < "Thomas Lange" ; > ; \
     < "Lars Langhans" ; > ; \
