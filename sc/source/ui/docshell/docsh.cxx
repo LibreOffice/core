@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:37:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@
 #include "warnpassword.hxx"
 
 #include "docsh.hxx"
+#include "docshimp.hxx"
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
@@ -2125,7 +2126,7 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
 #define __SCDOCSHELL_INIT \
         aDocument       ( SCDOCMODE_DOCUMENT, this ), \
         pUndoManager    ( NULL ), \
-        pFontList       ( NULL ), \
+        pImpl           ( new DocShell_Impl ), \
         bHeaderOn       ( TRUE ), \
         bFooterOn       ( TRUE ), \
         pDocHelper      ( NULL ), \
@@ -2223,7 +2224,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
     delete pDocFunc;
     delete pUndoManager;
-    delete pFontList;
+    delete pImpl;
 
     delete pPaintLockData;
 
