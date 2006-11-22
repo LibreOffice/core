@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:50:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,6 @@ IMPL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractMailMergeWizard_Impl);
 
 // AbstractTabDialog_Impl begin
 void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
@@ -609,6 +608,33 @@ Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
     return (Window*)pDlg;
 }
 // AbstractAuthMarkFloatDlg_Impl end
+
+AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
+{
+    delete pDlg;
+}
+
+void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link& rEndDialogHdl )
+{
+    aEndDlgHdl = rEndDialogHdl;
+    pDlg->StartExecuteModal(
+        LINK( this, AbstractMailMergeWizard_Impl, EndDialogHdl ) );
+}
+
+long AbstractMailMergeWizard_Impl::GetResult()
+{
+    return pDlg->GetResult();
+}
+
+IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDialog )
+{
+    DBG_ASSERT( pDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
+
+    aEndDlgHdl.Call( this );
+    aEndDlgHdl = Link();
+
+    return 0L;
+}
 
 void AbstractMailMergeWizard_Impl::SetReloadDocument(const String& rURL)
 {
