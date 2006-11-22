@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:18 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1619,6 +1619,10 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
                 }
             }
         }
+
+        // #i71490# Deselect drawing objects before changing the sheet number in view data,
+        // so the handling of notes still has the sheet selected on which the notes are.
+        DrawDeselectAll();
 
         BOOL bRefMode = SC_MOD()->IsFormulaMode();
         if ( !bRefMode ) // Abfrage, damit RefMode bei Tabellenwechsel funktioniert
