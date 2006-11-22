@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 15:50:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ class GraphicFilter;
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
 }}}
+namespace sfx2 { class FileDialogHelper; }
 
 const long nLeftOfst = -370;
 const long nScrollX  =   30;
@@ -627,6 +628,10 @@ public:
 
     long InsertDoc( USHORT nSlotId, const String& rFileName,
                     const String& rFilterName, INT16 nVersion = 0 );
+
+    void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
+    long InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper * );
 
     // status methods for clipboard.
     // Status changes now notified from the clipboard.
