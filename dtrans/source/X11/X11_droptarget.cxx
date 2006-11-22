@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_droptarget.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:53:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::su
         m_xSelectionManager = static_cast< XDragSource* >(m_pSelectionManager);
         m_pSelectionManager->initialize( arguments );
 
-        sal_Int32 aWindow = None;
+        sal_Size aWindow = None;
         arguments.getConstArray()[1] >>= aWindow;
         m_pSelectionManager->registerDropTarget( aWindow, this );
         m_aTargetWindow = aWindow;
