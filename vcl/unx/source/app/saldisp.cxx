@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:57:11 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2677,9 +2677,9 @@ void SalDisplay::PrintInfo() const
         fprintf( stderr, "\tScreen (count,def)\t%d (%d,%d)\n",
                  m_nDefaultScreen, ScreenCount(pDisp_), DefaultScreen(pDisp_) );
         fprintf( stderr, "\tshift ctrl alt    \t%s (0x%X) %s (0x%X) %s (0x%X)\n",
-                 KeyStr( nShiftKeySym_ ), nShiftKeySym_,
-                 KeyStr( nCtrlKeySym_ ),  nCtrlKeySym_,
-                 KeyStr( nMod1KeySym_ ),  nMod1KeySym_ );
+                 KeyStr( nShiftKeySym_ ), sal::static_int_cast< unsigned int >(nShiftKeySym_),
+                 KeyStr( nCtrlKeySym_ ),  sal::static_int_cast< unsigned int >(nCtrlKeySym_),
+                 KeyStr( nMod1KeySym_ ),  sal::static_int_cast< unsigned int >(nMod1KeySym_) );
         if( XExtendedMaxRequestSize(pDisp_) * 4 )
             fprintf( stderr, "\tXMaxRequestSize   \t%ld %ld [bytes]\n",
                      XMaxRequestSize(pDisp_) * 4, XExtendedMaxRequestSize(pDisp_) * 4 );
@@ -2701,7 +2701,7 @@ void SalDisplay::PrintInfo() const
     fprintf( stderr, "\tVisual            \t%d-bit %s ID=0x%x\n",
              GetVisual(m_nDefaultScreen).GetDepth(),
              VisualClassName[ GetVisual(m_nDefaultScreen).GetClass() ],
-             GetVisual(m_nDefaultScreen).GetVisualId() );
+             sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
 void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) const
