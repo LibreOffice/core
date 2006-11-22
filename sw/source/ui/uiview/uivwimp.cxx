@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:23:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@
 #include <sfx2/bindings.hxx>
 #endif
 
+#include <sfx2/docinsert.hxx>
 #include <sfx2/request.hxx>
 
 #ifndef _UIVWIMP_HXX
@@ -123,6 +124,8 @@ SwView_Impl::SwView_Impl(SwView* pShell) :
         pConfigItem(0),
         nMailMergeRestartPage(0),
         bMailMergeSourceView(sal_True),
+        m_pDocInserter(NULL),
+        m_pRequest(NULL),
         m_bSelectObject(false),
         m_bEditingPositionSet(false)
 {
@@ -154,6 +157,9 @@ SwView_Impl::~SwView_Impl()
         pClipEvtLstnr->ViewDestroyed();
     }
     delete pConfigItem;
+
+    delete m_pDocInserter;
+    delete m_pRequest;
 }
 
 /*-----------------13.12.97 09:54-------------------
@@ -305,6 +311,24 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
         xTransferable = Reference<XUnoTunnel> (&rTransferable);
     }
     rTransferable.m_refCount--;
+}
+
+void SwView_Impl::StartDocumentInserter( const String& rFactory, const Link& rEndDialogHdl )
+{
+    delete m_pDocInserter;
+    m_pDocInserter = new ::sfx2::DocumentInserter( 0, rFactory );
+    m_pDocInserter->StartExecuteModal( rEndDialogHdl );
+}
+
+SfxMedium* SwView_Impl::CreateMedium()
+{
+    return m_pDocInserter->CreateMedium();
+}
+
+void SwView_Impl::InitRequest( const SfxRequest& rRequest )
+{
+    delete m_pRequest;
+    m_pRequest = new SfxRequest( rRequest );
 }
 
 // ------------------------- SwScannerEventListener ---------------------
