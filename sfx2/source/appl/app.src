@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 15:30:39 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1268,7 +1268,7 @@ String STR_QUICKSTART_PRELAUNCH
 };
 String STR_QUICKSTART_PRELAUNCH_UNX
 {
-    Text[ en-US ] = "Disable systray quickstarter";
+    Text[ en-US ] = "Disable systray Quickstarter";
     Text[ de ] = "Schnellstarter deaktivieren";
     Text [ x-comment ] = " ";
 };
