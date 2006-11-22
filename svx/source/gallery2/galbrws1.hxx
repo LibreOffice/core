@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:48:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,9 @@ public:
 class Gallery;
 class GalleryThemeEntry;
 class GalleryTheme;
+class VclAbstractDialog2;
 struct ExchangeData;
+class SfxItemSet;
 
 class GalleryBrowser1 : public Control, SfxListener
 {
@@ -96,6 +98,8 @@ private:
     GalleryButton           maNewTheme;
     GalleryThemeListBox*    mpThemes;
     Gallery*                mpGallery;
+    ExchangeData*           mpExchangeData;
+    SfxItemSet*             mpThemePropsDlgItemSet;
 
     Image                   aImgNormal;
     Image                   aImgDefault;
@@ -107,6 +111,8 @@ private:
     void                    ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
     ::std::vector< USHORT > ImplGetExecuteVector();
     void                    ImplExecute( USHORT nId );
+    void                    ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew );
+    void                    ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew );
 
     // Control
     virtual void            Resize();
@@ -119,6 +125,9 @@ private:
                             DECL_LINK( SelectThemeHdl, void* );
                             DECL_LINK( ShowContextMenuHdl, void* );
                             DECL_LINK( PopupMenuHdl, Menu* );
+                            DECL_LINK( EndNewThemePropertiesDlgHdl, VclAbstractDialog2* );
+                            DECL_LINK( EndThemePropertiesDlgHdl, VclAbstractDialog2* );
+                            DECL_LINK( DestroyThemePropertiesDlgHdl, VclAbstractDialog2* );
 
 public:
 
