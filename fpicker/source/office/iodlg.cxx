@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:41:22 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:15:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1457,6 +1457,13 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
 //*****************************************************************************
 
+void SvtFileDialog::EnableAutocompletion( BOOL _bEnable )
+{
+    _pImp->_pEdFileName->EnableAutocompletion( _bEnable );
+}
+
+//*****************************************************************************
+
 IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
 {
     DBG_ASSERT( pBox, "SvtFileDialog:keine Instanz" );
@@ -2033,6 +2040,153 @@ String SvtFileDialog::implGetInitialURL( const String& _rPath, const String& _rF
 //---------------------------------------------------------------------
 short SvtFileDialog::Execute()
 {
+    if ( !PrepareExecute() )
+        return 0;
+
+    // Start des Dialogs.
+    _bIsInExecute = TRUE;
+    short nResult = ModalDialog::Execute();
+    _bIsInExecute = FALSE;
+
+    DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFilePicker::Execute: still running an async action!" );
+        // the dialog should not be cancellable while an async action is running - firs, the action
+        // needs to be cancelled
+
+    // letztes Verzeichnis merken
+    if ( RET_OK == nResult )
+    {
+        INetURLObject aURL( _aPath );
+        if ( aURL.GetProtocol() == INET_PROT_FILE )
+        {
+            // nur bei File-URL's und nicht bei virtuelle Folder
+            // das ausgew"ahlte Verzeichnis merken
+            sal_Int32 nLevel = aURL.getSegmentCount();
+            // #97148# & #102204# ------
+            sal_Bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            // BOOL bClassPath = ( ( _pImp->_nStyle & SFXWB_CLASSPATH ) == SFXWB_CLASSPATH );
+            if ( nLevel > 1 && ( FILEDLG_TYPE_FILEDLG == _pImp->_eDlgType || !bDir ) )
+                aURL.removeSegment();
+        }
+    }
+
+    return nResult;
+}
+
+//---------------------------------------------------------------------
+void SvtFileDialog::StartExecuteModal( const Link& rEndDialogHdl )
+{
+    PrepareExecute();
+
+    // Start des Dialogs.
+//    _bIsInExecute = TRUE;
+    ModalDialog::StartExecuteModal( rEndDialogHdl );
+}
+
+//-----------------------------------------------------------------------------
+void SvtFileDialog::onAsyncOperationStarted()
+{
+    EnableUI( FALSE );
+    // the cancel button must be always enabled
+    _pImp->_pBtnCancel->Enable( TRUE );
+    _pImp->_pBtnCancel->GrabFocus();
+}
+
+//-----------------------------------------------------------------------------
+void SvtFileDialog::onAsyncOperationFinished()
+{
+    EnableUI( TRUE );
+    m_pCurrentAsyncAction = NULL;
+    if ( !m_bInExecuteAsync )
+        _pImp->_pEdFileName->GrabFocus();
+        // (if m_bInExecuteAsync is true, then the operation was finished within the minium wait time,
+        // and to the user, the operation appears to be synchronous)
+}
+
+//-------------------------------------------------------------------------
+void SvtFileDialog::displayIOException( const String& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode )
+{
+    try
+    {
+        // create make a human-readable string from the URL
+        String sDisplayPath( _rURL );
+        ::utl::LocalFileHelper::ConvertURLToSystemPath( _rURL, sDisplayPath );
+
+        // build an own exception which tells "access denied"
+        ::com::sun::star::ucb::InteractiveAugmentedIOException aException;
+        aException.Arguments.realloc( 2 );
+        aException.Arguments[ 0 ] <<= ::rtl::OUString( sDisplayPath );
+        aException.Arguments[ 1 ] <<= PropertyValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ),
+            -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
+        );
+            // (formerly, it was sufficient to put the URL first parameter. Nowadays,
+            // the services expects the URL in a PropertyValue named "Uri" ...)
+        aException.Code = _eCode;
+        aException.Classification = InteractionClassification_ERROR;
+
+        // let and interaction handler handle this exception
+        ::comphelper::OInteractionRequest* pRequest = NULL;
+        Reference< ::com::sun::star::task::XInteractionRequest > xRequest = pRequest =
+            new ::comphelper::OInteractionRequest( makeAny( aException ) );
+        pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
+
+        Reference< XInteractionHandler > xHandler(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") )
+            ),
+            UNO_QUERY
+        );
+        if ( xHandler.is() )
+            xHandler->handle( xRequest );
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "iodlg::displayIOException: caught an exception!" );
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SvtFileDialog::EnableUI( BOOL _bEnable )
+{
+    Enable( _bEnable );
+
+    if ( _bEnable )
+    {
+        for ( ::std::set< Control* >::iterator aLoop = m_aDisabledControls.begin();
+              aLoop != m_aDisabledControls.end();
+              ++aLoop
+            )
+        {
+            (*aLoop)->Enable( FALSE );
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SvtFileDialog::EnableControl( Control* _pControl, BOOL _bEnable )
+{
+    if ( !_pControl )
+    {
+        DBG_ERRORFILE( "SvtFileDialog::EnableControl: invalid control!" );
+        return;
+    }
+
+    _pControl->Enable( _bEnable );
+
+    if ( _bEnable )
+    {
+        ::std::set< Control* >::iterator aPos = m_aDisabledControls.find( _pControl );
+        if ( m_aDisabledControls.end() != aPos )
+            m_aDisabledControls.erase( aPos );
+    }
+    else
+        m_aDisabledControls.insert( _pControl );
+}
+
+//----------------------------------------------------------------------------
+
+short SvtFileDialog::PrepareExecute()
+{
     rtl::OUString aEnvValue;
     if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) &&
          aEnvValue.equalsAscii( "1" ) )
@@ -2236,133 +2390,7 @@ short SvtFileDialog::Execute()
     // ggf. Gr"osse aus Ini lesen und setzen
     InitSize();
 
-    // Start des Dialogs.
-    _bIsInExecute = TRUE;
-    short nResult = ModalDialog::Execute();
-    _bIsInExecute = FALSE;
-
-    DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFilePicker::Execute: still running an async action!" );
-        // the dialog should not be cancellable while an async action is running - firs, the action
-        // needs to be cancelled
-
-    // letztes Verzeichnis merken
-    if ( RET_OK == nResult )
-    {
-        INetURLObject aURL( _aPath );
-        if ( aURL.GetProtocol() == INET_PROT_FILE )
-        {
-            // nur bei File-URL's und nicht bei virtuelle Folder
-            // das ausgew"ahlte Verzeichnis merken
-            sal_Int32 nLevel = aURL.getSegmentCount();
-            // #97148# & #102204# ------
-            sal_Bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            if ( nLevel > 1 && ( FILEDLG_TYPE_FILEDLG == _pImp->_eDlgType || !bDir ) )
-                aURL.removeSegment();
-        }
-    }
-
-    return nResult;
-}
-
-//-----------------------------------------------------------------------------
-void SvtFileDialog::onAsyncOperationStarted()
-{
-    EnableUI( FALSE );
-    // the cancel button must be always enabled
-    _pImp->_pBtnCancel->Enable( TRUE );
-    _pImp->_pBtnCancel->GrabFocus();
-}
-
-//-----------------------------------------------------------------------------
-void SvtFileDialog::onAsyncOperationFinished()
-{
-    EnableUI( TRUE );
-    m_pCurrentAsyncAction = NULL;
-    if ( !m_bInExecuteAsync )
-        _pImp->_pEdFileName->GrabFocus();
-        // (if m_bInExecuteAsync is true, then the operation was finished within the minium wait time,
-        // and to the user, the operation appears to be synchronous)
-}
-
-//-------------------------------------------------------------------------
-void SvtFileDialog::displayIOException( const String& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode )
-{
-    try
-    {
-        // create make a human-readable string from the URL
-        String sDisplayPath( _rURL );
-        ::utl::LocalFileHelper::ConvertURLToSystemPath( _rURL, sDisplayPath );
-
-        // build an own exception which tells "access denied"
-        ::com::sun::star::ucb::InteractiveAugmentedIOException aException;
-        aException.Arguments.realloc( 2 );
-        aException.Arguments[ 0 ] <<= ::rtl::OUString( sDisplayPath );
-        aException.Arguments[ 1 ] <<= PropertyValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ),
-            -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
-        );
-            // (formerly, it was sufficient to put the URL first parameter. Nowadays,
-            // the services expects the URL in a PropertyValue named "Uri" ...)
-        aException.Code = _eCode;
-        aException.Classification = InteractionClassification_ERROR;
-
-        // let and interaction handler handle this exception
-        ::comphelper::OInteractionRequest* pRequest = NULL;
-        Reference< ::com::sun::star::task::XInteractionRequest > xRequest = pRequest =
-            new ::comphelper::OInteractionRequest( makeAny( aException ) );
-        pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
-
-        Reference< XInteractionHandler > xHandler(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") )
-            ),
-            UNO_QUERY
-        );
-        if ( xHandler.is() )
-            xHandler->handle( xRequest );
-    }
-    catch( const Exception& )
-    {
-        DBG_ERROR( "iodlg::displayIOException: caught an exception!" );
-    }
-}
-
-//-----------------------------------------------------------------------------
-void SvtFileDialog::EnableUI( BOOL _bEnable )
-{
-    Enable( _bEnable );
-
-    if ( _bEnable )
-    {
-        for ( ::std::set< Control* >::iterator aLoop = m_aDisabledControls.begin();
-              aLoop != m_aDisabledControls.end();
-              ++aLoop
-            )
-        {
-            (*aLoop)->Enable( FALSE );
-        }
-    }
-}
-
-//-----------------------------------------------------------------------------
-void SvtFileDialog::EnableControl( Control* _pControl, BOOL _bEnable )
-{
-    if ( !_pControl )
-    {
-        DBG_ERRORFILE( "SvtFileDialog::EnableControl: invalid control!" );
-        return;
-    }
-
-    _pControl->Enable( _bEnable );
-
-    if ( _bEnable )
-    {
-        ::std::set< Control* >::iterator aPos = m_aDisabledControls.find( _pControl );
-        if ( m_aDisabledControls.end() != aPos )
-            m_aDisabledControls.erase( aPos );
-    }
-    else
-        m_aDisabledControls.insert( _pControl );
+    return 1;
 }
 
 //-----------------------------------------------------------------------------
