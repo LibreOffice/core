@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:21:39 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #include <vcl/graph.hxx>
 #endif
 
-#ifndef  _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef  _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_STRINGPAIR_HPP_
@@ -57,6 +57,9 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERLISTENER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XDIALOGCLOSEDLISTENER_HPP_
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #endif
 
 #ifndef _SFX_FCONTNR_HXX
@@ -74,10 +77,12 @@ class FileDialogHelper;
 
 namespace sfx2
 {
-
     typedef ::com::sun::star::beans::StringPair FilterPair;
 
-    class FileDialogHelper_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::ui::dialogs::XFilePickerListener >
+    class FileDialogHelper_Impl :
+        public ::cppu::WeakImplHelper2<
+            ::com::sun::star::ui::dialogs::XFilePickerListener,
+            ::com::sun::star::ui::dialogs::XDialogClosedListener >
     {
         friend class FileDialogHelper;
 
@@ -157,6 +162,7 @@ namespace sfx2
         void                    preExecute();
         void                    postExecute( sal_Int16 _nResult );
         sal_Int16               implDoExecute();
+        void                    implStartExecute();
 
         void                    correctVirtualDialogType();
 
@@ -185,6 +191,9 @@ namespace sfx2
         virtual ::rtl::OUString SAL_CALL    helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL               controlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL               dialogSizeChanged() throw( ::com::sun::star::uno::RuntimeException );
+
+        // XDialogClosedListener methods
+        virtual void SAL_CALL               dialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener methods
         virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException );
@@ -234,6 +243,9 @@ namespace sfx2
         ::rtl::OUString         getFilterWithExtension( const ::rtl::OUString& rFilter ) const;
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
+
+        inline sal_Bool         isSystemFilePicker() const { return mbSystemPicker; }
+        inline sal_Bool         isPasswordEnabled() const { return mbIsPwdEnabled; }
     };
 
 }   // end of namespace sfx2
