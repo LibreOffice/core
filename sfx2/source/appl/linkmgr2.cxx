@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkmgr2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:18:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:55:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ SvLinkManager::~SvLinkManager()
         if( (*ppRef)->Is() )
         {
             (*(*ppRef))->Disconnect();
-            (*(*ppRef))->pLinkMgr = 0;
+            (*(*ppRef))->SetLinkManager( NULL );
         }
         delete *ppRef;
     }
@@ -99,7 +99,7 @@ void SvLinkManager::Remove( SvBaseLink *pLink )
         if( pLink == *(*ppRef) )
         {
             (*(*ppRef))->Disconnect();
-            (*(*ppRef))->pLinkMgr = 0;
+            (*(*ppRef))->SetLinkManager( NULL );
             (*(*ppRef)).Clear();
             bFound = TRUE;
         }
@@ -130,7 +130,7 @@ void SvLinkManager::Remove( USHORT nPos, USHORT nCnt )
             if( (*ppRef)->Is() )
             {
                 (*(*ppRef))->Disconnect();
-                (*(*ppRef))->pLinkMgr = 0;
+                (*(*ppRef))->SetLinkManager( NULL );
             }
             delete *ppRef;
         }
@@ -153,7 +153,7 @@ BOOL SvLinkManager::Insert( SvBaseLink* pLink )
     }
 
     SvBaseLinkRef* pTmp = new SvBaseLinkRef( pLink );
-    pLink->pLinkMgr = this;
+    pLink->SetLinkManager( this );
     aLinkTbl.Insert( pTmp, aLinkTbl.Count() );
     return TRUE;
 }
