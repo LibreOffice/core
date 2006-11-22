@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2006-08-07 13:58:36 $
+#   last change: $Author: vg $ $Date: 2006-11-22 10:31:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,10 @@ IDLFILES=\
     XFilterManager.idl\
     XFolderPicker.idl\
     XControlAccess.idl\
-    XControlInformation.idl
+    XControlInformation.idl \
+    XAsynchronousExecutableDialog.idl \
+    XDialogClosedListener.idl \
+    DialogClosedEvent.idl
 
 # ------------------------------------------------------------------
 
