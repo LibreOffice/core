@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:08:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
+#include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 
 #include "boost/bind.hpp"
 
