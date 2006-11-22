@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:45:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,13 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include "vcl/msgbox.hxx" // RET_CANCEL
+#endif
+
 #include <helpid.h>
 #include <dbui.hrc>
 #include <mailmergewizard.hrc>
@@ -343,4 +350,22 @@ void SwMailMergeWizard::CreateTargetDocument()
 void SwMailMergeWizard::updateRoadmapItemLabel( WizardState _nState )
 {
     svt::RoadmapWizard::updateRoadmapItemLabel( _nState );
+}
+
+// ------------------------------------------------------------------------
+
+short SwMailMergeWizard::Execute()
+{
+    DBG_ERROR( "SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
+               "It creates a thread (MailDispatcher instance) that will call"
+               "back to VCL apartment => deadlock!\n"
+               "Use Dialog::StartExecuteModal to execute the dialog!" );
+    return RET_CANCEL;
+}
+
+// ------------------------------------------------------------------------
+
+void SwMailMergeWizard::StartExecuteModal( const Link& rEndDialogHdl )
+{
+    ::svt::RoadmapWizard::StartExecuteModal( rEndDialogHdl );
 }
