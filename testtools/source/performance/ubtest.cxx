@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ubtest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:38:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
-#include <stl/hash_map>
-#include <stl/map>
+#include <hash_map>
+#include <map>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -57,6 +57,7 @@
 #include <windows.h>
 #else
 #include <sys/times.h>
+#include <unistd.h>
 #endif
 
 #include <rtl/string.hxx>
@@ -112,7 +113,7 @@ static inline sal_uInt32 getSystemTicks()
 
     if ( !nImplTicksPerSecond )
     {
-        nImplTicksPerSecond = CLK_TCK;
+        nImplTicksPerSecond = sysconf(_SC_CLK_TCK);
         dImplTicksPerSecond = nImplTicksPerSecond;
         dImplTicksULONGMAX  = (double)(sal_uInt32)ULONG_MAX;
     }
@@ -1345,4 +1346,3 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
-
