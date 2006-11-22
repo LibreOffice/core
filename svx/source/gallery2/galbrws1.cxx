@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:15:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,14 +153,16 @@ long GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 // -------------------
 
 GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
-    Control     ( pParent, rResId ),
-    maNewTheme  ( this, WB_3DLOOK ),
-    mpThemes    ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
-    mpGallery   ( pGallery ),
-    aImgNormal  ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) ),
-    aImgDefault ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) ),
-    aImgReadOnly( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) ),
-    aImgImported( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) )
+    Control               ( pParent, rResId ),
+    maNewTheme            ( this, WB_3DLOOK ),
+    mpThemes              ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
+    mpGallery             ( pGallery ),
+    mpExchangeData        ( new ExchangeData ),
+    mpThemePropsDlgItemSet( NULL ),
+    aImgNormal            ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) ),
+    aImgDefault           ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) ),
+    aImgReadOnly          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) ),
+    aImgImported          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) )
 {
     StartListening( *mpGallery );
 
@@ -190,6 +192,8 @@ GalleryBrowser1::~GalleryBrowser1()
     EndListening( *mpGallery );
     delete mpThemes;
     mpThemes = NULL;
+    delete mpExchangeData;
+    mpExchangeData = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -312,6 +316,104 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
 // -----------------------------------------------------------------------------
 
+void GalleryBrowser1::ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew )
+{
+    DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
+    mpThemePropsDlgItemSet = new SfxItemSet( SFX_APP()->GetPool() );
+    GalleryTheme*   pTheme = mpGallery->AcquireTheme( rThemeName, *this );
+
+    ImplFillExchangeData( pTheme, *mpExchangeData );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Got no AbstractDialogFactory!");
+    VclAbstractDialog2* pThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, mpExchangeData, mpThemePropsDlgItemSet, ResId(RID_SVXTABDLG_GALLERYTHEME) );
+    DBG_ASSERT(pThemeProps, "Got no GalleryThemePropertiesDialog!");
+
+    if ( bCreateNew )
+    {
+        pThemeProps->StartExecuteModal(
+            LINK( this, GalleryBrowser1, EndNewThemePropertiesDlgHdl ) );
+    }
+    else
+    {
+        pThemeProps->StartExecuteModal(
+            LINK( this, GalleryBrowser1, EndThemePropertiesDlgHdl ) );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew )
+{
+    long nRet = pDialog->GetResult();
+
+    if( nRet == RET_OK )
+    {
+        String aName( mpExchangeData->pTheme->GetName() );
+
+        if( mpExchangeData->aEditedTitle.Len() && aName != mpExchangeData->aEditedTitle )
+        {
+            const String    aOldName( aName );
+            String          aTitle( mpExchangeData->aEditedTitle );
+            USHORT          nCount = 0;
+
+            while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
+            {
+                aTitle = mpExchangeData->aEditedTitle;
+                aTitle += ' ';
+                aTitle += String::CreateFromInt32( nCount );
+            }
+
+            mpGallery->RenameTheme( aOldName, aTitle );
+        }
+
+        if ( bCreateNew )
+        {
+            mpThemes->SelectEntry( mpExchangeData->pTheme->GetName() );
+            SelectThemeHdl( NULL );
+        }
+    }
+
+    String aThemeName( mpExchangeData->pTheme->GetName() );
+    mpGallery->ReleaseTheme( mpExchangeData->pTheme, *this );
+
+    if ( bCreateNew && ( nRet != RET_OK ) )
+    {
+        mpGallery->RemoveTheme( aThemeName );
+    }
+
+    // destroy mpThemeProps asynchronously
+    Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ) );
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
+{
+    ImplEndGalleryThemeProperties( pDialog, true );
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
+{
+    ImplEndGalleryThemeProperties( pDialog, false );
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
+{
+    delete pDialog;
+    delete mpThemePropsDlgItemSet;
+    mpThemePropsDlgItemSet = 0;
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+
 void GalleryBrowser1::ImplExecute( USHORT nId )
 {
     switch( nId )
@@ -400,38 +502,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
 
         case( MN_PROPERTIES ):
         {
-            SfxItemSet              aSet( SFX_APP()->GetPool() );
-            GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-            ExchangeData            aData; ImplFillExchangeData( pTheme, aData );
-            //CHINA001 GalleryThemeProperties   aThemeProps( NULL, &aData, &aSet );
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            VclAbstractDialog* aThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, &aData, &aSet, ResId(RID_SVXTABDLG_GALLERYTHEME) );
-            DBG_ASSERT(aThemeProps, "Dialogdiet fail!");//CHINA001
-
-            if( RET_OK == aThemeProps->Execute() ) //CHINA001 if( RET_OK == aThemeProps.Execute() )
-            {
-                String aName( pTheme->GetName() );
-
-                if( aData.aEditedTitle.Len() && aName != aData.aEditedTitle )
-                {
-                    const String    aOldName( aName );
-                    String          aTitle( aData.aEditedTitle );
-                    USHORT          nCount = 0;
-
-                    while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
-                    {
-                        aTitle = aData.aEditedTitle;
-                        aTitle += ' ';
-                        aTitle += String::CreateFromInt32( nCount );
-                    }
-
-                    mpGallery->RenameTheme( aOldName, aTitle );
-                }
-            }
-
-            mpGallery->ReleaseTheme( pTheme, *this );
-            delete aThemeProps; //add CHINA001
+            ImplGalleryThemeProperties( GetSelectedTheme(), false );
         }
         break;
     }
@@ -650,45 +721,9 @@ IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, EMPTYARG )
 
     if( !mpGallery->HasTheme( aName ) && mpGallery->CreateTheme( aName ) )
     {
-        GalleryTheme*           pTheme = mpGallery->AcquireTheme( aName, *this );
-        SfxItemSet              aSet( SFX_APP()->GetPool() );
-        ExchangeData            aData; ImplFillExchangeData( pTheme, aData );
-        //CHINA001 GalleryThemeProperties   aThemeProps( NULL, &aData, &aSet );
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        VclAbstractDialog* aThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, &aData, &aSet, ResId(RID_SVXTABDLG_GALLERYTHEME) );
-        DBG_ASSERT(aThemeProps, "Dialogdiet fail!");//CHINA001
-
-        if( RET_OK == aThemeProps->Execute() ) //CHINA001 if( RET_OK == aThemeProps.Execute() )
-        {
-            String aOldName( pTheme->GetName() );
-
-            if( aData.aEditedTitle.Len() && ( aOldName != aData.aEditedTitle ) )
-            {
-                String          aNewName( aData.aEditedTitle );
-                USHORT          nCount2 = 0;
-
-                while( mpGallery->HasTheme( aNewName ) && ( nCount2++ < 16000 ) )
-                {
-                    aNewName = aData.aEditedTitle;
-                    aNewName += ' ';
-                    aNewName += String::CreateFromInt32( nCount2 );
-                }
-
-                mpGallery->RenameTheme( aOldName, aNewName );
-            }
-
-            mpThemes->SelectEntry( pTheme->GetName() );
-            SelectThemeHdl( NULL );
-            mpGallery->ReleaseTheme( pTheme, *this );
-            delete aThemeProps; //add CHINA001
-        }
-        else
-        {
-            mpGallery->ReleaseTheme( pTheme, *this );
-            mpGallery->RemoveTheme( aName );
-        }
+        ImplGalleryThemeProperties( aName, true );
     }
 
     return 0L;
 }
+
