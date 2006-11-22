@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:46:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,12 +89,6 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 
 SW_DLLPUBLIC FieldUnit  GetDfltMetric(BOOL bWeb);
 void        SetDfltMetric(FieldUnit eMetric, BOOL bWeb);
-
-// besorge einen Filenamen/Filternamen. Wird ppMed uebergeben, wird das
-// erzeugte Medium returnt. Auch das FilePassword kann returnt werden.
-SW_DLLPUBLIC BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
-                                        String* pFilePassword =0, String* pFilterName =0,
-                                        SfxMedium** ppMed = 0 );
 
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
 SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE, BOOL bWithDefault = FALSE);
