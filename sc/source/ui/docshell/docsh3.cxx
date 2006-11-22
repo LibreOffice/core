@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:38:39 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #endif
 
 #include "docsh.hxx"
+#include "docshimp.hxx"
 #include "scmod.hxx"
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
@@ -457,10 +458,10 @@ SfxPrinter* ScDocShell::GetPrinter(BOOL bCreateIfNotExist)
 
 void ScDocShell::UpdateFontList()
 {
-    delete pFontList;
-    // pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    pFontList = new FontList( GetRefDevice(), NULL, FALSE );    // FALSE or TRUE???
-    SvxFontListItem aFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST );
+    delete pImpl->pFontList;
+    // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
+    pImpl->pFontList = new FontList( GetRefDevice(), NULL, FALSE ); // FALSE or TRUE???
+    SvxFontListItem aFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 
     CalcOutputFactor();
@@ -482,9 +483,9 @@ USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
 
             // MT: Use UpdateFontList: Will use Printer fonts only if needed!
             /*
-            delete pFontList;
-            pFontList = new FontList( pNewPrinter, Application::GetDefaultDevice() );
-            SvxFontListItem aFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST );
+            delete pImpl->pFontList;
+            pImpl->pFontList = new FontList( pNewPrinter, Application::GetDefaultDevice() );
+            SvxFontListItem aFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST );
             PutItem( aFontListItem );
 
             CalcOutputFactor();
