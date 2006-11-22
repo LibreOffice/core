@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:55:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:15:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,12 +157,7 @@ ShutdownIcon* ShutdownIcon::pShutdownIcon = NULL;
 
 // To remove conditionals
 extern "C" {
-    static void disabled_initSystray()
-    {
-        // disable shutdown
-        ShutdownIcon::getInstance()->SetVeto( true );
-        ShutdownIcon::getInstance()->addTerminateListener();
-    }
+    static void disabled_initSystray() { }
     static void disabled_deInitSystray() { }
 }
 #define DOSTRING( x )                       #x
