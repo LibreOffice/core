@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:16:48 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,18 +272,28 @@ static void ImplMouseAutoPos( Dialog* pDialog )
 
 // =======================================================================
 
+struct DialogImpl
+{
+    long    mnResult;
+    bool    mbStartedModal;
+    Link    maEndDialogHdl;
+
+    DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
+};
+
+// =======================================================================
+
 void Dialog::ImplInitDialogData()
 {
-    mpWindowImpl->mbDialog            = TRUE;
-
-    mpDialogParent      = NULL;
-    mpResult            = NULL;
-    mpPrevExecuteDlg    = NULL;
-    mbInExecute         = FALSE;
-    mbOldSaveBack       = FALSE;
-    mbInClose           = FALSE;
-    mbModalMode         = FALSE;
-    mnMousePositioned   = 0;
+    mpWindowImpl->mbDialog  = TRUE;
+    mpDialogParent          = NULL;
+    mpPrevExecuteDlg        = NULL;
+    mbInExecute             = FALSE;
+    mbOldSaveBack           = FALSE;
+    mbInClose               = FALSE;
+    mbModalMode             = FALSE;
+    mnMousePositioned       = 0;
+    mpDialogImpl            = new DialogImpl;
 }
 
 // -----------------------------------------------------------------------
@@ -458,6 +468,14 @@ Dialog::Dialog( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
+Dialog::~Dialog()
+{
+    delete mpDialogImpl;
+    mpDialogImpl = NULL;
+}
+
+// -----------------------------------------------------------------------
+
 long Dialog::Notify( NotifyEvent& rNEvt )
 {
     // Zuerst Basisklasse rufen wegen TabSteuerung
@@ -601,26 +619,26 @@ BOOL Dialog::Close()
 
 // -----------------------------------------------------------------------
 
-short Dialog::Execute()
+BOOL Dialog::ImplStartExecuteModal()
 {
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "Dialog::Execute() is called in Dialog::Execute(): " );
+        ByteString aErrorStr( "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): " );
         aErrorStr += ImplGetDialogText( this );
         DBG_ERROR( aErrorStr.GetBuffer() );
 #endif
-        return 0;
+        return FALSE;
     }
 
     if ( Application::IsDialogCancelEnabled() )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "Dialog::Execute() is called in a none UI application: " );
+        ByteString aErrorStr( "Dialog::StartExecuteModal() is called in a none UI application: " );
         aErrorStr += ImplGetDialogText( this );
         DBG_ERROR( aErrorStr.GetBuffer() );
 #endif
-        return 0;
+        return FALSE;
     }
 
 #ifdef DBG_UTIL
@@ -629,9 +647,9 @@ short Dialog::Execute()
     {
         pParent = pParent->ImplGetFirstOverlapWindow();
         DBG_ASSERT( pParent->IsReallyVisible(),
-                    "Dialog::Execute() - Parent not visible" );
+                    "Dialog::StartExecuteModal() - Parent not visible" );
         DBG_ASSERT( pParent->IsInputEnabled(),
-                    "Dialog::Execute() - Parent already disabled, use another parent to ensure modality!" );
+                    "Dialog::StartExecuteModal() - Parent already disabled, use another parent to ensure modality!" );
     }
 #endif
 
@@ -653,22 +671,35 @@ short Dialog::Execute()
         NotifyEvent aNEvt( EVENT_EXECUTEDIALOG, this );
         GetParent()->Notify( aNEvt );
     }
-    long nRet;
-    mpResult = &nRet;
     mbInExecute = TRUE;
     SetModalInputMode( TRUE );
     mbOldSaveBack = IsSaveBackgroundEnabled();
     EnableSaveBackground();
     Show();
 
+    pSVData->maAppData.mnModalMode++;
+    return TRUE;
+}
 
-    // Solange Yielden, bis EndDialog aufgerufen wird, oder der Dialog
-    // zerstoert wird (sollte nicht sein und ist nur vorsichtsmassnahme)
+// -----------------------------------------------------------------------
+
+void Dialog::ImplEndExecuteModal()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mnModalMode--;
+}
+
+// -----------------------------------------------------------------------
+
+short Dialog::Execute()
+{
+    if ( !ImplStartExecuteModal() )
+        return 0;
+
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
     ImplDelData aParentDelData;
 
-    pSVData->maAppData.mnModalMode++;
     //DBG_ASSERT( mpDialogParent, "Dialog::Execute() - no Parent: cannot set modal count!" );
     Window* pDialogParent = mpDialogParent;
     if( pDialogParent )
@@ -676,9 +707,14 @@ short Dialog::Execute()
         pDialogParent->ImplIncModalCount();        // #106303# support frame based modal count
         pDialogParent->ImplAddDel( &aParentDelData );
     }
+
+    // Solange Yielden, bis EndDialog aufgerufen wird, oder der Dialog
+    // zerstoert wird (sollte nicht sein und ist nur vorsichtsmassnahme)
     while ( !aDelData.IsDelete() && mbInExecute )
         Application::Yield();
-    pSVData->maAppData.mnModalMode--;
+
+    ImplEndExecuteModal();
+
     if( pDialogParent  )
     {
         if( ! aParentDelData.IsDelete() )
@@ -702,7 +738,28 @@ short Dialog::Execute()
     }
 #endif
 
+    long nRet = mpDialogImpl->mnResult;
+    mpDialogImpl->mnResult = -1;
     return (short)nRet;
+}
+
+// -----------------------------------------------------------------------
+
+// virtual
+void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
+{
+    if ( !ImplStartExecuteModal() )
+        return;
+
+    mpDialogImpl->maEndDialogHdl = rEndDialogHdl;
+    mpDialogImpl->mbStartedModal = true;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Dialog::IsStartedModal() const
+{
+    return mpDialogImpl->mbStartedModal;
 }
 
 // -----------------------------------------------------------------------
@@ -747,11 +804,27 @@ void Dialog::EndDialog( long nResult )
             NotifyEvent aNEvt( EVENT_ENDEXECUTEDIALOG, this );
             GetParent()->Notify( aNEvt );
         }
-        if ( mpResult )
-            *mpResult = nResult;
-        mpResult    = NULL;
+
+        mpDialogImpl->mnResult = nResult;
+
+        if ( mpDialogImpl->mbStartedModal )
+        {
+            ImplEndExecuteModal();
+            mpDialogImpl->maEndDialogHdl.Call( this );
+
+            mpDialogImpl->maEndDialogHdl = Link();
+            mpDialogImpl->mbStartedModal = false;
+            mpDialogImpl->mnResult = -1;
+        }
         mbInExecute = FALSE;
     }
+}
+
+// -----------------------------------------------------------------------
+
+long Dialog::GetResult() const
+{
+    return mpDialogImpl->mnResult;
 }
 
 // -----------------------------------------------------------------------
