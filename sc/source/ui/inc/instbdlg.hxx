@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instbdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:34:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@ class ScViewData;
 class ScDocument;
 class ScDocShell;
 
+namespace sfx2 { class DocumentInserter; }
+namespace sfx2 { class FileDialogHelper; }
+
 //------------------------------------------------------------------------
 
 class ScInsertTableDlg : public ModalDialog
@@ -111,11 +114,14 @@ private:
     CancelButton            aBtnCancel;
     HelpButton              aBtnHelp;
 
-    ScViewData&         rViewData;
-    ScDocument&         rDoc;
-    ScDocShell*         pDocShTables;
-    SfxObjectShellRef   aDocShTablesRef;
+    Timer                   aBrowseTimer;
+    ScViewData&             rViewData;
+    ScDocument&             rDoc;
+    ScDocShell*             pDocShTables;
+    sfx2::DocumentInserter* pDocInserter;
+    SfxObjectShellRef       aDocShTablesRef;
 
+    bool                bMustClose;
     USHORT              nSelTabIndex;   // fuer GetFirstTable() / GetNextTable()
     String              aStrCurSelTable;
     SCTAB               nTableCount;
@@ -132,10 +138,10 @@ private:
     DECL_LINK( SelectHdl_Impl, MultiListBox* );
     DECL_LINK( CountHdl_Impl, NumericField* );
     DECL_LINK( DoEnterHdl, PushButton* );
+    DECL_LINK( BrowseTimeoutHdl, Timer* );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
 #endif
 };
 
-
 #endif // SC_INSTBDLG_HXX
-
 
