@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:47:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,8 +395,16 @@ void ViewShell::Exit (void)
 
     Deactivate (TRUE);
 
+    // Call the SetWindow(NULL) method while we can still detect wether we
+    // are the main view shell.
+    SfxViewShell* pViewShell = GetViewShell();
+    if (pViewShell!=NULL && mpImpl->mbIsMainViewShell)
+        pViewShell->SetWindow(NULL);
+
     SetIsMainViewShell(false);
 }
+
+
 
 
 /*************************************************************************
