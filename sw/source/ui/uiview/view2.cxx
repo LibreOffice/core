@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:28:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -821,35 +821,48 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             {
                 String sFileName, sFilterName;
                 INT16 nVersion = 0;
+                bool bHasFileName = false;
+                pViewImpl->SetParam( 0 );
 
                 if( pArgs )
                 {
                     if( SFX_ITEM_SET == pArgs->GetItemState( SID_FILE_NAME, FALSE, &pItem ))
                         sFileName = ((const SfxStringItem*)pItem)->GetValue();
+                    bHasFileName = ( sFileName.Len() > 0 );
 
                     if( SFX_ITEM_SET == pArgs->GetItemState( SID_FILTER_NAME, FALSE, &pItem ))
                         sFilterName = ((const SfxStringItem*)pItem)->GetValue();
 
                     if( SFX_ITEM_SET == pArgs->GetItemState( SID_VERSION, FALSE, &pItem ))
+                    {
                         nVersion = ((const SfxInt16Item *)pItem)->GetValue();
+                        pViewImpl->SetParam( nVersion );
+                    }
                 }
 
+                pViewImpl->InitRequest( rReq );
                 long nFound = InsertDoc( nSlot, sFileName, sFilterName, nVersion );
-                rReq.SetReturnValue( SfxInt32Item( nSlot, nFound ));
 
-                if (nFound > 0) // Redline-Browser anzeigen
+                if ( bHasFileName )
                 {
-                    SfxViewFrame* pVFrame = GetViewFrame();
-                    pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
+                    rReq.SetReturnValue( SfxInt32Item( nSlot, nFound ));
 
-                    // RedlineDlg neu initialisieren
-                    USHORT nId = SwRedlineAcceptChild::GetChildWindowId();
-                    SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)
-                                            pVFrame->GetChildWindow(nId);
-                    if (pRed)
-                        pRed->ReInitDlg(GetDocShell());
+                    if (nFound > 0) // Redline-Browser anzeigen
+                    {
+                        SfxViewFrame* pVFrame = GetViewFrame();
+                        pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
+
+                        // RedlineDlg neu initialisieren
+                        USHORT nId = SwRedlineAcceptChild::GetChildWindowId();
+                        SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)
+                                                pVFrame->GetChildWindow(nId);
+                        if (pRed)
+                            pRed->ReInitDlg(GetDocShell());
+                    }
                 }
-        }
+                else
+                    bIgnore = TRUE;
+            }
         break;
         case FN_SYNC_LABELS:
         case FN_MAILMERGE_CHILDWINDOW:
@@ -1918,25 +1931,37 @@ sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
     Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
 
-long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
-                        const String& rFilterName, INT16 nVersion )
+void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 {
-    BOOL bInsert = FALSE, bCompare = FALSE, bMerge = FALSE;
-    long nFound = 0;
+    pViewImpl->InitRequest( rRequest );
+    pViewImpl->SetParam( pItem ? 1 : 0 );
+    USHORT nSlot = rRequest.GetSlot();
 
-    switch( nSlotId )
+    if ( !pItem )
     {
-        case SID_DOCUMENT_MERGE:        bMerge = TRUE;      break;
-        case SID_DOCUMENT_COMPARE:      bCompare = TRUE;    break;
-        case SID_INSERTDOC:             bInsert = TRUE;     break;
-
-        default:
-            ASSERT( !this, "Unbekannte SlotId!" );
-            bInsert = TRUE;
-            nSlotId = SID_INSERTDOC;
-            break;
+        String sEmpty;
+        InsertDoc( nSlot, sEmpty, sEmpty );
     }
+    else
+    {
+        String sFile, sFilter;
+        sFile = ( (const SfxStringItem *)pItem )->GetValue();
+        if ( SFX_ITEM_SET == rRequest.GetArgs()->GetItemState( FN_PARAM_1, TRUE, &pItem ) )
+            sFilter = ( (const SfxStringItem *)pItem )->GetValue();
 
+        bool bHasFileName = ( sFile.Len() > 0 );
+        long nFound = InsertDoc( nSlot, sFile, sFilter );
+
+        if ( bHasFileName )
+        {
+            rRequest.SetReturnValue( SfxBoolItem( nSlot, nFound != -1 ) );
+            rRequest.Done();
+        }
+    }
+}
+
+long SwView::InsertDoc( USHORT nSlotId, const String& rFileName, const String& rFilterName, INT16 nVersion )
+{
     SfxMedium* pMed = 0;
     SwDocShell* pDocSh = GetDocShell();
 
@@ -1959,10 +1984,35 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
     }
     else
     {
-        pMed = SFX_APP()->InsertDocumentDialog(0, String::CreateFromAscii(pDocSh->GetFactory().GetShortName()), HID_INSERT_FILE );
+        String sFactory = String::CreateFromAscii( pDocSh->GetFactory().GetShortName() );
+        pViewImpl->StartDocumentInserter( sFactory, LINK( this, SwView, DialogClosedHdl ) );
+        return -1;
     }
+
     if( !pMed )
         return -1;
+
+    return InsertMedium( nSlotId, pMed, nVersion );
+}
+
+long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
+{
+    BOOL bInsert = FALSE, bCompare = FALSE, bMerge = FALSE;
+    long nFound = 0;
+    SwDocShell* pDocSh = GetDocShell();
+
+    switch( nSlotId )
+    {
+        case SID_DOCUMENT_MERGE:        bMerge = TRUE;      break;
+        case SID_DOCUMENT_COMPARE:      bCompare = TRUE;    break;
+        case SID_INSERTDOC:             bInsert = TRUE;     break;
+
+        default:
+            ASSERT( !this, "Unbekannte SlotId!" );
+            bInsert = TRUE;
+            nSlotId = SID_INSERTDOC;
+            break;
+    }
 
     if( bInsert )
     {
@@ -1971,29 +2021,29 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
         if ( xRecorder.is() )
         {
             SfxRequest aRequest(GetViewFrame(), SID_INSERTDOC);
-            aRequest.AppendItem(SfxStringItem(SID_INSERTDOC, pMed->GetOrigURL()));
-            if(pMed->GetFilter())
-            aRequest.AppendItem(SfxStringItem(FN_PARAM_1, pMed->GetFilter()->GetName()));
+            aRequest.AppendItem(SfxStringItem(SID_INSERTDOC, pMedium->GetOrigURL()));
+            if(pMedium->GetFilter())
+            aRequest.AppendItem(SfxStringItem(FN_PARAM_1, pMedium->GetFilter()->GetName()));
             aRequest.Done();
         }
 
         SfxObjectShellRef aRef( pDocSh );
 
-        sal_uInt32 nError = SfxObjectShell::HandleFilter( pMed, pDocSh );
+        sal_uInt32 nError = SfxObjectShell::HandleFilter( pMedium, pDocSh );
         // #i16722# aborted?
         if(nError != ERRCODE_NONE)
         {
-            delete pMed;
+            delete pMedium;
             return -1;
         }
-        pDocSh->RegisterTransfer( *pMed );
-        pMed->DownLoad();   // ggfs. den DownLoad anstossen
+        pDocSh->RegisterTransfer( *pMedium );
+        pMedium->DownLoad();    // ggfs. den DownLoad anstossen
         if( aRef.Is() && 1 < aRef->GetRefCount() )  // noch gueltige Ref?
         {
             SwReader* pRdr;
-            Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, pWrtShell );
+            Reader *pRead = pDocSh->StartConvertFrom( *pMedium, &pRdr, pWrtShell );
             if( pRead ||
-                (pMed->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER) != 0 )
+                (pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER) != 0 )
             {
                 sal_uInt16 nUndoCheck = 0;
                 SwDoc *pDoc = pDocSh->GetDoc();
@@ -2015,7 +2065,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
                     {
                         sal_Bool bUndo = pDoc->DoesUndo();
                         pDoc->DoUndo( sal_False );
-                        nErrno = pDocSh->ImportFrom( *pMed ) ? 0 : ERR_SWG_READ_ERROR;
+                        nErrno = pDocSh->ImportFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
                         pDoc->DoUndo( bUndo );
                     }
 
@@ -2057,7 +2107,7 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
                             SwDocShell* pDestSh );
 
         String sFltNm;
-        int nRet = lcl_FindDocShell( xDocSh, pMed->GetName(), aEmptyStr,
+        int nRet = lcl_FindDocShell( xDocSh, pMedium->GetName(), aEmptyStr,
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
         {
@@ -2083,7 +2133,7 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             xDocSh->DoClose();
     }
 
-    delete pMed;
+    delete pMedium;
     return nFound;
 }
 /* -----------------05.02.2003 12:06-----------------
@@ -2310,4 +2360,47 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
     }
 }
 
+IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+{
+    if ( ERRCODE_NONE == _pFileDlg->GetError() )
+    {
+        SfxMedium* pMed = pViewImpl->CreateMedium();
+        if ( pMed )
+        {
+            USHORT nSlot = pViewImpl->GetRequest()->GetSlot();
+            long nFound = InsertMedium( nSlot, pMed, pViewImpl->GetParam() );
+
+            if ( SID_INSERTDOC == nSlot )
+            {
+                if ( pViewImpl->GetParam() == 0 )
+                {
+                    pViewImpl->GetRequest()->SetReturnValue( SfxBoolItem( nSlot, nFound != -1 ) );
+                    pViewImpl->GetRequest()->Ignore();
+                }
+                else
+                {
+                    pViewImpl->GetRequest()->SetReturnValue( SfxBoolItem( nSlot, nFound != -1 ) );
+                    pViewImpl->GetRequest()->Done();
+                }
+            }
+            else if ( SID_DOCUMENT_COMPARE == nSlot || SID_DOCUMENT_MERGE == nSlot )
+            {
+                pViewImpl->GetRequest()->SetReturnValue( SfxInt32Item( nSlot, nFound ) );
+
+                if ( nFound > 0 ) // Redline-Browser anzeigen
+                {
+                    SfxViewFrame* pVFrame = GetViewFrame();
+                    pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
+
+                    // RedlineDlg neu initialisieren
+                    USHORT nId = SwRedlineAcceptChild::GetChildWindowId();
+                    SwRedlineAcceptChild* pRed = (SwRedlineAcceptChild*)pVFrame->GetChildWindow( nId );
+                    if ( pRed )
+                        pRed->ReInitDlg( GetDocShell() );
+                }
+            }
+        }
+    }
+    return 0;
+}
 
