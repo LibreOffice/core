@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:52:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,11 +110,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XASYNCHRONOUSEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #endif
 #ifndef SVX_OPTHEADERTABLISTBOX_HXX
 #include "optHeaderTabListbox.hxx"
@@ -270,7 +270,8 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
-    pImpl           ( new OptPath_Impl( ResId(IMG_LOCK), ResId(IMG_LOCK_HC) ) )
+    pImpl           ( new OptPath_Impl( ResId(IMG_LOCK), ResId(IMG_LOCK_HC) ) ),
+    xDialogListener ( new ::svt::DialogClosedListener() )
 
 {
     pImpl->m_sMultiPathDlg = String( ResId( STR_MULTIPATHDLG ) );
@@ -313,6 +314,8 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     pHeaderBar->Show();
 
     FreeResource();
+
+    xDialogListener->SetDialogClosedLink( LINK( this, SvxPathTabPage, DialogClosedHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -527,6 +530,53 @@ IMPL_LINK( SvxPathTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
+{
+    SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
+    if ( !pEntry )
+    {
+        DBG_ERRORFILE( "SvxPathTabPage::ChangeCurrentEntry(): no entry" );
+        return;
+    }
+
+    String sInternal, sUser, sWritable;
+    PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
+    sal_Bool bReadOnly = sal_False;
+    GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
+    sUser = pPathImpl->sUserPath;
+    sWritable = pPathImpl->sWritablePath;
+    USHORT nPos = pPathImpl->nRealId;
+
+    // old path is an URL?
+    INetURLObject aObj( sWritable );
+    FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
+    rtl::OUString aPathStr( _rFolder );
+    INetURLObject aNewObj( aPathStr );
+    aNewObj.removeFinalSlash();
+
+    // then the new path also an URL else system path
+    String aNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+
+    FASTBOOL bChanged =
+#ifdef UNX
+// Unix is case sensitive
+        ( aNewPathStr != sWritable );
+#else
+        ( aNewPathStr.CompareIgnoreCaseToAscii( sWritable ) != COMPARE_EQUAL );
+#endif
+
+    if ( bChanged )
+    {
+        pPathBox->SetEntryText( Convert_Impl( aNewPathStr ), pEntry, 1 );
+        nPos = (USHORT)pPathBox->GetModel()->GetAbsPos( pEntry );
+        pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(nPos)->GetUserData();
+        pPathImpl->eState = SFX_ITEM_SET;
+        pPathImpl->sWritablePath = sWritable;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
@@ -606,41 +656,25 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
         {
             rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
             Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
+            xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
+                xFactory->createInstance( aService ), UNO_QUERY );
 
 //          svt::SetDialogHelpId( xFolderPicker, HID_OPTIONS_PATHS_SELECTFOLDER );
 
             INetURLObject aURL( sWritable, INET_PROT_FILE );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            short nRet = xFolderPicker->execute();
 
-            if ( ExecutableDialogResults::OK != nRet )
-                return 0;
-
-            // old path is an URL?
-            INetURLObject aObj( sWritable );
-            FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
-            rtl::OUString aPathStr = xFolderPicker->getDirectory();
-            INetURLObject aNewObj( aPathStr );
-            aNewObj.removeFinalSlash();
-
-            // then the new path also an URL else system path
-            String aNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
-
-            FASTBOOL bChanged =
-#ifdef UNX
-// Unix is case sensitive
-                                ( aNewPathStr != sWritable );
-#else
-                                ( aNewPathStr.CompareIgnoreCaseToAscii( sWritable ) != COMPARE_EQUAL );
-#endif
-            if ( bChanged )
+            Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+            if ( xAsyncDlg.is() )
+                xAsyncDlg->startExecuteModal( xDialogListener.get() );
+            else
             {
-                pPathBox->SetEntryText( Convert_Impl( aNewPathStr ), pEntry, 1 );
-                nPos = (USHORT)pPathBox->GetModel()->GetAbsPos( pEntry );
-                PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(nPos)->GetUserData();
-                pPathImpl->eState = SFX_ITEM_SET;
-                pPathImpl->sWritablePath = aNewPathStr;
+                short nRet = xFolderPicker->execute();
+                if ( ExecutableDialogResults::OK != nRet )
+                    return 0;
+
+                String sFolder( xFolderPicker->getDirectory() );
+                ChangeCurrentEntry( sFolder );
             }
         }
         catch( Exception& )
@@ -709,6 +743,20 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
         }
     }
     return 1;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
+{
+    if ( RET_OK == pEvt->DialogResult )
+    {
+        DBG_ASSERT( xFolderPicker.is() == sal_True, "SvxPathTabPage::DialogClosedHdl(): no folder picker" );
+
+        String sURL = String( xFolderPicker->getDirectory() );
+        ChangeCurrentEntry( sURL );
+    }
+    return 0L;
 }
 
 // -----------------------------------------------------------------------
