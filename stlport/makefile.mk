@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:43:50 $
+#   last change: $Author: vg $ $Date: 2006-11-22 10:44:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,6 @@ OUT2LIB= \
 all :
        @echo "         An already available installation of STLport has been chosen in the configure process."
        @echo "         Therefore the version provided here does not need to be built in addition."
-       +$(COPY) $(STLPORT4)$/lib$/*stlport*$(DLLPOST) $(DLLDEST)
 .ENDIF
 
 .INCLUDE : 	set_ext.mk
