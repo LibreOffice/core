@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PackageManagerDialog.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:59:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:30:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #if ! defined INCLUDED_com_sun_star_deployment_ui_PackageManagerDialog_idl
 #define INCLUDED_com_sun_star_deployment_ui_PackageManagerDialog_idl
 
-#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.idl>
 #include <com/sun/star/awt/XWindow.idl>
 
 
@@ -48,7 +48,7 @@ module com { module sun { module star { module deployment { module ui {
 
     @since OOo 2.0.0
 */
-service PackageManagerDialog : com::sun::star::ui::dialogs::XExecutableDialog
+service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
 {
     /** Create a default GUI.
      */
