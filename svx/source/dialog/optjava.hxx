@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:51:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,12 @@
 #ifndef _SVX_SIMPTABL_HXX
 #include "simptabl.hxx"
 #endif
-
+#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef _SVTOOLS_DIALOGCLOSEDLISTENER_HXX
+#include <svtools/dialogclosedlistener.hxx>
+#endif
 #include "radiobtnbox.hxx"
 
 // forward ---------------------------------------------------------------
@@ -118,6 +123,9 @@ private:
     ::std::vector< JavaInfo* >
                             m_aAddedInfos;
 
+    ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
+
     DECL_LINK(              EnableHdl_Impl, CheckBox * );
     DECL_LINK(              CheckHdl_Impl, SvxSimpleTable * );
     DECL_LINK(              SelectHdl_Impl, SvxSimpleTable * );
@@ -126,10 +134,15 @@ private:
     DECL_LINK(              ClassPathHdl_Impl, PushButton * );
     DECL_LINK(              ResetHdl_Impl, Timer * );
 
+    DECL_LINK(              StartFolderPickerHdl, void * );
+    DECL_LINK(              DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
+
     void                    ClearJavaInfo();
     void                    ClearJavaList();
     void                    LoadJREs();
     void                    AddJRE( JavaInfo* _pInfo );
+    void                    HandleCheckEntry( SvLBoxEntry* _pEntry );
+    void                    AddFolder( const ::rtl::OUString& _rFolder );
 
 public:
     SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet );
