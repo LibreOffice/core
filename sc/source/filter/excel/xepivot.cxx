@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:57:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,20 +161,19 @@ XclExpPCItem::XclExpPCItem( const String& rText ) :
         SetEmpty();
 }
 
-XclExpPCItem::XclExpPCItem( double fValue, bool bDate ) :
-    XclExpRecord( bDate ? EXC_ID_SXDATETIME : EXC_ID_SXDOUBLE, 8 )
+XclExpPCItem::XclExpPCItem( double fValue ) :
+    XclExpRecord( EXC_ID_SXDOUBLE, 8 )
 {
-    if( bDate )
-    {
-        SetDate( fValue );
-        mnTypeFlag = EXC_PCITEM_DATA_DATE;
-    }
-    else
-    {
-        SetDouble( fValue );
-        mnTypeFlag = (fValue - floor( fValue ) == 0.0) ?
-            EXC_PCITEM_DATA_INTEGER : EXC_PCITEM_DATA_DOUBLE;
-    }
+    SetDouble( fValue );
+    mnTypeFlag = (fValue - floor( fValue ) == 0.0) ?
+        EXC_PCITEM_DATA_INTEGER : EXC_PCITEM_DATA_DOUBLE;
+}
+
+XclExpPCItem::XclExpPCItem( const DateTime& rDateTime ) :
+    XclExpRecord( EXC_ID_SXDATETIME, 8 )
+{
+    SetDateTime( rDateTime );
+    mnTypeFlag = EXC_PCITEM_DATA_DATE;
 }
 
 XclExpPCItem::XclExpPCItem( sal_Int16 nValue ) :
@@ -195,7 +194,7 @@ XclExpPCItem::XclExpPCItem( bool bValue ) :
 
 bool XclExpPCItem::EqualsText( const String& rText ) const
 {
-    return (rText.Len() && GetText() && (*GetText() == rText)) || (!rText.Len() && IsEmpty());
+    return (rText.Len() == 0) ? IsEmpty() : (GetText() && (*GetText() == rText));
 }
 
 bool XclExpPCItem::EqualsDouble( double fValue ) const
@@ -203,9 +202,9 @@ bool XclExpPCItem::EqualsDouble( double fValue ) const
     return GetDouble() && (*GetDouble() == fValue);
 }
 
-bool XclExpPCItem::EqualsDate( double fDate ) const
+bool XclExpPCItem::EqualsDateTime( const DateTime& rDateTime ) const
 {
-    return GetDate() && (*GetDate() == fDate);
+    return GetDateTime() && (*GetDateTime() == rDateTime);
 }
 
 bool XclExpPCItem::EqualsBool( bool bValue ) const
@@ -229,40 +228,15 @@ void XclExpPCItem::WriteBody( XclExpStream& rStrm )
     {
         rStrm << *pnValue;
     }
-    else if( const double* pfDate = GetDate() )
+    else if( const DateTime* pDateTime = GetDateTime() )
     {
-        double fDays = ::rtl::math::approxFloor( *pfDate );
-        double fTime = *pfDate - fDays;
-
-        sal_uInt16 nYear = 0;
-        sal_uInt16 nMonth = 0;
-        sal_uInt8 nDay = 0;
-        sal_uInt8 nHour = 0;
-        sal_uInt8 nMin = 0;
-        sal_uInt8 nSec = 0;
-
-        if( fDays > 0.0 )
-        {
-            Date aDate( *rStrm.GetRoot().GetFormatter().GetNullDate() );
-            aDate += static_cast< long >( fDays );
-
-            nYear = static_cast< sal_uInt16 >( aDate.GetYear() );
-            nMonth = static_cast< sal_uInt16 >( aDate.GetMonth() );
-            nDay = static_cast< sal_uInt8 >( aDate.GetDay() );
-        }
-
-        if( fTime > 0.0 )
-        {
-            fTime *= 24;
-            nHour = static_cast< sal_uInt8 >( fTime );
-            fTime -= nHour;
-            fTime *= 60;
-            nMin = static_cast< sal_uInt8 >( fTime );
-            fTime -= nMin;
-            fTime *= 60;
-            nSec = ulimit_cast< sal_uInt8 >( fTime + 0.001, 59 );
-        }
-
+        sal_uInt16 nYear = static_cast< sal_uInt16 >( pDateTime->GetYear() );
+        sal_uInt16 nMonth = static_cast< sal_uInt16 >( pDateTime->GetMonth() );
+        sal_uInt8 nDay = static_cast< sal_uInt8 >( pDateTime->GetDay() );
+        sal_uInt8 nHour = static_cast< sal_uInt8 >( pDateTime->GetHour() );
+        sal_uInt8 nMin = static_cast< sal_uInt8 >( pDateTime->GetMin() );
+        sal_uInt8 nSec = static_cast< sal_uInt8 >( pDateTime->GetSec() );
+        if( nYear < 1900 ) { nYear = 1900; nMonth = 1; nDay = 0; }
         rStrm << nYear << nMonth << nDay << nHour << nMin << nSec;
     }
     else if( const bool* pbValue = GetBool() )
@@ -340,6 +314,10 @@ XclExpPCField::XclExpPCField(
     Finalize();
 }
 
+XclExpPCField::~XclExpPCField()
+{
+}
+
 void XclExpPCField::SetGroupChildField( const XclExpPCField& rChildField )
 {
     DBG_ASSERT( !::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_HASCHILD ),
@@ -369,7 +347,7 @@ sal_uInt16 XclExpPCField::GetItemIndex( const String& rItemName ) const
 
 sal_Size XclExpPCField::GetIndexSize() const
 {
-    return ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_16BIT ) ? 2 : 1;
+    return Has16BitIndexes() ? 2 : 1;
 }
 
 void XclExpPCField::WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const
@@ -378,7 +356,7 @@ void XclExpPCField::WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const
     if( nSrcRow < maIndexVec.size() )
     {
         sal_uInt16 nIndex = maIndexVec[ nSrcRow ];
-        if( ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_16BIT ) )
+        if( Has16BitIndexes() )
             rStrm << nIndex;
         else
             rStrm << static_cast< sal_uInt8 >( nIndex );
@@ -433,7 +411,7 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
             if( nFmtType == NUMBERFORMAT_LOGICAL )
                 InsertOrigBoolItem( fValue != 0 );
             else if( nFmtType & NUMBERFORMAT_DATETIME )
-                InsertOrigDateItem( fValue );
+                InsertOrigDateTimeItem( GetDateTimeFromDouble( ::std::max( fValue, 0.0 ) ) );
             else
                 InsertOrigDoubleItem( fValue );
         }
@@ -548,10 +526,9 @@ void XclExpPCField::InsertOrigTextItem( const String& rText )
     size_t nPos = 0;
     bool bFound = false;
     for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
-        bFound = maOrigItemList.GetRecord( nPos )->EqualsText( rText );
-    if( bFound )
-        InsertItemArrayIndex( nPos );
-    else
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( rText )) == true )
+            InsertItemArrayIndex( nPos );
+    if( !bFound )
         InsertOrigItem( new XclExpPCItem( rText ) );
 }
 
@@ -560,23 +537,21 @@ void XclExpPCField::InsertOrigDoubleItem( double fValue )
     size_t nPos = 0;
     bool bFound = false;
     for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
-        bFound = maOrigItemList.GetRecord( nPos )->EqualsDouble( fValue );
-    if( bFound )
-        InsertItemArrayIndex( nPos );
-    else
-        InsertOrigItem( new XclExpPCItem( fValue, false ) );
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDouble( fValue )) == true )
+            InsertItemArrayIndex( nPos );
+    if( !bFound )
+        InsertOrigItem( new XclExpPCItem( fValue ) );
 }
 
-void XclExpPCField::InsertOrigDateItem( double fDate )
+void XclExpPCField::InsertOrigDateTimeItem( const DateTime& rDateTime )
 {
     size_t nPos = 0;
     bool bFound = false;
     for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
-        bFound = maOrigItemList.GetRecord( nPos )->EqualsDate( fDate );
-    if( bFound )
-        InsertItemArrayIndex( nPos );
-    else
-        InsertOrigItem( new XclExpPCItem( fDate, true ) );
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDateTime( rDateTime )) == true )
+            InsertItemArrayIndex( nPos );
+    if( !bFound )
+        InsertOrigItem( new XclExpPCItem( rDateTime ) );
 }
 
 void XclExpPCField::InsertOrigBoolItem( bool bValue )
@@ -584,10 +559,9 @@ void XclExpPCField::InsertOrigBoolItem( bool bValue )
     size_t nPos = 0;
     bool bFound = false;
     for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
-        bFound = maOrigItemList.GetRecord( nPos )->EqualsBool( bValue );
-    if( bFound )
-        InsertItemArrayIndex( nPos );
-    else
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsBool( bValue )) == true )
+            InsertItemArrayIndex( nPos );
+    if( !bFound )
         InsertOrigItem( new XclExpPCItem( bValue ) );
 }
 
@@ -621,17 +595,17 @@ void XclExpPCField::SetNumGroupLimit( const ScDPNumGroupInfo& rNumInfo )
 {
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rNumInfo.AutoStart );
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rNumInfo.AutoEnd );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Start, false ) );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.End, false ) );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Step, false ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Start ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.End ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Step ) );
 }
 
 void XclExpPCField::SetDateGroupLimit( const ScDPNumGroupInfo& rDateInfo, bool bUseStep )
 {
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rDateInfo.AutoStart );
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rDateInfo.AutoEnd );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rDateInfo.Start, true ) );
-    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rDateInfo.End, true ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( GetDateTimeFromDouble( rDateInfo.Start ) ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( GetDateTimeFromDouble( rDateInfo.End ) ) );
     sal_Int16 nStep = bUseStep ? limit_cast< sal_Int16 >( rDateInfo.Step, 1, SAL_MAX_INT16 ) : 1;
     maNumGroupLimits.AppendNewRecord( new XclExpPCItem( nStep ) );
 }
@@ -903,8 +877,8 @@ void XclExpPivotCache::WriteCacheStream()
         WriteSxdbex( aStrm );
         // field list (SXFIELD and items)
         maFieldList.Save( aStrm );
-        // index table (list of SXIDARRAY)
-        WriteSxidarrayList( aStrm );
+        // index table (list of SXINDEXLIST)
+        WriteSxindexlistList( aStrm );
         // EOF
         XclExpEmptyRecord( EXC_ID_EOF ).Save( aStrm );
     }
@@ -925,7 +899,7 @@ void XclExpPivotCache::WriteSxdbex( XclExpStream& rStrm ) const
     rStrm.EndRecord();
 }
 
-void XclExpPivotCache::WriteSxidarrayList( XclExpStream& rStrm ) const
+void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 {
     if( HasItemIndexList() )
     {
@@ -936,7 +910,7 @@ void XclExpPivotCache::WriteSxidarrayList( XclExpStream& rStrm ) const
 
         for( sal_uInt32 nSrcRow = 0; nSrcRow < maPCInfo.mnSrcRecs; ++nSrcRow )
         {
-            rStrm.StartRecord( EXC_ID_SXIDARRAY, nRecSize );
+            rStrm.StartRecord( EXC_ID_SXINDEXLIST, nRecSize );
             for( nPos = 0; nPos < nSize; ++nPos )
                 maFieldList.GetRecord( nPos )->WriteIndex( rStrm, nSrcRow );
             rStrm.EndRecord();
