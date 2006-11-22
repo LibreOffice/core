@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:34:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 #ifndef _DAVSESSIONFACTORY_HXX_
 #define _DAVSESSIONFACTORY_HXX_
 
+#ifdef min
+#undef min // GNU libstdc++ <memory> includes <limit> which defines methods called min...
+#endif
 #include <map>
 #include <memory>
 
