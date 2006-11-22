@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:17:43 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,33 +712,35 @@ void ImportExcel::Wsbool( void )
 
 void ImportExcel::Boundsheet( void )
 {
-    UINT16      nGrbit;
+    UINT16 nGrbit = 0;
 
     if( GetBiff() == EXC_BIFF5 )
     {
         aIn.Ignore( 4 );
         aIn >> nGrbit;
     }
-    else
-        nGrbit = 0x0000;
 
     String aName( aIn.ReadByteString( FALSE ) );
     ScfTools::ConvertToScSheetName( aName );
 
     *pExcRoot->pTabNameBuff << aName;
 
-    const SCTAB nTab = static_cast<SCTAB>(nBdshtTab);
-    if( nTab > 0 )
+    SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
+    if( nScTab > 0 )
     {
-        DBG_ASSERT( !pD->HasTable( nTab ), "*ImportExcel::Boundsheet(): Tabelle schon vorhanden!" );
-
-        pD->MakeTable( nTab );
+        DBG_ASSERT( !pD->HasTable( nScTab ), "ImportExcel::Boundsheet - sheet exists already" );
+        pD->MakeTable( nScTab );
     }
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
-        pD->SetVisible( nTab, FALSE );
+        pD->SetVisible( nScTab, FALSE );
 
-    pD->RenameTab( nTab, aName );
+    if( !pD->RenameTab( nScTab, aName ) )
+    {
+        pD->CreateValidTabName( aName );
+        pD->RenameTab( nScTab, aName );
+    }
+
     nBdshtTab++;
 }
 
