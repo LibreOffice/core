@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:18:02 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,23 +366,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         }
         case SID_INSERTDOC:
-            if (!pItem)
-            {
-                rReq.SetReturnValue(SfxBoolItem(nSlot, GetView().InsertDoc(nSlot, aEmptyStr, aEmptyStr) != -1));
-                rReq.Ignore();
-            }
-            else
-            {
-                String aFile    = aEmptyStr;
-                String aFilter  = aEmptyStr;
-                aFile = ((const SfxStringItem *)pItem)->GetValue();
-                if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, TRUE, &pItem ))
-                    aFilter = ((const SfxStringItem *)pItem)->GetValue();
-
-                rReq.SetReturnValue(SfxBoolItem(nSlot, GetView().InsertDoc( nSlot, aFile, aFilter ) != -1));
-                rReq.Done();
-            }
+        {
+            GetView().ExecuteInsertDoc( rReq, pItem );
             break;
+        }
         case FN_FORMAT_RESET:
             rWrtSh.ResetAttr();
             rReq.Done();
