@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regcomplazy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:55:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <vector>
-#include <hash_map>
 
 #include <registry/registry.hxx>
 
