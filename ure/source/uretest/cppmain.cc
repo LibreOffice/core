@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppmain.cc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:14:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <functional>
 #include <memory>
 #include <new>
+#include <hash_map>
 
 #include "com/sun/star/lang/XMain.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
@@ -63,7 +64,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
-#include "stl/hash_map"
 #include "uno/current_context.hxx"
 #include "uno/environment.h"
 #include "uno/lbnames.h"
