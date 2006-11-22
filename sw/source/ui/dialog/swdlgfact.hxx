@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:30:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,7 +421,18 @@ class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 class SwMailMergeWizard;
 class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 {
-    DECL_ABSTDLG_BASE(AbstractMailMergeWizard_Impl, SwMailMergeWizard);
+    SwMailMergeWizard* pDlg;
+    Link               aEndDlgHdl;
+
+    DECL_LINK( EndDialogHdl, SwMailMergeWizard* );
+public:
+                    AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
+                     : pDlg(p)
+                     {}
+    virtual         ~AbstractMailMergeWizard_Impl();
+    virtual void    StartExecuteModal( const Link& rEndDialogHdl );
+    virtual long    GetResult();
+
     virtual void                SetReloadDocument(const String& rURL);
     virtual const String&       GetReloadDocument() const;
     virtual BOOL                ShowPage( USHORT nLevel );
