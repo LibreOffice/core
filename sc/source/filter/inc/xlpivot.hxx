@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLPIVOT_HXX
 #define SC_XLPIVOT_HXX
 
@@ -55,6 +56,10 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCEITEMTYPE_HPP_
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
+#endif
+
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
 #endif
 
 #ifndef SC_FTOOLS_HXX
@@ -100,9 +105,9 @@ enum XclPCItemType
     EXC_PCITEM_INVALID,         /// Special state, not used in Excel files.
     EXC_PCITEM_EMPTY,           /// Empty cell.
     EXC_PCITEM_TEXT,            /// String data.
-    EXC_PCITEM_VALUE,           /// Floating-point value.
+    EXC_PCITEM_DOUBLE,          /// Floating-point value.
+    EXC_PCITEM_DATETIME,        /// Date/time.
     EXC_PCITEM_INTEGER,         /// 16-bit integer value.
-    EXC_PCITEM_DATE,            /// Date/time.
     EXC_PCITEM_BOOL,            /// Boolean value.
     EXC_PCITEM_ERROR            /// Error code.
 };
@@ -119,9 +124,10 @@ enum XclPCFieldType
     EXC_PCFIELD_UNKNOWN         /// Unknown field state, handled like standard field.
 };
 
-// (0x0051) DCONREF -----------------------------------------------------------
+// (0x0051,0x0052) DCONREF, DCONNAME ------------------------------------------
 
 const sal_uInt16 EXC_ID_DCONREF             = 0x0051;
+const sal_uInt16 EXC_ID_DCONNAME            = 0x0052;
 
 // (0x00B0) SXVIEW ------------------------------------------------------------
 
@@ -282,9 +288,9 @@ const sal_uInt16 EXC_SXFIELD_INDEX_MIN      = 0;        /// List index for minim
 const sal_uInt16 EXC_SXFIELD_INDEX_MAX      = 1;        /// List index for maximum item in groupings.
 const sal_uInt16 EXC_SXFIELD_INDEX_STEP     = 2;        /// List index for step item in groupings.
 
-// (0x00C8) SXIDARRAY ---------------------------------------------------------
+// (0x00C8) SXINDEXLIST -------------------------------------------------------
 
-const sal_uInt16 EXC_ID_SXIDARRAY           = 0x00C8;
+const sal_uInt16 EXC_ID_SXINDEXLIST         = 0x00C8;
 
 // (0x00C9) SXDOUBLE ----------------------------------------------------------
 
@@ -325,18 +331,22 @@ const sal_uInt16 EXC_ID_SXNUMGROUP          = 0x00D8;
 const sal_uInt16 EXC_SXNUMGROUP_AUTOMIN     = 0x0001;
 const sal_uInt16 EXC_SXNUMGROUP_AUTOMAX     = 0x0002;
 
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_SEC    = 0x0001;
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_MIN    = 0x0002;
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_HOUR   = 0x0003;
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_DAY    = 0x0004;
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_MONTH  = 0x0005;
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_QUART  = 0x0006;
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_YEAR   = 0x0007;
-const sal_uInt16 EXC_SXNUMGROUP_TYPE_NUM    = 0x0008;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_SEC    = 1;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_MIN    = 2;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_HOUR   = 3;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_DAY    = 4;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_MONTH  = 5;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_QUART  = 6;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_YEAR   = 7;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_NUM    = 8;
 
 // (0x00D9) SXGROUPINFO -------------------------------------------------------
 
 const sal_uInt16 EXC_ID_SXGROUPINFO         = 0x00D9;
+
+// (0x00DC) SXEXT -------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXEXT               = 0x00DC;
 
 // (0x00E3) SXVS --------------------------------------------------------------
 
@@ -421,6 +431,7 @@ class XclPCItem
 {
 public:
     explicit            XclPCItem();
+    virtual             ~XclPCItem();
 
     /** Sets the item to 'empty' type. */
     void                SetEmpty();
@@ -428,10 +439,10 @@ public:
     void                SetText( const String& rText );
     /** Sets the item to 'double' type and adds the passed value. */
     void                SetDouble( double fValue );
+    /** Sets the item to 'date/time' type and adds the passed date. */
+    void                SetDateTime( const DateTime& rDateTime );
     /** Sets the item to 'integer' type and adds the passed value. */
     void                SetInteger( sal_Int16 nValue );
-    /** Sets the item to 'date/time' type and adds the passed date. */
-    void                SetDate( double fDate );
     /** Sets the item to 'error' type and adds the passed Excel error code. */
     void                SetError( sal_uInt16 nError );
     /** Sets the item to 'boolean' type and adds the passed Boolean value. */
@@ -439,6 +450,11 @@ public:
 
     /** Returns the current item type. */
     inline XclPCItemType GetType() const { return meType; }
+    /** Returns the text representation of the item. */
+    inline const String& ConvertToText() const { return maText; }
+
+    /** Returns true, if the passed iterm equals this item. */
+    bool                IsEqual( const XclPCItem& rItem ) const;
 
     /** Returns true, if the item type is 'empty'. */
     bool                IsEmpty() const;
@@ -446,38 +462,29 @@ public:
     const String*       GetText() const;
     /** Returns pointer to value, if the item type is 'double', otherwise 0. */
     const double*       GetDouble() const;
+    /** Returns pointer to date, if the item type is 'date/time', otherwise 0. */
+    const DateTime*     GetDateTime() const;
     /** Returns pointer to integer, if the item type is 'integer', otherwise 0. */
     const sal_Int16*    GetInteger() const;
-    /** Returns pointer to date value, if the item type is 'date/time', otherwise 0. */
-    const double*       GetDate() const;
     /** Returns pointer to error code, if the item type is 'error', otherwise 0. */
     const sal_uInt16*   GetError() const;
     /** Returns pointer to Boolean value, if the item type is 'boolean', otherwise 0. */
     const bool*         GetBool() const;
 
-    /** Returns the text representation of the item. */
-    inline const String& ConvertToText() const { return maText; }
-    /** Returns the value representation of the item. */
-    inline double       ConvertToDouble() const { return mfValue; }
-    /** Returns the value representation of the item. */
-    inline sal_Int16    ConvertToInteger() const { return mnValue; }
-    /** Returns the date/time representation of the item. */
-    inline double       ConvertToDate() const { return mfValue; }
-    /** Returns the error code representation of the item. */
-    inline sal_uInt16   ConvertToError() const { return mnError; }
-    /** Returns the boolean representation of the item. */
-    inline bool         ConvertToBool() const { return mbValue; }
-
 private:
     XclPCItemType       meType;         /// Type of the item.
-    String              maText;         /// Text data of a text item.
-    double              mfValue;        /// Value of a floating-point or date item.
-    sal_Int16           mnValue;        /// Value of an integer item.
-    sal_uInt16          mnError;        /// Error code of an error item.
-    bool                mbValue;        /// Value of a boolean item.
+    String              maText;         /// Text representation of the item.
+    DateTime            maDateTime;     /// Value of a date/time item.
+    union
+    {
+        double              mfValue;        /// Value of a floating-point item.
+        sal_Int16           mnValue;        /// Value of an integer item.
+        sal_uInt16          mnError;        /// Error code of an error item.
+        bool                mbValue;        /// Value of a boolean item.
+    };
 };
 
-bool operator==( const XclPCItem& rLeft, const XclPCItem& rRight );
+inline bool operator==( const XclPCItem& rLeft, const XclPCItem& rRight ) { return rLeft.IsEqual( rRight ); }
 inline bool operator!=( const XclPCItem& rLeft, const XclPCItem& rRight ) { return !(rLeft == rRight); }
 
 // Field settings =============================================================
@@ -529,6 +536,7 @@ class XclPCField
 {
 public:
     explicit            XclPCField( XclPCFieldType eFieldType, sal_uInt16 nFieldIdx );
+    virtual             ~XclPCField();
 
     /** Returns the index of this field in the containing pivot cache. */
     inline sal_uInt16   GetFieldIndex() const { return mnFieldIdx; }
@@ -557,8 +565,14 @@ public:
     /** Returns the index of the base field, if exists, otherwise the own index. */
     sal_uInt16          GetBaseFieldIndex() const;
 
+    /** Returns true, if the field is based on a column in the source data area. */
+    bool                HasOrigItems() const;
+    /** Returns true, if any items are stored after the SXFIELD record. */
+    bool                HasInlineItems() const;
     /** Returns true, if the items are stored separately after the last field. */
     bool                HasPostponedItems() const;
+    /** Returns true, if the item indexes in the SXINDEXLIST record are stored as 16-bit values. */
+    bool                Has16BitIndexes() const;
 
 protected:
     XclPCFieldInfo      maFieldInfo;        /// Pivot cache field info (SXFIELD record).
@@ -613,9 +627,9 @@ struct XclPTVisNameInfo
 {
     XclPTCachedName     maVisName;      /// The displayed name of the item.
 
-    /** Returns true, if the name is set exlicitely (maVisName.mbUseCache is false). */
+    /** Returns true, if the name is set explicitly (maVisName.mbUseCache is false). */
     inline bool         HasVisName() const { return !maVisName.mbUseCache; }
-    /** Returns the name, if set explicitely (maVisName.mbUseCache is false). */
+    /** Returns the name, if set explicitly (maVisName.mbUseCache is false). */
     const String*       GetVisName() const;
     /** Sets the visible name and enables usage of cache if name is empty. */
     void                SetVisName( const String& rName );
@@ -626,7 +640,7 @@ struct XclPTVisNameInfo
 /** Contains data for a pivot table data item (SXVI record). */
 struct XclPTItemInfo : public XclPTVisNameInfo
 {
-    sal_uInt16          mnType;         /// Type of the item (i.e. data, function, grand total).
+    sal_uInt16          mnType;         /// Type of the item (e.g. data, function, grand total).
     sal_uInt16          mnFlags;        /// Several flags.
     sal_uInt16          mnCacheIdx;     /// Index into cache for item name.
 
