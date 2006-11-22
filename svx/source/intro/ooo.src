@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ooo.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:52:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ ModalDialog RID_DEFAULTABOUT
         Pos = MAP_APPFONT ( 54 , 6 ) ;
         Size = MAP_APPFONT ( 118 , 16 ) ;
         WordBreak = TRUE ;
-        Text =  "2.1";
+        Text =  "OpenOffice.org 2.1";
        };
     FixedText ABOUT_FTXT_COPYRIGHT
     {
