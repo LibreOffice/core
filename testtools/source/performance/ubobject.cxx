@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ubobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:38:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,5 +314,3 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
-
-
