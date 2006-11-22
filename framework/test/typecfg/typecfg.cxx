@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typecfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:33:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,6 @@
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef __SGI_STL_HASH_MAP
-#include <hash_map>
 #endif
 
 #include <vcl/event.hxx>
