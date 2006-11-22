@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:17:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,40 +411,8 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
     {
         USHORT nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
-        if( pLink && (pLink->GetLinkSourceName().Len() != 0) && pLink->Edit( this ) )
-        {
-            // JP 09.01.98:
-            // StarImpress/Draw tauschen die LinkObjecte selbst aus!
-            // also suche den Link im Manager, wenn der nicht mehr existiert,
-            // dann setze fuelle die Liste komplett neu. Ansonsten braucht
-            // nur der editierte Linkt aktualisiert werden.
-            BOOL bLinkFnd = FALSE;
-            for( USHORT n = pLinkMgr->GetLinks().Count(); n;  )
-                if( pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
-                {
-                    bLinkFnd = TRUE;
-                    break;
-                }
-
-            if( bLinkFnd )
-            {
-                Links().SetUpdateMode(FALSE);
-                Links().GetModel()->Remove( Links().GetEntry( nPos ) );
-                SvLBoxEntry* pToUnselect = Links().FirstSelected();
-                InsertEntry( *pLink, nPos, sal_True );
-                if(pToUnselect)
-                    Links().Select(pToUnselect, FALSE);
-                Links().SetUpdateMode(TRUE);
-            }
-            else
-            {
-                SvLinkManager* pNewMgr = pLinkMgr;
-                pLinkMgr = 0;
-                SetManager( pNewMgr );
-            }
-            if( pLinkMgr->GetPersist() )
-                pLinkMgr->GetPersist()->SetModified();
-        }
+        if ( pLink && (pLink->GetLinkSourceName().Len() != 0) )
+            pLink->Edit( this, LINK( this, SvBaseLinksDlg, EndEditHdl ) );
     }
     return 0;
 }
@@ -562,6 +530,52 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
         }
     }
     Links().SetUpdateMode(TRUE);
+    return 0;
+}
+
+IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
+{
+    USHORT nPos;
+    SvBaseLink* pLink = GetSelEntry( &nPos );
+
+    if ( pLink != _pLink && _pLink && _pLink->WasLastEditOK() )
+    {
+        // JP 09.01.98:
+        // StarImpress/Draw tauschen die LinkObjecte selbst aus!
+        // also suche den Link im Manager, wenn der nicht mehr existiert,
+        // dann setze fuelle die Liste komplett neu. Ansonsten braucht
+        // nur der editierte Linkt aktualisiert werden.
+        BOOL bLinkFnd = FALSE;
+        for( USHORT n = pLinkMgr->GetLinks().Count(); n;  )
+            if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
+            {
+                bLinkFnd = TRUE;
+                break;
+            }
+
+        if( bLinkFnd )
+        {
+            Links().SetUpdateMode(FALSE);
+            Links().GetModel()->Remove( Links().GetEntry( nPos ) );
+            SvLBoxEntry* pToUnselect = Links().FirstSelected();
+            InsertEntry( *_pLink, nPos, sal_True );
+            if(pToUnselect)
+                Links().Select(pToUnselect, FALSE);
+            Links().SetUpdateMode(TRUE);
+        }
+        else
+        {
+            SvLinkManager* pNewMgr = pLinkMgr;
+            pLinkMgr = 0;
+            SetManager( pNewMgr );
+        }
+        if( pLinkMgr->GetPersist() )
+            pLinkMgr->GetPersist()->SetModified();
+    }
+    else if ( pLink == _pLink )
+    {
+        DBG_ERRORFILE( "SvBaseLinksDlg::EndEditHdl(): wrong link" );
+    }
     return 0;
 }
 
