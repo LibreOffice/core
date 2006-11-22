@@ -49,6 +49,10 @@
 #endif
 
 class ResMgr;
+namespace sfx2
+{
+    class FileDialogHelper;
+}
 
 typedef ::cppu::WeakComponentImplHelper3<
     ::com::sun::star::lang::XInitialization,
@@ -67,9 +71,10 @@ typedef ::cppu::WeakComponentImplHelper3<
 
 class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 {
-        ::osl::Mutex    m_aMutex;
-        bool            m_bVeto;
-        ResMgr          *m_pResMgr;
+        ::osl::Mutex            m_aMutex;
+        bool                    m_bVeto;
+        ResMgr*                 m_pResMgr;
+        sfx2::FileDialogHelper* m_pFileDlg;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
 
         static ShutdownIcon *pShutdownIcon; // one instance
@@ -124,6 +129,10 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
         bool GetVeto()              { return m_bVeto; }
+
+        void                    StartFileDialog();
+        sfx2::FileDialogHelper* GetFileDialog() const { return m_pFileDlg; }
+        static long DialogClosedHdl_Impl( ShutdownIcon*, sfx2::FileDialogHelper* );
 
         static bool IsQuickstarterInstalled();
 
