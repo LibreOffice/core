@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:12:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,7 +848,7 @@ void SvtURLBox::TryAutoComplete( BOOL bForce )
         return;
     USHORT nLen = (USHORT)aSelection.Min();
     aCurText.Erase( nLen );
-    if( aCurText.Len() )
+    if( aCurText.Len() && bIsAutoCompleteEnabled )
     {
         if ( pCtx )
         {
@@ -869,7 +869,8 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
         bTryAutoComplete( FALSE ),
         bCtrlClick( FALSE ),
         bHistoryDisabled( FALSE ),
-        bNoSelection( FALSE )
+        bNoSelection( FALSE ),
+        bIsAutoCompleteEnabled( TRUE )
 {
     ImplInit();
 
@@ -889,7 +890,8 @@ SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart )
         bTryAutoComplete( FALSE ),
         bCtrlClick( FALSE ),
         bHistoryDisabled( FALSE ),
-        bNoSelection( FALSE )
+        bNoSelection( FALSE ),
+        bIsAutoCompleteEnabled( TRUE )
 {
     ImplInit();
 }
@@ -904,7 +906,8 @@ SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
         bTryAutoComplete( FALSE ),
         bCtrlClick( FALSE ),
         bHistoryDisabled( FALSE ),
-        bNoSelection( FALSE )
+        bNoSelection( FALSE ),
+        bIsAutoCompleteEnabled( TRUE )
 {
     ImplInit();
 }
@@ -946,7 +949,7 @@ void SvtURLBox::UpdatePickList( )
     }
 
     String sText = GetText();
-    if ( sText.Len() )
+    if ( sText.Len() && bIsAutoCompleteEnabled )
         pCtx = new SvtMatchContext_Impl( this, sText );
 }
 
