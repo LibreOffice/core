@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_wincb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:03:39 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@
 #pragma warning(pop)
 #endif
 
-#include <stl/memory>
+#include <memory>
 
 #include <process.h>
 
