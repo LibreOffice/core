@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 16:55:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:15:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XDIALOGCLOSEDLISTENER_HPP_
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #endif
 
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
@@ -162,6 +165,9 @@ private:
     ::utl::OConfigurationNode   m_aConfiguration;
     ::rtl::Reference< ::svt::AsyncPickerAction >
                                 m_pCurrentAsyncAction;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::ui::dialogs::XDialogClosedListener >
+                                m_xListener;
     bool                        m_bInExecuteAsync;
     bool                        m_bHasFilename;
 
@@ -237,6 +243,7 @@ protected:
         <member>EnableUI</member> for details.
     */
     void                        EnableControl( Control* _pControl, BOOL _bEnable );
+    short                       PrepareExecute();
 
 public:
                                 SvtFileDialog( Window* _pParent, WinBits nBits, WinBits nExtraBits );
@@ -245,6 +252,7 @@ public:
 
     virtual long                OK();
     virtual short               Execute();
+    virtual void                StartExecuteModal( const Link& rEndDialogHdl );
 
             void                FileSelect();
             void                FilterSelect();
@@ -278,6 +286,7 @@ public:
     void                        DisableSaveLastDirectory();
     void                        InitSize();
     void                        UpdateControls( const String& rURL );
+    void                        EnableAutocompletion( BOOL _bEnable = TRUE );
 
     void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) { _pFileNotifier = pNotifier; }
 
