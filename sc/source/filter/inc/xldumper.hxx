@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,6 +554,9 @@ private:
     XclFontDataVec      maFontDatas;
     ScfUInt16Vec        maXfDatas;
     sal_uInt16          mnFormatIdx;
+    sal_uInt16          mnPTRowFields;
+    sal_uInt16          mnPTColFields;
+    sal_uInt16          mnPTSxliIdx;
 };
 
 // ============================================================================
