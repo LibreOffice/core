@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:11:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2768,7 +2768,10 @@ sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if(!(rVal >>= aLocale))
                 return sal_False;
 
-            SetValue(MsLangId::convertLocaleToLanguage( aLocale ));
+            if (aLocale.Language.getLength() || aLocale.Country.getLength())
+                SetValue(MsLangId::convertLocaleToLanguage( aLocale ));
+            else
+                SetValue(LANGUAGE_NONE);
         }
         break;
     }
