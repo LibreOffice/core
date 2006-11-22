@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:07:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,9 @@
 class SwXTextView;
 class SfxRequest;
 class SwTransferable;
+class SfxRequest;
 
+namespace sfx2 { class DocumentInserter; }
 namespace com{ namespace sun{ namespace star {
     namespace frame {
         class XDispatchProviderInterceptor;
@@ -145,6 +147,10 @@ class SwView_Impl
     sal_uInt16                  nMailMergeRestartPage;
     sal_Bool                    bMailMergeSourceView;
 
+    sfx2::DocumentInserter*     m_pDocInserter;
+    SfxRequest*                 m_pRequest;
+    sal_Int16                   m_nParam;
+
     Point                       m_aEditingPosition;
     bool                        m_bSelectObject;
     bool                        m_bEditingPositionSet;
@@ -196,6 +202,14 @@ public:
                                 return m_bEditingPositionSet;
                             }
 
+
+    void                    StartDocumentInserter( const String& rFactory, const Link& rEndDialogHdl );
+    SfxMedium*              CreateMedium();
+    void                    InitRequest( const SfxRequest& rRequest );
+
+    inline SfxRequest*      GetRequest() const { return m_pRequest; }
+    inline sal_Int16        GetParam() const { return m_nParam; }
+    inline void             SetParam( sal_Int16 nParam ) { m_nParam = nParam; }
 };
 #endif
 
