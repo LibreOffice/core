@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaedit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:23:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@ class SwWrtShell;
 class SwFldMgr;
 class SwScriptField;
 
+namespace sfx2 { class FileDialogHelper; }
+
 // class SwJavaEditDialog -------------------------------------------------
 
 class SwJavaEditDialog : public SvxStandardDialog
@@ -87,15 +89,18 @@ private:
     BOOL                bNew;
     BOOL                bIsUrl;
 
-    SwScriptField*      pFld;
-    SwFldMgr*           pMgr;
-    SwWrtShell*         pSh;
+    SwScriptField*          pFld;
+    SwFldMgr*               pMgr;
+    SwWrtShell*             pSh;
+    sfx2::FileDialogHelper* pFileDlg;
+    Window*                 pOldDefDlgParent;
 
     DECL_LINK( OKHdl, Button* );
     DECL_LINK( PrevHdl, Button* );
     DECL_LINK( NextHdl, Button* );
     DECL_LINK( RadioButtonHdl, RadioButton* pBtn );
     DECL_LINK( InsertFileHdl, PushButton * );
+    DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper * );
 
     virtual void    Apply();
 
