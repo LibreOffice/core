@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:18 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,16 @@ using namespace ::com::sun::star;
 #ifndef _SFX_PASSWD_HXX
 #include <sfx2/passwd.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#include <sfx2/docinsert.hxx>
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
 #endif
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "docsh.hxx"
+#include "docshimp.hxx"
 #include "docfunc.hxx"
 #include "sc.hrc"
 #include "stlsheet.hxx"
@@ -741,7 +746,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 BOOL bDo = TRUE;
                 ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
-                if ( pChangeTrack )
+                if ( pChangeTrack && !pImpl->bIgnoreLostRedliningWarning )
                 {
                     if ( nSlot == SID_DOCUMENT_COMPARE )
                     {   //! old changes trace will be lost
@@ -807,29 +812,15 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    pMed = pApp->InsertDocumentDialog( 0, String::CreateFromAscii(ScDocShell::Factory().GetShortName()) );
-                    if ( pMed )
-                    {
-                        //  kompletten Request zum Aufzeichnen zusammenbasteln
-                        rReq.AppendItem( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-                        if ( nSlot == SID_DOCUMENT_COMPARE )
-                        {
-                            // Filter und Options nur bei Compare
-                            if (pMed->GetFilter())
-                                rReq.AppendItem( SfxStringItem( SID_FILTER_NAME,
-                                                pMed->GetFilter()->GetFilterName() ) );
-                            String aOptions = ScDocumentLoader::GetOptions(*pMed);
-                            if (aOptions.Len())
-                                rReq.AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
-                        }
-                        SfxItemSet* pSet = pMed->GetItemSet();
-                        if ( pSet &&
-                             pSet->GetItemState( SID_VERSION, TRUE, &pItem ) == SFX_ITEM_SET &&
-                             pItem->ISA(SfxInt16Item) )
-                        {
-                            rReq.AppendItem( *pItem );
-                        }
-                    }
+                    // start file dialog asynchronous
+                    pImpl->bIgnoreLostRedliningWarning = true;
+                    delete pImpl->pRequest;
+                    pImpl->pRequest = new SfxRequest( rReq );
+                    delete pImpl->pDocInserter;
+                    pImpl->pDocInserter = new ::sfx2::DocumentInserter(
+                        0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ), 0 );
+                    pImpl->pDocInserter->StartExecuteModal( LINK( this, ScDocShell, DialogClosedHdl ) );
+                    return ;
                 }
 
                 if ( pMed )     // nun wirklich ausfuehren...
@@ -2396,5 +2387,40 @@ IMPL_LINK( ScDocShell, ChartSelectionHdl, ChartSelectionInfo*, pInfo )
     return 0;
 }
 
+//------------------------------------------------------------------
 
+IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+{
+    DBG_ASSERT( _pFileDlg, "ScDocShell::DialogClosedHdl(): no file dialog" );
+    DBG_ASSERT( pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
+
+    if ( ERRCODE_NONE == _pFileDlg->GetError() )
+    {
+        USHORT nSlot = pImpl->pRequest->GetSlot();
+        SfxMedium* pMed = pImpl->pDocInserter->CreateMedium();
+        pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
+        if ( SID_DOCUMENT_COMPARE == nSlot )
+        {
+            if ( pMed->GetFilter() )
+                pImpl->pRequest->AppendItem(
+                    SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
+            String sOptions = ScDocumentLoader::GetOptions( *pMed );
+            if ( sOptions.Len() > 0 )
+                pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
+        }
+        const SfxPoolItem* pItem = NULL;
+        SfxItemSet* pSet = pMed->GetItemSet();
+        if ( pSet &&
+             pSet->GetItemState( SID_VERSION, TRUE, &pItem ) == SFX_ITEM_SET &&
+             pItem->ISA( SfxInt16Item ) )
+        {
+            pImpl->pRequest->AppendItem( *pItem );
+        }
+
+        Execute( *(pImpl->pRequest) );
+    }
+
+    pImpl->bIgnoreLostRedliningWarning = false;
+    return 0;
+}
 
