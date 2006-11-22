@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:51:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -71,6 +74,12 @@
 #endif
 #ifndef _LINKMGR_HXX
 #include <sfx2/linkmgr.hxx>
+#endif
+#ifndef _SFX_DOCINSERT_HXX
+#include <sfx2/docinsert.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #define ITEMID_SIZE 0
@@ -353,9 +362,11 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aDismiss            ( this, SW_RES( CB_DISMISS ) ),
     aHelp               ( this, SW_RES( PB_HELP ) ),
     aCancel             ( this, SW_RES( PB_CANCEL ) ),
-    aImageIL(           ResId(IL_BITMAPS)),
-    aImageILH(          ResId(ILH_BITMAPS)),
-    bDontCheckPasswd(sal_True)
+    aImageIL            (       ResId(IL_BITMAPS)),
+    aImageILH           (       ResId(ILH_BITMAPS)),
+    pDocInserter        ( NULL ),
+    pOldDefDlgParent    ( NULL ),
+    bDontCheckPasswd    ( sal_True)
 {
     FreeResource();
 
@@ -565,6 +576,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     }
 
     aSectReprArr.DeleteAndDestroy( 0, aSectReprArr.Count() );
+    delete pDocInserter;
 }
 /* -----------------------------09.10.2001 15:41------------------------------
 
@@ -1118,25 +1130,13 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
 {
     if(!CheckPasswd(0))
         return 0;
-    SfxMedium* pMed;
-    String sFileName, sFilterName, sFilePasswd;
-    if( GetFileFilterNameDlg( *this, sFileName, &sFilePasswd,
-                                &sFilterName, &pMed ))
-    {
-        ::lcl_ReadSections( rSh, *pMed, aSubRegionED );
-        delete pMed;
-    }
 
-    SvLBoxEntry* pEntry = aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
-    if(pEntry)
-    {
-        SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
-        pSectRepr->SetFile( sFileName );
-        pSectRepr->SetFilter( sFilterName );
-        pSectRepr->SetFilePasswd( sFilePasswd );
-        aFileNameED.SetText( pSectRepr->GetFile());
-    }
+    pOldDefDlgParent = Application::GetDefDialogParent();
+    Application::SetDefDialogParent( this );
+    if ( pDocInserter )
+        delete pDocInserter;
+    pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
+    pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
     return 0;
 }
 
@@ -1450,6 +1450,40 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
     }
     return 0;
 }
+
+IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
+{
+    String sFileName, sFilterName, sPassword;
+    if ( _pFileDlg->GetError() == ERRCODE_NONE )
+    {
+        SfxMedium* pMedium = pDocInserter->CreateMedium();
+        if ( pMedium )
+        {
+            sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            sFilterName = pMedium->GetFilter()->GetFilterName();
+            const SfxPoolItem* pItem;
+            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, FALSE, &pItem ) )
+                sPassword = ( (SfxStringItem*)pItem )->GetValue();
+            ::lcl_ReadSections( rSh, *pMedium, aSubRegionED );
+            delete pMedium;
+        }
+    }
+
+    SvLBoxEntry* pEntry = aTree.FirstSelected();
+    DBG_ASSERT( pEntry, "no entry found" );
+    if ( pEntry )
+    {
+        SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
+        pSectRepr->SetFile( sFileName );
+        pSectRepr->SetFilter( sFilterName );
+        pSectRepr->SetFilePasswd( sPassword );
+        aFileNameED.SetText( pSectRepr->GetFile() );
+    }
+
+    Application::SetDefDialogParent( pOldDefDlgParent );
+    return 0;
+}
+
 /* -----------------------------08.05.2002 15:00------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1625,7 +1659,9 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     // <--
 
     sSection            (SW_RES( STR_REGION_DEFNAME )),
-    pWrtSh(0)
+    pWrtSh(0),
+    pDocInserter(NULL),
+    pOldDefDlgParent(NULL)
 {
     FreeResource();
 
@@ -1649,6 +1685,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
  * --------------------------------------------------*/
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
+    delete pDocInserter;
 }
 /* -----------------21.05.99 12:58-------------------
  *
@@ -1899,19 +1936,12 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
 
 IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
 {
-    SfxMedium* pMed;
-    if( GetFileFilterNameDlg( *this, sFileName, &sFilePasswd,
-                                &sFilterName, &pMed ))
-    {
-        aFileNameED.SetText( INetURLObject::decode( sFileName, INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ));
-
-        ::lcl_ReadSections( *pWrtSh, *pMed, aSubRegionED );
-        delete pMed;        // das brauchen wir nicht mehr !
-    }
-    else
-        sFilterName = sFilePasswd = aEmptyStr;
+    pOldDefDlgParent = Application::GetDefDialogParent();
+    Application::SetDefDialogParent( this );
+    if ( pDocInserter )
+        delete pDocInserter;
+    pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
+    pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
     return 0;
 }
 
@@ -1945,6 +1975,32 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
     return 0;
 }
 #endif
+
+IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
+{
+    if ( _pFileDlg->GetError() == ERRCODE_NONE )
+    {
+        SfxMedium* pMedium = pDocInserter->CreateMedium();
+        if ( pMedium )
+        {
+            sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            sFilterName = pMedium->GetFilter()->GetFilterName();
+            const SfxPoolItem* pItem;
+            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, FALSE, &pItem ) )
+                sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
+            aFileNameED.SetText( INetURLObject::decode(
+                sFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
+            ::lcl_ReadSections( *pWrtSh, *pMedium, aSubRegionED );
+            delete pMedium;
+        }
+    }
+    else
+        sFilterName = sFilePasswd = aEmptyStr;
+
+    Application::SetDefDialogParent( pOldDefDlgParent );
+    return 0;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   Liste der verwendeten Namen fuellen
  --------------------------------------------------------------------*/
@@ -2075,7 +2131,7 @@ BOOL SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
-        aFtn.SetOffset( aFtnOffsetFld.GetValue()-1 );
+        aFtn.SetOffset( static_cast< USHORT >( aFtnOffsetFld.GetValue()-1 ) );
         // no break;
     }
 
@@ -2096,7 +2152,7 @@ BOOL SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
-        aEnd.SetOffset( aEndOffsetFld.GetValue()-1 );
+        aEnd.SetOffset( static_cast< USHORT >( aEndOffsetFld.GetValue()-1 ) );
         // no break;
     }
 
