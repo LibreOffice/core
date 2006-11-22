@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:36:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@
 #include <svtools/inettbc.hxx>
 #endif
 
-
 //REMOVE    #ifndef _EMBOBJ_HXX //autogen
 //REMOVE    #include <so3/embobj.hxx>
 //REMOVE    #endif
@@ -73,8 +72,10 @@
 //REMOVE    SO2_DECL_REF(SvEmbeddedObject)
 //REMOVE    #endif
 
-class ScDocShell;
+namespace sfx2 { class DocumentInserter; }
+namespace sfx2 { class FileDialogHelper; }
 
+class ScDocShell;
 
 //------------------------------------------------------------------------
 
@@ -94,7 +95,9 @@ private:
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
 
-    ScDocShell*         pSourceShell;
+    ScDocShell*             pSourceShell;
+    sfx2::DocumentInserter* pDocInserter;
+
     SfxObjectShellRef   aSourceRef;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xSourceObject;
 
@@ -102,6 +105,8 @@ private:
     DECL_LINK( BrowseHdl, PushButton* );
     DECL_LINK( RangeHdl, MultiListBox* );
     DECL_LINK( ReloadHdl, CheckBox* );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+
     void                UpdateSourceRanges();
     void                UpdateEnable();
     void                LoadDocument( const String& rFile, const String& rFilter,
