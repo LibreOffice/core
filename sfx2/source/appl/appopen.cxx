@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:47:09 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -552,121 +552,6 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
 //--------------------------------------------------------------------
 
-SfxMedium* SfxApplication::InsertDocumentDialog
-(
-    ULONG                   nFlags,
-    const String& rFact
-)
-{
-    return InsertDocumentDialog( nFlags, rFact, 0 );
-}
-
-//--------------------------------------------------------------------
-
-SfxMedium* SfxApplication::InsertDocumentDialog
-(
-    ULONG                   nFlags,
-    const String& rFact,
-    ULONG                   nHelpId
-)
-{
-    SfxMedium *pMedium=0;
-    SvStringsDtor* pURLList = NULL;
-    String aFilter;
-    SfxItemSet* pSet=0;
-    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String(), nHelpId );
-    if( pURLList && !nErr )
-    {
-        DBG_ASSERT( pURLList->Count() == 1, "invalid URLList count" );
-        String aURL = *(pURLList->GetObject(0));
-        pMedium = new SfxMedium(
-                aURL, SFX_STREAM_READONLY, FALSE,
-                GetFilterMatcher().GetFilter4FilterName( aFilter ), pSet );
-
-        pMedium->UseInteractionHandler(TRUE);
-
-        SfxFilterMatcher* pMatcher = NULL;
-        if ( rFact.Len() )
-            pMatcher = new SfxFilterMatcher( rFact );
-        else
-            pMatcher = new SfxFilterMatcher();
-
-        const SfxFilter* pFilter=0;
-        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter, FALSE );
-        if ( nError == ERRCODE_NONE && pFilter )
-            pMedium->SetFilter( pFilter );
-        else
-            DELETEZ( pMedium );
-
-        if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) == ERRCODE_ABORT )
-            pMedium = NULL;
-
-        DELETEZ( pMatcher );
-    }
-
-    delete pURLList;
-    return pMedium;
-}
-
-//--------------------------------------------------------------------
-
-SfxMediumList* SfxApplication::InsertDocumentsDialog
-(
-    ULONG                   nFlags,
-    const String& rFact,
-    ULONG                   nHelpId
-)
-{
-    SfxMediumList *pMediumList=new SfxMediumList;
-    SvStringsDtor* pURLList = NULL;
-    String aFilter;
-    SfxItemSet* pSet=0;
-    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | SFXWB_MULTISELECTION | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String(), nHelpId );
-    DBG_ASSERT( pURLList, "invalid URLList" );
-    if( pURLList && !nErr )
-    {
-        for ( USHORT n=0; n<pURLList->Count(); n++ )
-        {
-            String aURL = *(pURLList->GetObject(n));
-            SfxMedium* pMedium = new SfxMedium(
-                    aURL, SFX_STREAM_READONLY, FALSE,
-                    GetFilterMatcher().GetFilter4FilterName( aFilter ), pSet );
-
-            pMedium->UseInteractionHandler(TRUE);
-
-            SfxFilterMatcher aMatcher( rFact );
-            const SfxFilter* pFilter=0;
-            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, FALSE );
-            if ( nError == ERRCODE_NONE && pFilter )
-                pMedium->SetFilter( pFilter );
-            else
-                DELETEZ( pMedium );
-
-            if( pMedium && CheckPasswd_Impl( 0, GetPool(), pMedium ) != ERRCODE_ABORT )
-            {
-                pMediumList->Insert( pMedium );
-            }
-            else
-                delete pMedium;
-        }
-    }
-
-    delete pURLList;
-    return pMediumList;
-}
-
-//--------------------------------------------------------------------
-
-SfxMediumList* SfxApplication::InsertDocumentsDialog
-(
-    ULONG                   nFlags,
-    const String& rFact
-)
-{
-    return InsertDocumentsDialog( nFlags, rFact, 0 );
-}
-
-//--------------------------------------------------------------------
 SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxItemSet *pSet )
 {
     SfxObjectShellLock xDoc;
@@ -1021,7 +906,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
 
         ULONG nErr = sfx2::FileOpenDialog_Impl(
-                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, aPath );
+                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, &aPath );
 
         if ( nErr == ERRCODE_ABORT )
         {
