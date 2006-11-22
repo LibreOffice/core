@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fla.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:49:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ Priorized Choice, e.g. (|[4][5])=[4] resp. (|[][5])=[5]; i.e. result is the firs
 
 #include "fla.hxx"
 #include "sal/main.h"
-#include <hash_map>
 
 
 namespace FLA {
