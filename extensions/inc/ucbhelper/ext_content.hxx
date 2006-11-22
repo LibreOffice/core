@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ext_content.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:01:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,11 +67,8 @@
 #endif
 
 #include <list>
-#include <hash_map>
 
-#if defined(TF_TYPE) || (SUPD >= 564)
 using namespace cppu;
-#endif
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -95,11 +92,7 @@ public:
     OSimpleContentIdentifier( const OUString& rIdentifier, const OUString& rProviderScheme );
 
     // XInterface
-#if defined(TF_TYPE) || (SUPD >= 564)
     virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-#else
-    virtual sal_Bool    SAL_CALL queryInterface( const Uik& type, Any& ifc ) throw( RuntimeException );
-#endif
     virtual void        SAL_CALL acquire() throw(RuntimeException);
     virtual void        SAL_CALL release() throw(RuntimeException);
 
@@ -169,11 +162,7 @@ public:
     virtual Any doCommand( const Command & crCommand ) = 0;
 
     // XInterface
-#if defined(TF_TYPE) || (SUPD >= 564)
     virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-#else
-    virtual sal_Bool SAL_CALL queryInterface( const Uik& type, Any& ifc ) throw( RuntimeException );
-#endif
 
     virtual void SAL_CALL acquire() throw(RuntimeException);
     virtual void SAL_CALL release() throw(RuntimeException);
@@ -268,11 +257,7 @@ public:
     virtual ~OContentTask();
 
     // XInterface
-#if defined(TF_TYPE) || (SUPD >= 564)
     virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-#else
-    virtual sal_Bool SAL_CALL queryInterface( const Uik& type, Any& ifc ) throw( RuntimeException );
-#endif
 
     virtual void SAL_CALL acquire() throw(RuntimeException);
     virtual void SAL_CALL release() throw(RuntimeException);
@@ -306,11 +291,7 @@ public:
     virtual void doExecute();
 
     // XInterface
-#if defined(TF_TYPE) || (SUPD >= 564)
     virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-#else
-    virtual sal_Bool    SAL_CALL queryInterface( const Uik& type, Any& ifc ) throw( RuntimeException );
-#endif
     virtual void        SAL_CALL acquire() throw(RuntimeException);
     virtual void        SAL_CALL release() throw(RuntimeException);
 
@@ -350,11 +331,7 @@ public:
     virtual void getPropertyValue( PropertyValueInfo & rProperty ) = 0;
 
     // XInterface
-#if defined(TF_TYPE) || (SUPD >= 564)
     virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-#else
-    virtual sal_Bool    SAL_CALL queryInterface( const Uik& type, Any& ifc ) throw( RuntimeException );
-#endif
     virtual void        SAL_CALL acquire() throw(RuntimeException);
     virtual void        SAL_CALL release() throw(RuntimeException);
 
