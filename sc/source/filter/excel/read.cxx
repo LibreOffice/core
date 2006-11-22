@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:17:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,6 +990,7 @@ FltError ImportExcel8::Read( void )
                         {
                             rNumFmtBfr.CreateScFormats();
                             rXFBfr.CreateUserStyles();
+                            rPTableMgr.ReadPivotCaches( maStrm );
                             eAkt = EXC_STATE_BEFORE_SHEET;
                         }
                     break;
@@ -1021,9 +1022,9 @@ FltError ImportExcel8::Read( void )
 
                     case EXC_ID_MSODRAWINGGROUP:rObjMgr.ReadMsoDrawingGroup( maStrm ); break;
 
-                    case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
                     case EXC_ID_SXIDSTM:        rPTableMgr.ReadSxidstm( maStrm );   break;
                     case EXC_ID_SXVS:           rPTableMgr.ReadSxvs( maStrm );      break;
+                    case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
                 }
 
             }
