@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -910,7 +910,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                         pMember->Insert(pCnt);
                         nMemberCount++;
                         if(nOldMemberCount > (int)i &&
-                            (pOldMember->GetObject(i))->IsInvisible() != pCnt->IsInvisible())
+                            (pOldMember->GetObject((USHORT)i))->IsInvisible() != pCnt->IsInvisible())
                                 *pbLevelOrVisibiblityChanged = sal_True;
                     }
                 }
@@ -1592,7 +1592,7 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                          nLevel <= pTxtNd->GetLevel();
                          nLevel++ )
                     {
-                        sal_uInt16 nVal = aNumVector[nLevel];
+                        sal_uInt16 nVal = (sal_uInt16)aNumVector[nLevel];
                         nVal ++;
                         nVal -= pOutlRule->Get(nLevel).GetStart();
                         sEntry += String::CreateFromInt32( nVal );
