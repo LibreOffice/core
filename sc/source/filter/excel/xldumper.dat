@@ -494,7 +494,7 @@ multilist=RECORD-NAMES-BIFF3
 begin
   include=RECORD-NAMES-BIFF2
   # worksheet records
-  exclude=0x0006,0x0008,0x0009,0x000B,0x0018,0x0021,0x0023,0x0025,0x0031,0x0036,0x0037,0x003E,0x0043
+  exclude=0x0006,0x0008,0x0009,0x000B,0x0018,0x0020,0x0021,0x0023,0x0024,0x0025,0x0031,0x0036,0x0037,0x003E,0x0043,0x0044,0x0045
   0x0050=,,,,,,BUILTINFMTCOUNT,
   0x0058=TOOLBAR,XCT,CRN,FILESHARING,WRITEACCESS,OBJ,UNCALCED,SAFERECALC
   0x0060=TEMPLATE,INTL,,OBJPROTECT,,,,
@@ -665,8 +665,10 @@ begin
   0x00CB=uint16,hex,error-code,ERRORCODES
   0x00CC=int16,dec,value
   0x00D5=uint16,hex,pivotcache-stream-id
+  0x00D8=uint16,hex,flags,SXNUMGROUP-FLAGS
   0x00DA=uint16,bool,strip-cached-values
   0x00DD=uint16,bool,scenarios-protected
+  0x00E3=uint16,dec,source-type,SXVS-TYPE
   0x1040=uint16,hex,flags,CHRADAR-FLAGS
   0x105D=uint16,hex,flags,CHSERIESFORMAT-FLAGS
 end
@@ -679,6 +681,7 @@ begin
   0x0161=uint16,bool,double-stream
   0x01AF=uint16,bool,revlog-protected
   0x01B7=uint16,bool,refresh-all
+  0x01BB=uint16,dec,sql-data-type,SXFDBTYPE-DATATYPE
   0x01BC=uint16,hex,password-hash
   0x1065=uint16,dec,series-idx
 end
@@ -1069,6 +1072,15 @@ begin
   0x0080=maximum-axis-cross
 end
 
+# COLINFO --------------------------------------------------------------------
+
+combilist=COLINFO-FLAGS
+begin
+  0x0001=hidden
+  0x0700=uint8,dec,outline-level
+  0x1000=outline-collapsed
+end
+
 # DATEMODE -------------------------------------------------------------------
 
 shortlist=DATEMODE,0,1899-12-31,1904-01-01
@@ -1162,9 +1174,79 @@ shortlist=FORMULA-RESULTTYPE,0,string,boolean,error,empty
 
 shortlist=HIDEOBJ,0,show,placeholder,hide
 
+# NAME -----------------------------------------------------------------------
+
+flagslist=NAME-FLAGS-BIFF2
+begin
+  0x02=macro
+  0x04=complex
+end
+
+shortlist=NAME-MACROTYPE-BIFF2,0,none,function,procedure
+
+flagslist=NAME-FLAGS-BIFF3
+begin
+  0x0001=hidden
+  0x0002=function
+  0x0004=command
+  0x0008=macro
+  0x0010=complex
+  0x0020=builtin
+end
+
+combilist=NAME-FLAGS-BIFF4
+begin
+  include=NAME-FLAGS-BIFF3
+  0x0FC0=uint16,dec,func-group,NAME-FUNCGROUP
+end
+
+combilist=NAME-FLAGS-BIFF5
+begin
+  include=NAME-FLAGS-BIFF4
+  0x0004=vba
+  0x1000=binary
+end
+
+shortlist=NAME-FUNCGROUP,0,none,financial,date-time,math-trig,statistical,lookup-ref,database,text,logical,information,commands,customizing,macro-control,dde-external,user-definded
+
+constlist=NAME-SHEETIDX
+begin
+  default=''
+  0=global
+end
+
 # REFMODE --------------------------------------------------------------------
 
 shortlist=REFMODE,0,R1C1,A1
+
+# ROW ------------------------------------------------------------------------
+
+combilist=ROW-HEIGHT
+begin
+  0x7FFF=uint16,dec,height,CONV-TWIP-TO-PT
+  0x8000=default-height
+end
+
+combilist=ROW-FLAGS
+begin
+  ignore=0x00000100
+  0x00000007=uint8,dec,outline-level
+  0x00000010=outline-collapsed
+  0x00000020=hidden
+  0x00000040=manual-height
+  0x00000080=has-default-xf
+  0x0FFF0000=uint16,dec,default-xf-idx
+  0x10000000=add-space-above
+  0x20000000=add-space-below
+end
+
+# common for pivot tables ----------------------------------------------------
+
+constlist=SX-NAMELEN
+begin
+  default=''
+  0xFFFF=name-in-cache
+end
 
 # SXDB -----------------------------------------------------------------------
 
@@ -1185,6 +1267,36 @@ begin
   4=consolidation
   8=scenario
 end
+
+# SXDI -----------------------------------------------------------------------
+
+shortlist=SXDI-FUNC,0,sum,count-all,average,max,min,product,count-num,std-dev,std-dev-p,variance,variance-p
+shortlist=SXDI-FORMAT,0,normal,diff-from,percent-of,percent-diff-from,running-total-in,percent-of-row,percent-of-column,percent-of-total,index
+
+multilist=SXDI-BASEITEM
+begin
+  default=''
+  0x7FFB=previous-item,next-item
+end
+
+# SXEXT ----------------------------------------------------------------------
+
+combilist=SXEXT-FLAGS
+begin
+  0x0007=uint8,dec,source-type,SXEXT-SOURCETYPE
+  0x0008=odbc-connection
+  0x0010=odbc-sql
+  0x0020=server-pagefields
+  0x0040=webquery
+  0x0080=save-password
+  0x0100=tables-html-only
+end
+
+shortlist=SXEXT-SOURCETYPE,1,odbc,dao,,webquery
+
+# SXFDBTYPE ------------------------------------------------------------------
+
+shortlist=SXFDBTYPE-DATATYPE,0,unknown,char,numeric,decimal,integer,small-int,float,real,double,datetime,,,var-char
 
 # SXFIELD --------------------------------------------------------------------
 
@@ -1211,6 +1323,120 @@ begin
   0x0980=date-empty-only
   0x0D00=date-number
   0x0D80=date-string-optnumber
+end
+
+# SXLI -----------------------------------------------------------------------
+
+shortlist=SXLI-ITEMTYPE,0,data,default,sum,count-num,average,max,min,product,count-num,std-dev,std-dev-p,variance,variance-p,grandtotal,blank-line
+
+combilist=SXLI-FLAGS
+begin
+  0x0001=field-name
+  0x01FE=uint16,dec,data-field-idx
+  0x0200=subtotal
+  0x0400=blocktotal
+  0x0800=grandtotal
+  0x1000=multi-data
+end
+
+# SXNUMGROUP -----------------------------------------------------------------
+
+combilist=SXNUMGROUP-FLAGS
+begin
+  0x0001=auto-min
+  0x0002=auto-max
+  0x003C=uint8,dec,data-type,SXNUMGROUP-TYPE
+end
+
+shortlist=SXNUMGROUP-TYPE,1,second,minute,hour,day,month,quarter,year,numeric
+
+# SXVD -----------------------------------------------------------------------
+
+flagslist=SXVD-AXISTYPE
+begin
+  0x0001=row
+  0x0002=column
+  0x0004=page
+  0x0008=data
+end
+
+flagslist=SXVD-SUBTOTALS
+begin
+  0x0001=default
+  0x0002=sum
+  0x0004=count-all
+  0x0008=average
+  0x0010=max
+  0x0020=min
+  0x0040=product
+  0x0080=count-num
+  0x0100=std-dev
+  0x0200=std-dev-p
+  0x0400=variance
+  0x0800=variance-p
+end
+
+# SXVDEX ---------------------------------------------------------------------
+
+combilist=SXVDEX-FLAGS
+begin
+  0x00000001=show-all-items
+  0x00000002=drag-to-row
+  0x00000004=drag-to-column
+  0x00000008=drag-to-page
+  0x00000010=drag-to-hide
+  0x00000080=server-based
+  0x00000200=autosort
+  0x00000400=autosort-ascending
+  0x00000800=autoshow
+  0x00001000=autoshow-top-values
+  0x00002000=calculated
+  0x00200000=layout-report
+  0x00400000=layout-blank
+  0x00800000=layout-top
+  0xFF000000=uint8,dec,autoshow-item-count
+end
+
+# SXVI -----------------------------------------------------------------------
+
+multilist=SXVI-ITEMTYPE
+begin
+  0=data,default,sum,count-num,average,max,min,product,count-num,std-dev,std-dev-p,variance,variance-p,grandtotal
+  254=page,none
+end
+
+flagslist=SXVI-FLAGS
+begin
+  0x0001=hidden
+  0x0002=hide-detail
+  0x0004=calculated
+  0x0008=missing
+end
+
+# SXVIEW ---------------------------------------------------------------------
+
+flagslist=SXVIEW-FLAGS
+begin
+  0x0001=row-grandtotals
+  0x0002=column-grandtotals
+  0x0008=auto-format
+  0x0010=size-auto-format
+  0x0020=font-auto-format
+  0x0040=align-auto-format
+  0x0080=border-auto-format
+  0x0100=pattern-auto-format
+  0x0200=numer-auto-format
+end
+
+# SXVS -----------------------------------------------------------------------
+
+flagslist=SXVS-TYPE
+begin
+  0x0001=spreadsheet
+  0x0002=extern
+  0x0004=consolidation-area
+  0x0008=pivot-table
+  0x0010=scenario
 end
 
 # WSBOOL ---------------------------------------------------------------------
@@ -1420,7 +1646,7 @@ begin
   0xC0=uint8,dec,font-idx,FONTNAMES
 end
 
-flagslist=CELL-XFSTYLE-BIFF2
+combilist=CELL-XFSTYLE-BIFF2
 begin
   include=XF-STYLEFLAGS-BIFF2
 end
