@@ -345,9 +345,11 @@ hedabu: ..\inc\QueryFolderName.hxx %_DEST%\inc%_EXT%\svtools\QueryFolderName.hxx
 hedabu: ..\inc\DocumentInfoPreview.hxx %_DEST%\inc%_EXT%\svtools\DocumentInfoPreview.hxx
 hedabu: ..\inc\javacontext.hxx %_DEST%\inc%_EXT%\svtools\javacontext.hxx
 hedabu: ..\inc\javainteractionhandler.hxx %_DEST%\inc%_EXT%\svtools\javainteractionhandler.hxx
+hedabu: ..\inc\dialogclosedlistener.hxx %_DEST%\inc%_EXT%\svtools\dialogclosedlistener.hxx
 hedabu: ..\inc\options.hxx %_DEST%\inc%_EXT%\svtools\options.hxx
 hedabu: ..\inc\contextmenuhelper.hxx %_DEST%\inc%_EXT%\svtools\contextmenuhelper.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
 *.xml %_DEST%\xml%_EXT%\*.xml
+
