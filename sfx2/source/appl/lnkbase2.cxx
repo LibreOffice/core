@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lnkbase2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:48:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 
 #include "app.hrc"
 #include "sfxresid.hxx"
+#include "filedlghelper.hxx"
 
 #include <tools/debug.hxx>
 
@@ -66,6 +67,25 @@ TYPEINIT0( SvBaseLink )
 static DdeTopic* FindTopic( const String &, USHORT* = 0 );
 
 class  ImplDdeItem;
+
+struct BaseLink_Impl
+{
+    Link                m_aEndEditLink;
+    SvLinkManager*      m_pLinkMgr;
+    Window*             m_pParentWin;
+    FileDialogHelper*   m_pFileDlg;
+    bool                m_bIsConnect;
+
+    BaseLink_Impl() :
+          m_pLinkMgr( NULL )
+        , m_pParentWin( NULL )
+        , m_pFileDlg( NULL )
+        , m_bIsConnect( false )
+        {}
+
+    ~BaseLink_Impl()
+        { delete m_pFileDlg; }
+};
 
 // nur fuer die interne Verwaltung
 struct ImplBaseLinkData
@@ -134,10 +154,11 @@ public:
 
 SvBaseLink::SvBaseLink()
 {
+    pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
-    pLinkMgr = 0;
     pImplData = new ImplBaseLinkData;
     bVisible = bSynchron = bUseCache = TRUE;
+    bWasLastEditOK = FALSE;
 }
 
 /************************************************************************
@@ -148,10 +169,11 @@ SvBaseLink::SvBaseLink()
 
 SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
 {
+    pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
-    pLinkMgr = 0;
     pImplData = new ImplBaseLinkData;
     bVisible = bSynchron = bUseCache = TRUE;
+    bWasLastEditOK = FALSE;
 
     // falls es ein Ole-Link wird,
     pImplData->ClientType.nUpdateMode = nUpdateMode;
@@ -168,6 +190,7 @@ SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
 SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSource* pObj )
 {
     bVisible = bSynchron = bUseCache = TRUE;
+    bWasLastEditOK = FALSE;
     aLinkName = rLinkName;
     pImplData = new ImplBaseLinkData;
     nObjType = nObjectType;
@@ -219,6 +242,19 @@ SvBaseLink::~SvBaseLink()
     }
 
     delete pImplData;
+}
+
+IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
+{
+    String sNewName;
+    if ( _pNewName )
+        sNewName = *_pNewName;
+    if ( !ExecuteEdit( sNewName ) )
+        sNewName.Erase();
+    bWasLastEditOK = ( sNewName.Len() > 0 );
+    if ( pImpl->m_aEndEditLink.IsSet() )
+        pImpl->m_aEndEditLink.Call( this );
+    return 0;
 }
 
 /************************************************************************
@@ -381,7 +417,7 @@ USHORT SvBaseLink::GetUpdateMode() const
 
 void SvBaseLink::_GetRealObject( BOOL bConnect)
 {
-    if( !pLinkMgr )
+    if( !pImpl->m_pLinkMgr )
         return;
 
     DBG_ASSERT( !xObj.Is(), "object already exist" )
@@ -389,12 +425,12 @@ void SvBaseLink::_GetRealObject( BOOL bConnect)
     if( OBJECT_CLIENT_DDE == nObjType )
     {
         String sServer;
-        if( pLinkMgr->GetDisplayNames( this, &sServer ) &&
+        if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
             sServer == GetpApp()->GetAppName() )        // interner Link !!!
         {
             // damit der Internal - Link erzeugt werden kann !!!
             nObjType = OBJECT_INTERN;
-            xObj = pLinkMgr->CreateObj( this );
+            xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
             pImplData->ClientType.bIntrnlLnk = TRUE;
             nObjType = OBJECT_CLIENT_DDE;       // damit wir wissen was es mal war !!
@@ -402,11 +438,11 @@ void SvBaseLink::_GetRealObject( BOOL bConnect)
         else
         {
             pImplData->ClientType.bIntrnlLnk = FALSE;
-            xObj = pLinkMgr->CreateObj( this );
+            xObj = pImpl->m_pLinkMgr->CreateObj( this );
         }
     }
     else if( (OBJECT_CLIENT_SO & nObjType) )
-        xObj = pLinkMgr->CreateObj( this );
+        xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
     if( bConnect && ( !xObj.Is() || !xObj->Connect( this ) ) )
         Disconnect();
@@ -431,6 +467,20 @@ BOOL SvBaseLink::SetContentType( ULONG nType )
     return FALSE;
 }
 
+SvLinkManager* SvBaseLink::GetLinkManager()
+{
+    return pImpl->m_pLinkMgr;
+}
+
+const SvLinkManager* SvBaseLink::GetLinkManager() const
+{
+    return pImpl->m_pLinkMgr;
+}
+
+void SvBaseLink::SetLinkManager( SvLinkManager* _pMgr )
+{
+    pImpl->m_pLinkMgr = _pMgr;
+}
 
 void SvBaseLink::Disconnect()
 {
@@ -441,7 +491,6 @@ void SvBaseLink::Disconnect()
         xObj.Clear();
     }
 }
-
 
 void SvBaseLink::DataChanged( const String &, const ::com::sun::star::uno::Any & )
 {
@@ -454,35 +503,53 @@ void SvBaseLink::DataChanged( const String &, const ::com::sun::star::uno::Any &
     }
 }
 
-
-BOOL SvBaseLink::Edit( Window* pParent )
+void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )
 {
-    BOOL bConnect = xObj.Is();
-    if( !bConnect )
+    pImpl->m_pParentWin = pParent;
+    pImpl->m_aEndEditLink = rEndEditHdl;
+    pImpl->m_bIsConnect = ( xObj.Is() != sal_False );
+    if( !pImpl->m_bIsConnect )
         _GetRealObject( xObj.Is() );
 
-    String aNewNm;
+    bool bAsync = false;
+    Link aLink = LINK( this, SvBaseLink, EndEditHdl );
 
-    if( OBJECT_CLIENT_SO & nObjType &&
-        pImplData->ClientType.bIntrnlLnk )
+    if( OBJECT_CLIENT_SO & nObjType && pImplData->ClientType.bIntrnlLnk )
     {
-        if( pLinkMgr )
+        if( pImpl->m_pLinkMgr )
         {
-            SvLinkSourceRef ref = pLinkMgr->CreateObj( this );
+            SvLinkSourceRef ref = pImpl->m_pLinkMgr->CreateObj( this );
             if( ref.Is() )
-                aNewNm = ref->Edit( pParent, this );
+            {
+                ref->Edit( pParent, this, aLink );
+                bAsync = true;
+            }
         }
     }
     else
-        aNewNm = xObj->Edit( pParent, this );
-
-    if( aNewNm.Len() != 0 )
     {
-        SetLinkSourceName( aNewNm );
+        xObj->Edit( pParent, this, aLink );
+        bAsync = true;
+    }
+
+    if ( !bAsync )
+    {
+        ExecuteEdit( String() );
+        bWasLastEditOK = FALSE;
+        if ( pImpl->m_aEndEditLink.IsSet() )
+            pImpl->m_aEndEditLink.Call( this );
+    }
+}
+
+bool SvBaseLink::ExecuteEdit( const String& _rNewName )
+{
+    if( _rNewName.Len() != 0 )
+    {
+        SetLinkSourceName( _rNewName );
         if( !Update() )
         {
             String sApp, sTopic, sItem, sError;
-            pLinkMgr->GetDisplayNames( this, &sApp, &sTopic, &sItem );
+            pImpl->m_pLinkMgr->GetDisplayNames( this, &sApp, &sTopic, &sItem );
             if( nObjType == OBJECT_CLIENT_DDE )
             {
                 sError = SfxResId( STR_DDE_ERROR );
@@ -502,16 +569,16 @@ BOOL SvBaseLink::Edit( Window* pParent )
                     sError.Erase( nFndPos, 1 ).Insert( sItem, nFndPos );
             }
             else
-                return FALSE;
+                return false;
 
-            ErrorBox( pParent, WB_OK, sError ).Execute();
+            ErrorBox( pImpl->m_pParentWin, WB_OK, sError ).Execute();
         }
     }
-    else if( !bConnect )
+    else if( !pImpl->m_bIsConnect )
         Disconnect();
-    return aNewNm.Len() != 0;
+    pImpl->m_bIsConnect = false;
+    return true;
 }
-
 
 void SvBaseLink::Closed()
 {
@@ -520,6 +587,13 @@ void SvBaseLink::Closed()
         xObj->RemoveAllDataAdvise( this );
 }
 
+FileDialogHelper* SvBaseLink::GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const
+{
+    if ( pImpl->m_pFileDlg )
+        delete pImpl->m_pFileDlg;
+    pImpl->m_pFileDlg = new FileDialogHelper( nFlags, rFactory );
+    return pImpl->m_pFileDlg;
+}
 
 ImplDdeItem::~ImplDdeItem()
 {
