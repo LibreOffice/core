@@ -122,3 +122,4 @@ hedabu: ..\inc\querystatus.hxx %_DEST%\inc%_EXT%\sfx2\querystatus.hxx
 hedabu: ..\inc\sfxstatuslistener.hxx %_DEST%\inc%_EXT%\sfx2\sfxstatuslistener.hxx
 hedabu: ..\inc\QuerySaveDocument.hxx %_DEST%\inc%_EXT%\sfx2\QuerySaveDocument.hxx
 hedabu: ..\inc\mailmodelapi.hxx %_DEST%\inc%_EXT%\sfx2\mailmodelapi.hxx
+hedabu: ..\inc\docinsert.hxx %_DEST%\inc%_EXT%\sfx2\docinsert.hxx
