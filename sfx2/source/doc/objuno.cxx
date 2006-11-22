@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:49:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1271,13 +1271,13 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
     // completely new initialization
     Clear();
 
+    _pInfo = new SfxDocumentInfo;
+
     uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_False );
     if ( xStorage.is() )
     {
         try
         {
-            _pInfo = new SfxDocumentInfo;
-
             // set the mediatype from the storage
             ::rtl::OUString aMediaType;
             uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
