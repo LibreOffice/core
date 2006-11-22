@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     {
         bPasteIsMove = FALSE;       // kein internes Verschieben passiert
 
-        SdrMarkView aView(pModel);
+        SdrView aView(pModel);      // #i71529# never create a base class of SdrView directly!
         SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
         aView.MarkAllObj(pPv);
         Size aSize = aView.GetAllMarkedRect().GetSize();
