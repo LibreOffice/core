@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:34:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,10 +450,11 @@ void SvxLinguConfigUpdate::UpdateAll()
                 {
                     RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - ReplaceSetProperties" );
                     // add new or replace existing entries.
-#ifdef DBG_UTIL
                     BOOL bRes = aCfg.ReplaceSetProperties( aSubNodeName, aNewValues );
-                    DBG_ASSERT( bRes, "failed to set new configuration values" );
-#endif
+                    if (!bRes)
+                    {
+                        DBG_ERROR( "failed to set new configuration values" );
+                    }
                 }
             }
         }
