@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:17:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,18 +216,22 @@ void ImportExcel8::Boundsheet( void )
     ScfTools::ConvertToScSheetName( aName );
     *pExcRoot->pTabNameBuff << aName;
 
-    if( nBdshtTab > 0 )
+    SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
+    if( nScTab > 0 )
     {
-        DBG_ASSERT( !pD->HasTable( nBdshtTab ),
-            "*ImportExcel::Boundsheet8(): Tabelle schon vorhanden!" );
-
-        pD->MakeTable( nBdshtTab );
+        DBG_ASSERT( !pD->HasTable( nScTab ), "ImportExcel8::Boundsheet - sheet exists already" );
+        pD->MakeTable( nScTab );
     }
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
-        pD->SetVisible( nBdshtTab, FALSE );
+        pD->SetVisible( nScTab, FALSE );
 
-    pD->RenameTab( nBdshtTab, aName );
+    if( !pD->RenameTab( nScTab, aName ) )
+    {
+        pD->CreateValidTabName( aName );
+        pD->RenameTab( nScTab, aName );
+    }
+
     nBdshtTab++;
 }
 
@@ -347,7 +351,7 @@ void ImportExcel8::PostDocLoad( void )
     }
 
     // building pivot tables
-    GetPivotTableManager().Apply();
+    GetPivotTableManager().ConvertPivotTables();
 }
 
 
