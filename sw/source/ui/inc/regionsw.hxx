@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:44:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,12 @@
 #endif
 class SwWrtShell;
 class EditRegionDlg;
+
+namespace sfx2
+{
+    class DocumentInserter;
+    class FileDialogHelper;
+}
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -232,10 +238,12 @@ class SwEditRegionDlg : public SfxModalDialog
     ImageList       aImageIL;
     ImageList       aImageILH;
 
-    SwWrtShell&     rSh;
-    SectReprArr     aSectReprArr;
-    SvLBoxEntry*    pAktEntry;
-    const SwSection*pCurrSect;
+    SwWrtShell&             rSh;
+    SectReprArr             aSectReprArr;
+    SvLBoxEntry*            pAktEntry;
+    const SwSection*        pCurrSect;
+    sfx2::DocumentInserter* pDocInserter;
+    Window*                 pOldDefDlgParent;
 
     BOOL            bDontCheckPasswd :1;
     BOOL            bWeb            :1;
@@ -267,6 +275,8 @@ class SwEditRegionDlg : public SfxModalDialog
 #ifdef DDE_AVAILABLE
     DECL_LINK( DDEHdl, CheckBox* );
 #endif
+    DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
+
     BOOL CheckPasswd(CheckBox* pBox = 0);
 
 public:
@@ -323,6 +333,8 @@ class SwInsertSectionTabPage : public SfxTabPage
 //  SwFmtCol*       pCols;
     ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
     SwWrtShell*     pWrtSh;
+    sfx2::DocumentInserter* pDocInserter;
+    Window*                 pOldDefDlgParent;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
     // --> FME 2004-06-22 #114856# edit in readonly sections
@@ -336,6 +348,7 @@ class SwInsertSectionTabPage : public SfxTabPage
 #ifdef DDE_AVAILABLE
     DECL_LINK( DDEHdl, CheckBox* );
 #endif
+    DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
 
     void            FillList(  const SwSectionFmt* pFmt = 0 );
 
