@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:41:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <stl/map>
-#include <stl/set>
-#include <stl/vector>
-#include <stl/slist>
+#include <map>
+#include <set>
+#include <vector>
+#include <slist>
 
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
