@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:07:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,11 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/docinsert.hxx>
 #include <sfx2/fcontnr.hxx>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/waitobj.hxx>
@@ -76,7 +80,9 @@ ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
     aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp    ( this, ScResId( BTN_HELP ) ),
     //
-    pSourceShell( NULL )
+    pSourceShell( NULL ),
+    pDocInserter( NULL )
+
 {
     FreeResource();
 
@@ -112,60 +118,10 @@ short ScLinkedAreaDlg::Execute()
 
 IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
 {
-    //  dialog parent has been set in execute
-
-    SfxApplication* pApp = SFX_APP();
-    SfxMedium* pMed = pApp->InsertDocumentDialog( 0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
-
-    if ( pMed )
-    {
-        WaitObject aWait( this );
-
-        // #92296# replace HTML filter with DataQuery filter
-        const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
-        const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
-
-        const SfxFilter* pFilter = pMed->GetFilter();
-        if( pFilter && (pFilter->GetFilterName() == aHTMLFilterName) )
-        {
-            const SfxFilter* pNewFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aWebQFilterName );
-            if( pNewFilter )
-                pMed->SetFilter( pNewFilter );
-        }
-
-        //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
-        SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
-
-        if (pSourceShell)
-            pSourceShell->DoClose();        // deleted when assigning aSourceRef
-
-        pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
-
-        pSourceShell = new ScDocShell;
-        aSourceRef = pSourceShell;
-        pSourceShell->DoLoad( pMed );
-
-        ULONG nErr = pSourceShell->GetErrorCode();
-        if (nErr)
-            ErrorHandler::HandleError( nErr );              // including warnings
-
-        if ( !pSourceShell->GetError() )                    // only errors
-        {
-            //aCbUrl.SetText( pSourceShell->GetTitle( SFX_TITLE_FULLNAME ) );
-            aCbUrl.SetText( pMed->GetName() );
-        }
-        else
-        {
-            pSourceShell->DoClose();
-            pSourceShell = NULL;
-            aSourceRef.Clear();
-
-            aCbUrl.SetText( EMPTY_STRING );
-        }
-    }
-
-    UpdateSourceRanges();
-    UpdateEnable();
+    if ( !pDocInserter )
+        pDocInserter = new sfx2::DocumentInserter(
+            0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
+    pDocInserter->StartExecuteModal( LINK( this, ScLinkedAreaDlg, DialogClosedHdl ) );
     return 0;
 }
 
@@ -199,9 +155,6 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
     UpdateEnable();
     return 0;
 }
-
-#undef FILTERNAME_HTML
-#undef FILTERNAME_QUERY
 
 void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, const String& rOptions )
 {
@@ -277,6 +230,68 @@ IMPL_LINK( ScLinkedAreaDlg, ReloadHdl, CheckBox*, EMPTYARG )
     UpdateEnable();
     return 0;
 }
+
+IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+{
+    if ( _pFileDlg->GetError() != ERRCODE_NONE )
+        return 0;
+
+    SfxMedium* pMed = pDocInserter->CreateMedium();
+    if ( pMed )
+    {
+        WaitObject aWait( this );
+
+        // #92296# replace HTML filter with DataQuery filter
+        const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
+        const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
+
+        const SfxFilter* pFilter = pMed->GetFilter();
+        if( pFilter && (pFilter->GetFilterName() == aHTMLFilterName) )
+        {
+            const SfxFilter* pNewFilter =
+                ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aWebQFilterName );
+            if( pNewFilter )
+                pMed->SetFilter( pNewFilter );
+        }
+
+        //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
+        SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
+
+        if (pSourceShell)
+            pSourceShell->DoClose();        // deleted when assigning aSourceRef
+
+        pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
+
+        pSourceShell = new ScDocShell;
+        aSourceRef = pSourceShell;
+        pSourceShell->DoLoad( pMed );
+
+        ULONG nErr = pSourceShell->GetErrorCode();
+        if (nErr)
+            ErrorHandler::HandleError( nErr );              // including warnings
+
+        if ( !pSourceShell->GetError() )                    // only errors
+        {
+            //aCbUrl.SetText( pSourceShell->GetTitle( SFX_TITLE_FULLNAME ) );
+            aCbUrl.SetText( pMed->GetName() );
+        }
+        else
+        {
+            pSourceShell->DoClose();
+            pSourceShell = NULL;
+            aSourceRef.Clear();
+
+            aCbUrl.SetText( EMPTY_STRING );
+        }
+    }
+
+    UpdateSourceRanges();
+    UpdateEnable();
+    return 0;
+}
+
+#undef FILTERNAME_HTML
+#undef FILTERNAME_QUERY
 
 void ScLinkedAreaDlg::UpdateSourceRanges()
 {
