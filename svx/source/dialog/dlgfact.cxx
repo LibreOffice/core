@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:48:43 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,45 @@ IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
+
+//////////////////////////////////////////////////////////////////////////
+// VclAbstractDialog2_Impl
+//////////////////////////////////////////////////////////////////////////
+
+// virtual
+VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
+{
+    delete m_pDlg;
+}
+
+// virtual
+void  VclAbstractDialog2_Impl::StartExecuteModal( const Link& rEndDialogHdl )
+{
+    m_aEndDlgHdl = rEndDialogHdl;
+    m_pDlg->StartExecuteModal(
+        LINK( this, VclAbstractDialog2_Impl, EndDialogHdl ) );
+}
+
+// virtual
+long VclAbstractDialog2_Impl::GetResult()
+{
+    return m_pDlg->GetResult();
+}
+
+IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog*, pDlg )
+{
+    if ( pDlg != m_pDlg )
+    {
+        DBG_ERRORFILE( "VclAbstractDialog2_Impl::EndDialogHdl(): wrong dialog" );
+    }
+
+    m_aEndDlgHdl.Call( this );
+    m_aEndDlgHdl = Link();
+
+    return 0L;
+}
+
+//////////////////////////////////////////////////////////////////////////
 
 void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
 {
@@ -1382,7 +1421,7 @@ AbstractGalleryIdDialog * AbstractDialogFactory_Impl::CreateGalleryIdDialog( Win
     return 0;
 }
 
-VclAbstractDialog * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
+VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet,
                                             const ResId& rResId)
@@ -1398,7 +1437,7 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDial
     }
 
     if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
+        return new VclAbstractDialog2_Impl( pDlg );
     return 0;
 }
 //CHINA001 GalleryDialog end
