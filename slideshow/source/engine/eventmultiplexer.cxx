@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:53:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@
 #include "basegfx/numeric/ftools.hxx"
 #include "delayevent.hxx"
 #include "boost/bind.hpp"
-#include <vector>
-#include <hash_map>
-#include <algorithm>
 
 namespace css = ::com::sun::star;
 using namespace css;
