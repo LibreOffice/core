@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:16:19 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2273,7 +2273,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
 
 
-            BOOL bIsAutoCorrectChar = SvxIsAutoCorrectChar( aCh );
+            BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
             if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
                     pACfg->IsAutoFmtByInput() &&
                 (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
