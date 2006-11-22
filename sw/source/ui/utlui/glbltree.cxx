@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:32:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,10 @@
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
+#endif
+#include <sfx2/docinsert.hxx>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 #include <sfx2/app.hxx>
@@ -238,14 +242,21 @@ void    SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& 
 
 --------------------------------------------------*/
 SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
+
     SvTreeListBox(pParent, rResId),
-    pSwGlblDocContents(0),
-    pEmphasisEntry(0),
-    pDDSource(0),
-    pActiveShell(0),
-    bIsInternalDrag(FALSE),
-    bLastEntryEmphasis(FALSE),
-    bIsImageListInitialized(FALSE)
+
+    pActiveShell        ( NULL ),
+    pEmphasisEntry      ( NULL ),
+    pDDSource           ( NULL ),
+    pSwGlblDocContents  ( NULL ),
+    pDefParentWin       ( NULL ),
+    pDocContent         ( NULL ),
+    pDocInserter        ( NULL ),
+
+    bIsInternalDrag         ( FALSE ),
+    bLastEntryEmphasis      ( FALSE ),
+    bIsImageListInitialized ( FALSE )
+
 {
     SetDragDropMode(SV_DRAGDROP_APP_COPY  |
                     SV_DRAGDROP_CTRL_MOVE |
@@ -270,6 +281,7 @@ SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
 SwGlobalTree::~SwGlobalTree()
 {
     delete pSwGlblDocContents;
+    delete pDocInserter;
 }
 
 /*-----------------12.06.97 09:38-------------------
@@ -849,129 +861,23 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 /*-----------------13.06.97 10:32-------------------
 
 --------------------------------------------------*/
-void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
-                                const String* pFileName )
+void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pFileName )
 {
-    Sequence<OUString> aFileNames;
-    SwView *pView = GetParentWindow()->GetCreateView();
-    SwWrtShell &rSh = pView->GetWrtShell();
-    String sFilePassword;
-    if(!pFileName)
+    Sequence< OUString > aFileNames;
+    if ( !pFileName )
     {
-        Window* pDefDlgParent = Application::GetDefDialogParent();
+        pDefParentWin = Application::GetDefDialogParent();
         Application::SetDefDialogParent( this );
-        SfxMediumList*  pMedList = SFX_APP()->InsertDocumentsDialog( 0, String::CreateFromAscii("swriter"));
-        if(pMedList)
-        {
-            aFileNames.realloc(pMedList->Count());
-            OUString* pFileNames = aFileNames.getArray();
-
-            SfxMedium* pMed = pMedList->First();
-            sal_Int32 nPos = 0;
-            while(pMed)
-            {
-                String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-                sFileName += sfx2::cTokenSeperator;
-                sFileName += pMed->GetFilter()->GetFilterName();
-                sFileName += sfx2::cTokenSeperator;
-                pFileNames[nPos++] = sFileName;
-                pMed = pMedList->Next();
-            }
-            delete pMedList;
-        }
-        Application::SetDefDialogParent( pDefDlgParent );
+        if ( pDocInserter )
+            delete pDocInserter;
+        pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter"), true );
+        pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
-    else if(pFileName->Len())
+    else if ( pFileName->Len() )
     {
         aFileNames.realloc(1);
         aFileNames.getArray()[0] = INetURLObject( *pFileName ).GetMainURL( INetURLObject::NO_DECODE );
-    }
-
-    sal_Int32 nFiles = aFileNames.getLength();
-    if(nFiles)
-    {
-        BOOL bMove = FALSE;
-        if(!pCont)
-        {
-            SvLBoxEntry* pLast = (SvLBoxEntry*)LastVisible();
-            pCont = (SwGlblDocContent*)pLast->GetUserData();
-            bMove = TRUE;
-        }
-        USHORT nEntryCount = (USHORT)GetEntryCount();
-        const OUString* pFileNames = aFileNames.getConstArray();
-        rSh.StartAction();
-        // after insertion of the first new content the 'pCont' parameter becomes invalid
-        // find the index of the 'anchor' content to always use a current anchor content
-        USHORT nAnchorContent = pSwGlblDocContents->Count() - 1;
-        if(!bMove)
-        {
-            for( USHORT nContent = 0; nContent < pSwGlblDocContents->Count(); ++nContent)
-            {
-                if( *pCont == *pSwGlblDocContents->GetObject(nContent) )
-                {
-                    nAnchorContent = nContent;
-                    break;
-                }
-            }
-        }
-        SwGlblDocContents aTempContents;
-        for(sal_Int32 nFile = 0; nFile < nFiles; ++nFile)
-        {
-            //update the global document content after each inserted document
-            rSh.GetGlobalDocContent(aTempContents);
-            SwGlblDocContent* pAnchorContent = 0;
-            DBG_ASSERT(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed")
-            if( aTempContents.Count() > (nAnchorContent + nFile) )
-                pAnchorContent = aTempContents.GetObject(nAnchorContent + nFile);
-            else
-                pAnchorContent = aTempContents.GetObject(aTempContents.Count() - 1);
-            String sFileName(pFileNames[nFile]);
-            INetURLObject aFileUrl(sFileName);
-            String sSectionName(String(aFileUrl.GetLastName(
-                INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
-                sfx2::cTokenSeperator));
-            USHORT nSectCount = rSh.GetSectionFmtCount();
-            String sTempSectionName(sSectionName);
-            USHORT nAddNumber = 0;
-            USHORT nCount = 0;
-            // evtl : und Index anhaengen, wenn der Bereichsname schon vergeben ist
-            while(nCount < nSectCount)
-            {
-                const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);
-                if( rFmt.GetSection()->GetName() == sTempSectionName &&
-                        rFmt.IsInNodesArr())
-                {
-                    nCount = 0;
-                    nAddNumber++;
-                    sTempSectionName = sSectionName;
-                    sTempSectionName += ':';
-                    sTempSectionName += String::CreateFromInt32( nAddNumber );
-                }
-                else
-                    nCount++;
-            }
-            if(nAddNumber)
-                    sSectionName = sTempSectionName;
-
-            SwSection   aSection(CONTENT_SECTION, sSectionName);
-            aSection.SetProtect(TRUE);
-            aSection.SetHidden(FALSE);
-
-            aSection.SetLinkFileName(sFileName);
-            aSection.SetType( FILE_LINK_SECTION);
-            aSection.SetLinkFilePassWd( sFilePassword );
-
-            rSh.InsertGlobalDocContent( *pAnchorContent, aSection );
-        }
-        if(bMove)
-        {
-            Update();
-            rSh.MoveGlobalDocContent(
-                *pSwGlblDocContents, nEntryCount, nEntryCount + nFiles, nEntryCount - nFiles);
-        }
-        rSh.EndAction();
-        Update();
-        Display();
+        InsertRegion( pCont, aFileNames );
     }
 }
 
@@ -1036,7 +942,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
     if(pCont)
         pContCopy = new SwGlblDocContent(pCont->GetDocPos());
     SfxDispatcher& rDispatch = *pActiveShell->GetView().GetViewFrame()->GetDispatcher();
-    USHORT nSlot = 0;;
+    USHORT nSlot = 0;
+    bool bDeleteContentCopy = true;
     switch( nSelectedPopupEntry )
     {
         case CTX_UPDATE_SEL:
@@ -1046,11 +953,11 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
             SvLBoxEntry* pEntry = FirstSelected();
             while( pEntry )
             {
-                SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
-                if(GLBLDOC_SECTION == pCont->GetType() &&
-                    pCont->GetSection()->IsConnected())
+                SwGlblDocContent* pContent = (SwGlblDocContent*)pEntry->GetUserData();
+                if(GLBLDOC_SECTION == pContent->GetType() &&
+                    pContent->GetSection()->IsConnected())
                 {
-                    ((SwSection*)pCont->GetSection())->UpdateNow();
+                    ((SwSection*)pContent->GetSection())->UpdateNow();
                 }
 
                 pEntry = NextSelected(pEntry);
@@ -1058,9 +965,9 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
             pEntry = FirstSelected();
             while( pEntry )
             {
-                SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
-                if(GLBLDOC_TOXBASE == pCont->GetType())
-                    pActiveShell->UpdateTableOf(*pCont->GetTOX());
+                SwGlblDocContent* pContent = (SwGlblDocContent*)pEntry->GetUserData();
+                if(GLBLDOC_TOXBASE == pContent->GetType())
+                    pActiveShell->UpdateTableOf(*pContent->GetTOX());
                 pEntry = NextSelected(pEntry);
             }
 
@@ -1164,8 +1071,10 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         break;
         case CTX_INSERT_FILE:
         {
-            InsertRegion(pContCopy);
-            pCont = 0;
+            bDeleteContentCopy = false;
+            pDocContent = pContCopy;
+            InsertRegion( pContCopy );
+            pCont = NULL;
         }
         break;
         case CTX_INSERT_NEW_FILE:
@@ -1254,7 +1163,10 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         rDispatch.Execute(nSlot);
     if(Update())
         Display();
-    delete pContCopy;
+    if ( bDeleteContentCopy )
+        delete pContCopy;
+    else
+        bDeleteContentCopy = true;
 //  return TRUE;
 }
 
@@ -1540,5 +1452,126 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
         Update(sal_True);
     }
     SvTreeListBox::DataChanged( rDCEvt );
+}
+
+void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequence< OUString >& _rFiles )
+{
+    sal_Int32 nFiles = _rFiles.getLength();
+    if ( nFiles )
+    {
+        BOOL bMove = FALSE;
+        if ( !_pContent )
+        {
+            SvLBoxEntry* pLast = (SvLBoxEntry*)LastVisible();
+            _pContent = (SwGlblDocContent*)pLast->GetUserData();
+            bMove = TRUE;
+        }
+        String sFilePassword;
+        USHORT nEntryCount = (USHORT)GetEntryCount();
+        const OUString* pFileNames = _rFiles.getConstArray();
+        SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
+        rSh.StartAction();
+        // after insertion of the first new content the 'pCont' parameter becomes invalid
+        // find the index of the 'anchor' content to always use a current anchor content
+        USHORT nAnchorContent = pSwGlblDocContents->Count() - 1;
+        if ( !bMove )
+        {
+            for( USHORT nContent = 0; nContent < pSwGlblDocContents->Count(); ++nContent )
+            {
+                if( *_pContent == *pSwGlblDocContents->GetObject( nContent ) )
+                {
+                    nAnchorContent = nContent;
+                    break;
+                }
+            }
+        }
+        SwGlblDocContents aTempContents;
+        for ( sal_Int32 nFile = 0; nFile < nFiles; ++nFile )
+        {
+            //update the global document content after each inserted document
+            rSh.GetGlobalDocContent(aTempContents);
+            SwGlblDocContent* pAnchorContent = 0;
+            DBG_ASSERT(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed")
+            if ( aTempContents.Count() > (nAnchorContent + nFile) )
+                pAnchorContent = aTempContents.GetObject(nAnchorContent + (USHORT)nFile);
+            else
+                pAnchorContent = aTempContents.GetObject(aTempContents.Count() - 1);
+            String sFileName(pFileNames[nFile]);
+            INetURLObject aFileUrl(sFileName);
+            String sSectionName(String(aFileUrl.GetLastName(
+                INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
+                sfx2::cTokenSeperator));
+            USHORT nSectCount = rSh.GetSectionFmtCount();
+            String sTempSectionName(sSectionName);
+            USHORT nAddNumber = 0;
+            USHORT nCount = 0;
+            // evtl : und Index anhaengen, wenn der Bereichsname schon vergeben ist
+            while ( nCount < nSectCount )
+            {
+                const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);
+                if ( rFmt.GetSection()->GetName() == sTempSectionName && rFmt.IsInNodesArr() )
+                {
+                    nCount = 0;
+                    nAddNumber++;
+                    sTempSectionName = sSectionName;
+                    sTempSectionName += ':';
+                    sTempSectionName += String::CreateFromInt32( nAddNumber );
+                }
+                else
+                    nCount++;
+            }
+
+            if ( nAddNumber )
+                sSectionName = sTempSectionName;
+
+            SwSection   aSection(CONTENT_SECTION, sSectionName);
+            aSection.SetProtect(TRUE);
+            aSection.SetHidden(FALSE);
+
+            aSection.SetLinkFileName(sFileName);
+            aSection.SetType( FILE_LINK_SECTION);
+            aSection.SetLinkFilePassWd( sFilePassword );
+
+            rSh.InsertGlobalDocContent( *pAnchorContent, aSection );
+        }
+        if ( bMove )
+        {
+            Update();
+            rSh.MoveGlobalDocContent(
+                *pSwGlblDocContents, nEntryCount, nEntryCount + (USHORT)nFiles, nEntryCount - (USHORT)nFiles );
+        }
+        rSh.EndAction();
+        Update();
+        Display();
+    }
+}
+
+IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+{
+    Application::SetDefDialogParent( pDefParentWin );
+    if ( ERRCODE_NONE == _pFileDlg->GetError() )
+    {
+        SfxMediumList* pMedList = pDocInserter->CreateMediumList();
+        if ( pMedList )
+        {
+            Sequence< OUString >aFileNames( pMedList->Count() );
+            OUString* pFileNames = aFileNames.getArray();
+            SfxMedium* pMed = pMedList->First();
+            sal_Int32 nPos = 0;
+            while ( pMed )
+            {
+                String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                sFileName += sfx2::cTokenSeperator;
+                sFileName += pMed->GetFilter()->GetFilterName();
+                sFileName += sfx2::cTokenSeperator;
+                pFileNames[nPos++] = sFileName;
+                pMed = pMedList->Next();
+            }
+            delete pMedList;
+            InsertRegion( pDocContent, aFileNames );
+            DELETEZ( pDocContent );
+        }
+    }
+    return 0;
 }
 
