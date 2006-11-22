@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:16:58 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,15 @@
 #include "dociter.hxx"
 #include "opcode.hxx"
 
+struct TableLink_Impl
+{
+    ScDocShell* m_pDocSh;
+    Window*     m_pOldParent;
+    Link        m_aEndEditLink;
+
+    TableLink_Impl() : m_pDocSh( NULL ), m_pOldParent( NULL ) {}
+};
+
 TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
 
 //------------------------------------------------------------------------
@@ -82,7 +91,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
                             ULONG nRefresh ):
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
-    pDocShell(pDocSh),
+    pImpl( new TableLink_Impl ),
     aFileName(rFile),
     aFilterName(rFilter),
     aOptions(rOpt),
@@ -91,6 +100,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
 {
+    pImpl->m_pDocSh = pDocSh;
 }
 
 ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
@@ -98,7 +108,7 @@ ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
                             ULONG nRefresh ):
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
-    pDocShell((ScDocShell*)pShell),
+    pImpl( new TableLink_Impl ),
     aFileName(rFile),
     aFilterName(rFilter),
     aOptions(rOpt),
@@ -107,8 +117,9 @@ ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
 {
+    pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScTableLink, RefreshHdl ) );
-    SetRefreshControl( pDocShell->GetDocument()->GetRefreshTimerControlAddress() );
+    SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );
 }
 
 __EXPORT ScTableLink::~ScTableLink()
@@ -117,37 +128,32 @@ __EXPORT ScTableLink::~ScTableLink()
 
     StopRefreshTimer();
     String aEmpty;
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
     SCTAB nCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab)==aFileName)
             pDoc->SetLink( nTab, SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
+    delete pImpl;
 }
 
-BOOL __EXPORT ScTableLink::Edit(Window* pParent)
+void __EXPORT ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 {
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
     //  ein Optionen-Dialog kommt...
 
-    Window* pOldParent = Application::GetDefDialogParent();
+    pImpl->m_aEndEditLink = rEndEditHdl;
+    pImpl->m_pOldParent = Application::GetDefDialogParent();
     if (pParent)
         Application::SetDefDialogParent(pParent);
 
     bInEdit = TRUE;
-
-    BOOL bRet = SvBaseLink::Edit(pParent);
-
-    bInEdit = FALSE;
-
-    Application::SetDefDialogParent(pOldParent);
-
-    return bRet;
+    SvBaseLink::Edit( pParent, LINK( this, ScTableLink, EndEditHdl ) );
 }
 
 void __EXPORT ScTableLink::DataChanged( const String&,
                                         const ::com::sun::star::uno::Any& )
 {
-    SvxLinkManager* pLinkManager=pDocShell->GetDocument()->GetLinkManager();
+    SvxLinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
         String aFile;
@@ -166,13 +172,13 @@ void __EXPORT ScTableLink::DataChanged( const String&,
 void __EXPORT ScTableLink::Closed()
 {
     // Verknuepfung loeschen: Undo
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
 
     if (bAddUndo && bUndo)
     {
-        pDocShell->GetUndoManager()->AddUndoAction(
-                new ScUndoRemoveLink( pDocShell, aFileName ) );
+        pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
+                new ScUndoRemoveLink( pImpl->m_pDocSh, aFileName ) );
 
         bAddUndo = FALSE;   // nur einmal
     }
@@ -184,7 +190,7 @@ void __EXPORT ScTableLink::Closed()
 
 BOOL ScTableLink::IsUsed() const
 {
-    return pDocShell->GetDocument()->HasLink( aFileName, aFilterName, aOptions );
+    return pImpl->m_pDocSh->GetDocument()->HasLink( aFileName, aFilterName, aOptions );
 }
 
 BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
@@ -195,14 +201,14 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     if (!rNewFile.Len() || !rNewFilter.Len())
         return FALSE;
 
-    String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pDocShell ) );
+    String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
     BOOL bNewUrlName = (aNewUrl != aFileName);
 
-    const SfxFilter* pFilter = pDocShell->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
+    const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return FALSE;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
     pDoc->SetInLinkUpdate( TRUE );
 
     BOOL bUndo(pDoc->IsUndoEnabled());
@@ -241,7 +247,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     //  Tabellen kopieren
 
-    ScDocShellModificator aModificator( *pDocShell );
+    ScDocShellModificator aModificator( *pImpl->m_pDocSh );
 
     BOOL bNotFound = FALSE;
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
@@ -404,14 +410,14 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     //  Undo
 
     if (bAddUndo && bUndo)
-        pDocShell->GetUndoManager()->AddUndoAction(
-                    new ScUndoRefreshLink( pDocShell, pUndoDoc ) );
+        pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
+                    new ScUndoRefreshLink( pImpl->m_pDocSh, pUndoDoc ) );
 
     //  Paint (koennen mehrere Tabellen sein)
 
     if (bDoPaint)
     {
-        pDocShell->PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
+        pImpl->m_pDocSh->PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
                                 PAINT_GRID | PAINT_TOP | PAINT_LEFT );
         aModificator.SetDocumentModified();
     }
@@ -432,13 +438,20 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     return TRUE;
 }
 
-
 IMPL_LINK( ScTableLink, RefreshHdl, ScTableLink*, pCaller )
 {
     long nRes = Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() ) != 0;
     return nRes;
 }
 
+IMPL_LINK( ScTableLink, EndEditHdl, ::sfx2::SvBaseLink*, pLink )
+{
+    if ( pImpl->m_aEndEditLink.IsSet() )
+        pImpl->m_aEndEditLink.Call( pLink );
+    bInEdit = FALSE;
+    Application::SetDefDialogParent( pImpl->m_pOldParent );
+    return 0;
+}
 
 // === ScDocumentLoader ==================================================
 
@@ -597,6 +610,4 @@ String ScDocumentLoader::GetTitle() const
     else
         return EMPTY_STRING;
 }
-
-
 
