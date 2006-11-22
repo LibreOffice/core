@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:00:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#include <vcl/svapp.hxx>
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -61,6 +62,9 @@
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
@@ -117,6 +121,8 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     aHelpBtn        ( this, SW_RES( BTN_POST_HELP ) ),
 
     pSh(pWrtSh),
+    pFileDlg(NULL),
+    pOldDefDlgParent(NULL),
     bNew(TRUE),
     bIsUrl(FALSE)
 {
@@ -161,6 +167,8 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
 SwJavaEditDialog::~SwJavaEditDialog()
 {
     delete pMgr;
+    delete pFileDlg;
+    Application::SetDefDialogParent( pOldDefDlgParent );
 }
 
 /*------------------------------------------------------------------------
@@ -354,19 +362,33 @@ IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, pBtn )
 
 IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
 {
-    String sFileName;
-    if( GetFileFilterNameDlg( *pBtn, sFileName ))
+    if ( !pFileDlg )
     {
-        if(sFileName.Len())
+        pOldDefDlgParent = Application::GetDefDialogParent();
+        Application::SetDefDialogParent( pBtn );
+
+        pFileDlg = new ::sfx2::FileDialogHelper(
+            (SFXWB_INSERT | WB_3DLOOK), String::CreateFromAscii("swriter") );
+    }
+
+    pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );
+    return 0;
+}
+
+IMPL_LINK( SwJavaEditDialog, DlgClosedHdl, sfx2::FileDialogHelper *, EMPTYARG )
+{
+    if ( pFileDlg->GetError() == ERRCODE_NONE )
+    {
+        String sFileName = pFileDlg->GetPath();
+        if ( sFileName.Len() > 0 )
         {
-            INetURLObject aINetURL(sFileName);
-            if(INET_PROT_FILE == aINetURL.GetProtocol())
+            INetURLObject aINetURL( sFileName );
+            if ( INET_PROT_FILE == aINetURL.GetProtocol() )
                 sFileName = aINetURL.PathToFileName();
         }
         aUrlED.SetText( sFileName );
     }
+
     return 0;
 }
-
-
 
