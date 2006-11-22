@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:49:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,97 @@ ElementEntry_Impl::ElementEntry_Impl( sal_Int16 nId )
     , m_bHasLabel( sal_False )
     , m_bHasEnabled( sal_False )
 {}
+
+//------------------------------------------------------------------------------------
+void SvtFilePicker::prepareExecute()
+{
+    // set the default directory
+    // --**-- doesn't match the spec yet
+    if ( m_aDisplayDirectory.getLength() > 0 || m_aDefaultName.getLength() > 0 )
+    {
+        if ( m_aDisplayDirectory.getLength() > 0 )
+        {
+
+            INetURLObject aPath( m_aDisplayDirectory );
+            if ( m_aDefaultName.getLength() > 0 )
+            {
+                aPath.insertName( m_aDefaultName );
+                getDialog()->SetHasFilename( true );
+            }
+            getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
+        }
+        else if ( m_aDefaultName.getLength() > 0 )
+        {
+            getDialog()->SetPath( m_aDefaultName );
+            getDialog()->SetHasFilename( true );
+        }
+    }
+    else
+    {
+        // Default-Standard-Dir setzen
+        INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
+        getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    }
+
+    // set the control values and set the control labels, too
+    if ( m_pElemList && !m_pElemList->empty() )
+    {
+        ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
+
+        ElementList::iterator aListIter;
+        for ( aListIter = m_pElemList->begin();
+              aListIter != m_pElemList->end(); ++aListIter )
+        {
+            ElementEntry_Impl& rEntry = *aListIter;
+            if ( rEntry.m_bHasValue )
+                aAccess.setValue( rEntry.m_nElementID, rEntry.m_nControlAction, rEntry.m_aValue );
+            if ( rEntry.m_bHasLabel )
+                aAccess.setLabel( rEntry.m_nElementID, rEntry.m_aLabel );
+            if ( rEntry.m_bHasEnabled )
+                aAccess.enableControl( rEntry.m_nElementID, rEntry.m_bEnabled );
+        }
+
+        getDialog()->updateListboxLabelSizes();
+    }
+
+    if ( m_pFilterList && !m_pFilterList->empty() )
+    {
+        for (   FilterList::iterator aListIter = m_pFilterList->begin();
+                aListIter != m_pFilterList->end();
+                ++aListIter
+            )
+        {
+            if ( aListIter->hasSubFilters() )
+            {   // it's a filter group
+                UnoFilterList aSubFilters;
+                aListIter->getSubFilters( aSubFilters );
+
+                getDialog()->AddFilterGroup( aListIter->getTitle(), aSubFilters );
+             }
+            else
+                // it's a single filter
+                getDialog()->AddFilter( aListIter->getTitle(), aListIter->getFilter() );
+        }
+    }
+
+    // set the default filter
+    if ( m_aCurrentFilter.getLength() > 0 )
+        getDialog()->SetCurFilter( m_aCurrentFilter );
+
+}
+
+//-----------------------------------------------------------------------------
+IMPL_LINK( SvtFilePicker, DialogClosedHdl, Dialog*, pDlg )
+{
+    if ( m_xDlgClosedListener.is() )
+    {
+        sal_Int16 nRet = static_cast< sal_Int16 >( pDlg->GetResult() );
+        ::com::sun::star::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
+        m_xDlgClosedListener->dialogClosed( aEvent );
+        m_xDlgClosedListener.clear();
+    }
+    return 0;
+}
 
 //------------------------------------------------------------------------------------
 // SvtFilePicker
@@ -431,79 +522,9 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 {
     getDialog()->SetFileCallback( this );
 
-    // set the default directory
-    // --**-- doesn't match the spec yet
-    if ( m_aDisplayDirectory.getLength() > 0 || m_aDefaultName.getLength() > 0 )
-    {
-        if ( m_aDisplayDirectory.getLength() > 0 )
-        {
+    prepareExecute();
 
-            INetURLObject aPath( m_aDisplayDirectory );
-            if ( m_aDefaultName.getLength() > 0 )
-            {
-                aPath.insertName( m_aDefaultName );
-                getDialog()->SetHasFilename( true );
-            }
-            getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
-        }
-        else if ( m_aDefaultName.getLength() > 0 )
-        {
-            getDialog()->SetPath( m_aDefaultName );
-            getDialog()->SetHasFilename( true );
-        }
-    }
-    else
-    {
-        // Default-Standard-Dir setzen
-        INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-        getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
-    }
-
-    // set the control values and set the control labels, too
-    if ( m_pElemList && !m_pElemList->empty() )
-    {
-        ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
-
-        ElementList::iterator aListIter;
-        for ( aListIter = m_pElemList->begin();
-              aListIter != m_pElemList->end(); ++aListIter )
-        {
-            ElementEntry_Impl& rEntry = *aListIter;
-            if ( rEntry.m_bHasValue )
-                aAccess.setValue( rEntry.m_nElementID, rEntry.m_nControlAction, rEntry.m_aValue );
-            if ( rEntry.m_bHasLabel )
-                aAccess.setLabel( rEntry.m_nElementID, rEntry.m_aLabel );
-            if ( rEntry.m_bHasEnabled )
-                aAccess.enableControl( rEntry.m_nElementID, rEntry.m_bEnabled );
-        }
-
-        getDialog()->updateListboxLabelSizes();
-    }
-
-    if ( m_pFilterList && !m_pFilterList->empty() )
-    {
-        for (   FilterList::iterator aListIter = m_pFilterList->begin();
-                aListIter != m_pFilterList->end();
-                ++aListIter
-            )
-        {
-            if ( aListIter->hasSubFilters() )
-            {   // it's a filter group
-                UnoFilterList aSubFilters;
-                aListIter->getSubFilters( aSubFilters );
-
-                getDialog()->AddFilterGroup( aListIter->getTitle(), aSubFilters );
-            }
-            else
-                // it's a single filter
-                getDialog()->AddFilter( aListIter->getTitle(), aListIter->getFilter() );
-        }
-    }
-
-    // set the default filter
-    if ( m_aCurrentFilter.getLength() > 0 )
-        getDialog()->SetCurFilter( m_aCurrentFilter );
-
+    getDialog()->EnableAutocompletion( FALSE );
     // now we are ready to execute the dialog
     sal_Int16 nRet = getDialog()->Execute();
 
@@ -547,6 +568,26 @@ void SAL_CALL SvtFilePicker::setTitle( const ::rtl::OUString& _rTitle ) throw (R
 sal_Int16 SAL_CALL SvtFilePicker::execute(  ) throw (RuntimeException)
 {
     return OCommonPicker::execute();
+}
+
+//------------------------------------------------------------------------------------
+// XAsynchronousExecutableDialog functions
+//------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------
+void SAL_CALL SvtFilePicker::setDialogTitle( const ::rtl::OUString& _rTitle ) throw (RuntimeException)
+{
+    setTitle( _rTitle );
+}
+
+//------------------------------------------------------------------------------------
+void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (RuntimeException)
+{
+    m_xDlgClosedListener = xListener;
+    prepareDialog();
+    prepareExecute();
+    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->StartExecuteModal( LINK( this, SvtFilePicker, DialogClosedHdl ) );
 }
 
 //------------------------------------------------------------------------------------
