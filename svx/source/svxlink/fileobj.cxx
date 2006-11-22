@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:51:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:37:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include <vcl/sysdep.hxx>
 #endif
 
-
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
@@ -59,9 +58,6 @@
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
 #endif
-#ifndef _SOERR_HXX
-//#include <so3/soerr.hxx>
-#endif
 #ifndef _LNKBASE_HXX
 #include <sfx2/lnkbase.hxx>
 #endif
@@ -77,10 +73,23 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sfx2/docfac.hxx>
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include "fileobj.hxx"
 #include "linkmgr.hxx"
@@ -90,8 +99,7 @@
 #include "opengrf.hxx"
 #include "impgrf.hxx"
 
-using namespace ::com::sun::star::uno;
-
+namespace css = ::com::sun::star;
 
 #define FILETYPE_TEXT       1
 #define FILETYPE_GRF        2
@@ -117,9 +125,8 @@ struct Impl_DownLoadData
 // --------------------------------------------------------------------------
 
 
-SvFileObject::SvFileObject()
-:   pDownLoadData( 0 )
-,   nType( FILETYPE_TEXT )
+SvFileObject::SvFileObject() :
+    pDownLoadData( NULL ), pOldParent( NULL ), nType( FILETYPE_TEXT )
 {
     bLoadAgain = TRUE;
     bSynchron = bLoadError = bWaitForData = bDataReady = bNativFormat =
@@ -273,7 +280,7 @@ JP 28.02.96: noch eine Baustelle:
                         aMeta.Write( aMemStm );
                     }
                 }
-                rData <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
+                rData <<= css::uno::Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
                 bNativFormat = bOldNativFormat;
@@ -475,93 +482,119 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
     return GRFILTER_OK == nRes;
 }
 
+/** detect the filter of the given file
 
-String SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink )
+    @param _rURL
+        specifies the URL of the file which filter is to detected.<br/>
+        If the URL doesn't denote a valid (existent and accessible) file, the
+        request is silently dropped.
+*/
+String impl_getFilter( const String& _rURL )
 {
-    String sFile, sRange, sTmpFilter;
-    if( !pLink || !pLink->GetLinkManager() )
-        return sFile;
+    String sFilter;
+    if ( _rURL.Len() == 0 )
+        return sFilter;
 
-    pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFile, &sRange,
-                                                        &sTmpFilter );
-
-    switch( pLink->GetObjType() )
+    try
     {
-    case OBJECT_CLIENT_GRF:
+        css::uno::Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection") ),
+                css::uno::UNO_QUERY );
+        if ( xTypeDetection.is() )
         {
-            nType = FILETYPE_GRF;       // falls noch nicht gesetzt
-
-            SvxOpenGraphicDialog aDlg(ResId(RID_SVXSTR_EDITGRFLINK, DIALOG_MGR()));
-            aDlg.EnableLink(sal_False);
-            aDlg.SetPath( sFile, sal_True );
-            aDlg.SetCurrentFilter( sTmpFilter );
-
-            if( !aDlg.Execute() )
+            ::comphelper::MediaDescriptor aDescr;
+            aDescr[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( _rURL );
+            css::uno::Sequence< css::beans::PropertyValue > aDescrList =
+                aDescr.getAsConstPropertyValueList();
+            ::rtl::OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );
+            if ( sType.getLength() )
             {
-                sFile = aDlg.GetPath();
-                sFile += ::sfx2::cTokenSeperator;
-                sFile += ::sfx2::cTokenSeperator;
-                sFile += aDlg.GetCurrentFilter();
+                css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
+                                                                              css::uno::UNO_QUERY );
+                if ( xTypeCont.is() )
+                {
+                    ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
+                    sFilter = lTypeProps.getUnpackedValueOrDefault(
+                        ::rtl::OUString::createFromAscii("PreferredFilter"), ::rtl::OUString() );
+                }
             }
-            else
-                sFile.Erase();
         }
-        break;
-
-    case OBJECT_CLIENT_OLE:
-        {
-            nType = FILETYPE_OBJECT;        // falls noch nicht gesetzt
-            Window* pOld = Application::GetDefDialogParent();
-            Application::SetDefDialogParent( pParent );
-
-            SfxMediumRef _xMed = SFX_APP()->InsertDocumentDialog( 0, String() );
-            if( _xMed.Is() )
-            {
-                sFile = _xMed->GetName();
-                sFile += ::sfx2::cTokenSeperator;
-// Bereich!         sFile += _xMed->GetFilter()->GetName();
-                sFile += ::sfx2::cTokenSeperator;
-                sFile += _xMed->GetFilter()->GetFilterName();
-            }
-            else
-                sFile.Erase();
-
-            Application::SetDefDialogParent( pOld );
-        }
-        break;
-
-    case OBJECT_CLIENT_FILE:
-        {
-            nType = FILETYPE_TEXT;      // falls noch nicht gesetzt
-            Window* pOld = Application::GetDefDialogParent();
-            Application::SetDefDialogParent( pParent );
-
-            const SfxObjectFactory* pFactory=0;
-            SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
-            if ( pShell )
-                pFactory = &pShell->GetFactory();
-
-            SfxMediumRef _xMed = SFX_APP()->InsertDocumentDialog( 0, pFactory ? pFactory->GetFactoryName() : String() );
-            if( _xMed.Is() )
-            {
-                sFile = _xMed->GetName();
-                sFile += ::sfx2::cTokenSeperator;
-// Bereich!         sFile += _xMed->GetFilter()->GetName();
-                sFile += ::sfx2::cTokenSeperator;
-                sFile += _xMed->GetFilter()->GetFilterName();
-            }
-            else
-                sFile.Erase();
-
-            Application::SetDefDialogParent( pOld );
-        }
-        break;
-
-    default:
-        sFile.Erase();
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 
-    return sFile;
+    return sFilter;
+}
+
+void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& rEndEditHdl )
+{
+    aEndEditLink = rEndEditHdl;
+    String sFile, sRange, sTmpFilter;
+    if( pLink && pLink->GetLinkManager() )
+    {
+        pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFile, &sRange, &sTmpFilter );
+
+        switch( pLink->GetObjType() )
+        {
+            case OBJECT_CLIENT_GRF:
+            {
+                nType = FILETYPE_GRF;       // falls noch nicht gesetzt
+
+                SvxOpenGraphicDialog aDlg(ResId(RID_SVXSTR_EDITGRFLINK, DIALOG_MGR()));
+                aDlg.EnableLink(sal_False);
+                aDlg.SetPath( sFile, sal_True );
+                aDlg.SetCurrentFilter( sTmpFilter );
+
+                if( !aDlg.Execute() )
+                {
+                    sFile = aDlg.GetPath();
+                    sFile += ::sfx2::cTokenSeperator;
+                    sFile += ::sfx2::cTokenSeperator;
+                    sFile += aDlg.GetCurrentFilter();
+
+                    if ( aEndEditLink.IsSet() )
+                        aEndEditLink.Call( &sFile );
+                }
+                else
+                    sFile.Erase();
+            }
+            break;
+
+            case OBJECT_CLIENT_OLE:
+            {
+                nType = FILETYPE_OBJECT; // if not set already
+                pOldParent = Application::GetDefDialogParent();
+                Application::SetDefDialogParent( pParent );
+
+                ::sfx2::FileDialogHelper* pFileDlg =
+                    pLink->GetFileDialog( (SFXWB_INSERT | WB_3DLOOK), String() );
+                pFileDlg->StartExecuteModal( LINK( this, SvFileObject, DialogClosedHdl ) );
+            }
+            break;
+
+            case OBJECT_CLIENT_FILE:
+            {
+                nType = FILETYPE_TEXT; // if not set already
+                pOldParent = Application::GetDefDialogParent();
+                Application::SetDefDialogParent( pParent );
+
+                String sFactory;
+                SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+                if ( pShell )
+                    sFactory = pShell->GetFactory().GetFactoryName();
+
+                ::sfx2::FileDialogHelper* pFileDlg =
+                    pLink->GetFileDialog( (SFXWB_INSERT | WB_3DLOOK), sFactory );
+                pFileDlg->StartExecuteModal( LINK( this, SvFileObject, DialogClosedHdl ) );
+            }
+            break;
+
+            default:
+                sFile.Erase();
+        }
+    }
 }
 
 IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
@@ -663,6 +696,31 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+{
+    String sFile;
+    Application::SetDefDialogParent( pOldParent );
+
+    if ( FILETYPE_TEXT == nType || FILETYPE_OBJECT == nType )
+    {
+        if ( _pFileDlg && _pFileDlg->GetError() == ERRCODE_NONE )
+        {
+            String sURL( _pFileDlg->GetPath() );
+            sFile = sURL;
+            sFile += ::sfx2::cTokenSeperator;
+            sFile += ::sfx2::cTokenSeperator;
+            sFile += impl_getFilter( sURL );
+        }
+    }
+    else
+    {
+        DBG_ERRORFILE( "SvFileObject::DialogClosedHdl(): wrong file type" );
+    }
+
+    if ( aEndEditLink.IsSet() )
+        aEndEditLink.Call( &sFile );
+    return 0;
+}
 
 /*  [Beschreibung]
 
@@ -727,7 +785,7 @@ void SvFileObject::SendStateChg_Impl( LinkState nState )
 {
     if( !bStateChangeCalled && HasDataLinks() )
     {
-        Any aAny;
+        css::uno::Any aAny;
         aAny <<= rtl::OUString::valueOf( (sal_Int32)nState );
         DataChanged( SotExchange::GetFormatName(
                         SvxLinkManager::RegisterStatusInfoId()), aAny );
