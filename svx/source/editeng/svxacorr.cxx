@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:40:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,6 +387,19 @@ void lcl_ClearTable(SvxAutoCorrLanguageTable_Impl& rLangTable)
         pLists = rLangTable.Prev();
     }
     rLangTable.Clear();
+}
+
+/* -----------------03.11.06 10:15-------------------
+ *
+ * --------------------------------------------------*/
+
+sal_Bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
+{
+    return  cChar == '\0' || cChar == '\t' || cChar == 0x0a ||
+            cChar == ' '  || cChar == '\'' || cChar == '\"' ||
+            cChar == '*'  || cChar == '_'  ||
+            cChar == '.'  || cChar == ','  || cChar == ';' ||
+            cChar == ':'  || cChar == '?';
 }
 
 /* -----------------19.11.98 10:15-------------------
