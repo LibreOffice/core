@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:35:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@
 
 /******************************************************************************/
 
-SFX_IMPL_FLOATINGWINDOW( SvxIMapDlgChildWindow, SID_IMAP );
+SFX_IMPL_MODELESSDIALOG( SvxIMapDlgChildWindow, SID_IMAP );
 
 /******************************************************************************/
 
