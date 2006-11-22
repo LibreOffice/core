@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-28 10:37:12 $
+#   last change: $Author: vg $ $Date: 2006-11-22 11:46:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,8 @@ SLOFILES =  \
         $(SLO)$/txatbase.obj \
         $(SLO)$/txatritr.obj \
         $(SLO)$/txtatr2.obj \
-        $(SLO)$/txtedt.obj
+                $(SLO)$/txtedt.obj \
+                $(SLO)$/txtnodenumattr.obj
 
 .IF "$(dbutil)" != ""
 OFILES+=$(SLO)$/dbchratr.$(QBJX)
