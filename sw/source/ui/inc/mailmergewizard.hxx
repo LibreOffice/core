@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:49:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,9 @@ public:
                                 {return ::svt::RoadmapWizard::skipUntil(WizardState(nPage));}
 
     void                    updateRoadmapItemLabel( WizardState _nState );
+
+     virtual short          Execute();
+    virtual void            StartExecuteModal( const Link& rEndDialogHdl );
 };
 #endif
 
