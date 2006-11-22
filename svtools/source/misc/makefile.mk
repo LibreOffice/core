@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-03 12:33:46 $
+#   last change: $Author: vg $ $Date: 2006-11-22 10:42:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,32 +61,30 @@ SRC2FILES=\
     errtxt.src
 
 SLOFILES=\
-    $(SLO)$/acceleratorexecute.obj \
-    $(SLO)$/cliplistener.obj \
-    $(SLO)$/embedhlp.obj \
-    $(SLO)$/embedtransfer.obj \
-    $(SLO)$/imagemgr.obj \
+    $(SLO)$/acceleratorexecute.obj  \
+    $(SLO)$/cliplistener.obj        \
+    $(SLO)$/embedhlp.obj            \
+    $(SLO)$/embedtransfer.obj       \
+    $(SLO)$/imagemgr.obj            \
     $(SLO)$/imageresourceaccess.obj \
-    $(SLO)$/templatefoldercache.obj	\
-    $(SLO)$/transfer.obj			\
-    $(SLO)$/transfer2.obj			\
-    $(SLO)$/stringtransfer.obj		\
-    $(SLO)$/urihelper.obj \
-    $(SLO)$/ehdl.obj \
-    $(SLO)$/flbytes.obj \
-    $(SLO)$/helpagentwindow.obj \
-    $(SLO)$/imap.obj		\
-    $(SLO)$/imap2.obj		\
-    $(SLO)$/imap3.obj		\
-    $(SLO)$/ownlist.obj		\
-    $(SLO)$/pver.obj		\
-    $(SLO)$/vcldata.obj     \
-    $(SLO)$/restrictedpaths.obj
+    $(SLO)$/templatefoldercache.obj \
+    $(SLO)$/transfer.obj            \
+    $(SLO)$/transfer2.obj           \
+    $(SLO)$/stringtransfer.obj      \
+    $(SLO)$/urihelper.obj           \
+    $(SLO)$/ehdl.obj                \
+    $(SLO)$/flbytes.obj             \
+    $(SLO)$/helpagentwindow.obj     \
+    $(SLO)$/imap.obj                \
+    $(SLO)$/imap2.obj               \
+    $(SLO)$/imap3.obj               \
+    $(SLO)$/ownlist.obj             \
+    $(SLO)$/pver.obj                \
+    $(SLO)$/vcldata.obj             \
+    $(SLO)$/restrictedpaths.obj     \
+    $(SLO)$/dialogclosedlistener.obj
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
-
 
