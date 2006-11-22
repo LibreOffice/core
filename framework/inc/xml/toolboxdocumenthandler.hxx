@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:42:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,6 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
-#include <hash_map>
 
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
