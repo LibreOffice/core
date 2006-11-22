@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEmptyEditSource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:00:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,9 @@ namespace accessibility
             EndListening( *mrObj.GetModel() );
 
         ::std::auto_ptr< SvxEditSource > pProxySource( new AccessibleProxyEditSource_Impl(mrObj, mrView, mrViewWindow) );
-        ::std::swap(pProxySource, mpEditSource);
+        ::std::auto_ptr< SvxEditSource > tmp = mpEditSource;
+        mpEditSource = pProxySource;
+        pProxySource = tmp;
 
         // register as listener
         StartListening( mpEditSource->GetBroadcaster() );
