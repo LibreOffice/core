@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 15:29:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/langitem.hxx>
@@ -69,6 +70,7 @@
 #include "globstr.hrc"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "scabstdlg.hxx"
 #include "dociter.hxx"
 
 //------------------------------------------------------------------
@@ -93,7 +95,7 @@ SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
 
 ScCellShell::ScCellShell(ScViewData* pData) :
     ScFormatShell(pData),
-    pClipEvtLstnr(NULL),
+    pImpl( new CellShell_Impl() ),
     bPastePossible(FALSE)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
@@ -102,16 +104,20 @@ ScCellShell::ScCellShell(ScViewData* pData) :
 
 ScCellShell::~ScCellShell()
 {
-    if ( pClipEvtLstnr )
+    if ( pImpl->m_pClipEvtLstnr )
     {
-        pClipEvtLstnr->AddRemoveListener( GetViewData()->GetActiveWin(), FALSE );
+        pImpl->m_pClipEvtLstnr->AddRemoveListener( GetViewData()->GetActiveWin(), FALSE );
 
         //  #103849# The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
-        pClipEvtLstnr->ClearCallbackLink();
+        pImpl->m_pClipEvtLstnr->ClearCallbackLink();
 
-        pClipEvtLstnr->release();
+        pImpl->m_pClipEvtLstnr->release();
     }
+
+    delete pImpl->m_pLinkedDlg;
+    delete pImpl->m_pRequest;
+    delete pImpl;
 }
 
 //------------------------------------------------------------------
@@ -418,13 +424,13 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 // FID_PASTE_CONTENTS
 // SID_CLIPBOARD_FORMAT_ITEMS
 
-    if ( !pClipEvtLstnr )
+    if ( !pImpl->m_pClipEvtLstnr )
     {
         // create listener
-        pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
-        pClipEvtLstnr->acquire();
+        pImpl->m_pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
+        pImpl->m_pClipEvtLstnr->acquire();
         Window* pWin = GetViewData()->GetActiveWin();
-        pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
+        pImpl->m_pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
