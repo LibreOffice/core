@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:51:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,17 @@
 
 class Graphic;
 struct Impl_DownLoadData;
-
+namespace sfx2 { class FileDialogHelper; }
 
 class SvFileObject : public sfx2::SvLinkSource
 {
-    String sFileNm;
-    String sFilter;
-    String sReferer;
-    SfxMediumRef xMed;
-    Impl_DownLoadData* pDownLoadData;
+    String              sFileNm;
+    String              sFilter;
+    String              sReferer;
+    Link                aEndEditLink;
+    SfxMediumRef        xMed;
+    Impl_DownLoadData*  pDownLoadData;
+    Window*             pOldParent;
 
     BYTE nType;
 
@@ -82,6 +84,8 @@ class SvFileObject : public sfx2::SvLinkSource
     DECL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef* );
     DECL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void* );
     DECL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void* );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+
 protected:
     virtual ~SvFileObject();
 
@@ -92,8 +96,8 @@ public:
                             const String & rMimeType,
                             BOOL bSynchron = FALSE );
 
-    virtual BOOL Connect( sfx2::SvBaseLink* );
-    virtual String Edit( Window*, sfx2::SvBaseLink* );
+    virtual BOOL    Connect( sfx2::SvBaseLink* );
+    virtual void    Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl );
 
     // erfrage ob das man direkt auf die Daten zugreifen kann oder ob das
     // erst angestossen werden muss
