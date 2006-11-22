@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:12:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:59:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     const PPDKey* pKey = NULL;
     const PPDValue* pValue = NULL;
 
-    pJobSetup->mnPaperBin = 0xffff;
+    pJobSetup->mnPaperBin = 0;
     if( rData.m_pParser )
         pKey                    = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
     if( pKey )
@@ -266,8 +266,8 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
                  pJobSetup->mnPaperBin < pKey->countValues();
              pJobSetup->mnPaperBin++ )
             ;
-        if( pJobSetup->mnPaperBin >= pKey->countValues() || pValue == pKey->getDefaultValue() )
-            pJobSetup->mnPaperBin = 0xffff;
+        if( pJobSetup->mnPaperBin >= pKey->countValues() )
+            pJobSetup->mnPaperBin = 0;
     }
 
 
@@ -853,7 +853,7 @@ BOOL PspSalInfoPrinter::SetData(
             if( pKey )
             {
                 int nPaperBin = pJobSetup->mnPaperBin;
-                if( nPaperBin == 0xffff )
+                if( nPaperBin >= pKey->countValues() )
                     pValue = pKey->getDefaultValue();
                 else
                     pValue = pKey->getValue( pJobSetup->mnPaperBin );
@@ -947,7 +947,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG 
     if( aData.m_pParser )
     {
         const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
-        if( nPaperBin == 0xffff || ! pKey )
+        if( ! pKey || nPaperBin >= (ULONG)pKey->countValues() )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
         {
