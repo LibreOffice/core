@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:54:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,28 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
             }
         }
     }
+
+#ifdef X86_64
+    //Make one last final legacy attempt on x86_64 in case the distro placed it in lib64 instead
+    if (!bRt && m_sJavaHome != rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib")))
+    {
+        m_sHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib64"));
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        {
+            //Construct an absolute path to the possible runtime
+            OUString usRt= m_sHome + *ip;
+            DirectoryItem item;
+            if(DirectoryItem::get(usRt, item) == File::E_None)
+            {
+                //found runtime lib
+                m_sRuntimeLibrary = usRt;
+                bRt = true;
+                break;
+            }
+        }
+    }
+#endif
+
     if (!bRt)
         return false;
 
