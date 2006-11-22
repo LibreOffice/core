@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:07:02 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docinsert.hxx>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
@@ -55,12 +59,8 @@
 #include "instbdlg.hrc"
 #include "globstr.hrc"
 
-
 #define SC_INSTBDLG_CXX
 #include "instbdlg.hxx"
-
-const long SC_DLG_BROWSE_OK     = 0;
-const long SC_DLG_BROWSE_CANCEL = 1;
 
 //==================================================================
 
@@ -88,6 +88,8 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
         rViewData       ( rData ),
         rDoc            ( *rData.GetDocument() ),
         pDocShTables    ( NULL ),
+        pDocInserter    ( NULL ),
+        bMustClose      ( false ),
         nSelTabIndex    ( 0 ),
         nTableCount     (nTabCount)
 {
@@ -101,6 +103,7 @@ __EXPORT ScInsertTableDlg::~ScInsertTableDlg()
 {
     if (pDocShTables)
         pDocShTables->DoClose();
+    delete pDocInserter;
 }
 
 //------------------------------------------------------------------------
@@ -140,6 +143,9 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     {
         aBtnFromFile.Check();
         SetFromTo_Impl();
+
+        aBrowseTimer.SetTimeoutHdl( LINK( this, ScInsertTableDlg, BrowseTimeoutHdl ) );
+        aBrowseTimer.SetTimeout( 200 );
     }
     else
     {
@@ -152,19 +158,15 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 
 short __EXPORT ScInsertTableDlg::Execute()
 {
-    // Parent fuer InsertDocumentDialog und Doc-Manager setzen:
-
+    // set Parent of DocumentInserter and Doc-Manager
     Window* pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
-    bool bExecute = true;
-    if( aBtnFromFile.IsChecked() )
-        bExecute = BrowseHdl_Impl( &aBtnBrowse ) == SC_DLG_BROWSE_OK;
+    if ( aBtnFromFile.IsChecked() )
+        aBrowseTimer.Start();
 
-    short nRet = bExecute ? ModalDialog::Execute() : RET_CANCEL;
-
+    short nRet = ModalDialog::Execute();
     Application::SetDefDialogParent( pOldDefParent );
-
     return nRet;
 }
 
@@ -317,51 +319,12 @@ IMPL_LINK( ScInsertTableDlg, ChoiceHdl_Impl, RadioButton*, EMPTYARG )
 
 IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
 {
-        //  Dialog-Parent ist schon in Execute gesetzt worden
-
-    SfxApplication* pApp = SFX_APP();
-    SfxMedium* pMed = pApp->InsertDocumentDialog( 0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
-
-    if ( pMed )
-    {
-        //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
-        SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
-
-        if (pDocShTables)
-            pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
-
-        pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
-
-        pDocShTables = new ScDocShell;
-        aDocShTablesRef = pDocShTables;
-
-        Pointer aOldPtr( GetPointer() );
-        SetPointer( Pointer( POINTER_WAIT ) );
-        pDocShTables->DoLoad( pMed );
-        SetPointer( aOldPtr );
-
-        ULONG nErr = pDocShTables->GetErrorCode();
-        if (nErr)
-            ErrorHandler::HandleError( nErr );              // auch Warnings
-
-        if ( !pDocShTables->GetError() )                    // nur Errors
-        {
-            FillTables_Impl( pDocShTables->GetDocument() );
-            aFtPath.SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
-        }
-        else
-        {
-            pDocShTables->DoClose();
-            aDocShTablesRef.Clear();
-            pDocShTables = NULL;
-
-            FillTables_Impl( NULL );
-            aFtPath.SetText( EMPTY_STRING );
-        }
-    }
-
-    DoEnable_Impl();
-    return pMed ? SC_DLG_BROWSE_OK : SC_DLG_BROWSE_CANCEL;
+    if ( pDocInserter )
+        delete pDocInserter;
+    pDocInserter = new ::sfx2::DocumentInserter(
+            0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
+    pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );
+    return 0;
 }
 
 //------------------------------------------------------------------------
@@ -396,5 +359,62 @@ IMPL_LINK( ScInsertTableDlg, DoEnterHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( ScInsertTableDlg, BrowseTimeoutHdl, Timer*, EMPTYARG )
+{
+    bMustClose = true;
+    BrowseHdl_Impl( &aBtnBrowse );
+    return 0;
+}
 
+IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+{
+    if ( ERRCODE_NONE == _pFileDlg->GetError() )
+    {
+        SfxMedium* pMed = pDocInserter->CreateMedium();
+        if ( pMed )
+        {
+            //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
+            SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
+
+            if ( pDocShTables )
+                pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
+
+            pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
+
+            pDocShTables = new ScDocShell;
+            aDocShTablesRef = pDocShTables;
+
+            Pointer aOldPtr( GetPointer() );
+            SetPointer( Pointer( POINTER_WAIT ) );
+            pDocShTables->DoLoad( pMed );
+            SetPointer( aOldPtr );
+
+            ULONG nErr = pDocShTables->GetErrorCode();
+            if ( nErr )
+                ErrorHandler::HandleError( nErr );              // auch Warnings
+
+            if ( !pDocShTables->GetError() )                    // nur Errors
+            {
+                FillTables_Impl( pDocShTables->GetDocument() );
+                aFtPath.SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
+            }
+            else
+            {
+                pDocShTables->DoClose();
+                aDocShTablesRef.Clear();
+                pDocShTables = NULL;
+
+                FillTables_Impl( NULL );
+                aFtPath.SetText( EMPTY_STRING );
+            }
+        }
+
+        DoEnable_Impl();
+    }
+    else if ( bMustClose )
+        // execute slot FID_INS_TABLE_EXT and cancel file dialog
+        EndDialog( RET_CANCEL );
+
+    return 0;
+}
 
