@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:36:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,36 +713,6 @@ FieldUnit   GetDfltMetric(BOOL bWeb)
 void    SetDfltMetric( FieldUnit eMetric, BOOL bWeb )
 {
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
-}
-
-BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
-                            String* pPassword, String* pFilterName,
-                            SfxMedium** ppMedium )
-{
-    Window* pDefDlgParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( &rParent );
-    SfxMedium* pMed = SFX_APP()->InsertDocumentDialog( 0, String::CreateFromAscii("swriter") );
-    if( pMed )
-    {
-        if( pFilterName )
-            *pFilterName = pMed->GetFilter()->GetFilterName();
-
-        rFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-        if( pPassword )
-        {
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pMed->GetItemSet()->GetItemState(
-                                    SID_PASSWORD, FALSE, &pItem ) )
-                *pPassword = ((SfxStringItem*)pItem)->GetValue();
-        }
-
-        if( ppMedium )
-            *ppMedium = pMed;
-        else
-            delete pMed;        // das brauchen wir nicht mehr !
-    }
-    Application::SetDefDialogParent( pDefDlgParent );
-    return 0 != pMed;
 }
 
 /*-----------------09.04.98 16:58-------------------
