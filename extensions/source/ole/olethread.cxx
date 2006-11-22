@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olethread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:04:36 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include "ole2uno.hxx"
 
 #include <tools/presys.h>
-#include <hash_map>
 #include <tools/postsys.h>
 
 #include <vos/thread.hxx>
