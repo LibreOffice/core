@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:18:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( ChangeSourceClickHdl, PushButton * );
     DECL_LINK( BreakLinkClickHdl, PushButton * );
     DECL_LINK( UpdateWaitingHdl, Timer * );
+    DECL_LINK( EndEditHdl, sfx2::SvBaseLink* );
     sfx2::SvBaseLink* GetSelEntry( USHORT* pPos );
     String ImplGetStateStr( const sfx2::SvBaseLink& );
     void SetType( sfx2::SvBaseLink& rLink, USHORT nPos, USHORT nType );
