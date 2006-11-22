@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:53:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:58:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,11 +489,18 @@ struct TAccInfo
         KeyCode m_aKey;
 };
 
+namespace sfx2
+{
+    class FileDialogHelper;
+}
+
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
     friend class SfxAccCfgTabListBox_Impl;
 private:
     const SfxMacroInfoItem*         m_pMacroInfoItem;
+    sfx2::FileDialogHelper*         m_pFileDlg;
+
     SfxAccCfgTabListBox_Impl        aEntriesBox;
     FixedLine                       aKeyboardGroup;
      RadioButton                        aOfficeButton;
@@ -532,12 +539,16 @@ private:
     DECL_LINK(                  Default, PushButton * );
     DECL_LINK(                  RadioHdl, RadioButton* );
 
+    DECL_LINK(                  LoadHdl, sfx2::FileDialogHelper* );
+    DECL_LINK(                  SaveHdl, sfx2::FileDialogHelper* );
+
     String                      GetLabel4Command(const String& sCommand);
     void                        InitAccCfg();
     KeyCode                     MapPosToKeyCode( USHORT nPos ) const;
     USHORT                      MapKeyCodeToPos( const KeyCode &rCode ) const;
     String                      GetFunctionName( KeyFuncType eType ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
+    void                        StartFileDialog( WinBits nBits, const String& rTitle );
 
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
