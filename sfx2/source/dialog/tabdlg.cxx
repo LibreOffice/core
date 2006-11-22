@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:53:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:57:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -702,6 +702,16 @@ short SfxTabDialog::Execute()
         return RET_CANCEL;
     Start_Impl();
     return TabDialog::Execute();
+}
+
+// -----------------------------------------------------------------------
+
+void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
+{
+    if ( !aTabCtrl.GetPageCount() )
+        return;
+    Start_Impl();
+    TabDialog::StartExecuteModal( rEndDialogHdl );
 }
 
 // -----------------------------------------------------------------------
