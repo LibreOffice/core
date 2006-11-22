@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:27:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 #ifndef _PROVIDER_HXX_
 #define _PROVIDER_HXX_
-
-#include <hash_set>
 
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
