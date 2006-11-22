@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-26 14:10:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,12 @@ class HeaderBar;
 #include "ControlFocusHelper.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef _SVTOOLS_DIALOGCLOSEDLISTENER_HXX
+#include <svtools/dialogclosedlistener.hxx>
+#endif
 
 // forward ---------------------------------------------------------------
 
@@ -67,6 +73,7 @@ namespace svx
     class OptHeaderTabListBox;
 }
 struct OptPath_Impl;
+class SvxPathTabPage;
 
 // define ----------------------------------------------------------------
 
@@ -88,13 +95,20 @@ private:
     ::svx::OptHeaderTabListBox* pPathBox;
     OptPath_Impl*               pImpl;
 
-#ifdef _SVX_OPTPATH_CXX
-    DECL_LINK( PathHdl_Impl, PushButton * );
-    DECL_LINK( StandardHdl_Impl, PushButton * );
+    ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
 
-    DECL_LINK( PathSelect_Impl, OptHeaderTabListBox * );
-    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
-    DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
+#ifdef _SVX_OPTPATH_CXX
+    void        ChangeCurrentEntry( const String& _rFolder );
+
+    DECL_LINK(  PathHdl_Impl, PushButton * );
+    DECL_LINK(  StandardHdl_Impl, PushButton * );
+
+    DECL_LINK(  PathSelect_Impl, OptHeaderTabListBox * );
+    DECL_LINK(  HeaderSelect_Impl, HeaderBar * );
+    DECL_LINK(  HeaderEndDrag_Impl, HeaderBar * );
+
+    DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
     void        GetPathList( USHORT _nPathHandle, String& _rInternalPath,
                              String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly );
@@ -113,7 +127,6 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
 };
-
 
 #endif
 
