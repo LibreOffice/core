@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:44:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 12:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2070,6 +2070,16 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpDec< sal_uInt16 >( "col-width", "CONV-COLWIDTH" );
         break;
 
+        case EXC_ID_DCONNAME:
+            DumpString( "source-name", (eBiff <= EXC_BIFF5) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
+            DumpString( "source-link", (eBiff <= EXC_BIFF5) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
+        break;
+
+        case EXC_ID_DCONREF:
+            DumpRange( "source-range", false );
+            DumpString( "source-link", (eBiff <= EXC_BIFF5) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
+        break;
+
         case EXC_ID3_DEFROWHEIGHT:
             DumpHex< sal_uInt16 >( "flags", "DEFROWHEIGHT-FLAGS" );
             DumpDec< sal_uInt16 >( "row-height", "CONV-TWIP-TO-PT" );
@@ -2171,6 +2181,122 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpString( "result", ((nRecId == EXC_ID2_STRING) && (eBiff <= EXC_BIFF4)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
         break;
 
+        case EXC_ID_SXDI:
+        {
+            DumpDec< sal_uInt16 >( "field-idx" );
+            DumpDec< sal_uInt16 >( "function", "SXDI-FUNC" );
+            DumpDec< sal_uInt16 >( "data-format", "SXDI-FORMAT" );
+            DumpDec< sal_uInt16 >( "format-basefield-idx" );
+            DumpDec< sal_uInt16 >( "format-baseitem-idx", "SXDI-BASEITEM" );
+            DumpFormatIdx();
+            sal_uInt16 nNameLen = DumpDec< sal_uInt16 >( "item-name-len", "SX-NAMELEN" );
+            if( nNameLen != EXC_PT_NOSTRING )
+                WriteStringItem( "item-name", rStrm.ReadUniString( nNameLen ) );
+        }
+        break;
+
+        case EXC_ID_SXEXT:
+            if( eBiff == EXC_BIFF8 )
+            {
+                DumpHex< sal_uInt16 >( "flags", "SXEXT-FLAGS" );
+                DumpDec< sal_uInt16 >( "param-string-count" );
+                DumpDec< sal_uInt16 >( "sql-statement-string-count" );
+                DumpDec< sal_uInt16 >( "webquery-postmethod-string-count" );
+                DumpDec< sal_uInt16 >( "server-pagefields-string-count" );
+                DumpDec< sal_uInt16 >( "odbc-connection-string-count" );
+            }
+        break;
+
+        case EXC_ID_SXIVD:
+            Out().ResetItemIndex();
+            for( sal_Size nIdx = 0, nCount = rStrm.GetRecLeft() / 2; nIdx < nCount; ++nIdx )
+                DumpDec< sal_uInt16 >( "#field-idx" );
+        break;
+
+        case EXC_ID_SXLI:
+            if( mnPTSxliIdx < 2 )
+            {
+                sal_uInt16 nCount = (mnPTSxliIdx == 0) ? mnPTRowFields : mnPTColFields;
+                sal_Size nLineSize = 8 + 2 * nCount;
+                Out().ResetItemIndex();
+                while( rStrm.GetRecLeft() >= nLineSize )
+                {
+                    WriteEmptyItem( "#line-data" );
+                    IndentGuard aIndGuard( Out() );
+                    MultiItemsGuard aMultiGuard( Out() );
+                    DumpDec< sal_uInt16 >( "ident-count" );
+                    DumpDec< sal_uInt16 >( "item-type", "SXLI-ITEMTYPE" );
+                    DumpDec< sal_uInt16 >( "used-count" );
+                    DumpHex< sal_uInt16 >( "flags", "SXLI-FLAGS" );
+                    String aItemList;
+                    for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
+                        StringHelper::AppendToken( aItemList, In().ReadValue< sal_uInt16 >() );
+                    WriteInfoItem( "item-idxs", aItemList );
+                }
+                ++mnPTSxliIdx;
+            }
+        break;
+
+        case EXC_ID_SXSTRING:
+            DumpString( "value" );
+        break;
+
+        case EXC_ID_SXVD:
+        {
+            DumpDec< sal_uInt16 >( "axis-type", "SXVD-AXISTYPE" );
+            DumpDec< sal_uInt16 >( "subtotal-count" );
+            DumpHex< sal_uInt16 >( "subtotals", "SXVD-SUBTOTALS" );
+            DumpDec< sal_uInt16 >( "item-count" );
+            sal_uInt16 nNameLen = DumpDec< sal_uInt16 >( "field-name-len", "SX-NAMELEN" );
+            if( nNameLen != EXC_PT_NOSTRING )
+                WriteStringItem( "field-name", rStrm.ReadUniString( nNameLen ) );
+        }
+        break;
+
+        case EXC_ID_SXVDEX:
+            DumpHex< sal_uInt32 >( "flags", "SXVDEX-FLAGS" );
+            DumpDec< sal_uInt16 >( "autosort-basefield-idx" );
+            DumpDec< sal_uInt16 >( "autoshow-basefield-idx" );
+            DumpFormatIdx();
+        break;
+
+        case EXC_ID_SXVI:
+        {
+            DumpDec< sal_uInt16 >( "item-type", "SXVI-ITEMTYPE" );
+            DumpHex< sal_uInt16 >( "flags", "SXVI-FLAGS" );
+            DumpDec< sal_uInt16 >( "cache-idx" );
+            sal_uInt16 nNameLen = DumpDec< sal_uInt16 >( "item-name-len", "SX-NAMELEN" );
+            if( nNameLen != EXC_PT_NOSTRING )
+                WriteStringItem( "item-name", rStrm.ReadUniString( nNameLen ) );
+        }
+        break;
+
+        case EXC_ID_SXVIEW:
+        {
+            DumpRange( "output-range" );
+            DumpRowIndex( "first-header-row" );
+            DumpAddress( "first-data-pos" );
+            DumpDec< sal_uInt16 >( "cache-idx" );
+            DumpUnused( 2 );
+            DumpDec< sal_uInt16 >( "default-data-axis", "SXVD-AXISTYPE" );
+            DumpDec< sal_Int16 >( "default-data-pos" );
+            DumpDec< sal_uInt16 >( "field-count" );
+            mnPTRowFields = DumpDec< sal_uInt16 >( "row-field-count" );
+            mnPTColFields = DumpDec< sal_uInt16 >( "column-field-count" );
+            DumpDec< sal_uInt16 >( "page-field-count" );
+            DumpDec< sal_uInt16 >( "data-field-count" );
+            DumpDec< sal_uInt16 >( "data-row-count" );
+            DumpDec< sal_uInt16 >( "data-column-count" );
+            DumpHex< sal_uInt16 >( "flags", "SXVIEW-FLAGS" );
+            DumpDec< sal_uInt16 >( "auto-format-idx" );
+            sal_uInt16 nTabNameLen = DumpDec< sal_uInt16 >( "table-name-len" );
+            sal_uInt16 nDataNameLen = DumpDec< sal_uInt16 >( "data-name-len" );
+            WriteStringItem( "table-name", rStrm.ReadUniString( nTabNameLen ) );
+            WriteStringItem( "data-name", rStrm.ReadUniString( nDataNameLen ) );
+            mnPTSxliIdx = 0;
+        }
+        break;
+
         case EXC_ID2_XF:
         case EXC_ID3_XF:
         case EXC_ID4_XF:
@@ -2207,6 +2333,9 @@ void WorkbookStreamObject::ConstructOwn()
         mxFormats       = rCfg.CreateNameList< ConstList >( "FORMATS" );
         mxFormats->IncludeList( rCfg.GetNameList( "BUILTIN-FORMATS" ) );
         mnFormatIdx = 0;
+        mnPTRowFields = 0;
+        mnPTColFields = 0;
+        mnPTSxliIdx = 0;
     }
 }
 
@@ -2451,6 +2580,7 @@ void PivotCacheStreamObject::ImplDumpRecord()
             WriteDateTimeItem( "value", aDateTime );
         }
         break;
+
         case EXC_ID_SXDB:
             DumpDec< sal_uInt32 >( "source-records" );
             DumpHex< sal_uInt16 >( "stream-id" );
@@ -2462,10 +2592,11 @@ void PivotCacheStreamObject::ImplDumpRecord()
             DumpDec< sal_uInt16 >( "database-type", "SXDB-TYPE" );
             DumpString( "user-name" );
         break;
+
         case EXC_ID_SXFIELD:
             DumpHex< sal_uInt16 >( "flags", "SXFIELD-FLAGS" );
-            DumpDec< sal_uInt16 >( "group-child" );
-            DumpDec< sal_uInt16 >( "group-base" );
+            DumpDec< sal_uInt16 >( "group-child-field" );
+            DumpDec< sal_uInt16 >( "group-base-field" );
             DumpDec< sal_uInt16 >( "visible-items" );
             DumpDec< sal_uInt16 >( "group-items" );
             DumpDec< sal_uInt16 >( "base-items" );
@@ -2473,6 +2604,7 @@ void PivotCacheStreamObject::ImplDumpRecord()
             if( rStrm.GetRecLeft() >= 3 )
                 DumpString( "item-name" );
         break;
+
         case EXC_ID_SXSTRING:
             DumpString( "value" );
         break;
