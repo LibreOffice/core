@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impldde.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:18:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,15 +328,14 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
     return TRUE;
 }
 
-String SvDDEObject::Edit( Window* pParent, SvBaseLink * pBaseLink )
+void SvDDEObject::Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl )
 {
-    String aRet;
-
     SvDDELinkEditDialog aDlg( pParent, pBaseLink );
-    if( RET_OK == aDlg.Execute() )
-        aRet = aDlg.GetCmd();
-
-    return aRet;
+    if ( RET_OK == aDlg.Execute() && rEndEditHdl.IsSet() )
+    {
+        String sCommand = aDlg.GetCmd();
+        rEndEditHdl.Call( &sCommand );
+    }
 }
 
 BOOL SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
