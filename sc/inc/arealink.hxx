@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:22:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,19 +53,21 @@
 
 class ScDocShell;
 class SfxObjectShell;
+class AbstractScLinkedAreaDlg;
+struct AreaLink_Impl;
 
 class ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
-    ScDocShell* pDocShell;      // Container
-    String      aFileName;
-    String      aFilterName;
-    String      aOptions;
-    String      aSourceArea;
-    ScRange     aDestArea;
-    BOOL        bAddUndo;
-    BOOL        bInCreate;
-    BOOL        bDoInsert;      // wird fuer das erste Update auf FALSE gesetzt
+    AreaLink_Impl*  pImpl;
+    String          aFileName;
+    String          aFilterName;
+    String          aOptions;
+    String          aSourceArea;
+    ScRange         aDestArea;
+    BOOL            bAddUndo;
+    BOOL            bInCreate;
+    BOOL            bDoInsert;      // wird fuer das erste Update auf FALSE gesetzt
 
     BOOL        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
 
@@ -80,7 +82,7 @@ public:
     virtual void DataChanged( const String& rMimeType,
                               const ::com::sun::star::uno::Any & rValue );
 
-    virtual BOOL Edit(Window* pParent);
+    virtual void    Edit( Window*, const Link& rEndEditHdl );
 
     BOOL    Refresh( const String& rNewFile, const String& rNewFilter,
                     const String& rNewArea, ULONG nNewRefresh );
@@ -101,8 +103,8 @@ public:
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
     DECL_LINK( RefreshHdl, ScAreaLink* );
-
+    DECL_LINK( EndEditHdl, AbstractScLinkedAreaDlg* );
 };
 
-
 #endif
+
