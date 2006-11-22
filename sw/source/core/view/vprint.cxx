@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:03:43 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1064,10 +1064,11 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
 
         if( !rOptions.GetJobName().Len() && !pPrt->IsJobActive() )
             return bStartJob;
-
-        // Einstellungen am Drucker merken
-        SwPrtOptSave aPrtSave( pPrt );
     }
+
+    // Einstellungen am Drucker merken
+    SwPrtOptSave aPrtSave( pPrt );
+
     OutputDevice *pPrtOrPDFOut = pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
 
     // eine neue Shell fuer den Printer erzeugen
