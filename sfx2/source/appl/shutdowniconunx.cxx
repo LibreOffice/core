@@ -69,6 +69,7 @@ static void open_template_cb( GtkWidget * )
 static void systray_disable_cb()
 {
     ShutdownIcon::SetAutostart( false );
+    ShutdownIcon::terminateDesktop();
 }
 
 static void exit_quickstarter_cb( GtkWidget * )
