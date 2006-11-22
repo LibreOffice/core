@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgaction.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:29:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,11 +589,9 @@ void SVGActionWriter::ImplWritePolygon( const Polygon& rPoly, sal_Bool bLineOnly
 {
     if( rPoly.GetSize() )
     {
-#if SUPD > 642
         if( rPoly.HasFlags() )
             ImplWritePolyPolygon( rPoly, bLineOnly, pStyle );
         else
-#endif
         {
             FastString                  aStyle;
             FastString                  aPoints;
@@ -649,11 +647,9 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
 {
     if( rPolyPoly.Count() )
     {
-#if SUPD > 642
         if( ( rPolyPoly.Count() == 1 ) && ( rPolyPoly[ 0 ].HasFlags() == sal_False ) )
             ImplWritePolygon( rPolyPoly[ 0 ], bLineOnly, pStyle );
         else
-#endif
         {
             FastString                  aStyle;
             FastString                  aPathData;
