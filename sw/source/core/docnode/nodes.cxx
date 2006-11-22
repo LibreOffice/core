@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:11:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #ifndef _FRAME_HXX
 #include <frame.hxx>
 #endif
+// --> OD 2006-11-14 #b6492987#
+#include <txtnodenumattr.hxx>
+// <--
 
 extern FASTBOOL CheckNodesRange( const SwNodeIndex& rStt,
                             const SwNodeIndex& rEnd, FASTBOOL bChkSection );
@@ -208,7 +211,11 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
             SwNodeIndex aDelIdx( *this, n );
             SwNode& rNd = aDelIdx.GetNode();
 
-            unsigned nTxtNodeLevel = 0;
+            // --> OD 2006-11-14 #b6492987#
+            // presave and restore all numbering attributes for a text node.
+//            unsigned nTxtNodeLevel = 0;
+            SwTxtNodeNumAttrs* pTxtNodeNumAttrs( 0L );
+            // <--
 
             // --> OD 2005-11-16 #i57920#
             // correction of refactoring done by cws swnumtree:
@@ -218,7 +225,12 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
             if ( rNd.IsTxtNode() )
             {
                 SwTxtNode* pTxtNode = rNd.GetTxtNode();
-                nTxtNodeLevel = pTxtNode->GetLevel();
+                // --> OD 2006-11-14 #b6492987#
+                // presave numbering attributes of text node in instance of
+                // helper class <SwTxtNodeNumAttrs>.
+//                nTxtNodeLevel = pTxtNode->GetLevel();
+                pTxtNodeNumAttrs = new SwTxtNodeNumAttrs( *pTxtNode );
+                // <--
                 pTxtNode->UnregisterNumber();
 
                 if ( pTxtNode->GetTxtColl()->GetOutlineLevel() != NO_NUMBERING )
@@ -236,8 +248,16 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                 SwTxtNode& rTxtNd = (SwTxtNode&)rNd;
                 rTxtNd.SyncNumberAndNumRule();
 
-                if (rTxtNd.GetNumRule())
-                    rTxtNd.SetLevel(nTxtNodeLevel);
+                // --> OD 2006-11-14 #b6492987#
+                // restore numbering attributes
+                ASSERT( pTxtNodeNumAttrs,
+                        "<SwNodes::ChgNode(..)> - missing instance of <SwTxtNumAttrs>. This is a serious defect, please inform OD" );
+                if ( rTxtNd.GetNumRule() && pTxtNodeNumAttrs )
+                {
+//                    rTxtNd.SetLevel(nTxtNodeLevel);
+                    pTxtNodeNumAttrs->ApplyPresavedNumAttrsAtTxtNode( rTxtNd );
+                }
+                // <--
 
                 if( bInsOutlineIdx &&
                     NO_NUMBERING != rTxtNd.GetTxtColl()->GetOutlineLevel() )
@@ -254,6 +274,10 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
             }
             else if( rNd.IsCntntNode() )
                 ((SwCntntNode&)rNd).InvalidateNumRule();
+
+            // --> OD 2006-11-14 #b6492987#
+            delete pTxtNodeNumAttrs;
+            // <--
         }
     }
     else
