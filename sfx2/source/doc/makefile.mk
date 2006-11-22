@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 13:28:25 $
+#   last change: $Author: vg $ $Date: 2006-11-22 10:57:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@ SRC1FILES = \
         doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src secmacrowarnings.src
 
 SLOFILES =	\
-                $(SLO)$/iframe.obj \
-                $(SLO)$/applet.obj \
+        $(SLO)$/iframe.obj \
+        $(SLO)$/applet.obj \
         $(SLO)$/commitlistener.obj \
-                $(SLO)$/plugin.obj \
+        $(SLO)$/plugin.obj \
         $(SLO)$/docfile.obj \
         $(SLO)$/objuno.obj \
         $(SLO)$/frmdescr.obj \
@@ -81,7 +81,8 @@ SLOFILES =	\
         $(SLO)$/graphhelp.obj \
         $(SLO)$/QuerySaveDocument.obj \
         $(SLO)$/secmacrowarnings.obj \
-        $(SLO)$/opostponedtruncationstream.obj
+        $(SLO)$/opostponedtruncationstream.obj \
+        $(SLO)$/docinsert.obj
 
 # exception should already be switched on
 # EXCEPTIONSFILES=$(SLO)$/objuno.obj \
