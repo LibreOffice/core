@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:50:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 11:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ class FmCursorActionThread;
 struct SAL_DLLPRIVATE CursorActionDescription
 {
     FmCursorActionThread*   pThread;
-    sal_uInt32                  nFinishedEvent;
+    ULONG                       nFinishedEvent;
         // we want to do the cleanup of the thread in the main thread so we post an event to ourself
     sal_Bool                    bCanceling;
         // this thread is being canceled
@@ -234,11 +234,11 @@ class FmFormPage;
 struct SAL_DLLPRIVATE FmLoadAction
 {
     FmFormPage* pPage;
-    sal_uInt32  nEventId;
+    ULONG       nEventId;
     sal_uInt16  nFlags;
 
     FmLoadAction( ) : pPage( NULL ), nEventId( 0 ), nFlags( 0 ) { }
-    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, sal_uInt32 _nEventId )
+    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, ULONG _nEventId )
         :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {
     }
