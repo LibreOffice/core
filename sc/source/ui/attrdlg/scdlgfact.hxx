@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:27:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,16 @@ public:                                             \
     virtual USHORT  Execute() ;
 //  virtual void    Show( BOOL bVisible = TRUE, USHORT nFlags = 0 )
 
+#define DECL_ABSTDLG2_BASE(Class,DialogClass)        \
+    DialogClass*        pDlg;                       \
+public:                                             \
+                    Class( DialogClass* p)          \
+                     : pDlg(p)                      \
+                     {}                             \
+    virtual         ~Class();                       \
+    virtual void    StartExecuteModal( const Link& rEndDialogHdl ); \
+    long            GetResult();
+
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
@@ -89,6 +99,19 @@ USHORT Class::Execute()                             \
     return pDlg->Execute();                         \
 }
 
+#define IMPL_ABSTDLG2_BASE(Class)                   \
+Class::~Class()                                     \
+{                                                   \
+    delete pDlg;                                    \
+}                                                   \
+void Class::StartExecuteModal( const Link& rEndDialogHdl ) \
+{                                                   \
+    pDlg->StartExecuteModal( rEndDialogHdl ) ;      \
+}                                                   \
+long Class::GetResult()                             \
+{                                                   \
+    return pDlg->GetResult();                       \
+}
 
 class VclAbstractDialog_Impl : public VclAbstractDialog //add for ScColOrRowDlg
 {
@@ -212,7 +235,8 @@ class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg  //add for ScSel
 
 class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg  //add for ScLinkedAreaDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScLinkedAreaDlg_Impl, ScLinkedAreaDlg);
+    DECL_ABSTDLG2_BASE( AbstractScLinkedAreaDlg_Impl, ScLinkedAreaDlg);
+
     virtual void            InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
                                         ULONG nRefresh );
