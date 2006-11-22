@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:31:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ public:
 class SwView;
 class SwMailMergeConfigItem;
 
-class AbstractMailMergeWizard : public VclAbstractDialog
+class AbstractMailMergeWizard : public VclAbstractDialog2
 {
 public:
     virtual void                SetReloadDocument(const String& rURL) = 0;
