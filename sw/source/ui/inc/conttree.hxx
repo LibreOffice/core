@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:39:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,23 +216,36 @@ public:
         SvLBoxEntry* pEntry);
 };
 
+namespace sfx2 { class DocumentInserter; }
+namespace sfx2 { class FileDialogHelper; }
+
 class SwGlobalTree : public SvTreeListBox
 {
+private:
     AutoTimer           aUpdateTimer;
     String              aContextStrings[GLOBAL_CONTEXT_COUNT];
 
     ImageList           aEntryImages;
 
-    SwWrtShell*         pActiveShell;   //
-    SvLBoxEntry*        pEmphasisEntry; // Drag'n Drop-Emphasis
-    SvLBoxEntry*        pDDSource;      // Quelle beim DnD
-    SwGlblDocContents*  pSwGlblDocContents; // Array mit sortierten Inhalten
+    SwWrtShell*             pActiveShell;   //
+    SvLBoxEntry*            pEmphasisEntry; // Drag'n Drop-Emphasis
+    SvLBoxEntry*            pDDSource;      // Quelle beim DnD
+    SwGlblDocContents*      pSwGlblDocContents; // Array mit sortierten Inhalten
+
+    Window*                 pDefParentWin;
+    SwGlblDocContent*       pDocContent;
+    sfx2::DocumentInserter* pDocInserter;
 
     BOOL                bIsInternalDrag     :1;
     BOOL                bLastEntryEmphasis  :1; // Drag'n Drop
     BOOL                bIsImageListInitialized : 1;
 
     static const SfxObjectShell* pShowShell;
+
+    void        InsertRegion( const SwGlblDocContent* _pContent,
+                              const com::sun::star::uno::Sequence< ::rtl::OUString >& _rFiles );
+
+    DECL_LINK(  DialogClosedHdl, sfx2::FileDialogHelper* );
 
 protected:
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
@@ -286,6 +299,7 @@ protected:
 
     virtual PopupMenu* CreateContextMenu( void );
     virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
+
 public:
     SwGlobalTree(Window* pParent, const ResId& rResId);
     virtual ~SwGlobalTree();
@@ -303,8 +317,5 @@ public:
     BOOL                Update(BOOL bHard = FALSE);
 };
 
-
-
 #endif
-
 
