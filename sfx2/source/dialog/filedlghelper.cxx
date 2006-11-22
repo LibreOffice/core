@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:52:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HDL_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XASYNCHRONOUSEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -310,6 +313,16 @@ void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeExceptio
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     mpAntiImpl->DialogSizeChanged();
+}
+
+// ------------------------------------------------------------------------
+// XDialogClosedListener Methods
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEvent ) throw ( RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    mpAntiImpl->DialogClosed( _rEvent );
+    postExecute( _rEvent.DialogResult );
 }
 
 // ------------------------------------------------------------------------
@@ -1413,6 +1426,31 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 }
 
 // ------------------------------------------------------------------------
+void FileDialogHelper_Impl::implStartExecute()
+{
+    DBG_ASSERT( mxFileDlg.is(), "invalid file dialog" );
+
+    preExecute();
+
+    if ( mbSystemPicker )
+    {
+    }
+    else
+    {
+        try
+        {
+            Reference< XAsynchronousExecutableDialog > xAsyncDlg( mxFileDlg, UNO_QUERY );
+            if ( xAsyncDlg.is() )
+                xAsyncDlg->startExecuteModal( this );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERRORFILE( "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         String&         rFilter )
@@ -2291,6 +2329,16 @@ void FileDialogHelper::SetContext( Context _eNewContext )
 }
 
 // ------------------------------------------------------------------------
+IMPL_LINK( FileDialogHelper, ExecuteSystemFilePicker, void*, EMPTYARG )
+{
+    m_nError = mpImp->execute();
+    if ( m_aDialogClosedLink.IsSet() )
+        m_aDialogClosedLink.Call( this );
+
+    return 0L;
+}
+
+// ------------------------------------------------------------------------
 ErrCode FileDialogHelper::Execute( const String&   rPath,
                                    SvStringsDtor*& rpURLList,
                                    SfxItemSet *&   rpSet,
@@ -2319,6 +2367,40 @@ ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
     delete pURLList;
 
     return nRet;
+}
+
+void FileDialogHelper::StartExecuteModal( const Link& rEndDialogHdl )
+{
+    m_aDialogClosedLink = rEndDialogHdl;
+    m_nError = ERRCODE_NONE;
+    if ( mpImp->isSystemFilePicker() )
+        Application::PostUserEvent( LINK( this, FileDialogHelper, ExecuteSystemFilePicker ) );
+    else
+        mpImp->implStartExecute();
+}
+
+// ------------------------------------------------------------------------
+
+short FileDialogHelper::GetDialogType() const
+{
+    return mpImp ? mpImp->m_nDialogType : 0;
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool FileDialogHelper::IsPasswordEnabled() const
+{
+    return mpImp ? mpImp->isPasswordEnabled() : sal_False;
+}
+
+// ------------------------------------------------------------------------
+
+String FileDialogHelper::GetRealFilter() const
+{
+    String sFilter;
+    if ( mpImp )
+        mpImp->getRealFilter( sFilter );
+    return sFilter;
 }
 
 // ------------------------------------------------------------------------
@@ -2523,6 +2605,14 @@ void SAL_CALL FileDialogHelper::DialogSizeChanged()
 }
 
 // ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
+{
+    m_nError = ( RET_OK == _rEvent.DialogResult ) ? ERRCODE_NONE : ERRCODE_ABORT;
+    if ( m_aDialogClosedLink.IsSet() )
+        m_aDialogClosedLink.Call( this );
+}
+
+// ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 
@@ -2531,19 +2621,17 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              SvStringsDtor *& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
-                             String aPath,
-                             ULONG /*nHelpId*/ )
+                             const String* pPath )
 {
     ErrCode nRet;
     FileDialogHelper aDialog( nFlags, rFact );
 
-//  if( nHelpId )
-//      aDialog.SetDialogHelpId( nHelpId );
+    String aPath;
+    if ( pPath )
+        aPath = *pPath;
 
     nRet = aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
     DBG_ASSERT( rFilter.SearchAscii(": ") == STRING_NOTFOUND, "Old filter name used!");
-
-    aPath = aDialog.GetDisplayDirectory();
 
     return nRet;
 }
