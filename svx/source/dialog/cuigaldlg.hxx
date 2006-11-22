@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:09:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:34:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,12 @@
 #ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HPP_
 #include <com/sun/star/media/XPlayer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef _SVTOOLS_DIALOGCLOSEDLISTENER_HXX
+#include <svtools/dialogclosedlistener.hxx>
+#endif
 
 // ------------
 // - Forwards -
@@ -75,18 +81,6 @@ struct FilterEntry
 {
     String  aFilterName;
 };
-
-//CHINA001 // ----------------
-//CHINA001 // - ExchangeData -
-//CHINA001 // ----------------
-//CHINA001
-//CHINA001 struct ExchangeData
-//CHINA001 {
-//CHINA001 GalleryTheme*    pTheme;
-//CHINA001 String           aEditedTitle;
-//CHINA001 Date         aThemeChangeDate;
-//CHINA001 Time         aThemeChangeTime;
-//CHINA001 };
 
 // ----------------
 // - SearchThread -
@@ -140,6 +134,7 @@ public:
                         DECL_LINK( CleanUpHdl, void* );
 
     virtual short       Execute();
+    virtual void        StartExecuteModal( const Link& rEndDialogHdl );
     void                SetFileType( const String& rType ) { aFtSearchType.SetText( rType ); }
     void                SetDirectory( const INetURLObject& rURL ) { aFtSearchDir.SetText( GetReducedString( rURL, 30 ) ); }
 };
@@ -191,6 +186,7 @@ public:
 
     void                SetFile( const INetURLObject& rURL ) { aFtTakeFile.SetText( GetReducedString( rURL, 30 ) ); }
     virtual short       Execute();
+    virtual void        StartExecuteModal( const Link& rEndDialogHdl );
 };
 
 // ---------------------
@@ -350,7 +346,9 @@ class TPGalleryThemeProperties : public SfxTabPage
     BOOL                bTakeAll;
     BOOL                bSearchRecursive;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > xMediaPlayer;
+    ::com::sun::star::uno::Reference< ::svt::DialogClosedListener >                  xDialogListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >             xMediaPlayer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
 
     virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
     virtual BOOL        FillItemSet( SfxItemSet& /*rSet*/ ) { return TRUE; }
@@ -371,6 +369,8 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( SelectFileTypeHdl, void* );
                         DECL_LINK( DClickFoundHdl, void* );
                         DECL_LINK( PreviewTimerHdl, void* );
+                        DECL_LINK( EndSearchProgressHdl, SearchProgress* );
+                        DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
 public:
                         TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet );
@@ -378,6 +378,8 @@ public:
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
+
+    void                StartSearchFiles( const String& _rFolderURL, short _nDlgResult );
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 };
