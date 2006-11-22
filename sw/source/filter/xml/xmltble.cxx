@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:31:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:47:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,6 @@
 #endif
 
 #include <list>
-#include <hash_map>
 
 #ifndef _SWTABLE_HXX
 #include "swtable.hxx"
