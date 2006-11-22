@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helponstartup.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:56:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-22 10:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 #ifndef __FRAMEWORK_JOBS_HELPONSTARTUP_HXX_
 #define __FRAMEWORK_JOBS_HELPONSTARTUP_HXX_
-
-// Must be the first include to prevent using of system headers .-(
-#include <hash_map>
 
 //_______________________________________________
 // my own includes
