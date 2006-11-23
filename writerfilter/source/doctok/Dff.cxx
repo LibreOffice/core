@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:25:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:18:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,12 +195,23 @@ void DffRecord::resolve(Properties & rHandler)
     pVal = createValue(getVersion());
     rHandler.attribute(NS_rtf::LN_dffversion, *pVal);
 
+    pVal = createValue(getU32(0x0));
+    rHandler.attribute(NS_rtf::LN_dffheader, *pVal);
+
     if (isContainer())
     {
         resolveChildren(rHandler);
     }
 
     resolveLocal(rHandler);
+
+#if 1
+    WW8BinaryObjReference::Pointer_t pBinObjRef
+        (new WW8BinaryObjReference(this, 0x8, getCount() - 0x8));
+    WW8Sprm aSprm(pBinObjRef);
+
+    rHandler.sprm(aSprm);
+#endif
 }
 
 sal_uInt32 DffRecord::getShapeType()
