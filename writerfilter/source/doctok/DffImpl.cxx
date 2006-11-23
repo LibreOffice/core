@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:26:27 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,50 @@ rtl::OUString DffBSE::get_blipname()
     return sResult;
 }
 
+doctok::Reference<Properties>::Pointer_t
+DffBSE::get_blip()
+{
+    doctok::Reference<Properties>::Pointer_t pResult;
+
+    WW8FBSE aFBSE(this, 8);
+    sal_uInt32 nOffset = 8 + WW8FBSE::getSize() + aFBSE.get_cbName();
+
+    if (nOffset + 8 < getCount())
+    {
+        WW8StructBase aTmp(this, nOffset, 0x8);
+
+        sal_uInt32 nCount = getCount() - 8;
+
+        if (aTmp.getU32(0x4) - 8 < nCount)
+            nCount = aTmp.getU32(0x4) - 8;
+
+        if (nCount)
+        {
+            DffRecord * pRecord = createDffRecord(this, nOffset);
+
+            pResult = doctok::Reference<Properties>::Pointer_t(pRecord);
+        }
+    }
+    else
+    {
+        nOffset = sal::static_int_cast<sal_Int32>(aFBSE.get_foDelay());
+        if (nOffset > 0 && getDocument() != NULL)
+        {
+            WW8StructBase aStructBase(*getDocument()->getDocStream(),
+                                      nOffset, 0x8);
+
+            DffRecord * pRecord =
+                createDffRecord(*getDocument()->getDocStream(),
+                                aFBSE.get_foDelay());
+
+            pResult = doctok::Reference<Properties>::Pointer_t(pRecord);
+        }
+    }
+
+    return pResult;
+}
+
+#if 0
 WW8BinaryObjReference::Pointer_t DffBSE::get_binary()
 {
     WW8BinaryObjReference::Pointer_t pResult;
@@ -377,6 +421,7 @@ WW8BinaryObjReference::Pointer_t DffBSE::get_binary()
 
     return pResult;
 }
+#endif
 
 // WW8FOPTE
 void WW8FOPTE::resolveNoAuto(Properties & rHandler)
