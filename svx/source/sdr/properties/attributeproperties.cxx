@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributeproperties.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:45:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-23 12:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,8 +555,6 @@ namespace sdr
                 const SfxPoolItem *pItem = NULL;
 
                 // now set all hard attributes of the current at the new itemset
-                static bool bUseParents(true);
-
                 while(nWhich)
                 {
                     // #i61284# use mpItemSet with parents, makes things easier and reduces to
