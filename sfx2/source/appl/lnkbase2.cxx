@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lnkbase2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:55:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-23 12:02:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ struct ImplBaseLinkData
     };
     ImplBaseLinkData()
     {
-        ClientType.nCntntType = NULL;
+        ClientType.nCntntType = 0;
         ClientType.bIntrnlLnk = FALSE;
         ClientType.nUpdateMode = 0;
         DDEType.pItem = NULL;
