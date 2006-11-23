@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdviter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:57:14 $
+ *  last change: $Author: vg $ $Date: 2006-11-23 10:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                 // Objekt gewuenscht? Na dann erstmal sehen, ob
                 // das Obj in dieser PageView auch sichtbar ist.
                 SetOfByte aObjLay;
-                pObject->getMergedHierarchyLayerSet(aObjLay);
+                mpObject->getMergedHierarchyLayerSet(aObjLay);
                 aObjLay &= pPV->GetVisibleLayers();
                 return !aObjLay.IsEmpty();
             }
@@ -142,7 +142,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                             // Objekt gewuenscht? Na dann erstmal sehen, ob
                             // das Obj in dieser PageView auch sichtbar ist.
                             SetOfByte aObjLay;
-                            pObject->getMergedHierarchyLayerSet(aObjLay);
+                            mpObject->getMergedHierarchyLayerSet(aObjLay);
                             aObjLay &= pPV->GetVisibleLayers();
                             aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:44:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-23 10:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,7 +648,7 @@ SdrLayerID FmFormObj::GetLayer() const
     return SdrUnoObj::GetLayer();
 }
 
-void FmFormObj::NbcSetLayer(SdrLayerID nLayer)
+void FmFormObj::NbcSetLayer(SdrLayerID /*nLayer*/)
 {
     // nothing to do, Layer cannot be changed for FmFormObj. Parents
     // do not need to be called, SdrUnoObj::NbcSetLayer will not do
