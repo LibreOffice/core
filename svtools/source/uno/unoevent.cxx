@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:30:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-23 10:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,7 +605,7 @@ SvMacroTableEventDescriptor::~SvMacroTableEventDescriptor()
 void SvMacroTableEventDescriptor::copyMacrosFromTable(
     const SvxMacroTableDtor& rMacroTable)
 {
-    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != NULL; i++)
+    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         const SvxMacro* pMacro = rMacroTable.Get(nEvent);
@@ -618,7 +618,7 @@ void SvMacroTableEventDescriptor::copyMacrosFromTable(
 void SvMacroTableEventDescriptor::copyMacrosIntoTable(
     SvxMacroTableDtor& rMacroTable)
 {
-    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != NULL; i++)
+    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasByName(nEvent))
