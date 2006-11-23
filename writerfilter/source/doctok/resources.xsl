@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:52:06 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:52:06 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -823,6 +823,10 @@ public:
     <xsl:value-of select="$classname"/>
     <xsl:text>(WW8StructBase * pParent, sal_uInt32 nOffset, sal_uInt32 nCount)&#xa;
     : DffRecord(pParent, nOffset, nCount) {}&#xa;
+    </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>(WW8Stream &amp; rStream, sal_uInt32 nOffset, sal_uInt32 nCount)&#xa;
+    : DffRecord(rStream, nOffset, nCount) {}&#xa;
     </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>(DffRecord &amp; rRecord)&#xa;

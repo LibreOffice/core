@@ -413,6 +413,21 @@
             </UML:Attribute>
           </UML:Classifier.feature>
           <UML:Classifier.feature>
+            <UML:Attribute name="dffheader">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:dffheader</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
             <UML:Attribute name="instance">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
@@ -26496,6 +26511,31 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Operation name="stringValue">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:shpstringvalue</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="opid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter kind="return" name="return">
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref="Value"/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="noresolve"/>
+              </UML:ModelElement.stereotype>
+            </UML:Operation>
+          </UML:Classifier.feature>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="FOPTE-Properties">
           <UML:Generalization.child>
@@ -37484,6 +37524,29 @@
             </UML:Operation>
           </UML:Classifier.feature>
           <UML:Classifier.feature>
+            <UML:Operation name="blip">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:blip</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="opid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter kind="return" name="return">
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref="DffRecord"/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Operation>
+          </UML:Classifier.feature>
+          <!--
+          <UML:Classifier.feature>
             <UML:Operation name="binary">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
@@ -37505,6 +37568,7 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+          -->
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="BSE-Properties">
           <UML:Generalization.child>

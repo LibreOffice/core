@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:12 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:12 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -636,6 +636,17 @@ rtl::OUString getDffOptName(sal_uInt32 nPid)
     return result;
 }
 
+WW8Value::Pointer_t WW8FOPTE::get_stringValue()
+{
+    WW8Value::Pointer_t pResult;
+    DffOPT * pOpt = dynamic_cast &lt; DffOPT * &gt;(mpParent); 
+    sal_uInt32 nExtraOffset = pOpt->get_extraoffset(mnIndex);
+    sal_uInt32 nExtraLength = pOpt->get_extraoffset(mnIndex + 1) - nExtraOffset;
+    pResult = createValue(mpParent->getString(nExtraOffset, nExtraLength / 2));
+
+    return pResult;
+}
+
 WW8Value::Pointer_t WW8FOPTE::get_value()
 {
     WW8Value::Pointer_t pResult;
@@ -681,10 +692,7 @@ WW8Value::Pointer_t WW8FOPTE::get_value()
           </xsl:when>
           <xsl:when test="$typetype='string'">
             <xsl:text>
-              DffOPT * pOpt = dynamic_cast &lt; DffOPT * &gt;(mpParent); 
-              sal_uInt32 nExtraOffset = pOpt->get_extraoffset(mnIndex);
-              sal_uInt32 nExtraLength = pOpt->get_extraoffset(mnIndex + 1) - nExtraOffset;
-            pResult = createValue(mpParent->getString(nExtraOffset, nExtraLength / 2));&#xa;</xsl:text>
+              pResult = get_stringValue();&#xa;</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>pResult = createValue(getU32(0x2));&#xa;</xsl:text>
@@ -734,6 +742,38 @@ DffRecord * createDffRecord
     <xsl:text>
          default:
              pResult = new DffRecord(pParent, nOffset, nSize);
+
+             break;
+    }
+
+    return pResult;
+}
+
+DffRecord * createDffRecord
+(WW8Stream &amp; rStream, sal_uInt32 nOffset, sal_uInt32 * pCount)
+{
+    DffRecord * pResult = NULL;
+    DffRecord aTmpRec(rStream, nOffset, 8);
+    sal_uInt32 nSize = aTmpRec.calcSize();
+
+    if (pCount != NULL)
+        *pCount = nSize;
+
+    switch (aTmpRec.getRecordType())
+    {&#xa;</xsl:text>
+    <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffrecord"]'>
+      <xsl:text>        case </xsl:text>
+      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='dffid']//UML:TaggedValue.dataValue"/>
+      <xsl:text>:
+             pResult = new Dff</xsl:text>
+                 <xsl:value-of select="@name"/>
+                 <xsl:text>(rStream, nOffset, nSize);
+                 
+             break;&#xa;</xsl:text>
+    </xsl:for-each>
+    <xsl:text>
+         default:
+             pResult = new DffRecord(rStream, nOffset, nSize);
 
              break;
     }
