@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-16 15:57:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,7 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
     mpShapeHelper->init();
 
     PLCF<WW8BKD>::Pointer_t pPlcbkdMother;
-    if (mpFib->get_fcBkdMother() > 0)
+    if (mpFib->get_fcBkdMother() > 0 && mpFib->get_lcbBkdMother() > 0)
     {
         pPlcbkdMother = PLCF<WW8BKD>::Pointer_t
             (new PLCF<WW8BKD>
