@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bB
     static const sal_uInt8 aHeader[] =
         {0x42, 0x4d, 0xe6, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
     m_pBMPHeader = aHeader;
-    m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof sal_uInt8 : 0;
+    m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof(sal_uInt8) : 0;
 
 }
 /*-- 01.11.2006 13:56:20---------------------------------------------------
@@ -280,6 +280,13 @@ struct GraphicImport_Impl
         ,nTopCrop (0)
         ,nRightCrop (0)
         ,nBottomCrop(0)
+        ,nWrap(0)
+        ,bContour(false)
+        ,bIgnoreWRK(true)
+        ,nContrast(0)
+        ,nBrightness(0)
+        ,fGamma( -1.0 )
+        ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
         ,bIsBitmap(false)
         ,bIsTiff(false)
@@ -287,14 +294,6 @@ struct GraphicImport_Impl
         ,bHoriFlip(false)
         ,bVertFlip(false)
         ,bInShapeOptionMode(false)
-        ,nShapeOptionType(0)
-        ,nWrap(0)
-        ,bContour(false)
-        ,bIgnoreWRK(true)
-        ,nContrast(0)
-        ,nBrightness(0)
-        ,eColorMode( drawing::ColorMode_STANDARD )
-        ,fGamma( -1.0 )
         {}
 };
 /*-- 01.11.2006 09:42:42---------------------------------------------------
@@ -1414,9 +1413,9 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
             {
                 if( !m_pImpl->bIsShapeImport || !nBorder )
                 {
-                    aBorderLine.Color = m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : nBorder ].nLineColor;
+                    aBorderLine.Color = m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineColor;
                     aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.OuterLineWidth = (sal_Int16)m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : nBorder ].nLineWidth;
+                    aBorderLine.OuterLineWidth = (sal_Int16)m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineWidth;
                     aBorderLine.LineDistance = 0;
                 }
                 PropertyIds aBorderProps[4] =
