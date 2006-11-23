@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:37:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -691,11 +691,15 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
                          OUSTRING_TO_OSTRING_CVTFLAGS);
     string sXMLValue = xmlify(pStr->getStr());
 
+    char sBuffer[256];
+    snprintf(sBuffer, sizeof(sBuffer), "0x%x", val.getInt());
+
     output.addItem("<attribute name=\"" +
                    (*QNameToString::Instance())(name) +
                    "\" value=\"" +
                    sXMLValue +
-                   + "\">");
+                   + "\" hexvalue=\""
+                   + sBuffer + "\">");
 
     doctok::Reference<Properties>::Pointer_t pProps = val.getProperties();
 
