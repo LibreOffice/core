@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:25:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:25:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:17:09 $
  *
  ******************************************************************/
 
@@ -157,6 +157,9 @@ public:
 
 DffRecord *
 createDffRecord(WW8StructBase * pParent, sal_uInt32 nOffset,
+                sal_uInt32 * nSize = NULL);
+DffRecord *
+createDffRecord(WW8Stream & rStream, sal_uInt32 nOffset,
                 sal_uInt32 * nSize = NULL);
 
 }
