@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 15:09:41 $
+#   last change: $Author: rt $ $Date: 2006-11-24 16:18:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.22 $ ';
+my $id_str = ' $Revision: 1.23 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -526,15 +526,14 @@ sub copy_workspace
                 my $destfile = $onefile;
                 $destfile =~ s#$wslocation/$master#$dir#;
 
-                if ( ! -d dirname( $destfile ))
+                if ( -d dirname( $destfile ))
                 {
-                    mkdir dirname( $destfile );
+                    $result = copy $onefile,  $destfile;
+                    if ( !$result ){ print_error ("Copying $onefile to CWS failed: $!", 1) };
+                    # preserve timestamp
+                    my @from_stat = stat($onefile);
+                    utime($from_stat[9], $from_stat[9], $destfile);
                 }
-                $result = copy $onefile,  $destfile;
-                if ( !$result ){ print_error ("Copying $onefile to CWS failed: $!", 1) };
-                # preserve timestamp
-                my @from_stat = stat($onefile);
-                utime($from_stat[9], $from_stat[9], $destfile);
             }
         }
     }
