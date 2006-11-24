@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:21:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-24 12:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,6 +450,22 @@ rtl::OUString DffFSP::get_shptypename()
     string aName = (*ShapeTypeToString::Instance())(get_shptype());
 
     return rtl::OUString::createFromAscii(aName.c_str());
+}
+
+// DffBlipPng
+WW8BinaryObjReference::Pointer_t
+DffBlipPng::get_payload()
+{
+  WW8BinaryObjReference::Pointer_t pResult;
+
+  sal_uInt32 nCount = getCount();
+  if (nCount > 0x19)
+  {
+    pResult = WW8BinaryObjReference::Pointer_t
+      (new WW8BinaryObjReference(this, 0x19, nCount - 0x19));
+  }
+
+  return pResult;
 }
 
 // DffSpContainer

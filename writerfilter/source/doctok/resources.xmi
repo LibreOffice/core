@@ -37544,7 +37544,7 @@
                 <UML:Stereotype xmi.idref="attribute"/>
               </UML:ModelElement.stereotype>
             </UML:Operation>
-          </UML:Classifier.feature>
+g          </UML:Classifier.feature>
           <!--
           <UML:Classifier.feature>
             <UML:Operation name="binary">
@@ -37579,6 +37579,51 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--DFF BSE-->
+<!--DFF BlipPng -->
+<UML:Class xmi.id="BlipPng" name="BlipPng">
+<UML:ModelElement.stereotype>
+  <UML:Stereotype xmi.idref="dffrecord"/>
+</UML:ModelElement.stereotype>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>0xf01e</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="dffid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+<UML:Classifier.feature>
+  <UML:Operation name="payload" >
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:payload</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="opid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:BehavioralFeature.parameter>
+      <UML:Parameter kind="return" name="return">
+        <UML:Parameter.type>
+          <UML:Class xmi.idref="Binary" />
+        </UML:Parameter.type>
+      </UML:Parameter>
+    </UML:BehavioralFeature.parameter>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="binary" />
+    </UML:ModelElement.stereotype>
+  </UML:Operation>
+</UML:Classifier.feature>
+<UML:Generalization isSpecification="false" xmi.id="BlipPng-Properties" >
+  <UML:Generalization.child>
+    <UML:Class xmi.idref="BlipPng" />
+  </UML:Generalization.child>
+  <UML:Generalization.parent>
+    <UML:Class xmi.idref="Properties" />
+  </UML:Generalization.parent>
+</UML:Generalization>
+</UML:Class>
+<!--DFF BlipPng -->
         <!--DFF SpContainer-->
         <UML:Class xmi.id="SpContainer" name="SpContainer">
           <UML:ModelElement.stereotype>
