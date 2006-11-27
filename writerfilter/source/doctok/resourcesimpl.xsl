@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,6 +364,7 @@ using namespace ::std;
     </xsl:call-template>
   </xsl:variable>
   <xsl:choose>
+    <xsl:when test='.//UML:Stereotype/@xmi.idref = "attributeremainder"'/>
     <xsl:when test='.//UML:Stereotype/@xmi.idref = "array"'>
       <xsl:text>
         {

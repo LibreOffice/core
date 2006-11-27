@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:18:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ void DffRecord::resolve(Properties & rHandler)
 
 #if 1
     WW8BinaryObjReference::Pointer_t pBinObjRef
-        (new WW8BinaryObjReference(this, 0x8, getCount() - 0x8));
+        (new WW8BinaryObjReference(this, 0, getCount()));
     WW8Sprm aSprm(pBinObjRef);
 
     rHandler.sprm(aSprm);

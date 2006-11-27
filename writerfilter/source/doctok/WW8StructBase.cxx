@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StructBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,21 @@ rtl::OUString WW8StructBase::getString(sal_uInt32 nOffset, sal_uInt32 nCount)
 
     return aResult;
 }
+
+WW8StructBase *
+WW8StructBase::getRemainder(sal_uInt32 nOffset) const
+{
+    WW8StructBase * pResult = NULL;
+
+    sal_uInt32 nCount = getCount();
+    if (nCount > nOffset)
+    {
+        pResult = new WW8StructBase(*this, nOffset, nCount - nOffset);
+    }
+
+    return pResult;
+}
+
 
 rtl::OUString WW8StructBase::getString(sal_uInt32 nOffset) const
 {

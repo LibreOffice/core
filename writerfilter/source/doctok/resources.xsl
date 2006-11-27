@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:20:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,31 +575,40 @@ class </xsl:text>
       </xsl:text>
     </xsl:if>
     <xsl:choose>
-      <xsl:when test='$typetype = "complex"'>
-        <xsl:text>        return </xsl:text>
-        <xsl:value-of select="$saltype"/>
-        <xsl:text>(new </xsl:text>
-        <xsl:value-of select="$completetype"/>
-        <xsl:text>(*this, </xsl:text>
+      <xsl:when test='././/UML:Stereotype[@xmi.idref="attributeremainder"]'>
+        <xsl:text>return doctok::Reference &lt; BinaryObj &gt;::Pointer_t(new WW8BinaryObjReference(getRemainder(</xsl:text>
         <xsl:value-of select="$offset"/>
-        <xsl:text>));&#xa;</xsl:text>
+        <xsl:text>)));&#xa;</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>        return (get</xsl:text>
-        <xsl:value-of select="$type"/>
-        <xsl:text>(</xsl:text>
-        <xsl:value-of select="$offset"/>
-        <xsl:text>)</xsl:text>
-        <xsl:if test="string-length($mask)>0">
-          <xsl:text>&amp; </xsl:text>
-          <xsl:value-of select="$mask"/>
-        </xsl:if>
-        <xsl:text>)</xsl:text>
-        <xsl:if test="$shift>0">
-          <xsl:text>&gt;&gt; </xsl:text>
-          <xsl:value-of select="$shift"/>
-        </xsl:if>
-        <xsl:text>;</xsl:text>
+        <xsl:choose>
+          <xsl:when test='$typetype = "complex"'>
+            <xsl:text>        return </xsl:text>
+            <xsl:value-of select="$saltype"/>
+            <xsl:text>(new </xsl:text>
+            <xsl:value-of select="$completetype"/>
+            <xsl:text>(*this, </xsl:text>
+            <xsl:value-of select="$offset"/>
+            <xsl:text>));&#xa;</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>        return (get</xsl:text>
+            <xsl:value-of select="$type"/>
+            <xsl:text>(</xsl:text>
+            <xsl:value-of select="$offset"/>
+            <xsl:text>)</xsl:text>
+            <xsl:if test="string-length($mask)>0">
+              <xsl:text>&amp; </xsl:text>
+              <xsl:value-of select="$mask"/>
+            </xsl:if>
+            <xsl:text>)</xsl:text>
+            <xsl:if test="$shift>0">
+              <xsl:text>&gt;&gt; </xsl:text>
+              <xsl:value-of select="$shift"/>
+            </xsl:if>
+            <xsl:text>;</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
     }

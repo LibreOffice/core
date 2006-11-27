@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:24:02 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,12 @@ WW8BinaryObjReference::WW8BinaryObjReference
 }
 
 WW8BinaryObjReference::WW8BinaryObjReference
+(WW8StructBase * pParent)
+: WW8StructBase(pParent, 0x0, pParent->getCount())
+{
+}
+
+WW8BinaryObjReference::WW8BinaryObjReference
 (WW8Stream & rStream, sal_uInt32 nOffset, sal_uInt32 nCount)
 : WW8StructBase(rStream, nOffset, nCount)
 {
@@ -376,6 +382,11 @@ doctok::Reference<Stream>::Pointer_t WW8Value::getStream()
     return doctok::Reference<Stream>::Pointer_t();
 }
 
+doctok::Reference<BinaryObj>::Pointer_t WW8Value::getBinary()
+{
+    return doctok::Reference<BinaryObj>::Pointer_t();
+}
+
 int WW8IntValue::getInt() const
 {
     return mValue;
@@ -486,6 +497,16 @@ string WW8StreamValue::toString() const
     return "stream";
 }
 
+doctok::Reference<BinaryObj>::Pointer_t WW8BinaryObjValue::getBinary()
+{
+    return mRef;
+}
+
+string WW8BinaryObjValue::toString() const
+{
+    return "binaryObj";
+}
+
 WW8Value::Pointer_t createValue(doctok::Reference<Properties>::Pointer_t rRef)
 {
     return WW8Value::Pointer_t(new WW8PropertiesValue(rRef));
@@ -494,6 +515,11 @@ WW8Value::Pointer_t createValue(doctok::Reference<Properties>::Pointer_t rRef)
 WW8Value::Pointer_t createValue(doctok::Reference<Stream>::Pointer_t rRef)
 {
     return WW8Value::Pointer_t(new WW8StreamValue(rRef));
+}
+
+WW8Value::Pointer_t createValue(doctok::Reference<BinaryObj>::Pointer_t rRef)
+{
+    return WW8Value::Pointer_t(new WW8BinaryObjValue(rRef));
 }
 
 WW8StreamHandler::WW8StreamHandler()
@@ -724,10 +750,26 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
 
     if (pStream.get() != NULL)
     {
-        try {
+        try
+        {
             WW8StreamHandler aHandler;
 
             pStream->resolve(aHandler);
+        }
+        catch (ExceptionOutOfBounds e)
+        {
+        }
+    }
+
+    doctok::Reference<BinaryObj>::Pointer_t pBinObj = val.getBinary();
+
+    if (pBinObj.get() != NULL)
+    {
+        try
+        {
+            WW8BinaryObjHandler aHandler;
+
+            pBinObj->resolve(aHandler);
         }
         catch (ExceptionOutOfBounds e)
         {

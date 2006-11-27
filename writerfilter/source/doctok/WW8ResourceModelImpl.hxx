@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:37:43 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,9 @@ public:
                           sal_uInt32 nCount);
     WW8BinaryObjReference(WW8StructBase & rParent, sal_uInt32 nOffset,
                           sal_uInt32 nCount);
-    WW8BinaryObjReference(WW8StructBase * rParent, sal_uInt32 nOffset,
+    WW8BinaryObjReference(WW8StructBase * pParent, sal_uInt32 nOffset,
                           sal_uInt32 nCount);
+    WW8BinaryObjReference(WW8StructBase * pParent);
 
     WW8BinaryObjReference()
     : WW8StructBase(WW8StructBase::Sequence())
@@ -178,6 +179,7 @@ public:
     virtual uno::Any getAny() const;
     virtual doctok::Reference<Properties>::Pointer_t getProperties();
     virtual doctok::Reference<Stream>::Pointer_t getStream();
+    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
     virtual WW8Value * clone() const = 0;
 };
 
@@ -292,6 +294,34 @@ WW8Value::Pointer_t createValue(WW8Value::Pointer_t value);
    @param rRef    reference to the stream
  */
 WW8Value::Pointer_t createValue(doctok::Reference<Stream>::Pointer_t rRef);
+
+class WW8BinaryObjValue : public WW8Value
+{
+    mutable doctok::Reference<BinaryObj>::Pointer_t mRef;
+
+public:
+    WW8BinaryObjValue(doctok::Reference<BinaryObj>::Pointer_t rRef)
+    : mRef(rRef)
+    {
+    }
+
+    virtual ~WW8BinaryObjValue()
+    {
+    }
+
+    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
+
+    virtual string toString() const;
+
+    virtual WW8Value * clone() const { return new WW8BinaryObjValue(mRef); }
+};
+
+/**
+   Creates value from a binary object reference.
+
+   @param rRef    reference to the stream
+ */
+WW8Value::Pointer_t createValue(doctok::Reference<BinaryObj>::Pointer_t rRef);
 
 class WW8StreamHandler : public Stream
 {
