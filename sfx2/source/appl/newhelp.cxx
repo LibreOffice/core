@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:46:23 $
+ *  last change: $Author: rt $ $Date: 2006-11-28 13:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,7 @@ namespace sfx2
 
         while ( aBoundary.startPos != aBoundary.endPos )
         {
-            nStartPos = aBoundary.startPos;
+            nStartPos = aBoundary.endPos;
             String sSearchToken( rSearchString.Copy(
                 (USHORT)aBoundary.startPos, (USHORT)aBoundary.endPos - (USHORT)aBoundary.startPos ) );
             if ( sSearchToken.Len() > 0 && ( sSearchToken.Len() > 1 || sSearchToken.GetChar(0) != '.' ) )
