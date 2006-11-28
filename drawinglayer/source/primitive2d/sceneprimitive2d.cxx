@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ namespace drawinglayer
 
             // get geometry of output range
             basegfx::B2DPolygon aLogicOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-            aLogicOutline.transform(getTransformation3D().getObjectTransformation());
+            aLogicOutline.transform(getObjectTransformation());
 
             // clip it against ViewRange
             const basegfx::B2DPolyPolygon aLogicClippedOutline(basegfx::tools::clipPolygonOnRange(aLogicOutline, rViewInformation.getViewport(), true, false));
@@ -120,7 +120,7 @@ namespace drawinglayer
             if(!aLogicVisiblePart.isEmpty())
             {
                 // transform back to unity
-                basegfx::B2DHomMatrix aInverseTransform(getTransformation3D().getObjectTransformation());
+                basegfx::B2DHomMatrix aInverseTransform(getObjectTransformation());
                 basegfx::B2DPolyPolygon aUnitClippedOutline(aLogicClippedOutline);
                 aInverseTransform.invert();
                 aUnitClippedOutline.transform(aInverseTransform);
@@ -128,7 +128,7 @@ namespace drawinglayer
                 // get logical size by decomposing
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
-                getTransformation3D().getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+                getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
                 // get logical sizes and generate visible part in unit coordinates
                 double fLogicSizeX(aScale.getX());
@@ -237,11 +237,13 @@ namespace drawinglayer
             const primitive3d::Primitive3DSequence& rxChildren3D,
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
+            const basegfx::B2DHomMatrix& rObjectTransformation,
             const geometry::Transformation3D& rTransformation3D)
         :   BasePrimitive2D(),
             mxChildren3D(rxChildren3D),
             maSdrSceneAttribute(rSdrSceneAttribute),
             maSdrLightingAttribute(rSdrLightingAttribute),
+            maObjectTransformation(rObjectTransformation),
             maTransformation3D(rTransformation3D),
             mbShadow3DChecked(false),
             mbLabel3DChecked(false),
@@ -259,6 +261,7 @@ namespace drawinglayer
                 return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
                     && getSdrSceneAttribute() == rCompare.getSdrSceneAttribute()
                     && getSdrLightingAttribute() == rCompare.getSdrLightingAttribute()
+                    && getObjectTransformation() == rCompare.getObjectTransformation()
                     && getTransformation3D() == rCompare.getTransformation3D());
             }
 
@@ -319,7 +322,7 @@ namespace drawinglayer
                 // and thus the object decomposition may be reused. For that, the logic visible part
                 // and the view sizes need to be the same
                 basegfx::B2DPolygon aWorldOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                aWorldOutline.transform(getTransformation3D().getObjectTransformation());
+                aWorldOutline.transform(getObjectTransformation());
 
                 // calculate last clipped visible part
                 const basegfx::B2DPolyPolygon aLastLogicClippedOutline(basegfx::tools::clipPolygonOnRange(aWorldOutline, maLastViewport, true, false));
@@ -373,9 +376,14 @@ namespace drawinglayer
             if(!mbShadow3DChecked && getChildren3D().hasElements())
             {
                 // create shadow extraction processor
+                const basegfx::B3DHomMatrix aWorldToEye(getTransformation3D().getOrientation() * getTransformation3D().getTransformation());
+                const basegfx::B3DHomMatrix aEyeToView(getTransformation3D().getDeviceToView() * getTransformation3D().getProjection());
+
                 processor3d::Shadow3DExtractingProcessor aShadowProcessor(
                     rViewInformation.getViewTime(),
-                    getTransformation3D(),
+                    getObjectTransformation(),
+                    aWorldToEye,
+                    aEyeToView,
                     getSdrLightingAttribute(),
                     getChildren3D(),
                     getSdrSceneAttribute().getShadowSlant());
@@ -402,7 +410,8 @@ namespace drawinglayer
                 // create label extraction processor
                 processor3d::Label3DExtractingProcessor aLabelProcessor(
                     rViewInformation.getViewTime(),
-                    getTransformation3D());
+                    getObjectTransformation(),
+                    getTransformation3D().getWorldToView());
 
                 // process local primitives
                 aLabelProcessor.process(getChildren3D());

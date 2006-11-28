@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strokeattribute.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,18 @@ namespace drawinglayer
                 meLineJoin(aB2DLineJoin),
                 maDotDashArray(rDotDashArray),
                 mfFullDotDashLen(fFullDotDashLen)
+            {
+            }
+
+            StrokeAttribute(
+                const basegfx::BColor& rColor,
+                double fWidth,
+                basegfx::tools::B2DLineJoin aB2DLineJoin = basegfx::tools::B2DLINEJOIN_ROUND)
+            :   maColor(rColor),
+                mfWidth(fWidth),
+                meLineJoin(aB2DLineJoin),
+                maDotDashArray(),
+                mfFullDotDashLen(0.0)
             {
             }
 

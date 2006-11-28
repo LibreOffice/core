@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:02 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,11 @@ namespace drawinglayer
             }
 
             return getLocalDecomposition();
+        }
+
+        bool BasePrimitive2D::mayDecompositionBeAnimated() const
+        {
+            return false;
         }
 
         Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const graphic::Primitive2DParameters& aPrimitive2DParameters ) throw ( uno::RuntimeException )

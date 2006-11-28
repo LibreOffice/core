@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:33:20 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,6 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_TRANSFORMATION3D_HXX
-#include <drawinglayer/geometry/transformation3d.hxx>
-#endif
-
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
@@ -76,6 +72,10 @@
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -89,8 +89,8 @@ namespace drawinglayer
             primitive2d::Primitive2DSequence                maPrimitive2DSequence;
             primitive2d::Primitive2DSequence*               mpPrimitive2DSequence;
 
-            // the 3d transformation stack
-            const geometry::Transformation3D                maTransformation3D;
+            // object transformation for scene for 2d definition
+            basegfx::B2DHomMatrix                           maObjectTransformation;
 
             // prepared data (transformations) for 2D/3D shadow calculations
             basegfx::B3DHomMatrix                           maWorldToEye;
@@ -122,7 +122,9 @@ namespace drawinglayer
         public:
             Shadow3DExtractingProcessor(
                 double fTime,
-                const geometry::Transformation3D& rTransformation3D,
+                const basegfx::B2DHomMatrix& rObjectTransformation,
+                const basegfx::B3DHomMatrix& rWorldToEye,
+                const basegfx::B3DHomMatrix& rEyeToView,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute,
                 const primitive3d::Primitive3DSequence& rPrimitiveVector,
                 double fShadowSlant);
@@ -132,7 +134,10 @@ namespace drawinglayer
 
             // data access
             const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-            const geometry::Transformation3D& getTransformation3D() const { return maTransformation3D; }
+            const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
+            const basegfx::B3DHomMatrix& getWorldToEye() const { return maWorldToEye; }
+            const basegfx::B3DHomMatrix& getEyeToView() const { return maEyeToView; }
+            const basegfx::B3DHomMatrix& getWorldToView() const { return maWorldToView; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

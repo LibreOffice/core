@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedded3dprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:03 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <drawinglayer/geometry/transformation3d.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // BackgroundColorPrimitive2D class
 
@@ -59,6 +63,7 @@ namespace drawinglayer
         {
         private:
             primitive3d::Primitive3DSequence                mxChildren3D;
+            basegfx::B2DHomMatrix                           maObjectTransformation;
             geometry::Transformation3D                      maTransformation3D;
 
         protected:
@@ -68,10 +73,12 @@ namespace drawinglayer
         public:
             Embedded3DPrimitive2D(
                 const primitive3d::Primitive3DSequence& rxChildren3D,
+                const basegfx::B2DHomMatrix& rObjectTransformation,
                 const geometry::Transformation3D& rTransformation3D);
 
             // get data
             const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
+            const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const geometry::Transformation3D& getTransformation3D() const { return maTransformation3D; }
 
             // compare operator

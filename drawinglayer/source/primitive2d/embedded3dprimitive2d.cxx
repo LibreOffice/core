@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedded3dprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:08 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ namespace drawinglayer
             basegfx::B2DRange a2DRange;
             a2DRange.expand(basegfx::B2DPoint(a3DRange.getMinX(), a3DRange.getMinY()));
             a2DRange.expand(basegfx::B2DPoint(a3DRange.getMaxX(), a3DRange.getMaxY()));
-            a2DRange.transform(getTransformation3D().getObjectTransformation());
+            a2DRange.transform(getObjectTransformation());
 
             const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(a2DRange));
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
@@ -91,9 +91,11 @@ namespace drawinglayer
 
         Embedded3DPrimitive2D::Embedded3DPrimitive2D(
             const primitive3d::Primitive3DSequence& rxChildren3D,
+            const basegfx::B2DHomMatrix& rObjectTransformation,
             const geometry::Transformation3D& rTransformation3D)
         :   BasePrimitive2D(),
             mxChildren3D(rxChildren3D),
+            maObjectTransformation(rObjectTransformation),
             maTransformation3D(rTransformation3D)
         {
         }
@@ -105,6 +107,7 @@ namespace drawinglayer
                 const Embedded3DPrimitive2D& rCompare = static_cast< const Embedded3DPrimitive2D& >(rPrimitive);
 
                 return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
+                    && getObjectTransformation() == rCompare.getObjectTransformation()
                     && getTransformation3D() == rCompare.getTransformation3D());
             }
 
@@ -121,7 +124,7 @@ namespace drawinglayer
             basegfx::B2DRange aRetval;
             aRetval.expand(basegfx::B2DPoint(a3DRange.getMinX(), a3DRange.getMinY()));
             aRetval.expand(basegfx::B2DPoint(a3DRange.getMaxX(), a3DRange.getMaxY()));
-            aRetval.transform(getTransformation3D().getObjectTransformation());
+            aRetval.transform(getObjectTransformation());
 
             return aRetval;
         }

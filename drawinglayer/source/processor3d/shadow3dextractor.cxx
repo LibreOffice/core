@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:39:22 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,14 +93,24 @@ namespace drawinglayer
     {
         Shadow3DExtractingProcessor::Shadow3DExtractingProcessor(
             double fTime,
-            const geometry::Transformation3D& rTransformation3D,
+            const basegfx::B2DHomMatrix& rObjectTransformation,
+            const basegfx::B3DHomMatrix& rWorldToEye,
+            const basegfx::B3DHomMatrix& rEyeToView,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const primitive3d::Primitive3DSequence& rPrimitiveSequence,
             double fShadowSlant)
         :   BaseProcessor3D(fTime),
             maPrimitive2DSequence(),
             mpPrimitive2DSequence(&maPrimitive2DSequence),
-            maTransformation3D(rTransformation3D),
+            maObjectTransformation(rObjectTransformation),
+            maWorldToEye(rWorldToEye),
+            maEyeToView(rEyeToView),
+            maWorldToView(maEyeToView * maWorldToEye),
+            maLightNormal(),
+            maShadowPlaneNormal(),
+            maPlanePoint(),
+            mfLightPlaneScalar(0.0),
+            maPrimitiveColor(),
             mbShadowProjectionIsValid(false),
             mbConvert(false),
             mbUseProjection(false)
@@ -112,11 +122,6 @@ namespace drawinglayer
             basegfx::B3DHomMatrix aDeviceToView;
             aDeviceToView.scale(0.5, -0.5, 0.5);
             aDeviceToView.translate(0.5, 0.5, 0.5);
-
-            // create complete 3d transformation set for shadow stuff
-            maWorldToEye = getTransformation3D().getOrientation() * getTransformation3D().getTransformation();
-            maEyeToView = getTransformation3D().getDeviceToView() * getTransformation3D().getProjection();
-            maWorldToView = maEyeToView * maWorldToEye;
 
             // calculate shadow projection stuff
             if(rSdrLightingAttribute.getLightVector().size())
@@ -132,7 +137,7 @@ namespace drawinglayer
                 if(basegfx::fTools::more(mfLightPlaneScalar, 0.0))
                 {
                     basegfx::B3DRange aContained3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(rPrimitiveSequence, getTime()));
-                    aContained3DRange.transform(maWorldToEye);
+                    aContained3DRange.transform(getWorldToEye());
                     maPlanePoint.setX(maShadowPlaneNormal.getX() < 0.0 ? aContained3DRange.getMinX() : aContained3DRange.getMaxX());
                     maPlanePoint.setY(maShadowPlaneNormal.getY() > 0.0 ? aContained3DRange.getMinY() : aContained3DRange.getMaxY());
                     maPlanePoint.setZ(aContained3DRange.getMinZ() - (aContained3DRange.getDepth() / 8.0));
@@ -211,12 +216,12 @@ namespace drawinglayer
                                 {
                                     // transform group. Remember current transformations
                                     const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(*pBasePrimitive);
-                                    basegfx::B3DHomMatrix aLastWorldToView(maWorldToView);
-                                    basegfx::B3DHomMatrix aLastWorldToEye(maWorldToEye);
+                                    basegfx::B3DHomMatrix aLastWorldToView(getWorldToView());
+                                    basegfx::B3DHomMatrix aLastWorldToEye(getWorldToEye());
 
                                     // create new transformations
-                                    maWorldToView = maWorldToView * rPrimitive.getTransformation();
-                                    maWorldToEye = maWorldToEye * rPrimitive.getTransformation();
+                                    maWorldToView = getWorldToView() * rPrimitive.getTransformation();
+                                    maWorldToEye = getWorldToEye() * rPrimitive.getTransformation();
 
                                     // let break down
                                     process(rPrimitive.getChildren());
@@ -243,12 +248,12 @@ namespace drawinglayer
                                         }
                                         else
                                         {
-                                            a2DHairline = basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), maWorldToView);
+                                            a2DHairline = basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getWorldToView());
                                         }
 
                                         if(a2DHairline.count())
                                         {
-                                            a2DHairline.transform(getTransformation3D().getObjectTransformation());
+                                            a2DHairline.transform(getObjectTransformation());
                                             const primitive2d::Primitive2DReference xRef(new primitive2d::PolygonHairlinePrimitive2D(a2DHairline, maPrimitiveColor));
                                             primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpPrimitive2DSequence, xRef);
                                         }
@@ -272,12 +277,12 @@ namespace drawinglayer
                                         }
                                         else
                                         {
-                                            a2DFill = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), maWorldToView);
+                                            a2DFill = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getWorldToView());
                                         }
 
                                         if(a2DFill.count())
                                         {
-                                            a2DFill.transform(getTransformation3D().getObjectTransformation());
+                                            a2DFill.transform(getObjectTransformation());
                                             const primitive2d::Primitive2DReference xRef(new primitive2d::PolyPolygonColorPrimitive2D(a2DFill, maPrimitiveColor));
                                             primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpPrimitive2DSequence, xRef);
                                         }
@@ -318,7 +323,7 @@ namespace drawinglayer
             {
                 // get point, transform to eye coordinate system
                 basegfx::B3DPoint aCandidate(rSource.getB3DPoint(a));
-                aCandidate *= maWorldToEye;
+                aCandidate *= getWorldToEye();
 
                 // we are in eye coordinates
                 // ray is (aCandidate + fCut * maLightNormal)
@@ -329,7 +334,7 @@ namespace drawinglayer
                 aCandidate += maLightNormal * fCut;
 
                 // transform to view, use 2d coordinates
-                aCandidate *= maEyeToView;
+                aCandidate *= getEyeToView();
                 aRetval.append(basegfx::B2DPoint(aCandidate.getX(), aCandidate.getY()));
             }
 

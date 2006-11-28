@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:04 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+
+            // give hint that this primitive may be animated. Check the group content
+            virtual bool mayDecompositionBeAnimated() const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:03 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,11 @@ namespace drawinglayer
             // ViewInformation2D for the last decomposition need to be remembered, too, and be used in the next call to decide if
             // the buffered decomposition may be reused or not.
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // Method to get a hint if the decomposition may produce animated primitives. Default implementation
+            // returns false. This should be overloaded to give a processor which looks for animated primitives
+            // hints if he shall decompose or not
+            virtual bool mayDecompositionBeAnimated() const;
 
             //
             // Methods from XPrimitive2D

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:37 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1029,7 +1029,7 @@ namespace drawinglayer
                     // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
                     // be expressed as rotation by PI
                     aScale = basegfx::absolute(aScale);
-                    fRotate += (180.0 * F_PI180);
+                    fRotate += F_PI;
                 }
 
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
@@ -1059,7 +1059,8 @@ namespace drawinglayer
                     const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
                     mpOutputDevice->SetFont(aFont);
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
-                    mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(), &(aTransformedDXArray[0]));
+                    mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
+                        aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
                 }
             }
 
@@ -1086,11 +1087,8 @@ namespace drawinglayer
         // direct draw of transformed BitmapEx primitive
         void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
         {
-            // decompose matrix to check for shear, rotate and mirroring
+            // create local transform
             basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
             BitmapEx aBitmapEx(rBitmapCandidate.getBitmapEx());
             bool bPainted(false);
 
@@ -1118,9 +1116,14 @@ namespace drawinglayer
                 static bool bForceUseOfOwnTransformer(false);
                 static bool bUseGraphicManager(true);
 
+                // decompose matrix to check for shear, rotate and mirroring
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
                 if(!bForceUseOfOwnTransformer && basegfx::fTools::equalZero(fShearX))
                 {
-                    if(basegfx::fTools::equalZero(fRotate) && !bUseGraphicManager)
+                    if(!bUseGraphicManager && basegfx::fTools::equalZero(fRotate))
                     {
                         RenderBitmapPrimitive2D_BitmapEx(*mpOutputDevice, aBitmapEx, aLocalTransform);
                     }

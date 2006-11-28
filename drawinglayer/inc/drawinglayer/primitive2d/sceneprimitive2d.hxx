@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:05 $
+ *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ namespace drawinglayer
             primitive3d::Primitive3DSequence                    mxChildren3D;               // the 3d sub-primitives
             attribute::SdrSceneAttribute                        maSdrSceneAttribute;        // 3d scene attribute set
             attribute::SdrLightingAttribute                     maSdrLightingAttribute;     // lighting attribute set
+            basegfx::B2DHomMatrix                               maObjectTransformation;     // object transformation for scene for 2d definition
             geometry::Transformation3D                          maTransformation3D;         // scene transformation set and object transformation
 
             // the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
@@ -107,12 +108,14 @@ namespace drawinglayer
                 const primitive3d::Primitive3DSequence& rxChildren3D,
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute,
+                const basegfx::B2DHomMatrix& rObjectTransformation,
                 const geometry::Transformation3D& rTransformation3D);
 
             // get data
             const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
             const attribute::SdrSceneAttribute& getSdrSceneAttribute() const { return maSdrSceneAttribute; }
             const attribute::SdrLightingAttribute& getSdrLightingAttribute() const { return maSdrLightingAttribute; }
+            const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const geometry::Transformation3D& getTransformation3D() const { return maTransformation3D; }
 
             // compare operator
