@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolling.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:22:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,38 +42,20 @@
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
-#include <com/sun/star/sdbc/XRowSetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
-#include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
-#include <com/sun/star/util/XModifyListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
-#ifndef SVX_DBTOOLSCLIENT_HXX
-#include "dbtoolsclient.hxx"
+#ifndef _COM_SUN_STAR_FORM_RUNTIME_FEATURESTATE_HPP_
+#include <com/sun/star/form/runtime/FeatureState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_RUNTIME_XFORMOPERATIONS_HPP_
+#include <com/sun/star/form/runtime/XFormOperations.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
-#endif
+#include <cppuhelper/implbase1.hxx>
+#include <comphelper/componentcontext.hxx>
+
+#include <vector>
 
 //........................................................................
 namespace svx
@@ -87,13 +69,19 @@ namespace svx
     {
     public:
         /// retrieves the feature id for a given feature URL
-        static  sal_Int32       getControllerFeatureIdForURL( const ::rtl::OUString& _rMainURL );
+        static  sal_Int32       getControllerFeatureSlotIdForURL( const ::rtl::OUString& _rMainURL );
 
         /// retrieves the feature URL for a given feature id
-        static ::rtl::OUString  getControllerFeatureURLForId( sal_Int32 _nId );
+        static ::rtl::OUString  getControllerFeatureURLForSlotId( sal_Int32 _nSlotId );
 
-        // determines whether the given URL is a controller feature URL
+        /// determines whether the given URL is a controller feature URL
         static sal_Bool         isFeatureURL( const ::rtl::OUString& _rMainURL );
+
+        /// retrieves the css.form.runtime.FormFeature ID for a given slot ID
+        static  sal_Int16       getFormFeatureForSlotId( sal_Int32 _nSlotId );
+
+        /// retrieves the slot id for a given css.form.runtime.FormFeature ID
+        static  sal_Int32       getSlotIdForFormFeature( sal_Int16 _nFormFeature );
     };
 
     //====================================================================
@@ -123,8 +111,7 @@ namespace svx
     class ControllerFeatures
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xORB;
+        ::comphelper::ComponentContext  m_aContext;
         IControllerFeatureInvalidation* m_pInvalidationCallback;    // necessary as long as m_pImpl is not yet constructed
         FormControllerHelper*           m_pImpl;
 
@@ -210,24 +197,10 @@ namespace svx
     };
 
     //====================================================================
-    //= ControllerFeatureState
-    //====================================================================
-    struct ControllerFeatureState
-    {
-        sal_Bool                    bEnabled;
-        ::com::sun::star::uno::Any  aState;
-
-        inline ControllerFeatureState() : bEnabled( sal_False ) { }
-    };
-
-    //====================================================================
     //= FormControllerHelper
     //====================================================================
-    typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::beans::XPropertyChangeListener
-                                    ,   ::com::sun::star::util::XModifyListener
-                                    ,   ::com::sun::star::sdbc::XRowSetListener
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::form::runtime::XFeatureInvalidation
                                     >   FormControllerHelper_Base;
-
     /** is a helper class which manages form controller functionality (such as moveNext etc.).
 
         <p>The class helps implementing form controller functionality, by providing
@@ -238,39 +211,16 @@ namespace svx
     class FormControllerHelper : public FormControllerHelper_Base
     {
     protected:
-        mutable
-        ::osl::Mutex    m_aMutex;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
-                    m_xController;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
-                    m_xCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >
-                    m_xUpdateCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    m_xCursorProperties;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >
-                    m_xLoadableForm;
-
-        mutable
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
-                    m_xParser;
-
-        sal_Bool    m_bInitializedParser     : 1;
-        sal_Bool    m_bActiveControlModified : 1;
-
-        ::svxform::OStaticDataAccessTools*
-                    m_pDbTools;
-        IControllerFeatureInvalidation*
-                    m_pInvalidationCallback;
+        ::comphelper::ComponentContext  m_aContext;
+        IControllerFeatureInvalidation* m_pInvalidationCallback;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >
+                                        m_xFormOperations;
 
     public:
         /** constructs the helper from a <type scope="com::sun::star::form">XFormController<type> instance
 
-            @param _rxORB
-                a multi service factory for creating various needed components
+            @param _rContext
+                the context the component lives in
             @param _rxController
                 The form controller which the helper should be responsible for. Must not
                 be <NULL/>, and must have a valid model (form).
@@ -278,7 +228,7 @@ namespace svx
                 the callback for invalidating feature states
         */
         FormControllerHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::comphelper::ComponentContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
@@ -287,111 +237,38 @@ namespace svx
 
             Any functionality which depends on a controller will not be available.
 
-            @param _rxORB
-                a multi service factory for creating various needed components
+            @param _rContext
+                the context the component lives in
             @param _rxForm
                 The form which the helper should be responsible for. Must not be <NULL/>.
             @param _pInvalidationCallback
                 the callback for invalidating feature states
         */
         FormControllerHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::comphelper::ComponentContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
-        // attribute access
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >&
-                    getCursor() const { return m_xCursor; }
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >&
-                    getUpdateCursor() const { return m_xUpdateCursor; }
-
-        /** gets the state of a given feature
-            @param _nFeatureId
-                the id of the feature in question. Must be one of the SID_FM_* slots
-            @param _rState
-                is the output parameter for the state
-        */
+        // forwards to the XFormOperations implementation
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
+                    getCursor() const;
         void        getState(
-                        sal_Int32 _nFeatureId,
-                        ControllerFeatureState& /* [out] */ _rState
+                        sal_Int32 _nSlotId,
+                        ::com::sun::star::form::runtime::FeatureState& _out_rState
                     ) const;
-
-        /** gets the state of a given feature, caring only whether or not
-            it's enabled
-            @param _nFeatureId
-                the id of the feature in question. Must be one of the SID_FM_* slots
-        */
-        sal_Bool    getSimpleState( sal_Int32 _nFeatureId ) const;
-
-        /** determines whether our cursor can be moved right
-            @precond hasCursor()
-        */
-        sal_Bool    canMoveRight( ) const;
-
-        /** determines whether our cursor can be moved left
-            @precond hasCursor()
-        */
-        sal_Bool    canMoveLeft( ) const;
-
-        /** executes the given feature
-        */
-        void        execute( sal_Int32 _nFeatureId ) const;
-
-        /** executes the given feature, carign for a named parameter for the execution
-        */
-        void        execute( sal_Int32 _nFeatureId, const ::rtl::OUString& _rParamName,
-                        const ::com::sun::star::uno::Any& _rParamValue ) const;
-
-        /** moves our cursor one position to the left, caring for different possible
-            cursor states.
-
-            <p>Before the movement is done, the current row is saved, if necessary.</p>
-
-            @precond
-                canMoveLeft()
-        */
-        sal_Bool    moveLeft( ) const;
-
-        /** moves our cursor one position to the right, caring for different possible
-            cursor states.
-
-            <p>Before the movement is done, the current row is saved, if necessary.</p>
-
-            @precond
-                canMoveRight()
-        */
-        sal_Bool    moveRight( ) const;
-
-        /** commits the current record of our form if necessary
-
-            @precond
-                hasCursor()
-            @param _pRecordInserted
-                 íf not <NULL/>, the boolean pointed to by this arg will be <TRUE/> if and only
-                 if a new record has been inserted.
-        */
-        sal_Bool    commitCurrentRecord( sal_Bool* _pRecordInserted = NULL ) const;
-
-        /** commits the current control of our controller
-            @precond
-                we have a valid controller
-        */
+        sal_Bool    isEnabled( sal_Int32 _nSlotId ) const;
+        void        execute( sal_Int32 _nSlotId ) const;
+        void        execute( sal_Int32 _nSlotId, const ::rtl::OUString& _rParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
+        sal_Bool    commitCurrentRecord() const;
         sal_Bool    commitCurrentControl( ) const;
+        sal_Bool    isInsertionRow() const;
+        sal_Bool    isModifiedRow() const;
 
-        // retrieving various information about the curren record
-        sal_Bool    isNewRecord() const;
-        sal_Bool    isModifiedRecord() const;
-        sal_Int32   getRecordCount() const;
-        sal_Bool    isRecordCountFinal() const;
-        sal_Bool    isInsertOnlyForm() const;
+        bool        moveLeft( ) const;
+        bool        moveRight( ) const;
 
-        /// determines whether we can parse the query of our form
-        sal_Bool    isParsable() const;
-
-        /** resets all control models in the given form
-        */
-        static void resetAllControls( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
+        bool        canDoFormFilter() const;
 
         /** disposes this instance.
 
@@ -403,113 +280,9 @@ namespace svx
         /// dtor
         ~FormControllerHelper();
 
-        // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
-
-        // XModifyListener
-        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& _rSource ) throw( ::com::sun::star::uno::RuntimeException );
-
-        // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
-
-        // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-
-    private:
-        /** resets all control models in our own form
-        */
-        void        resetAllControls( ) const;
-
-        /** initializes the cursor-related members
-            <p>Only to be called from within a constructor.</p>
-        */
-        void        initCursor(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm
-        );
-
-        /** initializes the controller-related members
-            <p>Only to be called from within a constructor.</p>
-        */
-        void        initController(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController
-        );
-
-        /** retrieces the column to which the current control of our controller is bound
-            @precond
-                m_xController.is()
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    getCurrentBoundField( ) const;
-
-        /** determines if we have a valid cursor, including the property set and the XLoadable
-            interface
-        */
-        inline  sal_Bool    hasCursor() const { return m_xCursorProperties.is(); }
-
-        /** determines if we have a filter in place
-        */
-        sal_Bool    hasFilterOrOrder() const;
-
-        /// ensures that our parse is initialized, or at least that we attempted to do so
-        void        ensureInitializedParser();
-
-        /** disposes our parser, if we have one
-        */
-        void        disposeParser();
-
-        /** executes the "auto sort ascending" and "auto sort descending" features
-        */
-        void        executeAutoSort( sal_Bool _bUp ) const;
-
-        /** executes the "auto filter" feature
-        */
-        void        executeAutoFilter( ) const;
-
-        /** executes the "sort..." feature
-        */
-        void        executeFilterOrSort( bool _bFilter ) const;
-
-        /// typedef for member method of this class
-        typedef void (FormControllerHelper::*Action)( const void* ) const;
-
-        /** calls a member function, with reporting an error - in case it happens - to the user
-
-            @param _pAction
-                the member function to call
-            @param _pParam
-                the parameters to pass to the member function
-            @param _nErrorResourceId
-                the id of the resources string to use as error message
-            @return
-                <TRUE/> if and only if the call was successfull (i.e. no error occured)
-        */
-        sal_Bool    doActionReportError( Action _pAction, const void* _pParam, sal_uInt16 _nErrorResourceId ) const;
-
-        // parameter structure for appendOrderByColumn
-        struct param_appendOrderByColumn
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        xField;
-            sal_Bool    bUp;
-        };
-        void        appendOrderByColumn( const void* _pActionParam ) const;
-
-        // parameter structure for appendFilterByColumn
-        struct param_appendFilterByColumn
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        xField;
-        };
-        void        appendFilterByColumn( const void* _pActionParam ) const;
-
-        /// invalidate the full palette of features which we know
-        void        invalidateAllSupportedFeatures( ::osl::ClearableMutexGuard& _rClearForCallback ) const;
-        /** invalidate the features which depend on the "modified" state of the current control
-            of our controller
-        */
-        void        invalidateModifyDependentFeatures( ::osl::ClearableMutexGuard& _rClearForCallback ) const;
+        // XFeatureInvalidation
+        virtual void SAL_CALL invalidateFeatures( const ::com::sun::star::uno::Sequence< ::sal_Int16 >& Features ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL invalidateAllFeatures() throw (::com::sun::star::uno::RuntimeException);
 
     private:
         FormControllerHelper();                                         // never implemented
