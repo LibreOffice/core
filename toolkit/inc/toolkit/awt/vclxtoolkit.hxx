@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:55:12 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,12 @@
 #ifndef _COM_SUN_STAR_AWT_XRESCHEDULE_HPP_
 #include <com/sun/star/awt/XReschedule.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XMESSAGEBOXFACTORY_HPP_
+#include <com/sun/star/awt/XMessageBoxFactory.hpp>
+#endif
 
-#ifndef _CPPUHELPER_COMPBASE6_HXX_
-#include <cppuhelper/compbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include "cppuhelper/interfacecontainer.hxx"
@@ -111,10 +114,11 @@ protected:
 };
 
 class VCLXToolkit : public VCLXToolkit_Impl,
-                    public cppu::WeakComponentImplHelper6<
+                    public cppu::WeakComponentImplHelper7<
                     ::com::sun::star::awt::XToolkit,
                     ::com::sun::star::lang::XServiceInfo,
                     ::com::sun::star::awt::XSystemChildFactory,
+                    ::com::sun::star::awt::XMessageBoxFactory,
                     ::com::sun::star::awt::XDataTransferProviderAccess,
                     ::com::sun::star::awt::XExtendedToolkit,
                     ::com::sun::star::awt::XReschedule >
@@ -152,6 +156,7 @@ protected:
     virtual void SAL_CALL disposing();
 
     Window* ImplCreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, WinBits nWinBits );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > ImplCreateWindow( const ::com::sun::star::awt::WindowDescriptor& Descriptor, WinBits nWinBits );
 
 public:
 
@@ -168,6 +173,9 @@ public:
 
     // ::com::sun::star::awt::XSystemChildFactory
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > SAL_CALL createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XMessageBoxFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL createMessageBox( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent, const ::com::sun::star::awt::Rectangle& aPosSize, const ::rtl::OUString& aType, ::sal_Int32 aButtons, const ::rtl::OUString& aTitle, const ::rtl::OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDataTransfer
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL getDragGestureRecognizer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException);
