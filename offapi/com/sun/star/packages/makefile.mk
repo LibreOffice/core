@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:29:32 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:10:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..$/..$/..
 
-PRJNAME=api
+PRJNAME=offapi
 
 TARGET=csspackages
 PACKAGE=com$/sun$/star$/packages
