@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testidlclass.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:44:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 #if OSL_DEBUG_LEVEL == 0
+#undef  NDEBUG
 #define NDEBUG
 #endif
 #include <assert.h>
