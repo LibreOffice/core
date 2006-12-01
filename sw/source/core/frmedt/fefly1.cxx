@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:36 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1133,7 +1133,15 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     SwFlyFrm *pFly = FindFlyFrm();
     if ( !pFly )
     {
-        ASSERT( GetCurrFrm(), "Crsr in parking zone" );
+        // --> OD 2006-11-08 #139670# - make code robust
+        SwFrm* pCurrFrm( GetCurrFrm() );
+        if ( !pCurrFrm )
+        {
+            ASSERT( false,
+                    "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
+            return sal_False;
+        }
+        // <--
         pFly = GetCurrFrm()->FindFlyFrm();
         if ( !pFly )
         {
@@ -1856,10 +1864,36 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         else
             eType = OBJCNT_FLY;
     }
-    else if( pInvestigatedObj->ISA( SdrObjGroup ) &&
-             FLY_IN_CNTNT !=
-                ((SwDrawContact*)GetUserCall(pInvestigatedObj))->GetFmt()->GetAnchor().GetAnchorId() )
-        eType = OBJCNT_GROUPOBJ;
+    // --> OD 2006-11-06 #130889# - make code robust
+//    else if( pInvestigatedObj->ISA( SdrObjGroup ) &&
+//             FLY_IN_CNTNT !=
+//                ((SwDrawContact*)GetUserCall(pInvestigatedObj))->GetFmt()->GetAnchor().GetAnchorId() )
+//        eType = OBJCNT_GROUPOBJ;
+    else if ( pInvestigatedObj->ISA( SdrObjGroup ) )
+    {
+        SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(GetUserCall( pInvestigatedObj ) ) );
+        if ( !pDrawContact )
+        {
+            ASSERT( false,
+                    "<SwFEShell::GetObjCntType(..)> - missing draw contact object" );
+            eType = OBJCNT_NONE;
+        }
+        else
+        {
+            SwFrmFmt* pFrmFmt( pDrawContact->GetFmt() );
+            if ( !pFrmFmt )
+            {
+                ASSERT( false,
+                        "<SwFEShell::GetObjCntType(..)> - missing frame format" );
+                eType = OBJCNT_NONE;
+            }
+            else if ( FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
+            {
+                eType = OBJCNT_GROUPOBJ;
+            }
+        }
+    }
+    // <--
     else
         eType = OBJCNT_SIMPLE;
     return eType;
