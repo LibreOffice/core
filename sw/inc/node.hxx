@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:22:20 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
-
+#include <boost/shared_ptr.hpp>
+#include <vector>
 // ---------------------
 // forward Deklarationen
 // ---------------------
@@ -87,6 +88,7 @@ class SwTxtNode;
 class SwPageDesc;
 class ViewShell;
 struct SwPosition;
+class IStyleAccess;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;
 class IDocumentBookmarkAccess;
@@ -275,6 +277,10 @@ public:
      */
           IDocumentContentOperations* getIDocumentContentOperations();
 
+    /** Provides access to the document automatic styles interface
+     */
+          IStyleAccess& getIDocumentStyleAccess();
+
     // liegt der Node im Sichtbarenbereich der Shell ?
     BOOL IsInVisibleArea( ViewShell* pSh = 0 ) const;
     // befindet sich der Node in einem geschuetzten Bereich?
@@ -379,6 +385,7 @@ class SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 //FEATURE::CONDCOLL
     SwDepend* pCondColl;
 //FEATURE::CONDCOLL
+    mutable bool mbSetModifyAtAttr;
 
 protected:
     SwCntntNode( const SwNodeIndex &rWhere, const BYTE nNodeType,
@@ -387,7 +394,8 @@ protected:
 
     // Attribut-Set fuer alle AUTO-Attribute eines CntntNodes
     //  ( z.B: TxtNode oder NoTxtNode
-    SwAttrSet *pAttrSet;
+    boost::shared_ptr<const SfxItemSet> mpAttrSet;
+
     // lasse von den entsprechenden Nodes die spz. AttrSets anlegen
     virtual void NewAttrSet( SwAttrPool& ) = 0;
 
@@ -457,16 +465,18 @@ public:
     BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
     BOOL ResetAttr( const SvUShorts& rWhichArr );
     USHORT ResetAllAttr();
+    // There some functions that like to remove items from the internal
+    // SwAttrSet (handle):
+    USHORT ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds );
+
     // liefert das Attribut, das nicht ueber die bedingte Vorlage kommt!
     const SfxPoolItem* GetNoCondAttr( USHORT nWhich, BOOL bInParents ) const;
 
     // hat der Node schon eigene Auto-Attribute ?
     // Zugriff auf SwAttrSet
-    inline         SwAttrSet &GetSwAttrSet();
     inline const SwAttrSet &GetSwAttrSet() const;
-    inline         SwAttrSet *GetpSwAttrSet() { return pAttrSet; }
-    inline const SwAttrSet *GetpSwAttrSet() const { return pAttrSet; }
-    inline BOOL  HasSwAttrSet() const { return pAttrSet ? TRUE : FALSE; }
+    inline const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
+    inline BOOL  HasSwAttrSet() const { return mpAttrSet ? TRUE : FALSE; }
 
     virtual SwFmtColl* ChgFmtColl( SwFmtColl* );
     SwFmtColl* GetFmtColl() const { return (SwFmtColl*)GetRegisteredIn(); }
@@ -490,10 +500,13 @@ public:
                             const Point* pPt ) const;
     // <--
 
+    inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
+
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwCntntNode( const SwCntntNode & rNode );
     SwCntntNode & operator= ( const SwCntntNode & rNode );
+
 };
 
 
@@ -736,16 +749,11 @@ inline SwFmtColl& SwCntntNode::GetAnyFmtColl() const
                 : *(SwFmtColl*)GetRegisteredIn();
 }
 
-inline SwAttrSet& SwCntntNode::GetSwAttrSet()
-{
-    return pAttrSet ? ( (SwAttrSet &) ( *pAttrSet ) )
-                    : ( (SwAttrSet &) ( GetAnyFmtColl().GetAttrSet() ) );
-}
 inline const SwAttrSet& SwCntntNode::GetSwAttrSet() const
 {
-    return pAttrSet ? ( (SwAttrSet &) ( *pAttrSet ) )
-                    : ( (SwAttrSet &) ( GetAnyFmtColl().GetAttrSet() ) );
+    return mpAttrSet ? *GetpSwAttrSet() : GetAnyFmtColl().GetAttrSet();
 }
+
 //FEATURE::CONDCOLL
 
 inline const SfxPoolItem& SwCntntNode::GetAttr( USHORT nWhich,
