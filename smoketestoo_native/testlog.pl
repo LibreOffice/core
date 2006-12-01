@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: testlog.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 15:12:24 $
+#   last change: $Author: rt $ $Date: 2006-12-01 16:31:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@ $global_log = "log.dat";
                 "calc", "sclog.dat",
                 "chart", "schlog.dat",
                 "Java", "javalog.dat",
-                "Database", "dblog.dat"
+                "Database", "dblog.dat",
+                "Extension", "extlog.dat"
 );
 
 %log = ();
@@ -222,7 +223,7 @@ sub getLog {
 
 ### main ###
 
-$idStr = ' $Revision: 1.4 $ ';
+$idStr = ' $Revision: 1.5 $ ';
 $idStr =~ /Revision:\s+(\S+)\s+\$/
   ? ($cpflat2minor_rev = $1) : ($cpflat2minor_rev = "-");
 
@@ -287,6 +288,7 @@ else {
 
 if (!$is_OneTestAvailable) {
     print "error: no test succeeded! Maybe Office crashed during starting!\n";
+    $is_testerror = 1;
 }
 
 exit($is_testerror);
