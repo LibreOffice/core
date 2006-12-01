@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgfontexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:45:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 #include "svgfontexport.hxx"
 
-static const sal_uInt32 nFontEM = 2048;
+static const sal_Int32  nFontEM = 2048;
 
 // -----------------
 // - SVGFontExport -
@@ -121,8 +121,8 @@ void SVGFontExport::implCollectGlyphs()
                     const String&       rFontName = aVDev.GetFont().GetName();
                     const sal_Unicode*  pStr = aText.getStr();
 
-                    for( sal_uInt32 i = 0, nLen = aText.getLength(); i < nLen; ++i )
-                        maGlyphs[ rFontName ].insert( pStr[ i ] );
+                    for( sal_uInt32 j = 0, nLen = aText.getLength(); j < nLen; ++j )
+                        maGlyphs[ rFontName ].insert( pStr[ j ] );
                 }
             }
 
@@ -156,7 +156,7 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", aUnitsPerEM );
 
         {
-            SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "font", TRUE, TRUE );
+            SvXMLElementExport  aExp2( mrExport, XML_NAMESPACE_NONE, "font", TRUE, TRUE );
             Point               aPos;
             Size                aSize( nFontEM, nFontEM );
             PolyPolygon         aMissingGlyphPolyPoly( Rectangle( aPos, aSize ) );
@@ -170,19 +170,19 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", SVGActionWriter::GetValueString( aVDev.GetFontMetric().GetDescent() ) );
 
             {
-                SvXMLElementExport aExp( mrExport, XML_NAMESPACE_NONE, "font-face", TRUE, TRUE );
+                SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", TRUE, TRUE );
             }
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aSize.Width() ) );
 
             {
-                SvXMLElementExport aExp( mrExport, XML_NAMESPACE_NONE, "missing-glyph", TRUE, TRUE );
+                SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "missing-glyph", TRUE, TRUE );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", B2UCONST( "fill:none;stroke:black;stroke-width:33" ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aMissingGlyphPolyPoly, sal_False ) );
 
                 {
-                    SvXMLElementExport aExp( mrExport, XML_NAMESPACE_NONE, "path", TRUE, TRUE );
+                    SvXMLElementExport aExp4( mrExport, XML_NAMESPACE_NONE, "path", TRUE, TRUE );
                 }
             }
 
