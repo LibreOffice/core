@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:40:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,16 +102,16 @@ static void printValue( const Any & rVal )
         printf( "%x", *(sal_uInt16 *)rVal.getValue() );
         break;
     case TypeClass_LONG:
-        printf( "%x", *(sal_Int32 *)rVal.getValue() );
+        printf( "%lx", static_cast<long>(*(sal_Int32 *)rVal.getValue()) );
         break;
     case TypeClass_UNSIGNED_LONG:
-        printf( "%x", *(sal_uInt32 *)rVal.getValue() );
+        printf( "%lx", static_cast<unsigned long>(*(sal_uInt32 *)rVal.getValue()) );
         break;
     case TypeClass_HYPER:
-        printf( "%x", (long)*(sal_Int64 *)rVal.getValue() );
+        printf( "%lx", (long)*(sal_Int64 *)rVal.getValue() );
         break;
     case TypeClass_UNSIGNED_HYPER:
-        printf( "%x", (unsigned long)*(sal_uInt64 *)rVal.getValue() );
+        printf( "%lx", (unsigned long)*(sal_uInt64 *)rVal.getValue() );
         break;
     case TypeClass_FLOAT:
         printf( "%f", *(float *)rVal.getValue() );
@@ -121,8 +121,8 @@ static void printValue( const Any & rVal )
         break;
     case TypeClass_STRING:
     {
-        OString aStr( OUStringToOString( *(OUString *)rVal.getValue(), RTL_TEXTENCODING_ISO_8859_1 ) );
-        printf( aStr.getStr() );
+        OString aStr2( OUStringToOString( *(OUString *)rVal.getValue(), RTL_TEXTENCODING_ISO_8859_1 ) );
+        printf( aStr2.getStr() );
         break;
     }
     case TypeClass_ENUM:
@@ -317,14 +317,14 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString::createFromAscii( "255" );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
-    aVal <<= (sal_Int8)0xff;
+    aVal <<= (sal_Int8)0xffu;
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= OUString::createFromAscii( "0x80" );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString::createFromAscii( "128" );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
-    aVal <<= (sal_Int8)( 0x80 );
+    aVal <<= (sal_Int8)( 0x80u );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= OUString::createFromAscii( "0x7f" );
@@ -449,7 +449,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_Int32)( 0xffffffff ); // is -1
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= (sal_Int32)( -0x80000000 );
+    aVal <<= (sal_Int32)( 0x80000000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= (sal_Int32)( 0x7fffffff );
