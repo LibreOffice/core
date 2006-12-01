@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:45:50 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
                 : 0;
     }
 
-    if( bNoColls && !rTxtNd.GetpSwAttrSet() )
+    if( bNoColls && !rTxtNd.HasSwAttrSet() )
         return ;
 
     const SfxItemSet& rSet = rTxtNd.GetSwAttrSet();
@@ -388,16 +388,16 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 // --------------------------------------------------------------
     USHORT nWhch = rAttr.Which();
     SfxWhichIter* pIter = NULL;
-    const SfxPoolItem* pTmpItem;
-    const SwAttrSet* pSet;
-    if( RES_TXTATR_CHARFMT == nWhch )
+    const SfxPoolItem* pTmpItem = NULL;
+    const SfxItemSet* pSet = NULL;
+    if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
     {
-        if( bNoColls )
+        if( bNoColls && RES_TXTATR_CHARFMT == nWhch )
             return Found();
-        SwCharFmt* pFmt = rAttr.GetCharFmt().GetCharFmt();
-        if( pFmt )
+        pTmpItem = NULL;
+        pSet = CharFmt::GetItemSet( rAttr.GetAttr() );
+        if ( pSet )
         {
-            pSet = &pFmt->GetAttrSet();
             pIter = new SfxWhichIter( *pSet );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
@@ -406,8 +406,6 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
             if( !nWhch )
                 pTmpItem = NULL;
         }
-        else
-            pTmpItem = NULL;
     }
     else
         pTmpItem = &rAttr.GetAttr();
@@ -548,16 +546,16 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 // --------------------------------------------------------------
     USHORT nWhch = rAttr.Which();
     SfxWhichIter* pIter = NULL;
-    const SfxPoolItem* pTmpItem;
-    const SwAttrSet* pSet;
-    if( RES_TXTATR_CHARFMT == nWhch )
+    const SfxPoolItem* pTmpItem = NULL;
+    const SfxItemSet* pSet = NULL;
+    if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
     {
-        if( bNoColls )
+        if( bNoColls && RES_TXTATR_CHARFMT == nWhch )
             return Found();
-        SwCharFmt* pFmt = rAttr.GetCharFmt().GetCharFmt();
-        if( pFmt )
+
+        pSet = CharFmt::GetItemSet( rAttr.GetAttr() );
+        if ( pSet )
         {
-            pSet = &pFmt->GetAttrSet();
             pIter = new SfxWhichIter( *pSet );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
@@ -566,8 +564,6 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
             if( !nWhch )
                 pTmpItem = NULL;
         }
-        else
-            pTmpItem = NULL;
     }
     else
         pTmpItem = &rAttr.GetAttr();
@@ -911,7 +907,7 @@ int lcl_Search( const SwCntntNode& rCNd, SwPaM& rPam,
             const SfxItemSet& rCmpSet, BOOL bNoColls  )
 {
     // nur die harte Attributierung suchen ?
-    if( bNoColls && !rCNd.GetpSwAttrSet() )
+    if( bNoColls && !rCNd.HasSwAttrSet() )
         return FALSE;
 
     const SfxItemSet& rNdSet = rCNd.GetSwAttrSet();
@@ -1003,7 +999,7 @@ FASTBOOL SwPaM::Find( const SfxPoolItem& rAttr, FASTBOOL bValue, SwMoveFn fnMove
 
         // keine harte Attributierung, dann pruefe, ob die Vorlage schon
         // mal nach dem Attribut befragt wurde
-        if( !pNode->GetpSwAttrSet() )
+        if( !pNode->HasSwAttrSet() )
         {
             const SwFmt* pTmpFmt = pNode->GetFmtColl();
             if( aFmtArr.Count() && aFmtArr.Seek_Entry( pTmpFmt ))
@@ -1101,7 +1097,7 @@ FASTBOOL SwPaM::Find( const SfxItemSet& rSet, FASTBOOL bNoColls, SwMoveFn fnMove
 
         // keine harte Attributierung, dann pruefe, ob die Vorlage schon
         // mal nach dem Attribut befragt wurde
-        if( !pNode->GetpSwAttrSet() )
+        if( !pNode->HasSwAttrSet() )
         {
             const SwFmt* pTmpFmt = pNode->GetFmtColl();
             if( aFmtArr.Count() && aFmtArr.Seek_Entry( pTmpFmt ))
