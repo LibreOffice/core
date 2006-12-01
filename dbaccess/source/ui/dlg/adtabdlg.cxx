@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:04:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:30:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,12 +439,14 @@ IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, /*pButton*/ )
 IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
 {
     if ( impl_isAddAllowed() )
+    {
         impl_addTable();
+        if ( !impl_isAddAllowed() )
+            Close();
+        return 1L;  // handled
+    }
 
-    if ( !impl_isAddAllowed() )
-        Close();
-
-    return 0;
+    return 0L;  // not handled
 }
 
 //------------------------------------------------------------------------------
