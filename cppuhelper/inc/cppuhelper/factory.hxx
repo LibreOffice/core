@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:12:08 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:17:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,32 +114,6 @@ typedef void * (SAL_CALL * component_getFactoryFunc)(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 
 //##################################################################################################
-
-#define WRITE_COMPONENT_INFO_FUNCTION       "writeComponentInfo"
-#define CREATE_COMPONENT_FACTORY_FUNCTION   "createComponentFactory"
-
-/** Deprecated.  Function pointer declaration.
-    Function writes component registry info, at least writing the supported service names.
-
-    @param pXKey a registry key
-    @return true if everything went fine
-    @deprecated
-*/
-typedef sal_Bool (SAL_CALL * WriteComponentInfoFunc)( uno_Interface * pXKey );
-
-/** Deprecated.  Function pointer declaration.
-    Retrieves a factory to create component instances.
-
-    @param pImplName
-    desired implementation name
-    @param pXSMgr a service manager
-    @param pXKey a registry key
-    @return acquired component factory
-    @deprecated
-*/
-typedef uno_Interface* (SAL_CALL * CreateComponentFactoryFunc)(
-    const sal_Unicode * pImplName, uno_Interface * pXSMgr, uno_Interface * pXKey );
-
 
 namespace cppu
 {
