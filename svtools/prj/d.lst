@@ -98,6 +98,7 @@ hedabu: ..\inc\prgsbar.hxx %_DEST%\inc%_EXT%\svtools\prgsbar.hxx
 hedabu: ..\inc\prnsetup.hxx %_DEST%\inc%_EXT%\svtools\prnsetup.hxx
 hedabu: ..\inc\poolcach.hxx %_DEST%\inc%_EXT%\svtools\poolcach.hxx
 hedabu: ..\inc\poolitem.hxx %_DEST%\inc%_EXT%\svtools\poolitem.hxx
+hedabu: ..\inc\stylepool.hxx %_DEST%\inc%_EXT%\svtools\stylepool.hxx
 hedabu: ..\inc\printer.hxx %_DEST%\inc%_EXT%\svtools\printer.hxx
 hedabu: ..\inc\printdlg.hxx %_DEST%\inc%_EXT%\svtools\printdlg.hxx
 hedabu: ..\inc\ptitem.hxx %_DEST%\inc%_EXT%\svtools\ptitem.hxx
