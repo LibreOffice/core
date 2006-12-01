@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandMetaData.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:38:33 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,18 +87,18 @@ public class CommandMetaData extends DBMetaData {
         this.setCommandName(_CommandName);
         FieldColumns = new FieldColumn[_FieldNames.length];
         for (int i = 0; i < _FieldNames.length; i++) {
-            FieldColumns[i] = new FieldColumn(this, _FieldNames[i], this.getCommandName(), false);
+                FieldColumns[i] = new FieldColumn(this, _FieldNames[i], this.getCommandName(), false);
             if (_bgetDefaultValue)
-                FieldColumns[i].getDefaultValue();
+        FieldColumns[i].getDefaultValue();
         }
     }
 
 
     public void initializeFieldColumns(String[] _FieldNames, XNameAccess _xColumns) {
-        FieldColumns = new FieldColumn[_FieldNames.length];
-        for (int i = 0; i < _FieldNames.length; i++) {
-            FieldColumns[i] = new FieldColumn(this,_xColumns, _FieldNames[i] );
-        }
+            FieldColumns = new FieldColumn[_FieldNames.length];
+            for (int i = 0; i < _FieldNames.length; i++) {
+                FieldColumns[i] = new FieldColumn(this,_xColumns, _FieldNames[i] );
+            }
     }
 
 
@@ -252,7 +252,7 @@ public class CommandMetaData extends DBMetaData {
         int ncount = 0;
         for (int i = 0; i < _fieldnames.length; i++){
             FieldColumn ofieldcolumn = getFieldColumnByFieldName(_fieldnames[i]);
-            if (getDBDataTypeInspector().isColumnOrderable(ofieldcolumn.xColPropertySet)){
+            if (getDBDataTypeInspector().isColumnOrderable(ofieldcolumn.getXColumnPropertySet())){
                 aOrderableColumns.addElement(_fieldnames[i]);
                 ncount++;
             }
