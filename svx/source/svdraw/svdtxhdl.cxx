@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:50:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,8 @@ void ImpTextPortionHandler::DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawE
         rOutliner.Clear();
         rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
         rOutliner.SetText(*pPara);
-        sal_uInt32 nCnt(Min(aContourPolyPolygon.count(), rOutliner.GetParagraphCount()));
+        sal_uInt32 nCnt(Min(aContourPolyPolygon.count(),
+            static_cast<sal_uInt32>(rOutliner.GetParagraphCount())));
 
         if ( nCnt == 1 )    bToLastPoint = TRUE;
         else                bToLastPoint = FALSE;
