@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:22:17 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:35:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,6 @@ INSO_SWEDISH_TARGET             = inso46
 
 CONFIG_SERVER_NOLANG_TARGET     = cfgsrvnolang
 CONFIG_SERVER_BITMAP_UNX_TARGET = cfgsrvbitmapunx
-CONFIG_SERVER_DOCLANG_TARGET    = cfgsrvdoclang
 CONFIG_USER_TARGET              = cfgusr
 
 MIGRATION_TARGET                = migration
