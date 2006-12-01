@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:51:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -122,6 +125,7 @@ namespace svx
                              ,public IContextRequestObserver
     {
     private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         m_xActiveControl;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >   m_xActiveTextComponent;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > m_xActiveController;
@@ -240,6 +244,10 @@ namespace svx
             we have an active controller currently
         */
         void    stopControllerListening( );
+
+        /** parses the given URL's Complete member, by calling XURLTransformer::parseString
+        */
+        void    impl_parseURL_nothrow( ::com::sun::star::util::URL& _rURL );
 
         DECL_LINK( OnInvalidateClipboard, void* );
     };
