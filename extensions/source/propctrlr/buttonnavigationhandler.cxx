@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttonnavigationhandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:13:54 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,6 @@
 #endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
-#include <com/sun/star/form/FormButtonType.hpp>
-#endif
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -75,7 +72,6 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
-    using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::inspection;
 
@@ -131,7 +127,7 @@ namespace pcr
         PropertyState eState = PropertyState_DIRECT_VALUE;
         switch ( nPropId )
         {
-        case PROPERTY_ID_ACTION_BUTTONTYPE:
+        case PROPERTY_ID_BUTTONTYPE:
         {
             PushButtonNavigation aHelper( m_xComponent );
             eState = aHelper.getCurrentButtonTypeState();
@@ -161,7 +157,7 @@ namespace pcr
         Any aReturn;
         switch ( nPropId )
         {
-        case PROPERTY_ID_ACTION_BUTTONTYPE:
+        case PROPERTY_ID_BUTTONTYPE:
         {
             PushButtonNavigation aHelper( m_xComponent );
             aReturn = aHelper.getCurrentButtonType();
@@ -190,7 +186,7 @@ namespace pcr
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
         switch ( nPropId )
         {
-        case PROPERTY_ID_ACTION_BUTTONTYPE:
+        case PROPERTY_ID_BUTTONTYPE:
         {
             PushButtonNavigation aHelper( m_xComponent );
             aHelper.setCurrentButtonType( _rValue );
@@ -229,7 +225,7 @@ namespace pcr
         if ( isNavigationCapableButton( m_xComponent ) )
         {
             addStringPropertyDescription( aProperties, PROPERTY_TARGET_URL );
-            implAddPropertyDescription( aProperties, PROPERTY_ACTION_BUTTONTYPE, ::getCppuType( static_cast< FormButtonType* >( NULL ) ) );
+            implAddPropertyDescription( aProperties, PROPERTY_BUTTONTYPE, ::getCppuType( static_cast< sal_Int32* >( NULL ) ) );
         }
 
         if ( aProperties.empty() )
@@ -238,18 +234,10 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getSupersededProperties( ) throw (RuntimeException)
-    {
-        Sequence< ::rtl::OUString > aSuperseded( 1 );
-        aSuperseded[0] = PROPERTY_BUTTONTYPE;
-        return aSuperseded;
-    }
-
-    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aActuating( 2 );
-        aActuating[0] = PROPERTY_ACTION_BUTTONTYPE;
+        aActuating[0] = PROPERTY_BUTTONTYPE;
         aActuating[1] = PROPERTY_TARGET_URL;
         return aActuating;
     }
@@ -282,7 +270,7 @@ namespace pcr
         PropertyId nPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
         switch ( nPropId )
         {
-        case PROPERTY_ID_ACTION_BUTTONTYPE:
+        case PROPERTY_ID_BUTTONTYPE:
         {
             PushButtonNavigation aHelper( m_xComponent );
             _rxInspectorUI->enablePropertyUI( PROPERTY_TARGET_URL, aHelper.currentButtonTypeIsOpenURL() );
