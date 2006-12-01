@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:12:57 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1539,30 +1539,35 @@ void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
         {
             SwLayoutFrm *pCell = (SwLayoutFrm*)pRow->Lower();
             SwFrm *pCnt = pCell->Lower();
-            pCnt->Calc();
-            const long nCellHeight = (pCell->Frm().*fnRect->fnGetHeight)();
-            const long nCellY      = (pCell->Frm().*fnRect->fnGetTop)()-1;
-            const long nCntHeight  = (pCnt->Frm().*fnRect->fnGetHeight)();
-            const long nCntY       = (pCnt->Frm().*fnRect->fnGetTop)()-1;
-            if ( 0 != (pCell = (SwLayoutFrm*)pCell->GetNext()) )
-                do
-                {   (pCell->Frm().*fnRect->fnSetTopAndHeight)
-                                                        ( nCellY, nCellHeight );
-                    (pCell->Prt().*fnRect->fnSetHeight)( nCellHeight );
-                    pCell->_InvalidateAll();
+            // --> OD 2006-11-08 #i70641# - make code robust
+            if ( pCnt )
+            {
+                pCnt->Calc();
+                const long nCellHeight = (pCell->Frm().*fnRect->fnGetHeight)();
+                const long nCellY      = (pCell->Frm().*fnRect->fnGetTop)()-1;
+                const long nCntHeight  = (pCnt->Frm().*fnRect->fnGetHeight)();
+                const long nCntY       = (pCnt->Frm().*fnRect->fnGetTop)()-1;
+                if ( 0 != (pCell = (SwLayoutFrm*)pCell->GetNext()) )
+                    do
+                    {   (pCell->Frm().*fnRect->fnSetTopAndHeight)
+                                                            ( nCellY, nCellHeight );
+                        (pCell->Prt().*fnRect->fnSetHeight)( nCellHeight );
+                        pCell->_InvalidateAll();
 
-                    pCnt = pCell->Lower();
-                    (pCnt->Frm().*fnRect->fnSetTopAndHeight)(nCntY, nCntHeight);
-                    (pCnt->Prt().*fnRect->fnSetHeight)( nCntHeight );
-                    pCnt->_InvalidateAll();
+                        pCnt = pCell->Lower();
+                        (pCnt->Frm().*fnRect->fnSetTopAndHeight)(nCntY, nCntHeight);
+                        (pCnt->Prt().*fnRect->fnSetHeight)( nCntHeight );
+                        pCnt->_InvalidateAll();
 
-                    pCell = (SwLayoutFrm*)pCell->GetNext();
-                } while ( pCell );
+                        pCell = (SwLayoutFrm*)pCell->GetNext();
+                    } while ( pCell );
 
-            SwTwips nRowTop = (pRow->Frm().*fnRect->fnGetTop)();
-            SwTwips nUpBot = (pTab->GetUpper()->Frm().*fnRect->fnGetBottom)();
-            if( (*fnRect->fnYDiff)( nUpBot, nRowTop ) < 0 )
-                break;
+                SwTwips nRowTop = (pRow->Frm().*fnRect->fnGetTop)();
+                SwTwips nUpBot = (pTab->GetUpper()->Frm().*fnRect->fnGetBottom)();
+                if( (*fnRect->fnYDiff)( nUpBot, nRowTop ) < 0 )
+                    break;
+            }
+            // <--
             pRow = (SwLayoutFrm*)pRow->GetNext();
         }
     }
@@ -4719,7 +4724,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             // the drawing layer
                             pFly->GetVirtDrawObj()->SetChanged();
                             // <--
-                            // --> OD 2006-10-13 #i59280#
+                            // --> OD 2006-10-13 #i58280#
                             pFly->InvalidateObjRectWithSpaces();
                             // <--
                         }
