@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:18:23 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,4 +163,35 @@ String RID_STR_LABEL_OF
 {
     Text [ de ] = "von";
     Text [ en-US ] = "of";
+};
+
+String RID_STR_QUERY_SAVE_MODIFIED_ROW
+{
+    Text [ de ] = "Der Inhalt des aktuellen Formulars wurde geändert.\nSollen die Änderungen gespeichert werden?";
+    Text [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?";
+};
+String RID_STR_COULD_NOT_SET_ORDER
+{
+    Text [ de ] = "Fehler beim Setzen der Sortier-Kriterien";
+    Text [ en-US ] = "Error setting the sort criteria";
+};
+String RID_STR_COULD_NOT_SET_FILTER
+{
+    Text [ de ] = "Fehler beim Setzen der Filter-Kriterien";
+    Text [ en-US ] = "Error setting the filter criteria";
+};
+String RID_STR_FEATURE_REQUIRES_PARAMETERS
+{
+    Text [ de ] = "Zum Ausführen dieser Funktion werden Parameter benötigt.";
+    Text [ en-US ] = "To execute this function, parameters are needed.";
+};
+String RID_STR_FEATURE_NOT_EXECUTABLE
+{
+    Text [ de ] = "Diese Funktion kann nicht ausgeführt werden, sondern dient nur der Statusabfrage.";
+    Text [ en-US ] = "This function cannot be executed, but is only for status queries.";
+};
+String RID_STR_FEATURE_UNKNOWN
+{
+    Text [ de ] = "Unbekannte Funktion.";
+    Text [ en-US ] = "Unknown function.";
 };
