@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:50:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,13 +235,13 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
             // kopiert. Um diese beim Undo wieder herzustellen, muss das
             // Auto-PageBreak aus dem EndNode zurueckgesetzt werden.
             // - fuer die PageDesc, ColBreak dito !
-            if( pEndTxtNd->GetpSwAttrSet() )
+            if( pEndTxtNd->HasSwAttrSet() )
             {
                 SwRegHistory aRegHist( *pEndTxtNd, pHistory );
                 if( SFX_ITEM_SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_BREAK, FALSE ) )
                     pEndTxtNd->ResetAttr( RES_BREAK );
-                if( pEndTxtNd->GetpSwAttrSet() &&
+                if( pEndTxtNd->HasSwAttrSet() &&
                     SFX_ITEM_SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_PAGEDESC, FALSE ) )
                     pEndTxtNd->ResetAttr( RES_PAGEDESC );
@@ -419,7 +419,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         // Ueberlappenden Bereichen von An/Aus.
         pHistory->CopyAttr( pSttTxtNd->GetpSwpHints(), nNdIdx,
                             0, pSttTxtNd->GetTxt().Len(), TRUE );
-        if( !bOneNode && pSttTxtNd->GetpSwAttrSet() )
+        if( !bOneNode && pSttTxtNd->HasSwAttrSet() )
                 pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx );
 
         // die Laenge kann sich veraendert haben (!!Felder!!)
@@ -451,7 +451,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nNdIdx, 0,
                             pEndTxtNd->GetTxt().Len(), TRUE );
 
-        if( pEndTxtNd->GetpSwAttrSet() )
+        if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx );
 
         // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
@@ -730,11 +730,11 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             // alle Attribute verwerfen, wurden alle gespeichert!
             SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
 
-            if( pTxtNd && pTxtNd->GetpSwAttrSet() )
+            if( pTxtNd && pTxtNd->HasSwAttrSet() )
                 pTxtNd->ResetAllAttr();
 
             if( pTxtNd && pTxtNd->GetpSwpHints() )
-                pTxtNd->ClearSwpHintsArr( FALSE );
+                pTxtNd->ClearSwpHintsArr( true );
 
             if( pSttStr && !bFromTableCopy )
             {
@@ -829,11 +829,11 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 
             if (pTxtNd != NULL)
             {
-                if( pTxtNd->GetpSwAttrSet() && bNodeMove && !pEndStr )
+                if( pTxtNd->HasSwAttrSet() && bNodeMove && !pEndStr )
                     pTxtNd->ResetAllAttr();
 
                 if( pTxtNd->GetpSwpHints() )
-                    pTxtNd->ClearSwpHintsArr( FALSE );
+                    pTxtNd->ClearSwpHintsArr( true );
 
                 // SectionNode-Modus und von oben nach unten selektiert:
                 //  -> im StartNode steht noch der Rest vom Join => loeschen
