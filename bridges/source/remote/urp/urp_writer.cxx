@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:02:50 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,9 +223,10 @@ void OWriterThread::executeReleaseRemoteCalls()
             &pReleaseMethod ,
             ((typelib_InterfaceTypeDescription*)pInterfaceTypeDesc)->ppAllMembers[REMOTE_RELEASE_METHOD_INDEX] );
 
-        urp_sendRequest( m_pEnvRemote , pReleaseMethod, call.sOid.pData,
-                         (typelib_InterfaceTypeDescription*) pInterfaceTypeDesc,
-                         0, 0 , &pAny );
+        urp_sendRequest_internal(
+            m_pEnvRemote , pReleaseMethod, call.sOid.pData,
+            (typelib_InterfaceTypeDescription*) pInterfaceTypeDesc, 0, 0,
+            &pAny );
 
         typelib_typedescription_release( pReleaseMethod );
         typelib_typedescription_release( pInterfaceTypeDesc );
