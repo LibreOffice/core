@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:19:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1134,7 +1134,7 @@ void SwCntntFrm::MakeAll()
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
 #ifndef PRODUCT
-    SwDoc *pDoc = GetAttrSet()->GetDoc();
+    const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {
         static sal_Bool bWarn = sal_False;
