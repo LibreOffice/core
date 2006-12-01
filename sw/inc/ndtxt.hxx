@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:27:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ namespace utl {
 class SwTxtFmtColl;
 class SwCntntFrm;
 class SwTxtFld;          // Fuer GetTxtFld()
-class SwAttrSet;
+class SfxItemSet;
 class SwUndoTransliterate;
 
 
@@ -92,6 +92,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     friend class SwTxtFrm;
     friend class SwScriptInfo;
     friend void SwpHints::Insert( SwTxtAttr*, SwTxtNode&, USHORT );
+    friend void SwpHints::BuildPortions( SwTxtNode&, SwTxtAttr&, USHORT );
 
     //Kann 0 sein, nur dann nicht 0 wenn harte Attribute drin stehen.
     //Also niemals direkt zugreifen!
@@ -120,7 +121,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     BYTE nOutlineLevel;
 
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
-                SwAttrSet* pAutoAttr = 0 );
+                             const SfxItemSet* pAutoAttr = 0 );
 
     // Kopiert die Attribute an nStart nach pDest.
     SW_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const xub_StrLen nStart, const xub_StrLen nOldPos);
@@ -131,8 +132,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     SW_DLLPRIVATE void  _Cut( SwTxtNode *pDest, const SwIndex &rDestStart,
                   const SwIndex &rStart, xub_StrLen nLen, BOOL bUpdate = TRUE );
 
-    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxPoolItem& rNew, xub_StrLen nStt, xub_StrLen nEnd,
-                            BOOL bPool = TRUE );
+    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxPoolItem& rNew, xub_StrLen nStt, xub_StrLen nEnd, bool bRedlineAttr = false );
+    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd );
 
     // Verlagere alles umfassende harte Attribute in den AttrSet des Absatzes
     SW_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // wird von SplitNode gerufen.
@@ -225,19 +226,19 @@ public:
     void    DestroyAttr( SwTxtAttr* pAttr );
 
     // loesche alle Attribute aus dem SwpHintsArray.
-    void    ClearSwpHintsArr( int bDelAll = TRUE, int bDelFields = TRUE );
+    void    ClearSwpHintsArr( bool bDelFields );
 
-    // uebernehme den Pointer auf das Text-Attribut
+    // Insert pAttr into hints array.
     BOOL    Insert( SwTxtAttr *pAttr, USHORT nMode = 0 );
     // lege ein neues TextAttribut an und fuege es ins SwpHints-Array ein
     // returne den neuen Pointer (oder 0 bei Fehlern)!
-    SwTxtAttr* Insert( const SfxPoolItem& rAttr,
-                        xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
+    SwTxtAttr* InsertItem( const SfxPoolItem& rAttr,
+                           xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
 
     // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
     // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
     BOOL SetAttr( const SfxItemSet& rSet,
-                    xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
+                  xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
     // erfrage die Attribute vom TextNode ueber den Bereich
     BOOL GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     BOOL bOnlyTxtAttr  = FALSE,
@@ -613,8 +614,8 @@ public:
     bool IsHidden() const;
 // <--
 
-    inline SwTxtAttr* MakeTmpTxtAttr( const SfxPoolItem& rNew )
-        { return MakeTxtAttr( rNew, 0, 0, FALSE ); }
+    inline SwTxtAttr* MakeRedlineTxtAttr( const SfxPoolItem& rNew )
+        { return MakeTxtAttr( rNew, 0, 0, true ); }
 
     TYPEINFO(); // fuer rtti
 
@@ -646,6 +647,11 @@ public:
     void SetStart(SwNodeNum::tSwNumTreeNumber nNum);
     SwNodeNum::tSwNumTreeNumber GetStart() const;
 
+    // Checks some global conditions like loading or destruction of document
+    // to economize notifications
+    bool IsNotificationEnabled() const;
+
+    // Checks a temporary notification blocker and the global conditons of IsNotificationEnabled()
     bool IsNotifiable() const;
 
     void SetCounted(bool _bCounted);
