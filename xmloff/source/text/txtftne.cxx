@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:38:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,8 +171,11 @@ void XMLTextParagraphExport::exportTextFootnote(
         // wil be handled via exportTextFootnoteHelper, exportText
         sal_Bool bHasHyperlink;
         sal_Bool bIsUICharStyle = sal_False;
+        sal_Bool bHasAutoStyle = sal_False;
+
         OUString sStyle = FindTextStyleAndHyperlink( rPropSet, bHasHyperlink,
-                                                     bIsUICharStyle );
+                                                     bIsUICharStyle, bHasAutoStyle );
+
         // export hyperlink (if we have one)
         Reference < XPropertySetInfo > xPropSetInfo;
         if( bHasHyperlink )
@@ -204,7 +207,7 @@ void XMLTextParagraphExport::exportTextFootnote(
             XMLTextCharStyleNamesElementExport aCharStylesExport(
                 GetExport(), bIsUICharStyle &&
                              aCharStyleNamesPropInfoCache.hasProperty(
-                                                    rPropSet ),
+                                                    rPropSet ), sal_False,
                 rPropSet, sCharStyleNames );
             if( sStyle.getLength() )
             {
