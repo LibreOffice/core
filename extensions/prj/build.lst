@@ -9,8 +9,6 @@ ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl ex_inc NULL
 ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w ex_inc NULL
 ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr ex_inc NULL
 ex	extensions\source\resource			nmake	-	all	ex_resrc ex_inc NULL
-ex	extensions\source\installation			nmake	-	w	ex_inst ex_inc NULL
-ex	extensions\source\installation\office\protchk		nmake	-	all	ex_pchk ex_inc NULL
 ex	extensions\source\plugin\base			nmake	-	all	ex_plbase ex_inc NULL
 ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase ex_inc NULL
 ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx ex_inc NULL
@@ -28,4 +26,4 @@ ex	extensions\source\config\ldap		nmake 	-	all ex_ldap ex_inc NULL
 ex	extensions\source\nsplugin\source	nmake	-	all	ex_nsplugin ex_inc NULL
 ex	extensions\source\update\check      	nmake	-	all	ex_updchk ex_inc NULL
 ex	extensions\source\update\ui      	nmake	-	all	ex_updchkui ex_inc NULL
-ex  extensions\util						nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_ldap ex_propctrlr ex_pchk.w ex_bib ex_plutil ex_updchk ex_updchkui NULL
+ex  extensions\util						nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_ldap ex_propctrlr ex_bib ex_plutil ex_updchk ex_updchkui NULL
