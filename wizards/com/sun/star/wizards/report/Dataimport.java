@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:23:44 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,24 +240,35 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 String sRecordFieldNames = CurReportDocument.oFormHandler.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
                 if (xNamedForm.hasByName("QueryName"))
                     sQueryName = CurReportDocument.oFormHandler.getValueofHiddenControl(xNamedForm, "QueryName", sMsg);
-                String[] sFieldNameList =  JavaTools.ArrayoutofString(sFieldNames, ";");
+        String[] sFieldNameList =  JavaTools.ArrayoutofString(sFieldNames, ";");
                 CurReportDocument.CurDBMetaData.RecordFieldNames = JavaTools.ArrayoutofString(sRecordFieldNames, ";");
                 CurReportDocument.CurDBMetaData.GroupFieldNames = JavaTools.ArrayoutofString(sGroupFieldNames, ";");
                 CurReportDocument.CurDBMetaData.setCommandType(Integer.valueOf(sCommandType).intValue());
                 sMsgQueryCreationImpossible = JavaTools.replaceSubString(sMsgQueryCreationImpossible, CurReportDocument.CurDBMetaData.Command, "<STATEMENT>");
                 bgetConnection = CurReportDocument.CurDBMetaData.getConnection(CurProperties);
+                int nCommandType = com.sun.star.sdb.CommandType.COMMAND;
+                boolean bexecute = false;
                 if (bgetConnection){
                     if ((CurReportDocument.CurDBMetaData.getCommandType() == CommandType.QUERY) && (CurReportDocument.CurDBMetaData.Command.equals(""))){
                         CurReportDocument.CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.CurDBMetaData);
                         DBMetaData.CommandObject oCommand = CurReportDocument.CurDBMetaData.getQueryByName(sQueryName);
-                        CurReportDocument.CurDBMetaData.Command = (String) oCommand.xPropertySet.getPropertyValue("Command");
-                        CurReportDocument.CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(CurReportDocument.CurDBMetaData.Command);
-                        CurReportDocument.CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
+                        if (CurReportDocument.CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet)){
+                            CurReportDocument.CurDBMetaData.Command = (String) oCommand.xPropertySet.getPropertyValue("Command");
+                            CurReportDocument.CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(CurReportDocument.CurDBMetaData.Command);
+                            CurReportDocument.CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
+                        }
+                        else{
+                            nCommandType = com.sun.star.sdb.CommandType.QUERY;
+                            CurReportDocument.CurDBMetaData.Command = sQueryName;
+                        }
                     }
-        boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, sFieldNameList, true);
-                return bexecute;
-                } else
-                    return false;
+                    bexecute = CurReportDocument.CurDBMetaData.executeCommand(nCommandType); //sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, sFieldNameList, true);
+                    if (bexecute){
+                        bexecute = CurReportDocument.CurDBMetaData.getFields(sFieldNameList, true);
+                    }
+                    return bexecute;
+                    } else
+                        return false;
             } else {
                 sReportFormNotExisting = JavaTools.replaceSubString(sReportFormNotExisting, ReportWizard.SOREPORTFORMNAME, "<REPORTFORM>");
                 showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sReportFormNotExisting + (char) 13 + sMsgEndAutopilot);
@@ -286,7 +297,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             com.sun.star.style.BreakType CorrBreakValue = null;
             String CorrPageDescName = "";
             CurReportDocument.removeAllVisibleTextSections();
-            CurReportDocument.removeAllVisibleTextTables();
+            CurReportDocument.removeNonLayoutTextTables();
             addTextSectionCopies();
             CurReportDocument.getallDBColumns();
             int GroupFieldCount = CurDBMetaData.GroupFieldNames.length;
@@ -304,14 +315,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     CurGroupTableName = TBLGROUPSECTION + Integer.toString(ColIndex + 1);
                     oTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
                     xGroupBaseTables[ColIndex] = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
-//                    if (ColIndex == 0) {
-//                        CorrBreakValue = TextTableHandler.resetBreakTypeofTextTable(xGroupBaseTables[ColIndex]);
-//                        String PageDescName = com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xGroupBaseTables[ColIndex], "PageDescName"));
-//                        if (PageDescName.equals("") == false) {
-//                            CorrPageDescName = PageDescName;
-//                            Helper.setUnoPropertyValue(xGroupBaseTables[ColIndex], "PageDescName", "");
-//                        }
-//                    }
                     CurGroupValue = CurDBMetaData.getGroupColumnValue(ColIndex);
                     OldGroupFieldValues[ColIndex] = CurGroupValue;
                     CurDBColumn = (DBColumn) CurReportDocument.DBColumnsVector.elementAt(ColIndex);
@@ -358,19 +361,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 OfficeDocument.ArraytoCellRange(RecordArray, xTextTable, 0, 1);
             }
             CurReportDocument.oTextSectionHandler.breakLinkofTextSections();
-//            Object oTextTable = null;
-//            if (CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().hasByName(TBLGROUPSECTION + 1))
-//                oTextTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(TBLGROUPSECTION + 1);
-//            else if (CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().hasByName(TBLRECORDSECTION))
-//                oTextTable = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(TBLRECORDSECTION);
-//            if ((CorrBreakValue != null) && (oTextTable != null)){
-//              String sName = ((XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable)).getName();
-//              String[] sNames = CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getElementNames();
-//              String sSecName = ((XNamed) UnoRuntime.queryInterface(XNamed.class, CurReportDocument.oTextTableHandler.xTextTablesSupplier.getTextTables().getByName(sNames[0]))).getName();
-//              Helper.setUnoPropertyValue(oTextTable, "BreakType", BreakType.PAGE_BEFORE);
-//                if (!CorrPageDescName.equals(""))
-//                    Helper.setUnoPropertyValue(oTextTable, "PageDescName", CorrPageDescName);
-//            }
         } catch (Exception exception) {
         } catch (java.lang.Exception javaexception) {
             javaexception.printStackTrace(System.out);
@@ -378,6 +368,8 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.unlockallControllers();
         CurReportDocument.setLayoutSectionsVisible(false);
         CurReportDocument.removeCopiedTextSections();
+        CurReportDocument.oTextSectionHandler.removeInvisibleTextSections();
+        CurReportDocument.removeLayoutTextTables();
     }
 
 
