@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:16:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:27:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1182,7 +1182,7 @@ void testArray(void)
 /*
  * main.
  */
-SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, /*argv*/)
+SAL_IMPLEMENT_MAIN()
 {
     rtl::OUString const cppName(
         RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
