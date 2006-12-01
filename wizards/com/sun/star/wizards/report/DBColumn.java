@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBColumn.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:22:21 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ public class DBColumn {
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) throws Exception{
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
-        CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
+    CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
         bIsGroupColumn = true;
         getTableColumns(TableName);
         xNameCell = OldDBColumn.xNameCell;
@@ -161,7 +161,7 @@ public class DBColumn {
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName) throws Exception{
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
-        CurDBField = CurDBMetaData.getFieldColumnByFieldName(_FieldName);
+    CurDBField = CurDBMetaData.getFieldColumnByFieldName(_FieldName);
         bIsGroupColumn = true;
         XTextRange xTextCell;
         XCell xCell;
@@ -200,14 +200,20 @@ public class DBColumn {
             xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
             xTableColumns = xTextTable.getColumns();
         }
-
     } catch (Exception e) {
         e.printStackTrace();
     }}
 
 
     public void initializeNumberFormat(){
-        oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey);
+        if (CurDBField.isBoolean()){
+            NumberFormatter oNumberFormatter = oTextTableHandler.getNumberFormatter();
+            int iLogicalFormatKey = oNumberFormatter.setBooleanReportDisplayNumberFormat();
+            oNumberFormatter.setNumberFormat(xValCell, iLogicalFormatKey, oNumberFormatter);
+        }
+        else{
+            oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey, CurDBMetaData.getNumberFormatter());
+        }
         setCellFont();
     }
 
@@ -223,7 +229,7 @@ public class DBColumn {
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
+    oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
     }
 
 
@@ -232,12 +238,12 @@ public class DBColumn {
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
+    oTextFieldHandler.insertUserField(xTextCursor, CurDBField.FieldName, CurDBField.FieldTitle);
     }
 
 
     public void formatValueCell(){
-        oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey);
+        initializeNumberFormat();
         if (checkforLeftAlignment())
             bAlignLeft = true;
     }
@@ -304,9 +310,6 @@ public class DBColumn {
         else
             CurGroupValue = CurDBField.getDefaultValue();
         modifyCellContent(CurGroupValue);
-//      xValCellCursor.gotoStart(false);
-//      xValCellCursor.gotoEnd(true);
-
         if (bAlignLeft)
         Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
 
@@ -323,7 +326,7 @@ public class DBColumn {
             }
             else{
                 if (PropertyState == com.sun.star.beans.PropertyState.DIRECT_VALUE)
-                Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
+                    Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
             }
         }
     }
