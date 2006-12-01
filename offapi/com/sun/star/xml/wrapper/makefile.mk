@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 10:40:19 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:21:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 PRJ=..$/..$/..$/..$/..
 
-PRJNAME=xmlsecurity
+PRJNAME=offapi
 
 TARGET=xsec-wrapper
 PACKAGE=com$/sun$/star$/xml$/wrapper
