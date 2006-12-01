@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:54:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6056,7 +6056,6 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //variable length always
                                                      //recorded as 3 byte;
         {0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate},
-        {0x6649, 0},                                 //undocumented
         {0x6649, 0},                                 //undocumented
         {0xF614, 0},                                 //undocumented
         {0xD612, 0},                                 //undocumented
