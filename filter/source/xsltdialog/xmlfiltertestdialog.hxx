@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:23:45 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,9 +96,6 @@ private:
     com::sun::star::uno::WeakReference< com::sun::star::lang::XComponent > mxLastFocusModel;
 
     ResMgr&             mrResMgr;
-    filter_info_impl*   mpFilterInfo;
-
-    XMLSourceFileDialog*mpSourceDLG;
 
     rtl::OUString   maImportRecentFile;
     rtl::OUString   maExportRecentFile;
@@ -122,6 +119,9 @@ private:
     FixedText   maFTNameOfRecentFile;
     PushButton  maPBClose;
     HelpButton  maPBHelp;
+
+    XMLSourceFileDialog*    mpSourceDLG;
+    filter_info_impl*       mpFilterInfo;
 
     String maDialogTitle;
 
