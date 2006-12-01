@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:48:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 13:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -710,7 +710,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     {
                         if ( !( pDataValues->Value >>= bTranslucent ) ) // SJ: TODO: The GIF Transparency is stored as int32 in
                         {                                               // configuration files, this has to be changed to boolean
-                            sal_Int32 nTranslucent;
+                            sal_Int32 nTranslucent = 0;
                             if ( pDataValues->Value >>= nTranslucent )
                                 bTranslucent = nTranslucent != 0;
                         }
