@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:11:02 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:42:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,9 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+#ifndef _FMTAUTOFMT_HXX
+#include <fmtautofmt.hxx>
+#endif
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
@@ -163,10 +166,139 @@
 #include <frmsh.hxx>
 #endif
 // <--
+#include <istyleaccess.hxx>
 
 using namespace ::com::sun::star::i18n;
 
 TYPEINIT2( SwCntntNode, SwModify, SwIndexReg )
+
+/*
+ * Some local helper functions for the attribute set handle of a content node.
+ * Since the attribute set of a content node may not be modified directly,
+ * we always have to create a new SwAttrSet, do the modifications, and get
+ * a new handle from the style access
+ */
+
+namespace AttrSetHandleHelper
+{
+
+void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+                      const SwCntntNode& rNode,
+                      SwAttrSet& rNewAttrSet )
+{
+    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(mrpAttrSet.get());
+    IStyleAccess& rSA = pAttrSet->GetPool()->GetDoc()->GetIStyleAccess();
+    mrpAttrSet = rSA.getAutomaticStyle( rNewAttrSet, rNode.IsTxtNode() ?
+                                                     IStyleAccess::AUTO_STYLE_PARA :
+                                                     IStyleAccess::AUTO_STYLE_NOTXT );
+    const bool bSetModifyAtAttr = ((SwAttrSet*)mrpAttrSet.get())->SetModifyAtAttr( &rNode );
+    rNode.SetModifyAtAttr( bSetModifyAtAttr );
+}
+
+
+void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+                const SwCntntNode& rNode,
+                const SwFmt* pParentFmt,
+                const SwFmt* pConditionalFmt )
+{
+    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(mrpAttrSet.get());
+    ASSERT( pAttrSet, "no SwAttrSet" )
+    ASSERT( pParentFmt || !pConditionalFmt, "ConditionalFmt without ParentFmt?" )
+
+    const SwAttrSet* pParentSet = pParentFmt ? &pParentFmt->GetAttrSet() : 0;
+
+    if ( pParentSet != pAttrSet->GetParent() )
+    {
+        SwAttrSet aNewSet( *pAttrSet );
+        aNewSet.SetParent( pParentSet );
+        aNewSet.ClearItem( RES_FRMATR_STYLE_NAME );
+        aNewSet.ClearItem( RES_FRMATR_CONDITIONAL_STYLE_NAME );
+        String sVal;
+
+        if ( pParentFmt )
+        {
+            SwStyleNameMapper::FillProgName( pParentFmt->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
+            const SfxStringItem aAnyFmtColl( RES_FRMATR_STYLE_NAME, sVal );
+            aNewSet.Put( aAnyFmtColl );
+
+            if ( pConditionalFmt != pParentFmt )
+                SwStyleNameMapper::FillProgName( pConditionalFmt->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
+
+            const SfxStringItem aFmtColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
+            aNewSet.Put( aFmtColl );
+        }
+
+        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+    }
+}
+
+const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+                        const SwCntntNode& rNode,
+                        const SfxPoolItem& rAttr )
+{
+    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    const SfxPoolItem* pRet = aNewSet.Put( rAttr );
+    if ( pRet )
+        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+    return pRet;
+}
+
+int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNode,
+         const SfxItemSet& rSet )
+{
+    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    const int nRet = aNewSet.Put( rSet );
+    if ( nRet )
+        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+    return nRet;
+}
+
+int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+            const SwCntntNode& rNode, const SfxPoolItem& rAttr,
+            SwAttrSet* pOld, SwAttrSet* pNew )
+{
+    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    const int nRet = aNewSet.Put_BC( rAttr, pOld, pNew );
+    if ( nRet )
+        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+    return nRet;
+}
+
+int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+            const SwCntntNode& rNode, const SfxItemSet& rSet,
+            SwAttrSet* pOld, SwAttrSet* pNew )
+{
+    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    const int nRet = aNewSet.Put_BC( rSet, pOld, pNew );
+    if ( nRet )
+        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+    return nRet;
+}
+
+USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+                     const SwCntntNode& rNode, USHORT nWhich,
+                     SwAttrSet* pOld, SwAttrSet* pNew )
+{
+    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    const USHORT nRet = aNewSet.ClearItem_BC( nWhich, pOld, pNew );
+    if ( nRet )
+        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+    return nRet;
+}
+
+USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+                     const SwCntntNode& rNode,
+                     USHORT nWhich1, USHORT nWhich2,
+                     SwAttrSet* pOld, SwAttrSet* pNew )
+{
+    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    const USHORT nRet = aNewSet.ClearItem_BC( nWhich1, nWhich2, pOld, pNew );
+    if ( nRet )
+        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+    return nRet;
+}
+
+}
 
 /*******************************************************************
 |*
@@ -913,8 +1045,8 @@ SwEndNode::SwEndNode( SwNodes& rNds, ULONG nPos, SwStartNode& rSttNd )
 SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const BYTE nNdType,
                             SwFmtColl *pColl )
     : SwNode( rWhere, nNdType ),
-    pAttrSet( 0 ),
     pCondColl( 0 ),
+    mbSetModifyAtAttr( false ),
     SwModify( pColl )    // CrsrsShell, FrameFmt
 #ifdef OLD_INDEX
     ,SwIndexReg(2)
@@ -931,12 +1063,12 @@ SwCntntNode::~SwCntntNode()
     if( GetDepends() )
         DelFrms();
 
-    if( pAttrSet )
-        delete pAttrSet;
     if( pCondColl )
         delete pCondColl;
-}
 
+    if ( mpAttrSet.get() && mbSetModifyAtAttr )
+        ((SwAttrSet*)mpAttrSet.get())->SetModifyAtAttr( 0 );
+}
 
 void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
@@ -959,16 +1091,15 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
                 {
                     // wenn Parent, dann im neuen Parent wieder anmelden
                     ((SwModify*)pFmt->GetRegisteredIn())->Add( this );
-                    if ( pAttrSet )
-                        pAttrSet->SetParent(
-                                &((SwFmt*)GetRegisteredIn())->GetAttrSet() );
+                    if ( GetpSwAttrSet() )
+                        AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFmtColl(), GetFmtColl() );
                 }
                 else
                 {
                     // sonst auf jeden Fall beim sterbenden abmelden
                     ((SwModify*)GetRegisteredIn())->Remove( this );
-                    if ( pAttrSet )
-                        pAttrSet->SetParent( 0 );
+                    if ( GetpSwAttrSet() )
+                        AttrSetHandleHelper::SetParent( mpAttrSet, *this, 0, 0 );
                 }
             }
         }
@@ -980,12 +1111,11 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         // meinen Attrset beim Neuen an.
 
         // sein eigenes Modify ueberspringen !!
-        if( pAttrSet &&
+        if( GetpSwAttrSet() &&
             ((SwFmtChg*)pNewValue)->pChangedFmt == GetRegisteredIn() )
         {
             // den Set an den neuen Parent haengen
-            pAttrSet->SetParent( GetRegisteredIn() ?
-                &((SwFmt*)GetRegisteredIn())->GetAttrSet() : 0 );
+            AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFmtColl(), GetFmtColl() );
         }
         if( GetNodes().IsDocNodes() && IsTxtNode() )
         {
@@ -1166,8 +1296,8 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 
         // setze den Parent von unseren Auto-Attributen auf die neue
         // Collection:
-        if( pAttrSet )
-            pAttrSet->SetParent( &pNewColl->GetAttrSet() );
+        if( GetpSwAttrSet() )
+            AttrSetHandleHelper::SetParent( mpAttrSet, *this, pNewColl, pNewColl );
 
 //FEATURE::CONDCOLL
         // HACK: hier muss die entsprechend der neuen Vorlage die Bedingungen
@@ -1214,9 +1344,9 @@ BOOL SwCntntNode::GoNext(SwIndex * pIdx, USHORT nMode ) const
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = pBreakIt->xBreak->nextCharacters( rTNd.GetTxt(), nPos,
-                                pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
-                                nItrMode, 1, nDone );
+                nPos = (xub_StrLen)pBreakIt->xBreak->nextCharacters( rTNd.GetTxt(), nPos,
+                                   pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                                   nItrMode, 1, nDone );
 
                 // Check if nPos is inside hidden text range:
                 if ( CRSR_SKIP_HIDDEN & nMode )
@@ -1262,9 +1392,9 @@ BOOL SwCntntNode::GoPrevious(SwIndex * pIdx, USHORT nMode ) const
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = pBreakIt->xBreak->previousCharacters( rTNd.GetTxt(), nPos,
-                                pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
-                                nItrMode, 1, nDone );
+                nPos = (xub_StrLen)pBreakIt->xBreak->previousCharacters( rTNd.GetTxt(), nPos,
+                                   pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                                   nItrMode, 1, nDone );
 
                 // Check if nPos is inside hidden text range:
                 if ( CRSR_SKIP_HIDDEN & nMode )
@@ -1491,10 +1621,10 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
     // setze ein Attribut
 BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 {
-    if( !pAttrSet )         // lasse von den entsprechenden Nodes die
+    if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
         NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
 
-    ASSERT( pAttrSet, "warum wurde kein AttrSet angelegt?" );
+    ASSERT( GetpSwAttrSet(), "warum wurde kein AttrSet angelegt?" );
 
     if ( IsInCache() )
     {
@@ -1507,9 +1637,8 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     if( IsModifyLocked() ||
         ( !GetDepends() &&  RES_PARATR_NUMRULE != rAttr.Which() ))
     {
-        if( 0 != ( bRet = (0 != pAttrSet->Put( rAttr )) ))
-            // einige Sonderbehandlungen fuer Attribute
-            pAttrSet->SetModifyAtAttr( this );
+        bRet = 0 != AttrSetHandleHelper::Put( mpAttrSet, *this, rAttr );
+
         // --> OD 2005-10-25 #126367#
         if ( IsModifyLocked() )
         {
@@ -1521,15 +1650,12 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     }
     else
     {
-        SwAttrSet aOld( *pAttrSet->GetPool(), pAttrSet->GetRanges() ),
-                    aNew( *pAttrSet->GetPool(), pAttrSet->GetRanges() );
-        if( 0 != ( bRet = pAttrSet->Put_BC( rAttr, &aOld, &aNew ) ))
+        SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
+                  aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
+        if( 0 != ( bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew ) ))
         {
-            // einige Sonderbehandlungen fuer Attribute
-            pAttrSet->SetModifyAtAttr( this );
-
-            SwAttrSetChg aChgOld( *pAttrSet, aOld );
-            SwAttrSetChg aChgNew( *pAttrSet, aNew );
+            SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
+            SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
             Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
@@ -1539,25 +1665,59 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 
 BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {
-    if( !pAttrSet )         // lasse von den entsprechenden Nodes die
-        NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
-
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
         SetInCache( FALSE );
     }
 
-    BOOL bRet = FALSE;
+    const SfxPoolItem* pFnd = 0;
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_AUTO_STYLE, FALSE, &pFnd ) )
+    {
+        ASSERT( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
+        const SwFmtAutoFmt* pTmp = static_cast<const SwFmtAutoFmt*>(pFnd);
 
+        // If there already is an attribute set (usually containing a numbering
+        // item), we have to merge the attribute of the new set into the old set:
+        bool bSetParent = true;
+        if ( GetpSwAttrSet() )
+        {
+            bSetParent = false;
+            AttrSetHandleHelper::Put( mpAttrSet, *this, *pTmp->GetStyleHandle() );
+        }
+        else
+        {
+            mpAttrSet = pTmp->GetStyleHandle();
+        }
+
+        if ( bSetParent )
+        {
+            // If the content node has a conditional style, we have to set the
+            // string item containing the correct conditional style name (the
+            // style name property has already been set during the import!)
+            // In case we do not have a conditional style, we make use of the
+            // fact that nobody else uses the attribute set behind the handle.
+            if ( 0 != GetCondFmtColl() )
+                AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFmtColl(), GetFmtColl() );
+            else
+                const_cast<SfxItemSet*>(mpAttrSet.get())->SetParent( &GetFmtColl()->GetAttrSet() );
+        }
+
+        return TRUE;
+    }
+
+    if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
+        NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
+
+    BOOL bRet = FALSE;
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
            SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, FALSE ) ) )
     {
         // einige Sonderbehandlungen fuer Attribute
-        if( 0 != (bRet = (0 != pAttrSet->Put( rSet ))) )
-            pAttrSet->SetModifyAtAttr( this );
+        bRet = 0 != AttrSetHandleHelper::Put( mpAttrSet, *this, rSet );
+
         // --> OD 2005-10-25 #126367#
         if ( IsModifyLocked() )
         {
@@ -1569,14 +1729,13 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
     }
     else
     {
-        SwAttrSet aOld( *pAttrSet->GetPool(), pAttrSet->GetRanges() ),
-                    aNew( *pAttrSet->GetPool(), pAttrSet->GetRanges() );
-        if( 0 != (bRet = pAttrSet->Put_BC( rSet, &aOld, &aNew )) )
+        SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
+                  aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
+        if( 0 != (bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew )) )
         {
             // einige Sonderbehandlungen fuer Attribute
-            pAttrSet->SetModifyAtAttr( this );
-            SwAttrSetChg aChgOld( *pAttrSet, aOld );
-            SwAttrSetChg aChgNew( *pAttrSet, aNew );
+            SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
+            SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
             Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
@@ -1588,7 +1747,7 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
 
 BOOL SwCntntNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
 {
-    if( !pAttrSet )
+    if( !GetpSwAttrSet() )
         return FALSE;
 
     if ( IsInCache() )
@@ -1600,12 +1759,18 @@ BOOL SwCntntNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if( IsModifyLocked() )
     {
-        USHORT nDel = (!nWhich2 || nWhich2 < nWhich1)
-                ? pAttrSet->ClearItem( nWhich1 )
-                : pAttrSet->ClearItem_BC( nWhich1, nWhich2 );
+        USHORT nDel = 0;
+        if ( !nWhich2 || nWhich2 < nWhich1 )
+        {
+            std::vector<USHORT> aClearWhichIds;
+            aClearWhichIds.push_back( nWhich1 );
+            nDel = ClearItemsFromAttrSet( aClearWhichIds );
+        }
+        else
+            nDel = AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, 0, 0 );
 
-        if( !pAttrSet->Count() )    // leer, dann loeschen
-            DELETEZ( pAttrSet );
+        if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
+            mpAttrSet.reset();//DELETEZ( mpAttrSet );
         return 0 != nDel;
     }
 
@@ -1613,24 +1778,24 @@ BOOL SwCntntNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
     if( !nWhich2 || nWhich2 < nWhich1 )
         nWhich2 = nWhich1;      // dann setze auf 1. Id, nur dieses Item
 
-    SwAttrSet aOld( *pAttrSet->GetPool(), pAttrSet->GetRanges() ),
-                aNew( *pAttrSet->GetPool(), pAttrSet->GetRanges() );
-    BOOL bRet = 0 != pAttrSet->ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
+    SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
+              aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
+    BOOL bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, &aOld, &aNew );
 
     if( bRet )
     {
-        SwAttrSetChg aChgOld( *pAttrSet, aOld );
-        SwAttrSetChg aChgNew( *pAttrSet, aNew );
+        SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
+        SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
         Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
-        if( !pAttrSet->Count() )    // leer, dann loeschen
-            DELETEZ( pAttrSet );
+        if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
+            mpAttrSet.reset();//DELETEZ( mpAttrSet );
     }
     return bRet;
 }
 BOOL SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
 {
-    if( !pAttrSet )
+    if( !GetpSwAttrSet() )
         return FALSE;
 
     if ( IsInCache() )
@@ -1643,35 +1808,37 @@ BOOL SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
     USHORT nDel = 0;
     if( IsModifyLocked() )
     {
+        std::vector<USHORT> aClearWhichIds;
         for( USHORT n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
-            if( pAttrSet->ClearItem( rWhichArr[ n ] ))
-                ++nDel;
+            aClearWhichIds.push_back( rWhichArr[ n ] );
+
+        nDel = ClearItemsFromAttrSet( aClearWhichIds );
     }
     else
     {
-        SwAttrSet aOld( *pAttrSet->GetPool(), pAttrSet->GetRanges() ),
-                    aNew( *pAttrSet->GetPool(), pAttrSet->GetRanges() );
+        SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
+                  aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
 
         for( USHORT n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
-            if( pAttrSet->ClearItem_BC( rWhichArr[ n ], &aOld, &aNew ))
+            if( AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, rWhichArr[ n ], &aOld, &aNew ))
                 ++nDel;
 
         if( nDel )
         {
-            SwAttrSetChg aChgOld( *pAttrSet, aOld );
-            SwAttrSetChg aChgNew( *pAttrSet, aNew );
+            SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
+            SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
             Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
-    if( !pAttrSet->Count() )    // leer, dann loeschen
-        DELETEZ( pAttrSet );
+    if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
+        mpAttrSet.reset();//DELETEZ( mpAttrSet );
     return 0 != nDel ;
 }
 
 
 USHORT SwCntntNode::ResetAllAttr()
 {
-    if( !pAttrSet )
+    if( !GetpSwAttrSet() )
         return 0;
 
     if ( IsInCache() )
@@ -1683,24 +1850,26 @@ USHORT SwCntntNode::ResetAllAttr()
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if( IsModifyLocked() )
     {
-        USHORT nDel = pAttrSet->ClearItem( 0 );
-        if( !pAttrSet->Count() )    // leer, dann loeschen
-            DELETEZ( pAttrSet );
+        std::vector<USHORT> aClearWhichIds;
+        aClearWhichIds.push_back(0);
+        USHORT nDel = ClearItemsFromAttrSet( aClearWhichIds );
+        if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
+            mpAttrSet.reset();            // DELETEZ( mpAttrSet );
         return nDel;
     }
 
-    SwAttrSet aOld( *pAttrSet->GetPool(), pAttrSet->GetRanges() ),
-                aNew( *pAttrSet->GetPool(), pAttrSet->GetRanges() );
-    BOOL bRet = 0 != pAttrSet->ClearItem_BC( 0, &aOld, &aNew );
+    SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
+              aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
+    BOOL bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, 0, &aOld, &aNew );
 
     if( bRet )
     {
-        SwAttrSetChg aChgOld( *pAttrSet, aOld );
-        SwAttrSetChg aChgNew( *pAttrSet, aNew );
+        SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
+        SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
         Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
-        if( !pAttrSet->Count() )    // leer, dann loeschen
-            DELETEZ( pAttrSet );
+        if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
+            mpAttrSet.reset();//DELETEZ( mpAttrSet );
     }
     return aNew.Count();
 }
@@ -1719,18 +1888,37 @@ BOOL SwCntntNode::GetAttr( SfxItemSet& rSet, BOOL bInParent ) const
     return rSet.Count() ? TRUE : FALSE;
 }
 
+USHORT SwCntntNode::ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds )
+{
+    USHORT nRet = 0;
+    if ( 0 == rWhichIds.size() )
+        return nRet;
+
+    ASSERT( GetpSwAttrSet(), "no item set" )
+    SwAttrSet aNewAttrSet( *GetpSwAttrSet() );
+    for ( std::vector<USHORT>::const_iterator aIter = rWhichIds.begin();
+          aIter != rWhichIds.end();
+          ++aIter )
+    {
+        nRet += aNewAttrSet.ClearItem( *aIter );
+    }
+    if ( nRet )
+        mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA );
+    return nRet;
+}
+
 const SfxPoolItem* SwCntntNode::GetNoCondAttr( USHORT nWhich,
                                                 BOOL bInParents ) const
 {
     const SfxPoolItem* pFnd = 0;
     if( pCondColl && pCondColl->GetRegisteredIn() )
     {
-        if( !pAttrSet || ( SFX_ITEM_SET != pAttrSet->GetItemState(
+        if( !GetpSwAttrSet() || ( SFX_ITEM_SET != GetpSwAttrSet()->GetItemState(
                     nWhich, FALSE, &pFnd ) && bInParents ))
             ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
     }
     // --> OD 2005-10-25 #126347# - undo change of issue #i51029#
-    // Note: <GetSwAttrSet()> returns <pAttrSet>, if set, otherwise it returns
+    // Note: <GetSwAttrSet()> returns <mpAttrSet>, if set, otherwise it returns
     //       the attribute set of the paragraph style, which is valid for the
     //       content node - see file <node.hxx>
     else
@@ -1797,7 +1985,7 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
         else
             pCondColl = 0;
 
-        if( pAttrSet )
+        if( GetpSwAttrSet() )
         {
 // Attrset beibehalten oder loeschen??
 // 13.04.99: Bisher wurden er geloescht, jetzt wird er beibehalten.
@@ -1805,12 +1993,12 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
 //           Vorlage nach dem Laden der harten Attribute gesetzt. Deshalb
 //           wurden die harten Attribute geloescht.
 
-            pAttrSet->SetParent( &GetAnyFmtColl().GetAttrSet() );
+            AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFmtColl(), GetFmtColl() );
 // steht im docfmt.cxx
 //extern BOOL lcl_RstAttr( const SwNodePtr&, void* );
 //          lcl_RstAttr( this, 0 );
-//          if( pAttrSet && !pAttrSet->Count() )
-//              delete pAttrSet, pAttrSet = 0;
+//          if( mpAttrSet && !mpAttrSet->Count() )
+//              delete mpAttrSet, mpAttrSet = 0;
         }
 
         if( !IsModifyLocked() )
@@ -2024,6 +2212,7 @@ IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return
 const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return GetDoc(); }
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
+IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
 
 BOOL SwNode::IsInRedlines() const
 {
