@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:41:35 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ void test_SimpleRegistry(
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            module.getSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
+            module.getFunctionSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
 
         if (pCompFactoryFunc)
         {
@@ -687,7 +687,7 @@ void test_DefaultRegistry(
     {
         xReg->close();
     }
-    catch(InvalidRegistryException& e)
+    catch(InvalidRegistryException& /*e*/)
     {
         TEST_ENSHURE(0, OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());
     }
