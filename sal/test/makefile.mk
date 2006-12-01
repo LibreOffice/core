@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:27:22 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:24:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,14 @@ OBJFILES= \
 
 APP2TARGET = testbootstrap
 APP2STDLIBS = $(SALLIB)
+
+APP3OBJS = $(OBJ)$/test_salmain.obj
+APP3TARGET = test_salmain
+APP3STDLIBS = $(SALLIB)
+
+APP4OBJS = $(OBJ)$/test_salmainwithargs.obj
+APP4TARGET = test_salmainwithargs
+APP4STDLIBS = $(SALLIB)
 
 
 # --- Targets ------------------------------------------------------
