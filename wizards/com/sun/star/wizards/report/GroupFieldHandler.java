@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupFieldHandler.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:24:01 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ ReportDocument CurReportDocument;
 Vector GroupFieldVector = new Vector();
 QueryMetaData CurDBMetaData;
 WizardDialog oWizardDialog;
+static final short MAXSELFIELDS = 4;
 
     public GroupFieldHandler(ReportDocument _CurReportDocument, WizardDialog _CurUnoDialog){
     super(_CurUnoDialog, ReportWizard.SOGROUPPAGE, 95, 27, 210, 127,
@@ -102,6 +103,23 @@ WizardDialog oWizardDialog;
     }
 
 
+    protected void toggleListboxButtons(short iFieldsSelIndex, short iSelFieldsSelIndex) {
+        super.toggleListboxButtons(iFieldsSelIndex, iSelFieldsSelIndex);
+        int iSelCount = xSelFieldsListBox.getItemCount();
+        if (iSelCount >= MAXSELFIELDS){
+            CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, "Enabled", Boolean.FALSE);
+        }
+    }
+
+
+    public void selectFields(boolean bMoveAll) {
+        int iSelCount = xSelFieldsListBox.getItemCount();
+        if (iSelCount < MAXSELFIELDS){
+            super.selectFields(bMoveAll);
+        }
+
+    }
+
     protected class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener{
 
         public void moveItemDown(String Selitem){
@@ -118,6 +136,9 @@ WizardDialog oWizardDialog;
             String[] CurGroupNames = xFieldsListBox.getItems();
             CurReportDocument.addGroupNametoDocument(CurGroupNames, CurGroupTitle, GroupFieldVector, ReportWizard.ReportPath, iSelCount);
             CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(true));
+            if (iSelCount >= MAXSELFIELDS){
+                toggleMoveButtons(false, false);
+            }
         }
 
         public void shiftFromRightToLeft(String[] OldSelitems, String[] Newitems){
