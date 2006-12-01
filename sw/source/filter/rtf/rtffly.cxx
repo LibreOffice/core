@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:14:30 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ BOOL lcl_HasBreakAttrs( const SwCntntNode& rNd )
 void lcl_CpyBreakAttrs( SwCntntNode* pSrcNd, SwCntntNode* pDstNd,
                         SwNodeIndex* pNewIdx )
 {
-    SwAttrSet* pSet;
+    const SfxItemSet* pSet;
     if( pSrcNd && pDstNd && 0 != ( pSet = pSrcNd->GetpSwAttrSet() ) )
     {
         const SfxPoolItem *pDescItem, *pBreakItem;
@@ -286,7 +286,7 @@ void lcl_CpyBreakAttrs( SwCntntNode* pSrcNd, SwCntntNode* pDstNd,
                 SwCntntNode* pOldNd = pDstNd;
                 pDstNd = aPos.nNode.GetNode().GetCntntNode();
                 pDstNd->ChgFmtColl( pOldNd->GetFmtColl() );
-                if( pDstNd->GetpSwAttrSet() )
+                if( pDstNd->HasSwAttrSet() )
                 {
                     SfxItemSet aSet( *pDstNd->GetpSwAttrSet() );
                     aSet.ClearItem( RES_BREAK );
@@ -494,7 +494,7 @@ void SwRTFParser::SetFlysInDoc()
             SwCntntNode* pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]->GetCntntNode();
             SfxItemSet aTmpSet( pDoc->GetAttrPool(),
                                     RES_BACKGROUND, RES_BOX );
-            if( pSrcNd && pSrcNd->GetpSwAttrSet() )
+            if( pSrcNd && pSrcNd->HasSwAttrSet() )
                 aTmpSet.Put( *pSrcNd->GetpSwAttrSet() );
             if (const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)pFlySave->aFlySet.GetItem(RES_BACKGROUND, FALSE))
             {
@@ -512,7 +512,7 @@ void SwRTFParser::SetFlysInDoc()
             }
             // #117914# Topic 6.
             pFlySave->aFlySet.Put( aTmpSet );
-            if( pSrcNd && pSrcNd->GetpSwAttrSet() )
+            if( pSrcNd && pSrcNd->HasSwAttrSet() )
             {
                 pSrcNd->ResetAttr( RES_BACKGROUND, RES_BOX );
             }
