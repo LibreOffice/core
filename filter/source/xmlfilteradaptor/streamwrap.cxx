@@ -4,9 +4,9 @@
  *
  *  $RCSfile: streamwrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:46:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,10 +93,10 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 >&
     checkError();
 
     // Wenn gelesene Zeichen < MaxLength, staruno::Sequence anpassen
-    if (nRead < nBytesToRead)
-        aData.realloc( nRead );
+    if (nRead < (sal_uInt64)nBytesToRead)
+        aData.realloc( static_cast< sal_Int32 >( nRead ) );
 
-    return nRead;
+    return static_cast< sal_Int32 >( nRead );
 }
 
 //------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( stario::NotConnectedE
     m_pSvStream->setPos(Pos_Absolut,nPos);
     checkError();
 
-    return nAvailable;
+    return static_cast< sal_Int32 >( nAvailable );
 }
 
 //------------------------------------------------------------------------------
@@ -254,7 +254,7 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8
 {
     sal_uInt64 nWritten = 0;
     rStream.write(aData.getConstArray(),aData.getLength(),nWritten);
-    if (nWritten != aData.getLength())
+    if (nWritten != (sal_uInt64)aData.getLength())
     {
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
     }
