@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:14:25 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -564,21 +564,26 @@ void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw(
 
     if ( m_aItems.end() != j )
     {
+        m_aItems.erase(j);
+
+        // look up in, and erase from, m_aMap, too
         OInterfaceMap::iterator i = m_aMap.begin();
         while ( i != m_aMap.end() )
         {
             DBG_ASSERT( i->second.get() == Reference< XInterface >( i->second, UNO_QUERY ).get(),
                 "OInterfaceContainer::disposing: map element not normalized!" );
 
-            if ( i->second.get() == _rSource.Source.get() )
+            if ( i->second.get() == xSource.get() )
+            {
                 // found it
+                m_aMap.erase(i);
                 break;
+            }
 
             ++i;
-        }
 
-        m_aMap.erase(i);
-        m_aItems.erase(j);
+            DBG_ASSERT( i != m_aMap.end(), "OInterfaceContainer::disposing: inconsistency: the element was in m_aItems, but not in m_aMap!" );
+        }
     }
 }
 
