@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:09 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:24:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,16 @@ void SwDrawView::AddCustomHdl()
         return;
 
     SdrObject *pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
-    const SwFmtAnchor &rAnchor = ::FindFrmFmt(pObj)->GetAnchor();
+    // --> OD 2006-11-06 #130889# - make code robust
+//    const SwFmtAnchor &rAnchor = ::FindFrmFmt(pObj)->GetAnchor();
+    SwFrmFmt* pFrmFmt( ::FindFrmFmt( pObj ) );
+    if ( !pFrmFmt )
+    {
+        ASSERT( false, "<SwDrawView::AddCustomHdl()> - missing frame format!" );
+        return;
+    }
+    const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
+    // <--
 
     if(FLY_IN_CNTNT == rAnchor.GetAnchorId())
         return;
@@ -934,9 +943,25 @@ void SwDrawView::CheckPossibilities()
         }
         if ( pFrm )
             bProtect = pFrm->IsProtected(); //Rahmen, Bereiche usw.
-        if ( FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() &&
-             rMrkList.GetMarkCount() > 1 )
-            bProtect = TRUE;
+        // --> OD 2006-11-06 #130889# - make code robust
+//        if ( FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() &&
+//             rMrkList.GetMarkCount() > 1 )
+//            bProtect = TRUE;
+        {
+            SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
+            if ( !pFrmFmt )
+            {
+                ASSERT( false,
+                        "<SwDrawView::CheckPossibilities()> - missing frame format" );
+                bProtect = TRUE;
+            }
+            else if ( FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() &&
+                      rMrkList.GetMarkCount() > 1 )
+            {
+                bProtect = TRUE;
+            }
+        }
+        // <--
     }
     bMoveProtect    |= bProtect;
     bResizeProtect  |= bProtect | bSzProtect;
