@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:40:04 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -739,19 +739,19 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             pInfo->bNullable        = (sal_Int32)aValue == ColumnValue::NULLABLE;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            pInfo->bCaseSensitive   = aValue;
+            pInfo->bCaseSensitive   = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
             pInfo->nSearchType      = aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            pInfo->bUnsigned        = aValue;
+            pInfo->bUnsigned        = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            pInfo->bCurrency        = aValue;
+            pInfo->bCurrency        = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            pInfo->bAutoIncrement   = aValue;
+            pInfo->bAutoIncrement   = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
             pInfo->aLocalTypeName   = aValue;
