@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:15:51 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,12 @@ BOOL SwGrfNode::ReRead(
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     Modify( &aMsgHint, &aMsgHint );
                 }
-                else {
+                // --> OD 2006-11-03 #i59688#
+                // do not load linked graphic, if it isn't a new linked graphic.
+//                else {
+                else if ( bNewGrf )
+                // <--
+                {
                     //TODO refLink->setInputStream(getInputStream());
                     ((SwBaseLink*)&refLink)->SwapIn();
                 }
@@ -343,8 +348,15 @@ BOOL SwGrfNode::ReRead(
                 // der neue Kink nicht geladen werden konnte.
                 Graphic aGrf; aGrf.SetDefaultType();
                 aGrfObj.SetGraphic( aGrf, rGrfName );
-                //TODO refLink->setInputStream(getInputStream());
-                ((SwBaseLink*)&refLink)->SwapIn();
+                // --> OD 2006-11-03 #i59688#
+                // do not load linked graphic, if it isn't a new linked graphic.
+//                //TODO refLink->setInputStream(getInputStream());
+//                ((SwBaseLink*)&refLink)->SwapIn();
+                if ( bNewGrf )
+                {
+                    ((SwBaseLink*)&refLink)->SwapIn();
+                }
+                // <--
             }
         }
     }
