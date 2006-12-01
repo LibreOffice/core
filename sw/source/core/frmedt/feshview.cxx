@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2320,11 +2320,27 @@ bool SwFEShell::IsGroupAllowed() const
             else
                 pUpGroup = pObj->GetUpGroup();
 
-            if ( bIsGroupAllowed &&
-                 FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() )
+            // --> OD 2006-11-06 #130889# - make code robust
+//            if ( bIsGroupAllowed &&
+//                 FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() )
+//            {
+//                bIsGroupAllowed = false;
+//            }
+            if ( bIsGroupAllowed )
             {
-                bIsGroupAllowed = false;
+                SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
+                if ( !pFrmFmt )
+                {
+                    ASSERT( false,
+                            "<SwFEShell::IsGroupAllowed()> - missing frame format" );
+                    bIsGroupAllowed = false;
+                }
+                else if ( FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+                {
+                    bIsGroupAllowed = false;
+                }
             }
+            // <--
 
             // OD 27.06.2003 #108784# - check, if all selected objects are in the
             // same header/footer or not in header/footer.
