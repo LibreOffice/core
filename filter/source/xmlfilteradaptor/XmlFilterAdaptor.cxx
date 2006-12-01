@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:45:59 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,6 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     //Template Loading if Required
     //********************
     if (!msTemplateName.equalsAscii("")){
-        Reference< XModel > xModel(mxDoc, UNO_QUERY);
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
 
         Reference< XNameAccess >xName;
@@ -241,7 +240,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         xstyleLoader->loadStylesFromURL(msTemplateName,pValue);
     }
 
-    sal_Bool xconv_ret = sal_True;
+//    sal_Bool xconv_ret = sal_True;
 
     if (xStatusIndicator.is()){
         xStatusIndicator->setValue(nSteps++);
@@ -256,7 +255,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             return sal_False;
         }
     }
-    catch( Exception& e){
+#if OSL_DEBUG_LEVEL > 0
+    catch( Exception& e )
+#else
+    catch( Exception& )
+#endif
+    {
         if (xStatusIndicator.is())
                xStatusIndicator->end();
 
@@ -363,7 +367,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
             return sal_False;
         }
     }
-    catch( Exception& exE){
+#if OSL_DEBUG_LEVEL > 0
+    catch( Exception& exE )
+#else
+    catch( Exception& )
+#endif
+    {
         OSL_ENSURE( sal_False, ::rtl::OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
         if (xStatusIndicator.is())
             xStatusIndicator->end();
