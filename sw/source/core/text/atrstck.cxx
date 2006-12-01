@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:33:11 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,9 @@
 #ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
 #endif
+#ifndef _FMTAUTOFMT_HXX
+#include <fmtautofmt.hxx>
+#endif
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
@@ -197,12 +200,12 @@ const BYTE StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] = {
     32, // RES_CHRATR_SCALEW,                    // 35
     33, // RES_CHRATR_RELIEF,                    // 36
     34, // RES_CHRATR_HIDDEN,                    // 37
+     0, // RES_TXTATR_AUTOFMT,                   // 39
      0, // RES_TXTATR_INETFMT                    // 38
-     0, // RES_TXTATR_DUMMY4,                    // 39
     35, // RES_TXTATR_REFMARK,                   // 40
     36, // RES_TXTATR_TOXMARK,                   // 41
      0, // RES_TXTATR_CHARFMT,                   // 42
-     0, // RES_TXTATR_DUMMY5,                    // 43
+     0, // RES_TXTATR_DUMMY5                     // 43
     37, // RES_TXTATR_CJK_RUBY,                  // 44
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 45
      0, // RES_TXTATR_DUMMY6,                    // 46
@@ -210,34 +213,76 @@ const BYTE StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] = {
 };
 
 /*************************************************************************
- *                      lcl_GetItem
+ *                      CharFmt::GetItem
+ * returns the item set associated with an character/inet/auto style
+ *************************************************************************/
+
+namespace CharFmt
+{
+
+const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
+{
+    const SfxItemSet* pSet = 0;
+
+    if ( RES_TXTATR_AUTOFMT == rAttr.Which() )
+    {
+        pSet = static_cast<const SwFmtAutoFmt&>(rAttr).GetStyleHandle().get();
+    }
+    else
+    {
+        // aus der Vorlage die Attribute holen:
+        SwCharFmt* pFmt = RES_TXTATR_INETFMT == rAttr.Which() ?
+                        ((SwFmtINetFmt&)rAttr).GetTxtINetFmt()->GetCharFmt() :
+                        ((SwFmtCharFmt&)rAttr).GetCharFmt();
+        if( pFmt )
+        {
+            pSet = &pFmt->GetAttrSet();
+        }
+    }
+
+    return pSet;
+}
+
+/*************************************************************************
+ *                      CharFmt::GetItem
  * extracts pool item of type nWhich from rAttr
  *************************************************************************/
 
-const SfxPoolItem* lcl_GetItem( const SwTxtAttr& rAttr, USHORT nWhich )
+const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, USHORT nWhich )
 {
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
-         RES_TXTATR_CHARFMT == rAttr.Which() )
+         RES_TXTATR_CHARFMT == rAttr.Which() ||
+         RES_TXTATR_AUTOFMT == rAttr.Which() )
     {
-       SwCharFmt* pFmt;
-       if( RES_TXTATR_INETFMT == rAttr.Which() )
-          pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-       else
-          pFmt = rAttr.GetCharFmt().GetCharFmt();
+        const SfxItemSet* pSet = CharFmt::GetItemSet( rAttr.GetAttr() );
+        if ( !pSet ) return 0;
 
-       if ( !pFmt )
-           return 0;;
-
+       bool bInParent = RES_TXTATR_AUTOFMT != rAttr.Which();
        const SfxPoolItem* pItem;
-       BOOL bRet = SFX_ITEM_SET ==
-             pFmt->GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem );
+       BOOL bRet = SFX_ITEM_SET == pSet->GetItemState( nWhich, bInParent, &pItem );
 
-       if ( bRet )
-             return pItem;
-       else return 0;
+       return bRet ? pItem : 0;
     }
 
     return ( nWhich == rAttr.Which() ) ? &rAttr.GetAttr() : 0;
+}
+
+/*************************************************************************
+ *                      CharFmt::IsItemIncluded
+ * checks if item is included in character/inet/auto style
+ *************************************************************************/
+
+BOOL IsItemIncluded( const USHORT nWhich, const SwTxtAttr *pAttr )
+{
+    BOOL bRet = FALSE;
+
+    const SfxItemSet* pItemSet = CharFmt::GetItemSet( pAttr->GetAttr() );
+    if ( pItemSet )
+        bRet = SFX_ITEM_SET == pItemSet->GetItemState( nWhich, TRUE );
+
+    return bRet;
+}
+
 }
 
 /*************************************************************************
@@ -314,7 +359,6 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
 
     return false;
 }
-
 
 /*************************************************************************
  *                      SwAttrHandler::SwAttrStack::SwAttrStack()
@@ -501,22 +545,17 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     // these special attributes in fact represent a collection of attributes
     // they have to be pushed to each stack they belong to
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
-         RES_TXTATR_CHARFMT == rAttr.Which() )
+         RES_TXTATR_CHARFMT == rAttr.Which() ||
+         RES_TXTATR_AUTOFMT == rAttr.Which() )
     {
-        SwCharFmt* pFmt;
-        if( RES_TXTATR_INETFMT == rAttr.Which() )
-            pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-        else
-            pFmt = rAttr.GetCharFmt().GetCharFmt();
-
-        if ( !pFmt )
-            return;
+        const SfxItemSet* pSet = CharFmt::GetItemSet( rAttr.GetAttr() );
+        if ( !pSet ) return;
 
         for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            BOOL bRet = SFX_ITEM_SET ==
-                 pFmt->GetItemState( i, TRUE, &pItem );
+            BOOL bRet = SFX_ITEM_SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
+
             if ( bRet )
             {
                 // we push rAttr onto the appropriate stack
@@ -588,22 +627,16 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     // these special attributes in fact represent a collection of attributes
     // they have to be removed from each stack they belong to
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
-         RES_TXTATR_CHARFMT == rAttr.Which() )
+         RES_TXTATR_CHARFMT == rAttr.Which() ||
+         RES_TXTATR_AUTOFMT == rAttr.Which() )
     {
-        SwCharFmt* pFmt;
-        if( RES_TXTATR_INETFMT == rAttr.Which() )
-            pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-        else
-            pFmt = rAttr.GetCharFmt().GetCharFmt();
-
-        if ( !pFmt )
-            return;
+        const SfxItemSet* pSet = CharFmt::GetItemSet( rAttr.GetAttr() );
+        if ( !pSet ) return;
 
         for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            BOOL bRet = SFX_ITEM_SET ==
-                 pFmt->GetItemState( i, TRUE, &pItem );
+            BOOL bRet = SFX_ITEM_SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
             if ( bRet )
             {
                 // we remove rAttr from the appropriate stack
@@ -657,16 +690,12 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
     {
         // check if top attribute is collection of attributes
         if ( RES_TXTATR_INETFMT == pTopAt->Which() ||
-             RES_TXTATR_CHARFMT == pTopAt->Which() )
+             RES_TXTATR_CHARFMT == pTopAt->Which() ||
+             RES_TXTATR_AUTOFMT == pTopAt->Which() )
         {
-            SwCharFmt* pFmtNext;
-            if( RES_TXTATR_INETFMT == pTopAt->Which() )
-                pFmtNext = ((SwTxtINetFmt*)pTopAt)->GetCharFmt();
-            else
-                pFmtNext = pTopAt->GetCharFmt().GetCharFmt();
-
+            const SfxItemSet* pSet = CharFmt::GetItemSet( pTopAt->GetAttr() );
             const SfxPoolItem* pItemNext;
-            pFmtNext->GetItemState( nAttr, TRUE, &pItemNext );
+            pSet->GetItemState( nAttr, RES_TXTATR_AUTOFMT != pTopAt->Which(), &pItemNext );
 
             Color aColor;
             if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, mpShell, &aColor ) )
@@ -699,7 +728,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
 
         if ( pTwoLineAttr )
         {
-             pTwoLineItem = lcl_GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
+             pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
              bTwoLineAct = ((SvxTwoLinesItem*)pTwoLineItem)->GetValue();
         }
         else
@@ -716,7 +745,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
 
         if ( pRotateAttr )
         {
-            pRotateItem = lcl_GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
+            pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
             rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
                                bVertLayout );
         }
@@ -887,7 +916,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 
             if ( pTwoLineAttr )
             {
-                pTwoLineItem = lcl_GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
+                pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
                 bTwoLineAct = ((SvxTwoLinesItem*)pTwoLineItem)->GetValue();
             }
             else
@@ -928,7 +957,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 
             if ( pRotateAttr )
             {
-                pRotateItem = lcl_GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
+                pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
                 rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
                                    bVertLayout );
             }
