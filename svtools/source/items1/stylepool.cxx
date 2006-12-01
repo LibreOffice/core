@@ -1,0 +1,275 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: stylepool.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:25:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef GCC
+#pragma hdrstop
+#endif
+
+#include <vector>
+
+#include "stylepool.hxx"
+#include "itemiter.hxx"
+#include "itempool.hxx"
+
+
+using namespace boost;
+
+namespace {
+    // A "Node" represents a subset of inserted SfxItemSets
+    // The root node represents the empty set
+    // The other nodes contain a SfxPoolItem and represents an item set which contains their
+    // pool item and the pool items of their parents.
+    class Node
+    {
+        std::vector<Node*> mChildren; // child nodes, create by findChildNode(..)
+        StylePool::SfxItemSet_Pointer_t pItemSet; // shared pointer an inserted item set or nul
+        const SfxPoolItem *pItem;   // my pool item
+        Node *pUpper;               // if I'm a child node that's my parent node
+    public:
+        Node() : pItem( 0 ), pUpper( 0 ) {} // root node Ctor
+        Node( const SfxPoolItem& rItem, Node* pParent ) : // child node Ctor
+            pItem( rItem.Clone() ), pUpper( pParent ){}
+        ~Node();
+        const bool hasItemSet() const { return 0 != pItemSet.get(); }
+        const StylePool::SfxItemSet_Pointer_t getItemSet() const { return pItemSet; }
+        void setItemSet( const SfxItemSet& rSet ){ pItemSet.reset( rSet.Clone() ); }
+        Node* findChildNode( const SfxPoolItem& rItem, bool bPoolable );
+        Node* nextItemSet( Node* pLast );
+        const SfxPoolItem& getPoolItem() const { return *pItem; }
+    };
+
+    Node* Node::findChildNode( const SfxPoolItem& rItem, bool bPoolable )
+    {
+        Node* pNextNode = this;
+        std::vector<Node*>::iterator aIter = mChildren.begin();
+        // Only poolable items are allowed to be reused,
+        // for non-poolable items allways newe nodes have to be created.
+        if( bPoolable )
+        {
+            while( aIter != mChildren.end() )
+            {
+                if( rItem.Which() == (*aIter)->getPoolItem().Which() &&
+                    rItem == (*aIter)->getPoolItem() )
+                    return *aIter;
+                ++aIter;
+            }
+        }
+        pNextNode = new Node( rItem, pNextNode );
+        mChildren.push_back( pNextNode );
+        return pNextNode;
+    }
+
+    /* Find the next node which has a SfxItemSet.
+       The input parameter pLast has a sophisticated meaning:
+       downstairs only:
+       pLast == 0 => scan your children and their children
+                     but neither your parents neither your siblings
+       downstairs and upstairs:
+       pLast == this => scan your children, their children,
+                        the children of your parent behind you, and so on
+       partial downstairs and upstairs
+       pLast != 0 && pLast != this => scan your children behind the given children,
+                        the children of your parent behind you and so on.
+    */
+
+    Node* Node::nextItemSet( Node* pLast )
+    {
+        // Searching downstairs
+        std::vector<Node*>::iterator aIter = mChildren.begin();
+        // For pLast == 0 and pLast == this all children are of interest
+        // for another pLast the search starts behind pLast...
+        if( pLast && pLast != this )
+        {
+            aIter = std::find( mChildren.begin(), mChildren.end(), pLast );
+            if( aIter != mChildren.end() )
+                ++aIter;
+        }
+        Node *pNext = 0;
+        while( aIter != mChildren.end() )
+        {
+            pNext = *aIter;
+            if( pNext->hasItemSet() ) // any child with item set?
+                return pNext;
+            pNext = pNext->nextItemSet( 0 ); // 0 => downstairs only
+            if( pNext )
+                return pNext;
+            ++aIter;
+        }
+        // Searching upstairs
+        if( pLast && pUpper )
+            pNext = pUpper->nextItemSet( this );
+        return pNext;
+    }
+
+    Node::~Node()
+    {
+        std::vector<Node*>::iterator aIter = mChildren.begin();
+        while( aIter != mChildren.end() )
+        {
+            delete *aIter;
+            ++aIter;
+        }
+        delete pItem;
+    }
+
+    class Iterator : public IStylePoolIteratorAccess
+    {
+        Node* pNode;
+        bool bStart;
+    public:
+        Iterator( Node& rNode ) : pNode(&rNode), bStart(true) {}
+        virtual StylePool::SfxItemSet_Pointer_t getNext();
+        virtual ::rtl::OUString getName();
+    };
+
+    StylePool::SfxItemSet_Pointer_t Iterator::getNext()
+    {
+        StylePool::SfxItemSet_Pointer_t pReturn;
+        if( pNode )
+        {
+            if( bStart )
+            {
+                bStart = false;
+                if( pNode->hasItemSet() )
+                    return pNode->getItemSet();
+            }
+            pNode = pNode->nextItemSet( pNode );
+            if( pNode )
+                pReturn = pNode->getItemSet();
+        }
+        return pReturn;
+    }
+
+    ::rtl::OUString Iterator::getName()
+    {
+        ::rtl::OUString aString;
+        if( !bStart && pNode )
+            aString = StylePool::nameOf( pNode->getItemSet() );
+        return aString;
+    }
+
+}
+
+/* This static method creates a unique name from a shared pointer to a SfxItemSet
+   The name is the memory address of the SfxItemSet itself. */
+
+::rtl::OUString StylePool::nameOf( SfxItemSet_Pointer_t pSet )
+{
+    return ::rtl::OUString::valueOf( reinterpret_cast<sal_Int32>( pSet.get() ), 16 );
+}
+
+// class StylePoolImpl organized a tree-structure where every node represents a SfxItemSet.
+// The insertItemSet method adds a SfxItemSet into the tree if necessary and returns a shared_ptr
+// to a copy of the SfxItemSet.
+// The aRoot-Node represents an empty SfxItemSet.
+
+class StylePoolImpl
+{
+private:
+    Node aRoot;
+    sal_Int32 nCount;
+public:
+    StylePoolImpl() : nCount(0) {}
+    StylePool::SfxItemSet_Pointer_t insertItemSet( const SfxItemSet& rSet );
+    IStylePoolIteratorAccess* createIterator();
+    sal_Int32 getCount() const { return nCount; }
+};
+
+StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
+{
+    Node* pCurNode = &aRoot;
+    SfxItemIter aIter( rSet );
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+    // Every SfxPoolItem in the SfxItemSet causes a step deeper into the tree,
+    // a complete empty SfxItemSet would stay at the root node.
+    while( pItem )
+    {
+        bool bPoolable = rSet.GetPool()->IsItemFlag(pItem->Which(), SFX_ITEM_POOLABLE );
+        pCurNode = pCurNode->findChildNode( *pItem, bPoolable );
+        // Optimization: If the last item wasn't poolable, we can stop inserting new nodes
+        // and insert our itemset directly into the last created node
+        pItem = bPoolable ? aIter.NextItem() : 0;
+    }
+    // Every leaf node represents an inserted item set, but "non-leaf" nodes represents subsets
+    // of inserted itemsets.
+    // These nodes could have but does not need to have a shared_ptr to a item set.
+    if( !pCurNode->hasItemSet() )
+    {
+        pCurNode->setItemSet( rSet );
+        ++nCount;
+    }
+#ifdef DEBUG
+    {
+        sal_Int32 nCheck = -1;
+        sal_Int32 nNo = -1;
+        IStylePoolIteratorAccess* pIter = createIterator();
+        StylePool::SfxItemSet_Pointer_t pTemp;
+        do
+        {
+            ++nCheck;
+            pTemp = pIter->getNext();
+            if( pTemp.get() == pCurNode->getItemSet().get() )
+            {
+                ::rtl::OUString aStr = pIter->getName();
+                nNo = nCheck;
+            }
+        } while( pTemp.get() );
+        DBG_ASSERT( nCount == nCheck, "Wrong counting");
+        delete pIter;
+    }
+#endif
+    return pCurNode->getItemSet();
+}
+
+IStylePoolIteratorAccess* StylePoolImpl::createIterator()
+{ return new Iterator( aRoot ); }
+
+// Ctor, Dtor and redirected methods of class StylePool, nearly inline ;-)
+
+StylePool::StylePool() : pImpl( new StylePoolImpl() ) {}
+
+StylePool::SfxItemSet_Pointer_t StylePool::insertItemSet( const SfxItemSet& rSet )
+{ return pImpl->insertItemSet( rSet ); }
+
+IStylePoolIteratorAccess* StylePool::createIterator()
+{ return pImpl->createIterator(); }
+
+sal_Int32 StylePool::getCount() const
+{ return pImpl->getCount(); }
+
+StylePool::~StylePool() { delete pImpl; }
+
+// End of class StylePool
+
