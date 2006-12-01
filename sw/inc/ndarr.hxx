@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:09:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ class Graphic;
 class GraphicObject;
 class String;
 class SwAttrSet;
+class SfxItemSet;
 class SwCntntNode;
 class SwDoc;
 class SwGrfFmtColl;
@@ -310,7 +311,7 @@ public:
         // in der Line muss schon eine Box vorhanden sein !
     BOOL InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFmt*,
                         // Formate fuer den TextNode der Box
-                        SwTxtFmtColl*, SwAttrSet* pAutoAttr,
+                        SwTxtFmtColl*, const SfxItemSet* pAutoAttr,
                         USHORT nInsPos, USHORT nCnt = 1 );
         // Splittet eine Tabelle in der Grund-Zeile, in der der Index steht.
         // Alle GrundZeilen dahinter wandern in eine neue Tabelle/-Node.
