@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:49:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,8 @@ map<USHORT,String,CompareUShort> & GetItemWhichMap()
         aItemWhichMap[RES_CHRATR_SCALEW] = String("CHRATR_SCALEW", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_CHRATR_RELIEF] = String("CHRATR_RELIEF", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_CHRATR_HIDDEN] = String("CHRATR_HIDDEN", RTL_TEXTENCODING_ASCII_US);
+        aItemWhichMap[RES_TXTATR_AUTOFMT] = String("TXTATR_AUTOFMT", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_INETFMT] = String("TXTATR_INETFMT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY4] = String("TXTATR_DUMMY4", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_REFMARK] = String("TXTATR_REFMARK", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_TOXMARK] = String("TXTATR_TOXMARK", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_CHARFMT] = String("TXTATR_CHARFMT", RTL_TEXTENCODING_ASCII_US);
