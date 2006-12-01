@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:45:45 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ FastString::FastString( sal_Char* pBufferForBase64Encoding, sal_uInt32 nBufLen )
         sal_Char*       pTmpSrc = pBufferForBase64Encoding;
         sal_Unicode*    pTmpDst = mpBuffer;
 
-        for( sal_uInt32 i = 0, nCharCount = 0; i < nQuadCount; i++ )
+        for( sal_uInt32 i = 0; i < nQuadCount; i++ )
         {
             const sal_Int32 nA = *pTmpSrc++;
             const sal_Int32 nB = *pTmpSrc++;
@@ -689,7 +689,7 @@ void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const G
 
         {
             GDIMetaFile         aTmpMtf;
-            SvXMLElementExport  aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+            SvXMLElementExport  aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
 
             mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
             ImplWriteActions( aTmpMtf, pStyle, nWriteFlags );
@@ -727,7 +727,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  nLen - 1 ) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar( sal::static_int_cast<USHORT>( nLen - 1 ) ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -815,27 +815,27 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             long                        nCurPos = 0;
             bool                        bIgnoreWhitespace = true;
 
-            for( long i = 0, nX = aPt.X(); i < nLen; ++i )
+            for( long j = 0, nX = aPt.X(); j < nLen; ++j )
             {
-                const sal_Unicode cCode = rText.GetChar( i );
+                const sal_Unicode cCode = rText.GetChar( sal::static_int_cast<USHORT>( j ) );
 
                 // don't take more than one whitespace into account
                 if( !bIgnoreWhitespace || ( ' ' != cCode ) )
                 {
-                    aOutputText.SetChar( nCurPos++, cCode );
-                    ( aTSpanX += GetValueString( nX + ( ( i > 0 ) ? pDX[ i - 1 ] : 0 ) ) ) += aSpace;
+                    aOutputText.SetChar( sal::static_int_cast<USHORT>( nCurPos++ ), cCode );
+                    ( aTSpanX += GetValueString( nX + ( ( j > 0 ) ? pDX[ j - 1 ] : 0 ) ) ) += aSpace;
                     bIgnoreWhitespace = ( ' ' == cCode );
                 }
             }
 
             if( nCurPos < nLen )
-                aOutputText.Erase( nCurPos );
+                aOutputText.Erase( sal::static_int_cast<USHORT>( nCurPos ) );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, aTSpanX.GetString() );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
 
             {
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, TRUE, TRUE );
+                SvXMLElementExport aElem2( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, TRUE, TRUE );
                 mrExport.GetDocHandler()->characters( aOutputText );
             }
 #else
@@ -843,7 +843,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
 
             {
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
+                SvXMLElementExport aElem2( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
                 mrExport.GetDocHandler()->characters( rText );
             }
 #endif
@@ -892,7 +892,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                                     const Point& rPt, const Size& rSz,
                                     const Point& rSrcPt, const Size& rSrcSz,
-                                    const NMSP_RTL::OUString* pStyle )
+                                    const NMSP_RTL::OUString* /* pStyle */ )
 {
     if( !!rBmpEx )
     {
@@ -1181,8 +1181,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         const Color aOldLineColor( mpVDev->GetLineColor() ), aOldFillColor( mpVDev->GetFillColor() );
                         Color       aNewLineColor( aOldLineColor ), aNewFillColor( aOldFillColor );
 
-                        aNewLineColor.SetTransparency( FRound( pA->GetTransparence() * 2.55 ) );
-                        aNewFillColor.SetTransparency( FRound( pA->GetTransparence() * 2.55 ) );
+                        aNewLineColor.SetTransparency( sal::static_int_cast<UINT8>( FRound( pA->GetTransparence() * 2.55 ) ) );
+                        aNewFillColor.SetTransparency( sal::static_int_cast<UINT8>( FRound( pA->GetTransparence() * 2.55 ) ) );
 
                         mpContext->SetPaintAttr( aNewLineColor, aNewFillColor );
                         ImplWritePolyPolygon( rPolyPoly, sal_False, pStyle );
@@ -1232,9 +1232,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                     sal_Bool                bFound = sal_False;
 
-                    for( ULONG i = 0, nCount = aGDIMetaFile.GetActionCount(); ( i < nCount ) && !bFound; i++ )
+                    for( ULONG j = 0, nC = aGDIMetaFile.GetActionCount(); ( j < nC ) && !bFound; j++ )
                     {
-                        const MetaAction* pSubstAct = aGDIMetaFile.GetAction( i );
+                        const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
 
                         if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                         {
