@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:32:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,12 +427,14 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     pxXBookmarks(0),
     pxXTextFieldTypes(0),
     pxXTextFieldMasters(0),
+    pxXNumberingRules(0),
     pxXFootnotes(0),
     pxXEndnotes(0),
     pxXFootnoteSettings(0),
     pxXEndnoteSettings(0),
     pxXDocumentIndexes(0),
     pxXStyleFamilies(0),
+    pxXAutoStyles(0),
     pxXChapterNumbering(0),
     pxXLineNumberingProperties(0),
     pDrawPage(0),
@@ -708,6 +710,20 @@ Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules(void)
     }
     return *pxXChapterNumbering;
 }
+
+Reference< XIndexAccess >  SwXTextDocument::getNumberingRules(void) throw( RuntimeException )
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    if(!pxXNumberingRules )
+    {
+        ((SwXTextDocument*)this)->pxXNumberingRules = new Reference< XIndexAccess > ;
+        *pxXNumberingRules = new SwXNumberingRulesCollection( pDocShell->GetDoc() );
+    }
+    return *pxXNumberingRules;
+}
+
 /*-- 18.12.98 11:55:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1163,7 +1179,7 @@ String lcl_CreateOutlineString( USHORT nIndex,
              nLevel <= pTxtNd->GetLevel();
              nLevel++ )
         {
-            sal_uInt16 nVal = aNumVector[nLevel];
+            long nVal = aNumVector[nLevel];
             nVal ++;
             nVal -= pOutlRule->Get(nLevel).GetStart();
             sEntry += String::CreateFromInt32( nVal );
@@ -1486,6 +1502,23 @@ Reference< XNameAccess >  SwXTextDocument::getStyleFamilies(void) throw( Runtime
     }
     return *pxXStyleFamilies;
 }
+/*-- 19.05.06 10:15:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
+    throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    if(!pxXAutoStyles)
+    {
+        pxXAutoStyles = new Reference< style::XAutoStyles > ;
+        *pxXAutoStyles = new SwXAutoStyles(*pDocShell);
+    }
+    return *pxXAutoStyles;
+
+}
 /*-- 22.01.99 10:18:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1640,6 +1673,14 @@ void    SwXTextDocument::InitNewDoc()
         pxXDrawPage = 0;
     }
 
+    if ( pxXNumberingRules )
+    {
+        XIndexAccess* pNum = pxXNumberingRules->get();
+        ((SwXNumberingRulesCollection*)pNum)->Invalidate();
+        delete pxXNumberingRules;
+        pxXNumberingRules = 0;
+    }
+
     if(pxXFootnotes)
     {
          XIndexAccess* pFtn = pxXFootnotes->get();
@@ -1670,6 +1711,13 @@ void    SwXTextDocument::InitNewDoc()
         ((SwXStyleFamilies*)pStyles)->Invalidate();
         delete pxXStyleFamilies;
         pxXStyleFamilies = 0;
+    }
+    if(pxXAutoStyles)
+    {
+         XNameAccess* pStyles = pxXAutoStyles->get();
+        ((SwXAutoStyles*)pStyles)->Invalidate();
+        delete pxXAutoStyles;
+        pxXAutoStyles = 0;
     }
 
     if(pxXBookmarks)
