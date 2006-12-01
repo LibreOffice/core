@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:32:20 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ namespace comphelper{
  */
 #define _COMPHELPER_COMPONENT_GETIMPLEMENTATIONENVIRONMENT                                                          \
     extern "C" void SAL_CALL component_getImplementationEnvironment(const sal_Char**        ppEnvironmentTypeName,  \
-                                                                          uno_Environment** ppEnvironment        )  \
+                                                                          uno_Environment** /* ppEnvironment */ )   \
     {                                                                                                               \
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;                                                \
     }
@@ -202,7 +202,7 @@ namespace comphelper{
 #define _COMPHELPER_COMPONENT_GETFACTORY(FACTORYLIST)                                                                                               \
     extern "C" void* SAL_CALL component_getFactory(const sal_Char* pImplementationName,                                                             \
                                                          void*     pServiceManager    ,                                                             \
-                                                         void*     pRegistryKey       )                                                             \
+                                                         void*     /* pRegistryKey */ )                                                             \
     {                                                                                                                                               \
         if (                                                                                                                                        \
             (!pImplementationName) ||                                                                                                               \
