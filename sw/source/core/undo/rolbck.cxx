@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:50:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,8 +325,8 @@ void SwSetTxtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
 
-    pTxtNd->Insert( *pAttr, nStart, nEnd,
-                    SETATTR_NOTXTATRCHR | SETATTR_NOHINTADJUST );
+    pTxtNd->InsertItem( *pAttr, nStart, nEnd,
+                        SETATTR_NOTXTATRCHR | SETATTR_NOHINTADJUST );
 }
 
 
@@ -381,7 +381,7 @@ void SwSetTxtFldHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
 
-    pTxtNd->Insert( *pFld, nPos, nPos, SETATTR_NOTXTATRCHR );
+    pTxtNd->InsertItem( *pFld, nPos, nPos, SETATTR_NOTXTATRCHR );
 }
 
 
@@ -406,7 +406,7 @@ void SwSetRefMarkHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     // existiert hier schon eine Referenz-Markierung ohne Ende, so
     // darf es nicht eingefuegt werden !!
     if( nStart != nEnd || !pTxtNd->GetTxtAttr( nStart, RES_TXTATR_REFMARK ) )
-        pTxtNd->Insert( aRefMark, nStart, nEnd, SETATTR_NOTXTATRCHR );
+        pTxtNd->InsertItem( aRefMark, nStart, nEnd, SETATTR_NOTXTATRCHR );
 }
 
 
@@ -445,7 +445,7 @@ void SwSetTOXMarkHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     SwTOXMark aNew( aTOXMark );
     ((SwTOXType*)pToxType)->Add( &aNew );
 
-    pTxtNd->Insert( aNew, nStart, nEnd, SETATTR_NOTXTATRCHR );
+    pTxtNd->InsertItem( aNew, nStart, nEnd, SETATTR_NOTXTATRCHR );
 }
 
 
@@ -859,7 +859,7 @@ void SwHstrySetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
     {
         ((SwCntntNode*)pNode)->SetAttr( aOldSet );
         const SfxPoolItem* pItem;
-        if( ((SwCntntNode*)pNode)->GetpSwAttrSet() && SFX_ITEM_SET ==
+        if( ((SwCntntNode*)pNode)->HasSwAttrSet() && SFX_ITEM_SET ==
             ((SwCntntNode*)pNode)->GetpSwAttrSet()->GetItemState(
             RES_PARATR_NUMRULE, FALSE, &pItem ) &&
             NO_NUMBERING != nNumLvl)
@@ -894,13 +894,26 @@ SwHstryResetAttrSet::SwHstryResetAttrSet( const SfxItemSet& rSet,
     aArr( (BYTE)rSet.Count() )
 {
     SfxItemIter aIter( rSet );
+    bool bAutoStyle = true;
+
     while( TRUE )
     {
-        aArr.Insert( aIter.GetCurItem()->Which() ,aArr.Count() );
+        const USHORT nWhich = aIter.GetCurItem()->Which();
+        // Character attribute cannot be inserted into the hints array
+        // anymore. Therefore we have to treat them as one RES_TXTATR_AUTOFMT:
+        if ( RES_CHRATR_BEGIN <= nWhich && RES_CHRATR_END > nWhich )
+            bAutoStyle = true;
+        else
+            aArr.Insert( aIter.GetCurItem()->Which() ,aArr.Count() );
+
         if( aIter.IsAtEnd() )
             break;
+
         aIter.NextItem();
     }
+
+    if ( bAutoStyle )
+        aArr.Insert( RES_TXTATR_AUTOFMT, aArr.Count() );
 }
 
 
