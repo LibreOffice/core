@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:25:42 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,7 +412,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         // dann setze im StartNode noch den Link:
                         SwFmtINetFmt aINet( sFileName , aEmptyStr );
                         SwTxtNode* pTNd = (SwTxtNode*)pSttNd;
-                        pTNd->Insert( aINet, 0, pTNd->GetTxt().Len() );
+                        pTNd->InsertItem( aINet, 0, pTNd->GetTxt().Len() );
 
                         // wenn der nicht mehr gefunden wird, kann das nur
                         // ein Bug sein!
