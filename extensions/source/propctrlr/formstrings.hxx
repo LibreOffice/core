@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:57:32 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_HIDDEN_VALUE,           "HiddenValue");
     PCR_CONSTASCII_STRING( PROPERTY_BUTTONTYPE,             "ButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_XFORMS_BUTTONTYPE,      "XFormsButtonType");
-    PCR_CONSTASCII_STRING( PROPERTY_ACTION_BUTTONTYPE,      "ActionButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_STRINGITEMLIST,         "StringItemList");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,           "DefaultText");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCHECKED,         "DefaultState");
