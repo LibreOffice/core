@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:57:55 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1210,6 +1210,10 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                                     FN_SHAPE_ENDPOSITION_IN_HORI_L2R,
                                     CPPU_E2T(CPPUTYPE_AWTPOINT),
                                     PropertyAttribute::READONLY, 0},
+                    // <--
+                    // --> OD 2006-11-09 #i71182#
+                    // missing map entry for property <PageToogle>
+                    { SW_PROP_NMID(UNO_NAME_PAGE_TOGGLE), RES_HORI_ORIENT,      CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
                     // <--
                     {0,0,0,0,0}
                 };
