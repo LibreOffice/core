@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 09:32:50 $
+#   last change: $Author: rt $ $Date: 2006-12-01 16:31:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ else {
             'Error: patching configuration failed!',
             'Error: starting office failed!',
             'Error during testing',
-            '',
+            'can not copy extension',
             'Error in setup log',
             'installationsset is not complete',
             'can not copy all basic scripts',
@@ -189,7 +189,7 @@ my $error_setup = 2;
 my $error_patchConfig = 3;
 my $error_startOffice = 4;
 my $error_testResult = 5;
-my $error_deinstall = 6;
+my $error_copyExtension = 6;
 my $error_setup_log = 7;
 my $error_installset = 8;
 my $error_copyBasic = 9;
@@ -215,7 +215,7 @@ $DATA="$ENV{DMAKE_WORK_DIR}$PathSeparator" . "data$PathSeparator";
 $WORK_STAMP_LC=$ENV{WORK_STAMP};
 $WORK_STAMP_LC =~ tr/A-Z/a-z/;
 $ENV{DBGSV_INIT} = $DATA . "dbgsv.ini";
-
+$ExtensionDir = $ENV{DMAKE_WORK_DIR} . $PathSeparator . $ENV{OUTPATH} . $ENV{PROEXT} . $PathSeparator . "bin" . $PathSeparator;
 if (defined($ENV{INSTALLPATH_SMOKETEST})) {
     $installpath_without = $ENV{INSTALLPATH_SMOKETEST};
 }
@@ -255,7 +255,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.18 $ ';
+$id_str = ' $Revision: 1.19 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -446,6 +446,13 @@ sub doTest {
         print_error ($error_messages[$error_patchBootstrap], $error_patchBootstrap);
     }
 
+    # copy extension (error 6)
+
+    createPath ($LOGPATH, $error_copyExtension);
+    $Command = "$COPY_FILE \"$ExtensionDir" . "TestExtension.oxt\" " . "\"$LOGPATH$PathSeparator\"";
+    execute_Command ($Command, $error_copyExtension, $show_Message, $command_withoutOutput);
+
+
     # start office (error 4)
 
     print "Starting Testtool ($INSTSETNAME)\n";
@@ -553,7 +560,7 @@ sub doInstall {
             createPath ($optdir, $error_setup);
             createPath ($rpmdir, $error_setup);
             $Command = "rpm --initdb --dbpath $rpmdir";
-            execute_Command ($Command, $error_setup, $show_Message, $command_normal);
+            execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
             $mask = "\\.rpm\$";
             getSubFiles ("$installsetpath", \@DirArray, $mask);
             if ($#DirArray == -1) {
@@ -574,7 +581,7 @@ sub doInstall {
                     createPath ($newdir, $error_setup);
                 }
                 $Command = "rpm --install --ignoresize --nodeps -vh --relocate $olddir=$newdir --dbpath $rpmdir $installsetpath$file";
-                execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
+                execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
             }
         }
         elsif ( (defined($system)) && ($system eq "SunOS") ) {
@@ -604,7 +611,7 @@ sub doInstall {
                     createPath ("$dest_installdir$$output_ref[0]", $error_setup);
                 }
                 $Command = "pkgadd -a $solarisdata" . "admin -d $installsetpath -R $dest_installdir $file";
-                execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
+                execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
             }
             my $pkgadd_tmpfile = "/tmp/.ai.pkg.zone.lock*";
             $Command = "$REMOVE_FILE $pkgadd_tmpfile";
@@ -991,7 +998,7 @@ sub deinstallInstallation  {
             if ($productcode ne "") {
                 print "deinstalling $productcode ...\n";
                 $Command = "msiexec.exe -x $productcode -qn";
-                execute_Command ($Command, $error_deinst, $show_Message, $command_withoutErrorcheck);
+                execute_Command ($Command, $error_deinst, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
             }
         }
     }
@@ -1020,7 +1027,7 @@ sub execute_Command {
     my ($Command, $Errorcode, $showMessage, $command_action) = @_;
     my ($Returncode, $output_ref);
     if (!$is_debug) {
-        if ( ($command_action and $command_withoutOutput) == $command_withoutOutput) {
+        if ( ($command_action & $command_withoutOutput) == $command_withoutOutput) {
             ($Returncode, $output_ref) = execute_system ("$Command");
         }
         else {
@@ -1029,7 +1036,7 @@ sub execute_Command {
         }
         if ($Returncode) {
             if ($showMessage) {
-                if (($command_action and $command_withoutErrorcheck) == $command_withoutErrorcheck) {
+                if (($command_action & $command_withoutErrorcheck) == $command_withoutErrorcheck) {
                     print_warning ($error_messages[$Errorcode], $Errorcode);
                 }
                 else {
@@ -1037,7 +1044,7 @@ sub execute_Command {
                 }
             }
             else {
-                if (($command_action and $command_withoutErrorcheck) != $command_withoutErrorcheck) {
+                if (($command_action & $command_withoutErrorcheck) != $command_withoutErrorcheck) {
                     do_exit ($Errorcode);
                 }
             }
