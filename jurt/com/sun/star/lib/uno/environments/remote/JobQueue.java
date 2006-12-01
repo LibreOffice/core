@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:01:12 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,6 @@ package com.sun.star.lib.uno.environments.remote;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-
-
-import com.sun.star.lib.util.IInvokeHook;
-import com.sun.star.lib.util.IInvokable;
-
-
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -57,7 +51,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.17 $ $ $Date: 2005-09-07 19:01:12 $
+ * @version     $Revision: 1.18 $ $ $Date: 2006-12-01 14:51:26 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -69,12 +63,6 @@ public class JobQueue {
      * When set to true, enables various debugging output.
      */
     private static final boolean DEBUG = false;
-
-    /**
-     * E.g. to get privleges for security managers, it is
-     * possible to set a hook for the <code>JobDispatcher</code> thread.
-     */
-    static public IInvokeHook __JobDispatcher_run_hook;
 
     protected Job _head;                 // the head of the job list
     protected Job _tail;                 // the tail of the job list
@@ -99,7 +87,7 @@ public class JobQueue {
     /**
      * A thread for dispatching jobs
      */
-    class JobDispatcher extends Thread implements IInvokable {
+    class JobDispatcher extends Thread {
         Object _disposeId;
 
         JobDispatcher(Object disposeId) {
@@ -112,7 +100,9 @@ public class JobQueue {
             return _threadId;
         }
 
-        public Object invoke(Object params[]) {
+        public void run() {
+            if(DEBUG) System.err.println("ThreadPool$JobDispatcher.run: " + Thread.currentThread());
+
             try {
                   enter(2000, _disposeId);
             }
@@ -125,24 +115,6 @@ public class JobQueue {
             finally {
                 release();
             }
-
-            return null;
-        }
-
-        public void run() {
-            if(DEBUG) System.err.println("ThreadPool$JobDispatcher.run: " + Thread.currentThread());
-
-            if(__JobDispatcher_run_hook != null) {
-                try {
-                    __JobDispatcher_run_hook.invoke(this, null);
-
-                }
-                catch(Exception exception) { // should not fly
-                    System.err.println(getClass().getName() + " - unexpected: method >doWork< threw an exception - " + exception);
-                }
-            }
-            else
-                invoke(null);
 
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".run - exit:" + _threadId);
 
@@ -380,7 +352,7 @@ public class JobQueue {
                         _active = false;
                     }
 
-                    if(job.isFinal()) {
+                    if (!job.isRequest()) {
                         job.dispose();
 
                         quit = true;
