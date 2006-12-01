@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdispatch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:05:39 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ namespace svx
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::form::runtime;
 
     //====================================================================
     //= OSingleFeatureDispatcher
@@ -91,15 +92,15 @@ namespace svx
     //--------------------------------------------------------------------
     void OSingleFeatureDispatcher::getUnoState( FeatureStateEvent& /* [out] */ _rState ) const
     {
-        ControllerFeatureState aState;
+        FeatureState aState;
         _rState.Source = *const_cast< OSingleFeatureDispatcher* >( this );
 
         m_rController.getState( m_nFeatureId, aState );
 
         _rState.FeatureURL = m_aFeatureURL;
-        _rState.IsEnabled = aState.bEnabled;
+        _rState.IsEnabled = aState.Enabled;
         _rState.Requery = sal_False;
-        _rState.State = aState.aState;
+        _rState.State = aState.State;
     }
 
     //--------------------------------------------------------------------
@@ -170,7 +171,7 @@ namespace svx
         OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::dispatch: not responsible for this URL!" );
         (void)_rURL;
 
-        if ( m_rController.getSimpleState( m_nFeatureId ) )
+        if ( m_rController.isEnabled( m_nFeatureId ) )
         {
             // release our mutex before executing the slot?
             sal_Int32 nFeatureId( m_nFeatureId );
