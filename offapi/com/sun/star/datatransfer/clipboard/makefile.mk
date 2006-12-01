@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:51:38 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:02:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..$/..$/..$/..
 
-PRJNAME=api
+PRJNAME=offapi
 
 TARGET=cssdclipboard
 PACKAGE=com$/sun$/star$/datatransfer$/clipboard
