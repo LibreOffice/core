@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:57:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,8 +119,8 @@ RES_TXTATR_BEGIN = RES_CHRATR_END,
 //              merkt sich die Ids immer als Offset zum Start der Gruppe!!!
 // Aus dem RES_TXTATR_NOLINEBREAK ist jetzt RES_TXTATR_INETFMT geworden.
 RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
-    RES_TXTATR_INETFMT = RES_TXTATR_WITHEND_BEGIN,  // 38
-    RES_TXTATR_DUMMY4,                              // 39
+    RES_TXTATR_AUTOFMT = RES_TXTATR_WITHEND_BEGIN,  // 38
+    RES_TXTATR_INETFMT,                             // 39
     RES_TXTATR_REFMARK,                             // 40
     RES_TXTATR_TOXMARK,                             // 41
     RES_TXTATR_CHARFMT,                             // 42
@@ -216,9 +216,9 @@ RES_FRMATR_BEGIN = RES_PARATR_END,
 // <-- collapsing
     // OD 2004-05-04 #i28701# - use dummy1 for new item
     RES_WRAP_INFLUENCE_ON_OBJPOS,                   // 112
-    RES_FRMATR_DUMMY3,                              // 113
-    RES_FRMATR_DUMMY4,                              // 114
-    RES_FRMATR_DUMMY5,                              // 115
+    RES_AUTO_STYLE,                                 // 113
+    RES_FRMATR_STYLE_NAME,                          // 114
+    RES_FRMATR_CONDITIONAL_STYLE_NAME,              // 115
 RES_FRMATR_END
 };
 
