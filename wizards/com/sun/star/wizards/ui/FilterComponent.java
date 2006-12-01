@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:32:22 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ public class FilterComponent{
                         XControl xValueControl = CurUnoDialog.xDlgContainer.getControl("txtValue" + scontrolnameSuffix);
                         XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
                         Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", new Boolean(CurFieldColumn.bIsNumberFormat));
-                        oQueryMetaData.getNumberFormatter().setNumberFormat(xValueModel, CurFieldColumn.DBFormatKey);
+                        oQueryMetaData.getNumberFormatter().setNumberFormat(xValueModel, CurFieldColumn.DBFormatKey, oQueryMetaData.getNumberFormatter());
                         break;
                     case SOFIRSTCONDITION:
                     case SOSECCONDITION:
@@ -260,8 +260,9 @@ public class FilterComponent{
                                     break;
                                 case DataType.BIT:
                                 case DataType.BOOLEAN:
-                                    double dblvalue = ((Double) curValue).doubleValue();
-                                    curValue = new Boolean(dblvalue == 1.0);
+                                    curValue = CurControlRow.getText();
+//                                    double dblvalue = ((Double) curValue).doubleValue();
+//                                    curValue = new Boolean(dblvalue == 1.0);
                                     break;
                                 default:
                                     curValue = String.valueOf(curValue);
@@ -440,23 +441,23 @@ public class FilterComponent{
                 String sCompSuffix = sIncSuffix + "_" + String.valueOf(Index + 1);
                 this.bEnabled = _bEnabled;
                 ControlElements[0] = (XInterface) CurUnoDialog.insertLabel("lblFieldNames" + sCompSuffix,
-                                        new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblFieldNames, new Integer(iStartPosX + 10), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(55)});
+                    new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                    new Object[] { new Boolean(bEnabled), new Integer(9), slblFieldNames, new Integer(iStartPosX + 10), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(55)});
                 ControlElements[1] = (XInterface) CurUnoDialog.insertLabel("lblOperators" + sCompSuffix,
-                                        new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblOperators, new Integer(iStartPosX + 87), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(52)});
+                    new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                    new Object[] { new Boolean(bEnabled), new Integer(9), slblOperators, new Integer(iStartPosX + 87), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(52)});
                 ControlElements[2] = (XInterface) CurUnoDialog.insertLabel("lblValue" + sCompSuffix,
-                                        new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblValue, new Integer(iStartPosX + 162), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(44)});
+                    new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                    new Object[] { new Boolean(bEnabled), new Integer(9), slblValue, new Integer(iStartPosX + 162), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(44)});
                 ControlElements[3] = (XInterface) CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SOFIELDNAMELIST[Index], null, new ItemListenerImpl(),
-                                        new String[] { "Enabled", "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 10), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(71)});
+                    new String[] { "Enabled", "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                    new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 10), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(71)});
                 ControlElements[4] = (XInterface) CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, SOCONDITIONLIST[Index], null, new ItemListenerImpl(),
-                                        new String[] { "Enabled", "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Short((short) 7), new Integer(iStartPosX + 87), new Integer(iCompPosY + 23), IStep, sLogicOperators, new Short(curtabindex++), new Integer(70)});
+                    new String[] { "Enabled", "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width" },
+                    new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Short((short) 7), new Integer(iStartPosX + 87), new Integer(iCompPosY + 23), IStep, sLogicOperators, new Short(curtabindex++), new Integer(70)});
                 ControlElements[5] = (XInterface) CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SOTEXTFIELDLIST[Index], new TextListenerImpl(),
-                                        new String[] { "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 162), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(44)});
+                    new String[] { "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                    new Object[] { new Boolean(bEnabled), new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 162), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(44)});
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
             }}
@@ -572,6 +573,15 @@ public class FilterComponent{
             protected Object getValue() {
                 try {
                     return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
+                } catch (Exception exception) {
+                    exception.printStackTrace(System.out);
+                    return null;
+                }
+            }
+
+            protected Object getText() {
+                try {
+                    return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Text"));
                 } catch (Exception exception) {
                     exception.printStackTrace(System.out);
                     return null;
