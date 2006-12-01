@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:49:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,14 +68,13 @@ SvXMLAutoStylePoolParentP_Impl::~SvXMLAutoStylePoolParentP_Impl()
 // if not added, yet.
 //
 
-sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName )
+sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
     sal_Bool bAdded = sal_False;
-
+    SvXMLAutoStylePoolPropertiesP_Impl *pProperties = 0;
+    sal_uInt32 i = 0;
     sal_Int32 nProperties = rProperties.size();
     sal_uInt32 nCount = maPropertiesList.Count();
-    SvXMLAutoStylePoolPropertiesP_Impl *pProperties = 0;
-    sal_uInt32 i;
 
     for( i = 0; i < nCount; i++ )
     {
@@ -88,7 +87,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
         {
             break;
         }
-        else if( pFamilyData->mxMapper->Equals( pIS->GetProperties(), rProperties ) )
+        else if( !bDontSeek && pFamilyData->mxMapper->Equals( pIS->GetProperties(), rProperties ) )
         {
             pProperties = pIS;
             break;
