@@ -39,6 +39,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\control
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\validation
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\binding
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\submission
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\runtime
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xforms
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\formula
@@ -141,6 +142,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\form\validation\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\validation
 ..\com\sun\star\form\binding\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\binding
 ..\com\sun\star\form\submission\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\submission
+..\com\sun\star\form\runtime\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\runtime
 ..\com\sun\star\xforms\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xforms
 ..\com\sun\star\xsd\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
 ..\com\sun\star\formula\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\formula
