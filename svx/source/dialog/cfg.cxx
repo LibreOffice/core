@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:06:11 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:24:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,12 +464,9 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
     OSL_TRACE("SupportsDocumentConfig: %s", PRTSTR(aModuleId));
 
-    if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.script.BasicIDE" ) ) ||
-         aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.frame.Bibliography" ) ) ||
-         aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.sdb.OfficeDatabaseDocument" ) ) )
+    if  (  aModuleId.equalsAscii( "com.sun.star.script.BasicIDE" )
+        || aModuleId.equalsAscii( "com.sun.star.frame.Bibliography" )
+        )
     {
         return FALSE;
     }
