@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:31:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,7 @@
 #endif
 // <--
 
+#include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
 
 
@@ -1059,6 +1060,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         xStatusIndicator->end();
     }
 
+    rDoc.GetIStyleAccess().clearCaches(); // Clear Automatic-Style-Caches(shared_pointer!)
     return nRet;
 }
 
