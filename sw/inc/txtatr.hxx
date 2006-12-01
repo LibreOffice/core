@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:35:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ class SvxTwoLinesItem;
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
     SwTxtNode* pMyTxtNd;
+    USHORT mnSortNumber;
 
 public:
     SwTxtCharFmt( const SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
@@ -68,6 +69,8 @@ public:
     // erfrage und setze den TxtNode Pointer
     void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
 
+    void SetSortNumber( USHORT nSortNumber ) { mnSortNumber = nSortNumber; }
+    USHORT GetSortNumber() const { return mnSortNumber; }
 };
 
 // ATT_HARDBLANK ******************************
