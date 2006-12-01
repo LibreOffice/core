@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:50:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:17:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
 #include "bridges/cpp_uno/shared/vtables.hxx"
 
+#include "abi.hxx"
 #include "share.hxx"
 
 using namespace ::rtl;
@@ -122,7 +123,7 @@ invoke_copy_to_stack(sal_uInt64 * pDS,  // Stack Storage
                 // value verbatim, as a double without conversion.
                 pFPR[nr_fpr++] = *reinterpret_cast<double *>( pSV++ );
             else
-                *pDS++ = *reinterpret_cast<double *>( pSV++ );
+                *pDS++ = *pSV++;
             break;
 
         case 'H': // 64-bit Word
@@ -165,7 +166,7 @@ invoke_copy_to_stack(sal_uInt64 * pDS,  // Stack Storage
 
 //==================================================================================================
 static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
-                              void * pRegisterReturn, typelib_TypeClass eReturnType,
+                              void * pRegisterReturn, typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
                               char * pPT, sal_uInt64 * pStackLongs, sal_uInt32 nStackLongs)
 {
     sal_uInt32 nr_gpr, nr_fpr, nr_stack;
@@ -174,8 +175,6 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     // Stack, if used, must be 16-bytes aligned
     if (nr_stack)
         nr_stack = (nr_stack + 1) & ~1;
-
-    bool bReturnsSimpleType = bridges::cpp_uno::shared::isSimpleType( eReturnType );
 
 #if OSL_DEBUG_LEVEL > 1
     // Let's figure out what is really going on here
@@ -244,7 +243,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 #undef ARG_GPR
     }
 
-    if ( bReturnsSimpleType )
+    if ( bSimpleReturn )
         a0 = (sal_uInt64) pThis;
     else
         a1 = (sal_uInt64) pThis;
@@ -275,7 +274,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     // Perform the call
     ReturnValue aRet = ( ( FunctionCall ) pMethod )( a0, a1, a2, a3, a4, a5 );
 
-    switch (eReturnType)
+    switch (pReturnTypeDescr->eTypeClass)
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -301,6 +300,15 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     case typelib_TypeClass_DOUBLE:
         *reinterpret_cast<double *>( pRegisterReturn ) = *reinterpret_cast<double*>( &aRet.f.xmm0 );
         break;
+    default: {
+        sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
+        if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0) {
+            if (nRetSize > 8)
+                static_cast<sal_uInt64 *>(pRegisterReturn)[1] = aRet.i.rdx;
+            static_cast<sal_uInt64 *>(pRegisterReturn)[0] = aRet.i.rax;
+        }
+        break;
+    }
     }
 }
 
@@ -328,12 +336,14 @@ static void cpp_call(
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
+    bool bSimpleReturn = true;
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
-        {
+        if ( x86_64::return_in_hidden_param( pReturnTypeRef ) )
+            bSimpleReturn = false;
+
+        if (bSimpleReturn)
             pCppReturn = pUnoReturn; // direct way for simple types
-        }
         else
         {
             // complex return via ptr
@@ -458,7 +468,7 @@ static void cpp_call(
         OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 7), "UNALIGNED STACK !!! (Please DO panic)" );
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr->eTypeClass, pParamType,
+            pCppReturn, pReturnTypeDescr, bSimpleReturn, pParamType,
             (sal_uInt64 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_uInt64) );
         // NO exception occured...
         *ppUnoExc = 0;
