@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:15:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,8 +595,10 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     BOOL bParentCntProt = 0 != rSh.IsSelObjProtected(
                     (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) );
     BOOL bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
-    BOOL bSwappedOut = rSh.IsGrfSwapOut( TRUE );
-    BOOL bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
+    // --> OD 2006-11-03 #i59688#
+//    BOOL bSwappedOut = rSh.IsGrfSwapOut( TRUE );
+//    BOOL bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
+    // <--
 
     SetGetStateSet( &rSet );
 
@@ -716,16 +718,37 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_GRFFILTER_POPART:
         case SID_GRFFILTER_SEPIA:
         case SID_GRFFILTER_SOLARIZE:
-            if( bParentCntProt || !bIsGrfCntnt )
-                bDisable = TRUE;
-            else if( bSwappedOut )
             {
-                rSet.DisableItem( nWhich );
-                if( AddGrfUpdateSlot( nWhich ))
-                    rSh.GetGraphic(FALSE);  // start the loading
+                if( bParentCntProt || !bIsGrfCntnt )
+                    bDisable = TRUE;
+                // --> OD 2006-11-03 #i59688#
+                // load graphic only if type is unknown
+//                else if( bSwappedOut )
+//                {
+//                    rSet.DisableItem( nWhich );
+//                    if( AddGrfUpdateSlot( nWhich ))
+//                        rSh.GetGraphic(FALSE);  // start the loading
+//                }
+//                else
+//                    bDisable = !bBitmapType;
+                else
+                {
+                    const USHORT eGraphicType( rSh.GetGraphicType() );
+                    if ( ( eGraphicType == GRAPHIC_NONE ||
+                           eGraphicType == GRAPHIC_DEFAULT ) &&
+                         rSh.IsGrfSwapOut( TRUE ) )
+                    {
+                        rSet.DisableItem( nWhich );
+                        if( AddGrfUpdateSlot( nWhich ))
+                            rSh.GetGraphic(FALSE);  // start the loading
+                    }
+                    else
+                    {
+                        bDisable = eGraphicType != GRAPHIC_BITMAP;
+                    }
+                }
+                // <--
             }
-            else
-                bDisable = !bBitmapType;
             break;
 
         default:
