@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecordParser.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:15:59 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,40 +196,48 @@ public class RecordParser extends QueryMetaData {
         return oAny;
     }
 
-    public boolean executeCommand(String sMessage, String[] _sFieldNames, boolean binitializeDBColumns) throws InvalidQueryException {
-        try {
-            Helper.setUnoPropertyValue(xRowSet, "DataSourceName", DataSourceName);
-            Helper.setUnoPropertyValue(xRowSet, "ActiveConnection", DBConnection);
-            Helper.setUnoPropertyValue(xRowSet, "Command", Command);
-            Helper.setUnoPropertyValue(xRowSet, "CommandType", new Integer(com.sun.star.sdb.CommandType.COMMAND)); // CommandType
-            xExecute.executeWithCompletion(xInteraction);
-            com.sun.star.sdb.XResultSetAccess xResultAccess = (com.sun.star.sdb.XResultSetAccess) UnoRuntime.queryInterface(com.sun.star.sdb.XResultSetAccess.class, xRowSet);
-            ResultSet = xResultAccess.createResultSet();
-            xResultSetRow = (com.sun.star.sdbc.XRow) UnoRuntime.queryInterface(com.sun.star.sdbc.XRow.class, ResultSet);
-            XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, ResultSet);
-            xColumns = xDBCols.getColumns();
-            setCommandType(com.sun.star.sdb.CommandType.COMMAND);
-            if (binitializeDBColumns == true){
-                    initializeFieldColumns(_sFieldNames, xColumns);
-            }
-            String[] AllQueryFieldNames = xColumns.getElementNames();
-            String[] sFieldNames = getFieldNames();
-            for (int i = 0; i < FieldColumns.length; i++) {
-                    FieldColumns[i].ColIndex = JavaTools.FieldInList(AllQueryFieldNames, FieldColumns[i].FieldName) + 1;
-                    if (FieldColumns[i].ColIndex == -1)
-                            throw new InvalidQueryException(xMSF, Command);
-            }
-            GroupFieldColumns = getFieldColumnList(GroupFieldNames);
-            RecordFieldColumns = getFieldColumnList(RecordFieldNames);
-            return true;
-        } catch (InvalidQueryException queryexception) {
-            queryexception.printStackTrace(System.out);
-            return false;
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
-            throw new InvalidQueryException(xMSF, Command);
+
+    public boolean executeCommand(int _nCommandType) throws InvalidQueryException {
+    try {
+        Helper.setUnoPropertyValue(xRowSet, "DataSourceName", DataSourceName);
+        Helper.setUnoPropertyValue(xRowSet, "ActiveConnection", DBConnection);
+        Helper.setUnoPropertyValue(xRowSet, "Command", Command);
+        Helper.setUnoPropertyValue(xRowSet, "CommandType", new Integer(_nCommandType)); // CommandType
+        xExecute.executeWithCompletion(xInteraction);
+        com.sun.star.sdb.XResultSetAccess xResultAccess = (com.sun.star.sdb.XResultSetAccess) UnoRuntime.queryInterface(com.sun.star.sdb.XResultSetAccess.class, xRowSet);
+        ResultSet = xResultAccess.createResultSet();
+        xResultSetRow = (com.sun.star.sdbc.XRow) UnoRuntime.queryInterface(com.sun.star.sdbc.XRow.class, ResultSet);
+        XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, ResultSet);
+        xColumns = xDBCols.getColumns();
+        setCommandType(_nCommandType);
+        return true;
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+        throw new InvalidQueryException(xMSF, Command);
+    }}
+
+
+
+    public boolean getFields(String[] _sFieldNames, boolean binitializeDBColumns){
+    try{
+        if (binitializeDBColumns == true){
+            initializeFieldColumns(_sFieldNames, xColumns);
         }
-    }
+        String[] AllQueryFieldNames = xColumns.getElementNames();
+        String[] sFieldNames = getFieldNames();
+        for (int i = 0; i < FieldColumns.length; i++) {
+            FieldColumns[i].ColIndex = JavaTools.FieldInList(AllQueryFieldNames, FieldColumns[i].FieldName) + 1;
+            if (FieldColumns[i].ColIndex == -1)
+                throw new InvalidQueryException(xMSF, Command);
+        }
+        GroupFieldColumns = getFieldColumnList(GroupFieldNames);
+        RecordFieldColumns = getFieldColumnList(RecordFieldNames);
+        return true;
+    } catch (InvalidQueryException queryexception) {
+        queryexception.printStackTrace(System.out);
+        return false;
+    }}
+
 
     private FieldColumn[] getFieldColumnList(String[] _FieldNames) {
         FieldColumn[] LocFieldColumns = new FieldColumn[_FieldNames.length];
@@ -245,8 +253,8 @@ public class RecordParser extends QueryMetaData {
     }
 
     public boolean getcurrentRecordData(java.util.Vector DataVector) {
-        Object[] RecordValueArray = new Object[RecordFieldColumns.length];
-        for (int i = 0; i < RecordFieldColumns.length; i++) {
+    Object[] RecordValueArray = new Object[RecordFieldColumns.length];
+    for (int i = 0; i < RecordFieldColumns.length; i++) {
             FieldColumn CurDBFieldColumn = this.RecordFieldColumns[i];
             RecordValueArray[i] = getColumnValue(CurDBFieldColumn.ColIndex, CurDBFieldColumn.FieldType); //FinalColIndex
         }
