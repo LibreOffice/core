@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:10:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:39:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1508,7 +1508,7 @@ BOOL SwDoc::DelNumRules( const SwPaM& rPam )
             aRegH.RegisterInModify( pTNd, *pTNd );
 
             BOOL bResetNumRule = FALSE;
-            const SwAttrSet* pAttrSet = pTNd->GetpSwAttrSet();
+            const SfxItemSet* pAttrSet = pTNd->GetpSwAttrSet();
             if( pUndo )
                 pUndo->AddNode( *pTNd, bResetNumRule );
 
