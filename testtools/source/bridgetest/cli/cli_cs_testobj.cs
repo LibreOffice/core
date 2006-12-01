@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cli_cs_testobj.cs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:46:22 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -756,6 +756,11 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     xMulti.fn11(1);
     
     
+    }
+
+    public XCurrentContextChecker getCurrentContextChecker()
+    {
+        return null; //TODO: not yet tested in CLI UNO
     }
 
     public TestPolyStruct transportPolyBoolean(/*[in]*/TestPolyStruct arg)
