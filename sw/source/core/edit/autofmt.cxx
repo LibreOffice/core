@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:27:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1151,7 +1151,7 @@ void SwAutoFormat::SetColl( USHORT nId, BOOL bHdLineOrText )
                         RES_BACKGROUND, RES_SHADOW,
                         0 );
 
-    if( pAktTxtNd->GetpSwAttrSet() )
+    if( pAktTxtNd->HasSwAttrSet() )
     {
         aSet.Put( *pAktTxtNd->GetpSwAttrSet() );
         // einige Sonderbedingungen:
@@ -1204,7 +1204,7 @@ BOOL SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
 
 BOOL SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
 {
-    const SwAttrSet* pSet = rTxtNd.GetpSwAttrSet();
+    const SfxItemSet* pSet = rTxtNd.GetpSwAttrSet();
     if( !pSet )
         return FALSE;
 
@@ -2712,12 +2712,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 DelMoreLinesBlanks( FALSE );
 
                 // behandel die harte Attributierung
-                if( pAktTxtNd->GetpSwAttrSet() )
+                if( pAktTxtNd->HasSwAttrSet() )
                 {
                     short nSz;
                     SvxLRSpaceItem* pLRSpace;
                     if( bReplaceStyles &&
-                        SFX_ITEM_SET == pAktTxtNd->GetpSwAttrSet()->
+                        SFX_ITEM_SET == pAktTxtNd->GetSwAttrSet().
                         GetItemState( RES_LR_SPACE, FALSE,
                                         (const SfxPoolItem**)&pLRSpace ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||
