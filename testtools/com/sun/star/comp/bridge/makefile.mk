@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:21:26 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:44:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ JARFILES 		= ridl.jar jurt.jar juh.jar
 
 
 JAVACLASSFILES= \
+    $(CLASSDIR)$/$(PACKAGE)$/CurrentContextChecker.class \
     $(CLASSDIR)$/$(PACKAGE)$/TestComponent.class \
     $(CLASSDIR)$/$(PACKAGE)$/TestComponentMain.class
 
