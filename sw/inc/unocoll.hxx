@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:36:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx> // helper for implementations
+#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
@@ -431,9 +434,32 @@ public:
     static SwXBookmark*     GetObject( SwBookmark& rBkm, SwDoc* pDoc );
 };
 
+
+class SwXNumberingRulesCollection : public cppu::WeakImplHelper1
+<
+    ::com::sun::star::container::XIndexAccess
+>,
+    public SwUnoCollection
+{
+protected:
+    virtual ~SwXNumberingRulesCollection();
+
+public:
+    SwXNumberingRulesCollection( SwDoc* pDoc );
+
+    //XIndexAccess
+    virtual sal_Int32 SAL_CALL SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
+
+    //XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+};
+
 /*-----------------12.02.98 08:01-------------------
 
 --------------------------------------------------*/
+
 typedef
 cppu::WeakImplHelper2
 <
@@ -441,15 +467,15 @@ cppu::WeakImplHelper2
     ::com::sun::star::lang::XServiceInfo
 >
 SwSimpleIndexAccessBaseClass;
+
 class SwXFootnotes : public SwSimpleIndexAccessBaseClass,
-    public SwUnoCollection
+                     public SwUnoCollection
 {
     sal_Bool                bEndnote;
 protected:
     virtual ~SwXFootnotes();
 public:
     SwXFootnotes(sal_Bool bEnd, SwDoc* pDoc);
-
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
