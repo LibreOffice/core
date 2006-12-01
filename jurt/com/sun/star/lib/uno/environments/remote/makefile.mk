@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:02:36 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:52:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,19 +32,16 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-PRJ		= ..$/..$/..$/..$/..$/..$/..
-PRJNAME = jurt
-PACKAGE = com$/sun$/star$/lib$/uno$/environments$/remote
-TARGET  = com_sun_star_lib_uno_environments_remote
 
-# --- Settings -----------------------------------------------------
+PRJ := ..$/..$/..$/..$/..$/..$/..
+PRJNAME := jurt
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+TARGET := com_sun_star_lib_uno_environments_remote
+PACKAGE := com$/sun$/star$/lib$/uno$/environments$/remote
 
-# --- Files --------------------------------------------------------
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 JAVAFILES = \
-    IMessage.java \
     IProtocol.java \
     IReceiver.java \
     IThreadPool.java \
@@ -52,13 +49,10 @@ JAVAFILES = \
     JavaThreadPoolFactory.java \
     Job.java \
     JobQueue.java \
+    Message.java \
     NativeThreadPool.java \
-    Protocol.java \
     ThreadId.java \
     ThreadPoolManager.java \
     remote_environment.java
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: target.mk
