@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:36:13 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,7 +590,6 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     SwTxtAttr* pTxtAttr;
     if( HasHints() )
     {
-        sal_Bool bINet = sal_False;
         sal_Bool bUnder = sal_False;
         MSHORT nTmp = 0;
 
@@ -598,40 +597,16 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         {
             pTxtAttr = pHints->GetStart( nTmp++ );
             sal_Bool bUnderSelect;
-            switch ( pTxtAttr->Which() )
+
+            const SvxUnderlineItem* pItem =
+                    static_cast<const SvxUnderlineItem*>(CharFmt::GetItem( *pTxtAttr, RES_CHRATR_UNDERLINE ));
+
+            if ( pItem )
             {
-                case RES_CHRATR_UNDERLINE:
-                {
-                    bUnder = sal_True;
-                    bUnderSelect = pFnt->GetUnderline() == pTxtAttr->GetUnderline().
-                                                           GetUnderline();
-                }
-                break;
-                case RES_TXTATR_INETFMT: bINet = sal_True;
-                case RES_TXTATR_CHARFMT:
-                {
-                    SwCharFmt* pFmt;
-                    const SfxPoolItem* pItem;
-                    if( bINet )
-                    {
-                        pFmt = ((SwTxtINetFmt*)pTxtAttr)->GetCharFmt();
-                        bINet = sal_False;
-                    }
-                    else
-                        pFmt = pTxtAttr->GetCharFmt().GetCharFmt();
-                    if ( pFmt )
-                    {
-                        if( SFX_ITEM_SET == pFmt->GetAttrSet().
-                            GetItemState( RES_CHRATR_UNDERLINE, sal_True, &pItem ) )
-                        {
-                            bUnderSelect = pFnt->GetUnderline() ==
-                                 ((SvxUnderlineItem*)pItem)->GetUnderline();
-                            bUnder = sal_True;
-                        }
-                    }
-                }
-                break;
+                bUnder = sal_True;
+                bUnderSelect = pFnt->GetUnderline() == pItem->GetUnderline();
             }
+
             if( bUnder )
             {
                 xub_StrLen nSt = *pTxtAttr->GetStart();
