@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:44:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ bool XMLFilterSettingsDialog::isClosable()
 
 // -----------------------------------------------------------------------
 
-void XMLFilterSettingsDialog::Show()
+void XMLFilterSettingsDialog::ShowWindow()
 {
     maCtrlFilterList.GrabFocus();
     disposeFilterList();
@@ -518,7 +518,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
     }
 
-    filter_info_impl* pFilterEntry;
+    filter_info_impl* pFilterEntry( NULL );
 
     if( bOk )
     {
@@ -1024,7 +1024,6 @@ void XMLFilterSettingsDialog::onOpen()
         XMLFilterJarHelper aJarHelper( mxMSF );
         aJarHelper.openPackage( aURL, aFilters );
 
-        String aFilterName;
         int nFilters = 0;
         XMLFilterVector::iterator aIter( aFilters.begin() );
         while( aIter != aFilters.end() )
@@ -1214,44 +1213,44 @@ void XMLFilterSettingsDialog::initFilterList()
                 {
                     try
                     {
-                        Any aAny( mxTypeDetection->getByName( pTempFilter->maType ) );
-                        Sequence< PropertyValue > aValues;
+                        aAny = mxTypeDetection->getByName( pTempFilter->maType );
+                        Sequence< PropertyValue > aValues2;
 
-                        if( aAny >>= aValues )
+                        if( aAny >>= aValues2 )
                         {
-                            const sal_Int32 nValueCount( aValues.getLength() );
-                            PropertyValue* pValues = aValues.getArray();
-                            sal_Int32 nValue;
+                            const sal_Int32 nValueCount2( aValues2.getLength() );
+                            PropertyValue* pValues2 = aValues2.getArray();
+                            sal_Int32 nValue2;
 
-                            for( nValue = 0; nValue < nValueCount; nValue++, pValues++ )
+                            for( nValue2 = 0; nValue2 < nValueCount2; nValue2++, pValues2++ )
                             {
 /*
-                                if( pValues->Name.equalsAscii( "MediaType" ) )
+                                if( pValues2->Name.equalsAscii( "MediaType" ) )
                                 {
-                                    pValues->Value >>= pTempFilter->maDocType;
+                                    pValues2->Value >>= pTempFilter->maDocType;
                                 } else
 */
-                                if( pValues->Name.equalsAscii( "ClipboardFormat" ) )
+                                if( pValues2->Name.equalsAscii( "ClipboardFormat" ) )
                                 {
                                     OUString aDocType;
-                                    pValues->Value >>= aDocType;
+                                    pValues2->Value >>= aDocType;
 
                                     if( aDocType.match( sDocTypePrefix ) )
                                         aDocType = aDocType.copy( sDocTypePrefix.getLength() );
 
                                     pTempFilter->maDocType = aDocType;
                                 }
-                                else if( pValues->Name.equalsAscii( "Extensions" ) )
+                                else if( pValues2->Name.equalsAscii( "Extensions" ) )
                                 {
                                     Sequence< OUString > aExtensions;
-                                    if( pValues->Value >>= aExtensions )
+                                    if( pValues2->Value >>= aExtensions )
                                     {
                                         pTempFilter->maExtension = OUString();
 
-                                        const sal_Int32 nCount( aExtensions.getLength() );
+                                        sal_Int32 nCount3( aExtensions.getLength() );
                                         OUString* pExtensions = aExtensions.getArray();
                                         sal_Int32 n;
-                                        for( n = 0; n < nCount; n++ )
+                                        for( n = 0; n < nCount3; n++ )
                                         {
                                             if( n > 0 )
                                                 pTempFilter->maExtension += OUString( sal_Unicode(';') );
@@ -1259,15 +1258,15 @@ void XMLFilterSettingsDialog::initFilterList()
                                         }
                                     }
                                 }
-                                else if( pValues->Name.equalsAscii( "DocumentIconID" ) )
+                                else if( pValues2->Name.equalsAscii( "DocumentIconID" ) )
                                 {
-                                    pValues->Value >>= pTempFilter->mnDocumentIconID;
+                                    pValues2->Value >>= pTempFilter->mnDocumentIconID;
                                 }
-                                else if(pValues->Name.equalsAscii( "Finalized" ))
+                                else if(pValues2->Name.equalsAscii( "Finalized" ))
                                 {
                                     // both the filter and the type may be finalized
                                     sal_Bool bTemp;
-                                    pValues->Value >>= bTemp;
+                                    pValues2->Value >>= bTemp;
                                     pTempFilter->mbReadonly |= bTemp;
                                 }
                             }
@@ -1517,7 +1516,7 @@ void XMLFilterListBox::Paint( const Rectangle& rRect )
     SvTabListBox::Paint( rRect );
 }
 
-IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, pList )
+IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, /* pList */ )
 {
     mpHeaderBar->SetOffset( -GetXOffset() );
     return 0;
@@ -1546,9 +1545,9 @@ IMPL_LINK( XMLFilterListBox, HeaderSelect_Impl, HeaderBar*, pBar )
         nBits |= HIB_UPARROW;
     }
     mpHeaderBar->SetItemBits( ITEMID_NAME, nBits );
-    SvTreeList* pModel = GetModel();
-    pModel->SetSortMode( eMode );
-    pModel->Resort();
+    SvTreeList* pMod = GetModel();
+    pMod->SetSortMode( eMode );
+    pMod->Resort();
     return 1;
 }
 
@@ -1574,9 +1573,9 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 
         for ( USHORT i = 1; i <= nTabs; ++i )
         {
-            long nWidth = mpHeaderBar->GetItemSize(i);
-            aSz.Width() =  nWidth + nTmpSz;
-            nTmpSz += nWidth;
+            long nW = mpHeaderBar->GetItemSize(i);
+            aSz.Width() =  nW + nTmpSz;
+            nTmpSz += nW;
             SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
         }
     }
@@ -1670,13 +1669,13 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maInterfaceName( rInfo.maInterfaceName ),
     maComment( rInfo.maComment ),
     maExtension( rInfo.maExtension ),
-    maDocType( rInfo.maDocType ),
     maDTD( rInfo.maDTD ),
     maExportXSLT( rInfo.maExportXSLT ),
     maImportXSLT( rInfo.maImportXSLT ),
-    maExportService( rInfo.maExportService ),
-    maImportService( rInfo.maImportService ),
     maImportTemplate( rInfo.maImportTemplate ),
+    maDocType( rInfo.maDocType ),
+    maImportService( rInfo.maImportService ),
+    maExportService( rInfo.maExportService ),
     maFlags( rInfo.maFlags ),
     maFileFormatVersion( rInfo.maFileFormatVersion ),
     mnDocumentIconID( rInfo.mnDocumentIconID ),
