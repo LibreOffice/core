@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:38:12 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #include "test/testtools/bridgetest/XBridgeTest2.hpp"
 #include "test/testtools/bridgetest/XMulti.hpp"
 
+#include "currentcontextchecker.hxx"
 #include "multi.hxx"
 
 using namespace rtl;
@@ -463,6 +464,9 @@ public: // XBridgeTest
         throw (RuntimeException);
     virtual void SAL_CALL testConstructorsService(
         Reference< XComponentContext > const & context)
+        throw (RuntimeException);
+    virtual Reference< XCurrentContextChecker > SAL_CALL
+    getCurrentContextChecker()
         throw (RuntimeException);
 
 public:
@@ -1123,6 +1127,12 @@ void Test_Impl::testConstructorsService(
         argSeq13,
         argSeq14,
         argSeq15);
+}
+
+Reference< XCurrentContextChecker > Test_Impl::getCurrentContextChecker()
+    throw (RuntimeException)
+{
+    return new testtools::bridgetest::CurrentContextChecker;
 }
 
 // XServiceInfo
