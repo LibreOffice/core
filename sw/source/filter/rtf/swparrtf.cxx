@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:42 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ SvParserState SwRTFParser::CallParser()
 bool lcl_UsedPara(SwPaM &rPam)
 {
     const SwCntntNode* pCNd;
-    const SwAttrSet* pSet;
+    const SfxItemSet* pSet;
     if( rPam.GetPoint()->nContent.GetIndex() ||
         ( 0 != ( pCNd = rPam.GetCntntNode()) &&
           0 != ( pSet = pCNd->GetpSwAttrSet()) &&
@@ -655,7 +655,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 pTxtNode->FmtToTxtAttr( pPrev );
                 pTxtNode->SwCntntNode::ResetAllAttr();
 
-                if( pPrev->GetpSwAttrSet() )
+                if( pPrev->HasSwAttrSet() )
                     pTxtNode->SwCntntNode::SetAttr( *pPrev->GetpSwAttrSet() );
 
                 if( &pPam->GetBound(TRUE).nNode.GetNode() == pPrev )
@@ -3786,7 +3786,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
                 bDelFirstChar = TRUE;
             }
 
-            pTxtAttr = pTxtNd->Insert( aFtnNote, nPos, nPos,
+            pTxtAttr = pTxtNd->InsertItem( aFtnNote, nPos, nPos,
                         bDelFirstChar ? SETATTR_NOTXTATRCHR : 0 );
 
             ASSERT( pTxtAttr, "konnte die Fussnote nicht einfuegen/finden" );
