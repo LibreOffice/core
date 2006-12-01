@@ -7,7 +7,7 @@ const sSDLogFileName = &quot;sdlog.dat&quot;, sSMathLogFileName = &quot;smalog.d
 const sSImDLogFileName = &quot;simlog.dat&quot;, sSChartLogFileName = &quot;schlog.dat&quot;
 const sSHptLogFileName = &quot;shptlog.dat&quot;, sSMessageLogFileName = &quot;smeslog.dat&quot;
 const sSDrawLogFileName = &quot;sdrwlog.dat&quot;, sJavaLogFileName = &quot;javalog.dat&quot;
-const sSDBLogFileName = &quot;dblog.dat&quot;
+const sSDBLogFileName = &quot;dblog.dat&quot;, sExtLogFileName = &quot;extlog.dat&quot;
 const sLogFileName = &quot;log.dat&quot;
 const cTempFileName = &quot;ttt&quot;
 
@@ -121,6 +121,9 @@ Sub DeleteAllLogFiles()
 	If FileExists (sWorkPath+sSDBLogFileName) then
 		Kill (sWorkPath+sSDBLogFileName)
 	End If
+	If FileExists (sWorkPath+sExtLogFileName) then
+		Kill (sWorkPath+sExtLogFileName)
+	End If
 end Sub
 
 Function OpenLogDat (sFileName as String) as Integer
@@ -167,6 +170,8 @@ Function ConvertPathToWin (sTmpWorkPath as string) as string
 end Function
 
 Sub TestAllDocs()
+DIM sDocURL as String, sDocPath as String
+DIM nStrPos as Long
 
 	sWorkPath = GetWorkPath
 	sWorkPathURL = GetWorkURL
@@ -174,6 +179,30 @@ Sub TestAllDocs()
 	if GetSystem (sWorkPath) = &quot;windows&quot; then
 		sWorkPath = ConvertPathToWin (sWorkPath)
 	end if
+	
+	&apos;search ExtensionURL
+	sExtensionURL = sWorkPathURL
+	If not FileExists (sExtensionURL + cExtensionFileName) then
+		if bShowTable then
+		    sDocURL = gOutPutDoc.URL
+		    CompatibilityMode(true)
+		    nStrPos = InStrRev (sDocURL, &quot;/&quot; )
+   		    CompatibilityMode(false)
+   	    	if nStrPos then
+	   	        sDocURL = Left (sDocURL, nStrPos)
+	   	        sExtensionURL = sDocURL
+	        	If not FileExists (sExtensionURL + cExtensionFileName) then
+	   				bMakeExtensionTest = false &apos; test is not possible then
+   				end if
+			else
+				bMakeExtensionTest = false &apos; test is not possible then
+   			end if
+
+		else    
+			bMakeExtensionTest = false &apos; test is not possible then
+		end if
+
+	end if 
 		
 	call DeleteAllSavedFiles()
 	call DeleteAllLogFiles()
@@ -205,6 +234,9 @@ Sub TestAllDocs()
 	end if
 	if bMakeDBTest then
 		call Test_DB.TestDB (frmDataBase)
+	end if
+	if bMakeExtensionTest then
+		call Test_Ext.TestExtensions (frmExtension)
 	end if
 	
 	Close #MainFileChannel
@@ -239,6 +271,9 @@ Sub WriteTestSequence (FileChannel as integer)
 	end if
 	if bMakeDBTest then
 		WriteDBTests (&quot;Database    : &quot;, FileChannel)
+	end if
+	if bMakeExtensionTest then
+		WriteExtensionTests (&quot;Extension    : &quot;, FileChannel)
 	end if
 		
 	Print #FileChannel
@@ -290,6 +325,17 @@ Sub WriteDBTests (sText as string, nFileChannel as integer)
 	sWriteStr = sWriteStr + &quot;, delete&quot;
 	sWriteStr = sWriteStr + &quot;, seek&quot;
 	sWriteStr = sWriteStr + &quot;, close&quot;
+	
+	Print #nFileChannel, sWriteStr
+end Sub
+
+Sub WriteExtensionTests (sText as string, nFileChannel as integer)
+	Dim sWriteStr as string
+	
+	sWriteStr = sText
+	sWriteStr = sWriteStr + &quot;services&quot;
+	sWriteStr = sWriteStr + &quot;, install&quot;
+	sWriteStr = sWriteStr + &quot;, uninstall&quot;
 	
 	Print #nFileChannel, sWriteStr
 end Sub
@@ -608,6 +654,8 @@ Function GetLogFileName (DocType as Integer) as String
 			GetLogFileName = sJavaLogFileName &apos;Java
 		case frmDataBase
 			GetLogFileName = sSDBLogFileName &apos;Database	
+		case frmExtension
+			GetLogFileName = sExtLogFileName &apos;Extension	
 		case else
 			GetLogFileName = &quot;&quot;
 	end Select		
