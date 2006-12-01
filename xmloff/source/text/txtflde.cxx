@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:54:40 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1107,9 +1107,10 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     // find out whether we need to set the style or hyperlink
     sal_Bool bHasHyperlink;
     sal_Bool bIsUICharStyle;
+    sal_Bool bHasAutoStyle;
     OUString sStyle = GetExport().GetTextParagraphExport()->
         FindTextStyleAndHyperlink( xRangePropSet, bHasHyperlink, bIsUICharStyle,
-                                  pStates );
+                                   bHasAutoStyle, pStates );
     sal_Bool bHasStyle = (sStyle.getLength() > 0);
 
     // export hyperlink (if we have one)
@@ -1146,7 +1147,7 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
             GetExport(), bIsUICharStyle &&
                          GetExport().GetTextParagraphExport()
                              ->GetCharStyleNamesPropInfoCache().hasProperty(
-                                        xRangePropSet, xRangePropSetInfo ),
+                                        xRangePropSet, xRangePropSetInfo ), sal_False,
             xRangePropSet, sPropertyCharStyleNames );
 
         // export span with style (if necessary)
