@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:52:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,6 +301,7 @@ static sal_Bool DeInitSignal()
     return sal_False;
 }
 
+#if defined (SAL_ENABLE_CRASH_REPORT) && defined(INCLUDE_BACKTRACE)
 /*****************************************************************************/
 /* Generate MD5 checksum    */
 /*****************************************************************************/
@@ -378,6 +379,7 @@ static int fputs_xml( const char *string, FILE *stream )
 
     return result;
 }
+#endif
 
 /* Create intermediate files and run crash reporter */
 
