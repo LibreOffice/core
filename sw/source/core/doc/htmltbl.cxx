@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:56:50 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,7 @@ static void lcl_GetMinMaxSize( ULONG& rMinNoAlignCnts, ULONG& rMaxNoAlignCnts,
 #ifdef FIX41370
     else if( pColl && RES_POOLCOLL_HTML_HR==pColl->GetPoolFmtId() )
     {
-        rHR |= !pTxtNd->GetpSwAttrSet() ||
+        rHR |= !pTxtNd->HasSwAttrSet() ||
                 SFX_ITEM_SET != pTxtNd->GetpSwAttrSet()
                                       ->GetItemState( RES_LR_SPACE, FALSE );
     }
