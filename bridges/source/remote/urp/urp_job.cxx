@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:01:16 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:48:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,15 @@
 #include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <uno/current_context.h>
+#include <uno/current_context.hxx>
 #include <uno/threadpool.h>
 
 #include <bridges/cpp_uno/type_misc.hxx>
 #include <bridges/remote/proxy.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include "urp_job.hxx"
@@ -120,14 +123,20 @@ namespace bridges_urp
 
 
     Job::Job( uno_Environment *pEnvRemote,
+              remote_Context *pContext,
               sal_Sequence *pTid,
               struct urp_BridgeImpl *pBridgeImpl,
               Unmarshal *pUnmarshal )
-        : m_pUnmarshal( pUnmarshal )
+        : m_pContext( pContext )
+        , m_pUnmarshal( pUnmarshal )
         , m_pBridgeImpl( pBridgeImpl )
         , m_pTid( pTid )
         , m_counter( pEnvRemote )
     {
+        if ( m_pContext )
+        {
+            m_pContext->aBase.acquire( &m_pContext->aBase );
+        }
         if( m_pTid )
             rtl_byte_sequence_acquire( pTid );
     }
@@ -136,6 +145,10 @@ namespace bridges_urp
     {
         if( m_pTid )
             rtl_byte_sequence_release( m_pTid );
+        if ( m_pContext )
+        {
+            m_pContext->aBase.release( &m_pContext->aBase );
+        }
     }
 
 
@@ -349,6 +362,27 @@ namespace bridges_urp
             m_pBridgeImpl->m_blockMarshaler.packTid( m_pBridgeImpl->m_lastOutTid );
         }
 
+        if ( m_pBridgeImpl->m_properties.bCurrentContext
+             && m_nMethodIndex != REMOTE_RELEASE_METHOD_INDEX
+             && m_pContext != 0 )
+        {
+            void * pCc = 0;
+            rtl::OUString aEnvName( RTL_CONSTASCII_USTRINGPARAM( "urp" ) );
+            bSuccess = bSuccess && uno_getCurrentContext(
+                &pCc, aEnvName.pData, m_pContext );
+            typelib_TypeDescription * pType = 0;
+            TYPELIB_DANGER_GET(
+                &pType, XCurrentContext::static_type().getTypeLibType() );
+            bSuccess = bSuccess && m_pBridgeImpl->m_blockMarshaler.pack(
+                &pCc, pType );
+            TYPELIB_DANGER_RELEASE( pType );
+            if ( pCc )
+            {
+                remote_Interface * p = static_cast< remote_Interface * >( pCc );
+                p->release( p );
+            }
+        }
+
         // marshal arguments !
 #ifdef BRIDGES_URP_PROT
         sal_Int32 nLogHeader = m_pBridgeImpl->m_blockMarshaler.getPos();
@@ -504,11 +538,12 @@ namespace bridges_urp
     //------------------------------------------------------------------------------------
     ServerMultiJob::ServerMultiJob(
         uno_Environment *pEnvRemote,
+        remote_Context *pContext,
         sal_Sequence *pTid,
         struct urp_BridgeImpl *pBridgeImpl,
         Unmarshal *pUnmarshal,
         sal_Int32 nMaxMessages )
-        : Job( pEnvRemote, pTid, pBridgeImpl , pUnmarshal )
+        : Job( pEnvRemote, pContext, pTid, pBridgeImpl, pUnmarshal )
         , m_pEnvRemote( pEnvRemote )
         , m_nCalls( 0 )
         , m_nMaxMessages( nMaxMessages )
@@ -567,10 +602,35 @@ namespace bridges_urp
     //-------------------------------------------------------------------------------------
     void ServerMultiJob::execute()
     {
+        Reference< XCurrentContext > xOldCc;
+        bool bHasOldCc = false;
         for( sal_Int32 i = 0; i < m_nCalls ; i ++ )
         {
             struct MemberTypeInfo * const pMTI = &( m_aTypeInfo[i] );
             struct ServerJobEntry * const pSJE = &( m_aEntries[i] );
+
+            if ( pSJE->m_bHasCurrentContext )
+            {
+                if ( !bHasOldCc )
+                {
+                    xOldCc = com::sun::star::uno::getCurrentContext();
+                    bHasOldCc = true;
+                }
+                rtl::OUString aEnvName( RTL_CONSTASCII_USTRINGPARAM( "urp" ) );
+                if ( !uno_setCurrentContext(
+                         pSJE->m_pCurrentContext, aEnvName.pData, m_pContext ) )
+                {
+                    throw RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "fatal: uno_setCurrentContext failed" ) ),
+                        Reference< XInterface >() );
+                }
+                if ( pSJE->m_pCurrentContext )
+                {
+                    pSJE->m_pCurrentContext->release( pSJE->m_pCurrentContext );
+                }
+            }
 
             if( ! pSJE->m_pRemoteI )
             {
@@ -765,6 +825,18 @@ namespace bridges_urp
                 // put it on the wire
                 m_pBridgeImpl->m_pWriter->touch( sal_True );
             } // MutexGuard marshalingMutex
+        }
+        if ( bHasOldCc )
+        {
+            if ( !com::sun::star::uno::setCurrentContext( xOldCc ) )
+            {
+                throw RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "fatal: com::sun::star::uno::setCurrentContext"
+                            " failed" ) ),
+                    Reference< XInterface >() );
+            }
         }
     }
 
