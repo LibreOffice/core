@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:20:23 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,8 +807,6 @@ sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
 //
 class SwXMLStylesContext_Impl : public SvXMLStylesContext
 {
-    sal_Bool bAutoStyles;
-
     SwXMLItemSetStyleContext_Impl *GetSwStyle( sal_uInt16 i ) const;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
@@ -929,8 +927,7 @@ SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Bool bAuto ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    bAutoStyles( bAuto )
+    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList, bAuto )
 {
 }
 
@@ -1014,7 +1011,7 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 
 void SwXMLStylesContext_Impl::EndElement()
 {
-    GetSwImport().InsertStyles( bAutoStyles );
+    GetSwImport().InsertStyles( IsAutomaticStyle() );
     // --> OD 2006-10-11 #i69629#
     // assign paragraph styles to list levels of outline style after all styles
     // are imported and finished.
@@ -1111,6 +1108,8 @@ SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
 
 void SwXMLImport::InsertStyles( sal_Bool bAuto )
 {
+    if( bAuto && GetAutoStyles() )
+        GetAutoStyles()->CopyAutoStylesToDoc();
     if( !bAuto && GetStyles() )
         GetStyles()->CopyStylesToDoc( !IsInsertMode(), sal_False );
 }
