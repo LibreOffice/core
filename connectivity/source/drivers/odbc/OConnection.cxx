@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:05:16 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,19 +588,19 @@ void OConnection::buildTypeInfo() throw( SQLException)
             aInfo.bNullable     = (sal_Int32)aValue == ColumnValue::NULLABLE;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bCaseSensitive    = aValue;
+            aInfo.bCaseSensitive    = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
             aInfo.nSearchType       = aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bUnsigned     = aValue;
+            aInfo.bUnsigned     = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bCurrency     = aValue;
+            aInfo.bCurrency     = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bAutoIncrement    = aValue;
+            aInfo.bAutoIncrement    = (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
             aInfo.aLocalTypeName    = aValue;
