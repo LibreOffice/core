@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:39:06 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:29:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,20 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTIONSSUPPLIER_HPP_
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLESSUPPLIER_HPP_
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGRULESSUPPLIER_HPP_
+#include <com/sun/star/text/XNumberingRulesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLE_HPP_
+#include <com/sun/star/text/XTextTable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
@@ -111,7 +122,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
-#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
 #include <com/sun/star/text/SizeType.hpp>
@@ -159,6 +170,13 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTSHAPESSUPPLIER_HPP_
 #include <com/sun/star/text/XTextShapesSupplier.hpp>
 #endif
+
+#include <com/sun/star/style/XAutoStylesSupplier.hpp>
+#include <com/sun/star/style/XAutoStyleFamily.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
+
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
 #endif
@@ -257,6 +275,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
@@ -332,7 +351,7 @@ enum eParagraphPropertyNamesEnum
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
-                                  const XMLPropertyState** ppAddStates)
+                                  const XMLPropertyState** ppAddStates, bool bDontSeek )
 {
     UniReference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
@@ -357,6 +376,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
 
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
+
     if( ppAddStates )
     {
         while( *ppAddStates )
@@ -418,22 +438,24 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 // Get parent and remove hyperlinks (they aren't of interest)
                 UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
                 for( ::std::vector< XMLPropertyState >::iterator i(xPropStates.begin());
-                      nIgnoreProps < 2 && i != xPropStates.end();
-                      i++ )
+                      nIgnoreProps < 2 && i != xPropStates.end(); )
                 {
                     if( i->mnIndex == -1 )
+                    {
+                        ++i;
                         continue;
+                    }
 
                     switch( xPM->GetEntryContextId(i->mnIndex) )
                     {
                     case CTF_CHAR_STYLE_NAME:
-                        i->maValue >>= sParent;
-                        i->mnIndex = -1;
-                        nIgnoreProps++;
-                        break;
                     case CTF_HYPERLINK_URL:
                         i->mnIndex = -1;
                         nIgnoreProps++;
+                        i = xPropStates.erase( i );
+                        break;
+                    default:
+                        ++i;
                         break;
                     }
                 }
@@ -452,7 +474,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
         if( (xPropStates.size() - nIgnoreProps) > 0 )
         {
-            GetAutoStylePool().Add( nFamily, sParent, xPropStates );
+            GetAutoStylePool().Add( nFamily, sParent, xPropStates, bDontSeek );
             if( sCondParent.getLength() && sParent != sCondParent )
                 GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
         }
@@ -590,8 +612,9 @@ OUString XMLTextParagraphExport::Find(
 
 OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
            const Reference < XPropertySet > & rPropSet,
-        sal_Bool& rHyperlink,
-        sal_Bool& rHasCharStyle,
+        sal_Bool& rbHyperlink,
+        sal_Bool& rbHasCharStyle,
+        sal_Bool& rbHasAutoStyle,
         const XMLPropertyState** ppAddStates ) const
 {
     UniReference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
@@ -599,9 +622,12 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
 
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;
-    rHyperlink = rHasCharStyle = sal_False;
+    rbHyperlink = rbHasCharStyle = rbHasAutoStyle = sal_False;
     sal_uInt16 nIgnoreProps = 0;
     UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
+    ::std::vector< XMLPropertyState >::iterator aFirstDel = xPropStates.end();
+    ::std::vector< XMLPropertyState >::iterator aSecondDel = xPropStates.end();
+
     for( ::std::vector< XMLPropertyState >::iterator
             i = xPropStates.begin();
          nIgnoreProps < 2 && i != xPropStates.end();
@@ -615,12 +641,20 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         case CTF_CHAR_STYLE_NAME:
             i->maValue >>= sName;
             i->mnIndex = -1;
-            rHasCharStyle = sName.getLength() > 0;
+            rbHasCharStyle = sName.getLength() > 0;
+            if( nIgnoreProps )
+                aSecondDel = i;
+            else
+                aFirstDel = i;
             nIgnoreProps++;
             break;
         case CTF_HYPERLINK_URL:
-            rHyperlink = sal_True;
+            rbHyperlink = sal_True;
             i->mnIndex = -1;
+            if( nIgnoreProps )
+                aSecondDel = i;
+            else
+                aFirstDel = i;
             nIgnoreProps++;
             break;
         }
@@ -634,7 +668,22 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         }
     }
     if( (xPropStates.size() - nIgnoreProps) > 0L )
-        sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sName, xPropStates );
+    {
+        // erase the character style, otherwise the autostyle cannot be found!
+        // erase the hyperlink, otherwise the autostyle cannot be found!
+        if ( nIgnoreProps )
+        {
+            // If two elements of a vector have to be deleted,
+            // we should delete the second one first.
+            if( --nIgnoreProps )
+                xPropStates.erase( aSecondDel );
+            xPropStates.erase( aFirstDel );
+        }
+        OUString sParent; // AutoStyles should not have parents!
+        sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates );
+        DBG_ASSERT( sName.getLength(), "AutoStyle could not be found" )
+        rbHasAutoStyle = sal_True;
+    }
 
     return sName;
 }
@@ -644,7 +693,8 @@ OUString XMLTextParagraphExport::FindTextStyle(
         sal_Bool& rHasCharStyle ) const
 {
     sal_Bool bDummy;
-    return FindTextStyleAndHyperlink( rPropSet, bDummy, rHasCharStyle );
+    sal_Bool bDummy2;
+    return FindTextStyleAndHyperlink( rPropSet, bDummy, rHasCharStyle, bDummy2 );
 }
 
 
@@ -1207,7 +1257,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
         for( sal_uInt16 i = 0; i < pPageTextFrameIdxs->Count(); i++ )
         {
             Reference < XTextContent > xTxtCntnt( xTextFrames->getByIndex( (*pPageTextFrameIdxs)[i] ), UNO_QUERY );
-            exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress );
+            exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, sal_True );
         }
     }
     if( pPageGraphicIdxs )
@@ -1262,7 +1312,7 @@ void XMLTextParagraphExport::exportFrameFrames(
                     pFrameTextFrameIdxs->Remove( i );
                 sal_uInt16 nOldCount = pFrameTextFrameIdxs->Count();
                 Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-                exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress );
+                exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, sal_True );
                 if( bAutoStyles )
                     i++;
                 else if( pFrameTextFrameIdxs->Count() != nOldCount )
@@ -1341,6 +1391,211 @@ void XMLTextParagraphExport::exportFrameFrames(
                 i++;
         }
     }
+}
+
+// bookmarks, reference marks (and TOC marks) are the same except for the
+// element names. We use the same method for export and it an array with
+// the proper element names
+static const enum XMLTokenEnum lcl_XmlReferenceElements[] = {
+    XML_REFERENCE_MARK, XML_REFERENCE_MARK_START, XML_REFERENCE_MARK_END };
+static const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
+    XML_BOOKMARK, XML_BOOKMARK_START, XML_BOOKMARK_END };
+
+// This function replaces the text portion iteration during auto style
+// collection.
+bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgress )
+{
+    GetExport().GetShapeExport(); // make sure the graphics styles family is added
+
+    const sal_Bool bAutoStyles = sal_True;
+    const sal_Bool bExportContent = sal_False;
+
+    // Export AutoStyles:
+    Reference< XAutoStylesSupplier > xAutoStylesSupp( GetExport().GetModel(), UNO_QUERY );
+    if ( xAutoStylesSupp.is() )
+    {
+        Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
+        OUString sName;
+        sal_uInt16 nFamily;
+
+        for ( int i = 0; i < 3; ++i )
+        {
+            if ( 0 == i )
+            {
+                sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterStyles" ) );
+                nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
+            }
+            else if ( 1 == i )
+            {
+                sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "RubyStyles" ) );
+                nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
+            }
+            else
+            {
+                sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
+                nFamily = XML_STYLE_FAMILY_TEXT_PARAGRAPH;
+            }
+
+            Any aAny = xAutoStyleFamilies->getByName( sName );
+            Reference< XAutoStyleFamily > xAutoStyles = *(Reference<XAutoStyleFamily>*)aAny.getValue();
+            Reference < XEnumeration > xAutoStylesEnum( xAutoStyles->createEnumeration() );
+
+            while ( xAutoStylesEnum->hasMoreElements() )
+            {
+                aAny = xAutoStylesEnum->nextElement();
+                Reference< XAutoStyle > xAutoStyle = *(Reference<XAutoStyle>*)aAny.getValue();
+                Reference < XPropertySet > xPSet( xAutoStyle, uno::UNO_QUERY );
+                Add( nFamily, xPSet, 0, true );
+            }
+        }
+    }
+
+    // Export Field AutoStyles:
+    Reference< XTextFieldsSupplier > xTextFieldsSupp( GetExport().GetModel(), UNO_QUERY );
+    if ( xTextFieldsSupp.is() )
+    {
+        Reference< XEnumerationAccess > xTextFields = xTextFieldsSupp->getTextFields();
+        Reference < XEnumeration > xTextFieldsEnum( xTextFields->createEnumeration() );
+
+        while ( xTextFieldsEnum->hasMoreElements() )
+        {
+            Any aAny = xTextFieldsEnum->nextElement();
+            Reference< XTextField > xTextField = *(Reference<XTextField>*)aAny.getValue();
+            exportTextField( xTextField->getAnchor(), bAutoStyles );
+        }
+    }
+
+    // Export text frames:
+    sal_Int32 nCount = 0;
+    if ( xTextFrames.is() )
+    {
+        nCount = xTextFrames->getCount();
+        for( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            Any aAny = xTextFrames->getByIndex( i );
+            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
+            if ( xTxtCntnt.is() )
+                exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, bExportContent, 0 );
+        }
+    }
+
+    // Export graphic objects:
+    if ( xGraphics.is() )
+    {
+        nCount = xGraphics->getCount();
+        for( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            Any aAny = xGraphics->getByIndex( i );
+            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
+            if ( xTxtCntnt.is() )
+                exportTextGraphic( xTxtCntnt, sal_True, 0 );
+        }
+    }
+
+    // Export embedded objects:
+    if ( xEmbeddeds.is() )
+    {
+        nCount = xEmbeddeds->getCount();
+        for( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            Any aAny = xEmbeddeds->getByIndex( i );
+            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
+            if ( xTxtCntnt.is() )
+                exportTextEmbedded( xTxtCntnt, sal_True, 0 );
+        }
+    }
+
+    // Export shapes:
+    if ( xShapes.is() )
+    {
+        nCount = xShapes->getCount();
+        for( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            Any aAny( xShapes->getByIndex( i ) );
+            Reference < XTextContent > xTxtCntnt( aAny, UNO_QUERY );
+            if ( xTxtCntnt.is() )
+            {
+                Reference<XServiceInfo> xServiceInfo( xTxtCntnt, UNO_QUERY );
+                if( xServiceInfo->supportsService( sShapeService ) )
+                       exportShape( xTxtCntnt, sal_True, 0 );
+            }
+        }
+    }
+
+    // AutoStyles for sections
+    Reference< XTextSectionsSupplier > xSectionsSupp( GetExport().GetModel(), UNO_QUERY );
+    if ( xSectionsSupp.is() )
+    {
+        Reference< XIndexAccess > xSections( xSectionsSupp->getTextSections(), UNO_QUERY );
+        if ( xSections.is() )
+        {
+            nCount = xSections->getCount();
+            for( sal_Int32 i = 0; i < nCount; ++i )
+            {
+                Any aAny = xSections->getByIndex( i );
+                Reference< XTextSection > xSection = *(Reference<XTextSection>*)aAny.getValue();
+                Reference < XPropertySet > xPSet( xSection, uno::UNO_QUERY );
+                Add( XML_STYLE_FAMILY_TEXT_SECTION, xPSet );
+            }
+        }
+    }
+
+    // AutoStyles for tables (Note: suppress autostyle collection for paragraphs in exportTable)
+    Reference< XTextTablesSupplier > xTablesSupp( GetExport().GetModel(), UNO_QUERY );
+    if ( xTablesSupp.is() )
+    {
+        Reference< XIndexAccess > xTables( xTablesSupp->getTextTables(), UNO_QUERY );
+        if ( xTables.is() )
+        {
+            nCount = xTables->getCount();
+            for( sal_Int32 i = 0; i < nCount; ++i )
+            {
+                Any aAny = xTables->getByIndex( i );
+                Reference< XTextTable > xTable = *(Reference<XTextTable>*)aAny.getValue();
+                Reference < XTextContent > xTextContent( xTable, uno::UNO_QUERY );
+                exportTable( xTextContent, sal_True, sal_True );
+            }
+        }
+    }
+
+    Reference< XNumberingRulesSupplier > xNumberingRulesSupp( GetExport().GetModel(), UNO_QUERY );
+    if ( xNumberingRulesSupp.is() )
+    {
+        Reference< XIndexAccess > xNumberingRules = xNumberingRulesSupp->getNumberingRules();
+        nCount = xNumberingRules->getCount();
+        for( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            Reference< XIndexReplace > xNumRule( xNumberingRules->getByIndex( i ), UNO_QUERY );
+            if( xNumRule.is() && xNumRule->getCount() )
+            {
+                Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
+                OUString sName;
+                if( xNamed.is() )
+                    sName = xNamed->getName();
+                sal_Bool bAdd = !sName.getLength();
+                if( !bAdd )
+                {
+                    Reference < XPropertySet > xNumPropSet( xNumRule,
+                                                            UNO_QUERY );
+                    OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                    if( xNumPropSet.is() &&
+                        xNumPropSet->getPropertySetInfo()
+                                   ->hasPropertyByName( sIsAutomatic ) )
+                    {
+                        bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                    }
+                    else
+                    {
+                        bAdd = sal_True;
+                    }
+                }
+                if( bAdd )
+                    pListAutoPool->Add( xNumRule );
+            }
+        }
+    }
+
+    return true;
 }
 
 void XMLTextParagraphExport::exportText(
@@ -1439,7 +1694,7 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         sal_Bool bIsProgress,
         sal_Bool bExportParagraph,
         const Reference < XPropertySet > *pRangePropSet,
-        sal_Bool bExportLevels)
+        sal_Bool bExportLevels )
 {
     DBG_ASSERT( rContEnum.is(), "No enumeration to export!" );
     sal_Bool bHasMoreElements = rContEnum->hasMoreElements();
@@ -1554,7 +1809,7 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         }
         else if( xServiceInfo->supportsService( sTextFrameService ) )
         {
-            exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, pRangePropSet );
+            exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, sal_True, pRangePropSet );
         }
         else if( xServiceInfo->supportsService( sTextGraphicService ) )
         {
@@ -1604,7 +1859,7 @@ void XMLTextParagraphExport::exportParagraph(
     if( bIsProgress )
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
-            pProgress->SetValue( pProgress->GetValue()+1 );
+        pProgress->SetValue( pProgress->GetValue()+1 );
     }
 
     // get property set or multi property set and initialize helper
@@ -1761,14 +2016,16 @@ void XMLTextParagraphExport::exportParagraph(
     }
 
     Reference < XEnumerationAccess > xEA( rTextContent, UNO_QUERY );
-    Reference < XEnumeration > xTextEnum(xEA->createEnumeration());
+    Reference < XEnumeration > xTextEnum;
+    xTextEnum = xEA->createEnumeration();
+    const sal_Bool bHasPortions = xTextEnum.is();
 
     Reference < XEnumeration> xContentEnum;
     Reference < XContentEnumerationAccess > xCEA( rTextContent, UNO_QUERY );
     if( xCEA.is() )
         xContentEnum.set(xCEA->createContentEnumeration( sTextContentService ));
-    sal_Bool bHasContentEnum = xContentEnum.is() &&
-                                  xContentEnum->hasMoreElements();
+    const sal_Bool bHasContentEnum = xContentEnum.is() &&
+                                        xContentEnum->hasMoreElements();
 
     Reference < XTextSection > xSection;
     if( bHasContentEnum )
@@ -1799,8 +2056,9 @@ void XMLTextParagraphExport::exportParagraph(
         if( bHasContentEnum )
             bPrevCharIsSpace = !exportTextContentEnumeration(
                                     xContentEnum, bAutoStyles, xSection,
-                                    bIsProgress );
-        exportTextRangeEnumeration( xTextEnum, bAutoStyles, bIsProgress );
+                                    bIsProgress, sal_True, 0, sal_True );
+        if ( bHasPortions )
+            exportTextRangeEnumeration( xTextEnum, bAutoStyles, bIsProgress );
     }
     else
     {
@@ -1817,15 +2075,6 @@ void XMLTextParagraphExport::exportParagraph(
                                      bPrevCharIsSpace );
     }
 }
-
-// bookmarks, reference marks (and TOC marks) are the same except for the
-// element names. We use the same method for export and it an array with
-// the proper element names
-static const enum XMLTokenEnum lcl_XmlReferenceElements[] = {
-    XML_REFERENCE_MARK, XML_REFERENCE_MARK_START, XML_REFERENCE_MARK_END };
-static const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
-    XML_BOOKMARK, XML_BOOKMARK_START, XML_BOOKMARK_END };
-
 
 void XMLTextParagraphExport::exportTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
@@ -2231,6 +2480,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
         FrameType eType,
         sal_Bool bAutoStyles,
         sal_Bool bIsProgress,
+        sal_Bool bExportContent,
         const Reference < XPropertySet > *pRangePropSet)
 {
     Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
@@ -2253,11 +2503,13 @@ void XMLTextParagraphExport::exportAnyTextFrame(
         case FT_TEXT:
             {
                 // frame bound frames
-                Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
-                Reference < XText > xTxt(xTxtFrame->getText());
-                collectFramesBoundToFrameAutoStyles( xTxtFrame, bIsProgress );
-
-                exportText( xTxt, bAutoStyles, bIsProgress, sal_True );
+                if ( bExportContent )
+                {
+                    Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
+                    Reference < XText > xTxt(xTxtFrame->getText());
+                    collectFramesBoundToFrameAutoStyles( xTxtFrame, bIsProgress );
+                    exportText( xTxt, bAutoStyles, bIsProgress, sal_True );
+                }
             }
             break;
         case FT_SHAPE:
@@ -2287,7 +2539,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
             XMLTextCharStyleNamesElementExport aCharStylesExport(
                 GetExport(), bIsUICharStyle &&
                              aCharStyleNamesPropInfoCache.hasProperty(
-                                            *pRangePropSet ),
+                                            *pRangePropSet ), sal_False,
                 *pRangePropSet, sCharStyleNames );
 
             if( sStyle.getLength() )
@@ -2638,6 +2890,130 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
     OUString sHRef, sName, sTargetFrame, sUStyleName, sVStyleName;
     sal_Bool bServerMap = sal_False;
 
+/*    bool bHyperLinkURL = false;
+    bool bHyperLinkName = false;
+    bool bHyperLinkTarget = false;
+    bool bServer = false;
+    bool bUnvisitedCharStyleName = false;
+    bool bVisitedCharStyleName = false;
+
+    const Reference< XMultiPropertySet > xMultiPropertySet( rPropSet, UNO_QUERY );
+    if ( xMultiPropertySet.is() )
+    {
+    sal_uInt32 nCount = 0;
+    Sequence< OUString > aPropertyNames( 6 );
+      OUString* pArray = aPropertyNames.getArray();
+
+    if ( rPropSetInfo->hasPropertyByName( sServerMap ) )
+    {
+        bServer = true;
+        pArray[ nCount++ ] = sServerMap;
+    }
+    if ( rPropSetInfo->hasPropertyByName( sHyperLinkName ) )
+    {
+        bHyperLinkName = true;
+        pArray[ nCount++ ] = sHyperLinkName;
+    }
+    if ( rPropSetInfo->hasPropertyByName( sHyperLinkTarget ) )
+    {
+        bHyperLinkTarget = true;
+        pArray[ nCount++ ] = sHyperLinkTarget;
+    }
+    if ( rPropSetInfo->hasPropertyByName( sHyperLinkURL ) )
+    {
+        bHyperLinkURL = true;
+        pArray[ nCount++ ] = sHyperLinkURL;
+    }
+    if ( rPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) )
+    {
+        bUnvisitedCharStyleName = true;
+        pArray[ nCount++ ] = sUnvisitedCharStyleName;
+    }
+    if ( rPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) )
+    {
+        bVisitedCharStyleName = true;
+        pArray[ nCount++ ] = sVisitedCharStyleName;
+    }
+
+    aPropertyNames.realloc( nCount );
+
+    if ( nCount )
+    {
+        Sequence< PropertyState > aPropertyStates( nCount );
+          PropertyState* pStateArray = aPropertyStates.getArray();
+
+        if ( rPropState.is() )
+            aPropertyStates = rPropState->getPropertyStates( aPropertyNames );
+
+        Sequence< Any > aPropertyValues ( xMultiPropertySet->getPropertyValues( aPropertyNames ) );
+        Any* pValueArray = aPropertyValues.getArray();
+
+        sal_uInt32 nIdx = 0;
+
+        if ( bServer )
+        {
+            if ( !rPropState.is() || PropertyState_DIRECT_VALUE == pStateArray[ nIdx ] )
+            {
+                bServerMap = *(sal_Bool *)pValueArray[ nIdx ].getValue();
+                if( bServerMap  )
+                    bExport = sal_True;
+            }
+            ++nIdx;
+        }
+        if ( bHyperLinkName )
+        {
+            if ( !rPropState.is() || PropertyState_DIRECT_VALUE == pStateArray[ nIdx ] )
+            {
+                pValueArray[ nIdx ] >>= sName;
+                if( sName.getLength() > 0 )
+                    bExport = sal_True;
+            }
+            ++nIdx;
+        }
+        if ( bHyperLinkTarget )
+        {
+            if ( !rPropState.is() || PropertyState_DIRECT_VALUE == pStateArray[ nIdx ] )
+            {
+                pValueArray[ nIdx ] >>= sTargetFrame;
+                if( sTargetFrame.getLength() )
+                    bExport = sal_True;
+            }
+            ++nIdx;
+        }
+        if ( bHyperLinkURL )
+        {
+            if ( !rPropState.is() || PropertyState_DIRECT_VALUE == pStateArray[ nIdx ] )
+            {
+                pValueArray[ nIdx ] >>= sHRef;
+                if( sHRef.getLength() > 0 )
+                    bExport = sal_True;
+            }
+            ++nIdx;
+        }
+        if ( bUnvisitedCharStyleName )
+        {
+            if ( !rPropState.is() || PropertyState_DIRECT_VALUE == pStateArray[ nIdx ] )
+            {
+                pValueArray[ nIdx ] >>= sUStyleName;
+                if( sUStyleName.getLength() )
+                    bExport = sal_True;
+            }
+            ++nIdx;
+        }
+        if ( bVisitedCharStyleName )
+        {
+            if ( !rPropState.is() || PropertyState_DIRECT_VALUE == pStateArray[ nIdx ] )
+            {
+                pValueArray[ nIdx ] >>= sVStyleName;
+                if( sVStyleName.getLength() )
+                    bExport = sal_True;
+            }
+            ++nIdx;
+        }
+    }
+    }
+    else
+    {*/
     if( rPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
                     rPropState->getPropertyState( sHyperLinkURL ) ) )
@@ -2739,9 +3115,13 @@ void XMLTextParagraphExport::exportTextRange(
     }
     else
     {
-        sal_Bool bHyperlink = sal_False, bIsUICharStyle = sal_False;
+        sal_Bool bHyperlink = sal_False;
+        sal_Bool bIsUICharStyle = sal_False;
+        sal_Bool bHasAutoStyle = sal_False;
+
         OUString sStyle(FindTextStyleAndHyperlink( xPropSet, bHyperlink,
-                                                        bIsUICharStyle ));
+                                                        bIsUICharStyle, bHasAutoStyle ));
+
         Reference < XPropertySetInfo > xPropSetInfo;
         if( bHyperlink )
         {
@@ -2767,7 +3147,7 @@ void XMLTextParagraphExport::exportTextRange(
             XMLTextCharStyleNamesElementExport aCharStylesExport(
                 GetExport(), bIsUICharStyle &&
                              aCharStyleNamesPropInfoCache.hasProperty(
-                                                    xPropSet, xPropSetInfo ),
+                                                    xPropSet, xPropSetInfo ), bHasAutoStyle,
                 xPropSet, sCharStyleNames );
 
             OUString aText(rTextRange->getString());
