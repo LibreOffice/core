@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:46:59 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,7 @@ using namespace ::svxform;
 using namespace ::connectivity::simple;
 
 //  ------------------------------------------------------------------------------
-void displayException(const Any& _rExcept, Window* _pParent = NULL)
+void displayException(const Any& _rExcept, Window* _pParent)
 {
     try
     {
@@ -281,7 +281,7 @@ void displayException(const Any& _rExcept, Window* _pParent = NULL)
         Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
 
         Sequence< Any > aArgs(2);
-        aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, makeAny(_rExcept), PropertyState_DIRECT_VALUE);
+        aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, _rExcept, PropertyState_DIRECT_VALUE);
         aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
 
         static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
