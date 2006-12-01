@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:58:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 /** === end UNO includes === **/
 
 #include <memory>
@@ -85,6 +88,12 @@ namespace comphelper
         */
         NamedValueCollection( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
 
+        /** constructs a collection
+            @param _rArguments
+                a sequence of NamedValue's
+        */
+        NamedValueCollection( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments );
+
         ~NamedValueCollection();
 
         inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments )
@@ -93,6 +102,11 @@ namespace comphelper
         }
 
         inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments )
+        {
+            impl_assign( _rArguments );
+        }
+
+        inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments )
         {
             impl_assign( _rArguments );
         }
@@ -161,6 +175,7 @@ namespace comphelper
     private:
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
+        void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments );
 
         bool    getIfExists_ensureType(
                     const ::rtl::OUString& _rValueName,
