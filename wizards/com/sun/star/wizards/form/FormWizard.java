@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:19:41 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,8 @@ public class FormWizard extends WizardDialog{
 
 
     public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+
+    String ConnectStr = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
     PropertyValue[] curproperties = null;
     try {
         XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
