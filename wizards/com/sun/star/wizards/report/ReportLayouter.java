@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportLayouter.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:25:58 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ public class ReportLayouter {
     }
 
     public void initialize(String _defaultTemplatePath) {
-      CurReportDocument.xTextDocument.lockControllers();
+        CurReportDocument.xTextDocument.lockControllers();
         CurReportDocument.setupRecordSection(_defaultTemplatePath);
         if (CurUnoDialog.getControlProperty("txtTitle", "Text").equals("")) {
             String[] sCommandNames = CurReportDocument.CurDBMetaData.getIncludedCommandNames();
