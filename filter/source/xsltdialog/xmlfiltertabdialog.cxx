@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:48:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:35:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,7 +356,7 @@ filter_info_impl* XMLFilterTabDialog::getNewFilterInfo() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( XMLFilterTabDialog, CancelHdl, Button*, pButton )
+IMPL_LINK( XMLFilterTabDialog, CancelHdl, Button*, /* pButton */ )
 {
     Close();
     return 0;
@@ -385,7 +385,7 @@ IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, /* pTabCtrl */ )
 {
     return TRUE;
 }
