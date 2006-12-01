@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:37:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,17 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_XAUTOSTYLESSUPPLIER_HPP_
+#include <com/sun/star/style/XAutoStylesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XLINKTARGETSUPPLIER_HPP_
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XREDLINESSUPPLIER_HPP_
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGRULESSUPPLIER_HPP_
+#include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XFOOTNOTESSUPPLIER_HPP_
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -165,18 +171,18 @@
 #include <RefreshListenerContainer.hxx>
 #endif
 
-#define __IFC27 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
-Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27
+#define __IFC29 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
+Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27, Ifc28, Ifc29
 
-#define __CLASS_IFC27 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
+#define __CLASS_IFC29 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
 class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12, class Ifc13, class Ifc14, class Ifc15, class Ifc16, \
 class Ifc17, class Ifc18, class Ifc19, class Ifc20, class Ifc21, class Ifc22, class Ifc23, class Ifc24,\
-class Ifc25, class Ifc26, class Ifc27
+class Ifc25, class Ifc26, class Ifc27, class Ifc28, class Ifc29
 
-#define __PUBLIC_IFC27 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
+#define __PUBLIC_IFC29 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
 public Ifc13, public Ifc14, public Ifc15, public Ifc16, public Ifc17, public Ifc18, \
 public Ifc19, public Ifc20, public Ifc21, public Ifc22, public Ifc23 , public Ifc24, \
-public Ifc25, public Ifc26, public Ifc27
+public Ifc25, public Ifc26, public Ifc27, public Ifc28, public Ifc29
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
 #include <cppuhelper/implbase_ex.hxx>
@@ -185,7 +191,7 @@ public Ifc25, public Ifc26, public Ifc27
 #ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 #include <cppuhelper/implbase_ex_pre.hxx>
 #endif
-#define __IFC_EX_TYPE_INIT27( class_cast ) \
+#define __IFC_EX_TYPE_INIT29( class_cast ) \
     __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
     __IFC_EX_TYPE_INIT( class_cast, 3 ), __IFC_EX_TYPE_INIT( class_cast, 4 ), \
     __IFC_EX_TYPE_INIT( class_cast, 5 ), __IFC_EX_TYPE_INIT( class_cast, 6 ), \
@@ -199,12 +205,13 @@ public Ifc25, public Ifc26, public Ifc27
     __IFC_EX_TYPE_INIT( class_cast, 21 ), __IFC_EX_TYPE_INIT( class_cast, 22 ), \
     __IFC_EX_TYPE_INIT( class_cast, 23 ), __IFC_EX_TYPE_INIT( class_cast, 24 ), \
     __IFC_EX_TYPE_INIT( class_cast, 25 ), __IFC_EX_TYPE_INIT( class_cast, 26 ), \
-    __IFC_EX_TYPE_INIT( class_cast, 27 )
+    __IFC_EX_TYPE_INIT( class_cast, 27 ), __IFC_EX_TYPE_INIT( class_cast, 28 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 29 )
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_POST_HXX_
 #include <cppuhelper/implbase_ex_post.hxx>
 #endif
-__DEF_IMPLHELPER_EX( 27 )
+__DEF_IMPLHELPER_EX( 29 )
 
 class SwDoc;
 class SwDocShell;
@@ -223,11 +230,12 @@ SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4);
  ******************************************************************************/
 
 
-typedef cppu::WeakImplHelper27
+typedef cppu::WeakImplHelper29
 <
     ::com::sun::star::text::XTextDocument,
     ::com::sun::star::text::XLineNumberingProperties,
     ::com::sun::star::text::XChapterNumberingSupplier,
+    ::com::sun::star::text::XNumberingRulesSupplier,
     ::com::sun::star::text::XFootnotesSupplier,
     ::com::sun::star::text::XEndnotesSupplier,
     ::com::sun::star::util::XReplaceable,
@@ -241,6 +249,7 @@ typedef cppu::WeakImplHelper27
     ::com::sun::star::text::XTextEmbeddedObjectsSupplier,
     ::com::sun::star::text::XTextFieldsSupplier,
     ::com::sun::star::style::XStyleFamiliesSupplier,
+    ::com::sun::star::style::XAutoStylesSupplier,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XDrawPageSupplier,
     ::com::sun::star::text::XDocumentIndexesSupplier,
@@ -274,6 +283,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     SwXBodyText*            pBodyText;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             xNumFmtAgg;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > *     pxXNumberingRules;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > *     pxXFootnotes;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *        pxXFootnoteSettings;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > *     pxXEndnotes;
@@ -289,6 +299,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXGraphicObjects;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXEmbeddedObjects;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXStyleFamilies;
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyles > *  pxXAutoStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > *        pxXChapterNumbering;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > *     pxXDocumentIndexes;
 
@@ -362,6 +373,9 @@ public:
     //XChapterNumberingSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >  SAL_CALL getChapterNumberingRules(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    //XNumberingRulesSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getNumberingRules() throw (::com::sun::star::uno::RuntimeException);
+
     //XFootnotesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  SAL_CALL getFootnotes(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SAL_CALL getFootnoteSettings(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -415,6 +429,9 @@ public:
 
     //XStyleFamiliesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  SAL_CALL getStyleFamilies(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XAutoStylesSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyles > SAL_CALL getAutoStyles(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //XMultiServiceFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createInstance(const rtl::OUString& ServiceSpecifier)
