@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:06:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,6 @@ namespace dbaui
         String      GetEntryText( SvLBoxEntry* _pEntry ) const;
 
         // is called when a table or a query was selected
-        DECL_LINK( OnEntryDoubleClicked, SvLBoxEntry* );
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
 
