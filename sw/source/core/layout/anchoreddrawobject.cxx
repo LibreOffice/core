@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:12:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -878,20 +878,21 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
         }
         // <--
 
-        const SwFmtHoriOrient& rHori = GetFrmFmt().GetHoriOrient();
-        GetFrmFmt().SetAttr( SwFmtHoriOrient( nHoriPos,
-                                              rHori.GetHoriOrient(),
-                                              rHori.GetRelationOrient() ) );
+        // --> OD 2006-11-10 #i71182#
+        // only change position - do not lose other attributes
+        SwFmtHoriOrient aHori( GetFrmFmt().GetHoriOrient() );
+        aHori.SetPos( nHoriPos );
+        GetFrmFmt().SetAttr( aHori );
 
-        const SwFmtVertOrient& rVert = GetFrmFmt().GetVertOrient();
-        if ( rVert.GetRelationOrient() == REL_CHAR ||
-             rVert.GetRelationOrient() == REL_VERT_LINE )
+        SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
+        if ( aVert.GetRelationOrient() == REL_CHAR ||
+             aVert.GetRelationOrient() == REL_VERT_LINE )
         {
             nVertPos = -nVertPos;
         }
-        GetFrmFmt().SetAttr( SwFmtVertOrient( nVertPos,
-                                              rVert.GetVertOrient(),
-                                              rVert.GetRelationOrient() ) );
+        aVert.SetPos( nVertPos );
+        GetFrmFmt().SetAttr( aVert );
+        // <--
 
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
         GetFrmFmt().SetPositionLayoutDir(
