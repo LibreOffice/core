@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:48:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,8 @@ SwTxtHardBlank::SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStart )
 SwTxtCharFmt::SwTxtCharFmt( const SwFmtCharFmt& rAttr,
                     xub_StrLen nStart, xub_StrLen nEnd )
     : SwTxtAttrEnd( rAttr, nStart, nEnd ),
-    pMyTxtNd( 0 )
+    pMyTxtNd( 0 ),
+    mnSortNumber( 0 )
 {
     ((SwFmtCharFmt&)rAttr).pTxtAttr = this;
     SetCharFmtAttr( TRUE );
