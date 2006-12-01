@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NativeThreadPool.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:01:26 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,9 @@ final class NativeThreadPool implements IThreadPool {
     }
 
     public void putJob(Job job) {
-        putJob(pool, job.getThreadId().getBytes(), job,
-               job.getOperation() != null, !job.isSynchron());
+        putJob(
+            pool, job.getThreadId().getBytes(), job, job.isRequest(),
+            job.isRequest() && !job.isSynchronous());
     }
 
     public void dispose(Throwable throwable) {
