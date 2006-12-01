@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg_test.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:43:51 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 // starting the executable:
 // -env:UNO_CFG_URL=local;<absolute_path>..\\..\\test\\cfg_data;<absolute_path>\\cfg_update
 // -env:UNO_TYPES=cpputest.rdb
+
+#include <sal/main.h>
 
 #include <stdio.h>
 
@@ -117,14 +119,14 @@ ServiceImpl0::ServiceImpl0( Reference< XComponentContext > const & xContext ) SA
     // service properties
     OSL_VERIFY( m_xContext->getValueByName(
         OUSTR("/services/com.sun.star.bootstrap.TestComponent0/context-properties/serviceprop0") ) >>= n );
-    OSL_VERIFY( n = 13 );
+    OSL_VERIFY( n == 13 );
     OSL_VERIFY( m_xContext->getValueByName(
         OUSTR("/services/com.sun.star.bootstrap.TestComponent0/context-properties/serviceprop1") ) >>= val );
     OSL_VERIFY( val.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("value of serviceprop1") ) );
     // impl properties
     OSL_VERIFY( m_xContext->getValueByName(
         OUSTR("/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop0") ) >>= n );
-    OSL_VERIFY( n = 15 );
+    OSL_VERIFY( n == 15 );
     OSL_VERIFY( m_xContext->getValueByName(
         OUSTR("/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop1") ) >>= val );
     OSL_VERIFY( val.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("value of implprop1") ) );
@@ -233,7 +235,7 @@ extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -258,7 +260,7 @@ void * SAL_CALL component_getFactory(
 //##################################################################################################
 //##################################################################################################
 
-int SAL_CALL main( int argc, char const * argv[] )
+SAL_IMPLEMENT_MAIN()
 {
     try
     {
