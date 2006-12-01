@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtertracer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:10:39 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,7 @@ class FilterTracer : public cppu::WeakImplHelper4
 >
 {
     REF( NMSP_LANG::XMultiServiceFactory )  xFact;
+    SvStream*       mpStream;
 
     sal_Int32       mnLogLevel;
     rtl::OUString   msClassFilter;
@@ -175,7 +176,6 @@ class FilterTracer : public cppu::WeakImplHelper4
     rtl::OUString   msMessageFilter;
     rtl::OUString   msURL;
 
-    SvStream*       mpStream;
     REF( NMSP_IO::XOutputStream )       mxOutputStream;
     REF( NMSP_SAX::XDocumentHandler)    mxDocumentHandler;
 
