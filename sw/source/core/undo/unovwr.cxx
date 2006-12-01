@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:52:59 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,7 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
     if( pHistory )
     {
         if( pTxtNd->GetpSwpHints() )
-            pTxtNd->ClearSwpHintsArr( FALSE, FALSE );
+            pTxtNd->ClearSwpHintsArr( false );
         pHistory->TmpRollback( pDoc, 0, FALSE );
     }
 
@@ -539,7 +539,7 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         if( pHistory )
         {
             if( pTNd->GetpSwpHints() )
-                pTNd->ClearSwpHintsArr( FALSE, FALSE );
+                pTNd->ClearSwpHintsArr( false );
             pHistory->TmpRollback( &rDoc, 0, FALSE );
             pHistory->SetTmpEnd( pHistory->Count() );
         }
