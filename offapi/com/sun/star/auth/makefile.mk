@@ -1,5 +1,5 @@
 PRJ = ..$/..$/..$/..
-PRJNAME = auth
+PRJNAME=offapi
 
 TARGET = cssauth
 PACKAGE = com$/sun$/star$/auth
