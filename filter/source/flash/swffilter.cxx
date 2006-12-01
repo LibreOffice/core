@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swffilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:40:10 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ void SAL_CALL OslOutputStreamWrapper::writeBytes( const ::com::sun::star::uno::S
         case osl::File::E_NOSPC:    // No space left on device
         case osl::File::E_NXIO:        // No such device or address
             throw com::sun::star::io::IOException();    // TODO: Better error handling
+        default: break;
         }
 
         uBytesToWrite -= uBytesWritten;
@@ -177,6 +178,7 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::i
     case osl::File::E_NOSPC:    // No space left on device
     case osl::File::E_IO:        // I/O error
         throw com::sun::star::io::IOException();    // TODO: Better error handling
+    default: break;
     }
 }
 
@@ -236,14 +238,14 @@ OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > 
 
     // AS: If suffix is "o" then the last paramter is true (for exporting objects).
     Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
-    sal_uInt32 nCached = aFlashExporter.exportBackgrounds( xDrawPage, xOutputStreamWrap, nPage, *suffix == 'o' );
+    sal_uInt16 nCached = aFlashExporter.exportBackgrounds( xDrawPage, xOutputStreamWrap, sal::static_int_cast<sal_uInt16>( nPage ), *suffix == 'o' );
     aFlashExporter.Flush();
     xOutputStreamWrap.clear();
 
     if (nCached != nPage)
     {
         osl_removeFile(fullpath.pData);
-        if (-1 == nCached)
+        if ( 0xffff == nCached )
             return STR("NULL");
         else
             return STR("slide") + VAL(nCached+1) + STR(suffix) + STR(".swf");
@@ -360,7 +362,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
 
     fullpath = swfdirpath + STR("/backgroundconfig.txt");
 
-    oslFileHandle xBackgroundConfig;
+    oslFileHandle xBackgroundConfig( 0 );
 
     // AS: Only export the background config if we're exporting all of the pages, otherwise we'll
     //  screw it up.
@@ -407,7 +409,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
             fullpath = swfdirpath + STR("/slide") + VAL(nPage+1) + STR("p.swf");
 
             Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
-            sal_Bool ret = aFlashExporter.exportSlides( xDrawPage, xOutputStreamWrap, nPage );
+            sal_Bool ret = aFlashExporter.exportSlides( xDrawPage, xOutputStreamWrap, sal::static_int_cast<sal_uInt16>( nPage ) );
             aFlashExporter.Flush();
             xOutputStreamWrap.clear();
 
@@ -491,7 +493,7 @@ void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno:
 // -----------------------------------------------------------------------------
 
 // XInitialization
-void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
     throw (Exception, RuntimeException)
 {
 }
