@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:58:20 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
 #endif
+#include <istyleaccess.hxx>
 #ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
 #endif
@@ -142,6 +143,7 @@
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
 #endif
+#include <fmtautofmt.hxx>
 #ifndef _CNTFRM_HXX //autogen
 #include <cntfrm.hxx>
 #endif
@@ -504,6 +506,29 @@ void lcl_setCharStyle(SwDoc* pDoc, const uno::Any aValue, SfxItemSet& rSet)
 
     }
 };
+/* -----------------08.06.06 10:43-------------------
+ *
+ * --------------------------------------------------*/
+void lcl_setAutoStyle(IStyleAccess& rStyleAccess, const uno::Any aValue, SfxItemSet& rSet, bool bPara )
+     throw (lang::IllegalArgumentException)
+{
+    OUString uStyle;
+    aValue >>= uStyle;
+    String sStyle;
+    StylePool::SfxItemSet_Pointer_t pStyle = bPara ?
+        rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_PARA ):
+        rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_CHAR );
+    if(pStyle.get())
+    {
+        SwFmtAutoFmt aFmt( bPara ? RES_AUTO_STYLE : RES_TXTATR_AUTOFMT );
+        aFmt.SetStyleHandle( pStyle );
+        rSet.Put(aFmt);
+    }
+    else
+    {
+         throw lang::IllegalArgumentException();
+    }
+};
 /* -----------------30.06.98 08:46-------------------
  *
  * --------------------------------------------------*/
@@ -632,6 +657,9 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             case RES_TXTATR_CHARFMT:
                 lcl_setCharStyle(rPam.GetDoc(), aValue, rItemSet );
             break;
+            case RES_TXTATR_AUTOFMT:
+                lcl_setAutoStyle(rPam.GetDoc()->GetIStyleAccess(), aValue, rItemSet, false );
+            break;
             case FN_UNO_CHARFMT_SEQUENCE:
             {
                 Sequence<OUString> aCharStyles;
@@ -656,6 +684,9 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             break;
             case FN_UNO_PARA_STYLE :
                 lcl_SetTxtFmtColl(aValue, rPam);
+            break;
+            case RES_AUTO_STYLE:
+                lcl_setAutoStyle(rPam.GetDoc()->GetIStyleAccess(), aValue, rItemSet, true );
             break;
             case FN_UNO_PAGE_STYLE :
             break;
