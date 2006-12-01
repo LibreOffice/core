@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:04:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,25 +418,25 @@ public final class TypeDescription implements ITypeDescription {
             superMethodDescriptions = new IMethodDescription[0];
             methodDescriptions = new IMethodDescription[] {
                 new MethodDescription(
-                    "queryInterface", 0, false,
-                    new ITypeDescription[] { getDefinitely(Type.TYPE) },
+                    "queryInterface", MethodDescription.ID_QUERY_INTERFACE,
+                    false, new ITypeDescription[] { getDefinitely(Type.TYPE) },
                     new ITypeDescription[] { null }, getDefinitely(Type.ANY),
                     null),
                 new MethodDescription(
-                    "acquire", 1, true, new ITypeDescription[0],
-                    new ITypeDescription[0], getDefinitely(Type.VOID), null),
+                    "acquire", MethodDescription.ID_ACQUIRE, true,
+                    new ITypeDescription[0], new ITypeDescription[0],
+                    getDefinitely(Type.VOID), null),
                 new MethodDescription(
-                    "release", 2, true, new ITypeDescription[0],
-                    new ITypeDescription[0], getDefinitely(Type.VOID), null) };
+                    "release", MethodDescription.ID_RELEASE, true,
+                    new ITypeDescription[0], new ITypeDescription[0],
+                    getDefinitely(Type.VOID), null) };
         } else {
             int methodOffset = 0;
             ArrayList superList = new ArrayList();
             for (int i = 0; i < superTypes.length; ++i) {
                 IMethodDescription[] ds = superTypes[i].getMethodDescriptions();
                 for (int j = 0; j < ds.length; ++j) {
-                    superList.add(
-                        new MethodDescription(
-                            (MethodDescription) ds[j], methodOffset++));
+                    superList.add(new MethodDescription(ds[j], methodOffset++));
                 }
             }
             superMethodDescriptions = (IMethodDescription[]) superList.toArray(
