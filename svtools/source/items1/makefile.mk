@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:07:38 $
+#   last change: $Author: rt $ $Date: 2006-12-01 15:24:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ SLOFILES=\
     $(SLO)$/itemset.obj	\
     $(SLO)$/lckbitem.obj	\
     $(SLO)$/poolio.obj	\
+    $(SLO)$/stylepool.obj	\
     $(SLO)$/poolitem.obj	\
     $(SLO)$/sfontitm.obj	\
     $(SLO)$/sitem.obj	    \
