@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:08:26 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,10 @@ final class Marshal {
             writeStringValue(found[0] ? null : objectId);
             write16Bit(index);
         }
+    }
+
+    public void writeInterface(XInterface object, Type type) {
+        writeObjectId((String) bridge.mapInterfaceTo(object, type));
     }
 
     public void writeThreadId(ThreadId threadId) {
@@ -353,7 +357,7 @@ final class Marshal {
     }
 
     private void writeInterfaceValue(TypeDescription type, XInterface value) {
-        writeObjectId((String) bridge.mapInterfaceTo(value, new Type(type)));
+        writeInterface(value, new Type(type));
     }
 
     private void write32Bit(int value) {
