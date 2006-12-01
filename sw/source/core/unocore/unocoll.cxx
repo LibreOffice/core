@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:55:46 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1550,6 +1550,60 @@ SwXBookmark*    SwXBookmarks::GetObject( SwBookmark& rBkm, SwDoc* pDoc )
 /******************************************************************
  *
  ******************************************************************/
+
+SwXNumberingRulesCollection::SwXNumberingRulesCollection( SwDoc* pDoc ) :
+    SwUnoCollection(pDoc)
+{
+}
+
+SwXNumberingRulesCollection::~SwXNumberingRulesCollection()
+{
+}
+
+sal_Int32 SwXNumberingRulesCollection::getCount(void) throw( uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw uno::RuntimeException();
+    return GetDoc()->GetNumRuleTbl().Count();
+}
+
+uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
+    throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    uno::Any aRet;
+    sal_uInt32 nCount = 0;
+    if(IsValid())
+    {
+        uno::Reference< XIndexReplace >  xRef;
+        if ( nIndex < GetDoc()->GetNumRuleTbl().Count() )
+        {
+            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[nIndex] );
+            aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
+        }
+
+        if(!xRef.is())
+            throw IndexOutOfBoundsException();
+    }
+    else
+        throw uno::RuntimeException();
+    return aRet;
+}
+
+uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType() throw(uno::RuntimeException)
+{
+    return ::getCppuType((uno::Reference<XIndexReplace>*)0);
+}
+
+sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw uno::RuntimeException();
+    return GetDoc()->GetNumRuleTbl().Count() > 0;
+}
+
 /* -----------------------------06.04.00 12:44--------------------------------
 
  ---------------------------------------------------------------------------*/
