@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.204 $
+#   $Revision: 1.205 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-30 08:54:01 $
+#   last change: $Author: hjs $ $Date: 2006-12-01 16:49:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,10 @@ wrapper_use_clean_sourcecheck=TRUE
 .IF "$(USE_SHELL)"!=""
 use_shell*=$(USE_SHELL)
 .ENDIF
+
+.IF "$(USE_PCH)"!=""
+ENABLE_PCH=TRUE
+.ENDIF			# "$(USE_PCH)"!=""
 
 .INCLUDE : unitools.mk
 

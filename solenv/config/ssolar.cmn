@@ -187,6 +187,7 @@ common
 		URD_ONLY
 		USE_MAPFILES
 		USE_NEW_SDK
+        USE_PCH
 		USE_SHELL
 		use_cygcp
 		use_shl_versions
