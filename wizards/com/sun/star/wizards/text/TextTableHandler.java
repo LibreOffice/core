@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextTableHandler.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:31:44 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,22 @@ public class TextTableHandler {
     public NumberFormatter getNumberFormatter(){
         return oNumberFormatter;
     }
+
+
+    public XTextTable getByName(String _sTableName){
+        XTextTable xTextTable = null;
+    try{
+        XNameAccess xAllTextTables = xTextTablesSupplier.getTextTables();
+        if (xAllTextTables.hasByName(_sTableName)){
+            Object oTable = xAllTextTables.getByName(_sTableName);
+            xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
+        }
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+    }
+        return xTextTable;
+    }
+
 
     public com.sun.star.text.XTextTable getlastTextTable() {
         try {
