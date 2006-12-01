@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:17:57 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:32:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     static String slblTables;
     public static String sBlindTextNote;
     public static boolean bCloseDocument;
+    public boolean bHasEscapeProcessing = true;
 
 
 
@@ -131,13 +132,13 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 CurDBCommandFieldSelection.setModified(false);
                 break;
             case SOTITLEPAGE:
-                CurTitlesComponent.initialize(CurReportDocument.CurDBMetaData.getFieldNames(), CurReportDocument.CurDBMetaData.getFieldTitleSet());
+        CurTitlesComponent.initialize(CurReportDocument.CurDBMetaData.getFieldNames(), CurReportDocument.CurDBMetaData.getFieldTitleSet());
                 break;
             case SOGROUPPAGE:
                 CurGroupFieldHandler.initialize();
                 break;
             case SOSORTPAGE:
-                CurSortingComponent.initialize(CurReportDocument.CurDBMetaData.getFieldNames(), CurReportDocument.CurDBMetaData.SortFieldNames);
+        CurSortingComponent.initialize(CurReportDocument.CurDBMetaData.getFieldNames(), CurReportDocument.CurDBMetaData.SortFieldNames);
                 CurSortingComponent.setReadOnlyUntil(CurReportDocument.CurDBMetaData.GroupFieldNames.length, false);
                 break;
             case SOTEMPLATEPAGE:
@@ -156,9 +157,9 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
          switch (nOldStep){
             case SOMAINPAGE:
                 CurReportDocument.CurDBMetaData.initializeFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames(), CurDBCommandFieldSelection.getSelectedCommandName());
-//              CurReportDocument.CurDBMetaData.setAllIncludedFieldNames(false);
+//      CurReportDocument.CurDBMetaData.setAllIncludedFieldNames(false);
                 if (CurDBCommandFieldSelection.isModified()){
-                    CurReportDocument.oTextSectionHandler.removeAllTextSections(false);
+                    CurReportDocument.oTextSectionHandler.removeAllTextSections();
                     CurReportDocument.oTextTableHandler.removeAllTextTables();
                     CurReportDocument.DBColumnsVector = new Vector();
                     CurReportDocument.CurDBMetaData.setGroupFieldNames(new String[]{});
@@ -166,7 +167,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 }
                 break;
             case SOTITLEPAGE:
-                CurReportDocument.CurDBMetaData.setFieldTitles(CurTitlesComponent.getFieldTitles());
+        CurReportDocument.CurDBMetaData.setFieldTitles(CurTitlesComponent.getFieldTitles());
                 break;
             case SOGROUPPAGE:
                 CurGroupFieldHandler.getGroupFieldNames(CurReportDocument.CurDBMetaData);
@@ -192,40 +193,50 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
     private boolean executeQuery(){
         boolean bQueryCreated = false;
-        if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
+        if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE){
             bQueryCreated = CurDBMetaData.oSQLQueryComposer.setQueryCommand(sMsgWizardName, this.xWindow, false, false);
+            CurDBMetaData.Command = CurDBMetaData.oSQLQueryComposer.getQuery();
+        }
         else{
             try {
-                DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(CurDBCommandFieldSelection.getSelectedCommandName());
-                String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
-                bQueryCreated = (!sCommand.equals(""));
-                CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(sCommand);
-                CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
-                CurDBMetaData.Command = CurDBMetaData.oSQLQueryComposer.getQuery();
+                String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
+                DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(sQueryName);
+                bHasEscapeProcessing = CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet);
+                if (bHasEscapeProcessing){
+                    String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
+                    bQueryCreated = (!sCommand.equals(""));
+                    CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(sCommand);
+                    CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
+                    CurDBMetaData.Command = CurDBMetaData.oSQLQueryComposer.getQuery();
+                    bQueryCreated = true;
+                }
+                else{
+                    CurDBMetaData.Command = sQueryName;
+                    bQueryCreated = true;
+                }
             } catch (Exception e) {
                 e.printStackTrace(System.out);
             }
         }
-        if (bQueryCreated){
-            CurDBMetaData.Command = CurDBMetaData.oSQLQueryComposer.getQuery();
-        }
-        else
+        if (!bQueryCreated){
             super.vetoableChange(null);
+        }
         return bQueryCreated;
     }
 
 
 
     public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+    String ConnectStr = "uno:socket,host=localhost,port=8100;urp;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
     try {
         XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
         ReportWizard CurReportWizard = new ReportWizard(xLocMSF);
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             PropertyValue[] curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb"); //MyDocAssign.odb; baseLocation ); "DataSourceName", "db1");
-//            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+//            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///localhome/bc93774/NewDatabase2" +
+//                    "C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb"); //MyDocAssign.odb; baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DataSourceName", "MyTestDatabase");
             CurReportWizard.startReportWizard(xLocMSF, curproperties);
         }
     }
@@ -308,13 +319,11 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         CurDBMetaData = CurReportDocument.CurDBMetaData;
         if (CurDBMetaData.getConnection(CurPropertyValue)){
             CurReportDocument.xProgressBar.setValue(20);
-//            CurReportDocument.oTextStyleHandler.loadStyleTemplates(ReportPath + "/stl-default.ott", "LoadPageStyles");
             CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.CurDBMetaData);
             buildSteps();
             this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
             createWindowPeer(CurReportDocument.xWindowPeer);
             CurDBMetaData.setWindowPeer(this.xControl.getPeer());
-    //      setAutoMnemonic("lblDialogHeader", false);
             insertQueryRelatedSteps();
             short RetValue = executeDialog(CurReportDocument.xFrame.getComponentWindow().getPosSize());
             boolean bdisposeDialog = true;
@@ -358,7 +367,17 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport){
         boolean bDocisStored = false;
         try{
-            if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, CurReportDocument.CurDBMetaData.getFieldNames(), false))
+            boolean bexecute = false;
+            if (!bHasEscapeProcessing){
+                bexecute = CurReportDocument.CurDBMetaData.executeCommand(com.sun.star.sdb.CommandType.QUERY);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+            }
+            else{
+                bexecute = CurReportDocument.CurDBMetaData.executeCommand(com.sun.star.sdb.CommandType.COMMAND);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+            }
+            if (bexecute){
+                bexecute = CurReportDocument.CurDBMetaData.getFields(CurReportDocument.CurDBMetaData.getFieldNames(), false);
+            }
+            if (bexecute)
                 CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
                 if (CurReportFinalizer.getReportOpenMode() == Finalizer.SOCREATEDOCUMENT){
                     bDocisStored = CurReportDocument.CurDBMetaData.storeDatabaseDocumentToTempPath(CurReportDocument.xComponent, CurReportFinalizer.getStoreName());
