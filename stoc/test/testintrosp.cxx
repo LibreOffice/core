@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:40:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,6 +234,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
             break;
         }
         */
+    default: ;
     }
 
     if( bIncludeType )
@@ -429,8 +430,8 @@ class ImplIntroTest : public ImplIntroTestHelper
 
     OUString m_ObjectName;
 
-    int m_nMarkusAge;
-    int m_nMarkusChildrenCount;
+    sal_Int16 m_nMarkusAge;
+    sal_Int16 m_nMarkusChildrenCount;
 
     long m_lDroenk;
     sal_Int16 m_nBla;
@@ -490,16 +491,16 @@ public:
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
     virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
 
@@ -563,15 +564,15 @@ public:
         { return m_nGulp; }
     virtual sal_Int16 SAL_CALL setGulp( sal_Int16 n ) throw(RuntimeException)
         { m_nGulp = n; return 1; }
-    virtual TypeClass SAL_CALL getTypeClass( sal_Int16 n ) throw(RuntimeException)
+    virtual TypeClass SAL_CALL getTypeClass( sal_Int16 /*n*/ ) throw(RuntimeException)
         { return eTypeClass; }
-    virtual void SAL_CALL setTypeClass( TypeClass t, double d1, double d2 ) throw(RuntimeException)
+    virtual void SAL_CALL setTypeClass( TypeClass t, double /*d1*/, double /*d2*/ ) throw(RuntimeException)
         { eTypeClass = t; }
     virtual Sequence< OUString > SAL_CALL getStrings(  ) throw(RuntimeException)
         { return aStringSeq; }
     virtual void SAL_CALL setStrings( const Sequence< OUString >& Strings ) throw(RuntimeException)
         { aStringSeq = Strings; }
-    virtual void SAL_CALL setStringsPerMethod( const Sequence< OUString >& Strings, sal_Int16 n ) throw(RuntimeException)
+    virtual void SAL_CALL setStringsPerMethod( const Sequence< OUString >& Strings, sal_Int16 /*n*/ ) throw(RuntimeException)
         { aStringSeq = Strings; }
     virtual Sequence< Sequence< Sequence< sal_Int16 > > > SAL_CALL getMultiSequence(  ) throw(RuntimeException)
         { return aMultSeq; }
@@ -853,10 +854,10 @@ Any ImplIntroTest::getByName( const OUString& aName )
         if( !pNameAccessTab[iIndex].is() )
         {
             ImplIntroTest* p = new ImplIntroTest( mxMgr );
-            OUString aName( OUString::createFromAscii("IntroTest by Name-Access, Index = ") );
-            aName += OUString::valueOf( iIndex );
-            //aName = aName + StringToUString( String( iIndex ), CHARSET_SYSTEM );
-            p->setObjectName( aName );
+            OUString aName2( OUString::createFromAscii("IntroTest by Name-Access, Index = ") );
+            aName2 += OUString::valueOf( iIndex );
+            //aName2 = aName2 + StringToUString( String( iIndex ), CHARSET_SYSTEM );
+            p->setObjectName( aName2 );
             pNameAccessTab[iIndex] = p;
         }
 
@@ -927,8 +928,8 @@ Any ImplIntroTest::getByIndex( sal_Int32 Index )
     return aRetAny;
 }
 
-void ImplIntroTest::addPropertiesChangeListener( const Sequence< OUString >& PropertyNames,
-    const Reference< XPropertiesChangeListener >& Listener )
+void ImplIntroTest::addPropertiesChangeListener( const Sequence< OUString >& /*PropertyNames*/,
+                                                 const Reference< XPropertiesChangeListener >& /*Listener*/ )
         throw(RuntimeException)
 //void ImplIntroTest::addPropertiesChangeListener
 //(const Sequence< UString >& PropertyNames, const XPropertiesChangeListenerRef& Listener)
@@ -937,7 +938,7 @@ void ImplIntroTest::addPropertiesChangeListener( const Sequence< OUString >& Pro
 }
 
 void ImplIntroTest::removePropertiesChangeListener
-    ( const Reference< XPropertiesChangeListener >& Listener )
+( const Reference< XPropertiesChangeListener >& /*Listener*/ )
         throw(RuntimeException)
 //void ImplIntroTest::removePropertiesChangeListener(const XPropertiesChangeListenerRef& Listener)
     //THROWS( (UsrSystemException) )
@@ -948,7 +949,7 @@ void ImplIntroTest::removePropertiesChangeListener
 
 struct DefItem
 {
-    char* pName;
+    char const * pName;
     sal_Int32 nConcept;
 };
 
@@ -966,7 +967,7 @@ Any getIntrospectionTestObject( const Reference< XMultiServiceFactory > & xMgr )
 }
 
 static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
-    Reference< XIdlReflection > xRefl, Reference< XIntrospection > xIntrospection )
+                              Reference< XIdlReflection > /*xRefl*/, Reference< XIntrospection > xIntrospection )
 {
     DefItem pPropertyDefs[] =
     {
@@ -997,34 +998,34 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     };
 
     // Tabelle der Property-Namen, die gefunden werden muessen
-    char* pDemandedPropNames[] =
-    {
-        "Factor",
-        "MyCount",
-        "Info",
-        "ObjectName",
-        "FirstName",
-        "LastName",
-        "Age",
-        "ChildrenCount",
-        "FirstStruct",
-        "SecondStruct",
-        "Droenk",
-        "IntroTest",
-        "Bla",
-        "Blub",
-        "Gulp",
-        "Strings",
-        "MultiSequence",
-        "PropertySetInfo",
-        "ElementType",
-        "ElementNames",
-        "Count",
-        "Types"
-        "ImplementationId"
-    };
+//  char* pDemandedPropNames[] =
+//  {
+//      "Factor",
+//      "MyCount",
+//      "Info",
+//      "ObjectName",
+//      "FirstName",
+//      "LastName",
+//      "Age",
+//      "ChildrenCount",
+//      "FirstStruct",
+//      "SecondStruct",
+//      "Droenk",
+//      "IntroTest",
+//      "Bla",
+//      "Blub",
+//      "Gulp",
+//      "Strings",
+//      "MultiSequence",
+//      "PropertySetInfo",
+//      "ElementType",
+//      "ElementNames",
+//      "Count",
+//      "Types"
+//      "ImplementationId"
+//  };
 
-    char* pDemandedPropVals[] =
+    char const * pDemandedPropVals[] =
     {
         "3.140000",
         "42",
@@ -1051,7 +1052,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         "TYPE SEQUENCE",
     };
 
-    char* pDemandedModifiedPropVals[] =
+    char const * pDemandedModifiedPropVals[] =
     {
         "4.140000",
         "43",
@@ -1078,7 +1079,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         "Wert wurde nicht modifiziert"
     };
 
-    char* pDemandedPropTypes[] =
+    char const * pDemandedPropTypes[] =
     {
         "double",
         "long",
