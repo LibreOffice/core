@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:29:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,8 @@ ULONG SwReader::Read( const Reader& rOptions )
     Link aOLELink( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    pDoc->SetInReading( TRUE );
+    pDoc->SetInReading( true );
+    pDoc->SetInXMLImport( 0 != dynamic_cast< XMLReader* >(po) );
 
     SwPaM *pPam;
     if( pCrsr )
@@ -428,7 +429,8 @@ ULONG SwReader::Read( const Reader& rOptions )
         }
     }
 
-    pDoc->SetInReading( FALSE );
+    pDoc->SetInReading( false );
+    pDoc->SetInXMLImport( false );
 
     pDoc->SyncNumRulesAndNodes();
     pDoc->InvalidateNumRules();
