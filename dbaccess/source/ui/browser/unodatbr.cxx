@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:16:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,7 +571,6 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeModel->SetCompareHdl(LINK(this, SbaTableQueryBrowser, OnTreeEntryCompare));
         m_pTreeView->setModel(m_pTreeModel);
         m_pTreeView->setSelectHdl(LINK(this, SbaTableQueryBrowser, OnSelectEntry));
-        m_pTreeView->getListBox()->SetDoubleClickHdl(LINK(this, SbaTableQueryBrowser, OnEntryDoubleClicked));
 
         // TODO
         getBrowserView()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
@@ -2276,19 +2275,6 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
 
     return bSuccess;
 }
-//------------------------------------------------------------------------------
-IMPL_LINK(SbaTableQueryBrowser, OnEntryDoubleClicked, SvLBoxEntry*, /*_pEntry*/)
-{
-    SvLBoxEntry* pSelected = m_pTreeView->getListBox()->FirstSelected();
-    if (!pSelected)
-    {
-        DBG_ERROR("SbaTableQueryBrowser::OnEntryDoubleClicked: invalid selection!");
-        return 0L;
-    }
-
-    return 1L;
-};
-
 //------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect)
 {
