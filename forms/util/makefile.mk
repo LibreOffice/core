@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 15:25:21 $
+#   last change: $Author: rt $ $Date: 2006-12-01 16:56:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ LIB1FILES=\
         $(SLB)$/solarcomponent.lib  \
         $(SLB)$/solarcontrol.lib \
         $(SLB)$/richtext.lib \
+        $(SLB)$/runtime.lib \
         $(SLB)$/xforms.lib \
         $(SLB)$/xformssubmit.lib \
         $(SLB)$/xformsxpath.lib
