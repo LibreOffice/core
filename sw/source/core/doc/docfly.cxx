@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:52:22 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:38:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             SwTxtNode *pNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
 
-            pNd->Insert( SwFmtFlyCnt( (SwFlyFrmFmt*)&rFmt ),
+            pNd->InsertItem( SwFmtFlyCnt( (SwFlyFrmFmt*)&rFmt ),
                                        pPos->nContent.GetIndex(), 0 );
         }
 
@@ -843,7 +843,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     SwTxtNode *pNd = aPos.nNode.GetNode().GetTxtNode();
                     ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
 
-                    pNd->Insert( SwFmtFlyCnt( pContact->GetFmt() ),
+                    pNd->InsertItem( SwFmtFlyCnt( pContact->GetFmt() ),
                                     aPos.nContent.GetIndex(), 0 );
                 }
                 break;
