@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:21:32 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:26:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
+
+#include "IdentityMapping.hxx"
 
 #include <hash_map>
 #include <set>
@@ -570,6 +572,10 @@ void SAL_CALL uno_getMapping(
     if (iFind != rData.aName2Entry.end())
         aRet = (*iFind).second->pMapping;
     }
+
+    // See if an identity mapping does fit.
+    if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength())
+        aRet = createIdentityMapping(pFrom);
 
     if (! aRet.is()) // try callback chain
     {
