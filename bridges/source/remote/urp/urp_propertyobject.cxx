@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_propertyobject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:01:56 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:48:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,9 @@ static const sal_Int32 PROPERTY_SUPPORTSMULTIPLESYNCHRONOUS = 10;
 static const sal_Int32 PROPERTY_CLEARCACHE = 11;
 static const sal_Int32 PROPERTY_NEGOTIATE = 12;
 static const sal_Int32 PROPERTY_FORCESYNCHRONOUS = 13;
+static const sal_Int32 PROPERTY_CURRENTCONTEXT = 14;
 
-static const sal_Int32 MAX_PROPERTIES = PROPERTY_FORCESYNCHRONOUS +1;
+static const sal_Int32 MAX_PROPERTIES = PROPERTY_CURRENTCONTEXT +1;
 
 const sal_Char *g_aPropertyName[] =
 {
@@ -122,7 +123,8 @@ const sal_Char *g_aPropertyName[] =
     "SupportsMultipleSynchronous",
     "ClearCache",
     "Negotiate",
-    "ForceSynchronous"
+    "ForceSynchronous",
+    "CurrentContext"
 };
 
 // nice little helper functions for conversion
@@ -218,6 +220,9 @@ static sal_Bool assignFromIdlToStruct( Properties *pProps, const ProtocolPropert
         case PROPERTY_FORCESYNCHRONOUS:
             assignFromIdl( &(pProps->bForceSynchronous) ,idl );
             break;
+        case PROPERTY_CURRENTCONTEXT:
+            pProps->bCurrentContext = true;
+            break;
         default:
             bReturn = sal_False;
         }
@@ -279,6 +284,11 @@ static void assignFromStringToPropSeq( const OUString &sProps, uno_Sequence **pp
         }
         switch( nIndex )
         {
+            // voids
+        case PROPERTY_CURRENTCONTEXT:
+            pElements[i].Name = OUString::createFromAscii(
+                g_aPropertyName[nIndex] );
+            break;
             // bools
         case PROPERTY_CLEARCACHE:
         case PROPERTY_NEGOTIATE:
@@ -342,7 +352,6 @@ PropertyObject::PropertyObject(
     , m_pLocalSetting( pLocalSetting )
     , m_pEnvRemote( pEnvRemote )
     , m_bRequestChangeHasBeenCalled( sal_False )
-    , m_bClientWaitingForCommit( sal_False )
     , m_bServerWaitingForCommit( sal_False )
     , m_bApplyProperties( sal_False )
 {
@@ -473,14 +482,14 @@ void SAL_CALL PropertyObject::implGetProperties( uno_Sequence **ppReturnValue )
 //----------------------------------------------------------------------------------------------
 sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
 {
-    sal_Int32 nResult = -1; // try again is default
+    sal_Int32 nResult = 0;
     sal_Bool bCall = sal_True;
 
     // disallow marshaling NOW !
     ClearableMutexGuard marshalingGuard( m_pBridgeImpl->m_marshalingMutex );
     {
         MutexGuard guard( m_mutex );
-        if( m_bRequestChangeHasBeenCalled || m_bClientWaitingForCommit || m_bServerWaitingForCommit )
+        if( m_bRequestChangeHasBeenCalled || m_bServerWaitingForCommit )
         {
             // another transaction is already underway
             // try again later !
@@ -528,6 +537,7 @@ sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
         uno_Any *pException = &exception;
 
         ClientJob job( m_pEnvRemote,
+                       0,
                        m_pBridgeImpl,
                        oid.pData,
                        pMethodType,
@@ -569,7 +579,6 @@ sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
     {
         MutexGuard guard( m_mutex );
         m_bRequestChangeHasBeenCalled = sal_False;
-        m_bClientWaitingForCommit = ( 1 == nResult );
         m_bServerWaitingForCommit = ( 0 == nResult );
     }
     return nResult;
@@ -625,7 +634,6 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
     OUString oid = OUString::createFromAscii( g_NameOfUrpProtocolPropertiesObject );
 
     osl_resetCondition( m_commitChangeCondition );
-    m_bClientWaitingForCommit = sal_True;
 
     Properties props = *m_pLocalSetting;
 
@@ -711,6 +719,7 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
     uno_Any *pException = &exception;
 
     ClientJob job( m_pEnvRemote,
+                   0,
                    m_pBridgeImpl,
                    oid.pData,
                    pMethodType,
@@ -737,13 +746,11 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
     else
     {
         m_pBridgeImpl->applyProtocolChanges( props );
-        m_bClientWaitingForCommit = sal_False;
         m_bServerWaitingForCommit = sal_False;
         m_bApplyProperties = sal_False;
     }
 
     // let the reader thread go ...
-    m_bClientWaitingForCommit = sal_False;
     osl_setCondition( m_commitChangeCondition );
 
     typelib_typedescription_release( pMethodType );
@@ -770,7 +777,6 @@ void SAL_CALL PropertyObject::implCommitChange( uno_Sequence *pSequence, uno_Any
             uno_type_any_construct( *ppException, &exception, type.getTypeLibType() , 0 );
 
             m_bApplyProperties = sal_False;
-            m_bClientWaitingForCommit = sal_False;
             m_bServerWaitingForCommit = sal_False;
             return;
         }
@@ -785,7 +791,6 @@ Properties SAL_CALL PropertyObject::getCommitedChanges()
     MutexGuard guard( m_mutex );
     OSL_ASSERT( m_bApplyProperties );
     m_bApplyProperties = sal_False;
-    m_bClientWaitingForCommit = sal_False;
     m_bServerWaitingForCommit = sal_False;
     return m_propsToBeApplied;
 }
