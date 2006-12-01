@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:12:46 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ public:
     virtual void RemoveChild(SwNumberTreeNode * pChild);
 
     virtual bool IsNotifiable() const;
+
+    virtual bool IsNotificationEnabled() const;
 
     virtual bool IsContinuous() const;
 
