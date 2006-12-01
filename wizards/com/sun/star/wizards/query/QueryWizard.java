@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryWizard.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:40:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ public class QueryWizard extends WizardDialog {
                 CurGroupFilterComponent.initialize(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.getGroupFieldNames());
                 break;
             case SOTITLESPAGE :
-                CurTitlesComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.FieldTitleSet);
+        CurTitlesComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.FieldTitleSet);
                 break;
             case SOSUMMARYPAGE :
                 CurFinalizer.initialize();
@@ -289,8 +289,8 @@ public class QueryWizard extends WizardDialog {
     protected void leaveStep(int nOldStep, int nNewStep) {
         switch (nOldStep) {
             case SOFIELDSELECTIONPAGE :
-                CurDBMetaData.reorderFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames());
-                CurDBMetaData.initializeFieldTitleSet(true);
+        CurDBMetaData.reorderFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames());
+        CurDBMetaData.initializeFieldTitleSet(true);
                 CurDBMetaData.setNumericFields();
                 searchForOutdatedFields();
                 break;
