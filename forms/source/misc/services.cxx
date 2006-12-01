@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:58:32 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:55:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,6 +335,7 @@ void SAL_CALL createRegistryInfo_ONavigationBarControl();
 void SAL_CALL createRegistryInfo_ORichTextModel();
 void SAL_CALL createRegistryInfo_ORichTextControl();
 void SAL_CALL createRegistryInfo_CLibxml2XFormsExtension();
+void SAL_CALL createRegistryInfo_FormOperations();
 
 //---------------------------------------------------------------------------------------
 void SAL_CALL createRegistryInfo_FORMS()
@@ -350,7 +351,8 @@ void SAL_CALL createRegistryInfo_FORMS()
         createRegistryInfo_ONavigationBarControl();
         createRegistryInfo_ORichTextModel();
         createRegistryInfo_ORichTextControl();
-        createRegistryInfo_CLibxml2XFormsExtension();;
+        createRegistryInfo_CLibxml2XFormsExtension();
+        createRegistryInfo_FormOperations();
         bInit = sal_True;
     }
 }
