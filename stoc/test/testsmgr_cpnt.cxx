@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testsmgr_cpnt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:42:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ Reference< XInterface > SAL_CALL Test_Manager_Impl_CreateInstance_Impl()
 // Test_Manager_Impl_CreateInstance()
 //
 Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
-                                    const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception)
+    const Reference< XMultiServiceFactory > & /*rSMgr*/ ) throw (Exception)
 {
     Reference < XInterface >  xService = (XWeak *)(OWeakObject *)new Test_Manager_Impl( );
 
@@ -434,57 +434,17 @@ extern "C" void SAL_CALL test_ServiceManager()
 
 
 
-//*************************************************************************
-extern "C" sal_Bool SAL_CALL writeComponentInfo(uno_Interface* pXUnoKey)
-{
-    sal_Bool    ret = sal_False;
-
-    if (pXUnoKey)
-    {
-        Mapping aUno2Current( OUString::createFromAscii(UNO_LB_UNO),
-                              OUString::createFromAscii(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-        if (aUno2Current.is())
-        {
-            XRegistryKey* pKey = (XRegistryKey *)aUno2Current.mapInterface(
-                pXUnoKey, ::getCppuType( (const Reference<XRegistryKey> *)0 ) );
-            if (pKey)
-            {
-                Reference<XRegistryKey> xKey( pKey );
-                pKey->release();
-
-                try
-                {
-                    Reference<XRegistryKey> xNewKey = xKey->createKey(
-                        OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES"));
-
-                    Sequence< OUString > aSNL = Test_Manager_Impl::getSupportedServiceNames_Static();
-                    const OUString * pArray = aSNL.getArray();
-                    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-                    {
-                        xNewKey->createKey(pArray[i]);
-                    }
-                    ret = sal_True;
-                }
-                catch( InvalidRegistryException&)
-                {
-                }
-            }
-        }
-    }
-    return ret;
-}
-
 extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    void * /*pServiceManager*/, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -511,7 +471,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
