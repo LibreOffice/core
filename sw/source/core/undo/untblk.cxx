@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:30:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:50:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ SwUndoInserts::SwUndoInserts( USHORT nUndoId, const SwPaM& rPam )
         pTxtFmtColl = pTxtNd->GetTxtColl();
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
                             0, pTxtNd->GetTxt().Len(), FALSE );
-        if( pTxtNd->GetpSwAttrSet() )
+        if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
         if( !nSttCntnt )    // dann werden Flys mitgenommen !!
