@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:13 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1765,9 +1765,21 @@ void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot,
         // as external view, then we need to reset the controls of the external form, too
         if ( getInternalForm( _rxForm ) == m_xExternalDisplayedForm )
         {
-            Reference< XFormController > xExternalFormController( m_xExternalViewController, UNO_QUERY );
-            if ( xExternalFormController.is() )
-                aHelper->resetAllControls( Reference< XForm >( xExternalFormController->getModel(), UNO_QUERY ) );
+            Reference< XIndexAccess > xContainer( m_xExternalDisplayedForm, UNO_QUERY );
+            if ( xContainer.is() )
+            {
+                Reference< XReset > xReset;
+                for ( sal_Int32 i = 0; i < xContainer->getCount(); ++i )
+                {
+                    if ( ( xContainer->getByIndex( i ) >>= xReset ) && xReset.is() )
+                    {
+                        // no resets on sub forms
+                        Reference< XForm > xAsForm( xReset, UNO_QUERY );
+                        if ( !xAsForm.is() )
+                            xReset->reset();
+                    }
+                }
+            }
         }
     }
 }
@@ -1824,9 +1836,9 @@ void FmXFormShell::setActiveController( const Reference< XFormController>& xCont
             if ( m_aActiveControllerFeatures->commitCurrentControl() )
             {
                 m_bSetFocus = sal_True;
-                if ( m_aActiveControllerFeatures->isModifiedRecord() )
+                if ( m_aActiveControllerFeatures->isModifiedRow() )
                     {
-                    sal_Bool bIsNew = m_aActiveControllerFeatures->isNewRecord();
+                    sal_Bool bIsNew = m_aActiveControllerFeatures->isInsertionRow();
                     sal_Bool bResult = m_aActiveControllerFeatures->commitCurrentRecord();
                     if ( !bResult && m_bSetFocus )
                     {
