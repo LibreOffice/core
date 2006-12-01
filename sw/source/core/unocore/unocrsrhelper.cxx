@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:13:29 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,7 +500,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                     USHORT nAttrStart = *pAttr->GetStart();
                     USHORT nAttrEnd = *pAttr->GetEnd();
                     //check if the attribute touches the selection
-                    if(nAttrEnd > nPaMStart && nAttrStart < nPaMEnd && nAttrEnd > nPaMStart)
+                    if( ( nAttrEnd > nPaMStart && nAttrStart < nPaMEnd ) ||
+                        ( !nAttrStart && !nAttrEnd && !nPaMStart && !nPaMEnd ) )
                     {
                         //check for overlapping
                         if(nAttrStart > nPaMStart ||
