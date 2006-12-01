@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:57:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,7 +341,6 @@ namespace pcr
     #define PROPERTY_ID_LIST_BINDING         185
     #define PROPERTY_ID_VERTICAL_ALIGN       186
     #define PROPERTY_ID_BINDING_NAME         187
-    #define PROPERTY_ID_ACTION_BUTTONTYPE    188
 
 //............................................................................
 } // namespace pcr
