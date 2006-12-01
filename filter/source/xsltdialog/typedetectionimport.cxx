@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedetectionimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:47:37 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:33:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,6 @@ using namespace std;
 
 TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >& xMSF )
 :   mxMSF(xMSF),
-    sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) ),
-    sWhiteSpace( RTL_CONSTASCII_USTRINGPARAM( " " ) ),
     sRootNode( RTL_CONSTASCII_USTRINGPARAM( "oor:component-data" ) ),
     sNode( RTL_CONSTASCII_USTRINGPARAM( "node" ) ),
     sName( RTL_CONSTASCII_USTRINGPARAM( "oor:name" ) ),
@@ -79,7 +77,9 @@ TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >&
     sFilters( RTL_CONSTASCII_USTRINGPARAM( "Filters" ) ),
     sTypes( RTL_CONSTASCII_USTRINGPARAM( "Types" ) ),
     sFilterAdaptorService( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) ),
-    sXSLTFilterService( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.documentconversion.XSLTFilter" ) )
+    sXSLTFilterService( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.documentconversion.XSLTFilter" ) ),
+    sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) ),
+    sWhiteSpace( RTL_CONSTASCII_USTRINGPARAM( " " ) )
 {
 }
 
@@ -107,7 +107,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
             pImporter->fillFilterVector( rFilters );
         }
     }
-    catch( Exception& e )
+    catch( Exception& /* e */ )
     {
         DBG_ERROR( "TypeDetectionImporter::doImport exception catched!" );
     }
@@ -323,7 +323,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
 
     maStack.push( eNewState );
 }
-void SAL_CALL TypeDetectionImporter::endElement( const OUString& aName )
+void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
     if( !maStack.empty()  )
@@ -353,6 +353,7 @@ void SAL_CALL TypeDetectionImporter::endElement( const OUString& aName )
         case e_Property:
             maPropertyMap[ maPropertyName ] = maValue;
             break;
+        default: break;
         }
 
         maStack.pop();
@@ -366,15 +367,15 @@ void SAL_CALL TypeDetectionImporter::characters( const OUString& aChars )
         maValue += aChars;
     }
 }
-void SAL_CALL TypeDetectionImporter::ignorableWhitespace( const OUString& aWhitespaces )
+void SAL_CALL TypeDetectionImporter::ignorableWhitespace( const OUString& /* aWhitespaces */ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
-void SAL_CALL TypeDetectionImporter::processingInstruction( const OUString& aTarget, const OUString& aData )
+void SAL_CALL TypeDetectionImporter::processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
-void SAL_CALL TypeDetectionImporter::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator )
+void SAL_CALL TypeDetectionImporter::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /* xLocator */ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
