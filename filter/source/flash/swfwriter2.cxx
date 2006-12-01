@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:29 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,12 +96,12 @@ void BitStream::writeUB( sal_uInt32 nValue, sal_uInt16 nBits )
 
         if ( nBits > mnBitPos )
         {
-            nBits -= mnBitPos;
+            nBits = nBits - mnBitPos;
             mnBitPos = 0;
         }
         else
         {
-            mnBitPos -= nBits;
+            mnBitPos = sal::static_int_cast<sal_uInt8>( mnBitPos - nBits );
             nBits = 0;
         }
 
@@ -169,21 +169,21 @@ Tag::Tag( sal_uInt8 nTagId )
 void Tag::write( SvStream &out )
 {
     Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 nSize = Tell();
+    sal_uInt32 nSz = Tell();
     Seek( STREAM_SEEK_TO_BEGIN );
 
     if( mnTagId != 0xff )
     {
-        bool bLarge = nSize > 62;
+        bool bLarge = nSz > 62;
 
-        sal_uInt16 nCode = ( mnTagId << 6 ) | ( bLarge ? 0x3f : _uInt16(nSize) );
+        sal_uInt16 nCode = ( mnTagId << 6 ) | ( bLarge ? 0x3f : _uInt16(nSz) );
 
         out << (sal_uInt8)nCode;
         out << (sal_uInt8)(nCode >> 8);
 
         if( bLarge )
         {
-            sal_uInt32 nTmp = nSize;
+            sal_uInt32 nTmp = nSz;
 
             out << (sal_uInt8)nTmp;
             nTmp >>= 8;
@@ -195,7 +195,7 @@ void Tag::write( SvStream &out )
         }
     }
 
-    out.Write( GetData(), nSize );
+    out.Write( GetData(), nSz );
 }
 
 // -----------------------------------------------------------------------------
@@ -300,8 +300,8 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
     // AS: Christian, can they be negative, or is that a wasted check?
     // CL: I think so, f.e. for shapes that have the top and/or left edge outside
     //         the page origin
-    sal_uInt8 nBits1 = max( getMaxBitsSigned( minX ), getMaxBitsSigned( minY ) );
-    sal_uInt8 nBits2 = max( getMaxBitsSigned( maxX ), getMaxBitsSigned( maxY ) );
+    sal_uInt8 nBits1 = sal::static_int_cast<sal_uInt8>( max( getMaxBitsSigned( minX ), getMaxBitsSigned( minY ) ) );
+    sal_uInt8 nBits2 = sal::static_int_cast<sal_uInt8>( max( getMaxBitsSigned( maxX ), getMaxBitsSigned( maxY ) ) );
     sal_uInt8 nBitsMax = max( nBits1, nBits2 );
 
     aBits.writeUB( nBitsMax, 5 );
@@ -509,8 +509,6 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
 
     maGlyphData.pad();
 
-    sal_uInt32 nOffset = maGlyphData.getOffset();
-
     pVDev->SetFont( aOldFont );
 
     return mnNextIndex++;
@@ -586,7 +584,7 @@ FillStyle::FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient )
 
 void FillStyle::addTo( Tag* pTag ) const
 {
-    pTag->addUI8( meType );
+    pTag->addUI8( sal::static_int_cast<sal_uInt8>( meType ) );
     switch( meType )
     {
     case solid:
@@ -687,6 +685,7 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             m.translate( maBoundRect.GetWidth() / 2.0, maBoundRect.GetHeight() / 2.0 , 0.0);
         }
         break;
+    case  GradientStyle_FORCE_EQUAL_SIZE: break;
     }
 
     m.translate( maBoundRect.nLeft, maBoundRect.nTop , 0.0);
