@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.126 $
-# Date:        $Date: 2006-12-01 14:17:17 $
+# Version:     $Revision: 1.127 $
+# Date:        $Date: 2006-12-01 14:53:16 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1218,14 +1218,7 @@ elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
                         $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
-                        $ps.$USR.$BIN.
-                        $ps.$BIN.
-                        $ps.$USR.$ds."sbin".
-                        $ps.$ds."sbin".
                         $ps.'$SOLARENV'.$BIN.
-                        $ps.$USR_LOCAL.$BIN.
-                        $ps.$USR.$ds."X11R6".$BIN.
-                        $ps.$USR_LOCAL.$ds."sbin";
 
   # Append old PATH
   $PATH             .= $ps.$oldPATH;
@@ -2088,7 +2081,7 @@ if ( "@USE_SHELL@" ne "4nt" ) {
 	print "You may now run ./bootstrap in $SRC_ROOT\n";
 }
 if ( $Warning ne "" ) {
-	print "***** WARNINGS ISSUED *****";
+	print "***** WARNINGS ISSUED *****\n";
 }
 
 #
