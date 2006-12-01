@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:44:33 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,15 @@
  *
  ************************************************************************/
 
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+# undef OSL_DEBUG_LEVEL
+# define OSL_DEBUG_LEVEL 2
+#endif
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
+
+#include <sal/main.h>
 
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
@@ -57,11 +64,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     try
     {
