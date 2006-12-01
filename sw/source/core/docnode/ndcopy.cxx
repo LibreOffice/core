@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:26:37 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwTxtNode* pTxtNd = pDoc->GetNodes().MakeTxtNode( rIdx, pColl );
 
     // kopiere Attribute/Text
-    if( !pCpyAttrNd->GetpSwAttrSet() )
+    if( !pCpyAttrNd->HasSwAttrSet() )
         // wurde ein AttrSet fuer die Numerierung angelegt, so loesche diesen!
         pTxtNd->ResetAllAttr();
 
@@ -160,7 +160,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     if( pCpyAttrNd != pCpyTxtNd )
     {
         pCpyAttrNd->CopyAttr( pTxtNd, 0, 0 );
-        if( pCpyAttrNd->GetpSwAttrSet() )
+        if( pCpyAttrNd->HasSwAttrSet() )
         {
             SwAttrSet aSet( *pCpyAttrNd->GetpSwAttrSet() );
             aSet.ClearItem( RES_PAGEDESC );
@@ -418,7 +418,7 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
     // Sonderbehandlung fuer PageBreak/PageDesc/ColBrk
     SwDoc* pDestDoc = rDestNd.GetDoc();
     SwAttrSet aPgBrkSet( pDestDoc->GetAttrPool(), aBreakSetRange );
-    SwAttrSet* pSet;
+    const SwAttrSet* pSet;
 
     if( 0 != ( pSet = rDestNd.GetpSwAttrSet() ) )
     {
@@ -562,7 +562,6 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
     // We have to count the "non-copied" nodes..
     ULONG nDelCount = 0;
     SwNodeIndex aCorrIdx( rStt.nNode );
-
     for( USHORT nCnt = pSrcDoc->getBookmarks().Count(); nCnt; )
     {
         // liegt auf der Position ??
@@ -955,7 +954,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 }
 
                 const SfxPoolItem * pItem = NULL;
-                SwAttrSet * pAttrSet = pDestNd->GetpSwAttrSet();
+                const SfxItemSet * pAttrSet = pDestNd->GetpSwAttrSet();
 
                 /* #107213#: Safe numrule item at destination. */
                 int aState = SFX_ITEM_UNKNOWN;
@@ -1086,7 +1085,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             }
 
             const SfxPoolItem * pItem = NULL;
-            SwAttrSet * pAttrSet = pDestNd->GetpSwAttrSet();
+            const SfxItemSet* pAttrSet = pDestNd->GetpSwAttrSet();
 
             /* #107213# Save numrule at destination */
             int aState = SFX_ITEM_UNKNOWN;
@@ -1131,7 +1130,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         if( aRg.aStart != aRg.aEnd )
         {
             SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
-            if( pSttNd && bCopyCollFmt && pDestNd->GetpSwAttrSet() )
+            if( pSttNd && bCopyCollFmt && pDestNd->HasSwAttrSet() )
             {
                 aBrkSet.Put( *pDestNd->GetpSwAttrSet() );
                 if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, FALSE ) )
