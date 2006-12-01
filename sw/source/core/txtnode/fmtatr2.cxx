@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:45:29 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:46:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,10 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-
+#include <svtools/stylepool.hxx>
+#ifndef _FMTAUTOFMT_HXX
+#include <fmtautofmt.hxx>
+#endif
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
 #endif
@@ -92,6 +95,9 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
+TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
+
 /*************************************************************************
 |*
 |*    class SwFmtCharFmt
@@ -100,8 +106,6 @@ using namespace ::rtl;
 |*    Letzte Aenderung  JP 09.08.94
 |*
 *************************************************************************/
-
-TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
 
 SwFmtCharFmt::SwFmtCharFmt( SwCharFmt *pFmt )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
@@ -165,6 +169,53 @@ BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 BOOL SwFmtCharFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 {
     DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!")
+    return FALSE;
+}
+
+/*************************************************************************
+|*
+|*    class SwFmtAutoFmt
+|*    Beschreibung
+|*    Ersterstellung    AMA 12.05.06
+|*    Letzte Aenderung  AMA 12.05.06
+|*
+*************************************************************************/
+
+SwFmtAutoFmt::SwFmtAutoFmt( USHORT nInitWhich )
+    : SfxPoolItem( nInitWhich )
+{
+}
+
+SwFmtAutoFmt::SwFmtAutoFmt( const SwFmtAutoFmt& rAttr )
+    : SfxPoolItem( rAttr.Which() ), mpHandle( rAttr.mpHandle )
+{
+}
+
+SwFmtAutoFmt::~SwFmtAutoFmt()
+{
+}
+
+int SwFmtAutoFmt::operator==( const SfxPoolItem& rAttr ) const
+{
+    ASSERT( SfxPoolItem::operator==( rAttr ), "different attributes" );
+    return mpHandle == ((SwFmtAutoFmt&)rAttr).mpHandle;
+}
+
+SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
+{
+    return new SwFmtAutoFmt( *this );
+}
+
+BOOL SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    String sCharFmtName = StylePool::nameOf( mpHandle );
+    rVal <<= OUString( sCharFmtName );
+    return TRUE;
+}
+
+BOOL SwFmtAutoFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
+{
+    DBG_ERROR("ToDo!")
     return FALSE;
 }
 
