@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:12:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3516,7 +3516,7 @@ void SvxMSDffManager::Scale( PolyPolygon& rPoly ) const
         Scale( rPoly[ nPolyNum ] );
 }
 
-void SvxMSDffManager::ScaleEmu( long& rVal ) const
+void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 {
     rVal = BigMulDiv( rVal, nEmuMul, nEmuDiv );
 }
