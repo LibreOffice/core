@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:10:20 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1532,24 +1532,24 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 // aus dem GetMarkNode kopiert.!!!
 
                 /* Der GetMarkNode */
-                if( ( pTxtNd = aIdx.GetNode().GetTxtNode())->GetpSwAttrSet() )
+                if( ( pTxtNd = aIdx.GetNode().GetTxtNode())->HasSwAttrSet() )
                 {
                     const SfxPoolItem* pItem;
                     if( SFX_ITEM_SET == pTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_BREAK, sal_False, &pItem ) )
                         pTxtNd->ResetAttr( RES_BREAK );
-                    if( pTxtNd->GetpSwAttrSet() &&
+                    if( pTxtNd->HasSwAttrSet() &&
                         SFX_ITEM_SET == pTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_PAGEDESC, sal_False, &pItem ) )
                         pTxtNd->ResetAttr( RES_PAGEDESC );
                 }
 
                 /* Der PointNode */
-                if( pOldTxtNd->GetpSwAttrSet() )
+                if( pOldTxtNd->HasSwAttrSet() )
                 {
                     const SfxPoolItem* pItem;
                     SfxItemSet aSet( pDoc->GetAttrPool(), aBreakSetRange );
-                    SfxItemSet* pSet = pOldTxtNd->GetpSwAttrSet();
+                    const SfxItemSet* pSet = pOldTxtNd->GetpSwAttrSet();
                     if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK,
                         sal_False, &pItem ) )
                         aSet.Put( *pItem );
@@ -1610,7 +1610,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 pTxtNd->ResetAttr(*pShorts);
                 delete pShorts;
 
-                if( pDelNd->GetpSwAttrSet() )
+                if( pDelNd->HasSwAttrSet() )
                 {
                     // nur die Zeichenattribute kopieren
                     SfxItemSet aTmpSet( pDoc->GetAttrPool(), aCharFmtSetRange );
