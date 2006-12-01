@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:46 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1612,7 +1612,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
+bool OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
 {
     OSL_ENSURE(_pTree != NULL,"Who called me without a svtreelsiboc! ->GPF ");
     if ( getContainer() && getContainer()->isLeaf(_pTree->GetHdlEntry()) )
@@ -1620,12 +1620,14 @@ void OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
         try
         {
             openElement( getContainer()->getQualifiedName( _pTree->GetHdlEntry() ), getContainer()->getElementType() );
+            return true;    // handled
         }
         catch(const Exception&)
         {
             OSL_ENSURE(0,"Could not open element!");
         }
     }
+    return false;   // not handled
 }
 // -----------------------------------------------------------------------------
 Reference< XComponent > OApplicationController::openElement(const ::rtl::OUString& _sName,ElementType _eType,OLinkedDocumentsAccess::EOpenMode _eOpenMode)
