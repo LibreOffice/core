@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:32:17 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:45:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,13 +60,14 @@ MY_LOCAL_CLASSDIR=file://$(PWD)$/$(CLASSDIR)
 SLOFILES = \
     $(SLO)$/bridgetest.obj \
     $(SLO)$/cppobj.obj \
+    $(SLO)$/currentcontextchecker.obj \
     $(SLO)$/multi.obj
 
 # ---- test ----
 
 LIB1TARGET=$(SLB)$/cppobj.lib
 LIB1OBJFILES= \
-        $(SLO)$/cppobj.obj $(SLO)$/multi.obj
+        $(SLO)$/cppobj.obj $(SLO)$/currentcontextchecker.obj $(SLO)$/multi.obj
 
 SHL1TARGET = cppobj.uno
 SHL1STDLIBS= \
@@ -87,7 +88,9 @@ SHL1VERSIONMAP = component.map
 
 LIB2TARGET=$(SLB)$/bridgetest.lib
 LIB2OBJFILES= \
-        $(SLO)$/bridgetest.obj $(SLO)$/multi.obj
+        $(SLO)$/bridgetest.obj \
+        $(SLO)$/currentcontextchecker.obj \
+        $(SLO)$/multi.obj
 
 SHL2TARGET = bridgetest.uno
 SHL2STDLIBS= \
@@ -173,7 +176,7 @@ $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
     echo uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
-        -- com.sun.star.test.bridge.JavaTestObject > $@
+        -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
