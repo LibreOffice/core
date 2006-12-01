@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:48:13 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -683,7 +683,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     if( bSetTxtFlyAtt && FLY_IN_CNTNT == rNewAnchor.GetAnchorId() )
     {
         SwPosition* pPos = (SwPosition*)rNewAnchor.GetCntntAnchor();
-        pPos->nNode.GetNode().GetTxtNode()->Insert(SwFmtFlyCnt( pDest ),
+        pPos->nNode.GetNode().GetTxtNode()->InsertItem(SwFmtFlyCnt( pDest ),
                                             pPos->nContent.GetIndex(), 0 );
     }
 
@@ -825,7 +825,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( FLY_IN_CNTNT == eAnchorId )
     {
         xub_StrLen nStt = rAnchPos.nContent.GetIndex();
-        rAnchPos.nNode.GetNode().GetTxtNode()->Insert(
+        rAnchPos.nNode.GetNode().GetTxtNode()->InsertItem(
                                         SwFmtFlyCnt( pFmt ), nStt, nStt );
     }
 
@@ -1105,7 +1105,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     if( FLY_IN_CNTNT == eAnchorId )
     {
         xub_StrLen nStt = rRg.GetPoint()->nContent.GetIndex();
-        rRg.GetPoint()->nNode.GetNode().GetTxtNode()->Insert(
+        rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(
                                         SwFmtFlyCnt( pFmt ), nStt, nStt );
     }
 
@@ -1582,7 +1582,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
         if(pType)
         {
             SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC);
-            pNew->Insert( SwFmtFld( aFld ), nIdx, nIdx );
+            pNew->InsertItem( SwFmtFld( aFld ), nIdx, nIdx );
             if(rCharacterStyle.Len())
             {
                 SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
@@ -1592,7 +1592,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                     pCharFmt = GetCharFmtFromPool( nId );
                 }
                 if(pCharFmt)
-                    pNew->Insert( SwFmtCharFmt( pCharFmt ), 0,
+                    pNew->InsertItem( SwFmtCharFmt( pCharFmt ), 0,
                                         nSepIdx + 1, SETATTR_DONTEXPAND );
             }
         }
@@ -1855,7 +1855,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
         if ( pType )
         {
             SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC );
-            pNew->Insert( SwFmtFld( aFld ), nIdx, nIdx );
+            pNew->InsertItem( SwFmtFld( aFld ), nIdx, nIdx );
             if ( rCharacterStyle.Len() )
             {
                 SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
@@ -1865,7 +1865,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                     pCharFmt = GetCharFmtFromPool( nId );
                 }
                 if ( pCharFmt )
-                    pNew->Insert( SwFmtCharFmt( pCharFmt ), 0, nSepIdx + 1, SETATTR_DONTEXPAND );
+                    pNew->InsertItem( SwFmtCharFmt( pCharFmt ), 0, nSepIdx + 1, SETATTR_DONTEXPAND );
             }
         }
     }
