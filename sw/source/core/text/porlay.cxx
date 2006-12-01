@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:13:17 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:45:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1992,8 +1992,6 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
 
     const SwpHints* pHints = rNode.GetpSwpHints();
     const SwTxtAttr* pTxtAttr = 0;
-    bool bHidden = false;
-    bool bHiddenSelect = false;
 
     if( pHints )
     {
@@ -2002,42 +2000,16 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
         while( nTmp < pHints->GetStartCount() )
         {
             pTxtAttr = pHints->GetStart( nTmp++ );
-            switch ( pTxtAttr->Which() )
-            {
-                case RES_CHRATR_HIDDEN:
-                {
-                    bHidden = sal_True;
-                    bHiddenSelect = pTxtAttr->GetCharHidden().GetValue();
-                }
-                break;
-                case RES_TXTATR_CHARFMT:
-                {
-                    SwCharFmt* pFmt;
-                    const SfxPoolItem* pItem;
-                    pFmt = pTxtAttr->GetCharFmt().GetCharFmt();
-                    if ( pFmt )
-                    {
-                        if( SFX_ITEM_SET == pFmt->GetAttrSet().
-                            GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) )
-                        {
-                            bHidden = sal_True;
-                            bHiddenSelect = ((SvxCharHiddenItem*)pItem)->GetValue();
-                        }
-                    }
-                }
-                break;
-            }
-            if( bHidden )
+            const SvxCharHiddenItem* pItem = static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
+            if( pItem )
             {
                 xub_StrLen nSt = *pTxtAttr->GetStart();
                 xub_StrLen nEnd = *pTxtAttr->GetEnd();
                 if( nEnd > nSt )
                 {
                     Range aTmp( nSt, nEnd - 1 );
-                    if( bHidden )
-                        rHiddenMulti.Select( aTmp, bHiddenSelect );
+                    rHiddenMulti.Select( aTmp, pItem->GetValue() );
                 }
-                bHidden = sal_False;
             }
         }
     }
