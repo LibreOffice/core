@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sw3convert.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:27:20 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,7 @@ void lcl_sw3io__ConvertNumLRSpace( SwTxtNode& rTxtNd, const SwNumRule& rNumRule,
     // man den wieder Erreichen, sonst den der NumRule.
     const SfxPoolItem *pItem;
     const SvxLRSpaceItem *pParaLRSpace = 0;
-    const SwAttrSet *pAttrSet = rTxtNd.GetpSwAttrSet();
+    const SfxItemSet *pAttrSet = rTxtNd.GetpSwAttrSet();
     if( pAttrSet &&
         SFX_ITEM_SET == pAttrSet->GetItemState( RES_LR_SPACE, FALSE, &pItem ) )
         pParaLRSpace = (const SvxLRSpaceItem *)pItem;
