@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:04 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,10 +204,10 @@ public:
     const Font& getFont() { return maFont; }
 
 private:
-    sal_uInt16 mnId;
     const Font  maFont;
     std::map<sal_uInt16, sal_uInt16, ltuint16> maGlyphIndex;
     sal_uInt16 mnNextIndex;
+    sal_uInt16 mnId;
     BitStream maGlyphData;
     std::vector< sal_uInt16 > maGlyphOffsets;
 };
@@ -495,7 +495,6 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
-
-};
+}
 
 #endif
