@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:42:33 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:36:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,6 +263,9 @@
 #ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
 #endif
+#ifndef _FMTAUTOFMT_HXX
+#include <fmtautofmt.hxx>
+#endif
 #ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
 #endif
@@ -278,6 +281,7 @@
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
 #endif
+#include <fmtautofmt.hxx>
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
@@ -500,12 +504,12 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },        // RES_CHRATR_RELIEF
     { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },        // RES_CHRATR_HIDDEN
 
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_AUTOFMT
     { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY4
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
     { 0, 0 },                                           // RES_TXTATR_CHARFMT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5,
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5
     { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY,
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER,
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY6,
@@ -586,9 +590,9 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     // <-- collapsing
     // OD 2004-05-04 #i28701#
     { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEM_POOLABLE }, // RES_WRAP_INFLUENCE_ON_OBJPOS
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY3
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY4
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY5
+    { 0, 0 },                                           // RES_AUTO_STYLE
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE },          // RES_GRFATR_CROPGRF
@@ -734,20 +738,13 @@ void _InitCore()
     //no dummy available
 // CharakterAttr - Dummies
 
-// TextAttr Ende - Dummies
-    aAttrTab[ RES_TXTATR_DUMMY4 - POOLATTR_BEGIN ]
-                = new SfxBoolItem( RES_TXTATR_DUMMY4 );
-// TextAttr Ende - Dummies
-
-    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ]
-                = new SwFmtINetFmt( aEmptyStr, aEmptyStr );
+    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] = new SwFmtAutoFmt;
+    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] = new SwFmtINetFmt( aEmptyStr, aEmptyStr );
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] = new SwFmtRefMark( aEmptyStr );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] = new SwTOXMark;
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] = new SwFmtCharFmt( 0 );
-
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] = new SwFmtRuby( aEmptyStr );
-    aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] =
-                new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
+    aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
 
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] = new SwFmtFld;
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] = new SwFmtFlyCnt( 0 );
@@ -755,21 +752,20 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_SOFTHYPH- POOLATTR_BEGIN ] = new SwFmtSoftHyph;
     aAttrTab[ RES_TXTATR_HARDBLANK- POOLATTR_BEGIN ] = new SwFmtHardBlank( ' ', FALSE );
 
-// TextAttr ohne Ende - Dummies
+// TextAttr - Dummies
     aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY1 );
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );
     aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY5 );
     aAttrTab[ RES_TXTATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY6 );
     aAttrTab[ RES_TXTATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY7 );
-// TextAttr ohne Ende - Dummies
+// TextAttr - Dummies
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem;
     aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] = new SvxAdjustItem;
     aAttrTab[ RES_PARATR_SPLIT- POOLATTR_BEGIN ] = new SvxFmtSplitItem;
     aAttrTab[ RES_PARATR_WIDOWS- POOLATTR_BEGIN ] = new SvxWidowsItem;
     aAttrTab[ RES_PARATR_ORPHANS- POOLATTR_BEGIN ] = new SvxOrphansItem;
-    aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] = new
-                            SvxTabStopItem( 1, SVX_TAB_DEFDIST );
+    aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] = new SvxTabStopItem( 1, SVX_TAB_DEFDIST );
 
     pItem = new SvxHyphenZoneItem;
     ((SvxHyphenZoneItem*)pItem)->GetMaxHyphens() = 0; // Default z.Z. auf 0
@@ -843,9 +839,9 @@ void _InitCore()
             new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     // <--
 // FrmAttr-Dummies
-    aAttrTab[ RES_FRMATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY3 );
-    aAttrTab[ RES_FRMATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY4 );
-    aAttrTab[ RES_FRMATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY5 );
+    aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] = new SwFmtAutoFmt( RES_AUTO_STYLE );
+    aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_STYLE_NAME, aEmptyStr );
+    aAttrTab[ RES_FRMATR_CONDITIONAL_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, aEmptyStr );
 // FrmAttr-Dummies
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] = new SwMirrorGrf;
