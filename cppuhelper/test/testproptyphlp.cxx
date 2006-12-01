@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testproptyphlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:45:29 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/Property.hpp>
 
 #if OSL_DEBUG_LEVEL == 0
+#undef  NDEBUG
 #define NDEBUG
 #endif
 #include <assert.h>
