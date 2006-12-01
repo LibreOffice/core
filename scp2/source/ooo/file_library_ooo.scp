@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.215 $
+ *  $Revision: 1.216 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:10:38 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:07:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1513,12 +1513,6 @@ File gid_File_Lib_Ole
     Dir = gid_Dir_Program;
     Name = "oleautobridge.uno.dll";
 End
-
-#endif
-
-#ifdef WNT
-
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Opc , opc)
 
 #endif
 
