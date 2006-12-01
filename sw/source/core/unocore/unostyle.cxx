@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:19:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #endif
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
+#endif
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
 #endif
 
 #ifndef _SVX_PAGEITEM_HXX //autogen
@@ -171,6 +174,7 @@
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
+#include <istyleaccess.hxx>
 
 #ifndef _GETMETRICVAL_HXX
 #include <GetMetricVal.hxx>
@@ -178,6 +182,8 @@
 #ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
+
+#include <boost/shared_ptr.hpp>
 
 #include "ccoll.hxx"
 
@@ -197,6 +203,15 @@ const unsigned short aStyleByIndex[] =
     SFX_STYLE_FAMILY_PAGE     ,
     SFX_STYLE_FAMILY_FRAME    ,
     SFX_STYLE_FAMILY_PSEUDO
+};
+
+// Already implemented autostyle families: 3
+#define AUTOSTYLE_FAMILY_COUNT 3
+const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
+{
+    IStyleAccess::AUTO_STYLE_CHAR,
+    IStyleAccess::AUTO_STYLE_RUBY,
+    IStyleAccess::AUTO_STYLE_PARA
 };
 
 using namespace ::com::sun::star;
@@ -273,6 +288,21 @@ SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
             return GET_POOLID_CHRFMT;
     }
 }
+
+class SwAutoStylesEnumImpl
+{
+    std::vector<SfxItemSet_Pointer_t> mAutoStyles;
+    std::vector<SfxItemSet_Pointer_t>::iterator aIter;
+    SwDoc* pDoc;
+    IStyleAccess::SwAutoStyleFamily eFamily;
+public:
+    SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
+    ::sal_Bool hasMoreElements() { return aIter != mAutoStyles.end(); }
+    SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
+    IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
+    SwDoc* getDoc() const { return pDoc; }
+};
+
 
 /******************************************************************
  * SwXStyleFamilies
@@ -1623,8 +1653,8 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
 /*-- 17.12.98 08:26:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
-    throw( RuntimeException )
+
+Reference< XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, sal_Bool bIsConditional )
 {
     Reference< XPropertySetInfo >  xRet;
     switch( eFamily )
@@ -1692,6 +1722,12 @@ Reference< XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
         break;
     }
     return xRet;
+}
+
+Reference< XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
+    throw( RuntimeException )
+{
+    return lcl_getPropertySetInfo( eFamily, bIsConditional );
 }
 /* -----------------23.04.99 13:28-------------------
  *
@@ -3671,4 +3707,738 @@ Reference< XNameReplace > SwXFrameStyle::getEvents(  ) throw(RuntimeException)
 {
     return new SwFrameStyleEventDescriptor( *this );
 }
+/*-- 19.05.2006 11:23:55---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+SwXAutoStyles::SwXAutoStyles(SwDocShell& rDocShell) :
+    SwUnoCollection(rDocShell.GetDoc()), pDocShell( &rDocShell )
+{
+}
+/*-- 19.05.2006 11:23:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXAutoStyles::~SwXAutoStyles()
+{
+}
+/*-- 19.05.2006 11:23:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SwXAutoStyles::getCount(void) throw( uno::RuntimeException )
+{
+    return AUTOSTYLE_FAMILY_COUNT;
+}
+/*-- 19.05.2006 11:23:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
+        throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
+                uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Any aRet;
+    if(nIndex < 0 || nIndex >= AUTOSTYLE_FAMILY_COUNT)
+        throw lang::IndexOutOfBoundsException();
+    if(IsValid())
+    {
+        Reference< style::XAutoStyleFamily >  aRef;
+        IStyleAccess::SwAutoStyleFamily nType = aAutoStyleByIndex[nIndex];
+        switch( nType )
+        {
+            case IStyleAccess::AUTO_STYLE_CHAR:
+            {
+                if(!xAutoCharStyles.is())
+                    xAutoCharStyles = new SwXAutoStyleFamily(pDocShell, nType);
+                aRef = xAutoCharStyles;
+            }
+            break;
+            case IStyleAccess::AUTO_STYLE_RUBY:
+            {
+                if(!xAutoRubyStyles.is())
+                    xAutoRubyStyles = new SwXAutoStyleFamily(pDocShell, nType );
+                aRef = xAutoRubyStyles;
+            }
+            break;
+            case IStyleAccess::AUTO_STYLE_PARA:
+            {
+                if(!xAutoParaStyles.is())
+                    xAutoParaStyles = new SwXAutoStyleFamily(pDocShell, nType );
+                aRef = xAutoParaStyles;
+            }
+            break;
+        }
+        aRet.setValue(&aRef, ::getCppuType((const Reference<style::XAutoStyleFamily>*)0));
+    }
+    else
+        throw RuntimeException();
+    return aRet;
+}
+/*-- 19.05.2006 11:23:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Type SwXAutoStyles::getElementType(  ) throw(uno::RuntimeException)
+{
+    return ::getCppuType((const Reference<style::XAutoStyleFamily>*)0);
+}
+/*-- 19.05.2006 11:23:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwXAutoStyles::hasElements(  ) throw(uno::RuntimeException)
+{
+    return sal_True;
+}
+/*-- 19.05.2006 11:23:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwXAutoStyles::getByName(const rtl::OUString& Name)
+        throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+{
+    uno::Any aRet;
+    if(Name.compareToAscii("CharacterStyles") == 0 )
+        aRet = getByIndex(0);
+    else if(Name.compareToAscii("RubyStyles") == 0 )
+        aRet = getByIndex(1);
+    else if(Name.compareToAscii("ParagraphStyles") == 0 )
+        aRet = getByIndex(2);
+    else
+        throw container::NoSuchElementException();
+    return aRet;
+}
+/*-- 19.05.2006 11:23:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< rtl::OUString > SwXAutoStyles::getElementNames(void)
+            throw( uno::RuntimeException )
+{
+    Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);
+    OUString* pNames = aNames.getArray();
+    pNames[0] = C2U("CharacterStyles");
+    pNames[1] = C2U("RubyStyles");
+    pNames[2] = C2U("ParagraphStyles");
+    return aNames;
+}
+/*-- 19.05.2006 11:24:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwXAutoStyles::hasByName(const rtl::OUString& Name)
+            throw( uno::RuntimeException )
+{
+    if( Name.compareToAscii("CharacterStyles") == 0 ||
+        Name.compareToAscii("RubyStyles") == 0 ||
+        Name.compareToAscii("ParagraphStyles") == 0 )
+        return sal_True;
+    else
+        return sal_False;
+}
+
+/*-- 19.05.2006 11:24:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoStyleFamily nFamily) :
+    pDocShell( pDocSh ), eFamily(nFamily)
+{
+    // Register ourselves as a listener to the document (via the page descriptor)
+    pDocSh->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+}
+/*-- 19.05.2006 11:24:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXAutoStyleFamily::~SwXAutoStyleFamily()
+{
+}
+
+void SwXAutoStyleFamily::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+        pDocShell = 0;
+}
+
+/*-- 31.05.2006 11:24:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
+    const uno::Sequence< beans::PropertyValue >& Values )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    if( !pDocShell )
+        throw RuntimeException();
+    const USHORT* aRange;
+    const SfxItemPropertyMap* pMap;
+    switch( eFamily )
+    {
+        case IStyleAccess::AUTO_STYLE_CHAR:
+        {
+            aRange = aCharFmtSetRange;
+            pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_CHAR_AUTO_STYLE);
+        }
+        break;
+        case IStyleAccess::AUTO_STYLE_RUBY:
+        {
+            aRange = 0;//aTxtNodeSetRange;
+            pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_RUBY_AUTO_STYLE);
+        }
+        break;
+        case IStyleAccess::AUTO_STYLE_PARA:
+        {
+            aRange = aTxtNodeSetRange;
+            pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARA_AUTO_STYLE);
+        }
+        break;
+    }
+    SwAttrSet aSet( pDocShell->GetDoc()->GetAttrPool(), aRange );
+    SfxItemPropertySet aPropSet( pMap );
+    const PropertyValue* pSeq = Values.getConstArray();
+    sal_Int32 nLen = Values.getLength();
+    for( sal_Int32 i = 0; i < nLen; ++i )
+    {
+        try
+        {
+            aPropSet.setPropertyValue( pSeq[i].Name, pSeq[i].Value, aSet );
+        }
+        catch (UnknownPropertyException &)
+        {
+            ASSERT( false, "Unknown property" );
+        }
+    }
+
+    SfxItemSet_Pointer_t pSet = pDocShell->GetDoc()->GetIStyleAccess().cacheAutomaticStyle( aSet, eFamily );
+    uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(pDocShell->GetDoc(), pSet, eFamily);
+    return xRet;
+}
+/*-- 31.05.2006 11:24:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(  )
+        throw (uno::RuntimeException)
+{
+    if( !pDocShell )
+        throw RuntimeException();
+    return uno::Reference< container::XEnumeration >
+        (new SwXAutoStylesEnumerator( pDocShell->GetDoc(), eFamily ));
+}
+/*-- 19.05.2006 11:24:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Type SwXAutoStyleFamily::getElementType(  ) throw(uno::RuntimeException)
+{
+    return ::getCppuType((const Reference<style::XAutoStyle>*)0);
+}
+/*-- 19.05.2006 11:24:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwXAutoStyleFamily::hasElements(  ) throw(uno::RuntimeException)
+{
+    return sal_False;
+}
+
+/*-- 31.05.2006 11:24:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam )
+: pDoc( pInitDoc ), eFamily( eFam )
+{
+    // special case for ruby auto styles:
+    if ( IStyleAccess::AUTO_STYLE_RUBY == eFam )
+    {
+        std::set< std::pair< USHORT, USHORT > > aRubyMap;
+        SwAttrPool& rAttrPool = pDoc->GetAttrPool();
+        USHORT nCount = rAttrPool.GetItemCount( RES_TXTATR_CJK_RUBY );
+
+        for ( USHORT nI = 0; nI < nCount; ++nI )
+        {
+            const SwFmtRuby* pItem = static_cast<const SwFmtRuby*>(rAttrPool.GetItem( RES_TXTATR_CJK_RUBY, nI ));
+            if ( pItem && pItem->GetTxtRuby() )
+            {
+                std::pair< USHORT, USHORT > aPair( pItem->GetPosition(), pItem->GetAdjustment() );
+                if ( aRubyMap.find( aPair ) == aRubyMap.end() )
+                {
+                    aRubyMap.insert( aPair );
+                    SfxItemSet_Pointer_t pItemSet( new SfxItemSet( rAttrPool, RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY ) );
+                    pItemSet->Put( *pItem );
+                    mAutoStyles.push_back( pItemSet );
+                }
+            }
+        }
+    }
+    else
+    {
+        pDoc->GetIStyleAccess().getAllStyles( mAutoStyles, eFamily );
+    }
+
+    aIter = mAutoStyles.begin();
+}
+
+/*-- 31.05.2006 11:24:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam )
+: pImpl( new SwAutoStylesEnumImpl( pDoc, eFam ) )
+{
+    // Register ourselves as a listener to the document (via the page descriptor)
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+}
+/*-- 31.05.2006 11:24:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
+{
+    delete pImpl;
+}
+
+void SwXAutoStylesEnumerator::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+    {
+        delete pImpl;
+        pImpl = 0;
+    }
+}
+
+
+/*-- 31.05.2006 11:24:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::sal_Bool SwXAutoStylesEnumerator::hasMoreElements(  )
+    throw (uno::RuntimeException)
+{
+    if( !pImpl )
+        throw RuntimeException();
+    return pImpl->hasMoreElements();
+}
+/*-- 31.05.2006 11:24:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwXAutoStylesEnumerator::nextElement(  )
+    throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( !pImpl )
+        throw RuntimeException();
+    Any aRet;
+    if( pImpl->hasMoreElements() )
+    {
+        SfxItemSet_Pointer_t pNextSet = pImpl->nextElement();
+        Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(pImpl->getDoc(),
+                                                        pNextSet, pImpl->getFamily());
+        aRet.setValue(&xAutoStyle, ::getCppuType((Reference<style::XAutoStyle>*)0));
+    }
+    return aRet;
+}
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXAutoStyle::SwXAutoStyle( SwDoc* pDoc, SfxItemSet_Pointer_t pInitSet, IStyleAccess::SwAutoStyleFamily eFam )
+: pSet( pInitSet ), eFamily( eFam )
+{
+    // Register ourselves as a listener to the document (via the page descriptor)
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXAutoStyle::~SwXAutoStyle()
+{
+}
+
+void SwXAutoStyle::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+        pSet.reset();
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< beans::XPropertySetInfo > SwXAutoStyle::getPropertySetInfo(  )
+                throw (uno::RuntimeException)
+{
+    Reference< XPropertySetInfo >  xRet;
+    switch( eFamily )
+    {
+        case IStyleAccess::AUTO_STYLE_CHAR:
+        {
+            static Reference< XPropertySetInfo >  xCharRef;
+            if(!xCharRef.is())
+            {
+                SfxItemPropertySet aPropSet(
+                    aSwMapProvider.GetPropertyMap(PROPERTY_MAP_CHAR_AUTO_STYLE));
+                xCharRef = aPropSet.getPropertySetInfo();
+            }
+            xRet = xCharRef;
+        }
+        break;
+        case IStyleAccess::AUTO_STYLE_RUBY:
+        {
+            static Reference< XPropertySetInfo >  xRubyRef;
+            if(!xRubyRef.is())
+            {
+                sal_uInt16 nMapId = PROPERTY_MAP_RUBY_AUTO_STYLE;
+                SfxItemPropertySet aPropSet(
+                    aSwMapProvider.GetPropertyMap(nMapId));
+                xRubyRef = aPropSet.getPropertySetInfo();
+            }
+            xRet = xRubyRef;
+        }
+        break;
+        case IStyleAccess::AUTO_STYLE_PARA:
+        {
+            static Reference< XPropertySetInfo >  xParaRef;
+            if(!xParaRef.is())
+            {
+                sal_uInt16 nMapId = PROPERTY_MAP_PARA_AUTO_STYLE;
+                SfxItemPropertySet aPropSet(
+                    aSwMapProvider.GetPropertyMap(nMapId));
+                xParaRef = aPropSet.getPropertySetInfo();
+            }
+            xRet = xParaRef;
+        }
+        break;
+    }
+
+    return xRet;
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+     throw( UnknownPropertyException,
+            PropertyVetoException,
+            IllegalArgumentException,
+            WrappedTargetException,
+            RuntimeException)
+{
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXAutoStyle::getPropertyValue( const OUString& rPropertyName )
+    throw( UnknownPropertyException,
+           lang::WrappedTargetException,
+           RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    const Sequence<OUString> aProperties(&rPropertyName, 1);
+    return GetPropertyValues_Impl(aProperties).getConstArray()[0];
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::addPropertyChangeListener( const OUString& aPropertyName,
+                                              const Reference< beans::XPropertyChangeListener >& xListener )
+    throw( UnknownPropertyException,
+           lang::WrappedTargetException,
+           RuntimeException )
+{
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::removePropertyChangeListener( const OUString& aPropertyName,
+                                                 const Reference< beans::XPropertyChangeListener >& aListener )
+    throw( UnknownPropertyException,
+           lang::WrappedTargetException,
+           RuntimeException )
+{
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::addVetoableChangeListener( const OUString& PropertyName,
+                                              const Reference< beans::XVetoableChangeListener >& aListener )
+    throw( UnknownPropertyException,
+           lang::WrappedTargetException,
+           RuntimeException )
+{
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::removeVetoableChangeListener( const OUString& PropertyName,
+                                                 const Reference< beans::XVetoableChangeListener >& aListener )
+    throw( UnknownPropertyException,
+           lang::WrappedTargetException,
+           RuntimeException )
+{
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::setPropertyValues(
+        const uno::Sequence< ::rtl::OUString >& aPropertyNames,
+        const uno::Sequence< uno::Any >& aValues )
+            throw (beans::PropertyVetoException, lang::IllegalArgumentException,
+                lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< Any > SwXAutoStyle::GetPropertyValues_Impl(
+        const uno::Sequence< OUString > & rPropertyNames )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+{
+    if( !pSet.get() )
+        throw RuntimeException();
+    // query_item
+
+    sal_Int8 nPropSetId;
+    switch(eFamily)
+    {
+        case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_SET_CHAR_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_SET_RUBY_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_SET_PARA_AUTO_STYLE;  break;
+    }
+
+    SfxItemPropertySet &rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap *pMap = rPropSet.getPropertyMap();
+    const OUString* pNames = rPropertyNames.getConstArray();
+
+    sal_Int32 nLen = rPropertyNames.getLength();
+    Sequence< Any > aRet( nLen );
+    Any* pValues = aRet.getArray();
+
+    SfxItemSet& rSet = *pSet.get();
+
+    for( sal_Int32 i = 0; i < nLen; ++i )
+    {
+        const String& rPropName = pNames[i];
+        pMap = SfxItemPropertyMap::GetByName(pMap, rPropName);
+        if(!pMap)
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+        else if ( RES_TXTATR_AUTOFMT == pMap->nWID || RES_AUTO_STYLE == pMap->nWID )
+        {
+            OUString sName(StylePool::nameOf( pSet ));
+            pValues[i] <<= sName;
+        }
+        else
+            pValues[i] = rPropSet.getPropertyValue( *pMap, rSet );
+    }
+    return aRet;
+}
+
+/*-- 19.05.2006 11:24:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
+        const uno::Sequence< ::rtl::OUString >& rPropertyNames )
+            throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues;
+
+    // workaround for bad designed API
+    try
+    {
+        aValues = GetPropertyValues_Impl( rPropertyNames );
+    }
+    catch (UnknownPropertyException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+    catch (WrappedTargetException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+
+    return aValues;
+}
+
+/*-- 19.05.2006 11:24:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::addPropertiesChangeListener(
+        const uno::Sequence< ::rtl::OUString >& aPropertyNames,
+        const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+            throw (uno::RuntimeException)
+{
+}
+
+/*-- 19.05.2006 11:24:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::removePropertiesChangeListener(
+        const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+            throw (uno::RuntimeException)
+{
+}
+
+/*-- 19.05.2006 11:24:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::firePropertiesChangeEvent(
+        const uno::Sequence< ::rtl::OUString >& aPropertyNames,
+        const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+            throw (uno::RuntimeException)
+{
+}
+
+/*-- 19.05.2006 11:24:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+beans::PropertyState SwXAutoStyle::getPropertyState( const OUString& rPropertyName )
+    throw( beans::UnknownPropertyException,
+           uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    Sequence< OUString > aNames(1);
+    OUString* pNames = aNames.getArray();
+    pNames[0] = rPropertyName;
+    Sequence< PropertyState > aStates = getPropertyStates(aNames);
+    return aStates.getConstArray()[0];
+}
+
+/*-- 19.05.2006 11:24:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::setPropertyToDefault( const OUString& PropertyName )
+    throw( beans::UnknownPropertyException,
+           uno::RuntimeException )
+{
+}
+
+/*-- 19.05.2006 11:24:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXAutoStyle::getPropertyDefault( const OUString& rPropertyName )
+    throw( beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException)
+{
+    const Sequence < OUString > aSequence ( &rPropertyName, 1 );
+    return getPropertyDefaults ( aSequence ).getConstArray()[0];
+}
+
+/*-- 19.05.2006 11:24:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
+        const uno::Sequence< ::rtl::OUString >& rPropertyNames )
+            throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    if( !pSet.get() )
+        throw RuntimeException();
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< PropertyState > aRet(rPropertyNames.getLength());
+    PropertyState* pStates = aRet.getArray();
+    const OUString* pNames = rPropertyNames.getConstArray();
+
+    sal_Int8 nPropSetId;
+    switch(eFamily)
+    {
+        case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_SET_CHAR_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_SET_RUBY_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_SET_PARA_AUTO_STYLE;  break;
+    }
+
+    SfxItemPropertySet &rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap *pMap = rPropSet.getPropertyMap();
+    SfxItemSet& rSet = *pSet.get();
+    for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
+    {
+        const String& rPropName = pNames[i];
+        pMap = SfxItemPropertyMap::GetByName(pMap, rPropName);
+        if(!pMap)
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+        pStates[i] = rPropSet.getPropertyState(*pMap, rSet);
+    }
+    return aRet;
+}
+
+/*-- 19.05.2006 11:24:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::setAllPropertiesToDefault(  )
+            throw (uno::RuntimeException)
+{
+}
+
+/*-- 19.05.2006 11:24:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXAutoStyle::setPropertiesToDefault(
+        const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+            throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+}
+
+/*-- 19.05.2006 11:24:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
+        const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+            throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+                    uno::RuntimeException)
+{
+    uno::Sequence< uno::Any > aRet(0);
+    return aRet;
+}
+
+/*-- 19.05.2006 11:24:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (::com::sun::star::uno::RuntimeException)
+{
+    if( !pSet.get() )
+        throw RuntimeException();
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    std::vector< PropertyValue > aPropertyVector;
+
+    sal_Int8 nPropSetId;
+    switch(eFamily)
+    {
+        case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_SET_CHAR_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_SET_RUBY_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_SET_PARA_AUTO_STYLE;  break;
+    }
+
+    SfxItemPropertySet& rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap* pMap = rPropSet.getPropertyMap();
+
+    SfxItemSet& rSet = *pSet.get();
+    SfxItemIter aIter(rSet);
+    const SfxPoolItem* pItem = aIter.FirstItem();
+
+    while ( pItem )
+    {
+        const USHORT nWID = pItem->Which();
+
+        // TODO: Optimize
+        int i = 0;
+        while ( pMap[i].nWID != 0 )
+        {
+            if ( pMap[i].nWID == nWID )
+            {
+                beans::PropertyValue aPropertyValue;
+                String sString( OUString::createFromAscii( pMap[i].pName ) );
+                aPropertyValue.Name = sString;
+                pItem->QueryValue( aPropertyValue.Value, pMap[i].nMemberId );
+                aPropertyVector.push_back( aPropertyValue );
+                break;
+            }
+            ++i;
+        }
+        pItem = aIter.NextItem();
+    }
+
+    const sal_Int32 nCount = aPropertyVector.size();
+    Sequence< beans::PropertyValue > aRet( nCount );
+    beans::PropertyValue* pProps = aRet.getArray();
+
+    for ( int i = 0; i < nCount; ++i, pProps++ )
+    {
+        *pProps = aPropertyVector[i];
+    }
+
+    return aRet;
+}
