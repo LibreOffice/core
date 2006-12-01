@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:36:23 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:30:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,6 +496,15 @@ BOOL DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText 
 
     return FALSE;  // we never want that the base change our text
 }
+
+// -----------------------------------------------------------------------------
+BOOL DBTreeListBox::DoubleClickHdl()
+{
+    long nResult = aDoubleClickHdl.Call( this );
+    // continue default processing if the DoubleClickHandler didn't handle it
+    return nResult == 0;
+}
+
 // -----------------------------------------------------------------------------
 void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
 {
