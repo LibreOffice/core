@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:19:54 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,8 +634,6 @@ public:
     void ReinitializeFrmSizeAttrFlags();
 
     const SwAttrSet *GetAttrSet() const;
-          SwAttrSet *GetAttrSet();
-    void             GetAttrSet( SwAttrSet* );
 
     inline BOOL HasFixSize() const { return bFixSize; }
     inline void SetFixSize( BOOL bNew ) { bFixSize = bNew; }
