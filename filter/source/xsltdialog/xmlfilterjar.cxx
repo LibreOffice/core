@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterjar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:48:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,11 +170,13 @@ static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleSe
     }
 }
 
+/*
 static void addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile, const OUString& rName ) throw( Exception )
 {
     Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( new SvFileStream(rSourceFile, STREAM_READ ), true ) );
     _addFile( xRootFolder, xFactory, xInput, rName );
 }
+*/
 
 void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception )
 {
@@ -259,7 +261,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
             {
                 osl::File aOutputFile( aTempFileURL );
-                osl::File::RC rc = aOutputFile.open( OpenFlag_Write );
+                /* osl::File::RC rc = */ aOutputFile.open( OpenFlag_Write );
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
 
                 TypeDetectionExporter aExporter( mxMSF );
@@ -277,7 +279,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
             return true;
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
         DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
     }
@@ -348,7 +350,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
         DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
     }
