@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfileview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:47:51 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw
     }
 }
 
-void SAL_CALL XMLErrorHandler::warning( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
+void SAL_CALL XMLErrorHandler::warning( const Any& /* aSAXParseException */ ) throw (SAXException, RuntimeException)
 {
 /*
     SAXParseException e;
@@ -290,7 +290,7 @@ void XMLFileWindow::Resize()
         }
 
         if ( nVisY != pTextView->GetStartDocPos().Y() )
-            Invalidate();
+            InvalidateWindow();
     }
 
 }
@@ -460,7 +460,7 @@ IMPL_LINK(XMLFileWindow, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-void XMLFileWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void XMLFileWindow::Notify( SfxBroadcaster& /* rBC */, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
     {
@@ -484,7 +484,7 @@ void XMLFileWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-void XMLFileWindow::Invalidate()
+void XMLFileWindow::InvalidateWindow()
 {
     pOutWin->Invalidate();
     Window::Invalidate();
@@ -520,7 +520,7 @@ void XMLFileWindow::GetFocus()
     pOutWin->GrabFocus();
 }
 
-void XMLFileWindow::Show( const rtl::OUString& rFileName )
+void XMLFileWindow::ShowWindow( const rtl::OUString& rFileName )
 {
     String aFileName( rFileName );
     SvFileStream aStream( aFileName, STREAM_READ );
@@ -560,11 +560,11 @@ void XMLFileWindow::showLine( sal_Int32 nLine )
 
 XMLSourceFileDialog::XMLSourceFileDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF  )
 :   WorkWindow( pParent, ResId( DLG_XML_SOURCE_FILE_DIALOG, &rResMgr ) ),
+    mnOutputHeight( LogicToPixel( Size( 80, 80 ), MAP_APPFONT ).Height() ),
     mxMSF( rxMSF ),
     mrResMgr( rResMgr ),
     maLBOutput( this ),
-    maPBValidate( this, ResId( PB_VALIDATE, &rResMgr ) ),
-    mnOutputHeight( LogicToPixel( Size( 80, 80 ), MAP_APPFONT ).Height() )
+    maPBValidate( this, ResId( PB_VALIDATE, &rResMgr ) )
 {
 
     FreeResource();
@@ -586,7 +586,7 @@ XMLSourceFileDialog::~XMLSourceFileDialog()
     delete mpTextWindow;
 }
 
-void XMLSourceFileDialog::Show( const rtl::OUString& rFileName, const filter_info_impl* pFilterInfo )
+void XMLSourceFileDialog::ShowWindow( const rtl::OUString& rFileName, const filter_info_impl* pFilterInfo )
 {
     EnterWait();
     if( maFileURL.getLength() )
@@ -602,7 +602,7 @@ void XMLSourceFileDialog::Show( const rtl::OUString& rFileName, const filter_inf
 
     mpFilterInfo = pFilterInfo;
     maFileURL = rFileName;
-    mpTextWindow->Show( rFileName );
+    mpTextWindow->ShowWindow( rFileName );
     WorkWindow::Show();
     LeaveWait();
 }
@@ -651,7 +651,7 @@ IMPL_LINK(XMLSourceFileDialog, SelectHdl_Impl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK(XMLSourceFileDialog, ClickHdl_Impl, PushButton *, pButton )
+IMPL_LINK(XMLSourceFileDialog, ClickHdl_Impl, PushButton *, /* pButton */ )
 {
     onValidate();
     return 0;
@@ -671,7 +671,7 @@ void XMLSourceFileDialog::onValidate()
         if( xImporter.is() )
         {
             osl::File aInputFile( maFileURL );
-            osl::File::RC rc = aInputFile.open( OpenFlag_Read );
+            /* osl::File::RC rc = */ aInputFile.open( OpenFlag_Read );
 
             Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 
@@ -726,8 +726,8 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCloseBracket= '>';
     const sal_Unicode cSlash        = '/';
     const sal_Unicode cExclamation = '!';
-    const sal_Unicode cQuote        = '"';
-    const sal_Unicode cSQuote      = '\'';
+//  const sal_Unicode cQuote        = '"';
+//  const sal_Unicode cSQuote      = '\'';
     const sal_Unicode cMinus        = '-';
     const sal_Unicode cSpace        = ' ';
     const sal_Unicode cTab          = 0x09;
@@ -844,12 +844,12 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 
                 if(bFound ||(eFoundType == svtools::HTMLCOMMENT))
                 {
-                    SwTextPortion aText;
-                    aText.nLine = 0;
-                    aText.nStart = nPortStart + 1;
-                    aText.nEnd = nPortEnd;
-                    aText.eType = eFoundType;
-                    aPortionList.Insert(aText, nInsert++);
+                    SwTextPortion aText2;
+                    aText2.nLine = 0;
+                    aText2.nStart = nPortStart + 1;
+                    aText2.nEnd = nPortEnd;
+                    aText2.eType = eFoundType;
+                    aPortionList.Insert(aText2, nInsert++);
                     eFoundType = svtools::HTMLUNKNOWN;
                 }
 
@@ -905,11 +905,10 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         // Wenn zwei gleiche Attribute hintereinander eingestellt werden,
         // optimiert das die TextEngine.
         USHORT nLastEnd = 0;
-        USHORT nLine = aPortionList[0].nLine;
         for ( USHORT i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
-            DBG_ASSERT( r.nLine == nLine, "doch mehrere Zeilen ?" );
+            DBG_ASSERT( r.nLine == aPortionList[0].nLine, "doch mehrere Zeilen ?" );
             if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
                 continue;
 
@@ -931,7 +930,7 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
-        USHORT nCol = r.eType;
+//      USHORT nCol = r.eType;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&
             r.eType != svtools::HTMLKEYWORD &&
@@ -993,9 +992,9 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
     {
         nLine = (USHORT)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
-        USHORT nCur = (USHORT)aSyntaxLineTable.GetCurKey();
+        USHORT nC = (USHORT)aSyntaxLineTable.GetCurKey();
         p = aSyntaxLineTable.Next();
-        aSyntaxLineTable.Remove(nCur);
+        aSyntaxLineTable.Remove(nC);
         nCount ++;
         if(Time().GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
         {
