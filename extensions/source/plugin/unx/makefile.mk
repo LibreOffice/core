@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 10:45:51 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:19:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@ CDEFS+=-DOJI
 
 .IF "$(WITH_MOZILLA)" != "NO"
 
+.IF "$(DISABLE_XAW)" == "TRUE"
+CDEFS+=-DDISABLE_XAW
+.ENDIF
+
 SLOFILES=\
     $(SLO)$/nppapi.obj		\
     $(SLO)$/sysplug.obj		\
@@ -73,10 +77,13 @@ APP1STDLIBS=\
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO" || "$(OS)"=="HPUX"
 APP1STDLIBS+=-lXm -lXt -lXext -lX11 -ldl
 .ELSE
+.IF "$(DISABLE_XAW)" != "TRUE"
+APP1STDLIBS+=-lXaw 
+.ENDIF
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
-APP1STDLIBS+=-lXaw -lXt -lXext -lX11
+APP1STDLIBS+= -lXt -lXext -lX11
 .ELSE
-APP1STDLIBS+=-lXaw -lXt -lXext -lX11 -ldl
+APP1STDLIBS+= -lXt -lXext -lX11 -ldl
 .ENDIF
 .ENDIF
 
