@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:58:24 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,10 +390,10 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
 
 OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
                                   const OUString& rParent,
-                                  const vector< XMLPropertyState >& rProperties )
+                                  const vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
     OUString sName;
-    pImpl->Add(sName, nFamily, rParent, rProperties );
+    pImpl->Add(sName, nFamily, rParent, rProperties, sal_False, bDontSeek );
     return sName;
 }
 
