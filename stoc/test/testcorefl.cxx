@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:40:21 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,9 +91,9 @@ public:
     virtual void SAL_CALL methodA(void) throw (RuntimeException)
         {}
 
-    virtual void SAL_CALL methodB(sal_Int16 aShort) throw (RuntimeException)
+    virtual void SAL_CALL methodB(sal_Int16 /*aShort*/) throw (RuntimeException)
         {}
-    virtual Sequence< StructB > SAL_CALL methodC(const StructC& aStructC, StructA& aStructA) throw (RuntimeException)
+    virtual Sequence< StructB > SAL_CALL methodC(const StructC& /*aStructC*/, StructA& /*aStructA*/) throw (RuntimeException)
         { return Sequence< StructB >(); }
 };
 
