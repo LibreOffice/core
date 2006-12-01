@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 12:55:58 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:13:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..$/..$/..$/..
 
-PRJNAME=api
+PRJNAME=offapi
 
 TARGET=csssdbapp
 PACKAGE=com$/sun$/star$/sdb$/application
