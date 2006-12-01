@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 14:18:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,12 @@ void FilterCache::takeOver(const FilterCache& rClone)
     28.10.2003 09:01
 -----------------------------------------------*/
 void FilterCache::load(EFillState eRequired,
-                       sal_Bool   bByThread)
+#if OSL_DEBUG_LEVEL > 0
+    sal_Bool bByThread
+#else
+    sal_Bool
+#endif
+)
     throw(css::uno::Exception)
 {
     // SAFE -> ----------------------------------
@@ -325,7 +330,7 @@ void FilterCache::load(EFillState eRequired,
         // and starts a thread, which calls loadAll() at this filter cache.
         // Note: Its not a leak to create this listener with new here.
         // It kills itself after working!
-        LateInitListener* pLateInit = new LateInitListener(m_xSMGR);
+        /* LateInitListener* pLateInit = */ new LateInitListener(m_xSMGR);
     }
 
     // ------------------------------------------
@@ -651,6 +656,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                 xPackage->getByName(CFGSET_CONTENTHANDLERS) >>= xSet;
             }
             break;
+        default: break;
     }
 
     try
@@ -795,6 +801,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 impl_saveItem(xItem, eType, pItem->second);
             }
             break;
+            default: break;
         }
     }
 }
@@ -878,11 +885,11 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 
     switch(eType)
     {
-        case E_TYPE           : return m_lTypes          ; break;
-        case E_FILTER         : return m_lFilters        ; break;
-        case E_FRAMELOADER    : return m_lFrameLoaders   ; break;
-        case E_CONTENTHANDLER : return m_lContentHandlers; break;
-        case E_DETECTSERVICE  : return m_lDetectServices ; break;
+        case E_TYPE           : return m_lTypes          ;
+        case E_FILTER         : return m_lFilters        ;
+        case E_FRAMELOADER    : return m_lFrameLoaders   ;
+        case E_CONTENTHANDLER : return m_lContentHandlers;
+        case E_DETECTSERVICE  : return m_lDetectServices ;
 
         default : throw css::uno::Exception(::rtl::OUString::createFromAscii("unknown sub container requested."),
                                             css::uno::Reference< css::uno::XInterface >()                      );
@@ -904,7 +911,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     css::uno::Reference< css::uno::XInterface >* pConfig = 0;
     css::uno::Reference< css::uno::XInterface >  xOld       ;
     ::rtl::OString                               sRtlLog    ;
-    FilterCache::EItemType                       eItemType  ;
+    FilterCache::EItemType                       eItemType( FilterCache::E_TYPE ) ;
     sal_Bool                                     bStartListening = sal_False;
 
     switch(eProvider)
@@ -1100,10 +1107,16 @@ void FilterCache::impl_validateAndOptimize()
     // First check if any filter or type could be readed
     // from the underlying configuration!
     sal_Bool bSomeTypesShouldExist   = ((m_eFillState & E_CONTAINS_STANDARD       ) == E_CONTAINS_STANDARD       );
-    sal_Bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
     sal_Bool bAllFiltersShouldExist  = ((m_eFillState & E_CONTAINS_FILTERS        ) == E_CONTAINS_FILTERS        );
+
+#if OSL_DEBUG_LEVEL > 0
+
+    sal_Int32             nWarnings = 0;
+
+//  sal_Bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
     sal_Bool bAllLoadersShouldExist  = ((m_eFillState & E_CONTAINS_FRAMELOADERS   ) == E_CONTAINS_FRAMELOADERS   );
     sal_Bool bAllHandlersShouldExist = ((m_eFillState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS);
+#endif
 
     if (
         (
@@ -1127,7 +1140,6 @@ void FilterCache::impl_validateAndOptimize()
     // If there are some real errors throw a RuntimException!
     // If there are some warnings only, show an assertion.
     sal_Int32             nErrors   = 0;
-    sal_Int32             nWarnings = 0;
     ::rtl::OUStringBuffer sLog(256);
 
     CacheItemList::iterator pIt;
@@ -1158,6 +1170,7 @@ void FilterCache::impl_validateAndOptimize()
         sal_Int32 cu = lURLPattern.getLength();
 
 #if OSL_DEBUG_LEVEL > 0
+
         ::rtl::OUString sInternalTypeNameCheck;
         aType[PROPNAME_NAME] >>= sInternalTypeNameCheck;
         if (!sInternalTypeNameCheck.equals(sType))
@@ -1260,8 +1273,8 @@ void FilterCache::impl_validateAndOptimize()
 
         if (sPrefFilter.getLength())
         {
-            CacheItemList::const_iterator pIt = m_lFilters.find(sPrefFilter);
-            if (pIt == m_lFilters.end())
+            CacheItemList::const_iterator pIt2 = m_lFilters.find(sPrefFilter);
+            if (pIt2 == m_lFilters.end())
             {
                 if (bAllFiltersShouldExist)
                 {
@@ -1283,7 +1296,7 @@ void FilterCache::impl_validateAndOptimize()
                 continue;
             }
 
-            CacheItem       aPrefFilter   = pIt->second;
+            CacheItem       aPrefFilter   = pIt2->second;
             ::rtl::OUString sFilterTypeReg;
             aPrefFilter[PROPNAME_TYPE] >>= sFilterTypeReg;
             if (sFilterTypeReg != sType)
@@ -1438,7 +1451,7 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
     sal_Bool bExistsInConfigLayer = xSet->hasByName(sItem);
     sal_Bool bExistsInMemory      = (rList.find(sItem) != rList.end());
 
-    EItemFlushState eState;
+    EItemFlushState eState( E_ITEM_UNCHANGED );
 
     // !? ... such situation can occure, if an item was added and(!) removed before it was flushed :-)
     if (!bExistsInConfigLayer && !bExistsInMemory)
@@ -1613,6 +1626,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
         case E_CONTENTHANDLER :
             sSetName = CFGSET_CONTENTHANDLERS;
             break;
+        default: break;
     }
 
     css::uno::Reference< css::container::XNameAccess > xSet;
@@ -1700,6 +1714,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 }
             }
             break;
+            default: break;
         }
     }
 }
@@ -1936,6 +1951,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             aItem[PROPNAME_TYPES] = xItem->getByName(PROPNAME_TYPES);
         }
         break;
+        default: break;
     }
 
     return aItem;
@@ -2123,6 +2139,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
                 xItem->replaceByName(PROPNAME_TYPES, pIt->second);
         }
         break;
+        default: break;
     }
 }
 
@@ -2470,6 +2487,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
             case E_FILTER :
                 impl_interpretDataVal4Filter(sProp, nProp, aItem);
                 break;
+            default: break;
         }
         ++nProp;
     }
