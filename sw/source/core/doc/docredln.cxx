@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:48:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2923,7 +2923,7 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
         {
             rMark.nContent.Assign( pTNd, pTNd->GetTxt().Len() );
 
-            if( pTNd->GetpSwAttrSet() )
+            if( pTNd->HasSwAttrSet() )
             {
                 // nur die setzen, die nicht mehr vorhanden sind. Andere
                 // koennen jetzt veraendert drin stehen, aber die werden
