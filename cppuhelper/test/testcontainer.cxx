@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:44:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,12 @@ using namespace ::com::sun::star::uno;
 class TestListener : public WeakImplHelper1< XVetoableChangeListener >
 {
     // Methods
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw(::com::sun::star::uno::RuntimeException)
         {
 
         }
 
-    virtual void SAL_CALL vetoableChange( const ::com::sun::star::beans::PropertyChangeEvent& aEvent )
+    virtual void SAL_CALL vetoableChange( const ::com::sun::star::beans::PropertyChangeEvent& /*aEvent*/ )
        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException)
         {
 
