@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:33:41 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -573,6 +573,7 @@ void SwNumberTreeNode::AddChild(SwNumberTreeNode * pChild, unsigned int nDepth)
         if (aResult.second)
         {
             pChild->mpParent = this;
+            bool bNotification = pChild->IsNotificationEnabled();
             tSwNumberTreeChildren::iterator aInsertedIt = aResult.first;
 
             if (aInsertedIt != mChildren.begin())
@@ -633,15 +634,18 @@ void SwNumberTreeNode::AddChild(SwNumberTreeNode * pChild, unsigned int nDepth)
 
             ClearObsoletePhantoms();
 
-            // --> OD 2005-10-20 #126009# - invalidation of not counted parent
-            // and notification of its siblings.
-            if ( !IsCounted() )
+            if( bNotification )
             {
-                InvalidateMe();
-                NotifyInvalidSiblings();
+                // --> OD 2005-10-20 #126009# - invalidation of not counted parent
+                // and notification of its siblings.
+                if ( !IsCounted() )
+                {
+                    InvalidateMe();
+                    NotifyInvalidSiblings();
+                }
+                // <--
+                NotifyInvalidChildren();
             }
-            // <--
-            NotifyInvalidChildren();
         }
     }
 
