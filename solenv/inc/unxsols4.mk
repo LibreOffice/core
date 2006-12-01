@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 15:11:52 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:37:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,6 @@ MODULES_WITH_WARNINGS := \
     chart2 \
     devtools \
     extensions \
-    filter \
     lingu \
     r_tools \
     sc \
