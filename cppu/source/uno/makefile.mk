@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:53:48 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:26:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,12 @@ TARGET=cppu_uno
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/data.obj	\
-    $(SLO)$/sequence.obj	\
-    $(SLO)$/any.obj		\
-    $(SLO)$/lbmap.obj	\
-    $(SLO)$/lbenv.obj
+    $(SLO)$/data.obj     \
+    $(SLO)$/sequence.obj \
+    $(SLO)$/any.obj      \
+    $(SLO)$/lbmap.obj    \
+    $(SLO)$/lbenv.obj    \
+    $(SLO)$/IdentityMapping.obj
 
 # --- Targets ------------------------------------------------------
 
