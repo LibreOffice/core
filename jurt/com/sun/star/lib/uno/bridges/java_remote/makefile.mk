@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:58:18 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:50:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,16 +33,13 @@
 #
 #*************************************************************************
 
-PRJ		= ..$/..$/..$/..$/..$/..$/..
-PRJNAME = jurt
+PRJ := ..$/..$/..$/..$/..$/..$/..
+PRJNAME := jurt
+
+TARGET := com_sun_star_lib_uno_bridges_java_remote
 PACKAGE = com$/sun$/star$/lib$/uno$/bridges$/java_remote
-TARGET  = com_sun_star_lib_uno_bridges_java_remote
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 JAVAFILES = \
     BridgedObject.java \
@@ -52,7 +49,4 @@ JAVAFILES = \
     XConnectionOutputStream_Adapter.java \
     java_remote_bridge.java
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: target.mk
