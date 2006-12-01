@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:17:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2259,7 +2259,8 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             }
             // --> OD 2006-05-08 #i53139#
             // --> OD 2006-09-11 #i69409# - check <pNewUpper>
-            else if ( pNewUpper )
+            // --> OD 2006-11-02 #i71065# - check <SwFlowFrm::IsMoveBwdJump()>
+            else if ( pNewUpper && !SwFlowFrm::IsMoveBwdJump() )
             // <--
             {
                 // Now <pNewUpper> is a previous layout frame, which
@@ -2324,8 +2325,12 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                             // --> OD 2006-07-05 #136538# - another correction of fix for i53139
                             // Beside type check, check also, if proposed new next upper
                             // frame is inside the same frame types.
+                            // --> OD 2006-11-02 #i71065#
+                            // Check that the proposed new next upper layout
+                            // frame isn't the current one.
                             SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
                             if ( pNewNextUpper &&
+                                 pNewNextUpper != rThis.GetUpper() &&
                                  pNewNextUpper->GetType() == pNewUpper->GetType() &&
                                  pNewNextUpper->IsInDocBody() == pNewUpper->IsInDocBody() &&
                                  pNewNextUpper->IsInFtn() == pNewUpper->IsInFtn() &&
