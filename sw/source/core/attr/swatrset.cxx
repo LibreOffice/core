@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swatrset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:40:45 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 #include <hintids.hxx>
-
+#include <svtools/whiter.hxx>
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
 #endif
@@ -79,6 +79,7 @@
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
+#include <istyleaccess.hxx>
 
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
@@ -114,6 +115,37 @@ SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
 {
 }
 
+SfxItemSet* SwAttrSet::Clone( BOOL bItems, SfxItemPool *pToPool ) const
+{
+    if ( pToPool && pToPool != GetPool() )
+    {
+        SwAttrPool* pAttrPool = dynamic_cast< SwAttrPool* >(pToPool);
+        SfxItemSet* pNewSet = 0;
+        if ( !pAttrPool )
+            pNewSet = SfxItemSet::Clone( bItems, pToPool );
+        else
+        {
+            pNewSet = new SwAttrSet( *pAttrPool, GetRanges() );
+            if ( bItems )
+            {
+                SfxWhichIter aIter(*pNewSet);
+                USHORT nWhich = aIter.FirstWhich();
+                while ( nWhich )
+                {
+                    const SfxPoolItem* pItem;
+                    if ( SFX_ITEM_SET == GetItemState( nWhich, FALSE, &pItem ) )
+                        pNewSet->Put( *pItem, pItem->Which() );
+                    nWhich = aIter.NextWhich();
+                }
+            }
+        }
+        return pNewSet;
+    }
+    else
+        return bItems
+                ? new SwAttrSet( *this )
+                : new SwAttrSet( *GetPool(), GetRanges() );
+}
 
 int SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
                     SwAttrSet* pOld, SwAttrSet* pNew )
@@ -193,19 +225,24 @@ void  SwAttrSet::Changed( const SfxPoolItem& rOld,
 //  - SwFmtPageDesc
 // (Wird beim Einfuegen in Formate/Nodes gerufen)
 // ----------------------------------------------------------------
-void SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
+
+bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 {
+    bool bSet = false;
+
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == GetItemState( RES_PAGEDESC, FALSE, &pItem ) &&
         ((SwFmtPageDesc*)pItem)->GetDefinedIn() != pModify  )
     {
         ((SwFmtPageDesc*)pItem)->ChgDefinedIn( pModify );
+        bSet = true;
     }
 
     if( SFX_ITEM_SET == GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) &&
         ((SwNumRuleItem*)pItem)->GetDefinedIn() != pModify  )
     {
         ((SwNumRuleItem*)pItem)->ChgDefinedIn( pModify );
+        bSet = true;
     }
 
     if( SFX_ITEM_SET == GetItemState( RES_PARATR_DROP, FALSE, &pItem ) &&
@@ -217,19 +254,22 @@ void SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
         if( 0 != ( pCharFmt = ((SwFmtDrop*)pItem)->GetCharFmt() )
             && GetPool() != pCharFmt->GetAttrSet().GetPool() )
         {
-            pCharFmt = GetDoc()->CopyCharFmt( *pCharFmt );
-            ((SwFmtDrop*)pItem)->SetCharFmt( pCharFmt );
+           pCharFmt = GetDoc()->CopyCharFmt( *pCharFmt );
+           ((SwFmtDrop*)pItem)->SetCharFmt( pCharFmt );
         }
         ((SwFmtDrop*)pItem)->ChgDefinedIn( pModify );
+        bSet = true;
     }
 
     if( SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMULA, FALSE, &pItem ) &&
         ((SwTblBoxFormula*)pItem)->GetDefinedIn() != pModify )
     {
         ((SwTblBoxFormula*)pItem)->ChgDefinedIn( pModify );
+        bSet = true;
     }
-}
 
+    return bSet;
+}
 
 void SwAttrSet::CopyToModify( SwModify& rMod ) const
 {
