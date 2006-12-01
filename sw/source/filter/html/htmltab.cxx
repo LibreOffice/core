@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:11:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1607,7 +1607,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                     pCNd = pSttNd->GetNodes()[pSttNd->GetIndex()+1]
                                  ->GetCntntNode();
                     const SfxPoolItem *pItem;
-                    if( pCNd && pCNd->GetpSwAttrSet() &&
+                    if( pCNd && pCNd->HasSwAttrSet() &&
                         SFX_ITEM_SET==pCNd->GetpSwAttrSet()->GetItemState(
                             RES_PARATR_ADJUST, sal_False, &pItem ) )
                     {
