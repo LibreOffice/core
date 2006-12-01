@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:39:27 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:29:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,11 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
-    m_pImpl->m_aControllers.erase(::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController));
+    ControllerArray::iterator pos = ::std::find( m_pImpl->m_aControllers.begin(), m_pImpl->m_aControllers.end(), _xController );
+    OSL_ENSURE( pos != m_pImpl->m_aControllers.end(), "ODatabaseDocument::disconnectController: don't know this controller!" );
+    if ( pos != m_pImpl->m_aControllers.end() )
+        m_pImpl->m_aControllers.erase( pos );
+
     if ( m_pImpl->m_xCurrentController == _xController )
         m_pImpl->m_xCurrentController = NULL;
 
@@ -1079,9 +1083,8 @@ void ODatabaseDocument::disposing()
     }
 
     DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
-        // normally, nobody should explicitly dispose, but only XCloseable::close the document.An upon
+        // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
         // closing, our controllers are closed, too
-    m_pImpl->m_aControllers.clear();
 
     Reference< XModel > xHoldAlive( this );
     {
@@ -1101,7 +1104,12 @@ void ODatabaseDocument::disposing()
         clearObjectContainer( m_xReports);
 
         m_pImpl->modelIsDisposing( ODatabaseModelImpl::ResetModelAccess() );
+
+        // now, at the latest, the controller array should be empty. Controllers are
+        // expected to listen for our disposal, and disconnect then
+        DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     }
+
     m_pImpl.clear();
 }
 // -----------------------------------------------------------------------------
