@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:35:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ void BaseContainer::impl_initFlushMode()
     if (!m_pFlushCache)
         throw css::uno::RuntimeException(
                 ::rtl::OUString::createFromAscii("Cant create write copy of internal used cache on demand."),
-                reinterpret_cast< css::container::XNameAccess* >(this));
+                dynamic_cast< css::container::XNameAccess* >(this));
     // <- SAFE
 }
 
@@ -509,7 +509,7 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
 /*-----------------------------------------------
     15.07.2003 09:21
 -----------------------------------------------*/
-css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
+css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const ::rtl::OUString& /* sQuery */ )
     throw (css::uno::RuntimeException)
 {
     OSL_ENSURE(sal_False, "not pure virtual ... but not realy implemented .-)");
@@ -580,7 +580,7 @@ void SAL_CALL BaseContainer::flush()
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(
                 ::rtl::OUString::createFromAscii("Cant guarantee cache consistency. Special flush container does not exists!"),
-                reinterpret_cast< css::container::XNameAccess* >(this),
+                dynamic_cast< css::container::XNameAccess* >(this),
                 css::uno::Any());
 
     try
@@ -603,7 +603,7 @@ void SAL_CALL BaseContainer::flush()
 
         throw css::lang::WrappedTargetRuntimeException(
                 ::rtl::OUString::createFromAscii("Flush rejected by internal container."),
-                reinterpret_cast< css::container::XNameAccess* >(this),
+                dynamic_cast< css::container::XNameAccess* >(this),
                 css::uno::makeAny(ex));
     }
 
