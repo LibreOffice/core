@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:53:30 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@
 #include <svx/tstpitem.hxx>
 #endif
 #include "svtools/urihelper.hxx"
+#include <svtools/whiter.hxx>
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
@@ -124,6 +125,7 @@
 #ifndef _FCHRFMT_HXX //autogen wg. SwFmtCharFmt
 #include <fchrfmt.hxx>
 #endif
+#include <fmtautofmt.hxx>
 #ifndef _CHARFMT_HXX //autogen wg. SwCharFmt
 #include <charfmt.hxx>
 #endif
@@ -533,7 +535,7 @@ void WW8_SwAttrIter::OutAttr(xub_StrLen nSwPos)
         RES_CHRATR_BEGIN, RES_TXTATR_END - 1);
 
     //The hard formatting properties that affect the entire paragraph
-    if (rNd.GetpSwAttrSet())
+    if (rNd.HasSwAttrSet())
     {
         aExportSet.Set(rNd.GetSwAttrSet());
         const SvxFontItem &rNdFont = ItemGet<SvxFontItem>(aExportSet, nFontId);
@@ -557,6 +559,25 @@ void WW8_SwAttrIter::OutAttr(xub_StrLen nSwPos)
                 sal_uInt16 nWhich = pHt->GetAttr().Which();
                 if (nWhich == nFontId)
                     pFont = &(item_cast<SvxFontItem>(pHt->GetAttr()));
+                else if( nWhich == RES_TXTATR_AUTOFMT )
+                {
+                    const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(pHt->GetAttr());
+                    const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
+                    SfxWhichIter aIter( *pSet );
+                    const SfxPoolItem* pItem;
+                    sal_uInt16 nWhichId = aIter.FirstWhich();
+                    while( nWhichId )
+                    {
+                        if( SFX_ITEM_SET == pSet->GetItemState( nWhichId, FALSE, &pItem ))
+                        {
+                            if (nWhichId == nFontId)
+                                pFont = &(item_cast<SvxFontItem>(*pItem));
+                            else
+                                aRangeItems[nWhichId] = pItem;
+                        }
+                        nWhichId = aIter.NextWhich();
+                    }
+                }
                 else
                     aRangeItems[nWhich] = (&(pHt->GetAttr()));
             }
@@ -1789,10 +1810,6 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             }
         }
 
-
-        if( !pTmpSet )
-            pTmpSet = pNd->GetpSwAttrSet();
-
         if( pNd->IsNumbered())
         {
             const SwNumRule* pRule = pNd->GetNumRule();
@@ -1801,7 +1818,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
 
-            if( pTmpSet == pNd->GetpSwAttrSet() )
+            if( !pTmpSet )
                 pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
 
             SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
@@ -1847,7 +1864,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             aAttrIter.IsParaRTL()
            )
         {
-            if (pTmpSet == pNd->GetpSwAttrSet())
+            if ( !pTmpSet )
                 pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
 
             pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
@@ -1868,7 +1885,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             // no numbering. Here, we will adjust the indents to match
             // visually.
 
-            if (pTmpSet == pNd->GetpSwAttrSet())
+            if ( !pTmpSet )
                 pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
 
             // create new LRSpace item, based on the current (if present)
@@ -1898,7 +1915,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             }
         }
 
-        if( pTmpSet )
+        const SfxItemSet* pNewSet = pTmpSet ? pTmpSet : pNd->GetpSwAttrSet();
+        if( pNewSet )
         {                                               // Para-Attrs
             rWW8Wrt.pStyAttr = &pNd->GetAnyFmtColl().GetAttrSet();
 
@@ -1906,14 +1924,14 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             rWW8Wrt.pOutFmtNode = pNd;
 
             // Pap-Attrs, so script is not necessary
-            rWW8Wrt.Out_SfxItemSet( *pTmpSet, true, false,
+            rWW8Wrt.Out_SfxItemSet( *pNewSet, true, false,
                 com::sun::star::i18n::ScriptType::LATIN);
 
             rWW8Wrt.pStyAttr = 0;
             rWW8Wrt.pOutFmtNode = pOldMod;
 
-            if( pTmpSet != pNd->GetpSwAttrSet() )
-                delete pTmpSet;
+            if( pNewSet != pNd->GetpSwAttrSet() )
+                delete pNewSet;
         }
     }
 
