@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lateinitlistener.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:37:42 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:24:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
 /*-----------------------------------------------
     14.08.2003 07:48
 -----------------------------------------------*/
-void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& aEvent)
+void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEvent */ )
     throw(css::uno::RuntimeException)
 {
     // ???
