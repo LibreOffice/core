@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:30:39 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:04:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..$/..$/..
 
-PRJNAME=api
+PRJNAME=offapi
 
 TARGET=cssform
 PACKAGE=com$/sun$/star$/form
@@ -46,6 +46,7 @@ PACKAGE=com$/sun$/star$/form
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    modules.idl\
     DataAwareControlModel.idl\
     DatabaseDeleteEvent.idl\
     DatabaseParameterEvent.idl\
