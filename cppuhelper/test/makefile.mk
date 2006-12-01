@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:32:05 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:19:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -172,10 +172,10 @@ $(BIN)$/testdefaultbootstrapping.pl: testdefaultbootstrapping.pl
 $(BIN)$/testrc: makefile.mk
 .IF "$(GUI)"=="WNT"
     echo [Tests] > $@
-    echo TestKey1=com.sun.star.script.Invocation.rdb >> $@
+    echo TestKey1=com.sun.star.uno.NamingService.rdb >> $@
 .ELSE
     echo '[Tests]' > $@
-    echo 'TestKey1=file:///'$(PWD)/$(BIN)'/com.sun.star.script.Invocation.rdb' >> $@
+    echo 'TestKey1=file:///'$(PWD)/$(BIN)'/com.sun.star.uno.NamingService.rdb' >> $@
 .ENDIF
 
 
