@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:08:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,11 @@ final class Unmarshal {
             }
         }
         return id;
+    }
+
+    public Object readInterface(Type type) {
+        String id = readObjectId();
+        return id == null ? null : bridge.mapInterfaceFrom(id, type);
     }
 
     public ThreadId readThreadId() {
@@ -451,8 +456,7 @@ final class Unmarshal {
     }
 
     private Object readInterfaceValue(TypeDescription type) {
-        String id = readObjectId();
-        return id == null ? null : bridge.mapInterfaceFrom(id, new Type(type));
+        return readInterface(new Type(type));
     }
 
     private int readCompressedNumber() {
