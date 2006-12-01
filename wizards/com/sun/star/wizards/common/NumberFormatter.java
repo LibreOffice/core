@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberFormatter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:32:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:29:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,12 +172,12 @@ public class NumberFormatter {
 
 
 
-    public void setNumberFormat(XInterface _xFormatObject, int _FormatKey) {
+    public void setNumberFormat(XInterface _xFormatObject, int _FormatKey, NumberFormatter _oNumberFormatter) {
         try {
-            XPropertySet xNumberFormat = xNumberFormats.getByKey(_FormatKey); //CurDBField.DBFormatKey);
+            XPropertySet xNumberFormat = _oNumberFormatter.xNumberFormats.getByKey(_FormatKey); //CurDBField.DBFormatKey);
             String FormatString = AnyConverter.toString(Helper.getUnoPropertyValue(xNumberFormat, "FormatString"));
             Locale oLocale = (Locale) Helper.getUnoPropertyValue(xNumberFormat, "Locale");
-            int NewFormatKey = defineNumberFormat(FormatString);
+            int NewFormatKey = defineNumberFormat(FormatString, oLocale);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xFormatObject);
             if (xPSet.getPropertySetInfo().hasPropertyByName("NumberFormat"))
                 xPSet.setPropertyValue("NumberFormat", new Integer(NewFormatKey));
@@ -208,7 +208,7 @@ public class NumberFormatter {
     }
 
 
-    public void setBooleanReportDisplayNumberFormat(){
+    public int setBooleanReportDisplayNumberFormat(){
         String FormatString = "[=1]" + '"' + (char)9745 + '"' + ";[=0]" + '"' + (char)58480 + '"' + ";0";
         iLogicalFormatKey = xNumberFormats.queryKey(FormatString, aLocale, true);
         try {
@@ -218,7 +218,9 @@ public class NumberFormatter {
             e.printStackTrace();
             iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, aLocale);
         }
+        return iLogicalFormatKey;
     }
+
 
     /**
      * @return Returns the iDateFormatKey.
