@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:39:56 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,11 +117,6 @@ using com::sun::star::document::XExporter;
 using com::sun::star::document::XFilter;
 using com::sun::star::frame::XModel;
 using com::sun::star::lang::XServiceInfo;
-
-// -----------------------------------------------------------------------------
-
-static const char* pszCurrentPageName = "current_page";     // TODO: Size optimize later?
-static const char* pszLastPageName = "last_page";           // TODO: Size optimize later?
 
 // -----------------------------------------------------------------------------
 
@@ -295,7 +290,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
 }
 
 
-sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 nPage)
+sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 /* nPage */ )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
@@ -383,8 +378,8 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
             Reference< XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
             if( !xMasterPageTarget.is() )
             {
-                maPagesMap[nPage].mnObjectsID = -1;
-                return -1;
+                maPagesMap[nPage].mnObjectsID = 0xffff;
+                return 0xffff;
             }
             Reference<XDrawPage> aTemp = xMasterPageTarget->getMasterPage();
             sal_uInt16 ret = exportMasterPageObjects(nPage, aTemp);
@@ -393,8 +388,8 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
         }
         else
         {
-            maPagesMap[nPage].mnObjectsID = -1;
-            return -1;
+            maPagesMap[nPage].mnObjectsID = 0xffff;
+            return 0xffff;
         }
     }
     else
@@ -408,8 +403,8 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
         }
         else
         {
-            maPagesMap[nPage].mnBackgroundID = -1;
-            return -1;
+            maPagesMap[nPage].mnBackgroundID = 0xffff;
+            return 0xffff;
         }
     }
 
@@ -455,11 +450,11 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
 
     Reference< XMasterPageTarget > xMasterPageTarget( xPage, UNO_QUERY );
     if( !xMasterPageTarget.is() )
-        return -1;
+        return 0xffff;
 
     Reference< XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
     if( !xMasterPage.is())
-        return -1;
+        return 0xffff;
 
     Reference< XComponent > xCompMaster( xMasterPage, UNO_QUERY );
 
@@ -571,11 +566,11 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, b
 
         if( xShape.is() )
         {
-            Reference< XShapes > xShapes( xShape, UNO_QUERY );
-            if( xShapes.is() && xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
+            Reference< XShapes > xShapes2( xShape, UNO_QUERY );
+            if( xShapes2.is() && xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
                 // export the contents of group shapes, but we only ever stream at the top
                 // recursive level anyway, so pass false for streaming.
-                exportShapes( xShapes, false, bMaster);
+                exportShapes( xShapes2, false, bMaster);
             else
                 exportShape( xShape, bMaster);
         }
@@ -751,11 +746,8 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
         Graphic aGraphic;
         GraphicFilter aFilter(false);
 
-        USHORT nRet = aFilter.ImportGraphic( aGraphic, String(aFile.GetURL()), *aFile.GetStream( STREAM_READ ) );
+        aFilter.ImportGraphic( aGraphic, String(aFile.GetURL()), *aFile.GetStream( STREAM_READ ) );
         BitmapEx rBitmapEx( aGraphic.GetBitmap(), Color(255,255,255) );
-
-        sal_Bool bHasAlpha = rBitmapEx.IsAlpha();
-        sal_Bool bIsTransparent = rBitmapEx.IsTransparent();
 
         Rectangle clipRect;
         for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
