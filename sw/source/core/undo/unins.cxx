@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:09:38 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:49:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,7 +712,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
 
     if( bSplitNext )
     {
-        if( pNd->GetpSwAttrSet() )
+        if( pNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNewPos );
         pHistory->Add( pNd->GetTxtColl(), nNewPos, ND_TEXTNODE );
 
@@ -720,7 +720,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
         ULONG nTmp = pNext->GetIndex();
         pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
                             pNext->GetTxt().Len(), TRUE );
-        if( pNext->GetpSwAttrSet() )
+        if( pNext->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pNext->GetpSwAttrSet(), nTmp );
         pHistory->Add( pNext->GetTxtColl(),nTmp, ND_TEXTNODE );
     }
@@ -797,7 +797,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     if( pHistory )
     {
         if( pNd->GetpSwpHints() )
-            pNd->ClearSwpHintsArr( FALSE );
+            pNd->ClearSwpHintsArr( true );
 
         pHistory->TmpRollback( pDoc, nSetPos, FALSE );
         if( nSetPos )       // es gab Fussnoten/FlyFrames
