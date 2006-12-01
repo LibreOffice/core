@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:07:21 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,8 +242,8 @@ class Window;
 void displayException(const ::com::sun::star::sdbc::SQLException&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::sdbc::SQLWarning&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::sdb::SQLContext&, Window* _pParent = NULL);
-// display info about chained SQLExceptions
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, Window* _pParent = NULL);
+void displayException(const ::com::sun::star::uno::Any&, Window* _pParent = NULL);
 
 // StringConversion
 namespace svxform
