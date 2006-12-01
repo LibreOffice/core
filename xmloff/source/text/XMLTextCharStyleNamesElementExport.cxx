@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextCharStyleNamesElementExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:12:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ using namespace ::xmloff::token;
 XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
     SvXMLExport& rExp,
     sal_Bool bDoSth,
+    sal_Bool bAllStyles,
     const Reference < XPropertySet > & rPropSet,
     const OUString& rPropName ) :
     rExport( rExp ),
@@ -74,6 +75,7 @@ XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
         {
             nCount = aNames.getLength();
             OSL_ENSURE( nCount > 0, "no char style found" );
+            if ( bAllStyles ) ++nCount;
             if( nCount > 1 )
             {
                 aName = rExport.GetNamespaceMap().GetQNameByKey(
