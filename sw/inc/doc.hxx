@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:20:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,7 @@ class SdrMarkList;
 class SwAuthEntry;
 class SwUnoCallBack;
 class SwLayoutCache;
+class IStyleAccess;
 struct SwCallMouseEvent;
 struct SwDocStat;
 struct SwHash;
@@ -417,6 +418,7 @@ class SwDoc :
 
     SwLayouter      *pLayouter;     // ::com::sun::star::frame::Controller for complex layout formatting
                                     // like footnote/endnote in sections
+    IStyleAccess    *pStyleAccess;  // handling of automatic styles
     SwLayoutCache   *pLayoutCache;  // Layout cache to read and save with the
                                     // document for a faster formatting
 
@@ -475,6 +477,7 @@ class SwDoc :
     bool mbVisibleLinks          : 1;    // TRUE: Links werden sichtbar eingefuegt
     bool mbBrowseMode            : 1;    // TRUE: Dokument im BrowseModus anzeigen
     bool mbInReading             : 1;    // TRUE: Dokument wird gerade gelesen
+    bool mbInXMLImport           : 1;    // TRUE: During xml import, attribute portion building is not necessary
     bool mbUpdateTOX             : 1;    // TRUE: nach Dokument laden die TOX Updaten
     bool mbInLoadAsynchron       : 1;    // TRUE: Dokument wird gerade asynchron geladen
     bool mbHTMLMode              : 1;    // TRUE: Dokument ist im HTMLMode
@@ -496,7 +499,6 @@ class SwDoc :
     bool mbWinEncryption         : 1;    // imported document password encrypted?
     bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
                                          // flag indicating, that the links have been updated.
-
 #ifndef PRODUCT
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
@@ -1164,6 +1166,9 @@ public:
     const SwCharFmt *GetDfltCharFmt() const { return pDfltCharFmt;}
           SwCharFmt *GetDfltCharFmt()       { return pDfltCharFmt;}
 
+    // Returns the interface of the management of (auto)styles
+    IStyleAccess& GetIStyleAccess() { return *pStyleAccess; }
+
     // Remove all language dependencies from all existing formats
     void RemoveAllFmtLanguageDependencies();
 
@@ -1339,7 +1344,10 @@ public:
     void            ApplyAutoMark();
 
     bool IsInReading() const                   { return mbInReading; }
-    void     SetInReading( bool bNew )              { mbInReading = bNew; }
+    void SetInReading( bool bNew )              { mbInReading = bNew; }
+
+    bool IsInXMLImport() const { return mbInXMLImport; }
+    void SetInXMLImport( bool bNew ) { mbInXMLImport = bNew; }
 
     // - Verzeichnis-Typen verwalten
     sal_uInt16 GetTOXTypeCount( TOXTypes eTyp ) const;
