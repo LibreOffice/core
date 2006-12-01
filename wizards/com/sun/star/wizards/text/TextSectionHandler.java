@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextSectionHandler.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:31:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,11 +80,7 @@ public class TextSectionHandler {
 
     public boolean hasTextSectionByName(String SectionName) {
         com.sun.star.container.XNameAccess xAllTextSections = xTextSectionsSupplier.getTextSections();
-        if (xAllTextSections.hasByName(SectionName) == true) {
-            return true;
-        } else {
-            return false;
-        }
+        return xAllTextSections.hasByName(SectionName);
     }
 
     public void removeLastTextSection() {
@@ -106,23 +102,32 @@ public class TextSectionHandler {
         exception.printStackTrace(System.out);
     }}
 
-    public void removeAllTextSections() {
-        removeAllTextSections(false);
-    }
 
-    public void removeAllTextSections(boolean _bRemoveVisibleOnly) {
+    public void removeInvisibleTextSections() {
     try {
-        boolean bRemoveTextSection = !_bRemoveVisibleOnly;
         XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
         int TextSectionCount = xAllTextSections.getCount();
         for (int i = TextSectionCount - 1; i >= 0; i--) {
             XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
-            if (_bRemoveVisibleOnly){
-                XPropertySet xTextSectionPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
-                bRemoveTextSection = AnyConverter.toBoolean(xTextSectionPropertySet.getPropertyValue("IsVisible"));
-            }
-            if (bRemoveTextSection)
+            XPropertySet xTextSectionPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
+            boolean bRemoveTextSection = (!AnyConverter.toBoolean(xTextSectionPropertySet.getPropertyValue("IsVisible")));
+            if (bRemoveTextSection){
                 xText.removeTextContent(xTextContentTextSection);
+            }
+        }
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+    }}
+
+
+    public void removeAllTextSections() {
+    try {
+        XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
+        int TextSectionCount = xAllTextSections.getCount();
+        for (int i = TextSectionCount - 1; i >= 0; i--) {
+            XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
+            XPropertySet xTextSectionPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
+            xText.removeTextContent(xTextContentTextSection);
         }
     } catch (Exception exception) {
         exception.printStackTrace(System.out);
