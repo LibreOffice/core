@@ -40,6 +40,7 @@ Const sTestString = &quot;Automatical Test&quot;
 	LogState (not IsNull (oDBConnection), &quot;Database &quot;+ cMessageDatabaseOpen, MainFileChannel)
 	SetStatus (FilterType, cDBOpen, not IsNull (oDBConnection))
 	if (IsNull(oDBConnection)) then
+   		Close #FileChannel%
 		Exit Sub
 	End If
 	
