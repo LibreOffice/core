@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:44:17 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,8 @@ private:
 //============================================================
 DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
 
+typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >   ControllerArray;
+
 class ODatabaseContext;
 class DocumentStorageAccess;
 class OSharedConnectionManager;
@@ -240,7 +242,7 @@ public:
 
     ::std::vector<TContentPtr>      m_aContainer;
     TStorages                       m_aStorages;
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController> > m_aControllers;
+    ControllerArray                 m_aControllers;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
