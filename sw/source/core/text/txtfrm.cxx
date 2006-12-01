@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:41:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2226,6 +2226,10 @@ SwTwips SwTxtFrm::CalcFitToContent()
 */
 void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 {
+    // --> OD 2006-11-13 #i71281#
+    // invalidate printing area, if height of last line changes
+    const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
+    // <--
     // determine output device
     ViewShell* pVsh = (ViewShell*)GetShell();
     ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
@@ -2307,18 +2311,36 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
                                                nDummy1, nDummy2,
                                                0L, true );
                 // <--
-                mnHeightOfLastLine = nAscent + nDescent;
+                // --> OD 2006-11-22 #i71281#
+                // Suppress wrong invalidation of printing area, if method is
+                // called recursive.
+                // Thus, member <mnHeightOfLastLine> is only set directly, if
+                // no recursive call is needed.
+//                mnHeightOfLastLine = nAscent + nDescent;
+                const SwTwips nNewHeightOfLastLine = nAscent + nDescent;
                 // --> OD 2005-05-20 #i47162# - if last line only contains
                 // fly content portions, <mnHeightOfLastLine> is zero.
                 // In this case determine height of last line by the font
-                if ( mnHeightOfLastLine == 0 )
+                if ( nNewHeightOfLastLine == 0 )
                 {
                     _CalcHeightOfLastLine( true );
                 }
+                else
+                {
+                    mnHeightOfLastLine = nNewHeightOfLastLine;
+                }
+                // <--
                 // <--
             }
         }
     }
+    // --> OD 2006-11-13 #i71281#
+    // invalidate printing area, if height of last line changes
+    if ( mnHeightOfLastLine != mnOldHeightOfLastLine )
+    {
+        InvalidatePrt();
+    }
+    // <--
 }
 
 /*************************************************************************
