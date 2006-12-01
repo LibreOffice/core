@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:59:20 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -522,7 +522,7 @@ namespace dbaui
         void refreshTables();
 
         /// @see <method>IApplicationElementNotification::onEntryDoubleClick</method>
-        virtual void onEntryDoubleClick(SvTreeListBox* _pTree);
+        virtual bool onEntryDoubleClick(SvTreeListBox* _pTree);
         /// @see <method>IApplicationElementNotification::onCreationClick</method>
         virtual void onCreationClick(const ::rtl::OUString& _sCommand);
         /// @see <method>IApplicationElementNotification::onContainerSelect</method>
