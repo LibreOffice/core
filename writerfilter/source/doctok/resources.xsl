@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -844,7 +844,11 @@ public:
     <xsl:value-of select="$classname"/>
     <xsl:text>();
 
-    virtual void resolveLocal(Properties &amp; props);
+    virtual void resolveLocal(Properties &amp; props);</xsl:text>
+    <xsl:if test='.//UML:Stereotype[@xmi.idref = "resolvenoauto"]'>
+      void resolveNoAuto(Properties &amp; rHandler);
+    </xsl:if>
+    <xsl:text>
     virtual void dump(OutputWithDepth &lt; string &gt; &amp; o) const;
 
     virtual DffRecord * clone() const { return new </xsl:text>

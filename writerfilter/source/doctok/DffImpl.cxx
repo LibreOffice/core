@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,4 +485,36 @@ DffSpContainer::get_shptxt()
 
     return pResult;
 }
+
+// DffUDefProp
+
+void DffUDefProp::resolveNoAuto(Properties & rHandler)
+{
+    sal_uInt32 nOffset = 0x8;
+    sal_uInt32 nCount = getCount();
+
+    while (nOffset + 6 <= nCount)
+    {
+        sal_uInt16 nPid = getU16(nOffset);
+        sal_uInt32 nValue = getU32(nOffset + 2);
+
+        sal_uInt32 nAttrid = 0;
+        switch (nPid)
+        {
+        case 0x18f: nAttrid = NS_rtf::LN_XAlign; break;
+        case 0x190: nAttrid = NS_rtf::LN_XRelTo; break;
+        case 0x191: nAttrid = NS_rtf::LN_YAlign; break;
+        case 0x192: nAttrid = NS_rtf::LN_YRelTo; break;
+        case 0x1bf: nAttrid = NS_rtf::LN_LayoutInTableCell; break;
+        default:
+            break;
+        }
+
+        WW8Value::Pointer_t pVal = createValue(nValue);
+        rHandler.attribute(nAttrid, *pVal);
+
+        nOffset += 6;
+    }
+}
+
 }
