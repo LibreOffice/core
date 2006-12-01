@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:16:08 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,8 @@ public:
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLException& _rError);
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLWarning& _rError);
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLContext& _rError);
+    const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent);
+    const SQLExceptionInfo& operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException);
 
     sal_Bool    isKindOf(TYPE _eType) const;
         // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
