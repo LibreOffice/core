@@ -32,6 +32,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xforms
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\form\binding
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\form\validation
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\form\submission
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\form\runtime
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\formula
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\frame
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\frame\status
@@ -177,6 +178,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\form\validation\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\form\validation\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\form\submission\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\form\submission\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\form\submission\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\form\submission\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\form\runtime\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\form\runtime\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\form\runtime\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\form\runtime\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\formula\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\formula\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\formula\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\formula\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\frame\*.hdl
