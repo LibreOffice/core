@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Base64Codec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:43:09 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,20 +127,20 @@ void ThreeByteToFourByte (const sal_uInt8* pBuffer, const sal_Int32 nStart, cons
 
     sBuffer.appendAscii("====");
 
-    sal_uInt8 nIndex ((nBinaer & 0xFC0000) >> 18);
+    sal_uInt8 nIndex = static_cast< sal_uInt8 >((nBinaer & 0xFC0000) >> 18);
     sBuffer.setCharAt(0, aBase64EncodeTable [nIndex]);
 
-    nIndex = (nBinaer & 0x3F000) >> 12;
+    nIndex = static_cast< sal_uInt8 >((nBinaer & 0x3F000) >> 12);
     sBuffer.setCharAt(1, aBase64EncodeTable [nIndex]);
     if (nLen == 1)
         return;
 
-    nIndex = (nBinaer & 0xFC0) >> 6;
+    nIndex = static_cast< sal_uInt8 >((nBinaer & 0xFC0) >> 6);
     sBuffer.setCharAt(2, aBase64EncodeTable [nIndex]);
     if (nLen == 2)
         return;
 
-    nIndex = (nBinaer & 0x3F);
+    nIndex = static_cast< sal_uInt8 >((nBinaer & 0x3F));
     sBuffer.setCharAt(3, aBase64EncodeTable [nIndex]);
 }
 
@@ -168,7 +168,6 @@ void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int3
 
     if (nLen != 4)
     {
-        OSL_DEBUG_ONLY(  "wrong length");
         return;
     }
 
@@ -185,19 +184,19 @@ void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int3
             (aBase64DecodeTable [sString [2]] <<  6) +
             (aBase64DecodeTable [sString [3]]));
 
-    sal_uInt8 OneByte ((nBinaer & 0xFF0000) >> 16);
+    sal_uInt8 OneByte = static_cast< sal_uInt8 >((nBinaer & 0xFF0000) >> 16);
     pBuffer[nStart + 0] = (sal_uInt8)OneByte;
 
     if (nLength == 1)
         return;
 
-    OneByte = (nBinaer & 0xFF00) >> 8;
+    OneByte = static_cast< sal_uInt8 >((nBinaer & 0xFF00) >> 8);
     pBuffer[nStart + 1] = (sal_uInt8)OneByte;
 
     if (nLength == 2)
         return;
 
-    OneByte = nBinaer & 0xFF;
+    OneByte = static_cast< sal_uInt8 >(nBinaer & 0xFF);
     pBuffer[nStart + 2] = (sal_uInt8)OneByte;
 }
 
