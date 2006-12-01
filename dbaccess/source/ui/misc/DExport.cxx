@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:12:25 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,19 +321,19 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 m_pTypeInfo->bNullable      = (sal_Int32)aValue == ColumnValue::NULLABLE;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],xRow);
-                m_pTypeInfo->bCaseSensitive = aValue;
+                m_pTypeInfo->bCaseSensitive = (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],xRow);
                 m_pTypeInfo->nSearchType        = aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],xRow);
-                m_pTypeInfo->bUnsigned      = aValue;
+                m_pTypeInfo->bUnsigned      = (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],xRow);
-                m_pTypeInfo->bCurrency      = aValue;
+                m_pTypeInfo->bCurrency      = (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],xRow);
-                m_pTypeInfo->bAutoIncrement = aValue;
+                m_pTypeInfo->bAutoIncrement = (sal_Bool)aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],xRow);
                 m_pTypeInfo->aLocalTypeName = aValue;
