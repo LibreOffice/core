@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:24:45 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1908,7 +1908,7 @@ BOOL SwFEShell::ImpEndCreate()
         {
             ASSERT( aAnch.GetAnchorId() == FLY_IN_CNTNT, "wrong AnchorType" );
             SwTxtNode *pNd = aAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
-            pNd->Insert( SwFmtFlyCnt( pFmt ),
+            pNd->InsertItem( SwFmtFlyCnt( pFmt ),
                             aAnch.GetCntntAnchor()->nContent.GetIndex(), 0 );
             SwFmtVertOrient aVert( pFmt->GetVertOrient() );
             aVert.SetVertOrient( VERT_LINE_CENTER );
