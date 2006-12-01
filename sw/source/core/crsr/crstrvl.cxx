@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:45:21 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1443,8 +1443,8 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                             aSet.Put( pHt->GetAttr() );
                         }
                     }
-                    if( pTxtNd->GetpSwAttrSet() &&
-                        pTxtNd->GetSwAttrSet().Count() )
+                    if( pTxtNd->HasSwAttrSet() &&
+                        pTxtNd->GetpSwAttrSet()->Count() )
                     {
                         SfxItemSet aFmtSet( pTxtNd->GetSwAttrSet() );
                         // aus dem Format-Set alle entfernen, die im TextSet auch gesetzt sind
