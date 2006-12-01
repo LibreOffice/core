@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:21:40 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -903,20 +903,29 @@ namespace pcr
                         aProperties.end(),
                         FindPropertyByName( copyProperty->Name )
                     );
-                    if ( previous != aProperties.end() )
+                    if ( previous == aProperties.end() )
                     {
-                        // there already was another (previous) handler which supported this property.
-                        // Don't add it to aProperties, again
+                        aProperties.push_back( *copyProperty );
                         continue;
                     }
 
-                    aProperties.push_back( *copyProperty );
+                    // there already was another (previous) handler which supported this property.
+                    // Don't add it to aProperties, again.
+
+                    // Also, ensure that handlers which previously expressed interest in *changes*
+                    // of this property are not notified.
+                    // This is 'cause we have a new handler which is responsible for this property,
+                    // which means it can give it a completely different meaning than the previous
+                    // handler for this property is prepared for.
+                    ::std::pair< PropertyHandlerMultiRepository::iterator, PropertyHandlerMultiRepository::iterator >
+                        aDepHandlers = m_aDependencyHandlers.equal_range( copyProperty->Name );
+                    m_aDependencyHandlers.erase( aDepHandlers.first, aDepHandlers.second );
                 }
 
                 // determine the superseded properties
-                StlSyntaxSequence< ::rtl::OUString > aSuperSededByThisHandler = (*aHandler)->getSupersededProperties();
-                for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator superseded = aSuperSededByThisHandler.begin();
-                        superseded != aSuperSededByThisHandler.end();
+                StlSyntaxSequence< ::rtl::OUString > aSupersededByThisHandler = (*aHandler)->getSupersededProperties();
+                for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator superseded = aSupersededByThisHandler.begin();
+                        superseded != aSupersededByThisHandler.end();
                         ++superseded
                     )
                 {
