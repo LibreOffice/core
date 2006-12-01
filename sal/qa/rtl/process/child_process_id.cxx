@@ -4,9 +4,9 @@
  *
  *  $RCSfile: child_process_id.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:59:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ void printUuid( sal_uInt8 *pNode )
 
 // ----------------------------------- Main -----------------------------------
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(,)
+SAL_IMPLEMENT_MAIN()
 {
     sal_uInt8 pTargetUUID[16];
     rtl_getGlobalProcessId( pTargetUUID );
