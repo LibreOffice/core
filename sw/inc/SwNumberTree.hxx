@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:13:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,6 +539,14 @@ public:
        @retval false  else
      */
     virtual bool IsNotifiable() const;
+
+     /**
+       Return if the notification is not disabled on global conditions
+
+       @retval true   Notification enabled in general.
+       @retval false  else
+     */
+    virtual bool IsNotificationEnabled() const = 0;
 
     /**
        Return if a node is first non-phantom child of this node.
