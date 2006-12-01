@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: testdefaultbootstrapping.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:33:06 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:19:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,9 @@ my $defExeExt;
 
 if ($ENV{GUI} eq "WNT") {
     %services = (
-                 'com.sun.star.uno.NamingService' => 'namingservice.dll',
-                 'com.sun.star.script.Invocation' => 'inv.dll',
-                 'com.sun.star.script.Converter' => 'tcv.dll'
+                 'com.sun.star.uno.NamingService'         => 'namingservice.uno.dll',
+                 'com.sun.star.reflection.CoreReflection' => 'reflection.uno.dll',
+                 'com.sun.star.script.Converter'          => 'typeconverter.uno.dll',
                  );
 
     $defExeExt = ".exe";
@@ -55,9 +55,9 @@ if ($ENV{GUI} eq "WNT") {
 }
 else {
     %services = (
-                 'com.sun.star.uno.NamingService' => 'libnamingservice.so',
-                 'com.sun.star.script.Invocation' => 'libinv.so',
-                 'com.sun.star.script.Converter' => 'libtcv.so'
+                 'com.sun.star.uno.NamingService'         => 'namingservice.uno.so',
+                 'com.sun.star.reflection.CoreReflection' => 'reflection.uno.so',
+                 'com.sun.star.script.Converter'          => 'typeconverter.uno.so'
                  );
 
     $defExeExt = "";
@@ -110,8 +110,9 @@ sub registerService($$){
     my $service_lib  = shift;
     my $rdb_name = shift;
 
-    system 'echo', "regcomp -register -r " . $rdb_name . " -c $service_lib";
+#   system 'echo', "regcomp -register -r " . $rdb_name . " -c $service_lib";
     my $rc = system "regcomp -register -r " . $rdb_name . " -c $service_lib";
+
 
     return ! ( $rc >> 8 );
 }
@@ -120,20 +121,22 @@ sub registerService($$){
 
 my $state = 1;
 my @allservices;
-my $allservices_rdbs;
+my $allservices_rdbs="";
 my $rc;
 my $comment;
 my $testexe;
 
 
 sub registerServices() {
+    use Cwd;
+
     # ensure that services can not be instantiated
     foreach $service ( keys %services ) {
         # ensure that the current service is not reachable
         unregisterService($service);
         $rc = !testForServices([$service], "", $testexe);
         if(!$rc) {
-            $comment = $comment . "couldn't unregister service " . $service . "\n";
+            $comment = $comment . "\tcouldn't unregister service " . $service . "\n";
             $state = 0;
         }
 
@@ -141,34 +144,37 @@ sub registerServices() {
         # register the service and ensure that it is reachable
         $rc = registerService($services{$service}, $service . '.rdb');
         if(!$rc) {
-            $comment = $comment . "couldn't register service " . $service . "\n";
+            $comment = $comment . "\tcouldn't register service " . $service . "\n";
             $state = 0;
         }
 
         $rc = testForServices([$service], "-env:UNO_SERVICES=" . $service . ".rdb", $testexe);
         if(!$rc) {
-            $comment = $comment . "couldn't reeach service " . $service . "\n";
+            $comment = $comment . "\tcouldn't reach service " . $service . "\n";
             $state = 0;
         }
 
         # memorize all services
-        $allservices_rdbs = $allservices_rdbs . $service . ".rdb" . " ";
+        if (length($allservices_rdbs)) {
+            $allservices_rdbs = $allservices_rdbs . " ";
+        }
+        $allservices_rdbs = $allservices_rdbs . "file://" . getcwd() . "/" . $service . ".rdb";
         push @allservices, $service;
     }
 }
 
 sub testIndirection() {
     #test indirection
-    $rc = testForServices(['com.sun.star.script.Invocation'], '-env:UNO_SERVICES=${testrc:Tests:TestKey1}', $testexe);
+    $rc = testForServices(['com.sun.star.uno.NamingService'], '-env:UNO_SERVICES=${testrc:Tests:TestKey1}', $testexe);
     if (!$rc) {
-        $comment = $comment . "indirection test not passed\n";
+        $comment = $comment . "\tindirection test not passed\n";
         $state = 0;
     }
 }
 
 
 sub testBeneathExe() {
-    my $service = 'com.sun.star.script.Invocation';
+    my $service = 'com.sun.star.reflection.CoreReflection';
     my $_testexe;
 
     my @_exes = (extendProgName(".exe"),
@@ -181,14 +187,14 @@ sub testBeneathExe() {
         registerService($services{$service}, $progname . "_services.rdb");
         my $_rc = testForServices([$service], "", $_testexe);
         if (!$_rc) {
-            $comment = $comment . "beneath executable test not passed: " . $_testexe . "\n";
+            $comment = $comment . "\tbeneath executable test not passed: " . $_testexe . "\n";
             $state = 0;
         }
     }
 }
 
 sub testBeneathLib_rdb() {
-    my $_service = 'com.sun.star.script.Invocation';
+    my $_service = 'com.sun.star.uno.NamingService';
 
     use UNO;
 
@@ -204,14 +210,14 @@ sub testBeneathLib_rdb() {
     registerService($services{$_service}, $_rdb_name);
     my $_rc = UNO::tryService($_service);
     if (!$_rc) {
-        $comment = $comment. "beneath lib test not passed\n";
+        $comment = $comment . "\tbeneath lib test not passed\n";
         $state = 0;
     }
     unlink $_rdb_name;
 }
 
 sub testBeneathLib_rc() {
-    my $_service = 'com.sun.star.script.Invocation';
+    my $_service = 'com.sun.star.uno.NamingService';
 
     use UNO;
 
@@ -234,7 +240,7 @@ sub testBeneathLib_rc() {
     registerService($services{$_service}, $_rdb_name);
     my $_rc = UNO::tryService($_service);
     if (!$_rc) {
-        $comment = $comment. "beneath lib rc test not passed\n";
+        $comment = $comment . "\tbeneath lib rc test not passed\n";
         $state = 0;
     }
     unlink $_rdb_name;
@@ -248,7 +254,7 @@ sub testAllAvailable() {
 
     $rc = testForServices(\@allservices, "-env:UNO_SERVICES=" . $allservices_rdbs, $testexe);
     if (!$rc) {
-        $comment = $comment. "multi rdb test not passed\n";
+        $comment = $comment . "\tmulti rdb test not passed\n";
         $state = 0;
     }
 }
