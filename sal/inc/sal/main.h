@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:15:39 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,22 @@
 extern "C" {
 #endif
 
-/* Prototype of sal main entry */
-
-int  SAL_CALL sal_main (int argc, char ** argv);
+/* Prototype needed below */
 void SAL_CALL osl_setCommandArgs(int argc, char ** argv);
+
+#define SAL_MAIN_WITH_ARGS_IMPL \
+int SAL_CALL main(int argc, char ** argv) \
+{ \
+    osl_setCommandArgs(argc, argv); \
+    return sal_main_with_args(argc, argv); \
+}
+
+#define SAL_MAIN_IMPL \
+int SAL_CALL main(int argc, char ** argv) \
+{ \
+    osl_setCommandArgs(argc, argv); \
+    return sal_main(); \
+}
 
 
 /* Definition macros for CRT entries */
@@ -87,39 +99,32 @@ DECLARE_HANDLE(HINSTANCE);
 
 #endif
 
-#define SAL_DEFINE_CRT_ENTRY() \
-int __cdecl main(int argc, char ** argv) \
-{ \
-    osl_setCommandArgs(argc, argv); \
-    return sal_main(argc, argv); \
-} \
+#define SAL_WIN_WinMain \
 int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nshow ) \
 { \
     int argc = __argc; char ** argv = __argv; \
     (void) _hinst; (void) _dummy; (void) _cmdline; (void) _nshow; /* unused */ \
-    osl_setCommandArgs(argc, argv); \
-    return sal_main(argc, argv); \
+    return main(argc, argv); \
 }
 
 #else   /* ! SAL_W32 */
-
-#define SAL_DEFINE_CRT_ENTRY() \
-int main(int argc, char ** argv) \
-{ \
-    osl_setCommandArgs(argc, argv); \
-    return sal_main(argc, argv); \
-} \
+# define SAL_WIN_WinMain
 
 #endif /* ! SAL_W32 */
 
 /* Implementation macro */
 
 #define SAL_IMPLEMENT_MAIN_WITH_ARGS(_argc_, _argv_) \
-    SAL_DEFINE_CRT_ENTRY() \
-    int SAL_CALL sal_main(int _argc_, char ** _argv_)
+    static int  SAL_CALL sal_main_with_args (int _argc_, char ** _argv_); \
+    SAL_MAIN_WITH_ARGS_IMPL \
+    SAL_WIN_WinMain \
+    static int SAL_CALL sal_main_with_args(int _argc_, char ** _argv_)
 
-#define SAL_IMPLEMENT_MAIN() SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
-
+#define SAL_IMPLEMENT_MAIN() \
+    static int  SAL_CALL sal_main(void); \
+    SAL_MAIN_IMPL \
+    SAL_WIN_WinMain \
+    static int SAL_CALL sal_main(void)
 
 /*
     "How to use" Examples:
