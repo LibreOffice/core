@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-04 09:24:25 $
+#   last change: $Author: rt $ $Date: 2006-12-01 16:49:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ = ..$/..$/..
 TARGET  = ConnectivityTools
-PRJNAME = $(TARGET)
+PRJNAME = connectivity
 PACKAGE = connectivity$/tools
 
 # --- Settings -----------------------------------------------------
