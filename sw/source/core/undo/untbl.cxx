@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:29:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLe
         if( pNd->GetpSwpHints() )
             pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
                         pNd->GetTxt().Len(), FALSE );
-        if( pNd->GetpSwAttrSet() )
+        if( pNd->HasSwAttrSet() )
             pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd );
 
         if( !pHstry->Count() )
@@ -646,11 +646,11 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
 
         if( pTxtNd )
         {
-            if( pTxtNd->GetpSwAttrSet() )
+            if( pTxtNd->HasSwAttrSet() )
                 pTxtNd->ResetAllAttr();
 
             if( pTxtNd->GetpSwpHints() )
-                pTxtNd->ClearSwpHintsArr( FALSE, FALSE );
+                pTxtNd->ClearSwpHintsArr( false );
         }
 
         if( pSave->pHstry )
@@ -1354,7 +1354,7 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
             if( pCNd )
             {
                 SfxItemSet* pSet = 0;
-                if( pCNd->GetpSwAttrSet() )
+                if( pCNd->HasSwAttrSet() )
                 {
                     pSet = new SfxItemSet( pDoc->GetAttrPool(),
                                             aSave_BoxCntntSet );
@@ -2222,7 +2222,7 @@ void SwUndoTblMerge::SaveCollection( const SwTableBox& rBox )
         pCNd = aIdx.GetNodes().GoNext( &aIdx );
 
     pHistory->Add( pCNd->GetFmtColl(), aIdx.GetIndex(), pCNd->GetNodeType());
-    if( pCNd->GetpSwAttrSet() )
+    if( pCNd->HasSwAttrSet() )
         pHistory->CopyFmtAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex() );
 }
 
@@ -2252,7 +2252,7 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
         pHistory->CopyAttr( pTNd->GetpSwpHints(), nNdPos, 0,
                             pTNd->GetTxt().Len(), TRUE );
 
-        if( pTNd->GetpSwAttrSet() )
+        if( pTNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTNd->GetpSwAttrSet(), nNdPos );
 
         aStr = pTNd->GetTxt();
@@ -2319,11 +2319,11 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
     SwTxtNode* pTxtNd = rDoc.GetNodes()[ nNode + 1 ]->GetTxtNode();
     // wenn mehr als ein Node geloescht wurde, dann wurden auch
     // alle "Node"-Attribute gespeichert
-    if( pTxtNd->GetpSwAttrSet() )
+    if( pTxtNd->HasSwAttrSet() )
         pTxtNd->ResetAllAttr();
 
     if( pTxtNd->GetpSwpHints() )
-        pTxtNd->ClearSwpHintsArr( FALSE );
+        pTxtNd->ClearSwpHintsArr( true );
 
     // ChgTextToNum(..) only acts when the strings are different. We
     // need to do the same here.
