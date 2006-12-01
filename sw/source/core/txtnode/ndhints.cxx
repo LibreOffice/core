@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:46:13 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 
 #include "txatbase.hxx"
 #include "ndhints.hxx"
+#include <txtatr.hxx>
 
 _SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
 _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
@@ -109,11 +110,20 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
         {
             nHt1 = rHt1.Which();
             nHt2 = rHt2.Which();
-            return nHt1 > nHt2 ||
-                (nHt1 == nHt2 && (long)&rHt1 < (long)&rHt2);
+            if ( nHt1 == nHt2 )
+            {
+                if ( RES_TXTATR_CHARFMT == nHt1 )
+                {
+                    const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" )
+                    return nS1 < nS2;
+                }
+
+                return (long)&rHt1 < (long)&rHt2;
+            }
         }
-        else
-            return ( nHt1 > nHt2 );
+        return ( nHt1 > nHt2 );
     }
     return ( *rHt1.GetStart() < *rHt2.GetStart() );
 }
@@ -133,8 +143,20 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
         {
             nHt1 = rHt1.Which();
             nHt2 = rHt2.Which();
-            return nHt1 < nHt2 ||
-                (nHt1 == nHt2 && (long)&rHt1 > (long)&rHt2);
+
+            if ( nHt1 == nHt2 )
+            {
+                if ( RES_TXTATR_CHARFMT == nHt1 )
+                {
+                    const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" )
+                    return nS1 > nS2;
+                }
+
+                return (long)&rHt1 > (long)&rHt2;
+            }
+            // else return nHt1 < nHt2, see below
         }
         else
             return ( *rHt1.GetStart() > *rHt2.GetStart() );
@@ -321,12 +343,37 @@ BOOL SwpHintsArr::Check() const
         // --- Ueberkreuzungen ---
 
         // 5) gleiche Pointer in beiden Arrays
-        nIdx = GetStartOf( pHtEnd );
+        if( !Seek_Entry( pHt, &nIdx ) )
+            nIdx = STRING_LEN;
+
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) gleiche Pointer in beiden Arrays
-        nIdx = GetEndOf( pHt );
+        if( !aHtEnd.Seek_Entry( pHt, &nIdx ) )
+            nIdx = STRING_LEN;
+
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetEndOf" );
+
+        // 7a) character attributes in array?
+        USHORT nWhich = pHt->Which();
+        CHECK_ERR( nWhich < RES_CHRATR_BEGIN || nWhich >= RES_CHRATR_END,
+                   "HintsCheck: Character attribute in start array" )
+
+        // 7b) character attributes in array?
+        nWhich = pHtEnd->Which();
+        CHECK_ERR( nWhich < RES_CHRATR_BEGIN || nWhich >= RES_CHRATR_END,
+                   "HintsCheck: Character attribute in end array" )
+
+        // 8) portion check
+        const SwTxtAttr* pHtThis = (*this)[i];
+        const SwTxtAttr* pHtLast = i > 0 ? (*this)[i-1] : 0;
+        CHECK_ERR( 0 == i ||
+                    ( RES_TXTATR_CHARFMT != pHtLast->Which() && RES_TXTATR_AUTOFMT != pHtLast->Which() ) ||
+                    ( RES_TXTATR_CHARFMT != pHtThis->Which() && RES_TXTATR_AUTOFMT != pHtThis->Which() ) ||
+                    ( *pHtThis->GetStart() >= *pHtLast->GetEnd() ) ||
+                    ( *pHtThis->GetStart() == *pHtLast->GetStart() && *pHtThis->GetEnd() == *pHtLast->GetEnd() ) ||
+                    ( *pHtThis->GetStart() == *pHtThis->GetEnd() ),
+                   "HintsCheck: Portion inconsistency" )
     }
     return TRUE;
 }
