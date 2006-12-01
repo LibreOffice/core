@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:40:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ class XLB_Invocation : public WeakImplHelper1< XInvocation >
     Reference< XLanguageBindingTest > _xLBT;
 
 public:
-    XLB_Invocation( const Reference< XMultiServiceFactory > & xMgr,
+    XLB_Invocation( const Reference< XMultiServiceFactory > & /*xMgr*/,
                     const Reference< XLanguageBindingTest > & xLBT )
         : _xLBT( xLBT )
         {}
@@ -869,7 +869,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 }
 
 //__________________________________________________________________________________________________
-test::TestData Test_Impl::raiseException( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, ::rtl::OUString& aString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInterface, ::com::sun::star::uno::Any& aAny, ::com::sun::star::uno::Sequence< test::TestElement >& aSequence, test::TestData& aStruct )
+test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cChar*/, sal_Int8& /*nByte*/, sal_Int16& /*nShort*/, sal_uInt16& /*nUShort*/, sal_Int32& /*nLong*/, sal_uInt32& /*nULong*/, sal_Int64& /*nHyper*/, sal_uInt64& /*nUHyper*/, float& /*fFloat*/, double& /*fDouble*/, test::TestEnum& /*eEnum*/, ::rtl::OUString& /*aString*/, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*xInterface*/, ::com::sun::star::uno::Any& /*aAny*/, ::com::sun::star::uno::Sequence< test::TestElement >& /*aSequence*/, test::TestData& /*aStruct*/ )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     IllegalArgumentException aExc;
@@ -877,7 +877,6 @@ test::TestData Test_Impl::raiseException( sal_Bool& bBool, sal_Unicode& cChar, s
     aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
     aExc.Context          = *this;
     throw aExc;
-    return test::TestData();
 }
 //__________________________________________________________________________________________________
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
@@ -886,10 +885,9 @@ sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeE
     aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
     aExc.Context          = *this;
     throw aExc;
-    return 0;
 }
 //__________________________________________________________________________________________________
-void Test_Impl::setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException)
+void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
     aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
@@ -920,12 +918,12 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
                              aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                              "### unexpected exception content!" );
 
-                Reference<XLanguageBindingTest > xLBT(
+                Reference<XLanguageBindingTest > xLBT2(
                     Reference<XLanguageBindingTest >::query( aExc.Context ) );
 
-                OSL_ENSURE( xLBT.is(), "### unexpected source of exception!" );
-                if (xLBT.is())
-                    xLBT->getRuntimeException();
+                OSL_ENSURE( xLBT2.is(), "### unexpected source of exception!" );
+                if (xLBT2.is())
+                    xLBT2->getRuntimeException();
                 else
                     return sal_False;
             }
@@ -936,12 +934,12 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
                         rExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                         "### unexpected exception content!" );
 
-            Reference<XLanguageBindingTest > xLBT(
+            Reference<XLanguageBindingTest > xLBT2(
                 Reference<XLanguageBindingTest >::query( rExc.Context ) );
 
-            OSL_ENSURE( xLBT.is(), "### unexpected source of exception!" );
-            if (xLBT.is())
-                xLBT->setRuntimeException( 0xcafebabe );
+            OSL_ENSURE( xLBT2.is(), "### unexpected source of exception!" );
+            if (xLBT2.is())
+                xLBT2->setRuntimeException( 0xcafebabe );
             else
                 return sal_False;
         }
@@ -1026,7 +1024,6 @@ SAL_IMPLEMENT_MAIN()
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
 
-    sal_Bool bSucc = sal_False;
     try
     {
         Reference< XImplementationRegistration > xImplReg(

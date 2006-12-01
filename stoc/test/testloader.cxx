@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:41:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ using namespace cppu;
 class EmptyComponentContext : public WeakImplHelper1< XComponentContext >
 {
 public:
-    virtual Any SAL_CALL getValueByName( const OUString& Name )
+    virtual Any SAL_CALL getValueByName( const OUString& /*Name*/ )
         throw (RuntimeException)
         {
             return Any();
@@ -105,7 +105,7 @@ SAL_IMPLEMENT_MAIN()
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            module.getSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
+            module.getFunctionSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
 
         if (pCompFactoryFunc)
         {

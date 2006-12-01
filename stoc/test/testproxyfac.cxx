@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:41:21 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
         { return OUString::createFromAscii( "target" ); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return sal_False; }
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
@@ -149,7 +149,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
         { return OUString::createFromAscii( "master" ); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return sal_False; }
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
@@ -186,8 +186,8 @@ Reference< XInterface > TestMaster::create(
 
 
 static void test_proxyfac_(
-    Reference< XInterface > const & xMaster, OUString const & test,
-    Reference< reflection::XProxyFactory > const & xProxyFac )
+    Reference< XInterface > const & xMaster, OUString const & /*test*/,
+    Reference< reflection::XProxyFactory > const & /*xProxyFac*/ )
 {
     Reference< lang::XServiceInfo > xMaster_XServiceInfo(
         xMaster, UNO_QUERY_THROW );
@@ -336,7 +336,7 @@ SAL_IMPLEMENT_MAIN()
                 xProxyFac );
             uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
         }
-        catch (Exception & rExc)
+        catch (Exception & /*rExc*/)
         {
             OSL_ENSURE(
                 ! __FILE__,
