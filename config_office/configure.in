@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-11-07 15:29:05 $
+dnl * Date: $Date: 2006-12-01 14:17:02 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.187 $ )
+AC_REVISION( $Revision: 1.188 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -356,6 +356,9 @@ AC_ARG_WITH(system-portaudio,
 ],,)
 AC_ARG_ENABLE(neon,
 [  --disable-neon          Disable neon and the compilation of webdav binding
+],,)
+AC_ARG_ENABLE(Xaw,
+[  --disable-Xaw           Disables the use of Xaw for the Netscape/Mozilla plugin
 ],,)
 AC_ARG_WITH(system-neon,
 [  --with-system-neon      Use neon already on system
@@ -2098,6 +2101,7 @@ dnl ===================================================================
 dnl Checks for JDK.
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
+   _gij_longver=0
    AC_MSG_CHECKING([the installed JDK])
    if test "$JAVAINTERPRETER"; then
       dnl java -version sends output to stderr!
@@ -2123,6 +2127,8 @@ if test "$SOLAR_JAVA" != ""; then
       elif test `$JAVAINTERPRETER --version 2>&1 | grep -c "GNU libgcj"` -gt 0; then
         JDK=gcj
         AC_MSG_RESULT([checked (gcj)]) 
+        _gij_version=`$JAVAINTERPRETER --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+        _gij_longver=`echo $_gij_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
         if test -z "$JAVA_HOME"; then
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
         fi
@@ -2266,7 +2272,7 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 
 if test "$SOLAR_JAVA" != ""; then
-    if test "$JDK" != "gcj"; then
+    if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
 
@@ -2292,6 +2298,9 @@ if test "$SOLAR_JAVA" != ""; then
          echo "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >> warn
          echo "attempted to find JAVA_HOME automatically, but apparently it failed" >> warn
          echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
+         if test "$JDK" == "gcj"; then
+             echo "e.g. install java-1.4.2-gcj-compat-devel and use --with-jdk-home=/usr/lib/jvm/java-1.4.2-gcj" >> warn
+         fi
       fi
     fi
 fi
@@ -3602,7 +3611,21 @@ elif test "$_os" != "WINNT" ; then
    AC_PATH_X
    AC_PATH_XTRA
    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
-   AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])])
+
+   dnl ===================================================================
+   dnl Check for using Xaw
+   dnl ===================================================================
+   AC_MSG_CHECKING([whether to use Xaw])
+   if test "$enable_Xaw" = "no"; then
+       DISABLE_XAW=TRUE
+       AC_MSG_RESULT([no])
+       AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt include headers not found])],
+         [#include <X11/Intrinsic.h>])
+   else
+       AC_MSG_RESULT([yes])
+       AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])])
+   fi
+   dnl ===================================================================
 
    if test "x$x_includes" = "x"; then
      x_includes="default_x_includes"
@@ -3642,6 +3665,7 @@ else
    XLIB="$x_libraries"
 fi
 AC_SUBST(XLIB)
+AC_SUBST(DISABLE_XAW)
 
 dnl ===================================================================
 dnl Check if fontconfig/fontconfig.h is available 
@@ -4807,30 +4831,33 @@ else
 fi
 AC_SUBST(WITH_FONTS)
 
-AC_SUBST(SCPDEFS)
-
+dnl ===================================================================
+dnl Test whether to include ppds
+dnl ===================================================================
 AC_MSG_CHECKING([whether to include PPDs])
-if test "$without_ppds" = "yes"; then
+if test "$with_ppds" != "no"; then
+  AC_MSG_RESULT([yes])
+else
   AC_MSG_RESULT([no])
   WITHOUT_PPDS=YES
   SCPDEFS="$SCPDEFS -DWITHOUT_PPDS"
-else
-  AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITHOUT_PPDS)
-AC_SUBST(SCPDEFS)
 
+dnl ===================================================================
+dnl Test whether to include afms
+dnl ===================================================================
 AC_MSG_CHECKING([whether to include AFMs])
-if test "$without_afms" = "yes"; then
+if test "$with_afms" != "no"; then
+  AC_MSG_RESULT([yes])
+else
   AC_MSG_RESULT([no])
   WITHOUT_AFMS=YES
   SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
-else
-  AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITHOUT_AFMS)
-AC_SUBST(SCPDEFS)
 
+AC_SUBST(SCPDEFS)
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
 if test "$_os" = "Darwin"; then
