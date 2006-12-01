@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:55:12 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1014,7 +1014,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             const SwCntntNode* pCNd = aNxtIdx.GetNode().GetCntntNode();
             if( !pCNd )
                 pCNd = pDoc->GetNodes().GoNext( &aNxtIdx );
-            if( pCNd->GetpSwAttrSet() )
+            if( pCNd->HasSwAttrSet() )
             {
                 SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
                 aBrkSet.Put( *pCNd->GetpSwAttrSet() );
@@ -1167,7 +1167,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         pDoc->CorrAbs( aInsPos, aEndIdx, *aCorPam.GetPoint(), TRUE );
 
         // Task 70995 - save and restore PageDesc and Break Attributes
-        if( pFirstEmptyNd->GetpSwAttrSet() )
+        if( pFirstEmptyNd->HasSwAttrSet() )
         {
             if( GetTitle().Len() )
                 aEndIdx = *pSectNd;
@@ -1992,7 +1992,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     pCharFmt = pDoc->FindCharFmtByName( aToken.sCharStyleName);
 
                 if(pCharFmt)
-                    pTOXNd->Insert( SwFmtCharFmt( pCharFmt ), nStartCharStyle,
+                    pTOXNd->InsertItem( SwFmtCharFmt( pCharFmt ), nStartCharStyle,
                                     rTxt.Len(), SETATTR_DONTEXPAND );
             }
 
@@ -2006,7 +2006,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
         for(USHORT i = 0; i < aLinkArr.Count(); ++i )
         {
             LinkStruct* pTmp = aLinkArr.GetObject(i);
-            pTOXNd->Insert( pTmp->aINetFmt, pTmp->nStartTextPos,
+            pTOXNd->InsertItem( pTmp->aINetFmt, pTmp->nStartTextPos,
                             pTmp->nEndTextPos);
         }
 }
@@ -2269,7 +2269,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt(pPageNoCharFmt->GetCharFmt());
-        pNd->Insert(aCharFmt, nStartPos, nStartPos + aNumStr.Len(), SETATTR_DONTEXPAND);
+        pNd->InsertItem(aCharFmt, nStartPos, nStartPos + aNumStr.Len(), SETATTR_DONTEXPAND);
     }
 
     //now the main entries should get there character style
@@ -2297,7 +2297,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         {
             xub_StrLen nStartIdx = (*pCharStyleIdx)[i] + nOffset;
             xub_StrLen nEndIdx = (*pCharStyleIdx)[i + 1]  + nOffset;
-            pNd->Insert(aCharFmt, nStartIdx, nEndIdx, SETATTR_DONTEXPAND);
+            pNd->InsertItem(aCharFmt, nStartIdx, nEndIdx, SETATTR_DONTEXPAND);
         }
 
     }
