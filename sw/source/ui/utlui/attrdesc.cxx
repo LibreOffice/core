@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:31:56 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #endif
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
+#endif
+#ifndef _FMTAUTOFMT_HXX
+#include <fmtautofmt.hxx>
 #endif
 #ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
@@ -216,6 +219,33 @@ SfxItemPresentation SwFmtCharFmt::GetPresentation
             }
             else
                 rText = SW_RESSTR( STR_NO_CHARFMT );
+            return ePres;
+        }
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+// ATT_AUTOFMT *********************************************
+
+
+SfxItemPresentation SwFmtAutoFmt::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    String&             rText,
+    const IntlWrapper*        pIntl
+)   const
+{
+    switch ( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            break;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            rText.Erase(); //TODO
             return ePres;
         }
     }
