@@ -4,9 +4,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:07:24 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3872,7 +3872,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0, // Dummy:
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
