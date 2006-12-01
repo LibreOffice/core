@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:28:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:58:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,8 @@ void SwXMLExport::_ExportAutoStyles()
                 GetFormExport()->examineForms(xPage);
         }
 
-        GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
+        GetTextParagraphExport()->collectTextAutoStylesOptimized( bShowProgress );
+        //GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress, sal_True, bPortions );
     }
 
     GetTextParagraphExport()->exportTextAutoStyles();
