@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldColumn.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:15:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.db;
+ ************************************************************************/
+package com.sun.star.wizards.db;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
@@ -54,7 +55,7 @@ public class FieldColumn {
     public int FieldType;
     public int StandardFormatKey;
     public boolean bIsNumberFormat;
-    public XPropertySet xColPropertySet;
+    public XPropertySet m_xColPropertySet;
     public int iType;
     protected int iDateFormatKey;
     protected int iDateTimeFormatKey;
@@ -71,10 +72,6 @@ public class FieldColumn {
         FieldTitle = FieldName;
         DBMetaData.CommandObject oTable = oCommandMetaData.getTableByName(CommandName);
         setFormatKeys(oCommandMetaData, oTable.xColumns);
-    }
-
-    private String getFieldName(String _DisplayFieldName, String _CommandName){
-        return _DisplayFieldName.substring(_CommandName.length()+1, _DisplayFieldName.length());
     }
 
 
@@ -102,37 +99,50 @@ public class FieldColumn {
         setFormatKeys(oCommandMetaData, _xColumns);
     }
 
+
+    private String getFieldName(String _DisplayFieldName, String _CommandName){
+        return _DisplayFieldName.substring(_CommandName.length()+1, _DisplayFieldName.length());
+    }
+
+
     public static String composeDisplayFieldName(String _sFieldName, String _sCommandName){
         return _sCommandName + "." + _sFieldName;
     }
 
     private void setFormatKeys(CommandMetaData oCommandMetaData, XNameAccess _xColumns){
-        try {
-            xColPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xColumns.getByName(FieldName));
-            ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
-            iType = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
-            iDateFormatKey = oCommandMetaData.getNumberFormatter().getDateFormatKey();
-            iDateTimeFormatKey = oCommandMetaData.getNumberFormatter().getDateTimeFormatKey();
-            iNumberFormatKey = oCommandMetaData.getNumberFormatter().getNumberFormatKey();
-            iTextFormatKey = oCommandMetaData.getNumberFormatter().getTextFormatKey();
-            iTimeFormatKey = oCommandMetaData.getNumberFormatter().getTimeFormatKey();
-            iLogicalFormatKey = oCommandMetaData.getNumberFormatter().getLogicalFormatKey();
-            DefaultValue = getTyperelatedFieldData();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+    try {
+        m_xColPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xColumns.getByName(FieldName));
+        ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
+        iType = AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Type"));
+        iDateFormatKey = oCommandMetaData.getNumberFormatter().getDateFormatKey();
+        iDateTimeFormatKey = oCommandMetaData.getNumberFormatter().getDateTimeFormatKey();
+        iNumberFormatKey = oCommandMetaData.getNumberFormatter().getNumberFormatKey();
+        iTextFormatKey = oCommandMetaData.getNumberFormatter().getTextFormatKey();
+        iTimeFormatKey = oCommandMetaData.getNumberFormatter().getTimeFormatKey();
+        iLogicalFormatKey = oCommandMetaData.getNumberFormatter().getLogicalFormatKey();
+        DefaultValue = getTyperelatedFieldData();
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }}
+
+
+    public XPropertySet getXColumnPropertySet(){
+        return m_xColPropertySet;
     }
+
 
     public void setCommandName(String _CommandName) {
         CommandName = _CommandName;
     }
 
+
     public String getCommandName() {
         return CommandName;
     }
 
+
     public String getFieldName(){
-        return FieldName;
+            return FieldName;
     }
 
     public static String getCommandName(String _DisplayName) {
@@ -146,23 +156,41 @@ public class FieldColumn {
     }
 
     public int getFormatKey() {
-        try {
-            int iKey;
-            Object oKey = this.xColPropertySet.getPropertyValue( "FormatKey");
-            if (AnyConverter.isVoid(oKey))
-                DBFormatKey = StandardFormatKey;
-            else
-                DBFormatKey = AnyConverter.toInt(oKey);
-            return DBFormatKey;
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
-            return StandardFormatKey;
+    try {
+        int iKey;
+        Object oKey = m_xColPropertySet.getPropertyValue( "FormatKey");
+        if (AnyConverter.isVoid(oKey))
+            DBFormatKey = StandardFormatKey;
+        else
+            DBFormatKey = AnyConverter.toInt(oKey);
+        return DBFormatKey;
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+        return StandardFormatKey;
+    }}
+
+
+    public boolean isBoolean(){
+    boolean bIsBoolean = false;
+    try{
+        FieldType = AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Type"));
+        switch (FieldType) {
+            case DataType.BIT : // ==  -7;
+            case DataType.BOOLEAN :
+                bIsBoolean = true;
+                break;
+            default:
+                bIsBoolean = false;
         }
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+    }
+        return bIsBoolean;
     }
 
     private Object getTyperelatedFieldData() {
         try {
-            FieldType = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
+            FieldType = AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Type"));
             switch (FieldType) {
                 case DataType.BIT : // ==  -7;
                 case DataType.BOOLEAN :
@@ -222,25 +250,25 @@ public class FieldColumn {
 
                 case DataType.DECIMAL : // ==   3;  [mit Nachkommastellen]
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
                 case DataType.FLOAT : // ==   6;
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
                 case DataType.REAL : // ==   7;
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
                 case DataType.DOUBLE : // ==   8;
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
@@ -273,7 +301,7 @@ public class FieldColumn {
     private void getTextFieldWidth(int iWidth) {
         int iNewWidth = iWidth;
         try {
-            FieldWidth = AnyConverter.toInt(xColPropertySet.getPropertyValue("Precision"));
+            FieldWidth = AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Precision"));
             if (FieldWidth > 0) {
                 if (FieldWidth > (2 * iWidth))
                     FieldWidth = 2 * iWidth;
