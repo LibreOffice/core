@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextimplcontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:00:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -631,7 +631,7 @@ namespace frm
     {
         // need to normalize the map mode of the device - every paint operation on any device needs
         // to use the same map mode
-        _pDev->Push( PUSH_MAPMODE );
+        _pDev->Push( PUSH_MAPMODE | PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
         // enforce our "normalize map mode" on the device
         MapMode aRefMapMode( m_pEngine->GetRefDevice()->GetMapMode() );
@@ -646,24 +646,29 @@ namespace frm
         Rectangle aPlayground( aPos, aSize );
         Size aOnePixel( _pDev->PixelToLogic( Size( 1, 1 ) ) );
 
-        if ( m_pAntiImpl->GetStyle() & WB_BORDER )
-        {
+        // background
+        _pDev->SetLineColor();
+        _pDev->DrawRect( Rectangle( aPlayground.TopLeft(), m_pEngine->GetPaperSize()) );
+
+        // possibly with border
+        bool bBorder = ( m_pAntiImpl->GetStyle() & WB_BORDER );
+        if ( bBorder )
             // let's draw a border
             _pDev->SetLineColor( COL_BLACK );
-            _pDev->DrawRect( aPlayground );
+        else
+            _pDev->SetLineColor();
+        _pDev->SetFillColor( m_pAntiImpl->GetBackground().GetColor() );
+        _pDev->DrawRect( aPlayground );
+
+        if ( bBorder )
+            // don't draw the text over the border
             lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
-        }
 
         // leave a space of one pixel between the "surroundings" of the control
         // and the content
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
         m_pEngine->Draw( _pDev, aPlayground, Point(), TRUE );
-
-#ifdef DEBUG_DRAW_CONTROL
-        _pDev->SetLineColor( COL_LIGHTRED );
-        _pDev->DrawRect( Rectangle( aPlayground.TopLeft(), m_pEngine->GetPaperSize()) );
-#endif
 
         _pDev->Pop();
     }
