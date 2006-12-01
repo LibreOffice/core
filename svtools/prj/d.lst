@@ -226,7 +226,6 @@ hedabu: ..\source\svsql\sdbyacc.hxx %_DEST%\inc%_EXT%\svtools\sdbyacc.hxx
 hedabu: ..\source\svsql\sdbparse.hxx %_DEST%\inc%_EXT%\svtools\sdbparse.hxx
 hedabu: ..\%__SRC%\inc\svtools\sdbbison.hxx %_DEST%\inc%_EXT%\svtools\sdbbison.hxx
 hedabu: ..\source\svsql\converter.hxx %_DEST%\inc%_EXT%\svtools\converter.hxx
-hedabu: ..\source\cmdparse\cmdparse.hxx %_DEST%\inc%_EXT%\svtools\cmdparse.hxx
 
 
 hedabu: ..\inc\filectrl.hxx %_DEST%\inc%_EXT%\svtools\filectrl.hxx
