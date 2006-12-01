@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testsmgr2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:42:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,14 +81,14 @@ SAL_IMPLEMENT_MAIN()
         sal_Int32 n = 0;
         while( rEnum->hasMoreElements() )
         {
-            Reference< XServiceInfo > r;
-            rEnum->nextElement() >>= r;
-            OString o = OUStringToOString( r->getImplementationName() , RTL_TEXTENCODING_ASCII_US );
+            Reference< XServiceInfo > r3;
+            rEnum->nextElement() >>= r3;
+            OString o = OUStringToOString( r3->getImplementationName() , RTL_TEXTENCODING_ASCII_US );
             printf( "%s\n" , o.getStr() );
-            Sequence< OUString > seq = r->getSupportedServiceNames();
-            for( int i = 0 ;i < seq.getLength() ; i ++  )
+            Sequence< OUString > seq2 = r3->getSupportedServiceNames();
+            for( int i = 0 ;i < seq2.getLength() ; i ++  )
             {
-                o = OUStringToOString( seq[i] , RTL_TEXTENCODING_ASCII_US );
+                o = OUStringToOString( seq2[i] , RTL_TEXTENCODING_ASCII_US );
                 printf( "   %s\n" , o.getStr() );
             }
             n ++;
