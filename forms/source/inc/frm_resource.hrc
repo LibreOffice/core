@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frm_resource.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:57:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,13 @@
 #define RID_STR_XFORMS_CANT_EVALUATE            ( RID_FRM_STRINGS_START + 51 )
 #define RID_STR_XFORMS_PATTERN_DOESNT_MATCH     ( RID_FRM_STRINGS_START + 52 )
 #define RID_STR_XFORMS_BINDING_UI_NAME          ( RID_FRM_STRINGS_START + 53 )
+
+#define RID_STR_QUERY_SAVE_MODIFIED_ROW         ( RID_FRM_STRINGS_START + 54 )
+#define RID_STR_COULD_NOT_SET_ORDER             ( RID_FRM_STRINGS_START + 55 )
+#define RID_STR_COULD_NOT_SET_FILTER            ( RID_FRM_STRINGS_START + 56 )
+#define RID_STR_FEATURE_REQUIRES_PARAMETERS     ( RID_FRM_STRINGS_START + 57 )
+#define RID_STR_FEATURE_NOT_EXECUTABLE          ( RID_FRM_STRINGS_START + 58 )
+#define RID_STR_FEATURE_UNKNOWN                 ( RID_FRM_STRINGS_START + 59 )
 
 #endif // _FRM_RESOURCE_HRC_
 
