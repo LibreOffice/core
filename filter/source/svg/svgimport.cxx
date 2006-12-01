@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:45:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,86 +93,91 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
                 aClass = pEnv->FindClass( "SOTranscoder" );
 
-                if( aClass && ( aMId = pEnv->GetStaticMethodID( aClass, "main", "([Ljava/lang/String;)V" ) ) )
+                if( aClass )
                 {
-                    ::utl::TempFile aTempFile;
-                    String          aOutputURL( aTempFile.GetURL() );
-                    String          aOutputFile;
-
-                    aTempFile.EnableKillingFile();
-
-                    if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aOutputURL, aOutputFile ) && aOutputFile.Len() )
+                    aMId = pEnv->GetStaticMethodID( aClass, "main", "([Ljava/lang/String;)V" );
+                    if ( aMId )
                     {
-                        aJStr = pEnv->NewStringUTF( ByteString( aLocalFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                        aArgs = static_cast<jobjectArray>(pEnv->NewObjectArray( 2, pEnv->FindClass( "java/lang/String" ), aJStr ));
-                        aJStr = pEnv->NewStringUTF( ByteString( aOutputFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                        pEnv->SetObjectArrayElement( aArgs, 1, aJStr );
-                        pEnv->CallStaticVoidMethod( aClass, aMId, aArgs );
 
-                        Graphic     aGraphic;
-                        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aOutputURL, STREAM_READ );
+                        ::utl::TempFile aTempFile;
+                        String          aOutputURL( aTempFile.GetURL() );
+                        String          aOutputFile;
 
-                        if( pIStm )
+                        aTempFile.EnableKillingFile();
+
+                        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aOutputURL, aOutputFile ) && aOutputFile.Len() )
                         {
-                            GraphicConverter::Import( *pIStm, aGraphic );
-                            delete pIStm;
-                        }
+                            aJStr = pEnv->NewStringUTF( ByteString( aLocalFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                            aArgs = static_cast<jobjectArray>(pEnv->NewObjectArray( 2, pEnv->FindClass( "java/lang/String" ), aJStr ));
+                            aJStr = pEnv->NewStringUTF( ByteString( aOutputFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                            pEnv->SetObjectArrayElement( aArgs, 1, aJStr );
+                            pEnv->CallStaticVoidMethod( aClass, aMId, aArgs );
 
-                        Reference< XDrawPagesSupplier > xDrawPagesSupplier( mxDstDoc, UNO_QUERY );
+                            Graphic     aGraphic;
+                            SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aOutputURL, STREAM_READ );
 
-                        if( xDrawPagesSupplier.is() && ( aGraphic.GetType() != GRAPHIC_NONE ) )
-                        {
-                            Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages() );
-
-                            if( xDrawPages.is() && xDrawPages->getCount() )
+                            if( pIStm )
                             {
-                                Reference< XDrawPage >  xDrawPage;
+                                GraphicConverter::Import( *pIStm, aGraphic );
+                                delete pIStm;
+                            }
 
-                                if( xDrawPages->getByIndex( 0 ) >>= xDrawPage )
+                            Reference< XDrawPagesSupplier > xDrawPagesSupplier( mxDstDoc, UNO_QUERY );
+
+                            if( xDrawPagesSupplier.is() && ( aGraphic.GetType() != GRAPHIC_NONE ) )
+                            {
+                                Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages() );
+
+                                if( xDrawPages.is() && xDrawPages->getCount() )
                                 {
-                                    Reference< XShapes >        xShapes( xDrawPage, UNO_QUERY );
-                                    Reference< XPropertySet>    xPagePropSet( xDrawPage, UNO_QUERY );
-                                    Reference< XShape >         xShape( Reference< XMultiServiceFactory >( mxDstDoc, UNO_QUERY )->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) ), UNO_QUERY );
+                                    Reference< XDrawPage >  xDrawPage;
 
-                                    if( xPagePropSet.is() && xShapes.is() && xShape.is() )
+                                    if( xDrawPages->getByIndex( 0 ) >>= xDrawPage )
                                     {
-                                        Reference< XPropertySet >   xPropSet( xShape, UNO_QUERY );
-                                        sal_Int32                   nPageWidth = 0, nPageHeight = 0;
+                                        Reference< XShapes >        xShapes( xDrawPage, UNO_QUERY );
+                                        Reference< XPropertySet>    xPagePropSet( xDrawPage, UNO_QUERY );
+                                        Reference< XShape >         xShape( Reference< XMultiServiceFactory >( mxDstDoc, UNO_QUERY )->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) ), UNO_QUERY );
 
-                                        xPagePropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nPageWidth;
-                                        xPagePropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nPageHeight;
-
-                                        if( xPropSet.is() && nPageWidth && nPageHeight )
+                                        if( xPagePropSet.is() && xShapes.is() && xShape.is() )
                                         {
-                                            xShapes->add( xShape );
+                                            Reference< XPropertySet >   xPropSet( xShape, UNO_QUERY );
+                                            sal_Int32                   nPageWidth = 0, nPageHeight = 0;
 
-                                            ::com::sun::star::awt::Point    aPos;
-                                            ::com::sun::star::awt::Size     aSize;
-                                            GraphicObject                   aGraphObj( aGraphic );
-                                            String                          aGraphURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
-                                            Any                             aValue;
-                                            Size                            aGraphicSize;
-                                            const MapMode                   aTargetMapMode( MAP_100TH_MM );
+                                            xPagePropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nPageWidth;
+                                            xPagePropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nPageHeight;
 
-                                            if( aGraphObj.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-                                                aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphObj.GetPrefSize(), aTargetMapMode );
-                                            else
-                                                aGraphicSize = OutputDevice::LogicToLogic( aGraphObj.GetPrefSize(), aGraphObj.GetPrefMapMode(), aTargetMapMode );
+                                            if( xPropSet.is() && nPageWidth && nPageHeight )
+                                            {
+                                                xShapes->add( xShape );
 
-                                            aGraphURL += String( aGraphObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
-                                            aValue <<= rtl::OUString( aGraphURL );
-                                            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), aValue );
+                                                ::com::sun::star::awt::Point    aPos;
+                                                ::com::sun::star::awt::Size     aSize;
+                                                GraphicObject                   aGraphObj( aGraphic );
+                                                String                          aGraphURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+                                                Any                             aValue;
+                                                Size                            aGraphicSize;
+                                                const MapMode                   aTargetMapMode( MAP_100TH_MM );
 
-                                            aPos.X = ( nPageWidth - aGraphicSize.Width() ) >> 1;
-                                            aPos.Y = ( nPageHeight - aGraphicSize.Height() ) >> 1;
+                                                if( aGraphObj.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+                                                    aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphObj.GetPrefSize(), aTargetMapMode );
+                                                else
+                                                    aGraphicSize = OutputDevice::LogicToLogic( aGraphObj.GetPrefSize(), aGraphObj.GetPrefMapMode(), aTargetMapMode );
 
-                                            aSize.Width = aGraphicSize.Width();
-                                            aSize.Height = aGraphicSize.Height();
+                                                aGraphURL += String( aGraphObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
+                                                aValue <<= rtl::OUString( aGraphURL );
+                                                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), aValue );
 
-                                            xShape->setPosition( aPos );
-                                            xShape->setSize( aSize );
+                                                aPos.X = ( nPageWidth - aGraphicSize.Width() ) >> 1;
+                                                aPos.Y = ( nPageHeight - aGraphicSize.Height() ) >> 1;
 
-                                            bRet = sal_True;
+                                                aSize.Width = aGraphicSize.Width();
+                                                aSize.Height = aGraphicSize.Height();
+
+                                                xShape->setPosition( aPos );
+                                                xShape->setSize( aSize );
+
+                                                bRet = sal_True;
+                                            }
                                         }
                                     }
                                 }
