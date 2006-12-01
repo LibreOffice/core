@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:28:18 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:08:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..$/..$/..
 
-PRJNAME=api
+PRJNAME=offapi
 
 TARGET=cssi18n
 PACKAGE=com$/sun$/star$/i18n
