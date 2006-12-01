@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:26:57 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,11 +173,11 @@ private:
 protected:
 
     virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL bUsed ) {}
+    virtual void            _ExportStyles( BOOL /* bUsed */ ) {}
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
-    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) { return 0; }
+    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
 
 public:
 
@@ -248,21 +248,22 @@ class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
 
 private:
 
-    ObjectMap*                          mpObjects;
     Reference< XMultiServiceFactory >   mxMSF;
+    SvXMLElementExport*                 mpSVGDoc;
+    SVGExport*                          mpSVGExport;
+    SVGFontExport*                      mpSVGFontExport;
+    SVGActionWriter*                    mpSVGWriter;
+    SdrPage*                            mpDefaultSdrPage;
+    SdrModel*                           mpSdrModel;
+    sal_Bool                            mbPresentation;
+
+    ObjectMap*                          mpObjects;
     Reference< XComponent >             mxSrcDoc;
 #ifdef SOLAR_JAVA
     Reference< XComponent >             mxDstDoc;
 #endif
     Reference< XDrawPage >              mxDefaultPage;
-    SvXMLElementExport*                 mpSVGDoc;
-    SVGExport*                          mpSVGExport;
-    SVGFontExport*                      mpSVGFontExport;
-    SVGActionWriter*                    mpSVGWriter;
-    SdrModel*                           mpSdrModel;
-    SdrPage*                            mpDefaultSdrPage;
     Link                                maOldFieldHdl;
-    sal_Bool                            mbPresentation;
 
 #ifdef SOLAR_JAVA
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
