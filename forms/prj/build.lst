@@ -12,4 +12,5 @@ fm	forms\source\xforms\xpathlib			nmake	-	all	fm_xforms_xpathlib fm_inc NULL
 fm	forms\source\xforms	    				nmake	-	all	fm_xforms fm_xforms_submit fm_xforms_xpathlib fm_inc NULL
 fm	forms\source\resource					nmake	-	all	fm_resource fm_inc NULL
 fm  forms\source\richtext                   nmake   -   all fm_richtext fm_inc NULL
-fm  forms\util                              nmake   -   all fm_util fm_component fm_solar_component fm_solar_control fm_helper fm_misc fm_resource fm_richtext fm_xforms NULL
+fm  forms\source\runtime                    nmake   -   all frm_runtime NULL
+fm  forms\util                              nmake   -   all fm_util fm_component fm_solar_component fm_solar_control fm_helper fm_misc fm_resource fm_richtext frm_runtime fm_xforms NULL
