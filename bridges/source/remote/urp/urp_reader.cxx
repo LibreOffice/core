@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:02:09 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include <bridges/remote/context.h>
 #include <bridges/remote/helper.hxx>
 
+#include <com/sun/star/uno/XCurrentContext.hpp>
 #include <uno/environment.h>
 
 #include "urp_reader.hxx"
@@ -556,6 +557,31 @@ void OReaderThread::run()
             // do the job
             if( flags.bRequest )
             {
+                bool bHasCc = m_pBridgeImpl->m_properties.bCurrentContext
+                    && flags.nMethodId != REMOTE_RELEASE_METHOD_INDEX
+                    && !rtl::OUString( *ppLastOid ).equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM(
+                            g_NameOfUrpProtocolPropertiesObject ) );
+                remote_Interface * pCc = 0;
+                if ( bHasCc )
+                {
+                    typelib_TypeDescription * pType = 0;
+                    TYPELIB_DANGER_GET(
+                        &pType,
+                        XCurrentContext::static_type().getTypeLibType() );
+                    bool ok = m_unmarshal.unpack( &pCc, pType );
+                    TYPELIB_DANGER_RELEASE( pType );
+                    if ( !ok )
+                    {
+                        OSL_ENSURE(
+                            false,
+                            ("urp_bridge: error while unpacking current"
+                             " context") );
+                        disposeEnvironment();
+                        break;
+                    }
+                }
+
                 //--------------------------
                 // handle request
                 //--------------------------
@@ -636,10 +662,14 @@ void OReaderThread::run()
                         }
 
                         pMultiJob = new ServerMultiJob(
-                            pEnvRemote, *ppLastTid,
-                            m_pBridgeImpl, &m_unmarshal , nMessageCount );
+                            pEnvRemote,
+                            static_cast< remote_Context * >(
+                                pEnvRemote->pContext ),
+                            *ppLastTid, m_pBridgeImpl, &m_unmarshal,
+                            nMessageCount );
                     }
 
+                    pMultiJob->setCurrentContext( bHasCc, pCc );
                     pMultiJob->setIgnoreCache( flags.bIgnoreCache );
                     pMultiJob->setType( *ppLastType );
                     if( pMethodType )
@@ -776,7 +806,6 @@ void OReaderThread::run()
                     m_unmarshal.getPos() - nLogHeader, sMemberName );
 #endif
                 sal_Bool bBridgePropertyCallAndWaitingForReply =
-                    m_pBridgeImpl->m_pPropertyObject->waitingForCommitChangeReply() &&
                     pClientJob->isBridgePropertyCall();
 
                 pClientJob->initiate();
