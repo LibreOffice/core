@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:12:22 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
+import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import complexlib.ComplexTestCase;
 
@@ -95,8 +96,9 @@ public final class JobQueue_Test extends ComplexTestCase {
         // put reply job:
         t._jobQueue.putJob(
             new Job(null, __iReceiver,
-                    new TestMessage(true, __workAt_td, "oid", null, null, null,
-                                    null)),
+                    new Message(
+                        null, false, "oid", __workAt_td, null, false, null,
+                        false, null, null)),
             null);
         t.waitToTerminate();
         assure("", true); // TODO! ???
@@ -160,9 +162,13 @@ public final class JobQueue_Test extends ComplexTestCase {
         testSendRequests(workAt, "increment", jobQueue);
         synchronized (workAt) {
             jobQueue.putJob(new Job(workAt, __iReceiver,
-                                    new TestMessage(true, __workAt_td, "oid",
-                                                    null, null, "notifyme",
-                                                    null)), null);
+                                    new Message(
+                                        null, true, "oid", __workAt_td,
+                                        ((MethodDescription)
+                                         __workAt_td.getMethodDescription(
+                                             "notifyme")),
+                                        true, null, false, null, null)),
+                            null);
             while (!workAt._notified) {
                 workAt.wait();
             }
@@ -181,8 +187,12 @@ public final class JobQueue_Test extends ComplexTestCase {
         synchronized (workAt) {
             async_jobQueue._sync_jobQueue.putJob(
                 new Job(workAt, __iReceiver,
-                        new TestMessage(true, __workAt_td, "oid", null, null,
-                                        "notifyme", null)), null);
+                        new Message(
+                            null, true, "oid", __workAt_td,
+                            ((MethodDescription)
+                             __workAt_td.getMethodDescription("notifyme")),
+                            true, null, false, null, null)),
+                null);
             while (!workAt._notified) {
                 workAt.wait();
             }
@@ -192,8 +202,10 @@ public final class JobQueue_Test extends ComplexTestCase {
 
     private void testSendRequests(TestWorkAt workAt, String operation,
                                   JobQueue jobQueue) {
-        IMessage iMessage = new TestMessage(true, __workAt_td, "oid", null,
-                                            null, operation, null);
+        Message iMessage = new Message(
+            null, true, "oid", __workAt_td,
+            (MethodDescription) __workAt_td.getMethodDescription(operation),
+            true, null, false, null, null);
         for (int i = 0; i < TestWorkAt.MESSAGES; ++ i) {
             Thread.yield(); // force scheduling
             jobQueue.putJob(new Job(workAt, __iReceiver, iMessage),
