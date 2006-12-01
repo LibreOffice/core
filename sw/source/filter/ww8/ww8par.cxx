@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:14:50 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1165,7 +1165,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
             if (nWhich == RES_LR_SPACE)
             {
                 SfxItemState eState = SFX_ITEM_DEFAULT;
-                if (const SwAttrSet *pSet = pNd->GetpSwAttrSet())
+                if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
                 if (eState != SFX_ITEM_SET)
                     pItem = &(rReader.pCollA[rReader.nAktColl].maWordLR);
