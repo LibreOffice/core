@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:58:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,7 @@ uno::Sequence< Any > SAL_CALL SwXParagraph::GetPropertyValues_Impl(
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
         SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-        SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
+        const SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
             pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
