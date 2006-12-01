@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:08:09 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,9 @@
 #include <svx/svditer.hxx>
 #endif
 // <--
-
+// --> OD 2006-11-01 #130889#
+#include <vector>
+// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -420,7 +422,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
 void SwDoc::UnGroupSelection( SdrView& rDrawView )
 {
-    int bUndo = DoesUndo();
+    const int bUndo = DoesUndo();
     if( bUndo )
         ClearRedo();
 
@@ -429,14 +431,21 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    if( rMrkList.GetMarkCount() )
+    // --> OD 2006-11-01 #130889#
+    std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >* pFmtsAndObjs( 0L );
+    const sal_uInt32 nMarkCount( rMrkList.GetMarkCount() );
+    // <--
+    if ( nMarkCount )
     {
+        // --> OD 2006-11-01 #130889#
+        pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[nMarkCount];
+        // <--
         SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pObj->GetUpGroup() )
         {
             String sDrwFmtNm( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM("DrawObject" )));
-            for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+            for ( USHORT i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                 if ( pObj->IsA( TYPE(SdrObjGroup) ) )
@@ -462,14 +471,20 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         pFmt->SetPositionLayoutDir(
                             com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
                         // <--
-                        SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
-                        // --> OD 2004-11-22 #i35635#
-                        pContact->MoveObjToVisibleLayer( pSubObj );
+                        // --> OD 2006-11-01 #130889#
+                        // creation of <SwDrawContact> instances for the group
+                        // members and its connection to the Writer layout is
+                        // done after intrinsic ungrouping.
+//                        SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
+//                        // --> OD 2004-11-22 #i35635#
+//                        pContact->MoveObjToVisibleLayer( pSubObj );
+//                        // <--
+//                        pContact->ConnectToLayout();
+//                        // OD 2004-04-07 #i26791# - Adjust positioning and
+//                        // alignment attributes.
+//                        lcl_AdjustPositioningAttr( pFmt, *pSubObj );
+                        pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
                         // <--
-                        pContact->ConnectToLayout();
-                        // OD 2004-04-07 #i26791# - Adjust positioning and
-                        // alignment attributes.
-                        lcl_AdjustPositioningAttr( pFmt, *pSubObj );
 
                         if( bUndo )
                             pUndo->AddObj( i2, pFmt );
@@ -479,6 +494,37 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         }
     }
     rDrawView.UnGroupMarked();
+    // --> OD 2006-11-01 #130889#
+    // creation of <SwDrawContact> instances for the former group members and
+    // its connection to the Writer layout.
+    for ( sal_uInt32 i = 0; i < nMarkCount; ++i )
+    {
+        SwUndoDrawUnGroupConnectToLayout* pUndo = 0;
+        if( bUndo )
+        {
+            pUndo = new SwUndoDrawUnGroupConnectToLayout();
+            AppendUndo( pUndo );
+        }
+
+        while ( pFmtsAndObjs[i].size() > 0 )
+        {
+            SwDrawFrmFmt* pFmt( pFmtsAndObjs[i].back().first );
+            SdrObject* pObj( pFmtsAndObjs[i].back().second );
+            pFmtsAndObjs[i].pop_back();
+
+            SwDrawContact* pContact = new SwDrawContact( pFmt, pObj );
+            pContact->MoveObjToVisibleLayer( pObj );
+            pContact->ConnectToLayout();
+            lcl_AdjustPositioningAttr( pFmt, *pObj );
+
+            if ( bUndo )
+            {
+                pUndo->AddFmtAndObj( pFmt, pObj );
+            }
+        }
+    }
+    delete [] pFmtsAndObjs;
+    // <--
 }
 
 /*************************************************************************
