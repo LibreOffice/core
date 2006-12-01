@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:08:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2226,11 +2226,13 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< DateField* >( m_pWindow )->SetMin( nMin );
         static_cast< DateField* >( m_pWindow )->SetMax( nMax );
         static_cast< DateField* >( m_pWindow )->SetStrictFormat( bStrict );
+        static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( TRUE );
 
         static_cast< DateField* >( m_pPainter )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
         static_cast< DateField* >( m_pPainter )->SetMin( nMin );
         static_cast< DateField* >( m_pPainter )->SetMax( nMax );
         static_cast< DateField* >( m_pPainter )->SetStrictFormat( bStrict );
+        static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( TRUE );
     }
 }
 
@@ -2245,7 +2247,9 @@ namespace
             try
             {
                 ::com::sun::star::util::Date aValue = _rxField->getDate();
-                if ( !_rxField->wasNull() )
+                if ( _rxField->wasNull() )
+                    _rField.SetText( sDate );
+                else
                 {
                     _rField.SetDate( ::Date( aValue.Day, aValue.Month, aValue.Year ) );
                     sDate = _rField.GetText();
@@ -2262,7 +2266,7 @@ namespace
 //------------------------------------------------------------------------------
 String DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
-    return lcl_setFormattedDate_nothrow( *dynamic_cast< DateField* >( m_pPainter ), _rxField );
+     return lcl_setFormattedDate_nothrow( *dynamic_cast< DateField* >( m_pPainter ), _rxField );
 }
 
 //------------------------------------------------------------------------------
@@ -2332,11 +2336,13 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< TimeField* >( m_pWindow )->SetMin( nMin );
         static_cast< TimeField* >( m_pWindow )->SetMax( nMax );
         static_cast< TimeField* >( m_pWindow )->SetStrictFormat( bStrict );
+        static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( TRUE );
 
         static_cast< TimeField* >( m_pPainter )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
         static_cast< TimeField* >( m_pPainter )->SetMin( nMin );
         static_cast< TimeField* >( m_pPainter )->SetMax( nMax );
         static_cast< TimeField* >( m_pPainter )->SetStrictFormat( bStrict );
+        static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( TRUE );
     }
 }
 
@@ -2351,7 +2357,9 @@ namespace
             try
             {
                 ::com::sun::star::util::Time aValue = _rxField->getTime();
-                if ( !_rxField->wasNull() )
+                if ( _rxField->wasNull() )
+                    _rField.SetText( sTime );
+                else
                 {
                     _rField.SetTime( ::Time( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds ) );
                     sTime = _rField.GetText();
