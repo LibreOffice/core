@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:29:36 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,10 @@
 #define PROPERTY_MAP_FLDTYP_DROPDOWN                    90
 #define PROPERTY_MAP_TEXT_VIEW                          91
 #define PROPERTY_MAP_CONDITIONAL_PARA_STYLE             92
-#define PROPERTY_MAP_END                                93
+#define PROPERTY_MAP_CHAR_AUTO_STYLE                    93
+#define PROPERTY_MAP_RUBY_AUTO_STYLE                    94
+#define PROPERTY_MAP_PARA_AUTO_STYLE                    95
+#define PROPERTY_MAP_END                                97
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
@@ -143,6 +146,9 @@
 // basically the same as PROPERTY_SET_PARA_STYLE with additional property
 // that is only available for conditional para styles
 #define PROPERTY_SET_CONDITIONAL_PARA_STYLE 6
+#define PROPERTY_SET_CHAR_AUTO_STYLE        7
+#define PROPERTY_SET_RUBY_AUTO_STYLE        8
+#define PROPERTY_SET_PARA_AUTO_STYLE        9
 
 //S&E
 #define WID_WORDS                0
@@ -349,6 +355,9 @@ class SwUnoPropertyMapProvider
     SfxItemPropertySet* pPageStyleMap;
     SfxItemPropertySet* pNumStyleMap;
     SfxItemPropertySet* pConditionalParaStyleMap;
+    SfxItemPropertySet* pCharAutoStyleMap;
+    SfxItemPropertySet* pParaAutoStyleMap;
+    SfxItemPropertySet* pRubyAutoStyleMap;
 
     void            Sort(sal_uInt16 nId);
 public:
