@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charfmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:35:44 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,13 @@ class SwCharFmt : public SwFmt
 public:
     TYPEINFO();    //Bereits in Basisklasse Client drin.
 };
+
+namespace CharFmt
+{
+    extern const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr );
+    extern const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, USHORT nWhich );
+    extern BOOL IsItemIncluded( const USHORT nWhich, const SwTxtAttr *pAttr );
+}
 
 #endif
 
