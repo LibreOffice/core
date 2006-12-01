@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:01 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,6 +334,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 
@@ -569,7 +570,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                 const ::svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
                 if ( rController->commitCurrentControl() )
             {
-                    sal_Bool bModified = rController->isModifiedRecord();
+                    sal_Bool bModified = rController->isModifiedRow();
 
                 if ( bModified && bUI )
                 {
@@ -1474,21 +1475,21 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_RECORD_ABSOLUTE:
             case SID_FM_RECORD_TOTAL:
             {
-                ::svx::ControllerFeatureState aState;
+                FeatureState aState;
                 GetImpl()->getNavControllerFeatures()->getState( nWhich, aState );
                 if ( SID_FM_RECORD_ABSOLUTE == nWhich )
                 {
                     sal_Int32 nPosition = 0;
-                    aState.aState >>= nPosition;
+                    aState.State >>= nPosition;
                     rSet.Put( SfxInt32Item( nWhich, nPosition ) );
                 }
                 else if ( SID_FM_RECORD_TOTAL == nWhich )
                 {
                     ::rtl::OUString sTotalCount;
-                    aState.aState >>= sTotalCount;
+                    aState.State >>= sTotalCount;
                     rSet.Put( SfxStringItem( nWhich, sTotalCount ) );
                 }
-                bEnable = aState.bEnabled;
+                bEnable = aState.Enabled;
             }
             break;
 
@@ -1497,10 +1498,6 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_RECORD_FIRST:
             case SID_FM_RECORD_PREV:
             case SID_FM_RECORD_LAST:
-                // delegate
-                bEnable = GetImpl()->getNavControllerFeatures()->getSimpleState( nWhich );
-                break;
-
             case SID_FM_RECORD_SAVE:
             case SID_FM_RECORD_UNDO:
             case SID_FM_RECORD_DELETE:
@@ -1511,22 +1508,21 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_AUTOFILTER:
             case SID_FM_ORDERCRIT:
                 // delegate
-                bEnable = GetImpl()->getActiveControllerFeatures()->getSimpleState( nWhich );
+                bEnable = GetImpl()->getActiveControllerFeatures()->isEnabled( nWhich );
                 break;
 
             case SID_FM_FORM_FILTERED:
             {
-                ::svx::ControllerFeatureState aState;
+                FeatureState aState;
                 GetImpl()->getActiveControllerFeatures()->getState( nWhich, aState );
 
-                bEnable = aState.bEnabled;
-                rSet.Put( SfxBoolItem( nWhich, ::comphelper::getBOOL( aState.aState ) ) );
+                bEnable = aState.Enabled;
+                rSet.Put( SfxBoolItem( nWhich, ::comphelper::getBOOL( aState.State ) ) );
             }
             break;
 
             case SID_FM_FILTER_START:
-                if ( GetImpl()->getActiveControllerFeatures()->isParsable() )
-                    bEnable = !GetImpl()->getActiveControllerFeatures()->isInsertOnlyForm();
+                bEnable = GetImpl()->getActiveControllerFeatures()->canDoFormFilter();
                 break;
             }
         }
