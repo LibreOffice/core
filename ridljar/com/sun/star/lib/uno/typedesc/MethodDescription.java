@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MethodDescription.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:17:11 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@ import com.sun.star.uno.IMethodDescription;
 import com.sun.star.uno.ITypeDescription;
 import java.lang.reflect.Method;
 
-final class MethodDescription implements IMethodDescription {
-    public MethodDescription(
+public final class MethodDescription implements IMethodDescription {
+    MethodDescription(
         String name, int index, boolean oneway, ITypeDescription[] inSignature,
         ITypeDescription[] outSignature, ITypeDescription returnSignature,
         Method method)
@@ -54,10 +54,11 @@ final class MethodDescription implements IMethodDescription {
         this.method = method;
     }
 
-    public MethodDescription(MethodDescription other, int index) {
+    MethodDescription(IMethodDescription other, int index) {
         this(
-            other.name, index, other.oneway, other.inSignature,
-            other.outSignature, other.returnSignature, other.method);
+            other.getName(), index, other.isOneway(), other.getInSignature(),
+            other.getOutSignature(), other.getReturnSignature(),
+            other.getMethod());
     }
 
     public String getName() {
@@ -103,6 +104,10 @@ final class MethodDescription implements IMethodDescription {
     public Method getMethod() {
         return method;
     }
+
+    public static final int ID_QUERY_INTERFACE = 0;
+    public static final int ID_ACQUIRE = 1;
+    public static final int ID_RELEASE = 2;
 
     private final String name;
     private final int index;
