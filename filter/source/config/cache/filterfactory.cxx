@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filterfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:37:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // pack list of item names as an enum list
     // Attention: Do not return empty reference for empty list!
     // The outside check "hasMoreElements()" should be enough, to detect this state :-)
-    size_t c = lEnumSet.size();
+//  size_t c = lEnumSet.size();
     css::uno::Sequence< ::rtl::OUString > lSet = lEnumSet.getAsConstList();
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
@@ -533,7 +533,6 @@ class stlcomp_removeIfMatchFlags
             {
                 return true;
             }
-            return true;
         }
 };
 
