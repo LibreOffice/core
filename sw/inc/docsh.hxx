@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:47:01 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,9 +256,15 @@ public:
                         BOOL bColumn = FALSE,
                         SwWrtShell*     pActShell = 0 );
 
-    // Timer starten fuers ueberpruefen der Grafik-Links. Sind alle
-    // vollstaendig geladen, dann ist das Doc fertig
-    void StartLoadFinishedTimer();
+    // --> OD 2006-11-07 #i59688#
+    // linked graphics are now loaded on demand.
+    // Thus, loading of linked graphics no longer needed and necessary for
+    // the load of document being finished.
+//    // Timer starten fuers ueberpruefen der Grafik-Links. Sind alle
+//    // vollstaendig geladen, dann ist das Doc fertig
+//    void StartLoadFinishedTimer();
+    void LoadingFinished();
+    // <--
 
     // eine Uebertragung wird abgebrochen (wird aus dem SFX gerufen)
     virtual void CancelTransfers();
