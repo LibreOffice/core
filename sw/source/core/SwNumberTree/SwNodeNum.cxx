@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:33:27 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,16 @@ bool SwNodeNum::IsNotifiable() const
 
     if (mpTxtNode)
         aResult = mpTxtNode->IsNotifiable();
+
+    return aResult;
+}
+
+bool SwNodeNum::IsNotificationEnabled() const
+{
+    bool aResult = true;
+
+    if (mpTxtNode)
+        aResult = mpTxtNode->IsNotificationEnabled();
 
     return aResult;
 }
