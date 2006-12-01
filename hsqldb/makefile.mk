@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 09:43:59 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:33:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=.
 
-PRJNAME=so_hsqldb
+PRJNAME=hsqldb
 TARGET=so_hsqldb
 
 # --- Settings -----------------------------------------------------
