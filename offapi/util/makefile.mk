@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 16:30:36 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:23:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssembed.db \
     $(UCR)$/cssfcontrol.db \
     $(UCR)$/cssfinsp.db \
+    $(UCR)$/cssfrunt.db \
     $(UCR)$/cssform.db \
     $(UCR)$/cssxforms.db \
     $(UCR)$/cssfcomp.db \
