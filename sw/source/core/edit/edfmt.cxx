@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:05:56 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, BOOL bReset)
         ((SwTxtNode*)pCNd)->GetAttr( aSet, nStt, nEnd );
         pCharFmt->SetAttr( aSet );
     }
-    else if( pCNd->GetpSwAttrSet() )
+    else if( pCNd->HasSwAttrSet() )
         pCharFmt->SetAttr( *pCNd->GetpSwAttrSet() );
 }
 
