@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testimplhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:45:01 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+# undef OSL_DEBUG_LEVEL
+# define OSL_DEBUG_LEVEL 2
+#endif
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
@@ -432,7 +437,7 @@ void throw_one(
 
 
 //==================================================================================================
-void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & xSF )
+void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
 {
     Reference< XInterface > xImpl( (lang::XTypeProvider *)new TestImpl() );
     Reference< lang::XTypeProvider > xTP1( xImpl, UNO_QUERY );
@@ -559,18 +564,18 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & xSF )
         {
             OSL_ENSURE( sal_False, "### unexpected IllegalAccessException exception caught!" );
         }
-        catch (Exception rExc)
+        catch (Exception & rExc2)
         {
-            OSL_ENSURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("exc") ) && rExc.Context == xImpl,
+            OSL_ENSURE( rExc2.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("exc") ) && rExc2.Context == xImpl,
                          "### unexpected exception content!" );
             try
             {
                 throwException( makeAny( lang::IllegalAccessException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("axxess exc") ), rExc.Context ) ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("axxess exc") ), rExc2.Context ) ) );
             }
-            catch (lang::IllegalAccessException & rExc)
+            catch (lang::IllegalAccessException & rExc3)
             {
-                OSL_ENSURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("axxess exc") ) && rExc.Context == xImpl,
+                OSL_ENSURE( rExc3.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("axxess exc") ) && rExc3.Context == xImpl,
                              "### unexpected exception content!" );
                 return;
             }
