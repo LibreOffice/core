@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:38:31 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:45:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,18 +261,9 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
             pRot = &rAttr.GetCharRotate();
         else
         {
-            SwCharFmt* pFmt = NULL;
-            if( RES_TXTATR_INETFMT == rAttr.Which() )
-                pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-            else if( RES_TXTATR_CHARFMT == rAttr.Which() )
-                pFmt = rAttr.GetCharFmt().GetCharFmt();
-            if ( pFmt )
-            {
-                const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == pFmt->GetAttrSet().
-                    GetItemState( RES_CHRATR_ROTATE, TRUE, &pItem ) )
-                    pRot = (SvxCharRotateItem*)pItem;
-            }
+            const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_ROTATE );
+            if ( pItem )
+                pRot = (SvxCharRotateItem*)pItem;
         }
     }
     if( pRot )
@@ -373,18 +364,9 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
             pTwo = &rAttr.Get2Lines();
         else
         {
-            SwCharFmt* pFmt = NULL;
-            if( RES_TXTATR_INETFMT == rAttr.Which() )
-                pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-            else if( RES_TXTATR_CHARFMT == rAttr.Which() )
-                pFmt = rAttr.GetCharFmt().GetCharFmt();
-            if ( pFmt )
-            {
-                const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == pFmt->GetAttrSet().
-                    GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
-                    pTwo = (SvxTwoLinesItem*)pItem;
-            }
+            const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
+            if ( pItem )
+                pTwo = (SvxTwoLinesItem*)pItem;
         }
     }
     if( pTwo )
@@ -901,37 +883,18 @@ void SwRubyPortion::CalcRubyOffset()
 sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     sal_Bool &rValue )
 {
-    if( RES_CHRATR_TWO_LINES == rAttr.Which() )
+    const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
+    if( pItem )
     {
-        rValue = rAttr.Get2Lines().GetValue();
+        rValue = ((SvxTwoLinesItem*)pItem)->GetValue();
         if( !rpRef )
-            rpRef = &rAttr.Get2Lines();
-        else if( rAttr.Get2Lines().GetEndBracket() != rpRef->GetEndBracket() ||
-            rAttr.Get2Lines().GetStartBracket() != rpRef->GetStartBracket() )
+            rpRef = (SvxTwoLinesItem*)pItem;
+        else if( ((SvxTwoLinesItem*)pItem)->GetEndBracket() !=
+                    rpRef->GetEndBracket() ||
+                    ((SvxTwoLinesItem*)pItem)->GetStartBracket() !=
+                    rpRef->GetStartBracket() )
             rValue = sal_False;
         return sal_True;
-    }
-    SwCharFmt* pFmt = NULL;
-    if( RES_TXTATR_INETFMT == rAttr.Which() )
-        pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-    else if( RES_TXTATR_CHARFMT == rAttr.Which() )
-        pFmt = rAttr.GetCharFmt().GetCharFmt();
-    if ( pFmt )
-    {
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pFmt->GetAttrSet().
-            GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
-        {
-            rValue = ((SvxTwoLinesItem*)pItem)->GetValue();
-            if( !rpRef )
-                rpRef = (SvxTwoLinesItem*)pItem;
-            else if( ((SvxTwoLinesItem*)pItem)->GetEndBracket() !=
-                        rpRef->GetEndBracket() ||
-                        ((SvxTwoLinesItem*)pItem)->GetStartBracket() !=
-                        rpRef->GetStartBracket() )
-                rValue = sal_False;
-            return sal_True;
-        }
     }
     return sal_False;
 }
@@ -950,35 +913,18 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
 sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
     const SvxCharRotateItem* &rpRef, sal_Bool &rValue )
 {
-    if( RES_CHRATR_ROTATE == rAttr.Which() )
+    const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_ROTATE );
+    if ( pItem )
     {
-        rValue = 0 != rAttr.GetCharRotate().GetValue();
+        rValue = 0 != ((SvxCharRotateItem*)pItem)->GetValue();
         if( !rpRef )
-            rpRef = &rAttr.GetCharRotate();
-        else if( rAttr.GetCharRotate().GetValue() != rpRef->GetValue() )
+            rpRef = (SvxCharRotateItem*)pItem;
+        else if( ((SvxCharRotateItem*)pItem)->GetValue() !=
+                    rpRef->GetValue() )
             rValue = sal_False;
         return sal_True;
     }
-    SwCharFmt* pFmt = NULL;
-    if( RES_TXTATR_INETFMT == rAttr.Which() )
-        pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-    else if( RES_TXTATR_CHARFMT == rAttr.Which() )
-        pFmt = rAttr.GetCharFmt().GetCharFmt();
-    if ( pFmt )
-    {
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pFmt->GetAttrSet().
-            GetItemState( RES_CHRATR_ROTATE, TRUE, &pItem ) )
-        {
-            rValue = 0 != ((SvxCharRotateItem*)pItem)->GetValue();
-            if( !rpRef )
-                rpRef = (SvxCharRotateItem*)pItem;
-            else if( ((SvxCharRotateItem*)pItem)->GetValue() !=
-                        rpRef->GetValue() )
-                rValue = sal_False;
-            return sal_True;
-        }
-    }
+
     return sal_False;
 }
 
