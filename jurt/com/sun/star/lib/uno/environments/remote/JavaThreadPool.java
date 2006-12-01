@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JavaThreadPool.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:00:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2005-09-07 19:00:19 $
+ * @version     $Revision: 1.12 $ $ $Date: 2006-12-01 14:50:58 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
@@ -107,9 +107,7 @@ public class JavaThreadPool implements IThreadPool {
     }
 
     public void putJob(Job job) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".putJob:" + job.isSynchron() + " " + job.getThreadId());
-
-        if(job.isSynchron() || job.getOperation() == null) { // note: replys must be synchron
+        if (!job.isRequest() || job.isSynchronous()) {
             JobQueue jobQueue = _javaThreadPoolFactory.getJobQueue(job.getThreadId());
 
             // this has not be synchronized, cause
