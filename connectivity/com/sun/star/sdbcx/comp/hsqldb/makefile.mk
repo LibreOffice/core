@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:02:49 $
+#   last change: $Author: rt $ $Date: 2006-12-01 16:49:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
 #
 #*************************************************************************  
 PRJ	= ..$/..$/..$/..$/..$/.. 
-PRJNAME = connectivity 
+PRJNAME = connectivity
 PACKAGE = com$/sun$/star$/sdbcx$/comp$/hsqldb
 TARGET  = sdbc_hsqldb 
 
