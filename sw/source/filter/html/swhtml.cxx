@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:26:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:54:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -959,7 +959,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 pTxtNode->FmtToTxtAttr( pPrev );
                 pTxtNode->SwCntntNode::ResetAllAttr();
 
-                if( pPrev->GetpSwAttrSet() )
+                if( pPrev->HasSwAttrSet() )
                     pTxtNode->SwCntntNode::SetAttr( *pPrev->GetpSwAttrSet() );
 
                 if( &pPam->GetBound(TRUE).nNode.GetNode() == pPrev )
