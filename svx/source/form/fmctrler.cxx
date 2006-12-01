@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:09:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1358,12 +1358,12 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
         {
             if ( e.FocusFlags & FocusChangeReason::FORWARD )
             {
-                if ( m_aControllerFeatures->canMoveRight() )
+                if ( m_aControllerFeatures->isEnabled( SID_FM_RECORD_NEXT ) )
                     m_aControllerFeatures->moveRight();
             }
             else // backward
             {
-                if ( m_aControllerFeatures->canMoveLeft() )
+                if ( m_aControllerFeatures->isEnabled( SID_FM_RECORD_PREV ) )
                     m_aControllerFeatures->moveLeft();
             }
         }
@@ -3562,7 +3562,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 /*_nId*/, const URL& aURL
     if ( !xReturn.is() && m_aControllerFeatures.isAssigned() )
     {
         // find the slot id which corresponds to the URL
-        sal_Int32 nFeatureId = ::svx::FeatureSlotTranslation::getControllerFeatureIdForURL( aURL.Main );
+        sal_Int32 nFeatureId = ::svx::FeatureSlotTranslation::getControllerFeatureSlotIdForURL( aURL.Main );
         if ( nFeatureId > 0 )
         {
             // get the dispatcher for this feature, create if necessary
