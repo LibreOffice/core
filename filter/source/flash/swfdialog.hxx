@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:43:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // XPropertyAccess
+    using ::cppu::OPropertySetHelper::getPropertyValues;
+    using ::cppu::OPropertySetHelper::setPropertyValues;
     virtual com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValues( const com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
 
