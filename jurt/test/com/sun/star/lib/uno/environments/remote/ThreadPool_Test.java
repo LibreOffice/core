@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:14:06 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
+import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import complexlib.ComplexTestCase;
 
@@ -352,8 +353,13 @@ public class ThreadPool_Test extends ComplexTestCase {
                                ThreadId threadId, String operation) {
         __iThreadPool.putJob(
             new Job(iWorkAt, __iReceiver,
-                    new TestMessage(synchron, __workAt_td, "oid", threadId,
-                                    null, operation, null)));
+                    new Message(
+                        threadId, operation != null, "oid", __workAt_td,
+                        (operation == null
+                         ? null
+                         : ((MethodDescription)
+                            __workAt_td.getMethodDescription(operation))),
+                        synchron, null, false, null, null)));
     }
 
     private static final class TestThread extends Thread {
@@ -407,9 +413,9 @@ public class ThreadPool_Test extends ComplexTestCase {
 
         public void syncCall() throws Throwable
         {
-            IMessage iMessage = new TestMessage(
-                true, ThreadPool_Test.__workAt_td, "oid",
-                __iThreadPool.getThreadId(), null, null, null);
+            Message iMessage = new Message(
+                __iThreadPool.getThreadId(), false, "oid", __workAt_td, null,
+                false, null, false, null, null);
 
             // marshal reply
             ThreadPool_Test.__iThreadPool.putJob(
