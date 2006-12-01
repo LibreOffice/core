@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:48:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:47:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen wg. Application
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
 #endif
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
@@ -153,6 +156,8 @@
 #ifndef _DOCSTAT_HXX //autogen
 #include <docstat.hxx>
 #endif
+#include <fmtautofmt.hxx>
+#include <istyleaccess.hxx>
 
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
@@ -260,6 +265,43 @@ USHORT lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
     return nRedlinesMasked + nHiddenCharsMasked;
 }
 
+static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
+                                      const SfxItemSet& rSet1,
+                                      const SfxItemSet& rSet2,
+                                      boost::shared_ptr<SfxItemSet>& pStyleHandle )
+{
+    bool bRet = false;
+
+    SfxItemIter aIter( rSet1 );
+    SfxItemSet* pNewSet = 0;
+
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+    while( TRUE )
+    {
+        if ( SFX_ITEM_SET == rSet2.GetItemState( pItem->Which(), FALSE ) )
+        {
+            if ( !pNewSet )
+                pNewSet = rSet2.Clone( TRUE );
+            pNewSet->ClearItem( pItem->Which() );
+        }
+
+        if( aIter.IsAtEnd() )
+            break;
+
+        pItem = aIter.NextItem();
+    }
+
+    if ( pNewSet )
+    {
+        if ( pNewSet->Count() )
+            pStyleHandle = rStyleAccess.getAutomaticStyle( *pNewSet, IStyleAccess::AUTO_STYLE_CHAR );
+        delete pNewSet;
+        bRet = true;
+    }
+
+    return bRet;
+}
+
 /*
  * Ein Zeichen wurde eingefuegt.
  */
@@ -336,8 +378,6 @@ inline BOOL InRange(xub_StrLen nIdx, xub_StrLen nStart, xub_StrLen nEnd) {
  *     -> nichts tun.
  */
 
-
-
 void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                         const SfxItemSet* pSet, BOOL bInclRefToxMark )
 {
@@ -363,7 +403,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
     // We have to remember the "new" attributes, which have
     // been introduced by splitting surrounding attributes (case 4).
     // They may not be forgotten inside the "Forget" function
-    std::vector< const SwTxtAttr* > aNewAttributes;
+    //std::vector< const SwTxtAttr* > aNewAttributes;
 
     // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
     // des Attributs hinter dem Bereich liegt
@@ -380,12 +420,30 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
             continue;
         }
 
-        // loesche alle TextAttribute die als Attribut im Set vorhanden sind
-        if( pSet ? SFX_ITEM_SET != pSet->GetItemState( pHt->Which(), FALSE )
-                 : ( nWhich ? nWhich != pHt->Which()
-                            : (!bInclRefToxMark &&
+        bool bSkipAttr;
+        boost::shared_ptr<SfxItemSet> pStyleHandle;
+        if ( pSet )
+        {
+            bSkipAttr = SFX_ITEM_SET != pSet->GetItemState( pHt->Which(), FALSE );
+            if ( bSkipAttr && RES_TXTATR_AUTOFMT == pHt->Which() )
+            {
+                // if the current attribute is an autostyle, we have to check if the autostyle
+                // and pSet have any attributes in common. If so, pStyleHandle will contain
+                // a handle to AutoStyle / pSet:
+                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), *pSet, *static_cast<const SwFmtAutoFmt&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
+            }
+        }
+        else
+        {
+            bSkipAttr = nWhich ?
+                        nWhich != pHt->Which() :
+                          (!bInclRefToxMark &&
                                 ( RES_TXTATR_REFMARK == pHt->Which() ||
-                                RES_TXTATR_TOXMARK == pHt->Which() ))))
+                                  RES_TXTATR_TOXMARK == pHt->Which() ) );
+        }
+
+        if( bSkipAttr )
+
         {
             // Es sollen nur Attribute mit nWhich beachtet werden
             i++;
@@ -408,8 +466,16 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                 bChanged = bChanged || nEnd > nAttrStart || bNoLen;
                 if( *pAttrEnd <= nEnd )     // Fall: 1
                 {
+                    const xub_StrLen nAttrEnd = *pAttrEnd;
+
                     pSwpHints->DeleteAtPos(i);
                     DestroyAttr( pHt );
+
+                    if ( pStyleHandle.get() )
+                    {
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nAttrEnd );
+                        Insert( pNew, SETATTR_NOHINTADJUST );
+                    }
 
                     // falls das letzte Attribut ein Field ist, loescht
                     // dieses das HintsArray !!!
@@ -462,17 +528,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     *pAttrEnd = nStart;
                     pSwpHints->NoteInHistory( pHt, TRUE );
 
-                    if( nEnd < nTmpEnd &&
-                        ! pSwpHints->Forget( &aNewAttributes, i, pHt->Which(),
-                                             nEnd, nTmpEnd ) )
+                    if( nEnd < nTmpEnd )
                     {
-                        const SwTxtAttr* pNewAttr =
-                                Insert( pHt->GetAttr(), nEnd, nTmpEnd,
-                                        SETATTR_NOHINTADJUST );
-
-                        aNewAttributes.push_back( pHt );
-                        aNewAttributes.push_back( pNewAttr );
-
+                         InsertItem( pHt->GetAttr(), nEnd, nTmpEnd, SETATTR_NOHINTADJUST );
                         // jetzt kein i+1, weil das eingefuegte Attribut
                         // ein anderes auf die Position geschoben hat !
                         continue;
@@ -488,9 +546,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
     {
         if ( pSwpHints )
         {
-            pSwpHints->ClearDummies( *this );
             ((SwpHintsArr*)pSwpHints)->Resort();
-            pSwpHints->Merge( *this );
         }
         //TxtFrm's reagieren auf aHint, andere auf aNew
         SwUpdateAttr aHint( nMin, nMax, 0 );
