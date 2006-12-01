@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:01:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,12 +68,12 @@ static sal_Int32 map100thmm( sal_Int32 n100thMM )
 
 Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nJPEGcompressMode )
 :   mpClipPolyPolygon( NULL ),
-    mpSprite( NULL ),
     mpTag( NULL ),
+    mpSprite( NULL ),
     mnNextId( 1 ),
+    mnGlobalTransparency(0),
     mnJPEGCompressMode(nJPEGcompressMode),
-    mbWrittenJPEGTables(false),
-    mnGlobalTransparency(0)
+    mbWrittenJPEGTables(false)
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( sal_False );
@@ -94,7 +94,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 
 #ifndef AUGUSTUS
     // define an invisible button with the size of a page
-    Rectangle aRect( 0, 0, mnDocWidth * mnDocXScale, mnDocHeight * mnDocYScale );
+    Rectangle aRect( 0, 0, (long)( mnDocWidth * mnDocXScale ), (long)( mnDocHeight * mnDocYScale ) );
     Polygon aPoly( aRect );
     FillStyle aFill = FillStyle( Color(COL_WHITE) );
     mnWhiteBackgroundShapeId = defineShape( aPoly, aFill );
