@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:29:20 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ SwUndoInsSection::SwUndoInsSection( const SwPaM& rPam, const SwSection& rNew,
     if( !rPam.HasMark() )
     {
         const SwCntntNode* pCNd = rPam.GetPoint()->nNode.GetNode().GetCntntNode();
-        if( pCNd && pCNd->GetpSwAttrSet() && (
+        if( pCNd && pCNd->HasSwAttrSet() && (
             !rPam.GetPoint()->nContent.GetIndex() ||
             rPam.GetPoint()->nContent.GetIndex() == pCNd->Len() ))
         {
