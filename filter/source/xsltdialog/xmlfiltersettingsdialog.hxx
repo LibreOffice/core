@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 15:05:50 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ public:
     DECL_LINK(SelectionChangedHdl_Impl, void * );
     DECL_LINK(DoubleClickHdl_Impl, void * );
 
-    void Show();
+    void ShowWindow();
 
     void    onNew();
     void    onEdit();
@@ -161,7 +161,6 @@ private:
     rtl::OUString createUniqueInterfaceName( const rtl::OUString& rInterfaceName );
 
 private:
-    bool    mbIsClosable;
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxFilterContainer;
@@ -180,6 +179,8 @@ private:
     PushButton  maPBOpen;
     HelpButton  maPBHelp;
     PushButton  maPBClose;
+
+    bool    mbIsClosable;
 
     ::rtl::OUString sTemplatePath;
     ::rtl::OUString sDocTypePrefix;
