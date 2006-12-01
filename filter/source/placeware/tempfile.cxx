@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:43:58 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,10 +83,17 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 #   define _CTYPE_DISABLE_MACROS /* wg. dynamischer C-Runtime MH */
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
 #include <malloc.h>
+
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #define elementsof(arr) (sizeof(arr)/sizeof(arr[0]))
 
@@ -135,7 +142,7 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 using namespace rtl;
 
 TempFile::TempFile( const OUString& rTempFileURL )
-:maURL( rTempFileURL ), osl::File( rTempFileURL )
+:osl::File( rTempFileURL ), maURL( rTempFileURL )
 {
 }
 
@@ -154,7 +161,7 @@ OUString TempFile::createTempFileURL()
     const sal_uInt32 nRadix = 26;
 
     OUString aTempDirURL;
-    oslFileError nRC = my_getTempDirURL( &aTempDirURL.pData );
+    /* oslFileError nRC = */ my_getTempDirURL( &aTempDirURL.pData );
 
     static sal_uInt32 u = osl_getGlobalTimer();
     for ( sal_uInt32 nOld = u; ++u != nOld; )
