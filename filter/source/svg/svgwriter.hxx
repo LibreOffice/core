@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgwriter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:11:17 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,12 +129,12 @@ class FastString
 {
 private:
 
-    rtl::OUString               maString;
-    sal_Unicode*                mpBuffer;
     sal_uInt32                  mnBufLen;
     sal_uInt32                  mnCurLen;
     sal_uInt32                  mnBufInc;
+    sal_Unicode*                mpBuffer;
     sal_uInt32                  mnPartPos;
+    rtl::OUString               maString;
 
 public:
 
@@ -197,17 +197,17 @@ class SVGActionWriter
 {
 private:
 
-    Stack                   maContextStack;
     SvXMLExport&            mrExport;
     SVGFontExport&          mrFontExport;
     SVGAttributeWriter*     mpContext;
+    sal_Bool                mbClipAttrChanged;
+    sal_Int32               mnCurClipId;
+    Stack                   maContextStack;
     VirtualDevice*          mpVDev;
     MapMode                 maTargetMapMode;
-    sal_Int32               mnCurClipId;
     sal_Bool                mbDestroyVDev;
     sal_Bool                mbPaintAttrChanged;
     sal_Bool                mbFontAttrChanged;
-    sal_Bool                mbClipAttrChanged;
 
     SVGAttributeWriter*     ImplAcquireContext() { maContextStack.Push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) ); return mpContext; }
     void                    ImplReleaseContext() { delete (SVGAttributeWriter*) maContextStack.Pop(); mpContext = (SVGAttributeWriter*) maContextStack.Top(); }
