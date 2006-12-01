@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoRuntime_EnvironmentTest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:17:54 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,27 +75,30 @@ public final class UnoRuntime_EnvironmentTest extends ComplexTestCase {
     }
 
     public void test_getBridge() throws java.lang.Exception {
-        PipedConnection oneSide = new PipedConnection(new Object[0]);
-        PipedConnection otherSide = new PipedConnection(new Object[]{oneSide});
+        PipedConnection conn = new PipedConnection(new Object[0]);
+        new PipedConnection(new Object[] { conn });
 
         // get a bridge
         IBridge iBridge = UnoRuntime.getBridgeByName(
             "java", null, "remote", "testname",
-            new Object[] { "urp", oneSide, null });
+            new Object[] { "urp", conn, null });
 
         // reget the bridge, it must be the same as above
         IBridge iBridge_tmp = UnoRuntime.getBridgeByName(
             "java", null, "remote", "testname",
-            new Object[] { "urp", oneSide, null });
+            new Object[] { "urp", conn, null });
         assure("", UnoRuntime.areSame(iBridge_tmp, iBridge));
 
         // dispose the bridge, this removes the entry from the runtime
         iBridge.dispose();
 
+        conn = new PipedConnection(new Object[0]);
+        new PipedConnection(new Object[] { conn });
+
         // reget the bridge, it must be a different one
         iBridge_tmp = UnoRuntime.getBridgeByName(
             "java", null, "remote", "testname",
-            new Object[]{ "urp", oneSide, null });
+            new Object[]{ "urp", conn, null });
         assure("", !UnoRuntime.areSame(iBridge_tmp, iBridge));
     }
 }
