@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:26:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1068,18 +1068,12 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 _InvalidateRange( SwCharRange( nPos, nLen) );
                 MSHORT nTmp = ((SwUpdateAttr*)pNew)->nWhichAttr;
 
-                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp ||
+                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
                     SET_WRONG( nPos, nPos + nLen, Invalidate )
                     SET_SCRIPT_INVAL( nPos )
                 }
-                else if ( RES_CHRATR_LANGUAGE == nTmp ||
-                          RES_CHRATR_CJK_LANGUAGE == nTmp ||
-                          RES_CHRATR_CTL_LANGUAGE == nTmp )
-                    SET_WRONG( nPos, nPos + nLen, Invalidate )
-                else if ( RES_CHRATR_HIDDEN == nTmp )
-                    SET_SCRIPT_INVAL( nPos )
             }
         }
         break;
