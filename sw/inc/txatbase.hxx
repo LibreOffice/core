@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:35:35 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ class SvxCharReliefItem;
 class SvxCharHiddenItem;
 
 class SwFmtCharFmt;
+class SwFmtAutoFmt;
 class SwFmtINetFmt;
 class SvxKerningItem;
 class SvxCaseMapItem;
@@ -155,6 +156,7 @@ public:
     inline const SvxColorItem           &GetColor() const;
     inline const SvxCharSetColorItem    &GetCharSetColor() const;
     inline const SwFmtCharFmt           &GetCharFmt() const;
+    inline const SwFmtAutoFmt           &GetAutoFmt() const;
     inline const SvxKerningItem         &GetKerning() const;
     inline const SvxCaseMapItem         &GetCaseMap() const;
     inline const SvxLanguageItem        &GetLanguage() const;
@@ -302,6 +304,12 @@ inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
 {
     ASSERT( pAttr && pAttr->Which() == RES_TXTATR_CHARFMT, "Falsche Abfrage" );
     return (const SwFmtCharFmt&)*pAttr;
+}
+
+inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
+{
+    ASSERT( pAttr && pAttr->Which() == RES_TXTATR_AUTOFMT, "Wrong request" );
+    return (const SwFmtAutoFmt&)*pAttr;
 }
 
 inline const SvxKerningItem& SwTxtAttr::GetKerning() const
