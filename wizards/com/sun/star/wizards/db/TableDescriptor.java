@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDescriptor.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:37:12 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,15 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
         }
 
 
+        private void removePrimaryKeys(){
+           if (keycolumncontainer.size() > 0){
+                for (int i = (keycolumncontainer.size()-1); i >= 0 ; i--){
+                    keycolumncontainer.remove(i);
+                }
+            }
+        }
+
+
        public boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation){
         try {
            XKeysSupplier xKeySupplier = (XKeysSupplier)UnoRuntime.queryInterface(XKeysSupplier.class, xPropTableDataDescriptor);
@@ -156,11 +165,7 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
            xKeyColumnSupplier = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
            XDataDescriptorFactory xKeyColFac = (XDataDescriptorFactory)UnoRuntime.queryInterface(XDataDescriptorFactory.class,xKeyColumnSupplier.getColumns());
            xKeyColAppend = (XAppend)UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
-            if (keycolumncontainer.size() > 0){
-                for (int i = (keycolumncontainer.size()-1); i >= 0 ; i--){
-                    keycolumncontainer.remove(i);
-                }
-            }
+           removePrimaryKeys();
            for (int i = 0; i < _fieldnames.length; i++){
                 XPropertySet xKeyColPropertySet = xKeyColFac.createDataDescriptor();
                 xKeyColPropertySet.setPropertyValue("Name", _fieldnames[i]);
@@ -261,40 +266,41 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
             }
             if (!breturn){
                 removeAllColumnsFromDescriptor(_tablename);
+                this.removePrimaryKeys();
             }
             return breturn;
         }
 
 
         private boolean removeAllColumnsFromDescriptor(String _tablename){
-                try {
-                    xPropTableDataDescriptor.setPropertyValue("Name", "");
-                    if ((xKeyDrop != null) && (xIndexAccessKeys != null)){
-                        int icount = xIndexAccessKeys.getCount();
-                        if (icount > 0){
-                            for (int i = xIndexAccessKeys.getCount()-1; i >= 0; i--){
-                                xKeyDrop.dropByIndex(i);
-                            }
+            try {
+                xPropTableDataDescriptor.setPropertyValue("Name", "");
+                if ((xKeyDrop != null) && (xIndexAccessKeys != null)){
+                    int icount = xIndexAccessKeys.getCount();
+                    if (icount > 0){
+                        for (int i = xIndexAccessKeys.getCount()-1; i >= 0; i--){
+                            xKeyDrop.dropByIndex(i);
                         }
                     }
-                    XDrop xColumnDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xNameAccessColumns);
-                    for (int i = xNameAccessColumns.getElementNames().length - 1; i >= 0; i--)
-                        xColumnDrop.dropByIndex(i);
-                    if (xTableDrop != null)
-                        if (xTableNames.hasByName(_tablename))
-                            xTableDrop.dropByName(_tablename);
-                    if (bIDFieldisInserted){
-                        this.dropColumnbyName(this.IDFieldName);
-                        bIDFieldisInserted = false;
-                    }
-                    return false;
-                } catch (SQLException oSQLException) {
-                    super.callSQLErrorMessageDialog(oSQLException, xWindow);
                 }
-                catch (Exception e1) {
-                    e1.printStackTrace(System.out);
+                XDrop xColumnDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xNameAccessColumns);
+                for (int i = xNameAccessColumns.getElementNames().length - 1; i >= 0; i--)
+                    xColumnDrop.dropByIndex(i);
+                if (xTableDrop != null)
+                    if (xTableNames.hasByName(_tablename))
+                        xTableDrop.dropByName(_tablename);
+                if (bIDFieldisInserted){
+                    this.dropColumnbyName(this.IDFieldName);
+                    bIDFieldisInserted = false;
                 }
                 return false;
+            } catch (SQLException oSQLException) {
+                super.callSQLErrorMessageDialog(oSQLException, xWindow);
+            }
+            catch (Exception e1) {
+                e1.printStackTrace(System.out);
+            }
+            return false;
         }
 
 
