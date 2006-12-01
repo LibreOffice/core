@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseControl.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:17:41 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.DataType;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
@@ -58,11 +59,12 @@ public class DatabaseControl extends Control {
     protected int ifieldtype;
     private int iMemofieldwidth = IIMGFIELDWIDTH;
     private int iMemofieldheight = -1;
-
+    private FieldColumn m_FieldColumn;
 
 
     public DatabaseControl(GridControl _oGridControl, FieldColumn _curfieldcolumn){
         super();
+        m_FieldColumn = _curfieldcolumn;
         if (_curfieldcolumn.FieldType != DataType.TIMESTAMP)
             createGridColumn(_oGridControl, _curfieldcolumn, _curfieldcolumn.FieldType, _curfieldcolumn.FieldTitle);
     }
@@ -70,6 +72,7 @@ public class DatabaseControl extends Control {
 
     public DatabaseControl(GridControl _oGridControl, FieldColumn _curfieldcolumn, int _fieldtype, String _columntitle){
         super();
+        m_FieldColumn = _curfieldcolumn;
         createGridColumn(_oGridControl, _curfieldcolumn, _fieldtype, _columntitle);
     }
 
@@ -164,7 +167,6 @@ public class DatabaseControl extends Control {
                 case DataType.BIGINT:
                     xPropertySet.setPropertyValue("EffectiveMax", new Double(2147483647 * 2147483647));
                     xPropertySet.setPropertyValue("EffectiveMin", new Double(-(-2147483648 * -2147483648)));
-//                  oLocObject.DecimalAccuracy = 0
                     break;
                 case DataType.INTEGER:
                     xPropertySet.setPropertyValue("EffectiveMax", new Double(2147483647));
@@ -179,33 +181,17 @@ public class DatabaseControl extends Control {
                     xPropertySet.setPropertyValue("EffectiveMin", new Double(-128));
                     break;
                 case DataType.FLOAT:
-// TODO:            oLocObject.DecimalAccuracy = ...
-                    xPropertySet.setPropertyValue("EffectiveDefault", new Double(1000));
-                    break;
                 case DataType.REAL:
-// TODO:            oLocObject.DecimalAccuracy = ...
-                    xPropertySet.setPropertyValue("EffectiveDefault", new Double(1000));
-                    break;
                 case DataType.DOUBLE:
-// TODO:            oLocObject.DecimalAccuracy = ...
-                    xPropertySet.setPropertyValue("EffectiveDefault", new Double(1000));
-                    break;
                 case DataType.DECIMAL:
-// TODO:            oLocObject.DecimalAccuracy = ...
-                    xPropertySet.setPropertyValue("EffectiveDefault", new Double(1000));
-                    break;
                 case DataType.NUMERIC:
-// TODO:            oLocObject.DecimalAccuracy = ...
-                    xPropertySet.setPropertyValue("EffectiveDefault", new Integer(1000));
                     break;
-
-// TODO: HelpText???
             }
         }
         else if (icontroltype == FormHandler.SOTEXTBOX){     // com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
+
         }
         else if (icontroltype == FormHandler.SOCHECKBOX){
-// TODO Why does this not work?:        oLocObject.DefautState = CurDefaultValue
         }
     } catch (Exception e) {
         e.printStackTrace(System.out);
