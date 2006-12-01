@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdcomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:46:42 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ extern "C"
 
 void SAL_CALL component_getImplementationEnvironment(
 
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 
 {
 
@@ -92,7 +92,7 @@ void SAL_CALL component_getImplementationEnvironment(
 
 sal_Bool SAL_CALL component_writeInfo(
 
-    void * pServiceManager, void * pRegistryKey )
+    void * /* pServiceManager */, void * pRegistryKey )
 
 {
 
@@ -144,7 +144,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
 void * SAL_CALL component_getFactory(
 
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 
 {
 
