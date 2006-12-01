@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:21:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1579,36 +1579,54 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case SID_IMAP:
             {
-                USHORT  nId = SvxIMapDlgChildWindow::GetChildWindowId();
-                BOOL bHas = pVFrame->HasChildWindow( nId );
-                BOOL bFrmSel = rSh.IsFrmSelected();
-                BOOL bProtect = 0 != rSh.IsSelObjProtected( (FlyProtectType)
+                // --> OD 2006-11-08 #i59688#
+                // improve efficiency:
+                // If selected object is protected, item has to disabled.
+                const BOOL bProtect = 0 != rSh.IsSelObjProtected( (FlyProtectType)
                                     (FLYPROTECT_CONTENT|FLYPROTECT_PARENT) );
-
-                BOOL bIsGraphicSelection = rSh.GetSelectionType() == SwWrtShell::SEL_GRF;
-
-                //wenn die Grafik ausgeswappt ist, dann muss der
-                //Status asynchron ermittelt werden
-                //bis dahin wird der Slot disabled
-                if( bIsGraphicSelection && rSh.IsGrfSwapOut( TRUE ))
+                if ( bProtect )
                 {
-                    if( AddGrfUpdateSlot( nWhich ))
-                        rSh.GetGraphic(FALSE);  // start the loading
+                    rSet.DisableItem( nWhich );
                 }
                 else
                 {
-                    if( bProtect || ( !bHas && ( !bFrmSel ||
-                            (bIsGraphicSelection &&
-                            rSh.GetIMapGraphic().GetType() == GRAPHIC_NONE )) ))
-                        rSet.DisableItem( nWhich );
+                    const USHORT nId = SvxIMapDlgChildWindow::GetChildWindowId();
+                    const BOOL bHas = pVFrame->HasChildWindow( nId );
+                    const BOOL bFrmSel = rSh.IsFrmSelected();
+                    const BOOL bIsGraphicSelection =
+                                rSh.GetSelectionType() == SwWrtShell::SEL_GRF;
+
+                    // --> OD 2006-11-08 #i59688#
+                    // avoid unnecessary loading of selected graphic.
+                    // The graphic is only needed, if the dialog is open.
+                    //wenn die Grafik ausgeswappt ist, dann muss der
+                    //Status asynchron ermittelt werden
+                    //bis dahin wird der Slot disabled
+                    if ( bHas && bIsGraphicSelection && rSh.IsGrfSwapOut( TRUE ) )
+                    {
+                        if( AddGrfUpdateSlot( nWhich ))
+                            rSh.GetGraphic(FALSE);  // start the loading
+                    }
                     else
                     {
-                        SfxBoolItem aBool(nWhich, bHas);
-                        if ( bHas && bFrmSel )
-                            lcl_UpdateIMapDlg( rSh );
-                        rSet.Put(aBool);
+                        if ( !bHas &&
+                             ( !bFrmSel ||
+                               ( bIsGraphicSelection &&
+                                 rSh.GetGraphicType() == GRAPHIC_NONE ) ) )
+                        {
+                            rSet.DisableItem( nWhich );
+                        }
+                        else
+                        {
+                            SfxBoolItem aBool(nWhich, bHas);
+                            if ( bHas && bFrmSel )
+                                lcl_UpdateIMapDlg( rSh );
+                            rSet.Put(aBool);
+                        }
                     }
+                    // <--
                 }
+                // <--
             }
             break;
             case SID_IMAP_EXEC:
@@ -1658,11 +1676,14 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     BOOL bDisable;
                     if( !bHas && !bOk )
                         bDisable = TRUE;
+                    // --> OD 2006-11-08 #i59688#
+                    // avoid unnecessary loading of selected graphic.
+                    // The graphic is only needed, if the dialog is open.
                     // wenn die Grafik ausgeswappt ist, dann muss der Status
                     // asynchron ermittelt werden bis dahin wird der Slot
                     // disabled
-                    else if( (nSel & SwWrtShell::SEL_GRF) &&
-                                rSh.IsGrfSwapOut(TRUE))
+                    else if ( bHas && (nSel & SwWrtShell::SEL_GRF) &&
+                              rSh.IsGrfSwapOut(TRUE) )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(FALSE);  // start the loading
@@ -1670,7 +1691,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else if( bHas && bOk )
                         bDisable = !lcl_UpdateContourDlg( rSh, nSel );
                     else if( bOk )
-                        bDisable = GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                        bDisable = GRAPHIC_NONE == rSh.GetGraphicType();
+                    // <--
 
                     if( bDisable )
                         rSet.DisableItem( nWhich );
