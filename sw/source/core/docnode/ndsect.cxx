@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:26:51 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -924,7 +924,7 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
         if( pCpyTNd )
         {
             SwTxtNode* pTNd = new SwTxtNode( aInsPos, pCpyTNd->GetTxtColl() );
-            if( pCpyTNd->GetpSwAttrSet() )
+            if( pCpyTNd->HasSwAttrSet() )
             {
                 // Task 70955 - move PageDesc/Break to the first Node of the
                 //              section
