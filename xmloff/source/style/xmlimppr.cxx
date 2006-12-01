@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:59:04 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:27:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,6 +390,78 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
         return FALSE;
 }
 
+void SvXMLImportPropertyMapper::FillPropertySequence(
+            const ::std::vector< XMLPropertyState >& rProperties,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues )
+            const
+{
+    sal_Int32 nCount = rProperties.size();
+    sal_Int32 nValueCount = 0;
+    rValues.realloc( nCount );
+    PropertyValue *pProps = rValues.getArray();
+    for( sal_Int32 i=0; i < nCount; i++ )
+    {
+        const XMLPropertyState& rProp = rProperties[i];
+        sal_Int32 nIdx = rProp.mnIndex;
+        if( nIdx == -1 )
+            continue;
+        pProps->Name = maPropMapper->GetEntryAPIName( nIdx );
+        if( pProps->Name.getLength() )
+        {
+            pProps->Value <<= rProp.maValue;
+            ++pProps;
+            ++nValueCount;
+        }
+    }
+    if( nValueCount < nCount )
+        rValues.realloc( nValueCount );
+}
+
+void SvXMLImportPropertyMapper::CheckSpecialContext(
+            const ::std::vector< XMLPropertyState >& aProperties,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet > rPropSet,
+            _ContextID_Index_Pair* pSpecialContextIds ) const
+{
+    OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
+    sal_Int32 nCount = aProperties.size();
+
+    Reference< XPropertySetInfo > xInfo(rPropSet->getPropertySetInfo());
+
+    for( sal_Int32 i=0; i < nCount; i++ )
+    {
+        const XMLPropertyState& rProp = aProperties[i];
+        sal_Int32 nIdx = rProp.mnIndex;
+
+        // disregard property state if it has an invalid index
+        if( -1 == nIdx )
+            continue;
+
+        const sal_Int32 nPropFlags = maPropMapper->GetEntryFlags( nIdx );
+
+        // handle no-property and special items
+        if( ( pSpecialContextIds != NULL ) &&
+            ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
+              ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
+        {
+            // maybe it's one of our special context ids?
+            sal_Int16 nContextId = maPropMapper->GetEntryContextId(nIdx);
+
+            for ( sal_Int32 n = 0;
+                  pSpecialContextIds[n].nContextID != -1;
+                  n++ )
+            {
+                // found: set index in pSpecialContextIds array
+                if ( pSpecialContextIds[n].nContextID == nContextId )
+                {
+                    pSpecialContextIds[n].nIndex = i;
+                    break; // early out
+                }
+            }
+        }
+    }
+
+}
 
 sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
             const vector< XMLPropertyState >& aProperties,
