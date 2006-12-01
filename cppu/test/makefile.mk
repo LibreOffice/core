@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-27 12:15:53 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:26:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,10 @@ APP2STDLIBS := $(CPPULIB) $(SALLIB)
 APP3TARGET  := Environment.test
 APP3OBJS    := $(OBJ)$/Environment.test.obj
 APP3STDLIBS := $(CPPULIB) $(SALLIB) 
+
+APP4TARGET  := IdentityMapping.test
+APP4OBJS    := $(OBJ)$/IdentityMapping.test.obj
+APP4STDLIBS := $(CPPULIB) $(SALLIB) 
 
 
 
