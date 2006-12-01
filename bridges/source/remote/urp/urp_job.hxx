@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:53:13 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,17 +62,25 @@ class Job
 {
 public:
       Job( uno_Environment *pEnvRemote,
+         remote_Context *pContext,
            sal_Sequence *pTid,
            struct urp_BridgeImpl *pBridgeImpl,
            Unmarshal *pUnmarshal );
 
     Job( uno_Environment *pEnvRemote,
+         remote_Context *pContext,
            struct urp_BridgeImpl *pBridgeImpl,
          ::bridges_remote::RemoteThreadCounter_HoldEnvWeak value )
-        : m_pBridgeImpl( pBridgeImpl )
+        : m_pContext( pContext )
+        , m_pBridgeImpl( pBridgeImpl )
         , m_pTid( 0 )
         , m_counter( pEnvRemote , value )
-        {}
+        {
+            if ( m_pContext )
+            {
+                m_pContext->aBase.acquire( &m_pContext->aBase );
+            }
+        }
 
     ~Job();
 
@@ -80,6 +88,7 @@ public:
            { m_pUnmarshal = p; }
 
 public:
+    remote_Context *m_pContext;
       Unmarshal *m_pUnmarshal;
     struct urp_BridgeImpl *m_pBridgeImpl;
     sal_Sequence          *m_pTid;
@@ -89,7 +98,9 @@ public:
 class ClientJob : public Job
 {
 public:
+    // pContext is null for bridge-internal UrpProtocolProperties requests
     inline ClientJob( uno_Environment *pEnvRemote, // weak !
+                      remote_Context *pContext,
                       struct urp_BridgeImpl *pBridgeImpl,
                       rtl_uString *pOid,  // weak
                       typelib_TypeDescription const * pMemberType, // weak
@@ -164,6 +175,8 @@ struct ServerJobEntry
     void                  *m_pReturn;
     uno_Any               m_exception;
      uno_Any               *m_pException;
+    remote_Interface      *m_pCurrentContext;
+    sal_Bool              m_bHasCurrentContext;
     sal_Bool              m_bIgnoreCache;
 };
 
@@ -171,6 +184,7 @@ class ServerMultiJob : public Job
 {
 public:
     ServerMultiJob( uno_Environment *pEnvRemote,
+                    remote_Context *pContext,
                     sal_Sequence *pTid,
                     struct urp_BridgeImpl *pBridgeImpl,
                     Unmarshal *pUnmarshal,
@@ -229,6 +243,13 @@ public:
             m_aEntries[m_nCalls].m_pOid = 0;
         }
 
+    inline void setCurrentContext(
+        bool bHasCurrentContext, remote_Interface *pCurrentContext )
+        {
+            m_aEntries[m_nCalls].m_pCurrentContext = pCurrentContext;
+            m_aEntries[m_nCalls].m_bHasCurrentContext = bHasCurrentContext;
+        }
+
     inline void setIgnoreCache( sal_Bool bIgnoreCache )
         {
             m_aEntries[m_nCalls].m_bIgnoreCache = bIgnoreCache;
@@ -280,6 +301,7 @@ private:
 //---------------------------------------------------------------------------------------------
 inline ClientJob::ClientJob(
     uno_Environment *pEnvRemote,
+    remote_Context *pContext,
     struct urp_BridgeImpl *pBridgeImpl,
     rtl_uString *pOid,
     typelib_TypeDescription const * pMemberType,
@@ -287,7 +309,8 @@ inline ClientJob::ClientJob(
     void *pReturn,
     void *ppArgs[],
     uno_Any **ppException )
-    : Job( pEnvRemote , pBridgeImpl, ::bridges_remote::RTC_HOLDENVWEAK )
+    : Job(
+        pEnvRemote, pContext, pBridgeImpl, ::bridges_remote::RTC_HOLDENVWEAK )
     , m_ppArgs( ppArgs )
     , m_pReturn( pReturn )
     , m_pInterfaceType( pInterfaceType ) // weak
