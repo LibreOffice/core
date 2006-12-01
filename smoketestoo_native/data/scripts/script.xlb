@@ -4,4 +4,5 @@
  <library:element library:name="Global"/>
  <library:element library:name="Test_10er"/>
  <library:element library:name="Test_DB"/>
+ <library:element library:name="Test_Ext"/>
 </library:library>
