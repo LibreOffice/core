@@ -31,3 +31,19 @@ Issue
 
 
 ====================================================================================
+File name
+---------
+  text_table_double_quotes.patch
+
+Description
+-----------
+  fixes the problem that when inserting double quotes into a text table, the table
+  becomes unreadable under some circumstances.
+
+Issue
+-----
+  http://www.openoffice.org/issues/show_bug.cgi?id=70841
+  writing certain data into bugdoc HSQL Text Table renders the complete database inaccessible
+
+
+====================================================================================
