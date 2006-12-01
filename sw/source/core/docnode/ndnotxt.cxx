@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndnotxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:00:09 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
+#include <svtools/stritem.hxx>
 #ifndef _CONTDLG_HXX_
 #include <svx/contdlg.hxx>
 #endif
@@ -76,7 +77,8 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>            // fuer SwFmtChg
 #endif
-
+#include <istyleaccess.hxx>
+#include <SwStyleNameMapper.hxx>
 
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
                   const BYTE nNdType,
@@ -104,9 +106,18 @@ SwNoTxtNode::~SwNoTxtNode()
 // fuer Frame- und Grafik-Attributen
 void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
 {
-    ASSERT( !pAttrSet, "AttrSet ist doch gesetzt" );
-    pAttrSet = new SwAttrSet( rPool, aNoTxtNodeSetRange );
-    pAttrSet->SetParent( &GetFmtColl()->GetAttrSet() );
+    ASSERT( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
+    SwAttrSet aNewAttrSet( rPool, aNoTxtNodeSetRange );
+
+    // put names of parent style and conditional style:
+    const SwFmtColl* pFmtColl = GetFmtColl();
+    String sVal;
+    SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
+    SfxStringItem aFmtColl( RES_FRMATR_STYLE_NAME, sVal );
+    aNewAttrSet.Put( aFmtColl );
+
+    aNewAttrSet.SetParent( &GetFmtColl()->GetAttrSet() );
+    mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_NOTXT );
 }
 
 // Dummies fuer das Laden/Speichern von persistenten Daten
