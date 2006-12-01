@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 17:22:33 $
+#   last change: $Author: rt $ $Date: 2006-12-01 13:52:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ STDLIBGUIST=-lm
 STDLIBCUIST=-lX11 -lpthread CPPRUNTIME -lm
 STDLIBGUIMT=-lpthread CPPRUNTIME -lm
 STDLIBCUIMT=-lX11 CPPRUNTIME -lm
-STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm
+STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm -framework CoreFoundation
 STDSHLCUIMT=-lpthread CPPRUNTIME -lm
 
 LIBMGR=ar
