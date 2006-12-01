@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 11:07:41 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:35:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,6 @@ namespace pcr
         DEF_INFO_3( VSCROLL,           VSCROLL,            VSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( BUTTONTYPE,        BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ENUM, COMPOSEABLE ),
         DEF_INFO_2( XFORMS_BUTTONTYPE, BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ENUM ),
-        DEF_INFO_2( ACTION_BUTTONTYPE, BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ENUM ),
         DEF_INFO_1( SUBMISSION_ID,     SUBMISSION_ID,      SUBMISSION_ID,     FORM_VISIBLE ),
         DEF_INFO_2( PUSHBUTTONTYPE,    PUSHBUTTONTYPE,     PUSHBUTTONTYPE,    DIALOG_VISIBLE, ENUM ),
         DEF_INFO_2( TARGET_URL,        TARGET_URL,         TARGET_URL,        FORM_VISIBLE, COMPOSEABLE ),
@@ -457,7 +456,6 @@ namespace pcr
                 nStringItemsResId = RID_RSC_ENUM_VERTICAL_ALIGN;
                 break;
             case PROPERTY_ID_BUTTONTYPE:
-            case PROPERTY_ID_ACTION_BUTTONTYPE:
                 nCommaSeparatedListResId = RID_STR_ENUM_BUTTONTYPE;
                 break;
             case PROPERTY_ID_PUSHBUTTONTYPE:
