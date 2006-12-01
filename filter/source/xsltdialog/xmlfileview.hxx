@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfileview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:16:37 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,8 @@ public:
 
 class XMLFileWindow : public Window, public SfxListener
 {
+    using Window::Notify;
+
 private:
     TextView*   pTextView;
     TextEngine* pTextEngine;
@@ -149,13 +151,13 @@ public:
     void            InitScrollBars();
     ULONG           Read( SvStream& rInput)     { return pTextEngine->Read(rInput); }
 
-    void            Show( const rtl::OUString& rFileName );
+    void            ShowWindow( const rtl::OUString& rFileName );
 
     TextView*       GetTextView()               { return pTextView; }
     TextEngine*     GetTextEngine()             { return pTextEngine; }
 
     TextViewOutWin* GetOutWin()                 { return pOutWin; }
-    void            Invalidate();
+    void            InvalidateWindow();
 
     void            CreateScrollbars();
 
@@ -171,11 +173,12 @@ public:
 
 class XMLSourceFileDialog : public WorkWindow
 {
+
 public:
                 XMLSourceFileDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF  );
     virtual     ~XMLSourceFileDialog();
 
-    void        Show( const rtl::OUString& rFileName, const filter_info_impl* pFilterInfo );
+    void        ShowWindow( const rtl::OUString& rFileName, const filter_info_impl* pFilterInfo );
 
     virtual void    Resize();
 
@@ -190,8 +193,10 @@ private:
 
     const filter_info_impl* mpFilterInfo;
     rtl::OUString   maFileURL;
+
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
     ResMgr&         mrResMgr;
+
     XMLFileWindow*  mpTextWindow;
     ListBox         maLBOutput;
 //  Control         maCtrlSourceView;
