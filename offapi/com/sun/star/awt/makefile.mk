@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: ihi $ $Date: 2006-10-18 13:21:32 $
+#   last change: $Author: rt $ $Date: 2006-12-01 15:10:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ IDLFILES=\
     LineEndFormat.idl\
     MenuEvent.idl\
     MenuItemStyle.idl\
+    MessageBoxButtons.idl\
     MessageBoxCommand.idl\
     MouseButton.idl\
     MouseEvent.idl\
@@ -247,6 +248,7 @@ IDLFILES=\
     XMenuBar.idl\
     XMenuListener.idl\
     XMessageBox.idl\
+    XMessageBoxFactory.idl\
     XMouseClickHandler.idl\
     XMouseListener.idl\
     XMouseMotionListener.idl\
@@ -264,6 +266,7 @@ IDLFILES=\
     XRegion.idl\
     XReschedule.idl\
     XScrollBar.idl\
+        XSimpleTabController.idl\
     XSpinField.idl\
     XSpinListener.idl\
     XSpinValue.idl\
@@ -271,17 +274,16 @@ IDLFILES=\
     XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
-    XSimpleTabController.idl\
     XTabController.idl\
     XTabControllerModel.idl\
-    XTabListener.idl\
+        XTabListener.idl\
     XTextArea.idl\
     XTextComponent.idl\
     XTextEditField.idl\
     XTextLayoutConstrains.idl\
     XTextListener.idl\
     XTimeField.idl\
-    XToggleButton.idl\
+        XToggleButton.idl\
     XToolkit.idl\
     XTopWindow.idl\
     XTopWindowListener.idl\
