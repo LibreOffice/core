@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:01:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,16 +527,6 @@ QueryBox RID_QRY_SAVEMODIFIED
     Message [ de ] = "Der Inhalt des aktuellen Formulars wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?" ;
     Message [ x-comment ] = " ";
-};
-String RID_STR_COULDNOTSETORDER
-{
-    Text [ de ] = "Fehler beim Setzen der Sortier-Kriterien";
-    Text [ en-US ] = "Error setting the sort criteria";
-};
-String RID_STR_COULDNOTSETFILTER
-{
-    Text [ de ] = "Fehler beim Setzen der Filter-Kriterien";
-    Text [ en-US ] = "Error setting the filter criteria";
 };
 String RID_STR_SVT_SQL_INTERNATIONAL
 {
