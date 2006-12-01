@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:26 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,17 @@
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -1394,11 +1405,31 @@ namespace svx
     }
 
     //------------------------------------------------------------------------
+    void FmTextControlShell::impl_parseURL_nothrow( URL& _rURL )
+    {
+        try
+        {
+            if ( !m_xURLTransformer.is() )
+            {
+                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                aContext.createComponent( "com.sun.star.util.URLTransformer", m_xURLTransformer );
+            }
+            if ( m_xURLTransformer.is() )
+                m_xURLTransformer->parseStrict( _rURL );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //------------------------------------------------------------------------
     FmTextControlFeature* FmTextControlShell::implGetFeatureDispatcher( const Reference< XDispatchProvider >& _rxProvider, SfxApplication* _pApplication, SfxSlotId _nSlot )
     {
         OSL_PRECOND( _rxProvider.is() && _pApplication, "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
         URL aFeatureURL;
         aFeatureURL.Complete = lcl_getUnoSlotName( *_pApplication, _nSlot );
+        impl_parseURL_nothrow( aFeatureURL );
         Reference< XDispatch > xDispatcher = _rxProvider->queryDispatch( aFeatureURL, ::rtl::OUString(), 0xFF );
         if ( xDispatcher.is() )
             return new FmTextControlFeature( xDispatcher, aFeatureURL, _nSlot, this );
