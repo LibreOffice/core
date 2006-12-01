@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:22:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4800,8 +4800,8 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_RELIEF*/              OutWW8_Relief,
 /* RES_CHRATR_HIDDEN */             OutWW8_SvxCharHidden,
 
-/* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,
 /* RES_TXTATR_DUMMY4 */             0,
+/* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,
 /* RES_TXTATR_REFMARK */            0,      // handled by SwAttrIter
 /* RES_TXTATR_TOXMARK   */          0,      // handled by SwAttrIter
 /* RES_TXTATR_CHARFMT   */          OutWW8_SwTxtCharFmt,
@@ -4878,7 +4878,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0, // Dummy:
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
