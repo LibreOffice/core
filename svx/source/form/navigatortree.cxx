@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:11 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1197,7 +1197,7 @@ namespace svxform
         DBG_ASSERT( DND_ACTION_COPY != _nAction, "NavigatorTree::implExecuteDataTransfer: somebody changed the logics!" );
 
         // die Liste der gedraggten Eintraege
-        const ListBoxEntrySet& aDropped = _rData.selected();
+        ListBoxEntrySet aDropped = _rData.selected();
         DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implExecuteDataTransfer: no entries!");
 
         // die Shell und das Model
@@ -1232,7 +1232,6 @@ namespace svxform
             Reference< XChild >  xCurrentChild(pCurrentUserData->GetChildIFace(), UNO_QUERY);
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
-
             FmFormData* pCurrentParentUserData = (FmFormData*)pCurrentUserData->GetParent();
             DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "NavigatorTree::implExecuteDataTransfer: ungueltiges Parent");
 
@@ -1263,7 +1262,6 @@ namespace svxform
             // und weg
             Remove(pCurrentUserData);
 
-
             // die Stelle innerhalb des DropParents, an der ich die gedroppten Eintraege einfuegen muss
             if (pTargetData)
                 xContainer = Reference< XIndexContainer > (pTargetData->GetElement(), UNO_QUERY);
@@ -1282,15 +1280,13 @@ namespace svxform
             if (pTargetData)
             {
                  // es wird in eine Form eingefuegt, dann brauche ich eine FormComponent
-                xContainer->insertByIndex(nIndex,
-                    makeAny(Reference<
-                    XFormComponent>(xCurrentChild, UNO_QUERY)));
+                xContainer->insertByIndex( nIndex,
+                    makeAny( Reference< XFormComponent >( xCurrentChild, UNO_QUERY ) ) );
             }
             else
             {
-                xContainer->insertByIndex(nIndex,
-                    makeAny(Reference<
-                    XForm>(xCurrentChild, UNO_QUERY)));
+                xContainer->insertByIndex( nIndex,
+                    makeAny( Reference< XForm >( xCurrentChild, UNO_QUERY ) ) );
             }
 
             if (aEvts.getLength())
