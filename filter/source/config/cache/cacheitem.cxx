@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cacheitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:36:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,6 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
             _FILTER_CONFIG_LOG_1_("isSubSet() ... check for atomic types => return %s\n", bIs ? "TRUE" : "FALSE")
             return bIs;
         }
-        break;
 
         //---------------------------------------
         case css::uno::TypeClass_STRING :
@@ -375,6 +374,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         case css::uno::TypeClass_CONSTANTS :
         case css::uno::TypeClass_SINGLETON :
 */
+        default: break;
     }
 
     OSL_ENSURE(sal_False, "isSubSet() ... this point should not be reached!");
