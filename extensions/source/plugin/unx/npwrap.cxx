@@ -4,9 +4,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:10:29 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,11 @@ Widget createSubWidget( char* pPluginText, Widget shell, XLIB_Window aParentWind
         xmDrawingAreaWidgetClass,
 #else
         "",
+#  if defined DISABLE_XAW
+        compositeWidgetClass,
+#  else
         labelWidgetClass,
+#  endif
 #endif
           shell,
         XtNwidth, 200,
