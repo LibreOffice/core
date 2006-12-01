@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 11:59:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
 #endif
+#include <svtools/stylepool.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -200,6 +201,10 @@
 #ifndef _MVSAVE_HXX
 #include <mvsave.hxx>
 #endif
+#ifndef _ISTYLEACCESS_HXX
+#include <istyleaccess.hxx>
+#endif
+#include <swstylemanager.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
@@ -303,6 +308,7 @@ SwDoc::SwDoc() :
     pPgPViewPrtData( 0 ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),
+    pStyleAccess( createStyleManager() ),
     pLayoutCache( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
     nUndoPos( 0 ),
@@ -337,6 +343,7 @@ SwDoc::SwDoc() :
     mbNoDrawUndoObj =
     mbBrowseMode =
     mbInReading =
+    mbInXMLImport =
     mbUpdateTOX =
     mbInLoadAsynchron =
     mbHTMLMode =
@@ -655,6 +662,9 @@ SwDoc::~SwDoc()
     //Die Arrays sollten (wegen includes) bei Gelegenheit auch zu Pointern werden.
     delete pFrmFmtTbl;
     delete pSpzFrmFmtTbl;
+
+    delete pStyleAccess;
+
     delete pCharFmtTbl;
     delete pSectionFmtTbl;
     delete pTblFrmFmtTbl;
