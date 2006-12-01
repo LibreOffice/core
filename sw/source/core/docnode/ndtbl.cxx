@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:27:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,7 +375,7 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
                         SwTableLine* pLine,
                         SwTableBoxFmt* pBoxFmt,
                         SwTxtFmtColl* pTxtColl,
-                        SwAttrSet* pAutoAttr,
+                        const SfxItemSet* pAutoAttr,
                         USHORT nInsPos,
                         USHORT nCnt )
 {
@@ -568,9 +568,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     // verschiebe ggfs. die harten PageDesc/PageBreak Attribute:
     SwCntntNode* pNextNd = GetNodes()[ pTblNd->EndOfSectionIndex()+1 ]
                             ->GetCntntNode();
-    if( pNextNd && pNextNd->GetpSwAttrSet() )
+    if( pNextNd && pNextNd->HasSwAttrSet() )
     {
-        SwAttrSet* pNdSet = pNextNd->GetpSwAttrSet();
+        const SfxItemSet* pNdSet = pNextNd->GetpSwAttrSet();
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, FALSE,
             &pItem ) )
@@ -1069,7 +1069,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         pTxtNd->DelFrms();
 
         // PageBreaks/PageDesc/ColBreak rausschmeissen.
-        SwAttrSet* pSet = pTxtNd->GetpSwAttrSet();
+        const SfxItemSet* pSet = pTxtNd->GetpSwAttrSet();
         if( pSet )
         {
 // das entfernen der PageBreaks erst nach dem erzeugen der Tabelle
@@ -1345,7 +1345,7 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
 
         //JP 03.04.97: die Ausrichtung der ZahlenFormatierung auf
         //              keinen Fall uebernehmen
-        if( pDelPara->pLastNd && pDelPara->pLastNd->GetpSwAttrSet() )
+        if( pDelPara->pLastNd && pDelPara->pLastNd->HasSwAttrSet() )
             pDelPara->pLastNd->ResetAttr( RES_PARATR_ADJUST );
     }
     return TRUE;
