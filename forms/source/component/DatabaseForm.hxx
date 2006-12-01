@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:46:45 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,6 +580,8 @@ private:
     void Encode(::rtl::OUString& rString) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection();
+
+    void    impl_createLoadTimer();
 
     DECL_LINK( OnTimeout, void* );
 };
