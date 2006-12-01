@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryMetaData.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:15:42 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.db;
+ ************************************************************************/
+package com.sun.star.wizards.db;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyValue;
