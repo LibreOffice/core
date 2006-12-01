@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:12:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ namespace comphelper
     using ::com::sun::star::uno::cpp_acquire;
     using ::com::sun::star::uno::cpp_release;
     using ::com::sun::star::uno::cpp_queryInterface;
+    using ::com::sun::star::beans::NamedValue;
     /** === end UNO using === **/
 
     //====================================================================
@@ -102,6 +103,13 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    NamedValueCollection::NamedValueCollection( const Sequence< NamedValue >& _rArguments )
+        :m_pImpl( new NamedValueCollection_Impl )
+    {
+        impl_assign( _rArguments );
+    }
+
+    //--------------------------------------------------------------------
     NamedValueCollection::~NamedValueCollection()
     {
     }
@@ -126,7 +134,7 @@ namespace comphelper
             else if ( *pArgument >>= aNamedValue )
                 m_pImpl->aValues[ aNamedValue.Name ] = aNamedValue.Value;
             else
-                OSL_ENSURE( !pArgument->hasValue(), "NamedValueCollection::NamedValueCollection: encountered a value which I cannot handle!" );
+                OSL_ENSURE( !pArgument->hasValue(), "NamedValueCollection::impl_assign: encountered a value which I cannot handle!" );
         }
     }
 
@@ -140,6 +148,20 @@ namespace comphelper
 
         const PropertyValue* pArgument = _rArguments.getConstArray();
         const PropertyValue* pArgumentEnd = _rArguments.getConstArray() + _rArguments.getLength();
+        for ( ; pArgument != pArgumentEnd; ++pArgument )
+            m_pImpl->aValues[ pArgument->Name ] = pArgument->Value;
+    }
+
+    //--------------------------------------------------------------------
+    void NamedValueCollection::impl_assign( const Sequence< NamedValue >& _rArguments )
+    {
+        {
+            NamedValueRepository empty;
+            m_pImpl->aValues.swap( empty );
+        }
+
+        const NamedValue* pArgument = _rArguments.getConstArray();
+        const NamedValue* pArgumentEnd = _rArguments.getConstArray() + _rArguments.getLength();
         for ( ; pArgument != pArgumentEnd; ++pArgument )
             m_pImpl->aValues[ pArgument->Name ] = pArgument->Value;
     }
