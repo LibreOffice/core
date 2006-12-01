@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:01:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,11 @@ public:
         , m_sProps( props )
         , m_pEnvRemote( pEnvRemote )
         {
+            if (m_sProps.getLength() > 0) {
+                m_sProps += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+            }
+            m_sProps += rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("CurrentContext="));
             // hold the environment in case all references are released before this
             // thread terminates
             m_pEnvRemote->acquire( pEnvRemote );
@@ -120,25 +125,22 @@ public:
 
     virtual void SAL_CALL run()
         {
-            struct Properties props;
-            if( m_sProps.getLength() )
+            for (;;)
             {
-                sal_Int32 nResult = m_pImpl->m_pPropertyObject->localRequestChange( );
-                if( 1  == nResult )
+                switch ( m_pImpl->m_pPropertyObject->localRequestChange( ) )
                 {
+                case 1:
                     sal_Bool bExceptionThrown;
                     m_pImpl->m_pPropertyObject->localCommitChange( m_sProps , &bExceptionThrown );
                     OSL_ENSURE( !bExceptionThrown, "properties were not set\n" );
-                }
-                else if( 0 == nResult )
-                {
+                    goto done;
+                case 0:
                     OSL_TRACE( "urp-bridge : remote-counterpart won the changing-the-protocol-race\n" );
-                }
-                else
-                {
-                    OSL_ASSERT( !"urp-bridge : property setting failed because identical random numbers " );
+                    goto done;
                 }
             }
+        done:
+            m_pImpl->m_initialized.set();
         }
     virtual void SAL_CALL onTerminated()
         {
@@ -489,14 +491,9 @@ void SAL_CALL uno_initEnvironment( uno_Environment * pEnvRemote )
                                                          pImpl->m_pWriter );
     pImpl->m_pReader->create();
 
-    // create the properties object
-    // start the property-set-thread, if necessary
-    if( sProtocolProperties.getLength() )
-    {
-        PropertySetterThread *pPropsSetterThread =
-            new PropertySetterThread( pEnvRemote, pImpl , sProtocolProperties );
-        pPropsSetterThread->create();
-    }
+    PropertySetterThread *pPropsSetterThread =
+        new PropertySetterThread( pEnvRemote, pImpl , sProtocolProperties );
+    pPropsSetterThread->create();
 #if OSL_DEBUG_LEVEL > 1
     thisCounter.acquire();
 #endif
