@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:36:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,10 @@
 #include <SwRewriter.hxx>
 #endif
 #include <svx/svdundo.hxx> // #111827#
+
+// --> OD 2006-11-01 #130889#
+#include <vector>
+// <--
 
 class SwUndoIter;
 class SwHistory;
@@ -1525,6 +1529,18 @@ public:
     void SetGroupFmt( SwDrawFrmFmt* );
 };
 
+// --> OD 2006-11-01 #130889#
+// Action "ungroup drawing object" is now splitted into three parts - see
+// method <SwDoc::UnGroupSelection(..)>:
+// - creation for <SwDrawFrmFmt> instances for the group members of the
+//   selected group objects
+// - intrinsic ungroup of the selected group objects
+// - creation of <SwDrawContact> instances for the former group members and
+//   connection to the Writer layout.
+// Thus, two undo actions (instances of <SwUndo>) are needed:
+// - Existing class <SwUndoDrawUnGroup> takes over the part for the formats.
+// - New class <SwUndoDrawUnGroupConnectToLayout> takes over the part for
+//   contact object.
 class SwUndoDrawUnGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
@@ -1539,6 +1555,24 @@ public:
 
     void AddObj( USHORT nPos, SwDrawFrmFmt* );
 };
+
+// --> OD 2006-11-01 #130889#
+class SwUndoDrawUnGroupConnectToLayout : public SwUndo
+{
+    private:
+        std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > > aDrawFmtsAndObjs;
+
+    public:
+        SwUndoDrawUnGroupConnectToLayout();
+        virtual ~SwUndoDrawUnGroupConnectToLayout();
+        virtual void Undo( SwUndoIter& );
+        virtual void Redo( SwUndoIter& );
+
+        void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
+                           SdrObject* pDrawObject );
+};
+// <--
+
 
 class SwUndoDrawDelete : public SwUndo
 {
