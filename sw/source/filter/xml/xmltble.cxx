@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:47:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:58:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,8 +800,14 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                         aAny >>= xTextSection;
                         rTblInfo.SetBaseSection( xTextSection );
                     }
-                    GetTextParagraphExport()->collectTextAutoStyles(
-                        xText, rTblInfo.GetBaseSection(), IsShowProgress() );
+
+                    const bool bExportContent = (getExportFlags() & EXPORT_CONTENT ) != 0;
+                    if ( !bExportContent )
+                    {
+                        // AUTOSTYLES - not needed anymore if we are currently exporting content.xml
+                        GetTextParagraphExport()->collectTextAutoStyles(
+                            xText, rTblInfo.GetBaseSection(), IsShowProgress() );
+                    }
                 }
                 else
                     DBG_ERROR("here should be a XCell");
@@ -1249,7 +1255,13 @@ void SwXMLTextParagraphExport::exportTable(
             ASSERT( pTblNd, "table node missing" );
             if( bAutoStyles )
             {
-                ((SwXMLExport&)GetExport()).ExportTableAutoStyles( *pTblNd );
+                SwNodeIndex aIdx( *pTblNd );
+                // AUTOSTYLES: Optimization: Do not export table autostyle if
+                // we are currently exporting the content.xml stuff and
+                // the table is located in header/footer:
+                const bool bExportContent = ( GetExport().getExportFlags() & EXPORT_CONTENT ) != 0;
+                if ( !bExportContent || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
+                    ((SwXMLExport&)GetExport()).ExportTableAutoStyles( *pTblNd );
             }
             else
             {
