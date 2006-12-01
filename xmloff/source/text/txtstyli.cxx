@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:07:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,7 +470,31 @@ void XMLTextStyleContext::FillPropertySet(
             { CTF_FONTFAMILYNAME_CTL, -1 },
             { -1, -1 }
         };
-        xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+
+        bool bAutomatic = false;
+        if( ((SvXMLStylesContext *)GetStyles())->IsAutomaticStyle() &&
+            ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
+        {
+            bAutomatic = true;
+            if( GetAutoName().getLength() )
+            {
+                OUString sAutoProp = ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT ) ?
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("CharAutoStyleName") ):
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("ParaAutoStyleName") );
+                try
+                {
+                    rPropSet->setPropertyValue( sAutoProp, makeAny(GetAutoName()) );
+                }
+                catch( UnknownPropertyException )
+                {
+                    bAutomatic = false;
+                }
+            }
+        }
+        if( bAutomatic )
+            xImpPrMap->CheckSpecialContext( GetProperties(), rPropSet, aContextIDs );
+        else
+            xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
         // have we found a combined characters
         sal_Int32 nIndex = aContextIDs[0].nIndex;
