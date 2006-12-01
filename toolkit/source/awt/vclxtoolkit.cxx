@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:02:32 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_WINDOWCLASS_HPP_
 #include <com/sun/star/awt/WindowClass.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_MESSAGEBOXBUTTONS_HPP_
+#include <com/sun/star/awt/MessageBoxButtons.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -551,10 +554,11 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
-    cppu::WeakComponentImplHelper6<
+    cppu::WeakComponentImplHelper7<
     ::com::sun::star::awt::XToolkit,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::awt::XSystemChildFactory,
+    ::com::sun::star::awt::XMessageBoxFactory,
     ::com::sun::star::awt::XDataTransferProviderAccess,
     ::com::sun::star::awt::XExtendedToolkit,
     ::com::sun::star::awt::XReschedule>( GetMutex() ),
@@ -659,113 +663,7 @@ void SAL_CALL VCLXToolkit::disposing()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createWindow( const ::com::sun::star::awt::WindowDescriptor& rDescriptor ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
-
-    Window* pParent = NULL;
-    if ( rDescriptor.Parent.is() )
-    {
-        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
-
-        // #103939# Don't through assertion, may be it's a system dependend window, used in ImplCreateWindow.
-        // DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
-
-        if ( pParentComponent )
-            pParent = pParentComponent->GetWindow();
-    }
-
-    WinBits nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
-        ImplGetComponentType( rDescriptor.WindowServiceName ) );
-
-    VCLXWindow* pNewComp = NULL;
-
-    Window* pNewWindow = NULL;
-    // Try to create the window with SvTools
-    // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
-    // and we need to stay compatible)
-    // try to load the lib
-    if ( !fnSvtCreateWindow && !hSvToolsLib )
-    {
-        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
-        hSvToolsLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
-        if ( hSvToolsLib )
-        {
-            ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
-            fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData );
-        }
-    }
-    // ask the SvTool creation function
-    if ( fnSvtCreateWindow )
-        pNewWindow = fnSvtCreateWindow( &pNewComp, &rDescriptor, pParent, nWinBits );
-
-    // if SvTools could not provide a window, create it ourself
-    if ( !pNewWindow )
-        pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
-
-    DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
-    DBG_ASSERTWARNING( pNewComp, "createWindow: No special Interface!" );
-
-    if ( pNewWindow )
-    {
-        pNewWindow->SetCreatedWithToolkit( sal_True );
-        //pNewWindow->SetPosPixel( Point() ); // do not force (0,0) position, keep default pos instead
-
-        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::MINSIZE )
-        {
-            pNewWindow->SetSizePixel( Size() );
-        }
-        else if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::FULLSIZE )
-        {
-            if ( pParent )
-                pNewWindow->SetSizePixel( pParent->GetOutputSizePixel() );
-        }
-        else if ( !VCLUnoHelper::IsZero( rDescriptor.Bounds ) )
-        {
-            Rectangle aRect = VCLRectangle( rDescriptor.Bounds );
-            pNewWindow->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
-        }
-
-        if ( !pNewComp )
-        {
-            // Default-Interface
-            xRef = pNewWindow->GetComponentInterface( sal_True );
-        }
-        else
-        {
-            pNewComp->SetCreatedWithToolkit( TRUE );
-            xRef = pNewComp;
-            pNewWindow->SetComponentInterface( xRef );
-        }
-        DBG_ASSERT( pNewWindow->GetComponentInterface( FALSE ) == xRef,
-            "VCLXToolkit::createWindow: did #133706# resurge?" );
-
-        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )
-            pNewWindow->Show();
-    }
-
-    return xRef;
-}
-
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > > VCLXToolkit::createWindows( const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::WindowDescriptor >& rDescriptors ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    sal_uInt32 nComponents = rDescriptors.getLength();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > > aSeq( nComponents );
-    for ( sal_uInt32 n = 0; n < nComponents; n++ )
-    {
-        ::com::sun::star::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
-
-        if ( aDescr.ParentIndex == (-1) )
-            aDescr.Parent = NULL;
-        else if ( ( aDescr.ParentIndex >= 0 ) && ( aDescr.ParentIndex < (short)n ) )
-            aDescr.Parent = aSeq.getConstArray()[aDescr.ParentIndex];
-        aSeq.getArray()[n] = createWindow( aDescr );
-    }
-    return aSeq;
+    return ImplCreateWindow( rDescriptor, WinBits(0) );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
@@ -1134,6 +1032,120 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     return pNewWindow;
 }
 
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
+    const css::awt::WindowDescriptor& rDescriptor,
+    WinBits nForceWinBits )
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
+
+    Window* pParent = NULL;
+    if ( rDescriptor.Parent.is() )
+    {
+        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
+
+        // #103939# Don't through assertion, may be it's a system dependend window, used in ImplCreateWindow.
+        // DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
+
+        if ( pParentComponent )
+            pParent = pParentComponent->GetWindow();
+    }
+
+    WinBits nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
+        ImplGetComponentType( rDescriptor.WindowServiceName ) );
+    nWinBits |= nForceWinBits;
+
+    VCLXWindow* pNewComp = NULL;
+
+    Window* pNewWindow = NULL;
+    // Try to create the window with SvTools
+    // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
+    // and we need to stay compatible)
+    // try to load the lib
+    if ( !fnSvtCreateWindow && !hSvToolsLib )
+    {
+        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
+        hSvToolsLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        if ( hSvToolsLib )
+        {
+            ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
+            fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData );
+        }
+    }
+    // ask the SvTool creation function
+    if ( fnSvtCreateWindow )
+        pNewWindow = fnSvtCreateWindow( &pNewComp, &rDescriptor, pParent, nWinBits );
+
+    // if SvTools could not provide a window, create it ourself
+    if ( !pNewWindow )
+        pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
+
+    DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
+    DBG_ASSERTWARNING( pNewComp, "createWindow: No special Interface!" );
+
+    if ( pNewWindow )
+    {
+        pNewWindow->SetCreatedWithToolkit( sal_True );
+        //pNewWindow->SetPosPixel( Point() ); // do not force (0,0) position, keep default pos instead
+
+        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::MINSIZE )
+        {
+            pNewWindow->SetSizePixel( Size() );
+        }
+        else if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::FULLSIZE )
+        {
+            if ( pParent )
+                pNewWindow->SetSizePixel( pParent->GetOutputSizePixel() );
+        }
+        else if ( !VCLUnoHelper::IsZero( rDescriptor.Bounds ) )
+        {
+            Rectangle aRect = VCLRectangle( rDescriptor.Bounds );
+            pNewWindow->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
+        }
+
+        if ( !pNewComp )
+        {
+            // Default-Interface
+            xRef = pNewWindow->GetComponentInterface( sal_True );
+        }
+        else
+        {
+            pNewComp->SetCreatedWithToolkit( TRUE );
+            xRef = pNewComp;
+            pNewWindow->SetComponentInterface( xRef );
+        }
+        DBG_ASSERT( pNewWindow->GetComponentInterface( FALSE ) == xRef,
+            "VCLXToolkit::createWindow: did #133706# resurge?" );
+
+        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )
+            pNewWindow->Show();
+    }
+
+    return xRef;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > > VCLXToolkit::createWindows( const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::WindowDescriptor >& rDescriptors ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    sal_uInt32 nComponents = rDescriptors.getLength();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > > aSeq( nComponents );
+    for ( sal_uInt32 n = 0; n < nComponents; n++ )
+    {
+        ::com::sun::star::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
+
+        if ( aDescr.ParentIndex == (-1) )
+            aDescr.Parent = NULL;
+        else if ( ( aDescr.ParentIndex >= 0 ) && ( aDescr.ParentIndex < (short)n ) )
+            aDescr.Parent = aSeq.getConstArray()[aDescr.ParentIndex];
+        aSeq.getArray()[n] = createWindow( aDescr );
+    }
+    return aSeq;
+}
+
 // ::com::sun::star::awt::XSystemChildFactory
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1206,6 +1218,72 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     return xPeer;
 }
 
+// ::com::sun::star::awt::XMessageBoxFactory
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent,
+    const ::com::sun::star::awt::Rectangle& aPosSize,
+    const ::rtl::OUString& aType,
+    ::sal_Int32 aButtons,
+    const ::rtl::OUString& aTitle,
+    const ::rtl::OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::WindowDescriptor aDescriptor;
+
+    sal_Int32 nWindowAttributes = css::awt::WindowAttribute::BORDER|css::awt::WindowAttribute::MOVEABLE|css::awt::WindowAttribute::CLOSEABLE;
+
+    // Map button definitions to window attributes
+    if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_OK )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::OK;
+    else if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_OK_CANCEL )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::OK_CANCEL;
+    else if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_YES_NO )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::YES_NO;
+    else if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_YES_NO_CANCEL )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::YES_NO_CANCEL;
+    else if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_RETRY_CANCEL )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::RETRY_CANCEL;
+
+    // Map default button definitions to window attributes
+    if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_OK )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::DEF_OK;
+    else if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_CANCEL )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::DEF_CANCEL;
+    else if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_YES )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::DEF_YES;
+    else if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_NO )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::DEF_NO;
+    else if (sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_RETRY )
+        nWindowAttributes |= css::awt::VclWindowPeerAttribute::DEF_RETRY;
+
+    // No more bits for VclWindowPeerAttribute possible. Mapping must be
+    // done explicitly using VCL methods
+    WinBits nAddWinBits( 0 );
+    if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_ABORT_IGNORE_RETRY )
+        nAddWinBits |= WB_ABORT_RETRY_IGNORE;
+
+    aDescriptor.Type              = css::awt::WindowClass_MODALTOP;
+    aDescriptor.WindowServiceName = aType;
+    aDescriptor.ParentIndex       = -1;
+    aDescriptor.Parent            = aParent;
+    aDescriptor.Bounds            = aPosSize;
+    aDescriptor.WindowAttributes  = nWindowAttributes;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > xMsgBox(
+        ImplCreateWindow( aDescriptor, nAddWinBits ), css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XWindow > xWindow( xMsgBox, css::uno::UNO_QUERY );
+    if ( xMsgBox.is() && xWindow.is() )
+    {
+        Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pWindow )
+        {
+            osl::Guard< vos::IMutex > aGuard(Application::GetSolarMutex());
+            xMsgBox->setCaptionText( aTitle );
+            xMsgBox->setMessageText( aMessage );
+            pWindow->Show();
+        }
+    }
+
+    return xMsgBox;
+}
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException)
 {
