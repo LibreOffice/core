@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Toolkit.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:17:46 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 #include <com/sun/star/awt/XSystemChildFactory.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XMessageBoxFactory_idl__
+#include <com/sun/star/awt/XMessageBoxFactory.idl>
+#endif
+
 
 //=============================================================================
 
@@ -68,6 +72,8 @@ published service Toolkit
     [optional] interface com::sun::star::awt::XDataTransferProviderAccess;
 
     [optional] interface com::sun::star::awt::XSystemChildFactory;
+
+    [optional] interface com::sun::star::awt::XMessageBoxFactory;
 
 };
 
