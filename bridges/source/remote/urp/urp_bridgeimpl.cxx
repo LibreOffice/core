@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:00:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,6 +207,7 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
         m_properties.bForceSynchronous = props.bForceSynchronous;
     }
 
+    m_properties.bCurrentContext = props.bCurrentContext;
 }
 
 void urp_BridgeImpl::addError( char const *pError )
