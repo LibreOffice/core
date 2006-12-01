@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WebWizard.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:35 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,7 +554,7 @@
                     <value>pdf_Portable_Document_Format</value>
                 </prop>
                 <node oor:name="Arguments">
-                    <node oor:name="CopressMode" oor:op="replace">
+                    <node oor:name="CompressMode" oor:op="replace">
                         <prop oor:name="Value">
                             <value>%2</value>
                         </prop>
@@ -605,7 +605,7 @@
                     <value>pdf_Portable_Document_Format</value>
                 </prop>
                 <node oor:name="Arguments">
-                    <node oor:name="CopressMode" oor:op="replace">
+                    <node oor:name="CompressMode" oor:op="replace">
                         <prop oor:name="Value">
                             <value>%2</value>
                         </prop>
@@ -656,7 +656,7 @@
                     <value>pdf_Portable_Document_Format</value>
                 </prop>
                 <node oor:name="Arguments">
-                    <node oor:name="CopressMode" oor:op="replace">
+                    <node oor:name="CompressMode" oor:op="replace">
                         <prop oor:name="Value">
                             <value>%2</value>
                         </prop>
@@ -712,7 +712,7 @@
                             <value>draw_pdf_Export</value>
                         </prop>
                     </node>
-                    <node oor:name="CopressMode" oor:op="replace">
+                    <node oor:name="CompressMode" oor:op="replace">
                         <prop oor:name="Value">
                             <value>%2</value>
                         </prop>
