@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Filter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:49:21 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,7 +534,7 @@ namespace frm
                     Reference< XDatabaseMetaData >  xMeta = xConnection->getMetaData();
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
                     ::rtl::OUStringBuffer aStatement;
-                    aStatement.appendAscii( "SELECT DISTINCT" );
+                    aStatement.appendAscii( "SELECT DISTINCT " );
                     aStatement.append( ::dbtools::quoteName( aQuote, sName ) );
 
                     if ( sFieldName.getLength() && ( sName != sFieldName ) )
@@ -582,12 +582,10 @@ namespace frm
 
 
                     sal_Int16 nKeyType = ::comphelper::getNumberFormatType(m_xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
-                    while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max anzahl eintraege
+                    while ( xListCursor->next() && ( i++ < SHRT_MAX) )
                     {
                         aStr = ::dbtools::DBTypeConversion::getValue(xDataField, m_xFormatter, aNullDate, nFormatKey, nKeyType);
-
                         aStringList.push_back(aStr);
-                        xListCursor->next();
                     }
 
                     Sequence< ::rtl::OUString> aStringSeq(aStringList.size());
