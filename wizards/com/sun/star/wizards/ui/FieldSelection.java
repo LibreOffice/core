@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldSelection.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:32:10 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ public class FieldSelection {
 
     // Enable or disable the buttons used for moving the available
     // fields between the two list boxes.
-    private void toggleListboxButtons(short iFieldsSelIndex, short iSelFieldsSelIndex) {
+    protected void toggleListboxButtons(short iFieldsSelIndex, short iSelFieldsSelIndex) {
         try {
             boolean bmoveUpenabled = false;
             boolean bmoveDownenabled = false;
@@ -357,7 +357,7 @@ public class FieldSelection {
     }
 
 
-    private void toggleMoveButtons(boolean _btoggleMoveAll, boolean _btoggleMoveSelected) {
+    protected void toggleMoveButtons(boolean _btoggleMoveAll, boolean _btoggleMoveSelected) {
         boolean btoggleMoveAll = (((xFieldsListBox.getItemCount() + xSelFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveAll));
         boolean btoggleMoveSelected = (((xFieldsListBox.getSelectedItems().length + xSelFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveSelected));
         CurUnoDialog.setControlProperty("cmdMoveAll" + sIncSuffix, "Enabled", new Boolean(btoggleMoveAll));
