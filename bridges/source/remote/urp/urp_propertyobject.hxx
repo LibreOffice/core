@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_propertyobject.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:53:35 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,6 @@ private:
     uno_Environment *m_pEnvRemote;
     sal_Int32 m_nRandomNumberOfRequest;
     sal_Bool  m_bRequestChangeHasBeenCalled;
-    sal_Bool  m_bClientWaitingForCommit;
     sal_Bool  m_bServerWaitingForCommit;
     sal_Bool  m_bApplyProperties;
 
@@ -120,8 +119,6 @@ public: // local
         { return m_bApplyProperties; }
     Properties SAL_CALL getCommitedChanges();
 
-    inline sal_Bool SAL_CALL waitingForCommitChangeReply()
-        { return m_bClientWaitingForCommit; }
     void SAL_CALL waitUntilChangesAreCommitted();
 
 protected:
