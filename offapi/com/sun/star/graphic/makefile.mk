@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 12:55:00 $
+#   last change: $Author: rt $ $Date: 2006-12-01 17:08:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@ PRJ=..$/..$/..$/..
 TARGET=cssgraphic
 PACKAGE=com$/sun$/star$/graphic
 
-PRJNAME=graphic
+PRJNAME=offapi
 
 # --- Settings -----------------------------------------------------
 
