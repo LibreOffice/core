@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:43:30 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
 {
     if( xOutputStream.is() )
     {
-        sal_uInt64 nTemp;
+        sal_uInt64 nTemp( 0 );
 
         osl::File::RC nRC = rSourceFile.setPos( osl_Pos_End, 0  );
         if( osl::File::E_None == nRC )
@@ -185,7 +185,6 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
         sal_Int32 nRead;
         while( nLen )
         {
-            sal_uInt64 nTemp;
             nRC = rSourceFile.read( pInBuffer, aInBuffer.getLength(), nTemp );
 
             if( (nRC != osl::File::E_None) || (0 == nTemp) )
@@ -336,7 +335,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
 //#define PLACEWARE_DEBUG 1
 
 sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream,
-                                        const rtl::OUString& rURL, Reference < XInterface > xHandler, Reference < XStatusIndicator >& xStatusIndicator )
+                                        const rtl::OUString& rURL, Reference < XInterface > /* xHandler */, Reference < XStatusIndicator >& xStatusIndicator )
 {
     sal_Bool bRet = sal_False;
 
@@ -467,7 +466,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
     const OUString szTitleTextShape( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape") );
     const OUString szIsEmptyPresObj( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") );
 
-    const sal_Int32 nShapeCount = xDrawPage->getCount();
+    sal_Int32 nShapeCount = xDrawPage->getCount();
     sal_Int32 nShape;
     for( nShape = 0; nShape < nShapeCount; nShape++ )
     {
@@ -503,8 +502,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
 
         const OUString szNotesShape( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape") );
 
-        const sal_Int32 nShapeCount = xNotesPage->getCount();
-        sal_Int32 nShape;
+        nShapeCount = xNotesPage->getCount();
         for( nShape = 0; nShape < nShapeCount; nShape++ )
         {
             Reference< XShape > xShape;
