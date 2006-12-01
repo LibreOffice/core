@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:27:11 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #endif
 
 #include "numrule.hxx"
-#include <vector>
 
 class SwTxtNode;
 class SwRegHistory;                 // steht im RolBck.hxx
@@ -81,7 +80,6 @@ protected:
 
 public:
     void Insert( const SwTxtAttr *pHt );
-    void Delete( const SwTxtAttr *pHt );
     void DeleteAtPos( const USHORT nPosInStart );
     BOOL Resort();
     SwTxtAttr *Cut( const USHORT nPosInStart );
@@ -93,7 +91,6 @@ public:
     inline USHORT GetEndCount() const { return aHtEnd.Count(); }
     inline USHORT GetStartCount() const { return Count(); }
     inline USHORT GetStartOf( const SwTxtAttr *pHt ) const;
-    inline USHORT GetEndOf( const SwTxtAttr *pHt ) const;
     inline USHORT GetPos( const SwTxtAttr *pHt ) const
 //  OS: in svmem.hxx wird fuer TCPP GetPos ohne const gerufen
 #ifdef TCPP
@@ -131,14 +128,6 @@ private:
     BOOL    bCalcHiddenParaField : 1; // bHasHiddenParaField ist invalid, CalcHiddenParaField() rufen
 
     BOOL Resort( const USHORT nPos );
-    // loescht Hints, die keinen Zustaendigkeitsbereich mehr haben
-    void ClearDummies( SwTxtNode &rNode );
-    // Merge verschmilzt aneinanderreichende Hints mit gleichen Attributen
-    // und gleichen Werten, falls nichts dagegen spricht, d.h. wenn dadurch
-    // keine Ueberlappungen mit gleichartigen Attr. entstehen,
-    // Ist der Rueckgabewert TRUE, so wurde verschmolzen und dabei u.a. auch
-    // ein Resort ausgeloest.
-    BOOL Merge( SwTxtNode &rNode, SwTxtAttr* pAttr = 0 );
     // Haelt ein neues Attribut in pHistory fest.
     void NoteInHistory( SwTxtAttr *pAttr, const BOOL bNew = FALSE );
 
@@ -158,6 +147,9 @@ private:
     inline BOOL HasHiddenParaField() const
         { if( bCalcHiddenParaField ) ((SwpHints*)this)->CalcHiddenParaField(); return bHasHiddenParaField; }
 
+    void BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMode );
+    bool MergePortions( SwTxtNode& rNode );
+
 public:
     inline BOOL CanBeDeleted() const { return !Count(); }
 
@@ -167,13 +159,7 @@ public:
     void Register( SwRegHistory* pHist ) { pHistory = pHist; }
     void DeRegister() { Register(0); }
 
-    void Insert( SwTxtAttr *pHt, SwTxtNode &rNode, USHORT nMode = 0 );
-
-    // Forget signalisiert, dass es ueberfluessig ist, das Attribut einzu-
-    // fuegen, da es keinen Zustaendigkeitsbereich haette.
-    BOOL Forget( const std::vector< const SwTxtAttr* >* pExclude,
-                 const USHORT i, const USHORT nWhich,
-                 const xub_StrLen nStrt, const xub_StrLen nEnd );
+    void Insert( SwTxtAttr*  pHt,      SwTxtNode &rNode, USHORT nMode = 0 );
 
     inline BOOL HasFtn() const { return bFtn; }
     inline BOOL IsInSplitNode() const { return bInSplitNode; }
@@ -203,14 +189,6 @@ inline USHORT SwpHintsArr::GetStartOf( const SwTxtAttr *pHt ) const
 {
     USHORT nPos;
     if( !Seek_Entry( pHt, &nPos ) )
-        nPos = USHRT_MAX;
-    return nPos;
-}
-
-inline USHORT SwpHintsArr::GetEndOf( const SwTxtAttr *pHt ) const
-{
-    USHORT nPos;
-    if( !aHtEnd.Seek_Entry( pHt, &nPos ) )
         nPos = USHRT_MAX;
     return nPos;
 }
