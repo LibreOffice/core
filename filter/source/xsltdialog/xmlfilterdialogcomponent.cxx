@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterdialogcomponent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:48:05 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,10 +168,11 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
-    static ResMgr* mpResMgr;
-    XMLFilterSettingsDialog* mpDialog;
     com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
     com::sun::star::uno::Reference< XMultiServiceFactory > mxMSF;
+
+    static ResMgr* mpResMgr;
+    XMLFilterSettingsDialog* mpDialog;
 };
 
 //-------------------------------------------------------------------------
@@ -366,7 +367,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 //-------------------------------------------------------------------------
 
 // XTerminateListener
-void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException)
+void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ ) throw (TerminationVetoException, RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -380,18 +381,18 @@ void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& Eve
 
 //-------------------------------------------------------------------------
 
-void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& Event ) throw (RuntimeException)
+void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ ) throw (RuntimeException)
 {
     // we are going down, so dispose us!
     dispose();
 }
 
-void SAL_CALL XMLFilterDialogComponent::disposing( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL XMLFilterDialogComponent::disposing( const EventObject& /* Source */ ) throw (RuntimeException)
 {
 }
 
 //-------------------------------------------------------------------------
-void SAL_CALL XMLFilterDialogComponent::setTitle( const ::rtl::OUString& _rTitle ) throw(RuntimeException)
+void SAL_CALL XMLFilterDialogComponent::setTitle( const ::rtl::OUString& /* _rTitle */ ) throw(RuntimeException)
 {
 }
 
@@ -420,11 +421,11 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 
         Reference< XComponent > xComp( this );
         mpDialog = new XMLFilterSettingsDialog( pParent, *mpResMgr, mxMSF );
-        mpDialog->Show();
+        mpDialog->ShowWindow();
     }
     else if( !mpDialog->IsVisible() )
     {
-        mpDialog->Show();
+        mpDialog->ShowWindow();
     }
     mpDialog->ToTop();
 
@@ -453,7 +454,7 @@ extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -467,7 +468,7 @@ void singlecomponent_writeInfo( Reference< XRegistryKey >& xNewKey, const Sequen
 }
 
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    void * /* pServiceManager */, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -490,7 +491,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
 
