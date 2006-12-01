@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testdefaultbootstrapping.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:44:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 
+#include <sal/main.h>
+
+
+
 #include <cstdio>
 
 #include <rtl/process.h>
@@ -49,11 +53,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     sal_Bool result = sal_True;
 
@@ -66,14 +66,16 @@ int __cdecl main( int argc, char * argv[] )
             OUString arg;
 
             rtl_getAppCommandArg(i, &arg.pData);
-
-            Reference<XInterface> xInterface = smgr->createInstance(arg);
-            OString tmp = OUStringToOString(arg, RTL_TEXTENCODING_ASCII_US);
+            if (arg.getLength())
+            {
+                Reference<XInterface> xInterface = smgr->createInstance(arg);
+                OString tmp = OUStringToOString(arg, RTL_TEXTENCODING_ASCII_US);
 #if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "got the %s service %p\n", tmp.getStr(), xInterface.get());
+                fprintf(stderr, "got the %s service %p\n", tmp.getStr(), xInterface.get());
 #endif
 
-            result = result && (xInterface.get() != 0);
+                result = result && (xInterface.get() != 0);
+            }
         }
     }
     catch(Exception & exception) {
