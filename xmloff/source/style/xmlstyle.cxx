@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:53:04 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,12 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#include <com/sun/star/beans/XPropertySet.hpp>
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
+#include <com/sun/star/style/XAutoStylesSupplier.hpp>
+#include <com/sun/star/style/XAutoStyleFamily.hpp>
 #ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
 #endif
@@ -349,6 +352,7 @@ class SvXMLStylesContext_Impl
 {
     SvXMLStyleContexts_Impl aStyles;
     SvXMLStyleIndices_Impl  *pIndices;
+    sal_Bool bAutomaticStyle;
 
 #ifndef PRODUCT
     sal_uInt32 nIndexCreated;
@@ -357,7 +361,7 @@ class SvXMLStylesContext_Impl
     void FlushIndex() { delete pIndices; pIndices = 0; }
 
 public:
-    SvXMLStylesContext_Impl();
+    SvXMLStylesContext_Impl( sal_Bool bAuto );
     ~SvXMLStylesContext_Impl();
 
     sal_uInt32 GetStyleCount() const { return aStyles.Count(); }
@@ -376,13 +380,14 @@ public:
     void Clear();
 
     const SvXMLStyleContext *FindStyleChildContext( sal_uInt16 nFamily,
-                                      const OUString& rName,
-                                      sal_Bool bCreateIndex ) const;
+                            const OUString& rName, sal_Bool bCreateIndex ) const;
+    sal_Bool IsAutomaticStyle() const { return bAutomaticStyle; }
 };
 
-SvXMLStylesContext_Impl::SvXMLStylesContext_Impl()
-:   aStyles( 20, 5 )
-,   pIndices( 0 )
+SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( sal_Bool bAuto ) :
+    aStyles( 20, 5 ),
+    pIndices( 0 ),
+    bAutomaticStyle( bAuto )
 #ifndef PRODUCT
 ,   nIndexCreated( 0 )
 #endif
@@ -467,7 +472,6 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
                 pStyle = pS;
         }
     }
-
     return pStyle;
 }
 
@@ -488,6 +492,11 @@ SvXMLStyleContext *SvXMLStylesContext::GetStyle( sal_uInt32 i )
 const SvXMLStyleContext *SvXMLStylesContext::GetStyle( sal_uInt32 i ) const
 {
     return mpImpl->GetStyle( i );
+}
+
+sal_Bool SvXMLStylesContext::IsAutomaticStyle() const
+{
+    return mpImpl->IsAutomaticStyle();
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
@@ -812,6 +821,38 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
     return xMapper;
 }
 
+Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFamily ) const
+{
+    Reference < XAutoStyleFamily > xAutoStyles;
+    if( XML_STYLE_FAMILY_TEXT_TEXT == nFamily || XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily)
+    {
+        bool bPara = XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily;
+        OUString sName;
+        if( !bPara && mxTextAutoStyles.is() )
+            xAutoStyles = mxTextAutoStyles;
+        else if( bPara && mxParaAutoStyles.is() )
+            xAutoStyles = mxParaAutoStyles;
+        else
+        {
+            sName = bPara ?
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) ):
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterStyles" ) );
+            Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
+            Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
+            if (xAutoStyleFamilies->hasByName(sName))
+            {
+                Any aAny = xAutoStyleFamilies->getByName( sName );
+                xAutoStyles = *(Reference<XAutoStyleFamily>*)aAny.getValue();
+                if( bPara )
+                    ((SvXMLStylesContext *)this)->mxParaAutoStyles = xAutoStyles;
+                else
+                    ((SvXMLStylesContext *)this)->mxTextAutoStyles = xAutoStyles;
+            }
+        }
+    }
+    return xAutoStyles;
+}
+
 Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
                                                 sal_uInt16 nFamily ) const
 {
@@ -880,12 +921,12 @@ OUString SvXMLStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 
 SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                         const OUString& rLName,
-                                        const uno::Reference< xml::sax::XAttributeList > &)
-:   SvXMLImportContext( rImport, nPrfx, rLName )
-,   msParaStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphStyle" ) )
-,   msTextStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterStyle" ) )
-,   mpImpl( new SvXMLStylesContext_Impl )
-,   mpStyleStylesElemTokenMap( 0 )
+                                        const uno::Reference< xml::sax::XAttributeList > &, sal_Bool bAuto ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    msParaStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphStyle" ) ),
+    msTextStyleServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterStyle" ) ),
+    mpImpl( new SvXMLStylesContext_Impl( bAuto ) ),
+    mpStyleStylesElemTokenMap( 0 )
 {
 }
 
@@ -932,6 +973,20 @@ void SvXMLStylesContext::AddStyle(SvXMLStyleContext& rNew)
 void SvXMLStylesContext::Clear()
 {
     mpImpl->Clear();
+}
+
+void SvXMLStylesContext::CopyAutoStylesToDoc()
+{
+    sal_uInt32 nCount = GetStyleCount();
+    sal_uInt32 i;
+    for( i = 0; i < nCount; i++ )
+    {
+        SvXMLStyleContext *pStyle = GetStyle( i );
+        if( !pStyle || ( pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_TEXT &&
+            pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
+            continue;
+        pStyle->CreateAndInsert( sal_False );
+    }
 }
 
 void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
