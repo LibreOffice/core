@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:05:38 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:31:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,8 @@ namespace dbaui
         // enable editing for tables/views and queries
         virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& );
         virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+
+        virtual BOOL    DoubleClickHdl();
 
         virtual PopupMenu* CreateContextMenu( void );
         virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
