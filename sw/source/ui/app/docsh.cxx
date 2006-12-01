@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:37:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,10 +472,16 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SetError( nErr );
     BOOL bOk = !IsError( nErr );
 
-    // StartFinishedLoading rufen. Nicht bei asynchronen Filtern!
-    // Diese muessen das selbst rufen!
-    if( bOk && !pDoc->IsInLoadAsynchron() )
-        StartLoadFinishedTimer();
+    // --> OD 2006-11-07 #i59688#
+//    // StartFinishedLoading rufen. Nicht bei asynchronen Filtern!
+//    // Diese muessen das selbst rufen!
+//    if( bOk && !pDoc->IsInLoadAsynchron() )
+//        StartLoadFinishedTimer();
+    if ( bOk && !pDoc->IsInLoadAsynchron() )
+    {
+        LoadingFinished();
+    }
+    // <--
 
     pRead->setSotStorageRef(pStg); // #i45333# save sot storage ref in case of recursive calls
 
@@ -1349,95 +1355,12 @@ void SwDocShell::PrepareReload()
     ::DelAllGrfCacheEntries( pDoc );
 }
 
-
-void SwDocShell::StartLoadFinishedTimer()
+// --> OD 2006-11-07 #i59688#
+// linked graphics are now loaded on demand.
+// Thus, loading of linked graphics no longer needed and necessary for
+// the load of document being finished.
+void SwDocShell::LoadingFinished()
 {
-    BOOL bSttTimer = FALSE;
-    // ohne WrtShell haben wir eine WebDocShell und muessen uns die
-    // Optionen vom Modul holen
-    if( pWrtShell ? pWrtShell->GetViewOptions()->IsGraphic()
-                  : SW_MOD()->GetUsrPref(TRUE)->IsGraphic() )
-    {
-        const SvxLinkManager& rLnkMgr = pDoc->GetLinkManager();
-        const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
-        for( USHORT n = 0; n < rLnks.Count(); ++n )
-        {
-            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ n ]);
-            if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
-                pLnk->ISA( SwBaseLink ) )
-            {
-                ::sfx2::SvLinkSource* pLnkObj = pLnk->GetObj();
-                if( !pLnkObj )
-                {
-                    String sFileNm;
-                    if( rLnkMgr.GetDisplayNames( pLnk, 0, &sFileNm, 0, 0 ))
-                    {
-                        INetURLObject aURL( sFileNm );
-                        switch( aURL.GetProtocol() )
-                        {
-                        case INET_PROT_NOT_VALID:
-                        case INET_PROT_FILE:
-                        case INET_PROT_MAILTO:
-                        case INET_PROT_NEWS:
-                        case INET_PROT_CID:
-                            break;
-
-                        default:
-                            ((SwBaseLink*)pLnk)->SwapIn();
-                            ((SwBaseLink*)pLnk)->GetCntntNode()->SetAutoFmtLvl(1);
-                            bSttTimer = TRUE;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    BOOL bSendState = FALSE;
-                    if( pLnkObj->IsPending() )
-                        bSttTimer = TRUE;       // Pending?
-                    else if( !pLnkObj->IsDataComplete() )
-                    {
-                        // falls aber nicht angetickert werden muss (liegt
-                        // im QuickdrawCache)
-                        if( !((SwBaseLink*)pLnk)->IsShowQuickDrawBmp() )
-                        {
-                            ((SwBaseLink*)pLnk)->SwapIn();
-                            ((SwBaseLink*)pLnk)->GetCntntNode()->SetAutoFmtLvl(1);
-                            bSttTimer = TRUE;
-                        }
-                        else
-                            // dann muss aber auf jedenfall der Status
-                            // an die Handler verschickt werden!
-                            bSendState = TRUE;
-                    }
-                    else if( ((SwBaseLink*)pLnk)->IsShowQuickDrawBmp() )
-                        // Wenn die Grafik aus dem QuickDrawCache kommt,
-                        // wird sie nie angefordert!
-                        // Dann muss aber auf jedenfall der Status
-                        // an die Handler verschickt werden!
-                        bSendState = TRUE;
-
-                    if( bSendState )
-                    {
-                        ::com::sun::star::uno::Any aValue;
-                        aValue <<= ::rtl::OUString::valueOf(
-                                            (sal_Int32)STATE_LOAD_OK );
-                        String sMimeType( SotExchange::GetFormatMimeType(
-                            SvxLinkManager::RegisterStatusInfoId() ));
-                        pLnkObj->DataChanged( sMimeType, aValue );
-                    }
-                }
-            }
-        }
-    }
-
-    if( bSttTimer )
-    {
-        aFinishedTimer.SetTimeoutHdl( STATIC_LINK( this, SwDocShell, IsLoadFinished ));
-        aFinishedTimer.SetTimeout( 1000 );
-        aFinishedTimer.Start();
-        getIDocumentTimerAccess()->BlockIdling();
-    }
     // --> OD 2005-02-11 #i38810# - disable method <SetModified(..)>, if document
     // has stay in modified state, due to the update of its links during load.
     bool bResetEnableSetModified(false);
@@ -1448,8 +1371,7 @@ void SwDocShell::StartLoadFinishedTimer()
         bResetEnableSetModified = true;
     }
     // <--
-    FinishedLoading( SFX_LOADED_MAINDOCUMENT |
-                    ( bSttTimer ? 0 : SFX_LOADED_IMAGES ));
+    FinishedLoading( SFX_LOADED_ALL );
     // --> OD 2005-02-11 #i38810#
     if ( bResetEnableSetModified )
     {
@@ -1464,49 +1386,6 @@ void SwDocShell::StartLoadFinishedTimer()
             ((SwSrcView*)pShell)->Load(this);
     }
 }
-
-
-IMPL_STATIC_LINK( SwDocShell, IsLoadFinished, void*, EMPTYARG )
-{
-    BOOL bSttTimer = FALSE;
-
-    if( !pThis->IsAbortingImport() )
-    {
-        const SvxLinkManager& rLnkMgr = pThis->pDoc->GetLinkManager();
-        const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
-        for( USHORT n = rLnks.Count(); n; )
-        {
-            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-            if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
-                pLnk->ISA( SwBaseLink ) )
-            {
-                ::sfx2::SvLinkSource* pLnkObj = pLnk->GetObj();
-                if( pLnkObj && pLnkObj->IsPending() &&
-                    !((SwBaseLink*)pLnk)->IsShowQuickDrawBmp() )
-                {
-                    bSttTimer = TRUE;
-                    break;
-                }
-            }
-        }
-    }
-
-    if( bSttTimer )
-        pThis->aFinishedTimer.Start();
-    else
-    {
-        BOOL bIsModifiedEnabled = pThis->IsEnableSetModified();
-        if(bIsModifiedEnabled)
-            pThis->EnableSetModified( sal_False );
-        pThis->FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
-        if(bIsModifiedEnabled)
-            pThis->EnableSetModified( sal_True );
-
-        pThis->getIDocumentTimerAccess()->UnblockIdling();
-    }
-    return 0;
-}
-
 
 // eine Uebertragung wird abgebrochen (wird aus dem SFX gerufen)
 void SwDocShell::CancelTransfers()
