@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:42:37 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -872,8 +872,8 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const ::rtl::OUStr
 // -----------------------------------------------------------------------------
 IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree)
 {
-    getBorderWin().getView()->getElementNotification()->onEntryDoubleClick(_pTree);
-    return 1L;
+    bool bHandled = getBorderWin().getView()->getElementNotification()->onEntryDoubleClick(_pTree);
+    return bHandled ? 1L : 0L;
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK(OAppDetailPageHelper, OnDeSelectHdl, SvTreeListBox*, _pTree)
