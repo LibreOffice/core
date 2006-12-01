@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:45:17 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ void SAL_CALL GlobalEventListenerImpl::notifyEvent( const com::sun::star::docume
     }
 }
 
-void SAL_CALL GlobalEventListenerImpl::disposing( const com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
+void SAL_CALL GlobalEventListenerImpl::disposing( const com::sun::star::lang::EventObject& /* Source */ ) throw (RuntimeException)
 {
 }
 
@@ -231,8 +231,8 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
     maPBImportBrowse( this, ResId( PB_IMPORT_BROWSE, &rResMgr ) ),
     maPBRecentDocument( this, ResId( PB_RECENT_DOCUMENT, &rResMgr ) ),
     maFTNameOfRecentFile( this, ResId( FT_NAME_OF_RECENT_FILE, &rResMgr ) ),
-    maPBHelp( this, ResId( PB_HELP, &rResMgr ) ),
     maPBClose( this, ResId( PB_CLOSE, &rResMgr ) ),
+    maPBHelp( this, ResId( PB_HELP, &rResMgr ) ),
     mpSourceDLG( NULL ),
     mpFilterInfo( NULL ),
     sDTDPath( RTL_CONSTASCII_USTRINGPARAM( "$(inst)/share/dtd/officedocument/1_0/office.dtd" ) )
@@ -260,7 +260,7 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
             mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
         DBG_ERROR( "XMLFilterTestDialog::XMLFilterTestDialog exception catched!" );
     }
@@ -273,7 +273,7 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
         if( mxGlobalBroadcaster.is() )
             mxGlobalBroadcaster->removeEventListener( mxGlobalEventListener );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
         DBG_ERROR( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
     }
@@ -424,7 +424,7 @@ void XMLFilterTestDialog::onExportBrowse()
                 OUString aInterfaceName;
                 PropertyValue* pValues = aValues.getArray();
                 OUString aType, aService;
-                sal_Int32 nFlags;
+                sal_Int32 nFlags( 0 );
 
                 int nFound = 0;
 
@@ -458,21 +458,21 @@ void XMLFilterTestDialog::onExportBrowse()
                     // see if this filter is not supressed in dialog
                     if( (nFlags & 0x1000) == 0 )
                     {
-                        Any aAny( xTypeDetection->getByName( aType ) );
-                        Sequence< PropertyValue > aValues;
+                        aAny = xTypeDetection->getByName( aType );
+                        Sequence< PropertyValue > aValues2;
 
-                        if( aAny >>= aValues )
+                        if( aAny >>= aValues2 )
                         {
-                            PropertyValue* pValues = aValues.getArray();
+                            PropertyValue* pValues2 = aValues2.getArray();
                             sal_Int32 nValue;
 
                             OUString aExtension;
-                            for( nValue = 0; nValue < aValues.getLength(); nValue++, pValues++ )
+                            for( nValue = 0; nValue < aValues2.getLength(); nValue++, pValues2++ )
                             {
-                                if( pValues->Name.equalsAscii( "Extensions" ) )
+                                if( pValues2->Name.equalsAscii( "Extensions" ) )
                                 {
                                     Sequence< OUString > aExtensions;
-                                    if( pValues->Value >>= aExtensions )
+                                    if( pValues2->Value >>= aExtensions )
                                     {
                                         const sal_Int32 nCount( aExtensions.getLength() );
                                         OUString* pExtensions = aExtensions.getArray();
@@ -517,7 +517,7 @@ void XMLFilterTestDialog::onExportBrowse()
             {
                 OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
                 Sequence< PropertyValue > aArguments(1);
-                aArguments[0].Name == OUString::createFromAscii( "InteractionHandler" );
+                aArguments[0].Name = OUString::createFromAscii( "InteractionHandler" );
                 aArguments[0].Value <<= xInter;
                 Reference< XComponent > xComp( xLoader->loadComponentFromURL( maExportRecentFile, aFrame, 0, aArguments ) );
                 if( xComp.is() )
@@ -554,7 +554,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
             if( pAppInfo )
             {
                 File aOutputFile( aTempFileURL );
-                File::RC rc = aOutputFile.open( OpenFlag_Write );
+                /* File::RC rc = */ aOutputFile.open( OpenFlag_Write );
 
                 // create xslt exporter
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
@@ -617,10 +617,10 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     Reference< XFilter > xFilter( mxMSF->createInstanceWithArguments( pAppInfo->maXMLExporter, aArgs ), UNO_QUERY );
                     if( xFilter.is() )
                     {
-                        Reference< XExporter > xExporter( xFilter, UNO_QUERY );
-                        if( xExporter.is() )
+                        Reference< XExporter > xExporter2( xFilter, UNO_QUERY );
+                        if( xExporter2.is() )
                         {
-                            xExporter->setSourceDocument( xComp );
+                            xExporter2->setSourceDocument( xComp );
 
                             Sequence< PropertyValue > aDescriptor( 1 );
                             aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
@@ -645,7 +645,7 @@ void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
     if( NULL == mpSourceDLG )
         mpSourceDLG = new XMLSourceFileDialog( NULL, mrResMgr, mxMSF );
 
-    mpSourceDLG->Show( rURL, mpFilterInfo);
+    mpSourceDLG->ShowWindow( rURL, mpFilterInfo);
 }
 
 void XMLFilterTestDialog::onImportBrowse()
@@ -712,9 +712,9 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
             OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
             Sequence< PropertyValue > aArguments(2);
-            aArguments[0].Name == OUString::createFromAscii( "FilterName" );
+            aArguments[0].Name = OUString::createFromAscii( "FilterName" );
             aArguments[0].Value <<= mpFilterInfo->maFilterName;
-            aArguments[1].Name == OUString::createFromAscii( "InteractionHandler" );
+            aArguments[1].Name = OUString::createFromAscii( "InteractionHandler" );
             aArguments[1].Value <<= xInter;
 
             xLoader->loadComponentFromURL( rURL, aFrame, 0, aArguments );
@@ -816,7 +816,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
             }
             else
             {
-                Reference< XComponent > xTest( xDesktop->getCurrentComponent() );
+                xTest = (Reference< XComponent >)xDesktop->getCurrentComponent();
 
                 if( checkComponent( xTest, rServiceName ) )
                 {
