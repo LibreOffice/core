@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtertracer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:38:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ SEQ( rtl::OUString ) SAL_CALL FilterTracer::getSupportedServiceNames()
 // -----------------------------------------------------------------------------
 
 // XLogger
-REF( NMSP_LOGGING::XLogger ) SAL_CALL  FilterTracer::getLogger( const rtl::OUString& rName )
+REF( NMSP_LOGGING::XLogger ) SAL_CALL  FilterTracer::getLogger( const rtl::OUString& /* rName */ )
      throw (::com::sun::star::uno::RuntimeException)
 {
     REF( NMSP_LOGGING::XLogger ) xLog( this );
@@ -202,7 +202,7 @@ sal_Bool SAL_CALL FilterTracer::isLoggable( sal_Int32 nLevel )
 {
     return mnLogLevel <= nLevel;
 }
-void SAL_CALL FilterTracer::logp( sal_Int32 nLevel, const rtl::OUString& rSourceClass,
+void SAL_CALL FilterTracer::logp( sal_Int32 /* nLevel */, const rtl::OUString& rSourceClass,
         const rtl::OUString& rSourceMethod, const rtl::OUString& rMessage )
      throw (::com::sun::star::uno::RuntimeException)
 {
