@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:00:55 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,59 +44,37 @@ import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.sun.star.uno.ITypeDescription;
-
+import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.uno.Any;
+import com.sun.star.uno.IMethodDescription;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-
+import com.sun.star.uno.XCurrentContext;
 
 /**
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.15 $ $ $Date: 2005-09-07 19:00:55 $
+ * @version     $Revision: 1.16 $ $ $Date: 2006-12-01 14:51:12 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
  * @since       UDK1.0
  */
 public class Job {
-    public static final boolean DEBUG = false;
-
     protected Job _next;
 
     protected IReceiver _iReceiver;
-    protected IMessage  _iMessage;
+    protected Message  _iMessage;
               Object    _disposeId;
 
     protected Object    _object;
 
-    public Job(Object object, IReceiver iReceiver, IMessage iMessage) {
+    public Job(Object object, IReceiver iReceiver, Message iMessage) {
         _object       = object;
         _iReceiver    = iReceiver;
         _iMessage     = iMessage;
-
-          if(DEBUG) System.err.println("##### " + getClass().getName() + ".<init>:" + _iReceiver + " " + _iMessage + " " + iMessage.getOperation() + " " + iMessage.getData(new Object[1][]));
     }
-
-    /**
-     * Dispatches a regular method call
-     * <p>
-     * @return  the result of the call
-     * @param message       the parameter for the call
-     * @param resultClass   the result type as an out parameter
-     * @param status        the status as an out parameter
-     * @param o_outs        the out parameters of the call as out parameters
-     * @param o_out_sig     the out signature as an out parameter
-     */
-    protected Object dispatch_MethodCall(Object params[]) throws InvocationTargetException, IllegalAccessException {
-          Method method = _iMessage.getInterface().getMethodDescription(_iMessage.getOperation()).getMethod();
-
-          if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispatch_MethodCall:" + _object + " " + method.getName() + " " + params);
-
-        return method.invoke(_object, params);
-      }
 
     /**
      * Dispatches a <code>queryInterface</code> call
@@ -117,9 +95,6 @@ public class Job {
         // the hell knows why, but empty interfaces a given back as void anys
         if(face != null)
             result = new Any(type, face);
-
-         if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispatch_queryInterface:" + _object + " " + zInterface + " result:" + result);
-
         return result;
     }
 
@@ -129,46 +104,32 @@ public class Job {
      * @return the result of the message.
      */
     public Object execute() throws Throwable {
-        Object[][] msgParams = new Object[1][];
-        Object msgResult = _iMessage.getData(msgParams);
-
-        if (DEBUG) {
-            System.err.println("##### " + getClass().getName() + ".execute: "
-                               + msgResult + " " + _iMessage.isException());
-        }
-
-        if (_iMessage.isException()) {
-            throw remoteUnoRequestRaisedException(msgResult);
-        }
-
-        String operation = _iMessage.getOperation();
-        if (operation != null) { // if it is a request
+        Object msgResult = _iMessage.getResult();
+        if (_iMessage.isRequest()) {
             Object result = null;
             Throwable exception = null;
-
+            IMethodDescription md = _iMessage.getMethod();
+            Object[] args = _iMessage.getArguments();
+            XCurrentContext oldCC = UnoRuntime.getCurrentContext();
+            UnoRuntime.setCurrentContext(_iMessage.getCurrentContext());
             try {
-                result = operation.equals("queryInterface")
-                    ? dispatch_queryInterface((Type) msgParams[0][0])
-                    : dispatch_MethodCall(msgParams[0]);
+                result = md.getIndex() == MethodDescription.ID_QUERY_INTERFACE
+                    ? dispatch_queryInterface((Type) args[0])
+                    : md.getMethod().invoke(_object, args);
             } catch (InvocationTargetException e) {
-                if (DEBUG) {
-                    e.printStackTrace(System.err);
-                }
                 exception = e.getTargetException();
                 if (exception == null) {
                     exception = e;
                 }
             } catch (Exception e) {
-                if (DEBUG) {
-                    e.printStackTrace(System.err);
-                }
                 exception = e;
+            } finally {
+                UnoRuntime.setCurrentContext(oldCC);
             }
-
-            if (_iMessage.mustReply()) {
+            if (_iMessage.isSynchronous()) {
                 if (exception == null) {
-                    _iReceiver.sendReply(false, _iMessage.getThreadId(),
-                                         result);
+                    _iReceiver.sendReply(
+                        false, _iMessage.getThreadId(), result);
                 } else {
                     // Here we have to be aware of non-UNO exceptions, because
                     // they may kill a remote side which does not know anything
@@ -176,85 +137,36 @@ public class Job {
                     if (exception != null
                         && !(exception instanceof com.sun.star.uno.Exception)
                         && !(exception instanceof
-                             com.sun.star.uno.RuntimeException)) {
+                             com.sun.star.uno.RuntimeException))
+                    {
                         StringWriter writer = new StringWriter();
                         exception.printStackTrace(new PrintWriter(writer));
                         exception = new com.sun.star.uno.RuntimeException(
                             "Java exception: <" + writer + ">", null);
                     }
-
-                    _iReceiver.sendReply(true, _iMessage.getThreadId(),
-                                         exception);
+                    _iReceiver.sendReply(
+                        true, _iMessage.getThreadId(), exception);
                 }
             }
+            return null;
+        } else if (_iMessage.isAbnormalTermination()) {
+            throw remoteUnoRequestRaisedException(_iMessage.getResult());
+        } else {
+            return _iMessage.getResult();
         }
-
-        return msgResult;
     }
 
-    /**
-     * Indicates whether the job is synchron or asynchron.
-     * <p>
-     * @return  returns <code>true</code> if the operation is synchron
-     */
-    public boolean isSynchron() {
-        return _iMessage.isSynchron(); //_synchron || (_operation == null);
-    }
-
-    /**
-     * Indicates whether the job is a reply but not an exception
-     * <p>
-     * @return  returns <code>true</code> is this job is final
-     */
-    public boolean isFinal() {
-        return _iMessage.getOperation() == null; // && !_iMessage.isException();
-    }
-
-    /**
-     * Gives the thread id of the job
-     * <p>
-     * @return  returns the thread id
-     */
     public ThreadId getThreadId() {
         return _iMessage.getThreadId();
     }
 
-    /**
-     * Gives the object id of the job
-     * <p>
-     * @return  returns the object id
-     */
-    public String getOID() {
-          return null; //_oId;
+    public boolean isRequest() {
+        return _iMessage.isRequest();
     }
 
-    /**
-     * Gives the operation of the job
-     * <p>
-     * @return  returns the operation
-     */
-    public String getOperation() {
-        return _iMessage.getOperation();
+    public boolean isSynchronous() {
+        return _iMessage.isSynchronous();
     }
-
-    /**
-     * Gives the interface of the object to call on
-     * <p>
-     * @return  returns the interface
-     */
-    public ITypeDescription getInterface() {
-        return _iMessage.getInterface();
-    }
-
-    /**
-     * Gives a descriptive <code>String</code> of the job
-     * <p>
-     * @return  returns the description
-     */
-    public String toString() {
-        return "job: "; //+ _operation + " " + _requestId;
-    }
-
 
     public void dispose() {
 //          _oId        = null;
