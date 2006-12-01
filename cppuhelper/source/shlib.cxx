@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:42:31 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,27 +319,15 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             &pEnvTypeName, &pEnv );
         OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
 
-        bool bNeedsMapping =
-            ((pEnv != 0) ||
-             !aEnvTypeName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM(
-                     CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ));
-        if (bNeedsMapping)
+        if (! pEnv)
         {
-            if (! pEnv)
-            {
-                uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
-            }
-            if (pEnv)
-            {
-                OUString aCppEnvTypeName =
-                    OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-                uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
-                if (pCurrentEnv)
-                {
-                    bNeedsMapping = (pEnv != pCurrentEnv);
-                }
-            }
+            uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
+        }
+        if (pEnv)
+        {
+            OUString aCppEnvTypeName =
+                OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+            uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
         }
 
         OUString aGetFactoryName = OUSTR(COMPONENT_GETFACTORY);
@@ -348,81 +336,60 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         {
             OString aImplName(
                 OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-            if (bNeedsMapping)
+
+            if (pEnv && pCurrentEnv)
             {
-                if (pEnv && pCurrentEnv)
+                Mapping aCurrent2Env( pCurrentEnv, pEnv );
+                Mapping aEnv2Current( pEnv, pCurrentEnv );
+
+                if (aCurrent2Env.is() && aEnv2Current.is())
                 {
-                    Mapping aCurrent2Env( pCurrentEnv, pEnv );
-                    Mapping aEnv2Current( pEnv, pCurrentEnv );
+                    void * pSMgr = aCurrent2Env.mapInterface(
+                        xMgr.get(), ::getCppuType( &xMgr ) );
+                    void * pKey = aCurrent2Env.mapInterface(
+                        xKey.get(), ::getCppuType( &xKey ) );
 
-                    if (aCurrent2Env.is() && aEnv2Current.is())
+                    void * pSSF =
+                        (*((component_getFactoryFunc) pSym))(
+                            aImplName.getStr(), pSMgr, pKey );
+
+                    if (pKey)
                     {
-                        void * pSMgr = aCurrent2Env.mapInterface(
-                            xMgr.get(), ::getCppuType( &xMgr ) );
-                        void * pKey = aCurrent2Env.mapInterface(
-                            xKey.get(), ::getCppuType( &xKey ) );
+                        (*pEnv->pExtEnv->releaseInterface)(
+                            pEnv->pExtEnv, pKey );
+                    }
+                    if (pSMgr)
+                    {
+                        (*pEnv->pExtEnv->releaseInterface)(
+                            pEnv->pExtEnv, pSMgr );
+                    }
 
-                        void * pSSF =
-                            (*((component_getFactoryFunc) pSym))(
-                                aImplName.getStr(), pSMgr, pKey );
-
-                        if (pKey)
-                        {
-                            (*pEnv->pExtEnv->releaseInterface)(
-                                pEnv->pExtEnv, pKey );
-                        }
-                        if (pSMgr)
-                        {
-                            (*pEnv->pExtEnv->releaseInterface)(
-                                pEnv->pExtEnv, pSMgr );
-                        }
-
-                        if (pSSF)
-                        {
-                            aEnv2Current.mapInterface(
-                                reinterpret_cast< void ** >( &xRet ),
-                                pSSF, ::getCppuType( &xRet ) );
-                            (*pEnv->pExtEnv->releaseInterface)(
-                                pEnv->pExtEnv, pSSF );
-                        }
-                        else
-                        {
-                            aExcMsg = aModulePath;
-                            aExcMsg += OUSTR(": cannot get factory of "
-                                             "demanded implementation: ");
-                            aExcMsg += OStringToOUString(
-                                aImplName, RTL_TEXTENCODING_ASCII_US );
-                        }
+                    if (pSSF)
+                    {
+                        aEnv2Current.mapInterface(
+                            reinterpret_cast< void ** >( &xRet ),
+                            pSSF, ::getCppuType( &xRet ) );
+                        (*pEnv->pExtEnv->releaseInterface)(
+                            pEnv->pExtEnv, pSSF );
                     }
                     else
                     {
-                        aExcMsg =
-                            OUSTR("cannot get uno mappings: C++ <=> UNO!");
+                        aExcMsg = aModulePath;
+                        aExcMsg += OUSTR(": cannot get factory of "
+                                         "demanded implementation: ");
+                        aExcMsg += OStringToOUString(
+                            aImplName, RTL_TEXTENCODING_ASCII_US );
                     }
                 }
                 else
                 {
-                    aExcMsg = OUSTR("cannot get uno environments!");
+                    aExcMsg =
+                        OUSTR("cannot get uno mappings: C++ <=> UNO!");
                 }
             }
             else
             {
-                XInterface * pRet =
-                    (XInterface *) (*((component_getFactoryFunc) pSym))(
-                        aImplName.getStr(), xMgr.get(), xKey.get() );
-                if (pRet)
-                {
-                    xRet = pRet;
-                    pRet->release();
-                }
-                else
-                {
-                    aExcMsg = aModulePath;
-                    aExcMsg += OUSTR(": cannot get factory of demanded "
-                                     "implementation: ");
-                    aExcMsg += OStringToOUString(
-                        aImplName, RTL_TEXTENCODING_ASCII_US );
-                }
+                aExcMsg = OUSTR("cannot get uno environments!");
             }
         }
         else
@@ -437,62 +404,11 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         if (pCurrentEnv)
             (*pCurrentEnv->release)( pCurrentEnv );
     }
-
-    // ========================= DEPRECATED =========================
     else
     {
-        OUString aGetFactoryName = OUSTR(CREATE_COMPONENT_FACTORY_FUNCTION);
-        pSym = ::osl_getFunctionSymbol( lib, aGetFactoryName.pData );
-        if (pSym != 0)
-        {
-            OUString aCppEnvTypeName = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-            OUString aUnoEnvTypeName = OUSTR(UNO_LB_UNO);
-            Mapping aUno2Cpp( aUnoEnvTypeName, aCppEnvTypeName );
-            Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
-            OSL_ENSURE(
-                aUno2Cpp.is() && aCpp2Uno.is(),
-                "### cannot get uno mappings!" );
-
-            if (aUno2Cpp.is() && aCpp2Uno.is())
-            {
-                uno_Interface * pUComponentFactory = 0;
-
-                uno_Interface * pUSFactory =
-                    (uno_Interface *) aCpp2Uno.mapInterface(
-                        xMgr.get(),
-                        ::getCppuType(
-                            (const Reference< lang::XMultiServiceFactory > *)0 )
-                        );
-                uno_Interface * pUKey =
-                    (uno_Interface *) aCpp2Uno.mapInterface(
-                        xKey.get(),
-                        ::getCppuType(
-                            (const Reference< registry::XRegistryKey > *)0 ) );
-
-                pUComponentFactory =
-                    (*((CreateComponentFactoryFunc) pSym))(
-                        rImplName.getStr(), pUSFactory, pUKey );
-
-                if (pUKey)
-                    (*pUKey->release)( pUKey );
-                if (pUSFactory)
-                    (*pUSFactory->release)( pUSFactory );
-
-                if (pUComponentFactory)
-                {
-                    aUno2Cpp.mapInterface(
-                        reinterpret_cast< void ** >( &xRet ),
-                        pUComponentFactory, ::getCppuType( &xRet ) );
-                    (*pUComponentFactory->release)( pUComponentFactory );
-                }
-            }
-        }
-        else
-        {
-            aExcMsg = aModulePath;
-            aExcMsg += OUSTR(": cannot get symbol: ");
-            aExcMsg += aGetEnvName;
-        }
+        aExcMsg = aModulePath;
+        aExcMsg += OUSTR(": cannot get symbol: ");
+        aExcMsg += aGetEnvName;
     }
 
     if (! xRet.is())
@@ -555,101 +471,65 @@ void SAL_CALL writeSharedLibComponentInfo(
             &pEnvTypeName, &pEnv );
         OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
 
-        bool bNeedsMapping =
-            ((pEnv != 0) ||
-             !aEnvTypeName.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM(
-                     CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ));
-        if (bNeedsMapping)
+        if (! pEnv)
         {
-            if (! pEnv)
-            {
-                uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
-            }
-            if (pEnv)
-            {
-                OUString aCppEnvTypeName =
-                    OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-                uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
-                if (pCurrentEnv)
-                {
-                    bNeedsMapping = (pEnv != pCurrentEnv);
-                }
-            }
+            uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
+        }
+        if (pEnv)
+        {
+            OUString aCppEnvTypeName =
+                OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+            uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
         }
 
         OUString aWriteInfoName = OUSTR(COMPONENT_WRITEINFO);
         pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
         if (pSym != 0)
         {
-            if (bNeedsMapping)
+            if (pEnv && pCurrentEnv)
             {
-                if (pEnv && pCurrentEnv)
+                Mapping aCurrent2Env( pCurrentEnv, pEnv );
+                if (aCurrent2Env.is())
                 {
-                    Mapping aCurrent2Env( pCurrentEnv, pEnv );
-                    if (aCurrent2Env.is())
+                    void * pSMgr = aCurrent2Env.mapInterface(
+                        xMgr.get(), ::getCppuType( &xMgr ) );
+                    void * pKey = aCurrent2Env.mapInterface(
+                        xKey.get(), ::getCppuType( &xKey ) );
+                    if (pKey)
                     {
-                        void * pSMgr = aCurrent2Env.mapInterface(
-                            xMgr.get(), ::getCppuType( &xMgr ) );
-                        void * pKey = aCurrent2Env.mapInterface(
-                            xKey.get(), ::getCppuType( &xKey ) );
-                        if (pKey)
+                        bRet = (*((component_writeInfoFunc) pSym))(
+                            pSMgr, pKey );
+                        (*pEnv->pExtEnv->releaseInterface)(
+                            pEnv->pExtEnv, pKey );
+                        if (! bRet)
                         {
-                            bRet = (*((component_writeInfoFunc) pSym))(
-                                pSMgr, pKey );
-                            (*pEnv->pExtEnv->releaseInterface)(
-                                pEnv->pExtEnv, pKey );
-                            if (! bRet)
-                            {
-                                aExcMsg = aModulePath;
-                                aExcMsg += OUSTR(": component_writeInfo() "
-                                                 "returned false!");
-                            }
-                        }
-                        else
-                        {
-                            // key is mandatory
                             aExcMsg = aModulePath;
-                            aExcMsg += OUSTR(": registry is mandatory to invoke"
-                                             " component_writeInfo()!");
-                        }
-
-                        if (pSMgr)
-                        {
-                            (*pEnv->pExtEnv->releaseInterface)(
-                                pEnv->pExtEnv, pSMgr );
+                            aExcMsg += OUSTR(": component_writeInfo() "
+                                             "returned false!");
                         }
                     }
                     else
                     {
-                        aExcMsg = OUSTR("cannot get uno mapping: C++ <=> UNO!");
+                        // key is mandatory
+                        aExcMsg = aModulePath;
+                        aExcMsg += OUSTR(": registry is mandatory to invoke"
+                                         " component_writeInfo()!");
+                    }
+
+                    if (pSMgr)
+                    {
+                        (*pEnv->pExtEnv->releaseInterface)(
+                            pEnv->pExtEnv, pSMgr );
                     }
                 }
                 else
                 {
-                    aExcMsg = OUSTR("cannot get uno environments!");
+                    aExcMsg = OUSTR("cannot get uno mapping: C++ <=> UNO!");
                 }
             }
             else
             {
-                if (xKey.is())
-                {
-                    bRet = (*((component_writeInfoFunc) pSym))(
-                        xMgr.get(), xKey.get() );
-                    if (! bRet)
-                    {
-                        aExcMsg = aModulePath;
-                        aExcMsg += OUSTR(": component_writeInfo() returned "
-                                         "false!");
-                    }
-                }
-                else
-                {
-                    // key is mandatory
-                    aExcMsg = aModulePath;
-                    aExcMsg += OUSTR(": registry is mandatory to invoke "
-                                     "component_writeInfo()!");
-                }
+                aExcMsg = OUSTR("cannot get uno environments!");
             }
         }
         else
@@ -664,38 +544,13 @@ void SAL_CALL writeSharedLibComponentInfo(
         if (pCurrentEnv)
             (*pCurrentEnv->release)( pCurrentEnv );
     }
-
-    // ========================= DEPRECATED =========================
     else
     {
-        OUString aWriteInfoName = OUSTR(WRITE_COMPONENT_INFO_FUNCTION);
-        pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
-        if (pSym != 0)
-        {
-            OUString aCppEnvTypeName =
-                OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-            OUString aUnoEnvTypeName = OUSTR(UNO_LB_UNO);
-            Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
-
-            if (aCpp2Uno.is())
-            {
-                uno_Interface * pUKey =
-                    (uno_Interface *) aCpp2Uno.mapInterface(
-                        xKey.get(), ::getCppuType( &xKey ) );
-
-                bRet = (*((WriteComponentInfoFunc) pSym))( pUKey );
-
-                if (pUKey)
-                    (*pUKey->release)( pUKey );
-            }
-        }
-        else
-        {
-            aExcMsg = aModulePath;
-            aExcMsg += OUSTR(": cannot get symbol: ");
-            aExcMsg += aGetEnvName;
-        }
+        aExcMsg = aModulePath;
+        aExcMsg += OUSTR(": cannot get symbol: ");
+        aExcMsg += aGetEnvName;
     }
+
 
 //!
 //! OK: please look at #88219#
