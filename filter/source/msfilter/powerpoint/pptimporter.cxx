@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptimporter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:41:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:27:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ void SAL_CALL PptImporter::setTargetDocument( const REF( NMSP_LANG::XComponent )
 }
 
 // XInitialization
-void SAL_CALL PptImporter::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
+void SAL_CALL PptImporter::initialize( const SEQ( NMSP_UNO::Any )& /* aArguments */ )
     throw ( NMSP_UNO::Exception, NMSP_UNO::RuntimeException )
 {
 }
