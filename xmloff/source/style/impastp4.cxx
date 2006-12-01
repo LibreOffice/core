@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:50:08 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:26:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,8 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 const OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
-                sal_Bool bCache)
+                sal_Bool bCache,
+                bool bDontSeek )
 {
     sal_Bool bRet(sal_False);
     ULONG nPos;
@@ -229,7 +230,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
             pParents->Insert( pParent );
         }
 
-        if( pParent->Add( pFamily, rProperties, rName ) )
+        if( pParent->Add( pFamily, rProperties, rName, bDontSeek ) )
         {
             pFamily->mnCount++;
             bRet = sal_True;
