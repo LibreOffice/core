@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:51:23 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
         // es muss mindestens das Attribut im TextNode stehen
         SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
         ASSERT( pCNd->IsTxtNode(), "Kein Textnode an dieser Position" );
-        ((SwTxtNode*)pCNd)->Insert( SwFmtFlyCnt(
+        ((SwTxtNode*)pCNd)->InsertItem( SwFmtFlyCnt(
                                 (SwFlyFrmFmt*)pFrmFmt ), nCntPos, nCntPos );
     }
 
@@ -605,7 +605,7 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
             if( FLY_IN_CNTNT == aNewAnchor.GetAnchorId() )
             {
                 SwPosition* pPos = (SwPosition*)aNewAnchor.GetCntntAnchor();
-                pPos->nNode.GetNode().GetTxtNode()->Insert(
+                pPos->nNode.GetNode().GetTxtNode()->InsertItem(
                         SwFmtFlyCnt( (SwFlyFrmFmt*)pFrmFmt ), nOldCntnt, 0 );
             }
 
