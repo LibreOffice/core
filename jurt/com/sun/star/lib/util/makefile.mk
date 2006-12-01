@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-09 09:48:55 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:54:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,25 +32,19 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-PRJ		= ..$/..$/..$/..$/..
-PRJNAME = jurt
-PACKAGE = com$/sun$/star$/lib$/util
-TARGET  = com_sun_star_lib_util
 
-# --- Settings -----------------------------------------------------
+PRJ := ..$/..$/..$/..$/..
+PRJNAME := jurt
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+TARGET := com_sun_star_lib_util
+PACKAGE := com$/sun$/star$/lib$/util
 
-# --- Files --------------------------------------------------------
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 JAVAFILES = \
     AsynchronousFinalizer.java \
-    IInvokable.java \
-    IInvokeHook.java \
     NativeLibraryLoader.java \
     StringHelper.java \
     UrlToFileMapper.java
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
+.INCLUDE: target.mk
