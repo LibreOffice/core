@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:58:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,11 @@
 #if defined USE_MOTIF
 #include <Xm/DrawingA.h>
 #else
-#include <X11/Xaw/Label.h>
+#  if defined DISABLE_XAW
+#     include <X11/Composite.h>
+#  else
+#     include <X11/Xaw/Label.h>
+#  endif
 #endif
 #include <X11/Xatom.h>
 #define XP_UNIX
