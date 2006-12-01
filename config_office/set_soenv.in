@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.125 $
-# Date:        $Date: 2006-11-21 15:13:02 $
+# Version:     $Revision: 1.126 $
+# Date:        $Date: 2006-12-01 14:17:17 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1848,6 +1848,7 @@ ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
 ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
 ToFile( "NEON_CFLAGS",       "@NEON_CFLAGS@",      "e" );
 ToFile( "DISABLE_NEON",      "@DISABLE_NEON@",     "e" );
+ToFile( "DISABLE_XAW",       "@DISABLE_XAW@",      "e" );
 ToFile( "ENABLE_AGG",        "@ENABLE_AGG@",       "e" );
 ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "AGG_VERSION",	     "@AGG_VERSION@",      "e" );
