@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:28:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:48:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         const SwPosition* pPos = aNewAnchor.GetCntntAnchor();
         SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
         ASSERT( pTxtNd, "Kein Textnode an dieser Position" );
-        pTxtNd->Insert( SwFmtFlyCnt( pFrmFmt ), pPos->nContent.GetIndex(), 0 );
+        pTxtNd->InsertItem( SwFmtFlyCnt( pFrmFmt ), pPos->nContent.GetIndex(), 0 );
     }
 
 
