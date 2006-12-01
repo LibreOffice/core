@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfexporter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:43:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:26:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,16 +157,15 @@ typedef std::vector<ShapeAnimationInfo> ShapeAnimationInfoVector;
 
 struct PageInfo
 {
-    sal_uInt16      mnBackgroundID;
-    sal_uInt16      mnObjectsID;
-    sal_uInt16      mnForegroundID;
-
-    sal_Int32       mnChange;
-
     ::com::sun::star::presentation::FadeEffect      meFadeEffect;
     ::com::sun::star::presentation::AnimationSpeed  meFadeSpeed;
 
     sal_Int32       mnDuration;
+    sal_Int32       mnChange;
+
+    sal_uInt16      mnBackgroundID;
+    sal_uInt16      mnObjectsID;
+    sal_uInt16      mnForegroundID;
 
     sal_Bool mbBackgroundVisible;
     sal_Bool mbBackgroundObjectsVisible;
