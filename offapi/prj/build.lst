@@ -15,7 +15,8 @@ oa	offapi\com\sun\star\configuration\backend\xml	nmake	-	all	oa_configbackend_xm
 oa	offapi\com\sun\star\datatransfer		nmake	-	all	oa_datatransfer NULL
 oa	offapi\com\sun\star\datatransfer\clipboard			nmake	-	all	oa_datatrans_clip NULL
 oa	offapi\com\sun\star\datatransfer\dnd	nmake	-	all	oa_datatrans_dnd oa_awt NULL
-oa	offapi\com\sun\star\deployment				nmake	-	all	oa_deployment oa_ucb oa_xml_input NULL
+oa	offapi\com\sun\star\deployment				nmake	-	all	oa_deploymenttest oa_ucb  NULL
+oa	offapi\com\sun\star\deployment\test			nmake	-	all	oa_deployment oa_ucb oa_xml_input NULL
 oa	offapi\com\sun\star\deployment\ui			nmake	-	all	oa_deployment_ui oa_awt oa_ui_dialogs NULL
 oa	offapi\com\sun\star\embed				nmake	-	all	oa_embed NULL
 oa	offapi\com\sun\star\document			nmake	-	all	oa_docu oa_embed NULL
