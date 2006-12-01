@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:00:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,26 @@ extern "C" void SAL_CALL urp_sendRequest(
 {
     remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
     urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
+    pImpl->m_initialized.wait();
+    urp_sendRequest_internal(
+        pEnvRemote, pMemberType, pOid, pInterfaceType, pReturn, ppArgs,
+        ppException );
+}
+void SAL_CALL urp_sendRequest_internal(
+    uno_Environment *pEnvRemote,
+    typelib_TypeDescription const * pMemberType,
+    rtl_uString *pOid,
+    typelib_InterfaceTypeDescription *pInterfaceType,
+    void *pReturn,
+    void *ppArgs[],
+    uno_Any **ppException )
+{
+    remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
+    urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
 
-    ClientJob job(pEnvRemote, pImpl, pOid, pMemberType, pInterfaceType, pReturn, ppArgs, ppException);
+    ClientJob job(
+        pEnvRemote, pContext, pImpl, pOid, pMemberType, pInterfaceType, pReturn,
+        ppArgs, ppException);
 
     if( job.pack() && ! job.isOneway() )
     {
