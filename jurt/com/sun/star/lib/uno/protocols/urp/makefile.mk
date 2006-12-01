@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:03:58 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:53:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,24 +33,20 @@
 #
 #*************************************************************************
 
-PRJ		= ..$/..$/..$/..$/..$/..$/..
-PRJNAME = jurt
-PACKAGE = com$/sun$/star$/lib$/uno$/protocols$/urp
-TARGET  = com_sun_star_lib_uno_protocols_urp
+PRJ := ..$/..$/..$/..$/..$/..$/..
+PRJNAME := jurt
 
-# --- Settings -----------------------------------------------------
+TARGET := com_sun_star_lib_uno_protocols_urp
+PACKAGE := com$/sun$/star$/lib$/uno$/protocols$/urp
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 JAVAFILES = \
     Cache.java \
     Marshal.java \
+    PendingRequests.java \
     Unmarshal.java \
+    UrpMessage.java \
     urp.java
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: target.mk
