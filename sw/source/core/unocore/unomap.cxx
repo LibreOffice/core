@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.191 $
+ *  $Revision: 1.192 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:26:36 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,10 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
         aMapArr[i] = 0;
     }
     pCharStyleMap   = pParaStyleMap = pFrameStyleMap =
-    pPageStyleMap   = pNumStyleMap  = pConditionalParaStyleMap = 0;
+    pPageStyleMap   = pNumStyleMap  = pConditionalParaStyleMap =
+    pCharAutoStyleMap = pRubyAutoStyleMap = pParaAutoStyleMap = 0;
 }
+
 /* -----------------19.02.99 08:31-------------------
  *
  * --------------------------------------------------*/
@@ -121,6 +123,9 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     delete pPageStyleMap;
     delete pNumStyleMap;
     delete pConditionalParaStyleMap;
+    delete pCharAutoStyleMap;
+    delete pRubyAutoStyleMap;
+    delete pParaAutoStyleMap;
 }
 /* -----------------19.02.99 08:31-------------------
  *
@@ -154,6 +159,18 @@ SfxItemPropertySet& SwUnoPropertyMapProvider::GetPropertySet(sal_Int8 nPropSetId
     case PROPERTY_SET_CONDITIONAL_PARA_STYLE:
         ppMap = &pConditionalParaStyleMap;
         nPropertyId = PROPERTY_MAP_CONDITIONAL_PARA_STYLE;
+        break;
+    case PROPERTY_SET_CHAR_AUTO_STYLE:
+        ppMap = &pCharAutoStyleMap;
+        nPropertyId = PROPERTY_MAP_CHAR_AUTO_STYLE;
+        break;
+    case PROPERTY_SET_RUBY_AUTO_STYLE:
+        ppMap = &pRubyAutoStyleMap;
+        nPropertyId = PROPERTY_MAP_RUBY_AUTO_STYLE;
+        break;
+    case PROPERTY_SET_PARA_AUTO_STYLE:
+        ppMap = &pParaAutoStyleMap;
+        nPropertyId = PROPERTY_MAP_PARA_AUTO_STYLE;
         break;
     }
 
@@ -387,8 +404,9 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
         COMMON_HYPERLINK_PROPERTIES \
         { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},\
-        { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  CPPU_E2T(CPPUTYPE_OUSTRINGS),     PropertyAttribute::MAYBEVOID,     0},
-
+        { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  CPPU_E2T(CPPUTYPE_OUSTRINGS),     PropertyAttribute::MAYBEVOID,     0},\
+        { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_STYLE_NAME), RES_TXTATR_AUTOFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},\
+        { SW_PROP_NMID(UNO_NAME_PARA_AUTO_STYLE_NAME), RES_AUTO_STYLE,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
 
 #define COMMON_CRSR_PARA_PROPERTIES_2 \
         COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
@@ -625,6 +643,32 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 aMapArr[nPropertyId] = aParagraphMap_Impl;
             }
             break;
+            case PROPERTY_MAP_PARA_AUTO_STYLE :
+            {
+                static SfxItemPropertyMap aAutoParaStyleMap [] =
+                {
+                    { SW_PROP_NMID(UNO_NAME_PARA_STYLE_NAME), RES_FRMATR_STYLE_NAME,        CPPU_E2T(CPPUTYPE_OUSTRING),                PropertyAttribute::MAYBEVOID,     0},                                                       \
+                    { SW_PROP_NMID(UNO_NAME_PAGE_STYLE_NAME), FN_UNO_PAGE_STYLE,        CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
+                    { SW_PROP_NMID(UNO_NAME_NUMBERING_IS_NUMBER), FN_UNO_IS_NUMBER,     CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
+                    { SW_PROP_NMID(UNO_NAME_NUMBERING_LEVEL), FN_UNO_NUM_LEVEL,     CPPU_E2T(CPPUTYPE_INT16),           PropertyAttribute::MAYBEVOID, 0},                                                            \
+                    { SW_PROP_NMID(UNO_NAME_NUMBERING_START_VALUE), FN_UNO_NUM_START_VALUE, CPPU_E2T(CPPUTYPE_INT16),           PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                                                \
+                    { SW_PROP_NMID(UNO_NAME_DOCUMENT_INDEX), FN_UNO_DOCUMENT_INDEX, CPPU_E2T(CPPUTYPE_REFDOCINDEX), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },            \
+                    { SW_PROP_NMID(UNO_NAME_TEXT_TABLE), FN_UNO_TEXT_TABLE,     CPPU_E2T(CPPUTYPE_REFTXTTABLE),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },               \
+                    { SW_PROP_NMID(UNO_NAME_CELL), FN_UNO_CELL,         CPPU_E2T(CPPUTYPE_REFCELL),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
+                    { SW_PROP_NMID(UNO_NAME_TEXT_FRAME), FN_UNO_TEXT_FRAME,     CPPU_E2T(CPPUTYPE_REFTEXTFRAME),        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
+                    { SW_PROP_NMID(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, CPPU_E2T(CPPUTYPE_REFTEXTSECTION),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                    \
+                    { SW_PROP_NMID(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},                                                     \
+                    { SW_PROP_NMID(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME), RES_FRMATR_CONDITIONAL_STYLE_NAME,        CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
+                    { SW_PROP_NMID(UNO_NAME_PARA_IS_NUMBERING_RESTART), FN_NUMBER_NEWSTART,     CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, 0 },
+                    COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
+                    TABSTOPS_MAP_ENTRY
+                    COMMON_TEXT_CONTENT_PROPERTIES
+                    { SW_PROP_NMID(UNO_NAME_PARA_AUTO_STYLE_NAME), RES_AUTO_STYLE,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
+                    {0,0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aAutoParaStyleMap;
+            }
+            break;
             case PROPERTY_MAP_CHAR_STYLE :
             {
                 static SfxItemPropertyMap aCharStyleMap [] =
@@ -666,6 +710,61 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharStyleMap;
+            }
+            break;
+            case PROPERTY_MAP_CHAR_AUTO_STYLE :
+            {
+                // same as PROPERTY_MAP_TEXTPORTION_EXTENSIONS
+                static SfxItemPropertyMap aAutoCharStyleMap [] =
+                {
+                    { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_KERNING), RES_CHRATR_AUTOKERN  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND,  CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_BACK_COLOR), RES_CHRATR_BACKGROUND,    CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_CASE_MAP), RES_CHRATR_CASEMAP,     CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_COLOR), RES_CHRATR_COLOR,      CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_STRIKEOUT), RES_CHRATR_CROSSEDOUT,  CPPU_E2T(CPPUTYPE_INT16),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_CROSSED_OUT), RES_CHRATR_CROSSEDOUT,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  CPPU_E2T(CPPUTYPE_INT16),             PROPERTY_NONE, MID_ESC          },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     CPPU_E2T(CPPUTYPE_INT8)  ,          PROPERTY_NONE, MID_ESC_HEIGHT},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
+                    _STANDARD_FONT_PROPERTIES
+                    _CJK_FONT_PROPERTIES
+                    _CTL_FONT_PROPERTIES
+                    { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT16),      PROPERTY_NONE, MID_UNDERLINE},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT32),            PROPERTY_NONE, MID_UL_COLOR},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_BOOLEAN),              PROPERTY_NONE, MID_UL_HASCOLOR},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_KERNING), RES_CHRATR_KERNING    ,  CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,  CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_NO_HYPHENATION), RES_CHRATR_NOHYPHEN   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_SHADOWED), RES_CHRATR_SHADOWED  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_CONTOURED), RES_CHRATR_CONTOUR,    CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_WORD_MODE), RES_CHRATR_WORDLINEMODE,CPPU_E2T(CPPUTYPE_BOOLEAN)  ,    PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NMID(UNO_NAME_IS_PHYSICAL), FN_UNO_IS_PHYSICAL,     CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_IS_ON), RES_CHRATR_TWO_LINES,          CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, MID_TWOLINES},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_PREFIX), RES_CHRATR_TWO_LINES,             CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, MID_START_BRACKET},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_SUFFIX), RES_CHRATR_TWO_LINES,             CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, MID_END_BRACKET},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_EMPHASIS), RES_CHRATR_EMPHASIS_MARK,           CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, MID_EMPHASIS},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_ROTATION), RES_CHRATR_ROTATE,      CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,    MID_ROTATE      },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE), RES_CHRATR_ROTATE,       CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE,        MID_FITTOLINE  },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_SCALE_WIDTH), RES_CHRATR_SCALEW,       CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,         0 },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE,      MID_RELIEF },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_STYLE_NAME), RES_TXTATR_AUTOFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
+                    {0,0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aAutoCharStyleMap;
+            }
+            break;
+            case PROPERTY_MAP_RUBY_AUTO_STYLE :
+            {
+                static SfxItemPropertyMap aAutoRubyStyleMap [] =
+                {
+                    { SW_PROP_NMID(UNO_NAME_RUBY_ADJUST), RES_TXTATR_CJK_RUBY,  CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },
+                    { SW_PROP_NMID(UNO_NAME_RUBY_IS_ABOVE), RES_TXTATR_CJK_RUBY,    CPPU_E2T(CPPUTYPE_BOOLEAN),  PropertyAttribute::MAYBEVOID,     MID_RUBY_ABOVE },
+                    {0,0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aAutoRubyStyleMap;
             }
             break;
             case PROPERTY_MAP_PARA_STYLE :
