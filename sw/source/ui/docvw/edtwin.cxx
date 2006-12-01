@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:24:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,11 +848,19 @@ void SwEditWin::StopInsFrm()
 
 BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const
 {
+    const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+    if ( !rCTLOptions.IsCTLFontEnabled() ||
+         !rCTLOptions.IsCTLSequenceChecking() )
+         return FALSE;
+
+    const xub_StrLen nFirstPos = rCrsr.Start()->nContent.GetIndex();
+    if ( 0 == nFirstPos ) /* first char needs not to be checked */
+        return FALSE;
+
     SwBreakIt *pBreakIt = SwBreakIt::Get();
     uno::Reference < i18n::XBreakIterator > xBI = pBreakIt->GetBreakIter();
-    SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-
     long nCTLScriptPos = -1;
+
     if (xBI.is())
     {
         if (xBI->getScriptType( rText, 0 ) == i18n::ScriptType::COMPLEX)
@@ -861,14 +869,7 @@ BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPa
             nCTLScriptPos = xBI->nextScript( rText, 0, i18n::ScriptType::COMPLEX );
     }
 
-    xub_StrLen nFirstPos = rCrsr.Start()->nContent.GetIndex();
-    BOOL bIsSequenceChecking =
-        rCTLOptions.IsCTLFontEnabled() &&
-        rCTLOptions.IsCTLSequenceChecking() &&
-        nFirstPos != 0 && /* first char needs not to be checked */
-        (0 <= nCTLScriptPos && nCTLScriptPos <= rText.Len());
-
-    return bIsSequenceChecking;
+    return (0 <= nCTLScriptPos && nCTLScriptPos <= rText.Len());
 }
 
 
@@ -882,9 +883,13 @@ void SwEditWin::FlushInBuffer()
     if ( aInBuffer.Len() )
     {
         SwWrtShell& rSh = rView.GetWrtShell();
-        SwCheckIt aCheckIt;
-        uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = aCheckIt.xCheck;
-        if (IsInputSequenceCheckingRequired( aInBuffer, *rSh.GetCrsr() ) && xISC.is())
+
+        // generate new sequence input checker if not already done
+        if ( !pCheckIt )
+            pCheckIt = new SwCheckIt;
+
+        uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = pCheckIt->xCheck;
+        if ( xISC.is() && IsInputSequenceCheckingRequired( aInBuffer, *rSh.GetCrsr() ) )
         {
             //
             // apply (Thai) input sequence checking/correction
