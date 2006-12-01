@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgetest.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:37:59 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #include "test/testtools/bridgetest/XBridgeTest2.hpp"
 #include "test/testtools/bridgetest/XMulti.hpp"
 
+#include "currentcontextchecker.hxx"
 #include "multi.hxx"
 
 using namespace rtl;
@@ -415,7 +416,8 @@ void MyClass::release() throw ()
 //==================================================================================================
 static sal_Bool performTest(
     const Reference<XComponentContext> & xContext,
-    const Reference<XBridgeTest > & xLBT )
+    const Reference<XBridgeTest > & xLBT,
+    bool noCurrentContext )
 {
     check( xLBT.is(), "### no test interface!" );
     bool bRet = true;
@@ -910,6 +912,28 @@ static sal_Bool performTest(
     } catch (BadConstructorArguments &) {
         bRet = false;
     }
+    if (!noCurrentContext) {
+        if (!(new testtools::bridgetest::CurrentContextChecker)->perform(
+                xBT2->getCurrentContextChecker(), 0, 1))
+        {
+            bRet = false;
+        }
+        if (!(new testtools::bridgetest::CurrentContextChecker)->perform(
+                xBT2->getCurrentContextChecker(), 0, 2))
+        {
+            bRet = false;
+        }
+        if (!(new testtools::bridgetest::CurrentContextChecker)->perform(
+                xBT2->getCurrentContextChecker(), 1, 2))
+        {
+            bRet = false;
+        }
+        if (!(new testtools::bridgetest::CurrentContextChecker)->perform(
+                xBT2->getCurrentContextChecker(), 1, 3))
+        {
+            bRet = false;
+        }
+    }
     }
     return bRet;
 }
@@ -1134,10 +1158,12 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         }
 
         Reference< XInterface > xOriginal;
+        sal_Int32 i;
         if( rArgs.getLength() > 1 && 0 == rArgs[0].compareToAscii( "-u" ) )
         {
             xOriginal = UnoUrlResolver::create( m_xContext )->resolve(
                 rArgs[1] );
+            i = 2;
         }
         else
         {
@@ -1145,7 +1171,11 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
             xOriginal =
                 m_xContext->getServiceManager()->createInstanceWithContext(
                     rArgs[0], m_xContext );
+            i = 1;
         }
+        bool noCurrentContext = i < rArgs.getLength()
+            && rArgs[i].equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("noCurrentContext"));
 
         if (! xOriginal.is())
         {
@@ -1164,7 +1194,8 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 
         Reference<XBridgeTest > xLBT;
         bRet = check( makeSurrogate( xLBT, xTest ), "makeSurrogate" );
-        bRet = check( performTest( m_xContext, xLBT ), "standard test" )
+        bRet = check(
+            performTest( m_xContext, xLBT, noCurrentContext ), "standard test" )
             && bRet;
         bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
         bRet = check( raiseOnewayException( xLBT ),
@@ -1232,7 +1263,7 @@ static Reference< XInterface > SAL_CALL TestBridgeImpl_create(
     const Reference< XComponentContext > & xContext )
 {
     return Reference< XInterface >(
-        (XBridgeTest *) new TestBridgeImpl( xContext ) );
+        static_cast< OWeakObject * >( new TestBridgeImpl( xContext ) ) );
 }
 
 }
