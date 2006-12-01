@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:19:25 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,7 +472,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         rDoc.Delete( *pPaM );
         pPaM->DeleteMark();
         SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
-        pFN = pTxt->Insert(aFtn, nPos, nPos);
+        pFN = pTxt->InsertItem(aFtn, nPos, nPos);
     }
     ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
     if (pFN)
