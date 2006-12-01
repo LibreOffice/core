@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:17:32 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -665,14 +665,6 @@ const SwAttrSet* SwFrm::GetAttrSet() const
         return &((const SwCntntFrm*)this)->GetNode()->GetSwAttrSet();
     else
         return &((const SwLayoutFrm*)this)->GetFmt()->GetAttrSet();
-}
-
-SwAttrSet* SwFrm::GetAttrSet()
-{
-    if ( IsCntntFrm() )
-        return &((SwCntntFrm*)this)->GetNode()->GetSwAttrSet();
-    else
-        return (SwAttrSet*)&((SwLayoutFrm*)this)->GetFmt()->GetAttrSet();
 }
 
 /*************************************************************************
