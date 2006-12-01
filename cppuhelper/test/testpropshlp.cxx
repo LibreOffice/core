@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testpropshlp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:45:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:20:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,12 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+# undef OSL_DEBUG_LEVEL
+# define OSL_DEBUG_LEVEL 2
+#endif
+
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
@@ -384,6 +390,8 @@ public:
     // XPropertySet
     Reference < XPropertySetInfo >  SAL_CALL getPropertySetInfo()throw(RuntimeException);
 
+    using OPropertySetHelper::getFastPropertyValue;
+
     sal_Bool                    bBOOL;
     sal_Int16                   nINT16;
     sal_Int32                   nINT32;
@@ -464,7 +472,7 @@ public:
         { return m_refCount; }
 
     // XEventListener
-    void SAL_CALL disposing(const EventObject& evt) throw ( RuntimeException)
+    void SAL_CALL disposing(const EventObject& /*evt*/) throw ( RuntimeException)
     {
         MutexGuard aGuard( aMutex );
         nDisposing++;
@@ -692,7 +700,6 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
             else
                 return sal_False;
             }
-        break;
 
         case PROPERTY_INT16:
             {
@@ -708,7 +715,6 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
             else
                 return sal_False;
             }
-        break;
 
         case PROPERTY_INT32:
             {
@@ -723,7 +729,6 @@ sal_Bool test_OPropertySetHelper::convertFastPropertyValue
             else
                 return sal_False;
             }
-        break;
 
         default:
             OSL_ENSURE( nHandle == -1, "invalid property handle" );
@@ -844,7 +849,7 @@ void test_PropertySetHelper()
                 xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), xPS_L );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( UnknownPropertyException & e )
+            catch( UnknownPropertyException & /*e*/ )
             {
 
             }
@@ -854,7 +859,7 @@ void test_PropertySetHelper()
                 xPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), x2 );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( UnknownPropertyException & e )
+            catch( UnknownPropertyException & /*e*/ )
             {
 
             }
@@ -894,7 +899,7 @@ void test_PropertySetHelper()
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), aBool );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( PropertyVetoException & e )
+            catch( PropertyVetoException & /*e*/ )
             {
             }
 
@@ -908,7 +913,7 @@ void test_PropertySetHelper()
                 pPS->setFastPropertyValue( PROPERTY_BOOL, aBool );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( PropertyVetoException & e )
+            catch( PropertyVetoException & /*e*/ )
             {
             }
 
@@ -921,7 +926,7 @@ void test_PropertySetHelper()
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), aBool );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( UnknownPropertyException & e )
+            catch( UnknownPropertyException & /*e*/ )
             {
             }
 
@@ -933,7 +938,7 @@ void test_PropertySetHelper()
                 pPS->setFastPropertyValue( 3, aBool );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( UnknownPropertyException & e )
+            catch( UnknownPropertyException & /*e*/ )
             {
             }
 
@@ -944,7 +949,7 @@ void test_PropertySetHelper()
                 aBool = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ) );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( UnknownPropertyException & e )
+            catch( UnknownPropertyException & /*e*/ )
             {
             }
 
@@ -954,7 +959,7 @@ void test_PropertySetHelper()
                 aBool = ((XFastPropertySet *)pPS)->getFastPropertyValue( 3 );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( UnknownPropertyException & e )
+            catch( UnknownPropertyException & /*e*/ )
             {
             }
 
@@ -965,7 +970,7 @@ void test_PropertySetHelper()
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), aBool );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( IllegalArgumentException & e )
+            catch( IllegalArgumentException & /*e*/ )
             {
             }
 
@@ -975,7 +980,7 @@ void test_PropertySetHelper()
                 pPS->setFastPropertyValue( PROPERTY_INT32, aBool );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( IllegalArgumentException & e )
+            catch( IllegalArgumentException & /*e*/ )
             {
             }
 
@@ -987,7 +992,7 @@ void test_PropertySetHelper()
                 xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aINT32 );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( IllegalArgumentException & e )
+            catch( IllegalArgumentException & /*e*/ )
             {
             }
 
@@ -999,7 +1004,7 @@ void test_PropertySetHelper()
                 pPS->setFastPropertyValue( PROPERTY_INT16, aINT32 );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( IllegalArgumentException & e )
+            catch( IllegalArgumentException & /*e*/ )
             {
             }
 
@@ -1092,7 +1097,7 @@ void test_PropertySetHelper()
                 ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT16, aValue );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch( PropertyVetoException & e )
+            catch( PropertyVetoException & /*e*/ )
             {
             }
 
@@ -1172,7 +1177,7 @@ void test_PropertySetHelper()
                 pPS->setPropertyValues( szPN, aValues );
                 OSL_ENSURE( sal_False, "PropertySetHelper: exeption not thrown" );
             }
-            catch ( PropertyVetoException & e )
+            catch ( PropertyVetoException & /*e*/ )
             {
             }
 
