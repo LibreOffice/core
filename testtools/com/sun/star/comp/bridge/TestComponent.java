@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:45:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ import test.testtools.bridgetest.TestPolyStruct2;
 import test.testtools.bridgetest.TestStruct;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
+import test.testtools.bridgetest.XCurrentContextChecker;
 import test.testtools.bridgetest.XMulti;
 import test.testtools.bridgetest.XRecursiveCall;
 
@@ -1255,6 +1256,10 @@ public class TestComponent {
                 new TestPolyStruct2[][]{new TestPolyStruct2[]{new TestPolyStruct2(
                     new TestPolyStruct2(new Character('X'),new Any(Type.BOOLEAN, Boolean.TRUE)),
                         new TestPolyStruct(new Character('X')))}});
+        }
+
+        public XCurrentContextChecker getCurrentContextChecker() {
+            return new CurrentContextChecker();
         }
     }
 
