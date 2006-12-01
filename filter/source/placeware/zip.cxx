@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zip.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:44:25 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@ void ZipFile::writeShort( sal_Int16 s)
 {
     if( !isError() )
     {
-        mnRC = putC( s & 0xff, mrFile );
+        mnRC = putC( static_cast< unsigned char >( s & 0xff ), mrFile );
         if( !isError() )
-            mnRC = putC( (s >> 8) & 0xff, mrFile );
+            mnRC = putC( static_cast< unsigned char >( (s >> 8) & 0xff ), mrFile );
     }
 }
 
@@ -92,16 +92,16 @@ void ZipFile::writeLong( sal_Int32 l )
 {
     if( !isError() )
     {
-        mnRC = putC(l & 0xff, mrFile);
+        mnRC = putC( static_cast< unsigned char >( l & 0xff ), mrFile);
         if( !isError() )
         {
-            mnRC = putC((l >> 8) & 0xff, mrFile);
+            mnRC = putC( static_cast< unsigned char >( (l >> 8) & 0xff ), mrFile);
             if( !isError() )
             {
-                mnRC = putC((l >> 16) & 0xff, mrFile);
+                mnRC = putC( static_cast< unsigned char >( (l >> 16) & 0xff ), mrFile);
                 if( !isError() )
                 {
-                    mnRC = putC((l >> 24) & 0xff, mrFile);
+                    mnRC = putC( static_cast< unsigned char >( (l >> 24) & 0xff ), mrFile);
                 }
             }
         }
@@ -192,7 +192,7 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
         {
             sal_uInt64 nWritten;
             mnRC = mrFile.write( e->name.getStr(), e->name.getLength(), nWritten ); // file name
-            OSL_ASSERT( nWritten == e->name.getLength() );
+            OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
             if( !isError() )
             {
                 mnRC = mrFile.setPos( Pos_Absolut, e->endOffset );
@@ -224,7 +224,7 @@ void ZipFile::writeCentralDir(ZipEntry *e)
     {
         sal_uInt64 nWritten;
         mrFile.write( e->name.getStr(), e->name.getLength(), nWritten );    // file name
-        OSL_ASSERT( nWritten == e->name.getLength() );
+        OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
     }
 }
 
@@ -234,8 +234,8 @@ void ZipFile::writeEndCentralDir(sal_Int32 nCdOffset, sal_Int32 nCdSize)
     writeLong(zf_ECDSIGValue);      // magic number
     writeShort(0);                  // disk num
     writeShort(0);                  // disk with central dir
-    writeShort(maEntries.size());   // number of file entries
-    writeShort(maEntries.size());   // number of file entries
+    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); // number of file entries
+    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); // number of file entries
     writeLong(nCdSize);             // central dir size
     writeLong(nCdOffset);
     writeShort(0);                  // comment len
