@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:14:21 $
+#   last change: $Author: rt $ $Date: 2006-12-01 14:55:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ JAVATESTFILES := \
     ThreadPool_Test.java
 JAVAFILES := \
     TestIWorkAt.java \
-    TestMessage.java \
     TestReceiver.java \
     TestWorkAt.java
 JARFILES := ridl.jar
