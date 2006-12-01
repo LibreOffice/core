@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_property.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:47:57 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ namespace bridges_urp
         sal_Bool            bClearCache;
         sal_Bool            bNegotiate;
         sal_Bool            bForceSynchronous;
+        sal_Bool            bCurrentContext;
 
         inline Properties()
             : nTypeCacheSize( 256 )
@@ -79,6 +80,7 @@ namespace bridges_urp
             , bClearCache( sal_False )
             , bNegotiate( sal_True )
             , bForceSynchronous( sal_True )
+            , bCurrentContext( sal_False )
             {}
 
         inline Properties & SAL_CALL operator = ( const Properties &props )
@@ -97,6 +99,7 @@ namespace bridges_urp
             bClearCache                  = props.bClearCache;
             bNegotiate                   = props.bNegotiate;
             bForceSynchronous            = props.bForceSynchronous;
+            bCurrentContext              = props.bCurrentContext;
             return *this;
         }
     };
