@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:46:56 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ Reference< com::sun::star::frame::XModel > xModel;
                  }
              }
         com::sun::star::uno::Sequence< sal_Int8 > aData;
-            long nBytesToRead=xInStream->available();
+            /* long nBytesToRead= */ xInStream->available();
             xInStream->skipBytes (0);
             long bytestRead =xInStream->readBytes (aData,  1000);
             resultString=::rtl::OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
@@ -287,7 +287,6 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 ::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
 {
-    sal_Int32 i=0;
     sal_Int32 checked =0;
     ::rtl::OUString sTypeName= OUString::createFromAscii("");
     if((clipBoardFormat.match(OUString::createFromAscii("doctype:"))))
