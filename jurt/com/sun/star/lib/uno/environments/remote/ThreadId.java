@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ThreadId.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:01:59 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public final class ThreadId {
-    static ThreadId createFresh() {
+    public static ThreadId createFresh() {
         BigInteger c;
         synchronized (PREFIX) {
             c = count;
