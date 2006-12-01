@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:39:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:45:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,7 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                         if( ( nWhich < RES_CHRATR_END ) &&
                             ( SFX_ITEM_SET == pSet->GetItemState( nWhich, sal_True, &pItem ) ) )
                         {
-                            SwTxtAttr* pAttr = ((SwTxtNode&)rNd).MakeTmpTxtAttr(*pItem);
+                            SwTxtAttr* pAttr = ((SwTxtNode&)rNd).MakeRedlineTxtAttr( *pItem );
                             pAttr->SetPriorityAttr( sal_True );
                             aHints.C40_INSERT( SwTxtAttr, pAttr, aHints.Count());
                             rAttrHandler.PushAndChg( *pAttr, rFnt );
