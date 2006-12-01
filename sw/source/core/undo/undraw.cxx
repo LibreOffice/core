@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:51:37 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,14 +450,16 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
-        SwDrawContact* pContact = (SwDrawContact*)rSave.pFmt->FindContactObj();
+        // --> OD 2006-11-01 #130889# - taken over by <SwUndoDrawUnGroupConnectToLayout>
+//        SwDrawContact* pContact = (SwDrawContact*)rSave.pFmt->FindContactObj();
 
-        rSave.pObj = pContact->GetMaster();
+//        rSave.pObj = pContact->GetMaster();
 
-        //loescht sich selbst!
-        pContact->Changed( *rSave.pObj, SDRUSERCALL_DELETE,
-            rSave.pObj->GetLastBoundRect() );
-        rSave.pObj->SetUserCall( 0 );
+//        //loescht sich selbst!
+//        pContact->Changed( *rSave.pObj, SDRUSERCALL_DELETE,
+//                           rSave.pObj->GetLastBoundRect() );
+//        rSave.pObj->SetUserCall( 0 );
+        // <--
 
         ::lcl_SaveAnchor( rSave.pFmt, rSave.nNodeIdx );
 
@@ -518,13 +520,15 @@ void SwUndoDrawUnGroup::Redo( SwUndoIter& )
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
         rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
 
-        SdrObject* pObj = rSave.pObj;
+        // --> OD 2006-11-01 #130889# - taken over by <SwUndoDrawUnGroupConnectToLayout>
+//        SdrObject* pObj = rSave.pObj;
 
-        SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, rSave.pObj );
-        pContact->ConnectToLayout();
-        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
-        // move object to visible layer
-        pContact->MoveObjToVisibleLayer( rSave.pObj );
+//        SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, rSave.pObj );
+//        pContact->ConnectToLayout();
+//        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
+//        // move object to visible layer
+//        pContact->MoveObjToVisibleLayer( rSave.pObj );
+//        // <--
         // <--
         // --> OD 2005-05-10 #i45952# - notify that position attributes
         // are already set
@@ -544,6 +548,57 @@ void SwUndoDrawUnGroup::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt )
     rSave.pFmt = pFmt;
     rSave.pObj = 0;
 }
+
+//-------------------------------------
+// --> OD 2006-11-01 #130889#
+SwUndoDrawUnGroupConnectToLayout::SwUndoDrawUnGroupConnectToLayout()
+    : SwUndo( UNDO_DRAWUNGROUP )
+{
+}
+
+SwUndoDrawUnGroupConnectToLayout::~SwUndoDrawUnGroupConnectToLayout()
+{
+}
+
+void SwUndoDrawUnGroupConnectToLayout::Undo( SwUndoIter& )
+{
+    for ( std::vector< SdrObject >::size_type i = 0;
+          i < aDrawFmtsAndObjs.size(); ++i )
+    {
+        SdrObject* pObj( aDrawFmtsAndObjs[i].second );
+        SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(pObj->GetUserCall()) );
+        ASSERT( pDrawContact,
+                "<SwUndoDrawUnGroupConnectToLayout::Undo(..)> -- missing SwDrawContact instance" );
+        if ( pDrawContact )
+        {
+            // deletion of instance <pDrawContact> and thus disconnection from
+            // the Writer layout.
+            pDrawContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+            pObj->SetUserCall( 0 );
+        }
+    }
+}
+
+void SwUndoDrawUnGroupConnectToLayout::Redo( SwUndoIter& )
+{
+    for ( std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >::size_type i = 0;
+          i < aDrawFmtsAndObjs.size(); ++i )
+    {
+        SwDrawFrmFmt* pFmt( aDrawFmtsAndObjs[i].first );
+        SdrObject* pObj( aDrawFmtsAndObjs[i].second );
+        SwDrawContact *pContact = new SwDrawContact( pFmt, pObj );
+        pContact->ConnectToLayout();
+        pContact->MoveObjToVisibleLayer( pObj );
+    }
+}
+
+void SwUndoDrawUnGroupConnectToLayout::AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
+                                                     SdrObject* pDrawObject )
+{
+    aDrawFmtsAndObjs.push_back(
+            std::pair< SwDrawFrmFmt*, SdrObject* >( pDrawFrmFmt, pDrawObject ) );
+}
+// <--
 
 //-------------------------------------
 
