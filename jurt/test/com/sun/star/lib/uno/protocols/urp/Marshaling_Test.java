@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Marshaling_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:14:52 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 package com.sun.star.lib.uno.protocols.urp;
 
-import com.sun.star.lib.uno.environments.remote.IProtocol;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.IBridge;
@@ -43,7 +42,6 @@ import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -57,18 +55,8 @@ public final class Marshaling_Test extends ComplexTestCase {
     }
 
     public void test() throws Exception {
-        String protocolDescription = "urp";
-
         short cacheSize = (short)256;
         TestBridge testBridge = new TestBridge();
-
-
-        Class protocol_class = Class.forName("com.sun.star.lib.uno.protocols." + protocolDescription + "." + protocolDescription);
-        Constructor protocol_constructor = protocol_class.getConstructor(new Class[] {IBridge.class});
-
-        IProtocol iProtocol = (IProtocol)protocol_constructor.newInstance(new Object[]{testBridge});
-
-
         Marshal marshal = new Marshal(testBridge, cacheSize);
 
         TestObject testObject = new TestObject();
