@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmove.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:52:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
         if( pTxtNd->GetpSwpHints() )
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
                                 0, pTxtNd->GetTxt().Len(), FALSE );
-        if( pTxtNd->GetpSwAttrSet() )
+        if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
     }
     if( pEndTxtNd && pEndTxtNd != pTxtNd )
@@ -92,7 +92,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
         if( pEndTxtNd->GetpSwpHints() )
             pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nEndNode,
                                 0, pEndTxtNd->GetTxt().Len(), FALSE );
-        if( pEndTxtNd->GetpSwAttrSet() )
+        if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode );
     }
 
@@ -102,7 +102,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
         if( pTxtNd->GetpSwpHints() )
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nMvDestNode,
                                 0, pTxtNd->GetTxt().Len(), FALSE );
-        if( pTxtNd->GetpSwAttrSet() )
+        if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode );
     }
 
@@ -236,11 +236,11 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
             SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
             aPos.nContent.Assign( pCNd, nInsPosCntnt );
 
-            if( pCNd->GetpSwAttrSet() )
+            if( pCNd->HasSwAttrSet() )
                 pCNd->ResetAllAttr();
 
             if( pCNd->IsTxtNode() && ((SwTxtNode*)pCNd)->GetpSwpHints() )
-                ((SwTxtNode*)pCNd)->ClearSwpHintsArr( FALSE, FALSE );
+                ((SwTxtNode*)pCNd)->ClearSwpHintsArr( false );
 
             // an der InsertPos erstmal alle Attribute entfernen,
             if( !pDoc->Move( aPam, aPos, ( bMoveRedlines ? IDocumentContentOperations::DOC_MOVEREDLINES : IDocumentContentOperations::DOC_MOVEDEFAULT ) ) )
