@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:32:11 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:33:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,8 @@ public:
     SwAttrSet( SwAttrPool&, const USHORT* nWhichPairTable );
     SwAttrSet( const SwAttrSet& );
 
+    virtual SfxItemSet* Clone(BOOL bItems = TRUE, SfxItemPool *pToPool = 0) const;
+
     int Put_BC( const SfxPoolItem& rAttr, SwAttrSet* pOld, SwAttrSet* pNew );
     int Put_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );
 
@@ -222,7 +224,8 @@ public:
     //  - SwFmtDropCaps
     //  - SwFmtPageDesc
     // (Wird beim Einfuegen in Formate/Nodes gerufen)
-    void SetModifyAtAttr( const SwModify* pModify );
+    // Second version is for the SwAttrSet handles of SwCntntNode.
+    bool SetModifyAtAttr( const SwModify* pModify );
 
     // Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
     // im Zugriff.
