@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:56:37 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
 #endif
+#include <com/sun/star/style/XAutoStyleFamily.hpp>
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -221,104 +222,157 @@ typedef ::std::set < OUString, ::comphelper::UStringLess > PropertyNameSet;
 
 void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 {
-    const OUString& rName = GetDisplayName();
-    if( 0 == rName.getLength() || IsDefaultStyle() )
-        return;
-
-    Reference < XNameContainer > xFamilies =
-            ((SvXMLStylesContext *)&mxStyles)->GetStylesContainer( GetFamily() );
-    if( !xFamilies.is() )
-        return;
-
-    sal_Bool bNew = sal_False;
-    if( xFamilies->hasByName( rName ) )
+    if( ((SvXMLStylesContext *)&mxStyles)->IsAutomaticStyle()
+        && ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
     {
-        Any aAny = xFamilies->getByName( rName );
-        aAny >>= mxStyle;
-    }
-    else
-    {
-        mxStyle = Create();
-        if( !mxStyle.is() )
+        Reference < XAutoStyleFamily > xAutoFamily =
+                ((SvXMLStylesContext *)&mxStyles)->GetAutoStyles( GetFamily() );
+        if( !xAutoFamily.is() )
             return;
-
-        Any aAny;
-        aAny <<= mxStyle;
-        xFamilies->insertByName( rName, aAny );
-        bNew = sal_True;
-    }
-
-    Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo =
-                xPropSet->getPropertySetInfo();
-    if( !bNew && xPropSetInfo->hasPropertyByName( msIsPhysical ) )
-    {
-        Any aAny = xPropSet->getPropertyValue( msIsPhysical );
-        bNew = !*(sal_Bool *)aAny.getValue();
-    }
-    SetNew( bNew );
-    if( rName != GetName() )
-        GetImport().AddStyleDisplayName( GetFamily(), GetName(), rName );
-
-    if( bOverwrite || bNew )
-    {
-        Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
-
-        UniReference < XMLPropertySetMapper > xPrMap;
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
-                                                                GetFamily() );
-        DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+            ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper( GetFamily() );
+        DBG_ASSERT( xImpPrMap.is(), "There is no import prop mapper" );
         if( xImpPrMap.is() )
-            xPrMap = xImpPrMap->getPropertySetMapper();
-        if( xPrMap.is() )
         {
-            Reference < XMultiPropertyStates > xMultiStates( xPropSet,
-                                                             UNO_QUERY );
-            if( xMultiStates.is() )
+            Sequence< PropertyValue > aValues;
+            xImpPrMap->FillPropertySequence( maProperties, aValues );
+
+            sal_Int32 nLen = aValues.getLength();
+            if( nLen )
             {
-                xMultiStates->setAllPropertiesToDefault();
-            }
-            else
-            {
-                PropertyNameSet aNameSet;
-                sal_Int32 nCount = xPrMap->GetEntryCount();
-                sal_Int32 i;
-                for( i = 0; i < nCount; i++ )
+                if( GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH )
                 {
-                    const OUString& rPrName = xPrMap->GetEntryAPIName( i );
-                    if( xPropSetInfo->hasPropertyByName( rPrName ) )
-                        aNameSet.insert( rPrName );
+                    aValues.realloc( nLen + 2 );
+                    PropertyValue *pProps = aValues.getArray() + nLen;
+                    pProps->Name = rtl::OUString::createFromAscii("ParaStyleName");
+                    OUString sParent( GetParentName() );
+                    if( sParent.getLength() )
+                        sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
+                    pProps->Value <<= sParent;
+                    ++pProps;
+                    pProps->Name = rtl::OUString::createFromAscii("ParaConditionalStyleName");
+                    pProps->Value <<= sParent;
                 }
 
-                nCount = aNameSet.size();
-                Sequence < OUString > aNames( nCount );
-                OUString *pNames = aNames.getArray();
-                PropertyNameSet::iterator aIter = aNameSet.begin();
-                while( aIter != aNameSet.end() )
-                    *pNames++ = *aIter++;
-
-                Sequence < PropertyState > aStates(
-                    xPropState->getPropertyStates( aNames ) );
-                const PropertyState *pStates = aStates.getConstArray();
-                pNames = aNames.getArray();
-
-                for( i = 0; i < nCount; i++ )
+                Reference < XAutoStyle > xAutoStyle = xAutoFamily->insertStyle( aValues );
+                if( xAutoStyle.is() )
                 {
-                    if( PropertyState_DIRECT_VALUE == *pStates++ )
-                        xPropState->setPropertyToDefault( pNames[i] );
+                    Sequence< OUString > aPropNames(1);
+                    aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
+                        rtl::OUString::createFromAscii("ParaAutoStyleName") :
+                        rtl::OUString::createFromAscii("CharAutoStyleName");
+                    Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
+                    if( aAny.hasElements() )
+                    {
+                        OUString aName;
+                        aAny[0] >>= aName;
+                        SetAutoName( aName );
+                    }
                 }
             }
         }
-
-        if (mxStyle.is())
-            mxStyle->setParentStyle(OUString());
-
-        FillPropertySet( xPropSet );
     }
     else
     {
-        SetValid( sal_False );
+        const OUString& rName = GetDisplayName();
+        if( 0 == rName.getLength() || IsDefaultStyle() )
+            return;
+
+        Reference < XNameContainer > xFamilies =
+                ((SvXMLStylesContext *)&mxStyles)->GetStylesContainer( GetFamily() );
+        if( !xFamilies.is() )
+            return;
+
+        sal_Bool bNew = sal_False;
+        if( xFamilies->hasByName( rName ) )
+        {
+            Any aAny = xFamilies->getByName( rName );
+            aAny >>= mxStyle;
+        }
+        else
+        {
+            mxStyle = Create();
+            if( !mxStyle.is() )
+                return;
+
+            Any aAny;
+            aAny <<= mxStyle;
+            xFamilies->insertByName( rName, aAny );
+            bNew = sal_True;
+        }
+
+        Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
+        Reference< XPropertySetInfo > xPropSetInfo =
+                    xPropSet->getPropertySetInfo();
+        if( !bNew && xPropSetInfo->hasPropertyByName( msIsPhysical ) )
+        {
+            Any aAny = xPropSet->getPropertyValue( msIsPhysical );
+            bNew = !*(sal_Bool *)aAny.getValue();
+        }
+        SetNew( bNew );
+        if( rName != GetName() )
+            GetImport().AddStyleDisplayName( GetFamily(), GetName(), rName );
+
+        if( bOverwrite || bNew )
+        {
+            Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+
+            UniReference < XMLPropertySetMapper > xPrMap;
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
+                                                                    GetFamily() );
+            DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+            if( xImpPrMap.is() )
+                xPrMap = xImpPrMap->getPropertySetMapper();
+            if( xPrMap.is() )
+            {
+                Reference < XMultiPropertyStates > xMultiStates( xPropSet,
+                                                                 UNO_QUERY );
+                if( xMultiStates.is() )
+                {
+                    xMultiStates->setAllPropertiesToDefault();
+                }
+                else
+                {
+                    PropertyNameSet aNameSet;
+                    sal_Int32 nCount = xPrMap->GetEntryCount();
+                    sal_Int32 i;
+                    for( i = 0; i < nCount; i++ )
+                    {
+                        const OUString& rPrName = xPrMap->GetEntryAPIName( i );
+                        if( xPropSetInfo->hasPropertyByName( rPrName ) )
+                            aNameSet.insert( rPrName );
+                    }
+
+                    nCount = aNameSet.size();
+                    Sequence < OUString > aNames( nCount );
+                    OUString *pNames = aNames.getArray();
+                    PropertyNameSet::iterator aIter = aNameSet.begin();
+                    while( aIter != aNameSet.end() )
+                        *pNames++ = *aIter++;
+
+                    Sequence < PropertyState > aStates(
+                        xPropState->getPropertyStates( aNames ) );
+                    const PropertyState *pStates = aStates.getConstArray();
+                    pNames = aNames.getArray();
+
+                    for( i = 0; i < nCount; i++ )
+                    {
+                        if( PropertyState_DIRECT_VALUE == *pStates++ )
+                            xPropState->setPropertyToDefault( pNames[i] );
+                    }
+                }
+            }
+
+            if (mxStyle.is())
+                mxStyle->setParentStyle(OUString());
+
+            FillPropertySet( xPropSet );
+        }
+        else
+        {
+            SetValid( sal_False );
+        }
     }
 }
 
