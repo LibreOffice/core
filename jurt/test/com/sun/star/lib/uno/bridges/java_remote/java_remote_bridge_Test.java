@@ -4,9 +4,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:10:49 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ import com.sun.star.comp.connections.PipedConnection;
 import com.sun.star.connection.XConnection;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lib.uno.environments.java.java_environment;
-import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.IQueryInterface;
@@ -105,7 +104,7 @@ public final class java_remote_bridge_Test extends ComplexTestCase {
             failed("no instance provider");
         } catch (com.sun.star.uno.RuntimeException e) {
             assure("no instance provider",
-                   e.getMessage().indexOf("no instance provider set") != -1);
+                   e.getMessage().startsWith("unknown OID "));
         }
     }
 
@@ -180,15 +179,7 @@ public final class java_remote_bridge_Test extends ComplexTestCase {
         assure("proxy count", ProxyFactory.getDebugCount() == 0);
 
         System.out.println("waiting for pending messages to be done");
-        while (((Protocol) bridgeB.getProtocol()).getRequestsSendCount()
-               > ((Protocol) bridgeA.getProtocol()).getRequestsReceivedCount())
-        {
-            System.out.println(
-                "pending: "
-                + ((Protocol) bridgeB.getProtocol()).getRequestsSendCount()
-                + ", "
-                + (((Protocol) bridgeA.getProtocol()).
-                   getRequestsReceivedCount()));
+        while (bridgeA.getLifeCount() != 0 || bridgeB.getLifeCount() != 0) {
             Thread.sleep(100);
         }
 
