@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:40:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2572,6 +2572,15 @@ void SAL_CALL ODatabaseForm::disposing(const EventObject& Source) throw( Runtime
     }
 }
 
+//------------------------------------------------------------------------------
+void ODatabaseForm::impl_createLoadTimer()
+{
+    OSL_PRECOND( m_pLoadTimer == NULL, "ODatabaseForm::impl_createLoadTimer: timer already exists!" );
+    m_pLoadTimer = new Timer();
+    m_pLoadTimer->SetTimeout(100);
+    m_pLoadTimer->SetTimeoutHdl(LINK(this,ODatabaseForm,OnTimeout));
+}
+
 //==============================================================================
 // com::sun::star::form::XLoadListener
 //------------------------------------------------------------------------------
@@ -2585,9 +2594,7 @@ void SAL_CALL ODatabaseForm::loaded(const EventObject& /*aEvent*/) throw( Runtim
         if (xParentRowSet.is())
             xParentRowSet->addRowSetListener(this);
 
-        m_pLoadTimer = new Timer();
-        m_pLoadTimer->SetTimeout(100);
-        m_pLoadTimer->SetTimeoutHdl(LINK(this,ODatabaseForm,OnTimeout));
+        impl_createLoadTimer();
     }
 }
 
@@ -3025,7 +3032,12 @@ void SAL_CALL ODatabaseForm::cursorMoved(const EventObject& /*event*/) throw( Ru
     // reload the subform with the new parameters of the parent
     // do this handling delayed to provide of execute too many SQL Statements
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
-    if (m_pLoadTimer->IsActive())
+
+    DBG_ASSERT( m_pLoadTimer, "ODatabaseForm::cursorMoved: how can this happen?!" );
+    if ( !m_pLoadTimer )
+        impl_createLoadTimer();
+
+    if ( m_pLoadTimer->IsActive() )
         m_pLoadTimer->Stop();
 
     // and start the timer again
