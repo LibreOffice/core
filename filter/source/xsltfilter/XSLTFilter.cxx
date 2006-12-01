@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSLTFilter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:49:40 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ public:
 
 };
 
-FLABridge::FLABridge(const Reference<XDocumentHandler>& m_rDocumentHandler) : m_rDocumentHandler(m_rDocumentHandler), active(false)
+FLABridge::FLABridge(const Reference<XDocumentHandler>& _rDocumentHandler) : m_rDocumentHandler(_rDocumentHandler), active(false)
 {
 }
 
@@ -150,18 +150,18 @@ void FLABridge::startElement(const OUString& str, const Reference<XAttributeList
     OSL_ASSERT(m_rDocumentHandler.is());
     if (active)
     {
-        SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
+//      SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
         const int len=attriblist->getLength();
         SvXMLAttributeList *_newattriblist= new SvXMLAttributeList();
         for(int i=0;i<len;i++)
         {
-            const OUString& name=attriblist->getNameByIndex(i);
+            const OUString& name=attriblist->getNameByIndex( sal::static_int_cast<sal_Int16>( i ) );
             sal_Int32 pos;
             static const OUString _value_(".value", 6, RTL_TEXTENCODING_ASCII_US);
             if ((pos=name.lastIndexOf(L'.'))!=-1 && name.match(_value_, pos))
             {
                 const OUString newName(name, pos);
-                const OUString& value=attriblist->getValueByIndex(i);
+                const OUString& value=attriblist->getValueByIndex( sal::static_int_cast<sal_Int16>( i ) );
                 const OUString newValue(ev.eval(value.getStr(), value.getLength()));
                 if (newValue.getLength()>0)
                 {
@@ -170,7 +170,7 @@ void FLABridge::startElement(const OUString& str, const Reference<XAttributeList
             }
             else
             {
-                _newattriblist->AddAttribute(name, attriblist->getValueByIndex(i));
+                _newattriblist->AddAttribute(name, attriblist->getValueByIndex( sal::static_int_cast<sal_Int16>( i )));
             }
         };
         const Reference<XAttributeList> newattriblist(_newattriblist);
@@ -238,8 +238,8 @@ private:
 
     Reference< XActiveDataControl > m_tcontrol;
     oslCondition  m_cTransformed;
-    sal_Bool m_bError;
     sal_Bool m_bTerminated;
+    sal_Bool m_bError;
 
     OUString m_aExportBaseUrl;
     OUString m_aOldBaseUrl;
@@ -300,7 +300,7 @@ XSLTFilter::XSLTFilter( const Reference< XMultiServiceFactory > &r )
     m_cTransformed = osl_createCondition();
 }
 
-void XSLTFilter::disposing(const EventObject& e) throw (RuntimeException)
+void XSLTFilter::disposing(const EventObject& ) throw (RuntimeException)
 {
 }
 
@@ -444,7 +444,11 @@ sal_Bool XSLTFilter::importer(
                 return sal_False;
             }
         }
-        catch( Exception &exc)
+#if OSL_DEBUG_LEVEL > 0
+        catch( Exception& exc)
+#else
+        catch( Exception& )
+#endif
         {
             // something went wrong
             OSL_ENSURE(0, OUStringToOString(exc.Message, RTL_TEXTENCODING_ASCII_US).getStr());
@@ -583,7 +587,7 @@ void XSLTFilter::startElement(const OUString& str, const Reference<XAttributeLis
     throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
-    SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
+//  SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
     m_rDocumentHandler->startElement(str, attriblist);
 }
 
@@ -657,12 +661,12 @@ using namespace XSLT;
 extern "C"
 {
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKey )
+sal_Bool SAL_CALL component_writeInfo(void * /* pServiceManager */, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -688,7 +692,7 @@ sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKe
 }
 
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
 
