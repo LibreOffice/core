@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fla.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:37:32 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 14:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,7 @@ const sal_Unicode *Evaluator::eval(const sal_Unicode *expr, sal_Int32 exprLen)
     return _buf;
 }
 
-};
+}
 
 /*
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
