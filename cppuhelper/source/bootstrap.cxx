@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:13:07 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 17:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ Reference< registry::XSimpleRegistry > nestRegistries(
         try
         {
             Reference<registry::XSimpleRegistry> simpleRegistry(
-                xSimRegFac->createInstance(), UNO_QUERY );
+                xSimRegFac->createInstance(), UNO_QUERY_THROW );
 
             osl::FileBase::getAbsoluteFileURL(baseDir, rdb_name, rdb_name);
             simpleRegistry->open(rdb_name, sal_True, sal_False);
