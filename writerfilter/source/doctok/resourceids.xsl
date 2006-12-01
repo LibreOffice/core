@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:11 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-16 16:00:11 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,11 @@ namespace NS_dff
         </xsl:call-template>
         <xsl:text> = </xsl:text>
         <xsl:value-of select="$fopid"/>
-        <xsl:text>;&#xa;</xsl:text>
+        <xsl:text>; // 0x</xsl:text>
+        <xsl:call-template name="dectohex">
+          <xsl:with-param name="number" select="$fopid"/>
+        </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
       </xsl:for-each>
       <xsl:text>
 }
@@ -199,7 +203,7 @@ namespace NS_dff
       <xsl:with-param name="number" select="floor($number div 16)"/>
     </xsl:call-template>
   </xsl:if>
-  <xsl:value-of select="substring('0123456789abcdef', $number mod 16, 1)"/>
+  <xsl:value-of select="substring('0123456789abcdef', $number mod 16 + 1, 1)"/>
 </xsl:template>
 
 </xsl:stylesheet>
