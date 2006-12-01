@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:33:35 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ public:
 
     ~SvXMLAutoStylePoolParentP_Impl();
 
-    sal_Bool Add( XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties, ::rtl::OUString& rName );
+    sal_Bool Add( XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties, ::rtl::OUString& rName, bool bDontSeek = false );
 
     ::rtl::OUString Find( const XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
@@ -219,7 +219,8 @@ public:
     sal_Bool Add( ::rtl::OUString& rName, sal_Int32 nFamily,
                 const ::rtl::OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
-                sal_Bool bCache = sal_False );
+                sal_Bool bCache = sal_False,
+                bool bDontSeek = false );
     ::rtl::OUString AddToCache( sal_Int32 nFamily,
                                 const ::rtl::OUString& rParent );
     ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent,
