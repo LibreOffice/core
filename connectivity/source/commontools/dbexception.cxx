@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:02:31 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 16:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,16 +140,25 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb:
 }
 
 //------------------------------------------------------------------------------
+const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent)
+{
+    m_aContent = _rErrorEvent.Reason;
+    implDetermineType();
+    return *this;
+}
+
+//------------------------------------------------------------------------------
+const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException)
+{
+    m_aContent = _rCaughtSQLException;
+    implDetermineType();
+    return *this;
+}
+
+//------------------------------------------------------------------------------
 SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdb::SQLErrorEvent& _rError)
 {
-    const staruno::Type& aSQLExceptionType = ::getCppuType(reinterpret_cast< ::com::sun::star::sdbc::SQLException*>(NULL));
-    staruno::Type aReasonType = _rError.Reason.getValueType();
-
-    sal_Bool bValid = isAssignableFrom(aSQLExceptionType, aReasonType);
-    OSL_ENSURE(bValid, "SQLExceptionInfo::SQLExceptionInfo : invalid argument (does not contain an SQLException) !");
-    if (bValid)
-        m_aContent = _rError.Reason;
-
+    m_aContent = _rError.Reason;
     implDetermineType();
 }
 
@@ -176,7 +185,10 @@ void SQLExceptionInfo::implDetermineType()
     else if (isA(aContentType, static_cast< ::com::sun::star::sdbc::SQLException*>(NULL)))
         m_eType = SQL_EXCEPTION;
     else
+    {
         m_eType = UNDEFINED;
+        m_aContent.clear();
+    }
 }
 
 //------------------------------------------------------------------------------
