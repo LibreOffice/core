@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:07:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,7 @@
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
 #endif
+#include <fmtautofmt.hxx>
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
@@ -1359,7 +1360,8 @@ enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // nicht unterst. Attribut
                       HTML_CHRFMT_VALUE,    // Attribut fuer Zeichenvorlage
                       HTML_COLOR_VALUE,     // Attribut fuer Vordergrundfarbe
                       HTML_STYLE_VALUE,     // Attribut muss als Style exp.
-                      HTML_DROPCAP_VALUE }; // DropCap-Attributs
+                      HTML_DROPCAP_VALUE,   // DropCap-Attributs
+                      HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
 
 
 class HTMLEndPosLst
@@ -1615,6 +1617,10 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
 
     case RES_TXTATR_CHARFMT:
         eState = HTML_CHRFMT_VALUE;
+        break;
+
+    case RES_TXTATR_AUTOFMT:
+        eState = HTML_AUTOFMT_VALUE;
         break;
 
     case RES_CHRATR_CASEMAP:
@@ -1975,6 +1981,15 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                     Insert( *pFmtInfo->pItemSet, nStart, nEnd,
                             rFmtInfos, TRUE, bParaAttrs );
                 }
+            }
+            break;
+
+        case HTML_AUTOFMT_VALUE:
+            {
+                const SwFmtAutoFmt& rAutoFmt = (const SwFmtAutoFmt&)rItem;
+                const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
+                if( pSet.get() )
+                    Insert( *pSet.get(), nStart, nEnd, rFmtInfos, TRUE, bParaAttrs );
             }
             break;
 
@@ -3478,8 +3493,8 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_DUMMY5 */             0,
 /* RES_CHRATR_HIDDEN */             0, // Dummy:
 
-/* RES_TXTATR_INETFMT   */          OutHTML_SwFmtINetFmt,
 /* RES_TXTATR_DUMMY4    */          0,
+/* RES_TXTATR_INETFMT   */          OutHTML_SwFmtINetFmt,
 /* RES_TXTATR_REFMARK*/             0,
 /* RES_TXTATR_TOXMARK */            0,
 /* RES_TXTATR_CHARFMT   */          OutHTML_SwTxtCharFmt,
@@ -3547,7 +3562,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_LAYOUT_SPLIT */              0,
 /* RES_FRMATR_DUMMY1 */             0, // Dummy:
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0, // Dummy:
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 /* RES_FRMATR_DUMMY6 */             0, // Dummy:
@@ -3557,7 +3572,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0, // Dummy:
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
