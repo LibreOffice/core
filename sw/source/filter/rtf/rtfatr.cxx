@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:52:21 $
+ *  last change: $Author: rt $ $Date: 2006-12-01 15:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,6 +223,7 @@
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
 #endif
+#include <fmtautofmt.hxx>
 #ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
 #endif
@@ -1400,7 +1401,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     }
 
     // gibt es harte Attributierung ?
-    if( bNewFmts && pNd->GetpSwAttrSet())
+    if( bNewFmts && pNd->HasSwAttrSet())
     {
         rRTFWrt.pFlyFmt = 0;
 
@@ -3123,6 +3124,19 @@ static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutRTF_SwTxtAutoFmt( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    const SwFmtAutoFmt& rAutoFmt = (const SwFmtAutoFmt&)rHt;
+    const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
+
+    if( pSet.get() )
+    {
+        SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
+        OutRTF_SfxItemSet( rRTFWrt, *pSet.get(), FALSE );
+    }
+    return rWrt;
+}
+
 static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
@@ -4297,8 +4311,8 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_RELIEF */             OutRTF_SwCharRelief,
 /* RES_CHRATR_HIDDEN */             OutRTF_SvxCharHiddenItem,
 
+/* RES_TXTATR_AUTOFMT   */          OutRTF_SwTxtAutoFmt,
 /* RES_TXTATR_INETFMT   */          OutRTF_SwTxtINetFmt, // Dummy
-/* RES_TXTATR_NOHYPHEN  */          0, // Dummy
 /* RES_TXTATR_REFMARK*/             0, // NOT USED!! OutRTF_SwRefMark,
 /* RES_TXTATR_TOXMARK */            0, // NOT USED!! OutRTF_SwTOXMark,
 /* RES_TXTATR_CHARFMT   */          OutRTF_SwTxtCharFmt,
@@ -4365,7 +4379,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_LAYOUT_SPLIT */              0,
 /* RES_FRMATR_DUMMY1 */             0, // Dummy:
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0, // Dummy:
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 /* RES_FRMATR_DUMMY6 */             0, // Dummy:
@@ -4375,7 +4389,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0, // Dummy:
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
