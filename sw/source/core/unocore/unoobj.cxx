@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:51:58 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 15:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,28 +453,31 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
 
         long lLen;
         if( !IsError( aWriter.Write( xWrt ) ) &&
-            STRING_MAXLEN > (( lLen  = aStream.GetSize() )
+            0x7ffffff > (( lLen  = aStream.GetSize() )
                                     / sizeof( sal_Unicode )) + 1 )
         {
             aStream << (sal_Unicode)'\0';
 
-            String sBuf;
-            const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
-            if( p )
-                sBuf = p;
-            else
+            long lUniLen = (lLen / sizeof( sal_Unicode ));
+            ::rtl::OUStringBuffer aStrBuffer( lUniLen );
+            aStream.Seek( 0 );
+            aStream.ResetError();
+            while(lUniLen)
             {
-                long lUniLen = (lLen / sizeof( sal_Unicode ));
-                sal_Unicode* pStrBuf = sBuf.AllocBuffer( xub_StrLen(
-                                lUniLen));
-                aStream.Seek( 0 );
-                aStream.ResetError();
-                aStream.Read( pStrBuf, lLen );
-                pStrBuf[ lUniLen ] = '\0';
+                String sBuf;
+                sal_Int32 nLocalLen = 0;
+                if( lUniLen >= STRING_MAXLEN )
+                    nLocalLen =  STRING_MAXLEN - 1;
+                else
+                    nLocalLen = lUniLen;
+                sal_Unicode* pStrBuf = sBuf.AllocBuffer( xub_StrLen( nLocalLen + 1));
+                aStream.Read( pStrBuf, 2 * nLocalLen );
+                pStrBuf[ nLocalLen ] = '\0';
+                aStrBuffer.append( pStrBuf, nLocalLen );
+                lUniLen -= nLocalLen;
             }
-            rBuffer = OUString( sBuf );
+            rBuffer = aStrBuffer.makeStringAndClear();
         }
-
         xWrt->bShowProgress = bOldShowProgress;
     }
 }
