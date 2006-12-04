@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:08:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,8 +567,8 @@ extern "C" {
              Display   *xdisplay )
     {
         SalXLib *pXLib = GetX11SalData()->GetLib();
-    if (pXLib)
-             pXLib->PushErrorTrap();
+        if (pXLib)
+            pXLib->PushXErrorLevel( true );
     }
 
     static void
@@ -576,11 +576,10 @@ extern "C" {
             Display   *xdisplay )
     {
         SalXLib *pXLib = GetX11SalData()->GetLib();
+        XSync( xdisplay, False ); // flush error queue
 
-    XSync( xdisplay, False ); // flush error queue
-
-    if (pXLib)
-             pXLib->PopErrorTrap();
+        if (pXLib)
+            pXLib->PopXErrorLevel();
     }
 }
 #endif /* HAVE_LIBSN */
@@ -2378,19 +2377,16 @@ void SalX11Display::Yield()
         return;
 #endif /* HAVE_LIBSN */
 
-    BOOL bIgnoreXErrors = pXLib_->GetIgnoreXErrors();
-
     Dispatch( &aEvent );
 
 #ifdef DBG_UTIL
-    if( pXLib_->WasXError() )
+    if( pXLib_->HasXErrorOccured() )
     {
         XFlush( pDisp_ );
         PrintEvent( "SalDisplay::Yield (WasXError)", &aEvent );
     }
 #endif
-
-    pXLib_->SetIgnoreXErrors( bIgnoreXErrors );
+    pXLib_->ResetXErrorOccured();
 }
 
 long SalX11Display::Dispatch( XEvent *pEvent )
