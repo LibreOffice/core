@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:05:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:42:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,8 +225,6 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
         // refresh the changed values
         if( m_pPaperPage )
         {
-            // scale
-            m_aJobData.m_nScale = m_pPaperPage->getScale();
             // orientation
             m_aJobData.m_eOrientation = m_pPaperPage->getOrientation().Equals( LSCAPE_STRING ) ? orientation::Landscape : orientation::Portrait;
         }
@@ -269,17 +267,12 @@ RTSPaperPage::RTSPaperPage( RTSDialog* pParent ) :
         m_aDuplexText( this, PaResId( RID_RTS_PAPER_DUPLEX_TXT ) ),
         m_aDuplexBox( this, PaResId( RID_RTS_PAPER_DUPLEX_BOX ) ),
         m_aSlotText( this, PaResId( RID_RTS_PAPER_SLOT_TXT ) ),
-        m_aSlotBox( this, PaResId( RID_RTS_PAPER_SLOT_BOX ) ),
-        m_aScaleText( this, PaResId( RID_RTS_PAPER_SCALE_TXT ) ),
-        m_aScaleBox( this, PaResId( RID_RTS_PAPER_SCALE_BOX ) )
+        m_aSlotBox( this, PaResId( RID_RTS_PAPER_SLOT_BOX ) )
 {
     m_aPaperBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
     m_aOrientBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
     m_aDuplexBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
     m_aSlotBox.SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_aScaleBox.SetMin( 1, FUNIT_PERCENT );
-    m_aScaleBox.SetMax( 10000, FUNIT_PERCENT );
-    m_aScaleBox.SetUnit( FUNIT_PERCENT );
 
     FreeResource();
 
@@ -296,9 +289,6 @@ RTSPaperPage::RTSPaperPage( RTSDialog* pParent ) :
     // input slots
     nPos = m_aSlotBox.InsertEntry( m_pParent->m_aInvalidString );
     m_aSlotBox.SetEntryData( nPos, NULL );
-
-    // scale
-    m_aScaleBox.SetValue( m_pParent->m_aJobData.m_nScale );
 
     update();
 }
