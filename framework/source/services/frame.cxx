@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:17:06 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
-//#include <typeinfo>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -2332,15 +2330,6 @@ aEvent
                 css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
                 if( xSupplier.is() == sal_True )
                 {
-/*
-                    if ( pFocusWindow )
-                    {
-                        const char* p = typeid(*pFocusWindow).name();
-                        fprintf(stderr, "FocusWindow: %s\n", p);
-                    }
-                    else
-                        fprintf(stderr, "No FocusWindow\n");
-*/
                     aSolarGuard.clear();
                     xSupplier->setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
                 }
