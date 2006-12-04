@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:12:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,11 @@
 #define FL_GENERAL                  16
 #define CB_TAGGEDPDF                17
 #define CB_EXPORTNOTES              18
-#define CB_TRANSITIONEFFECTS        19
-#define FT_FORMSFORMAT              20
-#define LB_FORMSFORMAT              21
-#define CB_EXPORTEMPTYPAGES         22
+#define CB_EXPORTBOOKMARKS          19
+#define CB_EXPORTFORMFIELDS         20
+#define FT_FORMSFORMAT              21
+#define LB_FORMSFORMAT              22
+#define CB_EXPORTEMPTYPAGES         23
 
 #define FL_OLD_PAGES        51
 #define RB_OLD_ALL          52
@@ -102,13 +103,17 @@
 #define RB_MAGNF_WIND             86
 #define RB_MAGNF_WIDTH            87
 #define RB_MAGNF_VISIBLE          88
+#define RB_MAGNF_ZOOM             89
+#define NUM_MAGNF_ZOOM            90
+#define FT_MAGNF_INITIAL_PAGE     91
+#define NUM_MAGNF_INITIAL_PAGE    92
 
-#define FL_PAGE_LAYOUT            89
-#define RB_PGLY_DEFAULT           90
-#define RB_PGLY_SINGPG            91
-#define RB_PGLY_CONT              92
-#define RB_PGLY_CONTFAC           93
-#define CB_PGLY_FIRSTLEFT         94
+#define FL_PAGE_LAYOUT            93
+#define RB_PGLY_DEFAULT           94
+#define RB_PGLY_SINGPG            95
+#define RB_PGLY_CONT              96
+#define RB_PGLY_CONTFAC           97
+#define CB_PGLY_FIRSTLEFT         98
 
 //controls for viewer preferences tab page
 #define FL_WINOPT                100
@@ -122,26 +127,34 @@
 #define CB_UOP_HIDEVTOOLBAR      107
 #define CB_UOP_HIDEVWINCTRL      108
 
+#define FL_TRANSITIONS           109
+#define CB_TRANSITIONEFFECTS     110
+
+#define FL_BOOKMARKS             111
+#define RB_ALLBOOKMARKLEVELS     112
+#define RB_VISIBLEBOOKMARKLEVELS 113
+#define NUM_BOOKMARKLEVELS       114
+
 //controls for security preferences tab page
-#define CB_SEC_ENCRYPT          110
-#define BTN_USER_PWD            112
-#define FT_USER_PWD_EMPTY       113
+#define CB_SEC_ENCRYPT          120
+#define BTN_USER_PWD            122
+#define FT_USER_PWD_EMPTY       123
 
-#define FL_PERMISSIONS          114
-#define CB_SEL_PERMISSIONS      115
-#define BTN_OWNER_PWD           116
-#define FT_OWNER_PWD_EMPTY      117
+#define FL_PERMISSIONS          124
+#define CB_SEL_PERMISSIONS      125
+#define BTN_OWNER_PWD           126
+#define FT_OWNER_PWD_EMPTY      127
 
-#define FL_PRINT_PERMISSIONS    118
-#define RB_PRINT_NONE           119
-#define RB_PRINT_LOWRES         120
-#define RB_PRINT_HIGHRES        121
+#define FL_PRINT_PERMISSIONS    128
+#define RB_PRINT_NONE           129
+#define RB_PRINT_LOWRES         130
+#define RB_PRINT_HIGHRES        131
 
-#define FL_CHANGES_ALLOWED      122
-#define RB_CHANGES_NONE         123
-#define RB_CHANGES_INSDEL       124
-#define RB_CHANGES_FILLFORM     125
-#define RB_CHANGES_COMMENT      126
-#define RB_CHANGES_ANY_NOCOPY   127
-#define CB_ENDAB_COPY           128
-#define CB_ENAB_ACCESS          129
+#define FL_CHANGES_ALLOWED      132
+#define RB_CHANGES_NONE         133
+#define RB_CHANGES_INSDEL       134
+#define RB_CHANGES_FILLFORM     135
+#define RB_CHANGES_COMMENT      136
+#define RB_CHANGES_ANY_NOCOPY   137
+#define CB_ENDAB_COPY           138
+#define CB_ENAB_ACCESS          139
