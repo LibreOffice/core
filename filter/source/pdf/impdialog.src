@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:29:12 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #include "impdialog.hrc"
 
-#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 200 )
+#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 210 )
 //string for TabDialog standard buttons
 String STR_PDF_EXPORT
 {
@@ -205,25 +205,33 @@ TabPage  RID_PDF_TAB_GENER
         Text[ de ] = "~Notizen exportieren" ;
         Text[ en-US ] = "Export ~notes";
     };
-    CheckBox CB_TRANSITIONEFFECTS
+    CheckBox CB_EXPORTBOOKMARKS
     {
         Pos = MAP_APPFONT ( 12 , 157 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
-        Text[ de ] = "~Übergangseffekte benutzen" ;
-        Text[ en-US ] = "~Use transition effects";
+        Text[ de ] = "Lesezeichen exportieren" ;
+        Text[ en-US ] = "Export ~bookmarks";
+    };
+    CheckBox CB_EXPORTFORMFIELDS
+    {
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "PDF Formular erzeugen" ;
+        Text[ en-US ] = "~Create PDF form";
     };
     FixedText FT_FORMSFORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 171 ) ;
-        Size = MAP_APPFONT ( 116, 10 ) ;
-        Text[ de ] = "~Format für Formularübermittlung:" ;
-        Text[ en-US ] = "Submit forms in ~format:";
+        Pos = MAP_APPFONT ( 30 , 185 ) ;
+        Size = MAP_APPFONT ( 98, 10 ) ;
+        Text[ de ] = "~Format für Übermittlung" ;
+        Text[ en-US ] = "Submit ~format";
     };
     ListBox LB_FORMSFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124, 168 ) ;
+        Pos = MAP_APPFONT ( 124, 182 ) ;
         Size = MAP_APPFONT ( 38, 48 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
@@ -238,7 +246,7 @@ TabPage  RID_PDF_TAB_GENER
     };
     CheckBox CB_EXPORTEMPTYPAGES
     {
-        Pos = MAP_APPFONT ( 12 , 185 ) ;
+        Pos = MAP_APPFONT ( 12 , 199 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
         Text[ de ] = "Automatisch eingefügte ~Leerseiten exportieren" ;
@@ -286,10 +294,27 @@ TabPage  RID_PDF_TAB_OPNFTR
         Text[ en-US ] = "~Thumbnails and page" ;
     };
 
+    FixedText FT_MAGNF_INITIAL_PAGE
+    {
+        Pos = MAP_APPFONT( 12, 52 );
+        Size = MAP_APPFONT( 80, 10 );
+        Text[ de ] = "Öffnen auf Seite";
+        Text[ en-US ] = "Open on page";
+    };
+    NumericField NUM_MAGNF_INITIAL_PAGE
+    {
+        Pos = MAP_APPFONT( 112, 52 );
+        Size = MAP_APPFONT( 40, 10 );
+        Value = 1;
+        Spin = TRUE;
+        Border = TRUE;
+        Minimum = 1;
+    };
+
 ///////////////////////////////////////////////////
     FixedLine FL_MAGNIFICATION
     {
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Pos = MAP_APPFONT ( 6 , 68 ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
         Text[ de ] = "Vergrößerung" ;
         Text[ en-US ] = "Magnification" ;
@@ -297,7 +322,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     RadioButton  RB_MAGNF_DEFAULT
     {
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /XYZ )
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Standard" ;
         Text[ en-US ] = "~Default" ;
@@ -305,7 +330,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     RadioButton  RB_MAGNF_WIND
     {
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /Fit )
-        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Fenstergröße" ;
         Text[ en-US ] = "~Fit in window" ;
@@ -313,7 +338,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     RadioButton  RB_MAGNF_WIDTH
     {
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /FitH top )
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Fensterbreite" ;
         Text[ en-US ] = "Fit ~width" ;
@@ -321,52 +346,70 @@ TabPage  RID_PDF_TAB_OPNFTR
     RadioButton  RB_MAGNF_VISIBLE
     {
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /FitBH top )
-        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Seitenbreite" ;
         Text[ en-US ] = "Fit ~visible" ;
         Text [ x-comment ] = " ";
     };
-
+    RadioButton  RB_MAGNF_ZOOM
+    {
+        // see PDF ref v 1.6 tab 8.2, pg. 551 ( /XYZ left top zoom )
+        Pos = MAP_APPFONT ( 12 , 128 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text[ de ] = "Vergrößerungsstufe" ;
+        Text[ en-US ] = "~Zoom factor" ;
+    };
+    MetricField NUM_MAGNF_ZOOM
+    {
+        Pos = MAP_APPFONT( 112, 128 ) ;
+        Size = MAP_APPFONT( 40, 10 ) ;
+        Unit = FUNIT_PERCENT;
+        Value = 100;
+        Spin = TRUE;
+        Border = TRUE;
+        Minimum = 50;
+        Maximum = 1600;
+    };
 ////////////////////////////////////////
     FixedLine FL_PAGE_LAYOUT
     {
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Pos = MAP_APPFONT ( 6 , 146 ) ;
         Size = MAP_APPFONT (162  , 8 ) ;
         Text[ de ] = "Seitenlayout" ;
         Text[ en-US ] = "Page layout" ;
     };
     RadioButton  RB_PGLY_DEFAULT
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Standard" ;
         Text[ en-US ] = "D~efault" ;
     };
     RadioButton  RB_PGLY_SINGPG
     {
-        Pos = MAP_APPFONT ( 12 , 138 ) ;
+        Pos = MAP_APPFONT ( 12 , 170 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Einzelne Seite" ;
         Text[ en-US ] = "~Single page" ;
     };
     RadioButton  RB_PGLY_CONT
     {
-        Pos = MAP_APPFONT ( 12 , 150 ) ;
+        Pos = MAP_APPFONT ( 12 , 182 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Fortlaufend" ;
         Text[ en-US ] = "~Continuous" ;
     };
     RadioButton  RB_PGLY_CONTFAC
     {
-        Pos = MAP_APPFONT ( 12 , 162 ) ;
+        Pos = MAP_APPFONT ( 12 , 194 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text[ de ] = "Fortlaufend - Doppelseiten" ;
         Text[ en-US ] = "C~ontinuous facing" ;
     };
     CheckBox  CB_PGLY_FIRSTLEFT
     {
-        Pos = MAP_APPFONT ( 22 , 174 ) ;
+        Pos = MAP_APPFONT ( 22 , 206 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
         Text[ de ] = "Erste Seite ist links" ;
         Text[ en-US ] = "First page is ~left" ;
@@ -455,6 +498,54 @@ TabPage  RID_PDF_TAB_VPREFER
         TabStop = TRUE ;
         Text[ de ] = "Fenstersteuerelemente ausblenden" ;
         Text[ en-US ] = "Hide ~window controls";
+    };
+
+////////////////////////////////
+    FixedLine FL_TRANSITIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT (162  , 8 ) ;
+        Text[ de ] = "Übergangseffekte" ;
+        Text[ en-US ] = "Transitions" ;
+    };
+    CheckBox CB_TRANSITIONEFFECTS
+    {
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "~Übergangseffekte benutzen" ;
+        Text[ en-US ] = "~Use transition effects";
+    };
+////////////////////////////////
+    FixedLine FL_BOOKMARKS
+    {
+        Pos = MAP_APPFONT ( 6 , 140 ) ;
+        Size = MAP_APPFONT (162  , 8 ) ;
+        Text[ de ] = "Lesezeichen" ;
+        Text[ en-US ] = "Bookmarks" ;
+    };
+    RadioButton RB_ALLBOOKMARKLEVELS
+    {
+        Pos = MAP_APPFONT ( 12 , 152 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text[ de ] = "Alle Lesezeichenebenen" ;
+        Text[ en-US ] = "All bookmark levels";
+    };
+    RadioButton RB_VISIBLEBOOKMARKLEVELS
+    {
+        Pos = MAP_APPFONT ( 12 , 166 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text[ de ] = "Aufgeklappte Lesezeichenebenen" ;
+        Text[ en-US ] = "Visible bookmark levels";
+    };
+    NumericField NUM_BOOKMARKLEVELS
+    {
+        Pos = MAP_APPFONT ( 120 , 166 ) ;
+        Size = MAP_APPFONT ( 32 , 10 ) ;
+        Border = TRUE;
+        Spin = TRUE;
+        Minimum = 1;
+        Maximum = 10;
     };
 };
 
