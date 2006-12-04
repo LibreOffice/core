@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:06:57 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,19 +180,15 @@ bool X11SalOpenGL::IsValid()
             if( nHaveGL && ! nDoubleBuffer )
             {
                 SalDisplay* pSalDisplay = GetX11SalData()->GetDisplay();
-                BOOL bPreviousState =
-                    pSalDisplay->GetXLib()->GetIgnoreXErrors();
-                pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+                pSalDisplay->GetXLib()->PushXErrorLevel( true );
                 mbHaveGLVisual = TRUE;
 
                 maGLXContext = pCreateContext( mpDisplay, const_cast<XVisualInfo*>(mpVisualInfo), 0, True );
-                if( pSalDisplay->GetXLib()->WasXError() )
-                    mbHaveGLVisual = FALSE;
-                else
+                if( ! pSalDisplay->GetXLib()->HasXErrorOccured() )
                     pMakeCurrent( mpDisplay, maDrawable, maGLXContext );
-                if( pSalDisplay->GetXLib()->WasXError() )
+                if( pSalDisplay->GetXLib()->HasXErrorOccured() )
                     mbHaveGLVisual = FALSE;
-                pSalDisplay->GetXLib()->SetIgnoreXErrors( bPreviousState );
+                pSalDisplay->GetXLib()->PopXErrorLevel();
 
                 if( mbHaveGLVisual )
                     mnOGLState = OGL_STATE_VALID;
