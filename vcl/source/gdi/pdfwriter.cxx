@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:08:25 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,4 +523,19 @@ void PDFWriter::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 n
 sal_Int32 PDFWriter::CreateControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr )
 {
     return ((PDFWriterImpl*)pImplementation)->createControl( rControl, nPageNr );
+}
+
+void PDFWriter::BeginPattern()
+{
+    ((PDFWriterImpl*)pImplementation)->beginPattern();
+}
+
+sal_Int32 PDFWriter::EndPattern( const Rectangle& rCellBounds, const SvtGraphicFill::Transform& rTransform )
+{
+    return ((PDFWriterImpl*)pImplementation)->endPattern( rCellBounds, rTransform );
+}
+
+void PDFWriter::DrawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill )
+{
+    ((PDFWriterImpl*)pImplementation)->drawPolyPolygon( rPolyPoly, nPattern, bEOFill );
 }
