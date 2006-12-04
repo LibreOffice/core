@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:25:40 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,11 +209,10 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
         // but this call can actually work on servers with backing store
         // defaults even if the rectangle is offscreen
         // so better catch the XError
-        BOOL bXError = pXLib->GetIgnoreXErrors();
-        pXLib->SetIgnoreXErrors( TRUE );
+        pXLib->PushXErrorLevel( true );
         XImage* pImage = XGetImage( pXDisp, aDrawable, nX, nY, nWidth, nHeight, AllPlanes, ZPixmap );
-        BOOL bWasError = pXLib->WasXError();
-        pXLib->SetIgnoreXErrors( bXError );
+        bool bWasError = pXLib->HasXErrorOccured();
+        pXLib->PopXErrorLevel();
 
         if( ! bWasError && pImage && pImage->data )
         {
