@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:46:35 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,16 +412,18 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     mnWidth = 0;
     for( i = 0; i < mnGlyphCount; ++i )
     {
+        // get the current UCS-4 code point, check for surrogate pairs
         const WCHAR* pCodes = &pBidiStr[i];
-        // check for surrogate pairs
-        if( (pCodes[0] & 0xFC00) == 0xDC00 )
-            continue;
-        bool bSurrogate = ((pCodes[0] & 0xFC00) == 0xD800);
-
-        // get the width of the corresponding code point
-        int nCharCode = pCodes[0];
+        unsigned nCharCode = pCodes[0];
+        bool bSurrogate = ((nCharCode >= 0xD800) && (nCharCode <= 0xDFFF));
         if( bSurrogate )
-            nCharCode = 0x10000 + ((pCodes[0] & 0x03FF) << 10) + (pCodes[1] & 0x03FF);
+        {
+            if( nCharCode >= 0xDC00 ) // this part of a surrogate pair was already processed
+                continue;
+            nCharCode = 0x10000 + ((pCodes[0] - 0xD800) << 10) + (pCodes[1] - 0xDC00);
+    }
+
+        // get the advance width for the current UCS-4 code point
         int nGlyphWidth = mrWinFontEntry.GetCachedGlyphWidth( nCharCode );
         if( nGlyphWidth == -1 )
         {
@@ -440,7 +442,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         mnWidth += nGlyphWidth;
 
         // remaining codes of surrogate pair get a zero width
-        if( bSurrogate )
+        if( bSurrogate && ((i+1) < mnGlyphCount) )
             mpGlyphAdvances[ i+1 ] = 0;
 
         // check with the font face if glyph fallback is needed
@@ -451,17 +453,16 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         bool bRTL = mpGlyphRTLFlags ? mpGlyphRTLFlags[i] : false;
         int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
         rArgs.NeedFallback( nCharPos, bRTL );
-        if( bSurrogate )
+        if( bSurrogate && ((nCharPos+1) < rArgs.mnLength) )
             rArgs.NeedFallback( nCharPos+1, bRTL );
 
+        // replace the current glyph shape with the NotDef glyph shape
         if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
         {
             // when we already are layouting for glyph fallback
             // then a new unresolved glyph is not interesting
             mnNotdefWidth = 0;
             mpOutGlyphs[i] = DROPPED_OUTGLYPH;
-            if( mbDisableGlyphs && bSurrogate )
-                mpOutGlyphs[i+1] = DROPPED_OUTGLYPH;
         }
         else
         {
@@ -475,11 +476,13 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                     mnNotdefWidth = aExtent.cx;
             }
             // use a better NotDef glyph
-            if( !mbDisableGlyphs )
+            if( !mbDisableGlyphs && !bSurrogate )
                 mpOutGlyphs[i] = 0;
         }
+        if( bSurrogate && ((i+1) < mnGlyphCount) )
+            mpOutGlyphs[i+1] = DROPPED_OUTGLYPH;
 
-        // replace the current glyph with the NotDef glyph
+        // adjust the current glyph width to the NotDef glyph width
         mnWidth += mnNotdefWidth - mpGlyphAdvances[i];
         mpGlyphAdvances[i] = mnNotdefWidth;
         if( mpGlyphOrigAdvs )
