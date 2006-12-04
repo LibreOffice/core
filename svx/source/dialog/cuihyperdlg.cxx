@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuihyperdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:15:01 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 15:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 
     SvxHyperlinkTabPageBase* pCurrentPage = (SvxHyperlinkTabPageBase*)GetTabPage( nPageId );
 
-    mbIsHTMLDoc = BOOL( pItem->GetInsertMode() & HLINK_HTMLMODE );
+    mbIsHTMLDoc = (pItem->GetInsertMode() & HLINK_HTMLMODE) ? true : false;
 
     SfxItemSet& aPageSet =  (SfxItemSet&)GetTabPage (nPageId)->GetItemSet ();
     aPageSet.Put ( *pItem );
