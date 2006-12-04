@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:29:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@ protected:
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
     sal_Int32                   mnFormsType;
+    sal_Bool                    mbExportFormFields;
+    sal_Bool                    mbExportBookmarks;
+    sal_Int32                   mnOpenBookmarkLevels;
 
     sal_Bool                    mbHideViewerToolbar;
     sal_Bool                    mbHideViewerMenubar;
@@ -101,6 +104,8 @@ protected:
     sal_Bool                    mbDisplayPDFDocumentTitle;
     sal_Int32                   mnMagnification;
     sal_Int32                   mnInitialView;
+    sal_Int32                   mnZoom;
+    sal_Int32                   mnInitialPage;
 
     sal_Int32                   mnPageLayout;
     sal_Bool                    mbFirstPageLeft;
@@ -159,8 +164,9 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     FixedLine                   maFlGeneral;
     CheckBox                    maCbTaggedPDF;
     CheckBox                    maCbExportNotes;
-    CheckBox                    maCbTransitionEffects;
+    CheckBox                    maCbExportBookmarks;
 
+    CheckBox                    maCbExportFormFields;
     FixedText                   maFtFormsFormat;
     ListBox                     maLbFormsFormat;
     CheckBox                    maCbExportEmptyPages;
@@ -173,6 +179,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     DECL_LINK( TogglePagesHdl, void* );
     DECL_LINK( ToggleCompressionHdl, void* );
     DECL_LINK( ToggleReduceImageResolutionHdl, void* );
+    DECL_LINK( ToggleExportFormFieldsHdl, void* );
 
 public:
     ImpPDFTabGeneralPage( Window* pParent,
@@ -194,12 +201,16 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     RadioButton                 maRbOpnPageOnly;
     RadioButton                 maRbOpnOutline;
     RadioButton                 maRbOpnThumbs;
+    FixedText                   maFtInitialPage;
+    NumericField                maNumInitialPage;
 
     FixedLine                   maFlMagnification;
     RadioButton                 maRbMagnDefault;
     RadioButton                 maRbMagnFitWin;
     RadioButton                 maRbMagnFitWidth;
     RadioButton                 maRbMagnFitVisible;
+    RadioButton                 maRbMagnZoom;
+    MetricField                 maNumZoom;
 
     FixedLine                   maFlPageLayout;
     RadioButton                 maRbPgLyDefault;
@@ -212,6 +223,7 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     ResMgr*                     mpaResMgr;
 
     DECL_LINK( ToggleRbPgLyContinueFacingHdl, void* );
+    DECL_LINK( ToggleRbMagnHdl, void* );
 
 public:
     ImpPDFTabOpnFtrPage( Window* pParent,
@@ -240,8 +252,18 @@ class ImpPDFTabViewerPage : public SfxTabPage
     CheckBox                    maCbHideViewerToolbar;
     CheckBox                    maCbHideViewerWindowControls;
 
+    FixedLine                   maFlTransitions;
+    CheckBox                    maCbTransitionEffects;
+    sal_Bool                    mbIsPresentation;
+
+    FixedLine                   maFlBookmarks;
+    RadioButton                 maRbAllBookmarkLevels;
+    RadioButton                 maRbVisibleBookmarkLevels;
+    NumericField                maNumBookmarkLevels;
+
     ResMgr*                     mpaResMgr;
 
+    DECL_LINK( ToggleRbBookmarksHdl, void* );
 public:
     ImpPDFTabViewerPage( Window* pParent,
                          const SfxItemSet& rSet,
