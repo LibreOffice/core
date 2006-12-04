@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:23:04 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,11 @@ XMLTransformerEventMapEntry aTransformerEventMap[] =
     { XML_NAMESPACE_OFFICE, "toggle-fullscreen",    "on-toggle-fullscreen" },
     { XML_NAMESPACE_OFFICE, "save-done",    "on-save-done" },
     { XML_NAMESPACE_OFFICE, "save-as-done", "on-save-as-done" },
+    { XML_NAMESPACE_OFFICE, "create",    "on-create" },
+    { XML_NAMESPACE_OFFICE, "save-as-failed",    "on-save-as-failed" },
+    { XML_NAMESPACE_OFFICE, "save-failed",    "on-save-failed" },
+    { XML_NAMESPACE_OFFICE, "copy-to-failed",    "on-copy-to-failed" },
+    { XML_NAMESPACE_OFFICE, "title-changed",    "on-title-changed" },
 
     { XML_NAMESPACE_FORM,   "approveaction",    "on-approveaction" },
     { XML_NAMESPACE_FORM,   "performaction",    "on-performaction" },
