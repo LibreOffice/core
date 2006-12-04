@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.247 $
+ *  $Revision: 1.248 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:29:24 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -825,11 +825,21 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         if( nStyle & WB_NOSHADOW )
             nFrameStyle |= SAL_FRAME_STYLE_NOSHADOW;
 
-        if( mpWindowImpl->mnType == WINDOW_DIALOG          ||
-            mpWindowImpl->mnType == WINDOW_TABDIALOG       ||
-            mpWindowImpl->mnType == WINDOW_MODALDIALOG     ||
-            mpWindowImpl->mnType == WINDOW_MODELESSDIALOG )
-            nFrameStyle |= SAL_FRAME_STYLE_DIALOG;
+        switch (mpWindowImpl->mnType)
+        {
+            case WINDOW_DIALOG:
+            case WINDOW_TABDIALOG:
+            case WINDOW_MODALDIALOG:
+            case WINDOW_MODELESSDIALOG:
+            case WINDOW_MESSBOX:
+            case WINDOW_INFOBOX:
+            case WINDOW_WARNINGBOX:
+            case WINDOW_ERRORBOX:
+            case WINDOW_QUERYBOX:
+                nFrameStyle |= SAL_FRAME_STYLE_DIALOG;
+            default:
+                break;
+        }
 
         SalFrame* pParentFrame = NULL;
         if ( pParent )
@@ -3930,6 +3940,10 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
 // -----------------------------------------------------------------------
 void Window::ImplGrabFocus( USHORT nFlags )
 {
+    // #143570# no focus for destructing windows
+    if( mpWindowImpl->mbInDtor )
+        return;
+
     // some event listeners do really bad stuff
     // => prepare for the worst
     ImplDelData aDogTag( this );
@@ -6398,7 +6412,29 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
                 }
             }
 
-            if ( !mpWindowImpl->mbFrame )
+            /*
+            * #i48371# native theming: some themes draw outside the control
+            * area we tell them to (bad thing, but we cannot do much about it ).
+            * On hiding these controls they get invalidated with their window rectangle
+            * which leads to the parts outside the control area being left and not
+            * invalidated. Workaround: invalidate an area on the parent, too
+            */
+            if( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mbEnableNativeWidget )
+            {
+                if( mpWindowImpl->mpParent &&
+                    mpWindowImpl->mpParent->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
+                {
+                    const int workaround_border = 5;
+                    Size aSize( mnOutWidth  + 2*workaround_border,
+                                mnOutHeight + 2*workaround_border );
+                    Point aPos( mnOutOffX - mpWindowImpl->mpParent->mnOutOffX - workaround_border,
+                                mnOutOffY - mpWindowImpl->mpParent->mnOutOffY - workaround_border );
+                    Region aReg( Rectangle( aPos, aSize ) );
+                    mpWindowImpl->mpParent->ImplInvalidate( &aReg, 0 );
+                }
+                ImplGenerateMouseMove();
+            }
+            else if ( !mpWindowImpl->mbFrame )
             {
                 if ( !mpWindowImpl->mbNoParentUpdate && !(nFlags & SHOW_NOPARENTUPDATE) )
                 {
