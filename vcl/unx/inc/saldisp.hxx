@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:21:07 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,16 +236,21 @@ protected:
     ULONG           m_nTimeoutMS;
     int             m_pTimeoutFDS[2];
 
-    BOOL            bWasXError_;
-    BOOL            bIgnoreXErrors_;
     bool            m_bHaveSystemChildFrames;
-    int                         nIgnoreErrorLevel;
 
     int             nFDs_;
     fd_set          aReadFDS_;
     fd_set          aExceptionFDS_;
     YieldEntry      *pYieldEntries_;
 
+
+    struct XErrorStackEntry
+    {
+        bool            m_bIgnore;
+        bool            m_bWas;
+        XErrorHandler   m_aHandler;
+    };
+    std::vector< XErrorStackEntry > m_aXErrorHandlerStack;
 public:
     SalXLib();
     virtual         ~SalXLib();
@@ -262,12 +267,10 @@ public:
     virtual void    Remove( int fd );
 
     void            XError( Display *pDisp, XErrorEvent *pEvent );
-    inline  void                    PushErrorTrap() { nIgnoreErrorLevel++; }
-    inline  void                    PopErrorTrap() { nIgnoreErrorLevel--; }
-    inline  BOOL            WasXError() const { return bWasXError_; }
-    inline  BOOL            GetIgnoreXErrors() const { return bIgnoreXErrors_; }
-    inline  void            SetIgnoreXErrors( BOOL b )
-    { bIgnoreXErrors_ = b; bWasXError_ = FALSE; }
+    inline  bool    HasXErrorOccured() const { return m_aXErrorHandlerStack.back().m_bWas; }
+    void            ResetXErrorOccured() { m_aXErrorHandlerStack.back().m_bWas = false; }
+    void PushXErrorLevel( bool bIgnore );
+    void PopXErrorLevel();
 
     virtual void            StartTimer( ULONG nMS );
     virtual void            StopTimer();
