@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:17:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,14 +229,6 @@ void PrinterInfoManager::initialize()
             aValue = aConfig.ReadKey( "Orientation" );
             m_aGlobalDefaults.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
 
-            aValue = aConfig.ReadKey( "Scale" );
-            if( aValue.Len() )
-            {
-                m_aGlobalDefaults.m_nScale = aValue.ToInt32();
-                if( (m_aGlobalDefaults.m_nScale < 1) || (m_aGlobalDefaults.m_nScale > 1000) )
-                    m_aGlobalDefaults.m_nScale = 100;
-            }
-
             aValue = aConfig.ReadKey( "MarginAdjust" );
             m_aGlobalDefaults.m_nLeftMarginAdjust   = aValue.GetToken( 0, ',' ).ToInt32();
             m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.GetToken( 1, ',' ).ToInt32();
@@ -427,14 +419,6 @@ void PrinterInfoManager::initialize()
                 aValue = aConfig.ReadKey( "Orientation" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
-
-                aValue = aConfig.ReadKey( "Scale" );
-                if( aValue.Len() )
-                {
-                    aPrinter.m_aInfo.m_nScale = aValue.ToInt32();
-                    if( (aPrinter.m_aInfo.m_nScale < 1) || (aPrinter.m_aInfo.m_nScale > 1000) )
-                        aPrinter.m_aInfo.m_nScale = 100;
-                }
 
                 aValue = aConfig.ReadKey( "MarginAdjust" );
                 if( aValue.Len() )
@@ -713,7 +697,6 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->WriteKey( "Command", ByteString( String( it->second.m_aInfo.m_aCommand ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Features", ByteString( String( it->second.m_aInfo.m_aFeatures ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
-            pConfig->WriteKey( "Scale", ByteString::CreateFromInt32( it->second.m_aInfo.m_nScale ) );
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
             pConfig->WriteKey( "PSLevel", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPSLevel ) );
             pConfig->WriteKey( "ColorDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDevice ) );
@@ -803,10 +786,9 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         m_aPrinters[ rPrinterName ] = aPrinter;
         bSuccess = true;
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "new printer %s, level = %d, scale = %d, colordevice = %d, depth = %d\n",
+        fprintf( stderr, "new printer %s, level = %d, colordevice = %d, depth = %d\n",
                  OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
                  m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
-                 m_aPrinters[rPrinterName].m_aInfo.m_nScale,
                  m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
                  m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
 #endif
