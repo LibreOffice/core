@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:28:19 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 15:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -735,17 +735,16 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     else
                         pParent = &GetViewFrame()->GetWindow();
                     SfxPasswordDialog aPasswdDlg( pParent );
-                    if (aPasswdDlg.Execute())
-                    {
-                        String sNewPasswd( aPasswdDlg.GetPassword() );
-                        Sequence <sal_Int8> aNewPasswd = pIDRA->GetRedlinePassword();
-                        SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
-                        if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
-                            pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
-                        else
-                        {   // xmlsec05: message box for wrong password
-                            break;
-                        }
+                    //#i69751# the result of Execute() can be ignored
+                    aPasswdDlg.Execute();
+                    String sNewPasswd( aPasswdDlg.GetPassword() );
+                    Sequence <sal_Int8> aNewPasswd = pIDRA->GetRedlinePassword();
+                    SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
+                    if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
+                        pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
+                    else
+                    {   // xmlsec05: message box for wrong password
+                        break;
                     }
                 }
 
