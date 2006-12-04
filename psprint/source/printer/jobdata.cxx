@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:35:45 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@ using namespace rtl;
 JobData& JobData::operator=(const JobData& rRight)
 {
     m_nCopies               = rRight.m_nCopies;
-    m_nScale                = rRight.m_nScale;
     m_nLeftMarginAdjust     = rRight.m_nLeftMarginAdjust;
     m_nRightMarginAdjust    = rRight.m_nRightMarginAdjust;
     m_nTopMarginAdjust      = rRight.m_nTopMarginAdjust;
@@ -95,10 +94,6 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     aLine += ByteString::CreateFromInt32( m_nCopies );
     aStream.WriteLine( aLine );
 
-    aLine = "scale=";
-    aLine += ByteString::CreateFromInt32( m_nScale );
-    aStream.WriteLine( aLine );
-
     aLine = "margindajustment=";
     aLine += ByteString::CreateFromInt32( m_nLeftMarginAdjust );
     aLine += ',';
@@ -142,7 +137,6 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     bool bPrinter       = false;
     bool bOrientation   = false;
     bool bCopies        = false;
-    bool bScale         = false;
     bool bContext       = false;
     bool bMargin        = false;
     bool bColorDepth    = false;
@@ -167,11 +161,6 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         {
             bCopies = true;
             rJobData.m_nCopies = aLine.Copy( 7 ).ToInt32();
-        }
-        else if( aLine.CompareTo( "scale=", 6 ) == COMPARE_EQUAL )
-        {
-            bScale = true;
-            rJobData.m_nScale = aLine.Copy( 6 ).ToInt32();
         }
         else if( aLine.CompareTo( "margindajustment=",17 ) == COMPARE_EQUAL )
         {
@@ -217,5 +206,5 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         }
     }
 
-    return bVersion && bPrinter && bOrientation && bCopies && bScale && bContext && bMargin && bPSLevel && bColorDevice && bColorDepth;
+    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bColorDevice && bColorDepth;
 }
