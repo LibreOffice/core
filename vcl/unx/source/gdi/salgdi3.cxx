@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:26:08 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -855,8 +855,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     }
 
     // get XImage
-    bool bOldXErrorEnabled = GetDisplay()->GetXLib()->GetIgnoreXErrors();
-    GetDisplay()->GetXLib()->SetIgnoreXErrors( true );
+    GetDisplay()->GetXLib()->PushXErrorLevel( true );
     Display* pDisplay = GetXDisplay();
 
     XRectangle aXRect;
@@ -956,7 +955,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
         }
         if( pImg == NULL )
         {
-            GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldXErrorEnabled );
+            GetDisplay()->GetXLib()->PopXErrorLevel();
             return false;
         }
     }
@@ -1037,7 +1036,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
         0, 0, nXmin, nYmin, (nXmax - nXmin + 1), (nYmax - nYmin + 1) );
     XDestroyImage( pImg );
 
-    GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldXErrorEnabled );
+    GetDisplay()->GetXLib()->PopXErrorLevel();
     return true;
 }
 
@@ -1255,7 +1254,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     // allow disabling of native X11 fonts
     static const char* pEnableX11FontStr = getenv( "SAL_ENABLE_NATIVE_XFONTS" );
-    if( !pEnableX11FontStr || (pEnableX11FontStr[0] != '0') )
+    if( pEnableX11FontStr && (pEnableX11FontStr[0] == '1') )
     {
         // announce X11 fonts
         XlfdStorage* pX11FontList = GetDisplay()->GetXlfdList();
