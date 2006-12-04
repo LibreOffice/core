@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:27:34 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4884,6 +4884,20 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</info>
 						<value>false</value>
 					</prop>
+					<prop oor:name="ExportBookmarks" oor:type="xs:boolean">
+						<info>
+							<author>PL</author>
+							<desc>Specifies if bookmarks are exported to PDF.</desc>
+						</info>
+						<value>true</value>
+					</prop>
+					<prop oor:name="OpenBookmarkLevels" oor:type="xs:int">
+						<info>
+							<author>PL</author>
+							<desc>Specifies how many bookmark levels should be opened in the reader application when the PDF gets opened.</desc>
+						</info>
+						<value>-1</value>
+					</prop>
 					<prop oor:name="ExportNotesPages" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
@@ -4898,6 +4912,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</info>
 						<value>true</value>
 					</prop>
+                    <prop oor:name="ExportFormFields" oor:type="xs:boolean">
+						<info>
+							<author>pl</author>
+							<desc>Specifies whether form fields are exported as widgets or only their fixed print representation is exported.</desc>
+						</info>
+						<value>true</value>
+                    </prop>
 					<prop oor:name="FormsType" oor:type="xs:int">
 						<info>
 							<desc>Specifies the submitted format of a PDF form.</desc>
@@ -5032,9 +5053,28 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 									<desc>Opens magnified to fit the entire width of its boundig box within the window (cuts out margins).</desc>
 								</info>
 							</enumeration>
+							<enumeration oor:value="4">
+								<info>
+									<desc>Opens with the zoom level specified in the Zoom property.</desc>
+								</info>
+							</enumeration>
 						</constraints>
 						<value>0</value>
 					</prop>
+                    <prop oor:name="Zoom" oor:type="xs:int">
+						<info>
+							<author>pl</author>
+							<desc>specifies the zoom level a PDF document is opened with. Only valid if "Magnification" is set to "4".</desc>
+						</info>
+                        <value>100</value>
+                    </prop>
+                    <prop oor:name="InitialPage" oor:type="xs:int">
+						<info>
+							<author>pl</author>
+							<desc>Specifies the page on which a PDF document should be opened in the viewer application.</desc>
+						</info>
+                        <value>1</value>
+                    </prop>
 					<prop oor:name="PageLayout" oor:type="xs:int">
 						<info>
 							<author>beppec56</author>
