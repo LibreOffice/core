@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:39:22 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@ private:
     sal_Bool                mbExportNotes;
     sal_Bool                mbExportNotesPages;
     sal_Bool                mbUseTransitionEffects;
+    sal_Bool                mbExportBookmarks;
+    sal_Int32               mnOpenBookmarkLevels;
 
     sal_Bool                mbUseLosslessCompression;
     sal_Bool                mbReduceImageResolution;
@@ -77,6 +79,7 @@ private:
     sal_Int32               mnMaxImageResolution;
     sal_Int32               mnQuality;
     sal_Int32               mnFormsFormat;
+    sal_Bool                mbExportFormFields;
     sal_Int32               mnProgressValue;
 
     sal_Bool                mbWatermark;
@@ -93,6 +96,8 @@ private:
     sal_Bool                mbDisplayPDFDocumentTitle;
     sal_Int32               mnPDFDocumentMode;
     sal_Int32               mnPDFDocumentAction;
+    sal_Int32               mnZoom;
+    sal_Int32               mnInitialPage;
     sal_Int32               mnPDFPageLayout;
     sal_Bool                mbFirstPageLeft;
 
@@ -104,6 +109,9 @@ private:
     sal_Int32               mnChangesAllowed;
     sal_Bool                mbCanCopyOrExtract;
     sal_Bool                mbCanExtractForAccessibility;
+
+    SvtGraphicFill          maCacheFill;
+    sal_Int32               mnCachePatternId;
 
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
