@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 11:45:58 $
+#   last change: $Author: rt $ $Date: 2006-12-04 16:38:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@ SLOFILES=\
 
 EXCEPTIONSFILES=\
             $(SLO)$/wmadaptor.obj		\
+            $(SLO)$/saldata.obj			\
             $(SLO)$/saldisp.obj			\
             $(SLO)$/i18n_status.obj		\
             $(SLO)$/i18n_cb.obj				\
