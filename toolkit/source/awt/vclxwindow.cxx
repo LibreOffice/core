@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:02:45 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,9 @@
 #endif
 #ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
+#endif
+#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
+#include <vcl/pdfextoutdevdata.hxx>
 #endif
 
 #ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
@@ -2367,7 +2370,10 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             aSz = pDev->PixelToLogic( aSz );
             Point aP = pDev->PixelToLogic( aPos );
 
-            bool bDrawSimple = ( pDev->GetOutDevType() == OUTDEV_PRINTER ) || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW );
+            vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+            bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+                               || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
+                               || ( pPDFExport && ! pPDFExport->GetIsExportFormFields() );
             if ( bDrawSimple )
             {
                 pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
