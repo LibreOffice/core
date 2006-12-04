@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:28:31 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,6 +555,13 @@ namespace sdr { namespace contact {
                 if and only if drawing should continue
         */
         bool    preparePrintOrPrintPreview() const;
+
+        /** determines whether or not our control is printable
+
+            Effectively, this method returns the value of the "Printable" property
+            of the control's model. If we have no control, <FALSE/> is returned.
+        */
+        bool    isPrintableControl() const;
 
         /** prepares painting the control onto the given device.
 
@@ -1200,6 +1207,29 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
+    bool ViewObjectContactOfUnoControl_Impl::isPrintableControl() const
+    {
+        if ( !m_xControl.is() )
+            return false;
+
+        bool bIsPrintable = false;
+        try
+        {
+            Reference< XPropertySet > xModelProperties( m_xControl->getModel(), UNO_QUERY );
+            Reference< XPropertySetInfo > xPropertyInfo( xModelProperties.is() ? xModelProperties->getPropertySetInfo() : Reference< XPropertySetInfo >() );
+            const ::rtl::OUString sPrintablePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) );
+
+            if ( xPropertyInfo.is() && xPropertyInfo->hasPropertyByName( sPrintablePropertyName ) )
+                OSL_VERIFY( xModelProperties->getPropertyValue( sPrintablePropertyName ) >>= bIsPrintable );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return bIsPrintable;
+    }
+
+    //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::preparePrintOrPrintPreview() const
     {
         OSL_PRECOND( m_pOutputDeviceForWindow && m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::preparePrintOrPrintPreview: no output device or no control!" );
@@ -1208,21 +1238,8 @@ namespace sdr { namespace contact {
 
         try
         {
-            // respect the "Printable" property
-            Reference< XPropertySet > xModelProperties( m_xControl->getModel(), UNO_QUERY );
-            Reference< XPropertySetInfo > xPropertyInfo( xModelProperties.is() ? xModelProperties->getPropertySetInfo() : Reference< XPropertySetInfo >() );
-            const ::rtl::OUString sPrintablePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) );
-
-            if ( xPropertyInfo.is() && xPropertyInfo->hasPropertyByName( sPrintablePropertyName ) )
-            {
-                sal_Bool bReallyPaint = sal_False;
-                OSL_VERIFY( xModelProperties->getPropertyValue( sPrintablePropertyName ) >>= bReallyPaint );
-
-                if ( bReallyPaint )
-                    return preparePaintOnDevice( *const_cast< OutputDevice* >( m_pOutputDeviceForWindow ) );
-
-                return false;
-            }
+            if ( isPrintableControl() )
+                return preparePaintOnDevice( *const_cast< OutputDevice* >( m_pOutputDeviceForWindow ) );
         }
         catch( const Exception& )
         {
@@ -1809,21 +1826,30 @@ namespace sdr { namespace contact {
         if ( !pPDFExport )
             return;
 
-        ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-        ::svxform::describePDFControl( m_pImpl->getExistentControl(), pPDFControl );
-        if ( pPDFControl.get() != NULL )
-        {
-            // still need to fill in the location
-            pPDFControl->Location = _pUnoObject->GetLogicRect();
-
-            Size aFontSize( pPDFControl->TextFont.GetSize() );
-            aFontSize = pDevice->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pDevice->GetMapMode() );
-            pPDFControl->TextFont.SetSize( aFontSize );
-
-            pPDFExport->BeginStructureElement( vcl::PDFWriter::Form );
-            pPDFExport->CreateControl( *pPDFControl.get() );
-            pPDFExport->EndStructureElement();
+        if ( !m_pImpl->isPrintableControl() )
+            // controls declared as "do not print" are not exported at all - neither as
+            // native PDF control, nor as normal drawing
+            // 2006-11-22 / #i71370# / frank.schoenheit@sun.com
             return;
+
+        if( pPDFExport->GetIsExportFormFields() )
+        {
+            ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
+            ::svxform::describePDFControl( m_pImpl->getExistentControl(), pPDFControl );
+            if ( pPDFControl.get() != NULL )
+            {
+                // still need to fill in the location
+                pPDFControl->Location = _pUnoObject->GetLogicRect();
+
+                Size aFontSize( pPDFControl->TextFont.GetSize() );
+                aFontSize = pDevice->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pDevice->GetMapMode() );
+                pPDFControl->TextFont.SetSize( aFontSize );
+
+                pPDFExport->BeginStructureElement( vcl::PDFWriter::Form );
+                pPDFExport->CreateControl( *pPDFControl.get() );
+                pPDFExport->EndStructureElement();
+                return;
+            }
         }
 
         if ( m_pImpl->preparePaintOnDevice( *pDevice ) )
