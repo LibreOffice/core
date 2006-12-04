@@ -27,9 +27,9 @@
     <accel:item accel:code="KEY_F2" xlink:href=".uno:InsertFormula"/>
     <accel:item accel:code="KEY_F9" accel:shift="true" xlink:href=".uno:Calc"/>
     <accel:item accel:code="KEY_UP" accel:mod1="true" accel:mod2="true" xlink:href=".uno:MoveUp"/>
-    <accel:item accel:code="KEY_UP" accel:mod1="true" xlink:href=".uno:MoveUp"/>
+    <<accel:item accel:code="KEY_UP" accel:mod1="true" xlink:href=".uno:GoToPrevPara"/>
     <accel:item accel:code="KEY_DOWN" accel:mod1="true" accel:mod2="true" xlink:href=".uno:MoveDown"/>
-    <accel:item accel:code="KEY_DOWN" accel:mod1="true" xlink:href=".uno:MoveDown"/>
+    <accel:item accel:code="KEY_DOWN" accel:mod1="true" xlink:href=".uno:GoToNextPara"/>
     <accel:item accel:code="KEY_F12" accel:shift="true" accel:mod1="true" xlink:href=".uno:RemoveBullets"/>
     <accel:item accel:code="KEY_F12" accel:shift="true" xlink:href=".uno:DefaultBullet"/>
     <accel:item accel:code="KEY_F9" accel:shift="true" accel:mod1="true" xlink:href=".uno:UpdateInputFields"/>
@@ -91,8 +91,8 @@
     <accel:item accel:code="KEY_F8" xlink:href=".uno:SetExtSelection"/>
     <accel:item accel:code="KEY_ESCAPE" xlink:href=".uno:Escape"/>
     <accel:item accel:code="KEY_BACKSPACE" accel:shift="true" xlink:href=".uno:ShiftBackspace"/>
-    <accel:item accel:code="KEY_UP" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoToStartOfTable"/>
-    <accel:item accel:code="KEY_DOWN" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoToEnd"/>
+        <accel:item accel:code="KEY_UP" accel:shift="true" accel:mod1="true" xlink:href=".uno:StartOfParaSel"/>
+        <accel:item accel:code="KEY_DOWN" accel:shift="true" accel:mod1="true" xlink:href=".uno:EndOfParaSel"/>
     <accel:item accel:code="KEY_F4" accel:shift="true" xlink:href=".uno:JumpToNextFrame"/>
     <accel:item accel:code="KEY_F5" accel:shift="true" xlink:href=".uno:RestoreEditingView"/>
     <accel:item accel:code="KEY_PAGEUP" accel:mod1="true" xlink:href=".uno:JumpToHeader"/>
