@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:08:43 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,13 @@ void doTestCode()
     aContext.URL            = aTestFile;
     aContext.Version        = PDFWriter::PDF_1_4;
     aContext.Tagged         = true;
+    aContext.InitialPage    = 2;
 
     PDFWriter aWriter( aContext );
+    PDFDocInfo aDocInfo;
+    aDocInfo.Title = OUString( RTL_CONSTASCII_USTRINGPARAM( "PDF export test document" ) );
+    aDocInfo.Producer = OUString( RTL_CONSTASCII_USTRINGPARAM( "VCL" ) );
+    aWriter.SetDocInfo( aDocInfo );
     aWriter.NewPage();
     // set duration of 3 sec for first page
     aWriter.SetAutoAdvanceTime( 3 );
@@ -201,6 +206,8 @@ void doTestCode()
         for( int nY = 0; nY < 256; nY++ )
             pAcc->SetPixel( nX, nY, BitmapColor( (BYTE)((nX+nY)/2) ) );
     aTransMask.ReleaseAccess( pAcc );
+    aTransMask.SetPrefMapMode( MAP_MM );
+    aTransMask.SetPrefSize( Size( 10, 10 ) );
 
     aWriter.DrawBitmap( Point( 600, 13500 ), Size( 3000, 3000 ), aTransMask );
 
@@ -254,6 +261,30 @@ void doTestCode()
     aLI.SetDashCount( 4 );
     aLIPoly.Move( 1000, 1000 );
     aWriter.DrawPolyLine( aLIPoly, aLI );
+
+    aWriter.NewPage();
+    aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
+    Wallpaper aWall( aTransMask );
+    aWall.SetStyle( WALLPAPER_TILE );
+    aWriter.DrawWallpaper( Rectangle( Point( 4400, 4200 ), Size( 10200, 6300 ) ), aWall );
+
+    aWriter.Push( PUSH_ALL );
+    aWriter.BeginPattern();
+    aWriter.SetFillColor( Color( COL_RED ) );
+    aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
+    Point aFillPoints[] = { Point( 1000, 0 ),
+                            Point( 0, 1000 ),
+                            Point( 2000, 1000 ) };
+    aWriter.DrawPolygon( Polygon( 3, aFillPoints ) );
+    aWriter.DrawBitmap( Point( 200, 200 ), Size( 1600, 600 ), aTransMask );
+    aWriter.DrawText( Rectangle( Point( 200, 200 ), Size( 1600, 600 ) ), String( RTL_CONSTASCII_USTRINGPARAM( "Pattern" ) ) );
+    sal_Int32 nPattern = aWriter.EndPattern( Rectangle(Point(0,0),Size(2000,1000)), SvtGraphicFill::Transform() );
+    aWriter.Pop();
+    Rectangle aPolyRect( Point( 3800, 11200 ), Size( 10200, 6300 ) );
+    aWriter.DrawPolyPolygon( PolyPolygon( Polygon( aPolyRect ) ), nPattern, true );
+    aWriter.SetFillColor();
+    aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
+    aWriter.DrawRect( aPolyRect );
 
     aWriter.NewPage();
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
@@ -374,6 +405,8 @@ void doTestCode()
     aLstBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Two" ) ) );
     aLstBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Three" ) ) );
     aLstBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Four" ) ) );
+    aLstBox.SelectedEntries.push_back( 1 );
+    aLstBox.SelectedEntries.push_back( 2 );
     aWriter.CreateControl( aLstBox );
 
     // dropdown list box
@@ -406,6 +439,7 @@ void doTestCode()
     aWriter.Emit();
 }
 #endif
+
 static const sal_Int32 nLog10Divisor = 1;
 static const double fDivisor = 10.0;
 
@@ -770,7 +804,44 @@ void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Poi
     rPage.appendPoint( Point( (long)f[4], (long)f[5] ), rBuffer, false, pBack );
 }
 
+static void appendResourceMap( OStringBuffer& rBuf, const char* pPrefix, const PDFWriterImpl::ResourceMap& rList )
+{
+    if( rList.empty() )
+        return;
+    rBuf.append( '/' );
+    rBuf.append( pPrefix );
+    rBuf.append( "<<" );
+    int ni = 0;
+    for( PDFWriterImpl::ResourceMap::const_iterator it = rList.begin(); it != rList.end(); ++it )
+    {
+        if( it->first.getLength() && it->second > 0 )
+        {
+            rBuf.append( '/' );
+            rBuf.append( it->first );
+            rBuf.append( ' ' );
+            rBuf.append( it->second );
+            rBuf.append( " 0 R" );
+            if( ((++ni) & 7) == 0 )
+                rBuf.append( '\n' );
+        }
+    }
+    rBuf.append( ">>\n" );
+}
 
+void PDFWriterImpl::ResourceDict::append( OStringBuffer& rBuf, sal_Int32 nFontDictObject )
+{
+    rBuf.append( "<</Font " );
+    rBuf.append( nFontDictObject );
+    rBuf.append( " 0 R\n" );
+    appendResourceMap( rBuf, "XObject", m_aXObjects );
+    appendResourceMap( rBuf, "ExtGState", m_aExtGStates );
+    appendResourceMap( rBuf, "Shading", m_aShadings );
+    appendResourceMap( rBuf, "Pattern", m_aPatterns );
+    rBuf.append( "/ProcSet[/PDF/Text" );
+    if( !m_aXObjects.empty() )
+        rBuf.append( "/ImageC/ImageI/ImageB" );
+    rBuf.append( "]\n>>\n" );
+};
 
 PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
         :
@@ -780,7 +851,6 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, s
         m_eOrientation( eOrientation ),
         m_nPageObject( 0 ),  // invalid object number
         m_nPageIndex( -1 ), // invalid index
-        m_nStreamObject( 0 ),
         m_nStreamLengthObject( 0 ),
         m_nBeginStreamPos( 0 ),
         m_eTransition( PDFWriter::Regular ),
@@ -804,14 +874,14 @@ void PDFWriterImpl::PDFPage::beginStream()
          m_pWriter->emitComment( aLine.getStr() );
     }
 #endif
-    m_nStreamObject = m_pWriter->createObject();
-    if( ! m_pWriter->updateObject( m_nStreamObject ) )
+    m_aStreamObjects.push_back(m_pWriter->createObject());
+    if( ! m_pWriter->updateObject( m_aStreamObjects.back() ) )
         return;
 
     m_nStreamLengthObject = m_pWriter->createObject();
     // write content stream header
     OStringBuffer aLine;
-    aLine.append( m_nStreamObject );
+    aLine.append( m_aStreamObjects.back() );
     aLine.append( " 0 obj\n<</Length " );
     aLine.append( m_nStreamLengthObject );
     aLine.append( " 0 R" );
@@ -829,11 +899,14 @@ void PDFWriterImpl::PDFPage::beginStream()
 #if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
     m_pWriter->beginCompression();
 #endif
-    m_pWriter->checkAndEnableStreamEncryption( m_nStreamObject );
+    m_pWriter->checkAndEnableStreamEncryption( m_aStreamObjects.back() );
 }
 
 void PDFWriterImpl::PDFPage::endStream()
 {
+#if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
+    m_pWriter->endCompression();
+#endif
     sal_uInt64 nEndStreamPos;
     if( osl_File_E_None != osl_getFilePos( m_pWriter->m_aFile, &nEndStreamPos ) )
     {
@@ -1004,9 +1077,19 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     {
         aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/I true>>" );
     }
-    aLine.append( "/Contents " );
-    aLine.append( m_nStreamObject );
-    aLine.append( " 0 R>>\nendobj\n\n" );
+    aLine.append( "/Contents" );
+    unsigned int nStreamObjects = m_aStreamObjects.size();
+    if( nStreamObjects > 1 )
+        aLine.append( '[' );
+    for( unsigned int i = 0; i < m_aStreamObjects.size(); i++ )
+    {
+        aLine.append( ' ' );
+        aLine.append( m_aStreamObjects[i] );
+        aLine.append( " 0 R" );
+    }
+    if( nStreamObjects > 1 )
+        aLine.append( ']' );
+    aLine.append( ">>\nendobj\n\n" );
     return m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
@@ -1272,7 +1355,9 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_eInheritedOrientation( PDFWriter::Portrait ),
         m_nCurrentPage( -1 ),
         m_nResourceDict( -1 ),
-        m_nFontResourceDict( -1 ),
+        m_nFontDictObject( -1 ),
+        m_nZaDbObject( -1 ),
+        m_nHelvRegObject( -1 ),
 
         m_pCodec( NULL ),
         m_aCipher( (rtlCipher)NULL ),
@@ -1556,6 +1641,7 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
     pStream->Write( aStream.GetData(), nEndPos );
     return true;
 #else
+    (void)pStream;
     return false;
 #endif
 }
@@ -1922,9 +2008,6 @@ void PDFWriterImpl::endPage()
 
         // this should pop the PDF graphics stack if necessary
         updateGraphicsState();
-
-        if( m_pCodec )
-            endCompression();
 
         m_aPages.back().endStream();
 
@@ -2383,12 +2466,14 @@ bool PDFWriterImpl::emitGradients()
 
 bool PDFWriterImpl::emitTilings()
 {
-    OStringBuffer aTilingStream( 1024 );
     OStringBuffer aTilingObj( 1024 );
 
-    for( std::list<BitmapPatternEmit>::const_iterator it = m_aTilings.begin(); it != m_aTilings.end(); ++it )
+    for( std::vector<TilingEmit>::iterator it = m_aTilings.begin(); it != m_aTilings.end(); ++it )
     {
-        aTilingStream.setLength( 0 );
+        DBG_ASSERT( it->m_pTilingStream, "tiling without stream" );
+        if( ! it->m_pTilingStream )
+            continue;
+
         aTilingObj.setLength( 0 );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2399,27 +2484,21 @@ bool PDFWriterImpl::emitTilings()
 #endif
 
         sal_Int32 nX = (sal_Int32)it->m_aRectangle.Left();
-        sal_Int32 nY = (sal_Int32)it->m_aRectangle.Bottom();
+        sal_Int32 nY = (sal_Int32)it->m_aRectangle.Top();
         sal_Int32 nW = (sal_Int32)it->m_aRectangle.GetWidth();
         sal_Int32 nH = (sal_Int32)it->m_aRectangle.GetHeight();
 
-        appendFixedInt( nW, aTilingStream );
-        aTilingStream.append( " 0 0 " );
-        appendFixedInt( nH, aTilingStream );
-        aTilingStream.append( ' ' );
-        appendFixedInt( nX, aTilingStream );
-        aTilingStream.append( ' ' );
-        appendFixedInt( nY, aTilingStream );
-        aTilingStream.append( " cm\n/Im" );
-        aTilingStream.append( it->m_nBitmapObject );
-        aTilingStream.append( " Do\n" );
+        bool bDeflate = compressStream( it->m_pTilingStream );
+        it->m_pTilingStream->Seek( STREAM_SEEK_TO_END );
+        sal_Size nTilingStreamSize = it->m_pTilingStream->Tell();
+        it->m_pTilingStream->Seek( STREAM_SEEK_TO_BEGIN );
 
         // write pattern object
         aTilingObj.append( it->m_nObject );
         aTilingObj.append( " 0 obj\n" );
         aTilingObj.append( "<</Type/Pattern/PatternType 1\n"
                            "/PaintType 1\n"
-                           "/TilingType 1\n"
+                           "/TilingType 2\n"
                            "/BBox[" );
         appendFixedInt( nX, aTilingObj );
         aTilingObj.append( ' ' );
@@ -2430,24 +2509,48 @@ bool PDFWriterImpl::emitTilings()
         appendFixedInt( nY+nH, aTilingObj );
         aTilingObj.append( "]\n"
                            "/XStep " );
-        appendDouble( pixelToPoint(nW), aTilingObj, 1 );
+        appendFixedInt( nW, aTilingObj );
         aTilingObj.append( "\n"
                            "/YStep " );
-        appendDouble( pixelToPoint(nH), aTilingObj, 1 );
-        aTilingObj.append( "\n"
-                           "/Resources<<\n"
-                           "/XObject<</Im" );
-        aTilingObj.append( it->m_nBitmapObject );
-        aTilingObj.append( ' ' );
-        aTilingObj.append( it->m_nBitmapObject );
-        aTilingObj.append( " 0 R>>>>\n"
-                           "/Length " );
-        aTilingObj.append( (sal_Int32)aTilingStream.getLength() );
+        appendFixedInt( nH, aTilingObj );
+        aTilingObj.append( "\n" );
+        if( it->m_aTransform.matrix[0] != 1.0 ||
+            it->m_aTransform.matrix[1] != 0.0 ||
+            it->m_aTransform.matrix[3] != 0.0 ||
+            it->m_aTransform.matrix[4] != 1.0 ||
+            it->m_aTransform.matrix[2] != 0.0 ||
+            it->m_aTransform.matrix[5] != 0.0 )
+        {
+            aTilingObj.append( "/Matrix [" );
+            // TODO: scaling, mirroring on y, etc
+            appendDouble( it->m_aTransform.matrix[0], aTilingObj );
+            aTilingObj.append( ' ' );
+            appendDouble( it->m_aTransform.matrix[1], aTilingObj );
+            aTilingObj.append( ' ' );
+            appendDouble( it->m_aTransform.matrix[3], aTilingObj );
+            aTilingObj.append( ' ' );
+            appendDouble( it->m_aTransform.matrix[4], aTilingObj );
+            aTilingObj.append( ' ' );
+            appendDouble( it->m_aTransform.matrix[2], aTilingObj );
+            aTilingObj.append( ' ' );
+            appendDouble( it->m_aTransform.matrix[5], aTilingObj );
+            aTilingObj.append( "]\n" );
+        }
+        aTilingObj.append( "/Resources" );
+        it->m_aResources.append( aTilingObj, getFontDictObject() );
+        if( bDeflate )
+            aTilingObj.append( "/Filter/FlateDecode" );
+        aTilingObj.append( "/Length " );
+        aTilingObj.append( (sal_Int32)nTilingStreamSize );
         aTilingObj.append( ">>\nstream\n" );
         CHECK_RETURN( updateObject( it->m_nObject ) );
         CHECK_RETURN( writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) );
         checkAndEnableStreamEncryption( it->m_nObject );
-        CHECK_RETURN( writeBuffer( aTilingStream.getStr(), aTilingStream.getLength() ) );
+        nTilingStreamSize = writeBuffer( it->m_pTilingStream->GetData(), nTilingStreamSize );
+        delete it->m_pTilingStream;
+        it->m_pTilingStream = NULL;
+        if( nTilingStreamSize == 0 )
+            return false;
         disableStreamEncryption();
         aTilingObj.setLength( 0 );
         aTilingObj.append( "\nendstream\nendobj\n\n" );
@@ -2456,7 +2559,7 @@ bool PDFWriterImpl::emitTilings()
     return true;
 }
 
-sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
+sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont, sal_Int32 nFontObject )
 {
     const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
     if( !pFD )
@@ -2465,7 +2568,8 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
 
     OStringBuffer aLine( 1024 );
 
-    sal_Int32 nFontObject = createObject();
+    if( nFontObject <= 0 )
+        nFontObject = createObject();
     CHECK_RETURN( updateObject( nFontObject ) );
     aLine.append( nFontObject );
     aLine.append( " 0 obj\n"
@@ -3194,12 +3298,10 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     return nFontDescriptor;
 }
 
-sal_Int32 PDFWriterImpl::emitFonts()
+bool PDFWriterImpl::emitFonts()
 {
-    sal_Int32 nFontDict = 0;
-
     if( ! m_pReferenceDevice->ImplGetGraphics() )
-        return 0;
+        return false;
 
     OStringBuffer aLine( 1024 );
     char buf[8192];
@@ -3369,210 +3471,104 @@ sal_Int32 PDFWriterImpl::emitFonts()
         }
     }
 
-    nFontDict = getFontDictObj();
-    aLine.setLength( 0 );
-    aLine.append( nFontDict );
-    aLine.append( " 0 obj\n"
-                  "<<\n" );
+    OStringBuffer aFontDict( 1024 );
+    aFontDict.append( getFontDictObject() );
+    aFontDict.append( " 0 obj\n"
+                      "<<" );
+    int ni = 0;
     for( std::map< sal_Int32, sal_Int32 >::iterator mit = aFontIDToObject.begin(); mit != aFontIDToObject.end(); ++mit )
     {
-        aLine.append( "/F" );
-        aLine.append( mit->first );
-        aLine.append( ' ' );
-        aLine.append( mit->second );
-        aLine.append( " 0 R\n" );
+        aFontDict.append( "/F" );
+        aFontDict.append( mit->first );
+        aFontDict.append( ' ' );
+        aFontDict.append( mit->second );
+        aFontDict.append( " 0 R" );
+            if( ((++ni) & 7) == 0 )
+                aFontDict.append( '\n' );
     }
     // emit helvetica and ZapfDingbats font for widget apperances / variable text
     if( ! m_aWidgets.empty() )
     {
         ImplPdfBuiltinFontData aHelvData(m_aBuiltinFonts[4]);
-        aLine.append( "/HelvReg " );
-        aLine.append( emitBuiltinFont( &aHelvData ) );
-        aLine.append( " 0 R\n" );
+        aFontDict.append( "/HelvReg " );
+        aFontDict.append( emitBuiltinFont( &aHelvData, getHelvRegObject() ) );
+        aFontDict.append( " 0 R" );
         ImplPdfBuiltinFontData aZapfData(m_aBuiltinFonts[13]);
-        aLine.append( "/ZaDb " );
-        aLine.append( emitBuiltinFont( &aZapfData ) );
-        aLine.append( " 0 R\n" );
+        aFontDict.append( "/ZaDb " );
+        aFontDict.append( emitBuiltinFont( &aZapfData, getZaDbObject() ) );
+        aFontDict.append( " 0 R" );
     }
-    aLine.append( ">>\n"
-                  "endobj\n\n" );
-    CHECK_RETURN( updateObject( nFontDict ) );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    aFontDict.append( "\n>>\nendobj\n\n" );
 
-    return nFontDict;
+    CHECK_RETURN( updateObject( getFontDictObject() ) );
+    CHECK_RETURN( writeBuffer( aFontDict.getStr(), aFontDict.getLength() ) );
+    return true;
 }
 
 sal_Int32 PDFWriterImpl::emitResources()
 {
-    OStringBuffer aLine( 512 );
-
     // emit shadings
-    sal_Int32 nShadingDict = 0;
-    if( m_aGradients.begin() != m_aGradients.end() )
-    {
+    if( ! m_aGradients.empty() )
         CHECK_RETURN( emitGradients() );
-        aLine.setLength( 0 );
-        aLine.append( nShadingDict = createObject() );
-        aLine.append( " 0 obj\n"
-                      "<<" );
-        for( std::list<GradientEmit>::iterator it = m_aGradients.begin();
-             it != m_aGradients.end(); ++it )
-        {
-            aLine.append( "/P" );
-            aLine.append( it->m_nObject );
-            aLine.append( ' ' );
-            aLine.append( it->m_nObject );
-            aLine.append( " 0 R\n" );
-        }
-        aLine.append( ">>\n"
-                      "endobj\n\n" );
-        CHECK_RETURN( updateObject( nShadingDict ) );
-        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-    }
-
-    // emit patterns
-    sal_Int32 nPatternDict = 0;
-    if( m_aTilings.begin() != m_aTilings.end() )
-    {
+    // emit tilings
+    if( ! m_aTilings.empty() )
         CHECK_RETURN( emitTilings() );
-        aLine.setLength( 0 );
-        aLine.append( nPatternDict = createObject() );
-        aLine.append( " 0 obj\n<<" );
-        for( std::list<BitmapPatternEmit>::const_iterator tile = m_aTilings.begin();
-             tile != m_aTilings.end(); ++tile )
-        {
-            aLine.append( "/P" );
-            aLine.append( tile->m_nObject );
-            aLine.append( ' ' );
-            aLine.append( tile->m_nObject );
-            aLine.append( " 0 R\n" );
-        }
-        aLine.append( ">>\n"
-                      "endobj\n\n" );
-        CHECK_RETURN( updateObject( nPatternDict ) );
-        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-    }
 
     // emit font dict
-    sal_Int32 nFontDict = emitFonts();
-
-    // emit xobject dict
-    sal_Int32 nXObjectDict = 0;
-    std::list< sal_Int32 > aExtGStates;
-    if( m_aBitmaps.begin() != m_aBitmaps.end()      ||
-        m_aJPGs.begin() != m_aJPGs.end()            ||
-        m_aTransparentObjects.begin() != m_aTransparentObjects.end()
-        )
-    {
-        aLine.setLength( 0 );
-        nXObjectDict = createObject();
-        aLine.append( nXObjectDict );
-        aLine.append( " 0 obj\n"
-                      "<<" );
-        for( std::list<BitmapEmit>::const_iterator it = m_aBitmaps.begin();
-             it != m_aBitmaps.end(); ++it )
-        {
-            aLine.append( "/Im" );
-            aLine.append( it->m_nObject );
-            aLine.append( ' ' );
-            aLine.append( it->m_nObject );
-            aLine.append( " 0 R\n" );
-        }
-        for( std::list<JPGEmit>::const_iterator jpeg = m_aJPGs.begin(); jpeg != m_aJPGs.end(); ++jpeg )
-        {
-            aLine.append( "/Im" );
-            aLine.append( jpeg->m_nObject );
-            aLine.append( ' ' );
-            aLine.append( jpeg->m_nObject );
-            aLine.append( " 0 R\n" );
-        }
-        for( std::list<TransparencyEmit>::const_iterator t = m_aTransparentObjects.begin();
-             t != m_aTransparentObjects.end(); ++t )
-        {
-            aLine.append( "/Tr" );
-            aLine.append( t->m_nObject );
-            aLine.append( ' ' );
-            aLine.append( t->m_nObject );
-            aLine.append( " 0 R\n" );
-            if( t->m_nExtGStateObject > 0 )
-                aExtGStates.push_back( t->m_nExtGStateObject );
-        }
-
-        aLine.append( ">>\n"
-                      "endobj\n\n" );
-        CHECK_RETURN( updateObject( nXObjectDict ) );
-        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-    }
-
-    // emit ExtGStates
-    sal_Int32 nExtGStateObject = 0;
-    if( !aExtGStates.empty() )
-    {
-        nExtGStateObject = createObject();
-        CHECK_RETURN( updateObject( nExtGStateObject ) );
-        aLine.setLength( 0 );
-        aLine.append( nExtGStateObject );
-        aLine.append( " 0 obj\n"
-                      "<<" );
-        int i = 0;
-        while( ! aExtGStates.empty() )
-        {
-            aLine.append( "/EGS" );
-            aLine.append( aExtGStates.front() );
-            aLine.append( " " );
-            aLine.append( aExtGStates.front() );
-            aLine.append( " 0 R" );
-            aLine.append( ((i%5) == 4) ? "\n" : " " );
-            aExtGStates.pop_front();
-            i++;
-        }
-        aLine.append( "\n>>\nendobj\n\n" );
-        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-    }
+    CHECK_RETURN( emitFonts() );
 
     // emit Resource dict
+    OStringBuffer aLine( 512 );
     sal_Int32 nResourceDict = getResourceDictObj();
     CHECK_RETURN( updateObject( nResourceDict ) );
     aLine.setLength( 0 );
     aLine.append( nResourceDict );
-    aLine.append( " 0 obj\n<<" );
-    if( nFontDict )
-    {
-        aLine.append( "/Font " );
-        aLine.append( nFontDict );
-        aLine.append( " 0 R\n" );
-    }
-    if( nXObjectDict )
-    {
-        aLine.append( "/XObject " );
-        aLine.append( nXObjectDict );
-        aLine.append( " 0 R\n" );
-    }
-    if( nExtGStateObject )
-    {
-        aLine.append( "/ExtGState " );
-        aLine.append( nExtGStateObject );
-        aLine.append( " 0 R\n" );
-    }
-    if( nShadingDict )
-    {
-        aLine.append( "/Shading " );
-        aLine.append( nShadingDict );
-        aLine.append( " 0 R\n" );
-    }
-    if( nPatternDict )
-    {
-        aLine.append( "/Pattern " );
-        aLine.append( nPatternDict );
-        aLine.append( " 0 R\n" );
-    }
-    aLine.append( "/ProcSet[/PDF/Text" );
-    if( nXObjectDict )
-        aLine.append( "/ImageC/ImageI/ImageB" );
-    aLine.append( "]>>\n"
-                  "endobj\n\n" );
+    aLine.append( " 0 obj\n" );
+    m_aGlobalResourceDict.append( aLine, getFontDictObject() );
+    aLine.append( "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     return nResourceDict;
+}
+
+sal_Int32 PDFWriterImpl::updateOutlineItemCount( std::vector< sal_Int32 >& rCounts,
+                                                 sal_Int32 nItemLevel,
+                                                 sal_Int32 nCurrentItemId )
+{
+    /* The /Count number of an item is
+       positive: the number of visible subitems
+       negative: the negative number of subitems that will become visible if
+                 the item gets opened
+       see PDF ref 1.4 p 478
+    */
+
+    sal_Int32 nCount = 0;
+
+    if( m_aContext.OpenBookmarkLevels < 0           || // all levels arevisible
+        m_aContext.OpenBookmarkLevels >= nItemLevel    // this level is visible
+      )
+    {
+        PDFOutlineEntry& rItem = m_aOutline[ nCurrentItemId ];
+        sal_Int32 nChildren = rItem.m_aChildren.size();
+        for( sal_Int32 i = 0; i < nChildren; i++ )
+            nCount += updateOutlineItemCount( rCounts, nItemLevel+1, rItem.m_aChildren[i] );
+        rCounts[nCurrentItemId] = nCount;
+        // return 1 (this item) + visible sub items
+        if( nCount < 0 )
+            nCount = 0;
+        nCount++;
+    }
+    else
+    {
+        // this bookmark level is invisible
+        PDFOutlineEntry& rItem = m_aOutline[ nCurrentItemId ];
+        sal_Int32 nChildren = rItem.m_aChildren.size();
+        rCounts[ nCurrentItemId ] = -sal_Int32(rItem.m_aChildren.size());
+        for( sal_Int32 i = 0; i < nChildren; i++ )
+            updateOutlineItemCount( rCounts, nItemLevel+1, rItem.m_aChildren[i] );
+        nCount = -1;
+    }
+
+    return nCount;
 }
 
 sal_Int32 PDFWriterImpl::emitOutline()
@@ -3607,6 +3603,10 @@ sal_Int32 PDFWriterImpl::emitOutline()
         }
     }
 
+    // calculate Count entries for all items
+    std::vector< sal_Int32 > aCounts( nItems );
+    updateOutlineItemCount( aCounts, 0, 0 );
+
     // emit hierarchy
     for( i = 0; i < nItems; ++i )
     {
@@ -3617,11 +3617,15 @@ sal_Int32 PDFWriterImpl::emitOutline()
         aLine.append( rItem.m_nObject );
         aLine.append( " 0 obj\n" );
         aLine.append( "<<" );
+        // number of visible children (all levels)
+        if( i > 0 || aCounts[0] > 0 )
+        {
+            aLine.append( "/Count " );
+            aLine.append( aCounts[i] );
+        }
         if( ! rItem.m_aChildren.empty() )
         {
-            // children list: Count, First, Last
-            aLine.append( "/Count " );
-            aLine.append( (sal_Int32)rItem.m_aChildren.size() );
+            // children list: First, Last
             aLine.append( "/First " );
             aLine.append( m_aOutline[rItem.m_aChildren.front()].m_nObject );
             aLine.append( " 0 R/Last " );
@@ -4407,15 +4411,29 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 aLine.append( "Btn" );
                 break;
             case PDFWriter::ListBox:
-            case PDFWriter::ComboBox:
                 if( rWidget.m_nFlags & 0x200000 ) // multiselect
                 {
                     aValue.append( "[" );
-                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    for( unsigned int i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
+                    {
+                        sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
+                        if( nEntry >= 0 && nEntry < sal_Int32(rWidget.m_aListEntries.size()) )
+                            appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject, aValue );
+                    }
                     aValue.append( "]" );
                 }
+                else if( rWidget.m_aSelectedEntries.size() > 0 &&
+                         rWidget.m_aSelectedEntries[0] >= 0 &&
+                         rWidget.m_aSelectedEntries[0] < sal_Int32(rWidget.m_aListEntries.size()) )
+                {
+                    appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
+                }
                 else
-                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    appendUnicodeTextStringEncrypt( rtl::OUString(), rWidget.m_nObject, aValue );
+                aLine.append( "Ch" );
+                break;
+            case PDFWriter::ComboBox:
+                appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
                 aLine.append( "Ch" );
                 break;
             case PDFWriter::Edit:
@@ -4481,7 +4499,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             sal_Int32 nTI = -1;
             aLine.append( "/Opt[\n" );
             sal_Int32 i = 0;
-            for( std::list< OUString >::const_iterator it = rWidget.m_aListEntries.begin(); it != rWidget.m_aListEntries.end(); ++it, ++i )
+            for( std::vector< OUString >::const_iterator it = rWidget.m_aListEntries.begin(); it != rWidget.m_aListEntries.end(); ++it, ++i )
             {
                 appendUnicodeTextStringEncrypt( *it, rWidget.m_nObject, aLine );
                 aLine.append( "\n" );
@@ -4547,6 +4565,8 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                     default:
                         break;
                 }
+                if( rWidget.m_bSubmitGet )
+                    nFlags |= 8;
                 aLine.append( nFlags );
                 aLine.append( ">>>>\n" );
             }
@@ -4560,9 +4580,11 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         }
         if( rWidget.m_aDAString.getLength() )
         {
-            aLine.append( "/DR<</Font " );
-            aLine.append( getFontDictObj() );
-            aLine.append( " 0 R>>\n" );
+            aLine.append( "/DR<</Font<</ZaDb " );
+            aLine.append( getZaDbObject() );
+            aLine.append( " 0 R/HelvReg " );
+            aLine.append( getHelvRegObject() );
+            aLine.append( " 0 R>>>>\n" );
             aLine.append( "/DA" );
             appendLiteralStringEncrypt( rWidget.m_aDAString, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
@@ -4723,22 +4745,52 @@ bool PDFWriterImpl::emitCatalog()
     else if( m_aContext.OpenInFullScreenMode )
         aLine.append( "/PageMode/FullScreen\n" ); //document is opened full screen
 
+    OStringBuffer aInitPageRef;
+    if( m_aContext.InitialPage >= 0 && m_aContext.InitialPage < (sal_Int32)m_aPages.size() )
+    {
+        aInitPageRef.append( m_aPages[m_aContext.InitialPage].m_nPageObject );
+        aInitPageRef.append( " 0 R" );
+    }
+    else
+        aInitPageRef.append( "0" );
     switch( m_aContext.PDFDocumentAction )
     {
     case PDFWriter::ActionDefault :     //do nothing, this is the Acrobat default
     default:
+        if( aInitPageRef.getLength() > 1 )
+        {
+            aLine.append( "/OpenAction[" );
+            aLine.append( aInitPageRef );
+            aLine.append( " /XYZ null null 0]\n" );
+        }
         break;
     case PDFWriter::FitInWindow :
-        aLine.append( "/OpenAction[0 /Fit]\n" ); //Open fit page
+        aLine.append( "/OpenAction[" );
+        aLine.append( aInitPageRef );
+        aLine.append( " /Fit]\n" ); //Open fit page
         break;
     case PDFWriter::FitWidth :
-        aLine.append( "/OpenAction[0 /FitH " );
+        aLine.append( "/OpenAction[" );
+        aLine.append( aInitPageRef );
+        aLine.append( " /FitH " );
         aLine.append( m_nInheritedPageHeight );//Open fit width
         aLine.append( "]\n" );
         break;
     case PDFWriter::FitVisible :
-        aLine.append( "/OpenAction[0 /FitBH " );
+        aLine.append( "/OpenAction[" );
+        aLine.append( aInitPageRef );
+        aLine.append( " /FitBH " );
         aLine.append( m_nInheritedPageHeight );//Open fit visible
+        aLine.append( "]\n" );
+        break;
+    case PDFWriter::ActionZoom :
+        aLine.append( "/OpenAction[" );
+        aLine.append( aInitPageRef );
+        aLine.append( " /XYZ null null " );
+        if( m_aContext.Zoom >= 50 && m_aContext.Zoom <= 1600 )
+            aLine.append( (double)m_aContext.Zoom/100.0 );
+        else
+            aLine.append( "0" );
         aLine.append( "]\n" );
         break;
     }
@@ -6609,19 +6661,64 @@ void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nT
         aContent.append( " f*\n" );
     m_aTransparentObjects.back().m_pContentStream->Write( aContent.getStr(), aContent.getLength() );
 
+    OStringBuffer aObjName( 16 );
+    aObjName.append( "Tr" );
+    aObjName.append( m_aTransparentObjects.back().m_nObject );
+    OString aTrName( aObjName.makeStringAndClear() );
+    aObjName.append( "EGS" );
+    aObjName.append( m_aTransparentObjects.back().m_nExtGStateObject );
+    OString aExtName( aObjName.makeStringAndClear() );
+
     OStringBuffer aLine( 80 );
     // insert XObject
-    aLine.append( "q /EGS" );
-    aLine.append( m_aTransparentObjects.back().m_nExtGStateObject );
-    aLine.append( " gs " );
-    aLine.append( "/Tr" );
-    aLine.append( m_aTransparentObjects.back().m_nObject );
+    aLine.append( "q /" );
+    aLine.append( aExtName );
+    aLine.append( " gs /" );
+    aLine.append( aTrName );
     aLine.append( " Do Q\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
+
+    pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
+    pushResource( ResExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
+}
+
+void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject )
+{
+    if( nObject >= 0 )
+    {
+        switch( eKind )
+        {
+            case ResXObject:
+                m_aGlobalResourceDict.m_aXObjects[ rResource ] = nObject;
+                if( ! m_aOutputStreams.empty() )
+                    m_aOutputStreams.front().m_aResourceDict.m_aXObjects[ rResource ] = nObject;
+                break;
+            case ResExtGState:
+                m_aGlobalResourceDict.m_aExtGStates[ rResource ] = nObject;
+                if( ! m_aOutputStreams.empty() )
+                    m_aOutputStreams.front().m_aResourceDict.m_aExtGStates[ rResource ] = nObject;
+                break;
+            case ResShading:
+                m_aGlobalResourceDict.m_aShadings[ rResource ] = nObject;
+                if( ! m_aOutputStreams.empty() )
+                    m_aOutputStreams.front().m_aResourceDict.m_aShadings[ rResource ] = nObject;
+                break;
+            case ResPattern:
+                m_aGlobalResourceDict.m_aPatterns[ rResource ] = nObject;
+                if( ! m_aOutputStreams.empty() )
+                    m_aOutputStreams.front().m_aResourceDict.m_aPatterns[ rResource ] = nObject;
+                break;
+        }
+    }
 }
 
 void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRect )
 {
+    push( PUSH_ALL );
+
+    setClipRegion( Region() );
+    updateGraphicsState();
+
     m_aOutputStreams.push_front( StreamRedirect() );
     m_aOutputStreams.front().m_pStream = pStream;
     m_aOutputStreams.front().m_aMapMode = m_aMapMode;
@@ -6655,9 +6752,12 @@ SvStream* PDFWriterImpl::endRedirect()
         m_aOutputStreams.pop_front();
     }
 
+    pop();
     // force reemitting colors
     m_aCurrentPDFState.m_aLineColor = Color( COL_TRANSPARENT );
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
+
+    updateGraphicsState();
 
     return pStream;
 }
@@ -6687,14 +6787,25 @@ void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, sal_uIn
         m_aTransparentObjects.back().m_pContentStream = static_cast<SvMemoryStream*>(endRedirect());
         m_aTransparentObjects.back().m_nExtGStateObject = createObject();
 
+        OStringBuffer aObjName( 16 );
+        aObjName.append( "Tr" );
+        aObjName.append( m_aTransparentObjects.back().m_nObject );
+        OString aTrName( aObjName.makeStringAndClear() );
+        aObjName.append( "EGS" );
+        aObjName.append( m_aTransparentObjects.back().m_nExtGStateObject );
+        OString aExtName( aObjName.makeStringAndClear() );
+
         OStringBuffer aLine( 80 );
         // insert XObject
-        aLine.append( "q /EGS" );
-        aLine.append( m_aTransparentObjects.back().m_nExtGStateObject );
-        aLine.append( " gs /Tr" );
-        aLine.append( m_aTransparentObjects.back().m_nObject );
+        aLine.append( "q /" );
+        aLine.append( aExtName );
+        aLine.append( " gs /" );
+        aLine.append( aTrName );
         aLine.append( " Do Q\n" );
         writeBuffer( aLine.getStr(), aLine.getLength() );
+
+        pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
+        pushResource( ResExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
     }
 }
 
@@ -6718,14 +6829,25 @@ void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, const B
         drawBitmap( rBoundingBox.TopLeft(), rBoundingBox.GetSize(), rAlphaMask );
         m_aTransparentObjects.back().m_pSoftMaskStream = static_cast<SvMemoryStream*>(endRedirect());
 
+        OStringBuffer aObjName( 16 );
+        aObjName.append( "Tr" );
+        aObjName.append( m_aTransparentObjects.back().m_nObject );
+        OString aTrName( aObjName.makeStringAndClear() );
+        aObjName.append( "EGS" );
+        aObjName.append( m_aTransparentObjects.back().m_nExtGStateObject );
+        OString aExtName( aObjName.makeStringAndClear() );
+
         OStringBuffer aLine( 80 );
         // insert XObject
-        aLine.append( "q /EGS" );
-        aLine.append( m_aTransparentObjects.back().m_nExtGStateObject );
-        aLine.append( " gs /Tr" );
-        aLine.append( m_aTransparentObjects.back().m_nObject );
+        aLine.append( "q /" );
+        aLine.append( aExtName );
+        aLine.append( " gs /" );
+        aLine.append( aTrName );
         aLine.append( " Do Q\n" );
         writeBuffer( aLine.getStr(), aLine.getLength() );
+
+        pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
+        pushResource( ResExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
     }
 }
 
@@ -7902,6 +8024,12 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     aLine.append( it->m_nObject );
     aLine.append( " Do Q\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
+
+    OStringBuffer aObjName( 16 );
+    aObjName.append( "Im" );
+    aObjName.append( it->m_nObject );
+    pushResource( ResXObject, aObjName.makeStringAndClear(), it->m_nObject );
+
 }
 
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor )
@@ -7941,18 +8069,28 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         if( ! aMask.IsEmpty() )
             aID.m_nMaskChecksum = aMask.GetChecksum();
     }
-    for( std::list< BitmapEmit >::const_iterator it = m_aBitmaps.begin(); it != m_aBitmaps.end(); ++it )
+    std::list< BitmapEmit >::const_iterator it;
+    for( it = m_aBitmaps.begin(); it != m_aBitmaps.end(); ++it )
     {
         if( aID == it->m_aID )
-            return *it;
+            break;
     }
-    m_aBitmaps.push_front( BitmapEmit() );
-    m_aBitmaps.front().m_aID        = aID;
-    m_aBitmaps.front().m_aBitmap    = rBitmap;
-    m_aBitmaps.front().m_nObject    = createObject();
-    m_aBitmaps.front().m_bDrawMask  = bDrawMask;
+    if( it == m_aBitmaps.end() )
+    {
+        m_aBitmaps.push_front( BitmapEmit() );
+        m_aBitmaps.front().m_aID        = aID;
+        m_aBitmaps.front().m_aBitmap    = rBitmap;
+        m_aBitmaps.front().m_nObject    = createObject();
+        m_aBitmaps.front().m_bDrawMask  = bDrawMask;
+        it = m_aBitmaps.begin();
+    }
 
-    return m_aBitmaps.front();
+    OStringBuffer aObjName( 16 );
+    aObjName.append( "Im" );
+    aObjName.append( it->m_nObject );
+    pushResource( ResXObject, aObjName.makeStringAndClear(), it->m_nObject );
+
+    return *it;
 }
 
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap )
@@ -8003,7 +8141,8 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
                                getReferenceDevice(),
                                rSize ) );
     // check if we already have this gradient
-    for( std::list<GradientEmit>::iterator it = m_aGradients.begin(); it != m_aGradients.end(); ++it )
+    std::list<GradientEmit>::iterator it;
+    for( it = m_aGradients.begin(); it != m_aGradients.end(); ++it )
     {
         if( it->m_aGradient == rGradient )
         {
@@ -8011,15 +8150,24 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
                 it->m_aSize.Width() = aPtSize.Width();
             if( it->m_aSize.Height() <= aPtSize.Height() )
                 it->m_aSize.Height() = aPtSize.Height();
-            return it->m_nObject;
+           break;
         }
     }
+    if( it == m_aGradients.end() )
+    {
+        m_aGradients.push_front( GradientEmit() );
+        m_aGradients.front().m_aGradient    = rGradient;
+        m_aGradients.front().m_nObject      = createObject();
+        m_aGradients.front().m_aSize        = aPtSize;
+        it = m_aGradients.begin();
+    }
 
-    m_aGradients.push_back( GradientEmit() );
-    m_aGradients.back().m_aGradient = rGradient;
-    m_aGradients.back().m_nObject   = createObject();
-    m_aGradients.back().m_aSize     = aPtSize;
-    return m_aGradients.back().m_nObject;
+    OStringBuffer aObjName( 16 );
+    aObjName.append( 'P' );
+    aObjName.append( it->m_nObject );
+    pushResource( ResShading, aObjName.makeStringAndClear(), it->m_nObject );
+
+    return it->m_nObject;
 }
 
 void PDFWriterImpl::drawGradient( const Rectangle& rRect, const Gradient& rGradient )
@@ -8205,18 +8353,42 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                 Rectangle aConvertRect( aBmpPos, aBmpSize );
                 m_aPages.back().convertRect( aConvertRect );
 
+                OStringBuffer aNameBuf(16);
+                aNameBuf.append( "Im" );
+                aNameBuf.append( rEmit.m_nObject );
+                OString aImageName( aNameBuf.makeStringAndClear() );
+
                 // push the pattern
-                m_aTilings.push_back( BitmapPatternEmit() );
+                OStringBuffer aTilingStream( 32 );
+                appendFixedInt( aConvertRect.GetWidth(), aTilingStream );
+                aTilingStream.append( " 0 0 " );
+                appendFixedInt( aConvertRect.GetHeight(), aTilingStream );
+                aTilingStream.append( " 0 0 cm\n/" );
+                aTilingStream.append( aImageName );
+                aTilingStream.append( " Do\n" );
+
+                m_aTilings.push_back( TilingEmit() );
                 m_aTilings.back().m_nObject         = createObject();
-                m_aTilings.back().m_nBitmapObject   = rEmit.m_nObject;
-                m_aTilings.back().m_aRectangle      = aConvertRect;
+                m_aTilings.back().m_aRectangle      = Rectangle( Point( 0, 0 ), aConvertRect.GetSize() );
+                m_aTilings.back().m_pTilingStream   = new SvMemoryStream();
+                m_aTilings.back().m_pTilingStream->Write( aTilingStream.getStr(), aTilingStream.getLength() );
+                // phase the tiling so wallpaper begins on upper left
+                m_aTilings.back().m_aTransform.matrix[2] = double(aConvertRect.Left() % aConvertRect.GetWidth()) / fDivisor;
+                m_aTilings.back().m_aTransform.matrix[5] = double(aConvertRect.Top() % aConvertRect.GetHeight()) / fDivisor;
+                m_aTilings.back().m_aResources.m_aXObjects[aImageName] = rEmit.m_nObject;
 
                 updateGraphicsState();
 
+                OStringBuffer aObjName( 16 );
+                aObjName.append( 'P' );
+                aObjName.append( m_aTilings.back().m_nObject );
+                OString aPatternName( aObjName.makeStringAndClear() );
+                pushResource( ResPattern, aPatternName, m_aTilings.back().m_nObject );
+
                 // fill a rRect with the pattern
                 OStringBuffer aLine( 100 );
-                aLine.append( "q /Pattern cs /P" );
-                aLine.append( m_aTilings.back().m_nObject );
+                aLine.append( "q /Pattern cs /" );
+                aLine.append( aPatternName );
                 aLine.append( " scn " );
                 m_aPages.back().appendRect( rRect, aLine );
                 aLine.append( " f Q\n" );
@@ -8269,6 +8441,125 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
         drawBitmap( aBmpPos, aBmpSize, aBitmap );
         writeBuffer( "Q\n", 2 );
     }
+}
+
+void PDFWriterImpl::beginPattern()
+{
+    beginRedirect( new SvMemoryStream(), Rectangle() );
+}
+
+sal_Int32 PDFWriterImpl::endPattern( const Rectangle& rRect, const SvtGraphicFill::Transform& rTransform )
+{
+    Rectangle aConvertRect( rRect );
+    m_aPages.back().convertRect( aConvertRect );
+
+    // transform translation part of matrix
+    Size aSize( (long)rTransform.matrix[2], (long)rTransform.matrix[5] );
+    aSize = lcl_convert( m_aGraphicsStack.front().m_aMapMode, m_aMapMode, getReferenceDevice(), aSize );
+
+    sal_Int32 nTilingId = m_aTilings.size();
+    m_aTilings.push_back( TilingEmit() );
+    TilingEmit& rTile = m_aTilings.back();
+    rTile.m_nObject         = createObject();
+    rTile.m_aRectangle      = aConvertRect;
+    rTile.m_aResources      = m_aOutputStreams.front().m_aResourceDict;
+    rTile.m_aTransform.matrix[0] = rTransform.matrix[0];
+    rTile.m_aTransform.matrix[1] = rTransform.matrix[1];
+    rTile.m_aTransform.matrix[2] = double(aSize.Width())/fDivisor;
+    rTile.m_aTransform.matrix[3] = rTransform.matrix[3];
+    rTile.m_aTransform.matrix[4] = rTransform.matrix[4];
+    rTile.m_aTransform.matrix[5] = double(aSize.Height())/fDivisor;
+    double fx = double(aConvertRect.Left()%aConvertRect.GetWidth())/fDivisor;
+    double fy = double(aConvertRect.Top()%aConvertRect.GetHeight())/fDivisor;
+    rTile.m_aTransform.matrix[2] +=
+            rTile.m_aTransform.matrix[0] * fx + rTile.m_aTransform.matrix[1] * fy;
+    rTile.m_aTransform.matrix[5] +=
+            rTile.m_aTransform.matrix[3] * fx + rTile.m_aTransform.matrix[4] * fy;
+    // caution: endRedirect pops the stream, so do this last
+    rTile.m_pTilingStream   = dynamic_cast<SvMemoryStream*>(endRedirect());
+
+    OStringBuffer aObjName( 16 );
+    aObjName.append( 'P' );
+    aObjName.append( rTile.m_nObject );
+    pushResource( ResPattern, aObjName.makeStringAndClear(), rTile.m_nObject );
+    return nTilingId;
+}
+
+void PDFWriterImpl::drawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill )
+{
+    if( nPattern < 0 || nPattern >= (sal_Int32)m_aTilings.size() )
+        return;
+
+    m_aPages.back().endStream();
+    sal_Int32 nXObject = createObject();
+    OStringBuffer aNameBuf( 16 );
+    aNameBuf.append( "Pol" );
+    aNameBuf.append( nXObject );
+    OString aObjName( aNameBuf.makeStringAndClear() );
+    Rectangle aObjRect;
+    if( updateObject( nXObject ) )
+    {
+        // get bounding rect of object
+        PolyPolygon aSubDiv;
+        rPolyPoly.AdaptiveSubdivide( aSubDiv );
+        aObjRect = aSubDiv.GetBoundRect();
+        Rectangle aConvObjRect( aObjRect );
+        m_aPages.back().convertRect( aConvObjRect );
+
+        // move polypolygon to bottom left of page
+        PolyPolygon aLocalPath( rPolyPoly );
+        sal_Int32 nPgWd = getReferenceDevice()->ImplGetDPIX() * m_aPages.back().getWidth() / 72;
+        sal_Int32 nPgHt = getReferenceDevice()->ImplGetDPIY() * m_aPages.back().getHeight() / 72;
+        Size aLogicPgSz = getReferenceDevice()->PixelToLogic( Size( nPgWd, nPgHt ), m_aGraphicsStack.front().m_aMapMode );
+        sal_Int32 nXOff = aObjRect.Left();
+        sal_Int32 nYOff = aLogicPgSz.Height() - aObjRect.Bottom();
+        aLocalPath.Move( -nXOff, nYOff );
+
+        // prepare XObject's content stream
+        OStringBuffer aStream( 512 );
+        aStream.append( "/Pattern cs /P" );
+        aStream.append( m_aTilings[ nPattern ].m_nObject );
+        aStream.append( " scn\n" );
+        m_aPages.back().appendPolyPolygon( aLocalPath, aStream );
+        aStream.append( bEOFill ? "f*" : "f" );
+        SvMemoryStream aMemStream( aStream.getLength() );
+        aMemStream.Write( aStream.getStr(), aStream.getLength() );
+        bool bDeflate = compressStream( &aMemStream );
+        aMemStream.Seek( STREAM_SEEK_TO_END );
+        sal_Int32 nStreamLen = (sal_Int32)aMemStream.Tell();
+        aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+        // add new XObject to global resource dict
+        m_aGlobalResourceDict.m_aXObjects[ aObjName ] = nXObject;
+
+        // write XObject
+        OStringBuffer aLine( 512 );
+        aLine.append( nXObject );
+        aLine.append( " 0 obj\n"
+                      "<</Type/XObject/Subtype/Form/BBox[0 0 " );
+        appendFixedInt( aConvObjRect.GetWidth(), aLine );
+        aLine.append( ' ' );
+        appendFixedInt( aConvObjRect.GetHeight(), aLine );
+        aLine.append( "]/Length " );
+        aLine.append( nStreamLen );
+        if( bDeflate )
+            aLine.append( "/Filter/FlateDecode" );
+        aLine.append( ">>\n"
+                      "stream\n" );
+        writeBuffer( aLine.getStr(), aLine.getLength() );
+        checkAndEnableStreamEncryption( nXObject );
+        writeBuffer( aMemStream.GetData(), nStreamLen );
+        disableStreamEncryption();
+        writeBuffer( "\nendobj\n\n", 9 );
+    }
+    m_aPages.back().beginStream();
+    OStringBuffer aLine( 80 );
+    aLine.append( "q 1 0 0 1 " );
+    m_aPages.back().appendPoint( aObjRect.BottomLeft(), aLine );
+    aLine.append( " cm/" );
+    aLine.append( aObjName );
+    aLine.append( " Do Q\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 void PDFWriterImpl::updateGraphicsState()
@@ -9489,8 +9780,9 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_nFlags |= 0x00010000;
         if( rBtn.URL.getLength() )
             rNewWidget.m_aListEntries.push_back( rBtn.URL );
-        rNewWidget.m_bSubmit = rBtn.Submit;
-        rNewWidget.m_nDest   = rBtn.Dest;
+        rNewWidget.m_bSubmit    = rBtn.Submit;
+        rNewWidget.m_bSubmitGet = rBtn.SubmitGet;
+        rNewWidget.m_nDest      = rBtn.Dest;
         createDefaultPushButtonAppearance( rNewWidget, rBtn );
     }
     else if( rControl.getType() == PDFWriter::RadioButton )
@@ -9546,16 +9838,14 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
             rNewWidget.m_nTextStyle = TEXT_DRAW_VCENTER;
 
         const PDFWriter::ListBoxWidget& rLstBox = static_cast<const PDFWriter::ListBoxWidget&>(rControl);
-        rNewWidget.m_aListEntries   = rLstBox.Entries;
-        rNewWidget.m_aValue         = rLstBox.Text;
+        rNewWidget.m_aListEntries     = rLstBox.Entries;
+        rNewWidget.m_aSelectedEntries = rLstBox.SelectedEntries;
+        rNewWidget.m_aValue           = rLstBox.Text;
         if( rLstBox.DropDown )
             rNewWidget.m_nFlags |= 0x00020000;
         if( rLstBox.Sort )
-        {
             rNewWidget.m_nFlags |= 0x00080000;
-            rNewWidget.m_aListEntries.sort();
-        }
-        if( rLstBox.MultiSelect && !rLstBox.DropDown )
+        if( rLstBox.MultiSelect && !rLstBox.DropDown && (int)m_aContext.Version > (int)PDFWriter::PDF_1_3 )
             rNewWidget.m_nFlags |= 0x00200000;
 
         createDefaultListBoxAppearance( rNewWidget, rLstBox );
@@ -9570,10 +9860,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aListEntries   = rBox.Entries;
         rNewWidget.m_nFlags |= 0x00060000; // combo and edit flag
         if( rBox.Sort )
-        {
             rNewWidget.m_nFlags |= 0x00080000;
-            rNewWidget.m_aListEntries.sort();
-        }
 
         PDFWriter::ListBoxWidget aLBox;
         aLBox.Name              = rBox.Name;
