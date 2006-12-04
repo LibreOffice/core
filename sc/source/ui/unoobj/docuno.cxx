@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:55:18 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -806,7 +806,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         // first page of a sheet: add outline item for the sheet name
 
         vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
-        if ( pPDFData )
+        if ( pPDFData && pPDFData->GetIsExportBookmarks() )
         {
             // the sheet starts at the top of the page
             Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
