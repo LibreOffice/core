@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:42:02 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,9 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbUseTransitionEffects( sal_False ),
     mbIsSkipEmptyPages( sal_False ),
     mnFormsType( 0 ),
+    mbExportFormFields( sal_True ),
+    mbExportBookmarks( sal_True ),
+    mnOpenBookmarkLevels( -1 ),
 
     mbHideViewerToolbar( sal_False ),
     mbHideViewerMenubar( sal_False ),
@@ -112,6 +115,8 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbDisplayPDFDocumentTitle( sal_False ),
     mnMagnification( 0 ),
     mnInitialView( 0 ),
+    mnZoom( 0 ),
+    mnInitialPage( 1 ),
     mnPageLayout( 0 ),
     mbFirstPageLeft( sal_False ),
 
@@ -190,16 +195,19 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbReduceImageResolution = maConfigItem.ReadBool(  OUString( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ), sal_False );
     mnMaxImageResolution = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), 300 );
 
-    mbUseTaggedPDF = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
+    mbUseTaggedPDF = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
     if ( mbIsPresentation )
-        mbExportNotesBoth = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages"  ) ), sal_False );
+        mbExportNotesBoth = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages"  ) ), sal_False );
     else
-        mbExportNotesBoth = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_True );
+        mbExportNotesBoth = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_True );
 
-    mbUseTransitionEffects = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True );
-    mbIsSkipEmptyPages = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages"  ) ), sal_False );
+    mbExportBookmarks = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), sal_True );
+    mnOpenBookmarkLevels = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), -1 );
+    mbUseTransitionEffects = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True );
+    mbIsSkipEmptyPages = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages"  ) ), sal_False );
 
-    mnFormsType = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
+    mnFormsType = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
+    mbExportFormFields = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
     if ( ( mnFormsType < 0 ) || ( mnFormsType > 3 ) )
         mnFormsType = 0;
 
@@ -214,8 +222,12 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
 
     mnInitialView = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ), 0 );
     mnMagnification = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ), 0 );
+    mnZoom = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ), 100 );
     mnPageLayout = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), 0 );
     mbFirstPageLeft = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), sal_False );
+    mnInitialPage = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialPage" ) ), 1 );
+    if( mnInitialPage < 1 )
+        mnInitialPage = 1;
 
 //prepare values for the security tab page
     mnPrint = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ), 2 );
@@ -296,6 +308,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), mbExportNotesBoth );
     else
         maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), mbExportNotesBoth );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), mbExportBookmarks );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), mbUseTransitionEffects );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), mbIsSkipEmptyPages );
 
@@ -304,6 +317,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     * ever be an additional form submit format this could get invalid.
     */
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), mnFormsType );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), mbExportFormFields );
 
     if( GetTabPage( RID_PDF_TAB_VPREFER ) )
         ( ( ImpPDFTabViewerPage* )GetTabPage( RID_PDF_TAB_VPREFER ) )->GetFilterConfigItem( this );
@@ -320,8 +334,11 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ), mbDisplayPDFDocumentTitle );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ), mnInitialView );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ), mnMagnification);
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ), mnZoom );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialPage" ) ), mnInitialPage );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), mnPageLayout );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), mbFirstPageLeft );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), mnOpenBookmarkLevels );
 
     if( GetTabPage( RID_PDF_TAB_SECURITY ) )
         ( ( ImpPDFTabSecurityPage* )GetTabPage( RID_PDF_TAB_SECURITY ) )->GetFilterConfigItem( this );
@@ -395,8 +412,9 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maFlGeneral( this, ResId( FL_GENERAL, paResMgr ) ),
     maCbTaggedPDF( this, ResId( CB_TAGGEDPDF, paResMgr ) ),
     maCbExportNotes( this, ResId( CB_EXPORTNOTES, paResMgr ) ),
-    maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS, paResMgr ) ),
+    maCbExportBookmarks( this, ResId( CB_EXPORTBOOKMARKS, paResMgr ) ),
 
+    maCbExportFormFields( this, ResId( CB_EXPORTFORMFIELDS, paResMgr ) ),
     maFtFormsFormat( this, ResId( FT_FORMSFORMAT, paResMgr ) ),
     maLbFormsFormat( this, ResId( LB_FORMSFORMAT, paResMgr ) ),
     maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES, paResMgr ) ),
@@ -430,7 +448,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     mbIsPresentation = paParent->mbIsPresentation;
     mbIsWriter = paParent->mbIsWriter;
 
-    maCbTransitionEffects.Enable( mbIsPresentation );
     maCbExportEmptyPages.Enable( mbIsWriter );
 
 //  SJ: Dont know if there are Notes available also for writer.
@@ -460,11 +477,14 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
         maCbExportNotes.Check( paParent->mbExportNotesBoth );
     else
         maCbExportNotes.Check( paParent->mbExportNotesBoth );
+    maCbExportBookmarks.Check( paParent->mbExportBookmarks );
 
-    maCbTransitionEffects.Check( paParent->mbUseTransitionEffects );
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
 
+    maCbExportFormFields.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
+    maCbExportFormFields.Check( paParent->mbExportFormFields );
     maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
+    maLbFormsFormat.Enable( paParent->mbExportFormFields );
 }
 
 // -----------------------------------------------------------------------------
@@ -477,8 +497,8 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().ToInt32();
     paParent->mbUseTaggedPDF =  maCbTaggedPDF.IsChecked();
     paParent->mbExportNotesBoth = maCbExportNotes.IsChecked();
+    paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
 
-    paParent->mbUseTransitionEffects = maCbTransitionEffects.IsChecked();
     paParent->mbIsSkipEmptyPages =  !maCbExportEmptyPages.IsChecked();
 
     paParent->mbIsRangeChecked = sal_False;
@@ -496,6 +516,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     * ever be an additional form submit format this could get invalid.
     */
     paParent->mnFormsType = (sal_Int32) maLbFormsFormat.GetSelectEntryPos();
+    paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
 }
 
 // -----------------------------------------------------------------------------
@@ -514,6 +535,14 @@ IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, p )
     p = p; //for compiler warning
     maEdPages.Enable( maRbRange.IsChecked() );
     maEdPages.SetReadOnly( !maRbRange.IsChecked() );
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, void*, p )
+{
+    p = p; //for compiler warning
+    maLbFormsFormat.Enable( maCbExportFormFields.IsChecked() );
     return 0;
 }
 
@@ -545,12 +574,16 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
     maRbOpnPageOnly( this, ResId( RB_OPNMODE_PAGEONLY, paResMgr ) ),
     maRbOpnOutline( this, ResId( RB_OPNMODE_OUTLINE, paResMgr ) ),
     maRbOpnThumbs( this, ResId( RB_OPNMODE_THUMBS, paResMgr ) ),
+    maFtInitialPage( this, ResId( FT_MAGNF_INITIAL_PAGE, paResMgr ) ),
+    maNumInitialPage( this, ResId( NUM_MAGNF_INITIAL_PAGE, paResMgr ) ),
 
     maFlMagnification( this, ResId( FL_MAGNIFICATION, paResMgr ) ),
     maRbMagnDefault( this, ResId( RB_MAGNF_DEFAULT, paResMgr ) ),
     maRbMagnFitWin( this, ResId( RB_MAGNF_WIND, paResMgr ) ),
     maRbMagnFitWidth( this, ResId( RB_MAGNF_WIDTH, paResMgr ) ),
     maRbMagnFitVisible( this, ResId( RB_MAGNF_VISIBLE, paResMgr ) ),
+    maRbMagnZoom( this, ResId( RB_MAGNF_ZOOM, paResMgr ) ),
+    maNumZoom( this, ResId( NUM_MAGNF_ZOOM, paResMgr ) ),
 
     maFlPageLayout( this, ResId( FL_PAGE_LAYOUT, paResMgr ) ),
     maRbPgLyDefault( this, ResId( RB_PGLY_DEFAULT, paResMgr ) ),
@@ -562,6 +595,12 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
 {
     mpaResMgr = paResMgr;
     FreeResource();
+
+    maRbMagnDefault.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    maRbMagnFitWin.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    maRbMagnFitWidth.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    maRbMagnFitVisible.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    maRbMagnZoom.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -596,6 +635,13 @@ void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
         paParent->mnMagnification = 2;
     else if( maRbMagnFitVisible.IsChecked() )
         paParent->mnMagnification = 3;
+    else if( maRbMagnZoom.IsChecked() )
+    {
+        paParent->mnMagnification = 4;
+        paParent->mnZoom = maNumZoom.GetValue();
+    }
+
+    paParent->mnInitialPage = maNumInitialPage.GetValue();
 
     paParent->mnPageLayout = 0;
     if( maRbPgLySinglePage.IsChecked() )
@@ -648,17 +694,28 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     default:
     case 0:
         maRbMagnDefault.Check();
+        maNumZoom.Enable( FALSE );
         break;
     case 1:
         maRbMagnFitWin.Check();
+        maNumZoom.Enable( FALSE );
         break;
     case 2:
         maRbMagnFitWidth.Check();
+        maNumZoom.Enable( FALSE );
         break;
     case 3:
         maRbMagnFitVisible.Check();
+        maNumZoom.Enable( FALSE );
+        break;
+    case 4:
+        maRbMagnZoom.Check();
+        maNumZoom.Enable( TRUE );
         break;
     };
+
+    maNumZoom.SetValue( paParent->mnZoom );
+    maNumInitialPage.SetValue( paParent->mnInitialPage );
 
     if( !mbUseCTLFont )
         maCbPgLyFirstOnLeft.Hide( );
@@ -674,6 +731,12 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, void*, p )
 {
     p = p; //for compiler warning
     maCbPgLyFirstOnLeft.Enable( maRbPgLyContinueFacing.IsChecked() );
+    return 0;
+}
+
+IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
+{
+    maNumZoom.Enable( maRbMagnZoom.IsChecked() );
     return 0;
 }
 
@@ -694,10 +757,19 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
     maFlUIOptions( this, ResId( FL_USRIFOPT, paResMgr ) ),
     maCbHideViewerMenubar( this, ResId( CB_UOP_HIDEVMENUBAR, paResMgr ) ),
     maCbHideViewerToolbar( this, ResId( CB_UOP_HIDEVTOOLBAR, paResMgr ) ),
-    maCbHideViewerWindowControls( this, ResId( CB_UOP_HIDEVWINCTRL, paResMgr ) )
+    maCbHideViewerWindowControls( this, ResId( CB_UOP_HIDEVWINCTRL, paResMgr ) ),
+    maFlTransitions( this, ResId( FL_TRANSITIONS, paResMgr ) ),
+    maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS, paResMgr ) ),
+    mbIsPresentation( sal_True ),
+    maFlBookmarks( this, ResId( FL_BOOKMARKS, paResMgr ) ),
+    maRbAllBookmarkLevels( this, ResId( RB_ALLBOOKMARKLEVELS, paResMgr ) ),
+    maRbVisibleBookmarkLevels( this, ResId( RB_VISIBLEBOOKMARKLEVELS, paResMgr ) ),
+    maNumBookmarkLevels( this, ResId( NUM_BOOKMARKLEVELS, paResMgr ) )
 {
     mpaResMgr = paResMgr;
     FreeResource();
+    maRbAllBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
+    maRbVisibleBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -706,6 +778,12 @@ ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
     delete mpaResMgr;
 }
 
+// -----------------------------------------------------------------------------
+IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
+{
+    maNumBookmarkLevels.Enable( maRbVisibleBookmarkLevels.IsChecked() );
+    return 0;
+}
 // -----------------------------------------------------------------------------
 SfxTabPage*  ImpPDFTabViewerPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
@@ -719,13 +797,16 @@ SfxTabPage*  ImpPDFTabViewerPage::Create( Window* pParent,
 // -----------------------------------------------------------------------------
 void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
-     paParent->mbHideViewerMenubar = maCbHideViewerMenubar.IsChecked();
-     paParent->mbHideViewerToolbar = maCbHideViewerToolbar.IsChecked( );
-     paParent->mbHideViewerWindowControls = maCbHideViewerWindowControls.IsChecked();
-     paParent->mbResizeWinToInit = maCbResWinInit.IsChecked();
-     paParent->mbOpenInFullScreenMode = maCbOpenFullScreen.IsChecked();
-     paParent->mbCenterWindow = maCbCenterWindow.IsChecked();
-     paParent->mbDisplayPDFDocumentTitle = maCbDispDocTitle.IsChecked();
+    paParent->mbHideViewerMenubar = maCbHideViewerMenubar.IsChecked();
+    paParent->mbHideViewerToolbar = maCbHideViewerToolbar.IsChecked( );
+    paParent->mbHideViewerWindowControls = maCbHideViewerWindowControls.IsChecked();
+    paParent->mbResizeWinToInit = maCbResWinInit.IsChecked();
+    paParent->mbOpenInFullScreenMode = maCbOpenFullScreen.IsChecked();
+    paParent->mbCenterWindow = maCbCenterWindow.IsChecked();
+    paParent->mbDisplayPDFDocumentTitle = maCbDispDocTitle.IsChecked();
+    paParent->mbUseTransitionEffects = maCbTransitionEffects.IsChecked();
+    paParent->mnOpenBookmarkLevels = maRbAllBookmarkLevels.IsChecked() ?
+                                     -1 : maNumBookmarkLevels.GetValue();
 }
 
 // -----------------------------------------------------------------------------
@@ -739,6 +820,20 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     maCbOpenFullScreen.Check( paParent->mbOpenInFullScreenMode );
     maCbCenterWindow.Check( paParent->mbCenterWindow );
     maCbDispDocTitle.Check( paParent->mbDisplayPDFDocumentTitle );
+    mbIsPresentation = paParent->mbIsPresentation;
+    maCbTransitionEffects.Check( paParent->mbUseTransitionEffects );
+    maCbTransitionEffects.Enable( mbIsPresentation );
+    if( paParent->mnOpenBookmarkLevels < 0 )
+    {
+        maRbAllBookmarkLevels.Check( TRUE );
+        maNumBookmarkLevels.Enable( FALSE );
+    }
+    else
+    {
+        maRbVisibleBookmarkLevels.Check( TRUE );
+        maNumBookmarkLevels.Enable( TRUE );
+        maNumBookmarkLevels.SetValue( paParent->mnOpenBookmarkLevels );
+    }
 }
 
 ////////////////////////////////////////////////////////
