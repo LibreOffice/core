@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:03:57 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,15 +477,14 @@ void IIIMPStatusWindow::GetFocus()
         {
             const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
             SalXLib* pXLib = GetX11SalData()->GetDisplay()->GetXLib();
-            BOOL bIgnore = pXLib->GetIgnoreXErrors();
-            pXLib->SetIgnoreXErrors( TRUE );
+            pXLib->PushXErrorLevel( true );
             XSetInputFocus( (Display*)pParentEnvData->pDisplay,
                             (XLIB_Window)pParentEnvData->aShellWindow,
                             RevertToNone,
                             CurrentTime
                             );
             XSync( (Display*)pParentEnvData->pDisplay, False );
-            pXLib->SetIgnoreXErrors( bIgnore );
+            pXLib->PopXErrorLevel();
         }
         m_pResetFocus = NULL;
     }
@@ -511,15 +510,14 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
             {
                 const SystemEnvData* pEnv = pParent->GetSystemData();
                 SalXLib* pXLib = GetX11SalData()->GetDisplay()->GetXLib();
-                BOOL bIgnore = pXLib->GetIgnoreXErrors();
-                pXLib->SetIgnoreXErrors( TRUE );
+                pXLib->PushXErrorLevel( true );
                 XSetInputFocus( (Display*)pEnv->pDisplay,
                                 (XLIB_Window)pEnv->aShellWindow,
                                 RevertToNone,
                                 CurrentTime
                                 );
                 XSync( (Display*)pEnv->pDisplay, False );
-                pXLib->SetIgnoreXErrors( bIgnore );
+                pXLib->PopXErrorLevel();
             }
         }
     }
