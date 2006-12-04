@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,12 +134,15 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mbExportNotes           ( sal_True ),
     mbExportNotesPages      ( sal_False ),
     mbUseTransitionEffects  ( sal_True ),
+    mbExportBookmarks       ( sal_True ),
+    mnOpenBookmarkLevels    ( -1 ),
     mbUseLosslessCompression( sal_False ),
     mbReduceImageResolution ( sal_False ),
     mbSkipEmptyPages        ( sal_False ),
     mnMaxImageResolution    ( 300 ),
     mnQuality               ( 90 ),
     mnFormsFormat           ( 0 ),
+    mbExportFormFields      ( sal_True ),
     mnProgressValue         ( 0 ),
     mbWatermark             ( sal_False ),
 
@@ -152,6 +155,8 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mbDisplayPDFDocumentTitle   ( sal_True ),
     mnPDFDocumentMode           ( 0 ),
     mnPDFDocumentAction         ( 0 ),
+    mnZoom                      ( 100 ),
+    mnInitialPage               ( 1 ),
     mnPDFPageLayout             ( 0 ),
     mbFirstPageLeft             ( sal_False ),
 
@@ -162,7 +167,9 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mnPrintAllowed              ( 2 ),
     mnChangesAllowed            ( 4 ),
     mbCanCopyOrExtract          ( sal_True ),
-    mbCanExtractForAccessibility( sal_True )
+    mbCanExtractForAccessibility( sal_True ),
+
+    mnCachePatternId            ( -1 )
 {
 }
 
@@ -332,6 +339,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ) )
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ) )
+                    rFilterData[ nData ].Value >>= mbExportFormFields;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
 //viewer properties
@@ -353,6 +362,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mnPDFDocumentMode;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ) )
                     rFilterData[ nData ].Value >>= mnPDFDocumentAction;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ) )
+                    rFilterData[ nData ].Value >>= mnZoom;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialPage" ) ) )
+                    rFilterData[ nData ].Value >>= mnInitialPage;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ) )
                     rFilterData[ nData ].Value >>= mnPDFPageLayout;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ) )
@@ -379,6 +392,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbCanCopyOrExtract;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ) )
                     rFilterData[ nData ].Value >>= mbCanExtractForAccessibility;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ) )
+                    rFilterData[ nData ].Value >>= mbExportBookmarks;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ) )
+                    rFilterData[ nData ].Value >>= mnOpenBookmarkLevels;
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             aContext.Version    = PDFWriter::PDF_1_4;
@@ -394,6 +411,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             aContext.CenterWindow               = mbCenterWindow;
             aContext.OpenInFullScreenMode       = mbOpenInFullScreenMode;
             aContext.DisplayPDFDocumentTitle    = mbDisplayPDFDocumentTitle;
+            aContext.InitialPage                = mnInitialPage-1;
+            aContext.OpenBookmarkLevels         = mnOpenBookmarkLevels;
 
             switch( mnPDFDocumentMode )
             {
@@ -422,6 +441,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
                 case 3:
                     aContext.PDFDocumentAction = PDFWriter::FitVisible;
+                    break;
+                case 4:
+                    aContext.PDFDocumentAction = PDFWriter::ActionZoom;
+                    aContext.Zoom = mnZoom;
                     break;
             }
 
@@ -585,6 +608,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsExportTaggedPDF( mbUseTaggedPDF );
                 pPDFExtOutDevData->SetIsExportTransitionEffects( mbUseTransitionEffects );
                 pPDFExtOutDevData->SetFormsFormat( mnFormsFormat );
+                pPDFExtOutDevData->SetIsExportFormFields( mbExportFormFields );
+                pPDFExtOutDevData->SetIsExportBookmarks( mbExportBookmarks );
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
 
@@ -1114,6 +1139,87 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     else if ( fTransparency == 1.0 )
                                         bSkipSequence = sal_True;
                                 }
+                                else if( aFill.getFillType() == SvtGraphicFill::fillTexture && aFill.isTiling() )
+                                {
+                                    sal_Int32 nPattern = mnCachePatternId;
+                                    Graphic aPatternGraphic;
+                                    aFill.getGraphic( aPatternGraphic );
+                                    bool bUseCache = false;
+                                    if( mnCachePatternId >= 0 )
+                                    {
+                                        SvtGraphicFill::Transform aCacheTransform, aTransform;
+                                        maCacheFill.getTransform( aCacheTransform );
+                                        aFill.getTransform( aTransform );
+                                        if( aCacheTransform.matrix[0] == aTransform.matrix[0] &&
+                                            aCacheTransform.matrix[1] == aTransform.matrix[1] &&
+                                            aCacheTransform.matrix[2] == aTransform.matrix[2] &&
+                                            aCacheTransform.matrix[3] == aTransform.matrix[3] &&
+                                            aCacheTransform.matrix[4] == aTransform.matrix[4] &&
+                                            aCacheTransform.matrix[5] == aTransform.matrix[5]
+                                            )
+                                        {
+                                            Graphic aCacheGraphic;
+                                            maCacheFill.getGraphic( aCacheGraphic );
+                                            if( aCacheGraphic == aPatternGraphic )
+                                                bUseCache = true;
+                                        }
+                                    }
+
+                                    if( ! bUseCache )
+                                    {
+                                        GDIMetaFile aPattern;
+
+                                        // paint metafile into graphic
+                                        rDummyVDev.SetConnectMetaFile( &aPattern );
+                                        rDummyVDev.Push();
+                                        rDummyVDev.SetMapMode( aPatternGraphic.GetPrefMapMode() );
+                                        aPatternGraphic.Draw( &rDummyVDev, Point( 0, 0 ) );
+                                        rDummyVDev.Pop();
+                                        rDummyVDev.SetConnectMetaFile( NULL );
+                                        aPattern.WindStart();
+
+                                        // prepare pattern from metafile
+                                        rWriter.Push();
+                                        rWriter.BeginPattern();
+                                        rDummyVDev.Push();
+                                        MapMode aMapMode( aPatternGraphic.GetPrefMapMode() );
+                                        rWriter.SetMapMode( aMapMode );
+                                        rDummyVDev.SetMapMode( aMapMode );
+                                        ImplWriteActions( rWriter, NULL, aPattern, rDummyVDev );
+                                        rDummyVDev.Pop();
+                                        Size aPrefSize( aPatternGraphic.GetPrefSize() );
+                                        aPrefSize.Width() -= 1; // magic: for some reason prefsize is usually off by one
+                                        aPrefSize.Height() -= 1;
+                                        SvtGraphicFill::Transform aPatTransform;
+                                        aFill.getTransform( aPatTransform );
+                                        // workaround strange SvtGraphicsFill behaviour
+                                        BitmapEx aBmpEx = aPatternGraphic.GetBitmapEx();
+                                        if( !!aBmpEx )
+                                        {
+                                            Size aPixSz( 1000, 1000 );
+                                            Size aDummySz( rDummyVDev.PixelToLogic( aPixSz, MapMode( MAP_100TH_MM ) ) );
+                                            Size aPDFSz( rWriter.GetReferenceDevice()->PixelToLogic( aPixSz, MapMode( MAP_100TH_MM ) ) );
+                                            double sX = sqrt(double( aPDFSz.Width() )/ double( aDummySz.Width() ));
+                                            aPatTransform.matrix[0] *= sX;
+                                            aPatTransform.matrix[1] *= sX;
+                                            aPatTransform.matrix[3] *= sX;
+                                            aPatTransform.matrix[4] *= sX;
+                                        }
+
+                                        nPattern = rWriter.EndPattern( Rectangle( Point( 0 , 0 ), aPrefSize  ), aPatTransform );
+                                        rWriter.Pop();
+
+                                        // try some caching and reuse pattern
+                                        mnCachePatternId = nPattern;
+                                        maCacheFill = aFill;
+                                    }
+                                    // draw polypolygon with pattern fill
+                                    PolyPolygon aPath;
+                                    aFill.getPath( aPath );
+                                    rWriter.DrawPolyPolygon( aPath, nPattern, aFill.getFillRule() == SvtGraphicFill::fillEvenOdd );
+
+                                    bSkipSequence = sal_True;
+                                }
                             }
                             if ( bSkipSequence )
                             {
@@ -1151,6 +1257,8 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     BitmapEx aBitmapEx( pA->GetBitmap() );
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
                             aBitmapEx.GetPrefMapMode(), rDummyVDev.GetMapMode() ) );
+                    if( ! ( aSize.Width() && aSize.Height() ) )
+                        aSize = rDummyVDev.PixelToLogic( aBitmapEx.GetSizePixel() );
                     ImplWriteBitmapEx( rWriter, rDummyVDev, pA->GetPoint(), aSize, aBitmapEx );
                 }
                 break;
