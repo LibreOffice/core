@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:52:09 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1092,7 +1092,9 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                                 OUStringToOString(aResProvider.getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
-                            btn = gtk_dialog_run( GTK_DIALOG( dlg ) );
+                            RunDialog aAnotherRunInMain(dlg);
+                            btn = aAnotherRunInMain.runandwaitforresult();
+
                             gtk_widget_destroy( dlg );
                         }
 
