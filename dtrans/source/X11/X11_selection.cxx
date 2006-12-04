@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:52:48 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1363,19 +1363,20 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 sal_Int32 nIndex = 0;
                 if( pFlavors->MimeType.getToken( 0, ';', nIndex ).equalsAsciiL( "text/plain", 10 ) )
                 {
+                    OUString aToken(pFlavors->MimeType.getToken( 0, ';', nIndex ));
                     // omit text/plain;charset=unicode since it is not well defined
-                    if( pFlavors->MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=unicode" ) == 0 )
+                    if( aToken.compareToAscii( "charset=unicode" ) == 0 )
                     {
                         pAtoms++;
                         continue;
                     }
                     bHaveText = true;
-                    if( pFlavors->MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
+                    if( aToken.compareToAscii( "charset=utf-16" ) == 0 )
                     {
                         bHaveUTF16 = true;
                         pFlavors->DataType = getCppuType( (OUString*)0 );
                     }
-                    else if( pFlavors->MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-8" ) == 0 )
+                    else if( aToken.compareToAscii( "charset=utf-8" ) == 0 )
                     {
                         aUTF8Type = *pAtoms;
                     }
