@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:42:09 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,8 +176,8 @@
 static float GetSwapFloat( SvStream& rSt )
 {
     float   fTmp;
-    sal_Int8* pPtr = (sal_Int8*)&fTmp + 3;
-    rSt >> *pPtr-- >> *pPtr-- >> *pPtr-- >> *pPtr;  // Little Endian <-> Big Endian switch
+    sal_Int8* pPtr = (sal_Int8*)&fTmp;
+    rSt >> pPtr[3] >> pPtr[2] >> pPtr[1] >> pPtr[0];    // Little Endian <-> Big Endian switch
     return fTmp;
 }
 #endif
