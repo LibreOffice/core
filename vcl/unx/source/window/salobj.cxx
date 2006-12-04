@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:30:41 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,8 +153,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                     pSalDisp->GetVisual( nScreen ).GetVisualId(),
                     aVisID );
         #endif
-        BOOL bOldIgnore = pSalDisp->GetXLib()->GetIgnoreXErrors();
-        pSalDisp->GetXLib()->SetIgnoreXErrors(TRUE);
+        pSalDisp->GetXLib()->PushXErrorLevel( true );
         pObject->maSecondary =
             XCreateWindow( pDisp,
                            pSalDisp->GetRootWindow( nScreen ),
@@ -164,8 +163,8 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            pVisual,
                            CWEventMask, &aAttribs );
         XSync( pDisp, False );
-        BOOL bWasXError = pSalDisp->GetXLib()->WasXError();
-        pSalDisp->GetXLib()->SetIgnoreXErrors( bOldIgnore );
+        BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+        pSalDisp->GetXLib()->PopXErrorLevel();
         if( bWasXError )
         {
             pObject->maSecondary = None;
@@ -175,6 +174,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         XReparentWindow( pDisp, pObject->maSecondary, pObject->maPrimary, 0, 0 );
     }
 
+    pSalDisp->GetXLib()->PushXErrorLevel( true );
     XMapWindow( pDisp, pObject->maPrimary );
     XMapWindow( pDisp, pObject->maSecondary );
 
@@ -187,11 +187,9 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                               pSalDisp->GetColormap( nScreen ).GetXColormap() : None;
     pObjData->pAppContext   = NULL;
 
-    BOOL bOldIgnore = pSalDisp->GetXLib()->GetIgnoreXErrors();
-    pSalDisp->GetXLib()->SetIgnoreXErrors(TRUE);
     XSync(pDisp, False);
-    BOOL bWasXError = pSalDisp->GetXLib()->WasXError();
-    pSalDisp->GetXLib()->SetIgnoreXErrors( bOldIgnore );
+    BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+    pSalDisp->GetXLib()->PopXErrorLevel();
     if( bWasXError )
     {
         delete pObject;
@@ -288,14 +286,13 @@ X11SalObject::~X11SalObject()
     std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
     rObjects.remove( this );
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
-    BOOL bOldIgnore = pSalDisp->GetXLib()->GetIgnoreXErrors();
-    pSalDisp->GetXLib()->SetIgnoreXErrors(TRUE);
+    pSalDisp->GetXLib()->PushXErrorLevel( true );
     if ( maSecondary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
     if ( maPrimary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maPrimary );
     XSync( (Display*)maSystemChildData.pDisplay, False );
-    pSalDisp->GetXLib()->SetIgnoreXErrors(bOldIgnore);
+    pSalDisp->GetXLib()->PopXErrorLevel();
 }
 
 
