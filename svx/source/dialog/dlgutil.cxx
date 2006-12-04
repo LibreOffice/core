@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:00:15 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,12 +224,20 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet )
 }
 
 // -----------------------------------------------------------------------
-
 void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
 {
     long nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MAP_100TH_MM );
+    /* #i69437#
+     * work around limited precision of MetricField
+     */
+    FieldUnit eValUnit = FUNIT_100TH_MM;
+    if( nVal > rField.Denormalize( 0x3fffffff ) )
+    {
+        nVal /= 1000;
+        eValUnit = FUNIT_CM;
+    }
     nVal = rField.Normalize( nVal );
-    rField.SetValue( nVal, FUNIT_100TH_MM );
+    rField.SetValue( nVal, eValUnit );
 
 /*
     if ( SFX_MAPUNIT_100TH_MM == eUnit )
