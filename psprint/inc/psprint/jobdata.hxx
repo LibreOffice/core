@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:25 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ enum type {
 struct JobData
 {
     int                     m_nCopies;
-    int                     m_nScale;           // in percent
     int                     m_nLeftMarginAdjust;
     int                     m_nRightMarginAdjust;
     int                     m_nTopMarginAdjust;
@@ -68,7 +67,6 @@ struct JobData
 
     JobData() :
             m_nCopies( 1 ),
-            m_nScale( 100 ),
             m_nLeftMarginAdjust( 0 ),
             m_nRightMarginAdjust( 0 ),
             m_nTopMarginAdjust( 0 ),
