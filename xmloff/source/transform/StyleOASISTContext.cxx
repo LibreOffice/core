@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:28:24 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -733,6 +733,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
     {
         switch( eUnderline )
         {
+        case XML_NONE:
         case XML_SOLID:
             eUnderline = XML_BOLD;
             break;
@@ -765,6 +766,9 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
         {
         case XML_SOLID:
             eUnderline = XML_SINGLE;
+            break;
+        case XML_NONE:
+            eUnderline = XML_NONE;
             break;
         default:
             OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
