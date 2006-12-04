@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
+ *  last change: $Author: os $ $Date: 2006-12-04 15:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,8 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_PARENT_NUMBERING: sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentNumbering")); break;
             case PROP_RIGHT_MARGIN     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")); break;
             case PROP_LEFT_MARGIN      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")); break;
+            case PROP_TOP_MARGIN          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")); break;
+            case PROP_BOTTOM_MARGIN       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")); break;
             case PROP_FIRST_LINE_OFFSET:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstLineOffset")); break;
             case PROP_LEFT_BORDER           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LeftBorder"));break;
             case PROP_RIGHT_BORDER          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RightBorder"));break;
@@ -196,10 +198,10 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_ANCHOR_TYPE           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType")); break;
             case PROP_SIZE                  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")); break;
             case PROP_HORI_ORIENT           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")); break;
-            case PROP_HORI_ORIENT_POSITTION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")); break;
+            case PROP_HORI_ORIENT_POSITION  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")); break;
             case PROP_HORI_ORIENT_RELATION  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")); break;
             case PROP_VERT_ORIENT           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")); break;
-            case PROP_VERT_ORIENT_POSITTION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")); break;
+            case PROP_VERT_ORIENT_POSITION  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")); break;
             case PROP_VERT_ORIENT_RELATION  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")); break;
             case PROP_GRAPHIC_CROP          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicCrop")); break;
             case PROP_SIZE100th_M_M         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size100thMM")); break;
@@ -213,6 +215,12 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_HORI_MIRRORED_ON_EVEN_PAGES:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriMirroredOnEvenPages")); break;
             case PROP_HORI_MIRRORED_ON_ODD_PAGES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriMirroredOnOddPages")); break;
             case PROP_VERT_MIRRORED              :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertMirrored")); break;
+            case PROP_CONTOUR_OUTSIDE      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContourOutside")); break;
+            case PROP_CONTOUR_POLY_POLYGON :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")); break;
+            case PROP_PAGE_TOGGLE          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageToggle")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

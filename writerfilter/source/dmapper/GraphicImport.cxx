@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:56:15 $
+ *  last change: $Author: os $ $Date: 2006-12-04 15:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
 #endif
+//#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
+//#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+//#endif
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #endif
@@ -243,9 +246,19 @@ struct GraphicImport_Impl
     sal_Int32 nRightCrop;
     sal_Int32 nBottomCrop;
 
+    sal_Int16 nHoriOrient;
+    sal_Int16 nHoriRelation;
+    bool      bPageToggle;
+    sal_Int16 nVertOrient;
+    sal_Int16 nVertRelation;
     sal_Int32 nWrap;
     bool      bContour;
     bool      bIgnoreWRK;
+
+    sal_Int32 nLeftMargin;
+    sal_Int32 nRightMargin;
+    sal_Int32 nTopMargin;
+    sal_Int32 nBottomMargin;
 
     sal_Int32 nContrast;
     sal_Int32 nBrightness;
@@ -256,6 +269,7 @@ struct GraphicImport_Impl
     GraphicBorderLine   aBorders[4];
     sal_Int32           nCurrentBorderLine;
 
+    sal_Int32   nDffType;
     bool        bIsBitmap;
     bool        bIsTiff;
     sal_Int32   nBitsPerPixel;
@@ -280,14 +294,24 @@ struct GraphicImport_Impl
         ,nTopCrop (0)
         ,nRightCrop (0)
         ,nBottomCrop(0)
+        ,nHoriOrient(   text::HoriOrientation::NONE )
+        ,nHoriRelation( text::RelOrientation::FRAME )
+        ,bPageToggle( false )
+        ,nVertOrient(  text::VertOrientation::NONE )
+        ,nVertRelation( text::RelOrientation::FRAME )
         ,nWrap(0)
         ,bContour(false)
         ,bIgnoreWRK(true)
+        ,nLeftMargin(319)
+        ,nRightMargin(319)
+        ,nTopMargin(0)
+        ,nBottomMargin(0)
         ,nContrast(0)
         ,nBrightness(0)
         ,fGamma( -1.0 )
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
+        ,nDffType( 0 )
         ,bIsBitmap(false)
         ,bIsTiff(false)
         ,nBitsPerPixel(0)
@@ -370,7 +394,9 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
             doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
             if( pProperties.get())
             {
+                string sName = pProperties->getType();
                 pProperties->resolve(*this);
+                sName = "";
             }
                 switch(Name)
                 {
@@ -379,6 +405,13 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
                     break;
                     default:;
                 }
+        }
+        break;
+        case NS_rtf::LN_payload :
+        {
+            doctok::Reference<BinaryObj>::Pointer_t pPictureData = val.getBinary();
+            if( pPictureData.get())
+                pPictureData->resolve(*this);
         }
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
@@ -440,9 +473,48 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
 
         //sprm 0xf004 and 0xf008, 0xf00b
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_rtf::LN_dfftype:// ignored
+        case NS_rtf::LN_dfftype://
+            m_pImpl->nDffType = nIntValue;
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_rtf::LN_dffinstance:// ignored
+        case NS_rtf::LN_dffinstance:
+            //todo: does this still work for PICF?
+            //in case of LN_dfftype == 0xf01f the instance contains the bitmap type:
+            if(m_pImpl->nDffType == 0xf01f)
+                switch( nIntValue )
+                {
+                    case 0x216 :            // Metafile header then compressed WMF
+
+                    case 0x3D4 :           // Metafile header then compressed EMF
+
+                    case 0x542 :            // Metafile hd. then compressed PICT
+
+                    {
+
+//                        rBLIPStream.SeekRel( nSkip + 20 );
+//                        // read in size of metafile in EMUS
+//                        rBLIPStream >> aMtfSize100.Width() >> aMtfSize100.Height();
+//                        // scale to 1/100mm
+//                        aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
+//                        if ( pVisArea )     // seem that we currently are skipping the visarea position
+//                            *pVisArea = Rectangle( Point(), aMtfSize100 );
+//                        // skip rest of header
+//                        nSkip = 6;
+//                        bMtfBLIP = bZCodecCompression = TRUE;
+                    }
+
+                    break;
+
+                    case 0x46A :            break;// One byte tag then JPEG (= JFIF) data
+
+                    case 0x6E0 :            break;// One byte tag then PNG data
+
+                    case 0x7A8 : m_pImpl->bIsBitmap = true;    break;
+//                        nSkip += 1;         // One byte tag then DIB data
+                    break;
+
+                }
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_dffversion://  ignored
         break;
@@ -589,9 +661,114 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FHDR:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_rtf::LN_BX:
+        case NS_rtf::LN_XAlign:
+/*
+        static const SwHoriOrient aHoriOriTab[ nCntXAlign ] =
+        {
+            HORI_NONE,     // From left position
+            HORI_LEFT,     // left
+            HORI_CENTER,   // centered
+            HORI_RIGHT,    // right
+            // --> OD 2004-12-06 #i36649#
+            // - inside -> HORI_LEFT and outside -> HORI_RIGHT
+            HORI_LEFT,   // inside
+            HORI_RIGHT   // outside
+*/
+            if( nIntValue < 6 && nIntValue > 0 )
+            {
+                static const sal_Int16 aHoriOrientTab[ 6 ] =
+                {
+                    text::HoriOrientation::NONE,
+                    text::HoriOrientation::LEFT,
+                    text::HoriOrientation::CENTER,
+                    text::HoriOrientation::RIGHT,
+                    text::HoriOrientation::INSIDE,
+                    text::HoriOrientation::OUTSIDE
+                };
+                m_pImpl->nHoriOrient = aHoriOrientTab[nIntValue];
+                m_pImpl->bPageToggle = nIntValue > 3;
+            }
+        break;
+        case NS_rtf::LN_YAlign:
+/*
+        static const SwVertOrient aVertOriTab[ nCntYAlign ] =
+        {
+            VERT_NONE,         // From Top position
+            VERT_TOP,          // top
+            VERT_CENTER,       // centered
+            VERT_BOTTOM,       // bottom
+            VERT_LINE_TOP,     // inside (obscure)
+            VERT_LINE_BOTTOM   // outside (obscure)
+        };
+        // CMC,OD 24.11.2003 #i22673# - to-line vertical alignment
+        static const SwVertOrient aToLineVertOriTab[ nCntYAlign ] =
+        {
+            VERT_NONE,         // below
+            VERT_LINE_BOTTOM,  // top
+            VERT_LINE_CENTER,  // centered
+            VERT_LINE_TOP,     // bottom
+            VERT_LINE_BOTTOM,  // inside (obscure)
+            VERT_LINE_TOP      // outside (obscure)
+        };
+        if ( eVertRel == REL_VERT_LINE ) //m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE
+        {
+            eVertOri = aToLineVertOriTab[ nYAlign ];
+        }
+        else
+        {
+            eVertOri = aVertOriTab[ nYAlign ];
+        }
+
+*/
+            if( nIntValue < 6 && nIntValue > 0)
+            {
+                static const sal_Int16 aVertOrientTab[ 6 ] =
+                {
+                    text::VertOrientation::NONE,         // From Top position
+                    text::VertOrientation::TOP,          // top
+                    text::VertOrientation::CENTER,       // centered
+                    text::VertOrientation::BOTTOM,       // bottom
+                    text::VertOrientation::LINE_TOP,     // inside (obscure)
+                    text::VertOrientation::LINE_BOTTOM   // outside (obscure)
+                };
+                static const sal_Int16 aToLineVertOrientTab[ 6 ] =
+                {
+                    text::VertOrientation::NONE,         // below
+                    text::VertOrientation::LINE_BOTTOM,  // top
+                    text::VertOrientation::LINE_CENTER,  // centered
+                    text::VertOrientation::LINE_TOP,     // bottom
+                    text::VertOrientation::LINE_BOTTOM,  // inside (obscure)
+                    text::VertOrientation::LINE_TOP      // outside (obscure)
+                };
+                m_pImpl->nVertOrient = m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE ?
+                    aToLineVertOrientTab[nIntValue] : aVertOrientTab[nIntValue];
+            }
+        break;
+        case NS_rtf::LN_LayoutInTableCell: break; //currently unknown
+        case NS_rtf::LN_XRelTo:
+        case NS_rtf::LN_BX: //hori orient relation
+            switch( nIntValue )
+            {
+                case  0: m_pImpl->nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
+                case  1: m_pImpl->nHoriRelation = text::RelOrientation::PAGE_FRAME; break;
+                case  2: m_pImpl->nHoriRelation = text::RelOrientation::FRAME; break;
+                //case  :
+                default:m_pImpl->nHoriRelation = text::RelOrientation::CHAR;
+            }
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_rtf::LN_BY: break;
+        case NS_rtf::LN_YRelTo:
+        case NS_rtf::LN_BY: //vert orient relation
+            switch( nIntValue )
+            {
+                case  0: m_pImpl->nVertRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
+                case  1: m_pImpl->nVertRelation = text::RelOrientation::PAGE_FRAME; break;
+                case  2: m_pImpl->nVertRelation = text::RelOrientation::FRAME; break;
+                //case  :
+                default:m_pImpl->nVertRelation = text::RelOrientation::TEXT_LINE;
+            }
+
+        break;
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_WR: //wrapping
             switch( nIntValue )
@@ -662,6 +839,7 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_shpLeft = 10424;
         case NS_rtf::LN_shpTop = 10425;
             break;*/
+        case NS_rtf::LN_dffheader: break;
         default: val.getInt();
     }
 
@@ -696,7 +874,6 @@ void GraphicImport::ProcessShapeOptions(doctok::Value& val)
 //        case NS_dff::LN_shpfLockAdjustHandles /*126*/: break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shpfLockAgainstGrouping /*127*/: break;
-
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shpfLockAgainstGrouping /*127*/:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -1289,13 +1466,25 @@ void GraphicImport::ProcessShapeOptions(doctok::Value& val)
 //        case NS_dff::LN_shppihlShape /*898*/:
         case NS_dff::LN_shppWrapPolygonVertices/*899*/:  break;  // rtf:shppWrapPolygonVertices
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-//        case NS_dff::LN_shpdxWrapDistLeft /*900*/:
+        case NS_dff::LN_shpdxWrapDistLeft /*900*/: // contains a twip/635 value
+            //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
+            m_pImpl->nLeftMargin = nIntValue / 360;
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-//        case NS_dff::LN_shpdyWrapDistTop /*901*/:
+        case NS_dff::LN_shpdyWrapDistTop /*901*/:  // contains a twip/635 value
+            //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
+            m_pImpl->nTopMargin = nIntValue / 360;
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-//        case NS_dff::LN_shpdxWrapDistRight /*902*/:
+        case NS_dff::LN_shpdxWrapDistRight /*902*/:// contains a twip/635 value
+            //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
+            m_pImpl->nRightMargin = nIntValue / 360;
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-//        case NS_dff::LN_shpdyWrapDistBottom /*903*/:
+        case NS_dff::LN_shpdyWrapDistBottom /*903*/:// contains a twip/635 value
+            //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
+            m_pImpl->nBottomMargin = nIntValue / 360;
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shplidRegroup /*904*/:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -1330,24 +1519,30 @@ void GraphicImport::sprm(doctok::Sprm & sprm_)
         case 0xf00a: //part of 0xf004 - shape properties
         case 0xf00b: //part of 0xf004
         case 0xf007:
+        case 0xf122: //udefprop
         {
             doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
             if( pProperties.get())
             {
+                string sName = pProperties->getType();
                 pProperties->resolve(*this);
+                sName = "";
             }
         }
         break;
         case 0x271b:
+        case 0x271c:
         {
-            doctok::Reference<BinaryObj>::Pointer_t pPictureData = sprm_.getBinary();
-            if( pPictureData.get())
-                pPictureData->resolve(*this);
+            if( nId != 0x271c || m_pImpl->nDffType == 0xf01f || m_pImpl->nDffType == 0xf01e )
+            {
+                doctok::Reference<BinaryObj>::Pointer_t pPictureData = sprm_.getBinary();
+                if( pPictureData.get())
+                    pPictureData->resolve(*this);
+            }
         }
         break;
         case 0xf010:
         case 0xf011:
-        case 0xf122:
             //ignore - doesn't contain useful members
         break;
         default:
@@ -1434,23 +1629,81 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
                 sal_Int32 nHeight = m_pImpl->nBottomPosition - m_pImpl->nTopPosition;
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
                     uno::makeAny( awt::Size( nWidth, nHeight )));
+                //adjust margins
+                if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
+                    (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                        m_pImpl->nHoriRelation == text::RelOrientation::FRAME) ) ||
+                     (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
+                       m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
+                    m_pImpl->nLeftMargin = 0;
+                if((m_pImpl->nHoriOrient == text::HoriOrientation::RIGHT &&
+                        (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                            m_pImpl->nHoriRelation == text::RelOrientation::FRAME) ) ||
+                    (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
+                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
+                    m_pImpl->nRightMargin = 0;
+                // adjust top/bottom margins
+                if( m_pImpl->nVertOrient == text::VertOrientation::TOP &&
+                        ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                            m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
+                    m_pImpl->nTopMargin = 0;
+                if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
+                        ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                            m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
+                    m_pImpl->nBottomMargin = 0;
+                if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
+                        m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA )
+                    m_pImpl->nBottomMargin = 0;
+
+                //adjust alignment
+                if( m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
+                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
+                {
+                    // convert 'left to page' to 'from left -<width> to page text area'
+                    m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+                    m_pImpl->nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA;
+                    m_pImpl->nLeftPosition = - nWidth;
+                }
+                else if( m_pImpl->nHoriOrient == text::HoriOrientation::OUTSIDE &&
+                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
+                {
+                    // convert 'right to page' to 'from left 0 to right page border'
+                    m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+                    m_pImpl->nHoriRelation = text::RelOrientation::PAGE_RIGHT;
+                    m_pImpl->nLeftPosition = 0;
+                }
+
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT          ),
-                    uno::makeAny(text::HoriOrientation::NONE));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITTION),
+                    uno::makeAny(m_pImpl->nHoriOrient));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITION),
                     uno::makeAny(m_pImpl->nLeftPosition));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_RELATION ),
-                    uno::makeAny(text::RelOrientation::PRINT_AREA));
+                    uno::makeAny(m_pImpl->nHoriRelation));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_TOGGLE ),
+                    uno::makeAny(m_pImpl->bPageToggle));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT          ),
-                    uno::makeAny(text::VertOrientation::NONE));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITTION),
+                    uno::makeAny(m_pImpl->nVertOrient));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITION),
                     uno::makeAny(m_pImpl->nTopPosition));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
-                uno::makeAny(text::RelOrientation::PRINT_AREA));
+                uno::makeAny(m_pImpl->nVertRelation));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND ),
                     uno::makeAny(m_pImpl->nWrap));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
+                    uno::makeAny(true));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_LEFT_MARGIN ),
+                    uno::makeAny(m_pImpl->nLeftMargin));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_RIGHT_MARGIN ),
+                    uno::makeAny(m_pImpl->nRightMargin));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TOP_MARGIN ),
+                    uno::makeAny(m_pImpl->nTopMargin));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ),
+                    uno::makeAny(m_pImpl->nBottomMargin));
 
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
+                    uno::Any());
                 if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
                     m_pImpl->nContrast == -70 &&
                     m_pImpl->nBrightness == 70 )
