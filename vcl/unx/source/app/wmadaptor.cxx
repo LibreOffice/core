@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:05:13 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -671,8 +671,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = NULL;
             XLIB_Window aCheckWindow = None;
-            BOOL bIgnore = m_pSalDisplay->GetXLib()->GetIgnoreXErrors();
-            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+            m_pSalDisplay->GetXLib()->PushXErrorLevel( true );
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
                                     m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
@@ -687,7 +686,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 && aRealType == XA_CARDINAL
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->WasXError()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;
@@ -705,7 +704,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     getNetWmName();
                 }
             }
-            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+            m_pSalDisplay->GetXLib()->PopXErrorLevel();
         }
         else if( pProperty )
         {
@@ -871,8 +870,7 @@ bool WMAdaptor::getNetWmName()
             XFree( pProperty );
             pProperty = NULL;
             XLIB_Window aCheckWindow = None;
-            BOOL bIgnore = m_pSalDisplay->GetXLib()->GetIgnoreXErrors();
-            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+            m_pSalDisplay->GetXLib()->PushXErrorLevel( true );
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
                                     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
@@ -887,7 +885,7 @@ bool WMAdaptor::getNetWmName()
                 && aRealType == XA_WINDOW
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->WasXError()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;
@@ -937,7 +935,7 @@ bool WMAdaptor::getNetWmName()
                 XFree( pProperty );
                 pProperty = NULL;
             }
-            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+            m_pSalDisplay->GetXLib()->PopXErrorLevel();
         }
         else if( pProperty )
         {
