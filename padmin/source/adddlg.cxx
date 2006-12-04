@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:23:33 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,10 +597,6 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             if( aValue.Len() )
                 aInfo.m_nBottomMarginAdjust = aValue.ToInt32() - (int)((double)nBottom * 35.27777778 );
         }
-
-        aValue = aConfig.ReadKey( "Scale", aDefScale );
-        if( aValue.Len() )
-            aInfo.m_nScale = (int)(100.0 * StringToDouble( aValue ));
 
         aValue = aConfig.ReadKey( "Copies", aDefScale );
         if( aValue.Len() )
