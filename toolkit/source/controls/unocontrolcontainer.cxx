@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:12:22 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,13 +185,13 @@ private:
         @throw uno::RuntimeException
             if no free identifier can be found
     */
-    ControlIdentifier UnoControlHolderList::impl_getFreeIdentifier_throw();
+    ControlIdentifier impl_getFreeIdentifier_throw();
 
     /** finds a free name
         @throw uno::RuntimeException
             if no free name can be found
     */
-    ::rtl::OUString UnoControlHolderList::impl_getFreeName_throw();
+    ::rtl::OUString impl_getFreeName_throw();
 };
 
 //------------------------------------------------------------------------
