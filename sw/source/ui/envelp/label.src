@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:01:31 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 15:10:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,7 @@ TabPage TP_PRIVATE_DATA
         Pos = MAP_APPFONT ( 12 ,  32) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text [ de ] = "~Vor-/Name/Kürzel 2" ;
-        Text [ en-US ] = "First / Last ~Name / Initials 2";
+        Text [ en-US ] = "First/Last ~name/Initials 2";
     };
     Edit ED_FIRSTNAME_2
     {
