@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:25:53 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,21 +123,19 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
         else
         {
             SalXLib* pLib = GetX11SalData()->GetDisplay()->GetXLib();
-            bool bWasIgnore = pLib->GetIgnoreXErrors();
-            pLib->SetIgnoreXErrors( TRUE );
+            pLib->PushXErrorLevel( true );
             XImage* pImage = XGetImage( pDisplay, aSrc, src_x, src_y, w, h,
                                         AllPlanes, ZPixmap );
             if( pImage )
             {
                 if( pImage->data )
                 {
-                    pLib->SetIgnoreXErrors( TRUE );
                     XPutImage( pDisplay, aDest, aDestGC, pImage,
                                0, 0, dest_x, dest_y, w, h );
                 }
                 XDestroyImage( pImage );
             }
-            pLib->SetIgnoreXErrors( bWasIgnore );
+            pLib->PopXErrorLevel();
         }
     }
     else
