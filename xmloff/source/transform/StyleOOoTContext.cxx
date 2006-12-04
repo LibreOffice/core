@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:28:37 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:12:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -653,6 +653,10 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 case XML_DOUBLE_WAVE:
                     eToken = XML_WAVE;
                     bDouble = sal_True;
+                    break;
+                case XML_NONE:
+                    eToken = XML_NONE;
+                    bDouble = sal_False;
                     break;
                 default:
                     OSL_ENSURE( false, "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
