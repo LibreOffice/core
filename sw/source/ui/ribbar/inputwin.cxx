@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:11:41 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 15:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,9 +353,10 @@ IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, pToolBox )
     {
         case FN_FORMULA_CALC :
         {
-            Point aBL = GetItemRect( FN_FORMULA_CALC ).BottomLeft();
-            Point aPt(aBL.X(), aBL.Y());
-            aPopMenu.Execute( this, aPt );
+            aPopMenu.Execute( this, GetItemRect( FN_FORMULA_CALC ), POPUPMENU_NOMOUSEUPCLOSE );
+            break;
+        default:
+            break;
         }
     }
 
