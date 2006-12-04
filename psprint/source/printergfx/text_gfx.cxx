@@ -4,9 +4,9 @@
  *
  *  $RCSfile: text_gfx.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:07:02 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -833,6 +833,13 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
         {
             convertPfbToPfa (aFontFile, *pFile);
             aFontFile.close ();
+
+            pFile->setPos(osl_Pos_Current, -1);
+            char lastchar = '\n';
+            sal_uInt64 uBytes(1);
+            pFile->read((void *)(&lastchar), uBytes, uBytes);
+            if (lastchar != '\n')
+                WritePS (pFile, "\n");
         }
         WritePS (pFile, "%%EndResource\n");
         rSuppliedFonts.push_back( aPostScriptName );
