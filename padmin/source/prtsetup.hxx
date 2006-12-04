@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtsetup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:29:00 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,9 +138,6 @@ class RTSPaperPage : public TabPage
     FixedText           m_aSlotText;
     ListBox             m_aSlotBox;
 
-    FixedText           m_aScaleText;
-    MetricField         m_aScaleBox;
-
     DECL_LINK( SelectHdl, ListBox* );
 public:
     RTSPaperPage( RTSDialog* );
@@ -148,7 +145,6 @@ public:
 
     void update();
 
-    ULONG getScale() { return m_aScaleBox.GetValue(); }
     String getOrientation() { return m_aOrientBox.GetSelectEntry(); }
 };
 
