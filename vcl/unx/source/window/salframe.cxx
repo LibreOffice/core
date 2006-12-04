@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.213 $
+ *  $Revision: 1.214 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:30:27 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,26 +160,22 @@ X11SalFrame* X11SalFrame::s_pSaveYourselfFrame = NULL;
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void doReparentPresentationDialogues( SalDisplay* pDisplay )
 {
-    BOOL bIgnore = pDisplay->GetXLib()->GetIgnoreXErrors();
+    pDisplay->GetXLib()->PushXErrorLevel( true );
     while( aPresentationReparentList.begin() != aPresentationReparentList.end() )
     {
-        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
         int x, y;
         XLIB_Window aRoot, aChild;
         unsigned int w, h, bw, d;
-        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
         XGetGeometry( pDisplay->GetDisplay(),
                       aPresentationReparentList.front(),
                       &aRoot,
                       &x, &y, &w, &h, &bw, &d );
-        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
         XTranslateCoordinates( pDisplay->GetDisplay(),
                                hPresentationWindow,
                                aRoot,
                                x, y,
                                &x, &y,
                                &aChild );
-        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
         XReparentWindow( pDisplay->GetDisplay(),
                          aPresentationReparentList.front(),
                          aRoot,
@@ -189,7 +185,7 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
     if( hPresFocusWindow )
         XSetInputFocus( pDisplay->GetDisplay(), hPresFocusWindow, PointerRoot, CurrentTime );
     XSync( pDisplay->GetDisplay(), False );
-    pDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+    pDisplay->GetXLib()->PopXErrorLevel();
 }
 
 // -=-= SalFrame / X11SalFrame =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2564,10 +2560,6 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
 
 bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
-    // plugin parent may be killed unexpectedly by
-    // plugging process; ignore XErrors in that case
-    GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
-
     createNewWindow( pNewParent ? pNewParent->aWindow : None );
 
     return true;
@@ -3506,8 +3498,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
 
-    BOOL bOldIgnore = GetDisplay()->GetXLib()->GetIgnoreXErrors();
-    GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+    GetDisplay()->GetXLib()->PushXErrorLevel( true );
 
     /*
      *  #89186# don't rely on the new parent from the event.
@@ -3526,7 +3517,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                     &hDummy,
                     &Children,
                     &nChildren );
-        if( GetDisplay()->GetXLib()->WasXError() )
+        if( GetDisplay()->GetXLib()->HasXErrorOccured() )
         {
             hWM_Parent = GetShellWindow();
             break;
@@ -3565,7 +3556,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         // Reparenting before Destroy
         aPresentationReparentList.remove( GetStackingWindow() );
         mhStackingWindow = None;
-        GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldIgnore );
+        GetDisplay()->GetXLib()->PopXErrorLevel();
         return 0;
     }
 
@@ -3616,6 +3607,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
      *  so need real geometries here
      *  (this will fail with virtual roots ?)
      */
+    GetDisplay()->GetXLib()->ResetXErrorOccured();
     int xp, yp, x, y;
     unsigned int wp, w, hp, h, bw, d;
     XGetGeometry( GetXDisplay(),
@@ -3627,7 +3619,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                   &hRoot,
                   &xp, &yp, &wp, &hp, &bw, &d );
     bool bResized = false;
-    if( ! GetDisplay()->GetXLib()->WasXError() )
+    if( ! GetDisplay()->GetXLib()->HasXErrorOccured() )
     {
         maGeometry.nRightDecoration     = wp - w - maGeometry.nLeftDecoration;
         maGeometry.nBottomDecoration    = hp - h - maGeometry.nTopDecoration;
@@ -3665,7 +3657,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     else if( bResized )
         CallCallback( SALEVENT_RESIZE, NULL );
 
-    GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldIgnore );
+    GetDisplay()->GetXLib()->PopXErrorLevel();
 
     return 1;
 }
