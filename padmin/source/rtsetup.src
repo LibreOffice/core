@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:17:28 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,20 +151,6 @@ TabPage RID_RTS_PAPERPAGE
         DropDown = TRUE;
         Pos = MAP_APPFONT( 115, 50 );
         Size = MAP_APPFONT( 110, 120 );
-    };
-    FixedText RID_RTS_PAPER_SCALE_TXT
-    {
-        Pos = MAP_APPFONT ( 5 , 65 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "~Skalierung" ;
-        Text [ en-US ] = "~Scale";
-    };
-    MetricField RID_RTS_PAPER_SCALE_BOX
-    {
-        Border = TRUE ;
-        Spin = TRUE;
-        Pos = MAP_APPFONT ( 115 , 65 ) ;
-        Size = MAP_APPFONT ( 110 , 12 ) ;
     };
 };
 
