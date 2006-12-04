@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:04:10 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,10 +386,8 @@ SalXLib::SalXLib()
         nFDs_ = m_pTimeoutFDS[0] + 1;
     }
 
-    bWasXError_                     = FALSE;
-    bIgnoreXErrors_                 = !!getenv( "SAL_IGNOREXERRORS" );
+    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
     m_bHaveSystemChildFrames        = false;
-    nIgnoreErrorLevel               = 0;
 }
 
 SalXLib::~SalXLib()
@@ -397,8 +395,27 @@ SalXLib::~SalXLib()
     // close 'wakeup' pipe.
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
+
+    PopXErrorLevel();
 }
 
+void SalXLib::PushXErrorLevel( bool bIgnore )
+{
+    m_aXErrorHandlerStack.push_back( XErrorStackEntry() );
+    XErrorStackEntry& rEnt = m_aXErrorHandlerStack.back();
+    rEnt.m_bWas = false;
+    rEnt.m_bIgnore = bIgnore;
+    rEnt.m_aHandler = XSetErrorHandler( (XErrorHandler)X11SalData::XErrorHdl );
+}
+
+void SalXLib::PopXErrorLevel()
+{
+    if( m_aXErrorHandlerStack.size() )
+    {
+        XSetErrorHandler( m_aXErrorHandlerStack.back().m_aHandler );
+        m_aXErrorHandlerStack.pop_back();
+    }
+}
 
 void SalXLib::Init()
 {
@@ -475,7 +492,6 @@ void SalXLib::Init()
     }
 
     XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
 
     SalDisplay *pSalDisplay = new SalX11Display( pDisp );
 
@@ -483,13 +499,12 @@ void SalXLib::Init()
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );
 
-    sal_Bool bOldErrorSetting = GetIgnoreXErrors();
-    SetIgnoreXErrors( True );
+    PushXErrorLevel( true );
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! WasXError() );
-    SetIgnoreXErrors( bOldErrorSetting );
+    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
 }
@@ -514,10 +529,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
     if( m_bHaveSystemChildFrames )
         return;
 
-    if( nIgnoreErrorLevel > 0 )
-        return;
-
-    if( ! bIgnoreXErrors_ )
+    if( ! m_aXErrorHandlerStack.back().m_bIgnore )
     {
         if (   (pEvent->error_code   == BadAlloc)
             && (pEvent->request_code == X_OpenFont) )
@@ -576,7 +588,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 
     }
 
-    bWasXError_ = TRUE;
+    m_aXErrorHandlerStack.back().m_bWas = true;
 }
 
 struct YieldEntry
