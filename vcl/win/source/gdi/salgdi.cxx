@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:27:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -765,7 +765,7 @@ WinSalGraphics::WinSalGraphics()
     mpStdClipRgnData    = NULL;
     mpLogFont           = NULL;
     mpFontCharSets      = NULL;
-    mpFontNameCache     = NULL;
+    mpFontAttrCache     = NULL;
     mnFontCharSetCount  = 0;
     mpFontKernPairs     = NULL;
     mnFontKernPairCount = 0;
