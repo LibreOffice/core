@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:08:10 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,6 +546,14 @@ void PDFExtOutDevData::SetIsExportTransitionEffects( const sal_Bool bTransitionE
 {
     mbTransitionEffects = bTransitionEffects;
 }
+sal_Bool PDFExtOutDevData::GetIsExportFormFields() const
+{
+    return mbExportFormFields;
+}
+void PDFExtOutDevData::SetIsExportFormFields( const sal_Bool bExportFomtFields )
+{
+    mbExportFormFields = bExportFomtFields;
+}
 sal_Int32 PDFExtOutDevData::GetFormsFormat() const
 {
     return mnFormsFormat;
@@ -553,6 +561,14 @@ sal_Int32 PDFExtOutDevData::GetFormsFormat() const
 void PDFExtOutDevData::SetFormsFormat( const sal_Int32 nFormsFormat )
 {
     mnFormsFormat = nFormsFormat;
+}
+sal_Bool PDFExtOutDevData::GetIsExportBookmarks() const
+{
+    return mbExportBookmarks;
+}
+void PDFExtOutDevData::SetIsExportBookmarks( const sal_Bool bExportBookmarks )
+{
+    mbExportBookmarks = bExportBookmarks;
 }
 std::vector< PDFExtOutDevBookmarkEntry >& PDFExtOutDevData::GetBookmarks()
 {
