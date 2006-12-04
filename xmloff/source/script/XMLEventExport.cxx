@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:40:04 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,11 +183,15 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
             // now export the current event
             ExportEvent( aValues, rXmlName, bWhitespace, bStarted );
         }
+#ifdef DBG_UTIL
         else
         {
             // don't proceed further
-            DBG_ERROR("Unknown event name.");
+            ::rtl::OString aStr("Unknown event name:" );
+            aStr += ::rtl::OUStringToOString( aNames[i], RTL_TEXTENCODING_UTF8 );
+            DBG_ERROR( aStr.getStr() );
         }
+#endif
     }
 
     // close <script:events> element (if it was opened before)
@@ -219,11 +223,15 @@ void XMLEventExport::ExportSingleEvent(
             EndElement(bUseWhitespace);
         }
     }
+#ifdef DBG_UTIL
     else
     {
-        // unknown name!
-        DBG_ERROR("unknown event name");
+        // don't proceed further
+        ::rtl::OString aStr("Unknown event name:" );
+        aStr += ::rtl::OUStringToOString( rApiEventName, RTL_TEXTENCODING_UTF8 );
+        DBG_ERROR( aStr.getStr() );
     }
+#endif
 }
 
 
@@ -345,6 +353,11 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnPrepareViewClosing", XML_NAMESPACE_OFFICE, "prepare-view-closing" },
     { "OnViewClosed",       XML_NAMESPACE_OFFICE, "view-close" },
     { "OnVisAreaChanged",   XML_NAMESPACE_OFFICE, "visarea-changed" }, // "on-visarea-changed"
+    { "OnCreate",           XML_NAMESPACE_OFFICE, "create" },
+    { "OnSaveAsFailed",     XML_NAMESPACE_OFFICE, "save-as-failed" },
+    { "OnSaveFailed",       XML_NAMESPACE_OFFICE, "save-failed" },
+    { "OnCopyToFailed",     XML_NAMESPACE_OFFICE, "copy-to-failed" },
+    { "TitleChanged",       XML_NAMESPACE_OFFICE, "title-changed" },
 
     { NULL, 0, 0 }
 };
