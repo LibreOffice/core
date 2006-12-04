@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:59:39 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,6 +412,10 @@ void GtkData::initNWF( void )
         // that makes direct rendering impossible: they totally
         // ignore the clip rectangle passed to the paint methods
         GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
+    static const char* pEnv = getenv( "SAL_GTK_USE_PIXMAPPAINT" );
+    if( pEnv && *pEnv )
+        GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
+
     int nScreens = GetX11SalData()->GetDisplay()->GetScreenCount();
     gWidgetData = std::vector<NWFWidgetData>( nScreens );
     for( int i = 0; i < nScreens; i++ )
@@ -3185,6 +3189,18 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
 
+    #if OSL_DEBUG_LEVEL > 1
+    {
+        GtkSettings* pGtkSettings = gtk_settings_get_default();
+        GValue aValue;
+        memset( &aValue, 0, sizeof(GValue) );
+        g_value_init( &aValue, G_TYPE_STRING );
+        g_object_get_property( G_OBJECT(pGtkSettings), "gtk-theme-name", &aValue );
+        const gchar* pThemeName = g_value_get_string( &aValue );
+        fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
+        g_value_unset( &aValue );
+    }
+    #endif
     if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )
     {
         // #i52570#, #i61532# workaround a weird paint issue;
