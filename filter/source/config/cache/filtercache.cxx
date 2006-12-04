@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:23:25 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ void FilterCache::load(EFillState eRequired,
     if ((m_eFillState & eRequired) == eRequired)
         return;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     if (
         (!bByThread) &&
         (
