@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:32:24 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5650,8 +5650,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     aLine.append( ' ' );
                     if( bWasYChange )
                     {
-                        m_aPages.back().appendMappedLength( (sal_Int32)aDiff.Y(), aLine, true, &nDiffL );
-                        aCumulativePos.Y() += nDiffL;
+                        m_aPages.back().appendMappedLength( (sal_Int32)-aDiff.Y(), aLine, true, &nDiffL );
+                        aCumulativePos.Y() -= nDiffL;
                     }
                     else
                     {
