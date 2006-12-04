@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:06:47 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:33:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1126,16 +1126,20 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
         }
     }
 
-    // setup code
-    ByteString aLine( "/#copies " );
-    aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
-    aLine +=  " def\n";
-    sal_uInt64 nWritten = 0;
-    bool bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
-        || nWritten != aLine.Len() ? false : true;
+    bool bSuccess = true;
+    if (rJob.m_nCopies > 1)
+    {
+        // setup code
+        ByteString aLine( "/#copies " );
+        aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
+        aLine +=  " def\n";
+        sal_uInt64 nWritten = 0;
+        bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
+            || nWritten != aLine.Len() ? false : true;
 
-    if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
-        WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );
+        if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
+            WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );
+    }
 
     bool bFeatureSuccess = writeFeatureList( pFile, rJob, true );
 
