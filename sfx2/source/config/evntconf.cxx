@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:25:36 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -695,10 +695,7 @@ SvxMacroTableDtor* SfxEventConfiguration::GetDocEventTable( SfxObjectShell*pDoc 
             USHORT nID = (USHORT) GetEventId_Impl( aNames[i] );
             if ( nID && pMacro )
                 pDocTable->Insert( nID, pMacro );
-            else
-                DBG_ERROR("Suspicious event binding!");
         }
-
     }
 
     return pDocTable;
