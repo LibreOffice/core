@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:31:07 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,7 +607,7 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {   "demi",                 WEIGHT_SEMIBOLD },
 {   "black",                WEIGHT_BLACK },
 {   "bold",                 WEIGHT_BOLD },
-{   "heavy",                WEIGHT_BOLD },
+{   "heavy",                WEIGHT_BLACK },
 {   "ultralight",           WEIGHT_ULTRALIGHT },
 {   "light",                WEIGHT_LIGHT },
 {   "medium",               WEIGHT_MEDIUM },
@@ -948,7 +948,7 @@ static const enum_convert pWeightNames[] =
     { "ultrabold", WEIGHT_ULTRABOLD },
     { "semi", WEIGHT_SEMIBOLD },
     { "demi", WEIGHT_SEMIBOLD },
-    { "heavy", WEIGHT_SEMIBOLD },
+    { "heavy", WEIGHT_BLACK },
     { "unknown", WEIGHT_DONTKNOW },
     { "thin", WEIGHT_THIN },
     { "ultralight", WEIGHT_ULTRALIGHT }
