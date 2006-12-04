@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:59:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 15:10:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,7 @@ void SwRedlineAcceptDlg::Init(USHORT nStart)
     // #i69618# this moves the list box to the right position, visually
     SvLBoxEntry* pSelEntry = pTable->FirstSelected();
     if( pSelEntry )
-        pTable->MakeVisible( pSelEntry );
+        pTable->MakeVisible( pSelEntry, sal_True ); //#i70937#, force the scroll
 }
 
 /*------------------------------------------------------------------------
