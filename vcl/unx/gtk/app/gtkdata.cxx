@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:56:57 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,11 +503,11 @@ void GtkXLib::Init()
     // add executable
     nParams++;
 
-    // init gtk/gdk
-    gtk_init_check( &nParams, &pCmdLineAry );
-
     g_set_application_name(X11SalData::getFrameClassName());
     g_set_prgname(X11SalData::getFrameResName());
+
+    // init gtk/gdk
+    gtk_init_check( &nParams, &pCmdLineAry );
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
@@ -556,13 +556,12 @@ void GtkXLib::Init()
 
     gdk_window_add_filter( NULL, call_filterGdkEvent, m_pGtkSalDisplay );
 
-    sal_Bool bOldErrorSetting = GetIgnoreXErrors();
-    SetIgnoreXErrors( True );
+    PushXErrorLevel( true );
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! WasXError() );
-    SetIgnoreXErrors( bOldErrorSetting );
+    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    PopXErrorLevel();
 
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
 
