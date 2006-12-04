@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:32:42 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 08:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1565,56 +1565,59 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         //
         // OUTLINE
         //
-        typedef std::pair< sal_Int8, sal_Int32 > StackEntry;
-        std::stack< StackEntry > aOutlineStack;
-        aOutlineStack.push( StackEntry( -1, -1 ) ); // push default value
-
-        const sal_uInt16 nOutlineCount = mrSh.GetOutlineCnt();
-        for ( sal_uInt16 i = 0; i < nOutlineCount; ++i )
+        if( pPDFExtOutDevData->GetIsExportBookmarks() )
         {
-            // Check if outline is hidden
-            const SwTxtNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTxtNode();
-            ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+            typedef std::pair< sal_Int8, sal_Int32 > StackEntry;
+            std::stack< StackEntry > aOutlineStack;
+            aOutlineStack.push( StackEntry( -1, -1 ) ); // push default value
 
-            if ( pTNd->IsHidden() ||
-                 // --> FME 2005-01-10 #i40292# Skip empty outlines:
-                 0 == pTNd->GetTxt().Len() )
-                 // <--
-                continue;
-
-            // Get parent id from stack:
-            const sal_Int8 nLevel = (sal_Int8)mrSh.GetOutlineLevel( i );
-            sal_Int8 nLevelOnTopOfStack = aOutlineStack.top().first;
-            while ( nLevelOnTopOfStack >= nLevel &&
-                    nLevelOnTopOfStack != -1 )
+            const sal_uInt16 nOutlineCount = mrSh.GetOutlineCnt();
+            for ( sal_uInt16 i = 0; i < nOutlineCount; ++i )
             {
-                aOutlineStack.pop();
-                nLevelOnTopOfStack = aOutlineStack.top().first;
-            }
-            const sal_Int32 nParent = aOutlineStack.top().second;
+                // Check if outline is hidden
+                const SwTxtNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTxtNode();
+                ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
 
-            // Destination rectangle
-            mrSh.GotoOutline(i);
-            const SwRect& rDestRect = mrSh.GetCharRect();
+                if ( pTNd->IsHidden() ||
+                     // --> FME 2005-01-10 #i40292# Skip empty outlines:
+                     0 == pTNd->GetTxt().Len() )
+                     // <--
+                    continue;
 
-            // Destination PageNum
-            const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
+                // Get parent id from stack:
+                const sal_Int8 nLevel = (sal_Int8)mrSh.GetOutlineLevel( i );
+                sal_Int8 nLevelOnTopOfStack = aOutlineStack.top().first;
+                while ( nLevelOnTopOfStack >= nLevel &&
+                        nLevelOnTopOfStack != -1 )
+                {
+                    aOutlineStack.pop();
+                    nLevelOnTopOfStack = aOutlineStack.top().first;
+                }
+                const sal_Int32 nParent = aOutlineStack.top().second;
 
-            if ( -1 != nDestPageNum )
-            {
-                // Destination Export
-                const sal_Int32 nDestId =
-                    pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                // Destination rectangle
+                mrSh.GotoOutline(i);
+                const SwRect& rDestRect = mrSh.GetCharRect();
 
-                // Outline entry text
-                const String& rEntry = mrSh.GetOutlineText( i );
+                // Destination PageNum
+                const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
-                // Create a new outline item:
-                const sal_Int32 nOutlineId =
-                    pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
+                if ( -1 != nDestPageNum )
+                {
+                    // Destination Export
+                    const sal_Int32 nDestId =
+                        pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                // Push current level and nOutlineId on stack:
-                aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
+                    // Outline entry text
+                    const String& rEntry = mrSh.GetOutlineText( i );
+
+                    // Create a new outline item:
+                    const sal_Int32 nOutlineId =
+                        pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
+
+                    // Push current level and nOutlineId on stack:
+                    aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
+                }
             }
         }
     }
