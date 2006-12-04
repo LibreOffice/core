@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtsetup.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:29:35 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,6 @@
 #define RID_RTS_PAPER_DUPLEX_BOX            6
 #define RID_RTS_PAPER_SLOT_TXT              7
 #define RID_RTS_PAPER_SLOT_BOX              8
-#define RID_RTS_PAPER_SCALE_TXT         9
-#define RID_RTS_PAPER_SCALE_BOX         10
 
 #define RID_RTS_FONTSUBSTPAGE               4005
 #define RID_RTS_FS_SUBST_TXT                1
