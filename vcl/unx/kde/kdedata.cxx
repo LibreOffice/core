@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:03:31 $
+ *  last change: $Author: rt $ $Date: 2006-12-04 16:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,13 +206,12 @@ void KDEXLib::Init()
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );
 
-    sal_Bool bOldErrorSetting = GetIgnoreXErrors();
-    SetIgnoreXErrors( True );
+    PushXErrorLevel( true );
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! WasXError() );
-    SetIgnoreXErrors( bOldErrorSetting );
+    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
 }
