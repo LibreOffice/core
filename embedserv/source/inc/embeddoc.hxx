@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:38:54 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 12:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,7 @@ public:
     HRESULT SaveObject();
     HRESULT ShowObject();
     GUID GetGUID() const { return m_guid; }
+    HRESULT OLENotifyClosing();
 
 protected:
     oslInterlockedCount                 m_refCount;
