@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,26 +246,37 @@ sal_uInt32 DffRecord::getShapeId()
 
 class DffOPTHandler : public Properties
 {
-    map<Id, WW8ValueSharedPointer_t> mMap;
+    map<int, WW8ValueSharedPointer_t> mMap;
+    int nId;
 
 public:
-    DffOPTHandler() {}
+    DffOPTHandler() : nId(0) {}
     virtual ~DffOPTHandler() {}
 
     virtual void attribute(Id name, Value & val)
     {
-        WW8Value & rTmpVal = dynamic_cast<WW8Value &>(val);
-        WW8ValueSharedPointer_t pVal(dynamic_cast<WW8Value *>(rTmpVal.clone()));
-        mMap[name] = pVal;
+        switch (name)
+        {
+        case NS_rtf::LN_shppid:
+            nId = val.getInt();
+            break;
+        case NS_rtf::LN_shpvalue:
+            {
+                WW8Value & rTmpVal = dynamic_cast<WW8Value &>(val);
+                WW8ValueSharedPointer_t
+                    pVal(dynamic_cast<WW8Value *>(rTmpVal.clone()));
+                mMap[nId] = pVal;
+            }
+        }
     }
 
     virtual void sprm(Sprm & /*sprm_*/)
     {
     }
 
-    WW8ValueSharedPointer_t & getValue(Id name)
+    WW8ValueSharedPointer_t & getValue(int nId_)
     {
-        return mMap[name];
+        return mMap[nId_];
     }
 
 };
@@ -468,11 +479,16 @@ DffRecord::Pointer_t DffBlock::getBlip(sal_uInt32 nBlip)
 {
     DffRecord::Pointer_t pResult;
 
-    Records_t aRecords = findRecords(0xf007);
-
-    if (nBlip < aRecords.size())
+    if (nBlip > 0)
     {
-        pResult = aRecords[nBlip];
+        nBlip--;
+
+        Records_t aRecords = findRecords(0xf007);
+
+        if (nBlip < aRecords.size())
+        {
+            pResult = aRecords[nBlip];
+        }
     }
 
     return pResult;
