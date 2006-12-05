@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:41:08 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 12:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 
 
 
-#define IUL 5
+#define IUL 6
 
 
 
@@ -135,12 +135,14 @@ void SAL_CALL Interceptor::dispose()
 
 Interceptor::Interceptor(
     const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess,
-    DocumentHolder* pDocH)
+    DocumentHolder* pDocH,
+    sal_Bool bLink )
     : m_xOleAccess( xOleAccess ),
       m_xDocHLocker( static_cast< ::cppu::OWeakObject* >( pDocH ) ),
       m_pDocH(pDocH),
       m_pStatCL(0),
-      m_pDisposeEventListeners(0)
+      m_pDisposeEventListeners(0),
+      m_bLink( bLink )
 {
     m_aInterceptedURL[0] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
@@ -152,6 +154,8 @@ Interceptor::Interceptor(
         RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
     m_aInterceptedURL[4] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
+    m_aInterceptedURL[5] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
 }
 
 
@@ -203,12 +207,40 @@ Interceptor::dispatch(
         LockedEmbedDocument_Impl aDocLock = xOleAccess->GetEmbedDocument();
         if ( aDocLock.m_pEmbedDocument )
         {
-            if(URL.Complete == m_aInterceptedURL[0])
+            if( !m_bLink && URL.Complete == m_aInterceptedURL[0])
                 aDocLock.m_pEmbedDocument->SaveObject();
-            else if(URL.Complete == m_aInterceptedURL[2] ||
-                    URL.Complete == m_aInterceptedURL[3] ||
-                    URL.Complete == m_aInterceptedURL[4])
-                aDocLock.m_pEmbedDocument->Close(1);
+            else if(!m_bLink
+                    && ( URL.Complete == m_aInterceptedURL[2] ||
+                         URL.Complete == m_aInterceptedURL[3] ||
+                         URL.Complete == m_aInterceptedURL[4] ) )
+                aDocLock.m_pEmbedDocument->Close( 0 );
+            else if ( URL.Complete == m_aInterceptedURL[5] )
+            {
+                uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;
+                sal_Int32 nInd = 0;
+
+                while( nInd < aNewArgs.getLength() )
+                {
+                    if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
+                    {
+                        aNewArgs[nInd].Value <<= sal_True;
+                        break;
+                    }
+                    nInd++;
+                }
+
+                if ( nInd == aNewArgs.getLength() )
+                {
+                    aNewArgs.realloc( nInd + 1 );
+                    aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
+                    aNewArgs[nInd].Value <<= sal_True;
+                }
+
+                uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
+                    URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+                if ( xDispatch.is() )
+                    xDispatch->dispatch( URL, aNewArgs );
+            }
         }
     }
 }
@@ -216,7 +248,7 @@ Interceptor::dispatch(
 
 void Interceptor::generateFeatureStateEvent()
 {
-    if(m_pStatCL)
+    if( m_pStatCL )
     {
         DocumentHolder* pTmpDocH = NULL;
         uno::Reference< uno::XInterface > xLock;
@@ -233,7 +265,7 @@ void Interceptor::generateFeatureStateEvent()
 
         for(int i = 0; i < IUL; ++i)
         {
-            if( i == 1 )
+            if( i == 1 || m_bLink && i != 5 )
                 continue;
 
             cppu::OInterfaceContainerHelper* pICH =
@@ -257,6 +289,14 @@ void Interceptor::generateFeatureStateEvent()
                     RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
                                        aTitle);
 
+            }
+            else if ( i == 5 )
+            {
+                aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
+                aStateEvent.FeatureDescriptor = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
+                aStateEvent.State <<= (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("($3)")));
             }
             else
             {
@@ -294,7 +334,7 @@ Interceptor::addStatusListener(
     if(!Control.is())
         return;
 
-    if(URL.Complete == m_aInterceptedURL[0])
+    if( !m_bLink && URL.Complete == m_aInterceptedURL[0] )
     {   // Save
         DocumentHolder* pTmpDocH = NULL;
         uno::Reference< uno::XInterface > xLock;
@@ -332,9 +372,10 @@ Interceptor::addStatusListener(
     }
 
     sal_Int32 i = 2;
-    if(URL.Complete == m_aInterceptedURL[i] ||
-       URL.Complete == m_aInterceptedURL[++i] ||
-       URL.Complete == m_aInterceptedURL[++i] )
+    if ( !m_bLink
+      && ( URL.Complete == m_aInterceptedURL[i] ||
+           URL.Complete == m_aInterceptedURL[++i] ||
+           URL.Complete == m_aInterceptedURL[++i] ) )
     {   // Close and return
         DocumentHolder* pTmpDocH = NULL;
         uno::Reference< uno::XInterface > xLock;
@@ -371,6 +412,29 @@ Interceptor::addStatusListener(
         m_pStatCL->addInterface(URL.Complete,Control);
         return;
     }
+
+    if(URL.Complete == m_aInterceptedURL[5])
+    {   // SaveAs
+        frame::FeatureStateEvent aStateEvent;
+        aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
+        aStateEvent.FeatureDescriptor = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
+        aStateEvent.IsEnabled = sal_True;
+        aStateEvent.Requery = sal_False;
+        aStateEvent.State <<= (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
+        Control->statusChanged(aStateEvent);
+
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            if(!m_pStatCL)
+                m_pStatCL =
+                    new StatusChangeListenerContainer(m_aMutex);
+        }
+
+        m_pStatCL->addInterface(URL.Complete,Control);
+        return;
+    }
+
 }
 
 
@@ -401,6 +465,14 @@ Interceptor::getInterceptedURLs(  )
     )
 {
     // now implemented as update
+    if ( m_bLink )
+    {
+        uno::Sequence< ::rtl::OUString > aResult( 2 );
+        aResult[0] = m_aInterceptedURL[1];
+        aResult[1] = m_aInterceptedURL[5];
+
+        return aResult;
+    }
 
     return m_aInterceptedURL;
 }
@@ -418,15 +490,17 @@ Interceptor::queryDispatch(
     )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    if(URL.Complete == m_aInterceptedURL[0])
+    if( !m_bLink && URL.Complete == m_aInterceptedURL[0] )
         return (frame::XDispatch*)this;
     else if(URL.Complete == m_aInterceptedURL[1])
         return (frame::XDispatch*)0   ;
-    else if(URL.Complete == m_aInterceptedURL[2])
+    else if( !m_bLink && URL.Complete == m_aInterceptedURL[2] )
         return (frame::XDispatch*)this;
-    else if(URL.Complete == m_aInterceptedURL[3])
+    else if( !m_bLink && URL.Complete == m_aInterceptedURL[3] )
         return (frame::XDispatch*)this;
-    else if(URL.Complete == m_aInterceptedURL[4])
+    else if( !m_bLink && URL.Complete == m_aInterceptedURL[4] )
+        return (frame::XDispatch*)this;
+    else if(URL.Complete == m_aInterceptedURL[5])
         return (frame::XDispatch*)this;
     else {
         if(m_xSlaveDispatchProvider.is())
@@ -452,15 +526,17 @@ Interceptor::queryDispatches(
         aRet.realloc(Requests.getLength());
 
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
-        if(m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete)
+        if ( !m_bLink && m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete )
             aRet[i] = (frame::XDispatch*) this;
         else if(m_aInterceptedURL[1] == Requests[i].FeatureURL.Complete)
             aRet[i] = (frame::XDispatch*) 0;
-        else if(m_aInterceptedURL[2] == Requests[i].FeatureURL.Complete)
+        else if( !m_bLink && m_aInterceptedURL[2] == Requests[i].FeatureURL.Complete )
             aRet[i] = (frame::XDispatch*) this;
-        else if(m_aInterceptedURL[3] == Requests[i].FeatureURL.Complete)
+        else if( !m_bLink && m_aInterceptedURL[3] == Requests[i].FeatureURL.Complete )
             aRet[i] = (frame::XDispatch*) this;
-        else if(m_aInterceptedURL[4] == Requests[i].FeatureURL.Complete)
+        else if( !m_bLink && m_aInterceptedURL[4] == Requests[i].FeatureURL.Complete )
+            aRet[i] = (frame::XDispatch*) this;
+        else if(m_aInterceptedURL[5] == Requests[i].FeatureURL.Complete)
             aRet[i] = (frame::XDispatch*) this;
 
     return aRet;
