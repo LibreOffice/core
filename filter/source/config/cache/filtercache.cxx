@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:05:06 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 14:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
     28.10.2003 09:01
 -----------------------------------------------*/
 void FilterCache::load(EFillState eRequired,
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bByThread
 #else
     sal_Bool
