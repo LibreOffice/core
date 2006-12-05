@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:27:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 15:05:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1319,7 +1319,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
 
             rFilling.getTransform( aTransform );
 
-            int a,b;
+            sal_uInt16 a,b;
             for( a = 0; a < 2; a++ )
             {
                 for( b = 0; b < 3; b++ )
