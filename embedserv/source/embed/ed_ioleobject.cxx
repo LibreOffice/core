@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:38:24 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 13:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,23 +69,52 @@ STDMETHODIMP EmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 
 STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
 {
-    m_pDocHolder->setTitle(
-        rtl::OUString(
-            (sal_Unicode*)szContainerObj));
-    m_pDocHolder->setContainerName(
-        rtl::OUString(
-            (sal_Unicode*)szContainerApp));
+    // the code should be ignored for links
+    if ( !m_aFileName.getLength() )
+    {
+        m_pDocHolder->setTitle(
+            rtl::OUString(
+                (sal_Unicode*)szContainerObj));
+        m_pDocHolder->setContainerName(
+            rtl::OUString(
+                (sal_Unicode*)szContainerApp));
+    }
+
     return S_OK;
 }
 
 STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
+    if ( dwSaveOption == 2 && m_aFileName.getLength() )
+    {
+        // ask the user about saving
+        if ( m_pDocHolder->ExecuteSuspendCloseFrame() )
+        {
+            m_pDocHolder->CloseDocument();
+            return S_OK;
+        }
+        else
+            return OLE_E_PROMPTSAVECANCELLED;
+    }
+
     HRESULT hr = S_OK;
 
-    if ( dwSaveOption && m_pClientSite )
+    if ( dwSaveOption != 1 )
         hr = SaveObject(); // ADVF_DATAONSTOP);
 
+    m_pDocHolder->FreeOffice();
+    m_pDocHolder->CloseDocument();
     m_pDocHolder->CloseFrame();
+
+    OLENotifyClosing();
+
+    return hr;
+}
+
+
+HRESULT EmbedDocument_Impl::OLENotifyClosing()
+{
+    HRESULT hr = S_OK;
 
     if ( m_pClientSite )
         m_pClientSite->OnShowWindow( FALSE );
@@ -100,6 +129,7 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
     }
 
     return hr;
+
 }
 
 STDMETHODIMP EmbedDocument_Impl::SetMoniker( DWORD /*dwWhichMoniker*/, IMoniker * /*pmk*/ )
@@ -140,6 +170,17 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
         return OLEOBJ_S_CANNOT_DOVERB_NOW;
 
     BooleanGuard_Impl aGuard( m_bIsInVerbHandling );
+
+    if ( iVerb == OLEIVERB_PRIMARY )
+    {
+        if ( m_aFileName.getLength() )
+        {
+            // that should be a link
+            iVerb = OLEIVERB_OPEN;
+        }
+        else
+            iVerb = OLEIVERB_SHOW;
+    }
 
     switch(iVerb) {
         case OLEIVERB_DISCARDUNDOSTATE:
@@ -378,6 +419,14 @@ HRESULT EmbedDocument_Impl::SaveObject()
               iAdvise++ )
             if ( iAdvise->second )
                 iAdvise->second->OnSave( );
+    }
+    else if ( m_aFileName.getLength() && IsDirty() == S_OK )
+    {
+        ::rtl::OUString aPreservFileName = m_aFileName;
+
+        // in case of links the containers does not provide client site sometimes
+        hr = Save( (LPCOLESTR)NULL, FALSE ); // triggers saving to the link location
+        SaveCompleted( (LPCOLESTR)aPreservFileName.getStr() );
     }
 
     notify( false );
