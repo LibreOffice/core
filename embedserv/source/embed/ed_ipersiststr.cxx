@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:38:39 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 13:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,18 +220,20 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_guid( *guid )
 , m_bIsDirty( sal_False )
 , m_nAdviseNum( 0 )
-, m_xOwnAccess( new EmbeddedDocumentInstanceAccess_Impl( this ) )
 , m_bIsInVerbHandling( sal_False )
 //, m_bLoadedFromFile( sal_False )
 {
+    m_xOwnAccess = new EmbeddedDocumentInstanceAccess_Impl( this );
     m_pDocHolder = new DocumentHolder( xFactory, m_xOwnAccess );
     m_pDocHolder->acquire();
 }
 
 EmbedDocument_Impl::~EmbedDocument_Impl()
 {
-    m_pDocHolder->CloseDocument();
     m_pDocHolder->FreeOffice();
+    m_pDocHolder->CloseDocument();
+    m_pDocHolder->CloseFrame();
+
     m_pDocHolder->release();
 }
 
@@ -253,14 +255,11 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     }
     else
     {
-        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "AsTemplate" ) );
-        aArgs[2].Value <<= sal_True;
-        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
 
         rtl::OUString sDocUrl;
         if ( pFilePath )
         {
-
             ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.util.URLTransformer" ) );
             uno::Reference< util::XURLTransformer > aTransformer( m_xFactory->createInstance( aServiceName ),
                                                                     uno::UNO_QUERY );
@@ -276,7 +275,8 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
             }
         }
 
-        aArgs[3].Value <<= sDocUrl;
+        aArgs[2].Value <<= sDocUrl;
+        aArgs.realloc( 3 );
     }
 
     return aArgs;
@@ -410,7 +410,8 @@ STDMETHODIMP EmbedDocument_Impl::GetClassID( CLSID* pClassId )
 
 STDMETHODIMP EmbedDocument_Impl::IsDirty()
 {
-    if ( m_bIsDirty )
+    // the link modified state is controlled by the document
+    if ( m_bIsDirty && !m_aFileName.getLength() )
         return S_OK;
 
     uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
@@ -818,7 +819,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
                     uno::UNO_QUERY );
     if ( aDocument.is() )
     {
-        m_pDocHolder->SetDocument( aDocument );
+        m_pDocHolder->SetDocument( aDocument, sal_True );
 
         uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
         if( xLoadable.is() )
@@ -895,38 +896,49 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
     if ( !m_pDocHolder->GetDocument().is() || !m_xFactory.is() )
         return E_FAIL;
 
-    USES_CONVERSION;
-    ::rtl::OUString aTargetName = pszFileName ? ::rtl::OUString( OLE2CW( pszFileName ) ) : m_aFileName;
-    if ( !aTargetName.getLength() )
-        return E_FAIL;
+    HRESULT hr = E_FAIL;
 
-    uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-    if( xStorable.is() )
+    // TODO/LATER: currently there is no hands off state implemented
+    try
     {
-        try
+        uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY_THROW );
+
+        if ( !pszFileName )
+            xStorable->store();
+        else
         {
-            xStorable->storeToURL( aTargetName, fillArgsForStoring_Impl( uno::Reference< io::XOutputStream >() ) );
+            util::URL aURL;
+            USES_CONVERSION;
+            aURL.Complete = ::rtl::OUString( OLE2CW( pszFileName ) );
 
-            m_aFileName = ::rtl::OUString();
+            ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.util.URLTransformer" ) );
+            uno::Reference< util::XURLTransformer > aTransformer( m_xFactory->createInstance( aServiceName ),
+                                                                  uno::UNO_QUERY_THROW );
 
-            if ( !pszFileName || fRemember )
+            if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) && aURL.Complete.getLength() )
             {
-                uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-                if ( xMod.is() )
-                    xMod->setModified( sal_False );
-                m_bIsDirty = sal_False;
+                if ( fRemember )
+                {
+                    xStorable->storeAsURL( aURL.Complete, fillArgsForStoring_Impl( uno::Reference< io::XOutputStream >() ) );
+                    m_aFileName = aURL.Complete;
+                }
+                else
+                    xStorable->storeToURL( aURL.Complete, fillArgsForStoring_Impl( uno::Reference< io::XOutputStream >() ) );
             }
         }
-        catch( uno::Exception& )
-        {
-        }
+
+        hr = S_OK;
+    }
+    catch( uno::Exception& )
+    {
     }
 
-    return E_FAIL;
+    return hr;
 }
 
 STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
+    // the different file name would mean error here
     m_aFileName = ::rtl::OUString( OLE2CW( pszFileName ) );
     return S_OK;
 }
