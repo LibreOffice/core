@@ -14392,3 +14392,11 @@ WriteJPEG
 ?s_pType@?$Sequence@UContentInfo@ucb@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_ucb_ContentInfo@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUContentInfo@ucb@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_ucb_XContentCreator@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXContentCreator@ucb@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?InsertBlanks@SvNumberformat@@SAGAAVString@@GG@Z
+?ImplDrawBitmap@WinMtfOutput@@AAEXABVPoint@@ABVSize@@VBitmapEx@@@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx2531628567@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1650127727@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1650127727@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1650127727@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1650127727@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1650127727@@YAEABVString@@AAV2@@Z
