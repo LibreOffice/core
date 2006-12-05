@@ -51600,6 +51600,214 @@ g          </UML:Classifier.feature>
         </UML:Class>
         <!--DFFOPT fPrint-->
         <!--DFFOPT-->
+<UML:Class xmi.id="FDG" name="FDG">
+<UML:ModelElement.stereotype>
+  <UML:Stereotype xmi.idref="ww8resource"/>
+</UML:ModelElement.stereotype>
+<UML:Classifier.feature>
+  <UML:Attribute name="csp">
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>The number of shapes in this drawing</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="comment"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>0x0</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="offset"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>32</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="bits"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="mask"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="shift"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:csp</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="attrid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:StructuralFeature.type>
+      <UML:DataType xmi.idref="U32"/>
+    </UML:StructuralFeature.type>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="attribute"/>
+    </UML:ModelElement.stereotype>
+  </UML:Attribute>
+</UML:Classifier.feature>
+<UML:Classifier.feature>
+  <UML:Attribute name="spidCur">
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>The last MSOSPID given to an SP in this DG</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="comment"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>0x4</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="offset"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>32</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="bits"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="mask"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="shift"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:spidCur</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="attrid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:StructuralFeature.type>
+      <UML:DataType xmi.idref="U32"/>
+    </UML:StructuralFeature.type>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="attribute"/>
+    </UML:ModelElement.stereotype>
+  </UML:Attribute>
+</UML:Classifier.feature>
+</UML:Class>
+<UML:Generalization isSpecification="false" xmi.id="FDG-Properties" >
+  <UML:Generalization.child>
+    <UML:Class xmi.idref="FDG" />
+  </UML:Generalization.child>
+  <UML:Generalization.parent>
+    <UML:Class xmi.idref="Properties" />
+  </UML:Generalization.parent>
+</UML:Generalization>
+<UML:Class xmi.id="Dg" name="Dg">
+<UML:ModelElement.stereotype>
+  <UML:Stereotype xmi.idref="dffrecord"/>
+</UML:ModelElement.stereotype>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>0xf008</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="dffid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+<UML:Classifier.feature>
+  <UML:Attribute name="fdg">
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>The FDG data structure</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="comment"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>0x8</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="offset"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>64</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="bits"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="mask"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="shift"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:ModelElement.taggedValue>
+      <UML:TaggedValue>
+        <UML:TaggedValue.dataValue>rtf:fdg</UML:TaggedValue.dataValue>
+        <UML:TaggedValue.type>
+          <UML:TagDefinition xmi.idref="attrid"/>
+        </UML:TaggedValue.type>
+      </UML:TaggedValue>
+    </UML:ModelElement.taggedValue>
+    <UML:StructuralFeature.type>
+      <UML:DataType xmi.idref="FDG"/>
+    </UML:StructuralFeature.type>
+    <UML:ModelElement.stereotype>
+      <UML:Stereotype xmi.idref="attribute"/>
+    </UML:ModelElement.stereotype>
+  </UML:Attribute>
+</UML:Classifier.feature>
+</UML:Class>
+<UML:Generalization isSpecification="false" xmi.id="Dg-Properties" >
+  <UML:Generalization.child>
+    <UML:Class xmi.idref="Dg" />
+  </UML:Generalization.child>
+  <UML:Generalization.parent>
+    <UML:Class xmi.idref="Properties" />
+  </UML:Generalization.parent>
+</UML:Generalization>
       </UML:Namespace.ownedElement>
     </UML:Model>
   </XMI.content>
