@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-01 10:17:21 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,7 +376,7 @@ DffBSE::get_blip()
     else
     {
         nOffset = sal::static_int_cast<sal_Int32>(aFBSE.get_foDelay());
-        if (nOffset > 0 && getDocument() != NULL)
+        if (! (nOffset & 1 << 31) && nOffset > 0 && getDocument() != NULL)
         {
             WW8StructBase aStructBase(*getDocument()->getDocStream(),
                                       nOffset, 0x8);
@@ -463,7 +463,7 @@ DffSpContainer::get_blip()
     {
         sal_uInt32 nBid = getShapeBid();
 
-        if (getDocument() != NULL)
+        if (getDocument() != NULL && nBid > 0)
             pResult = getDocument()->getBlip(nBid);
     }
 
@@ -501,17 +501,27 @@ void DffUDefProp::resolveNoAuto(Properties & rHandler)
         sal_uInt32 nAttrid = 0;
         switch (nPid)
         {
-        case 0x18f: nAttrid = NS_rtf::LN_XAlign; break;
-        case 0x190: nAttrid = NS_rtf::LN_XRelTo; break;
-        case 0x191: nAttrid = NS_rtf::LN_YAlign; break;
-        case 0x192: nAttrid = NS_rtf::LN_YRelTo; break;
-        case 0x1bf: nAttrid = NS_rtf::LN_LayoutInTableCell; break;
+        case 0x38f: nAttrid = NS_rtf::LN_XAlign; break;
+        case 0x390: nAttrid = NS_rtf::LN_XRelTo; break;
+        case 0x391: nAttrid = NS_rtf::LN_YAlign; break;
+        case 0x392: nAttrid = NS_rtf::LN_YRelTo; break;
+        case 0x3bf: nAttrid = NS_rtf::LN_LayoutInTableCell; break;
         default:
             break;
         }
 
-        WW8Value::Pointer_t pVal = createValue(nValue);
-        rHandler.attribute(nAttrid, *pVal);
+        if (nAttrid != 0)
+        {
+            WW8Value::Pointer_t pVal = createValue(nValue);
+            rHandler.attribute(nAttrid, *pVal);
+        }
+        else
+        {
+            char buffer[1024];
+            snprintf(buffer, sizeof(buffer),
+                     "<property id=\"0x%x\" value=\"0x%lx\"/>", nPid, nValue);
+            output.addItem(buffer);
+        }
 
         nOffset += 6;
     }
