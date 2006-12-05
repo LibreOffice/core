@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_sc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 09:44:58 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 14:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,13 +75,8 @@
 #include <goodies/b3dcompo.hxx>
 #include <goodies/b3dentty.hxx>
 #include <goodies/b3dlight.hxx>
-#include <goodies/b3dvolum.hxx>
 #include <goodies/bucket.hxx>
-#include <goodies/hmatrix.hxx>
 #include <goodies/matril3d.hxx>
-#include <goodies/point3d.hxx>
-#include <goodies/point4d.hxx>
-#include <goodies/vector3d.hxx>
 #include <offuh/com/sun/star/awt/Point.hdl>
 #include <offuh/com/sun/star/awt/Point.hpp>
 #include <offuh/com/sun/star/awt/Size.hdl>
@@ -181,12 +176,9 @@
 #include <svx/eeitem.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/outlobj.hxx>
-#include <svx/poly3d.hxx>
 #include <svx/sdangitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/sdmsitm.hxx>
-#include <svx/sdolsitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
@@ -209,7 +201,6 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnasit.hxx>
 #include <svx/xtextit0.hxx>
-#include <svx/xtxasit.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/errcode.hxx>
