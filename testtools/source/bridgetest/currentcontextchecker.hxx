@@ -4,9 +4,9 @@
  *
  *  $RCSfile: currentcontextchecker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:45:14 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 15:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 namespace testtools { namespace bridgetest {
 
 class CurrentContextChecker:
-    private ::osl::DebugBase< CurrentContextChecker >,
+    public ::osl::DebugBase< CurrentContextChecker >,
     public ::cppu::WeakImplHelper1<
         ::test::testtools::bridgetest::XCurrentContextChecker >
 {
