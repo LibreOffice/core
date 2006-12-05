@@ -4,9 +4,9 @@
  *
  *  $RCSfile: currentcontextchecker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:45:03 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 15:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ static char const key[] = "testtools.bridgetest.Key";
 static char const value[] = "good";
 
 class CurrentContext:
-    private ::osl::DebugBase< CurrentContext >,
+    public ::osl::DebugBase< CurrentContext >,
     public ::cppu::WeakImplHelper1< css::uno::XCurrentContext >
 {
 public:
