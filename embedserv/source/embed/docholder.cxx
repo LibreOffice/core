@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:55 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 12:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,8 @@ DocumentHolder::DocumentHolder(
     m_hWndxWinCont(NULL),
     m_nMenuHandle(NULL),
     m_nMenuShared(NULL),
-    m_nOLEMenu(NULL)
+    m_nOLEMenu(NULL),
+    m_bLink( sal_False )
 {
     static const ::rtl::OUString aServiceName (
         RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
@@ -171,15 +172,6 @@ DocumentHolder::DocumentHolder(
 
 DocumentHolder::~DocumentHolder()
 {
-    if ( m_xDocument.is() )
-        CloseDocument();
-
-    if( m_xFrame.is() )
-        CloseFrame();
-
-    if ( m_xFactory.is() )
-        FreeOffice();
-
     delete m_pCHatchWin;
 
     ClearInterceptorInternally();
@@ -683,29 +675,30 @@ void DocumentHolder::FreeOffice()
     {
         xDesktop->removeTerminateListener(
             (frame::XTerminateListener*)this );
-
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier(
-            xDesktop, uno::UNO_QUERY );
-        if ( xFramesSupplier.is() )
-        {
-            uno::Reference< frame::XFrames > xFrames(
-                xFramesSupplier->getFrames());
-
-            if ( xFrames.is() && !xFrames->hasElements() )
-            {
-                try
-                {
-                    xDesktop->terminate();
-                }
-                catch( uno::Exception & )
-                {}
-            }
-        }
-
-        m_xFactory = uno::Reference< lang::XMultiServiceFactory >();
     }
 }
 
+void DocumentHolder::DisconnectFrameDocument()
+{
+    try
+    {
+        uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+            m_xDocument, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
+    }
+    catch( uno::Exception& )
+    {}
+
+    try
+    {
+        uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+            m_xFrame, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
+    }
+    catch( uno::Exception& )
+    {}
+
+}
 
 void DocumentHolder::CloseDocument()
 {
@@ -736,6 +729,11 @@ void DocumentHolder::CloseDocument()
 
 void DocumentHolder::CloseFrame()
 {
+    uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+        m_xFrame, uno::UNO_QUERY );
+    if ( xBroadcaster.is() )
+        xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
+
     uno::Reference<util::XCloseable> xCloseable(
         m_xFrame,uno::UNO_QUERY);
     if(xCloseable.is())
@@ -753,13 +751,13 @@ void DocumentHolder::CloseFrame()
     m_xFrame = uno::Reference< frame::XFrame >();
 }
 
-
-void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc)
+void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, sal_Bool bLink )
 {
     if ( m_xDocument.is() )
         CloseDocument();
 
     m_xDocument = xDoc;
+    m_bLink = bLink;
 
     uno::Reference< util::XCloseBroadcaster > xBroadcaster(
         m_xDocument, uno::UNO_QUERY );
@@ -767,7 +765,7 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc)
     if ( xBroadcaster.is() )
         xBroadcaster->addCloseListener( (util::XCloseListener*)this );
 
-    if(m_xDocument.is())
+    if ( m_xDocument.is() && !m_bLink )
     {
         // set the document mode to embedded
         uno::Sequence< beans::PropertyValue > aSeq(1);
@@ -777,6 +775,47 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc)
     }
 }
 
+sal_Bool DocumentHolder::ExecuteSuspendCloseFrame()
+{
+    if ( m_xFrame.is() && m_xFactory.is() )
+    {
+        try
+        {
+            uno::Reference< frame::XController > xController = m_xFrame->getController();
+            if ( xController.is() )
+            {
+                if ( !xController->suspend( sal_True ) )
+                    return sal_False;
+
+                FreeOffice();
+                try
+                {
+                    uno::Reference<util::XCloseable> xCloseable( m_xFrame, uno::UNO_QUERY );
+                    if ( xCloseable.is() )
+                        xCloseable->close(sal_True);
+                    else
+                    {
+                        uno::Reference<lang::XComponent> xComp( m_xFrame, uno::UNO_QUERY_THROW );
+                        if( xComp.is() )
+                            xComp->dispose();
+                    }
+                }
+                catch( const util::CloseVetoException& )
+                {
+                    // should be called if the frame could not be closed
+                    xController->suspend( sal_False );
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        m_xFrame = uno::Reference< frame::XFrame >();
+    }
+
+    return sal_True;
+}
 
 uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
 {
@@ -792,9 +831,21 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
         uno::Reference<frame::XFrame> xFrame(
             xDesktop,uno::UNO_QUERY);
 
+        // the frame will be registered on desktop here, later when the document
+        // is loaded into the frame in ::show() method the terminate listener will be removed
+        // this is so only for outplace activation
         if( xFrame.is() )
             m_xFrame = xFrame->findFrame(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")),0);
+
+        uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+            m_xFrame, uno::UNO_QUERY );
+
+        if ( xBroadcaster.is() )
+        {
+            xBroadcaster->addCloseListener( (util::XCloseListener*)this );
+            FreeOffice(); // the frame is part of the desktop
+        }
     }
 
     if( m_xFrame.is() )
@@ -816,7 +867,7 @@ uno::Reference< frame::XDispatchProviderInterceptor > DocumentHolder::CreateNewI
 
     ClearInterceptorInternally();
 
-    uno::Reference< frame::XDispatchProviderInterceptor > xInterceptor( m_pInterceptor = new Interceptor( m_xOleAccess, this ) );
+    uno::Reference< frame::XDispatchProviderInterceptor > xInterceptor( m_pInterceptor = new Interceptor( m_xOleAccess, this, m_bLink ) );
     m_xInterceptorLocker = xInterceptor;
     return xInterceptor;
 }
@@ -912,7 +963,9 @@ void DocumentHolder::show()
                 OSL_ENSURE( sal_False, "Can not adjust the frame!\n" );
             }
         }
-        setTitle(m_aDocumentNamePart);
+
+        if ( !m_bLink )
+            setTitle(m_aDocumentNamePart);
     }
 }
 
@@ -1470,7 +1523,8 @@ DocumentHolder::queryClosing(
         util::CloseVetoException
     )
 {
-    if ( m_xDocument.is() && m_xDocument == aSource.Source )
+    if ( !m_bLink
+      && ( m_xDocument.is() && m_xDocument == aSource.Source || m_xFrame.is() && m_xFrame == aSource.Source ) )
         throw util::CloseVetoException();
 }
 
@@ -1486,11 +1540,16 @@ DocumentHolder::notifyClosing(
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
     {
+        // can happen only in case of links
         m_pIDispatch = NULL;
         m_xDocument = uno::Reference< frame::XModel >();
-    }
+        m_xFrame = uno::Reference< frame::XFrame >();
 
-    if( m_xFrame.is() && m_xFrame == aSource.Source )
+        LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
+        if ( aDocLock.m_pEmbedDocument )
+            aDocLock.m_pEmbedDocument->OLENotifyClosing();
+    }
+    else if( m_xFrame.is() && m_xFrame == aSource.Source )
         m_xFrame = uno::Reference< frame::XFrame >();
 }
 
