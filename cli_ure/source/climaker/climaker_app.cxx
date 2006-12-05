@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:51:27 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 11:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,9 +325,6 @@ using namespace ::climaker;
 //##############################################################################
 SAL_IMPLEMENT_MAIN()
 {
-    (void) argc; // unused
-    (void) argv; // unused
-
     sal_uInt32 nCount = osl_getCommandArgCount();
     if (0 == nCount)
     {
