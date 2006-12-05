@@ -1,12 +1,13 @@
+<!--
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: tidyxmi.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:34 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:10:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +33,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
+-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:UML = 'org.omg.xmi.namespace.UML' xml:space="default">
 <xsl:output indent="yes"/>
 <xsl:template match="/">
