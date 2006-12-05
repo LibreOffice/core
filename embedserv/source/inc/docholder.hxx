@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:56:27 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 12:53:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,9 @@ private:
 
     CComPtr< IDispatch > m_pIDispatch;
 
+    sal_Bool m_bLink;
+
+
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XFrame > DocumentFrame();
 
@@ -177,9 +180,13 @@ public:
 
     void SetDocument(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >& xDoc
+        ::com::sun::star::frame::XModel >& xDoc,
+        sal_Bool bLink = sal_False
     );
 
+    sal_Bool ExecuteSuspendCloseFrame();
+
+    void DisconnectFrameDocument();
     void CloseDocument();
     void CloseFrame();
     void ClearInterceptor();
