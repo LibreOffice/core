@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:52:23 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 14:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ void SAL_CALL
 Interceptor::dispatch(
     const util::URL& URL,
     const uno::Sequence<
-    beans::PropertyValue >& /*Arguments*/ )
+    beans::PropertyValue >& Arguments )
     throw (uno::RuntimeException)
 {
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > xOleAccess;
