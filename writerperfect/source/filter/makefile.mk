@@ -1,6 +1,6 @@
 PRJ=..$/..
 
-PRJNAME=filter
+PRJNAME=writerperfect
 TARGET=filter
 ENABLE_EXCEPTIONS=true
 

@@ -1,5 +1,5 @@
 PRJ=..
-PRJNAME=wpft
+PRJNAME=writerperfect
 TARGET=wpft
 VERSION=$(UPD)
 
