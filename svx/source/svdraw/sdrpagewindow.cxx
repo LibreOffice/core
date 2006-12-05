@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpagewindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:38:41 $
+ *  last change: $Author: rt $ $Date: 2006-12-05 12:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
 
 #ifndef _SDRPAGEWINDOW_HXX
 #include <sdrpagewindow.hxx>
