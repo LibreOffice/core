@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:22:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,15 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
     {
         mpDataStream = getSubStream(::rtl::OUString::createFromAscii
                                     ("Data"));
+    }
+    catch (ExceptionNotFound e)
+    {
+    }
+
+    try
+    {
+        mpCompObjStream = getSubStream(::rtl::OUString::createFromAscii
+                                       ("\1CompObj"));
     }
     catch (ExceptionNotFound e)
     {
@@ -1484,6 +1493,15 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         //mpDocStream->dump(output);
 
         //output.addItem(mTextboxHeaderEndCpAndFc.toString());
+
+        output.addItem("<substream-names>");
+        output.addItem(mpStream->getSubStreamNames());
+        output.addItem("</substream-names>");
+
+        if (mpDocStream.get() != NULL)
+        {
+            mpDocStream->dump(output);
+        }
 
         doctok::Reference<Properties>::Pointer_t pFib
             (new WW8Fib(*mpFib));

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-16 15:55:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,6 +290,9 @@ class WW8DocumentImpl : public WW8Document
 
     /// pointer to the data stream of the document
     WW8Stream::Pointer_t mpDataStream;
+
+    /// pointer to the compound object stream of the document
+    WW8Stream::Pointer_t mpCompObjStream;
 
     /// pointer to the piece table
     WW8PieceTable::Pointer_t mpPieceTable;
