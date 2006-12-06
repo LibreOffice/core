@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacontext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:08:22 $
+ *  last change: $Author: jl $ $Date: 2006-12-06 14:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,9 @@ Any SAL_CALL JavaContext::queryInterface(const Type& aType )
     throw (RuntimeException)
 {
     if (aType == getCppuType(reinterpret_cast<Reference<XInterface>*>(0)))
-        return Any( static_cast<XInterface*>(this), aType);
+        return Any(Reference<XInterface>(static_cast<XInterface*>(this)));
     else if (aType == getCppuType(reinterpret_cast<Reference<XCurrentContext>*>(0)))
-        return Any( static_cast<XCurrentContext*>(this), aType);
+        return Any(Reference<XCurrentContext>( static_cast<XCurrentContext*>(this)));
     return Any();
 }
 
