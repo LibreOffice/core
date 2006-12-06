@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: rene $ $Date: 2006-12-06 13:09:33 $
+#   last change: $Author: rene $ $Date: 2006-12-06 14:22:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,34 +47,17 @@ TARGET=afms
 TARFILE_NAME=Adobe-Core35_AFMs-314
 TARFILE_ROOTDIR=Adobe-Core35_AFMs-314
 
-PATCH_FILE_NAME=
-
-
-CONFIGURE_DIR=
-CONFIGURE_ACTION=
-
-BUILD_DIR=
-BUILD_ACTION=
-BUILD_FLAGS=
-
 # --- Targets ------------------------------------------------------
 
-all: \
-    $(MISC)$/remove_build.flag \
-    ALLTAR
-    
 .INCLUDE : set_ext.mk
+
+ZIP1DIR         = $(MISC)/build/$(TARFILE_NAME)
+ZIP1TARGET      = fontunxafm
+ZIP1LIST        = *.afm
+
 .INCLUDE : target.mk
 
-.IF "$(WITH_FONTS)"!="NO"
 .INCLUDE : tg_ext.mk
-.ENDIF
 
-# Since you never know what will be in a patch (for example, it may already
-# patch at configure level), we remove the entire package directory if a patch
-# is newer.
-$(MISC)$/remove_build.flag : $(PATCH_FILE_NAME)
-    $(REMOVE_PACKAGE_COMMAND)
-    +$(TOUCH) $(MISC)$/remove_build.flag
-
+$(ZIP1TARGETN):	$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 
