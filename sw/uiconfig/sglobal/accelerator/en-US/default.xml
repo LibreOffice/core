@@ -27,7 +27,7 @@
     <accel:item accel:code="KEY_F2" xlink:href=".uno:InsertFormula"/>
     <accel:item accel:code="KEY_F9" accel:shift="true" xlink:href=".uno:Calc"/>
     <accel:item accel:code="KEY_UP" accel:mod1="true" accel:mod2="true" xlink:href=".uno:MoveUp"/>
-    <<accel:item accel:code="KEY_UP" accel:mod1="true" xlink:href=".uno:GoToPrevPara"/>
+    <accel:item accel:code="KEY_UP" accel:mod1="true" xlink:href=".uno:GoToPrevPara"/>
     <accel:item accel:code="KEY_DOWN" accel:mod1="true" accel:mod2="true" xlink:href=".uno:MoveDown"/>
     <accel:item accel:code="KEY_DOWN" accel:mod1="true" xlink:href=".uno:GoToNextPara"/>
     <accel:item accel:code="KEY_F12" accel:shift="true" accel:mod1="true" xlink:href=".uno:RemoveBullets"/>
