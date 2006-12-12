@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:55:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,77 +200,21 @@ SfxViewFrame* ViewShell::GetViewFrame (void) const
 TYPEINIT1(ViewShell, SfxShell);
 
 
-ViewShell::ViewShell (
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    ViewShellBase& rViewShellBase,
-    bool bAllowCenter)
-    : SfxShell (&rViewShellBase),
-      mpContentWindow(NULL),
-      mpHorizontalScrollBar(NULL),
-      mpVerticalScrollBar(NULL),
-      mpHorizontalRuler(NULL),
-      mpVerticalRuler(NULL),
-      mpScrollBarBox(NULL),
-      mbHasRulers(false),
-      mpActiveWindow(NULL),
-      mpView(NULL),
-      pFrameView(NULL),
-      mpSlideShow(NULL),
-      pZoomList(NULL),
-      aViewPos(),
-      aViewSize(),
-      aScrBarWH(),
-      bCenterAllowed(bAllowCenter),
-      bStartShowWithDialog(FALSE),
-      mnPrintedHandoutPageNum(1),
-      maAllWindowRectangle(),
-      meShellType(ST_NONE),
-      mpParentWindow(pParentWindow),
-      mpWindowUpdater (new ::sd::WindowUpdater()),
-      mpImpl(new Implementation(*this))
+ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
+:   SfxShell(&rViewShellBase)
+,   mbCenterAllowed(bAllowCenter)
+,   mpParentWindow(pParentWindow)
 {
-    Construct();
+    construct();
 }
 
-
-
-
-ViewShell::ViewShell(
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    const ViewShell& rShell)
-    : SfxShell (rShell.GetViewShell()),
-      mpContentWindow(NULL),
-      mpHorizontalScrollBar(NULL),
-      mpVerticalScrollBar(NULL),
-      mpHorizontalRuler(NULL),
-      mpVerticalRuler(NULL),
-      mpScrollBarBox(NULL),
-      mbHasRulers(false),
-      mpActiveWindow(NULL),
-      mpView(NULL),
-      pFrameView(NULL),
-      mpSlideShow(NULL),
-      pZoomList(NULL),
-      aViewPos(),
-      aViewSize(),
-      aScrBarWH(),
-      bCenterAllowed(rShell.bCenterAllowed),
-      bStartShowWithDialog(FALSE),
-      mnPrintedHandoutPageNum(1),
-      maAllWindowRectangle(),
-      meShellType(ST_NONE),
-      mpParentWindow(pParentWindow),
-      mpWindowUpdater (new ::sd::WindowUpdater()),
-      mpImpl(new Implementation(*this)),
-      mpLayerTabBar(NULL)
+ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, const ViewShell& rShell)
+:   SfxShell(rShell.GetViewShell())
+,   mbCenterAllowed(rShell.mbCenterAllowed)
+,   mpParentWindow(pParentWindow)
 {
-    Construct();
+    construct();
 }
-
-
-
 
 ViewShell::~ViewShell()
 {
@@ -294,7 +238,7 @@ ViewShell::~ViewShell()
     if (IsMainViewShell())
         GetDocSh()->Disconnect(this);
 
-    delete pZoomList;
+    delete mpZoomList;
 
     mpLayerTabBar.reset();
 
@@ -310,22 +254,33 @@ ViewShell::~ViewShell()
 |*
 \************************************************************************/
 
-void ViewShell::Construct(void)
+void ViewShell::construct(void)
 {
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    mbHasRulers = false;
+    mpActiveWindow = 0;
+    mpView = 0;
+    mpFrameView = 0;
+    mpSlideShow = 0;
+    mpZoomList = 0;
+    mbStartShowWithDialog = FALSE;
+    mnPrintedHandoutPageNum = 1;
+    mpWindowUpdater.reset( new ::sd::WindowUpdater() );
+    mpImpl.reset(new Implementation(*this));
+    meShellType = ST_NONE;
+
+    OSL_ASSERT (GetViewShell()!=NULL);
 
     if (IsMainViewShell())
         GetDocSh()->Connect (this);
 
-    pZoomList = new ZoomList( this );
+    mpZoomList = new ZoomList( this );
 
     mpContentWindow.reset(new ::sd::Window(GetParentWindow()));
     SetActiveWindow (mpContentWindow.get());
 
     GetParentWindow()->SetBackground (Wallpaper());
     mpContentWindow->SetBackground (Wallpaper());
-    mpContentWindow->SetCenterAllowed(bCenterAllowed);
+    mpContentWindow->SetCenterAllowed(mbCenterAllowed);
     mpContentWindow->SetViewShell(this);
     mpContentWindow->Show();
 
@@ -342,8 +297,7 @@ void ViewShell::Construct(void)
         mpVerticalScrollBar->SetRange(Range(0, 32000));
         mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
         mpVerticalScrollBar->Show();
-
-        aScrBarWH = Size(
+        maScrBarWH = Size(
             mpVerticalScrollBar->GetSizePixel().Width(),
             mpHorizontalScrollBar->GetSizePixel().Height());
 
@@ -464,13 +418,13 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         //HMH}
     }
 
-    ReadFrameViewData( pFrameView );
+    ReadFrameViewData( mpFrameView );
 
     if (IsMainViewShell())
         GetDocSh()->Connect(this);
 }
 
-void ViewShell::UIActivating( SfxInPlaceClient* pCli )
+void ViewShell::UIActivating( SfxInPlaceClient*  )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
     GetViewShellBase().GetToolBarManager().ToolBarsDestroyed();
@@ -478,7 +432,7 @@ void ViewShell::UIActivating( SfxInPlaceClient* pCli )
 
 
 
-void ViewShell::UIDeactivated( SfxInPlaceClient* pCli )
+void ViewShell::UIDeactivated( SfxInPlaceClient*  )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
     GetViewShellBase().GetToolBarManager().ToolBarsDestroyed();
@@ -503,8 +457,7 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
     if( pDragTransferable )
         pDragTransferable->SetView( NULL );
 
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    OSL_ASSERT (GetViewShell()!=NULL);
 
     // View-Attribute an der FrameView merken
     WriteFrameViewData();
@@ -568,7 +521,7 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         // give key input first to SfxViewShell to give CTRL+Key
         // (e.g. CTRL+SHIFT+'+', to front) priority.
         OSL_ASSERT (GetViewShell()!=NULL);
-        bReturn = GetViewShell()->KeyInput(rKEvt);
+        bReturn = (BOOL)GetViewShell()->KeyInput(rKEvt);
     }
 
     if(!bReturn)
@@ -853,18 +806,6 @@ void ViewShell::SetupRulers (void)
             }
         }
     }
-    /*
-    SvBorder aBorder (
-        bHasRuler && pVRulerArray[0]!=NULL
-        ? pVRulerArray[0]->GetSizePixel().Width()
-        : 0,
-        bHasRuler && pHRulerArray[0]!=NULL
-        ? pHRulerArray[0]->GetSizePixel().Height()
-        : 0,
-        aScrBarWH.Width(),
-        aScrBarWH.Height());
-    GetViewShellBase().SetBorderPixel (aBorder);
-    */
 }
 
 
@@ -888,8 +829,8 @@ void ViewShell::Resize (const Point& rPos, const Size& rSize)
         return;
 
     // Remember the new position and size.
-    aViewPos  = rPos;
-    aViewSize = rSize;
+    maViewPos  = rPos;
+    maViewSize = rSize;
 
     // Rearrange the UI elements to take care of the new position and size.
     ArrangeGUIElements ();
@@ -917,7 +858,7 @@ void ViewShell::Resize (const Point& rPos, const Size& rSize)
     }
 }
 
-SvBorder ViewShell::GetBorder (bool bOuterResize)
+SvBorder ViewShell::GetBorder (bool )
 {
     SvBorder aBorder;
 
@@ -925,14 +866,14 @@ SvBorder ViewShell::GetBorder (bool bOuterResize)
     if (mpHorizontalScrollBar.get()!=NULL
         && mpHorizontalScrollBar->IsVisible())
     {
-        aBorder.Bottom() = aScrBarWH.Height();
+        aBorder.Bottom() = maScrBarWH.Height();
     }
 
     // Vertical scrollbar.
     if (mpVerticalScrollBar.get()!=NULL
         && mpVerticalScrollBar->IsVisible())
     {
-        aBorder.Right() = aScrBarWH.Width();
+        aBorder.Right() = maScrBarWH.Width();
     }
 
     // Place horizontal ruler below tab bar.
@@ -953,16 +894,15 @@ SvBorder ViewShell::GetBorder (bool bOuterResize)
 
 void ViewShell::ArrangeGUIElements (void)
 {
-    bool bVisible = mpContentWindow->IsVisible();
     if (mpImpl->mbArrangeActive)
         return;
     mpImpl->mbArrangeActive = true;
 
     // Calculate border for in-place editing.
-    long nLeft = aViewPos.X();
-    long nTop  = aViewPos.Y();
-    long nRight = aViewPos.X() + aViewSize.Width();
-    long nBottom = aViewPos.Y() + aViewSize.Height();
+    long nLeft = maViewPos.X();
+    long nTop  = maViewPos.Y();
+    long nRight = maViewPos.X() + maViewSize.Width();
+    long nBottom = maViewPos.Y() + maViewSize.Height();
 
     // Horizontal scrollbar.
     if (mpHorizontalScrollBar.get()!=NULL
@@ -971,20 +911,20 @@ void ViewShell::ArrangeGUIElements (void)
         int nLocalLeft = nLeft;
         if (mpLayerTabBar.get()!=NULL && mpLayerTabBar->IsVisible())
             nLocalLeft += mpLayerTabBar->GetSizePixel().Width();
-        nBottom -= aScrBarWH.Height();
+        nBottom -= maScrBarWH.Height();
         mpHorizontalScrollBar->SetPosSizePixel (
             Point(nLocalLeft,nBottom),
-            Size(nRight-nLocalLeft-aScrBarWH.Width(),aScrBarWH.Height()));
+            Size(nRight-nLocalLeft-maScrBarWH.Width(),maScrBarWH.Height()));
     }
 
     // Vertical scrollbar.
     if (mpVerticalScrollBar.get()!=NULL
         && mpVerticalScrollBar->IsVisible())
     {
-        nRight -= aScrBarWH.Width();
+        nRight -= maScrBarWH.Width();
         mpVerticalScrollBar->SetPosSizePixel (
             Point(nRight,nTop),
-            Size (aScrBarWH.Width(),nBottom-nTop));
+            Size (maScrBarWH.Width(),nBottom-nTop));
     }
 
     // Filler in the lower right corner.
@@ -995,7 +935,7 @@ void ViewShell::ArrangeGUIElements (void)
             && mpVerticalScrollBar->IsVisible())
         {
             mpScrollBarBox->Show();
-            mpScrollBarBox->SetPosSizePixel(Point(nRight, nBottom), aScrBarWH);
+            mpScrollBarBox->SetPosSizePixel(Point(nRight, nBottom), maScrBarWH);
         }
         else
             mpScrollBarBox->Hide();
@@ -1033,8 +973,7 @@ void ViewShell::ArrangeGUIElements (void)
         && mpSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
     if ( ! bSlideShowActive)
     {
-        SfxViewShell* pViewShell = GetViewShell();
-        OSL_ASSERT (pViewShell!=NULL);
+        OSL_ASSERT (GetViewShell()!=NULL);
 
         mpContentWindow->SetPosSizePixel(
             Point(nLeft,nTop),
@@ -1043,9 +982,9 @@ void ViewShell::ArrangeGUIElements (void)
 
     // Windows in the center and rulers at the left and top side.
     maAllWindowRectangle = Rectangle(
-        aViewPos,
-        Size(aViewSize.Width()-aScrBarWH.Width(),
-            aViewSize.Height()-aScrBarWH.Height()));
+        maViewPos,
+        Size(maViewSize.Width()-maScrBarWH.Width(),
+            maViewSize.Height()-maScrBarWH.Height()));
 
     if (mpContentWindow.get() != NULL)
     {
@@ -1102,7 +1041,7 @@ USHORT ViewShell::PrepareClose (BOOL bUI, BOOL bForBrowsing)
 
 
 
-void ViewShell::UpdatePreview (SdPage* pPage, BOOL bInit)
+void ViewShell::UpdatePreview (SdPage*, BOOL )
 {
     // Do nothing.  After the actual preview has been removed,
     // OutlineViewShell::UpdatePreview() is the place where something
@@ -1218,7 +1157,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 
 // -----------------------------------------------------------------------------
 
-void ViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
+void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
@@ -1259,7 +1198,7 @@ void ViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
 
 // -----------------------------------------------------------------------------
 
-void ViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
+void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
@@ -1335,7 +1274,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
             }
 
             GetActiveWindow()->SetDrawMode( nMode );
-            pFrameView->SetDrawMode( nMode );
+            mpFrameView->SetDrawMode( nMode );
 // #110094#-7
 //            GetView()->ReleaseMasterPagePaintCache();
             GetActiveWindow()->Invalidate();
@@ -1355,7 +1294,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
 */
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
-ViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
+ViewShell::CreateAccessibleDocumentView (::sd::Window* )
 {
     return ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> ();
@@ -1400,7 +1339,7 @@ SdDrawDocument* ViewShell::GetDoc (void) const
     return GetViewShellBase().GetDocument();
 }
 
-ErrCode ViewShell::DoVerb (long nVerb)
+ErrCode ViewShell::DoVerb (long )
 {
     return ERRCODE_NONE;
 }
@@ -1523,14 +1462,14 @@ void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
 
 
 
-void ViewShell::Paint (const Rectangle& rRect, ::sd::Window* pWin)
+void ViewShell::Paint (const Rectangle&, ::sd::Window* )
 {
 }
 
 
 
 
-void ViewShell::Draw(OutputDevice &rDev, const Region &rReg)
+void ViewShell::Draw(OutputDevice &, const Region &)
 {
 }
 
@@ -1539,7 +1478,7 @@ void ViewShell::Draw(OutputDevice &rDev, const Region &rReg)
 
 ZoomList* ViewShell::GetZoomList (void)
 {
-    return pZoomList;
+    return mpZoomList;
 }
 
 
@@ -1608,8 +1547,8 @@ ViewShellObjectBarFactory::~ViewShellObjectBarFactory (void)
 
 SfxShell* ViewShellObjectBarFactory::CreateShell (
     ::sd::ShellId nId,
-    ::Window* pParentWindow,
-    ::sd::FrameView* pFrameView)
+    ::Window*,
+    ::sd::FrameView* )
 {
     SfxShell* pShell = NULL;
 
