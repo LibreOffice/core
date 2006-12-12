@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2993,9 +2993,13 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
         {
             // ignore shear and rotate, just use scale and translate
             OSL_ENSURE(GetPathPoly().count() > 0L && GetPathPoly().getB2DPolygon(0L).count() > 1L, "OBJ_LINE with too less polygons (!)");
-            const basegfx::B2DRange aPolyRange(basegfx::tools::getRange(rPolyPolygon));
-            aScale = aPolyRange.getRange();
-            aTranslate = aPolyRange.getMinimum();
+            // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
+            // itself, else this method will no longer return the full polygon information (curve will
+            // be lost)
+            const basegfx::B2DPolyPolygon aPolyPolygonNoCurve(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon));
+            const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(aPolyPolygonNoCurve));
+            aScale = aPolyRangeNoCurve.getRange();
+            aTranslate = aPolyRangeNoCurve.getMinimum();
 
             // define matrix for move polygon to zero point
             aMoveToZeroMatrix.translate(-aTranslate.getX(), -aTranslate.getY());
@@ -3022,19 +3026,27 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
                 // get range from unsheared, unrotated polygon and extract scale and translate.
                 // transform topLeft from it back to transformed state to get original
                 // topLeft (rotation center)
-                const basegfx::B2DRange aCorrectedRange(basegfx::tools::getRange(rPolyPolygon));
-                aTranslate = aObjectMatrix * aCorrectedRange.getMinimum();
-                aScale = aCorrectedRange.getRange();
+                // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
+                // itself, else this method will no longer return the full polygon information (curve will
+                // be lost)
+                const basegfx::B2DPolyPolygon aPolyPolygonNoCurve(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon));
+                const basegfx::B2DRange aCorrectedRangeNoCurve(basegfx::tools::getRange(aPolyPolygonNoCurve));
+                aTranslate = aObjectMatrix * aCorrectedRangeNoCurve.getMinimum();
+                aScale = aCorrectedRangeNoCurve.getRange();
 
                 // define matrix for move polygon to zero point
-                aMoveToZeroMatrix.translate(-aCorrectedRange.getMinX(), aCorrectedRange.getMinY());
+                aMoveToZeroMatrix.translate(-aCorrectedRangeNoCurve.getMinX(), aCorrectedRangeNoCurve.getMinY());
             }
             else
             {
                 // get scale and translate from unsheared, unrotated polygon
-                const basegfx::B2DRange aPolyRange(basegfx::tools::getRange(rPolyPolygon));
-                aScale = aPolyRange.getRange();
-                aTranslate = aPolyRange.getMinimum();
+                // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
+                // itself, else this method will no longer return the full polygon information (curve will
+                // be lost)
+                const basegfx::B2DPolyPolygon aPolyPolygonNoCurve(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon));
+                const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(aPolyPolygonNoCurve));
+                aScale = aPolyRangeNoCurve.getRange();
+                aTranslate = aPolyRangeNoCurve.getMinimum();
 
                 // define matrix for move polygon to zero point
                 aMoveToZeroMatrix.translate(-aTranslate.getX(), -aTranslate.getY());
