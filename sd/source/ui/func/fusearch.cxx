@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:54:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,19 +108,19 @@ FunctionReference FuSearch::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd
     return xFunc;
 }
 
-void FuSearch::DoExecute( SfxRequest& rReq )
+void FuSearch::DoExecute( SfxRequest& )
 {
-    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
-    if ( pViewShell->ISA(DrawViewShell) )
+    if ( mpViewShell->ISA(DrawViewShell) )
     {
         bOwnOutliner = TRUE;
-        pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+        pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( pViewShell->ISA(OutlineViewShell) )
+    else if ( mpViewShell->ISA(OutlineViewShell) )
     {
         bOwnOutliner = FALSE;
-        pSdOutliner = pDoc->GetOutliner();
+        pSdOutliner = mpDoc->GetOutliner();
     }
 
     if (pSdOutliner)
@@ -135,8 +135,8 @@ void FuSearch::DoExecute( SfxRequest& rReq )
 
 FuSearch::~FuSearch()
 {
-    if ( ! pDocSh->IsInDestruction() && pDocSh->GetViewShell()!=NULL)
-        pDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
+    if ( ! mpDocSh->IsInDestruction() && mpDocSh->GetViewShell()!=NULL)
+        mpDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if (pSdOutliner)
         pSdOutliner->EndSpelling();
@@ -166,7 +166,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
             pSdOutliner->EndSpelling();
 
             bOwnOutliner = TRUE;
-            pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+            pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
         else if ( pSdOutliner && pViewShell->ISA(OutlineViewShell) && bOwnOutliner )
@@ -175,7 +175,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
             delete pSdOutliner;
 
             bOwnOutliner = FALSE;
-            pSdOutliner = pDoc->GetOutliner();
+            pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->PrepareSpelling();
         }
 
