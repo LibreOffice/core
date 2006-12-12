@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,7 +491,7 @@ void ViewShellManager::UnlockUpdate (void)
 //===== ViewShellManager::Implementation ======================================
 
 ViewShellManager::Implementation::Implementation (
-    ViewShellManager& rManager,
+    ViewShellManager& ,
     ViewShellBase& rBase)
     : mrBase(rBase),
       maMutex(),
@@ -893,7 +893,7 @@ void ViewShellManager::Implementation::ReplaceUndoManager (
     SfxUndoManager* pManager,
     SfxUndoManager* pReplacement)
 {
-    for (int i=0; ;++i)
+    for (USHORT i=0; ;++i)
     {
         SfxShell* pShell = mrBase.GetSubShell(i);
         if (pShell == NULL)
@@ -1325,7 +1325,7 @@ void ViewShellManager::Implementation::DestroyViewShell (
 
 
 void ViewShellManager::Implementation::DestroySubShell (
-    const ViewShell& rParentShell,
+    const ViewShell& ,
     const ShellDescriptor<SfxShell>& rDescriptor)
 {
     OSL_ASSERT(rDescriptor.mpFactory.get() != NULL);
