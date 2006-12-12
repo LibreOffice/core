@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:10:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ class SwViewImp
     BOOL bScrolled          :1; //Wurde gescrolled? Dann im Idle aufraeumen.
 
     //BOOL bResetXorVisibility:1; //StartAction/EndAction
-    BOOL bShowHdlPaint      :1; //LockPaint/UnlockPaint
+    //HMHBOOL bShowHdlPaint     :1; //LockPaint/UnlockPaint
     BOOL bResetHdlHiddenPaint:1;//  -- "" --
     BOOL bPaintInScroll     :1; //Paint (Update() im ScrollHdl der ViewShell
 
