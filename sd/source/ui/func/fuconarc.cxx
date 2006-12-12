@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:27:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 
@@ -147,13 +147,13 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 
         Activate();  // Setzt aObjKind
         SdrCircObj* pNewCircle =
-        new SdrCircObj((SdrObjKind) pView->GetCurrentObjIdentifier(),
+        new SdrCircObj((SdrObjKind) mpView->GetCurrentObjIdentifier(),
                        aNewRectangle,
                        (long) (pPhiStart->GetValue () * 10.0),
                        (long) (pPhiEnd->GetValue () * 10.0));
-        SdrPageView *pPV = pView->GetSdrPageView();
+        SdrPageView *pPV = mpView->GetSdrPageView();
 
-        pView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER);
+        mpView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER);
     }
 }
 
@@ -167,18 +167,18 @@ BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
-    if ( rMEvt.IsLeft() && !pView->IsAction() )
+    if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        pWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-        pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        mpWindow->CaptureMouse();
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
 
-        SdrObject* pObj = pView->GetCreateObj();
+        SdrObject* pObj = mpView->GetCreateObj();
 
         if (pObj)
         {
-            SfxItemSet aAttr(pDoc->GetPool());
+            SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
 //-/            pObj->NbcSetAttributes(aAttr, FALSE);
@@ -212,15 +212,15 @@ BOOL FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
     BOOL bReturn = FALSE;
     BOOL bCreated = FALSE;
 
-    if ( pView->IsCreateObj() && rMEvt.IsLeft() )
+    if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        ULONG nCount = pView->GetSdrPageView()->GetObjList()->GetObjCount();
+        ULONG nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
-        if (pView->EndCreateObj(SDRCREATE_NEXTPOINT) )
+        if (mpView->EndCreateObj(SDRCREATE_NEXTPOINT) )
         {
-            if (nCount != pView->GetSdrPageView()->GetObjList()->GetObjCount())
+            if (nCount != mpView->GetSdrPageView()->GetObjList()->GetObjCount())
             {
                 bCreated = TRUE;
             }
@@ -232,7 +232,7 @@ BOOL FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent && bCreated)
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
     return bReturn;
 }
@@ -296,7 +296,7 @@ void FuConstructArc::Activate()
         break;
     }
 
-    pView->SetCurrentObj(aObjKind);
+    mpView->SetCurrentObj((UINT16)aObjKind);
 
     FuConstruct::Activate();
 //  FuDraw::Activate();
@@ -329,8 +329,8 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
     // case SID_DRAW_CIRCLECUT_NOFILL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDoc);
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        0L, mpDoc);
 
     if(pObj)
     {
@@ -351,7 +351,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
 
             pObj->SetLogicRect(aRect);
 
-            SfxItemSet aAttr(pDoc->GetPool());
+            SfxItemSet aAttr(mpDoc->GetPool());
             aAttr.Put(SdrCircStartAngleItem(9000));
             aAttr.Put(SdrCircEndAngleItem(0));
 
