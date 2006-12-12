@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AllMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:47:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:45:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,8 @@ private:
         control.
     */
     void UpdateMasterPageList (void);
+
+    using sd::toolpanel::controls::MasterPagesSelector::Fill;
 };
 
 } } } // end of namespace ::sd::toolpanel::controls
