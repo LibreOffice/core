@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,8 +105,8 @@ FunctionReference FuEditGluePoints::Create( ViewShell* pViewSh, ::sd::Window* pW
 void FuEditGluePoints::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );
-    pView->SetInsGluePointMode(FALSE);
-    pViewShell->GetViewShellBase().GetToolBarManager().AddToolBar(
+    mpView->SetInsGluePointMode(FALSE);
+    mpViewShell->GetViewShellBase().GetToolBarManager().AddToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msGluePointsToolBar);
 }
@@ -119,9 +119,9 @@ void FuEditGluePoints::DoExecute( SfxRequest& rReq )
 
 FuEditGluePoints::~FuEditGluePoints()
 {
-    pView->BrkAction();
-    pView->UnmarkAllGluePoints();
-    pView->SetInsGluePointMode(FALSE);
+    mpView->BrkAction();
+    mpView->UnmarkAllGluePoints();
+    mpView->SetInsGluePointMode(FALSE);
 }
 
 /*************************************************************************
@@ -132,14 +132,14 @@ FuEditGluePoints::~FuEditGluePoints()
 
 BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    pView->SetActualWin( pWindow );
+    mpView->SetActualWin( mpWindow );
 
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
 
-    if (pView->IsAction())
+    if (mpView->IsAction())
     {
         if (rMEvt.IsRight())
-            pView->BckAction();
+            mpView->BckAction();
 
         return TRUE;
     }
@@ -147,12 +147,12 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsLeft())
     {
         bReturn = TRUE;
-        USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-        pWindow->CaptureMouse();
+        USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        mpWindow->CaptureMouse();
 
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
         if (eHit == SDRHIT_HANDLE)
         {
@@ -161,24 +161,24 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             ******************************************************************/
             SdrHdl* pHdl = aVEvt.pHdl;
 
-            if (pView->IsGluePointMarked(aVEvt.pObj, aVEvt.nGlueId) && rMEvt.IsShift())
+            if (mpView->IsGluePointMarked(aVEvt.pObj, aVEvt.nGlueId) && rMEvt.IsShift())
             {
-                pView->UnmarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, aVEvt.pPV);
+                mpView->UnmarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, aVEvt.pPV);
                 pHdl = NULL;
             }
 
             if (pHdl)
             {
                 // Handle draggen
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
         }
-        else if (eHit == SDRHIT_MARKEDOBJECT && pView->IsInsGluePointMode())
+        else if (eHit == SDRHIT_MARKEDOBJECT && mpView->IsInsGluePointMode())
         {
             /******************************************************************
             * Klebepunkt einfuegen
             ******************************************************************/
-            pView->BegInsGluePoint(aMDPos);
+            mpView->BegInsGluePoint(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
         {
@@ -186,16 +186,16 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             * Klebepunkt selektieren
             ******************************************************************/
             if (!rMEvt.IsShift())
-                pView->UnmarkAllGluePoints();
+                mpView->UnmarkAllGluePoints();
 
-            pView->BegMarkGluePoints(aMDPos);
+            mpView->BegMarkGluePoints(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
             /******************************************************************
             * Objekt verschieben
             ******************************************************************/
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
+            mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
         }
         else if (eHit == SDRHIT_GLUEPOINT)
         {
@@ -203,14 +203,14 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             * Klebepunkt selektieren
             ******************************************************************/
             if (!rMEvt.IsShift())
-                pView->UnmarkAllGluePoints();
+                mpView->UnmarkAllGluePoints();
 
-            pView->MarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, aVEvt.pPV);
-            SdrHdl* pHdl = pView->GetGluePointHdl(aVEvt.pObj, aVEvt.nGlueId);
+            mpView->MarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, aVEvt.pPV);
+            SdrHdl* pHdl = mpView->GetGluePointHdl(aVEvt.pObj, aVEvt.nGlueId);
 
             if (pHdl)
             {
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             }
         }
         else
@@ -220,7 +220,7 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             ******************************************************************/
             if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SDRHIT_UNMARKEDOBJECT)
             {
-               pView->UnmarkAllObj();
+               mpView->UnmarkAllObj();
             }
 
             BOOL bMarked = FALSE;
@@ -229,11 +229,11 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if (rMEvt.IsMod2())
                 {
-                    bMarked = pView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift());
+                    bMarked = mpView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift());
                 }
                 else
                 {
-                    bMarked = pView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift());
+                    bMarked = mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift());
                 }
             }
 
@@ -241,24 +241,24 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
             {
                 // Objekt verschieben
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
-            else if (pView->AreObjectsMarked())
+            else if (mpView->AreObjectsMarked())
             {
                 /**************************************************************
                 * Klebepunkt selektieren
                 **************************************************************/
                 if (!rMEvt.IsShift())
-                    pView->UnmarkAllGluePoints();
+                    mpView->UnmarkAllGluePoints();
 
-                pView->BegMarkGluePoints(aMDPos);
+                mpView->BegMarkGluePoints(aMDPos);
             }
             else
             {
                 /**************************************************************
                 * Objekt selektieren
                 **************************************************************/
-                pView->BegMarkObj(aMDPos);
+                mpView->BegMarkObj(aMDPos);
             }
         }
 
@@ -276,16 +276,16 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
 BOOL FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 {
-    pView->SetActualWin( pWindow );
+    mpView->SetActualWin( mpWindow );
 
     FuDraw::MouseMove(rMEvt);
 
-    if (pView->IsAction())
+    if (mpView->IsAction())
     {
         Point aPix(rMEvt.GetPosPixel());
-        Point aPnt( pWindow->PixelToLogic(aPix) );
+        Point aPnt( mpWindow->PixelToLogic(aPix) );
         ForceScroll(aPix);
-        pView->MovAction(aPnt);
+        mpView->MovAction(aPnt);
     }
 
     ForcePointer(&rMEvt);
@@ -301,36 +301,36 @@ BOOL FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    pView->SetActualWin( pWindow );
+    mpView->SetActualWin( mpWindow );
 
     BOOL bReturn = FALSE;
 
-    if (pView->IsAction())
+    if (mpView->IsAction())
     {
         bReturn = TRUE;
-        pView->EndAction();
+        mpView->EndAction();
     }
 
     FuDraw::MouseButtonUp(rMEvt);
 
-    USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-    Point aPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+    USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+    Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
     if (Abs(aMDPos.X() - aPos.X()) < nDrgLog &&
         Abs(aMDPos.Y() - aPos.Y()) < nDrgLog &&
         !rMEvt.IsShift() && !rMEvt.IsMod2())
     {
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
         if (eHit == SDRHIT_NONE)
         {
             // Klick auf der Stelle: deselektieren
-            pView->UnmarkAllObj();
+            mpView->UnmarkAllObj();
         }
     }
 
-    pWindow->ReleaseMouse();
+    mpWindow->ReleaseMouse();
 
     return bReturn;
 }
@@ -346,7 +346,7 @@ BOOL FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 
 BOOL FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
-    pView->SetActualWin( pWindow );
+    mpView->SetActualWin( mpWindow );
 
     BOOL bReturn = FuDraw::KeyInput(rKEvt);
 
@@ -361,7 +361,7 @@ BOOL FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 
 BOOL FuEditGluePoints::Command(const CommandEvent& rCEvt)
 {
-    pView->SetActualWin( pWindow );
+    mpView->SetActualWin( mpWindow );
     return FuPoor::Command( rCEvt );
 }
 
@@ -373,7 +373,7 @@ BOOL FuEditGluePoints::Command(const CommandEvent& rCEvt)
 
 void FuEditGluePoints::Activate()
 {
-    pView->SetGluePointEditMode();
+    mpView->SetGluePointEditMode();
     FuDraw::Activate();
 }
 
@@ -385,7 +385,7 @@ void FuEditGluePoints::Activate()
 
 void FuEditGluePoints::Deactivate()
 {
-    pView->SetGluePointEditMode( FALSE );
+    mpView->SetGluePointEditMode( FALSE );
     FuDraw::Deactivate();
 }
 
@@ -401,35 +401,35 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
     {
         case SID_GLUE_INSERT_POINT:
         {
-            pView->SetInsGluePointMode(!pView->IsInsGluePointMode());
+            mpView->SetInsGluePointMode(!mpView->IsInsGluePointMode());
         }
         break;
 
         case SID_GLUE_ESCDIR_LEFT:
         {
-            pView->SetMarkedGluePointsEscDir( SDRESC_LEFT,
-                    !pView->IsMarkedGluePointsEscDir( SDRESC_LEFT ) );
+            mpView->SetMarkedGluePointsEscDir( SDRESC_LEFT,
+                    !mpView->IsMarkedGluePointsEscDir( SDRESC_LEFT ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_RIGHT:
         {
-            pView->SetMarkedGluePointsEscDir( SDRESC_RIGHT,
-                    !pView->IsMarkedGluePointsEscDir( SDRESC_RIGHT ) );
+            mpView->SetMarkedGluePointsEscDir( SDRESC_RIGHT,
+                    !mpView->IsMarkedGluePointsEscDir( SDRESC_RIGHT ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_TOP:
         {
-            pView->SetMarkedGluePointsEscDir( SDRESC_TOP,
-                    !pView->IsMarkedGluePointsEscDir( SDRESC_TOP ) );
+            mpView->SetMarkedGluePointsEscDir( SDRESC_TOP,
+                    !mpView->IsMarkedGluePointsEscDir( SDRESC_TOP ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_BOTTOM:
         {
-            pView->SetMarkedGluePointsEscDir( SDRESC_BOTTOM,
-                    !pView->IsMarkedGluePointsEscDir( SDRESC_BOTTOM ) );
+            mpView->SetMarkedGluePointsEscDir( SDRESC_BOTTOM,
+                    !mpView->IsMarkedGluePointsEscDir( SDRESC_BOTTOM ) );
         }
         break;
 
@@ -438,43 +438,43 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
             const SfxItemSet* pSet = rReq.GetArgs();
             const SfxPoolItem& rItem = pSet->Get(SID_GLUE_PERCENT);
             BOOL bPercent = ((const SfxBoolItem&) rItem).GetValue();
-            pView->SetMarkedGluePointsPercent(bPercent);
+            mpView->SetMarkedGluePointsPercent(bPercent);
         }
         break;
 
         case SID_GLUE_HORZALIGN_CENTER:
         {
-            pView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_CENTER);
         }
         break;
 
         case SID_GLUE_HORZALIGN_LEFT:
         {
-            pView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_LEFT);
+            mpView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_LEFT);
         }
         break;
 
         case SID_GLUE_HORZALIGN_RIGHT:
         {
-            pView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_RIGHT);
+            mpView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_RIGHT);
         }
         break;
 
         case SID_GLUE_VERTALIGN_CENTER:
         {
-            pView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_CENTER);
         }
         break;
 
         case SID_GLUE_VERTALIGN_TOP:
         {
-            pView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_TOP);
+            mpView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_TOP);
         }
         break;
 
         case SID_GLUE_VERTALIGN_BOTTOM:
         {
-            pView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_BOTTOM);
+            mpView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_BOTTOM);
         }
         break;
     }
