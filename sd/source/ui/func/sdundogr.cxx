@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdundogr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:59:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,23 +110,6 @@ void SdUndoGroup::Redo()
     for (ULONG nAction = 0; nAction < nLast; nAction++)
     {
         ((SdUndoAction*)aCtn.GetObject(nAction))->Redo();
-    }
-
-}
-
-/*************************************************************************
-|*
-|* Repeat
-|*
-\************************************************************************/
-
-void SdUndoGroup::Repeat()
-{
-    ULONG nLast = aCtn.Count();
-    for (ULONG nAction = 0; nAction < nLast; nAction++)
-    {
-// erstmal nichts tun, bis klar ist, woher wir das RepeatTarget bekommen
-//        ((SdUndoAction*)aCtn.GetObject(nAction))->Repeat();
     }
 
 }
