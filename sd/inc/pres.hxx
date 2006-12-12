@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pres.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:22:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:23:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ enum AutoLayout
     AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE,
     AUTOLAYOUT_TITLE_VERTICAL_OUTLINE,
     AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART,
-    AUTOLAYOUT__END,
+    AUTOLAYOUT__END
 };
 
 enum PageKind
