@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masterlayoutdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:40:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,15 +58,15 @@ using namespace ::sd;
 
 MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
 :   ModalDialog( pParent, SdResId( RID_SD_DLG_MASTER_LAYOUT ) ),
-    maFLPlaceholders( this, SdResId( FL_PLACEHOLDERS ) ),
-    maCBHeader( this, SdResId( CB_HEADER ) ),
-    maCBDate( this, SdResId( CB_DATE ) ),
-    maCBFooter( this, SdResId( CB_FOOTER ) ),
-    maCBPageNumber( this, SdResId( CB_PAGE_NUMBER ) ),
-    maPBOK( this, SdResId( BT_OK ) ),
-    maPBCancel( this, SdResId( BT_CANCEL ) ),
     mpDoc( pDoc ),
-    mpCurrentPage( pCurrentPage )
+    mpCurrentPage( pCurrentPage ),
+    maFLPlaceholders( this, SdResId( FL_PLACEHOLDERS ) ),
+    maCBDate( this, SdResId( CB_DATE ) ),
+    maCBPageNumber( this, SdResId( CB_PAGE_NUMBER ) ),
+    maCBHeader( this, SdResId( CB_HEADER ) ),
+    maCBFooter( this, SdResId( CB_FOOTER ) ),
+    maPBOK( this, SdResId( BT_OK ) ),
+    maPBCancel( this, SdResId( BT_CANCEL ) )
 {
     if( mpCurrentPage && !mpCurrentPage->IsMasterPage() )
     {
@@ -177,6 +177,6 @@ void MasterLayoutDialog::remove( PresObjKind eKind )
         mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
         SdrObjList* pOL =pObject->GetObjList();
         UINT32 nOrdNum=pObject->GetOrdNumDirect();
-        SdrObject* pChkObj=pOL->RemoveObject(nOrdNum);
+        pOL->RemoveObject(nOrdNum);
     }
 }
