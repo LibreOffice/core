@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unprlout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:01:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,17 +100,6 @@ void SdPresentationLayoutUndoAction::Redo()
     pPage->SetPresentationLayout(aNewLayoutName);
     if (bSetAutoLayout)
         pPage->SetAutoLayout(eNewAutoLayout, TRUE);
-}
-
-/*************************************************************************
-|*
-|* Repeat()
-|*
-\************************************************************************/
-
-void SdPresentationLayoutUndoAction::Repeat()
-{
-    DBG_ASSERT(FALSE, "SdPresentationLayoutUndoAction::Repeat: nicht implementiert");
 }
 
 /*************************************************************************
