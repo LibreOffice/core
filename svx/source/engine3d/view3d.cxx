@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:22:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1640,9 +1640,9 @@ void E3dView::Start3DCreation()
     if (GetMarkedObjectCount())
     {
         // irgendwelche Markierungen ermitteln und ausschalten
-        BOOL bVis = IsMarkHdlShown();
+        //HMHBOOL bVis = IsMarkHdlShown();
 
-        if (bVis) HideMarkHdl();
+        //HMHif (bVis) HideMarkHdl();
 
         // bestimme die koordinaten fuer JOEs Mirrorachse
         // entgegen der normalen Achse wird diese an die linke Seite des Objektes
@@ -1722,7 +1722,7 @@ void E3dView::Start3DCreation()
         // Markierungen einschalten
         SetMarkHandles();
 
-        if (bVis) ShowMarkHdl();
+        //HMHif (bVis) ShowMarkHdl();
         if (AreObjectsMarked()) MarkListHasChanged();
 
         // SpiegelPolygone SOFORT zeigen
