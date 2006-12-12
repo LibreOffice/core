@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoutl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:53:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ BOOL FuOutline::Command(const CommandEvent& rCEvt)
     BOOL bResult = FALSE;
 
     OutlinerView* pOlView =
-        static_cast<OutlineView*>(pView)->GetViewByWindow(pWindow);
+        static_cast<OutlineView*>(mpView)->GetViewByWindow(mpWindow);
     DBG_ASSERT (pOlView, "keine OutlinerView gefunden");
 
     if (pOlView)
