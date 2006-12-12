@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:16:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1023,7 +1023,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
         SdrView* pView = new SdrView( pModel, &aVDev );
-        pView->SetMarkHdlHidden( TRUE );
+        pView->hideMarkHandles();
         SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 //      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
         SdrObject *pObj=NULL;
@@ -1701,7 +1701,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         pModel->InsertPage( pPage, 0 );
         // 3D View
         SdrView* pView = new SdrView( pModel, &aVDev );
-        pView->SetMarkHdlHidden( TRUE );
+        pView->hideMarkHandles();
 //      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
         SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
