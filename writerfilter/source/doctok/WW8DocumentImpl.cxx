@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:11:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-12 16:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,7 +485,9 @@ bool WW8DocumentImpl::isSpecial(sal_uInt32 nChar)
         bResult = true;
     else if (nChar >= 10)
     {
-        if (nChar <= 16)
+        if (nChar == 12)
+            bResult= true;
+        else if (nChar <= 16)
             bResult = true;
         else if (nChar >= 22)
         {
@@ -523,7 +525,9 @@ WW8DocumentImpl & WW8DocumentImpl::Assign(const WW8DocumentImpl & rSrc)
 
     mpStream = rSrc.mpStream;
     mpTableStream = rSrc.mpTableStream;
+    mpDataStream = rSrc.mpDataStream;
     mpDocStream = rSrc.mpDocStream;
+    mpCompObjStream = rSrc.mpCompObjStream;
 
     mpPieceTable = rSrc.mpPieceTable;
 
@@ -539,6 +543,7 @@ WW8DocumentImpl & WW8DocumentImpl::Assign(const WW8DocumentImpl & rSrc)
     mpEndnoteHelper = rSrc.mpEndnoteHelper;
     mpAnnotationHelper = rSrc.mpAnnotationHelper;
     mpShapeHelper = rSrc.mpShapeHelper;
+    mpBreakHelper = rSrc.mpBreakHelper;
 
     mpBookmarkHelper = rSrc.mpBookmarkHelper;
 
@@ -1383,59 +1388,64 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
         if (nCount == 1)
             bComplex = true;
 
-        sal_uInt32 nIndex = nCount - (bComplex ? 1 : 2);
-        sal_uInt32 nChar = aSeq[nIndex];
-
-        if (! bComplex)
-            nChar += aSeq[nIndex + 1] << 8;
-
-        if (isSpecial(nChar))
+        if (bComplex)
         {
-            resolveSpecialChar(nChar, rStream);
+            sal_uInt32 nStartIndex = 0;
+            sal_uInt32 nEndIndex = nCount - 1;
 
-            if (bComplex)
+            sal_uInt32 nCharFirst = aSeq[0];
+            sal_uInt32 nCharLast = aSeq[nEndIndex];
+
+            if (isSpecial(nCharFirst))
             {
-                if (nIndex > 0)
-                    rStream.text(&aSeq[0], nIndex);
-                rStream.text(&aSeq[nIndex], 1);
+                nStartIndex += 1;
+                resolveSpecialChar(nCharFirst, rStream);
+                rStream.text(&aSeq[0], 1);
             }
-            else
+
+            if (!isSpecial(nCharLast))
+                nEndIndex += 1;
+
+            if (nStartIndex < nEndIndex)
             {
-                if (nIndex > 0)
-                    rStream.utext(&aSeq[0], nIndex / 2);
-                rStream.utext(&aSeq[nIndex], 1);
+                sal_uInt32 nChars = nEndIndex - nStartIndex;
+                rStream.text(&aSeq[nStartIndex], nChars);
+
+                if (isSpecial(nCharLast))
+                {
+                    resolveSpecialChar(nCharLast, rStream);
+                    rStream.text(&aSeq[nEndIndex], 1);
+                }
             }
         }
         else
         {
-            nChar = aSeq[0];
+            sal_uInt32 nStartIndex = 0;
+            sal_uInt32 nEndIndex = nCount - 2;
 
-            if (!bComplex)
-                nChar += aSeq[1] << 8;
+            sal_uInt32 nCharFirst = aSeq[0] + (aSeq[1] << 8);
+            sal_uInt32 nCharLast = aSeq[nEndIndex] + (aSeq[nEndIndex + 1]);
 
-            if (isSpecial(nChar))
+            if (isSpecial(nCharFirst))
             {
-                resolveSpecialChar(nChar, rStream);
-
-                if (bComplex)
-                {
-                    rStream.text(&aSeq[0], 1);
-                    if (nCount > 1)
-                        rStream.text(&aSeq[1], nCount - 1);
-                }
-                else
-                {
-                    rStream.utext(&aSeq[0], 1);
-                    if (nCount > 2)
-                        rStream.utext(&aSeq[2], (nCount - 2) / 2);
-                }
+                nStartIndex += 2;
+                resolveSpecialChar(nCharFirst, rStream);
+                rStream.utext(&aSeq[0], 1);
             }
-            else
+
+            if (!isSpecial(nCharLast))
+                nEndIndex += 2;
+
+            if (nStartIndex < nEndIndex)
             {
-                if (bComplex)
-                    rStream.text(&aSeq[0], nCount);
-                else
-                    rStream.utext(&aSeq[0], nCount/2);
+                sal_uInt32 nChars = (nEndIndex - nStartIndex) / 2;
+                rStream.utext(&aSeq[nStartIndex], nChars);
+
+                if (isSpecial(nCharLast))
+                {
+                    resolveSpecialChar(nCharLast, rStream);
+                    rStream.utext(&aSeq[nEndIndex], 1);
+                }
             }
         }
     }
@@ -1494,6 +1504,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
         //output.addItem(mTextboxHeaderEndCpAndFc.toString());
 
+#if 0
         output.addItem("<substream-names>");
         output.addItem(mpStream->getSubStreamNames());
         output.addItem("</substream-names>");
@@ -1502,6 +1513,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         {
             mpDocStream->dump(output);
         }
+#endif
 
         doctok::Reference<Properties>::Pointer_t pFib
             (new WW8Fib(*mpFib));
