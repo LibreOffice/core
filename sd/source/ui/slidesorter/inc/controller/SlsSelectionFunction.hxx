@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:22:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ public:
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void Paint(const Rectangle& rRect, SdWindow* pWin);
+    virtual void Paint(const Rectangle&, ::sd::Window* );
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
