@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:09:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,9 +122,9 @@ SlideSorterViewShell::SlideSorterViewShell (
 
     mpView = mpSlideSorterView.get();
     if (pFrameViewArgument != NULL)
-        pFrameView = pFrameViewArgument;
+        mpFrameView = pFrameViewArgument;
     else
-        pFrameView = new FrameView(GetDoc());
+        mpFrameView = new FrameView(GetDoc());
     GetFrameView()->Connect();
 
     pWindow->SetViewShell (this);
@@ -341,8 +341,8 @@ SfxUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
 
 
 SfxShell* SlideSorterViewShell::CreateInstance (
-    sal_Int32 nId,
-    SfxShell* pParent,
+    sal_Int32,
+    SfxShell*,
     void* pUserData,
     ViewShellBase& rBase)
 {
@@ -356,7 +356,7 @@ SfxShell* SlideSorterViewShell::CreateInstance (
 
 
 
-void SlideSorterViewShell::SetupControls (::Window* pParentWindow)
+void SlideSorterViewShell::SetupControls (::Window* )
 {
     GetVerticalScrollBar()->Show ();
 }
@@ -562,8 +562,8 @@ void SlideSorterViewShell::Paint (
 
 void SlideSorterViewShell::ArrangeGUIElements (void)
 {
-    Point aOrigin (aViewPos);
-    Size aSize (aViewSize);
+    Point aOrigin (maViewPos);
+    Size aSize (maViewSize);
 
     if (aSize.Width()!=0 && aSize.Height()!=0)
     {
@@ -603,7 +603,7 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
 
 
 
-SvBorder SlideSorterViewShell::GetBorder (bool bOuterResize)
+SvBorder SlideSorterViewShell::GetBorder (bool )
 {
     SvBorder aBorder;
 
@@ -690,33 +690,33 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
 
 void SlideSorterViewShell::WriteFrameViewData()
 {
-    if (pFrameView != NULL)
+    if (mpFrameView != NULL)
     {
         view::SlideSorterView& rView (*mpSlideSorterView);
-        pFrameView->SetLineDraft( rView.IsLineDraft() );
-        pFrameView->SetFillDraft( rView.IsFillDraft() );
-        pFrameView->SetTextDraft( rView.IsTextDraft() );
-        pFrameView->SetGrafDraft( rView.IsGrafDraft() );
+        mpFrameView->SetLineDraft( rView.IsLineDraft() );
+        mpFrameView->SetFillDraft( rView.IsFillDraft() );
+        mpFrameView->SetTextDraft( rView.IsTextDraft() );
+        mpFrameView->SetGrafDraft( rView.IsGrafDraft() );
 
-        pFrameView->SetSlidesPerRow((USHORT)rView.GetLayouter().GetColumnCount());
+        mpFrameView->SetSlidesPerRow((USHORT)rView.GetLayouter().GetColumnCount());
 
         // DrawMode for 'main' window
-        if( pFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
-            pFrameView->SetDrawMode( GetActiveWindow()->GetDrawMode() );
+        if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
+            mpFrameView->SetDrawMode( GetActiveWindow()->GetDrawMode() );
 
         SdPage* pActualPage = GetActualPage();
 
         if (pActualPage != NULL)
         {
-            pFrameView->SetSelectedPage (
+            mpFrameView->SetSelectedPage (
                 ( pActualPage->GetPageNum() - 1 ) / 2 );
         }
         else
         {
             // We have no current page to set but at least we can make sure
             // tht the index of the frame view has a legal value.
-            if (pFrameView->GetSelectedPage() >= mpSlideSorterModel->GetPageCount())
-                pFrameView->SetSelectedPage(mpSlideSorterModel->GetPageCount()-1);
+            if (mpFrameView->GetSelectedPage() >= mpSlideSorterModel->GetPageCount())
+                mpFrameView->SetSelectedPage((USHORT)mpSlideSorterModel->GetPageCount()-1);
         }
     }
 }
@@ -724,7 +724,7 @@ void SlideSorterViewShell::WriteFrameViewData()
 
 
 
-void SlideSorterViewShell::SetZoom (long int nZoom)
+void SlideSorterViewShell::SetZoom (long int )
 {
     // Ignored.
     // The zoom scale is adapted internally to fit a number of columns in
@@ -796,7 +796,7 @@ SlideSorterViewShell::TabBarEntry
 
             case TBE_SLIDES:
             case TBE_MASTER_PAGES:
-                mpTabBar->SetCurPageId (eEntry);
+                mpTabBar->SetCurPageId ((USHORT)eEntry);
                 mpSlideSorterController->HandleModelChange();
                 break;
 
