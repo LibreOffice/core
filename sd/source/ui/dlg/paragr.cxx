@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:41:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,15 +46,11 @@
 #include <svx/dialogs.hrc>
 #include "eetext.hxx"
 #include <svx/eeitem.hxx>
-//CHINA001 #include <svx/tabstpge.hxx>
 
-//CHINA001 #ifndef _SVX_PARAGRPH_HXX //autogen
-//CHINA001 #include <svx/paragrph.hxx>
-//CHINA001 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
 #include "paragr.hxx"
 #include "sdresid.hxx"
 
@@ -70,14 +66,14 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
 {
     FreeResource();
 
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
 
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
-        AddTabPage( RID_SVXPAGE_PARA_ASIAN);//CHINA001 AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+        AddTabPage( RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
 
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );//CHINA001 ddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,0);
-    AddTabPage( RID_SVXPAGE_TABULATOR );//CHINA001 AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
+    AddTabPage( RID_SVXPAGE_TABULATOR );
 }

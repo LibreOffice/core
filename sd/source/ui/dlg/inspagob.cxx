@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspagob.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:40:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:05:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,13 +67,13 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     const String& rFileName )
     : ModalDialog     ( pWindow, SdResId( DLG_INSERT_PAGES_OBJS ) ),
       aLbTree         ( this, SdResId( LB_TREE ) ),
+      aCbxLink        ( this, SdResId( CBX_LINK ) ),
+      aCbxMasters     ( this, SdResId( CBX_CHECK_MASTERS ) ),
       aBtnOk          ( this, SdResId( BTN_OK ) ),
       aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
       aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-      aCbxLink        ( this, SdResId( CBX_LINK ) ),
-      aCbxMasters     ( this, SdResId( CBX_CHECK_MASTERS ) ),
-      pDoc          ( pInDoc ),
       pMedium       ( pSfxMedium ),
+      mpDoc         ( pInDoc ),
       rName         ( rFileName )
 {
     FreeResource();
@@ -113,7 +113,7 @@ void SdInsertPagesObjsDlg::Reset()
         aLbTree.SetSelectionMode( MULTIPLE_SELECTION );
 
         // transfer ownership of Medium
-        aLbTree.Fill( pDoc, pMedium, rName );
+        aLbTree.Fill( mpDoc, pMedium, rName );
     }
     else
     {
@@ -186,7 +186,7 @@ BOOL SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 |*
 \************************************************************************/
 
-IMPL_LINK( SdInsertPagesObjsDlg, SelectObjectHdl, void *, p )
+IMPL_LINK( SdInsertPagesObjsDlg, SelectObjectHdl, void *, EMPTYARG )
 {
     if( aLbTree.IsLinkableSelected() )
         aCbxLink.Enable();
