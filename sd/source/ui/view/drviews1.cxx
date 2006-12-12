@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:41:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ void DrawViewShell::SelectionHasChanged (void)
             if (!pOleObj)
             {
                 pIPClient->DeactivateObject();
-                pDrView->ShowMarkHdl();
+                //HMHpDrView->ShowMarkHdl();
             }
             else
             {
@@ -871,7 +871,7 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
                     * OLE-Objekt erzeugen, StarImage starten
                     * Grafik-Objekt loeschen (durch OLE-Objekt ersetzt)
                     **************************************************************/
-                    pDrView->HideMarkHdl();
+                    //HMHpDrView->HideMarkHdl();
 
                     SvStorageRef aStor = new SvStorage(String());
                     SvInPlaceObjectRef aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
