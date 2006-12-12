@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {
-                        pView->HideMarkHdl();
+                        //HMHpView->HideMarkHdl();
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
 
                         // consumed
