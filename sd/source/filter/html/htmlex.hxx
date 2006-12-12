@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,9 +112,9 @@ class View;
 class HtmlErrorContext : public ErrorContext
 {
 private:
-    USHORT  m_nResId;
-    String  m_aURL1;
-    String  m_aURL2;
+    USHORT  mnResId;
+    String  maURL1;
+    String  maURL2;
 
 public:
                     HtmlErrorContext(Window *pWin=0);
@@ -132,66 +132,65 @@ public:
 // =====================================================================
 class HtmlExport
 {
-    String m_aPath;
+    String maPath;
 
-    SdDrawDocument* pDoc;
-    ::sd::DrawDocShell* pDocSh;
+    SdDrawDocument* mpDoc;
+    ::sd::DrawDocShell* mpDocSh;
 
-    HtmlErrorContext m_eEC;
+    HtmlErrorContext meEC;
 
-    HtmlPublishMode m_eMode;
+    HtmlPublishMode meMode;
     SfxProgress* mpProgress;
-    bool m_bImpress;
-    USHORT m_nSdPageCount;
-    USHORT m_nPagesWritten;
-    bool m_bContentsPage;
-    INT16 m_nButtonThema;
-    UINT16 m_nWidthPixel;
-    UINT16 m_nHeightPixel;
-    PublishingFormat m_eFormat;
-    bool m_bHeader;
-    bool m_bNotes;
-    bool m_bFrames;
-    bool m_bKiosk;
-//-/    bool m_bCreated;
-    String m_aIndex;
-    String m_aEMail;
-    String m_aAuthor;
-    String m_aHomePage;
-    String m_aInfo;
-    INT16 m_nCompression;
-    String m_aDocFileName;
-    String m_aFramePage;
-    String m_DocTitle;
-    bool m_bDownload;
+    bool mbImpress;
+    USHORT mnSdPageCount;
+    USHORT mnPagesWritten;
+    bool mbContentsPage;
+    INT16 mnButtonThema;
+    UINT16 mnWidthPixel;
+    UINT16 mnHeightPixel;
+    PublishingFormat meFormat;
+    bool mbHeader;
+    bool mbNotes;
+    bool mbFrames;
+    bool mbKiosk;
+    String maIndex;
+    String maEMail;
+    String maAuthor;
+    String maHomePage;
+    String maInfo;
+    INT16 mnCompression;
+    String maDocFileName;
+    String maFramePage;
+    String mDocTitle;
+    bool mbDownload;
 
-    bool m_bAutoSlide;
-    UINT32  m_nSlideDuration;
-    bool m_bSlideSound;
-    bool m_bEndless;
+    bool mbAutoSlide;
+    UINT32  mnSlideDuration;
+    bool mbSlideSound;
+    bool mbEndless;
 
-    bool m_bUserAttr;           // die folgenden Farben werden fuer das <body>
-    Color m_aTextColor;         // tag genutzt, wenn m_bUserAttr true ist
-    Color m_aBackColor;
-    Color m_aLinkColor;
-    Color m_aVLinkColor;
-    Color m_aALinkColor;
-    Color m_aFirstPageColor;
-    bool m_bDocColors;
+    bool mbUserAttr;            // die folgenden Farben werden fuer das <body>
+    Color maTextColor;          // tag genutzt, wenn mbUserAttr true ist
+    Color maBackColor;
+    Color maLinkColor;
+    Color maVLinkColor;
+    Color maALinkColor;
+    Color maFirstPageColor;
+    bool mbDocColors;
 
-    String   m_aHTMLExtension;
-    String** m_pHTMLFiles;
-    String** m_pImageFiles;
-    String** m_pPageNames;
-    String** m_pTextFiles;
+    String   maHTMLExtension;
+    String** mpHTMLFiles;
+    String** mpImageFiles;
+    String** mpPageNames;
+    String** mpTextFiles;
 
-    String m_aExportPath;           // Das Ausgabeverzeichnes bzw. die URL
-    String m_aIndexUrl;
-    String m_aURLPath;
-    String m_aCGIPath;
-    PublishingScript m_eScript;
+    String maExportPath;            // Das Ausgabeverzeichnes bzw. die URL
+    String maIndexUrl;
+    String maURLPath;
+    String maCGIPath;
+    PublishingScript meScript;
 
-    const String m_aHTMLHeader;
+    const String maHTMLHeader;
 
     SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
