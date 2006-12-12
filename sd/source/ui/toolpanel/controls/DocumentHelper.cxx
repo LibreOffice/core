@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:18:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,10 +118,10 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         // master page already exists.
         bool bPageExists (false);
         USHORT nMasterPageCount(rTargetDocument.GetMasterSdPageCount(PK_STANDARD));
-        for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
+        for (USHORT nMaster=0; nMaster<nMasterPageCount; nMaster++)
         {
             SdPage* pCandidate = static_cast<SdPage*>(
-                rTargetDocument.GetMasterSdPage (nIndex, PK_STANDARD));
+                rTargetDocument.GetMasterSdPage (nMaster, PK_STANDARD));
             if (pMasterPage!=NULL
                 && pCandidate->GetName().CompareTo(pMasterPage->GetName())==0)
             {
@@ -488,7 +488,6 @@ void DocumentHelper::AssignMasterPageToPage (
             }
         }
 
-        USHORT nIndex = pPage->GetPageNum();
         if (pSlide != NULL)
         {
             // 2. Assign the given master pages to the first slide that was
