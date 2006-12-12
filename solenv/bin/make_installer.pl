@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-27 12:08:27 $
+#   last change: $Author: kz $ $Date: 2006-12-12 15:49:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1376,6 +1376,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 my $staticpath = "";
                 my $relocatablepath = "";
+                # relocatable path can be defined in package list
+                if ( $onepackage->{'relocatablepath'} ) { $relocatablepath = $onepackage->{'relocatablepath'}; }
+                # setting fix part and variable part of destination path
                 installer::epmfile::analyze_rootpath($packagerootpath, \$staticpath, \$relocatablepath);
 
                 # ... replacing the variable PRODUCTDIRECTORYNAME in the shellscriptfile by $staticpath
