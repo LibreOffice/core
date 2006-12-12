@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:08:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:36:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,9 +172,9 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (int nPageIndex) const
         {
             SdPage* pPage;
             if (meEditMode == EM_PAGE)
-                pPage = mrDocument.GetSdPage (nPageIndex, mePageKind);
+                pPage = mrDocument.GetSdPage ((USHORT)nPageIndex, mePageKind);
             else
-                pPage = mrDocument.GetMasterSdPage (nPageIndex, mePageKind);
+                pPage = mrDocument.GetMasterSdPage ((USHORT)nPageIndex, mePageKind);
             pDescriptor.reset(new PageDescriptor (
                 *pPage,
                 GetPageObjectFactory()));
