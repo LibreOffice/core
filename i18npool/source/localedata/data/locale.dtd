@@ -313,6 +313,18 @@
     Entries that don't match a defined key are appended to the index list. Used
     in Writer textprocessor.
 
+    Syntax for indexKey string,
+
+    '-' (dash): Ellipsis, all letters elided by the ellipsis are included as index keys in
+        alphabetic order.
+    '[]' (square bracket): all letters included in square breacket are skipping letters. It is
+        used for CTL language to skip prefix vowels or signs. Example, if double quote is 
+        defined as skipping letter, index item '"Index"' will be under 'I', not '"'.
+    '{}' (curly bracket): it defines multiple letters index key, like 'Ch' is one of the index 
+        key for Czech.
+    '()' (parentheses): it defines optional description for index key. If defined, the description 
+        will be showed as delimiter, instead of index key itself.
+
     The initial data was setup according to the ICU collation chart at
     http://oss.software.ibm.com/icu/charts/collation/
 
