@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleBar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:15:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,20 +99,16 @@ namespace sd { namespace toolpanel {
 
 const int TitleBar::snIndentationWidth = 16;
 
-TitleBar::TitleBar (
-    ::Window* pParent,
-    const String& rsTitle,
-    TitleBarType eType,
-    bool bIsExpandable)
-    : ::Window (pParent),
-      TreeNode(this),
-      msTitle(rsTitle),
-      meType(eType),
-      mbExpanded(false),
-      mbFocused(false),
-      mbMouseOver(false),
-      mpDevice(new VirtualDevice (*this)),
-      mbIsExpandable (bIsExpandable)
+TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eType, bool bIsExpandable)
+: ::Window (pParent)
+, TreeNode(this)
+, meType(eType)
+, msTitle(rsTitle)
+, mbExpanded(false)
+, mbFocused(false)
+, mbMouseOver(false)
+, mpDevice(new VirtualDevice (*this))
+, mbIsExpandable (bIsExpandable)
 {
     EnableMapMode (FALSE);
 
@@ -156,7 +152,7 @@ Size TitleBar::GetPreferredSize (void)
 
 
 
-sal_Int32 TitleBar::GetPreferredWidth (sal_Int32 nHeight)
+sal_Int32 TitleBar::GetPreferredWidth (sal_Int32 )
 {
     Rectangle aTitleBarBox (
         CalculateTitleBarBox(
@@ -541,9 +537,9 @@ void TitleBar::PaintBackground (const Rectangle& rTitleBarBox)
             if (mbExpanded)
             {
                 // Make the color a little bit darker.
-                aColor.SetRed(((UINT16)aColor.GetRed()) * 8 / 10);
-                aColor.SetGreen(((UINT16)aColor.GetGreen()) * 8 / 10);
-                aColor.SetBlue(((UINT16)aColor.GetBlue()) * 8 / 10);
+                aColor.SetRed(UINT8(((UINT16)aColor.GetRed()) * 8 / 10));
+                aColor.SetGreen(UINT8(((UINT16)aColor.GetGreen()) * 8 / 10));
+                aColor.SetBlue(UINT8(((UINT16)aColor.GetBlue()) * 8 / 10));
             }
 
             mpDevice->SetFillColor (aColor);
@@ -658,7 +654,7 @@ void TitleBar::MouseMove (const MouseEvent& rEvent)
 
 
 
-void TitleBar::MouseButtonDown (const MouseEvent& rEvent)
+void TitleBar::MouseButtonDown (const MouseEvent& )
 {
     // Do not forward to parent window so that the mouse button handler of
     // the docking window is not invoked.
@@ -667,7 +663,7 @@ void TitleBar::MouseButtonDown (const MouseEvent& rEvent)
 
 
 
-void TitleBar::MouseButtonUp (const MouseEvent& rEvent)
+void TitleBar::MouseButtonUp (const MouseEvent& )
 {
     // Do not forward to parent window so that the mouse button handler of
     // the docking window is not invoked.
@@ -731,7 +727,7 @@ String TitleBar::GetTitle (void) const
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible > TitleBar::CreateAccessibleObject (
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent)
+        ::com::sun::star::accessibility::XAccessible>& )
 {
     return new ::accessibility::AccessibleTreeNode(
         *this,
