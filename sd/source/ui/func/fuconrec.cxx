@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:27:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 
@@ -204,9 +204,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () + pAxisY->GetValue () / 2);
                 SdrCircObj  *pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
-                SdrPageView *pPV = pView->GetSdrPageView();
+                SdrPageView *pPV = mpView->GetSdrPageView();
 
-                pView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
+                mpView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
             }
             break;
 
@@ -222,9 +222,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pMouseEndX->GetValue (),
                                            pMouseEndY->GetValue ());
                 SdrRectObj  *pNewRect = new SdrRectObj (aNewRectangle);
-                SdrPageView *pPV = pView->GetSdrPageView();
+                SdrPageView *pPV = mpView->GetSdrPageView();
 
-                pView->InsertObjectAtView(pNewRect, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
+                mpView->InsertObjectAtView(pNewRect, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
             }
             break;
         }
@@ -266,7 +266,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
         nSlotId == SID_LINE_ARROW_SQUARE            ||
         nSlotId == SID_LINE_SQUARE_ARROW )
     {
-        pView->UnmarkAll();
+        mpView->UnmarkAll();
     }
 }
 
@@ -280,29 +280,29 @@ BOOL FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
-    if ( rMEvt.IsLeft() && !pView->IsAction() )
+    if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        pWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        mpWindow->CaptureMouse();
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        if (pView->GetCurrentObjIdentifier() == OBJ_CAPTION)
+        if (mpView->GetCurrentObjIdentifier() == OBJ_CAPTION)
         {
             Size aCaptionSize(846, 846);    // (4x2)cm
-            bReturn = pView->BegCreateCaptionObj(aPnt, aCaptionSize,
+            bReturn = mpView->BegCreateCaptionObj(aPnt, aCaptionSize,
                                                 (OutputDevice*) NULL, nDrgLog);
         }
         else
         {
-            pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+            mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
         }
 
-        SdrObject* pObj = pView->GetCreateObj();
+        SdrObject* pObj = mpView->GetCreateObj();
 
         if (pObj)
         {
-            SfxItemSet aAttr(pDoc->GetPool());
+            SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
             SetAttributes(aAttr, pObj);
             SetLineEnds(aAttr, pObj);
@@ -336,15 +336,15 @@ BOOL FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn(sal_False);
 
-    if(pView->IsCreateObj() && rMEvt.IsLeft())
+    if(mpView->IsCreateObj() && rMEvt.IsLeft())
     {
-        SdrObject* pObj = pView->GetCreateObj();
+        SdrObject* pObj = mpView->GetCreateObj();
 
-        if(pObj && pView->EndCreateObj(SDRCREATE_FORCEEND))
+        if(pObj && mpView->EndCreateObj(SDRCREATE_FORCEEND))
         {
             if(SID_DRAW_MEASURELINE == nSlotId)
             {
-                SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
+                SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
                 String aStr(SdResId(STR_LAYER_MEASURELINES));
                 pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
             }
@@ -374,7 +374,7 @@ BOOL FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent)
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
     return bReturn;
 }
@@ -413,7 +413,7 @@ void FuConstructRectangle::Activate()
         case SID_LINE_CIRCLE_ARROW:
         case SID_LINE_ARROW_SQUARE:
         case SID_LINE_SQUARE_ARROW:
-            pView->SetGlueVisible();
+            mpView->SetGlueVisible();
             // keine break !
         case SID_DRAW_LINE :
         case SID_DRAW_XLINE:
@@ -485,7 +485,7 @@ void FuConstructRectangle::Activate()
         case SID_CONNECTOR_LINES_CIRCLES:
         {
             aObjKind = OBJ_EDGE;
-            pView->SetGlueVisible();
+            mpView->SetGlueVisible();
         }
         break;
 
@@ -496,7 +496,7 @@ void FuConstructRectangle::Activate()
         break;
     }
 
-    pView->SetCurrentObj(aObjKind);
+    mpView->SetCurrentObj((UINT16)aObjKind);
 
     FuConstruct::Activate();
 }
@@ -545,7 +545,7 @@ void FuConstructRectangle::Deactivate()
         nSlotId == SID_LINE_ARROW_SQUARE            ||
         nSlotId == SID_LINE_SQUARE_ARROW )
     {
-        pView->SetGlueVisible( FALSE );
+        mpView->SetGlueVisible( FALSE );
     }
     FuConstruct::Deactivate();
 }
@@ -636,7 +636,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         /**********************************************************************
         * Masslinie
         **********************************************************************/
-        SdPage* pPage = (SdPage*) pView->GetSdrPageView()->GetPage();
+        SdPage* pPage = (SdPage*) mpView->GetSdrPageView()->GetPage();
         String aName(SdResId(STR_POOLSHEET_MEASURE));
         SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
                                      GetStyleSheetPool()->
@@ -648,7 +648,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
             pObj->SetStyleSheet(pSheet, FALSE);
         }
 
-        SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
         String aStr(SdResId(STR_LAYER_MEASURELINES));
         pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
     }
@@ -708,7 +708,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         **************************************************************/
 
         // Pfeilspitze
-        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDoc ) );
+        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, mpDoc ) );
         if( !aArrow.count() )
         {
             ::basegfx::B2DPolygon aNewArrow;
@@ -720,7 +720,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         }
 
         // Kreis
-        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, pDoc ) );
+        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, mpDoc ) );
         if( !aCircle.count() )
         {
             ::basegfx::B2DPolygon aNewCircle;
@@ -730,7 +730,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         }
 
         // Quadrat
-        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, pDoc ) );
+        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, mpDoc ) );
         if( !aSquare.count() )
         {
             ::basegfx::B2DPolygon aNewSquare;
@@ -742,8 +742,8 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             aSquare.append(aNewSquare);
         }
 
-        SfxItemSet aSet( pDoc->GetPool() );
-        pView->GetAttributes( aSet );
+        SfxItemSet aSet( mpDoc->GetPool() );
+        mpView->GetAttributes( aSet );
 
         // #i3908# Here, the default Line Start/End width for arrow construction is
         // set. To have the same value in all situations (construction) in i3908
@@ -935,8 +935,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
     // case SID_CONNECTOR_LINES_CIRCLES:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDoc);
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        0L, mpDoc);
 
     if(pObj)
     {
@@ -1083,7 +1083,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             }
         }
 
-        SfxItemSet aAttr(pDoc->GetPool());
+        SfxItemSet aAttr(mpDoc->GetPool());
         SetStyleSheet(aAttr, pObj);
         SetAttributes(aAttr, pObj);
         SetLineEnds(aAttr, pObj);
