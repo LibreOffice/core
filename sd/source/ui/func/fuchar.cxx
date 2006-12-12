@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuchar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:46:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 #include <sfx2/request.hxx>
 #endif
 
-//CHINA001 #include "dlg_char.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
@@ -71,8 +70,8 @@
 #include "ViewShell.hxx"
 #endif
 #include "DrawDocShell.hxx"
-#include "sdabstdlg.hxx" //CHINA001
-#include "dlg_char.hrc" //CHINA001
+#include "sdabstdlg.hxx"
+
 namespace sd {
 
 TYPEINIT1( FuChar, FuPoor );
@@ -106,39 +105,34 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aEditAttr( pDoc->GetPool() );
-        pView->GetAttributes( aEditAttr );
+        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        mpView->GetAttributes( aEditAttr );
 
-        SfxItemSet aNewAttr( pViewShell->GetPool(),
+        SfxItemSet aNewAttr( mpViewShell->GetPool(),
                                 EE_ITEMS_START, EE_ITEMS_END );
         aNewAttr.Put( aEditAttr, FALSE );
 
-        //CHINA001 SdCharDlg* pDlg = new SdCharDlg( NULL, &aNewAttr, pDoc->GetDocSh() );
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-        SfxAbstractTabDialog* pDlg = pFact->CreateSdTabDialog(ResId( TAB_CHAR ), NULL, &aNewAttr, pDoc->GetDocSh() );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        USHORT nResult = pDlg->Execute();
-
-        switch( nResult )
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0;
+        if( pDlg )
         {
-            case RET_OK:
+            USHORT nResult = pDlg->Execute();
+
+            if( nResult == RET_OK )
             {
                 rReq.Done( *( pDlg->GetOutputItemSet() ) );
-
                 pArgs = rReq.GetArgs();
             }
-            break;
 
-            default:
+            delete pDlg;
+
+            if( nResult != RET_OK )
             {
-                delete pDlg;
+                return;
             }
-            return; // Abbruch
         }
-        delete( pDlg );
     }
-    pView->SetAttributes(*pArgs);
+    mpView->SetAttributes(*pArgs);
 
     // invalidieren der Slots, die in der DrTxtObjBar auftauchen
     static USHORT SidArray[] = {
@@ -152,17 +146,17 @@ void FuChar::DoExecute( SfxRequest& rReq )
                     SID_SET_SUB_SCRIPT,
                     0 };
 
-    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
-    if( pDoc->GetOnlineSpell() )
+    if( mpDoc->GetOnlineSpell() )
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, FALSE, &pItem ) ||
             SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, FALSE, &pItem ) ||
             SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, FALSE, &pItem ) )
         {
-            pDoc->StopOnlineSpelling();
-            pDoc->StartOnlineSpelling();
+            mpDoc->StopOnlineSpelling();
+            mpDoc->StartOnlineSpelling();
         }
     }
 }
