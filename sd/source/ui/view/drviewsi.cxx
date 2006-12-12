@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:18:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,8 +180,6 @@ void DrawViewShell::Update3DWindow()
 
 /*----------------------------------------------------------------------------*/
 
-#pragma optimize ( "", off )
-
 void DrawViewShell::AssignFrom3DWindow()
 {
     USHORT nId = Svx3DChildWindow::GetChildWindowId();
@@ -248,7 +246,5 @@ void DrawViewShell::AssignFrom3DWindow()
         }
     }
 }
-
-#pragma optimize ( "", on )
 
 }
