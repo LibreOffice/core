@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:53:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ public:
             BOOL    IsMasterPageCachingAllowed() const
                     { return(bAllowMasterPageCaching); }
 
-    virtual void    CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    virtual void    CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
     virtual void    InvalidateOneWin(::Window& rWin);
     virtual void    InvalidateOneWin(::Window& rWin, const Rectangle& rRect);
 
@@ -84,7 +84,7 @@ public:
 
 private:
     SdDrawDocument* pDrDoc;
-    ViewShell* pViewSh;
+    ViewShell* mpViewSh;
     Window*         pWindowForPlugIns;
     USHORT          nAllowInvalidateSmph;
     BOOL            bAllowMasterPageCaching;
