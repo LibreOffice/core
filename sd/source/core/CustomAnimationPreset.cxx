@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPreset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:12:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,8 +189,6 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
         (void)e;
         DBG_ERROR( "sd::implImportLabels(), Exception catched!" );
     }
-
-    false;
 }
 
 CustomAnimationPreset::CustomAnimationPreset( CustomAnimationEffectPtr pEffect )
@@ -271,8 +269,8 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const rtl::OUString& 
 UStringList CustomAnimationPreset::getProperties() const
 {
     String aProperties( maProperty );
-    int nTokens = aProperties.GetTokenCount();
-    int nToken;
+    USHORT nTokens = aProperties.GetTokenCount();
+    USHORT nToken;
     UStringList aPropertyList;
     for( nToken = 0; nToken < nTokens; nToken++ )
         aPropertyList.push_back( aProperties.GetToken( nToken ) );
@@ -285,8 +283,8 @@ bool CustomAnimationPreset::hasProperty( const OUString& rProperty )const
 {
     String aProperties( maProperty );
     String aProperty( rProperty );
-    int nTokens = aProperties.GetTokenCount();
-    int nToken;
+    USHORT nTokens = aProperties.GetTokenCount();
+    USHORT nToken;
     for( nToken = 0; nToken < nTokens; nToken++ )
     {
         if( aProperties.GetToken( nToken ) == aProperty )
@@ -412,7 +410,7 @@ void CustomAnimationPresets::importEffects()
                     pDescriptor->add( pEffect );
                 else
                 {
-                    CustomAnimationPresetPtr pDescriptor( new CustomAnimationPreset( pEffect ) );
+                    pDescriptor.reset( new CustomAnimationPreset( pEffect ) );
                     pDescriptor->maLabel = getUINameForPresetId( pEffect->getPresetId() );
                     maEffectDiscriptorMap[aPresetId] = pDescriptor;
                 }
