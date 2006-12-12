@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NotesDockingWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:01:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,14 @@
 namespace sd { namespace notes {
 
 NotesDockingWindow::NotesDockingWindow (
-    SfxBindings *pBindings,
+    SfxBindings *_pBindings,
     SfxChildWindow *pChildWindow,
-    Window* pParent)
-    : SfxDockingWindow (pBindings, pChildWindow, pParent,
+    Window* _pParent)
+    : SfxDockingWindow (_pBindings, pChildWindow, _pParent,
         SdResId(FLT_WIN_NOTES))
 {
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase (
-        pBindings->GetDispatcher()->GetFrame());
+        _pBindings->GetDispatcher()->GetFrame());
     if (pBase != NULL)
     {
         SdDrawDocument* pDocument = pBase->GetDocument();

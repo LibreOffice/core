@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NotesChildWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:01:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,13 @@
 namespace sd { namespace notes {
 
 NotesChildWindow::NotesChildWindow (
-    ::Window* pParent,
+    ::Window* _pParent,
     USHORT nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
-    : SfxChildWindow (pParent, nId)
+    : SfxChildWindow (_pParent, nId)
 {
-    pWindow = new NotesDockingWindow (pBindings, this, pParent);
+    pWindow = new NotesDockingWindow (pBindings, this, _pParent);
     eChildAlignment = SFX_ALIGN_BOTTOM;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize(pInfo);
 };
