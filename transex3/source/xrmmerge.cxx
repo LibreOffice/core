@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:21:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,7 @@ extern FILE *GetXrmFile()
 int WorkOnTokenSet( int nTyp, char *pTokenText )
 /*****************************************************************************/
 {
+//  printf("Typ = %d , text = '%s'\n",nTyp , pTokenText );
     pParser->Execute( nTyp, pTokenText );
 
     return 1;
@@ -343,7 +344,10 @@ int XRMResParser::Execute( int nToken, char * pToken )
             sLID = "";
             sGID += ".";
             sGID += GetAttribute( rToken, "id" );
-            sLocalized = "X:";
+            //sLocalized = "1";
+
+            //sLocalized = "X:";
+            sLocalized = true;
         break;
 
         case XRM_SECTION_END:
@@ -355,9 +359,11 @@ int XRMResParser::Execute( int nToken, char * pToken )
             sGID += ".";
             sGID += GetAttribute( rToken, "id" );
             if ( GetAttribute( rToken, "localized" ) == "false" )
-                sLocalized += "0";
+//              sLocalized += "0";
+                sLocalized = false;
             else
-                sLocalized += "1";
+//              sLocalized += "1";
+                sLocalized = true;
         break;
 
         case XRM_PARAGRAPH_END: {
@@ -370,12 +376,14 @@ int XRMResParser::Execute( int nToken, char * pToken )
                     sGID += ".";
                 sGID += sTmp.GetToken( i, '.' );
             }
-            sLocalized = sLocalized.Copy( 0, sLocalized.Len() - 1 );
+            //sLocalized = sLocalized.Copy( 0, sLocalized.Len() - 1 );
            }
         break;
 
         case XRM_TEXT_START:
-            if ( sLocalized.GetChar( sLocalized.Len() - 1 ) == '1' ) {
+//          if ( sLocalized.GetChar( sLocalized.Len() - 1 ) == '1' ) {
+            if ( sLocalized ) {
+
                 ByteString sNewLID = GetAttribute( rToken, "id" );
                 if ( sNewLID != sLID ) {
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
@@ -389,7 +397,8 @@ int XRMResParser::Execute( int nToken, char * pToken )
         break;
 
         case XRM_TEXT_END: {
-            if ( sLocalized.GetChar( sLocalized.Len() - 1 ) == '1' ) {
+//          if ( sLocalized.GetChar( sLocalized.Len() - 1 ) == '1' ) {
+            if( sLocalized ){
                 sCurrentCloseTag = rToken;
 
                 ByteString sLang = GetAttribute( sCurrentOpenTag, "xml:lang" );
@@ -407,8 +416,8 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
 
-//              fprintf( stdout, "%s %s\n", sGID.GetBuffer(), sLID.GetBuffer());
-//              fprintf( stdout, "%s\n\n", sCurrentText.GetBuffer());
+                //fprintf( stdout, "%s %s\n", sGID.GetBuffer(), sLID.GetBuffer());
+                //fprintf( stdout, "%s\n\n", sCurrentText.GetBuffer());
 
                 bText = FALSE;
             }
@@ -601,7 +610,6 @@ void XRMResExport::EndOfText(
             sCur = aLanguages[ n ];
 
             ByteString sAct = pResData->sText[ sCur ];
-
                 Export::UnquotHTML( sAct );
                 sAct.EraseAllChars( 0x0A );
 
@@ -614,10 +622,8 @@ void XRMResExport::EndOfText(
                 sOutput += sCur;
                 sOutput += "\t";
 
-
                 sOutput += sAct; sOutput += "\t\t\t\t";
                 sOutput += sTimeStamp;
-
 
                 sOutput.SearchAndReplaceAll( sSearch, "_" );
                 if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
@@ -688,7 +694,7 @@ void XRMResMerge::WorkOnText(
                 {
                     rText = sContent;
                     ConvertStringToXMLFormat( rText );
-                    Export::QuotHTML( rText );
+                    Export::QuotHTMLXRM( rText );
                 }
             }
     }
@@ -716,13 +722,18 @@ void XRMResMerge::EndOfText(
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
                 ByteString sContent;
-                if ( Export::isAllowed( sCur ) &&
+//<<<<<<< xrmmerge.cxx
+                if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
+              ( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( sPrj ) )) &&
+//=======
+//              if ( Export::isAllowed( sCur ) &&
+//>>>>>>> 1.17
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, TRUE )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
-                    Export::QuotHTML( sText );
+                    Export::QuotHTMLXRM( sText );
 
                     ByteString sAdditionalLine( "\t" );
                     sAdditionalLine += rOpenTag;
