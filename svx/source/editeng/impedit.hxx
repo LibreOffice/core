@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:38:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,7 +715,7 @@ private:
     void                ForceAutoColor( BOOL b ) { bForceAutoColor = b; }
     BOOL                IsForceAutoColor() const { return bForceAutoColor; }
 
-    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode );
+    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, ULONG nDrawMode );
     inline void             EraseVirtualDevice();
 
     DECL_LINK( StatusTimerHdl, Timer * );
@@ -1113,7 +1113,7 @@ inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
     return aSel;
 }
 
-inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode )
+inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, ULONG nDrawMode )
 {
     if ( !pVirtDev )
         pVirtDev = new VirtualDevice;
@@ -1126,6 +1126,8 @@ inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode )
         aMapMode.SetOrigin( Point( 0, 0 ) );
         pVirtDev->SetMapMode( aMapMode );
     }
+
+    pVirtDev->SetDrawMode( nDrawMode );
 
     return pVirtDev;
 }
