@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:06:30 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,11 +241,11 @@ UINT32 PageHelpIds[] =
 class PasswordEntry
 {
 public:
-    String m_aPassword;
-    String m_aPath;
+    String maPassword;
+    String maPath;
 };
 
-DECLARE_LIST( PasswordEntryList, PasswordEntry * );
+DECLARE_LIST( PasswordEntryList, PasswordEntry * )
 
 // ====================================================================
 
@@ -256,7 +256,7 @@ public:
     ~AssistentDlgImpl();
 
     /// Local mutex used to serialize concurrent method calls.
-    ::osl::Mutex m_aMutex;
+    ::osl::Mutex maMutex;
 
     SfxObjectShellLock GetDocument();
 
@@ -270,20 +270,20 @@ public:
     /** Flag that is set to TRUE after the recently used files have been
         scanned.
     */
-    BOOL m_bRecentDocumentsReady;
+    BOOL mbRecentDocumentsReady;
 
     /** When the list of templates has not been scanned already this is done
         when this method is called.  That includes requesting the whole list
         of templates from UCB and extracting from that list the impress
         templates and layouts and storing them for later use in
-        <member>m_aPresentList</member>.  Note that the first call to this
+        <member>maPresentList</member>.  Note that the first call to this
         method after installing a new Office may take some time.
     */
     void ProvideTemplates (void);
 
     /** This method transfers the template folders from the template scanner
         to the internal structures of this class.  On termination it sets
-        the flag <member>m_bTemplatesReady</member> to <TRUE/> to indicate
+        the flag <member>mbTemplatesReady</member> to <TRUE/> to indicate
         that the templates are available.
         @param rTemplateFolders
             This is a list of template folders.  This method takes ownership
@@ -295,59 +295,59 @@ public:
     /** Flag that is set to TRUE after the impress templates have been
         scanned.
     */
-    BOOL m_bTemplatesReady;
+    BOOL mbTemplatesReady;
 
     /** Flag used to prevent nested or concurrent calls to the
         <member>UpdatePreview</memember> method.  A <TRUE/> value indicates
         that a preview update is currently active.
     */
-    BOOL m_bPreviewUpdating;
+    BOOL mbPreviewUpdating;
 
-    ::Window* m_pWindow;
+    ::Window* mpWindow;
 
     void SavePassword( SfxObjectShellLock xDoc, const String& rPath );
     void RestorePassword( SfxItemSet* pSet, const String& rPath );
     String GetPassword( const String rPath );
     void DeletePassords();
 
-    PasswordEntryList m_aPasswordList;
+    PasswordEntryList maPasswordList;
 
-    String m_aDocFile;
-    String m_aLayoutFile;
+    String maDocFile;
+    String maLayoutFile;
 
     String GetDocFileName();
     String GetLayoutFileName();
 
     /// List of URLs of recently used impress files.
-    std::vector<String*> m_aOpenFilesList;
+    std::vector<String*> maOpenFilesList;
 
     /// List of folders containing data about impress templates.
-    std::vector<TemplateDir*> m_aPresentList;
+    std::vector<TemplateDir*> maPresentList;
 
     /// Currently selected template folder.
-    TemplateDir* m_pTemplateRegion;
+    TemplateDir* mpTemplateRegion;
 
     /// Currently selected layout folder.
-    TemplateDir* m_pLayoutRegion;
+    TemplateDir* mpLayoutRegion;
 
     // preview
-    BOOL m_bUserDataDirty;
-    Timer m_aPrevTimer;
-    Timer m_aEffectPrevTimer;
-    Timer m_aUpdatePageListTimer;
-    Timer m_aStartScanTimer;
+    BOOL mbUserDataDirty;
+    Timer maPrevTimer;
+    Timer maEffectPrevTimer;
+    Timer maUpdatePageListTimer;
+    Timer maStartScanTimer;
 
     SfxObjectShellLock xDocShell;
 
     ::std::auto_ptr<WindowUpdater> mpWindowUpdater;
 
-    BOOL m_bPreview;
-    USHORT m_nShowPage;
-    BOOL m_bDocPreview;
+    BOOL mbPreview;
+    USHORT mnShowPage;
+    BOOL mbDocPreview;
 
-    ULONG m_nTemplate;
+    ULONG mnTemplate;
 
-    String m_aPageListFile;
+    String maPageListFile;
 
     void UpdatePreview( BOOL bDocPreview );
     void UpdatePageList();
@@ -390,70 +390,70 @@ public:
     DECL_LINK( OpenButtonHdl, Button * );
 
     // Common
-    Assistent           m_aAssistentFunc;
-    CheckBox            m_aPreviewFlag;
-    CheckBox            m_aStartWithFlag;
-    HelpButton          m_aHelpButton;
-    CancelButton        m_aCancelButton;
-    PushButton          m_aLastPageButton;
-    PushButton          m_aNextPageButton;
-    OKButton            m_aFinishButton;
-    SdDocPreviewWin     m_aPreview;
+    Assistent           maAssistentFunc;
+    CheckBox            maPreviewFlag;
+    CheckBox            maStartWithFlag;
+    HelpButton          maHelpButton;
+    CancelButton        maCancelButton;
+    PushButton          maLastPageButton;
+    PushButton          maNextPageButton;
+    OKButton            maFinishButton;
+    SdDocPreviewWin     maPreview;
 
     // Seite 1
-    FixedBitmap*        m_pPage1FB;
-    FixedLine*          m_pPage1ArtFL;
-    RadioButton*        m_pPage1EmptyRB;
-    RadioButton*        m_pPage1TemplateRB;
-    ListBox*            m_pPage1RegionLB;
-    ListBox*            m_pPage1TemplateLB;
-    RadioButton*        m_pPage1OpenRB;
-    ListBox*            m_pPage1OpenLB;
-    PushButton*         m_pPage1OpenPB;
+    FixedBitmap*        mpPage1FB;
+    FixedLine*          mpPage1ArtFL;
+    RadioButton*        mpPage1EmptyRB;
+    RadioButton*        mpPage1TemplateRB;
+    ListBox*            mpPage1RegionLB;
+    ListBox*            mpPage1TemplateLB;
+    RadioButton*        mpPage1OpenRB;
+    ListBox*            mpPage1OpenLB;
+    PushButton*         mpPage1OpenPB;
 
     // Seite 2
-    FixedBitmap*        m_pPage2FB;
-    FixedLine*          m_pPage2LayoutFL;
-    ListBox*            m_pPage2RegionLB;
-    ListBox*            m_pPage2LayoutLB;
-    FixedLine*          m_pPage2OutTypesFL;
-    RadioButton*        m_pPage2Medium1RB;
-    RadioButton*        m_pPage2Medium2RB;
-    RadioButton*        m_pPage2Medium3RB;
-    RadioButton*        m_pPage2Medium4RB;
-    RadioButton*        m_pPage2Medium5RB;
+    FixedBitmap*        mpPage2FB;
+    FixedLine*          mpPage2LayoutFL;
+    ListBox*            mpPage2RegionLB;
+    ListBox*            mpPage2LayoutLB;
+    FixedLine*          mpPage2OutTypesFL;
+    RadioButton*        mpPage2Medium1RB;
+    RadioButton*        mpPage2Medium2RB;
+    RadioButton*        mpPage2Medium3RB;
+    RadioButton*        mpPage2Medium4RB;
+    RadioButton*        mpPage2Medium5RB;
 
     // Seite 3
-    FixedBitmap*        m_pPage3FB;
-    FixedLine*          m_pPage3EffectFL;
-    FixedText*          m_pPage3EffectFT;
-    FadeEffectLB*       m_pPage3EffectLB;
-    FixedText*          m_pPage3SpeedFT;
-    ListBox*            m_pPage3SpeedLB;
-    FixedLine*          m_pPage3PresTypeFL;
-    RadioButton*        m_pPage3PresTypeLiveRB;
-    RadioButton*        m_pPage3PresTypeKioskRB;
-    FixedText*          m_pPage3PresTimeFT;
-    TimeField*          m_pPage3PresTimeTMF;
-    FixedText*          m_pPage3BreakFT;
-    TimeField*          m_pPage3BreakTMF;
-    CheckBox*           m_pPage3LogoCB;
+    FixedBitmap*        mpPage3FB;
+    FixedLine*          mpPage3EffectFL;
+    FixedText*          mpPage3EffectFT;
+    FadeEffectLB*       mpPage3EffectLB;
+    FixedText*          mpPage3SpeedFT;
+    ListBox*            mpPage3SpeedLB;
+    FixedLine*          mpPage3PresTypeFL;
+    RadioButton*        mpPage3PresTypeLiveRB;
+    RadioButton*        mpPage3PresTypeKioskRB;
+    FixedText*          mpPage3PresTimeFT;
+    TimeField*          mpPage3PresTimeTMF;
+    FixedText*          mpPage3BreakFT;
+    TimeField*          mpPage3BreakTMF;
+    CheckBox*           mpPage3LogoCB;
 
     // Seite 4
-    FixedBitmap*        m_pPage4FB;
-    FixedLine*          m_pPage4PersonalFL;
-    FixedText*          m_pPage4AskNameFT;
-    Edit*               m_pPage4AskNameEDT;
-    FixedText*          m_pPage4AskTopicFT;
-    Edit*               m_pPage4AskTopicEDT;
-    FixedText*          m_pPage4AskInfoFT;
-    MultiLineEdit*      m_pPage4AskInfoEDT;
+    FixedBitmap*        mpPage4FB;
+    FixedLine*          mpPage4PersonalFL;
+    FixedText*          mpPage4AskNameFT;
+    Edit*               mpPage4AskNameEDT;
+    FixedText*          mpPage4AskTopicFT;
+    Edit*               mpPage4AskTopicEDT;
+    FixedText*          mpPage4AskInfoFT;
+    MultiLineEdit*      mpPage4AskInfoEDT;
 
     // Seite 5
-    FixedBitmap*        m_pPage5FB;
-    FixedText*          m_pPage5PageListFT;
-    SdPageListControl*  m_pPage5PageListCT;
-    CheckBox*           m_pPage5SummaryCB;
+    FixedBitmap*        mpPage5FB;
+    FixedText*          mpPage5PageListFT;
+    SdPageListControl*  mpPage5PageListCT;
+    CheckBox*           mpPage5SummaryCB;
 
 };
 
@@ -462,74 +462,72 @@ public:
 // ====================================================================
 
 AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot ) :
-    m_aFinishButton(pWindow,SdResId(BUT_FINISH)),
-    m_aHelpButton(pWindow,SdResId(BUT_HELP)),
-    m_aCancelButton(pWindow,SdResId(BUT_CANCEL)),
-    m_aNextPageButton(pWindow,SdResId(BUT_NEXT)),
-    m_aLastPageButton(pWindow,SdResId(BUT_LAST)),
-    m_aPreviewFlag(pWindow,SdResId(CB_PREVIEW)),
-    m_aPreview(pWindow,SdResId(CT_PREVIEW)),
-    m_aStartWithFlag(pWindow,SdResId(CB_STARTWITH)),
-//  m_aBitmap(pWindow,SdResId(PAGE1_BMP)),
-    m_pTemplateRegion(NULL),
-    m_pLayoutRegion(NULL),
-    m_bPreview(TRUE),
-    m_bDocPreview(FALSE),
-    m_nShowPage(0),
-//  m_aPageListFile('?'),
-    m_bUserDataDirty(FALSE),
-    m_aAssistentFunc(5),
+    mpTemplateRegion(NULL),
+    mpLayoutRegion(NULL),
+    mbUserDataDirty(FALSE),
     xDocShell (NULL),
-    mpWindowUpdater (new WindowUpdater())
+    mpWindowUpdater (new WindowUpdater()),
+    mbPreview(TRUE),
+    mnShowPage(0),
+    mbDocPreview(FALSE),
+    maAssistentFunc(5),
+    maPreviewFlag(pWindow,SdResId(CB_PREVIEW)),
+    maStartWithFlag(pWindow,SdResId(CB_STARTWITH)),
+    maHelpButton(pWindow,SdResId(BUT_HELP)),
+    maCancelButton(pWindow,SdResId(BUT_CANCEL)),
+    maLastPageButton(pWindow,SdResId(BUT_LAST)),
+    maNextPageButton(pWindow,SdResId(BUT_NEXT)),
+    maFinishButton(pWindow,SdResId(BUT_FINISH)),
+    maPreview(pWindow,SdResId(CT_PREVIEW))
 {
-    m_aPageListFile += sal_Unicode('?'),
-    m_bRecentDocumentsReady = FALSE;
-    m_bTemplatesReady = FALSE;
-    m_bPreviewUpdating = FALSE;
+    maPageListFile += sal_Unicode('?'),
+    mbRecentDocumentsReady = FALSE;
+    mbTemplatesReady = FALSE;
+    mbPreviewUpdating = FALSE;
 
-    m_pWindow = pWindow;
+    mpWindow = pWindow;
 
     if(bAutoPilot)
-        m_aStartWithFlag.Hide();
+        maStartWithFlag.Hide();
     else
-        m_aAssistentFunc.InsertControl(1, &m_aStartWithFlag );
+        maAssistentFunc.InsertControl(1, &maStartWithFlag );
 
     //page1 wird initialisiert und an die Assistentenfunktionalitaet
     //uebergeben
-    m_aAssistentFunc.InsertControl(1, &m_aPreview );
-    m_aAssistentFunc.InsertControl(1, &m_aPreviewFlag );
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1FB = new FixedBitmap(pWindow,SdResId(FB_PAGE1)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1ArtFL = new FixedLine(pWindow,SdResId(FL_PAGE1_ARTGROUP)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1EmptyRB=new RadioButton(pWindow,SdResId(RB_PAGE1_EMPTY)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1TemplateRB=new RadioButton(pWindow,SdResId(RB_PAGE1_TEMPLATE)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1OpenRB=new RadioButton(pWindow,SdResId(RB_PAGE1_OPEN)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1RegionLB = new ListBox(pWindow,SdResId(LB_PAGE1_REGION)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1TemplateLB=new ListBox(pWindow,SdResId(LB_PAGE1_TEMPLATES)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1OpenPB=new PushButton(pWindow,SdResId(PB_PAGE1_OPEN)));
-    m_aAssistentFunc.InsertControl(1,
-        m_pPage1OpenLB=new ListBox(pWindow,SdResId(LB_PAGE1_OPEN)));
+    maAssistentFunc.InsertControl(1, &maPreview );
+    maAssistentFunc.InsertControl(1, &maPreviewFlag );
+    maAssistentFunc.InsertControl(1,
+        mpPage1FB = new FixedBitmap(pWindow,SdResId(FB_PAGE1)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1ArtFL = new FixedLine(pWindow,SdResId(FL_PAGE1_ARTGROUP)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1EmptyRB=new RadioButton(pWindow,SdResId(RB_PAGE1_EMPTY)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1TemplateRB=new RadioButton(pWindow,SdResId(RB_PAGE1_TEMPLATE)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1OpenRB=new RadioButton(pWindow,SdResId(RB_PAGE1_OPEN)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1RegionLB = new ListBox(pWindow,SdResId(LB_PAGE1_REGION)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1TemplateLB=new ListBox(pWindow,SdResId(LB_PAGE1_TEMPLATES)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1OpenPB=new PushButton(pWindow,SdResId(PB_PAGE1_OPEN)));
+    maAssistentFunc.InsertControl(1,
+        mpPage1OpenLB=new ListBox(pWindow,SdResId(LB_PAGE1_OPEN)));
 
     // Align the button and list box displayed for the "open existing file"
     // radio button with the text of that radio button.
     {
-        RadioButton aEmptyRB (m_pWindow);
+        RadioButton aEmptyRB (mpWindow);
         sal_Int32 nIndent (aEmptyRB.CalcMinimumSize(0).Width());
-        sal_Int32 nLeft (m_pPage1OpenRB->GetPosPixel().X() + nIndent);
-        sal_Int32 nWidth (m_pPage1OpenRB->GetSizePixel().Width() - nIndent);
-        m_pPage1OpenPB->SetPosSizePixel(
-            Point(nLeft, m_pPage1OpenPB->GetPosPixel().Y()),
-            Size(m_pPage1OpenPB->GetSizePixel()));
-        m_pPage1OpenLB->SetPosSizePixel(
-            Point(nLeft, m_pPage1OpenLB->GetPosPixel().Y()),
-            Size(nWidth, m_pPage1OpenLB->GetSizePixel().Height()));
+        sal_Int32 nLeft (mpPage1OpenRB->GetPosPixel().X() + nIndent);
+        sal_Int32 nWidth (mpPage1OpenRB->GetSizePixel().Width() - nIndent);
+        mpPage1OpenPB->SetPosSizePixel(
+            Point(nLeft, mpPage1OpenPB->GetPosPixel().Y()),
+            Size(mpPage1OpenPB->GetSizePixel()));
+        mpPage1OpenLB->SetPosSizePixel(
+            Point(nLeft, mpPage1OpenLB->GetPosPixel().Y()),
+            Size(nWidth, mpPage1OpenLB->GetSizePixel().Height()));
     }
 
     // Set text and icon of the 'Open...' button.
@@ -539,190 +537,190 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         // are not too close together.
         sText.SearchAndReplaceAll(String(RTL_CONSTASCII_STRINGPARAM("~")),String());
         sText.Insert(String(RTL_CONSTASCII_STRINGPARAM(" ")),0);
-        m_pPage1OpenPB->SetText(sText);
+        mpPage1OpenPB->SetText(sText);
         // Place icon left of text and both centered in the button.
-        m_pPage1OpenPB->SetModeImage(
+        mpPage1OpenPB->SetModeImage(
             GetUiIconForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))),
             BMP_COLOR_NORMAL);
-        m_pPage1OpenPB->EnableImageDisplay(TRUE);
-        m_pPage1OpenPB->EnableTextDisplay(TRUE);
-        m_pPage1OpenPB->SetImageAlign(IMAGEALIGN_LEFT);
-        m_pPage1OpenPB->SetStyle(m_pPage1OpenPB->GetStyle() | WB_CENTER);
+        mpPage1OpenPB->EnableImageDisplay(TRUE);
+        mpPage1OpenPB->EnableTextDisplay(TRUE);
+        mpPage1OpenPB->SetImageAlign(IMAGEALIGN_LEFT);
+        mpPage1OpenPB->SetStyle(mpPage1OpenPB->GetStyle() | WB_CENTER);
     }
 
     // links&handler
-    m_pPage1RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
-    m_pPage1RegionLB->SetDropDownLineCount( 6 );
-    m_pPage1TemplateLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectTemplateHdl));
-    m_pPage1TemplateLB->InsertEntry(String(SdResId(STR_ISLOADING)));
+    mpPage1RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
+    mpPage1RegionLB->SetDropDownLineCount( 6 );
+    mpPage1TemplateLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectTemplateHdl));
+    mpPage1TemplateLB->InsertEntry(String(SdResId(STR_ISLOADING)));
 
-    m_pPage1EmptyRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
-    m_pPage1TemplateRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
-    m_pPage1OpenRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
-    m_pPage1OpenLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectFileHdl));
-    m_pPage1OpenLB->SetDoubleClickHdl(rFinishLink);
-    m_pPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
-    //  m_pPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
+    mpPage1EmptyRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
+    mpPage1TemplateRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
+    mpPage1OpenRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
+    mpPage1OpenLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectFileHdl));
+    mpPage1OpenLB->SetDoubleClickHdl(rFinishLink);
+    mpPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
+    //  mpPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
 
     // Seite 2
-    m_aAssistentFunc.InsertControl(2, &m_aPreview );
-    m_aAssistentFunc.InsertControl(2, &m_aPreviewFlag );
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2FB = new FixedBitmap(pWindow,SdResId(FB_PAGE2)));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2LayoutFL = new FixedLine( pWindow, SdResId(FL_PAGE2_LAYOUT) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2RegionLB = new ListBox(pWindow,SdResId(LB_PAGE2_REGION) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2LayoutLB = new ListBox(pWindow,SdResId(LB_PAGE2_LAYOUT) ));
+    maAssistentFunc.InsertControl(2, &maPreview );
+    maAssistentFunc.InsertControl(2, &maPreviewFlag );
+    maAssistentFunc.InsertControl(2,
+        mpPage2FB = new FixedBitmap(pWindow,SdResId(FB_PAGE2)));
+    maAssistentFunc.InsertControl(2,
+        mpPage2LayoutFL = new FixedLine( pWindow, SdResId(FL_PAGE2_LAYOUT) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2RegionLB = new ListBox(pWindow,SdResId(LB_PAGE2_REGION) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2LayoutLB = new ListBox(pWindow,SdResId(LB_PAGE2_LAYOUT) ));
 
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2OutTypesFL = new FixedLine( pWindow, SdResId(FL_PAGE2_OUTPUTTYPES) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2Medium5RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM5) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2Medium3RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM3) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2Medium4RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM4) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2Medium1RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM1) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2Medium2RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM2) ));
-    m_pPage2Medium5RB->Check();
+    maAssistentFunc.InsertControl(2,
+        mpPage2OutTypesFL = new FixedLine( pWindow, SdResId(FL_PAGE2_OUTPUTTYPES) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2Medium5RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM5) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2Medium3RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM3) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2Medium4RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM4) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2Medium1RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM1) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2Medium2RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM2) ));
+    mpPage2Medium5RB->Check();
 
-    m_pPage2RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
-    m_pPage2RegionLB->SetDropDownLineCount( 6 );
-    m_pPage2LayoutLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectLayoutHdl));
-    m_pPage2LayoutLB->InsertEntry(String(SdResId(STR_ISLOADING)));
+    mpPage2RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
+    mpPage2RegionLB->SetDropDownLineCount( 6 );
+    mpPage2LayoutLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectLayoutHdl));
+    mpPage2LayoutLB->InsertEntry(String(SdResId(STR_ISLOADING)));
 
     // Seite 3
-    m_aAssistentFunc.InsertControl(3, &m_aPreview );
-    m_aAssistentFunc.InsertControl(3, &m_aPreviewFlag );
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3FB = new FixedBitmap(pWindow,SdResId(FB_PAGE3)));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3EffectFL = new FixedLine( pWindow, SdResId(FL_PAGE3_EFFECT) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3EffectFT = new FixedText( pWindow, SdResId(FT_PAGE3_EFFECT) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3EffectLB = new FadeEffectLB( pWindow, SdResId(LB_PAGE3_EFFECT) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3SpeedFT = new FixedText( pWindow, SdResId(FT_PAGE3_SPEED) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3SpeedLB = new FadeEffectLB( pWindow, SdResId(LB_PAGE3_SPEED) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3PresTypeFL = new FixedLine( pWindow, SdResId(FL_PAGE3_PRESTYPE) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3PresTypeLiveRB = new RadioButton( pWindow, SdResId(RB_PAGE3_LIVE) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3PresTypeKioskRB = new RadioButton( pWindow, SdResId(RB_PAGE3_KIOSK) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3PresTimeFT = new FixedText( pWindow, SdResId( FT_PAGE3_TIME) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3PresTimeTMF = new TimeField( pWindow, SdResId( TMF_PAGE3_TIME) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3BreakFT = new FixedText( pWindow, SdResId( FT_PAGE3_BREAK) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3BreakTMF = new TimeField( pWindow, SdResId( TMF_PAGE3_BREAK) ));
-    m_aAssistentFunc.InsertControl(3,
-        m_pPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
+    maAssistentFunc.InsertControl(3, &maPreview );
+    maAssistentFunc.InsertControl(3, &maPreviewFlag );
+    maAssistentFunc.InsertControl(3,
+        mpPage3FB = new FixedBitmap(pWindow,SdResId(FB_PAGE3)));
+    maAssistentFunc.InsertControl(3,
+        mpPage3EffectFL = new FixedLine( pWindow, SdResId(FL_PAGE3_EFFECT) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3EffectFT = new FixedText( pWindow, SdResId(FT_PAGE3_EFFECT) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3EffectLB = new FadeEffectLB( pWindow, SdResId(LB_PAGE3_EFFECT) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3SpeedFT = new FixedText( pWindow, SdResId(FT_PAGE3_SPEED) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3SpeedLB = new FadeEffectLB( pWindow, SdResId(LB_PAGE3_SPEED) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3PresTypeFL = new FixedLine( pWindow, SdResId(FL_PAGE3_PRESTYPE) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3PresTypeLiveRB = new RadioButton( pWindow, SdResId(RB_PAGE3_LIVE) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3PresTypeKioskRB = new RadioButton( pWindow, SdResId(RB_PAGE3_KIOSK) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3PresTimeFT = new FixedText( pWindow, SdResId( FT_PAGE3_TIME) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3PresTimeTMF = new TimeField( pWindow, SdResId( TMF_PAGE3_TIME) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3BreakFT = new FixedText( pWindow, SdResId( FT_PAGE3_BREAK) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3BreakTMF = new TimeField( pWindow, SdResId( TMF_PAGE3_BREAK) ));
+    maAssistentFunc.InsertControl(3,
+        mpPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
 
-    m_pPage3EffectLB->Fill();
-//  m_pPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
-    m_pPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
-    m_pPage3EffectLB->SetDropDownLineCount( 12 );
+    mpPage3EffectLB->Fill();
+//  mpPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
+    mpPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
+    mpPage3EffectLB->SetDropDownLineCount( 12 );
 
-    m_pPage3SpeedLB->InsertEntry( String( SdResId(STR_SLOW) ));
-    m_pPage3SpeedLB->InsertEntry( String( SdResId(STR_MEDIUM) ));
-    m_pPage3SpeedLB->InsertEntry( String( SdResId(STR_FAST) ));
-    m_pPage3SpeedLB->SetDropDownLineCount( 3 );
-    m_pPage3SpeedLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
-    m_pPage3SpeedLB->SelectEntryPos( 1 );
+    mpPage3SpeedLB->InsertEntry( String( SdResId(STR_SLOW) ));
+    mpPage3SpeedLB->InsertEntry( String( SdResId(STR_MEDIUM) ));
+    mpPage3SpeedLB->InsertEntry( String( SdResId(STR_FAST) ));
+    mpPage3SpeedLB->SetDropDownLineCount( 3 );
+    mpPage3SpeedLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
+    mpPage3SpeedLB->SelectEntryPos( 1 );
 
-    m_pPage3PresTypeLiveRB->Check();
-    m_pPage3PresTypeLiveRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
-    m_pPage3PresTypeKioskRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
-    m_pPage3PresTimeTMF->SetFormat( TIMEF_SEC );
-    m_pPage3PresTimeTMF->SetTime( Time( 0, 0, 10 ) );
-    m_pPage3BreakTMF->SetFormat( TIMEF_SEC );
-    m_pPage3BreakTMF->SetTime( Time( 0, 0, 10 ) );
-    m_pPage3LogoCB->Check();
+    mpPage3PresTypeLiveRB->Check();
+    mpPage3PresTypeLiveRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
+    mpPage3PresTypeKioskRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
+    mpPage3PresTimeTMF->SetFormat( TIMEF_SEC );
+    mpPage3PresTimeTMF->SetTime( Time( 0, 0, 10 ) );
+    mpPage3BreakTMF->SetFormat( TIMEF_SEC );
+    mpPage3BreakTMF->SetTime( Time( 0, 0, 10 ) );
+    mpPage3LogoCB->Check();
 
     // set cursor in timefield
-    Edit *pEditPage3PresTimeTMF = m_pPage3PresTimeTMF->GetField();
-    Edit *pEditPage3BreakTMF = m_pPage3BreakTMF->GetField();
+    Edit *pEditPage3PresTimeTMF = mpPage3PresTimeTMF->GetField();
+    Edit *pEditPage3BreakTMF = mpPage3BreakTMF->GetField();
     Selection aSel1( pEditPage3PresTimeTMF->GetMaxTextLen(), pEditPage3PresTimeTMF->GetMaxTextLen() );
     Selection aSel2( pEditPage3BreakTMF->GetMaxTextLen(), pEditPage3BreakTMF->GetMaxTextLen() );
     pEditPage3PresTimeTMF->SetSelection( aSel1 );
     pEditPage3BreakTMF->SetSelection( aSel2 );
 
     // Seite 4
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4FB = new FixedBitmap(pWindow,SdResId(FB_PAGE4)));
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4PersonalFL = new FixedLine( pWindow, SdResId(FL_PAGE4_PERSONAL) ));
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4AskNameFT   = new FixedText( pWindow, SdResId(FT_PAGE4_ASKNAME) ));
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4AskNameEDT  = new Edit( pWindow, SdResId(EDT_PAGE4_ASKNAME) ));
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4AskTopicFT= new FixedText( pWindow, SdResId(FT_PAGE4_ASKTOPIC) ));
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4AskTopicEDT = new Edit( pWindow, SdResId(EDT_PAGE4_ASKTOPIC) ));
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4AskInfoFT   = new FixedText( pWindow, SdResId(FT_PAGE4_ASKINFORMATION) ));
-    m_aAssistentFunc.InsertControl(4,
-        m_pPage4AskInfoEDT  = new MultiLineEdit( pWindow, SdResId(EDT_PAGE4_ASKINFORMATION) ));
+    maAssistentFunc.InsertControl(4,
+        mpPage4FB = new FixedBitmap(pWindow,SdResId(FB_PAGE4)));
+    maAssistentFunc.InsertControl(4,
+        mpPage4PersonalFL = new FixedLine( pWindow, SdResId(FL_PAGE4_PERSONAL) ));
+    maAssistentFunc.InsertControl(4,
+        mpPage4AskNameFT   = new FixedText( pWindow, SdResId(FT_PAGE4_ASKNAME) ));
+    maAssistentFunc.InsertControl(4,
+        mpPage4AskNameEDT  = new Edit( pWindow, SdResId(EDT_PAGE4_ASKNAME) ));
+    maAssistentFunc.InsertControl(4,
+        mpPage4AskTopicFT= new FixedText( pWindow, SdResId(FT_PAGE4_ASKTOPIC) ));
+    maAssistentFunc.InsertControl(4,
+        mpPage4AskTopicEDT = new Edit( pWindow, SdResId(EDT_PAGE4_ASKTOPIC) ));
+    maAssistentFunc.InsertControl(4,
+        mpPage4AskInfoFT   = new FixedText( pWindow, SdResId(FT_PAGE4_ASKINFORMATION) ));
+    maAssistentFunc.InsertControl(4,
+        mpPage4AskInfoEDT  = new MultiLineEdit( pWindow, SdResId(EDT_PAGE4_ASKINFORMATION) ));
 
-    m_pPage4AskNameEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
-    m_pPage4AskTopicEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
-    m_pPage4AskInfoEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
+    mpPage4AskNameEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
+    mpPage4AskTopicEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
+    mpPage4AskInfoEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
 
     // page 5
-    m_aAssistentFunc.InsertControl(5, &m_aPreview );
-    m_aAssistentFunc.InsertControl(5, &m_aPreviewFlag );
-    m_aAssistentFunc.InsertControl(5,
-        m_pPage5FB = new FixedBitmap(pWindow,SdResId(FB_PAGE5)));
-    m_aAssistentFunc.InsertControl(5,
-        m_pPage5PageListFT = new FixedText( pWindow, SdResId( FT_PAGE5_PAGELIST ) ));
-    m_aAssistentFunc.InsertControl(5,
-        m_pPage5PageListCT = new SdPageListControl( pWindow, SdResId( CT_PAGE5_PAGELIST ) ));
-    m_aAssistentFunc.InsertControl(5,
-        m_pPage5SummaryCB  = new CheckBox( pWindow, SdResId( CB_PAGE5_SUMMARY ) ));
+    maAssistentFunc.InsertControl(5, &maPreview );
+    maAssistentFunc.InsertControl(5, &maPreviewFlag );
+    maAssistentFunc.InsertControl(5,
+        mpPage5FB = new FixedBitmap(pWindow,SdResId(FB_PAGE5)));
+    maAssistentFunc.InsertControl(5,
+        mpPage5PageListFT = new FixedText( pWindow, SdResId( FT_PAGE5_PAGELIST ) ));
+    maAssistentFunc.InsertControl(5,
+        mpPage5PageListCT = new SdPageListControl( pWindow, SdResId( CT_PAGE5_PAGELIST ) ));
+    maAssistentFunc.InsertControl(5,
+        mpPage5SummaryCB  = new CheckBox( pWindow, SdResId( CB_PAGE5_SUMMARY ) ));
 
-    m_pPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
+    mpPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
 
     // generell
-    InterpolateFixedBitmap( m_pPage1FB );
-    InterpolateFixedBitmap( m_pPage2FB );
-    InterpolateFixedBitmap( m_pPage3FB );
-    InterpolateFixedBitmap( m_pPage4FB );
-    InterpolateFixedBitmap( m_pPage5FB );
+    InterpolateFixedBitmap( mpPage1FB );
+    InterpolateFixedBitmap( mpPage2FB );
+    InterpolateFixedBitmap( mpPage3FB );
+    InterpolateFixedBitmap( mpPage4FB );
+    InterpolateFixedBitmap( mpPage5FB );
 
-    m_aLastPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, LastPageHdl ));
-    m_aNextPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, NextPageHdl ));
-    m_aPreviewFlag.Check( m_bPreview );
-    m_aPreviewFlag.SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
-    m_aPreview.SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
+    maLastPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, LastPageHdl ));
+    maNextPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, NextPageHdl ));
+    maPreviewFlag.Check( mbPreview );
+    maPreviewFlag.SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
+    maPreview.SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
 
     //setzt die Ausgangsseite
-    m_aAssistentFunc.GotoPage(1);
-    m_aLastPageButton.Disable();
+    maAssistentFunc.GotoPage(1);
+    maLastPageButton.Disable();
 
-    m_aPrevTimer.SetTimeout( 200 );
-    m_aPrevTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
+    maPrevTimer.SetTimeout( 200 );
+    maPrevTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
 
-    m_aEffectPrevTimer.SetTimeout( 50 );
-    m_aEffectPrevTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, EffectPreviewHdl ));
+    maEffectPrevTimer.SetTimeout( 50 );
+    maEffectPrevTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, EffectPreviewHdl ));
 
-    m_aUpdatePageListTimer.SetTimeout( 50 );
-    m_aUpdatePageListTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
+    maUpdatePageListTimer.SetTimeout( 50 );
+    maUpdatePageListTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
 
     SetStartType( ST_EMPTY );
 
     ChangePage();
 
-    mpWindowUpdater->RegisterWindow (&m_aPreview);
+    mpWindowUpdater->RegisterWindow (&maPreview);
 
     UpdatePreview( TRUE );
 
@@ -733,12 +731,12 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     {
         ProvideTemplates();
 
-        //find aStandardTemplate in m_aPresentList
+        //find aStandardTemplate in maPresentList
         TemplateDir*   pStandardTemplateDir = 0;
         TemplateEntry* pStandardTemplateEntry = 0;
 
         std::vector<TemplateDir*>::iterator I;
-        for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
+        for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
         {
             TemplateDir* pDir = *I;
             std::vector<TemplateEntry*>::iterator   J;
@@ -759,10 +757,10 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         //preselect template
         if( pStandardTemplateDir && pStandardTemplateEntry )
         {
-            m_pPage1RegionLB->SelectEntry( pStandardTemplateDir->msRegion );
+            mpPage1RegionLB->SelectEntry( pStandardTemplateDir->msRegion );
             SelectTemplateRegion( pStandardTemplateDir->msRegion );
-            m_pPage1TemplateLB->SelectEntry( pStandardTemplateEntry->msTitle );
-            SelectTemplateHdl(m_pPage1TemplateLB);
+            mpPage1TemplateLB->SelectEntry( pStandardTemplateEntry->msTitle );
+            SelectTemplateHdl(mpPage1TemplateLB);
         }
     }
 }
@@ -779,7 +777,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     //  Delete the template file infos.
     std::vector<TemplateDir*>::iterator I;
     std::vector<TemplateEntry*>::iterator   J;
-    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
     {
         for (J=(*I)->maEntries.begin(); J!=(*I)->maEntries.end(); J++)
             delete (*J);
@@ -787,63 +785,63 @@ AssistentDlgImpl::~AssistentDlgImpl()
     }
 
     // Seite 1
-    delete m_pPage1FB;
-    delete m_pPage1ArtFL;
-    delete m_pPage1EmptyRB;
-    delete m_pPage1TemplateRB;
-    delete m_pPage1TemplateLB;
-    delete m_pPage1RegionLB;
-    delete m_pPage1OpenRB;
-    delete m_pPage1OpenLB;
-    delete m_pPage1OpenPB;
+    delete mpPage1FB;
+    delete mpPage1ArtFL;
+    delete mpPage1EmptyRB;
+    delete mpPage1TemplateRB;
+    delete mpPage1TemplateLB;
+    delete mpPage1RegionLB;
+    delete mpPage1OpenRB;
+    delete mpPage1OpenLB;
+    delete mpPage1OpenPB;
 
     // Seite 2
-    delete m_pPage2FB;
-    delete m_pPage2LayoutFL;
-    delete m_pPage2RegionLB;
-    delete m_pPage2LayoutLB;
-    delete m_pPage2OutTypesFL;
-    delete m_pPage2Medium1RB;
-    delete m_pPage2Medium2RB;
-    delete m_pPage2Medium3RB;
-    delete m_pPage2Medium4RB;
-    delete m_pPage2Medium5RB;
+    delete mpPage2FB;
+    delete mpPage2LayoutFL;
+    delete mpPage2RegionLB;
+    delete mpPage2LayoutLB;
+    delete mpPage2OutTypesFL;
+    delete mpPage2Medium1RB;
+    delete mpPage2Medium2RB;
+    delete mpPage2Medium3RB;
+    delete mpPage2Medium4RB;
+    delete mpPage2Medium5RB;
 
     // Seite 3
-    delete m_pPage3FB;
-    delete m_pPage3EffectFL;
-    delete m_pPage3EffectFT;
-    delete m_pPage3EffectLB;
-    delete m_pPage3SpeedFT;
-    delete m_pPage3SpeedLB;
-    delete m_pPage3PresTypeFL;
-    delete m_pPage3PresTypeLiveRB;
-    delete m_pPage3PresTypeKioskRB;
-    delete m_pPage3PresTimeFT;
-    delete m_pPage3PresTimeTMF;
-    delete m_pPage3BreakFT;
-    delete m_pPage3BreakTMF;
-    delete m_pPage3LogoCB;
+    delete mpPage3FB;
+    delete mpPage3EffectFL;
+    delete mpPage3EffectFT;
+    delete mpPage3EffectLB;
+    delete mpPage3SpeedFT;
+    delete mpPage3SpeedLB;
+    delete mpPage3PresTypeFL;
+    delete mpPage3PresTypeLiveRB;
+    delete mpPage3PresTypeKioskRB;
+    delete mpPage3PresTimeFT;
+    delete mpPage3PresTimeTMF;
+    delete mpPage3BreakFT;
+    delete mpPage3BreakTMF;
+    delete mpPage3LogoCB;
 
     // Seite 4
-    delete m_pPage4FB;
-    delete m_pPage4PersonalFL;
-    delete m_pPage4AskNameFT;
-    delete m_pPage4AskNameEDT;
-    delete m_pPage4AskTopicFT;
-    delete m_pPage4AskTopicEDT;
-    delete m_pPage4AskInfoFT;
-    delete m_pPage4AskInfoEDT;
+    delete mpPage4FB;
+    delete mpPage4PersonalFL;
+    delete mpPage4AskNameFT;
+    delete mpPage4AskNameEDT;
+    delete mpPage4AskTopicFT;
+    delete mpPage4AskTopicEDT;
+    delete mpPage4AskInfoFT;
+    delete mpPage4AskInfoEDT;
 
     // Seite 5
-    delete m_pPage5FB;
-    delete m_pPage5PageListFT;
-    delete m_pPage5PageListCT;
-    delete m_pPage5SummaryCB;
+    delete mpPage5FB;
+    delete mpPage5PageListFT;
+    delete mpPage5PageListCT;
+    delete mpPage5SummaryCB;
 
     //  Delete the file history list.
     std::vector<String*>::iterator  I2;
-    for (I2=m_aOpenFilesList.begin(); I2!=m_aOpenFilesList.end(); I2++)
+    for (I2=maOpenFilesList.begin(); I2!=maOpenFilesList.end(); I2++)
         delete *I2;
 }
 
@@ -868,9 +866,9 @@ void AssistentDlgImpl::CloseDocShell()
     }
 }
 
-void AssistentDlgImpl::EndDialog( long nResult )
+void AssistentDlgImpl::EndDialog( long )
 {
-    m_pWindow = NULL;
+    mpWindow = NULL;
 }
 
 
@@ -878,7 +876,7 @@ void AssistentDlgImpl::EndDialog( long nResult )
 
 void    AssistentDlgImpl::ScanDocmenu   (void)
 {
-    if( m_bRecentDocumentsReady )
+    if( mbRecentDocumentsReady )
         return;
 
     uno::Sequence<uno::Sequence<beans::PropertyValue> > aHistory =
@@ -921,9 +919,9 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             aFilterPropSet >>= lProps;
         }
 
-        sal_Int32 nCount = lProps.getLength();
+        sal_Int32 nPropCount = lProps.getLength();
         rtl::OUString sFactoryName;
-        for( sal_Int32 i=0; i<nCount; ++i )
+        for( sal_Int32 i=0; i<nPropCount; ++i )
         {
             if( lProps[i].Name.compareToAscii( "DocumentService" ) == 0 &&
                 (lProps[i].Value >>= sFactoryName) &&
@@ -940,13 +938,13 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
                 // The password is set only when it is not empty.
                 if (sPassword.getLength() > 0)
                     aURL.SetPass (sPassword);
-                m_aOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
-                m_pPage1OpenLB->InsertEntry (sTitle);
+                maOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
+                mpPage1OpenLB->InsertEntry (sTitle);
                 break;
             }
         }
     }
-    m_bRecentDocumentsReady = TRUE;
+    mbRecentDocumentsReady = TRUE;
     try
     {
         UpdatePreview(TRUE);
@@ -961,7 +959,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
 
 void AssistentDlgImpl::ProvideTemplates (void)
 {
-    if ( ! m_bTemplatesReady)
+    if ( ! mbTemplatesReady)
     {
         TemplateScanner aScanner;
         aScanner.Scan ();
@@ -986,14 +984,14 @@ void AssistentDlgImpl::TemplateScanDone (
     ::vos::OGuard aGuard (Application::GetSolarMutex());
 
     // Copy the contents of the given template folders to a local list.
-    m_aPresentList.swap (rTemplateFolder);
+    maPresentList.swap (rTemplateFolder);
 
     //  Fill in the list box on the first page.
     int nFirstEntry = 0;
-    m_pPage1RegionLB->Clear();
+    mpPage1RegionLB->Clear();
     std::vector<TemplateDir*>::iterator I;
     int i;
-    for (i=0,I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++,i++)
+    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
     {
         TemplateDir* pDir = *I;
         if (pDir == NULL)
@@ -1009,16 +1007,16 @@ void AssistentDlgImpl::TemplateScanDone (
                     nFirstEntry = i;
         }
 
-        m_pPage1RegionLB->InsertEntry (pDir->msRegion);
+        mpPage1RegionLB->InsertEntry (pDir->msRegion);
     }
-    m_pPage1RegionLB->SelectEntryPos (nFirstEntry);
-    m_pPage1RegionLB->Update();
-    SelectTemplateRegion (m_pPage1RegionLB->GetSelectEntry());
+    mpPage1RegionLB->SelectEntryPos ((USHORT)nFirstEntry);
+    mpPage1RegionLB->Update();
+    SelectTemplateRegion (mpPage1RegionLB->GetSelectEntry());
 
     //  Fill in the list box on the second page.
     nFirstEntry = 0;
-    m_pPage2RegionLB->Clear();
-    for (i=0,I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++,i++)
+    mpPage2RegionLB->Clear();
+    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
     {
         TemplateDir* pDir = *I;
         if (pDir == NULL)
@@ -1034,15 +1032,15 @@ void AssistentDlgImpl::TemplateScanDone (
                     nFirstEntry = i;
         }
 
-        m_pPage2RegionLB->InsertEntry (pDir->msRegion);
+        mpPage2RegionLB->InsertEntry (pDir->msRegion);
     }
-    m_pPage2RegionLB->SelectEntryPos (nFirstEntry);
-    m_pPage2RegionLB->Update();
-    SelectLayoutRegion (m_pPage2RegionLB->GetSelectEntry());
+    mpPage2RegionLB->SelectEntryPos ((USHORT)nFirstEntry);
+    mpPage2RegionLB->Update();
+    SelectLayoutRegion (mpPage2RegionLB->GetSelectEntry());
 
     //  Make the changes visible.
-    m_bTemplatesReady = TRUE;
-    if (m_pWindow)
+    mbTemplatesReady = TRUE;
+    if (mpWindow)
         UpdatePage();
 }
 
@@ -1055,22 +1053,22 @@ void AssistentDlgImpl::TemplateScanDone (
 
 void AssistentDlgImpl::SetStartType( StartType eType )
 {
-    m_pPage1EmptyRB->SetState( eType == ST_EMPTY );
-    m_pPage1TemplateRB->SetState( eType == ST_TEMPLATE );
-    m_pPage1OpenRB->SetState( eType == ST_OPEN );
-    m_aNextPageButton.Enable( eType != ST_OPEN );
+    mpPage1EmptyRB->SetState( eType == ST_EMPTY );
+    mpPage1TemplateRB->SetState( eType == ST_TEMPLATE );
+    mpPage1OpenRB->SetState( eType == ST_OPEN );
+    maNextPageButton.Enable( eType != ST_OPEN );
 
-    m_pPage1RegionLB->Show(eType == ST_TEMPLATE);
-    m_pPage1TemplateLB->Show(eType == ST_TEMPLATE);
-    m_pPage1OpenLB->Show(eType == ST_OPEN);
-    m_pPage1OpenPB->Show(eType == ST_OPEN);
+    mpPage1RegionLB->Show(eType == ST_TEMPLATE);
+    mpPage1TemplateLB->Show(eType == ST_TEMPLATE);
+    mpPage1OpenLB->Show(eType == ST_OPEN);
+    mpPage1OpenPB->Show(eType == ST_OPEN);
 }
 
 StartType AssistentDlgImpl::GetStartType()
 {
-    if( m_pPage1EmptyRB->IsChecked() )
+    if( mpPage1EmptyRB->IsChecked() )
         return ST_EMPTY;
-    else if( m_pPage1TemplateRB->IsChecked() )
+    else if( mpPage1TemplateRB->IsChecked() )
         return ST_TEMPLATE;
     else
         return ST_OPEN;
@@ -1079,9 +1077,9 @@ StartType AssistentDlgImpl::GetStartType()
 String AssistentDlgImpl::GetDocFileName()
 {
     String aTitle;
-    if(m_pWindow)
+    if(mpWindow)
     {
-        aTitle = m_pWindow->GetText();
+        aTitle = mpWindow->GetText();
         USHORT nPos = aTitle.Search(sal_Unicode('('));
         if(nPos != STRING_NOTFOUND)
             aTitle.Erase( nPos-1 );
@@ -1090,10 +1088,10 @@ String AssistentDlgImpl::GetDocFileName()
     String aDocFile;
     if( GetStartType() == ST_TEMPLATE )
     {
-        const USHORT nEntry = m_pPage1TemplateLB->GetSelectEntryPos();
+        const USHORT nEntry = mpPage1TemplateLB->GetSelectEntryPos();
         TemplateEntry* pEntry = NULL;
         if(nEntry != (USHORT)-1)
-            pEntry = m_pTemplateRegion->maEntries[nEntry];
+            pEntry = mpTemplateRegion->maEntries[nEntry];
 
         if(pEntry)
         {
@@ -1106,13 +1104,13 @@ String AssistentDlgImpl::GetDocFileName()
     }
     else if( GetStartType() == ST_OPEN )
     {
-        const USHORT nEntry = m_pPage1OpenLB->GetSelectEntryPos();
-        if(nEntry != (USHORT)-1 && nEntry >= 0)
-            aDocFile = *m_aOpenFilesList[nEntry];
+        const USHORT nEntry = mpPage1OpenLB->GetSelectEntryPos();
+        if(nEntry != (USHORT)-1 )
+            aDocFile = *maOpenFilesList[nEntry];
     }
 
-    if(m_pWindow)
-        m_pWindow->SetText(aTitle);
+    if(mpWindow)
+        mpWindow->SetText(aTitle);
 
     return aDocFile;
 }
@@ -1120,10 +1118,10 @@ String AssistentDlgImpl::GetDocFileName()
 String AssistentDlgImpl::GetLayoutFileName()
 {
     String aFile;
-    const USHORT nEntry = m_pPage2LayoutLB->GetSelectEntryPos();
+    const USHORT nEntry = mpPage2LayoutLB->GetSelectEntryPos();
     TemplateEntry* pEntry = NULL;
     if(nEntry != (USHORT)-1 && nEntry > 0)
-        pEntry = m_pLayoutRegion->maEntries[nEntry-1];
+        pEntry = mpLayoutRegion->maEntries[nEntry-1];
 
     if(pEntry)
         aFile = pEntry->msPath;
@@ -1133,7 +1131,7 @@ String AssistentDlgImpl::GetLayoutFileName()
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
 {
-//  m_bPreview = FALSE;     // Document nicht anzeigen
+//  mbPreview = FALSE;      // Document nicht anzeigen
     UpdatePreview(FALSE);   // aber komplett laden
     UpdatePageList();
 
@@ -1144,14 +1142,14 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     if(pDoc)
     {
         const USHORT nPageCount = pDoc->GetSdPageCount(PK_STANDARD);
-        BOOL bKiosk = m_pPage3PresTypeKioskRB->IsChecked();
-        UINT32 nNewTime = (UINT32)m_pPage3PresTimeTMF->GetTime().GetMSFromTime() / 1000;
+        BOOL bKiosk = mpPage3PresTypeKioskRB->IsChecked();
+        UINT32 nNewTime = (UINT32)mpPage3PresTimeTMF->GetTime().GetMSFromTime() / 1000;
         if(bKiosk)
         {
             PresentationSettings& rSettings = pDoc->getPresentationSettings();
             rSettings.mbEndless = bKiosk;
-            rSettings.mnPauseTimeout = (sal_Int32)m_pPage3BreakTMF->GetTime().GetMSFromTime() / 1000;
-            rSettings.mbShowPauseLogo = m_pPage3LogoCB->IsChecked();
+            rSettings.mnPauseTimeout = (sal_Int32)mpPage3BreakTMF->GetTime().GetMSFromTime() / 1000;
+            rSettings.mbShowPauseLogo = mpPage3LogoCB->IsChecked();
         }
 
         USHORT nPgAbsNum = 0;
@@ -1159,10 +1157,10 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
         while( nPgAbsNum < nPageCount )
         {
             SdPage* pPage = pDoc->GetSdPage( nPgRelNum, PK_STANDARD );
-            if( m_pPage5PageListCT->IsPageChecked(nPgAbsNum) )
+            if( mpPage5PageListCT->IsPageChecked(nPgAbsNum) )
             {
-                m_pPage3EffectLB->applySelected(pPage);
-                const sal_uInt16 nPos = m_pPage3SpeedLB->GetSelectEntryPos();
+                mpPage3EffectLB->applySelected(pPage);
+                const sal_uInt16 nPos = mpPage3SpeedLB->GetSelectEntryPos();
                 pPage->setTransitionDuration( (nPos == 0) ? 3.0 : (nPos == 1) ? 2.0 : 1.0 );
                 if(bKiosk)
                 {
@@ -1192,33 +1190,33 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
 
 void AssistentDlgImpl::LeavePage()
 {
-    USHORT nPage = m_aAssistentFunc.GetCurrentPage();
+    int nPage = maAssistentFunc.GetCurrentPage();
 
-    if( nPage == 4 && m_bUserDataDirty )
-        m_aPrevTimer.Start();
+    if( nPage == 4 && mbUserDataDirty )
+        maPrevTimer.Start();
 }
 
 void AssistentDlgImpl::ChangePage()
 {
-    m_aNextPageButton.Enable(!m_aAssistentFunc.IsLastPage());
-    m_aLastPageButton.Enable(!m_aAssistentFunc.IsFirstPage());
+    maNextPageButton.Enable(!maAssistentFunc.IsLastPage());
+    maLastPageButton.Enable(!maAssistentFunc.IsFirstPage());
 
-    USHORT nPage = m_aAssistentFunc.GetCurrentPage();
+    USHORT nPage = (USHORT)maAssistentFunc.GetCurrentPage();
 
-    if( m_pWindow )
-        m_pWindow->SetHelpId( PageHelpIds[nPage-1]);
+    if( mpWindow )
+        mpWindow->SetHelpId( PageHelpIds[nPage-1]);
 
     UpdatePage();
 
-    if( m_aNextPageButton.IsEnabled() )
-        m_aNextPageButton.GrabFocus();
+    if( maNextPageButton.IsEnabled() )
+        maNextPageButton.GrabFocus();
     else
-        m_aFinishButton.GrabFocus();
+        maFinishButton.GrabFocus();
 }
 
 void AssistentDlgImpl::UpdatePage()
 {
-    USHORT nPage = m_aAssistentFunc.GetCurrentPage();
+    USHORT nPage = (USHORT)maAssistentFunc.GetCurrentPage();
 
     switch(nPage)
     {
@@ -1226,48 +1224,48 @@ void AssistentDlgImpl::UpdatePage()
         {
             // Elemente auf der ersten Seite abhaengig vom Starttype Zeigen
             SetStartType( GetStartType() );
-            m_pPage1TemplateRB->Enable(TRUE /*m_bTemplatesReady*/);
+            mpPage1TemplateRB->Enable(TRUE /*mbTemplatesReady*/);
             break;
         }
 
     case 2:
         {
-            m_pPage2RegionLB->Enable(m_bTemplatesReady);
-            m_pPage2LayoutLB->Enable(m_bTemplatesReady);
+            mpPage2RegionLB->Enable(mbTemplatesReady);
+            mpPage2LayoutLB->Enable(mbTemplatesReady);
 
             if( GetStartType() != ST_EMPTY )
             {
-                m_pPage2Medium5RB->Enable( TRUE );
+                mpPage2Medium5RB->Enable( TRUE );
             }
             else
             {
-                m_pPage2Medium5RB->Enable( FALSE );
-                if(m_pPage2Medium5RB->IsChecked())
-                    m_pPage2Medium1RB->Check();
+                mpPage2Medium5RB->Enable( FALSE );
+                if(mpPage2Medium5RB->IsChecked())
+                    mpPage2Medium1RB->Check();
             }
 
             break;
         }
     case 5:
         {
-            if(m_bDocPreview || m_aPageListFile != m_aDocFile)
-                m_pPage5PageListCT->Clear();
+            if(mbDocPreview || maPageListFile != maDocFile)
+                mpPage5PageListCT->Clear();
 
-            m_aUpdatePageListTimer.Start();
+            maUpdatePageListTimer.Start();
             break;
         }
 
     case 3:
         {
             if(GetStartType() != ST_TEMPLATE)
-                m_aNextPageButton.Disable();
+                maNextPageButton.Disable();
 
-            BOOL bKiosk = m_pPage3PresTypeKioskRB->IsChecked();
-            m_pPage3PresTimeFT->Enable(bKiosk);
-            m_pPage3BreakFT->Enable(bKiosk);
-            m_pPage3PresTimeTMF->Enable(bKiosk);
-            m_pPage3BreakTMF->Enable(bKiosk);
-            m_pPage3LogoCB->Enable(bKiosk);
+            BOOL bKiosk = mpPage3PresTypeKioskRB->IsChecked();
+            mpPage3PresTimeFT->Enable(bKiosk);
+            mpPage3BreakFT->Enable(bKiosk);
+            mpPage3PresTimeTMF->Enable(bKiosk);
+            mpPage3BreakTMF->Enable(bKiosk);
+            mpPage3LogoCB->Enable(bKiosk);
             break;
         }
     }
@@ -1279,11 +1277,11 @@ void AssistentDlgImpl::UpdatePage()
 
 IMPL_LINK( AssistentDlgImpl, SelectRegionHdl, ListBox *, pLB )
 {
-    if( pLB == m_pPage1RegionLB )
+    if( pLB == mpPage1RegionLB )
     {
         SelectTemplateRegion( pLB->GetSelectEntry() );
         SetStartType( ST_TEMPLATE );
-        m_pPage2Medium5RB->Check();
+        mpPage2Medium5RB->Check();
     }
     else
     {
@@ -1295,20 +1293,20 @@ IMPL_LINK( AssistentDlgImpl, SelectRegionHdl, ListBox *, pLB )
 
 IMPL_LINK( AssistentDlgImpl, SelectEffectHdl, void*, EMPTYARG )
 {
-    m_aEffectPrevTimer.Start();
+    maEffectPrevTimer.Start();
     return 0;
 }
 
 IMPL_LINK( AssistentDlgImpl, OpenButtonHdl, Button*, pButton )
 {
     // Clear the selection and forward the call.
-    m_pPage1OpenLB->SetNoSelection();
-    return m_pPage1OpenLB->GetDoubleClickHdl().Call(pButton);
+    mpPage1OpenLB->SetNoSelection();
+    return mpPage1OpenLB->GetDoubleClickHdl().Call(pButton);
 }
 
 IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
 {
-    if(m_bPreview && xDocShell.Is() )
+    if(mbPreview && xDocShell.Is() )
     {
         SfxObjectShell* pShell = xDocShell;
         DrawDocShell* pDocShell = dynamic_cast< DrawDocShell * >(pShell);
@@ -1317,12 +1315,12 @@ IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
             SdDrawDocument* pDoc = pDocShell->GetDoc();
             if( pDoc )
             {
-                SdPage* pPage = pDoc->GetSdPage( m_nShowPage, PK_STANDARD );
+                SdPage* pPage = pDoc->GetSdPage( mnShowPage, PK_STANDARD );
                 if( pPage )
-                    m_pPage3EffectLB->applySelected(pPage);
+                    mpPage3EffectLB->applySelected(pPage);
             }
         }
-        m_aPreview.startPreview();
+        maPreview.startPreview();
     }
     return 0;
 }
@@ -1330,9 +1328,9 @@ IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
 IMPL_LINK( AssistentDlgImpl, PreviewFlagHdl, CheckBox *, EMPTYARG )
 
 {
-    if( m_aPreviewFlag.IsChecked() != m_bPreview )
+    if( maPreviewFlag.IsChecked() != mbPreview )
     {
-        m_bPreview = m_aPreviewFlag.IsChecked();
+        mbPreview = maPreviewFlag.IsChecked();
         UpdatePreview(TRUE);
     }
     return 0;
@@ -1341,31 +1339,31 @@ IMPL_LINK( AssistentDlgImpl, PreviewFlagHdl, CheckBox *, EMPTYARG )
 IMPL_LINK( AssistentDlgImpl, SelectTemplateHdl, ListBox *, EMPTYARG )
 {
     SetStartType( ST_TEMPLATE );
-    m_pPage2Medium5RB->Check();
-    m_pPage2LayoutLB->SelectEntryPos(0);
-    m_aPrevTimer.Start();
+    mpPage2Medium5RB->Check();
+    mpPage2LayoutLB->SelectEntryPos(0);
+    maPrevTimer.Start();
     return 0;
 }
 
 IMPL_LINK( AssistentDlgImpl, SelectLayoutHdl, ListBox *, EMPTYARG )
 {
-    m_aPrevTimer.Start();
+    maPrevTimer.Start();
     return 0;
 }
 
 IMPL_LINK( AssistentDlgImpl, SelectFileHdl, ListBox *, EMPTYARG )
 {
     SetStartType( ST_OPEN );
-    m_aPrevTimer.Start();
+    maPrevTimer.Start();
     return 0;
 }
 
 IMPL_LINK( AssistentDlgImpl, PageSelectHdl, Control *, EMPTYARG )
 {
-    USHORT nPage = m_pPage5PageListCT->GetSelectedPage();
-    if( m_nShowPage != nPage )
+    USHORT nPage = mpPage5PageListCT->GetSelectedPage();
+    if( mnShowPage != nPage )
     {
-        m_nShowPage = nPage;
+        mnShowPage = nPage;
         UpdatePreview(FALSE);
     }
 
@@ -1386,7 +1384,7 @@ IMPL_LINK( AssistentDlgImpl, UpdatePreviewHdl, void *, EMPTYARG )
 
 IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
 {
-    StartType eType = pButton == m_pPage1EmptyRB?ST_EMPTY:pButton == m_pPage1TemplateRB?ST_TEMPLATE:ST_OPEN;
+    StartType eType = pButton == mpPage1EmptyRB?ST_EMPTY:pButton == mpPage1TemplateRB?ST_TEMPLATE:ST_OPEN;
 
     if(eType == ST_TEMPLATE)
         ProvideTemplates();
@@ -1397,13 +1395,13 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
 
     if(eType == ST_TEMPLATE)
     {
-        m_pPage1TemplateLB->SelectEntryPos(0);
-        m_pPage2Medium5RB->Check();
+        mpPage1TemplateLB->SelectEntryPos(0);
+        mpPage2Medium5RB->Check();
     }
     else if(eType == ST_OPEN)
-        m_pPage1OpenLB->SelectEntryPos(0);
+        mpPage1OpenLB->SelectEntryPos(0);
 
-    m_aPrevTimer.Start();
+    maPrevTimer.Start();
     return 0;
 }
 
@@ -1412,12 +1410,12 @@ IMPL_LINK( AssistentDlgImpl, NextPageHdl, PushButton *, EMPTYARG )
 {
     // When changing from the first to the second page make sure that the
     // templates are present.
-    if (m_aAssistentFunc.GetCurrentPage() == 1)
+    if (maAssistentFunc.GetCurrentPage() == 1)
         ProvideTemplates();
 
     // Change to the next page.
     LeavePage();
-    m_aAssistentFunc.NextPage();
+    maAssistentFunc.NextPage();
     ChangePage();
     return 0;
 }
@@ -1425,34 +1423,34 @@ IMPL_LINK( AssistentDlgImpl, NextPageHdl, PushButton *, EMPTYARG )
 IMPL_LINK( AssistentDlgImpl, LastPageHdl, PushButton *, EMPTYARG )
 {
     LeavePage();
-    m_aAssistentFunc.PreviousPage();
+    maAssistentFunc.PreviousPage();
     ChangePage();
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, PresTypeHdl, RadioButton*, pButton )
+IMPL_LINK( AssistentDlgImpl, PresTypeHdl, RadioButton*, EMPTYARG )
 {
-    if(m_aDocFile.Len() == 0)
-        m_aNextPageButton.Disable();
+    if(maDocFile.Len() == 0)
+        maNextPageButton.Disable();
 
-    BOOL bKiosk = m_pPage3PresTypeKioskRB->IsChecked();
-    m_pPage3PresTimeFT->Enable(bKiosk);
-    m_pPage3BreakFT->Enable(bKiosk);
-    m_pPage3PresTimeTMF->Enable(bKiosk);
-    m_pPage3BreakTMF->Enable(bKiosk);
-    m_pPage3LogoCB->Enable(bKiosk);
+    BOOL bKiosk = mpPage3PresTypeKioskRB->IsChecked();
+    mpPage3PresTimeFT->Enable(bKiosk);
+    mpPage3BreakFT->Enable(bKiosk);
+    mpPage3PresTimeTMF->Enable(bKiosk);
+    mpPage3BreakTMF->Enable(bKiosk);
+    mpPage3LogoCB->Enable(bKiosk);
     return 0;
 }
 
 IMPL_LINK( AssistentDlgImpl, UpdateUserDataHdl, Edit*, EMPTYARG )
 {
-    m_bUserDataDirty = TRUE;
-    String aTopic = m_pPage4AskTopicEDT->GetText();
-    String aName  = m_pPage4AskNameEDT->GetText();
-    String aInfo  = m_pPage4AskInfoEDT->GetText();
+    mbUserDataDirty = TRUE;
+    String aTopic = mpPage4AskTopicEDT->GetText();
+    String aName  = mpPage4AskNameEDT->GetText();
+    String aInfo  = mpPage4AskInfoEDT->GetText();
 
     if(aTopic.Len() == 0 && aName.Len() == 0 && aInfo.Len() == 0)
-        m_aDocFile.Erase();
+        maDocFile.Erase();
 
     return 0;
 }
@@ -1462,21 +1460,21 @@ IMPL_LINK( AssistentDlgImpl, UpdateUserDataHdl, Edit*, EMPTYARG )
 
 void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
 {
-    m_pPage1TemplateLB->Clear();
+    mpPage1TemplateLB->Clear();
     std::vector<TemplateDir*>::iterator I;
-    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
     {
         TemplateDir * pDir = *I;
-        m_pTemplateRegion = *I;
+        mpTemplateRegion = *I;
         if (pDir->msRegion.Equals( rRegion ) )
         {
             std::vector<TemplateEntry*>::iterator   J;
             for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
-                m_pPage1TemplateLB->InsertEntry ((*J)->msTitle);
-            m_pPage1TemplateLB->Update();
+                mpPage1TemplateLB->InsertEntry ((*J)->msTitle);
+            mpPage1TemplateLB->Update();
             if(GetStartType() == ST_TEMPLATE)
             {
-                m_pPage1TemplateLB->SelectEntryPos( 0 );
+                mpPage1TemplateLB->SelectEntryPos( 0 );
                 SelectTemplateHdl(NULL);
             }
             break;
@@ -1486,20 +1484,20 @@ void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
 
 void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
 {
-    m_pPage2LayoutLB->Clear();
-    m_pPage2LayoutLB->InsertEntry(String(SdResId(STR_WIZARD_ORIGINAL)));
+    mpPage2LayoutLB->Clear();
+    mpPage2LayoutLB->InsertEntry(String(SdResId(STR_WIZARD_ORIGINAL)));
     std::vector<TemplateDir*>::iterator I;
-    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
     {
         TemplateDir * pDir = *I;
-        m_pLayoutRegion = *I;
+        mpLayoutRegion = *I;
 
         if (pDir->msRegion.Equals (rRegion))
         {
             std::vector<TemplateEntry*>::iterator   J;
             for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
-                m_pPage2LayoutLB->InsertEntry ((*J)->msTitle);
-            m_pPage2LayoutLB->Update();
+                mpPage2LayoutLB->InsertEntry ((*J)->msTitle);
+            mpPage2LayoutLB->Update();
             break;
         }
     }
@@ -1507,9 +1505,9 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
 
 void AssistentDlgImpl::UpdateUserData()
 {
-    String aTopic = m_pPage4AskTopicEDT->GetText();
-    String aName  = m_pPage4AskNameEDT->GetText();
-    String aInfo  = m_pPage4AskInfoEDT->GetText();
+    String aTopic = mpPage4AskTopicEDT->GetText();
+    String aName  = mpPage4AskNameEDT->GetText();
+    String aInfo  = mpPage4AskInfoEDT->GetText();
 
     SfxObjectShell* pShell = xDocShell;
     DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
@@ -1563,42 +1561,42 @@ void AssistentDlgImpl::UpdateUserData()
         }
     }
 
-    m_bUserDataDirty = FALSE;
+    mbUserDataDirty = FALSE;
 }
 
 void AssistentDlgImpl::UpdatePageList()
 {
-    if(m_bDocPreview || !m_bPreview)
+    if(mbDocPreview || !mbPreview)
         UpdatePreview(FALSE);
-    else if(m_aPageListFile == m_aDocFile)
+    else if(maPageListFile == maDocFile)
         return;
 
-    m_aPageListFile = m_aDocFile;
+    maPageListFile = maDocFile;
 
     SfxObjectShell* pShell = xDocShell;
     DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
-    m_pPage5PageListCT->Clear();
+    mpPage5PageListCT->Clear();
 
     if(pDoc)
-        m_pPage5PageListCT->Fill(pDoc);
+        mpPage5PageListCT->Fill(pDoc);
 }
 
 void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
 {
     // Guard against multiple concurrent execution to this method caused either
     // by calls from different threads or recursion.
-    ::osl::MutexGuard aGuard (m_aMutex);
-    if (m_bPreviewUpdating)
+    ::osl::MutexGuard aGuard (maMutex);
+    if (mbPreviewUpdating)
         return;
-    m_bPreviewUpdating = TRUE;
+    mbPreviewUpdating = TRUE;
 
-    if(!m_bPreview && bDocPreview)
+    if(!mbPreview && bDocPreview)
     {
-        m_aPreview.Invalidate();
-        m_aPreview.SetObjectShell(0);
-        m_bPreviewUpdating = FALSE;
+        maPreview.Invalidate();
+        maPreview.SetObjectShell(0);
+        mbPreviewUpdating = FALSE;
         return;
     }
 
@@ -1612,8 +1610,8 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
 
     if( aDocFile.Len() == 0 )
     {
-        if( !xDocShell.Is() || m_aDocFile.Len() != 0 ||
-            (m_aDocFile.Len() == 0 && m_aLayoutFile.Len() != 0 && aLayoutFile.Len() == 0 ))
+        if( !xDocShell.Is() || maDocFile.Len() != 0 ||
+            (maDocFile.Len() == 0 && maLayoutFile.Len() != 0 && aLayoutFile.Len() == 0 ))
         {
             CloseDocShell();
 
@@ -1623,24 +1621,24 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             SdDrawDocument* pDoc = pNewDocSh->GetDoc();
             pDoc->CreateFirstPages();
             pDoc->StopWorkStartupDelay();
-            m_bDocPreview = FALSE;
+            mbDocPreview = FALSE;
 
-            m_aDocFile = aDocFile;
-            m_bUserDataDirty = TRUE;
+            maDocFile = aDocFile;
+            mbUserDataDirty = TRUE;
         }
         else
-            bChangeMaster = (aLayoutFile.Len() != 0) && (m_aLayoutFile != aLayoutFile);
+            bChangeMaster = (aLayoutFile.Len() != 0) && (maLayoutFile != aLayoutFile);
     }
-    else if( aDocFile == m_aDocFile && ( m_bDocPreview == bDocPreview || bDocPreview ) )
+    else if( aDocFile == maDocFile && ( mbDocPreview == bDocPreview || bDocPreview ) )
     {
-        if( aLayoutFile != m_aLayoutFile )
+        if( aLayoutFile != maLayoutFile )
         {
             SfxObjectShell* pShell = xDocShell;
             DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
             SfxUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
             if(pUndoMgr)
                 pUndoMgr->Undo();
-            m_bUserDataDirty = TRUE;
+            mbUserDataDirty = TRUE;
         }
         else
             bChangeMaster = FALSE;
@@ -1650,9 +1648,9 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         CloseDocShell();
 
         ::Window *pParent = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( m_pWindow );
+        Application::SetDefDialogParent( mpWindow );
 
-        SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,m_pWindow);
+        SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
 
         SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
         if(IsOwnFormat(aDocFile))
@@ -1661,15 +1659,13 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             if(bDocPreview)
                 pSet->Put( SfxBoolItem( SID_PREVIEW, TRUE ) );
             RestorePassword( pSet, aDocFile );
-            if( lErr = pSfxApp->LoadTemplate( xDocShell, aDocFile, TRUE, pSet ) )
+            if( (lErr = pSfxApp->LoadTemplate( xDocShell, aDocFile, TRUE, pSet )) != 0 )
                 ErrorHandler::HandleError(lErr);
             else
                 SavePassword( xDocShell, aDocFile );
         }
         else
         {
-            SfxObjectShell* pShell = NULL;
-
             const String aTargetStr( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
@@ -1689,21 +1685,21 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
 
         Application::SetDefDialogParent( pParent );
 
-        m_nShowPage = 0;
-        m_bDocPreview = bDocPreview;
-        m_aDocFile = aDocFile;
-        m_bUserDataDirty = TRUE;
+        mnShowPage = 0;
+        mbDocPreview = bDocPreview;
+        maDocFile = aDocFile;
+        mbUserDataDirty = TRUE;
     }
 
-    if(bChangeMaster && (aLayoutFile != m_aDocFile))
+    if(bChangeMaster && (aLayoutFile != maDocFile))
     {
         // Layoutvorlage laden
         SfxObjectShellLock xLayoutDocShell;
-        SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,m_pWindow);
+        SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
         SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
 
         ::Window *pParent = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( m_pWindow );
+        Application::SetDefDialogParent( mpWindow );
 
         if(IsOwnFormat(aLayoutFile))
         {
@@ -1711,7 +1707,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             pSet->Put( SfxBoolItem( SID_PREVIEW, TRUE ) );
 
             RestorePassword( pSet, aLayoutFile );
-            if( lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, TRUE, pSet ) )
+            if( (lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, TRUE, pSet )) != 0 )
                 ErrorHandler::HandleError(lErr);
             SavePassword( xLayoutDocShell, aLayoutFile );
         }
@@ -1731,21 +1727,21 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             pDoc->SetMasterPage(0, aEmptyStr, pLayoutDoc, TRUE,  FALSE );
         else
             DBG_ERROR("Keine gueltigen Impress Documente fuer die Preview? [CL]");
-        m_bUserDataDirty = TRUE;
+        mbUserDataDirty = TRUE;
     }
-    m_aLayoutFile = aLayoutFile;
+    maLayoutFile = aLayoutFile;
 
-    if(m_bUserDataDirty)
+    if(mbUserDataDirty)
         UpdateUserData();
 
-    if ( !xDocShell.Is() || !m_bPreview )
-        m_aPreview.SetObjectShell( 0 );
+    if ( !xDocShell.Is() || !mbPreview )
+        maPreview.SetObjectShell( 0 );
     else
     {
-        m_aPreview.SetObjectShell( xDocShell, m_nShowPage );
+        maPreview.SetObjectShell( xDocShell, mnShowPage );
     }
 
-    m_bPreviewUpdating = FALSE;
+    mbPreviewUpdating = FALSE;
 }
 
 void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPath )
@@ -1764,25 +1760,25 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
             if(aPass.Len() == 0)
                 return;
 
-            PasswordEntry* pEntry = m_aPasswordList.First();
+            PasswordEntry* pEntry = maPasswordList.First();
             while(pEntry)
             {
-                if(pEntry->m_aPath == rPath)
+                if(pEntry->maPath == rPath)
                     break;
 
-                pEntry = m_aPasswordList.Next();
+                pEntry = maPasswordList.Next();
 
             }
 
             if(pEntry == NULL)
             {
                 pEntry = new PasswordEntry();
-                pEntry->m_aPath = rPath;
-                m_aPasswordList.Insert( pEntry );
+                pEntry->maPath = rPath;
+                maPasswordList.Insert( pEntry );
             }
 
             if(pEntry)
-                pEntry->m_aPassword = aPass;
+                pEntry->maPassword = aPass;
           }
         }
     }
@@ -1798,13 +1794,13 @@ void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const String& rPath )
 
 String AssistentDlgImpl::GetPassword( const String rPath )
 {
-    PasswordEntry* pEntry = m_aPasswordList.First();
+    PasswordEntry* pEntry = maPasswordList.First();
     while(pEntry)
     {
-        if(pEntry->m_aPath == rPath)
-            return pEntry->m_aPassword;
+        if(pEntry->maPath == rPath)
+            return pEntry->maPassword;
 
-        pEntry = m_aPasswordList.Next();
+        pEntry = maPasswordList.Next();
     }
 
     return String();
@@ -1812,11 +1808,11 @@ String AssistentDlgImpl::GetPassword( const String rPath )
 
 void AssistentDlgImpl::DeletePassords()
 {
-    PasswordEntry* pEntry = m_aPasswordList.First();
+    PasswordEntry* pEntry = maPasswordList.First();
     while(pEntry)
     {
         delete pEntry;
-        pEntry = m_aPasswordList.Next();
+        pEntry = maPasswordList.Next();
     }
 }
 
@@ -1956,10 +1952,10 @@ AssistentDlg::AssistentDlg(Window* pParent, BOOL bAutoPilot) :
     ModalDialog(pParent,SdResId(DLG_ASS))
 {
     Link aFinishLink = LINK(this,AssistentDlg, FinishHdl);
-    m_pImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
+    mpImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
 
     //Buttonbelegung
-    m_pImpl->m_aFinishButton.SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
+    mpImpl->maFinishButton.SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
 
     FreeResource();
 }
@@ -1985,54 +1981,54 @@ IMPL_LINK( AssistentDlg, FinishHdl, OKButton *, EMPTYARG )
 
                 INetURLObject aURL;
                 aURL.SetSmartURL(aFileToOpen);
-                m_pImpl->m_aOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
-                USHORT nNewPos = m_pImpl->m_pPage1OpenLB->InsertEntry(aURL.getName());
-                m_pImpl->m_pPage1OpenLB->SelectEntryPos(nNewPos);
+                mpImpl->maOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
+                USHORT nNewPos = mpImpl->mpPage1OpenLB->InsertEntry(aURL.getName());
+                mpImpl->mpPage1OpenLB->SelectEntryPos(nNewPos);
             }
         }
     }
 
     //Ende
-    m_pImpl->EndDialog(RET_OK);
+    mpImpl->EndDialog(RET_OK);
     EndDialog(RET_OK);
     return 0;
 }
 
 AssistentDlg::~AssistentDlg()
 {
-    delete m_pImpl;
+    delete mpImpl;
 }
 
 
 SfxObjectShellLock AssistentDlg::GetDocument()
 {
-    return m_pImpl->GetDocument();
+    return mpImpl->GetDocument();
 }
 
 String AssistentDlg::GetTopic() const
 {
-    return m_pImpl->m_pPage4AskTopicEDT->GetText();
+    return mpImpl->mpPage4AskTopicEDT->GetText();
 }
 
 String AssistentDlg::GetUserName() const
 {
-    return m_pImpl->m_pPage4AskNameEDT->GetText();
+    return mpImpl->mpPage4AskNameEDT->GetText();
 }
 
 String AssistentDlg::GetInformation() const
 {
-    return m_pImpl->m_pPage4AskInfoEDT->GetText();
+    return mpImpl->mpPage4AskInfoEDT->GetText();
 }
 
 OutputType AssistentDlg::GetOutputMedium() const
 {
-    if(m_pImpl->m_pPage2Medium1RB->IsChecked())
+    if(mpImpl->mpPage2Medium1RB->IsChecked())
         return OUTPUT_PRESENTATION;
-    else if(m_pImpl->m_pPage2Medium2RB->IsChecked())
+    else if(mpImpl->mpPage2Medium2RB->IsChecked())
         return OUTPUT_SLIDE;
-    else if(m_pImpl->m_pPage2Medium3RB->IsChecked())
+    else if(mpImpl->mpPage2Medium3RB->IsChecked())
         return OUTPUT_OVERHEAD;
-    else if(m_pImpl->m_pPage2Medium4RB->IsChecked())
+    else if(mpImpl->mpPage2Medium4RB->IsChecked())
         return OUTPUT_PAGE;
     else
         return OUTPUT_ORIGINAL;
@@ -2040,31 +2036,31 @@ OutputType AssistentDlg::GetOutputMedium() const
 
 BOOL AssistentDlg::IsSummary() const
 {
-    return m_pImpl->m_pPage5SummaryCB->IsChecked();
+    return mpImpl->mpPage5SummaryCB->IsChecked();
 }
 
 StartType AssistentDlg::GetStartType() const
 {
-    return m_pImpl->GetStartType();
+    return mpImpl->GetStartType();
 }
 
 String AssistentDlg::GetDocPath() const
 {
-    return m_pImpl->GetDocFileName();
+    return mpImpl->GetDocFileName();
 }
 
 BOOL AssistentDlg::GetStartWithFlag() const
 {
-    return !m_pImpl->m_aStartWithFlag.IsChecked();
+    return !mpImpl->maStartWithFlag.IsChecked();
 }
 
 BOOL AssistentDlg::IsDocEmpty() const
 {
-    return m_pImpl->GetDocFileName().Len() == 0 &&
-           m_pImpl->GetLayoutFileName().Len() == 0;
+    return mpImpl->GetDocFileName().Len() == 0 &&
+           mpImpl->GetLayoutFileName().Len() == 0;
 }
 
 String AssistentDlg::GetPassword()
 {
-    return m_pImpl->GetPassword( m_pImpl->m_aDocFile );
+    return mpImpl->GetPassword( mpImpl->maDocFile );
 }
