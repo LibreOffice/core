@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:47:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:15:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
         aCustomShape = rItm.GetValue();
     }
 
-    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 }
@@ -217,16 +217,16 @@ BOOL FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
-    if ( rMEvt.IsLeft() && !pView->IsAction() )
+    if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        pWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        mpWindow->CaptureMouse();
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
 
-        SdrObject* pObj = pView->GetCreateObj();
+        SdrObject* pObj = mpView->GetCreateObj();
         if ( pObj )
         {
             SetAttributes( pObj );
@@ -237,7 +237,7 @@ BOOL FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
                 bForceFillStyle = sal_False;
                 bForceNoFillStyle = sal_True;
             }
-            SfxItemSet aAttr(pDoc->GetPool());
+            SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet( aAttr, pObj, bForceFillStyle, bForceNoFillStyle );
             pObj->SetMergedItemSet(aAttr);
         }
@@ -267,10 +267,10 @@ BOOL FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn(sal_False);
 
-    if(pView->IsCreateObj() && rMEvt.IsLeft())
+    if(mpView->IsCreateObj() && rMEvt.IsLeft())
     {
-        SdrObject* pObj = pView->GetCreateObj();
-        if( pObj && pView->EndCreateObj( SDRCREATE_FORCEEND ) )
+        SdrObject* pObj = mpView->GetCreateObj();
+        if( pObj && mpView->EndCreateObj( SDRCREATE_FORCEEND ) )
         {
             bReturn = sal_True;
         }
@@ -278,7 +278,7 @@ BOOL FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent)
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
     return bReturn;
 }
@@ -306,7 +306,7 @@ BOOL FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstructCustomShape::Activate()
 {
-    pView->SetCurrentObj( OBJ_CUSTOMSHAPE );
+    mpView->SetCurrentObj( OBJ_CUSTOMSHAPE );
     FuConstruct::Activate();
 }
 
@@ -395,11 +395,11 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
 }
 
 // #97016#
-SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDoc);
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        0L, mpDoc);
 
     if( pObj )
     {
@@ -408,7 +408,7 @@ SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16 nID, con
             ImpForceQuadratic( aRect );
         pObj->SetLogicRect( aRect );
         SetAttributes( pObj );
-        SfxItemSet aAttr(pDoc->GetPool());
+        SfxItemSet aAttr(mpDoc->GetPool());
         SetStyleSheet(aAttr, pObj);
         pObj->SetMergedItemSet(aAttr);
     }
