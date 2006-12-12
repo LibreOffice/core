@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SubToolPanel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:13:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,7 @@ Size SubToolPanel::GetPreferredSize (void)
 
 
 
-sal_Int32 SubToolPanel::GetPreferredWidth (sal_Int32 nHeight)
+sal_Int32 SubToolPanel::GetPreferredWidth (sal_Int32 )
 {
     return GetPreferredSize().Width();
 }
@@ -238,7 +238,7 @@ sal_Int32 SubToolPanel::GetPreferredWidth (sal_Int32 nHeight)
 
 
 
-sal_Int32 SubToolPanel::GetPreferredHeight (sal_Int32 nWidth)
+sal_Int32 SubToolPanel::GetPreferredHeight (sal_Int32 )
 {
     return GetPreferredSize().Height();
 }
@@ -302,7 +302,7 @@ void SubToolPanel::Rearrange (void)
         mnChildrenWidth = -2*mnHorizontalBorder;
         mnChildrenWidth += aAvailableSize.Width();
 
-        sal_Int32 nChildrenHeight (LayoutChildren());
+        LayoutChildren();
 
         mbIsRearrangePending = false;
     }
@@ -446,7 +446,7 @@ IMPL_LINK(SubToolPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible> SubToolPanel::CreateAccessibleObject (
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent)
+        ::com::sun::star::accessibility::XAccessible>& )
 {
     return new ::accessibility::AccessibleTreeNode (
         *this,

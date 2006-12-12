@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:14:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,7 @@ TaskPaneShellManager::~TaskPaneShellManager (void)
 
 
 
-SfxShell* TaskPaneShellManager::CreateShell (
-    ShellId nId,
-    ::Window* pParentWindow,
-    FrameView* pFrameView)
+SfxShell* TaskPaneShellManager::CreateShell( ShellId nId, ::Window* , FrameView* )
 {
     SubShells::const_iterator iShell (maSubShells.find(nId));
     if (iShell != maSubShells.end())
@@ -82,7 +79,7 @@ SfxShell* TaskPaneShellManager::CreateShell (
 
 
 
-void TaskPaneShellManager::ReleaseShell (SfxShell* pShell)
+void TaskPaneShellManager::ReleaseShell (SfxShell* )
 {
     // Nothing to do.
 }

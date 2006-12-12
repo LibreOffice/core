@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneTreeNode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:14:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,10 @@
 
 namespace sd { namespace toolpanel {
 
-TreeNode::TreeNode (
-    TreeNode* pParent)
-    : mpParent (pParent),
-      mpControlContainer (new ControlContainer(this)),
-      maStateChangeListeners()
+TreeNode::TreeNode( TreeNode* pParent)
+: mpControlContainer (new ControlContainer(this))
+, mpParent (pParent)
+, maStateChangeListeners()
 {
 }
 
@@ -272,7 +271,7 @@ TaskPaneShellManager* TreeNode::GetShellManager (void)
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible> TreeNode::CreateAccessibleObject (
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent)
+        ::com::sun::star::accessibility::XAccessible>& )
 {
     if (GetWindow() != NULL)
         return GetWindow()->CreateAccessible();
