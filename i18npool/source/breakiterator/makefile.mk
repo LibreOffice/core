@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:46:25 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:14:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,11 @@ ENABLE_EXCEPTIONS=TRUE
 MY_BRK_TXTFILES:=$(shell ls data/*.txt)
 
 # insert "OpenOffice" as icu package name in front of the  name of each rule file for searching on application provided data
-MY_BRK_BRKFILES:=$(subst,data/,$(MISC)$/OpenOffice_ $(MY_BRK_TXTFILES:s/.txt/.brk/))
+MY_BRK_BRKFILES:=$(subst,data/,$(MISC)$/ $(MY_BRK_TXTFILES:s/.txt/.brk/))
 
-# OpenOffice_icu_dat.c is a generated file from the rule file list by gencmn
+# OpenOffice_dat.c is a generated file from the rule file list by gencmn
 MY_MISC_CXXFILES := \
-        $(MISC)$/OpenOffice_icu_dat.c \
+        $(MISC)$/OpenOffice_dat.c \
         $(MY_BRK_BRKFILES:s/.brk/_brk.c/)
 
 SLOFILES=   \
@@ -80,13 +80,13 @@ APP1STDLIBS = $(SALLIB)
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
 # so the output (OpenOffice_icu_dat.c) is changed here to include a pragma to disable the warnings.
 # Output of gencmn is redirected to OpenOffice_icu_tmp.c with the -t switch.
-$(MISC)$/OpenOffice_icu_dat.c :  $(MY_BRK_BRKFILES)
-    +$(WRAPCMD) $(SOLARBINDIR)$/gencmn -e OpenOffice_icu -n OpenOffice_icu -t tmp -S -d $(MISC) O $(mktmp $(MY_BRK_BRKFILES:t"\n"))
-    echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
-    echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@
-    echo $(USQ)#endif$(USQ) >> $@
+$(MISC)$/OpenOffice_dat.c :  $(MY_BRK_BRKFILES) makefile.mk
+    +$(WRAPCMD) $(SOLARBINDIR)$/gencmn -n OpenOffice -t tmp -S -d $(MISC) O $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
+    +echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
+    +echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@
+    +echo $(USQ)#endif$(USQ) >> $@
     +$(TYPE) $(@:s/_dat/_tmp/) >> $@
-$(MISC)$/OpenOffice_%.brk : data/%.txt
-    +$(WRAPCMD) $(SOLARBINDIR)$/genbrk -r $< -o $(MISC)$/OpenOffice_$*.brk
+$(MISC)$/%.brk : data/%.txt
+    +$(WRAPCMD) $(SOLARBINDIR)$/genbrk -r $< -o $(MISC)$/$*.brk
 $(MISC)$/%_brk.c : $(MISC)$/%.brk
-    +$(WRAPCMD) $(SOLARBINDIR)$/genccode -d $(MISC)$ $(MISC)$/$*.brk
+    +$(WRAPCMD) $(SOLARBINDIR)$/genccode -n OpenOffice -d $(MISC)$ $(MISC)$/$*.brk
