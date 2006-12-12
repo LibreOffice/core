@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuformatpaintbrush.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:50:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,12 +85,12 @@ FunctionReference FuFormatPaintBrush::Create( ViewShell* pViewSh, ::sd::Window* 
 
 BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    if(pView&&pWindow)
+    if(mpView&&mpWindow)
     {
-        USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
         BOOL bToggle = FALSE;
-        pView->UnMarkAll();
-        pView->MarkObj(pWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, FALSE);
+        mpView->UnMarkAll();
+        mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, FALSE);
     }
     return FALSE;
 }
@@ -98,33 +98,33 @@ BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 BOOL FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
 {
     SdFormatClipboard* pFormatClipboard = 0;
-    if(pViewShell)
-        pFormatClipboard = pViewShell->GetDocSh()->pFormatClipboard;
-    if(pView&&pWindow&&pFormatClipboard&&pFormatClipboard->HasContent())
+    if(mpViewShell)
+        pFormatClipboard = mpViewShell->GetDocSh()->mpFormatClipboard;
+    if(mpView&&mpWindow&&pFormatClipboard&&pFormatClipboard->HasContent())
     {
-        USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
         SdrObject* pObj=0;
         SdrPageView* pPV=0;
-        BOOL bOverMarkableObject = pView->PickObj(
-             pWindow->PixelToLogic( rMEvt.GetPosPixel() )
+        BOOL bOverMarkableObject = mpView->PickObj(
+             mpWindow->PixelToLogic( rMEvt.GetPosPixel() )
             ,nHitLog, pObj, pPV, SDRSEARCH_PICKMARKABLE);
 
         if(bOverMarkableObject && pFormatClipboard->HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
-            pWindow->SetPointer(Pointer(POINTER_FILL));
+            mpWindow->SetPointer(Pointer(POINTER_FILL));
         else
-            pWindow->SetPointer(Pointer(POINTER_ARROW));
+            mpWindow->SetPointer(Pointer(POINTER_ARROW));
     }
     else
-        pWindow->SetPointer(Pointer(POINTER_ARROW));
+        mpWindow->SetPointer(Pointer(POINTER_ARROW));
     return FALSE;
 }
 
 BOOL FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
 {
     SdFormatClipboard* pFormatClipboard = 0;
-    if(pViewShell)
-        pFormatClipboard = pViewShell->GetDocSh()->pFormatClipboard;
-    if( pFormatClipboard && pView && pView->AreObjectsMarked() )
+    if(mpViewShell)
+        pFormatClipboard = mpViewShell->GetDocSh()->mpFormatClipboard;
+    if( pFormatClipboard && mpView && mpView->AreObjectsMarked() )
     {
         bool bNoCharacterFormats = false;
         bool bNoParagraphFormats = false;
@@ -134,25 +134,25 @@ BOOL FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
             else if( rMEvt.GetModifier() & KEY_MOD1 )
                 bNoParagraphFormats = true;
         }
-        pFormatClipboard->Paste( *pView, bNoCharacterFormats, bNoParagraphFormats );
-        if(pViewShell)
-            pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+        pFormatClipboard->Paste( *mpView, bNoCharacterFormats, bNoParagraphFormats );
+        if(mpViewShell)
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
     }
-    if(pViewShell && pFormatClipboard && !pFormatClipboard->HasContent() )
-        pViewShell->Cancel();
+    if(mpViewShell && pFormatClipboard && !pFormatClipboard->HasContent() )
+        mpViewShell->Cancel();
     return TRUE;
 }
 
 BOOL FuFormatPaintBrush::KeyInput(const KeyEvent& rKEvt)
 {
-    if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE && pViewShell )
+    if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE && mpViewShell )
     {
-        SdFormatClipboard* pFormatClipboard = pViewShell->GetDocSh()->pFormatClipboard;
+        SdFormatClipboard* pFormatClipboard = mpViewShell->GetDocSh()->mpFormatClipboard;
         if(pFormatClipboard)
         {
             pFormatClipboard->Erase();
-            pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
-            pViewShell->Cancel();
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+            mpViewShell->Cancel();
 
             return TRUE;
         }
