@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlinerIterator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:31:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,10 @@ IteratorPosition::IteratorPosition (const IteratorPosition& aPosition)
       meEditMode(aPosition.meEditMode)
 {}
 
-IteratorPosition::IteratorPosition (SdrObject* pObject, sal_Int32 nPageIndex,// ::sd::View* pView,
+IteratorPosition::IteratorPosition (SdrObject* pObject, sal_Int32 nPageIndex,
     PageKind ePageKind, EditMode eEditMode)
     : mpObject(pObject),
       mnPageIndex(nPageIndex),
-      //      mpView(pView),
       mePageKind(ePageKind),
       meEditMode(eEditMode)
 {}
@@ -418,29 +417,21 @@ sal_Int32 OutlinerContainer::GetPageIndex (
 
 //===== IteratorImplBase ====================================================
 
-IteratorImplBase::IteratorImplBase (
-    SdDrawDocument* pDocument,
-    DrawViewShell* pViewShell,
-    bool bDirectionIsForward)
-    : mpDocument (pDocument),
-      mpViewShell (pViewShell),
-      maPosition(),
-      mbDirectionIsForward (bDirectionIsForward)
+IteratorImplBase::IteratorImplBase(SdDrawDocument* pDocument, DrawViewShell* pViewShell, bool bDirectionIsForward)
+:   maPosition()
+,   mpDocument (pDocument)
+,   mpViewShell (pViewShell)
+,   mbDirectionIsForward (bDirectionIsForward)
 {
     maPosition.mePageKind = pViewShell->GetPageKind();
     maPosition.meEditMode = pViewShell->GetEditMode();
 }
 
-IteratorImplBase::IteratorImplBase (
-    SdDrawDocument* pDocument,
-    DrawViewShell* pViewShell,
-    bool bDirectionIsForward,
-    PageKind ePageKind,
-    EditMode eEditMode)
-    : mpDocument (pDocument),
-      mpViewShell (pViewShell),
-      maPosition(),
-      mbDirectionIsForward (bDirectionIsForward)
+IteratorImplBase::IteratorImplBase( SdDrawDocument* pDocument, DrawViewShell* pViewShell,bool bDirectionIsForward, PageKind ePageKind, EditMode eEditMode)
+: maPosition()
+, mpDocument (pDocument)
+, mpViewShell (pViewShell)
+, mbDirectionIsForward (bDirectionIsForward)
 {
     maPosition.mePageKind = ePageKind;
     maPosition.meEditMode = eEditMode;
@@ -454,7 +445,7 @@ bool IteratorImplBase::operator== (const IteratorImplBase& rIterator) const
     return maPosition == rIterator.maPosition;
 }
 
-bool IteratorImplBase::IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const
+bool IteratorImplBase::IsEqual (const IteratorImplBase& rIterator, IteratorType ) const
 {
     // When this method is executed instead of the ones from derived classes
     // then the argument is of another type then the object itself.  In this
