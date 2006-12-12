@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:07:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,10 @@ public:
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
+
+    static void QuotHTMLXRM( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
+
     static const char* GetEnv( const char *pVar );
     static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
 
