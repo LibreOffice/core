@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:24:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char  ** ppEnvTypeName,
-    uno_Environment ** ppEnv )
+    uno_Environment **  )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -111,7 +111,7 @@ static void SAL_CALL writeInfo(
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager,
+    void * ,
     void * pRegistryKey )
 {
     if( pRegistryKey )
@@ -137,7 +137,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName,
     void           * pServiceManager,
-    void           * pRegistryKey )
+    void           *  )
 {
     void * pRet = 0;
 
