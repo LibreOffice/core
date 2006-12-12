@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdundo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:26:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,20 +48,19 @@ class SdDrawDocument;
 
 class SD_DLLPUBLIC SdUndoAction : public SfxUndoAction
 {
-    String aComment;
-protected:
-    SdDrawDocument* pDoc;
 public:
     TYPEINFO();
                             SdUndoAction(SdDrawDocument* pSdDrawDocument)
-                                : pDoc(pSdDrawDocument)  {}
+                                : mpDoc(pSdDrawDocument)  {}
     virtual                 ~SdUndoAction() {}
 
-    virtual BOOL            CanRepeat(SfxRepeatTarget& rView) const;
-    virtual void            Repeat(SfxRepeatTarget& rView);
-    void                    SetComment(String& rStr) { aComment = rStr; }
-    virtual String          GetComment() const { return aComment; }
+    void                    SetComment(String& rStr) { maComment = rStr; }
+    virtual String          GetComment() const { return maComment; }
     virtual SdUndoAction*   Clone() const { return NULL; }
+
+protected:
+    SdDrawDocument* mpDoc;
+    String maComment;
 };
 
 #endif     // _SD_SDUNDO_HXX
