@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:27:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:02:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ const SfxItemPropertyMap* ImplGetPageBackgroundPropertyMap()
     static const SfxItemPropertyMap aPageBackgroundPropertyMap_Impl[] =
     {
         FILL_PROPERTIES
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
     };
 
     return aPageBackgroundPropertyMap_Impl;
@@ -127,7 +127,7 @@ SdUnoPageBackground::~SdUnoPageBackground() throw()
         delete mpSet;
 }
 
-void SdUnoPageBackground::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
@@ -318,10 +318,10 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
     return aAny;
 }
 
-void SAL_CALL SdUnoPageBackground::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdUnoPageBackground::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdUnoPageBackground::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdUnoPageBackground::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdUnoPageBackground::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdUnoPageBackground::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdUnoPageBackground::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdUnoPageBackground::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 // XPropertyState
 beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUString& PropertyName )
