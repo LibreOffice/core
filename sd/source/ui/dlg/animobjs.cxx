@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:25:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
 
 // -----------------------------------------------------------------------
 
-void SdDisplay::Paint( const Rectangle& rRect )
+void SdDisplay::Paint( const Rectangle& )
 {
     Point aPt;
     Size aSize = GetOutputSize();
@@ -188,6 +188,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
         aNumFldBitmap       ( this, SdResId( NUM_FLD_BITMAP ) ),
         aTimeField          ( this, SdResId( TIME_FIELD ) ),
         aLbLoopCount        ( this, SdResId( LB_LOOP_COUNT ) ),
+
         aBtnGetOneObject    ( this, SdResId( BTN_GET_ONE_OBJECT ) ),
         aBtnGetAllObjects   ( this, SdResId( BTN_GET_ALL_OBJECTS ) ),
         aBtnRemoveBitmap    ( this, SdResId( BTN_REMOVE_BITMAP ) ),
@@ -195,17 +196,21 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
         aFtCount            ( this, SdResId( FT_COUNT ) ),
         aFiCount            ( this, SdResId( FI_COUNT ) ),
         aGrpBitmap          ( this, SdResId( GRP_BITMAP ) ),
+
         aRbtGroup           ( this, SdResId( RBT_GROUP ) ),
         aRbtBitmap          ( this, SdResId( RBT_BITMAP ) ),
         aFtAdjustment       ( this, SdResId( FT_ADJUSTMENT ) ),
         aLbAdjustment       ( this, SdResId( LB_ADJUSTMENT ) ),
         aBtnCreateGroup     ( this, SdResId( BTN_CREATE_GROUP ) ),
         aGrpAnimation       ( this, SdResId( GRP_ANIMATION_GROUP ) ),
-        pBindings           ( pInBindings ),
+
         pWin                ( pParent ),
         pBitmapEx           ( NULL ),
+
         bMovie              ( FALSE ),
-        bAllObjects         ( FALSE )
+        bAllObjects         ( FALSE ),
+
+        pBindings           ( pInBindings )
 {
     FreeResource();
 
@@ -421,11 +426,12 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
     }
     else if( p == &aRbtBitmap || aRbtBitmap.IsChecked() )
     {
-        ULONG n = aNumFldBitmap.GetValue() - 1;
-        if( n >= 0 )
+        ULONG n = aNumFldBitmap.GetValue();
+        if( n > 0 )
         {
-            Time* pTime = static_cast< Time* >( aTimeList.GetObject( n ) );
-            aTimeField.SetTime( *pTime );
+            Time* pTime = static_cast< Time* >( aTimeList.GetObject( n - 1 ) );
+            if( pTime )
+                aTimeField.SetTime( *pTime );
         }
         aTimeField.Enable();
         aLbLoopCount.Enable();
@@ -752,9 +758,9 @@ Fraction AnimationWindow::GetScale()
         for( ULONG i = 0; i < nCount; i++ )
         {
             pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
-            Size aSize( pBitmapEx->GetBitmap().GetSizePixel() );
-            aBmpSize.Width() = Max( aBmpSize.Width(), aSize.Width() );
-            aBmpSize.Height() = Max( aBmpSize.Height(), aSize.Height() );
+            Size aTempSize( pBitmapEx->GetBitmap().GetSizePixel() );
+            aBmpSize.Width() = Max( aBmpSize.Width(), aTempSize.Width() );
+            aBmpSize.Height() = Max( aBmpSize.Height(), aTempSize.Height() );
         }
 
         aBmpSize.Width() += 10;
@@ -975,7 +981,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     bAnimObj = TRUE;
                 }
             }
-            else if( bAllObjects || ( pAnimInfo && pAnimInfo->bIsMovie ) )
+            else if( bAllObjects || ( pAnimInfo && pAnimInfo->mbIsMovie ) )
             {
                 // Mehrere Objekte
                 SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
@@ -1127,7 +1133,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
 
             // Offset fuer die gewuenschte Ausrichtung bestimmen
-            const Size aBmpSize( pBitmapEx->GetSizePixel() );
+            const Size aBitmapSize( pBitmapEx->GetSizePixel() );
 
             switch( eBA )
             {
@@ -1135,39 +1141,39 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
                 break;
 
                 case BA_LEFT:
-                    aPt.Y() = (aMaxSizePix.Height() - aBmpSize.Height()) >> 1;
+                    aPt.Y() = (aMaxSizePix.Height() - aBitmapSize.Height()) >> 1;
                 break;
 
                 case BA_LEFT_DOWN:
-                    aPt.Y() = aMaxSizePix.Height() - aBmpSize.Height();
+                    aPt.Y() = aMaxSizePix.Height() - aBitmapSize.Height();
                 break;
 
                 case BA_UP:
-                    aPt.X() = (aMaxSizePix.Width() - aBmpSize.Width()) >> 1;
+                    aPt.X() = (aMaxSizePix.Width() - aBitmapSize.Width()) >> 1;
                 break;
 
                 case BA_CENTER:
-                    aPt.X()  = (aMaxSizePix.Width() - aBmpSize.Width()) >> 1;
-                    aPt.Y() = (aMaxSizePix.Height() - aBmpSize.Height()) >> 1;
+                    aPt.X()  = (aMaxSizePix.Width() - aBitmapSize.Width()) >> 1;
+                    aPt.Y() = (aMaxSizePix.Height() - aBitmapSize.Height()) >> 1;
                 break;
 
                 case BA_DOWN:
-                    aPt.X()  = (aMaxSizePix.Width() - aBmpSize.Width()) >> 1;
-                    aPt.Y() = aMaxSizePix.Height() - aBmpSize.Height();
+                    aPt.X()  = (aMaxSizePix.Width() - aBitmapSize.Width()) >> 1;
+                    aPt.Y() = aMaxSizePix.Height() - aBitmapSize.Height();
                 break;
 
                 case BA_RIGHT_UP:
-                    aPt.X() = aMaxSizePix.Width() - aBmpSize.Width();
+                    aPt.X() = aMaxSizePix.Width() - aBitmapSize.Width();
                 break;
 
                 case BA_RIGHT:
-                    aPt.X()  = aMaxSizePix.Width() - aBmpSize.Width();
-                    aPt.Y() = (aMaxSizePix.Height() - aBmpSize.Height()) >> 1;
+                    aPt.X()  = aMaxSizePix.Width() - aBitmapSize.Width();
+                    aPt.Y() = (aMaxSizePix.Height() - aBitmapSize.Height()) >> 1;
                 break;
 
                 case BA_RIGHT_DOWN:
-                    aPt.X()  = aMaxSizePix.Width() - aBmpSize.Width();
-                    aPt.Y() = aMaxSizePix.Height() - aBmpSize.Height();
+                    aPt.X()  = aMaxSizePix.Width() - aBitmapSize.Width();
+                    aPt.Y() = aMaxSizePix.Height() - aBitmapSize.Height();
                 break;
 
             }
@@ -1182,7 +1188,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
             aAnimBmp.aBmpEx = *pBitmapEx;
             aAnimBmp.aPosPix = aPt;
-            aAnimBmp.aSizePix = aBmpSize;
+            aAnimBmp.aSizePix = aBitmapSize;
             aAnimBmp.nWait = nTime;
             aAnimBmp.eDisposal = DISPOSE_BACK;
             aAnimBmp.bUserInput = FALSE;
@@ -1283,11 +1289,11 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
         // Animationsinformation erzeugen
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pGroup,true);
-        pInfo->eEffect = presentation::AnimationEffect_NONE;
-        pInfo->eSpeed = presentation::AnimationSpeed_MEDIUM;
-        pInfo->bActive = TRUE;
-        pInfo->bIsMovie = TRUE;
-        pInfo->aBlueScreen = COL_WHITE;
+        pInfo->meEffect = presentation::AnimationEffect_NONE;
+        pInfo->meSpeed = presentation::AnimationSpeed_MEDIUM;
+        pInfo->mbActive = TRUE;
+        pInfo->mbIsMovie = TRUE;
+        pInfo->maBlueScreen = COL_WHITE;
 
         rView.InsertObjectAtView( pGroup, *pPV, SDRINSERT_SETDEFLAYER);
     }
@@ -1312,10 +1318,10 @@ void AnimationWindow::DataChanged( const DataChangedEvent& rDCEvt )
 \************************************************************************/
 
 AnimationControllerItem::AnimationControllerItem(
-    USHORT nId,
+    USHORT _nId,
     AnimationWindow* pAnimWin,
-    SfxBindings*    pBindings)
-    : SfxControllerItem( nId, *pBindings ),
+    SfxBindings*    _pBindings)
+    : SfxControllerItem( _nId, *_pBindings ),
       pAnimationWin( pAnimWin )
 {
 }
