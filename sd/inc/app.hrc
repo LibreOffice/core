@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:19:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,5 +460,8 @@
 #define SID_ASSIGN_LAYOUT                   (SID_SD_START+435)
 #define SID_DISPLAY_MASTER_BACKGROUND       (SID_SD_START+436)
 #define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
+
+// Add companion for the SID_HIDE_SLIDE (that is defined in svx)
+#define SID_SHOW_SLIDE                      (SID_SD_START+440)
 
 #endif
