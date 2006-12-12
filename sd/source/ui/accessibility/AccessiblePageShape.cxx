@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:24:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ sal_Int32 SAL_CALL
     an exception for a wrong index.
 */
 uno::Reference<XAccessible> SAL_CALL
-    AccessiblePageShape::getAccessibleChild (long nIndex)
+    AccessiblePageShape::getAccessibleChild(long )
     throw (::com::sun::star::uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException (
