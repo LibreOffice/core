@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoobjects.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:18:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,9 @@ using namespace sd;
 ///////////////////////////////////////////////////////////////////////
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
-: mpUndoUsercall(0), mpUndoPresObj(0), mpUndoAnimation(0)
+: mpUndoUsercall(0)
+, mpUndoAnimation(0)
+, mpUndoPresObj(0)
 {
     SdPage* pPage = dynamic_cast< SdPage* >( rObject.GetPage() );
     if( pPage )
@@ -105,7 +107,8 @@ void UndoRemovePresObjectImpl::Redo()
 
 
 UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
-: SdrUndoRemoveObj( rObject, bOrdNumDirect ), UndoRemovePresObjectImpl( rObject ), UndoShapeWatcher(rObject)
+: SdrUndoRemoveObj( rObject, bOrdNumDirect ), UndoRemovePresObjectImpl( rObject )
+, mxSdrObject(&rObject)
 {
 }
 
@@ -113,8 +116,8 @@ UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 
 void UndoRemoveObject::Undo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoRemoveObject::Undo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoRemoveObject::Undo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
         SdrUndoRemoveObj::Undo();
         UndoRemovePresObjectImpl::Undo();
@@ -125,8 +128,8 @@ void UndoRemoveObject::Undo()
 
 void UndoRemoveObject::Redo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoRemoveObject::Redo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoRemoveObject::Redo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
         UndoRemovePresObjectImpl::Redo();
         SdrUndoRemoveObj::Redo();
@@ -136,7 +139,9 @@ void UndoRemoveObject::Redo()
 ///////////////////////////////////////////////////////////////////////
 
 UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
-: SdrUndoDelObj( rObject, bOrdNumDirect ), UndoRemovePresObjectImpl( rObject ), UndoShapeWatcher(rObject)
+: SdrUndoDelObj( rObject, bOrdNumDirect )
+, UndoRemovePresObjectImpl( rObject )
+, mxSdrObject(&rObject)
 {
 }
 
@@ -144,8 +149,8 @@ UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 
 void UndoDeleteObject::Undo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoDeleteObject::Undo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoDeleteObject::Undo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
         SdrUndoDelObj::Undo();
         UndoRemovePresObjectImpl::Undo();
@@ -156,8 +161,8 @@ void UndoDeleteObject::Undo()
 
 void UndoDeleteObject::Redo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoDeleteObject::Redo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoDeleteObject::Redo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
         UndoRemovePresObjectImpl::Redo();
         SdrUndoDelObj::Redo();
@@ -167,7 +172,9 @@ void UndoDeleteObject::Redo()
 ///////////////////////////////////////////////////////////////////////
 
 UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
-: SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect ), UndoRemovePresObjectImpl( rOldObject ), UndoShapeWatcher( rOldObject )
+: SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect )
+, UndoRemovePresObjectImpl( rOldObject )
+, mxSdrObject( &rOldObject )
 {
 }
 
@@ -175,8 +182,8 @@ UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObje
 
 void UndoReplaceObject::Undo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoReplaceObject::Undo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoReplaceObject::Undo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
         SdrUndoReplaceObj::Undo();
         UndoRemovePresObjectImpl::Undo();
@@ -187,8 +194,8 @@ void UndoReplaceObject::Undo()
 
 void UndoReplaceObject::Redo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoReplaceObject::Redo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoReplaceObject::Redo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
         UndoRemovePresObjectImpl::Redo();
         SdrUndoReplaceObj::Redo();
@@ -198,7 +205,10 @@ void UndoReplaceObject::Redo()
 ///////////////////////////////////////////////////////////////////////
 
 UndoObjectSetText::UndoObjectSetText( SdrObject& rObject )
-: SdrUndoObjSetText( rObject ), mpUndoAnimation(0), mbNewEmptyPresObj(false), UndoShapeWatcher(rObject)
+: SdrUndoObjSetText( rObject )
+, mpUndoAnimation(0)
+, mbNewEmptyPresObj(false)
+, mxSdrObject( &rObject )
 {
     SdPage* pPage = dynamic_cast< SdPage* >( rObject.GetPage() );
     if( pPage && pPage->hasAnimationNode() )
@@ -222,10 +232,10 @@ UndoObjectSetText::~UndoObjectSetText()
 
 void UndoObjectSetText::Undo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoObjectSetText::Undo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectSetText::Undo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
-        mbNewEmptyPresObj = mpObjectSafe->IsEmptyPresObj() ? true : false;
+        mbNewEmptyPresObj = mxSdrObject->IsEmptyPresObj() ? true : false;
         SdrUndoObjSetText::Undo();
         if( mpUndoAnimation )
             mpUndoAnimation->Undo();
@@ -236,13 +246,13 @@ void UndoObjectSetText::Undo()
 
 void UndoObjectSetText::Redo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoObjectSetText::Redo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectSetText::Redo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
         if( mpUndoAnimation )
             mpUndoAnimation->Redo();
         SdrUndoObjSetText::Redo();
-        mpObjectSafe->SetEmptyPresObj(mbNewEmptyPresObj ? TRUE : FALSE );
+        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? TRUE : FALSE );
     }
 }
 
@@ -250,10 +260,10 @@ void UndoObjectSetText::Redo()
 // Undo for SdrObject::SetUserCall()
 
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
-:   SdrUndoObj(rObject),
-    UndoShapeWatcher(rObject),
-    mpOldUserCall((SdPage*)rObject.GetUserCall()),
-    mpNewUserCall(0)
+:   SdrUndoObj(rObject)
+,   mpOldUserCall((SdPage*)rObject.GetUserCall())
+,   mpNewUserCall(0)
+,   mxSdrObject( &rObject )
 {
 }
 
@@ -261,11 +271,11 @@ UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
 
 void UndoObjectUserCall::Undo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoObjectUserCall::Undo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectUserCall::Undo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
-        mpNewUserCall = mpObjectSafe->GetUserCall();
-        mpObjectSafe->SetUserCall(mpOldUserCall);
+        mpNewUserCall = mxSdrObject->GetUserCall();
+        mxSdrObject->SetUserCall(mpOldUserCall);
     }
 }
 
@@ -273,10 +283,10 @@ void UndoObjectUserCall::Undo()
 
 void UndoObjectUserCall::Redo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoObjectUserCall::Redo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectUserCall::Redo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
-        mpObjectSafe->SetUserCall(mpNewUserCall);
+        mxSdrObject->SetUserCall(mpNewUserCall);
     }
 }
 
@@ -284,29 +294,30 @@ void UndoObjectUserCall::Redo()
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
 UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
-:   SdrUndoObj(rObject),
-    UndoShapeWatcher(rObject),
-    meOldKind(PRESOBJ_NONE),
-    meNewKind(PRESOBJ_NONE),
-    mpPage( dynamic_cast< SdPage* >( rObject.GetPage() ) )
+:   SdrUndoObj(rObject)
+,   meOldKind(PRESOBJ_NONE)
+,   meNewKind(PRESOBJ_NONE)
+,   mxPage( rObject.GetPage() )
+,   mxSdrObject( &rObject )
 {
-    DBG_ASSERT( mpPage, "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
+    DBG_ASSERT( mxPage.is(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
 
-    if( mpPage)
-        meOldKind = mpPage->GetPresObjKind( &rObject );
+    if( mxPage.is() )
+        meOldKind = static_cast< SdPage* >( mxPage.get() )->GetPresObjKind( &rObject );
 }
 
 //---------------------------------------------------------------------
 
 void UndoObjectPresentationKind::Undo()
 {
-    if( mpPage && mpObjectSafe )
+    if( mxPage.is() && mxSdrObject.is() )
     {
-        meNewKind = mpPage->GetPresObjKind( mpObjectSafe );
+        SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
+        meNewKind =  pPage->GetPresObjKind( mxSdrObject.get() );
         if( meNewKind != PRESOBJ_NONE )
-            mpPage->RemovePresObj( mpObjectSafe );
+            pPage->RemovePresObj( mxSdrObject.get() );
         if( meOldKind != PRESOBJ_NONE )
-            mpPage->InsertPresObj( mpObjectSafe, meOldKind );
+            pPage->InsertPresObj( mxSdrObject.get(), meOldKind );
     }
 }
 
@@ -314,19 +325,20 @@ void UndoObjectPresentationKind::Undo()
 
 void UndoObjectPresentationKind::Redo()
 {
-    if( mpPage && mpObjectSafe )
+    if( mxPage.is() && mxSdrObject.is() )
     {
+        SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
         if( meOldKind != PRESOBJ_NONE )
-            mpPage->RemovePresObj( mpObjectSafe );
+            pPage->RemovePresObj( mxSdrObject.get() );
         if( meNewKind != PRESOBJ_NONE )
-            mpPage->InsertPresObj( mpObjectSafe, meNewKind );
+            pPage->InsertPresObj( mxSdrObject.get(), meNewKind );
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 UndoAutoLayoutPosAndSize::UndoAutoLayoutPosAndSize( SdPage& rPage )
-: mrPage( rPage )
+: mxPage( &rPage )
 {
 }
 
@@ -341,15 +353,17 @@ void UndoAutoLayoutPosAndSize::Undo()
 
 void UndoAutoLayoutPosAndSize::Redo()
 {
-    mrPage.SetAutoLayout( mrPage.GetAutoLayout(), FALSE, FALSE );
+    SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
+    if( pPage )
+        pPage->SetAutoLayout( pPage->GetAutoLayout(), FALSE, FALSE );
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 : SdrUndoGeoObj( rNewObj )
-, UndoShapeWatcher( rNewObj )
-, mpPage( dynamic_cast< SdPage* >( rNewObj.GetPage() ) )
+, mxPage( rNewObj.GetPage() )
+, mxSdrObject( &rNewObj )
 {
 }
 
@@ -357,12 +371,12 @@ UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 
 void UndoGeoObject::Undo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoGeoObject::Undo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoGeoObject::Undo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
-        if( mpPage )
+        if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( mpPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( static_cast< SdPage* >( mxPage.get() )->maLockAutoLayoutArrangement );
             SdrUndoGeoObj::Undo();
         }
         else
@@ -376,12 +390,12 @@ void UndoGeoObject::Undo()
 
 void UndoGeoObject::Redo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoGeoObject::Redo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoGeoObject::Redo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
-        if( mpPage )
+        if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( mpPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( static_cast< SdPage* >(mxPage.get())->maLockAutoLayoutArrangement );
             SdrUndoGeoObj::Redo();
         }
         else
@@ -397,8 +411,8 @@ void UndoGeoObject::Redo()
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 : SdrUndoAttrObj( rObject, bStyleSheet1 ? TRUE : FALSE, bSaveText ? TRUE : FALSE )
-, UndoShapeWatcher( rObject )
-, mpPage( dynamic_cast< SdPage* >( rObject.GetPage() ) )
+, mxPage( rObject.GetPage() )
+, mxSdrObject( &rObject )
 {
 }
 
@@ -406,12 +420,12 @@ UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSav
 
 void UndoAttrObject::Undo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoAttrObject::Undo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoAttrObject::Undo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
-        if( mpPage )
+        if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( mpPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( static_cast< SdPage* >( mxPage.get() )->maLockAutoLayoutArrangement );
             SdrUndoAttrObj::Undo();
         }
         else
@@ -425,12 +439,12 @@ void UndoAttrObject::Undo()
 
 void UndoAttrObject::Redo()
 {
-    DBG_ASSERT( mpObjectSafe, "sd::UndoAttrObject::Redo(), object already dead!" );
-    if( mpObjectSafe )
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoAttrObject::Redo(), object already dead!" );
+    if( mxSdrObject.is() )
     {
-        if( mpPage )
+        if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( mpPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( static_cast< SdPage* >( mxPage.get() )->maLockAutoLayoutArrangement );
             SdrUndoAttrObj::Redo();
         }
         else
@@ -438,27 +452,4 @@ void UndoAttrObject::Redo()
             SdrUndoAttrObj::Redo();
         }
     }
-}
-
-//---------------------------------------------------------------------
-
-UndoShapeWatcher::UndoShapeWatcher( SdrObject& rObject )
-: mpObjectSafe( &rObject )
-{
-    rObject.AddObjectUser( *this );
-}
-
-UndoShapeWatcher::~UndoShapeWatcher()
-{
-    if( mpObjectSafe )
-    {
-        mpObjectSafe->RemoveObjectUser( *this );
-        mpObjectSafe = 0;
-    }
-}
-
-void UndoShapeWatcher::ObjectInDestruction(const SdrObject& rObject)
-{
-//  DBG_ERROR( "sd::UndoShapeWatcher::ObjectInDestruction(), shape destructed while still in undo! undo stack now is corrupted!" );
-    mpObjectSafe = 0;
 }
