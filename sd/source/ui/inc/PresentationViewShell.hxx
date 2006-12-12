@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationViewShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:12:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:36:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ public:
     TYPEINFO();
 
     SFX_DECL_VIEWFACTORY(PresViewShell);
-    SFX_DECL_INTERFACE( SD_IF_SDPRESVIEWSHELL );
+    SFX_DECL_INTERFACE( SD_IF_SDPRESVIEWSHELL )
 
     PresentationViewShell (
         SfxViewFrame* pFrame,
