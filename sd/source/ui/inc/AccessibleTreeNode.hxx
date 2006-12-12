@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTreeNode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:01:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,8 @@ public:
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener )
         throw (::com::sun::star::uno::RuntimeException);
 
+    using cppu::WeakComponentImplHelperBase::addEventListener;
+    using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XAccessibleContext  ==============================================
 
