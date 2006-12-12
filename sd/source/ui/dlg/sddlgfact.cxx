@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddlgfact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:42:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,85 +40,56 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include "sddlgfact.hxx"
-
-// class ResId
+#include <sfx2/objsh.hxx>
 #include <tools/rc.hxx>
-//#include <sfx2/basedlgs.hxx>
+#include "sddlgfact.hxx"
 #include "strings.hrc"
-
-#include "BreakDlg.hxx" //add for BreakDlg
-#include "brkdlg.hrc"
-#include "copydlg.hxx" //add for CopyDlg
-#include "copydlg.hrc"
-#include "custsdlg.hxx" //add for SdCustomShowDlg
-#include "custsdlg.hrc"
-#include "dlg_char.hxx" //add for SdCharDlg
-#include "dlgpage.hxx" //add for SdPageDlg
-#include "dlgass.hxx" //add for AssistentDlg
-#include "dlgass.hrc"
-#include "dlgfield.hxx" //add for SdModifyFieldDlg
-#include "dlgfield.hrc"
-#include "dlgsnap.hxx" //add for SdSnapLineDlg
-#include "dlgsnap.hrc"
-#include "ins_page.hxx" //add for SdInsertLayerDlg
-#include "ins_page.hrc"
-#include "ins_paste.hxx" //add for SdInsertPasteDlg
-#include "ins_paste.hrc"
-#include "inspagob.hxx" //add for SdInsertPagesObjsDlg
-#include "inspagob.hrc"
-#include "morphdlg.hxx" //add for MorphDlg
-#include "morphdlg.hrc"
-#include "new_foil.hxx" //add for SdNewFoilDlg
-#include "new_foil.hrc"
-#include "OutlineBulletDlg.hxx" //add for OutlineBulletDlg
-#include "paragr.hxx" //add for SdParagraphDlg
-#include "paragr.hrc"
-#include "present.hxx" //add for SdStartPresentationDlg
-#include "present.hrc"
-#include "printdlg.hxx" //add for SdPrintDlg
-#include "printdlg.hrc"
-#include "prltempl.hxx" //add for SdPresLayoutTemplateDlg
-#include "prltempl.hrc"
-#include "sdpreslt.hxx" //add for SdPresLayoutDlg
-#include "sdpreslt.hrc"
-#include "tabtempl.hxx" //add for SdTabTemplateDlg
-#include "tabtempl.hrc"
-#include "tpaction.hxx" //add for SdActionDlg
-#include "tpaction.hrc"
-#include "vectdlg.hxx" //add for SdVectorizeDlg
-#include "vectdlg.hrc"
-#include "tpoption.hxx" //add for SdTpOptionsSnap, SdTpOptionsContents, SdTpOptionsMisc
-#include "tpoption.hrc"
-#include "prntopts.hxx" //add for SdPrintOptions
-#include "prntopts.hrc"
-#include "pubdlg.hxx" //add for SdPublishingDlg
-#include "pubdlg.hrc"
+#include "BreakDlg.hxx"
+#include "copydlg.hxx"
+#include "custsdlg.hxx"
+#include "dlg_char.hxx"
+#include "dlgpage.hxx"
+#include "dlgass.hxx"
+#include "dlgfield.hxx"
+#include "dlgsnap.hxx"
+#include "ins_page.hxx"
+#include "ins_paste.hxx"
+#include "inspagob.hxx"
+#include "morphdlg.hxx"
+#include "OutlineBulletDlg.hxx"
+#include "paragr.hxx"
+#include "present.hxx"
+#include "printdlg.hxx"
+#include "prltempl.hxx"
+#include "sdpreslt.hxx"
+#include "tabtempl.hxx"
+#include "tpaction.hxx"
+#include "vectdlg.hxx"
+#include "tpoption.hxx"
+#include "prntopts.hxx"
+#include "pubdlg.hxx"
 #include "masterlayoutdlg.hxx"
-#include "masterlayoutdlg.hrc"
 #include "headerfooterdlg.hxx"
-#include "headerfooterdlg.hrc"
 
-IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl); // add for BreakDlg
-IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl); // add for CopyDlg
-IMPL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl); // CHINA001 add for SdCustomShowDlg
-IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for SdCharDlg
+IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractAssistentDlg_Impl); //add for AssistentDlg
-IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl); //add for SdModifyFieldDlg
-IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl); //add for SdSnapLineDlg
-IMPL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl); //add for SdInsertLayerDlg
-IMPL_ABSTDLG_BASE(AbstractSdInsertPasteDlg_Impl); //add for SdInsertPasteDlg
-IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl); //add for SdInsertPagesObjsDlg
-IMPL_ABSTDLG_BASE(AbstractMorphDlg_Impl); //add for MorphDlg
-IMPL_ABSTDLG_BASE(AbstractSdNewFoilDlg_Impl); //add for SdNewFoilDlg
-IMPL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl); //add for SdStartPresentationDlg
-IMPL_ABSTDLG_BASE(AbstractSdPrintDlg_Impl); //add for SdPrintDlg
-IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl); //add for SdPresLayoutDlg
-IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl); //add for SdActionDlg
-IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl); //add for SdVectorizeDlg
-IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl); //add for SdPublishingDlg
-IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl); // add for HeaderFooterDialog
+IMPL_ABSTDLG_BASE(AbstractAssistentDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdInsertPasteDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractMorphDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdPrintDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractBulletDialog_Impl);
 
 //AbstractCopyDlg_Impl begin
@@ -148,12 +119,10 @@ const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-//add by CHINA001
 const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-//add by CHINA001
 void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
@@ -180,12 +149,10 @@ const SfxItemSet* AbstractBulletDialog_Impl::GetOutputItemSet() const
 {
     return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetOutputItemSet();
 }
-//add by CHINA001
 const USHORT* AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetInputRanges( pItem );
 }
-//add by CHINA001
 void AbstractBulletDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetInputSet( pInSet );
@@ -360,13 +327,6 @@ BOOL AbstractMorphDlg_Impl::IsOrientationFade() const
 }
 // AbstractMorphDlg_Impl end
 
-//AbstractSdNewFoilDlg_Impl begin
-void AbstractSdNewFoilDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
-{
-    pDlg->GetAttr( rOutAttrs );
-}
-// AbstractSdNewFoilDlg_Impl end
-
 //AbstractSdStartPresDlg_Impl begin
 void AbstractSdStartPresDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
@@ -429,486 +389,180 @@ void AbstractHeaderFooterDialog_Impl::Cancel( TabPage* pPage )
 //-------------- SdAbstractDialogFactory implementation--------------
 
 //add for BreakDlg begin
-VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateBreakDlg( const ResId& rResId,
+VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateBreakDlg(
                                             ::Window* pWindow,
                                             ::sd::DrawView* pDrView,
                                             ::sd::DrawDocShell* pShell,
                                             ULONG nSumActionCount,
                                             ULONG nObjCount ) //add for BreakDlg
 {
-    Dialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_BREAK :
-            pDlg = new ::sd::BreakDlg( pWindow, pDrView, pShell, nSumActionCount, nObjCount );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    return new VclAbstractDialog_Impl( new ::sd::BreakDlg( pWindow, pDrView, pShell, nSumActionCount, nObjCount ) );
 }
 //add for BreakDlg end
 
 //add for CopyDlg begin
-AbstractCopyDlg * SdAbstractDialogFactory_Impl::CreateCopyDlg( const ResId& rResId,
+AbstractCopyDlg * SdAbstractDialogFactory_Impl::CreateCopyDlg(
                                             ::Window* pWindow, const SfxItemSet& rInAttrs,
                                             XColorTable* pColTab, ::sd::View* pView ) //add for CopyDlg
 {
-    ::sd::CopyDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_COPY :
-            pDlg = new ::sd::CopyDlg( pWindow, rInAttrs, pColTab, pView );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractCopyDlg_Impl( pDlg );
-    return 0;
+    return new AbstractCopyDlg_Impl( new ::sd::CopyDlg( pWindow, rInAttrs, pColTab, pView ) );
 }
 //add for CopyDlg end
 
 //add for SdCustomShowDlg begin
-AbstractSdCustomShowDlg * SdAbstractDialogFactory_Impl::CreateSdCustomShowDlg( const ResId& rResId,
-                                            ::Window* pWindow, SdDrawDocument& rDrawDoc ) //add for SdCustomShowDlg
+AbstractSdCustomShowDlg * SdAbstractDialogFactory_Impl::CreateSdCustomShowDlg( ::Window* pWindow, SdDrawDocument& rDrawDoc ) //add for SdCustomShowDlg
 {
-    SdCustomShowDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_CUSTOMSHOW :
-            pDlg = new SdCustomShowDlg( pWindow, rDrawDoc );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdCustomShowDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdCustomShowDlg_Impl( new SdCustomShowDlg( pWindow, rDrawDoc ) );
 }
 //add for SdCustomShowDlg end
 
 // add for SdCharDlg begin
-SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabDialog( const ResId& rResId,
-                                            ::Window* pParent, const SfxItemSet* pAttr,
-                                            SfxObjectShell* pDocShell, BOOL bAreaPage ) //add for SdCharDlg, SdPageDlg
+SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabCharDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell )
 {
+    return new AbstractTabDialog_Impl( new SdCharDlg( pParent, pAttr, pDocShell ) );
+}
 
-    SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case TAB_CHAR :
-            pDlg = new SdCharDlg( pParent, pAttr, pDocShell );
-            break;
-        case TAB_PAGE :
-            pDlg = new SdPageDlg( pDocShell, pParent, pAttr, bAreaPage );
-            break;
-        default:
-            break;
-    }
 
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
-
+SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, BOOL bAreaPage )
+{
+    return new AbstractTabDialog_Impl( new SdPageDlg( pDocShell, pParent, pAttr, bAreaPage ) );
 }
 // add for SdCharDlg end
 
 //add for AssistentDlg begin
-AbstractAssistentDlg * SdAbstractDialogFactory_Impl::CreateAssistentDlg( const ResId& rResId,
-                                            ::Window* pParent, BOOL bAutoPilot) //add for AssistentDlg
+AbstractAssistentDlg * SdAbstractDialogFactory_Impl::CreateAssistentDlg( ::Window* pParent, BOOL bAutoPilot)
 {
-    AssistentDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_ASS :
-            pDlg = new AssistentDlg( pParent, bAutoPilot );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractAssistentDlg_Impl( pDlg );
-    return 0;
+    return new AbstractAssistentDlg_Impl( new AssistentDlg( pParent, bAutoPilot ) );
 }
 //add for AssistentDlg end
 
 //add for SdModifyFieldDlg begin
-AbstractSdModifyFieldDlg * SdAbstractDialogFactory_Impl::CreateSdModifyFieldDlg( const ResId& rResId,
-                                            ::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) //add for SdModifyFieldDlg
+AbstractSdModifyFieldDlg * SdAbstractDialogFactory_Impl::CreateSdModifyFieldDlg( ::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet )
 {
-    SdModifyFieldDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_FIELD_MODIFY :
-            pDlg = new SdModifyFieldDlg( pWindow, pInField, rSet );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdModifyFieldDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdModifyFieldDlg_Impl( new SdModifyFieldDlg( pWindow, pInField, rSet ) );
 }
 //add for SdModifyFieldDlg end
 
 //add for SdSnapLineDlg begin
-AbstractSdSnapLineDlg * SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg( const ResId& rResId,
-                                            ::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView) //add for SdSnapLineDlg
+AbstractSdSnapLineDlg * SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView)
 {
-    SdSnapLineDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_SNAPLINE :
-            pDlg = new SdSnapLineDlg( pWindow, rInAttrs, pView );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdSnapLineDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdSnapLineDlg_Impl( new SdSnapLineDlg( pWindow, rInAttrs, pView ) );
 }
 //add for SdSnapLineDlg end
 
 //add for SdInsertLayerDlg begin
-AbstractSdInsertLayerDlg * SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg( const ResId& rResId,
-                                            ::Window* pWindow,
-                                            const SfxItemSet& rInAttrs,
-                                            BOOL bDeletable,
-                                            String aStr ) //add for SdInsertLayerDlg
+AbstractSdInsertLayerDlg * SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, BOOL bDeletable, String aStr ) //add for SdInsertLayerDlg
 {
-    SdInsertLayerDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_INSERT_LAYER :
-            pDlg = new SdInsertLayerDlg( pWindow, rInAttrs, bDeletable, aStr );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdInsertLayerDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdInsertLayerDlg_Impl( new SdInsertLayerDlg( pWindow, rInAttrs, bDeletable, aStr ) );
 }
 //add for SdInsertLayerDlg end
 
 //add for SdInsertPasteDlg begin
-AbstractSdInsertPasteDlg * SdAbstractDialogFactory_Impl::CreateSdInsertPasteDlg( const ResId& rResId, ::Window* pWindow ) //add for SdInsertPasteDlg
+AbstractSdInsertPasteDlg * SdAbstractDialogFactory_Impl::CreateSdInsertPasteDlg( ::Window* pWindow )
 {
-    SdInsertPasteDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_INSERT_PASTE :
-            pDlg = new SdInsertPasteDlg( pWindow );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdInsertPasteDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdInsertPasteDlg_Impl( new SdInsertPasteDlg( pWindow ) );
 }
 //add for SdInsertPasteDlg end
 
 //add for SdInsertPagesObjsDlg begin
-AbstractSdInsertPagesObjsDlg * SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg( const ResId& rResId,
-                                                ::Window* pParent,
-                                                const SdDrawDocument* pDoc,
-                                                SfxMedium* pSfxMedium,
-                                                const String& rFileName ) //add for SdInsertPagesObjsDlg
+AbstractSdInsertPagesObjsDlg * SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg( ::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const String& rFileName )
 {
-    SdInsertPagesObjsDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_INSERT_PAGES_OBJS :
-            pDlg = new SdInsertPagesObjsDlg( pParent, pDoc, pSfxMedium, rFileName );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdInsertPagesObjsDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdInsertPagesObjsDlg_Impl( new SdInsertPagesObjsDlg( pParent, pDoc, pSfxMedium, rFileName ) );
 }
 //add for SdInsertPagesObjsDlg end
 
 //add for MorphDlg begin
-AbstractMorphDlg * SdAbstractDialogFactory_Impl::CreateMorphDlg( const ResId& rResId,
-                                                ::Window* pParent,
-                                                const SdrObject* pObj1,
-                                                const SdrObject* pObj2) //add for MorphDlg
+AbstractMorphDlg * SdAbstractDialogFactory_Impl::CreateMorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2)
 {
-    ::sd::MorphDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_MORPH :
-            pDlg = new ::sd::MorphDlg( pParent, pObj1, pObj2 );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractMorphDlg_Impl( pDlg );
-    return 0;
+    return new AbstractMorphDlg_Impl( new ::sd::MorphDlg( pParent, pObj1, pObj2 ) );
 }
 //add for MorphDlg end
 
-//add for SdNewFoilDlg begin
-AbstractSdNewFoilDlg * SdAbstractDialogFactory_Impl::CreateSdNewFoilDlg( const ResId& rResId,
-                                                ::Window* pWindow,
-                                                const SfxItemSet& rInAttrs,
-                                                PageKind ePgKind,
-                                                ::sd::DrawDocShell* pDocShell,
-                                                BOOL bChangeFoil ) //add for SdNewFoilDlg
-{
-    SdNewFoilDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_NEW_FOIL :
-            pDlg = new SdNewFoilDlg( pWindow, rInAttrs, ePgKind, pDocShell, bChangeFoil );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdNewFoilDlg_Impl( pDlg );
-    return 0;
-}
-//add for SdNewFoilDlg end
-
 // add for OutlineBulletDlg begin
-SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdItemSetTabDlg ( const ResId& rResId,
-                                                ::Window* pParent,
-                                                const SfxItemSet* pAttr,
-                                                ::sd::View* pView ) //add for OutlineBulletDlg, SdParagraphDlg
+SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDlg( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
 {
-    switch ( rResId.GetId() )
-    {
-    case TAB_OUTLINEBULLET :
-        return new AbstractBulletDialog_Impl( new ::sd::OutlineBulletDlg( pParent, pAttr, pView ) );
-    case TAB_PARAGRAPH :
-        return new AbstractTabDialog_Impl( new SdParagraphDlg( pParent, pAttr ) );
-    }
-    return 0;
+    return new AbstractBulletDialog_Impl( new ::sd::OutlineBulletDlg( pParent, pAttr, pView ) );
+}
+
+SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdParagraphTabDlg( ::Window* pParent, const SfxItemSet* pAttr )
+{
+    return new AbstractTabDialog_Impl( new SdParagraphDlg( pParent, pAttr ) );
 }
 // add for OutlineBulletDlg end
 
 // add for SdStartPresentationDlg begin
-AbstractSdStartPresDlg *  SdAbstractDialogFactory_Impl::CreateSdStartPresentationDlg( const ResId& rResId,
-                                                ::Window* pWindow,
-                                                const SfxItemSet& rInAttrs,
-                                                List& rPageNames,
-                                                List* pCSList ) //add for SdStartPresentationDlg
+AbstractSdStartPresDlg *  SdAbstractDialogFactory_Impl::CreateSdStartPresentationDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, List& rPageNames, List* pCSList )
 {
-
-    SdStartPresentationDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_START_PRESENTATION :
-            pDlg = new SdStartPresentationDlg( pWindow, rInAttrs, rPageNames, pCSList );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdStartPresDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdStartPresDlg_Impl( new SdStartPresentationDlg( pWindow, rInAttrs, rPageNames, pCSList ) );
 }
 // add for SdStartPresentationDlg end
 
 // add for SdPrintDlg begin
-AbstractSdPrintDlg *  SdAbstractDialogFactory_Impl::CreateSdPrintDlg( const ResId& rResId, ::Window* pWindow ) //add for SdPrintDlg
+AbstractSdPrintDlg *  SdAbstractDialogFactory_Impl::CreateSdPrintDlg( ::Window* pWindow )
 {
-
-    SdPrintDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_PRINT_WARNINGS :
-            pDlg = new SdPrintDlg( pWindow );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdPrintDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdPrintDlg_Impl( new SdPrintDlg( pWindow ) );
 }
 // add for SdPrintDlg end
 
 // add for SdPresLayoutTemplateDlg begin
-SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg( const ResId& rResId,
-                                                SfxObjectShell* pDocSh, ::Window* pParent,
-                                                SdResId DlgId, SfxStyleSheetBase& rStyleBase,
-                                                PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool ) //add for SdPresLayoutTemplateDlg
+SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, ::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool )
 {
-    if ( rResId.GetId() == TAB_PRES_LAYOUT_TEMPLATE )
-        return new SdPresLayoutTemplateDlg_Impl( new SdPresLayoutTemplateDlg( pDocSh, pParent, DlgId, rStyleBase, ePO, pSSPool ) );
-    else
-        return 0;
+    return new SdPresLayoutTemplateDlg_Impl( new SdPresLayoutTemplateDlg( pDocSh, pParent, DlgId, rStyleBase, ePO, pSSPool ) );
 }
 // add for SdPresLayoutTemplateDlg end
 
 // add for SdPresLayoutDlg begin
-AbstractSdPresLayoutDlg *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg( const ResId& rResId,
-                                                ::sd::DrawDocShell* pDocShell,
-                                                ::sd::ViewShell* pViewShell,
-                                                ::Window* pWindow,
-                                                const SfxItemSet& rInAttrs) //add for SdPresLayoutDlg
+AbstractSdPresLayoutDlg *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg(  ::sd::DrawDocShell* pDocShell, ::sd::ViewShell* pViewShell, ::Window* pWindow, const SfxItemSet& rInAttrs)
 {
-    SdPresLayoutDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_PRESLT :
-            pDlg = new SdPresLayoutDlg( pDocShell, pViewShell, pWindow, rInAttrs );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdPresLayoutDlg_Impl( pDlg );
-    return 0;
-
+    return new AbstractSdPresLayoutDlg_Impl( new SdPresLayoutDlg( pDocShell, pViewShell, pWindow, rInAttrs ) );
 }
 // add for SdPresLayoutDlg end
 
 // add for SdTabTemplateDlg begin
-SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg( const ResId& rResId,
-                                                ::Window* pParent,
-                                                const SfxObjectShell* pDocShell,
-                                                SfxStyleSheetBase& rStyleBase,
-                                                SdrModel* pModel,
-                                                SdrView* pView ) //add for SdTabTemplateDlg
+SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg( ::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView )
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case TAB_TEMPLATE :
-            pDlg = new SdTabTemplateDlg( pParent, pDocShell, rStyleBase, pModel, pView );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    return new AbstractTabDialog_Impl( new SdTabTemplateDlg( pParent, pDocShell, rStyleBase, pModel, pView ) );
 }
 // add for SdTabTemplateDlg end
 
-AbstractSfxSingleTabDialog* SdAbstractDialogFactory_Impl::CreateSfxSingleTabDialog( const ResId& rResId,
-                                            ::Window* pParent,
-                                            const SfxItemSet* pAttr,
-                                            ::sd::View* pView ) //add for SdActionDlg
+AbstractSfxSingleTabDialog* SdAbstractDialogFactory_Impl::CreatSdActionDialog( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
 {
-    SfxSingleTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case TP_ANIMATION_ACTION :
-            pDlg = new SdActionDlg( pParent, pAttr, pView );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSfxSingleTabDialog_Impl( pDlg );
-    return 0;
+    return new AbstractSfxSingleTabDialog_Impl( new SdActionDlg( pParent, pAttr, pView ) );
 }
 
 // add for SdVectorizeDlg begin
-AbstractSdVectorizeDlg *  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg( const ResId& rResId,
-                                                ::Window* pParent, const Bitmap& rBmp,
-                                                ::sd::DrawDocShell* pDocShell ) //add for SdVectorizeDlg
+AbstractSdVectorizeDlg *  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg( ::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell )
 {
-    SdVectorizeDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_VECTORIZE :
-            pDlg = new SdVectorizeDlg( pParent, rBmp, pDocShell );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdVectorizeDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdVectorizeDlg_Impl( new SdVectorizeDlg( pParent, rBmp, pDocShell ) );
 }
 // add for SdVectorizeDlg end
 
 // add for SdPublishingDlg begin
-AbstractSdPublishingDlg *  SdAbstractDialogFactory_Impl::CreateSdPublishingDlg( const ResId& rResId,
-                                                ::Window* pWindow, DocumentType eDocType) //add for SdPublishingDlg
+AbstractSdPublishingDlg *  SdAbstractDialogFactory_Impl::CreateSdPublishingDlg( ::Window* pWindow, DocumentType eDocType)
 {
-    SdPublishingDlg* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case DLG_PUBLISHING :
-            pDlg = new SdPublishingDlg( pWindow, eDocType );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSdPublishingDlg_Impl( pDlg );
-    return 0;
+    return new AbstractSdPublishingDlg_Impl( new SdPublishingDlg( pWindow, eDocType ) );
 }
 // add for SdPublishingDlg end
 
 // Factories for TabPages
-CreateTabPage SdAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
+CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsContentsTabPageCreatorFunc()
 {
-    switch ( nId )
-    {
-        case TP_OPTIONS_CONTENTS:
-            return SdTpOptionsContents::Create;
-            break;
-        case TP_PRINT_OPTIONS:
-            return SdPrintOptions::Create;
-            break;
-        case TP_OPTIONS_MISC:
-            return SdTpOptionsMisc::Create;
-            break;
-        case TP_OPTIONS_SNAP:
-            return SdTpOptionsSnap::Create;
-            break;
-        default:
-            break;
-    }
-
-    return 0;
+    return SdTpOptionsContents::Create;
 }
 
-GetTabPageRanges SdAbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
+CreateTabPage SdAbstractDialogFactory_Impl::GetSdPrintOptionsTabPageCreatorFunc()
 {
-    switch ( nId )
-    {
-    case 1 : //RID_SVXPAGE_TEXTANIMATION :
-            //return SvxTextAnimationPage::GetRanges;
-            break;
-        default:
-            break;
-    }
+    return SdPrintOptions::Create;
+}
 
-    return 0;
+CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsMiscTabPageCreatorFunc()
+{
+    return SdTpOptionsMisc::Create;
+}
+
+CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsSnapTabPageCreatorFunc()
+{
+    return SdTpOptionsSnap::Create;
 }
 
 VclAbstractDialog* SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog( ::Window* pParent,
