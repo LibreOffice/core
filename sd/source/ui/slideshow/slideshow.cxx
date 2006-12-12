@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:02:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,11 +156,11 @@ void Slideshow::deactivate()
     mpImpl->deactivate();
 }
 
-void Slideshow::setWindow( sd::Window* pWindow )
+void Slideshow::setWindow( sd::Window* )
 {
 }
 
-bool Slideshow::requestHelp(const HelpEvent& rHEvt)
+bool Slideshow::requestHelp(const HelpEvent& )
 {
     return false;
 }
@@ -175,11 +175,11 @@ bool Slideshow::keyInput(const KeyEvent& rKEvt)
     return mpImpl->keyInput(rKEvt);
 }
 
-void Slideshow::mouseButtonDown(const MouseEvent& rMEvt)
+void Slideshow::mouseButtonDown(const MouseEvent& )
 {
 }
 
-void Slideshow::mouseMove(const MouseEvent& rMEvt)
+void Slideshow::mouseMove(const MouseEvent& )
 {
 }
 
