@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EditWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:01:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,10 +95,10 @@ EditWindow::EditWindow (Window* pParentWindow, SfxItemPool* pItemPool)
     : Window (pParentWindow, WinBits()),
       DropTargetHelper(this),
       mpEditView(NULL),
+      mpEditEngine(NULL),
       mpHorizontalScrollBar(NULL),
       mpVerticalScrollBar(NULL),
-      mpScrollBox(NULL),
-      mpEditEngine(NULL)
+      mpScrollBox(NULL)
 {
     SetMapMode(MAP_PIXEL);
 
@@ -289,8 +289,8 @@ void EditWindow::DataChanged (const DataChangedEvent&)
                 EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL };
         for (int i = 0;  i < 3;  ++i)
         {
-            const SfxPoolItem *pItem;
-            if ((pItem = mpEditEngineItemPool->GetPoolDefaultItem(  aFntInfoId[i] )))
+            const SfxPoolItem *pItem = mpEditEngineItemPool->GetPoolDefaultItem(  aFntInfoId[i] );
+            if( pItem )
             {
                 const SvxFontItem *pFntItem = ((const SvxFontItem *) pItem);
                 const Font &rFnt = aSettings.GetFieldFont();
@@ -420,7 +420,7 @@ void EditWindow::Command(const CommandEvent& rCEvt)
         Window::Command (rCEvt);
 
 }
-IMPL_LINK_INLINE_START( EditWindow, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_INLINE_START( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
 {
     /*    SmViewShell *pViewSh = rCmdBox.GetView();
     if (pViewSh)
@@ -430,9 +430,9 @@ IMPL_LINK_INLINE_START( EditWindow, MenuSelectHdl, Menu *, pMenu )
 */
     return 0;
 }
-IMPL_LINK_INLINE_END( EditWindow, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_INLINE_END( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
 
-void EditWindow::KeyInput(const KeyEvent& rKEvt)
+void EditWindow::KeyInput(const KeyEvent& )
 {
     /*  if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
@@ -550,7 +550,7 @@ void EditWindow::CreateEditView (void)
 
 
 
-IMPL_LINK( EditWindow, EditStatusHdl, EditStatus *, pStat )
+IMPL_LINK( EditWindow, EditStatusHdl, EditStatus *, EMPTYARG )
 {
     if (!mpEditView)
         return 1;
@@ -561,7 +561,7 @@ IMPL_LINK( EditWindow, EditStatusHdl, EditStatus *, pStat )
     }
 }
 
-IMPL_LINK_INLINE_START( EditWindow, ScrollHdl, ScrollBar *, pScrollBar )
+IMPL_LINK_INLINE_START( EditWindow, ScrollHdl, ScrollBar *, EMPTYARG )
 {
     DBG_ASSERT(mpEditView, "EditView missing");
     if (mpEditView)
@@ -573,7 +573,7 @@ IMPL_LINK_INLINE_START( EditWindow, ScrollHdl, ScrollBar *, pScrollBar )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( EditWindow, ScrollHdl, ScrollBar *, pScrollBar )
+IMPL_LINK_INLINE_END( EditWindow, ScrollHdl, ScrollBar *, EMPTYARG )
 
 Rectangle EditWindow::AdjustScrollBars()
 {
@@ -749,7 +749,7 @@ void EditWindow::MarkError(const Point &rPos)
         const int Col = rPos.X();
         const int Row = rPos.Y() - 1;
 
-        mpEditView->SetSelection(ESelection (Row, Col - 1, Row, Col));
+        mpEditView->SetSelection(ESelection ( (USHORT)Row, (USHORT)(Col - 1), (USHORT)Row, (USHORT)Col));
         GrabFocus();
     }
 }
@@ -837,12 +837,12 @@ void EditWindow::MouseMove(const MouseEvent &rEvt)
         mpEditView->MouseMove(rEvt);
 }
 
-sal_Int8 EditWindow::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 EditWindow::AcceptDrop( const AcceptDropEvent& )
 {
     return mpEditView ? /*mpEditView->QueryDrop( rEvt )*/DND_ACTION_NONE: DND_ACTION_NONE;
 }
 
-sal_Int8 EditWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 EditWindow::ExecuteDrop( const ExecuteDropEvent& )
 {
     return mpEditView ? /*mpEditView->Drop( rEvt )*/DND_ACTION_NONE : DND_ACTION_NONE;
 }
@@ -868,7 +868,7 @@ void EditWindow::SetSelection(const ESelection &rSel)
 BOOL EditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((EditWindow *) this)->GetEditEngine();
-    return pEditEngine ? pEditEngine->GetTextLen() == 0 : FALSE;
+    return (pEditEngine && (pEditEngine->GetTextLen() == 0)) ? TRUE : FALSE;
 }
 
 BOOL EditWindow::IsSelected() const
