@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.217 $
+ *  $Revision: 1.218 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:02:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1005,6 +1005,8 @@ File gid_File_Lib_I18nutil
     Styles = (PACKED,PATCH);
 End
 
+#ifndef SYSTEM_ICU
+
 File gid_File_Lib_Icudata
     TXT_FILE_BODY;
   #ifdef UNX
@@ -1024,7 +1026,7 @@ File gid_File_Lib_Icui18n
     Name = STRING(CONCAT4(icuin,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Icule
@@ -1046,8 +1048,10 @@ File gid_File_Lib_Icuuc
     Name = STRING(CONCAT4(icuuc,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
+
+#endif
 
 File gid_File_Lib_Iiopbrdg
     TXT_FILE_BODY;
