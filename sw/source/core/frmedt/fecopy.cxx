@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -737,7 +737,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             }
 
             if( this != pDestShell && !pDestShell->HasShFcs() )
-                pDestShell->Imp()->GetDrawView()->SetMarkHdlHidden( TRUE );
+                pDestShell->Imp()->GetDrawView()->hideMarkHandles();
         }
     }
     else if ( IsObjSelected() )
