@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodule.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:27:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdUnoModule_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    return uno::Reference< frame::XDispatch >( new SdUnoModule( rSMgr ) );
+    return uno::Reference< uno::XInterface >( static_cast< cppu::OWeakObject* >( new SdUnoModule( rSMgr ) ) );
 }
 
     // XNotifyingDispatch
@@ -118,11 +118,11 @@ void SAL_CALL SdUnoModule::dispatch( const ::com::sun::star::util::URL& aURL, co
     dispatchWithNotification(aURL, aArgs, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >());
 }
 
-void SAL_CALL SdUnoModule::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SdUnoModule::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > &, const ::com::sun::star::util::URL&) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL SdUnoModule::removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SdUnoModule::removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > &, const ::com::sun::star::util::URL&) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
@@ -142,7 +142,7 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SdUnoModule::queryDispatches( const 
 }
 
 // XDispatchProvider
-REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, const OUSTRING& sTargetFrameName, sal_Int32 eSearchFlags    ) throw( RUNTIMEEXCEPTION )
+REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, const OUSTRING&, sal_Int32 ) throw( RUNTIMEEXCEPTION )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SdDLL::Init();
