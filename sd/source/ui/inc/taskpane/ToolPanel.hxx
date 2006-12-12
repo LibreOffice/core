@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolPanel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:03:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:58:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,8 @@ public:
         ::com::sun::star::accessibility::XAccessible> CreateAccessibleObject (
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent);
+
+    using Window::GetWindow;
 
 protected:
     /** Initiate a rearrangement of the controls.

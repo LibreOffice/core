@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitledControl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:03:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,9 @@ public:
         ::com::sun::star::accessibility::XAccessible > CreateAccessibleObject (
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent);
+
+    using Window::GetWindow;
+    using Window::Show;
 
 private:
     String msTitle;
