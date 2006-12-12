@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:21:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ const sal_uInt32 ImplTranslatePresetSubType( const sal_uInt32 nPresetClass, cons
     sal_uInt32  nPresetSubType = 0;
     sal_Bool    bTranslated = sal_False;
 
-    if ( ( nPresetClass == EffectPresetClass::ENTRANCE ) || ( nPresetClass == EffectPresetClass::EXIT ) && ( nPresetId != 21 ) )
+    if ( ( nPresetClass == (sal_uInt32)EffectPresetClass::ENTRANCE ) || ( nPresetClass == (sal_uInt32)EffectPresetClass::EXIT ) && ( nPresetId != 21 ) )
     {
         switch( nPresetId )
         {
@@ -883,7 +883,7 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
 }
 
 void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnimationNode >& xNode,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >* pParent, const sal_Int32 nGroupLevel, const sal_Int16 nFillDefault )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >*, const sal_Int32, const sal_Int16 nFillDefault )
 {
     EscherExAtom    aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
     AnimationNode   aAnim;
@@ -1127,7 +1127,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
             else
             {
                 const preset_maping* p = gPresetMaping;
-                while( p->mpStrPresetId && ((p->mnPresetClass != nAPIPresetClass) || !sPreset.equalsAscii( p->mpStrPresetId )) )
+                while( p->mpStrPresetId && ((p->mnPresetClass != (sal_Int32)nAPIPresetClass) || !sPreset.equalsAscii( p->mpStrPresetId )) )
                     p++;
 
                 if( p->mpStrPresetId )
@@ -1291,6 +1291,8 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
                 }
             }
             break;
+            default:
+                break;
         }
     }
     return bRet;
@@ -1306,7 +1308,7 @@ void AnimationExporter::exportAnimPropertyString( SvStream& rStrm, const sal_uIn
     writeZString( rStrm, aStr );
 }
 
-void AnimationExporter::exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal, const TranslateMode eTranslateMode )
+void AnimationExporter::exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal, const TranslateMode )
 {
     EscherExAtom aExAtom( rStrm, DFF_msofbtAnimAttributeValue, nPropertyId );
     sal_uInt8 nType = DFF_ANIM_PROP_TYPE_FLOAT;
@@ -1315,7 +1317,7 @@ void AnimationExporter::exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt
           << fFloat;
 }
 
-void AnimationExporter::exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal, const TranslateMode eTranslateMode )
+void AnimationExporter::exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal, const TranslateMode )
 {
     EscherExAtom aExAtom( rStrm, DFF_msofbtAnimAttributeValue, nPropertyId );
     sal_uInt8 nType = DFF_ANIM_PROP_TYPE_INT32 ;
@@ -1323,7 +1325,7 @@ void AnimationExporter::exportAnimPropertyuInt32( SvStream& rStrm, const sal_uIn
           << nVal;
 }
 
-void AnimationExporter::exportAnimPropertyByte( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt8 nVal, const TranslateMode eTranslateMode )
+void AnimationExporter::exportAnimPropertyByte( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt8 nVal, const TranslateMode )
 {
     EscherExAtom aExAtom( rStrm, DFF_msofbtAnimAttributeValue, nPropertyId );
     sal_uInt8 nType = DFF_ANIM_PROP_TYPE_BYTE;
@@ -1692,7 +1694,7 @@ sal_uInt32 GetValueTypeForAttributeName( const rtl::OUString& rAttributeName )
         { "width", 1 },
         { "x", 1 },
         { "y", 1 },
-        NULL
+        { NULL, 0 }
     };
     const Entry* pPtr = &lcl_attributeMap[ 0 ];
     while( pPtr->pName )
@@ -1857,21 +1859,16 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any a
                         begin = end = nCurrentParagraph = 0;
                         while ( xTextParagraphEnumeration->hasMoreElements() )
                         {
-                            Reference< XTextContent > xParagraph;
-                            Any aAny( xTextParagraphEnumeration->nextElement() );
-                            if ( aAny >>= xParagraph )
+                            Reference< XTextRange > xTextRange( xTextParagraphEnumeration->nextElement(), UNO_QUERY );
+                            if ( xTextRange.is() )
                             {
-                                Reference< XTextRange > xTextRange( xParagraph, UNO_QUERY );
-                                if ( xTextRange.is() )
-                                {
-                                    rtl::OUString aParaText( xTextRange->getString() );
-                                    sal_Int32 nLength = aParaText.getLength() + 1;
-                                    end += nLength;
-                                    if ( nCurrentParagraph == nParagraph )
-                                        break;
-                                    nCurrentParagraph++;
-                                    begin += nLength;
-                                }
+                                rtl::OUString aParaText( xTextRange->getString() );
+                                sal_Int32 nLength = aParaText.getLength() + 1;
+                                end += nLength;
+                                if ( nCurrentParagraph == nParagraph )
+                                    break;
+                                nCurrentParagraph++;
+                                begin += nLength;
                             }
                         }
                     }
@@ -2281,5 +2278,5 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
     }
 }
 
-}; // namespace ppt;
+} // namespace ppt;
 
