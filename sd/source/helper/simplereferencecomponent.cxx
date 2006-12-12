@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplereferencecomponent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:23:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,11 @@ void SimpleReferenceComponent::release()
         {
             Dispose();
         }
-        catch (RuntimeException & exc) // don't break throw ()
+        catch (RuntimeException &
+#if OSL_DEBUG_LEVEL > 0
+            exc
+#endif
+            ) // don't break throw ()
         {
 #if OSL_DEBUG_LEVEL > 0
             rtl::OString msg( rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
@@ -111,7 +115,11 @@ void * SimpleReferenceComponent::operator new(std::size_t nSize)
 }
 
 void * SimpleReferenceComponent::operator new(std::size_t nSize,
-                                           std::nothrow_t const & rNothrow)
+                                           std::nothrow_t const &
+#ifndef WNT
+                                           rNothrow
+#endif
+                                           )
     SAL_THROW(())
 {
 #if defined WNT
@@ -128,7 +136,11 @@ void SimpleReferenceComponent::operator delete(void * pPtr) SAL_THROW(())
 }
 
 void SimpleReferenceComponent::operator delete(void * pPtr,
-                                            std::nothrow_t const & rNothrow)
+                                            std::nothrow_t const &
+#ifndef WNT
+                                            rNothrow
+#endif
+)
     SAL_THROW(())
 {
 #if defined WNT || (defined IRIX && !defined GCC)
