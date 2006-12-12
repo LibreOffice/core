@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:52:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2760,7 +2760,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
         {
             // Da schaun wir mal, was fuer eine Leading ich auf dem
             // Bildschirm erhalte
-            VirtualDevice* pVDev = GetVirtualDevice( pRefDev->GetMapMode() );
+            VirtualDevice* pVDev = GetVirtualDevice( pRefDev->GetMapMode(), pRefDev->GetDrawMode() );
             rFont.SetPhysFont( pVDev );
             aMetric = pVDev->GetFontMetric();
 
@@ -3497,7 +3497,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
 
         // Wenn aClipRecPixel > XXXX, dann invalidieren ?!
 
-        VirtualDevice* pVDev = GetVirtualDevice( pOutWin->GetMapMode() );
+        VirtualDevice* pVDev = GetVirtualDevice( pOutWin->GetMapMode(), pOutWin->GetDrawMode() );
         pVDev->SetDigitLanguage( GetRefDevice()->GetDigitLanguage() );
 
         {
