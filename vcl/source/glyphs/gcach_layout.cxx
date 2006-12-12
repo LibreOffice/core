@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:12:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:09:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,7 +411,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
     struct IcuPosition{ float fX, fY; };
     const int nAllocSize = sizeof(LEGlyphID) + sizeof(le_int32) + sizeof(IcuPosition);
-    LEGlyphID* pIcuGlyphs = (LEGlyphID*)alloca( nGlyphCapacity * nAllocSize + sizeof(IcuPosition) );
+    LEGlyphID* pIcuGlyphs = (LEGlyphID*)alloca( (nGlyphCapacity * nAllocSize) + sizeof(IcuPosition) );
     le_int32* pCharIndices = (le_int32*)((char*)pIcuGlyphs + nGlyphCapacity * sizeof(LEGlyphID) );
     IcuPosition* pGlyphPositions = (IcuPosition*)((char*)pCharIndices + nGlyphCapacity * sizeof(le_int32) );
 
@@ -477,21 +477,33 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
         // layout bidi/script runs and export them to a ServerFontLayout
         // convert results to GlyphItems
+        int nLastCharPos = -1;
         int nFilteredRunGlyphCount = 0;
         const IcuPosition* pPos = pGlyphPositions;
-        int nLastCharPos = -1;
         for( int i = 0; i < nRawRunGlyphCount; ++i, ++pPos )
         {
             LEGlyphID nGlyphIndex = pIcuGlyphs[i];
+            // ignore glyphs which were marked or deleted by ICU
             if( (nGlyphIndex == ICU_MARKED_GLYPH)
             ||  (nGlyphIndex == ICU_DELETED_GLYPH) )
-                continue;  // ignore these glyphs
+                continue;
 
-            int nCharPos = pCharIndices[i] + nMinRunPos;
-            // when glyph fallback is needed update LayoutArgs
+            // adjust the relative char pos
+            int nCharPos = pCharIndices[i];
+            if( nCharPos >= 0 ) {
+                nCharPos += nMinRunPos;
+                // ICU seems to return bad pCharIndices
+                // for some combinations of ICU+font+text
+                // => better give up now than crash later
+                if( nCharPos >= nEndRunPos )
+                    continue;
+            }
+
+            // if needed request glyph fallback by updating LayoutArgs
             if( !nGlyphIndex )
             {
-                rArgs.NeedFallback( nCharPos, bRightToLeft );
+                if( nCharPos >= 0 )
+                    rArgs.NeedFallback( nCharPos, bRightToLeft );
                 if( SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags )
                     continue;
             }
@@ -505,14 +517,18 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                     nCharPos = nLastCharPos;
 
             // apply vertical flags, etc.
-            sal_Unicode aChar = rArgs.mpStr[ nCharPos ];
-            nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
+            if( nCharPos >= 0 )
+            {
+                sal_Unicode aChar = rArgs.mpStr[ nCharPos ];
+                nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
+            }
 
+            // get glyph position and its metrics
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
 
-            // heuristic to detect group clusters using the "smoothed" char positions
+            // heuristic to detect group clusters using "smoothed" char positions
             long nGlyphFlags = 0;
             if( nLastCharPos != -1 )
                 if( (nCharPos == nLastCharPos) || (nGlyphWidth <= 0) )
@@ -520,6 +536,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             if( bRightToLeft )
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
 
+            // add resulting glyph item to layout
             GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
@@ -529,6 +546,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         nGlyphCount += nFilteredRunGlyphCount;
     }
 
+    // sort glyphs in visual order
     rLayout.SortGlyphItems();
 
     // determine need for kashida justification
