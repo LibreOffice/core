@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoaprms.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:00:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,29 +65,29 @@ SdAnimationPrmsUndoAction::SdAnimationPrmsUndoAction(
     SdAnimationInfo* pInfo = pTheDoc->GetAnimationInfo( pObject );
     if( pInfo )
     {
-        bNewActive      = bOldActive     = pInfo->bActive;
-        eNewEffect      = eOldEffect     = pInfo->eEffect;
-        eNewTextEffect  = eOldTextEffect = pInfo->eTextEffect;
-        eNewSpeed       = eOldSpeed      = pInfo->eSpeed;
-        bNewDimPrevious = bOldDimPrevious= pInfo->bDimPrevious;
-        aNewDimColor    = aOldDimColor   = pInfo->aDimColor;
-        bNewDimHide     = bOldDimHide    = pInfo->bDimHide;
-        bNewSoundOn     = bOldSoundOn    = pInfo->bSoundOn;
-        aNewSoundFile   = aOldSoundFile  = pInfo->aSoundFile;
-        bNewPlayFull    = bOldPlayFull   = pInfo->bPlayFull;
+        bNewActive      = bOldActive     = pInfo->mbActive;
+        eNewEffect      = eOldEffect     = pInfo->meEffect;
+        eNewTextEffect  = eOldTextEffect = pInfo->meTextEffect;
+        eNewSpeed       = eOldSpeed      = pInfo->meSpeed;
+        bNewDimPrevious = bOldDimPrevious= pInfo->mbDimPrevious;
+        aNewDimColor    = aOldDimColor   = pInfo->maDimColor;
+        bNewDimHide     = bOldDimHide    = pInfo->mbDimHide;
+        bNewSoundOn     = bOldSoundOn    = pInfo->mbSoundOn;
+        aNewSoundFile   = aOldSoundFile  = pInfo->maSoundFile;
+        bNewPlayFull    = bOldPlayFull   = pInfo->mbPlayFull;
 
-        pNewPathObj     = pOldPathObj    = pInfo->pPathObj;
+        pNewPathObj     = pOldPathObj    = pInfo->mpPathObj;
 
-        eNewClickAction     = eOldClickAction    = pInfo->eClickAction;
-        aNewBookmark        = aOldBookmark       = pInfo->aBookmark;
-//      bNewInvisibleInPres = bOldInvisibleInPres= pInfo->bInvisibleInPresentation;
-        nNewVerb            = nOldVerb           = pInfo->nVerb;
-        nNewPresOrder       = nOldPresOrder      = pInfo->nPresOrder;
+        eNewClickAction     = eOldClickAction    = pInfo->meClickAction;
+        aNewBookmark        = aOldBookmark       = pInfo->maBookmark;
+//      bNewInvisibleInPres = bOldInvisibleInPres= pInfo->mbInvisibleInPresentation;
+        nNewVerb            = nOldVerb           = pInfo->mnVerb;
+        nNewPresOrder       = nOldPresOrder      = pInfo->mnPresOrder;
 
-        eNewSecondEffect    = eOldSecondEffect   = pInfo->eSecondEffect;
-        eNewSecondSpeed     = eOldSecondSpeed    = pInfo->eSecondSpeed;
-        bNewSecondSoundOn   = bOldSecondSoundOn  = pInfo->bSecondSoundOn;
-        bNewSecondPlayFull  = bOldSecondPlayFull = pInfo->bSecondPlayFull;
+        eNewSecondEffect    = eOldSecondEffect   = pInfo->meSecondEffect;
+        eNewSecondSpeed     = eOldSecondSpeed    = pInfo->meSecondSpeed;
+        bNewSecondSoundOn   = bOldSecondSoundOn  = pInfo->mbSecondSoundOn;
+        bNewSecondPlayFull  = bOldSecondPlayFull = pInfo->mbSecondPlayFull;
     }
 }
 
@@ -108,27 +108,27 @@ void SdAnimationPrmsUndoAction::Undo()
             SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pObject );
             // So nicht...
             //SdAnimationInfo* pInfo = (SdAnimationInfo*)pObject->GetUserData(0);
-            pInfo->bActive      = bOldActive;
-            pInfo->eEffect      = eOldEffect;
-            pInfo->eTextEffect  = eOldTextEffect;
-            pInfo->eSpeed       = eOldSpeed;
-            pInfo->bDimPrevious = bOldDimPrevious;
-            pInfo->aDimColor    = aOldDimColor;
-            pInfo->bDimHide     = bOldDimHide;
-            pInfo->bSoundOn     = bOldSoundOn;
-            pInfo->aSoundFile   = aOldSoundFile;
-            pInfo->bPlayFull    = bOldPlayFull;
-//          pInfo->SetPath(pOldPathObj);
-            pInfo->eClickAction = eOldClickAction;
-            pInfo->aBookmark    = aOldBookmark;
-//          pInfo->bInvisibleInPresentation = bOldInvisibleInPres;
-            pInfo->nVerb        = nOldVerb;
-            pInfo->nPresOrder   = nOldPresOrder;
+            pInfo->mbActive     = bOldActive;
+            pInfo->meEffect      = eOldEffect;
+            pInfo->meTextEffect  = eOldTextEffect;
+            pInfo->meSpeed      = eOldSpeed;
+            pInfo->mbDimPrevious = bOldDimPrevious;
+            pInfo->maDimColor    = aOldDimColor;
+            pInfo->mbDimHide     = bOldDimHide;
+            pInfo->mbSoundOn     = bOldSoundOn;
+            pInfo->maSoundFile   = aOldSoundFile;
+            pInfo->mbPlayFull    = bOldPlayFull;
+//          pInfo->mSetPath(pOldPathObj);
+            pInfo->meClickAction = eOldClickAction;
+            pInfo->maBookmark    = aOldBookmark;
+//          pInfo->mbInvisibleInPresentation = bOldInvisibleInPres;
+            pInfo->mnVerb        = nOldVerb;
+            pInfo->mnPresOrder   = nOldPresOrder;
 
-            pInfo->eSecondEffect    = eOldSecondEffect;
-            pInfo->eSecondSpeed     = eOldSecondSpeed;
-            pInfo->bSecondSoundOn   = bOldSecondSoundOn;
-            pInfo->bSecondPlayFull  = bOldSecondPlayFull;
+            pInfo->meSecondEffect    = eOldSecondEffect;
+            pInfo->meSecondSpeed     = eOldSecondSpeed;
+            pInfo->mbSecondSoundOn   = bOldSecondSoundOn;
+            pInfo->mbSecondPlayFull  = bOldSecondPlayFull;
         }
     }
     // Info wurde durch Aktion erzeugt: Info loeschen
@@ -154,42 +154,32 @@ void SdAnimationPrmsUndoAction::Redo()
 
     pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
 
-    pInfo->bActive      = bNewActive;
-    pInfo->eEffect      = eNewEffect;
-    pInfo->eTextEffect  = eNewTextEffect;
-    pInfo->eSpeed       = eNewSpeed;
-    pInfo->bDimPrevious = bNewDimPrevious;
-    pInfo->aDimColor    = aNewDimColor;
-    pInfo->bDimHide     = bNewDimHide;
-    pInfo->bSoundOn     = bNewSoundOn;
-    pInfo->aSoundFile   = aNewSoundFile;
-    pInfo->bPlayFull    = bNewPlayFull;
-//  pInfo->SetPath(pNewPathObj);
-    pInfo->eClickAction = eNewClickAction;
-    pInfo->aBookmark    = aNewBookmark;
-//  pInfo->bInvisibleInPresentation = bNewInvisibleInPres;
-    pInfo->nVerb        = nNewVerb;
-    pInfo->nPresOrder   = nNewPresOrder;
+    pInfo->mbActive      = bNewActive;
+    pInfo->meEffect      = eNewEffect;
+    pInfo->meTextEffect  = eNewTextEffect;
+    pInfo->meSpeed       = eNewSpeed;
+    pInfo->mbDimPrevious = bNewDimPrevious;
+    pInfo->maDimColor    = aNewDimColor;
+    pInfo->mbDimHide     = bNewDimHide;
+    pInfo->mbSoundOn     = bNewSoundOn;
+    pInfo->maSoundFile   = aNewSoundFile;
+    pInfo->mbPlayFull    = bNewPlayFull;
+//  pInfo->mSetPath(pNewPathObj);
+    pInfo->meClickAction = eNewClickAction;
+    pInfo->maBookmark    = aNewBookmark;
+//  pInfo->mbInvisibleInPresentation = bNewInvisibleInPres;
+    pInfo->mnVerb        = nNewVerb;
+    pInfo->mnPresOrder   = nNewPresOrder;
 
-    pInfo->eSecondEffect    = eNewSecondEffect;
-    pInfo->eSecondSpeed     = eNewSecondSpeed;
-    pInfo->bSecondSoundOn   = bNewSecondSoundOn;
-    pInfo->bSecondPlayFull  = bNewSecondPlayFull;
+    pInfo->meSecondEffect    = eNewSecondEffect;
+    pInfo->meSecondSpeed     = eNewSecondSpeed;
+    pInfo->mbSecondSoundOn   = bNewSecondSoundOn;
+    pInfo->mbSecondPlayFull  = bNewSecondPlayFull;
 
     // Damit ein ModelHasChanged() ausgeloest wird, um das Effekte-Window
     // auf Stand zu bringen (Animations-Reihenfolge)
     pObject->SetChanged();
     pObject->BroadcastObjectChange();
-}
-
-/*************************************************************************
-|*
-|* Repeat()
-|*
-\************************************************************************/
-
-void SdAnimationPrmsUndoAction::Repeat()
-{
 }
 
 /*************************************************************************
