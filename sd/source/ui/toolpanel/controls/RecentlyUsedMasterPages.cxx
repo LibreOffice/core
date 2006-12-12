@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:20:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ int RecentlyUsedMasterPages::GetMasterPageCount (void) const
 
 MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32 nIndex) const
 {
-    if (nIndex>=0 && nIndex<mpMasterPages->size())
+    if(nIndex<mpMasterPages->size())
         return (*mpMasterPages)[nIndex].maToken;
     else
         return MasterPageContainer::NIL_TOKEN;
