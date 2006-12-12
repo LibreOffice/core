@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsnap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:38:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,15 +71,15 @@ SdSnapLineDlg::SdSnapLineDlg(
     const SfxItemSet& rInAttrs,
     ::sd::View* pView)
     : ModalDialog (pWindow, SdResId(DLG_SNAPLINE)),
-      aFtX        (this, SdResId(FT_X)),
-      aFtY        (this, SdResId(FT_Y)),
-      aMtrFldX    (this, SdResId(MTR_FLD_X)),
-      aMtrFldY    (this, SdResId(MTR_FLD_Y)),
       aFlPos      (this, SdResId(FL_POSITION)),
+      aFtX        (this, SdResId(FT_X)),
+      aMtrFldX    (this, SdResId(MTR_FLD_X)),
+      aFtY        (this, SdResId(FT_Y)),
+      aMtrFldY    (this, SdResId(MTR_FLD_Y)),
       aFlDir      (this, SdResId(FL_DIRECTION)),
-      aRbHorz     (this, SdResId(RB_HORIZONTAL)),
-      aRbVert     (this, SdResId(RB_VERTICAL)),
       aRbPoint    (this, SdResId(RB_POINT)),
+      aRbVert     (this, SdResId(RB_VERTICAL)),
+      aRbHorz     (this, SdResId(RB_HORIZONTAL)),
       aBtnOK      (this, SdResId(BTN_OK)),
       aBtnCancel  (this, SdResId(BTN_CANCEL)),
       aBtnHelp    (this, SdResId(BTN_HELP)),
@@ -180,7 +180,7 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     nXValue = Fraction( GetCoreValue( aMtrFldX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
     nYValue = Fraction( GetCoreValue( aMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
 
-    rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, eKind));
+    rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (USHORT)eKind));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_X, nXValue));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, nYValue));
 }
