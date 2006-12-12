@@ -272,6 +272,7 @@
             <menu:menuitem menu:id=".uno:CustomAnimation"/>
             <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowSlide"/>
             <menu:menuitem menu:id=".uno:HideSlide"/>
             <menu:menuitem menu:id=".uno:CustomShowDialog"/>
         </menu:menupopup>
