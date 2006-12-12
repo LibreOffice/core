@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:41:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:18:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,6 @@
 #ifndef SD_FU_CUSTOM_SHOW_DLG_HXX
 #include "fucushow.hxx"
 #endif
-//CHINA001 #include "dlgfield.hxx"
 #include "drawdoc.hxx"
 #include "sdattr.hxx"
 #include "PaneManager.hxx"
@@ -145,8 +144,7 @@
 #ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
 #endif
-#include "sdabstdlg.hxx" //CHINA001
-#include "dlgfield.hrc" //CHINA001
+#include "sdabstdlg.hxx"
 namespace sd {
 
 
@@ -181,6 +179,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                         SetZoom( (long) ( ( const SvxZoomItem& ) pArgs->
                                             Get( SID_ATTR_ZOOM ) ).GetValue() );
                         Invalidate( SID_ATTR_ZOOM );
+                        break;
+                    default:
                         break;
 
                     /* Gibt es hier z.Z. nicht
@@ -221,7 +221,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             SetZoom( 100 );
             Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
                                              GetActiveWindow()->GetOutputSizePixel()) );
-            pZoomList->InsertZoomRect(aVisAreaWin);
+            mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Cancel();
             rReq.Done();
@@ -233,7 +233,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             SetZoom( Max( (long) ( GetActiveWindow()->GetZoom() / 2 ), (long) GetActiveWindow()->GetMinZoom() ) );
             Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
                                              GetActiveWindow()->GetOutputSizePixel()) );
-            pZoomList->InsertZoomRect(aVisAreaWin);
+            mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ZOOM_OUT);
             Invalidate( SID_ZOOM_IN );
@@ -310,10 +310,10 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             }
             else
             {
-                pFrameView->SetPresentationViewShellId (SID_VIEWSHELL2);
-                pFrameView->SetSlotId (SID_PRESENTATION);
-                pFrameView->SetPageKind (PK_STANDARD);
-                pFrameView->SetPreviousViewShellType (GetShellType());
+                mpFrameView->SetPresentationViewShellId (SID_VIEWSHELL2);
+                mpFrameView->SetSlotId (SID_PRESENTATION);
+                mpFrameView->SetPageKind (PK_STANDARD);
+                mpFrameView->SetPreviousViewShellType (GetShellType());
 
                 // Switch to an Impress view shell which shows the
                 // presentation in a window.  Switching to a presentation
@@ -554,7 +554,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_INSERT_FLD_PAGE:
         case SID_INSERT_FLD_FILE:
         {
-            SvxFieldItem* pFieldItem;
+            SvxFieldItem* pFieldItem = 0;
 
             switch( nSId )
             {
@@ -618,7 +618,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                 pOutlinerView->SetSelection( aSel );
             }
 
-            pOutlinerView->InsertField( *pFieldItem );
+            if( pFieldItem )
+                pOutlinerView->InsertField( *pFieldItem );
 
             delete pFieldItem;
 
@@ -637,14 +638,11 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
             {
                 // Dialog...
-                //CHINA001 SdModifyFieldDlg aDlg( GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() );
-                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-                AbstractSdModifyFieldDlg* pDlg = pFact->CreateSdModifyFieldDlg(ResId( DLG_FIELD_MODIFY ), GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-                if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+                AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : 0;
+                if( pDlg && (pDlg->Execute() == RET_OK) )
                 {
-                    SvxFieldData* pField = pDlg->GetField(); //CHINA001 SvxFieldData* pField = aDlg.GetField();
+                    SvxFieldData* pField = pDlg->GetField();
                     if( pField )
                     {
                         SvxFieldItem aFieldItem( *pField );
@@ -669,7 +667,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                         delete pField;
                     }
 
-                    SfxItemSet aSet( pDlg->GetItemSet() ); //CHINA001 SfxItemSet aSet( aDlg.GetItemSet() );
+                    SfxItemSet aSet( pDlg->GetItemSet() );
                     if( aSet.Count() )
                     {
                         pOutlinerView->SetAttribs( aSet );
@@ -679,7 +677,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                             pOutliner->UpdateFields();
                     }
                 }
-                delete pDlg; //add by CHINA001
+                delete pDlg;
             }
 
             Cancel();
