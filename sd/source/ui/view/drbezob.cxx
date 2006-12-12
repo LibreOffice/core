@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:41:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,13 +134,13 @@ BezierObjectBar::BezierObjectBar(
     ViewShell* pSdViewShell,
     ::sd::View* pSdView)
     : SfxShell(pSdViewShell->GetViewShell()),
-      pView(pSdView),
-      pViewSh(pSdViewShell)
+      mpView(pSdView),
+      mpViewSh(pSdViewShell)
 {
-    DrawDocShell* pDocShell = pViewSh->GetDocSh();
+    DrawDocShell* pDocShell = mpViewSh->GetDocSh();
     SetPool(&pDocShell->GetPool());
     SetUndoManager(pDocShell->GetUndoManager());
-    SetRepeatTarget(pView);
+    SetRepeatTarget(mpView);
 
     SetHelpId( SD_IF_SDDRAWBEZIEROBJECTBAR );
 }
@@ -165,11 +165,11 @@ BezierObjectBar::~BezierObjectBar()
 
 void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
-    SfxItemSet aAttrSet( pView->GetDoc()->GetPool() );
-    pView->GetAttributes( aAttrSet );
+    SfxItemSet aAttrSet( mpView->GetDoc()->GetPool() );
+    mpView->GetAttributes( aAttrSet );
     rSet.Put(aAttrSet, FALSE); // <- FALSE, damit DontCare-Status uebernommen wird
 
-    FunctionReference xFunc( pViewSh->GetCurrentFunction() );
+    FunctionReference xFunc( mpViewSh->GetCurrentFunction() );
 
     if(xFunc.is())
     {
@@ -185,29 +185,30 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
         }
     }
 
-    if (!pView->IsRipUpAtMarkedPointsPossible())
+    if (!mpView->IsRipUpAtMarkedPointsPossible())
     {
         rSet.DisableItem(SID_BEZIER_CUTLINE);
     }
-    if (!pView->IsDeleteMarkedPointsPossible())
+    if (!mpView->IsDeleteMarkedPointsPossible())
     {
         rSet.DisableItem(SID_BEZIER_DELETE);
     }
-    if (!pView->IsSetMarkedSegmentsKindPossible())
+    if (!mpView->IsSetMarkedSegmentsKindPossible())
     {
         rSet.DisableItem(SID_BEZIER_CONVERT);
     }
     else
     {
-        SdrPathSegmentKind eSegm = pView->GetMarkedSegmentsKind();
+        SdrPathSegmentKind eSegm = mpView->GetMarkedSegmentsKind();
         switch (eSegm)
         {
             case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
             case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,FALSE)); break; // Button reingedrueckt = Kurve
             case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,TRUE));  break;
+            default: break;
         }
     }
-    if (!pView->IsSetMarkedPointsSmoothPossible())
+    if (!mpView->IsSetMarkedPointsSmoothPossible())
     {
         rSet.DisableItem(SID_BEZIER_EDGE);
         rSet.DisableItem(SID_BEZIER_SMOOTH);
@@ -215,7 +216,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     }
     else
     {
-        SdrPathSmoothKind eSmooth = pView->GetMarkedPointsSmooth();
+        SdrPathSmoothKind eSmooth = mpView->GetMarkedPointsSmooth();
         switch (eSmooth)
         {
             case SDRPATHSMOOTH_DONTCARE  : break;
@@ -224,22 +225,23 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,TRUE)); break;
         }
     }
-    if (!pView->IsOpenCloseMarkedObjectsPossible())
+    if (!mpView->IsOpenCloseMarkedObjectsPossible())
     {
         rSet.DisableItem(SID_BEZIER_CLOSE);
     }
     else
     {
-        SdrObjClosedKind eClose = pView->GetMarkedObjectsClosedState();
+        SdrObjClosedKind eClose = mpView->GetMarkedObjectsClosedState();
         switch (eClose)
         {
             case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
             case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,FALSE)); break;
             case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,TRUE)); break;
+            default: break;
         }
     }
 
-    rSet.Put(SfxBoolItem(SID_BEZIER_ELIMINATE_POINTS, pView->IsEliminatePolyPoints()));
+    rSet.Put(SfxBoolItem(SID_BEZIER_ELIMINATE_POINTS, mpView->IsEliminatePolyPoints()));
 }
 
 
@@ -263,23 +265,23 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_SYMMTR:
         case SID_BEZIER_CLOSE:
         {
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
-            if (rMarkList.GetMark(0) && !pView->IsAction())
+            if (rMarkList.GetMark(0) && !mpView->IsAction())
             {
                 switch (nSId)
                 {
                     case SID_BEZIER_DELETE:
-                        pView->DeleteMarkedPoints();
+                        mpView->DeleteMarkedPoints();
                         break;
 
                     case SID_BEZIER_CUTLINE:
-                        pView->RipUpAtMarkedPoints();
+                        mpView->RipUpAtMarkedPoints();
                         break;
 
                     case SID_BEZIER_CONVERT:
                     {
-                        pView->SetMarkedSegmentsKind(SDRPATHSEGMENT_TOGGLE);
+                        mpView->SetMarkedSegmentsKind(SDRPATHSEGMENT_TOGGLE);
                         break;
                     }
 
@@ -291,31 +293,31 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
                         switch (nSId)
                         {
+                            default:
                             case SID_BEZIER_EDGE:   eKind = SDRPATHSMOOTH_ANGULAR; break;
                             case SID_BEZIER_SMOOTH: eKind = SDRPATHSMOOTH_ASYMMETRIC; break;
                             case SID_BEZIER_SYMMTR: eKind = SDRPATHSMOOTH_SYMMETRIC; break;
                         }
 
-                        pView->SetMarkedPointsSmooth(eKind);
+                        mpView->SetMarkedPointsSmooth(eKind);
                         break;
                     }
 
                     case SID_BEZIER_CLOSE:
                     {
                         SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
-                        pView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
-                        pView->UnmarkAllPoints();
-                        //Size aDist(pViewSh->GetActiveWindow()->PixelToLogic(Size(8,8)));
-                        pView->AddUndo(pView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
-                        pPathObj->ToggleClosed(); // aDist.Width());
-                        pView->EndUndo();
+                        mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                        mpView->UnmarkAllPoints();
+                        mpView->AddUndo(mpView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+                        pPathObj->ToggleClosed();
+                        mpView->EndUndo();
                         break;
                     }
                 }
             }
 
-            if ( !pView->AreObjectsMarked() )
-                pViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+            if ( !mpView->AreObjectsMarked() )
+                mpViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
             rReq.Ignore();
         }
@@ -323,7 +325,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
         case SID_BEZIER_ELIMINATE_POINTS:
         {
-            pView->SetEliminatePolyPoints(!pView->IsEliminatePolyPoints());
+            mpView->SetEliminatePolyPoints(!mpView->IsEliminatePolyPoints());
             Invalidate(SID_BEZIER_ELIMINATE_POINTS);
             rReq.Done();
         }
@@ -332,7 +334,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_MOVE:
         case SID_BEZIER_INSERT:
         {
-            FunctionReference xFunc( pViewSh->GetCurrentFunction() );
+            FunctionReference xFunc( mpViewSh->GetCurrentFunction() );
 
             if(xFunc.is())
             {
