@@ -2,9 +2,9 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 
-..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\bin\f*.res %_DEST%\bin%_EXT%\
+..\%__SRC%\bin\f*.dll %_DEST%\bin%_EXT%\
+..\%__SRC%\lib\f*.so %_DEST%\lib%_EXT%\
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\source\win32\filepicker\*.xml %_DEST%\xml%_EXT%\*.xml
