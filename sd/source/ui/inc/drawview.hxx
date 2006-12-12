@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ public:
     virtual ~DrawView (void);
 
     virtual void MarkListHasChanged();
-    void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
     virtual BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
@@ -97,12 +97,12 @@ protected:
 private:
     friend class DrawViewRedirector;
 
-    DrawDocShell*   pDocShell;
-    DrawViewShell* pDrawViewShell;
-    VirtualDevice*      pVDev;
+    DrawDocShell*   mpDocShell;
+    DrawViewShell*  mpDrawViewShell;
+    VirtualDevice*  mpVDev;
 
-    USHORT              nPOCHSmph;  // zum blockieren des PageOrderChangedHint
-    Slideshow*          mpSlideShow;
+    USHORT          mnPOCHSmph; // zum blockieren des PageOrderChangedHint
+    Slideshow*      mpSlideShow;
 };
 
 } // end of namespace sd
