@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlOptionsDialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:21:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,10 +98,8 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::ui::dialogs;
 
 #include "pres.hxx"
-//CHINA001 #include "pubdlg.hxx"
-#include "sdabstdlg.hxx" //CHINA001
-#include "pubdlg.hrc" //CHINA001
-#include "tools/debug.hxx" //CHINA001
+#include "sdabstdlg.hxx"
+#include "tools/debug.hxx"
 class SdHtmlOptionsDialog : public cppu::WeakImplHelper5
 <
     XExporter,
@@ -215,7 +213,7 @@ void SAL_CALL SdHtmlOptionsDialog::release() throw()
 }
 
 // XInitialization
-void SAL_CALL SdHtmlOptionsDialog::initialize( const Sequence< Any > & aArguments )
+void SAL_CALL SdHtmlOptionsDialog::initialize( const Sequence< Any > & )
     throw ( Exception, RuntimeException )
 {
 }
@@ -285,22 +283,27 @@ void SdHtmlOptionsDialog::setTitle( const OUString& aTitle )
 sal_Int16 SdHtmlOptionsDialog::execute()
     throw ( RuntimeException )
 {
-    //CHINA001 SdPublishingDlg aDlg( Application::GetDefDialogParent(), meDocType );
-    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-    AbstractSdPublishingDlg* pDlg = pFact->CreateSdPublishingDlg(ResId( DLG_PUBLISHING ), Application::GetDefDialogParent(), meDocType );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-    if( pDlg->Execute() ) //CHINA001 if( aDlg.Execute() )
-    {
-        pDlg->GetParameterSequence( maFilterDataSequence ); //CHINA001 aDlg.GetParameterSequence( maFilterDataSequence );
-        return ExecutableDialogResults::OK;
-    }
-    else
-    {
-        return ExecutableDialogResults::CANCEL;
-    }
-    delete pDlg; //add by CHINA001
+    sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    if( pFact )
+    {
+        AbstractSdPublishingDlg* pDlg = pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType );
+        if( pDlg )
+        {
+            if( pDlg->Execute() )
+            {
+                pDlg->GetParameterSequence( maFilterDataSequence );
+                nRet = ExecutableDialogResults::OK;
+            }
+            else
+            {
+                nRet = ExecutableDialogResults::CANCEL;
+            }
+            delete pDlg;
+        }
+    }
+    return nRet;
 }
 
 // XEmporter
