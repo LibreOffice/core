@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconnct.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:48:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-//CHINA001 #include <svx/connect.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -55,8 +54,8 @@
 #include "ViewShell.hxx"
 #endif
 #include "drawdoc.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 namespace sd {
 
@@ -87,38 +86,24 @@ FunctionReference FuConnectionDlg::Create( ViewShell* pViewSh, ::sd::Window* pWi
 
 void FuConnectionDlg::DoExecute( SfxRequest& rReq )
 {
-    SfxItemSet aNewAttr( pDoc->GetPool() );
-    pView->GetAttributes( aNewAttr );
+    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aNewAttr );
 
     const SfxItemSet* pArgs = rReq.GetArgs();
-    ::std::auto_ptr<AbstractSfxSingleTabDialog> pDlg (NULL);
 
     if( !pArgs )
     {
-        //CHINA001 SvxConnectionDialog* pDlg = new SvxConnectionDialog( NULL, aNewAttr, pView );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
-        pDlg.reset (pFact->CreateSfxSingleTabDialog( NULL,
-                aNewAttr,
-                pView,
-                ResId(RID_SVXPAGE_CONNECTION)));
-        DBG_ASSERT(pDlg.get()!=NULL, "Dialogdiet fail!");//CHINA001
-        USHORT nResult = pDlg->Execute();
+        ::std::auto_ptr<AbstractSfxSingleTabDialog> pDlg( pFact ? pFact->CreateSfxSingleTabDialog( NULL, aNewAttr, mpView, ResId(RID_SVXPAGE_CONNECTION)) : 0);
 
-        switch( nResult )
+        if( pDlg.get() && (pDlg->Execute() == RET_OK) )
         {
-            case RET_OK:
-            {
-                pArgs = pDlg->GetOutputItemSet();
-                rReq.Done( *pArgs );
-            }
-            break;
-
-            default:
-                return; // Abbruch
+            rReq.Done( *pDlg->GetOutputItemSet() );
+            pArgs = rReq.GetArgs();
         }
     }
-    pView->SetAttributes( *pArgs );
+    if( pArgs )
+        mpView->SetAttributes( *pArgs );
 }
 
 } // end of namespace sd
