@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:13:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3658,11 +3658,14 @@ void SdrObjCustomShape::SetPage( SdrPage* pNewPage )
 {
     SdrTextObj::SetPage( pNewPage );
 
-/*  invalidating rectangles by SetRectsDirty is not sufficient,
-    AdjustTextFrameWidthAndHeight() also has to be made, both
-    actions are done by NbcSetSnapRect !  */
-    Rectangle aTmp( aRect );    //creating temporary rectangle #i61108#
-    NbcSetSnapRect( aTmp );
+    if( pNewPage )
+    {
+        // invalidating rectangles by SetRectsDirty is not sufficient,
+        // AdjustTextFrameWidthAndHeight() also has to be made, both
+        // actions are done by NbcSetSnapRect
+        Rectangle aTmp( aRect );    //creating temporary rectangle #i61108#
+        NbcSetSnapRect( aTmp );
+    }
 }
 
 SdrObjGeoData* SdrObjCustomShape::NewGeoData() const
