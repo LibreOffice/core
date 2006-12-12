@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:33:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1009,8 +1009,10 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // made only for the main view shell.  This not only avoids unnecessary
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
+    // For issue #140703# we have to check the existence of the window,
+    // too.  The SfxTopViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell();
-    if (pMainViewShell != NULL)
+    if (pMainViewShell != NULL && GetWindow()!=NULL)
     {
         SvBorder aCurrentBorder (GetBorderPixel());
         bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
