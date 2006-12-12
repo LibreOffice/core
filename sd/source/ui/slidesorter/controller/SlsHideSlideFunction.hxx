@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsHideSlideFunction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:20:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #define SD_SLIDESORTER_HIDE_SLIDE_FUNCTION_HXX
 
 #include "controller/SlsSlideFunction.hxx"
+#include "model/SlideSorterModel.hxx"
+
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -51,8 +53,19 @@ class HideSlideFunction
 public:
     TYPEINFO();
 
+    virtual ~HideSlideFunction (void);
+
     static FunctionReference Create( SlideSorterController& rController, SfxRequest& rRequest );
     virtual void DoExecute( SfxRequest& rReq );
+
+    // The state of a set of slides with respect to being excluded from the
+    // slide show.
+    enum ExclusionState {UNDEFINED, EXCLUDED, INCLUDED, MIXED};
+
+    /** Return for the given set of slides whether they included are
+        excluded from the slide show.
+    */
+    static ExclusionState GetExclusionState (model::SlideSorterModel::Enumeration& rPageSet);
 
 protected:
     HideSlideFunction (
