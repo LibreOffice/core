@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TemplateScanner.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:34:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ public:
 /** Use a heuristic based on the URL of a top-level template folder to
     assign a priority that is used to sort the folders.
 */
-int Classify (const ::rtl::OUString& rsTitle, const ::rtl::OUString& rsURL)
+int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
 {
     int nPriority (0);
 
@@ -173,12 +173,12 @@ TemplateScanner::TemplateScanner (void)
       mpTemplateDirectory(NULL),
       maFolderList(),
       mpLastAddedEntry(NULL),
+      mpFolderDescriptors(new FolderDescriptorList()),
       mxTemplateRoot(),
       mxFolderEnvironment(),
       mxEntryEnvironment(),
       mxFolderResultSet(),
-      mxEntryResultSet(),
-      mpFolderDescriptors(new FolderDescriptorList())
+      mxEntryResultSet()
 {
     //  empty;
 }
@@ -468,6 +468,8 @@ void TemplateScanner::RunNextStep (void)
         case SCAN_ENTRY:
             meState = ScanEntry();
             break;
+        default:
+            break;
     }
 
     switch (meState)
@@ -481,6 +483,8 @@ void TemplateScanner::RunNextStep (void)
             mxFolderResultSet.clear();
             mxEntryResultSet.clear();
             mpLastAddedEntry = NULL;
+            break;
+        default:
             break;
     }
 }
