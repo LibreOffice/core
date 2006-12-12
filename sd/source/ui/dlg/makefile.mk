@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 14:26:20 $
+#   last change: $Author: kz $ $Date: 2006-12-12 17:06:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
 TARGET=dlg
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -58,7 +59,6 @@ SRC1FILES =\
     present.src\
     dlg_char.src\
     paragr.src\
-    new_foil.src\
     tabtempl.src\
     dlgpage.src\
     tpaction.src\
@@ -90,7 +90,6 @@ SLOFILES =  \
         $(SLO)$/dlgctrls.obj \
         $(SLO)$/dlgchar.obj \
         $(SLO)$/paragr.obj \
-        $(SLO)$/newfoil.obj \
         $(SLO)$/tabtempl.obj \
         $(SLO)$/dlgpage.obj  \
         $(SLO)$/diactrl.obj  \
@@ -130,15 +129,6 @@ SLOFILES =  \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj			\
         $(SLO)$/PaneDockingWindow.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/tpaction.obj \
-        $(SLO)$/filedlg.obj   	    \
-        $(SLO)$/dlgass.obj		    \
-        $(SLO)$/TemplateScanner.obj \
-        $(SLO)$/sdtreelb.obj        \
-        $(SLO)$/tpoption.obj \
-        $(SLO)$/present.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -186,7 +176,6 @@ LIB2OBJFILES= \
         $(SLO)$/ins_paste.obj \
         $(SLO)$/inspagob.obj \
         $(SLO)$/morphdlg.obj \
-        $(SLO)$/newfoil.obj \
         $(SLO)$/dlgolbul.obj \
         $(SLO)$/paragr.obj \
         $(SLO)$/present.obj \
