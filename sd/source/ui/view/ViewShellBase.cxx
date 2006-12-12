@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:54:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,10 +278,10 @@ SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(STR_VIEWSHELLBASE))
 
 
 ViewShellBase::ViewShellBase (
-    SfxViewFrame* pFrame,
-    SfxViewShell* pOldShell,
+    SfxViewFrame* _pFrame,
+    SfxViewShell*,
     ViewShell::ShellType eDefaultSubShell)
-    : SfxViewShell (pFrame,
+    : SfxViewShell (_pFrame,
         SFX_VIEW_MAXIMIZE_FIRST
         | SFX_VIEW_OPTIMIZE_EACH
         | SFX_VIEW_DISABLE_ACCELS
@@ -310,16 +310,16 @@ ViewShellBase::ViewShellBase (
         eDefaultSubShell = GetInitialViewShellType();
     mpPaneManager.reset (new PaneManager(*this, eDefaultSubShell));
 
-    SetWindow (&pFrame->GetWindow());
+    SetWindow (&_pFrame->GetWindow());
 
     // Hide the window to avoid complaints from Sfx...SwitchViewShell...
-    pFrame->GetWindow().Hide();
+    _pFrame->GetWindow().Hide();
 
     // Now that this new object has (almost) finished its construction
     // we can pass it as argument to the SubShellManager constructor.
     GetViewShellManager().SetViewShellFactory (
         ViewShellManager::SharedShellFactory(
-            new ViewShellFactory(*this, pFrame)));
+            new ViewShellFactory(*this, _pFrame)));
 }
 
 
@@ -452,7 +452,7 @@ ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 
 
 
-void ViewShellBase::GetMenuState (SfxItemSet& rSet)
+void ViewShellBase::GetMenuState (SfxItemSet& )
 {
 }
 
@@ -713,7 +713,7 @@ void ViewShellBase::UIDeactivated( SfxInPlaceClient* pClient )
 
 
 
-SvBorder ViewShellBase::GetBorder (bool bOuterResize)
+SvBorder ViewShellBase::GetBorder (bool )
 {
     int nTop = 0;
     if (mpImpl->mpViewTabBar.get()!=NULL && mpImpl->mpViewTabBar->IsVisible())
@@ -889,7 +889,10 @@ void ViewShellBase::ReadUserDataSequence (
                 }
                 if (eType != ViewShell::ST_NONE)
                     GetPaneManager().RequestMainViewShellChange(eType);
+                break;
             }
+            default:
+                break;
         }
     }
 }
@@ -1212,71 +1215,57 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
 
 void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
 {
-    FrameView* pFrameView = NULL;
-    SfxViewFrame* pViewFrame = NULL;
-
-    if (mrBase.GetMainViewShell() != NULL)
+    ViewShell* pViewShell = mrBase.GetMainViewShell();
+    if(pViewShell != NULL)
     {
-        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
-        pViewFrame = mrBase.GetMainViewShell()->GetViewFrame();
-    }
-
-    if (pFrameView!=NULL && pViewFrame!=NULL)
-    {
-        PageKind ePageKind (pFrameView->GetPageKindOnLoad());
-
-        ViewShell* pViewShell = mrBase.GetMainViewShell();
-        if (pViewShell != NULL)
+        FrameView* pFrameView = pViewShell->GetFrameView();
+        if(pFrameView != NULL)
         {
-            FrameView* pFrameView = pViewShell->GetFrameView();
-            if (pFrameView != NULL)
-            {
-                // Set view shell, edit mode, and page kind.
-                pFrameView->SetViewShEditMode(
-                    pFrameView->GetViewShEditModeOnLoad(),
-                    pFrameView->GetPageKindOnLoad());
-                pFrameView->SetPageKind(
-                    pFrameView->GetPageKindOnLoad());
-                mrBase.GetPaneManager().RequestMainViewShellChange(
-                    pFrameView->GetViewShellTypeOnLoad(),
-                    PaneManager::CM_SYNCHRONOUS);
+            // Set view shell, edit mode, and page kind.
+            pFrameView->SetViewShEditMode(
+                pFrameView->GetViewShEditModeOnLoad(),
+                pFrameView->GetPageKindOnLoad());
+            pFrameView->SetPageKind(
+                pFrameView->GetPageKindOnLoad());
+            mrBase.GetPaneManager().RequestMainViewShellChange(
+                pFrameView->GetViewShellTypeOnLoad(),
+                PaneManager::CM_SYNCHRONOUS);
 
-                try
+            try
+            {
+                // Get the current page either from the
+                // DrawPagesSupplier or the MasterPagesSupplier.
+                Any aPage;
+                if (pFrameView->GetViewShEditModeOnLoad() == EM_PAGE)
                 {
-                    // Get the current page either from the
-                    // DrawPagesSupplier or the MasterPagesSupplier.
-                    Any aPage;
-                    if (pFrameView->GetViewShEditModeOnLoad() == EM_PAGE)
-                    {
-                        Reference<drawing::XDrawPagesSupplier> xPagesSupplier (
-                            mrBase.GetController()->getModel(), UNO_QUERY_THROW);
-                        Reference<container::XIndexAccess> xPages (
-                            xPagesSupplier->getDrawPages(), UNO_QUERY_THROW);
-                        aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
-                    }
-                    else
-                    {
-                        Reference<drawing::XMasterPagesSupplier> xPagesSupplier (
-                            mrBase.GetController()->getModel(), UNO_QUERY_THROW);
-                        Reference<container::XIndexAccess> xPages (
-                            xPagesSupplier->getMasterPages(), UNO_QUERY_THROW);
-                        aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
-                    }
-                    // Switch to the page last edited by setting the
-                    // CurrentPage property.
-                    Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
-                    xSet->setPropertyValue (String::CreateFromAscii("CurrentPage"), aPage);
+                    Reference<drawing::XDrawPagesSupplier> xPagesSupplier (
+                        mrBase.GetController()->getModel(), UNO_QUERY_THROW);
+                    Reference<container::XIndexAccess> xPages (
+                        xPagesSupplier->getDrawPages(), UNO_QUERY_THROW);
+                    aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
                 }
-                catch (RuntimeException aException)
+                else
                 {
-                    // We have not been able to set the current page at the main view.
-                    // This is sad but still leaves us in a valid state.  Therefore,
-                    // this exception is silently ignored.
+                    Reference<drawing::XMasterPagesSupplier> xPagesSupplier (
+                        mrBase.GetController()->getModel(), UNO_QUERY_THROW);
+                    Reference<container::XIndexAccess> xPages (
+                        xPagesSupplier->getMasterPages(), UNO_QUERY_THROW);
+                    aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
                 }
-                catch (beans::UnknownPropertyException aException)
-                {
-                    DBG_ASSERT(false,"CurrentPage property unknown");
-                }
+                // Switch to the page last edited by setting the
+                // CurrentPage property.
+                Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
+                xSet->setPropertyValue (String::CreateFromAscii("CurrentPage"), aPage);
+            }
+            catch (RuntimeException aException)
+            {
+                // We have not been able to set the current page at the main view.
+                // This is sad but still leaves us in a valid state.  Therefore,
+                // this exception is silently ignored.
+            }
+            catch (beans::UnknownPropertyException aException)
+            {
+                DBG_ASSERT(false,"CurrentPage property unknown");
             }
         }
     }
@@ -1473,6 +1462,5 @@ void ViewShellFactory::ReleaseShell (SfxShell* pShell)
 {
     delete pShell;
 }
-
 
 } // end of anonymouse namespace
