@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:07:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ namespace sd { namespace slidesorter { namespace controller {
 
 
 SlideSorterController::SlideSorterController (
-    SfxViewFrame *pFrame,
+    SfxViewFrame *,
     ::Window* pParentWindow,
     SlideSorterViewShell& rViewShell,
     model::SlideSorterModel& rModel,
@@ -152,7 +152,6 @@ SlideSorterController::SlideSorterController (
       mbIsMakeSelectionVisiblePending(false),
       mnPaintEntranceCount(0)
 {
-    OSL_ASSERT(pFrame!=NULL);
     OSL_ASSERT(pParentWindow!=NULL);
 
     // The whole background is painted by the view and controls.
@@ -326,7 +325,7 @@ void SlideSorterController::Paint (
                 GetView().GetWindow()->Invalidate();
             }
 
-            GetView().CompleteRedraw(pWindow, Region(aBBox));
+            GetView().CompleteRedraw(pWindow, Region(aBBox), 0, 0);
         }
         catch (const Exception&)
         {
@@ -941,7 +940,7 @@ void SlideSorterController::GetAttrState (SfxItemSet& rSet)
 
 
 
-void SlideSorterController::ExecStatusBar (SfxRequest& rRequest)
+void SlideSorterController::ExecStatusBar (SfxRequest& )
 {
 }
 
