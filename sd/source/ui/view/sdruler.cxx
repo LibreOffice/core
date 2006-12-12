@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdruler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:42:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,10 +89,9 @@ class RulerCtrlItem : public SfxControllerItem
 |*
 \************************************************************************/
 
-RulerCtrlItem::RulerCtrlItem(USHORT nId, Ruler& rRlr,
-                                 SfxBindings& rBind) :
-    SfxControllerItem(nId, rBind),
-    rRuler(rRlr)
+RulerCtrlItem::RulerCtrlItem(USHORT _nId, Ruler& rRlr, SfxBindings& rBind)
+: SfxControllerItem(_nId, rBind)
+, rRuler(rRlr)
 {
 }
 
@@ -101,14 +100,13 @@ RulerCtrlItem::RulerCtrlItem(USHORT nId, Ruler& rRlr,
 |*
 \************************************************************************/
 
-void RulerCtrlItem::StateChanged( USHORT nSId,
-                        SfxItemState eState, const SfxPoolItem* pState )
+void RulerCtrlItem::StateChanged( USHORT nSId, SfxItemState, const SfxPoolItem* pState )
 {
     switch( nSId )
     {
         case SID_RULER_NULL_OFFSET:
         {
-            const SfxPointItem* pItem = PTR_CAST(SfxPointItem, pState);
+            const SfxPointItem* pItem = dynamic_cast< const SfxPointItem* >(pState);
             DBG_ASSERT(pState ? pItem != NULL : TRUE, "SfxPointItem erwartet");
             if ( pItem )
                 rRuler.SetNullOffset(pItem->GetValue());
@@ -124,16 +122,10 @@ void RulerCtrlItem::StateChanged( USHORT nSId,
 |*
 \************************************************************************/
 
-Ruler::Ruler (
-    DrawViewShell& rViewSh,
-    ::Window* pParent,
-    ::sd::Window* pWin,
-    USHORT nRulerFlags,
-    SfxBindings& rBindings,
-    WinBits nWinStyle)
-    : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle),
-      pDrViewShell(&rViewSh),
-      pSdWin(pWin)
+Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, USHORT nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
+: SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
+, pSdWin(pWin)
+, pDrViewShell(&rViewSh)
 {
     rBindings.EnterRegistrations();
     pCtrlItem = new RulerCtrlItem(SID_RULER_NULL_OFFSET, *this, rBindings);
