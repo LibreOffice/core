@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:59:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:35:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ namespace sdr
 
             // #i37869# Support method to paint borders and grids which are overpainted from
             // this MasterPage content to let the MasterPage appear as page background
-            void PaintBackgroundPageBordersAndGrids(DisplayInfo& rDisplayInfo);
+            void PaintBackgroundPageBordersAndGrids(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
         };
     } // end of namespace contact
 } // end of namespace sdr
