@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:20:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ class SdPage;
 class SfxPrinter;
 struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
-class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class AbstractSvxNameDialog;
 class SdFormatClipboard;
 
 namespace sd {
@@ -88,13 +88,14 @@ class SD_DLLPUBLIC DrawDocShell : public SfxObjectShell
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDDRAWDOCSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDDRAWDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
 
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         BOOL bSdDataObj=FALSE,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
+
     DrawDocShell (
         SdDrawDocument* pDoc,
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
@@ -127,23 +128,24 @@ public:
     virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat ) const;
     virtual void            SetModified( BOOL = TRUE );
 
+    using SotObject::GetInterface;
+    using SfxObjectShell::GetVisArea;
+    using SfxShell::GetViewShell;
 
-
-    sd::ViewShell* GetViewShell() { return pViewShell; }
+    sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
     ::Window* GetWindow() const;
     ::sd::FunctionReference GetDocShellFunction() const { return mxDocShellFunction; }
     void SetDocShellFunction( const ::sd::FunctionReference& xFunction );
 
     SdDrawDocument*         GetDoc();
-    DocumentType            GetDocumentType() const { return eDocType; }
+    DocumentType            GetDocumentType() const { return meDocType; }
 
     SfxPrinter*             GetPrinter(BOOL bCreate);
     void                    SetPrinter(SfxPrinter *pNewPrinter);
     void                    UpdateFontList();
 
-    //BOOL                    IsUIActive() { return bUIActive; }
-    BOOL                    IsInDestruction() const { return bInDestruction; }
+    BOOL                    IsInDestruction() const { return mbInDestruction; }
 
     void                    CancelSearching();
 
@@ -175,15 +177,15 @@ public:
      */
     BOOL                    CheckPageName(::Window* pWin, String& rName );
 
-    void                    SetSlotFilter(BOOL bEnable = FALSE, USHORT nCount = 0, const USHORT* pSIDs = NULL) { bFilterEnable = bEnable; nFilterCount = nCount; pFilterSIDs = pSIDs; }
+    void                    SetSlotFilter(BOOL bEnable = FALSE, USHORT nCount = 0, const USHORT* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
-    UINT16                  GetStyleFamily() const { return nStyleFamily; }
-    void                    SetStyleFamily( UINT16 nSF ) { nStyleFamily = nSF; }
+    UINT16                  GetStyleFamily() const { return mnStyleFamily; }
+    void                    SetStyleFamily( UINT16 nSF ) { mnStyleFamily = nSF; }
 
     BOOL                    HasSpecialProgress() const { return ( mpSpecialProgress != NULL && mpSpecialProgressHdl != NULL ); }
     void                    ReleaseSpecialProgress() { mpSpecialProgress = NULL; mpSpecialProgressHdl = NULL; }
-    void                    SetSpecialProgress( SfxProgress* pProgress, Link* pLink ) { mpSpecialProgress = pProgress; mpSpecialProgressHdl = pLink; }
+    void                    SetSpecialProgress( SfxProgress* _pProgress, Link* pLink ) { mpSpecialProgress = _pProgress; mpSpecialProgressHdl = pLink; }
     SfxProgress*            GetSpecialProgress() { return( HasSpecialProgress() ? mpSpecialProgress : NULL ); }
 
     sal_Bool                IsNewDocument() const;
@@ -230,31 +232,30 @@ public:
                             DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
 
 public:
-    SdFormatClipboard*      pFormatClipboard;
+    SdFormatClipboard*      mpFormatClipboard;
 
 protected:
 
-    SfxProgress*            pProgress;
-    SdDrawDocument*         pDoc;
-    SfxUndoManager*         pUndoManager;
-    SfxPrinter*             pPrinter;
-    ::sd::ViewShell* pViewShell;
-    FontList*               pFontList;
+    SdDrawDocument*         mpDoc;
+    SfxUndoManager*         mpUndoManager;
+    SfxPrinter*             mpPrinter;
+    ::sd::ViewShell*        mpViewShell;
+    FontList*               mpFontList;
     ::sd::FunctionReference mxDocShellFunction;
-    DocumentType            eDocType;
-    UINT16                  nStyleFamily;
-    const USHORT*           pFilterSIDs;
-    USHORT                  nFilterCount;
-    BOOL                    bFilterEnable;
-    //BOOL                    bUIActive;
-    BOOL                    bSdDataObj;
-    BOOL                    bInDestruction;
-    BOOL                    bOwnPrinter;
+    DocumentType            meDocType;
+    UINT16                  mnStyleFamily;
+    const USHORT*           mpFilterSIDs;
+    USHORT                  mnFilterCount;
+    BOOL                    mbFilterEnable;
+    BOOL                    mbSdDataObj;
+    BOOL                    mbInDestruction;
+    BOOL                    mbOwnPrinter;
     BOOL                    mbNewDocument;
 
     static SfxProgress*     mpSpecialProgress;
     static Link*            mpSpecialProgressHdl;
 
+    bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct();
     virtual void            InPlaceActivate( BOOL bActive );
 };
