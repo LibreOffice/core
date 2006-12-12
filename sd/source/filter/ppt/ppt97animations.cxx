@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ppt97animations.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:23:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -801,29 +801,29 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
             sal_Int32 nIndex = 0;
             for( ; aIter != rEffects.end(); aIter++ )
             {
-                ::sd::CustomAnimationEffectPtr pEffect(*aIter);
+                ::sd::CustomAnimationEffectPtr pGroupEffect(*aIter);
 
                 ////todo? if( nIndex > 1 && pLastEffect && this->HasSoundEffect() )
                 ////          pLastEffect->setStopAudio();
                 if( nIndex < 2  )
                 {
-                    pEffect->setNodeType( this->GetEffectNodeType() );
+                    pGroupEffect->setNodeType( this->GetEffectNodeType() );
                 }
                 else if( nIndex > 0 )
                 {
                     bool bAtParagraphBegin = false;
                     if(!bTextReverse)
-                        bAtParagraphBegin = pEffect->getParaDepth() < nParagraphLevel;
+                        bAtParagraphBegin = pGroupEffect->getParaDepth() < nParagraphLevel;
                     else
                         bAtParagraphBegin = !pLastEffect || pLastEffect->getParaDepth() < nParagraphLevel;
                     if( bAtParagraphBegin )
-                        pEffect->setNodeType( this->GetEffectNodeType() );
+                        pGroupEffect->setNodeType( this->GetEffectNodeType() );
                     else if( this->GetTextAnimationType() == presentation::TextAnimationType::BY_PARAGRAPH )
-                        pEffect->setNodeType( presentation::EffectNodeType::WITH_PREVIOUS );
+                        pGroupEffect->setNodeType( presentation::EffectNodeType::WITH_PREVIOUS );
                     else
-                        pEffect->setNodeType( presentation::EffectNodeType::AFTER_PREVIOUS );
+                        pGroupEffect->setNodeType( presentation::EffectNodeType::AFTER_PREVIOUS );
                 }
-                pLastEffect = pEffect;
+                pLastEffect = pGroupEffect;
                 nIndex++;
             }
         }
