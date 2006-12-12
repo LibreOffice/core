@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:29:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,10 +262,10 @@ void fillRepeatComboBox( ComboBox* pBox )
 CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const Size& rMinSize )
 :   Control( pParent, SdResId(DLG_CUSTOMANIMATIONPANE) ),
     mrBase( rBase ),
-    mxModel( rBase.GetDocShell()->GetDoc()->getUnoModel(), UNO_QUERY ),
     mpCustomAnimationPresets(NULL),
     mnPropertyType( nPropertyTypeNone ),
     maMinSize( rMinSize ),
+    mxModel( rBase.GetDocShell()->GetDoc()->getUnoModel(), UNO_QUERY ),
     maLateInitTimer()
 {
     // load resources
@@ -652,10 +652,8 @@ void CustomAnimationPane::updateLayout()
     // Its width has to be calculated dynamically so that is can be
     // displayed flush right without having too much space to the buttons
     // with some languages or truncated text with others.
-    {
-        Size aSize (mpFTChangeOrder->CalcMinimumSize());
-        mpFTChangeOrder->SetSizePixel(aSize);
-    }
+    mpFTChangeOrder->SetSizePixel(mpFTChangeOrder->CalcMinimumSize());
+
     aCursor.X() -= aOffset.X() + mpFTChangeOrder->GetSizePixel().Width();
     aCursor.Y() += (aSize.Height() - mpFTChangeOrder->GetSizePixel().Height()) >> 1;
     mpFTChangeOrder->SetPosPixel( aCursor );
@@ -964,11 +962,11 @@ void CustomAnimationPane::updateControls()
             MainSequenceRebuildGuard aGuard( mpMainSequence );
 
             EffectSequenceHelper* pSequence = 0;
-            EffectSequence::iterator aIter( maListSelection.begin() );
-            const EffectSequence::iterator aEnd( maListSelection.end() );
-            while( aIter != aEnd )
+            EffectSequence::iterator aRebuildIter( maListSelection.begin() );
+            const EffectSequence::iterator aRebuildEnd( maListSelection.end() );
+            while( aRebuildIter != aRebuildEnd )
             {
-                CustomAnimationEffectPtr pEffect = (*aIter++);
+                CustomAnimationEffectPtr pEffect = (*aRebuildIter++);
 
                 if( pEffect.get() )
                 {
@@ -1433,10 +1431,10 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleEnd ) == STLPropertyState_DIRECT )
         {
-            Any aEnd( pResultSet->getPropertyValue( nHandleEnd ) );
-            if( pEffect->getEnd() != aEnd )
+            Any aEndValue( pResultSet->getPropertyValue( nHandleEnd ) );
+            if( pEffect->getEnd() != aEndValue )
             {
-                pEffect->setEnd( aEnd );
+                pEffect->setEnd( aEndValue );
                 bChanged = true;
             }
         }
@@ -2060,7 +2058,7 @@ void CustomAnimationPane::onChangeSpeed()
 }
 
 /// this link is called when the property box is modified by the user
-IMPL_LINK( CustomAnimationPane, implPropertyHdl, Control*, pControl )
+IMPL_LINK( CustomAnimationPane, implPropertyHdl, Control*, EMPTYARG )
 {
     onChangeProperty();
     return 0;
@@ -2102,7 +2100,7 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     return 0;
 }
 
-IMPL_LINK(CustomAnimationPane, lateInitCallback, Timer*, pTimer)
+IMPL_LINK(CustomAnimationPane, lateInitCallback, Timer*, EMPTYARG )
 {
     // Call getPresets() to initiate the (expensive) construction of the
     // presets list.
