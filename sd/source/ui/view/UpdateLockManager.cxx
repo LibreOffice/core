@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UpdateLockManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:32:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:08:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ void UpdateLockManager::Implementation::ForceUnlock (void)
 
 
 void SAL_CALL UpdateLockManager::Implementation::layoutEvent (
-    const lang::EventObject& xSource,
+    const lang::EventObject&,
     sal_Int16 eLayoutEvent,
     const Any& rInfo)
     throw (uno::RuntimeException)
@@ -382,7 +382,7 @@ void SAL_CALL UpdateLockManager::Implementation::layoutEvent (
 
 
 
-void SAL_CALL UpdateLockManager::Implementation::disposing (const lang::EventObject& rEventObject)
+void SAL_CALL UpdateLockManager::Implementation::disposing (const lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
@@ -397,7 +397,7 @@ void SAL_CALL UpdateLockManager::Implementation::disposing (void)
 
 
 
-IMPL_LINK(UpdateLockManager::Implementation, Timeout, void*, unused)
+IMPL_LINK(UpdateLockManager::Implementation, Timeout, void*, EMPTYARG)
 {
     // This method is only called when all else failed.  We unlock
     // regardless of how deep the lock depth.
