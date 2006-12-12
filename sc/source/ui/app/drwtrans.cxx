@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:48:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:06:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     //  get size for object descriptor
     //
 
-    SdrExchangeView aView(pModel);
+    // #i71538# use complete SdrViews
+    // SdrExchangeView aView(pModel);
+    SdrView aView(pModel);
     SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
     aView.MarkAllObj(pPv);
     aSrcSize = aView.GetAllMarkedRect().GetSize();
@@ -443,7 +445,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         }
         else if ( nFormat == SOT_FORMAT_BITMAP || nFormat == SOT_FORMAT_GDIMETAFILE )
         {
-            SdrExchangeView aView( pModel );
+            // #i71538# use complete SdrViews
+            // SdrExchangeView aView( pModel );
+            SdrView aView( pModel );
             SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
             DBG_ASSERT( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
@@ -754,7 +758,9 @@ void ScDrawTransferObj::InitDocShell()
         pDestDoc->InitDrawLayer( pDocSh );
 
         SdrModel* pDestModel = pDestDoc->GetDrawLayer();
-        SdrExchangeView aDestView( pDestModel );
+        // #i71538# use complete SdrViews
+        // SdrExchangeView aDestView( pDestModel );
+        SdrView aDestView( pDestModel );
         aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
         aDestView.Paste( *pModel, Point( aSrcSize.Width()/2, aSrcSize.Height()/2 ) );
 
