@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 16:17:43 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:24:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ GEN_HID=TRUE
 LIB1TARGET=$(SLB)$/go.lib
 LIB1FILES=\
     $(SLB)$/base3d.lib	\
-    $(SLB)$/base2d.lib	\
     $(SLB)$/graphic.lib \
     $(SLB)$/unographic.lib	
 
