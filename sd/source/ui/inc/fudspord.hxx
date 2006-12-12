@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudspord.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,9 @@ protected:
     virtual ~FuDisplayOrder (void);
     void implClearOverlay();
 
-    Pointer         aPtr;
-    SdrObject*      pRefObj;
-    SdrDropMarkerOverlay*                       mpOverlay;
+    Pointer                 maPtr;
+    SdrObject*              mpRefObj;
+    SdrDropMarkerOverlay*   mpOverlay;
 
 private:
     FuDisplayOrder (
