@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:52:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif#else
+#endif
 #ifndef _OUTLINER_HXX //autogen wg. Outliner
 #include <svx/outliner.hxx>
 #endif
@@ -260,7 +260,7 @@ using namespace ::sd;
 
 void SdDrawDocument::CreateLayoutTemplates()
 {
-    SdStyleSheetPool*       pStyleSheetPool = (SdStyleSheetPool*)GetStyleSheetPool();
+    SdStyleSheetPool*       pSSPool = (SdStyleSheetPool*)GetStyleSheetPool();
     SfxStyleSheetBase*      pSheet = NULL;
     String                  aHelpFile;
     String                  aStdName = String(SdResId(STR_STANDARD_STYLESHEET_NAME));
@@ -274,7 +274,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     USHORT nMask = SFXSTYLEBIT_AUTO;
 
     String aName(aStdName);
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetHelpId( aHelpFile, HID_STANDARD_STYLESHEET_NAME );
     SfxItemSet& rISet = pSheet->GetItemSet();
     SfxItemPool* pPool = rISet.GetPool();
@@ -365,8 +365,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     // if this is a new document and
     // text direction is set explicitly to RTL
 /*
-    if( pDocSh &&
-        pDocSh->IsNewDocument() &&
+    if( mpDocSh &&
+        mpDocSh->IsNewDocument() &&
         SD_MOD()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB )
     {
         SvxAdjustItem           aAdjust( SVX_ADJUST_RIGHT );
@@ -396,7 +396,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);           // in Prozent
 
-    Font aBulletFont( pStyleSheetPool->GetBulletFont() );
+    Font aBulletFont( pSSPool->GetBulletFont() );
 
     aBulletFont.SetSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
 
@@ -408,14 +408,14 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(aBulletStateItem);
 
     // Neues BulletItem
-    pStyleSheetPool->PutNumBulletItem( pSheet, aBulletFont );
+    pSSPool->PutNumBulletItem( pSheet, aBulletFont );
 
     SfxItemSet* pISet = NULL;
 
     // ---- Objekt mit Pfeilspitze ----------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_OBJWITHARROW));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHARROW );
     pISet = &pSheet->GetItemSet();
@@ -438,7 +438,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Objekt mit Schatten -------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_OBJWITHSHADOW));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHSHADOW );
     pISet = &pSheet->GetItemSet();
@@ -451,7 +451,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Objekt ohne Fllung -------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHOUTFILL );
     pISet = &pSheet->GetItemSet();
@@ -461,7 +461,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Text ----------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXT));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXT );
     pISet = &pSheet->GetItemSet();
@@ -472,7 +472,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Textk”rper ----------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXTBODY));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY );
     pISet = &pSheet->GetItemSet();
@@ -485,7 +485,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Textk”rper mit Blocksatz --------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXTBODY_JUSTIFY));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_JUSTIFY );
     pISet = &pSheet->GetItemSet();
@@ -498,7 +498,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Textkoerper mit Einzug -----------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXTBODY_INDENT));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_INDENT );
     pISet = &pSheet->GetItemSet();
@@ -518,7 +518,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Titel ---------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE );
     pISet = &pSheet->GetItemSet();
@@ -531,7 +531,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Titel1 --------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE1));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE1 );
     pISet = &pSheet->GetItemSet();
@@ -552,7 +552,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Titel2 --------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE2));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE2 );
     pISet = &pSheet->GetItemSet();
@@ -585,7 +585,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Ueberschrift ---------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_HEADLINE));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE );
     pISet = &pSheet->GetItemSet();
@@ -601,7 +601,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Ueberschrift1 --------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_HEADLINE1));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE1 );
     pISet = &pSheet->GetItemSet();
@@ -619,7 +619,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Ueberschrift2 --------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_HEADLINE2));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE2 );
     pISet = &pSheet->GetItemSet();
@@ -638,7 +638,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Bemassung --------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_MEASURE));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_MEASURE );
     pISet = &pSheet->GetItemSet();
@@ -662,7 +662,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- leere Vorlage --------------------------------------------------
 
     aName = String(SdResId(STR_EMPTY_STYLESHEET_NAME));
-    pSheet = &(pStyleSheetPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
     pISet = &pSheet->GetItemSet();
     pISet->InvalidateAllItems();      // alle auf DONTCARE setzen
 */
@@ -670,7 +670,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Praesentationsvorlagen fuer das Standardlayout erzeugen
     String aPrefix = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
-    pStyleSheetPool->CreateLayoutStyleSheets(aPrefix);
+    pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
 
 
@@ -710,16 +710,16 @@ USHORT SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
 
 void SdDrawDocument::StopOnlineSpelling()
 {
-    if (pOnlineSpellingTimer && pOnlineSpellingTimer->IsActive())
+    if (mpOnlineSpellingTimer && mpOnlineSpellingTimer->IsActive())
     {
-        pOnlineSpellingTimer->Stop();
+        mpOnlineSpellingTimer->Stop();
     }
 
-    delete pOnlineSpellingTimer;
-    pOnlineSpellingTimer = NULL;
+    delete mpOnlineSpellingTimer;
+    mpOnlineSpellingTimer = NULL;
 
-    delete pOnlineSpellingList;
-    pOnlineSpellingList = NULL;
+    delete mpOnlineSpellingList;
+    mpOnlineSpellingList = NULL;
 }
 
 /*************************************************************************
@@ -730,8 +730,8 @@ void SdDrawDocument::StopOnlineSpelling()
 
 void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 {
-    if (bOnlineSpell && (bForceSpelling || bInitialOnlineSpellingEnabled) &&
-        pDocSh && !pDocSh->IsReadOnly() )
+    if (mbOnlineSpell && (bForceSpelling || mbInitialOnlineSpellingEnabled) &&
+        mpDocSh && !mpDocSh->IsReadOnly() )
     {
         StopOnlineSpelling();
 
@@ -745,11 +745,9 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
         if( xHyphenator.is() )
             pOutl->SetHyphenator( xHyphenator );
 
-        pOutl->SetDefaultLanguage( eLanguage );
+        pOutl->SetDefaultLanguage( meLanguage );
 
-        SdPage* pPage = NULL;
-        SdrObject* pObj = NULL;
-        pOnlineSpellingList = new ShapeList;
+        mpOnlineSpellingList = new ShapeList;
         USHORT nPage;
 
         for ( nPage = 0; nPage < GetPageCount(); nPage++ )
@@ -764,11 +762,11 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
             FillOnlineSpellingList((SdPage*) GetMasterPage(nPage));
         }
 
-        pOnlineSpellingList->seekShape(0);
-        pOnlineSpellingTimer = new Timer();
-        pOnlineSpellingTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
-        pOnlineSpellingTimer->SetTimeout(250);
-        pOnlineSpellingTimer->Start();
+        mpOnlineSpellingList->seekShape(0);
+        mpOnlineSpellingTimer = new Timer();
+        mpOnlineSpellingTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
+        mpOnlineSpellingTimer->SetTimeout(250);
+        mpOnlineSpellingTimer->Start();
     }
 }
 
@@ -793,7 +791,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
         if (pObj->GetOutlinerParaObject())
         {
             // Textobjekt gefunden
-            pOnlineSpellingList->addShape(*pObj);
+            mpOnlineSpellingList->addShape(*pObj);
         }
         else if (pObj->GetObjIdentifier() == OBJ_GRUP)
         {
@@ -814,7 +812,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 
             if (bSubTextObjFound)
             {
-                pOnlineSpellingList->addShape(*pObj);
+                mpOnlineSpellingList->addShape(*pObj);
             }
         }
     }
@@ -826,15 +824,15 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 |*
 \************************************************************************/
 
-IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, pTimer)
+IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, EMPTYARG )
 {
-    if (pOnlineSpellingList!=NULL
-        && ( !bOnlineSpell || pOnlineSpellingList->hasMore()))
+    if (mpOnlineSpellingList!=NULL
+        && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))
     {
         /**********************************************************************
         * Naechstes Objekt spellen
         **********************************************************************/
-        SdrObject* pObj = pOnlineSpellingList->getNextShape();
+        SdrObject* pObj = mpOnlineSpellingList->getNextShape();
 
         if (pObj)
         {
@@ -865,18 +863,18 @@ IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, pTimer)
         }
 
         // Weitersuchen
-        pOnlineSpellingTimer->Start();
+        mpOnlineSpellingTimer->Start();
     }
     else
     {
         // Spelling wurde initial durchgefuehrt
-        bInitialOnlineSpellingEnabled = FALSE;
+        mbInitialOnlineSpellingEnabled = FALSE;
 
         // Suche beenden
         StopOnlineSpelling();
 
-        delete pOnlineSearchItem;
-        pOnlineSearchItem = NULL;
+        delete mpOnlineSearchItem;
+        mpOnlineSearchItem = NULL;
     }
 
     return(0);
@@ -892,7 +890,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 {
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
-        bHasOnlineSpellErrors = FALSE;
+        mbHasOnlineSpellErrors = FALSE;
         ::sd::Outliner* pOutl = GetInternalOutliner(TRUE);
         pOutl->SetUpdateMode(TRUE);
         Link aEvtHdl = pOutl->GetStatusEventHdl();
@@ -911,12 +909,12 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
         // Text in den Outliner setzen
         pOutl->SetText(*((SdrTextObj*) pObj)->GetOutlinerParaObject());
 
-        if (!pOnlineSearchItem || pOutl->HasText(*pOnlineSearchItem))
+        if (!mpOnlineSearchItem || pOutl->HasText(*mpOnlineSearchItem))
         {
             // Spelling
             pOutl->CompleteOnlineSpelling();
 
-            if (bHasOnlineSpellErrors)
+            if (mbHasOnlineSpellErrors)
             {
                 sd::ModifyGuard aGuard( this );
 
@@ -930,7 +928,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
         pOutl->SetStatusEventHdl(aEvtHdl);
         pOutl->SetUpdateMode(FALSE);
         pOutl->Init( nOldOutlMode );
-        bHasOnlineSpellErrors = FALSE;
+        mbHasOnlineSpellErrors = FALSE;
     }
 }
 
@@ -939,14 +937,14 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 |* Objekt wurde ins Model eingefuegt
 |*
 \************************************************************************/
-void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* pPage)
+void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* /*pPage*/)
 {
-    if(pOnlineSpellingList && pObj)
+    if(mpOnlineSpellingList && pObj)
     {
         if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
         {
             // Objekt in OnlineSpelling-Liste aufnehmen
-            pOnlineSpellingList->addShape(*pObj);
+            mpOnlineSpellingList->addShape(*pObj);
         }
     }
 }
@@ -956,14 +954,14 @@ void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* pPage)
 |* Objekt wurde aus dem Model entfernt
 |*
 \************************************************************************/
-void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* pPage)
+void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
 {
-    if(pOnlineSpellingList && pObj)
+    if(mpOnlineSpellingList && pObj)
     {
         if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
         {
             // Objekt in OnlineSpelling-Liste durch NULL-Pointer ersetzt
-            pOnlineSpellingList->removeShape(*pObj);
+            mpOnlineSpellingList->removeShape(*pObj);
         }
     }
 }
@@ -976,7 +974,7 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* pPage)
 IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 {
     ULONG nStat = pEditStat->GetStatusWord();
-    bHasOnlineSpellErrors = (nStat & EE_STAT_WRONGWORDCHANGED) != 0;
+    mbHasOnlineSpellErrors = (nStat & EE_STAT_WRONGWORDCHANGED) != 0;
 
     return(0);
 }
@@ -990,8 +988,8 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 // #91457# removed link and replaced with Imp method
 void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
 {
-    delete pOnlineSearchItem;
-    pOnlineSearchItem = NULL;
+    delete mpOnlineSearchItem;
+    mpOnlineSearchItem = NULL;
 
     USHORT nCommand = pInfo->nCommand;
 
@@ -1007,8 +1005,8 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
             pObj->BroadcastObjectChange();
         }
 
-        pOnlineSearchItem = new SvxSearchItem();
-        pOnlineSearchItem->SetSearchString(pInfo->aWord);
+        mpOnlineSearchItem = new SvxSearchItem();
+        mpOnlineSearchItem->SetSearchString(pInfo->aWord);
         StartOnlineSpelling();
     }
     else if (nCommand == SPELLCMD_STARTSPELLDLG)
@@ -1079,77 +1077,33 @@ void SdDrawDocument::RestoreLayerNames()
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
     USHORT nLayerCount = rLayerAdmin.GetLayerCount();
 
-    if (nFileFormatVersion < 13)
+    for (USHORT nLayer = 0; nLayer < nLayerCount; nLayer++)
     {
-        USHORT nStandardLayer = 5;
-        nLayerCount = Min(nLayerCount, nStandardLayer);
+        SdrLayer* pLayer = rLayerAdmin.GetLayer(nLayer);
 
-        for (USHORT nLayer = 0; nLayer < nLayerCount; nLayer++)
+        if (pLayer)
         {
-            SdrLayer* pLayer = rLayerAdmin.GetLayer(nLayer);
+            String aLayerName(pLayer->GetName());
 
-            if (pLayer)
+            if (aLayerName.EqualsAscii( "LAYER_LAYOUT" ))
             {
-                String aDefaultLayerName;
-
-                if (nLayer == 0)
-                {
-                    aDefaultLayerName = String(SdResId(STR_LAYER_LAYOUT));
-                }
-                else if (nLayer == 1)
-                {
-                    aDefaultLayerName = String(SdResId(STR_LAYER_BCKGRND));
-                }
-                else if (nLayer == 2)
-                {
-                    aDefaultLayerName = String(SdResId(STR_LAYER_BCKGRNDOBJ));
-                }
-                else if (nLayer == 3)
-                {
-                    aDefaultLayerName = String(SdResId(STR_LAYER_CONTROLS));
-                }
-                else if (nLayer == 4)
-                {
-                    aDefaultLayerName = String(SdResId(STR_LAYER_MEASURELINES));
-                }
-
-                if (pLayer->GetName() != aDefaultLayerName)
-                {
-                    pLayer->SetName(aDefaultLayerName);
-                }
+                pLayer->SetName(String(SdResId(STR_LAYER_LAYOUT)));
             }
-        }
-    }
-    else
-    {
-        for (USHORT nLayer = 0; nLayer < nLayerCount; nLayer++)
-        {
-            SdrLayer* pLayer = rLayerAdmin.GetLayer(nLayer);
-
-            if (pLayer)
+            else if (aLayerName.EqualsAscii( "LAYER_BCKGRND" ))
             {
-                String aLayerName(pLayer->GetName());
-
-                if (aLayerName.EqualsAscii( "LAYER_LAYOUT" ))
-                {
-                    pLayer->SetName(String(SdResId(STR_LAYER_LAYOUT)));
-                }
-                else if (aLayerName.EqualsAscii( "LAYER_BCKGRND" ))
-                {
-                    pLayer->SetName(String(SdResId(STR_LAYER_BCKGRND)));
-                }
-                else if (aLayerName.EqualsAscii( "LAYER_BACKGRNDOBJ" ))
-                {
-                    pLayer->SetName(String(SdResId(STR_LAYER_BCKGRNDOBJ)));
-                }
-                else if (aLayerName.EqualsAscii( "LAYER_CONTROLS" ))
-                {
-                    pLayer->SetName(String(SdResId(STR_LAYER_CONTROLS)));
-                }
-                else if (aLayerName.EqualsAscii( "LAYER_MEASURELINES" ))
-                {
-                    pLayer->SetName(String(SdResId(STR_LAYER_MEASURELINES)));
-                }
+                pLayer->SetName(String(SdResId(STR_LAYER_BCKGRND)));
+            }
+            else if (aLayerName.EqualsAscii( "LAYER_BACKGRNDOBJ" ))
+            {
+                pLayer->SetName(String(SdResId(STR_LAYER_BCKGRNDOBJ)));
+            }
+            else if (aLayerName.EqualsAscii( "LAYER_CONTROLS" ))
+            {
+                pLayer->SetName(String(SdResId(STR_LAYER_CONTROLS)));
+            }
+            else if (aLayerName.EqualsAscii( "LAYER_MEASURELINES" ))
+            {
+                pLayer->SetName(String(SdResId(STR_LAYER_MEASURELINES)));
             }
         }
     }
@@ -1166,7 +1120,7 @@ String SdDrawDocument::CreatePageNumValue(USHORT nNum) const
     String aPageNumValue;
     BOOL bUpper = FALSE;
 
-    switch (ePageNumType)
+    switch (mePageNumType)
     {
         case SVX_CHARS_UPPER_LETTER:
             aPageNumValue += (sal_Unicode)(char)((nNum - 1) % 26 + 'A');
