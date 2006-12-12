@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestPanel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:15:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:44:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,11 +85,11 @@ public:
     {
         return maPreferredSize;
     }
-    virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeigh)
+    virtual sal_Int32 GetPreferredWidth (sal_Int32 )
     {
         return maPreferredSize.Width();
     }
-    virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth)
+    virtual sal_Int32 GetPreferredHeight (sal_Int32 )
     {
         return maPreferredSize.Height();
     }
