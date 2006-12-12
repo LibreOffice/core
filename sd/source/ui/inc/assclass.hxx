@@ -4,9 +4,9 @@
  *
  *  $RCSfile: assclass.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:22:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,45 +51,45 @@ class Control;
 
 class SD_DLLPUBLIC Assistent
 {
-    List* pPages[MAX_PAGES];
+    List* mpPages[MAX_PAGES];
         //enthaelt fuer jede Seite die Controls die
         //korrekt geschaltet werden muessen
 
-    UINT8 nPages;
+    int mnPages;
         //gibt die Anzahl der Seiten an
 
-    UINT8 nCurrentPage;
+    int mnCurrentPage;
         //gibt die aktuelle Seite an
 
-    BOOL* pPageStatus;
+    bool* mpPageStatus;
 
 public:
 
-    Assistent(UINT8 nNoOfPage);
+    Assistent(int nNoOfPage);
 
-    BOOL IsEnabled( UINT8 nPage );
-    void EnablePage( UINT8 nPage );
-    void DisablePage( UINT8 nPage );
+    bool IsEnabled( int nPage );
+    void EnablePage( int nPage );
+    void DisablePage( int nPage );
 
-    BOOL InsertControl(UINT8 nDestPage,Control* pUsedControl);
+    bool InsertControl(int nDestPage,Control* pUsedControl);
         //fuegt einer spezifizierten Seite ein Control hinzu
 
-    BOOL NextPage();
+    bool NextPage();
         //springt zur naechsten Seite
 
-    BOOL PreviousPage();
+    bool PreviousPage();
         //springt zur vorherigen Seite
 
-    BOOL GotoPage(const UINT8 nPageToGo);
+    bool GotoPage(const int nPageToGo);
         //springt zu einer angegebenen Seite
 
-    BOOL IsLastPage();
+    bool IsLastPage();
         //gibt an ob die aktuelle Seite die letzte ist
 
-    BOOL IsFirstPage();
+    bool IsFirstPage();
         //gibt an ob die aktuelle Seite die erste ist
 
-    UINT8  GetCurrentPage();
+    int  GetCurrentPage();
         //gibt die aktuelle Seite zurueck
 
     ~Assistent();
