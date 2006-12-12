@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:43:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2070,7 +2070,7 @@ BOOL SwFEShell::EndMark()
                     {
                         if ( !bShowHdl )
                         {
-                            pDView->HideMarkHdl();
+                            //HMHpDView->HideMarkHdl();
                             bShowHdl = TRUE;
                         }
                         rMrkList.DeleteMark( i );
@@ -2082,7 +2082,7 @@ BOOL SwFEShell::EndMark()
             {
                 pDView->MarkListHasChanged();
                 pDView->AdjustMarkHdl();
-                pDView->ShowMarkHdl();
+                //HMHpDView->ShowMarkHdl();
             }
 
             if ( rMrkList.GetMarkCount() )
