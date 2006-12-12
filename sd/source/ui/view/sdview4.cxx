@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:46:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                                    const Point& rPos, SdrObject* pObj, ImageMap* pImageMap )
 {
     SdrEndTextEdit();
-    nAction = rAction;
+    mnAction = rAction;
 
     // Liegt ein Objekt an der Position rPos?
     SdrGrafObj*     pNewGrafObj = NULL;
@@ -183,7 +183,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         PickObj(rPos, pPickObj, pPageView);
     }
 
-    if( nAction == DND_ACTION_LINK && pPickObj && pPV )
+    if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
     {
         if( pPickObj->ISA( SdrGrafObj ) )
         {
@@ -229,9 +229,9 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             EndUndo();
 
             XOBitmap aXOBitmap( rGraphic.GetBitmap() );
-            SfxItemSet aSet(pDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+            SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
-            aSet.Put(XFillBitmapItem(&pDocSh->GetPool(), aXOBitmap));
+            aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), aXOBitmap));
             pPickObj->SetMergedItemSetAndBroadcast(aSet);
         }
     }
@@ -243,8 +243,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
         {
             ::OutputDevice* pOutDev = 0;
-            if( pViewSh )
-                pOutDev = pViewSh->GetActiveWindow();
+            if( mpViewSh )
+                pOutDev = mpViewSh->GetActiveWindow();
 
             if( !pOutDev )
                 pOutDev = Application::GetDefaultDevice();
@@ -270,22 +270,22 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         ULONG   nOptions = SDRINSERT_SETDEFLAYER;
         BOOL    bIsPresTarget = FALSE;
 
-        if ((pViewSh
-                && pViewSh->GetViewShell()!=NULL
-                && pViewSh->GetViewShell()->GetIPClient()
-                && pViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
+        if ((mpViewSh
+                && mpViewSh->GetViewShell()!=NULL
+                && mpViewSh->GetViewShell()->GetIPClient()
+                && mpViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
             || this->ISA(SlideView))
             nOptions |= SDRINSERT_DONTMARK;
 
-        if( ( nAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
+        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
         {
-            SdPage* pPage = (SdPage*) pPickObj->GetPage();
+            SdPage* pP = static_cast< SdPage* >( pPickObj->GetPage() );
 
-            if ( pPage && pPage->IsMasterPage() )
-                bIsPresTarget = pPage->IsPresObj(pPickObj);
+            if ( pP && pP->IsMasterPage() )
+                bIsPresTarget = pP->IsPresObj(pPickObj);
         }
 
-        if( ( nAction & DND_ACTION_MOVE ) && pPickObj && !bIsPresTarget )
+        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && !bIsPresTarget )
         {
             // replace object
             if (pImageMap)
@@ -305,13 +305,13 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
             BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
             pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
-            SdrPage* pPage = pPV->GetPage();
-            pPage->InsertObject(pNewGrafObj);
-            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
-            AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
-            pPage->RemoveObject(pPickObj->GetOrdNum());
+            SdrPage* pP = pPV->GetPage();
+            pP->InsertObject(pNewGrafObj);
+            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
+            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
+            pP->RemoveObject(pPickObj->GetOrdNum());
             EndUndo();
-            nAction = DND_ACTION_COPY;
+            mnAction = DND_ACTION_COPY;
         }
         else
         {
@@ -322,7 +322,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
     }
 
-    rAction = nAction;
+    rAction = mnAction;
 
     return pNewGrafObj;
 }
@@ -333,7 +333,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
                                    const Point& rPos, const Size& rSize )
 {
     SdrEndTextEdit();
-    nAction = rAction;
+    mnAction = rAction;
 
     SdrMediaObj*    pNewMediaObj = NULL;
     SdrPageView*    pPV = GetSdrPageView();
@@ -351,7 +351,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
         PickObj(rPos, pPickObj, pPageView);
     }
 
-    if( nAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
+    if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
         pNewMediaObj->setURL( rMediaURL );
@@ -368,7 +368,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
             pNewMediaObj->setURL( rMediaURL );
     }
 
-    rAction = nAction;
+    rAction = mnAction;
 
     return pNewMediaObj;
 }
@@ -379,18 +379,18 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
 |*
 \************************************************************************/
 
-IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
+IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
 {
-    DBG_ASSERT( pViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
-    if( !pViewSh )
+    DBG_ASSERT( mpViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
+    if( !mpViewSh )
         return 0;
 
-    SfxErrorContext aEc( ERRCTX_ERROR, pViewSh->GetActiveWindow(), RID_SO_ERRCTX );
+    SfxErrorContext aEc( ERRCTX_ERROR, mpViewSh->GetActiveWindow(), RID_SO_ERRCTX );
     ErrCode nError = 0;
 
-    ::std::vector< String >::const_iterator aIter( aDropFileVector.begin() );
+    ::std::vector< String >::const_iterator aIter( maDropFileVector.begin() );
 
-    while( (aIter != aDropFileVector.end()) && !nError )
+    while( (aIter != maDropFileVector.end()) && !nError )
     {
         String          aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
@@ -412,15 +412,15 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
         {
             if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
             {
-                sal_Int8    nTempAction = ( aIter == aDropFileVector.begin() ) ? nAction : 0;
-                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, aDropPos, NULL, NULL );
+                sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
+                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
 
                 if( pGrafObj )
                     pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
 
                 // return action from first inserted graphic
-                if( aIter == aDropFileVector.begin() )
-                    nAction = nTempAction;
+                if( aIter == maDropFileVector.begin() )
+                    mnAction = nTempAction;
 
                 bOK = TRUE;
             }
@@ -451,13 +451,13 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                         aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
                         aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
                     {
-                        ::sd::Window* pWin = pViewSh->GetActiveWindow();
-                        SfxRequest      aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
+                        ::sd::Window* pWin = mpViewSh->GetActiveWindow();
+                        SfxRequest      aReq(SID_INSERTFILE, 0, mpDoc->GetItemPool());
                         SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
 
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
-                        FuInsertFile::Create( pViewSh, pWin, this, pDoc, aReq );
+                        FuInsertFile::Create( mpViewSh, pWin, this, mpDoc, aReq );
                         bOK = TRUE;
                     }
                 }
@@ -473,7 +473,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
             {
                 if( aPrefSize.Width() && aPrefSize.Height() )
                 {
-                    ::sd::Window* pWin = pViewSh->GetActiveWindow();
+                    ::sd::Window* pWin = mpViewSh->GetActiveWindow();
 
                     if( pWin )
                         aPrefSize = pWin->PixelToLogic( aPrefSize, MAP_100TH_MM );
@@ -483,13 +483,13 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                 else
                     aPrefSize  = Size( 5000, 5000 );
 
-                InsertMediaURL( aCurrentDropFile, nAction, aDropPos, aPrefSize ) ;
+                InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize ) ;
             }
-            else if( nAction & DND_ACTION_LINK )
-                static_cast< DrawViewShell* >( pViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &aDropPos );
+            else if( mnAction & DND_ACTION_LINK )
+                static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &maDropPos );
             else
             {
-                if( pViewSh )
+                if( mpViewSh )
                 {
                     try
                     {
@@ -499,7 +499,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                         aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
                         aMedium[0].Value <<= ::rtl::OUString( aCurrentDropFile );
 
-                        uno::Reference < embed::XEmbeddedObject > xObj = pDocSh->GetEmbeddedObjectContainer().
+                        uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().
                                 InsertEmbeddedObject( aMedium, aName );
 
                         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
@@ -529,16 +529,16 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                                 aSize.Height()  = 1000;
                             }
 
-                            aRect = Rectangle( aDropPos, aSize );
+                            aRect = Rectangle( maDropPos, aSize );
 
                             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
                             ULONG       nOptions = SDRINSERT_SETDEFLAYER;
 
-                            if (pViewSh != NULL)
+                            if (mpViewSh != NULL)
                             {
-                                OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+                                OSL_ASSERT (mpViewSh->GetViewShell()!=NULL);
                                 SfxInPlaceClient* pIpClient =
-                                    pViewSh->GetViewShell()->GetIPClient();
+                                    mpViewSh->GetViewShell()->GetIPClient();
                                 if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
                                     nOptions |= SDRINSERT_DONTMARK;
                             }
@@ -574,9 +574,9 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 |*
 \************************************************************************/
 
-IMPL_LINK( View, DropErrorHdl, Timer*, pTimer )
+IMPL_LINK( View, DropErrorHdl, Timer*, EMPTYARG )
 {
-    InfoBox( pViewSh ? pViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+    InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;
 }
 
@@ -594,45 +594,45 @@ void View::LockRedraw(BOOL bLock)
 {
     if (bLock)
     {
-        nLockRedrawSmph++;
-        DBG_ASSERT(nLockRedrawSmph, "Ueberlauf im LockRedraw");
+        mnLockRedrawSmph++;
+        DBG_ASSERT(mnLockRedrawSmph, "Ueberlauf im LockRedraw");
     }
     else
     {
-        DBG_ASSERT(nLockRedrawSmph, "Unterlauf im LockRedraw");
-        nLockRedrawSmph--;
+        DBG_ASSERT(mnLockRedrawSmph, "Unterlauf im LockRedraw");
+        mnLockRedrawSmph--;
 
         // alle gespeicherten Redraws ausfuehren
-        if (!nLockRedrawSmph)
+        if (!mnLockRedrawSmph)
         {
-            while (pLockedRedraws && pLockedRedraws->Count())
+            while (mpLockedRedraws && mpLockedRedraws->Count())
             {
-                SdViewRedrawRec* pRec = (SdViewRedrawRec*)pLockedRedraws->First();
-                OutputDevice* pCurrentOut = pRec->pOut;
+                SdViewRedrawRec* pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
+                OutputDevice* pCurrentOut = pRec->mpOut;
                 Rectangle aBoundRect(pRec->aRect);
-                pLockedRedraws->Remove(pRec);
+                mpLockedRedraws->Remove(pRec);
                 delete pRec;
 
-                pRec = (SdViewRedrawRec*)pLockedRedraws->First();
+                pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
                 while (pRec)
                 {
-                    if (pRec->pOut == pCurrentOut)
+                    if (pRec->mpOut == pCurrentOut)
                     {
                         aBoundRect.Union(pRec->aRect);
-                        pLockedRedraws->Remove(pRec);
+                        mpLockedRedraws->Remove(pRec);
                         delete pRec;
-                        pRec = (SdViewRedrawRec*)pLockedRedraws->GetCurObject();
+                        pRec = (SdViewRedrawRec*)mpLockedRedraws->GetCurObject();
                     }
                     else
                     {
-                        pRec = (SdViewRedrawRec*)pLockedRedraws->Next();
+                        pRec = (SdViewRedrawRec*)mpLockedRedraws->Next();
                     }
                 }
 
                 CompleteRedraw(pCurrentOut, Region(aBoundRect));
             }
-            delete pLockedRedraws;
-            pLockedRedraws = NULL;
+            delete mpLockedRedraws;
+            mpLockedRedraws = NULL;
         }
     }
 }
@@ -642,7 +642,7 @@ void View::LockRedraw(BOOL bLock)
 
 bool View::IsRedrawLocked (void) const
 {
-    return nLockRedrawSmph>0;
+    return mnLockRedrawSmph>0;
 }
 
 /*************************************************************************
