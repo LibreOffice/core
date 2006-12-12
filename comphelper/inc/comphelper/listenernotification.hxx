@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenernotification.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:43:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,6 +289,8 @@ namespace comphelper
         {
             return OListenerContainer::notify( _rEvent );
         }
+
+        using OListenerContainer::notify;
 
     protected:
         virtual bool    implNotify(
