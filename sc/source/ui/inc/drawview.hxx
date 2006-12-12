@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:53:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ class ScDrawView: public FmFormView
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
     BOOL                    bInConstruct;
-    BOOL                    bDisableHdl;
+    //HMHBOOL                   bDisableHdl;
 
     void            Construct();
     void            UpdateBrowser();
@@ -85,7 +85,7 @@ public:
 
     void            MarkDropObj( SdrObject* pObj );
 
-    BOOL            IsDisableHdl() const    { return bDisableHdl; }
+    //HMHBOOL           IsDisableHdl() const    { return bDisableHdl; }
 
     void            SetMarkedToLayer( BYTE nLayerNo );
 
