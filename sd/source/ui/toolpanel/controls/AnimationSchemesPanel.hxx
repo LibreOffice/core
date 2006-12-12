@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationSchemesPanel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:38:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:46:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,8 @@ public:
     virtual ::Window* GetWindow (void);
     virtual bool IsResizable (void);
     virtual bool IsExpandable (void) const;
+
+    using Window::GetWindow;
 
 private:
     Size maPreferredSize;
