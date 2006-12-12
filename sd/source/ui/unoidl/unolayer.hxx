@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolayer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:51:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ private:
     SvUnoWeakContainer* mpLayers;
 
     ::sd::View* GetView() const throw();
-    ::sd::DrawDocShell* GetDocShell() const throw() { return mpModel->pDocShell; }
+    ::sd::DrawDocShell* GetDocShell() const throw() { return mpModel->mpDocShell; }
     void UpdateLayerView( sal_Bool modify = sal_True ) const throw();
 };
 
