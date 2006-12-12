@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ const SfxItemPropertyMap* ImplGetSdLayerPropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_LAYER_PRINTABLE),   WID_LAYER_PRINTABLE,&::getBooleanCppuType(),            0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_LAYER_VISIBLE),     WID_LAYER_VISIBLE,  &::getBooleanCppuType(),            0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_LAYER_NAME),        WID_LAYER_NAME,     &::getCppuType((const OUString*)0), 0, 0 },
-        { 0,0,0,0,0}
+        { 0,0,0,0,0,0}
     };
 
     return aSdLayerPropertyMap_Impl;
@@ -191,9 +191,10 @@ OUString SdLayer::convertToExternalName( const String& rName )
 
 /** */
 SdLayer::SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw()
-: aPropSet(ImplGetSdLayerPropertyMap()),
-  pLayerManager(pLayerManager_), pLayer(pSdrLayer_),
-  mxLayerManager(pLayerManager_)
+: pLayerManager(pLayerManager_)
+, mxLayerManager(pLayerManager_)
+, pLayer(pSdrLayer_)
+, aPropSet(ImplGetSdLayerPropertyMap())
 {
 }
 
@@ -282,7 +283,6 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     }
     default:
         throw beans::UnknownPropertyException();
-        break;
     }
 
 #ifndef SVX_LIGHT
@@ -322,16 +322,15 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
     }
     default:
         throw beans::UnknownPropertyException();
-        break;
     }
 
     return aValue;
 }
 
-void SAL_CALL SdLayer::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdLayer::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdLayer::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdLayer::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdLayer::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdLayer::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdLayer::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdLayer::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 /** */
 sal_Bool SdLayer::get( LayerAttribute what ) throw()
@@ -452,7 +451,7 @@ uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
 }
 
 
-void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& rxParent)
+void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
     throw (::com::sun::star::lang::NoSupportException,
         ::com::sun::star::uno::RuntimeException)
 {
@@ -467,12 +466,12 @@ void SAL_CALL SdLayer::dispose(  ) throw (uno::RuntimeException)
     pLayer = 0;
 }
 
-void SAL_CALL SdLayer::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL SdLayer::addEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented!");
 }
 
-void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw (uno::RuntimeException)
+void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented!");
 }
@@ -511,12 +510,12 @@ void SAL_CALL SdLayerManager::dispose(  ) throw (uno::RuntimeException)
     }
 }
 
-void SAL_CALL SdLayerManager::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL SdLayerManager::addEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented!");
 }
 
-void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw (uno::RuntimeException)
+void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented!");
 }
@@ -553,9 +552,9 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
 
     uno::Reference< drawing::XLayer > xLayer;
 
-    if( mpModel->pDoc )
+    if( mpModel->mpDoc )
     {
-        SdrLayerAdmin& rLayerAdmin = mpModel->pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
         sal_uInt16 nLayer = nLayerCnt - 2 + 1;
         String aLayerName;
@@ -568,7 +567,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
             nLayer++;
         }
 
-        SdrLayerAdmin& rLA=mpModel->pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLA=mpModel->mpDoc->GetLayerAdmin();
         const sal_Int32 nMax=rLA.GetLayerCount();
         if (nIndex>nMax) nIndex=nMax;
         xLayer = GetLayer (rLA.NewLayer(aLayerName,(USHORT)nIndex));
@@ -629,14 +628,14 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::getLayerForShape( con
 
     uno::Reference< drawing::XLayer >  xLayer;
 
-    if(mpModel->pDoc)
+    if(mpModel->mpDoc)
     {
         SvxShape* pShape = SvxShape::getImplementation( xShape );
         SdrObject* pObj = pShape?pShape->GetSdrObject():NULL;
         if(pObj)
         {
             SdrLayerID aId = pObj->GetLayer();
-            SdrLayerAdmin& rLayerAdmin = mpModel->pDoc->GetLayerAdmin();
+            SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
             xLayer = GetLayer (rLayerAdmin.GetLayerPerID(aId));
         }
     }
@@ -652,9 +651,9 @@ sal_Int32 SAL_CALL SdLayerManager::getCount()
     if( mpModel == 0 )
         throw lang::DisposedException();
 
-    if( mpModel->pDoc )
+    if( mpModel->mpDoc )
     {
-        SdrLayerAdmin& rLayerAdmin = mpModel->pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
         return rLayerAdmin.GetLayerCount();
     }
 
@@ -674,9 +673,9 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
 
     uno::Any aAny;
 
-    if( mpModel->pDoc )
+    if( mpModel->mpDoc )
     {
-        SdrLayerAdmin& rLayerAdmin = mpModel->pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
         uno::Reference<drawing::XLayer> xLayer (GetLayer (rLayerAdmin.GetLayer((sal_uInt16)nLayer)));
         aAny <<= xLayer;
     }
@@ -690,27 +689,15 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( mpModel == 0 )
+    if( (mpModel == 0) || (mpModel->mpDoc == 0 ) )
         throw lang::DisposedException();
 
-    uno::Reference< drawing::XLayer >  xLayer;
+    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
+    if( pLayer == NULL )
+        throw container::NoSuchElementException();
 
-    uno::Any aAny;
-
-    if( mpModel->pDoc )
-    {
-        SdrLayerAdmin& rLayerAdmin = mpModel->pDoc->GetLayerAdmin();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
-        if( pLayer == NULL )
-            throw container::NoSuchElementException();
-
-        xLayer = GetLayer (pLayer);
-        aAny <<= xLayer;
-        return aAny;
-    }
-
-    throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any( GetLayer (pLayer) );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
@@ -721,7 +708,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
     if( mpModel == 0 )
         throw lang::DisposedException();
 
-    SdrLayerAdmin& rLayerAdmin = mpModel->pDoc->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
     const sal_uInt16 nLayerCount = rLayerAdmin.GetLayerCount();
 
     uno::Sequence< OUString > aSeq( nLayerCount );
@@ -746,7 +733,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::
     if( mpModel == 0 )
         throw lang::DisposedException();
 
-    SdrLayerAdmin& rLayerAdmin = mpModel->pDoc->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
 
     return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
 }
@@ -767,10 +754,10 @@ sal_Bool SAL_CALL SdLayerManager::hasElements() throw(uno::RuntimeException)
     die Aenderungen auch in der sdbcx::View sichtbar gemacht werden */
 void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
 {
-    if(mpModel->pDocShell)
+    if(mpModel->mpDocShell)
     {
         ::sd::DrawViewShell* pDrViewSh =
-            PTR_CAST(::sd::DrawViewShell, mpModel->pDocShell->GetViewShell());
+            PTR_CAST(::sd::DrawViewShell, mpModel->mpDocShell->GetViewShell());
 
         if(pDrViewSh)
         {
@@ -780,16 +767,16 @@ void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
         }
 
         if(modify)
-            mpModel->pDoc->SetChanged(sal_True);
+            mpModel->mpDoc->SetChanged(sal_True);
     }
 }
 
 /** */
 ::sd::View* SdLayerManager::GetView() const throw()
 {
-    if( mpModel->pDocShell )
+    if( mpModel->mpDocShell )
     {
-        ::sd::ViewShell* pViewSh = mpModel->pDocShell->GetViewShell();
+        ::sd::ViewShell* pViewSh = mpModel->mpDocShell->GetViewShell();
         if(pViewSh)
             return pViewSh->GetView();
     }
