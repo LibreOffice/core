@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddetect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:25:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:57:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
-SdFilterDetect::SdFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+SdFilterDetect::SdFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >&  )
 {
 }
 
@@ -261,7 +261,6 @@ SdFilterDetect::~SdFilterDetect()
         {
             String aPattern( aPrefix );
             aPattern += String::CreateFromAscii("sdraw");
-            USHORT nMatch = aURL.Match( aPattern );
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
         }
@@ -331,10 +330,10 @@ SdFilterDetect::~SdFilterDetect()
                         // the storage can be corrupted and it will be detected here
                         try
                         {
-                            String aFilterName;
+                            String sFilterName;
                             if ( pFilter )
-                                aFilterName = pFilter->GetName();
-                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
+                                sFilterName = pFilter->GetName();
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &sFilterName );
                         }
                         catch( lang::WrappedTargetException& aWrap )
                         {
@@ -434,8 +433,8 @@ SdFilterDetect::~SdFilterDetect()
                                 pFilter = 0;
                                 if( SvtModuleOptions().IsImpress() )
                                 {
-                                    INetURLObject aURL( aFileName );
-                                    if( aURL.getExtension().equalsIgnoreAsciiCaseAscii( "cgm" ) )
+                                    INetURLObject aCheckURL( aFileName );
+                                    if( aCheckURL.getExtension().equalsIgnoreAsciiCaseAscii( "cgm" ) )
                                     {
                                         sal_uInt8 n8;
                                         pStm->Seek( STREAM_SEEK_TO_BEGIN );
