@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:59:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,62 +70,62 @@ public:
     void Update(SdOptions* pOptions);
 
     void  SetStandardHelpLines(const SdrHelpLineList& rHelpLines)
-                             { aStandardHelpLines = rHelpLines; }
-    const SdrHelpLineList& GetStandardHelpLines() { return aStandardHelpLines; }
+                             { maStandardHelpLines = rHelpLines; }
+    const SdrHelpLineList& GetStandardHelpLines() { return maStandardHelpLines; }
     void  SetNotesHelpLines(const SdrHelpLineList& rHelpLines)
-                             { aNotesHelpLines = rHelpLines; }
-    const SdrHelpLineList& GetNotesHelpLines() { return aNotesHelpLines; }
+                             { maNotesHelpLines = rHelpLines; }
+    const SdrHelpLineList& GetNotesHelpLines() { return maNotesHelpLines; }
     void  SetHandoutHelpLines(const SdrHelpLineList& rHelpLines)
-                             { aHandoutHelpLines = rHelpLines; }
-    const SdrHelpLineList& GetHandoutHelpLines() { return aHandoutHelpLines; }
+                             { maHandoutHelpLines = rHelpLines; }
+    const SdrHelpLineList& GetHandoutHelpLines() { return maHandoutHelpLines; }
 
     void SetVisibleLayers(const SetOfByte& rVisibleLayers)
-                         { aVisibleLayers = rVisibleLayers; }
-    const SetOfByte& GetVisibleLayers() { return aVisibleLayers; }
+                         { maVisibleLayers = rVisibleLayers; }
+    const SetOfByte& GetVisibleLayers() { return maVisibleLayers; }
 
     void SetLockedLayers(const SetOfByte& rLockedLayers)
-                        { aLockedLayers = rLockedLayers; }
-    const SetOfByte& GetLockedLayers() { return aLockedLayers; }
+                        { maLockedLayers = rLockedLayers; }
+    const SetOfByte& GetLockedLayers() { return maLockedLayers; }
 
     void SetPrintableLayers(const SetOfByte& rPrintableLayers)
-                         { aPrintableLayers = rPrintableLayers; }
-    const SetOfByte& GetPrintableLayers() { return aPrintableLayers; }
+                         { maPrintableLayers = rPrintableLayers; }
+    const SetOfByte& GetPrintableLayers() { return maPrintableLayers; }
 
     void SetRuler(const BOOL bRulerOn)
-                 { bRuler = bRulerOn; }
-    const BOOL HasRuler() { return bRuler; }
+                 { mbRuler = bRulerOn; }
+    const BOOL HasRuler() { return mbRuler; }
 
     void SetNoColors(const BOOL bNoCol)
-                 { bNoColors = bNoCol; }
-    const BOOL IsNoColors() { return bNoColors; }
+                 { mbNoColors = bNoCol; }
+    const BOOL IsNoColors() { return mbNoColors; }
 
     void SetNoAttribs(const BOOL bNoAttr)
-                 { bNoAttribs = bNoAttr; }
-    const BOOL IsNoAttribs() { return bNoAttribs; }
+                 { mbNoAttribs = bNoAttr; }
+    const BOOL IsNoAttribs() { return mbNoAttribs; }
 
     void SetVisArea(const Rectangle& rVisArea)
-                 { aVisArea = rVisArea; }
-    const Rectangle GetVisArea() { return aVisArea; }
+                 { maVisArea = rVisArea; }
+    const Rectangle GetVisArea() { return maVisArea; }
 
-    void SetPageKind(PageKind eKind) { ePageKind = eKind; }
-    const PageKind GetPageKind() { return ePageKind; }
+    void SetPageKind(PageKind eKind) { mePageKind = eKind; }
+    const PageKind GetPageKind() { return mePageKind; }
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
         page kind that was selected while last saving this document */
-    void SetPageKindOnLoad(PageKind eKind) { ePageKindOnLoad = eKind; }
+    void SetPageKindOnLoad(PageKind eKind) { mePageKindOnLoad = eKind; }
 
     /** can be used to get the page kind that was selected on last save of this document */
-    const PageKind GetPageKindOnLoad() { return ePageKindOnLoad; }
+    const PageKind GetPageKindOnLoad() { return mePageKindOnLoad; }
 
     void SetSelectedPage (USHORT nPage);
     const USHORT GetSelectedPage (void) const;
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
         page that was selected while last saving this document */
-    void SetSelectedPageOnLoad (USHORT nPage) { nSelectedPageOnLoad = nPage; }
+    void SetSelectedPageOnLoad (USHORT nPage) { mnSelectedPageOnLoad = nPage; }
 
     /** can be used to get the page that was selected on last save of this document */
-    const USHORT GetSelectedPageOnLoad (void) const { return nSelectedPageOnLoad; }
+    const USHORT GetSelectedPageOnLoad (void) const { return mnSelectedPageOnLoad; }
 
     void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode (PageKind eKind);
@@ -141,25 +141,21 @@ public:
     EditMode GetViewShEditModeOnLoad (void) const;
 
     void SetLayerMode(BOOL bMode)
-                 { bLayerMode = bMode; }
-    const BOOL IsLayerMode() { return bLayerMode; }
+                 { mbLayerMode = bMode; }
+    const BOOL IsLayerMode() { return mbLayerMode; }
 
     void SetQuickEdit(BOOL bQEdit)
-                 { bQuickEdit = bQEdit; }
-    const BOOL IsQuickEdit() { return bQuickEdit; }
+                 { mbQuickEdit = bQEdit; }
+    const BOOL IsQuickEdit() { return mbQuickEdit; }
 
-    void        SetBigHandles( BOOL bOn = TRUE ) { bBigHandles = bOn; }
-    const BOOL  IsBigHandles() const { return bBigHandles; }
+    void        SetBigHandles( BOOL bOn = TRUE ) { mbBigHandles = bOn; }
+    const BOOL  IsBigHandles() const { return mbBigHandles; }
 
-    void        SetDoubleClickTextEdit( BOOL bOn = TRUE ) { bDoubleClickTextEdit = bOn; }
-    const BOOL  IsDoubleClickTextEdit() const { return bDoubleClickTextEdit; }
+    void        SetDoubleClickTextEdit( BOOL bOn = TRUE ) { mbDoubleClickTextEdit = bOn; }
+    const BOOL  IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
 
-    void        SetClickChangeRotation( BOOL bOn = TRUE ) { bClickChangeRotation = bOn; }
-    const BOOL  IsClickChangeRotation() const { return bClickChangeRotation; }
-
-    void SetDragWithCopy(BOOL bCopy)
-                 { bDragWithCopy = bCopy; }
-    const BOOL IsDragWithCopy() { return bDragWithCopy; }
+    void        SetClickChangeRotation( BOOL bOn = TRUE ) { mbClickChangeRotation = bOn; }
+    const BOOL  IsClickChangeRotation() const { return mbClickChangeRotation; }
 
     /** Remember the type of the view shell that was (or soon will be)
         previously associated with this frame view.
@@ -182,59 +178,55 @@ public:
     ViewShell::ShellType GetViewShellTypeOnLoad (void) const;
 
     void SetPresentationViewShellId(USHORT nId)
-                 { nPresViewShellId = nId; }
-    const USHORT GetPresentationViewShellId() { return nPresViewShellId; }
+                 { mnPresViewShellId = nId; }
+    const USHORT GetPresentationViewShellId() { return mnPresViewShellId; }
 
-    void SetSlotId(USHORT nId) { nSlotId = nId; }
-    const USHORT GetSlotId() { return nSlotId; }
+    void SetSlotId(USHORT nId) { mnSlotId = nId; }
+    const USHORT GetSlotId() { return mnSlotId; }
 
-    void SetSlidesPerRow(USHORT nSlides) { nSlidesPerRow = nSlides; }
-    USHORT GetSlidesPerRow() const { return nSlidesPerRow; }
+    void SetSlidesPerRow(USHORT nSlides) { mnSlidesPerRow = nSlides; }
+    USHORT GetSlidesPerRow() const { return mnSlidesPerRow; }
 
-    void SetDrawMode(ULONG nNewDrawMode) { nDrawMode = nNewDrawMode; };
-    ULONG GetDrawMode() const { return nDrawMode; };
+    void SetDrawMode(ULONG nNewDrawMode) { mnDrawMode = nNewDrawMode; };
+    ULONG GetDrawMode() const { return mnDrawMode; };
 
-    void SetTabCtrlPercent( double nPercent ) { nTabCtrlPercent = nPercent; }
-    double GetTabCtrlPercent() const { return nTabCtrlPercent; }
-
-    friend SvStream& operator << (SvStream& rOut, const FrameView& rView);
-    friend SvStream& operator >> (SvStream& rIn, FrameView& rView);
+    void SetTabCtrlPercent( double nPercent ) { mnTabCtrlPercent = nPercent; }
+    double GetTabCtrlPercent() const { return mnTabCtrlPercent; }
 
     virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
 
 private:
-    USHORT          nRefCount;
-    VirtualDevice*  pVDev;
-    BOOL            bRuler;
-    SetOfByte       aVisibleLayers;
-    SetOfByte       aLockedLayers;
-    SetOfByte       aPrintableLayers;
-    SdrHelpLineList aStandardHelpLines;
-    SdrHelpLineList aNotesHelpLines;
-    SdrHelpLineList aHandoutHelpLines;
-    BOOL            bNoColors;         // Gliederungsmodus
-    BOOL            bNoAttribs;        // Gliederungsmodus
-    Rectangle       aVisArea;          // Sichtbarer Bereich
-    PageKind        ePageKind;         // Seitentyp (Standard, Notizen, Handzettel)
-    USHORT          nSelectedPage;     // Selektierte Seite
-    PageKind        ePageKindOnLoad;
-    USHORT          nSelectedPageOnLoad;
-    EditMode        eStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
-    EditMode        eNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
-    EditMode        eHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
+    USHORT          mnRefCount;
+    VirtualDevice*  mpVDev;
+    BOOL            mbRuler;
+    SetOfByte       maVisibleLayers;
+    SetOfByte       maLockedLayers;
+    SetOfByte       maPrintableLayers;
+    SdrHelpLineList maStandardHelpLines;
+    SdrHelpLineList maNotesHelpLines;
+    SdrHelpLineList maHandoutHelpLines;
+    BOOL            mbNoColors;        // Gliederungsmodus
+    BOOL            mbNoAttribs;       // Gliederungsmodus
+    Rectangle       maVisArea;         // Sichtbarer Bereich
+    PageKind        mePageKind;        // Seitentyp (Standard, Notizen, Handzettel)
+    USHORT          mnSelectedPage;    // Selektierte Seite
+    PageKind        mePageKindOnLoad;
+    USHORT          mnSelectedPageOnLoad;
+    EditMode        meStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
+    EditMode        meNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
+    EditMode        meHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
     EditMode        meEditModeOnLoad;
-    BOOL            bLayerMode;        // Layer an/aus
-    BOOL            bQuickEdit;        // QuickEdit an/aus
-    BOOL            bDragWithCopy;     // Verschieben mit Kopie (Ctrl-Taste)
-    BOOL            bBigHandles;       // Grosse Handles
-    BOOL            bDoubleClickTextEdit; // Textmodus nach Doppelklick
-    BOOL            bClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
-    USHORT          nPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
-    USHORT          nSlotId;           // SlotId, welche initial ausgefuehrt wird
-    USHORT          nSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
-    ULONG           nDrawMode;         // Drawmode fuer das normale Fenster
-    double          nTabCtrlPercent;
+    BOOL            mbLayerMode;       // Layer an/aus
+    BOOL            mbQuickEdit;       // QuickEdit an/aus
+    BOOL            mbBigHandles;      // Grosse Handles
+    BOOL            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
+    BOOL            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
+    USHORT          mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
+    USHORT          mnSlotId;          // SlotId, welche initial ausgefuehrt wird
+    USHORT          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
+    ULONG           mnDrawMode;        // Drawmode fuer das normale Fenster
+    double          mnTabCtrlPercent;
 
     /** The type of the previous view shell.  The (default) value
         ViewShell::ST_NONE indicates that there was no previous view shell.
