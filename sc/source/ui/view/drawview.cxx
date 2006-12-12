@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:56:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,9 +445,9 @@ void __EXPORT ScDrawView::MarkListHasChanged()
     if ( pClient && pClient->IsObjectInPlaceActive() )
     {
         //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
-        bDisableHdl = TRUE;
+        //HMHbDisableHdl = TRUE;
         pClient->DeactivateObject();
-        bDisableHdl = FALSE;
+        //HMHbDisableHdl = FALSE;
         //  Image-Ole wieder durch Grafik ersetzen passiert jetzt in ScClient::UIActivate
     }
 
