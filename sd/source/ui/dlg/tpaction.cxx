@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:43:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,16 +168,7 @@ static USHORT pActionRanges[] =
     0
 };
 
-static USHORT pEffectRanges[] =
-{
-    ATTR_ANIMATION_START,
-    ATTR_ANIMATION_END,
-    0
-};
-
-
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
-
 
 /*************************************************************************
 |*
@@ -191,16 +182,16 @@ SdActionDlg::SdActionDlg (
         rOutAttrs           ( *pAttr )
 {
     // FreeResource();
-    SfxTabPage* pPage = SdTPAction::Create( this, rOutAttrs );
-    DBG_ASSERT( pPage, "Seite konnte nicht erzeugt werden");
+    SfxTabPage* pNewPage = SdTPAction::Create( this, rOutAttrs );
+    DBG_ASSERT( pNewPage, "Seite konnte nicht erzeugt werden");
 
     // Ehemals in PageCreated
-    ( (SdTPAction*) pPage )->SetView( pView );
-    ( (SdTPAction*) pPage )->Construct();
+    ( (SdTPAction*) pNewPage )->SetView( pView );
+    ( (SdTPAction*) pNewPage )->Construct();
 
-    SetTabPage( pPage );
+    SetTabPage( pNewPage );
 
-    String aStr( pPage->GetText() );
+    String aStr( pNewPage->GetText() );
     if( aStr.Len() )
         SetText( aStr );
 }
@@ -217,22 +208,22 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
         aFtAction       ( this, SdResId( FT_ACTION ) ),
         aLbAction       ( this, SdResId( LB_ACTION ) ),
-        aEdtSound       ( this, SdResId( EDT_SOUND ) ),
-        aBtnSearch      ( this, SdResId( BTN_SEARCH ) ),
         aFtTree         ( this, SdResId( FT_TREE ) ),
         aLbTree         ( this, SdResId( LB_TREE ) ),
         aLbTreeDocument ( this, SdResId( LB_TREE_DOCUMENT ) ),
         aLbOLEAction    ( this, SdResId( LB_OLE_ACTION ) ),
         aFlSeparator    ( this, SdResId( FL_SEPARATOR ) ),
+        aEdtSound       ( this, SdResId( EDT_SOUND ) ),
         aEdtBookmark    ( this, SdResId( EDT_BOOKMARK ) ),
         aEdtDocument    ( this, SdResId( EDT_DOCUMENT ) ),
         aEdtProgram     ( this, SdResId( EDT_PROGRAM ) ),
         aEdtMacro       ( this, SdResId( EDT_MACRO ) ),
+        aBtnSearch      ( this, SdResId( BTN_SEARCH ) ),
         aBtnSeek        ( this, SdResId( BTN_SEEK ) ),
 
-        pView           ( NULL ),
-        pDoc            ( NULL ),
         rOutAttrs       ( rInAttrs ),
+        mpView          ( NULL ),
+        mpDoc           ( NULL ),
         bTreeUpdated    ( FALSE )
 {
     FreeResource();
@@ -266,13 +257,13 @@ SdTPAction::~SdTPAction()
 
 void SdTPAction::SetView( const ::sd::View* pSdView )
 {
-    pView = pSdView;
+    mpView = pSdView;
 
     // Holen der ColorTable und Fuellen der ListBox
-    ::sd::DrawDocShell* pDocSh = static_cast<const ::sd::View*>(pView)->GetDocSh();
+    ::sd::DrawDocShell* pDocSh = static_cast<const ::sd::View*>(mpView)->GetDocSh();
     if( pDocSh && pDocSh->GetViewShell() )
     {
-        pDoc = pDocSh->GetDoc();
+        mpDoc = pDocSh->GetDoc();
         SfxViewFrame* pFrame = pDocSh->GetViewShell()->GetViewFrame();
         aLbTree.SetViewFrame( pFrame );
         aLbTreeDocument.SetViewFrame( pFrame );
@@ -294,12 +285,11 @@ void SdTPAction::Construct()
     // OLE-Actionlistbox auffuellen
     SdrOle2Obj* pOleObj = NULL;
     SdrGrafObj* pGrafObj = NULL;
-    BOOL        bDisableAll = FALSE;
     BOOL        bOLEAction = FALSE;
 
-    if ( pView->AreObjectsMarked() )
+    if ( mpView->AreObjectsMarked() )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         SdrObject* pObj;
 
         if (rMarkList.GetMarkCount() == 1)
@@ -398,7 +388,7 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 
     if( aLbAction.GetSavedValue() != aLbAction.GetSelectEntryPos() )
     {
-        rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, eCA ) );
+        rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, (USHORT)eCA ) );
         bModified = TRUE;
     }
     else
@@ -409,9 +399,9 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
     {
-        if( pDoc && pDoc->GetDocSh() && pDoc->GetDocSh()->GetMedium() )
+        if( mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
         {
-            String aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
+            String aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
             if( eCA == presentation::ClickAction_SOUND ||
                 eCA == presentation::ClickAction_DOCUMENT ||
                 eCA == presentation::ClickAction_PROGRAM )
@@ -482,16 +472,16 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-void SdTPAction::ActivatePage( const SfxItemSet& rSet )
+void SdTPAction::ActivatePage( const SfxItemSet& )
 {
 }
 
 // -----------------------------------------------------------------------
 
-int SdTPAction::DeactivatePage( SfxItemSet* pSet )
+int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
 {
-    if( pSet )
-        FillItemSet( *pSet );
+    if( pPageSet )
+        FillItemSet( *pPageSet );
 
     return( LEAVE_PAGE );
 }
@@ -515,10 +505,10 @@ USHORT* SdTPAction::GetRanges()
 
 void SdTPAction::UpdateTree()
 {
-    if( !bTreeUpdated && pDoc && pDoc->GetDocSh() && pDoc->GetDocSh()->GetMedium() )
+    if( !bTreeUpdated && mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
     {
         //aLbTree.Clear();
-        aLbTree.Fill( pDoc, TRUE, pDoc->GetDocSh()->GetMedium()->GetName() );
+        aLbTree.Fill( mpDoc, TRUE, mpDoc->GetDocSh()->GetMedium()->GetName() );
         bTreeUpdated = TRUE;
     }
 }
@@ -782,6 +772,8 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aFtTree.SetText( String( SdResId( STR_EFFECTDLG_JUMP ) ) );
             aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_PAGE_OBJECT ) ) );
             break;
+        default:
+            break;
     }
 
     return( 0L );
@@ -822,14 +814,14 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
                 ( xAccess->hasByName( pStarDrawXMLContent ) ||
                 xAccess->hasByName( pStarDrawOldXMLContent ) ) )
             {
-                SdDrawDocument* pBookmarkDoc = pDoc->OpenBookmarkDoc( aFile );
+                SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc( aFile );
                 if( pBookmarkDoc )
                 {
                     aLastFile = aFile;
 
                     aLbTreeDocument.Clear();
                     aLbTreeDocument.Fill( pBookmarkDoc, TRUE, aFile );
-                    pDoc->CloseBookmarkDoc();
+                    mpDoc->CloseBookmarkDoc();
                     aLbTreeDocument.Show();
                 }
                 else
@@ -863,7 +855,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 {
     USHORT nPos = (USHORT)pCurrentActions->GetPos((void*)(ULONG)eCA);
-    DBG_ASSERT(nPos != LIST_ENTRY_NOTFOUND, "unbekannte Interaktion");
+    DBG_ASSERT(nPos != 0xffff, "unbekannte Interaktion");
     aLbAction.SelectEntryPos(nPos);
 }
 
@@ -884,13 +876,17 @@ void SdTPAction::SetEditText( String const & rStr )
             // fallthrough inteded
         case presentation::ClickAction_SOUND:
         case presentation::ClickAction_PROGRAM:
-            INetURLObject aURL( aText );
+            {
+                INetURLObject aURL( aText );
 
-            // try to convert to system path
-            String aTmpStr(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
+                // try to convert to system path
+                String aTmpStr(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
 
-            if( aTmpStr.Len() )
-                aText = aTmpStr;    // was a system path
+                if( aTmpStr.Len() )
+                    aText = aTmpStr;    // was a system path
+            }
+            break;
+        default:
             break;
     }
 
@@ -920,6 +916,8 @@ void SdTPAction::SetEditText( String const & rStr )
             break;
         case presentation::ClickAction_BOOKMARK:
             aEdtBookmark.SetText( aText );
+            break;
+        default:
             break;
     }
 }
@@ -984,17 +982,19 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
         {
             return aEdtMacro.GetText();
         }
-        break;
 
         case presentation::ClickAction_BOOKMARK:
             return( aEdtBookmark.GetText() );
+
+        default:
+            break;
     }
 
     // validate file URI
     INetURLObject aURL( aStr );
     String aBaseURL;
-    if( pDoc && pDoc->GetDocSh() && pDoc->GetDocSh()->GetMedium() )
-        aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
+    if( mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
+        aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
 
     if( aStr.Len() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
         aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl(), true, false ) );
