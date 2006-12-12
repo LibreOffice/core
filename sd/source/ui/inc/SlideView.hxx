@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ public:
     virtual ~SlideView (void);
 
     void                Select( USHORT nSdPageNum, BOOL bSelect );
-    void                SelectAll( BOOL bSelect );
+    void                SelectAllSlides( BOOL bSelect );
 
     void                MoveFocus( SlideViewFocusMove eMove );
     USHORT              GetFocusPage() const;
@@ -108,7 +108,6 @@ public:
     SdPage*             GetFadePage( const Point& rPos ) const;
     SdPage*             GetNearestPage( const Point& rPos ) const;
 
-    void                ArrangePages();
     void                DeleteMarked();
     void                MoveMarked( USHORT nTargetPage );
 
@@ -139,10 +138,10 @@ public:
 private:
     Timer               aDelayedPaintTimer;
     List                aDelayedPaints;
-    SlideViewShell* pSlideViewShell;
+    SlideViewShell*     pSlideViewShell;
     BitmapCache*        pCache;
     ShowView*           pShowView;
-    VirtualDevice*      pVDev;
+    VirtualDevice*      mpVDev;
     USHORT              nAllowInvalidateSmph;
     USHORT              nPagesPerRow;
     USHORT              nFocusPage;
