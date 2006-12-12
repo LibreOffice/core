@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:52:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:20:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,14 +149,14 @@ BOOL FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
-    pWindow->GrabFocus();
+    mpWindow->GrabFocus();
 
-    bReturn = pOutlineView->GetViewByWindow(pWindow)->MouseButtonDown(rMEvt);
+    bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonDown(rMEvt);
 
     if (bReturn)
     {
         // Attributierung der akt. Textstelle kann jetzt anders sein
-        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
     {
@@ -176,7 +176,7 @@ BOOL FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
-    bReturn = pOutlineView->GetViewByWindow(pWindow)->MouseMove(rMEvt);
+    bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
 
     if (!bReturn)
     {
@@ -185,7 +185,7 @@ BOOL FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 
     // MT 07/2002: Done in OutlinerView::MouseMove
     /*
-    const SvxFieldItem* pFieldItem = pOutlineView->GetViewByWindow( pWindow )->
+    const SvxFieldItem* pFieldItem = pOutlineView->GetViewByWindow( mpWindow )->
                                         GetFieldUnderMousePointer();
     const SvxFieldData* pField = NULL;
     if( pFieldItem )
@@ -193,10 +193,10 @@ BOOL FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 
     if( pField && pField->ISA( SvxURLField ) )
     {
-       pWindow->SetPointer( Pointer( POINTER_REFHAND ) );
+       mpWindow->SetPointer( Pointer( POINTER_REFHAND ) );
     }
     else
-       pWindow->SetPointer( Pointer( POINTER_TEXT ) );
+       mpWindow->SetPointer( Pointer( POINTER_TEXT ) );
     */
 
     return (bReturn);
@@ -212,16 +212,16 @@ BOOL FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
-    bReturn = pOutlineView->GetViewByWindow(pWindow)->MouseButtonUp(rMEvt);
+    bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonUp(rMEvt);
 
     if (bReturn)
     {
         // Attributierung der akt. Textstelle kann jetzt anders sein
-        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
     {
-        const SvxFieldItem* pFieldItem = pOutlineView->GetViewByWindow( pWindow )->GetFieldUnderMousePointer();
+        const SvxFieldItem* pFieldItem = pOutlineView->GetViewByWindow( mpWindow )->GetFieldUnderMousePointer();
         if( pFieldItem )
         {
             const SvxFieldData* pField = pFieldItem->GetField();
@@ -229,11 +229,11 @@ BOOL FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
             if( pField && pField->ISA( SvxURLField ) )
             {
                 bReturn = TRUE;
-                pWindow->ReleaseMouse();
+                mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem( SID_FILE_NAME, ( (SvxURLField*) pField)->GetURL() );
-                SfxStringItem aReferer( SID_REFERER, pDocSh->GetMedium()->GetName() );
+                SfxStringItem aReferer( SID_REFERER, mpDocSh->GetMedium()->GetName() );
                 SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
-                SfxViewFrame* pFrame = pViewShell->GetViewFrame();
+                SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
 
                 if ( rMEvt.IsMod1() )
                 {
@@ -272,16 +272,16 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
     BOOL bReturn = FALSE;
 
     USHORT nKeyGroup = rKEvt.GetKeyCode().GetGroup();
-    if( !pDocSh->IsReadOnly() || nKeyGroup == KEYGROUP_CURSOR )
+    if( !mpDocSh->IsReadOnly() || nKeyGroup == KEYGROUP_CURSOR )
     {
-        pWindow->GrabFocus();
+        mpWindow->GrabFocus();
 
         std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
 
         if( (nKeyGroup != KEYGROUP_CURSOR) && (nKeyGroup != KEYGROUP_FKEYS) )
             aGuard.reset( new OutlineViewModelChangeGuard( *pOutlineView ) );
 
-        bReturn = pOutlineView->GetViewByWindow(pWindow)->PostKeyEvent(rKEvt);
+        bReturn = pOutlineView->GetViewByWindow(mpWindow)->PostKeyEvent(rKEvt);
 
         if (bReturn)
         {
@@ -299,7 +299,7 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 {
     // Attributes at the current text position may have changed.
-    pViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
 
     bool bUpdatePreview = true;
     switch (rEvent.GetKeyCode().GetCode())
@@ -359,7 +359,7 @@ void FuOutlineText::Deactivate()
 
 void FuOutlineText::DoCut()
 {
-    pOutlineView->GetViewByWindow(pWindow)->Cut();
+    pOutlineView->GetViewByWindow(mpWindow)->Cut();
 }
 
 /*************************************************************************
@@ -370,7 +370,7 @@ void FuOutlineText::DoCut()
 
 void FuOutlineText::DoCopy()
 {
-    pOutlineView->GetViewByWindow(pWindow)->Copy();
+    pOutlineView->GetViewByWindow(mpWindow)->Copy();
 }
 
 /*************************************************************************
@@ -381,7 +381,7 @@ void FuOutlineText::DoCopy()
 
 void FuOutlineText::DoPaste()
 {
-    pOutlineView->GetViewByWindow(pWindow)->PasteSpecial();
+    pOutlineView->GetViewByWindow(mpWindow)->PasteSpecial();
 }
 
 
