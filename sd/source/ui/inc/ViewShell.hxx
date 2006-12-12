@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:29:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ class FmFormShell;
 class SdOptionsPrintItem;
 class MultiSelection;
 
-extern String aEmptyStr;
+extern const String aEmptyStr;
 
 
 namespace sd {
@@ -316,8 +316,8 @@ public:
                             BOOL bScaleAll, Orientation eOrient, USHORT nPaperBin,
                             BOOL bBackgroundFullSize );
 
-    void    SetStartShowWithDialog( BOOL bIn = TRUE ) { bStartShowWithDialog = bIn; }
-    BOOL    IsStartShowWithDialog() const { return bStartShowWithDialog; }
+    void    SetStartShowWithDialog( BOOL bIn = TRUE ) { mbStartShowWithDialog = bIn; }
+    BOOL    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
     USHORT GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
     void SetPrintedHandoutPageNum (USHORT nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
@@ -498,21 +498,21 @@ protected:
     /// The active window.
     ::sd::Window* mpActiveWindow;
     ::sd::View* mpView;
-    FrameView*  pFrameView;
+    FrameView*  mpFrameView;
 
     FunctionReference   mxCurrentFunction;
     FunctionReference   mxOldFunction;
     Slideshow*  mpSlideShow;
-    ZoomList*    pZoomList;
+    ZoomList*   mpZoomList;
 
-    Point       aViewPos;
-    Size        aViewSize;
-    Size        aScrBarWH;
+    Point       maViewPos;
+    Size        maViewSize;
+    Size        maScrBarWH;
 
-    BOOL        bCenterAllowed;           // wird an Fenster weitergegeben
+    BOOL        mbCenterAllowed;          // wird an Fenster weitergegeben
 
-    BOOL        bStartShowWithDialog;   // Praesentation wurde ueber Dialog gestartet
-    USHORT mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
+    BOOL        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
+    USHORT      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
 
     //af    BOOL        bPrintDirectSelected;       // Print only selected objects in direct print
     //afString      sPageRange;                 // pagerange if selected objects in direct print
@@ -547,14 +547,14 @@ protected:
     virtual long VirtVScrollHdl(ScrollBar* pVScroll);
 
     // virtuelle Funktionen fuer Lineal-Handling
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst) { return NULL; }
-    virtual SvxRuler* CreateVRuler(::sd::Window* pWin) { return NULL; }
-    virtual void UpdateHRuler() {}
-    virtual void UpdateVRuler() {}
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
+    virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
+    virtual void UpdateHRuler();
+    virtual void UpdateVRuler();
 
     // Zeiger auf ein zusaetzliches Control im horizontalen ScrollBar
     // abgeleiteter Klassen (z.B. ein TabBar) zurueckgeben
-    virtual long GetHCtrlWidth() { return 0; }
+    virtual long GetHCtrlWidth();
 
     virtual void Activate(BOOL IsMDIActivate);
     virtual void Deactivate(BOOL IsMDIActivate);
@@ -592,7 +592,7 @@ private:
     /** Code common to all constructors.  It generally is a bad idea
         to call this function from outside a constructor.
     */
-    void Construct (void);
+    void construct (void);
 
     DECL_LINK(FrameWindowEventListener, VclSimpleEvent*);
 
