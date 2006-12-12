@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:53:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:21:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 #endif
 
 #include "app.hrc"
-//CHINA001 #include "paragr.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
@@ -73,8 +72,8 @@
 #include "ViewShell.hxx"
 #endif
 #include "drawdoc.hxx"
-#include "sdabstdlg.hxx" //CHINA001
-#include "paragr.hrc" //CHINA001
+#include "sdabstdlg.hxx"
+#include "paragr.hrc"
 namespace sd {
 
 TYPEINIT1( FuParagraph, FuPoor );
@@ -108,8 +107,8 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aEditAttr( pDoc->GetPool() );
-        pView->GetAttributes( aEditAttr );
+        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        mpView->GetAttributes( aEditAttr );
         SfxItemPool *pPool =  aEditAttr.GetPool();
         SfxItemSet aNewAttr( *pPool,
                              EE_ITEMS_START, EE_ITEMS_END,
@@ -124,32 +123,32 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );
 
-        //CHINA001 SdParagraphDlg* pDlg = new SdParagraphDlg( NULL, &aNewAttr );
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-        SfxAbstractTabDialog* pDlg = pFact->CreateSdItemSetTabDlg(ResId( TAB_PARAGRAPH ), NULL, &aNewAttr );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        USHORT nResult = pDlg->Execute();
-
-        switch( nResult )
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0;
+        if( pDlg )
         {
-            case RET_OK:
-            {
-                rReq.Done( *( pDlg->GetOutputItemSet() ) );
+            USHORT nResult = pDlg->Execute();
 
-                pArgs = rReq.GetArgs();
-            }
-            break;
-
-            default:
+            switch( nResult )
             {
-                delete pDlg;
+                case RET_OK:
+                {
+                    rReq.Done( *( pDlg->GetOutputItemSet() ) );
+
+                    pArgs = rReq.GetArgs();
+                }
+                break;
+
+                default:
+                {
+                    delete pDlg;
+                }
+                return; // Abbruch
             }
-            return; // Abbruch
+            delete( pDlg );
         }
-        delete( pDlg );
     }
-    pView->SetAttributes( *pArgs );
+    mpView->SetAttributes( *pArgs );
 
     // invalidieren der Slots
     static USHORT SidArray[] = {
@@ -169,7 +168,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SID_PARASPACE_DECREASE,
         0 };
 
-    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 }
 
 void FuParagraph::Activate()
