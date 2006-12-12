@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:28:30 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,11 +269,11 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     USHORT nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
-    PresetCategoryList::const_iterator aIter( rCategoryList.begin() );
-    const PresetCategoryList::const_iterator aEnd( rCategoryList.end() );
-    while( aIter != aEnd )
+    PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
+    const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
+    while( aCategoryIter != aCategoryEnd )
     {
-        PresetCategoryPtr pCategory( *aIter++ );
+        PresetCategoryPtr pCategory( *aCategoryIter++ );
         if( pCategory.get() )
         {
             mpLBEffects->InsertCategory( pCategory->maLabel );
