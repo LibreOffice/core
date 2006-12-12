@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:26:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ namespace sd {
 
 Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
     SfxInPlaceClient(pViewShell->GetViewShell(), pWindow, pObj->GetAspect() ),
-    pViewShell(pViewShell),
+    mpViewShell(pViewShell),
     pSdrOle2Obj(pObj),
     pSdrGrafObj(NULL),
     pOutlinerParaObj (NULL)
@@ -121,7 +121,7 @@ Client::~Client()
 
 void Client::RequestNewObjectArea( Rectangle& aObjRect )
 {
-    ::sd::View* pView = pViewShell->GetView();
+    ::sd::View* pView = mpViewShell->GetView();
     Rectangle aWorkArea( pView->GetWorkArea() );
     if (!aWorkArea.IsInside(aObjRect))
     {
@@ -142,7 +142,7 @@ void Client::RequestNewObjectArea( Rectangle& aObjRect )
 
 void Client::ObjectAreaChanged()
 {
-    ::sd::View* pView = pViewShell->GetView();
+    ::sd::View* pView = mpViewShell->GetView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)
     {
@@ -174,9 +174,9 @@ void Client::ViewChanged()
 
     //TODO/LATER: should we try to avoid the recalculation of the visareasize
     //if we know that it didn't change?
-    if (pViewShell->GetActiveWindow())
+    if (mpViewShell->GetActiveWindow())
     {
-        ::sd::View* pView = pViewShell->GetView();
+        ::sd::View* pView = mpViewShell->GetView();
         if (pView)
         {
             // TODO/LEAN: maybe we can do this without requesting the VisualArea?
@@ -216,11 +216,11 @@ void Client::ViewChanged()
 
 void Client::MakeVisible()
 {
-    if (pViewShell->ISA(DrawViewShell))
+    if (mpViewShell->ISA(DrawViewShell))
     {
-        static_cast<DrawViewShell*>(pViewShell)->MakeVisible(
+        static_cast<DrawViewShell*>(mpViewShell)->MakeVisible(
             pSdrOle2Obj->GetLogicRect(),
-            *pViewShell->GetActiveWindow());
+            *mpViewShell->GetActiveWindow());
     }
 }
 
