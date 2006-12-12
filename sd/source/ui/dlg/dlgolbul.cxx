@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:37:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@
 #include <svx/eeitem.hxx>
 #endif
 
-//CHINA001 #include <svx/numpages.hxx>
 #include <svx/numitem.hxx>
 
 #include <svx/dialogs.hrc>
@@ -93,11 +92,10 @@
 
 #include "glob.hrc"
 #include "dlgolbul.hrc"
-//#include "enumdlg.hxx"
 #include "bulmaper.hxx"
 #include "DrawDocShell.hxx"
-#include <svx/svxids.hrc> //add CHINA001
-#include <svtools/aeitem.hxx> //add CHINA001
+#include <svx/svxids.hrc>
+#include <svtools/aeitem.hxx>
 
 namespace sd {
 
@@ -201,14 +199,14 @@ OutlineBulletDlg::OutlineBulletDlg(
     SetInputSet( &aInputSet );
 
     if(!bTitle)
-        AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM);//CHINA001 AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM, &SvxSingleNumPickTabPage::Create, 0);
+        AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM);
     else
         RemoveTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
 
-    AddTabPage( RID_SVXPAGE_PICK_BULLET  ); //CHINA001 AddTabPage(RID_SVXPAGE_PICK_BULLET    , &SvxBulletPickTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_PICK_BMP   ); //CHINA001 AddTabPage(RID_SVXPAGE_PICK_BMP      , &SvxBitmapPickTabPage::Create, 0);
-    AddTabPage(RID_SVXPAGE_NUM_OPTIONS  ); //CHINA001 AddTabPage(RID_SVXPAGE_NUM_OPTIONS      , &SvxNumOptionsTabPage::Create, 0);
-    AddTabPage(RID_SVXPAGE_NUM_POSITION ); //CHINA001 AddTabPage(RID_SVXPAGE_NUM_POSITION     , &SvxNumPositionTabPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_PICK_BULLET  );
+    AddTabPage( RID_SVXPAGE_PICK_BMP   );
+    AddTabPage(RID_SVXPAGE_NUM_OPTIONS  );
+    AddTabPage(RID_SVXPAGE_NUM_POSITION );
 
 }
 
@@ -226,10 +224,9 @@ void OutlineBulletDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             if( pSdView )
             {
                 FieldUnit eMetric = pSdView->GetDoc()->GetUIUnit();
-                //CHINA001 ((SvxNumOptionsTabPage&)rPage).SetMetric(eMetric);
-                SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
-                aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,eMetric));//add CHINA001
-                rPage.PageCreated(aSet);//add CHINA001
+                SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+                aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(USHORT)eMetric));
+                rPage.PageCreated(aSet);
             }
         }
         break;
@@ -238,10 +235,9 @@ void OutlineBulletDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             if( pSdView )
             {
                 FieldUnit eMetric = pSdView->GetDoc()->GetUIUnit();
-                //CHINA001 ((SvxNumPositionTabPage&)rPage).SetMetric(eMetric);
-                SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
-                aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,eMetric));//add CHINA001
-                rPage.PageCreated(aSet);//add CHINA001
+                SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+                aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(USHORT)eMetric));
+                rPage.PageCreated(aSet);
             }
         }
         break;
@@ -266,8 +262,8 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
 
     if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,TRUE) == SFX_ITEM_ON )
     {
-        SvxNumBulletItem* pItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,TRUE);
-        SvxNumRule* pRule = pItem->GetNumRule();
+        SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,TRUE);
+        SvxNumRule* pRule = pBulletItem->GetNumRule();
         if(pRule)
             pRule->SetFeatureFlag( NUM_NO_NUMBERS, FALSE );
     }
