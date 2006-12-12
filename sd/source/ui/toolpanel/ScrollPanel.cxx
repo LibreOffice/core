@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScrollPanel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:13:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,7 @@ Size ScrollPanel::GetPreferredSize (void)
 
 
 
-sal_Int32 ScrollPanel::GetPreferredWidth (sal_Int32 nHeight)
+sal_Int32 ScrollPanel::GetPreferredWidth (sal_Int32 )
 {
     return GetPreferredSize().Width();
 }
@@ -288,7 +288,7 @@ sal_Int32 ScrollPanel::GetPreferredWidth (sal_Int32 nHeight)
 
 
 
-sal_Int32 ScrollPanel::GetPreferredHeight (sal_Int32 nWidth)
+sal_Int32 ScrollPanel::GetPreferredHeight (sal_Int32 )
 {
     return GetPreferredSize().Height();
 }
@@ -649,7 +649,7 @@ sal_Int32 ScrollPanel::SetupHorizontalScrollBar (bool bShow, sal_Int32 nRange)
 }
 
 
-IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, pScrollBar)
+IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, EMPTYARG)
 {
     maScrollOffset.X() -= maHorizontalScrollBar.GetDelta();
     maScrollOffset.Y() -= maVerticalScrollBar.GetDelta();
@@ -701,7 +701,7 @@ long ScrollPanel::Notify( NotifyEvent& rNEvt )
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible> ScrollPanel::CreateAccessibleObject (
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent)
+        ::com::sun::star::accessibility::XAccessible>& )
 {
     return new ::accessibility::AccessibleScrollPanel (
         *this,
