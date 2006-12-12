@@ -4,9 +4,9 @@
  *
  *  $RCSfile: STLPropertySet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:37:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,6 @@ private:
     PropertyMap maPropertyMap;
 };
 
-};
+}
 
 #endif // _SD_STLPROPERTYSET_HXX
