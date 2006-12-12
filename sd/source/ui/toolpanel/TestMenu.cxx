@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestMenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:15:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,8 @@ Size ColorMenu::GetPreferredSize (void)
     Size aItemSize = maSet.CalcItemSizePixel (Size());
     Size aPreferredWindowSize = maSet.CalcWindowSizePixel (
         aItemSize,
-        mnPreferredColumnCount,
-        CalculateRowCount (aItemSize, mnPreferredColumnCount));
+        (USHORT)mnPreferredColumnCount,
+        (USHORT)CalculateRowCount (aItemSize, (USHORT)mnPreferredColumnCount));
     return aPreferredWindowSize;
 }
 
@@ -204,9 +204,9 @@ void ColorMenu::Resize (void)
             else if (nColumnCount > 4)
                 nColumnCount = 4;
 
-            int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
+            USHORT nRowCount = (USHORT)CalculateRowCount (aItemSize, nColumnCount);
 
-            maSet.SetColCount (nColumnCount);
+            maSet.SetColCount ((USHORT)nColumnCount);
             maSet.SetLineCount (nRowCount);
         }
     }
@@ -216,7 +216,7 @@ void ColorMenu::Resize (void)
 
 
 
-int ColorMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
+int ColorMenu::CalculateRowCount (const Size&, int nColumnCount)
 {
     int nRowCount = 0;
 
@@ -240,7 +240,7 @@ void ColorMenu::Fill (void)
     maSet.Clear();
     maSet.SetItemWidth (30);
     maSet.SetItemHeight (30);
-    int i = 0;
+    USHORT i = 0;
     maSet.InsertItem (++i, rSettings.GetFaceColor());
     maSet.SetItemText (i, String::CreateFromAscii("FaceColor"));
     maSet.InsertItem (++i, rSettings.GetCheckedColor());
