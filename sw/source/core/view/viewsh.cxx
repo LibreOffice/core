@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     }
 
     SET_CURR_SHELL( this );
-    if ( Imp()->HasDrawView() && !Imp()->GetDrawView()->IsMarkHdlHidden() )
+    if ( Imp()->HasDrawView() && !Imp()->GetDrawView()->areMarkHandlesHidden() )
         Imp()->StartAction();
 
     if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
