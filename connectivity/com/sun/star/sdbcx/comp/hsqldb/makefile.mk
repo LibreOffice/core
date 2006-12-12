@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 16:49:15 $
+#   last change: $Author: kz $ $Date: 2006-12-12 15:50:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ JAVAFILES =\
     StorageAccess.java\
     StorageFileAccess.java\
     StorageNativeInputStream.java\
-    StorageNativeOutputStream.java
+    StorageNativeOutputStream.java\
+    FileSystemRuntimeException.java
     
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
