@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datatypes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:03:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@
 #include <comphelper/broadcasthelper.hxx>
 #endif
 
-#ifndef REGEX_H
-#include <unicode/regex.h>
+#ifndef INCLUDED_WARNINGS_GUARD_UNICODE_REGEX_H
+#include "warnings_guard_unicode_regex.h"
 #endif
 
 #include <memory>
