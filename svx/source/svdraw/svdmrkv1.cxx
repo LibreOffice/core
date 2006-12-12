@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:43:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,14 +154,14 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
             pPts->Remove(nBla);
         } else return FALSE; // Fehlerfall!
     }
-    BOOL bVis=IsMarkHdlShown();
+    //HMHBOOL bVis=IsMarkHdlShown();
     pHdl->SetSelected(!bUnmark);
     if (!bPlusHdlAlways) {
-        BOOL bSolid=IsSolidMarkHdl();
+        //HMHBOOL bSolid=IsSolidMarkHdl();
         if (!bUnmark)
         {
             sal_uInt32 nAnz(pObj->GetPlusHdlCount(*pHdl));
-            if (nAnz!=0L && bSolid && bVis) HideMarkHdl();
+            //HMHif (nAnz!=0L && bSolid && bVis) HideMarkHdl();
             for (sal_uInt32 i=0; i<nAnz; i++) {
                 SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,i);
                 if (pPlusHdl!=NULL) {
@@ -171,24 +171,24 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
                     aHdl.AddHdl(pPlusHdl);
                 }
             }
-            if (nAnz!=0 && bSolid && bVis) ShowMarkHdl();
+            //HMHif (nAnz!=0 && bSolid && bVis) ShowMarkHdl();
         } else {
             ULONG nAnz=aHdl.GetHdlCount();
             for (ULONG i=nAnz; i>0;) {
                 i--;
                 SdrHdl* pPlusHdl=aHdl.GetHdl(i);
-                BOOL bFlag=FALSE;
+                //HMHBOOL bFlag=FALSE;
                 if (pPlusHdl->IsPlusHdl() && pPlusHdl->GetSourceHdlNum()==nHdlNum) {
-                    if (bVis) {
-                        if (bSolid) {
-                            bFlag=TRUE;
-                            HideMarkHdl(); // SolidMarkHdl und Bezier ist noch nicht fertig!
-                        }
-                    }
+                    //HMHif (bVis) {
+                    //HMH   if (bSolid) {
+                    //HMH       bFlag=TRUE;
+                    //HMH       HideMarkHdl(); // SolidMarkHdl und Bezier ist noch nicht fertig!
+                    //HMH   }
+                    //HMH}
                     aHdl.RemoveHdl(i);
                     delete pPlusHdl;
                 }
-                if (bFlag) ShowMarkHdl();
+                //HMHif (bFlag) ShowMarkHdl();
             }
         }
     }
@@ -231,7 +231,7 @@ BOOL SdrMarkView::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
     const SdrPageView* pPV0=NULL;
     SdrMark* pM=NULL;
     aHdl.Sort();
-    BOOL bHideHdl=IsMarkHdlShown() && IsSolidMarkHdl() && !bPlusHdlAlways;
+    //HMHBOOL bHideHdl=IsMarkHdlShown() && IsSolidMarkHdl() && !bPlusHdlAlways;
     ULONG nHdlAnz=aHdl.GetHdlCount();
     for (ULONG nHdlNum=nHdlAnz; nHdlNum>0;) {
         nHdlNum--;
@@ -262,10 +262,10 @@ BOOL SdrMarkView::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
             }
             Point aPos(pHdl->GetPos());
             if (pM!=NULL && (pRect==NULL || pRect->IsInside(aPos))) {
-                if (bHideHdl && IsMarkHdlShown() && pHdl->GetObj()!=NULL) {
-                    sal_uInt32 nAnz=pHdl->GetObj()->GetPlusHdlCount(*pHdl);
-                    if (nAnz!=0L) HideMarkHdl(); // #36987#
-                }
+                //HMHif (bHideHdl && IsMarkHdlShown() && pHdl->GetObj()!=NULL) {
+                    //HMHsal_uInt32 nAnz=pHdl->GetObj()->GetPlusHdlCount(*pHdl);
+                    //HMHif (nAnz!=0L) HideMarkHdl(); // #36987#
+                //HMH}
                 if (ImpMarkPoint(pHdl,pM,bUnmark)) bChgd=TRUE;
             }
         }
@@ -274,7 +274,7 @@ BOOL SdrMarkView::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
         SdrUShortCont* pPts=pM->GetMarkedPoints();
         if (pPts!=NULL) pPts->ForceSort();
     }
-    if (bHideHdl) ShowMarkHdl(); // #36987#
+    //HMHif (bHideHdl) ShowMarkHdl(); // #36987#
     if (bChgd) {
         MarkListHasChanged();
     }
@@ -317,11 +317,11 @@ void SdrMarkView::SetPlusHandlesAlwaysVisible(BOOL bOn)
 { // HandlePaint optimieren !!!!!!!
     ForceUndirtyMrkPnt();
     if (bOn!=bPlusHdlAlways) {
-        BOOL bVis=IsMarkHdlShown();
-        if (bVis) HideMarkHdl();
+        //HMHBOOL bVis=IsMarkHdlShown();
+        //HMHif (bVis) HideMarkHdl();
         bPlusHdlAlways=bOn;
         SetMarkHandles();
-        if (bVis) ShowMarkHdl();
+        //HMHif (bVis) ShowMarkHdl();
         MarkListHasChanged();
     }
 }
