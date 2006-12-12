@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,18 +42,15 @@
 #ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
 #endif
-//CHINA001 #ifndef _SVX_DLG_NAME_HXX //autogen
-//CHINA001 #include <svx/dlgname.hxx>
-//CHINA001 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-#ifndef _SVDOBJ_HXX //autogen
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif
-#ifndef _SVDOPATH_HXX //autogen
+#ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
 #endif
-#ifndef _SV_MSGBOX_HXX //autogen
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
 
@@ -97,9 +94,9 @@ FunctionReference FuLineEnd::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::s
     return xFunc;
 }
 
-void FuLineEnd::DoExecute( SfxRequest& rReq )
+void FuLineEnd::DoExecute( SfxRequest& )
 {
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -137,7 +134,7 @@ void FuLineEnd::DoExecute( SfxRequest& rReq )
         if( pConvPolyObj )
             delete pConvPolyObj;
 
-        XLineEndList* pLineEndList = pDoc->GetLineEndList();
+        XLineEndList* pLineEndList = mpDoc->GetLineEndList();
         XLineEndEntry* pEntry;
 
         String aNewName( SdResId( STR_LINEEND ) );
@@ -161,63 +158,36 @@ void FuLineEnd::DoExecute( SfxRequest& rReq )
             }
         }
 
-        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( NULL, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( NULL, aName, aDesc, ResId(RID_SVXDLG_NAME) );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
+        AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( NULL, aName, aDesc, ResId(RID_SVXDLG_NAME) ) : 0;
 
-        if( pDlg->Execute() == RET_OK )
+        if( pDlg )
         {
-            pDlg->GetName( aName );
-            bDifferent = TRUE;
+            pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
+            if( pDlg->Execute() == RET_OK )
             {
-                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = FALSE;
-            }
+                pDlg->GetName( aName );
+                bDifferent = TRUE;
 
-            if( bDifferent )
-            {
-            /*
-                XOutdevItemPool* pItemPool = (XOutdevItemPool*) &pViewSh->GetPool();
-                XLineAttrSetItem aXLSet( pItemPool );
-                XFillAttrSetItem aXFSet( pItemPool );
-                VirtualDevice    aTmpVD ( *pWindow );
-                XOutputDevice    aTmpXOut( &aTmpVD, pItemPool );
+                for( long i = 0; i < nCount && bDifferent; i++ )
+                {
+                    if( aName == pLineEndList->GetLineEnd( i )->GetName() )
+                        bDifferent = FALSE;
+                }
 
-                aTmpVD.ChangeMapMode( MAP_100TH_MM );
-                aTmpVD.SetOutputSize( aTmpVD.PixelToLogic( Size( BITMAP_WIDTH * 2, BITMAP_HEIGHT ) ) );
-                aXLSet.GetItemSet().Put( XLineStartWidthItem( aTmpVD.GetOutputSize().Height() ) );
-                aXLSet.GetItemSet().Put( XLineEndWidthItem( aTmpVD.GetOutputSize().Height() ) );
-                aXFSet.GetItemSet().Put( XFillColorItem( String(), Color( COL_WHITE ) ) );
-                aXFSet.GetItemSet().Put( XFillStyleItem( XFILL_SOLID ) );
-                aXLSet.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-
-                aTmpXOut.SetLineAttr( ( const XLineAttrSetItem& ) pItemPool->Put( aXLSet ) );
-                aTmpXOut.SetFillAttr( ( const XFillAttrSetItem& ) pItemPool->Put( aXFSet ) );
-                aTmpXOut.DrawRect( Rectangle( Point(), aTmpVD.GetOutputSize() ) );
-
-                aXLSet.GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
-                aXLSet.GetItemSet().Put( XLineStartItem( String(), aXPoly ) );
-                aXLSet.GetItemSet().Put( XLineEndItem( String(), aXPoly ) );
-
-                aTmpXOut.SetLineAttr( ( const XLineAttrSetItem& ) pItemPool->Put( aXLSet ) );
-                aTmpXOut.DrawLine( Point( 0, aTmpVD.GetOutputSize().Height() / 2 ),
-                                    Point( aTmpVD.GetOutputSize().Width(), aTmpVD.GetOutputSize().Height() / 2 ) );
-                Bitmap* pBitmap = new Bitmap( aTmpVD.GetBitmap( Point(), aTmpVD.GetOutputSize() ) );
-            */
-                pEntry = new XLineEndEntry( aPolyPolygon, aName );
-                pLineEndList->Insert( pEntry, LIST_APPEND);
-            }
-            else
-            {
-                String aStr(SdResId( STR_WARN_NAME_DUPLICATE ));
-                WarningBox aWarningBox( pWindow, WinBits( WB_OK ),
-                     aStr );
-                aWarningBox.Execute();
+                if( bDifferent )
+                {
+                    pEntry = new XLineEndEntry( aPolyPolygon, aName );
+                    pLineEndList->Insert( pEntry, LIST_APPEND);
+                }
+                else
+                {
+                    String aStr(SdResId( STR_WARN_NAME_DUPLICATE ));
+                    WarningBox aWarningBox( mpWindow, WinBits( WB_OK ),
+                         aStr );
+                    aWarningBox.Execute();
+                }
             }
         }
         delete pDlg;
