@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:44:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:12:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ namespace sd {
 
 void DrawDocShell::Execute( SfxRequest& rReq )
 {
-    if(pViewShell && pViewShell->GetSlideShow())
+    if(mpViewShell && mpViewShell->GetSlideShow())
     {
         // during a running presentation no slot will be executed
         return;
@@ -207,8 +207,8 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
                 if( !xFuSearch.is() )
                 {
-                    ::sd::View* pView = pViewShell->GetView();
-                    SetDocShellFunction( FuSearch::Create( pViewShell, pViewShell->GetActiveWindow(), pView, pDoc, rReq ) );
+                    ::sd::View* pView = mpViewShell->GetView();
+                    SetDocShellFunction( FuSearch::Create( mpViewShell, mpViewShell->GetActiveWindow(), pView, mpDoc, rReq ) );
                     xFuSearch.set( dynamic_cast< FuSearch* >( GetDocShellFunction().get() ) );
                 }
 
@@ -248,24 +248,24 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_VERSION:
         {
-            const ULONG nOldSwapMode = pDoc->GetSwapGraphicsMode();
+            const ULONG nOldSwapMode = mpDoc->GetSwapGraphicsMode();
 
-            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
+            mpDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
             ExecuteSlot( rReq, SfxObjectShell::GetStaticInterface() );
-            pDoc->SetSwapGraphicsMode( nOldSwapMode );
+            mpDoc->SetSwapGraphicsMode( nOldSwapMode );
         }
         break;
 
         case SID_HANGUL_HANJA_CONVERSION:
         {
-            FunctionReference aFunc( FuHangulHanjaConversion::Create( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq ) );
+            FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
             static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True );
         }
         break;
 
         case SID_CHINESE_CONVERSION:
         {
-            FunctionReference aFunc( FuHangulHanjaConversion::Create( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq ) );
+            FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
             static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartChineseConversion();
         }
         break;
