@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:56:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,7 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
                     pSummaryPage->SetLayoutName(pActualPage->GetLayoutName());
                     pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
                     pSummaryPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
+                    pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
                     // Notiz-Seite
                     SdPage* pNotesPage = (SdPage*) pDoc->AllocPage(FALSE);
@@ -193,6 +194,7 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
                     pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), TRUE);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
+                    pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 
                     pOutl = new ::sd::Outliner( pDoc, OUTLINERMODE_OUTLINEOBJECT );
                     pOutl->SetUpdateMode(FALSE);
