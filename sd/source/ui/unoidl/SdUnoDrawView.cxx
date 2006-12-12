@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -621,7 +621,6 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
 {
     Reference< drawing::XDrawPage >  xPage;
 
-    SdXImpressDocument* pModel = GetModel();
     SdrPageView *pPV = mrView.GetSdrPageView();
     SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
 
