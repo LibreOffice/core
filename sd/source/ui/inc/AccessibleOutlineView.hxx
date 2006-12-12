@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:58:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,9 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);
+
+    using cppu::WeakComponentImplHelperBase::addEventListener;
+    using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XServiceInfo  ====================================================
 
