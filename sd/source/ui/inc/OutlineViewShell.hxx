@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:24:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ public:
     TYPEINFO();
 
     SFX_DECL_VIEWFACTORY(OutlineViewShell);
-    SFX_DECL_INTERFACE(SD_IF_SDOUTLINEVIEWSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDOUTLINEVIEWSHELL)
 
     // The previous macros change access mode.  To be sure switch back
     // to public access.
