@@ -60,10 +60,19 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ShowSlide" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Folie ~einblenden</value>
+                    <value xml:lang="en-US">Sho~w Slide</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
             <node oor:name=".uno:HideSlide" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Folie anzeigen</value>
-                    <value xml:lang="en-US">~Show/Hide Slide</value>
+                    <value xml:lang="de">Folie au~sblenden</value>
+                    <value xml:lang="en-US">~Hide Slide</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -390,7 +399,7 @@
             <node oor:name=".uno:PresentationDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Bildschirm~präsentationseinstellungen...</value>
-                    <value xml:lang="en-US">~Slide Show Settings...</value>
+                    <value xml:lang="en-US">S~lide Show Settings...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Hyphenation" oor:op="replace">
