@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:21:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:03:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,10 +263,14 @@ void SvxLineBox::ReleaseFocus_Impl()
         bRelease = TRUE;
         return;
     }
-    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
-    if ( pShellWnd )
-        pShellWnd->GrabFocus();
+    if( SfxViewShell::Current() )
+    {
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
 }
 /* -----------------------------08.03.2002 15:39------------------------------
 
@@ -498,10 +502,14 @@ void SvxColorBox::ReleaseFocus_Impl()
         bRelease = TRUE;
         return;
     }
-    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
-    if ( pShellWnd )
-        pShellWnd->GrabFocus();
+    if( SfxViewShell::Current() )
+    {
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
 }
 
 //========================================================================
@@ -577,9 +585,12 @@ void SvxMetricField::Modify()
 
 void SvxMetricField::ReleaseFocus_Impl()
 {
-    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-    if ( pShellWnd )
-        pShellWnd->GrabFocus();
+    if( SfxViewShell::Current() )
+    {
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -766,10 +777,13 @@ long SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 
 void SvxFillTypeBox::ReleaseFocus_Impl()
 {
-    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+    if( SfxViewShell::Current() )
+    {
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
-    if ( pShellWnd )
-        pShellWnd->GrabFocus();
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
 }
 
 //========================================================================
@@ -849,9 +863,12 @@ void SvxFillAttrBox::Select()
 
 void SvxFillAttrBox::ReleaseFocus_Impl()
 {
-    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+    if( SfxViewShell::Current() )
+    {
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
-    if ( pShellWnd )
-        pShellWnd->GrabFocus();
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
 }
 
