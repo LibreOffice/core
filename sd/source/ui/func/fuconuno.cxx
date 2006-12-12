@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:48:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 
-    pViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 }
@@ -141,12 +141,12 @@ BOOL FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
-    if ( rMEvt.IsLeft() && !pView->IsAction() )
+    if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        pWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-        pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        mpWindow->CaptureMouse();
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
         bReturn = TRUE;
     }
     return bReturn;
@@ -171,17 +171,17 @@ BOOL FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
-    if ( pView->IsCreateObj() && rMEvt.IsLeft() )
+    if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        pView->EndCreateObj(SDRCREATE_FORCEEND);
+        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        mpView->EndCreateObj(SDRCREATE_FORCEEND);
         bReturn = TRUE;
     }
 
     bReturn = (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 
     if (!bPermanent)
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
     return (bReturn);
 }
@@ -207,15 +207,15 @@ BOOL FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
 \************************************************************************/
 void FuConstructUnoControl::Activate()
 {
-    pView->SetCurrentObj( nIdentifier, nInventor );
+    mpView->SetCurrentObj( nIdentifier, nInventor );
 
     aNewPointer = Pointer(POINTER_DRAW_RECT);
-    aOldPointer = pWindow->GetPointer();
-    pWindow->SetPointer( aNewPointer );
+    aOldPointer = mpWindow->GetPointer();
+    mpWindow->SetPointer( aNewPointer );
 
-    aOldLayer = pView->GetActiveLayer();
+    aOldLayer = mpView->GetActiveLayer();
     String aStr(SdResId(STR_LAYER_CONTROLS));
-    pView->SetActiveLayer( aStr );
+    mpView->SetActiveLayer( aStr );
 
     FuConstruct::Activate();
 }
@@ -228,18 +228,18 @@ void FuConstructUnoControl::Activate()
 void FuConstructUnoControl::Deactivate()
 {
     FuConstruct::Deactivate();
-    pView->SetActiveLayer( aOldLayer );
-    pWindow->SetPointer( aOldPointer );
+    mpView->SetActiveLayer( aOldLayer );
+    mpWindow->SetPointer( aOldPointer );
 }
 
 // #97016#
-SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDoc);
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        0L, mpDoc);
 
     if(pObj)
     {
