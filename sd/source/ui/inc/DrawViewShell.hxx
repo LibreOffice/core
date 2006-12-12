@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:25 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ class SdrObject;
 class SdrPageView;
 class TransferableDataHelper;
 class TransferableClipboardListener;
-class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class AbstractSvxNameDialog;
 class SdrLayer;
 class SvxClipboardFmtItem;
 
@@ -101,7 +101,7 @@ public:
 
     TYPEINFO();
 
-    SFX_DECL_INTERFACE(SD_IF_SDDRAWVIEWSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDDRAWVIEWSHELL)
 
     /** Create a new stackable shell that may take some information
         (e.g. the frame view) from the given previous shell.
@@ -258,14 +258,14 @@ public:
 
     virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
-    PageKind        GetPageKind() { return ePageKind; }
+    PageKind        GetPageKind() { return mePageKind; }
 
-    Point           GetMousePos() { return aMousePos; }
-    BOOL            IsMousePosFreezed() { return bMousePosFreezed; }
-    void            SetMousePosFreezed( BOOL bIn ) { bMousePosFreezed = bIn; }
+    Point           GetMousePos() { return maMousePos; }
+    BOOL            IsMousePosFreezed() { return mbMousePosFreezed; }
+    void            SetMousePosFreezed( BOOL bIn ) { mbMousePosFreezed = bIn; }
 
-    EditMode        GetEditMode() const { return eEditMode; }
-    virtual SdPage* GetActualPage() { return pActualPage; }
+    EditMode        GetEditMode() const { return meEditMode; }
+    virtual SdPage* GetActualPage() { return mpActualPage; }
 
     /// inherited from sd::ViewShell
     virtual SdPage* getCurrentPage() const;
@@ -284,8 +284,8 @@ public:
     virtual ErrCode DoVerb(long nVerb);
     virtual BOOL    ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
-    void            SetZoomOnPage( BOOL bZoom = TRUE ) { bZoomOnPage = bZoom; }
-    BOOL            IsZoomOnPage() { return bZoomOnPage; }
+    void            SetZoomOnPage( BOOL bZoom = TRUE ) { mbZoomOnPage = bZoom; }
+    BOOL            IsZoomOnPage() { return mbZoomOnPage; }
     void            CheckLineTo (SfxRequest& rReq);
     void            FuTemp01(SfxRequest& rReq);
     void            FuTemp02(SfxRequest& rReq);
@@ -297,9 +297,9 @@ public:
 
     void            LockInput();
     void            UnlockInput();
-    BOOL            IsInputLocked() const { return nLockCount > 0UL; }
+    BOOL            IsInputLocked() const { return mnLockCount > 0UL; }
 
-    USHORT          GetCurPageId() { return( aTabControl.GetCurPageId() ); }
+    USHORT          GetCurPageId() { return( maTabControl.GetCurPageId() ); }
 
     /** Show controls of the UI or hide them, depending on the given flag.
         Do not call this method directly.  Call the method at ViewShellBase
@@ -311,7 +311,7 @@ public:
 
     bool IsLayerModeActive (void) const;
 
-    USHORT*         GetSlotArray() const { return pSlotArray; }
+    USHORT*         GetSlotArray() const { return mpSlotArray; }
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
@@ -387,30 +387,25 @@ public:
 
     virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
 
-    DrawView*   GetDrawView() const { return pDrView; }
+    DrawView*   GetDrawView() const { return mpDrawView; }
 
 protected:
-    DrawView* pDrView;
-    SdPage*         pActualPage;
-    UINT16          nLastSlot;
-    Rectangle       aMarkRect;
-    Point           aMousePos;
-    BOOL            bMousePosFreezed;
-    TabControl aTabControl;
-    EditMode        eEditMode;
-    PageKind        ePageKind;
-    BOOL            bZoomOnPage;
-    BOOL            bIsRulerDrag;
-    Color           aGradStartColor;
-    Color           aGradEndColor;
-    Color           aHatchColor;
-    ULONG           nLockCount;
-    Timer           aCloseTimer;
-    BOOL            bReadOnly;
-    BOOL            bInEffectAssignment;
-    USHORT*         pSlotArray;
+    DrawView*       mpDrawView;
+    SdPage*         mpActualPage;
+    Rectangle       maMarkRect;
+    Point           maMousePos;
+    BOOL            mbMousePosFreezed;
+    TabControl      maTabControl;
+    EditMode        meEditMode;
+    PageKind        mePageKind;
+    BOOL            mbZoomOnPage;
+    BOOL            mbIsRulerDrag;
+    ULONG           mnLockCount;
+    Timer           maCloseTimer;
+    BOOL            mbReadOnly;
+    USHORT*         mpSlotArray;
 
-    static BOOL     bPipette;
+    static BOOL     mbPipette;
 
 
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
@@ -429,8 +424,6 @@ protected:
     virtual long    GetHCtrlWidth();
     virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY);
     virtual Size    GetOptimalSizePixel() const;
-
-//  void            DestroyPolygons();
 
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                BOOL bSize, BOOL bMargin, BOOL bScaleAll );
@@ -473,8 +466,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >  mxScannerManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
-    TransferableClipboardListener*                                                  pClipEvtLstnr;
-    BOOL                                                                            bPastePossible;
+    TransferableClipboardListener*                                                  mpClipEvtLstnr;
+    BOOL                                                                            mbPastePossible;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint);
 
@@ -493,6 +486,8 @@ private:
             call.
     */
     void StopSlideShow (bool bCloseFrame);
+
+    using ViewShell::Notify;
 };
 
 
