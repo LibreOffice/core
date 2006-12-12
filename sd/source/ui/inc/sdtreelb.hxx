@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:52:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,24 +148,24 @@ public:
 
 protected:
 
-    Window*                 pParent;
-    const SdDrawDocument*   pDoc;
-    SdDrawDocument*         pBookmarkDoc;
-    SfxMedium*              pMedium;
-    SfxMedium*              pOwnMedium;
+    Window*                 mpParent;
+    const SdDrawDocument*   mpDoc;
+    SdDrawDocument*         mpBookmarkDoc;
+    SfxMedium*              mpMedium;
+    SfxMedium*              mpOwnMedium;
     /// The color used for masking transparency.
-    Color                   aTransparencyColor;
-    Image                   aImgOle;
-    Image                   aImgGraphic;
-    Image                   aImgOleH;
-    Image                   aImgGraphicH;
-    BOOL                    bLinkableSelected;
-    BOOL                    bDragEnabled;
-    String                  aDocName;
-    ::sd::DrawDocShellRef       xBookmarkDocShRef;  // Zum Laden von Bookmarks
-    ::sd::DrawDocShell*         pDropDocSh;
-    SdNavigatorWin*         pDropNavWin;
-    SfxViewFrame*           pFrame;
+    Color                   maTransparencyColor;
+    Image                   maImgOle;
+    Image                   maImgGraphic;
+    Image                   maImgOleH;
+    Image                   maImgGraphicH;
+    BOOL                    mbLinkableSelected;
+    BOOL                    mbDragEnabled;
+    String                  maDocName;
+    ::sd::DrawDocShellRef       mxBookmarkDocShRef; // Zum Laden von Bookmarks
+    ::sd::DrawDocShell*         mpDropDocSh;
+    SdNavigatorWin*         mpDropNavWin;
+    SfxViewFrame*           mpFrame;
 
     // DragSourceHelper
     virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
@@ -177,7 +177,7 @@ protected:
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
 
     void                    DoDrag();
-    void                    DragFinished( sal_uInt8 nDropAction );
+    void                    OnDragFinished( sal_uInt8 nDropAction );
 
     String                  GetObjectName( const SdrObject* pObj ) const;
     void                    CloseBookmarkDoc();
@@ -185,14 +185,14 @@ protected:
 
 public:
 
-                            SdPageObjsTLB( Window* pParent, const SdResId& rSdResId, BOOL bEnableDrop = FALSE );
+                            SdPageObjsTLB( Window* pParent, const SdResId& rSdResId );
                             ~SdPageObjsTLB();
 
     virtual void            SelectHdl();
     virtual void            KeyInput( const KeyEvent& rKEvt );
 
-    void                    SetViewFrame( SfxViewFrame* pViewFrame ) { pFrame = pViewFrame; }
-    SfxViewFrame*           GetViewFrame() const { return pFrame; }
+    void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
+    SfxViewFrame*           GetViewFrame() const { return mpFrame; }
 
     void                    Fill( const SdDrawDocument*, BOOL bAllPages, const String& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const String& rDocName );
@@ -203,11 +203,12 @@ public:
     List*                   GetSelectEntryList( USHORT nDepth );
     List*                   GetBookmarkList( USHORT nType );
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
-    ::sd::DrawDocShell*         GetDropDocSh() { return(pDropDocSh); }
+    ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
 
-    BOOL                    IsLinkableSelected() const { return bLinkableSelected; }
+    BOOL                    IsLinkableSelected() const { return mbLinkableSelected; }
 
     static BOOL             IsInDrag()  { return bIsInDrag; }
+    using SvLBox::ExecuteDrop;
 };
 
 #endif      // _SDTREELB_HXX
