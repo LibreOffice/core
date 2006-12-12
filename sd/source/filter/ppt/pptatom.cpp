@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptatom.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:24:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,10 @@
 using namespace ppt;
 
 Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
-: maRecordHeader( rRecordHeader ),
-  mrStream( rStream ),
-  mpFirstChild( 0 ),
-  mpNextAtom( 0 )
+: mrStream( rStream )
+, maRecordHeader( rRecordHeader )
+, mpFirstChild( 0 )
+, mpNextAtom( 0 )
 {
     if( isContainer() )
     {
