@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anminfo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:22:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,28 +74,28 @@ public:
     PresObjKind             mePresObjKind;
 
     /* deprecated animation infos */
-    ::com::sun::star::presentation::AnimationEffect         eEffect;        // Animationseffekt
-    ::com::sun::star::presentation::AnimationEffect         eTextEffect;    // Animationseffekt fuer Textinhalt
-    ::com::sun::star::presentation::AnimationSpeed          eSpeed;         // Geschwindigkeit der Animation
-    BOOL                    bActive;        // eingeschaltet ?
-    BOOL                    bDimPrevious;   // Objekt abblenden
-    BOOL                    bIsMovie;       // wenn Gruppenobjekt, dann Sequenz aus den
-    BOOL                    bDimHide;       // verstecken statt abblenden
-    Color                   aBlueScreen;    // identifiziert "Hintergrundpixel"
-    Color                   aDimColor;      // zum Abblenden des Objekts
-    String                  aSoundFile;     // Pfad zum Soundfile in MSDOS-Notation
-    BOOL                    bSoundOn;       // Sound ein/aus
-    BOOL                    bPlayFull;      // Sound ganz abspielen
-    SdrPathObj*             pPathObj;       // das Pfadobjekt
-    ::com::sun::star::presentation::ClickAction             eClickAction;   // Aktion bei Mausklick
-    ::com::sun::star::presentation::AnimationEffect         eSecondEffect;  // fuer Objekt ausblenden
-    ::com::sun::star::presentation::AnimationSpeed          eSecondSpeed;   // fuer Objekt ausblenden
-    String                  aSecondSoundFile; // fuer Objekt ausblenden
-    BOOL                    bSecondSoundOn; // fuer Objekt ausblenden
-    BOOL                    bSecondPlayFull;// fuer Objekt ausblenden
-    String                  aBookmark;      // Sprung zu Objekt/Seite
-    USHORT                  nVerb;          // fuer OLE-Objekt
-    ULONG                   nPresOrder;
+    ::com::sun::star::presentation::AnimationEffect         meEffect;       // Animationseffekt
+    ::com::sun::star::presentation::AnimationEffect         meTextEffect;   // Animationseffekt fuer Textinhalt
+    ::com::sun::star::presentation::AnimationSpeed          meSpeed;            // Geschwindigkeit der Animation
+    BOOL                    mbActive;       // eingeschaltet ?
+    BOOL                    mbDimPrevious;  // Objekt abblenden
+    BOOL                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
+    BOOL                    mbDimHide;      // verstecken statt abblenden
+    Color                   maBlueScreen;   // identifiziert "Hintergrundpixel"
+    Color                   maDimColor;     // zum Abblenden des Objekts
+    String                  maSoundFile;        // Pfad zum Soundfile in MSDOS-Notation
+    BOOL                    mbSoundOn;      // Sound ein/aus
+    BOOL                    mbPlayFull;     // Sound ganz abspielen
+    SdrPathObj*             mpPathObj;      // das Pfadobjekt
+    ::com::sun::star::presentation::ClickAction             meClickAction;  // Aktion bei Mausklick
+    ::com::sun::star::presentation::AnimationEffect         meSecondEffect; // fuer Objekt ausblenden
+    ::com::sun::star::presentation::AnimationSpeed          meSecondSpeed;  // fuer Objekt ausblenden
+    String                  maSecondSoundFile; // fuer Objekt ausblenden
+    BOOL                    mbSecondSoundOn;    // fuer Objekt ausblenden
+    BOOL                    mbSecondPlayFull;// fuer Objekt ausblenden
+    String                  maBookmark;     // Sprung zu Objekt/Seite
+    USHORT                  mnVerb;         // fuer OLE-Objekt
+    ULONG                   mnPresOrder;
 
 public:
                             SdAnimationInfo();
