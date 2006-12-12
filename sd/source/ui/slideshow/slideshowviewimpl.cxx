@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:03:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,14 +227,14 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mpCanvas( ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas( rOutputWindow ) ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_QUERY_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
-    mpSlideShow( pSlideShow ),
-    mpDoc( pDoc ),
     mxPointer(),
+    mpSlideShow( pSlideShow ),
     mrOutputWindow( rOutputWindow ),
     mpViewListeners( new SlideShowViewListeners( m_aMutex ) ),
     mpPaintListeners( new SlideShowViewPaintListeners( m_aMutex ) ),
     mpMouseListeners( new SlideShowViewMouseListeners( m_aMutex ) ),
     mpMouseMotionListeners( new SlideShowViewMouseMotionListeners( m_aMutex ) ),
+    mpDoc( pDoc ),
     mbIsMouseMotionListener( false ),
     meAnimationMode( eAnimationMode ),
     mbFirstPaint( true ),
@@ -509,17 +509,17 @@ void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e ) throw (R
     }
 }
 
-void SAL_CALL SlideShowView::windowMoved( const awt::WindowEvent& e ) throw (RuntimeException)
+void SAL_CALL SlideShowView::windowMoved( const awt::WindowEvent& ) throw (RuntimeException)
 {
     // ignored
 }
 
-void SAL_CALL SlideShowView::windowShown( const lang::EventObject& e ) throw (RuntimeException)
+void SAL_CALL SlideShowView::windowShown( const lang::EventObject& ) throw (RuntimeException)
 {
     // ignored
 }
 
-void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& e ) throw (RuntimeException)
+void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& ) throw (RuntimeException)
 {
     // ignored
 }
