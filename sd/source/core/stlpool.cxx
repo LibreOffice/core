@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:17:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,10 +141,10 @@
 |*
 \************************************************************************/
 
-SdStyleSheetPool::SdStyleSheetPool(SfxItemPool& rPool, SdDrawDocument* pDocument) :
-    SfxStyleSheetPool(rPool),
-    pActualStyleSheet(NULL),
-    pDoc(pDocument)
+SdStyleSheetPool::SdStyleSheetPool(SfxItemPool& _rPool, SdDrawDocument* pDocument)
+:   SfxStyleSheetPool(_rPool)
+,   mpActualStyleSheet(NULL)
+,   mpDoc(pDocument)
 {
 }
 
@@ -166,9 +166,9 @@ SdStyleSheetPool::~SdStyleSheetPool()
 
 SfxStyleSheetBase* SdStyleSheetPool::Create(const String& rName,
                                             SfxStyleFamily eFamily,
-                                            USHORT nMask )
+                                            USHORT _nMask )
 {
-    return new SdStyleSheet(rName, *this, eFamily, nMask);
+    return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
 
 
@@ -254,8 +254,9 @@ List* SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName)
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck /*=sal_False*/ )
+void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck /*= sal_False*/ )
 {
+    (void)bCheck;
     sal_Bool bCreated = sal_False;
 
     SfxStyleSheetBase* pSheet = NULL;
@@ -266,7 +267,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
     Font aLatinFont, aCJKFont, aCTLFont;
 
-    pDoc->getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
+    mpDoc->getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
     // Font fuer Titel und Gliederung
     SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
@@ -333,8 +334,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
                 if( nLevel == 1 )
                 {
-                    Font aBulletFont( GetBulletFont() );
-                    PutNumBulletItem( pSheet, aBulletFont );
+                    Font f( GetBulletFont() );
+                    PutNumBulletItem( pSheet, f );
                 }
             }
 
@@ -477,7 +478,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
     /**************************************************************************
     * Untertitel
-    * Aenderugen auch in AdjustLRSpaceItems() vornehmen!
     **************************************************************************/
     aName = String(SdResId(STR_LAYOUT_SUBTITLE));
     aName.Insert(aPrefix, 0);
@@ -516,9 +516,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         aSvxLRSpaceItem.SetTxtLeft(0);
         rSubtitleSet.Put(aSvxLRSpaceItem);
-        Font aBulletFont( GetBulletFont() );
-        aBulletFont.SetSize(Size(0, 1129));     // 32 pt
-        PutNumBulletItem( pSheet, aBulletFont );
+
+        Font aTmpFont( GetBulletFont() );
+        aTmpFont.SetSize(Size(0, 1129));        // 32 pt
+        PutNumBulletItem( pSheet, aTmpFont );
     }
 
     /**************************************************************************
@@ -833,49 +834,49 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     SfxStyleSheetBase* pSheet = NULL;
     SfxStyleSheetBase* pParent = NULL;
 
-    //USHORT nMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
-    USHORT nMask = SFXSTYLEBIT_USED;
+    //USHORT nUsedMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
+    USHORT nUsedMask = SFXSTYLEBIT_USED;
 
     aName = String(SdResId(STR_PSEUDOSHEET_TITLE));
-    if (!(pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)))
+    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nMask);
+        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
 
     aName = String(SdResId(STR_PSEUDOSHEET_SUBTITLE));
-    if (!(pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)))
+    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nMask);
+        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent(String());
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
 
     aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
-    if (!(pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)))
+    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nMask);
+        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
 
     aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUND));
-    if (!(pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)))
+    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nMask);
+        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
 
     aName = String(SdResId(STR_PSEUDOSHEET_NOTES));
-    if (!(pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)))
+    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nMask);
+        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
@@ -890,9 +891,9 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
         aLevelName.Append( sal_Unicode( ' ' ));
         aLevelName.Append( String::CreateFromInt32( sal_Int32( nLevel )));
 
-        if (!(pSheet = Find(aLevelName, SFX_STYLE_FAMILY_PSEUDO)))
+        if( (pSheet = Find(aLevelName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
         {
-            pSheet = &Make(aLevelName, SFX_STYLE_FAMILY_PSEUDO, nMask);
+            pSheet = &Make(aLevelName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
 
             if (pSheet)
             {
@@ -1076,7 +1077,6 @@ void SdStyleSheetPool::UpdateStdNames()
                     String aStr( SdResId( STR_PSEUDOSHEET_OUTLINE ) );
                     aStr.Append( sal_Unicode( ' ' ));
                     String aStr2( RTL_CONSTASCII_USTRINGPARAM( "Gliederung " ));
-                    sal_Int32 nNumber = 0;
 
                     if( aOldName == String( SdResId( STR_PSEUDOSHEET_TITLE ) ) ||
                         aOldName.EqualsAscii( "Titel", 0, RTL_CONSTASCII_LENGTH( "Titel" )))
@@ -1148,192 +1148,6 @@ void SdStyleSheetPool::UpdateStdNames()
     if( bNewHelpIds )
         UpdateStdNames();
 }
-
-
-/*************************************************************************
-|*
-|* Da sich die Bedeutung der SvxLRSpaceItems ab nFileFormatVersion = 16
-|* geaendert hat (Bullet-Handling des Outliners, siehe auch
-|* SdDrawDocument::NewOrLoadCompleted()), muss fuer aeltere Versionen
-|* eine Korrektur vorgenommen werden.
-|*
-\************************************************************************/
-
-void SdStyleSheetPool::AdjustLRSpaceItems()
-{
-    String aHelpFile;
-    ULONG nCount = aStyles.Count();
-
-    // #63254# Aenderungen nicht mehr broadcasten,statt dessen nach
-    // AdjustLRSpaceItems() ein UpdateStyleSheets am Outliner
-
-    if ( nCount > 0 )
-    {
-        /**************************************************************************
-        * All LayoutStyleSheets loaded? (e.g. new Subtitle LayoutStyleSheet)
-        **************************************************************************/
-        USHORT nMasterPageCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
-
-        for ( USHORT i = 0; i < nMasterPageCount; i++ )
-        {
-            String aName(pDoc->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
-            aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
-            CreateLayoutStyleSheets(aName);
-        }
-    }
-
-    String aOutlineName( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
-    aOutlineName += String(SdResId(STR_PSEUDOSHEET_OUTLINE));
-    String aTitleName( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
-    aTitleName += String(SdResId(STR_PSEUDOSHEET_TITLE));
-    String aSubtitleName( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
-    aSubtitleName += String(SdResId(STR_PSEUDOSHEET_SUBTITLE));
-    String aStandardName(SdResId(STR_STANDARD_STYLESHEET_NAME));
-    SfxStyleSheet* pSheetOutlineLevelOne = NULL;
-
-    for (ULONG n = 0; n < nCount; n++)
-    {
-        SfxStyleSheet* pSheet = (SfxStyleSheet*)aStyles.GetObject(n);
-        SfxItemSet& rSet = pSheet->GetItemSet();
-        String aName( pSheet->GetName() );
-        String aHelpFile;
-        ULONG nHelpId = pSheet->GetHelpId( aHelpFile );
-
-        if( nHelpId == 0)
-        {
-            if( aName.Len() == aOutlineName.Len() + 1 &&
-                aName.Match( aOutlineName ) == STRING_MATCH )
-            {
-                sal_Int32 nNumber = String( aName, aName.Len(), 1 ).ToInt32();
-                if( 1 <= nNumber && nNumber <= 9 )
-                    nHelpId = HID_PSEUDOSHEET_OUTLINE + nNumber;
-            }
-        }
-
-        if ( nHelpId &&
-             ( HID_PSEUDOSHEET_OUTLINE + 1 <= nHelpId &&
-               nHelpId <= HID_PSEUDOSHEET_OUTLINE + 9 ))
-        {
-            // Gliederungsvorlage
-            // Bei Gliederungsobjektvorlagen Korrektur vornehmen
-            // Es handelt sich hier um die RealStyleSheets und die Pseudos!
-            // (siehe SdStyleSheet::GetRealStyleSheet())
-            if ( nHelpId == HID_PSEUDOSHEET_OUTLINE + 1 )
-            {
-                if (rSet.GetItemState(EE_PARA_BULLETSTATE) != SFX_ITEM_ON)
-                {
-                    SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 1); // Bullets sichtbar
-                    rSet.Put(aBulletStateItem);
-                }
-            }
-
-            // Gliederungs-Vorlage
-            const SvxBulletItem* pOldBullet = NULL;
-            if ( rSet.GetItemState( EE_PARA_BULLET ) == SFX_ITEM_ON )
-                pOldBullet = &(const SvxBulletItem&) rSet.Get(EE_PARA_BULLET);
-
-            const SvxLRSpaceItem* pOldLRSpace = NULL;
-            if ( rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
-                pOldLRSpace = &(const SvxLRSpaceItem&) rSet.Get(EE_PARA_LRSPACE);
-
-            USHORT nLevel = (USHORT) (nHelpId - HID_PSEUDOSHEET_OUTLINE);
-
-            if ( nHelpId == HID_PSEUDOSHEET_OUTLINE + 1 )
-            {
-                pSheetOutlineLevelOne = pSheet;
-                SvxNumBulletItem aDefaultNumBullet( *(SvxNumBulletItem*) rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
-                aDefaultNumBullet.GetNumRule()->SetNumRuleType( SVX_RULETYPE_PRESENTATION_NUMBERING );
-                EditEngine::ImportBulletItem( aDefaultNumBullet, nLevel, pOldBullet, pOldLRSpace );
-                rSet.Put( aDefaultNumBullet );
-
-                if (rSet.GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_ON )
-                {
-                    // Flaechenattribute sind nun unsichtbar
-                    XFillStyleItem aFillStyleItem(XFILL_NONE);
-                    rSet.Put(aFillStyleItem);
-                }
-
-                if (rSet.GetItemState( XATTR_LINESTYLE ) != SFX_ITEM_ON )
-                {
-                    // Linienattribute sind nun unsichtbar
-                    XLineStyleItem aLineStyleItem(XLINE_NONE);
-                    rSet.Put(aLineStyleItem);
-                }
-            }
-            else
-            {
-                SfxItemSet& rSetOutlineLevelOne = pSheetOutlineLevelOne->GetItemSet();
-                SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rSetOutlineLevelOne.Get(EE_PARA_NUMBULLET) );
-                EditEngine::ImportBulletItem( aNumBullet, nLevel, pOldBullet, pOldLRSpace );
-                rSetOutlineLevelOne.Put( aNumBullet );
-
-                // SvxNumBulletItems darf es nur in der ersten Gliederungsebene geben!
-                if ( rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
-                    rSet.ClearItem( EE_PARA_NUMBULLET );
-            }
-
-            if (rSet.GetItemState(EE_PARA_LRSPACE) == SFX_ITEM_ON)
-            {
-                const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) rSet.Get(EE_PARA_LRSPACE);
-
-                if (rLRItem.GetTxtFirstLineOfst() == 0)
-                {
-                    SvxLRSpaceItem aNewLRItem(rLRItem);
-                    const SvxBulletItem& rBulletItem = (const SvxBulletItem&) rSet.Get(EE_PARA_BULLET);
-                    short nFirstLineOfst = (short) -rBulletItem.GetWidth();
-                    aNewLRItem.SetTxtFirstLineOfst(nFirstLineOfst);
-                    rSet.Put(aNewLRItem);
-                }
-            }
-        }
-        else if ( nHelpId == HID_PSEUDOSHEET_TITLE               ||
-                  nHelpId == HID_PSEUDOSHEET_SUBTITLE            ||
-                  aName.Search(aTitleName)    != STRING_NOTFOUND ||
-                  aName.Search(aSubtitleName) != STRING_NOTFOUND )
-        {
-            // Titel- oder Untertitel-Vorlage
-            SfxItemSet& rSet = pSheet->GetItemSet();
-
-            if (rSet.GetItemState(EE_PARA_BULLETSTATE) != SFX_ITEM_ON ||
-                ((const SfxUInt16Item&) rSet.Get(EE_PARA_BULLETSTATE)).GetValue() == 1)
-            {
-                SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0); // Bullets nicht sichtbar
-                rSet.Put(aBulletStateItem);
-            }
-
-            if( nHelpId == HID_PSEUDOSHEET_TITLE ||
-                aName.Search(aTitleName) != STRING_NOTFOUND )
-            {
-                Font aBulletFont( GetBulletFont() );
-                aBulletFont.SetSize(Size(0,1552));                  // 44 pt
-                PutNumBulletItem( pSheet, aBulletFont );
-            }
-            else if( nHelpId == HID_PSEUDOSHEET_SUBTITLE ||
-                     aName.Search(aSubtitleName) != STRING_NOTFOUND )
-            {
-                Font aBulletFont( GetBulletFont() );
-                aBulletFont.SetSize(Size(0, 1129));     // 32 pt
-                PutNumBulletItem( pSheet, aBulletFont );
-            }
-        }
-        else if ( aName == aStandardName )
-        {
-            // Standardvorlage
-            Font aBulletFont( GetBulletFont() );
-            aBulletFont.SetSize(Size(0,846));       // 24 pt
-            PutNumBulletItem( pSheet, aBulletFont );
-        }
-        else if ( rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
-        {
-            // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
-            SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rSet.Get(EE_PARA_NUMBULLET) );
-
-            EditEngine::ImportBulletItem( aNumBullet, 0, NULL, &(const SvxLRSpaceItem&) rSet.Get( EE_PARA_LRSPACE ) );
-            rSet.Put( aNumBullet );
-        }
-    }
-}
-
 
 /*************************************************************************
 |*
@@ -1426,7 +1240,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 const short nLSpace = i ? i * 1200 : 1200;
                 aNumberFormat.SetLSpace(nLSpace);
                 aNumberFormat.SetAbsLSpace(nLSpace);
-                USHORT nFirstLineOffset = -600;
+                short nFirstLineOffset = -600;
 
                 ULONG nFontSize = 20;
                 switch(i)
