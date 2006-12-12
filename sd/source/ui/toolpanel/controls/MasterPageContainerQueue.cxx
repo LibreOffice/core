@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainerQueue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:19:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,8 @@ MasterPageContainerQueue* MasterPageContainerQueue::Create (
 MasterPageContainerQueue::MasterPageContainerQueue (
     const ::boost::weak_ptr<ContainerAdapter>& rpContainer)
     : mpWeakContainer(rpContainer),
-      maDelayedPreviewCreationTimer(),
       mpRequestQueue(new RequestQueue()),
+      maDelayedPreviewCreationTimer(),
       mnRequestsServedCount(0)
 {
 }
