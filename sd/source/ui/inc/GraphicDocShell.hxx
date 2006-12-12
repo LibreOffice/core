@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicDocShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:05:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,18 +70,16 @@ class GraphicDocShell
 public:
     TYPEINFO();
 
-    SFX_DECL_INTERFACE(SD_IF_SDGRAPHICDOCSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDGRAPHICDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
+
+    using SotObject::GetInterface;
 
     GraphicDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         BOOL bSdDataObj=FALSE,
         DocumentType=DOCUMENT_TYPE_DRAW);
-    GraphicDocShell (
-        SdDrawDocument* pDoc,
-        SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
-        BOOL bSdDataObj=FALSE,
-        DocumentType=DOCUMENT_TYPE_DRAW);
+
     virtual ~GraphicDocShell (void);
 };
 
