@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:42:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,6 @@
 
 #ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-
-#ifndef _B2D_MTRI_HXX
-#include <goodies/b2dmtri.hxx>
 #endif
 
 #ifndef _B3D_B3DCOLOR_HXX
@@ -469,7 +465,7 @@ void SdrHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->IsMarkHdlHidden())
+    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
     {
         BitmapColorIndex eColIndex = LightGreen;
         BitmapMarkerKind eKindOfMarker = Rect_7x7;
@@ -1004,7 +1000,7 @@ void SdrHdlColor::CreateB2dIAObject()
     {
         SdrMarkView* pView = pHdlList->GetView();
 
-        if(pView && !pView->IsMarkHdlHidden())
+        if(pView && !pView->areMarkHandlesHidden())
         {
             SdrPageView* pPageView = pView->GetSdrPageView();
 
@@ -1168,7 +1164,7 @@ void SdrHdlGradient::CreateB2dIAObject()
     {
         SdrMarkView* pView = pHdlList->GetView();
 
-        if(pView && !pView->IsMarkHdlHidden())
+        if(pView && !pView->areMarkHandlesHidden())
         {
             SdrPageView* pPageView = pView->GetSdrPageView();
 
@@ -1325,7 +1321,7 @@ void SdrHdlLine::CreateB2dIAObject()
     {
         SdrMarkView* pView = pHdlList->GetView();
 
-        if(pView && !pView->IsMarkHdlHidden() && pHdl1 && pHdl2)
+        if(pView && !pView->areMarkHandlesHidden() && pHdl1 && pHdl2)
         {
             SdrPageView* pPageView = pView->GetSdrPageView();
 
@@ -1392,7 +1388,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
     {
         SdrMarkView* pView = pHdlList->GetView();
 
-        if(pView && !pView->IsMarkHdlHidden())
+        if(pView && !pView->areMarkHandlesHidden())
         {
             SdrPageView* pPageView = pView->GetSdrPageView();
 
@@ -1450,7 +1446,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
     {
         SdrMarkView* pView = pHdlList->GetView();
 
-        if(pView && !pView->IsMarkHdlHidden())
+        if(pView && !pView->areMarkHandlesHidden())
         {
             SdrPageView* pPageView = pView->GetSdrPageView();
 
@@ -1516,7 +1512,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
         {
             SdrMarkView* pView = pHdlList->GetView();
 
-            if(pView && !pView->IsMarkHdlHidden())
+            if(pView && !pView->areMarkHandlesHidden())
             {
                 const SdrEdgeObj* pEdge = (SdrEdgeObj*)pObj;
 
@@ -1576,7 +1572,7 @@ void ImpEdgeHdl::SetLineCode(SdrEdgeLineCode eCode)
         eLineCode = eCode;
 
         // create new display
-        CreateB2dIAObject();
+        Touch();
     }
 }
 
@@ -1623,7 +1619,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
     {
         SdrMarkView* pView = pHdlList->GetView();
 
-        if(pView && !pView->IsMarkHdlHidden())
+        if(pView && !pView->areMarkHandlesHidden())
         {
             BitmapColorIndex eColIndex = LightCyan;
             BitmapMarkerKind eKindOfMarker = Rect_9x9;
@@ -1835,14 +1831,14 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         // take care of old handle
         const sal_uInt32 nOldHdlNum(mnFocusIndex);
         SdrHdl* pOld = GetHdl(nOldHdlNum);
-        sal_Bool bRefresh(sal_False);
+        //SDOsal_Bool bRefresh(sal_False);
 
         if(pOld)
         {
             // switch off old handle
             mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
             pOld->Touch();
-            bRefresh = sal_True;
+            //SDObRefresh = sal_True;
         }
 
         // #105678# Alloc pointer array for sorted handle list
@@ -1949,7 +1945,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             if(pNew)
             {
                 pNew->Touch();
-                bRefresh = sal_True;
+                //SDObRefresh = sal_True;
             }
         }
 
@@ -1978,19 +1974,19 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
 
             if(nNewHdlNum != CONTAINER_ENTRY_NOTFOUND)
             {
-                sal_Bool bRefresh(sal_False);
+                //SDOsal_Bool bRefresh(sal_False);
                 mnFocusIndex = nNewHdlNum;
 
                 if(pActual)
                 {
                     pActual->Touch();
-                    bRefresh = sal_True;
+                    //SDObRefresh = sal_True;
                 }
 
                 if(pNew)
                 {
                     pNew->Touch();
-                    bRefresh = sal_True;
+                    //SDObRefresh = sal_True;
                 }
 
                 //OLMif(bRefresh)
@@ -2125,18 +2121,18 @@ void SdrHdlList::Sort()
 
     if(pPrev != pNow)
     {
-        sal_Bool bRefresh(sal_False);
+        //SDOsal_Bool bRefresh(sal_False);
 
         if(pPrev)
         {
             pPrev->Touch();
-            bRefresh = sal_True;
+            //SDObRefresh = sal_True;
         }
 
         if(pNow)
         {
             pNow->Touch();
-            bRefresh = sal_True;
+            //SDObRefresh = sal_True;
         }
     }
 }
