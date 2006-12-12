@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:14:16 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,10 @@
 #include <unicode/locid.h>
 #include <unicode/rbbi.h>
 #include <unicode/udata.h>
+#include <rtl/strbuf.hxx>
 
 U_CDECL_BEGIN
-extern const char OpenOffice_icu_dat[];
+extern const char OpenOffice_dat[];
 U_CDECL_END
 
 using namespace ::com::sun::star::uno;
@@ -61,16 +62,21 @@ BreakIterator_Unicode::BreakIterator_Unicode()
         wordRule="word";
         lineRule="line";
         character.aBreakIterator=word.aBreakIterator=sentence.aBreakIterator=line.aBreakIterator=NULL;
-        character.aText=OUString();
-        word.aText=OUString();
-        sentence.aText=OUString();
-        line.aText=OUString();
+        character.aICUText=UnicodeString();
+        word.aICUText=UnicodeString();
+        sentence.aICUText=UnicodeString();
+        line.aICUText=UnicodeString();
         cBreakIterator = ImplementName;
+        icuBI=NULL;
 }
 
 
 BreakIterator_Unicode::~BreakIterator_Unicode()
 {
+        if (icuBI && icuBI->aBreakIterator) {
+            delete icuBI->aBreakIterator;
+            icuBI->aBreakIterator=NULL;
+        }
         if (character.aBreakIterator) delete character.aBreakIterator;
         if (word.aBreakIterator) delete word.aBreakIterator;
         if (sentence.aBreakIterator) delete sentence.aBreakIterator;
@@ -102,16 +108,22 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
                         rWordType == WordType::DICTIONARY_WORD ? "dict_word" : "edit_word";
 
             status = U_ZERO_ERROR;
-            udata_setAppData("OpenOffice", OpenOffice_icu_dat, &status);
+            udata_setAppData("OpenOffice", OpenOffice_dat, &status);
             if ( !U_SUCCESS(status) ) throw ERROR;
 
             status = U_ZERO_ERROR;
-            icuBI->aBreakIterator = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk",
-                    OUStringToOString(OUString::createFromAscii(rule)+OUString::createFromAscii("_")+rLocale.Language,
-                    RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
+            OStringBuffer aUDName(64);
+            aUDName.append(rule);
+            aUDName.append('_');
+            aUDName.append( OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US));
+            UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
+            if( U_SUCCESS(status) )
+                icuBI->aBreakIterator = new RuleBasedBreakIterator( pUData, status);
             if (!U_SUCCESS(status) ) {
                 status = U_ZERO_ERROR;
-                icuBI->aBreakIterator = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk", rule, &status), status);
+                pUData = udata_open("OpenOffice", "brk", rule, &status);
+                if( U_SUCCESS(status) )
+                    icuBI->aBreakIterator = new RuleBasedBreakIterator( pUData, status);
                 if (!U_SUCCESS(status) ) icuBI->aBreakIterator=NULL;
             }
         }
@@ -152,9 +164,9 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         }
     }
 
-    if (newBreak || !icuBI->aText.equals(rText)) {
-        icuBI->aText = rText;
-        icuBI->aBreakIterator->setText(UnicodeString(icuBI->aText.getStr(), icuBI->aText.getLength()));
+    if (newBreak || icuBI->aICUText.compare(UnicodeString(rText.getStr(), rText.getLength()))) {
+        icuBI->aICUText=UnicodeString(rText.getStr(), rText.getLength());
+        icuBI->aBreakIterator->setText(icuBI->aICUText);
     }
 }
 
