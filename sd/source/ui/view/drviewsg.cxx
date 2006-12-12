@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:39:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
     if ( rReq.GetSlot() == SID_IMAP_EXEC )
     {
-        SdrMark* pMark = pDrView->GetMarkedObjectList().GetMark(0);
+        SdrMark* pMark = mpDrawView->GetMarkedObjectList().GetMark(0);
 
         if ( pMark )
         {
@@ -129,7 +129,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
-        const SdrMarkList&  rMarkList = pDrView->GetMarkedObjectList();
+        const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
         const SdrObject*    pObj = NULL;
         ULONG               nMarkCount = rMarkList.GetMarkCount();
 
@@ -137,7 +137,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
         {
             pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-            if ( ( pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) ) &&
+            if ( ( pObj->ISA( SdrGrafObj ) /*|| pObj->ISA( SdrOle2Obj )*/ ) &&
                  ( SVXIMAPDLG()->GetEditingObject() == (void*) pObj ) )
             {
                 bDisable = FALSE;
@@ -162,7 +162,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
     BOOL   bDefault = FALSE;
     USHORT nSlot = rReq.GetSlot();
-    FrameView* pFrameView = GetFrameView();
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
 
@@ -170,109 +169,109 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     {
         // Ersatzdarstellung-Optionen
         case SID_GRAPHIC_DRAFT:
-            pOptions->SetExternGraphic( !pDrView->IsGrafDraft() );
+            pOptions->SetExternGraphic( !mpDrawView->IsGrafDraft() );
         break;
 
         case SID_FILL_DRAFT:
-            pOptions->SetOutlineMode( !pDrView->IsFillDraft() );
+            pOptions->SetOutlineMode( !mpDrawView->IsFillDraft() );
         break;
 
         case SID_TEXT_DRAFT:
-            pOptions->SetNoText( !pDrView->IsTextDraft() );
+            pOptions->SetNoText( !mpDrawView->IsTextDraft() );
         break;
 
         case SID_LINE_DRAFT:
-            pOptions->SetHairlineMode( !pDrView->IsLineDraft() );
+            pOptions->SetHairlineMode( !mpDrawView->IsLineDraft() );
         break;
 
         case SID_HANDLES_DRAFT:
-            pOptions->SetSolidMarkHdl( !pDrView->IsSolidMarkHdl() );
+            pOptions->SetSolidMarkHdl( !mpDrawView->IsSolidMarkHdl() );
         break;
 
         case SID_SOLID_CREATE:
-            pOptions->SetSolidDragging( !pDrView->IsSolidDragging() );
+            pOptions->SetSolidDragging( !mpDrawView->IsSolidDragging() );
         break;
 
 
         // Raster- / Hilfslinien-Optionen
         case SID_GRID_VISIBLE: // noch nicht hier !
         {
-            pOptions->SetGridVisible( !pDrView->IsGridVisible() );
+            pOptions->SetGridVisible( !mpDrawView->IsGridVisible() );
         }
         break;
 
         case SID_GRID_USE:
         {
-            pOptions->SetUseGridSnap( !pDrView->IsGridSnap() );
+            pOptions->SetUseGridSnap( !mpDrawView->IsGridSnap() );
         }
         break;
 
         case SID_HELPLINES_VISIBLE: // noch nicht hier !
         {
-            pOptions->SetHelplines( !pDrView->IsHlplVisible() );
+            pOptions->SetHelplines( !mpDrawView->IsHlplVisible() );
         }
         break;
 
         case SID_HELPLINES_USE:
         {
-            pOptions->SetSnapHelplines( !pDrView->IsHlplSnap() );
+            pOptions->SetSnapHelplines( !mpDrawView->IsHlplSnap() );
         }
         break;
 
         case SID_HELPLINES_MOVE:
         {
-            pOptions->SetDragStripes( !pDrView->IsDragStripes() );
+            pOptions->SetDragStripes( !mpDrawView->IsDragStripes() );
         }
         break;
 
 
         case SID_SNAP_BORDER:
         {
-            pOptions->SetSnapBorder( !pDrView->IsBordSnap() );
+            pOptions->SetSnapBorder( !mpDrawView->IsBordSnap() );
         }
         break;
 
         case SID_SNAP_FRAME:
         {
-            pOptions->SetSnapFrame( !pDrView->IsOFrmSnap() );
+            pOptions->SetSnapFrame( !mpDrawView->IsOFrmSnap() );
         }
         break;
 
         case SID_SNAP_POINTS:
         {
-            pOptions->SetSnapPoints( !pDrView->IsOPntSnap() );
+            pOptions->SetSnapPoints( !mpDrawView->IsOPntSnap() );
         }
         break;
 
 
         case SID_QUICKEDIT:
         {
-            pOptions->SetQuickEdit( !pDrView->IsQuickTextEditMode() );
+            pOptions->SetQuickEdit( !mpDrawView->IsQuickTextEditMode() );
         }
         break;
 
         case SID_PICK_THROUGH:
         {
             pOptions->SetPickThrough(
-                !pDrView->GetModel()->IsPickThroughTransparentTextFrames() );
+                !mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() );
         }
         break;
 
         case SID_BIG_HANDLES:
         {
-            pOptions->SetBigHandles( !pFrameView->IsBigHandles() );
+            pOptions->SetBigHandles( !mpFrameView->IsBigHandles() );
         }
         break;
 
         case SID_DOUBLECLICK_TEXTEDIT:
         {
-            pOptions->SetDoubleClickTextEdit( !pFrameView->IsDoubleClickTextEdit() );
+            pOptions->SetDoubleClickTextEdit( !mpFrameView->IsDoubleClickTextEdit() );
         }
         break;
 
         case SID_CLICK_CHANGE_ROTATION:
         {
-            pOptions->SetClickChangeRotation( !pFrameView->IsClickChangeRotation() );
+            pOptions->SetClickChangeRotation( !mpFrameView->IsClickChangeRotation() );
         }
         break;
 
@@ -289,9 +288,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         // SFX_APP()->SaveConfiguration();
         WriteFrameViewData();
 
-        //FrameView* pFrameView = pViewShell->GetFrameView(); schon oben
-        pFrameView->Update( pOptions );
-        ReadFrameViewData( pFrameView );
+        mpFrameView->Update( pOptions );
+        ReadFrameViewData( mpFrameView );
 
         Invalidate( nSlot );
         rReq.Done();
@@ -308,31 +306,29 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
 void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 {
-    FrameView* pFrameView = GetFrameView();
+    rSet.Put( SfxBoolItem( SID_GRAPHIC_DRAFT, mpDrawView->IsGrafDraft() ) );
+    rSet.Put( SfxBoolItem( SID_FILL_DRAFT, mpDrawView->IsFillDraft() ) );
+    rSet.Put( SfxBoolItem( SID_TEXT_DRAFT, mpDrawView->IsTextDraft() ) );
+    rSet.Put( SfxBoolItem( SID_LINE_DRAFT, mpDrawView->IsLineDraft() ) );
+    rSet.Put( SfxBoolItem( SID_HANDLES_DRAFT, !mpDrawView->IsSolidMarkHdl() ) );
+    rSet.Put( SfxBoolItem( SID_SOLID_CREATE, mpDrawView->IsSolidDragging() ) );
+    rSet.Put( SfxBoolItem( SID_GRID_VISIBLE, mpDrawView->IsGridVisible() ) );
+    rSet.Put( SfxBoolItem( SID_GRID_USE, mpDrawView->IsGridSnap() ) );
+    rSet.Put( SfxBoolItem( SID_HELPLINES_VISIBLE, mpDrawView->IsHlplVisible() ) );
+    rSet.Put( SfxBoolItem( SID_HELPLINES_USE, mpDrawView->IsHlplSnap() ) );
+    rSet.Put( SfxBoolItem( SID_HELPLINES_MOVE, mpDrawView->IsDragStripes() ) );
 
-    rSet.Put( SfxBoolItem( SID_GRAPHIC_DRAFT, pDrView->IsGrafDraft() ) );
-    rSet.Put( SfxBoolItem( SID_FILL_DRAFT, pDrView->IsFillDraft() ) );
-    rSet.Put( SfxBoolItem( SID_TEXT_DRAFT, pDrView->IsTextDraft() ) );
-    rSet.Put( SfxBoolItem( SID_LINE_DRAFT, pDrView->IsLineDraft() ) );
-    rSet.Put( SfxBoolItem( SID_HANDLES_DRAFT, !pDrView->IsSolidMarkHdl() ) );
-    rSet.Put( SfxBoolItem( SID_SOLID_CREATE, pDrView->IsSolidDragging() ) );
-    rSet.Put( SfxBoolItem( SID_GRID_VISIBLE, pDrView->IsGridVisible() ) );
-    rSet.Put( SfxBoolItem( SID_GRID_USE, pDrView->IsGridSnap() ) );
-    rSet.Put( SfxBoolItem( SID_HELPLINES_VISIBLE, pDrView->IsHlplVisible() ) );
-    rSet.Put( SfxBoolItem( SID_HELPLINES_USE, pDrView->IsHlplSnap() ) );
-    rSet.Put( SfxBoolItem( SID_HELPLINES_MOVE, pDrView->IsDragStripes() ) );
+    rSet.Put( SfxBoolItem( SID_SNAP_BORDER, mpDrawView->IsBordSnap() ) );
+    rSet.Put( SfxBoolItem( SID_SNAP_FRAME, mpDrawView->IsOFrmSnap() ) );
+    rSet.Put( SfxBoolItem( SID_SNAP_POINTS, mpDrawView->IsOPntSnap() ) );
 
-    rSet.Put( SfxBoolItem( SID_SNAP_BORDER, pDrView->IsBordSnap() ) );
-    rSet.Put( SfxBoolItem( SID_SNAP_FRAME, pDrView->IsOFrmSnap() ) );
-    rSet.Put( SfxBoolItem( SID_SNAP_POINTS, pDrView->IsOPntSnap() ) );
+    rSet.Put( SfxBoolItem( SID_QUICKEDIT, mpDrawView->IsQuickTextEditMode() ) );
+    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (BOOL)
+                mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
 
-    rSet.Put( SfxBoolItem( SID_QUICKEDIT, pDrView->IsQuickTextEditMode() ) );
-    rSet.Put( SfxBoolItem( SID_PICK_THROUGH,
-                pDrView->GetModel()->IsPickThroughTransparentTextFrames() ) );
-
-    rSet.Put( SfxBoolItem( SID_BIG_HANDLES, pFrameView->IsBigHandles() ) );
-    rSet.Put( SfxBoolItem( SID_DOUBLECLICK_TEXTEDIT, pFrameView->IsDoubleClickTextEdit() ) );
-    rSet.Put( SfxBoolItem( SID_CLICK_CHANGE_ROTATION, pFrameView->IsClickChangeRotation() ) );
+    rSet.Put( SfxBoolItem( SID_BIG_HANDLES, mpFrameView->IsBigHandles() ) );
+    rSet.Put( SfxBoolItem( SID_DOUBLECLICK_TEXTEDIT, mpFrameView->IsDoubleClickTextEdit() ) );
+    rSet.Put( SfxBoolItem( SID_CLICK_CHANGE_ROTATION, mpFrameView->IsClickChangeRotation() ) );
 }
 
 } // end of namespace sd
