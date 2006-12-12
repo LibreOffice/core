@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneFocusManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:14:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:42:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,9 +191,10 @@ void FocusManager::RemoveLinks (::Window* pWindow)
     pWindow->RemoveEventListener (LINK (this, FocusManager, WindowEventListener));
 
     // Remove links to the given window.
-    bool bLinkRemoved (false);
+    bool bLinkRemoved;
     do
     {
+        bLinkRemoved = false;
         LinkMap::iterator iLink;
         for (iLink=mpLinks->begin(); iLink!=mpLinks->end(); ++iLink)
         {
@@ -201,7 +202,7 @@ void FocusManager::RemoveLinks (::Window* pWindow)
             {
                 mpLinks->erase(iLink);
                 RemoveUnusedEventListener(iLink->first);
-                bLinkRemoved;
+                bLinkRemoved = true;
                 break;
             }
         }
