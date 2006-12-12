@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:13:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,8 +344,8 @@ Size LayoutMenu::GetPreferredSize (void)
     Size aItemSize = CalcItemSizePixel (Size());
     Size aPreferredWindowSize = CalcWindowSizePixel (
         aItemSize,
-        mnPreferredColumnCount,
-        CalculateRowCount (aItemSize, mnPreferredColumnCount));
+         (USHORT)mnPreferredColumnCount,
+        (USHORT)CalculateRowCount (aItemSize,mnPreferredColumnCount));
     return aPreferredWindowSize;
 }
 
@@ -468,11 +468,10 @@ void LayoutMenu::Resize (void)
             else if (nColumnCount > 4)
                 nColumnCount = 4;
 
-            int n = GetItemCount();
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
 
-            SetColCount (nColumnCount);
-            SetLineCount (nRowCount);
+            SetColCount ((USHORT)nColumnCount);
+            SetLineCount ((USHORT)nRowCount);
         }
     }
 
@@ -563,7 +562,7 @@ void LayoutMenu::InvalidateContent (void)
 
 
 
-int LayoutMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
+int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
 {
     int nRowCount = 0;
 
@@ -581,7 +580,7 @@ int LayoutMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
 
 
 
-IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, pValueSet)
+IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, EMPTYARG)
 {
     AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
     return 0;
@@ -619,6 +618,8 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                     if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
                         bMasterPageMode = true;
             }
+            default:
+                break;
         }
         if (bMasterPageMode)
             break;
@@ -639,6 +640,8 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             case ViewShell::ST_NOTES:
             case ViewShell::ST_SLIDE_SORTER:
                 pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
+                break;
+            default:
                 break;
         }
         if (pSlideSorter != NULL)
@@ -788,14 +791,14 @@ void LayoutMenu::Clear (void)
 
 
 
-void LayoutMenu::StartDrag (sal_Int8 nAction, const Point& rPosPixel)
+void LayoutMenu::StartDrag (sal_Int8 , const Point& )
 {
 }
 
 
 
 
-sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& rEvent)
+sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& )
 {
     return 0;
 }
@@ -803,7 +806,7 @@ sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& rEvent)
 
 
 
-sal_Int8 LayoutMenu::ExecuteDrop (const ExecuteDropEvent& rEvent)
+sal_Int8 LayoutMenu::ExecuteDrop (const ExecuteDropEvent& )
 {
     return 0;
 }
@@ -828,7 +831,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     // When the command event was not caused by a mouse
                     // event (for example a key press instead) then show the
                     // popup menu at the center of the current item.
-                    if (GetSelectItemId() >= 0)
+                    if (GetSelectItemId() != (USHORT)-1)
                     {
                         Rectangle aBBox (GetItemRect(GetSelectItemId()));
                         Point aPosition (aBBox.Center());
@@ -850,7 +853,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
 
 
 
-IMPL_LINK(LayoutMenu, StateChangeHandler, ::rtl::OUString*, pSlotName)
+IMPL_LINK(LayoutMenu, StateChangeHandler, ::rtl::OUString*, EMPTYARG)
 {
     InvalidateContent();
     return 0;
