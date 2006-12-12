@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:28:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ class ViewShellBase
 public:
     TYPEINFO();
     SFX_DECL_VIEWFACTORY(ViewShellBase);
-    SFX_DECL_INTERFACE(SD_IF_SDVIEWSHELLBASE);
+    SFX_DECL_INTERFACE(SD_IF_SDVIEWSHELLBASE)
 
     /** This constructor is used by the view factory of the SFX macros.
         Note that LateInit() has to be called after the constructor
