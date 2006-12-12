@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:20:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -682,8 +682,12 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
                 pLbFillType->Selected();
 
             // release focus
-            if ( pBox && pLbFillType->IsRelease() && SfxViewShell::Current()->GetWindow() )
-                SfxViewShell::Current()->GetWindow()->GrabFocus();
+            if ( pBox && pLbFillType->IsRelease() )
+            {
+                SfxViewShell* pViewShell = SfxViewShell::Current();
+                if( pViewShell && pViewShell->GetWindow() )
+                    pViewShell->GetWindow()->GrabFocus();
+            }
         }
     }
     return 0;
@@ -812,8 +816,14 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
         }
 
         // release focus
-        if ( pLbFillAttr->IsRelease()  && pBox && SfxViewShell::Current()->GetWindow() )
-            SfxViewShell::Current()->GetWindow()->GrabFocus();
+        if ( pLbFillAttr->IsRelease()  && pBox )
+        {
+            SfxViewShell* pViewShell = SfxViewShell::Current();
+            if( pViewShell && pViewShell->GetWindow() )
+            {
+                pViewShell->GetWindow()->GrabFocus();
+            }
+        }
     }
 
     return 0;
