@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:19:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize
 PropEntry::PropEntry( const PropEntry& rProp ) :
     mnId        ( rProp.mnId ),
     mnSize      ( rProp.mnSize ),
-    mpBuf       ( new sal_uInt8[ mnSize ] ),
-    mnTextEnc   ( rProp.mnTextEnc )
+    mnTextEnc   ( rProp.mnTextEnc ),
+    mpBuf       ( new sal_uInt8[ mnSize ] )
 {
     memcpy( (void*)mpBuf, (void*)rProp.mpBuf, mnSize );
 };
@@ -98,41 +98,41 @@ const PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
 void PropItem::Clear()
 {
     Seek( STREAM_SEEK_TO_BEGIN );
-    delete[] SwitchBuffer();
+    delete[] (sal_uInt8*)SwitchBuffer();
 }
 
 //  -----------------------------------------------------------------------
 
 BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
 {
-    sal_uInt32  i, nSize, nType, nPos;
+    sal_uInt32  i, nItemSize, nType, nItemPos;
     sal_Bool    bRetValue = sal_False;
 
-    nPos = Tell();
+    nItemPos = Tell();
 
     if ( nStringType == VT_EMPTY )
         *this >> nType;
     else
         nType = nStringType & VT_TYPEMASK;
 
-    *this >> nSize;
+    *this >> nItemSize;
 
     switch( nType )
     {
         case VT_LPSTR :
         {
-            if ( (sal_uInt16)nSize )
+            if ( (sal_uInt16)nItemSize )
             {
-                sal_Char* pString = new sal_Char[ (sal_uInt16)nSize ];
+                sal_Char* pString = new sal_Char[ (sal_uInt16)nItemSize ];
                 if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
                 {
-                    nSize >>= 1;
-                    if ( (sal_uInt16)nSize > 1 )
+                    nItemSize >>= 1;
+                    if ( (sal_uInt16)nItemSize > 1 )
                     {
                         sal_Unicode* pWString = (sal_Unicode*)pString;
-                        for ( i = 0; i < (sal_uInt16)nSize; i++ )
+                        for ( i = 0; i < (sal_uInt16)nItemSize; i++ )
                             *this >> pWString[ i ];
-                        rString = String( pWString, (sal_uInt16)nSize - 1 );
+                        rString = String( pWString, (sal_uInt16)nItemSize - 1 );
                     }
                     else
                         rString = String();
@@ -140,10 +140,10 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
                 }
                 else
                 {
-                    SvMemoryStream::Read( pString, (sal_uInt16)nSize );
-                    if ( pString[ (sal_uInt16)nSize - 1 ] == 0 )
+                    SvMemoryStream::Read( pString, (sal_uInt16)nItemSize );
+                    if ( pString[ (sal_uInt16)nItemSize - 1 ] == 0 )
                     {
-                        if ( (sal_uInt16)nSize > 1 )
+                        if ( (sal_uInt16)nItemSize > 1 )
                             rString = String( ByteString( pString ), mnTextEnc );
                         else
                             rString = String();
@@ -153,34 +153,34 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
                 delete[] pString;
             }
             if ( bAlign )
-                SeekRel( ( 4 - ( nSize & 3 ) ) & 3 );       // dword align
+                SeekRel( ( 4 - ( nItemSize & 3 ) ) & 3 );       // dword align
         }
         break;
 
         case VT_LPWSTR :
         {
-            if ( nSize )
+            if ( nItemSize )
             {
-                sal_Unicode* pString = new sal_Unicode[ (sal_uInt16)nSize ];
-                for ( i = 0; i < (sal_uInt16)nSize; i++ )
+                sal_Unicode* pString = new sal_Unicode[ (sal_uInt16)nItemSize ];
+                for ( i = 0; i < (sal_uInt16)nItemSize; i++ )
                     *this >> pString[ i ];
                 if ( pString[ i - 1 ] == 0 )
                 {
-                    if ( (sal_uInt16)nSize > 1 )
-                        rString = String( pString, (sal_uInt16)nSize - 1 );
+                    if ( (sal_uInt16)nItemSize > 1 )
+                        rString = String( pString, (sal_uInt16)nItemSize - 1 );
                     else
                         rString = String();
                     bRetValue = sal_True;
                 }
                 delete[] pString;
             }
-            if ( bAlign && ( nSize & 1 ) )
+            if ( bAlign && ( nItemSize & 1 ) )
                 SeekRel( 2 );                           // dword align
         }
         break;
     }
     if ( !bRetValue )
-        Seek( nPos );
+        Seek( nItemPos );
     return bRetValue;
 }
 
@@ -191,13 +191,13 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
     if ( this != &rPropItem )
     {
         Seek( STREAM_SEEK_TO_BEGIN );
-        delete[] SwitchBuffer();
+        delete[] (sal_uInt8*)SwitchBuffer();
 
         mnTextEnc = rPropItem.mnTextEnc;
-        sal_uInt32 nPos = rPropItem.Tell();
+        sal_uInt32 nItemPos = rPropItem.Tell();
         rPropItem.Seek( STREAM_SEEK_TO_END );
         SvMemoryStream::Write( rPropItem.GetData(), rPropItem.Tell() );
-        rPropItem.Seek( nPos );
+        rPropItem.Seek( nItemPos );
     }
     return *this;
 }
@@ -271,6 +271,7 @@ Dictionary& Dictionary::operator=( Dictionary& rDictionary )
 //  -----------------------------------------------------------------------
 
 Section::Section( Section& rSection )
+: List()
 {
     mnTextEnc = rSection.mnTextEnc;
     for ( int i = 0; i < 16; i++ )
@@ -354,11 +355,11 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
     }
     if ( pProp )
     {
-        sal_uInt32 nCount, nId, nSize, nPos;
+        sal_uInt32 nDictCount, nId, nSize, nPos;
         SvMemoryStream aStream( (sal_Int8*)pProp->mpBuf, pProp->mnSize, STREAM_READ );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
-        aStream >> nCount;
-        for ( sal_uInt32 i = 0; i < nCount; i++ )
+        aStream >> nDictCount;
+        for ( sal_uInt32 i = 0; i < nDictCount; i++ )
         {
             aStream >> nId >> nSize;
             if ( (sal_uInt16)nSize )
@@ -526,14 +527,23 @@ void Section::Read( SvStorageStream *pStrm )
                     sal_uInt16 nCodePage;
                     aPropItem >> nPropType;
                     if ( nPropType == VT_I2 )
+                    {
                         aPropItem >> nCodePage;
-                    if ( nCodePage == 1200 )
-                        mnTextEnc = RTL_TEXTENCODING_UCS2;
+
+                        if ( nCodePage == 1200 )
+                        {
+                            mnTextEnc = RTL_TEXTENCODING_UCS2;
+                        }
+                        else
+                        {
+                            mnTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
+                            if ( mnTextEnc == RTL_TEXTENCODING_DONTKNOW )
+                                mnTextEnc = RTL_TEXTENCODING_MS_1252;
+                        }
+                    }
                     else
                     {
-                        mnTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
-                        if ( mnTextEnc == RTL_TEXTENCODING_DONTKNOW )
-                            mnTextEnc = RTL_TEXTENCODING_MS_1252;
+                        mnTextEnc = RTL_TEXTENCODING_MS_1252;
                     }
                 }
             }
