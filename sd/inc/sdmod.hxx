@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:04:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@
 class SdOptions;
 class BasicIDE;
 class SvxSearchItem;
-class SdAppLinkHdl; ;
+class SdAppLinkHdl;
 class SvxErrorHandler;
 class EditFieldInfo;
 class SvFactory;
@@ -118,7 +118,7 @@ class SdModule : public SfxModule, public SfxListener
 public:
 
                             TYPEINFO();
-                            SFX_DECL_INTERFACE(SD_IF_SDAPP);
+                            SFX_DECL_INTERFACE(SD_IF_SDAPP)
                             DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
                             SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact);
