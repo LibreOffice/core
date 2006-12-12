@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionCommand.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:07:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ void SelectionCommand::AddPages (::std::auto_ptr<PageSelector::PageSelection> pS
     PageSelector::PageSelection::iterator iPageIndex = pSelection->begin();
     PageSelector::PageSelection::iterator iEnd = pSelection->end();
     for (; iPageIndex!=iEnd; ++iPageIndex)
-        AddPage(*iPageIndex);
+        AddPage((USHORT)(*iPageIndex));
 }
 
 
