@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diactrl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:24:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 #ifndef _SD_DIACTRL_HXX
 #define _SD_DIACTRL_HXX
-
-#pragma hdrstop
 
 #ifndef SD_DLGCTRLS_HXX
 #include "dlgctrls.hxx"
@@ -88,7 +86,7 @@ public:
                                   WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
                     ~SdPagesField();
 
-    void            Update( const SfxUInt16Item* pItem );
+    void            UpdatePagesField( const SfxUInt16Item* pItem );
 };
 
 //========================================================================
