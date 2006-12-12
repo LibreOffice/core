@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucushow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:49:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 
 #include <svx/svxids.hrc>
 
-
-//CHINA001 #include "custsdlg.hxx"
-
 #include "app.hrc"
 #include "sdresid.hxx"
 
@@ -62,8 +59,7 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
-#include "sdabstdlg.hxx" //CHINA001
-#include "custsdlg.hrc" //CHINA001
+#include "sdabstdlg.hxx"
 
 namespace sd {
 
@@ -93,33 +89,31 @@ FunctionReference FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window* pWi
     return xFunc;
 }
 
-void FuCustomShowDlg::DoExecute( SfxRequest& rReq )
+void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
-    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-    AbstractSdCustomShowDlg* pDlg = pFact ? pFact->CreateSdCustomShowDlg(ResId( DLG_CUSTOMSHOW ), NULL, *pDoc ) : 0;
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    AbstractSdCustomShowDlg* pDlg = pFact ? pFact->CreateSdCustomShowDlg( NULL, *mpDoc ) : 0;
     if( pDlg )
     {
-        USHORT nRet = pDlg->Execute(); //CHINA001 nRet = aDlg.Execute();
+        USHORT nRet = pDlg->Execute();
         if( nRet != RET_CANCEL )
         {
-            // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
-            if( pDlg->IsModified() )//CHINA001 if( aDlg.IsModified() )
+            if( pDlg->IsModified() )
             {
-                pDoc->SetChanged( TRUE );
-                sd::PresentationSettings& rSettings = pDoc->getPresentationSettings();
+                mpDoc->SetChanged( TRUE );
+                sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
                 rSettings.mbCustomShow = pDlg->IsCustomShow();
             }
 
             if( nRet == RET_YES )
             {
-                pViewShell->SetStartShowWithDialog();
+                mpViewShell->SetStartShowWithDialog();
 
-                pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
+                mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
             }
         }
-        delete pDlg; //CHINA001
+        delete pDlg;
     }
 }
 
