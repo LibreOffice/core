@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:20:30 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:30:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,9 +135,12 @@
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
 #endif
-#ifndef _SVDXCGV_HXX
-#include <svx/svdxcgv.hxx>
+
+// #i71538#
+#ifndef _SVDVIEW_HXX
+#include <svx/svdview.hxx>
 #endif
+
 #ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
 #endif
@@ -2778,7 +2781,11 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
         SdrModel *pModel = rWrt.pDoc->GetDrawModel();
         OutputDevice *pDevice = Application::GetDefaultDevice();
         ASSERT(pModel && pDevice, "no model or device");
-        SdrExchangeView aExchange(pModel, pDevice);
+
+        // #i71538# use complete SdrViews
+        // SdrExchangeView aExchange(pModel, pDevice);
+        SdrView aExchange(pModel, pDevice);
+
         Graphic aGraphic(aExchange.GetObjGraphic(pModel,
             const_cast<SdrObject*>(pSdrObj)));
 
