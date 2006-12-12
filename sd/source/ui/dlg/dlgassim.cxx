@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:36:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,17 +78,17 @@ SdPageListControl::SdPageListControl(
 
 IMPL_LINK( SdPageListControl, CheckButtonClickHdl, SvLBoxButtonData *, EMPTYARG )
 {
-    SvLBoxTreeList* pModel = GetModel();
-    SvLBoxEntry* pEntry = pModel->First();
+    SvLBoxTreeList* pTreeModel = GetModel();
+    SvLBoxEntry* pEntry = pTreeModel->First();
 
     while( pEntry )
     {
-        if(pModel->IsAtRootDepth(pEntry) && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
+        if(pTreeModel->IsAtRootDepth(pEntry) && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
             return 0;
-        pEntry = pModel->Next( pEntry );
+        pEntry = pTreeModel->Next( pEntry );
     }
 
-    pEntry = pModel->First();
+    pEntry = pTreeModel->First();
     SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
 
     return 0;
@@ -194,17 +194,17 @@ USHORT SdPageListControl::GetSelectedPage()
 
     if ( pSelEntry )
     {
-        SvLBoxTreeList* pModel = GetModel();
-        SvLBoxEntry* pEntry = pModel->First();
+        SvLBoxTreeList* pTreeModel = GetModel();
+        SvLBoxEntry* pEntry = pTreeModel->First();
 
         while( pEntry && pEntry != pSelEntry )
         {
-            if(pModel->IsAtRootDepth(pEntry))
+            if(pTreeModel->IsAtRootDepth(pEntry))
                 nPage++;
-            pEntry = pModel->Next( pEntry );
+            pEntry = pTreeModel->Next( pEntry );
         }
 
-        if(!pModel->IsAtRootDepth(pSelEntry))
+        if(!pTreeModel->IsAtRootDepth(pSelEntry))
             nPage--;
     }
     return nPage;
@@ -213,7 +213,7 @@ USHORT SdPageListControl::GetSelectedPage()
 BOOL SdPageListControl::IsPageChecked( USHORT nPage )
 {
     SvLBoxEntry* pEntry = GetModel()->GetEntry(nPage);
-    return pEntry?GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED: FALSE;
+    return pEntry?(BOOL)(GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED): FALSE;
 }
 
 void SdPageListControl::DataChanged( const DataChangedEvent& rDCEvt )
