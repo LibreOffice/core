@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:31:04 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,36 +71,56 @@ sal_Bool ViewContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo, Rectan
 
 ViewObjectContact& ViewContactOfSdrMediaObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
-    return *( new ViewObjectContactOfSdrMediaObj( rObjectContact, *this,
-                                                  static_cast< SdrMediaObj& >( GetSdrObject() ).getMediaProperties() ) );
+    return *( new ViewObjectContactOfSdrMediaObj( rObjectContact, *this, static_cast< SdrMediaObj& >( GetSdrObject() ).getMediaProperties() ) );
 }
 
 // ------------------------------------------------------------------------------
 
 bool ViewContactOfSdrMediaObj::hasPreferredSize() const
 {
-    return( maVOCList.Count() &&
-            static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( 0 ) )->hasPreferredSize() );
+    // #i71805# Since we may have a whole bunch of VOCs here, make a loop
+    // return true if all have their preferred size
+    bool bRetval(true);
+
+    for(sal_uInt32 a(0L); bRetval && a < maVOCList.Count(); a++)
+    {
+        if(!static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( 0 ) )->hasPreferredSize())
+        {
+            bRetval = false;
+        }
+    }
+
+    return bRetval;
 }
 
 // ------------------------------------------------------------------------------
 
 Size ViewContactOfSdrMediaObj::getPreferredSize() const
 {
-    Size aRet;
+    // #i71805# Since we may have a whole bunch of VOCs here, make a loop
+    // return first useful size -> the size from the first which is visualized as a window
+    for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
+    {
+        Size aSize(static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( 0 ) )->getPreferredSize());
 
-    if( maVOCList.Count() )
-        aRet = static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( 0 ) )->getPreferredSize();
+        if(0 != aSize.getWidth() || 0 != aSize.getHeight())
+        {
+            return aSize;
+        }
+    }
 
-    return aRet;
+    return Size();
 }
 
 // ------------------------------------------------------------------------------
 
 void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
-    if( maVOCList.Count() )
-        static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( 0 ) )->updateMediaItem( rItem );
+    // #i71805# Since we may have a whole bunch of VOCs here, make a loop
+    for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
+    {
+        static_cast< ViewObjectContactOfSdrMediaObj* >(maVOCList.GetObject(a))->updateMediaItem(rItem);
+    }
 }
 
 // ------------------------------------------------------------------------------
