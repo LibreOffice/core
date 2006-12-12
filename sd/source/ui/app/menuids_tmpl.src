@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 21:52:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -961,7 +961,7 @@
         Identifier = SID_CUSTOM_ANIMATION_PANEL ; \
         HelpID = SID_CUSTOM_ANIMATION_PANEL ; \
         Text [ de ] = "Benutzerdefinierte Animation..." ; \
-        Text [ en-us ] = "Custom Animation..." ; \
+        Text [ en-US ] = "Custom Animation..." ; \
         Text [ x-comment ] = " ";\
     };
 
