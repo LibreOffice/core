@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:50:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,8 @@ public:
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener )
         throw (::com::sun::star::uno::RuntimeException);
 
+    using cppu::WeakComponentImplHelperBase::addEventListener;
+    using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XAccessibleContext  ==============================================
 
