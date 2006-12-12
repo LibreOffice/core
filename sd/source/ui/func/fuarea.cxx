@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuarea.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:46:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@
 #include "Window.hxx"
 #endif
 #include "app.hrc"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 namespace sd {
 TYPEINIT1( FuArea, FuPoor );
@@ -85,14 +85,14 @@ TYPEINIT1( FuArea, FuPoor );
 |*
 \************************************************************************/
 
-FuArea::FuArea( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
-: FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuArea::FuArea( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq)
+: FuPoor(pViewSh, pWin, _pView, pDoc, rReq)
 {
 }
 
-FunctionReference FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+FunctionReference FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    FunctionReference xFunc( new FuArea( pViewSh, pWin, pView, pDoc, rReq ) );
+    FunctionReference xFunc( new FuArea( pViewSh, pWin, _pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -103,31 +103,18 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        // erst einmal alle eingabeparameter fuer den dialog retten
-        SfxItemSet aInputAttr( pDoc->GetPool() );
-        pView->GetAttributes( aInputAttr );
+        SfxItemSet aNewAttr( mpDoc->GetPool() );
+        mpView->GetAttributes( aNewAttr );
 
-        const XFillStyleItem    &rIFillStyleItem    = (const XFillStyleItem &) aInputAttr.Get (XATTR_FILLSTYLE);
-        const XFillColorItem    &rIFillColorItem    = (const XFillColorItem &) aInputAttr.Get (XATTR_FILLCOLOR);
-        const XFillGradientItem &rIFillGradientItem = (const XFillGradientItem &) aInputAttr.Get (XATTR_FILLGRADIENT);
-        const XFillHatchItem    &rIFillHatchItem    = (const XFillHatchItem &) aInputAttr.Get (XATTR_FILLHATCH);
-        const XFillBitmapItem   &rIXFillBitmapItem  = (const XFillBitmapItem &) aInputAttr.Get (XATTR_FILLBITMAP);
-
-        SfxItemSet* pNewAttr = new SfxItemSet( pDoc->GetPool() );
-        pView->GetAttributes( *pNewAttr );
-
-        //CHINA001 SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, pNewAttr, pDoc, pView );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
-        AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
-                                                                        pNewAttr,
-                                                                        pDoc,
+        AbstractSvxAreaTabDialog * pDlg = pFact ? pFact->CreateSvxAreaTabDialog( NULL,
+                                                                        &aNewAttr,
+                                                                        mpDoc,
                                                                         ResId(RID_SVXDLG_AREA),
-                                                                        pView);
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        if ( pDlg->Execute() == RET_OK )
+                                                                        mpView) : 0;
+        if( pDlg && (pDlg->Execute() == RET_OK) )
         {
-            pView->SetAttributes (*(pDlg->GetOutputItemSet ()));
+            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
         }
 
         // Attribute wurden geaendert, Listboxes in Objectbars muessen aktualisiert werden
@@ -139,10 +126,9 @@ void FuArea::DoExecute( SfxRequest& rReq )
                         SID_ATTR_FILL_BITMAP,
                         0 };
 
-        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
         delete pDlg;
-        delete pNewAttr;
     }
 
     rReq.Ignore ();
