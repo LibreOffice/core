@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StreamImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:52:34 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-12 16:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ class WW8StreamImpl : public WW8Stream
 public:
     WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
                   uno::Reference<io::XInputStream> rStream);
-    virtual ~WW8StreamImpl() {}
+    virtual ~WW8StreamImpl();
 
     virtual WW8Stream::Pointer_t getSubStream(const ::rtl::OUString & rId);
 

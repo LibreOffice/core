@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StreamImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:59:54 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-12 16:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,10 @@ WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
           ("com.sun.star.embed.OLESimpleStorage"),
           aArgs, mrComponentContext ),
          uno::UNO_QUERY );
+}
+
+WW8StreamImpl::~WW8StreamImpl()
+{
 }
 
 WW8Stream::Sequence WW8StreamImpl::get(sal_uInt32 nOffset,
