@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futransf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:57:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include "futransf.hxx"
 
 #include <svx/dialogs.hrc>
-//#include <svx/labdlg.hxx> delete by CHINA001
 #include <svx/polysc3d.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -48,10 +47,6 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-
-//CHINA001 #ifndef _SVX_TRANSFRM_HXX //autogen
-//CHINA001 #include <svx/transfrm.hxx>
-//CHINA001 #endif
 
 #include "strings.hrc"
 #ifndef SD_VIEW_SHELL_HXX
@@ -62,9 +57,8 @@
 #endif
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-//add header of cui CHINA001
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 namespace sd {
 
@@ -91,29 +85,29 @@ FunctionReference FuTransform::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
-    if( pView->AreObjectsMarked() )
+    if( mpView->AreObjectsMarked() )
     {
         const SfxItemSet* pArgs = rReq.GetArgs();
 
         if( !pArgs )
         {
             // --------- itemset for size and position --------
-            SfxItemSet aSet( pView->GetGeoAttrFromMarked() );
+            SfxItemSet aSet( mpView->GetGeoAttrFromMarked() );
 
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if( rMarkList.GetMarkCount() == 1 &&
                 pObj->GetObjInventor() == SdrInventor &&
                 pObj->GetObjIdentifier() == OBJ_CAPTION )
             {
                 // --------- itemset for caption --------
-                SfxItemSet aNewAttr( pDoc->GetPool() );
-                pView->GetAttributes( aNewAttr );
+                SfxItemSet aNewAttr( mpDoc->GetPool() );
+                mpView->GetAttributes( aNewAttr );
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, pView, ResId( RID_SVXDLG_CAPTION ) ) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView, ResId( RID_SVXDLG_CAPTION ) ) );
 
                     const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -133,7 +127,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet,pView, ResId(RID_SVXDLG_TRANSFORM) ) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet,mpView, ResId(RID_SVXDLG_TRANSFORM) ) );
                     if( pDlg.get() && (pDlg->Execute() == RET_OK) )
                     {
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );
@@ -146,19 +140,19 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if( pArgs )
         {
             // Undo
-            String aString( pView->GetDescriptionOfMarkedObjects() );
+            String aString( mpView->GetDescriptionOfMarkedObjects() );
             aString.Append( sal_Unicode(' ') );
             aString.Append( String( SdResId( STR_TRANSFORM ) ) );
-            pView->BegUndo( aString );
+            mpView->BegUndo( aString );
 
-            pView->SetGeoAttrToMarked( *pArgs );
-            pView->SetAttributes( *pArgs );
+            mpView->SetGeoAttrToMarked( *pArgs );
+            mpView->SetAttributes( *pArgs );
 
             /**********************************************************************
             * An der E3dView muss demnaechst SetGeoAttrToMarked() mit folgendem
             * Code ueberladen werden:
             **********************************************************************/
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
             ULONG nCount = rMarkList.GetMarkCount();
 
             for (ULONG nMark = 0; nMark < nCount; nMark++)
@@ -172,7 +166,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
             }
             //********************************************************************
 
-            pView->EndUndo();
+            mpView->EndUndo();
         }
     }
 }
@@ -189,23 +183,14 @@ Point FuTransform::GetPoint( Rectangle aRect, RECT_POINT eRP )
     switch( eRP )
     {
         case RP_LT: return( Point( aRect.Left(), aRect.Top() ) );
-            break;
         case RP_MT: return( Point( aRect.Center().X(), aRect.Top() ) );
-            break;
         case RP_RT: return( Point( aRect.Right(), aRect.Top() ) );
-            break;
         case RP_LM: return( Point( aRect.Left(), aRect.Center().Y() ) );
-            break;
         case RP_MM: return( Point( aRect.Center().X(), aRect.Center().Y() ) );
-            break;
         case RP_RM: return( Point( aRect.Right(), aRect.Center().Y() ) );
-            break;
         case RP_LB: return( Point( aRect.Left(), aRect.Bottom() ) );
-            break;
         case RP_MB: return( Point( aRect.Center().X(), aRect.Bottom() ) );
-            break;
         case RP_RB: return( Point( aRect.Right(), aRect.Bottom() ) );
-            break;
     }
     return( Point ( 0, 0 ) ); // Sollte nicht vorkommen !
 }
