@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsBitmapCompressor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:03:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,23 +59,26 @@ public:
     DummyReplacement (const ::boost::shared_ptr<BitmapEx>& rpPreview) : mpPreview(rpPreview)
     {
     }
-    virtual sal_Int32 GetMemorySize (void) const
-    {
-        return mpPreview->GetSizeBytes();
-    }
+
+    virtual ~DummyReplacement();
+
+    virtual sal_Int32 GetMemorySize (void) const;
 };
 
+NoBitmapCompression::DummyReplacement::~DummyReplacement()
+{
+}
 
-
+sal_Int32 NoBitmapCompression::DummyReplacement::GetMemorySize (void) const
+{
+    return mpPreview->GetSizeBytes();
+}
 
 ::boost::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (
     const ::boost::shared_ptr<BitmapEx>& rpBitmap) const
 {
     return ::boost::shared_ptr<BitmapReplacement>(new DummyReplacement(rpBitmap));
 }
-
-
-
 
 ::boost::shared_ptr<BitmapEx> NoBitmapCompression::Decompress (
     const BitmapReplacement& rBitmapData) const
@@ -97,7 +100,7 @@ bool NoBitmapCompression::IsLossless (void) const
 //===== CompressionByDeletion =================================================
 
 ::boost::shared_ptr<BitmapReplacement> CompressionByDeletion::Compress (
-    const ::boost::shared_ptr<BitmapEx>& rpBitmap) const
+    const ::boost::shared_ptr<BitmapEx>& ) const
 {
     return ::boost::shared_ptr<BitmapReplacement>();
 }
@@ -106,7 +109,7 @@ bool NoBitmapCompression::IsLossless (void) const
 
 
 ::boost::shared_ptr<BitmapEx> CompressionByDeletion::Decompress (
-    const BitmapReplacement& rBitmapData) const
+    const BitmapReplacement& ) const
 {
     // Return a NULL pointer.  This will eventually lead to a request for
     // the creation of a new one.
@@ -134,17 +137,22 @@ public:
     ::boost::shared_ptr<BitmapEx> mpPreview;
     Size maOriginalSize;
 
-    virtual sal_Int32 GetMemorySize (void) const
-    {
-        if (mpPreview.get() != NULL)
-            return mpPreview->GetSizeBytes();
-        else
-            return 0;
-    }
+    virtual ~ResolutionReducedReplacement();
+
+    virtual sal_Int32 GetMemorySize (void) const;
 };
 
+ResolutionReduction::ResolutionReducedReplacement::~ResolutionReducedReplacement()
+{
+}
 
-
+sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize (void) const
+{
+    if (mpPreview.get() != NULL)
+        return mpPreview->GetSizeBytes();
+    else
+        return 0;
+}
 
 ::boost::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
     const ::boost::shared_ptr<BitmapEx>& rpBitmap) const
@@ -210,7 +218,7 @@ public:
     {}
     virtual ~PngReplacement (void)
     {
-        delete [] mpData;
+        delete [] (char*)mpData;
     }
     virtual sal_Int32 GetMemorySize (void) const
     {
@@ -252,7 +260,7 @@ public:
         pResult = new BitmapEx(aReader.Read());
     }
 
-    sal_Int32 nRatio ((100L * (ULONG)pResult->GetSizeBytes()) / (ULONG)pData->mnDataSize);
+//    sal_Int32 nRatio ((100L * (ULONG)pResult->GetSizeBytes()) / (ULONG)pData->mnDataSize);
 
     return ::boost::shared_ptr<BitmapEx>(pResult);
 }
