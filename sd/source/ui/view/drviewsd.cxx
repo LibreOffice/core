@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,8 +130,8 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
             }
             else if (nSId == SID_NAVIGATOR_PAGE)
             {
-                if ( pDrView->IsTextEdit() )
-                    pDrView->SdrEndTextEdit();
+                if ( mpDrawView->IsTextEdit() )
+                    mpDrawView->SdrEndTextEdit();
 
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 PageJump eJump = (PageJump)((SfxAllEnumItem&) pArgs->
@@ -149,16 +149,16 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                     case PAGE_LAST:
                     {
                         // Sprung zu letzter Seite
-                        SwitchPage(GetDoc()->GetSdPageCount(pActualPage->GetPageKind()) - 1);
+                        SwitchPage(GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1);
                     }
                     break;
 
                     case PAGE_NEXT:
                     {
                         // Sprung zu naechster Seite
-                        USHORT nSdPage = (pActualPage->GetPageNum() - 1) / 2;
+                        USHORT nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
 
-                        if (nSdPage < GetDoc()->GetSdPageCount(pActualPage->GetPageKind()) - 1)
+                        if (nSdPage < GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1)
                         {
                             SwitchPage(nSdPage + 1);
                         }
@@ -168,7 +168,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                     case PAGE_PREVIOUS:
                     {
                         // Sprung zu vorheriger Seite
-                        USHORT nSdPage = (pActualPage->GetPageNum() - 1) / 2;
+                        USHORT nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
 
                         if (nSdPage > 0)
                         {
@@ -176,6 +176,9 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                         }
                     }
                     break;
+
+                    case PAGE_NONE:
+                        break;
                 }
             }
             else if (nSId == SID_NAVIGATOR_OBJECT)
@@ -227,14 +230,14 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         // pen activated?
         nState |= mpSlideShow->isDrawingPossible() ? NAVBTN_PEN_CHECKED : NAVBTN_PEN_UNCHECKED;
 
-        nCurrentPage = mpSlideShow->getCurrentPageNumber();
-        nFirstPage = mpSlideShow->getFirstPageNumber();
-        nLastPage = mpSlideShow->getLastPageNumber();
+        nCurrentPage = (USHORT)mpSlideShow->getCurrentPageNumber();
+        nFirstPage = (USHORT)mpSlideShow->getFirstPageNumber();
+        nLastPage = (USHORT)mpSlideShow->getLastPageNumber();
         bEndless = mpSlideShow->isEndless();
 
         // Get the page for the current page number.
         SdPage* pPage = 0;
-        if( (nCurrentPage >= 0) && (nCurrentPage < GetDoc()->GetSdPageCount( PK_STANDARD ) ) )
+        if( nCurrentPage < GetDoc()->GetSdPageCount( PK_STANDARD ) )
             pPage = GetDoc()->GetSdPage (nCurrentPage, PK_STANDARD);
 
         if(pPage)
@@ -244,12 +247,12 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     {
         nState |= NAVBTN_PEN_DISABLED | NAVTLB_UPDATE;
 
-        if (pActualPage != NULL)
+        if (mpActualPage != NULL)
         {
-            nCurrentPage = ( pActualPage->GetPageNum() - 1 ) / 2;
-            aPageName = pActualPage->GetName();
+            nCurrentPage = ( mpActualPage->GetPageNum() - 1 ) / 2;
+            aPageName = mpActualPage->GetName();
         }
-        nLastPage = GetDoc()->GetSdPageCount( ePageKind ) - 1;
+        nLastPage = GetDoc()->GetSdPageCount( mePageKind ) - 1;
     }
 
     // erste Seite / vorherige Seite
