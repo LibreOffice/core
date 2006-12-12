@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 14:43:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,9 @@ public:
         is a better candiate for the name PrepareSpelling.
     */
     void StartSpelling (void);
+
+    /** Proxy for method from base class to avoid compiler warning */
+    void StartSpelling(EditView&, unsigned char);
 
     /** Initiate a find and/or replace on the next relevant text object.
         @return
