@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:34:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:57:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,13 +62,13 @@ SFX_IMPL_CHILDWINDOW(SpellDialogChildWindow, SID_SPELL_DIALOG)
 namespace sd {
 
 SpellDialogChildWindow::SpellDialogChildWindow (
-    ::Window* pParent,
+    ::Window* _pParent,
     USHORT nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
-    : ::svx::SpellDialogChildWindow (pParent, nId, pBindings, pInfo),
-      mbOwnOutliner (false),
-      mpSdOutliner (NULL)
+    : ::svx::SpellDialogChildWindow (_pParent, nId, pBindings, pInfo),
+      mpSdOutliner (NULL),
+      mbOwnOutliner (false)
 {
     ProvideOutliner();
 }
@@ -141,7 +141,6 @@ void SpellDialogChildWindow::ApplyChangedSentence (
 {
     if (mpSdOutliner != NULL)
     {
-        EditView* pEditView = NULL;
         OutlinerView* pOutlinerView = mpSdOutliner->GetView(0);
         if (pOutlinerView != NULL)
             mpSdOutliner->ApplyChangedSentence (
