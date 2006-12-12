@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gencoll_rule.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:17:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,16 +43,7 @@
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 
-// External unicode includes (from icu) cause warning C4668 on Windows.
-// We want to minimize the patches to external headers, so the warnings are
-// disabled here instead of in the header file itself.
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <unicode/tblcoll.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "warnings_guard_unicode_tblcoll.h"
 
 using namespace ::rtl;
 
@@ -93,9 +84,6 @@ void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
     fclose(fp);
 
 }
-
-U_CAPI uint8_t* U_EXPORT2
-ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
@@ -138,7 +126,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (U_SUCCESS(status)) {
 
         int32_t len = 0;
-        //uint8_t *data = ucol_cloneRuleData(coll, &len, &status);
         uint8_t *data = coll->cloneRuleData(len, status);
 
         if (U_SUCCESS(status) && data != NULL)
