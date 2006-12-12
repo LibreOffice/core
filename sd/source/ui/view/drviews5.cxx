@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ void DrawViewShell::ModelHasChanged()
 
     // jetzt den von der Drawing Engine neu erzeugten TextEditOutliner
     // initialisieren
-    ::Outliner* pOutliner     = pDrView->GetTextEditOutliner();
+    ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
     if (pOutliner)
     {
         SfxStyleSheetPool* pSPool = (SfxStyleSheetPool*) GetDocSh()->GetStyleSheetPool();
@@ -183,17 +183,15 @@ void DrawViewShell::ArrangeGUIElements (void)
     // bar.
     int nScrollBarSize =
         GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
-    aScrBarWH = Size (nScrollBarSize, nScrollBarSize);
+    maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
-    Point aHPos = aViewPos;
-    aHPos.Y() += aViewSize.Height();
+    Point aHPos = maViewPos;
+    aHPos.Y() += maViewSize.Height();
 
 
     ViewShell::ArrangeGUIElements ();
 
-    aTabControl.Hide();
-    //af aTabControl.SetSizePixel(aTabSize);
-    //af    aTabControl.SetPosSizePixel(aHPos, aTabSize);
+    maTabControl.Hide();
 
     OSL_ASSERT (GetViewShell()!=NULL);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
@@ -203,8 +201,7 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     BOOL bInPlaceActive = GetViewFrame()->GetFrame()->IsInPlace();
 
-//        if ( bZoomOnPage && GetDocSh()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-    if ( bZoomOnPage && !bInPlaceActive && !bClientActive )
+    if ( mbZoomOnPage && !bInPlaceActive && !bClientActive )
     {
         // bei Split immer erstes Fenster resizen
         //af pWindow = mpContentWindow.get();
@@ -231,125 +228,124 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (HasRuler() != pView->HasRuler())
         SetRuler( pView->HasRuler() );
 
-    if (pDrView->GetGridCoarse() != pView->GetGridCoarse())
-        pDrView->SetGridCoarse( pView->GetGridCoarse() );
+    if (mpDrawView->GetGridCoarse() != pView->GetGridCoarse())
+        mpDrawView->SetGridCoarse( pView->GetGridCoarse() );
 
-    if (pDrView->GetGridFine() != pView->GetGridFine())
-        pDrView->SetGridFine( pView->GetGridFine() );
+    if (mpDrawView->GetGridFine() != pView->GetGridFine())
+        mpDrawView->SetGridFine( pView->GetGridFine() );
 
-    if (pDrView->GetSnapGridWidthX() != pView->GetSnapGridWidthX() || pDrView->GetSnapGridWidthY() != pView->GetSnapGridWidthY())
-        pDrView->SetSnapGridWidth(pView->GetSnapGridWidthX(), pView->GetSnapGridWidthY());
+    if (mpDrawView->GetSnapGridWidthX() != pView->GetSnapGridWidthX() || mpDrawView->GetSnapGridWidthY() != pView->GetSnapGridWidthY())
+        mpDrawView->SetSnapGridWidth(pView->GetSnapGridWidthX(), pView->GetSnapGridWidthY());
 
-    if (pDrView->IsGridVisible() != pView->IsGridVisible())
-        pDrView->SetGridVisible( pView->IsGridVisible() );
+    if (mpDrawView->IsGridVisible() != pView->IsGridVisible())
+        mpDrawView->SetGridVisible( pView->IsGridVisible() );
 
-    if (pDrView->IsGridFront() != pView->IsGridFront())
-        pDrView->SetGridFront( pView->IsGridFront() );
+    if (mpDrawView->IsGridFront() != pView->IsGridFront())
+        mpDrawView->SetGridFront( pView->IsGridFront() );
 
-    if (pDrView->GetSnapAngle() != pView->GetSnapAngle())
-        pDrView->SetSnapAngle( pView->GetSnapAngle() );
+    if (mpDrawView->GetSnapAngle() != pView->GetSnapAngle())
+        mpDrawView->SetSnapAngle( pView->GetSnapAngle() );
 
-    if (pDrView->IsGridSnap() !=  pView->IsGridSnap() )
-        pDrView->SetGridSnap( pView->IsGridSnap() );
+    if (mpDrawView->IsGridSnap() !=  pView->IsGridSnap() )
+        mpDrawView->SetGridSnap( pView->IsGridSnap() );
 
-    if (pDrView->IsBordSnap() !=  pView->IsBordSnap() )
-        pDrView->SetBordSnap( pView->IsBordSnap() );
+    if (mpDrawView->IsBordSnap() !=  pView->IsBordSnap() )
+        mpDrawView->SetBordSnap( pView->IsBordSnap() );
 
-    if (pDrView->IsHlplSnap() !=  pView->IsHlplSnap() )
-        pDrView->SetHlplSnap( pView->IsHlplSnap() );
+    if (mpDrawView->IsHlplSnap() !=  pView->IsHlplSnap() )
+        mpDrawView->SetHlplSnap( pView->IsHlplSnap() );
 
-    if (pDrView->IsOFrmSnap() !=  pView->IsOFrmSnap() )
-        pDrView->SetOFrmSnap( pView->IsOFrmSnap() );
+    if (mpDrawView->IsOFrmSnap() !=  pView->IsOFrmSnap() )
+        mpDrawView->SetOFrmSnap( pView->IsOFrmSnap() );
 
-    if (pDrView->IsOPntSnap() !=  pView->IsOPntSnap() )
-        pDrView->SetOPntSnap( pView->IsOPntSnap() );
+    if (mpDrawView->IsOPntSnap() !=  pView->IsOPntSnap() )
+        mpDrawView->SetOPntSnap( pView->IsOPntSnap() );
 
-    if (pDrView->IsOConSnap() !=  pView->IsOConSnap() )
-        pDrView->SetOConSnap( pView->IsOConSnap() );
+    if (mpDrawView->IsOConSnap() !=  pView->IsOConSnap() )
+        mpDrawView->SetOConSnap( pView->IsOConSnap() );
 
-    if (pDrView->IsHlplVisible() != pView->IsHlplVisible() )
-        pDrView->SetHlplVisible( pView->IsHlplVisible() );
+    if (mpDrawView->IsHlplVisible() != pView->IsHlplVisible() )
+        mpDrawView->SetHlplVisible( pView->IsHlplVisible() );
 
-    if (pDrView->IsDragStripes() != pView->IsDragStripes() )
-        pDrView->SetDragStripes( pView->IsDragStripes() );
+    if (mpDrawView->IsDragStripes() != pView->IsDragStripes() )
+        mpDrawView->SetDragStripes( pView->IsDragStripes() );
 
-    if (pDrView->IsPlusHandlesAlwaysVisible() != pView->IsPlusHandlesAlwaysVisible() )
-        pDrView->SetPlusHandlesAlwaysVisible( pView->IsPlusHandlesAlwaysVisible() );
+    if (mpDrawView->IsPlusHandlesAlwaysVisible() != pView->IsPlusHandlesAlwaysVisible() )
+        mpDrawView->SetPlusHandlesAlwaysVisible( pView->IsPlusHandlesAlwaysVisible() );
 
-    if (pDrView->GetSnapMagneticPixel() != pView->GetSnapMagneticPixel() )
-        pDrView->SetSnapMagneticPixel( pView->GetSnapMagneticPixel() );
+    if (mpDrawView->GetSnapMagneticPixel() != pView->GetSnapMagneticPixel() )
+        mpDrawView->SetSnapMagneticPixel( pView->GetSnapMagneticPixel() );
 
-    if (pDrView->IsMarkedHitMovesAlways() != pView->IsMarkedHitMovesAlways() )
-        pDrView->SetMarkedHitMovesAlways( pView->IsMarkedHitMovesAlways() );
+    if (mpDrawView->IsMarkedHitMovesAlways() != pView->IsMarkedHitMovesAlways() )
+        mpDrawView->SetMarkedHitMovesAlways( pView->IsMarkedHitMovesAlways() );
 
-    if (pDrView->IsMoveOnlyDragging() != pView->IsMoveOnlyDragging() )
-        pDrView->SetMoveOnlyDragging( pView->IsMoveOnlyDragging() );
+    if (mpDrawView->IsMoveOnlyDragging() != pView->IsMoveOnlyDragging() )
+        mpDrawView->SetMoveOnlyDragging( pView->IsMoveOnlyDragging() );
 
-//    pDrView->SetSlantButShear( pView->IsSlantButShear() );
+//    mpDrawView->SetSlantButShear( pView->IsSlantButShear() );
 
-    if (pDrView->IsNoDragXorPolys() != pView->IsNoDragXorPolys() )
-        pDrView->SetNoDragXorPolys( pView->IsNoDragXorPolys() );
+    if (mpDrawView->IsNoDragXorPolys() != pView->IsNoDragXorPolys() )
+        mpDrawView->SetNoDragXorPolys( pView->IsNoDragXorPolys() );
 
-    if (pDrView->IsCrookNoContortion() != pView->IsCrookNoContortion() )
-        pDrView->SetCrookNoContortion( pView->IsCrookNoContortion() );
+    if (mpDrawView->IsCrookNoContortion() != pView->IsCrookNoContortion() )
+        mpDrawView->SetCrookNoContortion( pView->IsCrookNoContortion() );
 
-    if (pDrView->IsAngleSnapEnabled() != pView->IsAngleSnapEnabled() )
-        pDrView->SetAngleSnapEnabled( pView->IsAngleSnapEnabled() );
+    if (mpDrawView->IsAngleSnapEnabled() != pView->IsAngleSnapEnabled() )
+        mpDrawView->SetAngleSnapEnabled( pView->IsAngleSnapEnabled() );
 
-    if (pDrView->IsBigOrtho() != pView->IsBigOrtho() )
-        pDrView->SetBigOrtho( pView->IsBigOrtho() );
+    if (mpDrawView->IsBigOrtho() != pView->IsBigOrtho() )
+        mpDrawView->SetBigOrtho( pView->IsBigOrtho() );
 
-    if (pDrView->IsOrtho() != pView->IsOrtho() )
-        pDrView->SetOrtho( pView->IsOrtho() );
+    if (mpDrawView->IsOrtho() != pView->IsOrtho() )
+        mpDrawView->SetOrtho( pView->IsOrtho() );
 
-    if (pDrView->GetEliminatePolyPointLimitAngle() != pView->GetEliminatePolyPointLimitAngle() )
-        pDrView->SetEliminatePolyPointLimitAngle( pView->GetEliminatePolyPointLimitAngle() );
+    if (mpDrawView->GetEliminatePolyPointLimitAngle() != pView->GetEliminatePolyPointLimitAngle() )
+        mpDrawView->SetEliminatePolyPointLimitAngle( pView->GetEliminatePolyPointLimitAngle() );
 
-    if (pDrView->IsEliminatePolyPoints() != pView->IsEliminatePolyPoints() )
-        pDrView->SetEliminatePolyPoints( pView->IsEliminatePolyPoints() );
+    if (mpDrawView->IsEliminatePolyPoints() != pView->IsEliminatePolyPoints() )
+        mpDrawView->SetEliminatePolyPoints( pView->IsEliminatePolyPoints() );
 
-    if (pDrView->IsLineDraft() != pView->IsLineDraft() )
-        pDrView->SetLineDraft( pView->IsLineDraft() );
+    if (mpDrawView->IsLineDraft() != pView->IsLineDraft() )
+        mpDrawView->SetLineDraft( pView->IsLineDraft() );
 
-    if (pDrView->IsFillDraft() != pView->IsFillDraft() )
+    if (mpDrawView->IsFillDraft() != pView->IsFillDraft() )
     {
 // #110094#-7
-//      pDrView->ReleaseMasterPagePaintCache();
-        pDrView->SetFillDraft( pView->IsFillDraft() );
+//      mpDrawView->ReleaseMasterPagePaintCache();
+        mpDrawView->SetFillDraft( pView->IsFillDraft() );
     }
 
-    if (pDrView->IsTextDraft() != pView->IsTextDraft() )
-        pDrView->SetTextDraft( pView->IsTextDraft() );
+    if (mpDrawView->IsTextDraft() != pView->IsTextDraft() )
+        mpDrawView->SetTextDraft( pView->IsTextDraft() );
 
-    if (pDrView->IsGrafDraft() != pView->IsGrafDraft() )
-        pDrView->SetGrafDraft( pView->IsGrafDraft() );
+    if (mpDrawView->IsGrafDraft() != pView->IsGrafDraft() )
+        mpDrawView->SetGrafDraft( pView->IsGrafDraft() );
 
-    if (pDrView->IsSolidMarkHdl() != pView->IsSolidMarkHdl() )
-        pDrView->SetSolidMarkHdl( pView->IsSolidMarkHdl() );
+    if (mpDrawView->IsSolidMarkHdl() != pView->IsSolidMarkHdl() )
+        mpDrawView->SetSolidMarkHdl( pView->IsSolidMarkHdl() );
 
-    if (pDrView->IsSolidDragging() != pView->IsSolidDragging() )
-        pDrView->SetSolidDragging( pView->IsSolidDragging() );
+    if (mpDrawView->IsSolidDragging() != pView->IsSolidDragging() )
+        mpDrawView->SetSolidDragging( pView->IsSolidDragging() );
 
-    if (pDrView->IsQuickTextEditMode() != pView->IsQuickEdit())
-        pDrView->SetQuickTextEditMode( pView->IsQuickEdit() );
+    if (mpDrawView->IsQuickTextEditMode() != pView->IsQuickEdit())
+        mpDrawView->SetQuickTextEditMode( pView->IsQuickEdit() );
 
     // #i26631#
-    if (pDrView->IsMasterPagePaintCaching() != pView->IsMasterPagePaintCaching())
-        pDrView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
+    if (mpDrawView->IsMasterPagePaintCaching() != pView->IsMasterPagePaintCaching())
+        mpDrawView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
     // Definition:
     //  grosse Handles: 9
     //  kleine Handles: 7
-    USHORT nTmp = pDrView->GetMarkHdlSizePixel();
+    USHORT nTmp = mpDrawView->GetMarkHdlSizePixel();
     //DBG_ASSERT(nTmp != 7, "HandleSize != 7 oder 9");
     if( nTmp == 9 && !pView->IsBigHandles() )
-        pDrView->SetMarkHdlSizePixel( 7 );
+        mpDrawView->SetMarkHdlSizePixel( 7 );
     else if( nTmp == 7 && pView->IsBigHandles() )
-        pDrView->SetMarkHdlSizePixel( 9 );
+        mpDrawView->SetMarkHdlSizePixel( 9 );
 
 
-    SdrPageView* pPageView = pDrView->GetSdrPageView();
-
+    SdrPageView* pPageView = mpDrawView->GetSdrPageView();
     if (pPageView)
     {
         if ( pPageView->GetVisibleLayers() != pView->GetVisibleLayers() )
@@ -361,12 +357,12 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         if ( pPageView->GetLockedLayers() != pView->GetLockedLayers() )
             pPageView->SetLockedLayers( pView->GetLockedLayers() );
 
-        if (ePageKind == PK_NOTES)
+        if (mePageKind == PK_NOTES)
         {
             if (pPageView->GetHelpLines() != pView->GetNotesHelpLines())
                 pPageView->SetHelpLines( pView->GetNotesHelpLines() );
         }
-        else if (ePageKind == PK_HANDOUT)
+        else if (mePageKind == PK_HANDOUT)
         {
             if (pPageView->GetHelpLines() != pView->GetHandoutHelpLines())
                 pPageView->SetHelpLines( pView->GetHandoutHelpLines() );
@@ -378,17 +374,17 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         }
     }
 
-    if ( pDrView->GetActiveLayer() != pView->GetActiveLayer() )
-        pDrView->SetActiveLayer( pView->GetActiveLayer() );
+    if ( mpDrawView->GetActiveLayer() != pView->GetActiveLayer() )
+        mpDrawView->SetActiveLayer( pView->GetActiveLayer() );
 
     USHORT nSelectedPage = 0;
 
-    if (ePageKind != PK_HANDOUT)
+    if (mePageKind != PK_HANDOUT)
     {
         nSelectedPage = pView->GetSelectedPage();
     }
 
-    EditMode eNewEditMode = pView->GetViewShEditMode(ePageKind);
+    EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
     BOOL bNewLayerMode = pView->IsLayerMode();
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
@@ -397,15 +393,15 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if(GetActiveWindow()->GetDrawMode() != pView->GetDrawMode())
       GetActiveWindow()->SetDrawMode(pView->GetDrawMode());
 
-    if ( pDrView->IsDesignMode() != pView->IsDesignMode() )
+    if ( mpDrawView->IsDesignMode() != pView->IsDesignMode() )
     {
         SfxBoolItem aDesignModeItem( SID_FM_DESIGN_MODE, pView->IsDesignMode() );
         GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aDesignModeItem, 0L );
     }
 
     // Muss am Ende gerufen werden, da ein WriteFrameViewData() ausgeloest wird
-    if (pDrView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
-        pDrView->SetFrameDragSingles( pView->IsFrameDragSingles() );
+    if (mpDrawView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
+        mpDrawView->SetFrameDragSingles( pView->IsFrameDragSingles() );
 }
 
 /*************************************************************************
@@ -417,103 +413,88 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 void DrawViewShell::WriteFrameViewData()
 {
     // Zeichen-(Bildschirm-)Attribute an FrameView merken
-    pFrameView->SetRuler( HasRuler() );
-    pFrameView->SetGridCoarse( pDrView->GetGridCoarse() );
-    pFrameView->SetGridFine( pDrView->GetGridFine() );
-    pFrameView->SetSnapGridWidth(pDrView->GetSnapGridWidthX(), pDrView->GetSnapGridWidthY());
-    pFrameView->SetGridVisible( pDrView->IsGridVisible() );
-    pFrameView->SetGridFront( pDrView->IsGridFront() );
-    pFrameView->SetSnapAngle( pDrView->GetSnapAngle() );
-    pFrameView->SetGridSnap( pDrView->IsGridSnap() );
-    pFrameView->SetBordSnap( pDrView->IsBordSnap() );
-    pFrameView->SetHlplSnap( pDrView->IsHlplSnap() );
-    pFrameView->SetOFrmSnap( pDrView->IsOFrmSnap() );
-    pFrameView->SetOPntSnap( pDrView->IsOPntSnap() );
-    pFrameView->SetOConSnap( pDrView->IsOConSnap() );
-    pFrameView->SetHlplVisible( pDrView->IsHlplVisible() );
-    pFrameView->SetDragStripes( pDrView->IsDragStripes() );
-    pFrameView->SetPlusHandlesAlwaysVisible( pDrView->IsPlusHandlesAlwaysVisible() );
-    pFrameView->SetFrameDragSingles( pDrView->IsFrameDragSingles() );
-    pFrameView->SetMarkedHitMovesAlways( pDrView->IsMarkedHitMovesAlways() );
-    pFrameView->SetMoveOnlyDragging( pDrView->IsMoveOnlyDragging() );
-    pFrameView->SetNoDragXorPolys( pDrView->IsNoDragXorPolys() );
-    pFrameView->SetCrookNoContortion( pDrView->IsCrookNoContortion() );
-    pFrameView->SetBigOrtho( pDrView->IsBigOrtho() );
-    pFrameView->SetEliminatePolyPointLimitAngle( pDrView->GetEliminatePolyPointLimitAngle() );
-    pFrameView->SetEliminatePolyPoints( pDrView->IsEliminatePolyPoints() );
+    mpFrameView->SetRuler( HasRuler() );
+    mpFrameView->SetGridCoarse( mpDrawView->GetGridCoarse() );
+    mpFrameView->SetGridFine( mpDrawView->GetGridFine() );
+    mpFrameView->SetSnapGridWidth(mpDrawView->GetSnapGridWidthX(), mpDrawView->GetSnapGridWidthY());
+    mpFrameView->SetGridVisible( mpDrawView->IsGridVisible() );
+    mpFrameView->SetGridFront( mpDrawView->IsGridFront() );
+    mpFrameView->SetSnapAngle( mpDrawView->GetSnapAngle() );
+    mpFrameView->SetGridSnap( mpDrawView->IsGridSnap() );
+    mpFrameView->SetBordSnap( mpDrawView->IsBordSnap() );
+    mpFrameView->SetHlplSnap( mpDrawView->IsHlplSnap() );
+    mpFrameView->SetOFrmSnap( mpDrawView->IsOFrmSnap() );
+    mpFrameView->SetOPntSnap( mpDrawView->IsOPntSnap() );
+    mpFrameView->SetOConSnap( mpDrawView->IsOConSnap() );
+    mpFrameView->SetHlplVisible( mpDrawView->IsHlplVisible() );
+    mpFrameView->SetDragStripes( mpDrawView->IsDragStripes() );
+    mpFrameView->SetPlusHandlesAlwaysVisible( mpDrawView->IsPlusHandlesAlwaysVisible() );
+    mpFrameView->SetFrameDragSingles( mpDrawView->IsFrameDragSingles() );
+    mpFrameView->SetMarkedHitMovesAlways( mpDrawView->IsMarkedHitMovesAlways() );
+    mpFrameView->SetMoveOnlyDragging( mpDrawView->IsMoveOnlyDragging() );
+    mpFrameView->SetNoDragXorPolys( mpDrawView->IsNoDragXorPolys() );
+    mpFrameView->SetCrookNoContortion( mpDrawView->IsCrookNoContortion() );
+    mpFrameView->SetBigOrtho( mpDrawView->IsBigOrtho() );
+    mpFrameView->SetEliminatePolyPointLimitAngle( mpDrawView->GetEliminatePolyPointLimitAngle() );
+    mpFrameView->SetEliminatePolyPoints( mpDrawView->IsEliminatePolyPoints() );
 
-    pFrameView->SetLineDraft( pDrView->IsLineDraft() );
-    pFrameView->SetFillDraft( pDrView->IsFillDraft() );
-    pFrameView->SetTextDraft( pDrView->IsTextDraft() );
-    pFrameView->SetGrafDraft( pDrView->IsGrafDraft() );
-    pFrameView->SetSolidMarkHdl( pDrView->IsSolidMarkHdl() );
-    pFrameView->SetSolidDragging( pDrView->IsSolidDragging() );
-    pFrameView->SetQuickEdit( pDrView->IsQuickTextEditMode() );
+    mpFrameView->SetLineDraft( mpDrawView->IsLineDraft() );
+    mpFrameView->SetFillDraft( mpDrawView->IsFillDraft() );
+    mpFrameView->SetTextDraft( mpDrawView->IsTextDraft() );
+    mpFrameView->SetGrafDraft( mpDrawView->IsGrafDraft() );
+    mpFrameView->SetSolidMarkHdl( mpDrawView->IsSolidMarkHdl() );
+    mpFrameView->SetSolidDragging( mpDrawView->IsSolidDragging() );
+    mpFrameView->SetQuickEdit( mpDrawView->IsQuickTextEditMode() );
 
-    pFrameView->SetDesignMode( pDrView->IsDesignMode() );
+    mpFrameView->SetDesignMode( mpDrawView->IsDesignMode() );
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
     Rectangle aVisArea = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-    pFrameView->SetVisArea(aVisArea);
+    mpFrameView->SetVisArea(aVisArea);
 
-    if( ePageKind == PK_HANDOUT )
-        pFrameView->SetSelectedPage(0);
+    if( mePageKind == PK_HANDOUT )
+        mpFrameView->SetSelectedPage(0);
     else
     {
-//      if ( ! ISA(PresentationViewShell))
-//      {
-//          if( mpSlideShow && ( mpSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW ) )
-//              pFrameView->SetSelectedPage( (USHORT)((mpSlideShow->getCurrentPageNumber() << 1) + 1)  );
-//          else
-//
-                pFrameView->SetSelectedPage( aTabControl.GetCurPageId() - 1 );
-//      }
+        mpFrameView->SetSelectedPage( maTabControl.GetCurPageId() - 1 );
     }
 
-    pFrameView->SetViewShEditMode(eEditMode, ePageKind);
-    pFrameView->SetLayerMode(IsLayerModeActive());
+    mpFrameView->SetViewShEditMode(meEditMode, mePageKind);
+    mpFrameView->SetLayerMode(IsLayerModeActive());
 
-    SdrPageView* pPageView = pDrView->GetSdrPageView();
+    SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
     if (pPageView)
     {
-        if ( pFrameView->GetVisibleLayers() != pPageView->GetVisibleLayers() )
-            pFrameView->SetVisibleLayers( pPageView->GetVisibleLayers() );
+        if ( mpFrameView->GetVisibleLayers() != pPageView->GetVisibleLayers() )
+            mpFrameView->SetVisibleLayers( pPageView->GetVisibleLayers() );
 
-        if ( pFrameView->GetPrintableLayers() != pPageView->GetPrintableLayers() )
-            pFrameView->SetPrintableLayers( pPageView->GetPrintableLayers() );
+        if ( mpFrameView->GetPrintableLayers() != pPageView->GetPrintableLayers() )
+            mpFrameView->SetPrintableLayers( pPageView->GetPrintableLayers() );
 
-        if ( pFrameView->GetLockedLayers() != pPageView->GetLockedLayers() )
-            pFrameView->SetLockedLayers( pPageView->GetLockedLayers() );
+        if ( mpFrameView->GetLockedLayers() != pPageView->GetLockedLayers() )
+            mpFrameView->SetLockedLayers( pPageView->GetLockedLayers() );
 
-        if (ePageKind == PK_NOTES)
+        if (mePageKind == PK_NOTES)
         {
-            pFrameView->SetNotesHelpLines( pPageView->GetHelpLines() );
+            mpFrameView->SetNotesHelpLines( pPageView->GetHelpLines() );
         }
-        else if (ePageKind == PK_HANDOUT)
+        else if (mePageKind == PK_HANDOUT)
         {
-            pFrameView->SetHandoutHelpLines( pPageView->GetHelpLines() );
+            mpFrameView->SetHandoutHelpLines( pPageView->GetHelpLines() );
         }
         else
         {
-            pFrameView->SetStandardHelpLines( pPageView->GetHelpLines() );
+            mpFrameView->SetStandardHelpLines( pPageView->GetHelpLines() );
         }
     }
 
-    if ( pFrameView->GetActiveLayer() != pDrView->GetActiveLayer() )
-        pFrameView->SetActiveLayer( pDrView->GetActiveLayer() );
+    if ( mpFrameView->GetActiveLayer() != mpDrawView->GetActiveLayer() )
+        mpFrameView->SetActiveLayer( mpDrawView->GetActiveLayer() );
 
     // DrawMode fuer 'Normales' Fenster merken
-    if(pFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode())
-      pFrameView->SetDrawMode(GetActiveWindow()->GetDrawMode());
-
-    // remember tabcontrol extent as percentage of whole frame width
-    const Size aFrameSize(GetParentWindow()->GetOutputSizePixel() );
-
-    if( aFrameSize.Width() )
-        pFrameView->SetTabCtrlPercent( (double) aTabControl.GetSizePixel().Width() / aFrameSize.Width() );
-    else
-        pFrameView->SetTabCtrlPercent( 0.0 );
+    if(mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode())
+      mpFrameView->SetDrawMode(GetActiveWindow()->GetDrawMode());
 }
 
 
@@ -542,85 +523,20 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
         aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
-//  if( pWin )
-//  {
-// #111096#
-// moved to ViewContactOfSdrPage::DrawPaper. There GetApplicationBackgroundColor
-// is used now to draw the background.
-//
-//      if ( !pFuSlideShow
-//             || pWin != static_cast<const ::sd::Window*>(
-//                 pFuSlideShow->GetShowWindow()))
-//      {
-//             const SdrPageView*  pPageView = pDrView->GetPageViewByIndex( 0 );
-//          const Color         aOldLineColor( pWin->GetLineColor() );
-//          const Color         aOldFillColor( pWin->GetFillColor() );
-//          const ULONG         nOldDrawMode( pWin->GetDrawMode() );
-//             const BOOL          bOldMap = pWin->IsMapModeEnabled();
-//             Point               aNullPoint;
-//             const Rectangle     aOutputRect( aNullPoint, pWin->GetOutputSizePixel() );
-//          Rectangle           aOutputPaperRect, aPaperRect;
-
-//             if( pPageView )
-//                 aPaperRect = pPageView->GetPageRect();
-//             else
-//                 aPaperRect = Rectangle( aNullPoint, pActualPage->GetSize() );
-
-//             ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
-
-//             pWin->EnableMapMode( FALSE );
-//          pWin->SetDrawMode( DRAWMODE_DEFAULT );
-//          pWin->SetLineColor();
-//          pWin->SetFillColor( aFillColor );
-
-//             if( aOutputPaperRect.IsEmpty() )
-//                 pWin->DrawRect( aOutputRect );
-//             else
-//             {
-//                 const Color aShadowColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-//                 PolyPolygon aPolyPoly( 2 );
-//                 Rectangle   aOutputRectExt( aOutputRect );
-
-//                 aOutputRectExt.Left()--;
-//                 aOutputRectExt.Top()--;
-//                 aOutputRectExt.Right()++;
-//                 aOutputRectExt.Bottom()++;
-
-//                 aPolyPoly.Insert( aOutputRectExt );
-//                 aPolyPoly.Insert( aOutputPaperRect );
-
-//              // draw paper
-//                 pWin->DrawPolyPolygon( aPolyPoly );
-
-//                  // draw shadow
-//                 pWin->SetFillColor( aShadowColor );
-//                 pWin->DrawRect( Rectangle( Point( aPaperRect.Right() + 1, aPaperRect.Top() + PAPER_SHADOW_EXT_PIXEL ),
-//                                            Size( PAPER_SHADOW_EXT_PIXEL, aPaperRect.GetHeight() ) ) );
-//                 pWin->DrawRect( Rectangle( Point( aPaperRect.Left() + PAPER_SHADOW_EXT_PIXEL, aPaperRect.Bottom() + 1 ),
-//                                            Size( aPaperRect.GetWidth(), PAPER_SHADOW_EXT_PIXEL ) ) );
-//             }
-
-//          pWin->SetFillColor( aOldFillColor );
-//          pWin->SetLineColor( aOldLineColor );
-//          pWin->SetDrawMode( nOldDrawMode );
-//             pWin->EnableMapMode( bOldMap );
-//      }
-//  }
-
     /* #97517#  This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
     // #103834# Set Application Background color for usage in SdrPaintView(s)
-    pDrView->SetApplicationBackgroundColor(aFillColor);
+    mpDrawView->SetApplicationBackgroundColor(aFillColor);
 
     /* #97517#  This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
-    pDrView->CompleteRedraw( pWin, Region( rRect ) );
+    mpDrawView->CompleteRedraw( pWin, Region( rRect ) );
 
     if( pWin )
     {
@@ -641,7 +557,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
     ViewShell::SetZoomFactor(rZoomX, rZoomY);
-    bZoomOnPage = FALSE;
+    mbZoomOnPage = FALSE;
     Point aOrigin = GetActiveWindow()->GetViewOrigin();
     GetActiveWindow()->SetWinViewPos(aOrigin);
 }
@@ -656,15 +572,14 @@ Size DrawViewShell::GetOptimalSizePixel() const
 {
     Size aSize;
 
-    SdrPageView* pPV = pDrView->GetSdrPageView();
-
+    SdrPageView* pPV = mpDrawView->GetSdrPageView();
     if (pPV)
     {
         SdPage* pPage = (SdPage*) pPV->GetPage();
 
         if (pPage)
         {
-            if (!bZoomOnPage)
+            if (!mbZoomOnPage)
             {
                 // Gegenwaertigen MapMode beruecksichtigen
                 aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize() );
@@ -674,7 +589,7 @@ Size DrawViewShell::GetOptimalSizePixel() const
                 // 1:1 Darstellung
                 MapMode aMapMode(MAP_100TH_MM);
                 aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize(), aMapMode );
-                ( (DrawViewShell*) this)->bZoomOnPage = TRUE;
+                const_cast< DrawViewShell* >(this)->mbZoomOnPage = TRUE;
             }
         }
     }
@@ -707,7 +622,7 @@ void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
     rSequence[nIndex].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ZoomOnPage ) );
-    rSequence[nIndex].Value <<= (sal_Bool)bZoomOnPage;
+    rSequence[nIndex].Value <<= (sal_Bool)mbZoomOnPage;
 }
 
 void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
@@ -725,22 +640,22 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
             sal_Bool bZoomPage;
             if( pValue->Value >>= bZoomPage )
             {
-                bZoomOnPage = bZoomPage;
+                mbZoomOnPage = bZoomPage;
             }
         }
     }
 
-    if( pFrameView->GetPageKind() != ePageKind )
+    if( mpFrameView->GetPageKind() != mePageKind )
     {
-        ePageKind = pFrameView->GetPageKind();
+        mePageKind = mpFrameView->GetPageKind();
 
-        if (ePageKind == PK_NOTES)
+        if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
             GetActiveWindow()->SetHelpId( SID_NOTESMODE );
             GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
         }
-        else if (ePageKind == PK_HANDOUT)
+        else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
             GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
@@ -754,11 +669,11 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
         }
     }
 
-    ReadFrameViewData( pFrameView );
+    ReadFrameViewData( mpFrameView );
 
-    if( !bZoomOnPage )
+    if( !mbZoomOnPage )
     {
-        const Rectangle aVisArea( pFrameView->GetVisArea() );
+        const Rectangle aVisArea( mpFrameView->GetVisArea() );
 
         if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
@@ -777,8 +692,8 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
         SetZoomRect(aVisArea);
     }
 
-    ChangeEditMode (eEditMode, ! IsLayerModeActive());
-    ChangeEditMode (eEditMode, ! IsLayerModeActive());
+    ChangeEditMode (meEditMode, ! IsLayerModeActive());
+    ChangeEditMode (meEditMode, ! IsLayerModeActive());
 }
 
 void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
@@ -847,8 +762,8 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
         if (nIndex>=0 && nIndex<pBar->GetPageCount())
         {
             // Tell the draw view and the tab control of the new active layer.
-            pDrView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId (nIndex)));
-            pBar->SetCurPageId (pBar->GetPageId (nIndex));
+            mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((USHORT)nIndex)));
+            pBar->SetCurPageId (pBar->GetPageId ((USHORT)nIndex));
         }
     }
 }
@@ -858,7 +773,7 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
 
 TabControl* DrawViewShell::GetPageTabControl (void)
 {
-    return &aTabControl;
+    return &maTabControl;
 }
 
 
