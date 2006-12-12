@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ SdUnoOutlineView::~SdUnoOutlineView (void) throw()
 // XSelectionSupplier
 
 
-sal_Bool SAL_CALL SdUnoOutlineView::select( const Any& aSelection )
+sal_Bool SAL_CALL SdUnoOutlineView::select( const Any&  )
     throw(lang::IllegalArgumentException, RuntimeException)
 {
     // todo: add selections for text ranges
@@ -201,7 +201,7 @@ void SdUnoOutlineView::setFastPropertyValue_NoBroadcast (
 
 
 
-void SAL_CALL SdUnoOutlineView::disposing (const ::com::sun::star::lang::EventObject& rEventObject)
+void SAL_CALL SdUnoOutlineView::disposing (const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
