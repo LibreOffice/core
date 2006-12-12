@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 14:38:03 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:20:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,6 @@ MODULES_WITH_WARNINGS := \
     lingucomponent \
     r_tools \
     sc \
-    sd \
     soldep \
     starmath \
     sw \
