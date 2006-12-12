@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmovss.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:58:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,12 +56,8 @@ public:
     virtual ~SdMoveStyleSheetsUndoAction();
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat();
 
     virtual String GetComment() const;
-
-    // erst mal kein Repeat, da kein Kontext erreichbar
-    virtual BOOL CanRepeat(SfxRepeatTarget&) const { return FALSE; }
 };
 
 #endif      // _SD_UNMOVSS_HXX

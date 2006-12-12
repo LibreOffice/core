@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unslsel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:00:33 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@ public:
     virtual ~SlideSelectionUndoAction()      {}
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat();
 };
 
 #endif      // _SD_UNSLSEL_HXX
