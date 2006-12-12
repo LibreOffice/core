@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grid.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:26:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,15 @@
 #include "precompiled_extensions.hxx"
 #include <grid.hrc>
 #include <cstdio>
+
+#define _USE_MATH_DEFINES
 #include <cmath>
+#undef _USE_MATH_DEFINES
+
 #include <grid.hxx>
+
+// for ::std::sort
+#include <algorithm>
 
 ResId SaneResId( sal_uInt32 );
 
@@ -50,26 +57,21 @@ ResId SaneResId( sal_uInt32 );
 
 // ---------------------------------------------------------------------
 
-GridWindow::GridWindow(
-    double* pXValues, double* pYValues, int nValues,
-    Window* pParent, BOOL bCutValues ) :
-        ModalDialog( pParent, SaneResId( GRID_DIALOG ) ),
-        m_aOKButton( this, SaneResId( GRID_DIALOG_OK_BTN ) ),
-        m_aCancelButton( this, SaneResId( GRID_DIALOG_CANCEL_BTN ) ),
-        m_aResetTypeBox( this, SaneResId( GRID_DIALOG_TYPE_BOX ) ),
-        m_aResetButton( this, SaneResId( GRID_DIALOG_RESET_BTN ) ),
-        m_aGridArea( 50, 15, 100, 100 ),
-        m_pXValues( pXValues ),
-        m_pOrigYValues( pYValues ),
-        m_nValues( nValues ),
-        m_pNewYValues( NULL ),
-        m_aIAOManager( this ),
-        m_pLeftMarker( NULL ),
-        m_pRightMarker( NULL ),
-        m_pDragMarker( NULL ),
-        m_aMarkerBitmap( Bitmap( SaneResId( GRID_DIALOG_HANDLE_BMP ) ),
-                         Color( 255, 255, 255 ) ),
-        m_bCutValues( bCutValues )
+GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, BOOL bCutValues )
+:   ModalDialog( pParent, SaneResId( GRID_DIALOG ) ),
+    m_aGridArea( 50, 15, 100, 100 ),
+    m_pXValues( pXValues ),
+    m_pOrigYValues( pYValues ),
+    m_nValues( nValues ),
+    m_pNewYValues( NULL ),
+    m_bCutValues( bCutValues ),
+    m_aHandles(),
+    m_nDragIndex( 0xffffffff ),
+    m_aMarkerBitmap( Bitmap( SaneResId( GRID_DIALOG_HANDLE_BMP ) ), Color( 255, 255, 255 ) ),
+    m_aOKButton( this, SaneResId( GRID_DIALOG_OK_BTN ) ),
+    m_aCancelButton( this, SaneResId( GRID_DIALOG_CANCEL_BTN ) ),
+    m_aResetTypeBox( this, SaneResId( GRID_DIALOG_TYPE_BOX ) ),
+    m_aResetButton( this, SaneResId( GRID_DIALOG_RESET_BTN ) )
 {
     USHORT nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_LINEAR_ASCENDING ) ) );
     m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_LINEAR_ASCENDING );
@@ -102,22 +104,11 @@ GridWindow::GridWindow(
     setBoundings( 0, 0, 1023, 1023 );
     computeExtremes();
 
-    // #i21114#
-    // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
-    m_pLeftMarker = new B2dIAOBitmapEx(
-        &m_aIAOManager,
-        transform( findMinX(), findMinY() ),
-        m_aMarkerBitmap,
-        m_aMarkerBitmap.GetSizePixel().Width()/2,
-        m_aMarkerBitmap.GetSizePixel().Height()/2 );
-    m_pLeftMarker->SetHittable( TRUE );
-    m_pRightMarker = new B2dIAOBitmapEx(
-        &m_aIAOManager,
-        transform( findMaxX(), findMaxY() ),
-        m_aMarkerBitmap,
-        m_aMarkerBitmap.GetSizePixel().Width()/2,
-        m_aMarkerBitmap.GetSizePixel().Height()/2 );
-    m_pRightMarker->SetHittable( TRUE );
+    // create left and right marker as first and last entry
+    m_BmOffX = sal_uInt16(m_aMarkerBitmap.GetSizePixel().Width() >> 1);
+    m_BmOffY = sal_uInt16(m_aMarkerBitmap.GetSizePixel().Height() >> 1);
+    m_aHandles.push_back(impHandle(transform(findMinX(), findMinY()), m_BmOffX, m_BmOffY));
+    m_aHandles.push_back(impHandle(transform(findMaxX(), findMaxY()), m_BmOffX, m_BmOffY));
 
     FreeResource();
 }
@@ -275,68 +266,49 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
 
 void GridWindow::computeNew()
 {
-    // special case: only left and right markers
-    if( m_aIAOManager.GetIAOCount() == 2 )
+    if(2L == m_aHandles.size())
     {
+        // special case: only left and right markers
         double xleft, yleft;
         double xright, yright;
-        transform( m_pLeftMarker->GetBasePosition(), xleft, yleft );
-        transform( m_pRightMarker->GetBasePosition(), xright, yright );
+        transform(m_aHandles[0L].maPos, xleft, yleft);
+        transform(m_aHandles[1L].maPos, xright, yright );
         double factor = (yright-yleft)/(xright-xleft);
         for( int i = 0; i < m_nValues; i++ )
         {
             m_pNewYValues[ i ] = yleft + ( m_pXValues[ i ] - xleft )*factor;
         }
-        return;
     }
-
-    // X sort markers
-    int nMarkers = m_aIAOManager.GetIAOCount();
-    int nSorted = 0;
-    B2dIAObject** pList = new B2dIAObject*[ nMarkers ];
-    for( B2dIAObject* pMarker = m_aIAOManager.GetIAObjectList();
-         pMarker; pMarker = pMarker->GetNext() )
+    else
     {
-        int n = nSorted;
-        for( int i = 0; i < nSorted; i++ )
+        // sort markers
+        std::sort(m_aHandles.begin(), m_aHandles.end());
+        const int nSorted = m_aHandles.size();
+        int i;
+
+        // get node arrays
+        double* nodex = new double[ nSorted ];
+        double* nodey = new double[ nSorted ];
+
+        for( i = 0L; i < nSorted; i++ )
+            transform( m_aHandles[i].maPos, nodex[ i ], nodey[ i ] );
+
+        for( i = 0; i < m_nValues; i++ )
         {
-            if( pList[ i ]->GetBasePosition().X() > pMarker->GetBasePosition().X() )
+            double x = m_pXValues[ i ];
+            m_pNewYValues[ i ] = interpolate( x, nodex, nodey, nSorted );
+            if( m_bCutValues )
             {
-                for( n=nSorted; n > i; n-- )
-                    pList[ n ] = pList[ n-1 ];
-                pList[ i ] = pMarker;
-                nSorted++;
-                break;
+                if( m_pNewYValues[ i ] > m_fMaxY )
+                    m_pNewYValues[ i ] = m_fMaxY;
+                else if( m_pNewYValues[ i ] < m_fMinY )
+                    m_pNewYValues[ i ] = m_fMinY;
             }
         }
-        if( n >= nSorted )
-            pList[ nSorted++ ] = pMarker;
+
+        delete [] nodex;
+        delete [] nodey;
     }
-
-    // get node arrays
-    double* nodex = new double[ nSorted ];
-    double* nodey = new double[ nSorted ];
-    int i;
-
-    for( i = 0; i < nSorted; i++ )
-        transform( pList[ i ]->GetBasePosition(), nodex[ i ], nodey[ i ] );
-
-    for( i = 0; i < m_nValues; i++ )
-    {
-        double x = m_pXValues[ i ];
-        m_pNewYValues[ i ] = interpolate( x, nodex, nodey, nSorted );
-        if( m_bCutValues )
-        {
-            if( m_pNewYValues[ i ] > m_fMaxY )
-                m_pNewYValues[ i ] = m_fMaxY;
-            else if( m_pNewYValues[ i ] < m_fMinY )
-                m_pNewYValues[ i ] = m_fMinY;
-        }
-    }
-
-    delete [] nodex;
-    delete [] nodey;
-    delete [] pList;
 }
 
 // ---------------------------------------------------------------------
@@ -453,37 +425,57 @@ void GridWindow::drawNew()
 
 // ---------------------------------------------------------------------
 
+void GridWindow::drawHandles()
+{
+    for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
+    {
+        m_aHandles[i].draw(*this, m_aMarkerBitmap);
+    }
+}
+
+// ---------------------------------------------------------------------
+
 void GridWindow::Paint( const Rectangle& rRect )
 {
     ModalDialog::Paint( rRect );
     drawGrid();
     drawOriginal();
     drawNew();
-    m_aIAOManager.UpdateDisplay();
+    drawHandles();
 }
 
 // ---------------------------------------------------------------------
 
 void GridWindow::MouseMove( const MouseEvent& rEvt )
 {
-    if( rEvt.GetButtons() == MOUSE_LEFT && m_pDragMarker )
+    if( rEvt.GetButtons() == MOUSE_LEFT && m_nDragIndex != 0xffffffff )
     {
         Point aPoint( rEvt.GetPosPixel() );
-        if( m_pDragMarker == m_pLeftMarker || m_pDragMarker == m_pRightMarker )
+
+        if( m_nDragIndex == 0L || m_nDragIndex == m_aHandles.size() - 1L)
         {
-            aPoint.X() = m_pDragMarker->GetBasePosition().X();
+            aPoint.X() = m_aHandles[m_nDragIndex].maPos.X();
         }
+        else
+        {
+            if(aPoint.X() < m_aGridArea.Left())
+                aPoint.X() = m_aGridArea.Left();
+            else if(aPoint.X() > m_aGridArea.Right())
+                aPoint.X() = m_aGridArea.Right();
+        }
+
         if( aPoint.Y() < m_aGridArea.Top() )
             aPoint.Y() = m_aGridArea.Top();
         else if( aPoint.Y() > m_aGridArea.Bottom() )
             aPoint.Y() = m_aGridArea.Bottom();
-        // avoid flicker
-        if( aPoint != m_pDragMarker->GetBasePosition() )
+
+        if( aPoint != m_aHandles[m_nDragIndex].maPos )
         {
-            m_pDragMarker->SetBasePosition( aPoint );
-            m_aIAOManager.UpdateDisplay();
+            m_aHandles[m_nDragIndex].maPos = aPoint;
+            Invalidate( m_aGridArea );
         }
     }
+
     ModalDialog::MouseMove( rEvt );
 }
 
@@ -493,9 +485,9 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 {
     if( rEvt.GetButtons() == MOUSE_LEFT )
     {
-        if( m_pDragMarker )
+        if( m_nDragIndex != 0xffffffff )
         {
-            m_pDragMarker = NULL;
+            m_nDragIndex = 0xffffffff;
             computeNew();
             Invalidate( m_aGridArea );
             Paint( m_aGridArea );
@@ -510,46 +502,50 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
     Point aPoint( rEvt.GetPosPixel() );
-    B2dIAObject* pMarker = m_aIAOManager.GetIAObjectList();
-    while( pMarker && ! pMarker->IsHit( aPoint ) )
-        pMarker = pMarker->GetNext();
+    sal_uInt32 nMarkerIndex = 0xffffffff;
+
+    for(sal_uInt32 a(0L); nMarkerIndex == 0xffffffff && a < m_aHandles.size(); a++)
+    {
+        if(m_aHandles[a].isHit(*this, aPoint))
+        {
+            nMarkerIndex = a;
+        }
+    }
 
     if( rEvt.GetButtons() == MOUSE_LEFT )
     {
         // user wants to drag a button
-        if( pMarker )
+        if( nMarkerIndex != 0xffffffff )
         {
-            // #i21114#
-            // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
-            m_pDragMarker = (B2dIAOBitmapEx*)pMarker;
+            m_nDragIndex = nMarkerIndex;
         }
     }
     else if( rEvt.GetButtons() == MOUSE_RIGHT )
     {
         // user wants to add/delete a button
-        if( pMarker && pMarker != m_pLeftMarker && pMarker != m_pRightMarker )
+        if( nMarkerIndex != 0xffffffff )
         {
-            // delete marker under mouse
-            if( m_pDragMarker == pMarker )
-                m_pDragMarker = NULL;
-            delete pMarker;
+            if( nMarkerIndex != 0L && nMarkerIndex != m_aHandles.size() - 1L)
+            {
+                // delete marker under mouse
+                if( m_nDragIndex == nMarkerIndex )
+                    m_nDragIndex = 0xffffffff;
+
+                m_aHandles.erase(m_aHandles.begin() + nMarkerIndex);
+            }
         }
-        else if( ! pMarker )
+        else
         {
-            // #i21114#
-            // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
-            pMarker = new B2dIAOBitmapEx(
-                &m_aIAOManager,
-                aPoint,
-                m_aMarkerBitmap,
-                m_aMarkerBitmap.GetSizePixel().Width()/2,
-                m_aMarkerBitmap.GetSizePixel().Height()/2 );
-            pMarker->SetHittable( TRUE );
+            m_BmOffX = sal_uInt16(m_aMarkerBitmap.GetSizePixel().Width() >> 1);
+            m_BmOffY = sal_uInt16(m_aMarkerBitmap.GetSizePixel().Height() >> 1);
+            m_aHandles.push_back(impHandle(aPoint, m_BmOffX, m_BmOffY));
         }
+
         computeNew();
         Invalidate( m_aGridArea );
         Paint( m_aGridArea );
     }
+
     ModalDialog::MouseButtonDown( rEvt );
 }
 
@@ -596,13 +592,12 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
             default:
                 break;
         }
-        int nMarkers = m_aIAOManager.GetIAOCount();
-        B2dIAObject* pMarker = m_aIAOManager.GetIAObjectList();
-        for( int i = 0 ; i < nMarkers; i++, pMarker = pMarker->GetNext() )
+
+        for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
         {
             // find nearest xvalue
             double x, y;
-            transform( pMarker->GetBasePosition(), x, y );
+            transform( m_aHandles[i].maPos, x, y );
             int nIndex = 0;
             double delta = fabs( x-m_pXValues[0] );
             for( int n = 1; n < m_nValues; n++ )
@@ -613,13 +608,14 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
                     nIndex = n;
                 }
             }
-            if( pMarker == m_pLeftMarker )
-                pMarker->SetBasePosition( transform( m_fMinX, m_pNewYValues[ nIndex ] ) );
-            else if( pMarker == m_pRightMarker )
-                pMarker->SetBasePosition( transform( m_fMaxX, m_pNewYValues[ nIndex ] ) );
+            if( 0 == i )
+                m_aHandles[i].maPos = transform( m_fMinX, m_pNewYValues[ nIndex ] );
+            else if( m_aHandles.size() - 1L == i )
+                m_aHandles[i].maPos = transform( m_fMaxX, m_pNewYValues[ nIndex ] );
             else
-                pMarker->SetBasePosition( transform( m_pXValues[ nIndex ], m_pNewYValues[ nIndex ] ) );
+                m_aHandles[i].maPos = transform( m_pXValues[ nIndex ], m_pNewYValues[ nIndex ] );
         }
+
         Invalidate( m_aGridArea );
         Paint(Rectangle());
     }
