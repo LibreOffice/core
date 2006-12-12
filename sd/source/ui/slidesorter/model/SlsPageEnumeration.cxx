@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageEnumeration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:08:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:37:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,28 +121,34 @@ PageEnumeration::PageEnumeration (
 PageEnumeration::PageEnumeration (
     PageEnumeration& rEnumeration,
     bool bCloneImpl)
-    : mpImpl (bCloneImpl
-        ? ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
-            rEnumeration.mpImpl->Clone())
-        : rEnumeration.mpImpl)
 {
+
+    if( bCloneImpl )
+    {
+        mpImpl = rEnumeration.mpImpl->Clone();
+    }
+    else
+    {
+        mpImpl = rEnumeration.mpImpl;
+    }
 }
 
 
 
-PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration)
-    : mpImpl (::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
-        rEnumeration.mpImpl->Clone()))
+PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration )
+: sd::slidesorter::model::Enumeration<sd::slidesorter::model::SharedPageDescriptor>()
 {
+    mpImpl = rEnumeration.mpImpl->Clone();
 }
 
-
+PageEnumeration::~PageEnumeration()
+{
+}
 
 PageEnumeration& PageEnumeration::operator= (
     const PageEnumeration& rEnumeration)
 {
-    mpImpl = ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
-        rEnumeration.mpImpl->Clone());
+    mpImpl = rEnumeration.mpImpl->Clone();
     return *this;
 }
 
@@ -312,7 +318,7 @@ void PageEnumerationImpl<Predicate>::AdvanceToNextValidElement (void)
 
 // Predicate operators.
 
-bool AllPagesPredicate::operator() (const PageDescriptor& rDescriptor)
+bool AllPagesPredicate::operator() (const PageDescriptor& )
 {
     return true;
 }
