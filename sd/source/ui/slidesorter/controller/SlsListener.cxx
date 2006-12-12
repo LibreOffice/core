@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:06:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,17 +300,15 @@ void Listener::DisconnectFromController (void)
 
 
 void Listener::Notify (
-    SfxBroadcaster& rBroadcaster,
+    SfxBroadcaster&,
     const SfxHint& rHint)
 {
     if (rHint.ISA(SdrHint))
     {
         SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        if(rSdrHint.GetKind() == HINT_PAGEORDERCHG )
         {
-            case HINT_PAGEORDERCHG:
-                mrController.HandleModelChange();
-                break;
+            mrController.HandleModelChange();
         }
     }
     else if (rHint.ISA(ViewShellHint))
@@ -453,7 +451,7 @@ void SAL_CALL Listener::disposing (
 //=====  document::XEventListener  ============================================
 
 void SAL_CALL Listener::notifyEvent (
-    const document::EventObject& rEventObject)
+    const document::EventObject& )
     throw (RuntimeException)
 {
 }
@@ -565,7 +563,7 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
 //===== accessibility::XAccessibleEventListener  ==============================
 
 void SAL_CALL Listener::notifyEvent (
-    const AccessibleEventObject& rEvent)
+    const AccessibleEventObject& )
     throw (RuntimeException)
 {
 }
@@ -575,7 +573,6 @@ void SAL_CALL Listener::notifyEvent (
 
 void SAL_CALL Listener::disposing (void)
 {
-    SlideSorterViewShell& rShell (mrController.GetViewShell());
     ReleaseListeners();
 }
 
