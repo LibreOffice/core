@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 14:59:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ class LayoutMenu
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDLAYOUTMENU);
+    SFX_DECL_INTERFACE(SD_IF_SDLAYOUTMENU)
 
     /** Create a new layout menu.  Depending on the given flag it
         displays its own scroll bar or lets a surrounding window
@@ -163,6 +163,9 @@ public:
         correct set of icons is displayed.
     */
     virtual void DataChanged (const DataChangedEvent& rEvent);
+
+    using Window::GetWindow;
+    using ValueSet::StartDrag;
 
 private:
     ViewShellBase& mrBase;
