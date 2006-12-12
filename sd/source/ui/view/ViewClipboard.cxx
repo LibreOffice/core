@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewClipboard.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ void ViewClipboard::AssignMasterPage (
         // appended again by SetMasterPage() to the given name.  Don't ask.
         String sLayoutSuffix (RTL_CONSTASCII_STRINGPARAM(SD_LT_SEPARATOR));
         sLayoutSuffix.Append (SdResId(STR_LAYOUT_OUTLINE));
-        int nLength = sLayoutSuffix.Len();
+        USHORT nLength = sLayoutSuffix.Len();
         String sLayoutName (pMasterPage->GetLayoutName());
         if (String(sLayoutName, sLayoutName.Len()-nLength, nLength).Equals (
             sLayoutSuffix))
@@ -207,7 +207,7 @@ void ViewClipboard::AssignMasterPage (
 
 
 USHORT ViewClipboard::DetermineInsertPosition  (
-    const SdTransferable& rTransferable)
+    const SdTransferable& )
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
     USHORT nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
@@ -236,7 +236,6 @@ USHORT ViewClipboard::InsertSlides (
     SdDrawDocument* pDoc = mrView.GetDoc();
 
     USHORT nInsertPgCnt = 0;
-    USHORT nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
     BOOL bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
 
     // Prepare the insertion.
