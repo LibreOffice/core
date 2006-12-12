@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:04:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,12 +66,13 @@ QueueProcessorBase::QueueProcessorBase (void)
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenRequestsWhenNotIdle;
 
-    maTimer.SetTimeoutHdl (LINK(this,QueueProcessorBase,ProcessRequest));
+    maTimer.SetTimeoutHdl (LINK(this,QueueProcessorBase,ProcessRequestHdl));
     maTimer.SetTimeout (mnTimeBetweenHighPriorityRequests);
 }
 
-
-
+QueueProcessorBase::~QueueProcessorBase()
+{
+}
 
 void QueueProcessorBase::Start (int nPriorityClass)
 {
@@ -97,7 +98,7 @@ void QueueProcessorBase::Stop (void)
 
 
 
-IMPL_LINK(QueueProcessorBase, ProcessRequest, Timer*, pTimer)
+IMPL_LINK(QueueProcessorBase, ProcessRequestHdl, Timer*, EMPTYARG)
 {
     ProcessRequest();
     return 1;
