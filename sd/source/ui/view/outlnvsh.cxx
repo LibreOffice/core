@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:45:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,18 +244,18 @@ TYPEINIT1( OutlineViewShell, ViewShell );
 |*
 \************************************************************************/
 
-void OutlineViewShell::Construct(DrawDocShell* pDocSh)
+void OutlineViewShell::Construct(DrawDocShell* )
 {
     BOOL bModified = GetDoc()->IsChanged();
 
     meShellType = ST_OUTLINE;
-    Size aViewSize(Size(29700, 21000));
+    Size aSize(29700, 21000);
     Point aWinPos (0, 0);
     Point aViewOrigin(0, 0);
     GetActiveWindow()->SetMinZoomAutoCalc(FALSE);
     GetActiveWindow()->SetMinZoom( MIN_ZOOM );
     GetActiveWindow()->SetMaxZoom( MAX_ZOOM );
-    InitWindows(aViewOrigin, aViewSize, aWinPos);
+    InitWindows(aViewOrigin, aSize, aWinPos);
     pOlView = new OutlineView(GetDocSh(), GetActiveWindow(), this);
     mpView = pOlView;            // Pointer der Basisklasse ViewShell
 
@@ -264,7 +264,7 @@ void OutlineViewShell::Construct(DrawDocShell* pDocSh)
     SetZoom(69);
 
     // Einstellungen der FrameView uebernehmen
-    ReadFrameViewData(pFrameView);
+    ReadFrameViewData(mpFrameView);
 
     ::Outliner* pOutl = pOlView->GetOutliner();
     pOutl->SetUpdateMode(TRUE);
@@ -329,11 +329,11 @@ OutlineViewShell::OutlineViewShell (
 
 {
     if (pFrameViewArgument != NULL)
-        pFrameView = pFrameViewArgument;
+        mpFrameView = pFrameViewArgument;
     else
-        pFrameView = new FrameView(GetDoc());
+        mpFrameView = new FrameView(GetDoc());
 
-    pFrameView->Connect();
+    mpFrameView->Connect();
 
     Construct(GetDocSh());
 }
@@ -357,8 +357,8 @@ OutlineViewShell::OutlineViewShell (
       mbInitialized(false)
 
 {
-    pFrameView = new FrameView(GetDoc());
-    pFrameView->Connect();
+    mpFrameView = new FrameView(GetDoc());
+    mpFrameView->Connect();
 
     Construct(GetDocSh());
 }
@@ -375,7 +375,7 @@ OutlineViewShell::~OutlineViewShell()
 
     delete pOlView;
 
-    pFrameView->Disconnect();
+    mpFrameView->Disconnect();
 
     if ( pClipEvtLstnr )
     {
@@ -412,12 +412,9 @@ void OutlineViewShell::ArrangeGUIElements ()
     // bar.
     int nScrollBarSize =
         GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
-    aScrBarWH = Size (nScrollBarSize, nScrollBarSize);
+    maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
     ViewShell::ArrangeGUIElements ();
-
-    long nSizeX = aViewSize.Width() - aScrBarWH.Width();
-    long nSizeY = aViewSize.Height() - aScrBarWH.Height();
 
     ::sd::Window* pWindow = mpContentWindow.get();
     if (pWindow != NULL)
@@ -464,7 +461,6 @@ void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
             ExecReq( rReq );
             break;
         }
-        break;
 
         case SID_OPT_LOCALE_CHANGED:
         {
@@ -668,7 +664,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_PASTE:
         {
-            OutlineViewPageChangesGuard aGuard(pOlView);
+            OutlineViewPageChangesGuard aGuard2(pOlView);
 
             if(HasCurrentFunction())
             {
@@ -690,7 +686,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 OutlinerView* pOutlView = pOlView->GetViewByWindow(GetActiveWindow());
                 if (pOutlView)
                 {
-                    OutlineViewPageChangesGuard aGuard(pOlView);
+                    OutlineViewPageChangesGuard aGuard2(pOlView);
 
                     KeyCode  aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode );
@@ -726,10 +722,10 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_ZOOM_PREV:
         {
-            if (pZoomList->IsPreviousPossible())
+            if (mpZoomList->IsPreviousPossible())
             {
                 // Vorheriges ZoomRect einstellen
-                SetZoomRect(pZoomList->GetPreviousZoomRect());
+                SetZoomRect(mpZoomList->GetPreviousZoomRect());
             }
             rReq.Done ();
         }
@@ -737,10 +733,10 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_ZOOM_NEXT:
         {
-            if (pZoomList->IsNextPossible())
+            if (mpZoomList->IsNextPossible())
             {
                 // Naechstes ZoomRect einstellen
-                SetZoomRect(pZoomList->GetNextZoomRect());
+                SetZoomRect(mpZoomList->GetNextZoomRect());
             }
             rReq.Done ();
         }
@@ -799,13 +795,13 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         // #96090# added Undo/Redo handling
         case SID_UNDO :
         {
-            OutlineViewPageChangesGuard aGuard(pOlView);
+            OutlineViewPageChangesGuard aGuard2(pOlView);
             ImpSidUndo(FALSE, rReq);
         }
         break;
         case SID_REDO :
         {
-            OutlineViewPageChangesGuard aGuard(pOlView);
+            OutlineViewPageChangesGuard aGuard2(pOlView);
             ImpSidRedo(FALSE, rReq);
         }
         break;
@@ -839,9 +835,6 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
     {
         case SID_EDIT_OUTLINER:
         {
-            // Empty the undo manager of the text object bar.
-            SfxUndoManager* pUndoManager = NULL;
-
             ::Outliner* pOutl = pOlView->GetOutliner();
             if( pOutl )
             {
@@ -909,11 +902,11 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
     rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
 
-    if (!pZoomList->IsNextPossible())
+    if (!mpZoomList->IsNextPossible())
     {
        rSet.DisableItem(SID_ZOOM_NEXT);
     }
-    if (!pZoomList->IsPreviousPossible())
+    if (!mpZoomList->IsPreviousPossible())
     {
        rSet.DisableItem(SID_ZOOM_PREV);
     }
@@ -927,22 +920,27 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem( SID_ZOOM_OUT );
     }
 
-    // 'Alles auswaehlen' zulassen?
-
     ::Outliner* pOutl = pOlView->GetOutliner();
-    DBG_ASSERT(pOutl, "kein Outliner");
-    ULONG nParaCount = pOutl->GetParagraphCount();
-    BOOL bDisable = nParaCount == 0;
-    if (!bDisable && nParaCount == 1)
+    DBG_ASSERT(pOutl, "OutlineViewShell::GetMenuState(), no outliner? Fatality!");
+    if( !pOutl )
+        return;
+
+    // 'Alles auswaehlen' zulassen?
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SELECTALL ) )
     {
-        String aTest( pOutl->GetText( pOutl->GetParagraph( 0 ) ) );
-        if (aTest.Len() == 0)
+        ULONG nParaCount = pOutl->GetParagraphCount();
+        BOOL bDisable = nParaCount == 0;
+        if (!bDisable && nParaCount == 1)
         {
-            bDisable = TRUE;
+            String aTest( pOutl->GetText( pOutl->GetParagraph( 0 ) ) );
+            if (aTest.Len() == 0)
+            {
+                bDisable = TRUE;
+            }
         }
+        if (bDisable)
+            rSet.DisableItem(SID_SELECTALL);
     }
-    if (bDisable)
-        rSet.DisableItem(SID_SELECTALL);
 
     // Status des Lineals setzen
     rSet.Put( SfxBoolItem( SID_RULER, HasRuler() ) );
@@ -1413,7 +1411,7 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
     else
         pOutl->SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);  // Farbansicht einschalten
 
-    USHORT nPage = pFrameView->GetSelectedPage();
+    USHORT nPage = mpFrameView->GetSelectedPage();
     pLastPage = GetDoc()->GetSdPage( nPage, PK_STANDARD );
     pOlView->SetActualPage(pLastPage);
 }
@@ -1434,12 +1432,12 @@ void OutlineViewShell::WriteFrameViewData()
     BOOL bNoColor = FALSE;
     if (nCntrl & EE_CNTRL_NOCOLORS)
         bNoColor = TRUE;
-    pFrameView->SetNoColors(bNoColor);
-    pFrameView->SetNoAttribs( pOutl->IsFlatMode() );
+    mpFrameView->SetNoColors(bNoColor);
+    mpFrameView->SetNoAttribs( pOutl->IsFlatMode() );
     SdPage* pActualPage = pOlView->GetActualPage();
     DBG_ASSERT(pActualPage, "No current page");
     if( pActualPage )
-        pFrameView->SetSelectedPage((pActualPage->GetPageNum() - 1) / 2);
+        mpFrameView->SetSelectedPage((pActualPage->GetPageNum() - 1) / 2);
 }
 
 
@@ -1449,7 +1447,7 @@ void OutlineViewShell::WriteFrameViewData()
 |*
 \************************************************************************/
 
-void OutlineViewShell::ExecStatusBar(SfxRequest& rReq)
+void OutlineViewShell::ExecStatusBar(SfxRequest&)
 {
 }
 
@@ -1867,8 +1865,8 @@ String OutlineViewShell::GetPageRangeString()
     String aStrPageRange;
     BOOL bFirstPageNo = TRUE;
     BOOL bOpenRange = FALSE;
-    USHORT nLastPage;
-    USHORT nLastUsedPage = -1;
+    USHORT nLastPage = 0;
+    USHORT nLastUsedPage = (USHORT)-1;
 
     USHORT nPageCount = 0;
     for( USHORT n = 0; n< GetDoc()->GetPageCount(); n++ )
@@ -1947,22 +1945,8 @@ String OutlineViewShell::GetPageRangeString()
     return aStrPageRange;
 }
 
-void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
+void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL )
 {
-/*
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-    ::Outliner* pOutliner = pOutlinerView->GetOutliner();
-    List* pList = pOutlinerView->CreateSelectionList();
-    Paragraph* pPara = (Paragraph*)pList->First();
-    delete pList;
-
-    if( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) != 0 )
-        pPara = pOlView->GetPrevTitle( pPara );
-
-    UpdateTitleObject( pPage, pPara );
-    UpdateOutlineObject( pPage, pPara );
-*/
-
     const bool bNewPage = pPage != pLastPage;
     pLastPage = pPage;
     if (bNewPage)
@@ -1971,9 +1955,6 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
         SetCurrentPage(pPage);
     }
 }
-
-
-
 
 /*************************************************************************
 |*
@@ -2231,7 +2212,7 @@ void OutlineViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Seque
 
     ViewShell::ReadUserDataSequence( rSequence, bBrowse );
 
-    ReadFrameViewData( pFrameView );
+    ReadFrameViewData( mpFrameView );
 }
 
 void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
