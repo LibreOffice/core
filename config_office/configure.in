@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-12-01 14:52:44 $
+dnl * Date: $Date: 2006-12-12 16:05:16 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.189 $ )
+AC_REVISION( $Revision: 1.190 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -278,9 +278,9 @@ AC_ARG_WITH(system-libxml,
 AC_ARG_WITH(system-python,
 [  --with-system-python    Use python already on system
 ],,)
-#AC_ARG_WITH(system-icu,
-#[  --with-system-icu       Use icu already on system
-#],,)
+AC_ARG_WITH(system-icu,
+[  --with-system-icu       Use icu already on system
+],,)
 AC_ARG_WITH(system-db,
 [  --with-system-db        Use berkeley db already on system
 ],,)
@@ -3582,32 +3582,32 @@ else
 fi
 AC_SUBST(SYSTEM_SANE_HEADER)
 
-# DISABLED; INCOMPLETE
 dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
-#AC_MSG_CHECKING([which icu to use])
-#if test -n "$with_system_icu" -o -n "$with_system_libs" && \
-#	test "$with_system_icu" != "no"; then
-#   AC_MSG_RESULT([external])
-#   SYSTEM_ICU=YES
-#   AC_MSG_CHECKING([for unicode/rbbi.h])
-#   AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
-#   AC_PATH_PROG(SYSTEM_GENBRK, genbrk)
-#   if test -z "$SYSTEM_GENBRK"; then
-#      AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
-#   fi
-#   AC_PATH_PROG(SYSTEM_GENCCODE, genccode)
-#   if test -z "$SYSTEM_GENCCODE"; then
-#      AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode"\])
-#   fi
-#else
-#    AC_MSG_RESULT([internal])
-#    SYSTEM_ICU=NO
-#fi
-#AC_SUBST(SYSTEM_ICU)
-#AC_SUBST(SYSTEM_GENBRK)
-#AC_SUBST(SYSTEM_GENCCODE)
+AC_MSG_CHECKING([which icu to use])
+if test -n "$with_system_icu" -o -n "$with_system_libs" && \
+	test "$with_system_icu" != "no"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_ICU=YES
+   AC_MSG_CHECKING([for unicode/rbbi.h])
+   AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
+   AC_PATH_PROG(SYSTEM_GENBRK, genbrk)
+   if test -z "$SYSTEM_GENBRK"; then
+      AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
+   fi
+   AC_PATH_PROG(SYSTEM_GENCCODE, genccode)
+   if test -z "$SYSTEM_GENCCODE"; then
+      AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode"\])
+   fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_ICU=NO
+    BUILD_TYPE="$BUILD_TYPE ICU"
+fi
+AC_SUBST(SYSTEM_ICU)
+AC_SUBST(SYSTEM_GENBRK)
+AC_SUBST(SYSTEM_GENCCODE)
 
 dnl ===================================================================
 dnl Checks for libraries.
