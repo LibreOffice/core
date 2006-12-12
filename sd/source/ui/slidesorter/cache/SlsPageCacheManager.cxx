@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:04:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,9 +375,9 @@ void PageCacheManager::InvalidatePreviewBitmap (
         RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
         if (iQueue != mpRecentlyUsedPageCaches->end())
         {
-            RecentlyUsedQueue::const_iterator iCache;
-            for (iCache=iQueue->second.begin(); iCache!=iQueue->second.end(); ++iCache)
-                iCache->mpCache->InvalidateBitmap(pKey);
+            RecentlyUsedQueue::const_iterator iCache2;
+            for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
+                iCache2->mpCache->InvalidateBitmap(pKey);
         }
     }
 }
