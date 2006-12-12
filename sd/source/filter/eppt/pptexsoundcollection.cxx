@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexsoundcollection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:21:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@
 namespace ppt
 {
 
-ExSoundEntry::ExSoundEntry( const String& rString ) :
-    aSoundURL( rString ),
-    nFileSize( 0 )
+ExSoundEntry::ExSoundEntry( const String& rString )
+:   nFileSize( 0 )
+,   aSoundURL( rString )
 {
     try
     {
@@ -188,12 +188,12 @@ sal_uInt32 ExSoundCollection::GetId( const String& rString )
     sal_uInt32 nSoundId = 0;
     if( rString.Len() )
     {
-        const sal_uInt32 nCount = Count();
+        const sal_uInt32 nSoundCount = Count();
 
-        for( ; nSoundId < nCount; nSoundId++ )
+        for( ; nSoundId < nSoundCount; nSoundId++ )
             if( ImplGetByIndex( nSoundId )->IsSameURL( rString ) )
                 break;
-        if ( nSoundId++ == nCount )
+        if ( nSoundId++ == nSoundCount )
         {
             ExSoundEntry* pEntry = new ExSoundEntry( rString );
             if ( pEntry->GetFileSize() )
@@ -216,11 +216,11 @@ const ExSoundEntry* ExSoundCollection::ImplGetByIndex( sal_uInt32 nIndex ) const
 sal_uInt32 ExSoundCollection::GetSize() const
 {
     sal_uInt32 nSize = 0;
-    sal_uInt32 i, nCount = Count();
-    if ( nCount )
+    sal_uInt32 i, nSoundCount = Count();
+    if ( nSoundCount )
     {
         nSize += 8 + 12;    // size of SoundCollectionContainerHeader + SoundCollAtom
-        for ( i = 0; i < nCount; i++ )
+        for ( i = 0; i < nSoundCount; i++ )
             nSize += ImplGetByIndex( i )->GetSize( i + 1 );
     }
     return nSize;
@@ -228,20 +228,20 @@ sal_uInt32 ExSoundCollection::GetSize() const
 
 void ExSoundCollection::Write( SvStream& rSt )
 {
-    sal_uInt32 i, nCount = Count();
-    if ( nCount )
+    sal_uInt32 i, nSoundCount = Count();
+    if ( nSoundCount )
     {
         // create SoundCollection Container
         rSt << (sal_uInt16)0xf << (sal_uInt16)EPP_SoundCollection << (sal_uInt32)( GetSize() - 8 );
 
         // create SoundCollAtom ( reference to the next free SoundId );
-        rSt << (sal_uInt32)( EPP_SoundCollAtom << 16 ) << (sal_uInt32)4 << nCount;
+        rSt << (sal_uInt32)( EPP_SoundCollAtom << 16 ) << (sal_uInt32)4 << nSoundCount;
 
-        for ( i = 0; i < nCount; i++ )
+        for ( i = 0; i < nSoundCount; i++ )
             ((ExSoundEntry*)List::GetObject( i ))->Write( rSt, i + 1 );
     }
 }
 
 
-}; // namespace ppt;
+} // namespace ppt;
 
