@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,16 +167,16 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
 
     CheckLineTo (rReq);
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() &&
-         pDrView && !pDrView->IsPresObjSelected() )
+         mpDrawView && !mpDrawView->IsPresObjSelected() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
         const SfxPoolItem* pItem;
 
-        if ( pDrView->IsTextEdit() )
-            pDrView->SdrEndTextEdit();
+        if ( mpDrawView->IsTextEdit() )
+            mpDrawView->SdrEndTextEdit();
 
         if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
              SFX_ITEM_SET &&
@@ -188,7 +188,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)GetViewFrame()->
                                         GetChildWindow(nId)->GetWindow();
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
+            pDlg->CreateStdFormObj(*mpDrawView, *mpDrawView->GetSdrPageView(),
                                     rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
@@ -200,7 +200,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
             }
         }
         else
-            pDrView->SetAttributes(rSet);
+            mpDrawView->SetAttributes(rSet);
     }
 }
 
@@ -212,7 +212,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
 
 void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 {
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
@@ -253,7 +253,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         }
 
         SfxItemSet aSet( GetDoc()->GetPool() );
-        pDrView->GetAttributes( aSet );
+        mpDrawView->GetAttributes( aSet );
         rSet.Set( aSet );
     }
 }
@@ -264,7 +264,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void DrawViewShell::ExecObjPalette( SfxRequest& rReq )
+void DrawViewShell::ExecObjPalette( SfxRequest& )
 {
     // Diese Methode muss erhalten bleiben, bis
     // der/die Slots entfernt wurden;
@@ -277,7 +277,7 @@ void DrawViewShell::ExecObjPalette( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void DrawViewShell::GetObjPaletteState(SfxItemSet& rSet)
+void DrawViewShell::GetObjPaletteState(SfxItemSet& )
 {
     // Diese Methode muss erhalten bleiben, bis
     // der/die Slots entfernt wurden;
@@ -316,9 +316,9 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
             if ( pAnimWin )
             {
                 if( nSId == SID_ANIMATOR_ADD )
-                    pAnimWin->AddObj( *pDrView );
+                    pAnimWin->AddObj( *mpDrawView );
                 else if( nSId == SID_ANIMATOR_CREATE )
-                    pAnimWin->CreateAnimObj( *pDrView );
+                    pAnimWin->CreateAnimObj( *mpDrawView );
             }
         }
         break;
@@ -344,7 +344,7 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     // Hier koennten Buttons etc. disabled werden
     UINT16 nValue;
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount == 0 )
@@ -454,16 +454,16 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
     {
         case ( SID_BMPMASK_PIPETTE ) :
         {
-            bPipette = ( (const SfxBoolItem&) ( rReq.GetArgs()->
+            mbPipette = ( (const SfxBoolItem&) ( rReq.GetArgs()->
                        Get( SID_BMPMASK_PIPETTE ) ) ).GetValue();
         }
         break;
 
         case ( SID_BMPMASK_EXEC ) :
         {
-            SdrGrafObj* pObj = (SdrGrafObj*) pDrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+            SdrGrafObj* pObj = (SdrGrafObj*) mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
-            if ( pObj && !pDrView->IsTextEdit() )
+            if ( pObj && !mpDrawView->IsTextEdit() )
             {
                 SdrGrafObj* pNewObj = (SdrGrafObj*) pObj->Clone();
                 BOOL        bCont = TRUE;
@@ -491,19 +491,19 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
                     if( aNewGraphic != rOldGraphic )
                     {
-                        SdrPageView* pPV = pDrView->GetSdrPageView();
+                        SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
                         pNewObj->SetEmptyPresObj( FALSE );
                         pNewObj->SetGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
                                              SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                              Mask( pNewObj->GetGraphic() ) );
 
-                        String aStr( pDrView->GetDescriptionOfMarkedObjects() );
+                        String aStr( mpDrawView->GetDescriptionOfMarkedObjects() );
                         aStr += (sal_Unicode)( ' ' ), aStr += String( SdResId( STR_EYEDROPPER ) );
 
-                        pDrView->BegUndo( aStr );
-                        pDrView->ReplaceObjectAtView( pObj, *pPV, pNewObj );
-                        pDrView->EndUndo();
+                        mpDrawView->BegUndo( aStr );
+                        mpDrawView->ReplaceObjectAtView( pObj, *pPV, pNewObj );
+                        mpDrawView->EndUndo();
                     }
                 }
             }
@@ -523,7 +523,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
 void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
-    const SdrMarkList&  rMarkList = pDrView->GetMarkedObjectList();
+    const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
     const SdrObject*    pObj = NULL;
     USHORT              nId = SvxBmpMaskChildWindow::GetChildWindowId();
     SvxBmpMask*         pDlg = NULL;
@@ -541,7 +541,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     // valid graphic object?
-    if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->IsEPS() && !pDrView->IsTextEdit() )
+    if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->IsEPS() && !mpDrawView->IsTextEdit() )
         bEnable = TRUE;
 
     // put value
@@ -561,7 +561,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
     {
         case SID_FORMATPAINTBRUSH:
         {
-            SdFormatClipboard* pFormatClipboard = GetDocSh()->pFormatClipboard;
+            SdFormatClipboard* pFormatClipboard = GetDocSh()->mpFormatClipboard;
             if(pFormatClipboard)
             {
                 if( pFormatClipboard->HasContent() )
@@ -581,8 +581,8 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
                                                 SID_FORMATPAINTBRUSH)).GetValue());
                     }
 
-                    pFormatClipboard->Copy( *pDrView, bPersistentCopy );
-                    SetCurrentFunction( FuFormatPaintBrush::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+                    pFormatClipboard->Copy( *mpDrawView, bPersistentCopy );
+                    SetCurrentFunction( FuFormatPaintBrush::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
                     GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
                 }
             }
@@ -639,7 +639,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_EXTRUSION_LIGHTING_FLOATER:
         case SID_EXTRUSION_SURFACE_FLOATER:
         case SID_EXTRUSION_DEPTH_DIALOG:
-            svx::ExtrusionBar::execute( pDrView, rReq, GetViewFrame()->GetBindings() );
+            svx::ExtrusionBar::execute( mpDrawView, rReq, GetViewFrame()->GetBindings() );
             Cancel();
             rReq.Ignore ();
             break;
@@ -654,7 +654,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
         case SID_FONTWORK_ALIGNMENT_FLOATER:
         case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
-            svx::FontworkBar::execute( pDrView, rReq, GetViewFrame()->GetBindings() );
+            svx::FontworkBar::execute( mpDrawView, rReq, GetViewFrame()->GetBindings() );
             Cancel();
             rReq.Ignore ();
             break;
@@ -769,10 +769,10 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             // ist nicht mehr noetig, falls der Parameter TRUE uebergeben wird. Dann wird sofort und
             // ohne Benutzereingriff ein gekippter Rotationskoerper mit einer Achse links neben dem
             // Umschliessenden Rechteck der slektierten Objekte gezeichnet.
-            pDrView->SdrEndTextEdit();
+            mpDrawView->SdrEndTextEdit();
             if(GetActiveWindow())
                 GetActiveWindow()->EnterWait();
-            pDrView->End3DCreation(TRUE);
+            mpDrawView->End3DCreation(TRUE);
             Cancel();
             rReq.Ignore();
             if(GetActiveWindow())
@@ -782,29 +782,29 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_PRESENTATION_DLG:
         {
-            SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_CUSTOMSHOW_DLG:
         {
-            SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_EXPAND_PAGE:
         {
-            SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_SUMMARY_PAGE:
         {
-            pDrView->SdrEndTextEdit();
-            SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            mpDrawView->SdrEndTextEdit();
+            SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
