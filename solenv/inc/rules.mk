@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 15:10:45 $
+#   last change: $Author: kz $ $Date: 2006-12-12 15:50:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -588,6 +588,26 @@ $(COMMONMISC)$/$(TARGET)$/%.xrb : %.xrb
     +$(RENAME) $@.$(INPATH) $@
     +-$(RM) $@.$(INPATH)
 
+$(COMMONMISC)$/$(MYPATH)$/%.xrm : %.xrm
+    +-$(MKDIRHIER) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+
+$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
+    +-$(MKDIRHIER) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+
+$(COMMONMISC)$/%.xrm : %.xrm
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
 .ENDIF			# "$(WITH_LANG)"!=""
 
 .IF "$(WITH_LANG)"!=""
