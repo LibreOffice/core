@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoanim.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:17:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,20 +134,10 @@ void UndoAnimation::Redo()
     }
 }
 
-void UndoAnimation::Repeat()
-{
-}
-
 String UndoAnimation::GetComment() const
 {
     return String(SdResId(STR_UNDO_ANIMATION));
 }
-
-BOOL UndoAnimation::CanRepeat(SfxRepeatTarget&) const
-{
-    return FALSE;
-}
-
 
 struct UndoTransitionImpl
 {
@@ -166,8 +156,8 @@ struct UndoTransitionImpl
     double mfOldTransitionDuration;
 };
 
-UndoTransition::UndoTransition( SdDrawDocument* pDoc, SdPage* pThePage )
-: SdUndoAction( pDoc ), mpImpl( new UndoTransitionImpl )
+UndoTransition::UndoTransition( SdDrawDocument* _pDoc, SdPage* pThePage )
+: SdUndoAction( _pDoc ), mpImpl( new UndoTransitionImpl )
 {
     mpImpl->mpPage = pThePage;
 
@@ -211,18 +201,9 @@ void UndoTransition::Redo()
     mpImpl->mpPage->mfTransitionDuration = mpImpl->mfNewTransitionDuration;
 }
 
-void UndoTransition::Repeat()
-{
-}
-
 String UndoTransition::GetComment() const
 {
     return String(SdResId(STR_UNDO_SLIDE_PARAMS));
-}
-
-BOOL UndoTransition::CanRepeat(SfxRepeatTarget&) const
-{
-    return FALSE;
 }
 
 }
