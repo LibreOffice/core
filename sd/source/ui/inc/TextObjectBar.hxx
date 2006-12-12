@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextObjectBar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:27:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ class TextObjectBar
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDDRAWTEXTOBJECTBAR);
+    SFX_DECL_INTERFACE(SD_IF_SDDRAWTEXTOBJECTBAR)
 
     TextObjectBar (
         ViewShell* pSdViewShell,
@@ -75,9 +75,8 @@ public:
     virtual void Command( const CommandEvent& rCEvt );
 
 private:
-    SfxItemPool& rPool;
-    ViewShell* pViewShell;
-    ::sd::View* pView;
+    ViewShell* mpViewShell;
+    ::sd::View* mpView;
 };
 
 } // end of namespace sd
