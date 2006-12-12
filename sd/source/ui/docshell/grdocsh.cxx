@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:45:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,16 +75,9 @@ using namespace sd;
 #define GraphicDocShell
 #include "sdgslots.hxx"
 
-namespace sd {
-
-/*************************************************************************
-|*
-|* SFX-Slotmaps und -Definitionen
-|*
-\************************************************************************/
+namespace sd
+{
 TYPEINIT1(GraphicDocShell, DrawDocShell);
-
-
 
 SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
 {
@@ -94,39 +87,13 @@ SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
 
 SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFXOBJECTSHELL_STD_NORMAL, "sdraw" )
 
-/*************************************************************************
-|*
-|* Konstruktor 1
-|*
-\************************************************************************/
-
 GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
                                      BOOL bDataObject,
                                      DocumentType eDocType) :
     DrawDocShell(eMode, bDataObject, eDocType)
 {
-    SetStyleFamily( 2 ); //CL: eigentlich SFX_STYLE_FAMILY_PARA, aber der stylist ist sch....
+    SetStyleFamily( 2 ); // SFX_STYLE_FAMILY_PARA
 }
-
-/*************************************************************************
-|*
-|* Konstruktor 2
-|*
-\************************************************************************/
-
-GraphicDocShell::GraphicDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
-                                     BOOL bDataObject,
-                                     DocumentType eDocType) :
-    DrawDocShell(pDoc, eMode, bDataObject, eDocType)
-{
-    SetStyleFamily( 2 ); //CL: eigentlich SFX_STYLE_FAMILY_PARA, aber der stylist ist sch....
-}
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 GraphicDocShell::~GraphicDocShell()
 {
