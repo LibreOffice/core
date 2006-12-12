@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationViewShellBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:31:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,10 @@ SFX_IMPL_VIEWFACTORY(PresentationViewShellBase, SdResId(STR_DEFAULTVIEW))
 */
 SfxViewFactory* PresentationViewShellBase::pFactory;
 SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
-    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+    SfxViewFrame *_pFrame, SfxViewShell *pOldView)
 {
     PresentationViewShellBase* pBase =
-        new PresentationViewShellBase(pFrame, pOldView);
+        new PresentationViewShellBase(_pFrame, pOldView);
     pBase->LateInit();
     return pBase;
 }
@@ -98,17 +98,17 @@ void PresentationViewShellBase::InitFactory()
 
 
 PresentationViewShellBase::PresentationViewShellBase (
-    SfxViewFrame* pFrame,
+    SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (pFrame, pOldShell, ViewShell::ST_PRESENTATION)
+    : ViewShellBase (_pFrame, pOldShell, ViewShell::ST_PRESENTATION)
 {
     GetUpdateLockManager().Disable();
 
     // Hide the automatic (non-context sensitive) tool bars.
-    if (pFrame!=NULL && pFrame->GetFrame()!=NULL)
+    if (_pFrame!=NULL && _pFrame->GetFrame()!=NULL)
     {
         Reference<beans::XPropertySet> xFrameSet (
-            pFrame->GetFrame()->GetFrameInterface(),
+            _pFrame->GetFrame()->GetFrameInterface(),
             UNO_QUERY);
         if (xFrameSet.is())
         {
