@@ -4,9 +4,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:40:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,14 +94,14 @@ namespace sd {
 
 MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 ) :
             ModalDialog     ( pParent, SdResId( DLG_MORPH ) ),
-            aBtnOK          ( this, SdResId( BTN_OK ) ),
-            aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
-            aBtnHelp        ( this, SdResId( BTN_HELP ) ),
             aGrpPreset      ( this, SdResId( GRP_PRESET ) ),
             aFtSteps        ( this, SdResId( FT_STEPS ) ),
             aMtfSteps       ( this, SdResId( MTF_STEPS ) ),
             aCbxAttributes  ( this, SdResId( CBX_ATTRIBUTES ) ),
-            aCbxOrientation ( this, SdResId( CBX_ORIENTATION ) )
+            aCbxOrientation ( this, SdResId( CBX_ORIENTATION ) ),
+            aBtnOK          ( this, SdResId( BTN_OK ) ),
+            aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
+            aBtnHelp        ( this, SdResId( BTN_HELP ) )
 {
     FreeResource();
     LoadSettings();
