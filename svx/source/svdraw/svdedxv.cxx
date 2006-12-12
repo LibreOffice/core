@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:41:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -770,7 +770,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
             if(!IsMarkHdlWhenTextEdit())
             {
-                AdjustMarkHdl(sal_True);
+                AdjustMarkHdl(); //HMHsal_True);
             }
 
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
@@ -880,11 +880,11 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
     mxTextEditObj.reset(0);
     pTextEditPV=NULL;
     pTextEditWin=NULL;
-    if (bMarkHdlWhenTextEdit) {
-        HideMarkHdl();
-    }
+    //HMHif (bMarkHdlWhenTextEdit) {
+    //HMH    HideMarkHdl();
+    //HMH}
     aHdl.SetMoveOutside(FALSE);
-    ShowMarkHdl();
+    //HMHShowMarkHdl();
 
     return sal_False;
 }
@@ -995,7 +995,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             // be shown again
             if(!IsMarkHdlWhenTextEdit())
             {
-                AdjustMarkHdl(sal_True);
+                AdjustMarkHdl(); //HMHsal_True);
             }
         }
         // alle OutlinerViews loeschen
@@ -1026,14 +1026,15 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
         if (pTEWin!=NULL) {
             pTEWin->SetCursor(pTECursorMerker);
         }
-        if (bMarkHdlWhenTextEdit) {
-            HideMarkHdl();
-        }
+//HMH        if (bMarkHdlWhenTextEdit) {
+//HMH            HideMarkHdl();
+//HMH        }
         aHdl.SetMoveOutside(FALSE);
-        if (eRet==SDRENDTEXTEDIT_UNCHANGED) {
-            ShowMarkHdl(); // Handles kommen ansonsten via Broadcast
-        }
-        else
+        if (eRet!=SDRENDTEXTEDIT_UNCHANGED)
+//HMH       {
+//HMH            ShowMarkHdl(); // Handles kommen ansonsten via Broadcast
+//HMH        }
+//HMH       else
         {
             GetMarkedObjectListWriteAccess().SetNameDirty();
         }
