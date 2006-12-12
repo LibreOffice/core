@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Ruler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:13:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:37:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ public:
 
     BOOL IsHorizontal() const { return bHorz; }
 
+    using ::Ruler::SetNullOffset;
 protected:
     ::sd::View* pSdView;
     ::sd::Window* pSdWin;
