@@ -4,9 +4,9 @@
  *
  *  $RCSfile: randomnode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:24:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,8 @@ using namespace ::com::sun::star::animations;
 namespace sd
 {
 
-class RandomAnimationNode : public ::cppu::WeakImplHelper5< XTimeContainer, XEnumerationAccess, XCloneable, XServiceInfo, XInitialization >
+typedef ::cppu::WeakImplHelper5< XTimeContainer, XEnumerationAccess, XCloneable, XServiceInfo, XInitialization > RandomAnimationNodeBase;
+class RandomAnimationNode : public RandomAnimationNodeBase
 {
 public:
     RandomAnimationNode( const RandomAnimationNode& rNode );
@@ -207,7 +208,7 @@ Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetCla
 
 // --------------------------------------------------------------------
 
-Reference< XInterface > SAL_CALL RandomNode_createInstance( const Reference< XMultiServiceFactory > & _rxFactory )
+Reference< XInterface > SAL_CALL RandomNode_createInstance( const Reference< XMultiServiceFactory > &  )
 {
     Reference< XInterface > xInt( static_cast<XWeak*>( new RandomAnimationNode() ) );
     return xInt;
@@ -235,7 +236,15 @@ Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( Runti
 // --------------------------------------------------------------------
 
 RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
-:   mnPresetClass( rNode.mnPresetClass ),
+:   RandomAnimationNodeBase(),
+    mnPresetClass( rNode.mnPresetClass ),
+    maBegin( rNode.maBegin ),
+    maDuration( rNode.maDuration ),
+    maEnd( rNode.maEnd ),
+    maEndSync( rNode.maEndSync ),
+    maRepeatCount( rNode.maRepeatCount ),
+    maRepeatDuration( rNode.maRepeatDuration ),
+    maTarget( rNode.maTarget ),
     mnFill( rNode.mnFill ),
     mnFillDefault( rNode.mnFillDefault ),
     mnRestart( rNode.mnRestart ),
@@ -243,14 +252,7 @@ RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
     mfAcceleration( rNode.mfAcceleration ),
     mfDecelerate( rNode.mfDecelerate ),
     mbAutoReverse( rNode.mbAutoReverse ),
-    maUserData( rNode.maUserData ),
-    maBegin( rNode.maBegin ),
-    maDuration( rNode.maDuration ),
-    maEnd( rNode.maEnd ),
-    maEndSync( rNode.maEndSync ),
-    maRepeatCount( rNode.maRepeatCount ),
-    maRepeatDuration( rNode.maRepeatDuration ),
-    maTarget( rNode.maTarget )
+    maUserData( rNode.maUserData )
 {
 }
 
@@ -642,13 +644,13 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
     {
         // no presets? give empty node!
         Reference< XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
-        Reference< XEnumerationAccess > aEnumAccess(
+        Reference< XEnumerationAccess > aEmptyEnumAccess(
             xServiceFactory->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.animations.ParallelTimeContainer" ))),
             UNO_QUERY );
 
-        if( aEnumAccess.is() )
-            xEnum = aEnumAccess->createEnumeration();
+        if( aEmptyEnumAccess.is() )
+            xEnum = aEmptyEnumAccess->createEnumeration();
     }
 
     return xEnum;
@@ -658,7 +660,7 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
 
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild )
+Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
     throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     return appendChild( newChild );
@@ -667,7 +669,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertBefore( const Re
 // --------------------------------------------------------------------
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild )
+Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
     throw (IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     return appendChild( newChild );
@@ -676,7 +678,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertAfter( const Ref
 // --------------------------------------------------------------------
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& oldChild )
+Reference< XAnimationNode > SAL_CALL RandomAnimationNode::replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
     throw( IllegalArgumentException, NoSuchElementException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     return appendChild( newChild );
@@ -697,8 +699,6 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::removeChild( const Ref
 Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Reference< XAnimationNode >& newChild )
     throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    Any aTarget;
-
     Reference< XAnimate > xAnimate( newChild, UNO_QUERY );
     if( xAnimate.is() )
     {
