@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grviewsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ GraphicViewShell::GraphicViewShell (
         PK_STANDARD,
         pFrameView)
 {
-    Construct ();
+    ConstructGraphicViewShell();
 }
 
 /*************************************************************************
@@ -84,7 +84,7 @@ GraphicViewShell::GraphicViewShell (
     const DrawViewShell& rShell)
     : DrawViewShell (pFrame, pParentWindow, rShell)
 {
-    Construct ();
+    ConstructGraphicViewShell();
 }
 
 
@@ -97,7 +97,7 @@ GraphicViewShell::~GraphicViewShell (void)
 
 
 
-void GraphicViewShell::Construct (void)
+void GraphicViewShell::ConstructGraphicViewShell(void)
 {
     meShellType = ST_DRAW;
 
@@ -114,7 +114,7 @@ void GraphicViewShell::Construct (void)
 
 void GraphicViewShell::ChangeEditMode (
     EditMode eMode,
-    bool bIsLayerModeActive)
+    bool )
 {
     // There is no page tab that could be shown instead of the layer tab.
     // Therefore we have it allways visible regardless of what the caller
@@ -135,25 +135,25 @@ void GraphicViewShell::ArrangeGUIElements (void)
 
         if (aSize.Width() == 0)
         {
-            if (pFrameView->GetTabCtrlPercent() == 0.0)
+            if (mpFrameView->GetTabCtrlPercent() == 0.0)
                 aSize.Width() = TABCONTROL_INITIAL_SIZE;
             else
                 aSize.Width() = FRound(aFrameSize.Width()
-                    * pFrameView->GetTabCtrlPercent());
+                    * mpFrameView->GetTabCtrlPercent());
         }
         aSize.Height() = GetParentWindow()->GetSettings().GetStyleSettings()
             .GetScrollBarSize();
 
-        Point aPos (0, aViewSize.Height() - aSize.Height());
+        Point aPos (0, maViewSize.Height() - aSize.Height());
 
         mpLayerTabBar->SetPosSizePixel (aPos, aSize);
 
         if (aFrameSize.Width() > 0)
-            pFrameView->SetTabCtrlPercent (
-                (double) aTabControl.GetSizePixel().Width()
+            mpFrameView->SetTabCtrlPercent (
+                (double) maTabControl.GetSizePixel().Width()
                 / aFrameSize.Width());
         else
-            pFrameView->SetTabCtrlPercent( 0.0 );
+            mpFrameView->SetTabCtrlPercent( 0.0 );
     }
 
     DrawViewShell::ArrangeGUIElements();
@@ -164,8 +164,8 @@ void GraphicViewShell::ArrangeGUIElements (void)
 
 IMPL_LINK(GraphicViewShell, TabBarSplitHandler, TabBar*, pTabBar)
 {
-    const long int nMax = aViewSize.Width()
-        - aScrBarWH.Width()
+    const long int nMax = maViewSize.Width()
+        - maScrBarWH.Width()
         - pTabBar->GetPosPixel().X();
 
     Size aTabSize = pTabBar->GetSizePixel();
@@ -176,7 +176,7 @@ IMPL_LINK(GraphicViewShell, TabBarSplitHandler, TabBar*, pTabBar)
     Point aPos = pTabBar->GetPosPixel();
     aPos.X() += aTabSize.Width();
 
-    Size aScrSize (nMax - aTabSize.Width(), aScrBarWH.Height());
+    Size aScrSize (nMax - aTabSize.Width(), maScrBarWH.Height());
     mpHorizontalScrollBar->SetPosSizePixel(aPos, aScrSize);
 
     return 0;
