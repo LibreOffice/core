@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futxtatt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:58:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include <sfx2/request.hxx>
 #endif
 
-//CHINA001 #include <svx/textattr.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
@@ -87,15 +86,15 @@ FunctionReference FuTextAttrDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin,
 
 void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
 {
-    SfxItemSet aNewAttr( pDoc->GetPool() );
-    pView->GetAttributes( aNewAttr );
+    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aNewAttr );
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, ResId( RID_SVXDLG_TEXT ), pView );
+        SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, ResId( RID_SVXDLG_TEXT ), mpView );
 
         USHORT nResult = pDlg->Execute();
 
@@ -117,7 +116,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
         }
         delete( pDlg );
     }
-    pView->SetAttributes( *pArgs );
+    mpView->SetAttributes( *pArgs );
 }
 
 
