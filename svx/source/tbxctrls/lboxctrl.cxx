@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:21:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,9 +180,12 @@ void SvxPopupWindowListBox::PopupModeEnd()
     SfxPopupWindow::PopupModeEnd();
     //FloatingWindow::PopupModeEnd();
 
-    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-    if (pShellWnd)
-        pShellWnd->GrabFocus();
+    if( SfxViewShell::Current() )
+    {
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        if (pShellWnd)
+            pShellWnd->GrabFocus();
+    }
 }
 
 
