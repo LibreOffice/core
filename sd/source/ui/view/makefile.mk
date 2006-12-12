@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-08 15:51:08 $
+#   last change: $Author: kz $ $Date: 2006-12-12 19:18:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ TARGET=view
 
 AUTOSEG=true
 PRJINC=..$/slidesorter
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -49,33 +50,6 @@ PRJINC=..$/slidesorter
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-
-EXCEPTIONSFILES=				\
-        $(SLO)$/Outliner.obj	\
-        $(SLO)$/drviews1.obj \
-        $(SLO)$/drviews8.obj \
-        $(SLO)$/drviewsa.obj \
-        $(SLO)$/outlnvsh.obj \
-        $(SLO)$/presvish.obj \
-        $(SLO)$/sdview.obj	\
-        $(SLO)$/sdview2.obj	\
-        $(SLO)$/sdview3.obj  \
-        $(SLO)$/sdview4.obj  \
-        $(SLO)$/slidvish.obj \
-        $(SLO)$/viewshe2.obj \
-        $(SLO)$/viewshel.obj \
-        $(SLO)$/FormShellManager.obj	\
-        $(SLO)$/PaneManager.obj			\
-        $(SLO)$/ToolBarManager.obj		\
-        $(SLO)$/UpdateLockManager.obj	\
-        $(SLO)$/ViewShellBase.obj		\
-        $(SLO)$/ViewShellImplementation.obj	\
-        $(SLO)$/ViewShellManager.obj
-
-EXCEPTIONSNOOPTFILES=\
-        $(SLO)$/drviews5.obj\
-        $(SLO)$/drviewsb.obj
 
 SLOFILES =	\
         $(SLO)$/sdview.obj	\
