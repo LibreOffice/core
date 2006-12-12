@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:42:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,9 +171,9 @@
 #endif
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
-#ifndef _SVDETC_HXX
-#include <svx/svdetc.hxx>
-#endif
+//#ifndef _SVDETC_HXX
+//#include <svx/svdetc.hxx>
+//#endif
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
 #endif
@@ -278,16 +278,16 @@ public:
 class HtmlState
 {
 private:
-    bool m_bColor;
-    bool m_bWeight;
-    bool m_bItalic;
-    bool m_bUnderline;
-    bool m_bStrike;
-    bool m_bLink;
-    Color m_aColor;
-    Color m_aDefColor;
-    String m_aLink;
-    String m_aTarget;
+    bool mbColor;
+    bool mbWeight;
+    bool mbItalic;
+    bool mbUnderline;
+    bool mbStrike;
+    bool mbLink;
+    Color maColor;
+    Color maDefColor;
+    String maLink;
+    String maTarget;
 
 public:
     HtmlState( Color aDefColor );
@@ -312,7 +312,7 @@ String HtmlState::Flush()
     aStr += SetItalic(false);
     aStr += SetUnderline(false);
     aStr += SetStrikeout(false);
-    aStr += SetColor(m_aDefColor);
+    aStr += SetColor(maDefColor);
     aStr += SetLink(aEmpty,aEmpty);
 
     return aStr;
@@ -323,13 +323,13 @@ String HtmlState::Flush()
 // =====================================================================
 HtmlState::HtmlState( Color aDefColor )
 {
-    m_bColor = false;
-    m_bWeight = false;
-    m_bItalic = false;
-    m_bUnderline = false;
-    m_bLink = false;
-    m_bStrike = false;
-    m_aDefColor = aDefColor;
+    mbColor = false;
+    mbWeight = false;
+    mbItalic = false;
+    mbUnderline = false;
+    mbLink = false;
+    mbStrike = false;
+    maDefColor = aDefColor;
 }
 
 // =====================================================================
@@ -339,12 +339,12 @@ String HtmlState::SetWeight( bool bWeight )
 {
     String aStr;
 
-    if(bWeight && !m_bWeight)
+    if(bWeight && !mbWeight)
         aStr.AppendAscii( "<b>" );
-    else if(!bWeight && m_bWeight)
+    else if(!bWeight && mbWeight)
         aStr.AppendAscii( "</b>" );
 
-    m_bWeight = bWeight;
+    mbWeight = bWeight;
     return aStr;
 }
 
@@ -355,12 +355,12 @@ String HtmlState::SetItalic( bool bItalic )
 {
     String aStr;
 
-    if(bItalic && !m_bItalic)
+    if(bItalic && !mbItalic)
         aStr.AppendAscii( "<i>" );
-    else if(!bItalic && m_bItalic)
+    else if(!bItalic && mbItalic)
         aStr.AppendAscii( "</i>" );
 
-    m_bItalic = bItalic;
+    mbItalic = bItalic;
     return aStr;
 }
 
@@ -371,12 +371,12 @@ String HtmlState::SetUnderline( bool bUnderline )
 {
     String aStr;
 
-    if(bUnderline && !m_bUnderline)
+    if(bUnderline && !mbUnderline)
         aStr.AppendAscii( "<u>" );
-    else if(!bUnderline && m_bUnderline)
+    else if(!bUnderline && mbUnderline)
         aStr.AppendAscii( "</u>" );
 
-    m_bUnderline = bUnderline;
+    mbUnderline = bUnderline;
     return aStr;
 }
 
@@ -387,12 +387,12 @@ String HtmlState::SetStrikeout( bool bStrike )
 {
     String aStr;
 
-    if(bStrike && !m_bStrike)
+    if(bStrike && !mbStrike)
         aStr.AppendAscii( "<strike>" );
-    else if(!bStrike && m_bStrike)
+    else if(!bStrike && mbStrike)
         aStr.AppendAscii( "</strike>" );
 
-    m_bStrike = bStrike;
+    mbStrike = bStrike;
     return aStr;
 }
 
@@ -403,24 +403,24 @@ String HtmlState::SetColor( Color aColor )
 {
     String aStr;
 
-    if(m_bColor && aColor == m_aColor)
+    if(mbColor && aColor == maColor)
         return aStr;
 
-    if(m_bColor)
+    if(mbColor)
     {
         aStr.AppendAscii( "</font>" );
-        m_bColor = false;
+        mbColor = false;
     }
 
-    if(aColor != m_aDefColor)
+    if(aColor != maDefColor)
     {
-        m_aColor = aColor;
+        maColor = aColor;
 
         aStr.AppendAscii( "<font color=\"" );
         aStr += HtmlExport::ColorToHTMLString(aColor);
         aStr.AppendAscii( "\">" );
 
-        m_bColor = true;
+        mbColor = true;
     }
 
     return aStr;
@@ -433,13 +433,13 @@ String HtmlState::SetLink( const String& aLink, const String& aTarget )
 {
     String aStr;
 
-    if(m_bLink&&m_aLink == aLink&&m_aTarget==aTarget)
+    if(mbLink&&maLink == aLink&&maTarget==aTarget)
         return aStr;
 
-    if(m_bLink)
+    if(mbLink)
     {
         aStr.AppendAscii( "</a>" );
-        m_bLink = false;
+        mbLink = false;
     }
 
     if(aLink.Len())
@@ -452,9 +452,9 @@ String HtmlState::SetLink( const String& aLink, const String& aTarget )
             aStr += aTarget;
         }
         aStr.AppendAscii( "\">" );
-        m_bLink = true;
-        m_aLink = aLink;
-        m_aTarget = aTarget;
+        mbLink = true;
+        maLink = aLink;
+        maTarget = aTarget;
     }
 
     return aStr;
@@ -473,43 +473,40 @@ HtmlExport::HtmlExport(
     const Sequence< PropertyValue >& rParams,
     SdDrawDocument* pExpDoc,
     ::sd::DrawDocShell* pDocShell )
-    :   pDoc(pExpDoc),
-        m_aPath( aPath ),
-        m_aHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
-        m_aIndexUrl(RTL_CONSTASCII_USTRINGPARAM("index")),
-
-        m_aHTMLHeader( RTL_CONSTASCII_USTRINGPARAM(
+    :   maPath( aPath ),
+        mpDoc(pExpDoc),
+        mpDocSh( pDocShell ),
+        meEC(NULL),
+        meMode( PUBLISH_HTML ),
+        mbContentsPage(false),
+        mnButtonThema(-1),
+        mnWidthPixel( PUB_LOWRES_WIDTH ),
+        meFormat( FORMAT_JPG ),
+        mbNotes(false),
+        mnCompression( -1 ),
+        mbDownload( false ),
+        mbSlideSound(true),
+        mbUserAttr(false),
+        mbDocColors(false),
+        maHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
+        mpHTMLFiles(NULL),
+        mpImageFiles(NULL),
+        mpPageNames(NULL),
+        mpTextFiles(NULL),
+        maIndexUrl(RTL_CONSTASCII_USTRINGPARAM("index")),
+        meScript( SCRIPT_ASP ),
+        maHTMLHeader( RTL_CONSTASCII_USTRINGPARAM(
             "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
             "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
-            "<html>\r\n<head>\r\n" ) ),
-        m_pImageFiles(NULL),
-        m_pHTMLFiles(NULL),
-        m_pPageNames(NULL),
-        m_pTextFiles(NULL),
-        m_bUserAttr(false),
-        m_bDocColors(false),
-        m_bContentsPage(false),
-        m_nButtonThema(-1),
-        m_bNotes(false),
-        m_eEC(NULL),
-        m_bSlideSound(true),
-        pDocSh( pDocShell ),
-        m_eMode( PUBLISH_HTML ),
-        m_eFormat( FORMAT_JPG ),
-        m_nCompression( -1 ),
-        m_nWidthPixel( PUB_LOWRES_WIDTH ),
-        m_bDownload( false ),
-        m_eScript( SCRIPT_ASP )
+            "<html>\r\n<head>\r\n" ) )
 {
-    FASTBOOL bChange = pDoc->IsChanged();
+    bool bChange = mpDoc->IsChanged();
 
-    USHORT nError = 0;
-
-    m_aIndexUrl += m_aHTMLExtension;
+    maIndexUrl += maHTMLExtension;
 
     InitExportParameters( rParams );
 
-    switch( m_eMode )
+    switch( meMode )
     {
     case PUBLISH_HTML:
     case PUBLISH_FRAMES:
@@ -523,7 +520,7 @@ HtmlExport::HtmlExport(
         break;
     }
 
-    pDoc->SetChanged(bChange);
+    mpDoc->SetChanged(bChange);
 }
 
 HtmlExport::~HtmlExport()
@@ -531,27 +528,27 @@ HtmlExport::~HtmlExport()
     // ------------------------------------------------------------------
     // Listen loeschen
     // ------------------------------------------------------------------
-    if(m_pImageFiles && m_pHTMLFiles && m_pPageNames && m_pTextFiles)
+    if(mpImageFiles && mpHTMLFiles && mpPageNames && mpTextFiles)
     {
-        for ( USHORT nSdPage = 0; nSdPage < m_nSdPageCount; nSdPage++)
+        for ( USHORT nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
-            delete m_pImageFiles[nSdPage];
-            delete m_pHTMLFiles[nSdPage];
-            delete m_pPageNames[nSdPage];
-            delete m_pTextFiles[nSdPage];
+            delete mpImageFiles[nSdPage];
+            delete mpHTMLFiles[nSdPage];
+            delete mpPageNames[nSdPage];
+            delete mpTextFiles[nSdPage];
         }
     }
 
-    delete[] m_pImageFiles;
-    delete[] m_pHTMLFiles;
-    delete[] m_pPageNames;
-    delete[] m_pTextFiles;
+    delete[] mpImageFiles;
+    delete[] mpHTMLFiles;
+    delete[] mpPageNames;
+    delete[] mpTextFiles;
 }
 
 /** get common export parameters from item set */
 void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams )
 {
-    m_bImpress = pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+    mbImpress = mpDoc && mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
     sal_Int32 nArgs = rParams.getLength();
     const PropertyValue* pParams = rParams.getConstArray();
@@ -562,18 +559,18 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_eMode = (HtmlPublishMode)temp;
+            meMode = (HtmlPublishMode)temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IndexURL" ) ) )
         {
             pParams->Value >>= aStr;
-            m_aIndexUrl = aStr;
+            maIndexUrl = aStr;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Format" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_eFormat = (PublishingFormat)temp;
+            meFormat = (PublishingFormat)temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Compression" ) ) )
         {
@@ -584,136 +581,136 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
                 xub_StrLen nPos = aTmp.Search( '%' );
                 if(nPos != STRING_NOTFOUND)
                     aTmp.Erase(nPos,1);
-                m_nCompression = (INT16)aTmp.ToInt32();
+                mnCompression = (INT16)aTmp.ToInt32();
             }
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_nWidthPixel = (sal_uInt16)temp;
+            mnWidthPixel = (sal_uInt16)temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseButtonSet" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_nButtonThema = (sal_Int16)temp;
+            mnButtonThema = (sal_Int16)temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsExportNotes" ) ) )
         {
-            if( m_bImpress )
+            if( mbImpress )
             {
                 sal_Bool temp;
                 pParams->Value >>= temp;
-                m_bNotes = temp;
+                mbNotes = temp;
             }
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsExportContentsPage" ) ) )
         {
             sal_Bool temp;
             pParams->Value >>= temp;
-            m_bContentsPage = temp;
+            mbContentsPage = temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Author" ) ) )
         {
             pParams->Value >>= aStr;
-            m_aAuthor = aStr;
+            maAuthor = aStr;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EMail" ) ) )
         {
             pParams->Value >>= aStr;
-            m_aEMail = aStr;
+            maEMail = aStr;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HomepageURL" ) ) )
         {
             pParams->Value >>= aStr;
-            m_aHomePage = aStr;
+            maHomePage = aStr;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserText" ) ) )
         {
             pParams->Value >>= aStr;
-            m_aInfo = aStr;
+            maInfo = aStr;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EnableDownload" ) ) )
         {
             sal_Bool temp;
             pParams->Value >>= temp;
-            m_bDownload = temp;
+            mbDownload = temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BackColor" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_aBackColor = temp;
-            m_bUserAttr = true;
+            maBackColor = temp;
+            mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TextColor" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_aTextColor = temp;
-            m_bUserAttr = true;
+            maTextColor = temp;
+            mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LinkColor" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_aLinkColor = temp;
-            m_bUserAttr = true;
+            maLinkColor = temp;
+            mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VLinkColor" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_aVLinkColor = temp;
-            m_bUserAttr = true;
+            maVLinkColor = temp;
+            mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ALinkColor" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_aALinkColor = temp;
-            m_bUserAttr = true;
+            maALinkColor = temp;
+            mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsUseDocumentColors" ) ) )
         {
             sal_Bool temp;
             pParams->Value >>= temp;
-            m_bDocColors = temp;
+            mbDocColors = temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskSlideDuration" ) ) )
         {
             sal_Int32 temp;
             pParams->Value >>= temp;
-            m_nSlideDuration = temp;
-            m_bAutoSlide = true;
+            mnSlideDuration = temp;
+            mbAutoSlide = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskEndless" ) ) )
         {
             sal_Bool temp;
             pParams->Value >>= temp;
-            m_bEndless = temp;
+            mbEndless = temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastCGIURL" ) ) )
         {
             pParams->Value >>= aStr;
-            m_aCGIPath = aStr;
+            maCGIPath = aStr;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastTargetURL" ) ) )
         {
             pParams->Value >>= aStr;
-            m_aURLPath = aStr;
+            maURLPath = aStr;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastScriptLanguage" ) ) )
         {
             pParams->Value >>= aStr;
             if( aStr.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "asp" ) ) )
             {
-                m_eScript = SCRIPT_ASP;
+                meScript = SCRIPT_ASP;
             }
             else
             {
-                m_eScript = SCRIPT_PERL;
+                meScript = SCRIPT_PERL;
             }
         }
         else
@@ -724,46 +721,46 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         pParams++;
     }
 
-    if( m_eMode == PUBLISH_KIOSK )
+    if( meMode == PUBLISH_KIOSK )
     {
-        m_bContentsPage = false;
-        m_bNotes = false;
+        mbContentsPage = false;
+        mbNotes = false;
 
     }
 
     // calculate image sizes
-    SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
+    SdPage* pPage = mpDoc->GetSdPage(0, PK_STANDARD);
     Size aTmpSize( pPage->GetSize() );
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
 
-    switch( m_nWidthPixel )
+    switch( mnWidthPixel )
     {
         case 800:
-            m_nWidthPixel = 640;
+            mnWidthPixel = 640;
             break;
         case 1024:
-            m_nWidthPixel = 800;
+            mnWidthPixel = 800;
             break;
         case 640:
         default:
-            m_nWidthPixel = 512;
+            mnWidthPixel = 512;
             break;
     }
-    m_nHeightPixel = (USHORT)(m_nWidthPixel/dRatio);
+    mnHeightPixel = (USHORT)(mnWidthPixel/dRatio);
 
     //------------------------------------------------------------------
     // Ziel ausklamuestern...
 
-    INetURLObject aINetURLObj( m_aPath );
+    INetURLObject aINetURLObj( maPath );
     DBG_ASSERT( aINetURLObj.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    m_aExportPath = aINetURLObj.GetPartBeforeLastName();    // with trailing '/'
-    m_aIndex = aINetURLObj.GetLastName();
+    maExportPath = aINetURLObj.GetPartBeforeLastName(); // with trailing '/'
+    maIndex = aINetURLObj.GetLastName();
 
-    m_nSdPageCount = pDoc->GetSdPageCount( PK_STANDARD );
-    m_bFrames = m_eMode == PUBLISH_FRAMES;
+    mnSdPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+    mbFrames = meMode == PUBLISH_FRAMES;
 
-    m_aDocFileName = m_aIndex;
+    maDocFileName = maIndex;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -771,43 +768,43 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
 ///////////////////////////////////////////////////////////////////////
 void HtmlExport::ExportHtml()
 {
-    if(m_bUserAttr)
+    if(mbUserAttr)
     {
-        if( m_aTextColor == COL_AUTO )
+        if( maTextColor == COL_AUTO )
         {
-            if( !m_aBackColor.IsDark() )
-                m_aTextColor = COL_BLACK;
+            if( !maBackColor.IsDark() )
+                maTextColor = COL_BLACK;
         }
     }
-    else if( m_bDocColors )
+    else if( mbDocColors )
     {
         // Standard Farben fuer das Farbschema 'Aus Dokument'
         SetDocColors();
-        m_aFirstPageColor = m_aBackColor;
+        maFirstPageColor = maBackColor;
     }
 
     // get name for downloadable presentation if needed
-    if( m_bDownload )
+    if( mbDownload )
     {
         // Separator such und Extension ausblenden
-        USHORT nSepPos = m_aDocFileName.Search( sal_Unicode('.') );
+        USHORT nSepPos = maDocFileName.Search( sal_Unicode('.') );
 
         if(nSepPos != STRING_NOTFOUND)
-            m_aDocFileName.Erase(nSepPos);
+            maDocFileName.Erase(nSepPos);
 
-        m_aDocFileName.AppendAscii( ".odp" );
+        maDocFileName.AppendAscii( ".odp" );
     }
 
     //////
 
-    USHORT nProgrCount = m_nSdPageCount;
-    nProgrCount += m_bImpress?m_nSdPageCount:0;
-    nProgrCount += m_bContentsPage?1:0;
-    nProgrCount += (m_bFrames && m_bNotes)?m_nSdPageCount:0;
-    nProgrCount += (m_bFrames)?8:0;
+    USHORT nProgrCount = mnSdPageCount;
+    nProgrCount += mbImpress?mnSdPageCount:0;
+    nProgrCount += mbContentsPage?1:0;
+    nProgrCount += (mbFrames && mbNotes)?mnSdPageCount:0;
+    nProgrCount += (mbFrames)?8:0;
     InitProgress( nProgrCount );
 
-    pDocSh->SetWaitCursor( true );
+    mpDocSh->SetWaitCursor( true );
 
     //------------------------------------------------------------------
     // Exceptions sind doch was schoennes...
@@ -826,11 +823,11 @@ void HtmlExport::ExportHtml()
         if( !CreateHtmlForPresPages() )
             break;
 
-        if( m_bImpress )
+        if( mbImpress )
             if( !CreateHtmlTextForPresPages() )
                 break;
 
-        if( m_bFrames )
+        if( mbFrames )
         {
             if( !CreateFrames() )
                 break;
@@ -841,23 +838,23 @@ void HtmlExport::ExportHtml()
             if( !CreateNavBarFrames() )
                 break;
 
-            if( m_bNotes && m_bImpress )
+            if( mbNotes && mbImpress )
                 if( !CreateNotesPages() )
                     break;
 
         }
 
-        if( m_bContentsPage )
+        if( mbContentsPage )
             if( !CreateContentPage() )
                 break;
 
         if( !CreateBitmaps() )
             break;
 
-        pDocSh->SetWaitCursor( false );
+        mpDocSh->SetWaitCursor( false );
         ResetProgress();
 
-        if( m_bDownload )
+        if( mbDownload )
             SavePresentation();
 
         return;
@@ -865,7 +862,7 @@ void HtmlExport::ExportHtml()
 
     // if we get to this point the export was
     // canceled by the user after an error
-    pDocSh->SetWaitCursor( false );
+    mpDocSh->SetWaitCursor( false );
     ResetProgress();
 }
 
@@ -874,17 +871,17 @@ void HtmlExport::ExportHtml()
 void HtmlExport::SetDocColors( SdPage* pPage )
 {
     if( pPage == NULL )
-        pPage = pDoc->GetSdPage(0, PK_STANDARD);
+        pPage = mpDoc->GetSdPage(0, PK_STANDARD);
 
     svtools::ColorConfig aConfig;
-    m_aVLinkColor = Color(aConfig.GetColorValue(svtools::LINKSVISITED).nColor);
-    m_aALinkColor = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
-    m_aLinkColor  = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
-    m_aTextColor  = Color(COL_BLACK);
+    maVLinkColor = Color(aConfig.GetColorValue(svtools::LINKSVISITED).nColor);
+    maALinkColor = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
+    maLinkColor  = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
+    maTextColor  = Color(COL_BLACK);
 
     SfxStyleSheet* pSheet = NULL;
 
-    if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+    if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
         // Standard Textfarbe aus Outline-Vorlage der ersten Seite
         pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_OUTLINE);
@@ -895,22 +892,22 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     }
 
     if(pSheet == NULL)
-        pSheet = pDoc->GetDefaultStyleSheet();
+        pSheet = mpDoc->GetDefaultStyleSheet();
 
     if(pSheet)
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
         if(rSet.GetItemState(ITEMID_COLOR,TRUE) == SFX_ITEM_ON)
-            m_aTextColor = ((SvxColorItem*)rSet.GetItem(ITEMID_COLOR,TRUE))->GetValue();
+            maTextColor = ((SvxColorItem*)rSet.GetItem(ITEMID_COLOR,TRUE))->GetValue();
     }
 
     // Standard Hintergrundfarbe aus Background der MasterPage der ersten Seite
-    m_aBackColor = pPage->GetBackgroundColor();
+    maBackColor = pPage->GetBackgroundColor();
 
-    if( m_aTextColor == COL_AUTO )
+    if( maTextColor == COL_AUTO )
     {
-        if( !m_aBackColor.IsDark() )
-            m_aTextColor = COL_BLACK;
+        if( !maBackColor.IsDark() )
+            maTextColor = COL_BLACK;
     }
 }
 
@@ -919,7 +916,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
 void HtmlExport::InitProgress( USHORT nProgrCount )
 {
     String aStr(SdResId(STR_CREATE_PAGES));
-    mpProgress = new SfxProgress( pDocSh, aStr, nProgrCount );
+    mpProgress = new SfxProgress( mpDocSh, aStr, nProgrCount );
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -934,8 +931,8 @@ void HtmlExport::ResetProgress()
 
 void HtmlExport::ExportKiosk()
 {
-    m_nPagesWritten = 0;
-    InitProgress( 2*m_nSdPageCount );
+    mnPagesWritten = 0;
+    InitProgress( 2*mnSdPageCount );
 
     CreateFileNames();
     if( !checkForExistingFiles() )
@@ -952,32 +949,32 @@ void HtmlExport::ExportKiosk()
 ///////////////////////////////////////////////////////////////////////
 void HtmlExport::ExportWebCast()
 {
-    m_nPagesWritten = 0;
-    InitProgress( m_nSdPageCount + 9 );
+    mnPagesWritten = 0;
+    InitProgress( mnSdPageCount + 9 );
 
-    pDocSh->SetWaitCursor( TRUE );
+    mpDocSh->SetWaitCursor( TRUE );
 
     CreateFileNames();
 
     String aEmpty;
-    if(m_aCGIPath.Len() == 0)
-        m_aCGIPath.Assign( sal_Unicode('.') );
+    if(maCGIPath.Len() == 0)
+        maCGIPath.Assign( sal_Unicode('.') );
 
-    if( m_aCGIPath.GetChar( m_aCGIPath.Len() - 1 ) != sal_Unicode('/') )
-        m_aCGIPath.Append( sal_Unicode('/') );
+    if( maCGIPath.GetChar( maCGIPath.Len() - 1 ) != sal_Unicode('/') )
+        maCGIPath.Append( sal_Unicode('/') );
 
-    if( m_eScript == SCRIPT_ASP )
+    if( meScript == SCRIPT_ASP )
     {
-        m_aURLPath.AssignAscii( "./" );
+        maURLPath.AssignAscii( "./" );
     }
     else
     {
            String aEmpty2;
-        if(m_aURLPath.Len() == 0)
-            m_aURLPath.Assign( sal_Unicode('.') );
+        if(maURLPath.Len() == 0)
+            maURLPath.Assign( sal_Unicode('.') );
 
-        if( m_aURLPath.GetChar( m_aURLPath.Len() - 1 ) != sal_Unicode('/') )
-            m_aURLPath.Append( sal_Unicode('/') );
+        if( maURLPath.GetChar( maURLPath.Len() - 1 ) != sal_Unicode('/') )
+            maURLPath.Append( sal_Unicode('/') );
     }
 
     // this is not a true while
@@ -989,7 +986,7 @@ void HtmlExport::ExportWebCast()
         if(!CreateImagesForPresPages())
             break;
 
-        if( m_eScript == SCRIPT_ASP )
+        if( meScript == SCRIPT_ASP )
         {
             if(!CreateASPScripts())
                 break;
@@ -1009,7 +1006,7 @@ void HtmlExport::ExportWebCast()
         break;
     }
 
-    pDocSh->SetWaitCursor( false );
+    mpDocSh->SetWaitCursor( false );
     ResetProgress();
 }
 
@@ -1019,17 +1016,17 @@ void HtmlExport::ExportWebCast()
 
 bool HtmlExport::SavePresentation()
 {
-    m_eEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, m_aDocFileName );
+    meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, maDocFileName );
 
-    OUString aURL( m_aExportPath );
-    aURL += m_aDocFileName;
+    OUString aURL( maExportPath );
+    aURL += maDocFileName;
 
 
-    pDocSh->EnableSetModified( true );
+    mpDocSh->EnableSetModified( true );
 
     try
     {
-        uno::Reference< frame::XStorable > xStorable( pDoc->getUnoModel(), uno::UNO_QUERY );
+        uno::Reference< frame::XStorable > xStorable( mpDoc->getUnoModel(), uno::UNO_QUERY );
         if( xStorable.is() )
         {
             uno::Sequence< beans::PropertyValue > aProperties( 2 );
@@ -1039,7 +1036,7 @@ bool HtmlExport::SavePresentation()
             aProperties[ 1 ].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("impress8"));
             xStorable->storeToURL( aURL, aProperties );
 
-            pDocSh->EnableSetModified( false );
+            mpDocSh->EnableSetModified( false );
 
             return true;
         }
@@ -1048,7 +1045,7 @@ bool HtmlExport::SavePresentation()
     {
     }
 
-    pDocSh->EnableSetModified( false );
+    mpDocSh->EnableSetModified( false );
 
     return false;
 }
@@ -1071,30 +1068,30 @@ bool HtmlExport::CreateImagesForPresPages()
         if( !xFilter.is() )
             return false;
 
-        Sequence< PropertyValue > aFilterData(((m_eFormat==FORMAT_JPG)&&(m_nCompression != -1))? 3 : 2);
+        Sequence< PropertyValue > aFilterData(((meFormat==FORMAT_JPG)&&(mnCompression != -1))? 3 : 2);
         aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelWidth") );
-        aFilterData[0].Value <<= (sal_Int32)m_nWidthPixel;
+        aFilterData[0].Value <<= (sal_Int32)mnWidthPixel;
         aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelHeight") );
-        aFilterData[1].Value <<= (sal_Int32)m_nHeightPixel;
-        if((m_eFormat==FORMAT_JPG)&&(m_nCompression != -1))
+        aFilterData[1].Value <<= (sal_Int32)mnHeightPixel;
+        if((meFormat==FORMAT_JPG)&&(mnCompression != -1))
         {
             aFilterData[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Quality") );
-            aFilterData[2].Value <<= (sal_Int32)m_nCompression;
+            aFilterData[2].Value <<= (sal_Int32)mnCompression;
         }
 
         Sequence< PropertyValue > aDescriptor( 3 );
         aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("URL") );
         aDescriptor[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
-        aDescriptor[1].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM(m_eFormat==FORMAT_GIF ? "GIF" : "JPG") );
+        aDescriptor[1].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM(meFormat==FORMAT_GIF ? "GIF" : "JPG") );
         aDescriptor[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterData") );
         aDescriptor[2].Value <<= aFilterData;
 
-        for (USHORT nSdPage = 0; nSdPage < m_nSdPageCount; nSdPage++)
+        for (USHORT nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
-            SdPage* pPage = pDoc->GetSdPage( nSdPage, PK_STANDARD );
+            SdPage* pPage = mpDoc->GetSdPage( nSdPage, PK_STANDARD );
 
-            OUString aFull(m_aExportPath);
-            aFull += *m_pImageFiles[nSdPage];
+            OUString aFull(maExportPath);
+            aFull += *mpImageFiles[nSdPage];
 
             aDescriptor[0].Value <<= aFull;
 
@@ -1103,7 +1100,7 @@ bool HtmlExport::CreateImagesForPresPages()
             xFilter->filter( aDescriptor );
 
             if (mpProgress)
-                mpProgress->SetState(++m_nPagesWritten);
+                mpProgress->SetState(++mnPagesWritten);
         }
     }
     catch( Exception& )
@@ -1157,23 +1154,23 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 {
     bool bOk = true;
 
-    SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
+    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
 
-    for(USHORT nSdPage = 0; nSdPage < m_nSdPageCount && bOk; nSdPage++)
+    for(USHORT nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
-        SdPage* pPage = pDoc->GetSdPage(nSdPage, PK_STANDARD);
+        SdPage* pPage = mpDoc->GetSdPage(nSdPage, PK_STANDARD);
 
-        if( m_bDocColors )
+        if( mbDocColors )
         {
             SetDocColors( pPage );
-//          m_aBackColor = pPage->GetBackgroundColor();
+//          maBackColor = pPage->GetBackgroundColor();
         }
 
 // HTML Kopf
-        String aStr(m_aHTMLHeader);
+        String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
-        aStr += StringToHTMLString( *m_pPageNames[nSdPage] );
+        aStr += StringToHTMLString( *mpPageNames[nSdPage] );
         aStr.AppendAscii( "</title>\r\n" );
         aStr.AppendAscii( "</head>\r\n" );
         aStr += CreateBodyTag();
@@ -1190,10 +1187,10 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         aStr += CreateTextForPage( pOutliner, pPage, true, pPage->GetBackgroundColor() );
 
 // Notizen
-        if(m_bNotes)
+        if(mbNotes)
         {
-            SdPage* pNotesPage = pDoc->GetSdPage(nSdPage, PK_NOTES);
-            String aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, m_aBackColor) );
+            SdPage* pNotesPage = mpDoc->GetSdPage(nSdPage, PK_NOTES);
+            String aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, maBackColor) );
 
             if( aNotesStr.Len() )
             {
@@ -1208,10 +1205,10 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 // Seite beenden
         aStr.AppendAscii( "</body>\r\n</html>" );
 
-        bOk = WriteHtml( *m_pTextFiles[nSdPage], false, aStr );
+        bOk = WriteHtml( *mpTextFiles[nSdPage], false, aStr );
 
         if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+            mpProgress->SetState(++mnPagesWritten);
 
     }
 
@@ -1228,12 +1225,12 @@ bool HtmlExport::WriteHtml( const String& rFileName, bool bAddExtension, const S
 
     String aFileName( rFileName );
     if( bAddExtension )
-        aFileName += m_aHTMLExtension;
+        aFileName += maHTMLExtension;
 
-    m_eEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, rFileName );
+    meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, rFileName );
     EasyFile aFile;
     SvStream* pStr;
-    String aFull( m_aExportPath );
+    String aFull( maExportPath );
     aFull += aFileName;
     nErr = aFile.createStream(aFull , pStr);
     if(nErr == 0)
@@ -1366,7 +1363,7 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
 // =====================================================================
 String HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
                                            SdPage* pPage,
-                                           bool bHeadLine,
+                                           bool,
                                            const Color& rBackgroundColor )
 {
     String aStr;
@@ -1412,7 +1409,7 @@ String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, ULONG nPara, c
     if(NULL == pPara)
         return aStr;
 
-    HtmlState aState( (m_bUserAttr || m_bDocColors)  ? m_aTextColor : Color(COL_BLACK) );
+    HtmlState aState( (mbUserAttr || mbDocColors)  ? maTextColor : Color(COL_BLACK) );
     SvUShorts aPortionList;
     rEditEngine.GetPortions( (USHORT) nPara, aPortionList );
     USHORT nPortionCount = aPortionList.Count();
@@ -1508,7 +1505,7 @@ String HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, 
             aStr += aTemp;
     }
 
-    if(m_bDocColors)
+    if(mbDocColors)
     {
         if ( pSet->GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON )
         {
@@ -1539,16 +1536,16 @@ bool HtmlExport::CreateHtmlForPresPages()
 
     List aClickableObjects;
 
-    for(USHORT nSdPage = 0; nSdPage < m_nSdPageCount && bOk; nSdPage++)
+    for(USHORT nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
         // Klickbare Objekte finden (auch auf der Masterpage) und
         // in Liste stellen. In umgekehrter Zeichenreihenfolge in
         // die Liste stellen, da in HTML bei Ueberlappungen die
         // _erstgenannte_ Area wirkt.
 
-        SdPage* pPage = pDoc->GetSdPage(nSdPage, PK_STANDARD);
+        SdPage* pPage = mpDoc->GetSdPage(nSdPage, PK_STANDARD);
 
-        if( m_bDocColors )
+        if( mbDocColors )
         {
             SetDocColors( pPage );
         }
@@ -1563,16 +1560,16 @@ bool HtmlExport::CreateHtmlForPresPages()
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                SdAnimationInfo* pInfo     = pDoc->GetAnimationInfo(pObject);
-                SdIMapInfo*      pIMapInfo = pDoc->GetIMapInfo(pObject);
+                SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
+                SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
 
                 if ((pInfo &&
-                     (pInfo->eClickAction == presentation::ClickAction_BOOKMARK  ||
-                      pInfo->eClickAction == presentation::ClickAction_DOCUMENT  ||
-                      pInfo->eClickAction == presentation::ClickAction_PREVPAGE  ||
-                      pInfo->eClickAction == presentation::ClickAction_NEXTPAGE  ||
-                      pInfo->eClickAction == presentation::ClickAction_FIRSTPAGE ||
-                      pInfo->eClickAction == presentation::ClickAction_LASTPAGE)) ||
+                     (pInfo->meClickAction == presentation::ClickAction_BOOKMARK  ||
+                      pInfo->meClickAction == presentation::ClickAction_DOCUMENT  ||
+                      pInfo->meClickAction == presentation::ClickAction_PREVPAGE  ||
+                      pInfo->meClickAction == presentation::ClickAction_NEXTPAGE  ||
+                      pInfo->meClickAction == presentation::ClickAction_FIRSTPAGE ||
+                      pInfo->meClickAction == presentation::ClickAction_LASTPAGE)) ||
                      pIMapInfo)
                 {
                     aClickableObjects.Insert(pObject, LIST_APPEND);
@@ -1589,45 +1586,45 @@ bool HtmlExport::CreateHtmlForPresPages()
         ULONG nClickableObjectCount = aClickableObjects.Count();
 
 // HTML Head
-        String aStr(m_aHTMLHeader);
+        String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
-        aStr += StringToHTMLString(*m_pPageNames[nSdPage]);
+        aStr += StringToHTMLString(*mpPageNames[nSdPage]);
         aStr.AppendAscii( "</title>\r\n" );
 
 // insert timing information
-        pPage = pDoc->GetSdPage(nSdPage, PK_STANDARD);
-        if( m_eMode == PUBLISH_KIOSK )
+        pPage = mpDoc->GetSdPage(nSdPage, PK_STANDARD);
+        if( meMode == PUBLISH_KIOSK )
         {
             ULONG nSecs = 0;
             bool bEndless = false;
-            if( !m_bAutoSlide )
+            if( !mbAutoSlide )
             {
                 if( pPage->GetPresChange() != PRESCHANGE_MANUAL )
                 {
                     nSecs = pPage->GetTime();
-                    bEndless = pDoc->getPresentationSettings().mbEndless;
+                    bEndless = mpDoc->getPresentationSettings().mbEndless;
                 }
             }
             else
             {
-                nSecs = m_nSlideDuration;
-                bEndless = m_bEndless;
+                nSecs = mnSlideDuration;
+                bEndless = mbEndless;
             }
 
             if( nSecs != 0 )
             {
-                if( nSdPage < (m_nSdPageCount-1) || bEndless )
+                if( nSdPage < (mnSdPageCount-1) || bEndless )
                 {
                     aStr.AppendAscii( "<meta http-equiv=\"refresh\" content=\"" );
                     aStr += String::CreateFromInt32(nSecs);
                     aStr.AppendAscii( "; URL=" );
 
                     int nPage = nSdPage + 1;
-                    if( nPage == m_nSdPageCount )
+                    if( nPage == mnSdPageCount )
                         nPage = 0;
 
-                    aStr += StringToURL(*m_pHTMLFiles[nPage]);
+                    aStr += StringToURL(*mpHTMLFiles[nPage]);
 
                     aStr.AppendAscii( "\">\r\n" );
                 }
@@ -1639,16 +1636,16 @@ bool HtmlExport::CreateHtmlForPresPages()
 // HTML Body
         aStr += CreateBodyTag();
 
-        if( m_bSlideSound && pPage->IsSoundOn() )
+        if( mbSlideSound && pPage->IsSoundOn() )
             aStr += InsertSound( pPage->GetSoundFile() );
 
 // Navigationsleiste
-        if(!m_bFrames )
+        if(!mbFrames )
             aStr += CreateNavBar( nSdPage, false );
 // Image
         aStr.AppendAscii( "<center>" );
         aStr.AppendAscii( "<img src=\"" );
-        aStr += StringToURL( *m_pImageFiles[nSdPage] );
+        aStr += StringToURL( *mpImageFiles[nSdPage] );
         aStr.AppendAscii( "\" alt=\"\"" );
 
         if (nClickableObjectCount > 0)
@@ -1657,11 +1654,11 @@ bool HtmlExport::CreateHtmlForPresPages()
         aStr.AppendAscii( "></center>\r\n" );
 
 // Notizen
-        if(m_bNotes && !m_bFrames)
+        if(mbNotes && !mbFrames)
         {
-            SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
-            SdPage* pNotesPage = pDoc->GetSdPage(nSdPage, PK_NOTES);
-            String aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, m_aBackColor) );
+            SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+            SdPage* pNotesPage = mpDoc->GetSdPage(nSdPage, PK_NOTES);
+            String aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, maBackColor) );
             pOutliner->Clear();
 
             if( aNotesStr.Len() )
@@ -1683,8 +1680,8 @@ bool HtmlExport::CreateHtmlForPresPages()
             for (ULONG nObject = 0; nObject < nClickableObjectCount; nObject++)
             {
                 SdrObject* pObject = (SdrObject*)aClickableObjects.GetObject(nObject);
-                SdAnimationInfo* pInfo     = pDoc->GetAnimationInfo(pObject);
-                SdIMapInfo*      pIMapInfo = pDoc->GetIMapInfo(pObject);
+                SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
+                SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
 
                 Rectangle aRect(pObject->GetCurrentBoundRect());
                 Point     aLogPos(aRect.TopLeft());
@@ -1697,7 +1694,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                 // Seitenursprung, nicht auf den Koordinatenursprung
                 aRect.Move(-pPage->GetLftBorder(), -pPage->GetUppBorder());
 
-                double fLogicToPixel = ((double)m_nWidthPixel) / nPageWidth;
+                double fLogicToPixel = ((double)mnWidthPixel) / nPageWidth;
                 aRect.Left()   = (long)(aRect.Left() * fLogicToPixel);
                 aRect.Top()    = (long)(aRect.Top() * fLogicToPixel);
                 aRect.Right()  = (long)(aRect.Right() * fLogicToPixel);
@@ -1722,13 +1719,13 @@ bool HtmlExport::CreateHtmlForPresPages()
                         // ggfs. Seiten- oder Objektnamen umwandeln in den
                         // Namen der entsprechenden HTML-Datei
                         BOOL        bIsMasterPage;
-                        USHORT      nPgNum = pDoc->GetPageByName( aURL, bIsMasterPage );
+                        USHORT      nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
                         SdrObject*  pObj = NULL;
 
                         if (nPgNum == SDRPAGE_NOTFOUND)
                         {
                             // Ist das Bookmark ein Objekt?
-                            pObj = pDoc->GetObj( aURL );
+                            pObj = mpDoc->GetObj( aURL );
                             if (pObj)
                                 nPgNum = pObj->GetPage()->GetPageNum();
                         }
@@ -1766,10 +1763,10 @@ bool HtmlExport::CreateHtmlForPresPages()
                                 aCenter.X() = (long)(aCenter.X() * fLogicToPixel);
                                 aCenter.Y() = (long)(aCenter.Y() * fLogicToPixel);
 
-                                ULONG nRadius = (((IMapCircleObject*)pArea)->
+                                ULONG nCircleRadius = (((IMapCircleObject*)pArea)->
                                                  GetRadius(false));
-                                nRadius = (ULONG)(nRadius * fLogicToPixel);
-                                aStr += CreateHTMLCircleArea(nRadius,
+                                nCircleRadius = (ULONG)(nCircleRadius * fLogicToPixel);
+                                aStr += CreateHTMLCircleArea(nCircleRadius,
                                                             aCenter.X(), aCenter.Y(),
                                                             aURL);
                             }
@@ -1800,20 +1797,20 @@ bool HtmlExport::CreateHtmlForPresPages()
                 if( pInfo )
                 {
                     String      aHRef;
-                    presentation::ClickAction eClickAction = pInfo->eClickAction;
+                    presentation::ClickAction eClickAction = pInfo->meClickAction;
 
                     switch( eClickAction )
                     {
                         case presentation::ClickAction_BOOKMARK:
                         {
                             BOOL        bIsMasterPage;
-                            USHORT      nPgNum = pDoc->GetPageByName( pInfo->aBookmark, bIsMasterPage );
+                            USHORT      nPgNum = mpDoc->GetPageByName( pInfo->maBookmark, bIsMasterPage );
                             SdrObject*  pObj = NULL;
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
                             {
                                 // Ist das Bookmark ein Objekt?
-                                pObj = pDoc->GetObj(pInfo->aBookmark);
+                                pObj = mpDoc->GetObj(pInfo->maBookmark);
                                 if (pObj)
                                     nPgNum = pObj->GetPage()->GetPageNum();
                             }
@@ -1824,7 +1821,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         break;
 
                         case presentation::ClickAction_DOCUMENT:
-                            aHRef = pInfo->aBookmark;
+                            aHRef = pInfo->maBookmark;
                         break;
 
                         case presentation::ClickAction_PREVPAGE:
@@ -1842,8 +1839,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                         case presentation::ClickAction_NEXTPAGE:
                         {
                             ULONG nPage = nSdPage;
-                            if (nSdPage == m_nSdPageCount - 1)
-                                nPage = m_nSdPageCount - 1;
+                            if (nSdPage == mnSdPageCount - 1)
+                                nPage = mnSdPageCount - 1;
                             else
                                 nPage = nSdPage + 1;
 
@@ -1856,14 +1853,14 @@ bool HtmlExport::CreateHtmlForPresPages()
                         break;
 
                         case presentation::ClickAction_LASTPAGE:
-                            aHRef = CreatePageURL(m_nSdPageCount - 1);
+                            aHRef = CreatePageURL(mnSdPageCount - 1);
                         break;
+
+                        default:
+                            break;
                     }
 
                     // jetzt die Areas
-                    UINT32 nObjIdent = pObject->GetObjIdentifier();
-                    UINT32 nObjInventor = pObject->GetObjInventor();
-
                     if( aHRef.Len() )
                     {
                         // ein Kreis?
@@ -1900,10 +1897,10 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         aStr.AppendAscii( "</body>\r\n</html>" );
 
-        bOk = WriteHtml( *m_pHTMLFiles[nSdPage], false, aStr );
+        bOk = WriteHtml( *mpHTMLFiles[nSdPage], false, aStr );
 
         if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+            mpProgress->SetState(++mnPagesWritten);
     }
 
     return bOk;
@@ -1917,21 +1914,21 @@ bool HtmlExport::CreateContentPage()
     // Parameter
     String aEmpty;
 
-    if( m_bDocColors )
+    if( mbDocColors )
         SetDocColors();
 
     // Html Kopf
-    String aStr(m_aHTMLHeader);
+    String aStr(maHTMLHeader);
     aStr += WriteMetaCharset();
     aStr.AppendAscii( "  <title>" );
-    aStr += StringToHTMLString(*m_pPageNames[0]);
+    aStr += StringToHTMLString(*mpPageNames[0]);
     aStr.AppendAscii( "</title>\r\n</head>\r\n" );
     aStr += CreateBodyTag();
 
     // Seitenkopf
     aStr.AppendAscii( "<center>\r\n" );
 
-    if(m_bHeader)
+    if(mbHeader)
     {
         aStr.AppendAscii( "<h1>" );
         aStr += getDocumentTitle();
@@ -1941,11 +1938,11 @@ bool HtmlExport::CreateContentPage()
     aStr.AppendAscii( "<h2>" );
 
     // #92564# Solaris compiler bug workaround
-    if( m_bFrames )
-        aStr += CreateLink( m_aFramePage,
+    if( mbFrames )
+        aStr += CreateLink( maFramePage,
                             RESTOHTML(STR_HTMLEXP_CLICKSTART) );
     else
-        aStr += CreateLink( StringToHTMLString(*m_pHTMLFiles[0]),
+        aStr += CreateLink( StringToHTMLString(*mpHTMLFiles[0]),
                             RESTOHTML(STR_HTMLEXP_CLICKSTART) );
 
     aStr.AppendAscii( "</h2>\r\n</center>\r\n" );
@@ -1958,16 +1955,14 @@ bool HtmlExport::CreateContentPage()
     aStr += RESTOHTML(STR_HTMLEXP_CONTENTS);
     aStr.AppendAscii( "</h3>" );
 
-    for(USHORT nSdPage = 0; nSdPage < m_nSdPageCount; nSdPage++)
+    for(USHORT nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
-        SdPage* pPage = pDoc->GetSdPage(nSdPage, PK_STANDARD);
-
-        String aPageName = *m_pPageNames[nSdPage];
+        String aPageName = *mpPageNames[nSdPage];
         aStr.AppendAscii( "<div align=\"left\">" );
-        if(m_bFrames)
+        if(mbFrames)
             aStr += StringToHTMLString(aPageName);
         else
-            aStr += CreateLink(*m_pHTMLFiles[nSdPage], aPageName);
+            aStr += CreateLink(*mpHTMLFiles[nSdPage], aPageName);
         aStr.AppendAscii( "</div>\r\n" );
     }
     aStr.AppendAscii( "</td>\r\n" );
@@ -1975,50 +1970,50 @@ bool HtmlExport::CreateContentPage()
     // Dokument Infos
     aStr.AppendAscii( "<td valign=\"top\" width=\"50%\">\r\n" );
 
-    if(m_aAuthor.Len())
+    if(maAuthor.Len())
     {
         aStr.AppendAscii( "<p><strong>" );
         aStr += RESTOHTML(STR_HTMLEXP_AUTHOR);
         aStr.AppendAscii( ":</strong> " );
-        aStr += StringToHTMLString(m_aAuthor);
+        aStr += StringToHTMLString(maAuthor);
         aStr.AppendAscii( "</p>\r\n" );
     }
 
-    if(m_aEMail.Len())
+    if(maEMail.Len())
     {
         aStr.AppendAscii( "<p><strong>" );
         aStr += RESTOHTML(STR_HTMLEXP_EMAIL);
         aStr.AppendAscii( ":</strong> <a href=\"mailto:" );
-        aStr += StringToURL(m_aEMail);
+        aStr += StringToURL(maEMail);
         aStr.AppendAscii( "\">" );
-        aStr += StringToHTMLString(m_aEMail);
+        aStr += StringToHTMLString(maEMail);
         aStr.AppendAscii( "</a></p>\r\n" );
     }
 
-    if(m_aHomePage.Len())
+    if(maHomePage.Len())
     {
         aStr.AppendAscii( "<p><strong>" );
         aStr += RESTOHTML(STR_HTMLEXP_HOMEPAGE);
         aStr.AppendAscii( ":</strong> <a href=\"" );
-        aStr += StringToURL(m_aHomePage);
+        aStr += StringToURL(maHomePage);
         aStr.AppendAscii( "\">" );
-        aStr += StringToHTMLString(m_aHomePage);
+        aStr += StringToHTMLString(maHomePage);
         aStr.AppendAscii( "</a> </p>\r\n" );
     }
 
-    if(m_aInfo.Len())
+    if(maInfo.Len())
     {
         aStr.AppendAscii( "<p><strong>" );
         aStr += RESTOHTML(STR_HTMLEXP_INFO);
         aStr.AppendAscii( ":</strong><br>\r\n" );
-        aStr += StringToHTMLString(m_aInfo);
+        aStr += StringToHTMLString(maInfo);
         aStr.AppendAscii( "</p>\r\n" );
     }
 
-    if(m_bDownload)
+    if(mbDownload)
     {
         aStr.AppendAscii( "<p><a href=\"" );
-        aStr += StringToURL(m_aDocFileName);
+        aStr += StringToURL(maDocFileName);
         aStr.AppendAscii( "\">" );
         aStr += RESTOHTML(STR_HTMLEXP_DOWNLOAD);
         aStr.AppendAscii( "</a></p>\r\n" );
@@ -2028,10 +2023,10 @@ bool HtmlExport::CreateContentPage()
 
     aStr.AppendAscii( "</body>\r\n</html>" );
 
-    bool bOk = WriteHtml( m_aIndex, false, aStr );
+    bool bOk = WriteHtml( maIndex, false, aStr );
 
     if (mpProgress)
-        mpProgress->SetState(++m_nPagesWritten);
+        mpProgress->SetState(++mnPagesWritten);
 
     return bOk;
 }
@@ -2043,23 +2038,23 @@ bool HtmlExport::CreateNotesPages()
 {
     bool bOk = true;
 
-    SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
-    for( USHORT nSdPage = 0; bOk && nSdPage < m_nSdPageCount; nSdPage++ )
+    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+    for( USHORT nSdPage = 0; bOk && nSdPage < mnSdPageCount; nSdPage++ )
     {
-        SdPage* pPage = pDoc->GetSdPage(nSdPage, PK_NOTES);
-        if( m_bDocColors )
+        SdPage* pPage = mpDoc->GetSdPage(nSdPage, PK_NOTES);
+        if( mbDocColors )
             SetDocColors( pPage );
 
         // Html Kopf
-        String aStr(m_aHTMLHeader);
+        String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
-        aStr += StringToHTMLString(*m_pPageNames[0]);
+        aStr += StringToHTMLString(*mpPageNames[0]);
         aStr.AppendAscii( "</title>\r\n</head>\r\n" );
         aStr += CreateBodyTag();
 
         if(pPage)
-            aStr += CreateTextForNotesPage( pOutliner, pPage, true, m_aBackColor );
+            aStr += CreateTextForNotesPage( pOutliner, pPage, true, maBackColor );
 
         aStr.AppendAscii( "</body>\r\n</html>" );
 
@@ -2068,7 +2063,7 @@ bool HtmlExport::CreateNotesPages()
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+            mpProgress->SetState(++mnPagesWritten);
     }
 
     pOutliner->Clear();
@@ -2083,41 +2078,41 @@ bool HtmlExport::CreateOutlinePages()
 {
     bool bOk = true;
 
-    if( m_bDocColors )
+    if( mbDocColors )
     {
         SetDocColors();
     }
 
     // Seite 0 wird der zugeklappte Outline, Seite 1 der aufgeklappte
-    for( int nPage = 0; nPage < (m_bImpress?2:1) && bOk; nPage++ )
+    for( int nPage = 0; nPage < (mbImpress?2:1) && bOk; nPage++ )
     {
         // Html Kopf
-        String aStr(m_aHTMLHeader);
+        String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
-        aStr += StringToHTMLString(*m_pPageNames[0]);
+        aStr += StringToHTMLString(*mpPageNames[0]);
         aStr.AppendAscii( "</title>\r\n</head>\r\n" );
         aStr += CreateBodyTag();
 
-        SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
-        for(USHORT nSdPage = 0; nSdPage < m_nSdPageCount; nSdPage++)
+        SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+        for(USHORT nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
-            SdPage* pPage = pDoc->GetSdPage(nSdPage, PK_STANDARD);
+            SdPage* pPage = mpDoc->GetSdPage(nSdPage, PK_STANDARD);
 
             aStr.AppendAscii( "<div align=\"left\">" );
             String aLink( RTL_CONSTASCII_USTRINGPARAM( "JavaScript:parent.NavigateAbs(" ) );
             aLink += String::CreateFromInt32(nSdPage);
             aLink.Append( sal_Unicode(')') );
 
-            String aTitle = CreateTextForTitle(pOutliner,pPage, m_aBackColor);
+            String aTitle = CreateTextForTitle(pOutliner,pPage, maBackColor);
             if(aTitle.Len() == 0)
-                aTitle = *m_pPageNames[nSdPage];
+                aTitle = *mpPageNames[nSdPage];
             aStr += CreateLink(aLink, aTitle);
 
             if(nPage==1)
             {
                 aStr.AppendAscii( "<br>" );
-                aStr += CreateTextForPage( pOutliner, pPage, false, m_aBackColor );
+                aStr += CreateTextForPage( pOutliner, pPage, false, maBackColor );
             }
             aStr.AppendAscii( "</div>\r\n" );
         }
@@ -2130,7 +2125,7 @@ bool HtmlExport::CreateOutlinePages()
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+            mpProgress->SetState(++mnPagesWritten);
     }
 
     return bOk;
@@ -2142,55 +2137,55 @@ bool HtmlExport::CreateOutlinePages()
 void HtmlExport::CreateFileNames()
 {
     // Listen mit neuen Dateinamen anlegen
-    m_pHTMLFiles = new String*[m_nSdPageCount];
-    m_pImageFiles = new String*[m_nSdPageCount];
-    m_pPageNames = new String*[m_nSdPageCount];
-    m_pTextFiles = new String*[m_nSdPageCount];
+    mpHTMLFiles = new String*[mnSdPageCount];
+    mpImageFiles = new String*[mnSdPageCount];
+    mpPageNames = new String*[mnSdPageCount];
+    mpTextFiles = new String*[mnSdPageCount];
 
-    m_bHeader = false;  // Ueberschrift auf Uebersichtsseite?
+    mbHeader = false;   // Ueberschrift auf Uebersichtsseite?
 
-    for (USHORT nSdPage = 0; nSdPage < m_nSdPageCount; nSdPage++)
+    for (USHORT nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
         String* pName;
-        if(nSdPage == 0 && !m_bContentsPage && !m_bFrames )
-            pName = new String(m_aIndex);
+        if(nSdPage == 0 && !mbContentsPage && !mbFrames )
+            pName = new String(maIndex);
         else
         {
             pName = new String( RTL_CONSTASCII_USTRINGPARAM("img") );
             *pName += String::CreateFromInt32(nSdPage);
-            *pName += m_aHTMLExtension;
+            *pName += maHTMLExtension;
         }
 
-        m_pHTMLFiles[nSdPage] = pName;
+        mpHTMLFiles[nSdPage] = pName;
 
         pName = new String( RTL_CONSTASCII_USTRINGPARAM("img") );
         *pName += String::CreateFromInt32(nSdPage);
-        if( m_eFormat==FORMAT_GIF )
+        if( meFormat==FORMAT_GIF )
             pName->AppendAscii( ".gif" );
         else
             pName->AppendAscii( ".jpg" );
 
-        m_pImageFiles[nSdPage] = pName;
+        mpImageFiles[nSdPage] = pName;
 
         pName = new String( RTL_CONSTASCII_USTRINGPARAM("text"));
         *pName += String::CreateFromInt32(nSdPage);
-        *pName += m_aHTMLExtension;
-        m_pTextFiles[nSdPage] = pName;
+        *pName += maHTMLExtension;
+        mpTextFiles[nSdPage] = pName;
 
-        SdPage* pSdPage = pDoc->GetSdPage(nSdPage, PK_STANDARD);
+        SdPage* pSdPage = mpDoc->GetSdPage(nSdPage, PK_STANDARD);
 
         // get slide title from page name
         String* pPageTitle = new String();
         *pPageTitle = pSdPage->GetName();
-        m_pPageNames[nSdPage] = pPageTitle;
+        mpPageNames[nSdPage] = pPageTitle;
     }
 
-    if(!m_bContentsPage && m_bFrames)
-        m_aFramePage = m_aIndex;
+    if(!mbContentsPage && mbFrames)
+        maFramePage = maIndex;
     else
     {
-        m_aFramePage.AssignAscii( "siframes" );
-        m_aFramePage += m_aHTMLExtension;
+        maFramePage.AssignAscii( "siframes" );
+        maFramePage += maHTMLExtension;
     }
 }
 
@@ -2199,13 +2194,13 @@ String HtmlExport::getDocumentTitle()
     // check for a title object in this page, if its the first
     // title it becomes this documents title for the content
     // page
-    if( !m_bHeader )
+    if( !mbHeader )
     {
-        if(m_bImpress)
+        if(mbImpress)
         {
             // falls es ein nicht-leeres Titelobjekt gibt, dessen ersten Absatz
             // als Seitentitel benutzen
-            SdPage* pSdPage = pDoc->GetSdPage(0, PK_STANDARD);
+            SdPage* pSdPage = mpDoc->GetSdPage(0, PK_STANDARD);
             SdrObject* pTitleObj = pSdPage->GetPresObj(PRESOBJ_TITLE);
             if (pTitleObj && !pTitleObj->IsEmptyPresObj())
             {
@@ -2218,27 +2213,27 @@ String HtmlExport::getDocumentTitle()
                     {
                         String aTest(rEditTextObject.GetText(0));
                         if (aTest.Len() > 0)
-                            m_DocTitle = aTest;
+                            mDocTitle = aTest;
                     }
                 }
             }
 
-            for( UINT16 i = 0; i < m_DocTitle.Len(); i++ )
-                if( m_DocTitle.GetChar(i) == (sal_Unicode)0xff)
-                    m_DocTitle.SetChar(i, sal_Unicode(' ') );
+            for( UINT16 i = 0; i < mDocTitle.Len(); i++ )
+                if( mDocTitle.GetChar(i) == (sal_Unicode)0xff)
+                    mDocTitle.SetChar(i, sal_Unicode(' ') );
         }
 
-        if( !m_DocTitle.Len() )
+        if( !mDocTitle.Len() )
         {
-            m_DocTitle = m_aDocFileName;
-            int nDot = m_DocTitle.Search( '.' );
+            mDocTitle = maDocFileName;
+            int nDot = mDocTitle.Search( '.' );
             if( nDot > 0 )
-                m_DocTitle.Erase( nDot );
+                mDocTitle.Erase( (USHORT)nDot );
         }
-        m_bHeader = true;
+        mbHeader = true;
     }
 
-    return m_DocTitle;
+    return mDocTitle;
 }
 
 /*
@@ -2342,19 +2337,19 @@ bool HtmlExport::CreateFrames()
 
     aStr += WriteMetaCharset();
     aStr.AppendAscii( "  <title>" );
-    aStr += StringToHTMLString(*m_pPageNames[0]);
+    aStr += StringToHTMLString(*mpPageNames[0]);
     aStr.AppendAscii( "</title>\r\n" );
 
     aStr.AppendAscii( "<script type=\"text/javascript\">\r\n<!--\r\n" );
 
     aStr.AppendAscii( "var nCurrentPage = 0;\r\nvar nPageCount = " );
-    aStr += String::CreateFromInt32(pDoc->GetSdPageCount( PK_STANDARD ));
+    aStr += String::CreateFromInt32(mpDoc->GetSdPageCount( PK_STANDARD ));
     aStr.AppendAscii( ";\r\n\r\n" );
 
     String aFunction;
     aFunction.AssignAscii(JS_NavigateAbs);
 
-    if(m_bNotes)
+    if(mbNotes)
     {
         String aEmpty;
         String aSlash( RTL_CONSTASCII_USTRINGPARAM( "//" ) );
@@ -2363,21 +2358,21 @@ bool HtmlExport::CreateFrames()
 
     // substitute HTML file extension
     String aPlaceHolder(RTL_CONSTASCII_USTRINGPARAM(".$EXT"));
-    aFunction.SearchAndReplaceAll(aPlaceHolder, m_aHTMLExtension);
+    aFunction.SearchAndReplaceAll(aPlaceHolder, maHTMLExtension);
     aStr += aFunction;
 
     aTmp.AssignAscii( JS_NavigateRel );
-    aTmp.SearchAndReplaceAll(aPlaceHolder, m_aHTMLExtension);
+    aTmp.SearchAndReplaceAll(aPlaceHolder, maHTMLExtension);
     aStr += aTmp;
 
-    if(m_bImpress)
+    if(mbImpress)
     {
         aTmp.AssignAscii( JS_ExpandOutline );
-        aTmp.SearchAndReplaceAll(aPlaceHolder, m_aHTMLExtension);
+        aTmp.SearchAndReplaceAll(aPlaceHolder, maHTMLExtension);
         aStr += aTmp;
 
         aTmp.AssignAscii( JS_CollapseOutline );
-        aTmp.SearchAndReplaceAll(aPlaceHolder, m_aHTMLExtension);
+        aTmp.SearchAndReplaceAll(aPlaceHolder, maHTMLExtension);
         aStr += aTmp;
     }
     aStr.AppendAscii( "// -->\r\n</script>\r\n" );
@@ -2385,42 +2380,42 @@ bool HtmlExport::CreateFrames()
     aStr.AppendAscii( "</head>\r\n" );
 
     aStr.AppendAscii( "<frameset cols=\"*," );
-    aStr += String::CreateFromInt32((m_nWidthPixel + 16));
+    aStr += String::CreateFromInt32((mnWidthPixel + 16));
     aStr.AppendAscii( "\">\r\n" );
-    if(m_bImpress)
+    if(mbImpress)
     {
         aStr.AppendAscii( "  <frameset rows=\"42,*\">\r\n" );
         aStr.AppendAscii( "    <frame src=\"navbar3" );
-        aStr += StringToURL(m_aHTMLExtension);
+        aStr += StringToURL(maHTMLExtension);
         aStr.AppendAscii( "\" name=\"navbar2\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n" );
     }
     aStr.AppendAscii( "    <frame src=\"outline0" );
-    aStr += StringToURL(m_aHTMLExtension);
+    aStr += StringToURL(maHTMLExtension);
     aStr.AppendAscii( "\" name=\"outline\">\r\n" );
-    if(m_bImpress)
+    if(mbImpress)
         aStr.AppendAscii( "  </frameset>\r\n" );
 
-    if(m_bNotes)
+    if(mbNotes)
     {
         aStr.AppendAscii( "  <frameset rows=\"42," );
-        aStr += String::CreateFromInt32((int)((double)m_nWidthPixel * 0.75) + 16);
+        aStr += String::CreateFromInt32((int)((double)mnWidthPixel * 0.75) + 16);
         aStr.AppendAscii( ",*\">\r\n" );
     }
     else
         aStr.AppendAscii( "  <frameset rows=\"42,*\">\r\n" );
 
     aStr.AppendAscii( "    <frame src=\"navbar0" );
-    aStr += StringToURL(m_aHTMLExtension);
+    aStr += StringToURL(maHTMLExtension);
     aStr.AppendAscii( "\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n" );
 
     aStr.AppendAscii( "    <frame src=\"" );
-    aStr += StringToURL(*m_pHTMLFiles[0]);
+    aStr += StringToURL(*mpHTMLFiles[0]);
     aStr.AppendAscii( "\" name=\"show\" marginwidth=\"4\" marginheight=\"4\">\r\n" );
 
-    if(m_bNotes)
+    if(mbNotes)
     {
         aStr.AppendAscii( "    <frame src=\"note0" );
-        aStr += StringToURL(m_aHTMLExtension);
+        aStr += StringToURL(maHTMLExtension);
         aStr.AppendAscii( "\" name=\"notes\">\r\n" );
     }
     aStr.AppendAscii( "  </frameset>\r\n" );
@@ -2430,10 +2425,10 @@ bool HtmlExport::CreateFrames()
     aStr += RESTOHTML(STR_HTMLEXP_NOFRAMES);
     aStr.AppendAscii( "\r\n</noframes>\r\n</frameset>\r\n</html>" );
 
-    bool bOk = WriteHtml( m_aFramePage, false, aStr );
+    bool bOk = WriteHtml( maFramePage, false, aStr );
 
     if (mpProgress)
-        mpProgress->SetState(++m_nPagesWritten);
+        mpProgress->SetState(++mnPagesWritten);
 
     return bOk;
 }
@@ -2452,29 +2447,29 @@ bool HtmlExport::CreateNavBarFrames()
     bool bOk = true;
     String aButton;
 
-    if( m_bDocColors )
+    if( mbDocColors )
     {
         SetDocColors();
-        m_aBackColor = m_aFirstPageColor;
+        maBackColor = maFirstPageColor;
     }
 
     for( int nFile = 0; nFile < 3 && bOk; nFile++ )
     {
-        String aStr(m_aHTMLHeader);
+        String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
-        aStr += StringToHTMLString(*m_pPageNames[0]);
+        aStr += StringToHTMLString(*mpPageNames[0]);
         aStr.AppendAscii( "</title>\r\n</head>\r\n" );
         aStr += CreateBodyTag();
         aStr.AppendAscii( "<center>\r\n" );
 
     // erste Seite
         aButton = String(SdResId(STR_HTMLEXP_FIRSTPAGE));
-        if(m_nButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile == 0 || m_nSdPageCount == 1?
+        if(mnButtonThema != -1)
+            aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
                                   BTN_FIRST_0:BTN_FIRST_1)), aButton);
 
-        if(nFile != 0 && m_nSdPageCount > 1)
+        if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink( String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateAbs(0)")), aButton);
 
         aStr += aButton;
@@ -2482,11 +2477,11 @@ bool HtmlExport::CreateNavBarFrames()
 
     // zur vorherigen Seite
         aButton = String(SdResId(STR_PUBLISH_BACK));
-        if(m_nButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile == 0 || m_nSdPageCount == 1?
+        if(mnButtonThema != -1)
+            aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
                                     BTN_PREV_0:BTN_PREV_1)), aButton);
 
-        if(nFile != 0 && m_nSdPageCount > 1)
+        if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink( String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateRel(-1)")), aButton);
 
         aStr += aButton;
@@ -2494,11 +2489,11 @@ bool HtmlExport::CreateNavBarFrames()
 
     // zur naechsten Seite
         aButton = String(SdResId(STR_PUBLISH_NEXT));
-        if(m_nButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile ==2 || m_nSdPageCount == 1?
+        if(mnButtonThema != -1)
+            aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
                                     BTN_NEXT_0:BTN_NEXT_1)), aButton);
 
-        if(nFile != 2 && m_nSdPageCount > 1)
+        if(nFile != 2 && mnSdPageCount > 1)
             aButton = CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateRel(1)")), aButton);
 
         aStr += aButton;
@@ -2506,14 +2501,14 @@ bool HtmlExport::CreateNavBarFrames()
 
     // zur letzten Seite
         aButton = String(SdResId(STR_HTMLEXP_LASTPAGE));
-        if(m_nButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile ==2 || m_nSdPageCount == 1?
+        if(mnButtonThema != -1)
+            aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
                                   BTN_LAST_0:BTN_LAST_1)), aButton);
 
-        if(nFile != 2 && m_nSdPageCount > 1)
+        if(nFile != 2 && mnSdPageCount > 1)
         {
             String aLink(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateAbs("));
-            aLink += String::CreateFromInt32(pDoc->GetSdPageCount( PK_STANDARD )-1);
+            aLink += String::CreateFromInt32(mpDoc->GetSdPageCount( PK_STANDARD )-1);
             aLink.AppendAscii( ")" );
             aButton = CreateLink( aLink, aButton);
         }
@@ -2522,26 +2517,26 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "\r\n" );
 
     // Inhalt
-        if (m_bContentsPage)
+        if (mbContentsPage)
         {
             aButton = String(SdResId(STR_PUBLISH_OUTLINE));
-            if(m_nButtonThema != -1)
+            if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
             // zur Uebersicht
-            aStr += CreateLink(m_aIndex, aButton, String(RTL_CONSTASCII_USTRINGPARAM("_top")));
+            aStr += CreateLink(maIndex, aButton, String(RTL_CONSTASCII_USTRINGPARAM("_top")));
             aStr.AppendAscii( "\r\n" );
         }
 
     // Textmodus
-        if(m_bImpress)
+        if(mbImpress)
         {
             aButton = String(SdResId(STR_HTMLEXP_SETTEXT));
-            if(m_nButtonThema != -1)
+            if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
             String  aText0( RTL_CONSTASCII_USTRINGPARAM("text0"));
-            aText0 += m_aHTMLExtension;
+            aText0 += maHTMLExtension;
             aStr += CreateLink( aText0, aButton, String(RTL_CONSTASCII_USTRINGPARAM("_top")));
             aStr.AppendAscii( "\r\n" );
         }
@@ -2556,23 +2551,21 @@ bool HtmlExport::CreateNavBarFrames()
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+            mpProgress->SetState(++mnPagesWritten);
     }
 
     // Jetzt kommt die Navigatonsleiste Outliner zugeklappt...
     if(bOk)
     {
-        String aStr(m_aHTMLHeader);
+        String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
-        aStr += StringToHTMLString(*m_pPageNames[0]);
+        aStr += StringToHTMLString(*mpPageNames[0]);
         aStr.AppendAscii( "</title>\r\n</head>\r\n" );
         aStr += CreateBodyTag();
 
-        String aButton;
-
         aButton = String(SdResId(STR_HTMLEXP_OUTLINE));
-        if(m_nButtonThema != -1)
+        if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
 
         aStr += CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.ExpandOutline()")), aButton);
@@ -2583,23 +2576,21 @@ bool HtmlExport::CreateNavBarFrames()
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+            mpProgress->SetState(++mnPagesWritten);
     }
 
     // ... und jetzt Outliner aufgeklappt
     if( bOk )
     {
-        String aStr(m_aHTMLHeader);
+        String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
-        aStr += StringToHTMLString(*m_pPageNames[0]);
+        aStr += StringToHTMLString(*mpPageNames[0]);
         aStr.AppendAscii( "</title>\r\n</head>\r\n" );
         aStr += CreateBodyTag();
 
-        String aButton;
-
         aButton = String(SdResId(STR_HTMLEXP_NOOUTLINE));
-        if(m_nButtonThema != -1)
+        if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
 
         aStr += CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.CollapseOutline()")), aButton);
@@ -2609,7 +2600,7 @@ bool HtmlExport::CreateNavBarFrames()
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+            mpProgress->SetState(++mnPagesWritten);
 
     }
 
@@ -2637,9 +2628,9 @@ String HtmlExport::CreateNavBar( USHORT nSdPage, bool bIsText ) const
         aStrNavText = String( SdResId(STR_HTMLEXP_SETTEXT) );
     }
 
-    if(!bIsText && m_nButtonThema != -1)
+    if(!bIsText && mnButtonThema != -1)
     {
-        if(nSdPage<1 || m_nSdPageCount == 1)
+        if(nSdPage<1 || mnSdPageCount == 1)
         {
             aStrNavFirst = CreateImage(GetButtonName(BTN_FIRST_0), aStrNavFirst);
             aStrNavPrev  = CreateImage(GetButtonName(BTN_PREV_0), aStrNavPrev);
@@ -2650,7 +2641,7 @@ String HtmlExport::CreateNavBar( USHORT nSdPage, bool bIsText ) const
             aStrNavPrev  = CreateImage(GetButtonName(BTN_PREV_1), aStrNavPrev);
         }
 
-        if(nSdPage == m_nSdPageCount-1 || m_nSdPageCount == 1)
+        if(nSdPage == mnSdPageCount-1 || mnSdPageCount == 1)
         {
             aStrNavNext    = CreateImage(GetButtonName(BTN_NEXT_0), aStrNavNext);
             aStrNavLast    = CreateImage(GetButtonName(BTN_LAST_0), aStrNavLast);
@@ -2669,48 +2660,48 @@ String HtmlExport::CreateNavBar( USHORT nSdPage, bool bIsText ) const
 
     // erste Seite
     if(nSdPage > 0)
-        aStr += CreateLink(bIsText?*m_pTextFiles[0]:*m_pHTMLFiles[0],aStrNavFirst);
+        aStr += CreateLink(bIsText?*mpTextFiles[0]:*mpHTMLFiles[0],aStrNavFirst);
     else
         aStr += aStrNavFirst;
     aStr.Append(sal_Unicode(' '));
 
     // to Previous page
     if(nSdPage > 0)
-        aStr += CreateLink( bIsText?*m_pTextFiles[nSdPage-1]:
-                                    *m_pHTMLFiles[nSdPage-1],   aStrNavPrev);
+        aStr += CreateLink( bIsText?*mpTextFiles[nSdPage-1]:
+                                    *mpHTMLFiles[nSdPage-1],    aStrNavPrev);
     else
         aStr += aStrNavPrev;
     aStr.Append(sal_Unicode(' '));
 
     // to Next page
-    if(nSdPage < m_nSdPageCount-1)
-        aStr += CreateLink( bIsText?*m_pTextFiles[nSdPage+1]:
-                                    *m_pHTMLFiles[nSdPage+1], aStrNavNext);
+    if(nSdPage < mnSdPageCount-1)
+        aStr += CreateLink( bIsText?*mpTextFiles[nSdPage+1]:
+                                    *mpHTMLFiles[nSdPage+1], aStrNavNext);
     else
         aStr += aStrNavNext;
     aStr.Append(sal_Unicode(' '));
 
     // to Last page
-    if(nSdPage < m_nSdPageCount-1)
-        aStr += CreateLink( bIsText?*m_pTextFiles[m_nSdPageCount-1]:
-                                    *m_pHTMLFiles[m_nSdPageCount-1],
+    if(nSdPage < mnSdPageCount-1)
+        aStr += CreateLink( bIsText?*mpTextFiles[mnSdPageCount-1]:
+                                    *mpHTMLFiles[mnSdPageCount-1],
                                     aStrNavLast );
     else
         aStr += aStrNavLast;
     aStr.Append(sal_Unicode(' '));
 
     // to Index page
-    if (m_bContentsPage)
+    if (mbContentsPage)
     {
-        aStr += CreateLink(m_aIndex, aStrNavContent);
+        aStr += CreateLink(maIndex, aStrNavContent);
         aStr.Append(sal_Unicode(' '));
     }
 
     // Text/Graphics
-    if(m_bImpress)
+    if(mbImpress)
     {
-        aStr += CreateLink( bIsText?(m_bFrames?m_aFramePage:*m_pHTMLFiles[nSdPage]):
-                                    *m_pTextFiles[nSdPage], aStrNavText);
+        aStr += CreateLink( bIsText?(mbFrames?maFramePage:*mpHTMLFiles[nSdPage]):
+                                    *mpTextFiles[nSdPage], aStrNavText);
 
     }
 
@@ -2726,20 +2717,20 @@ bool HtmlExport::CreateBitmaps()
 {
     ULONG nErr = 0;
 
-    m_eEC.SetContext( STR_HTMLEXP_ERROR_GALLERY );
+    meEC.SetContext( STR_HTMLEXP_ERROR_GALLERY );
 
-    if(m_nButtonThema != -1)
+    if(mnButtonThema != -1)
     {
         if( GalleryExplorer::BeginLocking( GALLERY_THEME_HTMLBUTTONS ) )
         {
             Graphic aButton;
-            INT16 nButtons = m_nButtonThema * NUM_BUTTONS;
+            INT16 nButtons = mnButtonThema * NUM_BUTTONS;
             for( INT16 nButton = 0; nButton < NUM_BUTTONS && nErr == 0; nButton++ )
             {
-                if(!m_bFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
+                if(!mbFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
                     continue;
 
-                if(!m_bImpress && (nButton == BTN_TEXT || nButton == BTN_MORE || nButton == BTN_LESS ))
+                if(!mbImpress && (nButton == BTN_TEXT || nButton == BTN_MORE || nButton == BTN_LESS ))
                     continue;
 
                 nErr = CreateBitmap(GALLERY_THEME_HTMLBUTTONS, nButtons + nButton, GetButtonName(nButton));
@@ -2760,7 +2751,7 @@ bool HtmlExport::CreateBitmaps()
 // ====================================================================
 ULONG HtmlExport::CreateBitmap( ULONG nThemeId, INT16 nImage, const String& aName ) const
 {
-    String aFull(m_aExportPath);
+    String aFull(maExportPath);
     aFull += aName;
 
     Graphic aGraphic;
@@ -2773,12 +2764,12 @@ ULONG HtmlExport::CreateBitmap( ULONG nThemeId, INT16 nImage, const String& aNam
         nErr = GalleryExplorer::GetGraphicObj( nThemeId, nImage, &aGraphic )?0:1;
         if( nErr == 0 )
         {
-            if( m_bUserAttr || m_bDocColors )
+            if( mbUserAttr || mbDocColors )
             {
                 BitmapEx aBitmap( aGraphic.GetBitmapEx() );
 
                 if( aBitmap.GetTransparentType() != TRANSPARENT_NONE )
-                    SmoothBitmap( aBitmap, m_bUserAttr?m_aBackColor:m_aFirstPageColor );
+                    SmoothBitmap( aBitmap, mbUserAttr?maBackColor:maFirstPageColor );
                 aGraphic = Graphic( aBitmap );
             }
             nErr = GraphicConverter::Export( *pStrm, aGraphic, CVT_GIF );
@@ -2886,8 +2877,8 @@ void HtmlExport::SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const
                     {
                         nAlpha <<= 4;
                         aPixel.SetRed( (BYTE)(((USHORT)cBackR * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                        aPixel.SetGreen( (BYTE)(((USHORT)cBackR * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                        aPixel.SetBlue( (BYTE)(((USHORT)cBackR * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
+                        aPixel.SetGreen( (BYTE)(((USHORT)cBackG * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
+                        aPixel.SetBlue( (BYTE)(((USHORT)cBackB * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
                     }
                     pWAcc->SetPixel( nY, nX, aPixel );
                 }
@@ -2943,22 +2934,22 @@ String HtmlExport::CreateBodyTag() const
 {
     String aStr( RTL_CONSTASCII_USTRINGPARAM("<body") );
 
-    if( m_bUserAttr || m_bDocColors )
+    if( mbUserAttr || mbDocColors )
     {
-        Color aTextColor( m_aTextColor );
-        if( (aTextColor == COL_AUTO) && (!m_aBackColor.IsDark()) )
+        Color aTextColor( maTextColor );
+        if( (aTextColor == COL_AUTO) && (!maBackColor.IsDark()) )
             aTextColor = COL_BLACK;
 
         aStr.AppendAscii( " text=\"" );
         aStr += ColorToHTMLString( aTextColor );
         aStr.AppendAscii( "\" bgcolor=\"" );
-        aStr += ColorToHTMLString( m_aBackColor );
+        aStr += ColorToHTMLString( maBackColor );
         aStr.AppendAscii( "\" link=\"" );
-        aStr += ColorToHTMLString( m_aLinkColor );
+        aStr += ColorToHTMLString( maLinkColor );
         aStr.AppendAscii( "\" vlink=\"" );
-        aStr += ColorToHTMLString( m_aVLinkColor );
+        aStr += ColorToHTMLString( maVLinkColor );
         aStr.AppendAscii( "\" alink=\"" );
-        aStr += ColorToHTMLString( m_aALinkColor );
+        aStr += ColorToHTMLString( maALinkColor );
         aStr.AppendAscii( "\"" );
     }
 
@@ -3149,7 +3140,7 @@ String HtmlExport::StringToHTMLString( const String& rString )
 // =====================================================================
 String HtmlExport::CreatePageURL( USHORT nPgNum )
 {
-    if(m_bFrames)
+    if(mbFrames)
     {
         String aUrl( RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateAbs("));
         aUrl += String::CreateFromInt32(nPgNum);
@@ -3157,7 +3148,7 @@ String HtmlExport::CreatePageURL( USHORT nPgNum )
         return aUrl;
     }
     else
-        return *m_pHTMLFiles[nPgNum];
+        return *mpHTMLFiles[nPgNum];
 }
 
 bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const String& rDest, bool bUnix /* = false */ )
@@ -3168,9 +3159,9 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM("webcast") ) );
     aURL.Append( rSource );
 
-    m_eEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
+    meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
 
-    ULONG       nErr;
+    ULONG       nErr = 0;
     SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
     if( pIStm )
@@ -3206,16 +3197,16 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
     const String aSaveStr( RESTOHTML( STR_WEBVIEW_SAVE ));
     aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$2")), aSaveStr );
 
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$3")), m_aCGIPath );
+    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$3")), maCGIPath );
 
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$4")), String::CreateFromInt32(m_nWidthPixel) );
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$5")), String::CreateFromInt32(m_nHeightPixel) );
+    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$4")), String::CreateFromInt32(mnWidthPixel) );
+    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$5")), String::CreateFromInt32(mnHeightPixel) );
 
 
     String aDest( rPath );
     aDest += rDest;
 
-    m_eEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, rDest );
+    meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, rDest );
     // write script file
     {
         EasyFile aFile;
@@ -3231,7 +3222,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
     }
 
     if (mpProgress)
-        mpProgress->SetState(++m_nPagesWritten);
+        mpProgress->SetState(++mnPagesWritten);
 
     if( nErr != 0 )
         ErrorHandler::HandleError( nErr );
@@ -3249,11 +3240,11 @@ bool HtmlExport::CreateASPScripts()
         String aScript;
 
         aScript.AssignAscii( ASP_Scripts[n] );
-        if(!CopyScript(m_aExportPath, aScript, aScript))
+        if(!CopyScript(maExportPath, aScript, aScript))
             return false;
     }
 
-    if(!CopyScript(m_aExportPath, String(RTL_CONSTASCII_USTRINGPARAM("edit.asp")), m_aIndex ))
+    if(!CopyScript(maExportPath, String(RTL_CONSTASCII_USTRINGPARAM("edit.asp")), maIndex ))
         return false;
 
     return true;
@@ -3269,14 +3260,14 @@ bool HtmlExport::CreatePERLScripts()
     {
         String aScript;
         aScript.AssignAscii( PERL_Scripts[n] );
-        if(!CopyScript(m_aExportPath, aScript, aScript, true))
+        if(!CopyScript(maExportPath, aScript, aScript, true))
             return false;
     }
 
-    if(!CopyScript(m_aExportPath, String( RTL_CONSTASCII_USTRINGPARAM("edit.pl")), m_aIndex, true ))
+    if(!CopyScript(maExportPath, String( RTL_CONSTASCII_USTRINGPARAM("edit.pl")), maIndex, true ))
         return false;
 
-    if(!CopyScript(m_aExportPath, String( RTL_CONSTASCII_USTRINGPARAM("index.pl")), m_aIndexUrl, true ))
+    if(!CopyScript(maExportPath, String( RTL_CONSTASCII_USTRINGPARAM("index.pl")), maIndexUrl, true ))
         return false;
 
     return true;
@@ -3286,12 +3277,12 @@ bool HtmlExport::CreatePERLScripts()
 bool HtmlExport::CreateImageFileList()
 {
     String aStr;
-    for( USHORT nSdPage = 0; nSdPage < m_nSdPageCount; nSdPage++)
+    for( USHORT nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
         aStr += String::CreateFromInt32( nSdPage + 1 );
         aStr.Append(sal_Unicode(';'));
-        aStr += m_aURLPath;
-        aStr += *m_pImageFiles[nSdPage];
+        aStr += maURLPath;
+        aStr += *mpImageFiles[nSdPage];
         aStr.AppendAscii( "\r\n" );
     }
 
@@ -3299,7 +3290,7 @@ bool HtmlExport::CreateImageFileList()
     bool bOk = WriteHtml( aFileName, false, aStr );
 
     if (mpProgress)
-        mpProgress->SetState(++m_nPagesWritten);
+        mpProgress->SetState(++mnPagesWritten);
 
     return bOk;
 }
@@ -3307,11 +3298,11 @@ bool HtmlExport::CreateImageFileList()
 /** Erzeugt das File mit der aktuellen Seitennumer */
 bool HtmlExport::CreateImageNumberFile()
 {
-    String aFull( m_aExportPath );
+    String aFull( maExportPath );
     String aFileName( RTL_CONSTASCII_USTRINGPARAM("currpic.txt") );
     aFull += aFileName;
 
-    m_eEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, aFileName );
+    meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, aFileName );
     EasyFile aFile;
     SvStream* pStr;
     ULONG nErr = aFile.createStream(aFull, pStr);
@@ -3322,7 +3313,7 @@ bool HtmlExport::CreateImageNumberFile()
     }
 
     if (mpProgress)
-        mpProgress->SetState(++m_nPagesWritten);
+        mpProgress->SetState(++mnPagesWritten);
 
     if( nErr != 0 )
         ErrorHandler::HandleError( nErr );
@@ -3345,7 +3336,7 @@ String HtmlExport::InsertSound( const String& rSoundFile )
     aStr += String(aURL.getName());
     aStr.AppendAscii( "\" hidden=\"true\" autostart=\"true\">" );
 
-    CopyFile( rSoundFile, m_aExportPath );
+    CopyFile( rSoundFile, maExportPath );
 
     return aStr;
 }
@@ -3357,7 +3348,7 @@ bool HtmlExport::CopyFile( const String& rSourceFile, const String& rDestPath )
     DirEntry aSourceEntry( rSourceFile );
     DirEntry aDestEntry( rDestPath );
 
-    m_eEC.SetContext( STR_HTMLEXP_ERROR_COPY_FILE, aSourceEntry.GetName(), rDestPath );
+    meEC.SetContext( STR_HTMLEXP_ERROR_COPY_FILE, aSourceEntry.GetName(), rDestPath );
     FSysError nError = aSourceEntry.CopyTo( aDestEntry, FSYS_ACTION_COPYFILE );
 
     if( nError != FSYS_ERR_OK )
@@ -3377,7 +3368,7 @@ bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileA
 {
     try
     {
-        OUString url( m_aExportPath );
+        OUString url( maExportPath );
         url += aFileName;
         return xFileAccess->exists( url );
     }
@@ -3404,22 +3395,22 @@ bool HtmlExport::checkForExistingFiles()
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY_THROW );
 
         sal_uInt16 nSdPage;
-        for( nSdPage = 0; !bFound && (nSdPage < m_nSdPageCount); nSdPage++)
+        for( nSdPage = 0; !bFound && (nSdPage < mnSdPageCount); nSdPage++)
         {
-            if( (m_pImageFiles[nSdPage] && checkFileExists( xFA, *m_pImageFiles[nSdPage] )) ||
-                (m_pHTMLFiles[nSdPage] && checkFileExists( xFA, *m_pHTMLFiles[nSdPage] )) ||
-                (m_pPageNames[nSdPage] && checkFileExists( xFA, *m_pPageNames[nSdPage] )) ||
-                (m_pTextFiles[nSdPage] && checkFileExists( xFA, *m_pTextFiles[nSdPage] )) )
+            if( (mpImageFiles[nSdPage] && checkFileExists( xFA, *mpImageFiles[nSdPage] )) ||
+                (mpHTMLFiles[nSdPage] && checkFileExists( xFA, *mpHTMLFiles[nSdPage] )) ||
+                (mpPageNames[nSdPage] && checkFileExists( xFA, *mpPageNames[nSdPage] )) ||
+                (mpTextFiles[nSdPage] && checkFileExists( xFA, *mpTextFiles[nSdPage] )) )
             {
                 bFound = true;
             }
         }
 
-        if( !bFound && m_bDownload )
-            bFound = checkFileExists( xFA, m_aDocFileName );
+        if( !bFound && mbDownload )
+            bFound = checkFileExists( xFA, maDocFileName );
 
-        if( !bFound && m_bFrames )
-            bFound = checkFileExists( xFA, m_aFramePage );
+        if( !bFound && mbFrames )
+            bFound = checkFileExists( xFA, maFramePage );
 
         if( bFound )
         {
@@ -3430,7 +3421,7 @@ bool HtmlExport::checkForExistingFiles()
                 String aMsg( aResId );
 
                 OUString aSystemPath;
-                osl::FileBase::getSystemPathFromFileURL( m_aExportPath, aSystemPath );
+                osl::FileBase::getSystemPathFromFileURL( maExportPath, aSystemPath );
                 aMsg.SearchAndReplaceAscii( "%FILENAME", aSystemPath );
                 WarningBox aWarning( 0, WB_YES_NO | WB_DEF_YES, aMsg );
                 aWarning.SetImage( WarningBox::GetStandardImage() );
@@ -3485,10 +3476,10 @@ void HtmlExport::HideSpecialObjects( SdPage* pPage )
     {
         pObj = aIter.Next();
 
-        pInfo = pDoc->GetAnimationInfo(pObj);
+        pInfo = mpDoc->GetAnimationInfo(pObj);
         if(pInfo)
         {
-            SdrPathObj* pPath = pInfo->pPathObj;
+            SdrPathObj* pPath = pInfo->mpPathObj;
 
             if( pPath )
             {
@@ -3502,7 +3493,7 @@ void HtmlExport::HideSpecialObjects( SdPage* pPage )
 
                 if( pHSOI == NULL )
                 {
-                    SfxItemSet aSet(pDoc->GetPool());
+                    SfxItemSet aSet(mpDoc->GetPool());
 
                     aSet.Put(pPath->GetMergedItemSet());
 
@@ -3545,7 +3536,7 @@ void HtmlExport::ShowSpecialObjects()
     {
         SdrObject* pPath = pHSOI->mpObj;
 
-        SfxItemSet aSet(pDoc->GetPool());
+        SfxItemSet aSet(mpDoc->GetPool());
         aSet.Put(pPath->GetMergedItemSet());
 
         if( pHSOI->mnLineStyleState == SFX_ITEM_SET )
@@ -3708,24 +3699,24 @@ ULONG EasyFile::close()
 // This class helps reporting errors during file i/o
 // =====================================================================
 
-HtmlErrorContext::HtmlErrorContext(Window *pWin)
-: ErrorContext(pWin)
+HtmlErrorContext::HtmlErrorContext(Window *_pWin)
+: ErrorContext(_pWin)
 {
-    m_nResId = 0;
+    mnResId = 0;
 }
 
 // =====================================================================
 
-BOOL HtmlErrorContext::GetString( ULONG nErrId, String& rCtxStr )
+BOOL HtmlErrorContext::GetString( ULONG, String& rCtxStr )
 {
-    DBG_ASSERT( m_nResId != 0, "No error context set" );
-    if( m_nResId == 0 )
+    DBG_ASSERT( mnResId != 0, "No error context set" );
+    if( mnResId == 0 )
         return false;
 
-    rCtxStr = String( SdResId( m_nResId ) );
+    rCtxStr = String( SdResId( mnResId ) );
 
-    rCtxStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("$(URL1)")), m_aURL1 );
-    rCtxStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("$(URL2)")), m_aURL2 );
+    rCtxStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("$(URL1)")), maURL1 );
+    rCtxStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("$(URL2)")), maURL2 );
 
     return true;
 }
@@ -3734,27 +3725,27 @@ BOOL HtmlErrorContext::GetString( ULONG nErrId, String& rCtxStr )
 
 void HtmlErrorContext::SetContext( USHORT nResId )
 {
-    m_nResId = nResId;
-    m_aURL1.Erase();
-    m_aURL2.Erase();
+    mnResId = nResId;
+    maURL1.Erase();
+    maURL2.Erase();
 }
 
 // =====================================================================
 
 void HtmlErrorContext::SetContext( USHORT nResId, const String& rURL )
 {
-    m_nResId = nResId;
-    m_aURL1 = rURL;
-    m_aURL2.Erase();
+    mnResId = nResId;
+    maURL1 = rURL;
+    maURL2.Erase();
 }
 
 // =====================================================================
 
 void HtmlErrorContext::SetContext( USHORT nResId, const String& rURL1, const String& rURL2 )
 {
-    m_nResId = nResId;
-    m_aURL1 = rURL1;
-    m_aURL2 = rURL2;
+    mnResId = nResId;
+    maURL1 = rURL1;
+    maURL2 = rURL2;
 }
 
 // =====================================================================
