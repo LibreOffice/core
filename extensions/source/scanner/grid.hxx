@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:35:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,15 +47,40 @@
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _B2D_MBASE_HXX
-#include <goodies/b2dmbase.hxx>
-#endif
-#ifndef _B2D_MPNT_HXX
-#include <goodies/b2dmbmp.hxx>
-#endif
 
 class GridWindow : public ModalDialog
 {
+    // helper class for handles
+    struct impHandle
+    {
+        Point           maPos;
+        sal_uInt16      mnOffX;
+        sal_uInt16      mnOffY;
+
+        impHandle(const Point& rPos, sal_uInt16 nX, sal_uInt16 nY)
+        :   maPos(rPos), mnOffX(nX), mnOffY(nY)
+        {
+        }
+
+        bool operator<(const impHandle& rComp) const
+        {
+            return (maPos.X() < rComp.maPos.X());
+        }
+
+        void draw(Window& rWin, const BitmapEx& rBitmapEx)
+        {
+            const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
+            rWin.DrawBitmapEx(maPos - aOffset, rBitmapEx);
+        }
+
+        bool isHit(Window& rWin, const Point& rPos)
+        {
+            const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
+            const Rectangle aTarget(maPos - aOffset, maPos + aOffset);
+            return aTarget.IsInside(rPos);
+        }
+    };
+
     Rectangle       m_aGridArea;
 
     double          m_fMinX;
@@ -73,18 +98,16 @@ class GridWindow : public ModalDialog
     int             m_nValues;
     double*         m_pNewYValues;
 
+    sal_uInt16      m_BmOffX;
+    sal_uInt16      m_BmOffY;
+
     BOOL            m_bCutValues;
 
     // stuff for handles
-    B2dIAOManager               m_aIAOManager;
+    std::vector< impHandle >    m_aHandles;
+    sal_uInt32                  m_nDragIndex;
 
-    // #i21114#
-    // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
-    B2dIAOBitmapEx*             m_pLeftMarker;
-    B2dIAOBitmapEx*             m_pRightMarker;
-    B2dIAOBitmapEx*             m_pDragMarker;
-
-    BitmapEx                    m_aMarkerBitmap;
+    BitmapEx        m_aMarkerBitmap;
 
     OKButton        m_aOKButton;
     CancelButton    m_aCancelButton;
@@ -104,6 +127,7 @@ class GridWindow : public ModalDialog
     void drawGrid();
     void drawOriginal();
     void drawNew();
+    void drawHandles();
 
     void computeExtremes();
     void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
