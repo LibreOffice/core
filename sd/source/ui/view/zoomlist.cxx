@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomlist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:45:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,10 @@ namespace sd {
 |*
 \************************************************************************/
 
-ZoomList::ZoomList (ViewShell* pViewShell)
-    : List(),
-      mpViewShell (pViewShell),
-      mnCurPos(0)
+ZoomList::ZoomList(ViewShell* pViewShell)
+: List()
+, mpViewShell (pViewShell)
+, mnCurPos(0)
 {
 }
 
@@ -83,13 +83,13 @@ ZoomList::ZoomList (ViewShell* pViewShell)
 ZoomList::~ZoomList()
 {
 #if ( defined GCC && defined C272 )
-    for (ULONG nCount=0; nCount<List::Count(); nCount++)
+    for (ULONG nObject=0; nObject<List::Count(); nObject++)
 #else
-    for (ULONG nCount=0; nCount<Count(); nCount++)
+    for (ULONG nObject=0; nObject<Count(); nObject++)
 #endif
     {
         // Ggf. ZoomRects loeschen
-        delete ((Rectangle*) GetObject(nCount));
+        delete ((Rectangle*) GetObject(nObject));
     }
 }
 
@@ -102,14 +102,14 @@ ZoomList::~ZoomList()
 
 void ZoomList::InsertZoomRect(const Rectangle& rRect)
 {
-    ULONG nCount = Count();
+    ULONG nRectCount = Count();
 
-    if (nCount >= MAX_ENTRYS)
+    if (nRectCount >= MAX_ENTRYS)
     {
         delete ((Rectangle*) GetObject(0));
         Remove((ULONG) 0);
     }
-    else if (nCount == 0)
+    else if (nRectCount == 0)
     {
         mnCurPos = 0;
     }
@@ -148,11 +148,11 @@ Rectangle ZoomList::GetCurrentZoomRect() const
 Rectangle ZoomList::GetNextZoomRect()
 {
     mnCurPos++;
-    ULONG nCount = Count();
+    ULONG nRectCount = Count();
 
-    if (nCount > 0 && mnCurPos > nCount - 1)
+    if (nRectCount > 0 && mnCurPos > nRectCount - 1)
     {
-        mnCurPos = nCount - 1;
+        mnCurPos = nRectCount - 1;
     }
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
@@ -193,9 +193,9 @@ Rectangle ZoomList::GetPreviousZoomRect()
 BOOL ZoomList::IsNextPossible() const
 {
     BOOL bPossible = FALSE;
-    ULONG nCount = Count();
+    ULONG nRectCount = Count();
 
-    if (nCount > 0 && mnCurPos < nCount - 1)
+    if (nRectCount > 0 && mnCurPos < nRectCount - 1)
     {
         bPossible = TRUE;
     }
