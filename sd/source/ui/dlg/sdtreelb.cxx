@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:43:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:09:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <sal/types.h>
 
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
@@ -122,7 +124,7 @@ sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star:
 
 void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mrParent.DragFinished( nDropAction );
+    mrParent.OnDragFinished( nDropAction );
 }
 
 // -----------------------------------------------------------------------------
@@ -148,7 +150,7 @@ sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const ::
     if( ( rId.getLength() == 16 ) &&
         ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
     {
-        nRet = (sal_Int64) this;
+        nRet = (sal_Int64)(sal_IntPtr)this;
     }
     else
         nRet = 0;
@@ -181,16 +183,16 @@ SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::ge
 {
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( rxData, ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( rxData, ::com::sun::star::uno::UNO_QUERY_THROW );
 
-        return( xUnoTunnel.is() ?
-                ( (SdPageObjsTLB::SdPageObjsTransferable*)(void*) xUnoTunnel->getSomething( SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId() ) ) :
-                NULL );
+        return reinterpret_cast<SdPageObjsTLB::SdPageObjsTransferable*>(
+                sal::static_int_cast<sal_uIntPtr>(
+                    xUnoTunnel->getSomething( SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId()) ) );
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        return NULL;
     }
+    return 0;
 }
 
 /*************************************************************************
@@ -199,21 +201,20 @@ SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::ge
 |*
 \************************************************************************/
 
-SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
-                              BOOL bEnableDrop ) :
-    SvTreeListBox       ( pParentWin, rSdResId ),
-    pParent             ( pParentWin ),
-    pDoc                ( NULL ),
-    pBookmarkDoc        ( NULL ),
-    pMedium             ( NULL ),
-    pOwnMedium          ( NULL ),
-    aTransparencyColor  ( RGB_COLORDATA (0xff,0,0xff) ),
-    aImgOle             ( Bitmap( SdResId( BMP_OLE ) ), aTransparencyColor ),
-    aImgGraphic         ( Bitmap( SdResId( BMP_GRAPHIC ) ), aTransparencyColor ),
-    aImgOleH            ( Bitmap( SdResId( BMP_OLE_H ) ), aTransparencyColor),
-    aImgGraphicH        ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), aTransparencyColor),
-    pDropNavWin         ( NULL ),
-    bLinkableSelected   ( FALSE )
+SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
+:   SvTreeListBox       ( pParentWin, rSdResId )
+,   mpParent            ( pParentWin )
+,   mpDoc               ( NULL )
+,   mpBookmarkDoc       ( NULL )
+,   mpMedium            ( NULL )
+,   mpOwnMedium         ( NULL )
+,   maTransparencyColor ( RGB_COLORDATA (0xff,0,0xff) )
+,   maImgOle            ( Bitmap( SdResId( BMP_OLE ) ), maTransparencyColor )
+,   maImgGraphic        ( Bitmap( SdResId( BMP_GRAPHIC ) ), maTransparencyColor )
+,   maImgOleH           ( Bitmap( SdResId( BMP_OLE_H ) ), maTransparencyColor)
+,   maImgGraphicH       ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), maTransparencyColor)
+,   mbLinkableSelected  ( FALSE )
+,   mpDropNavWin        ( NULL )
 {
     // Tree-ListBox mit Linien versehen
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -236,11 +237,11 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
 
 SdPageObjsTLB::~SdPageObjsTLB()
 {
-    if ( pBookmarkDoc )
+    if ( mpBookmarkDoc )
         CloseBookmarkDoc();
     else
-        // no document was created from pMedium, so this object is still the owner of it
-        delete pMedium;
+        // no document was created from mpMedium, so this object is still the owner of it
+        delete mpMedium;
 }
 
 /*************************************************************************
@@ -343,42 +344,42 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
         Clear();
     }
 
-    pDoc = pInDoc;
-    aDocName = rDocName;
+    mpDoc = pInDoc;
+    maDocName = rDocName;
 
     SdrObject*   pObj = NULL;
     SdPage*      pPage = NULL;
     SvLBoxEntry* pEntry = NULL;
 
     Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-    Image aImgPage( aBmpPage, aTransparencyColor );
+    Image aImgPage( aBmpPage, maTransparencyColor );
     Bitmap aBmpPageExcl( SdResId( BMP_PAGE_EXCLUDED ) );
-    Image aImgPageExcl( aBmpPageExcl, aTransparencyColor );
+    Image aImgPageExcl( aBmpPageExcl, maTransparencyColor );
     Bitmap aBmpPageObjsExcl( SdResId( BMP_PAGEOBJS_EXCLUDED ) );
-    Image aImgPageObjsExcl( aBmpPageObjsExcl, aTransparencyColor );
+    Image aImgPageObjsExcl( aBmpPageObjsExcl, maTransparencyColor );
     Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-    Image aImgPageObjs( aBmpPageObjs, aTransparencyColor );
+    Image aImgPageObjs( aBmpPageObjs, maTransparencyColor );
     Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-    Image aImgObjects( aBmpObjects, aTransparencyColor );
+    Image aImgObjects( aBmpObjects, maTransparencyColor );
 
     Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
-    Image aImgPageH( aBmpPageH , aTransparencyColor );
+    Image aImgPageH( aBmpPageH , maTransparencyColor );
     Bitmap aBmpPageExclH( SdResId( BMP_PAGE_EXCLUDED_H ) );
-    Image aImgPageExclH( aBmpPageExclH, aTransparencyColor );
+    Image aImgPageExclH( aBmpPageExclH, maTransparencyColor );
     Bitmap aBmpPageObjExclH( SdResId( BMP_PAGEOBJS_EXCLUDED_H ) );
-    Image aImgPageObjsExclH( aBmpPageObjExclH, aTransparencyColor );
+    Image aImgPageObjsExclH( aBmpPageObjExclH, maTransparencyColor );
     Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
-    Image aImgPageObjsH( aBmpPageObjsH, aTransparencyColor );
+    Image aImgPageObjsH( aBmpPageObjsH, maTransparencyColor );
     Bitmap aBmpObjectsH( SdResId( BMP_OBJECTS_H ) );
-    Image aImgObjectsH( aBmpObjectsH, aTransparencyColor );
+    Image aImgObjectsH( aBmpObjectsH, maTransparencyColor );
 
     // Zuerst alle Pages incl. Objekte einfuegen
     USHORT nPage = 0;
-    const USHORT nMaxPages = pDoc->GetPageCount();
+    const USHORT nMaxPages = mpDoc->GetPageCount();
 
     while( nPage < nMaxPages )
     {
-        pPage = (SdPage*) pDoc->GetPage( nPage );
+        pPage = (SdPage*) mpDoc->GetPage( nPage );
         if(  (bAllPages || pPage->GetPageKind() == PK_STANDARD)
              && !(pPage->GetPageKind()==PK_HANDOUT)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
@@ -408,17 +409,17 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
                 {
                     if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                     {
-                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pEntry );
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgOle, maImgOle, pEntry );
 
-                        SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
-                        SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                        SetExpandedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
                     {
-                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry );
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgGraphic, maImgGraphic, pEntry );
 
-                        SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
-                        SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                        SetExpandedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else
                     {
@@ -444,11 +445,11 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
     if( bAllPages )
     {
         nPage = 0;
-        const USHORT nMaxMasterPages = pDoc->GetMasterPageCount();
+        const USHORT nMaxMasterPages = mpDoc->GetMasterPageCount();
 
         while( nPage < nMaxMasterPages )
         {
-            pPage = (SdPage*) pDoc->GetMasterPage( nPage );
+            pPage = (SdPage*) mpDoc->GetMasterPage( nPage );
             pEntry = InsertEntry( pPage->GetName(),
                                   aImgPage,
                                   aImgPage,
@@ -470,17 +471,17 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
                 {
                     if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                     {
-                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pEntry ); // pEntry entspr. Parent
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgOle, maImgOle, pEntry ); // pEntry entspr. Parent
 
-                        SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
-                        SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                        SetExpandedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
                     {
-                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry ); // pEntry entspr. Parent
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgGraphic, maImgGraphic, pEntry ); // pEntry entspr. Parent
 
-                        SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
-                        SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                        SetExpandedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else
                     {
@@ -514,28 +515,23 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
 void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
                           const String& rDocName )
 {
-    pDoc = pInDoc;
+    mpDoc = pInDoc;
 
     // this object now owns the Medium
-    pMedium = pInMedium;
-    aDocName = rDocName;
-
-    SdrObject*   pObj = NULL;
-    SdPage*      pPage = NULL;
-    SvLBoxEntry* pFileEntry = NULL;
-    SvLBoxEntry* pPageEntry = NULL;
+    mpMedium = pInMedium;
+    maDocName = rDocName;
 
     Bitmap aBmpDocOpen( SdResId( BMP_DOC_OPEN ) );
-    Image aImgDocOpen( aBmpDocOpen, aTransparencyColor );
+    Image aImgDocOpen( aBmpDocOpen, maTransparencyColor );
     Bitmap aBmpDocClosed( SdResId( BMP_DOC_CLOSED ) );
-    Image aImgDocClosed( aBmpDocClosed, aTransparencyColor );
+    Image aImgDocClosed( aBmpDocClosed, maTransparencyColor );
     Bitmap aBmpDocOpenH( SdResId( BMP_DOC_OPEN_H ) );
-    Image aImgDocOpenH( aBmpDocOpenH, aTransparencyColor );
+    Image aImgDocOpenH( aBmpDocOpenH, maTransparencyColor );
     Bitmap aBmpDocClosedH( SdResId( BMP_DOC_CLOSED_H ) );
-    Image aImgDocClosedH( aBmpDocClosedH, aTransparencyColor );
+    Image aImgDocClosedH( aBmpDocClosedH, maTransparencyColor );
 
     // Dokumentnamen einfuegen
-    pFileEntry = InsertEntry( aDocName,
+    SvLBoxEntry* pFileEntry = InsertEntry( maDocName,
                               aImgDocOpen,
                               aImgDocClosed,
                               NULL,
@@ -559,9 +555,9 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
 BOOL SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 {
     if( pInDoc )
-        pDoc = pInDoc;
+        mpDoc = pInDoc;
 
-    if( !pDoc )
+    if( !mpDoc )
         return( FALSE );
 
     SdrObject*   pObj = NULL;
@@ -571,11 +567,11 @@ BOOL SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 
     // Alle Pages incl. Objekte vergleichen
     USHORT nPage = 0;
-    const USHORT nMaxPages = pDoc->GetPageCount();
+    const USHORT nMaxPages = mpDoc->GetPageCount();
 
     while( nPage < nMaxPages )
     {
-        pPage = (SdPage*) pDoc->GetPage( nPage );
+        pPage = (SdPage*) mpDoc->GetPage( nPage );
         if( pPage->GetPageKind() == PK_STANDARD )
         {
             if( !pEntry )
@@ -674,11 +670,11 @@ List* SdPageObjsTLB::GetBookmarkList( USHORT nType )
         SdPage*      pPage = NULL;
         String*      pName = NULL;
         USHORT       nPage = 0;
-        const USHORT nMaxPages = pBookmarkDoc->GetSdPageCount( PK_STANDARD );
+        const USHORT nMaxPages = mpBookmarkDoc->GetSdPageCount( PK_STANDARD );
 
         while( nPage < nMaxPages )
         {
-            pPage = pBookmarkDoc->GetSdPage( nPage, PK_STANDARD );
+            pPage = mpBookmarkDoc->GetSdPage( nPage, PK_STANDARD );
 
             if( nType == 0 ) // Seitennamen einfuegen
             {
@@ -729,27 +725,27 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
             SvLBoxEntry* pPageEntry = NULL;
 
             Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-            Image aImgPage( aBmpPage, aTransparencyColor );
+            Image aImgPage( aBmpPage, maTransparencyColor );
             Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-            Image aImgPageObjs( aBmpPageObjs, aTransparencyColor );
+            Image aImgPageObjs( aBmpPageObjs, maTransparencyColor );
             Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-            Image aImgObjects( aBmpObjects, aTransparencyColor );
+            Image aImgObjects( aBmpObjects, maTransparencyColor );
             Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
-            Image aImgPageH( aBmpPageH, aTransparencyColor );
+            Image aImgPageH( aBmpPageH, maTransparencyColor );
             Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
-            Image aImgPageObjsH( aBmpPageObjsH, aTransparencyColor );
+            Image aImgPageObjsH( aBmpPageObjsH, maTransparencyColor );
             Bitmap aBmpImgObjectsH( SdResId( BMP_OBJECTS_H ) );
-            Image aImgObjectsH( aBmpImgObjectsH, aTransparencyColor );
+            Image aImgObjectsH( aBmpImgObjectsH, maTransparencyColor );
 
             // Dokumentname ist schon eingefuegt
 
             // Nur alle "normalen" Pages mit Objekten einfuegen
             USHORT nPage = 0;
-            const USHORT nMaxPages = pBookmarkDoc->GetPageCount();
+            const USHORT nMaxPages = mpBookmarkDoc->GetPageCount();
 
             while( nPage < nMaxPages )
             {
-                pPage = (SdPage*) pBookmarkDoc->GetPage( nPage );
+                pPage = (SdPage*) mpBookmarkDoc->GetPage( nPage );
                 if( pPage->GetPageKind() == PK_STANDARD )
                 {
                     pPageEntry = InsertEntry( pPage->GetName(),
@@ -773,17 +769,17 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
                         {
                             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                             {
-                                SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pPageEntry );
+                                SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgOle, maImgOle, pPageEntry );
 
-                                SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
-                                SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                                SetExpandedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
+                                SetCollapsedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
                             }
                             else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
                             {
-                                SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pPageEntry ); // pEntry entspr. Parent
+                                SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgGraphic, maImgGraphic, pPageEntry ); // pEntry entspr. Parent
 
-                                SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
-                                SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                                SetExpandedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                                SetCollapsedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                             }
                             else
                             {
@@ -819,11 +815,11 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
 
 SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 {
-    if (!pBookmarkDoc ||
-        pMed && (!pOwnMedium || pOwnMedium->GetName() != pMed->GetName()))
+    if (!mpBookmarkDoc ||
+        pMed && (!mpOwnMedium || mpOwnMedium->GetName() != pMed->GetName()))
     {
         // create a new BookmarkDoc if now one exists or if a new Medium is provided
-        if (pOwnMedium != pMed)
+        if (mpOwnMedium != pMed)
         {
             CloseBookmarkDoc();
         }
@@ -831,39 +827,39 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
         if (pMed)
         {
             // it looks that it is undefined if a Medium was set by Fill() allready
-            DBG_ASSERT( !pMedium, "SfxMedium confusion!" );
-            delete pMedium;
-            pMedium = NULL;
+            DBG_ASSERT( !mpMedium, "SfxMedium confusion!" );
+            delete mpMedium;
+            mpMedium = NULL;
 
             // take over this Medium (currently used only be Navigator)
-            pOwnMedium = pMed;
+            mpOwnMedium = pMed;
         }
 
-        DBG_ASSERT( pMedium || pMed, "No SfxMedium provided!" );
+        DBG_ASSERT( mpMedium || pMed, "No SfxMedium provided!" );
 
         if( pMed )
         {
             // in this mode the document is also owned and controlled by this instance
-            xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
-            if (xBookmarkDocShRef->DoLoad(pMed))
-                pBookmarkDoc = xBookmarkDocShRef->GetDoc();
+            mxBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
+            if (mxBookmarkDocShRef->DoLoad(pMed))
+                mpBookmarkDoc = mxBookmarkDocShRef->GetDoc();
             else
-                pBookmarkDoc = NULL;
+                mpBookmarkDoc = NULL;
         }
-        else if ( pMedium )
+        else if ( mpMedium )
             // in this mode the document is owned and controlled by the SdDrawDocument
             // it can be released by calling the corresponding CloseBookmarkDoc method
             // successfull creation of a document makes this the owner of the medium
-            pBookmarkDoc = ((SdDrawDocument*) pDoc)->OpenBookmarkDoc(*pMedium);
+            mpBookmarkDoc = ((SdDrawDocument*) mpDoc)->OpenBookmarkDoc(*mpMedium);
 
-        if ( !pBookmarkDoc )
+        if ( !mpBookmarkDoc )
         {
             ErrorBox aErrorBox( this, WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
             aErrorBox.Execute();
         }
     }
 
-    return( pBookmarkDoc );
+    return( mpBookmarkDoc );
 }
 
 /*************************************************************************
@@ -874,32 +870,32 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
 void SdPageObjsTLB::CloseBookmarkDoc()
 {
-    if (xBookmarkDocShRef.Is())
+    if (mxBookmarkDocShRef.Is())
     {
-        xBookmarkDocShRef->DoClose();
-        xBookmarkDocShRef.Clear();
+        mxBookmarkDocShRef->DoClose();
+        mxBookmarkDocShRef.Clear();
 
         // Medium is owned by document, so it's destroyed already
-        pOwnMedium = 0;
+        mpOwnMedium = 0;
     }
-    else if ( pBookmarkDoc )
+    else if ( mpBookmarkDoc )
     {
-        DBG_ASSERT( !pOwnMedium, "SfxMedium confusion!" );
-        if ( pDoc )
+        DBG_ASSERT( !mpOwnMedium, "SfxMedium confusion!" );
+        if ( mpDoc )
         {
             // The document owns the Medium, so the Medium will be invalid after closing the document
-            ((SdDrawDocument*) pDoc)->CloseBookmarkDoc();
-            pMedium = 0;
+            ((SdDrawDocument*) mpDoc)->CloseBookmarkDoc();
+            mpMedium = 0;
         }
     }
     else
     {
-        // perhaps pOwnMedium provided, but no successfull creation of BookmarkDoc
-        delete pOwnMedium;
-        pOwnMedium = NULL;
+        // perhaps mpOwnMedium provided, but no successfull creation of BookmarkDoc
+        delete mpOwnMedium;
+        mpOwnMedium = NULL;
     }
 
-    pBookmarkDoc = NULL;
+    mpBookmarkDoc = NULL;
 }
 
 /*************************************************************************
@@ -912,12 +908,12 @@ void SdPageObjsTLB::SelectHdl()
 {
     SvLBoxEntry* pEntry = FirstSelected();
 
-    bLinkableSelected = TRUE;
+    mbLinkableSelected = TRUE;
 
-    while( pEntry && bLinkableSelected )
+    while( pEntry && mbLinkableSelected )
     {
         if( NULL == pEntry->GetUserData() )
-            bLinkableSelected = FALSE;
+            mbLinkableSelected = FALSE;
 
         pEntry = NextSelected( pEntry );
     }
@@ -957,14 +953,14 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
 |*
 \************************************************************************/
 
-void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void SdPageObjsTLB::StartDrag( sal_Int8, const Point& )
 {
     SdNavigatorWin* pNavWin = NULL;
 
-    if( pFrame->HasChildWindow( SID_NAVIGATOR ) )
-        pNavWin = (SdNavigatorWin*) ( pFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
+    if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
+        pNavWin = (SdNavigatorWin*) ( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
 
-    if( pNavWin && pNavWin == pParent && pNavWin->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE )
+    if( pNavWin && pNavWin == mpParent && pNavWin->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE )
     {
         //  Aus dem ExecuteDrag heraus kann der Navigator geloescht werden
         //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
@@ -982,15 +978,15 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 void SdPageObjsTLB::DoDrag()
 {
-    pDropNavWin = ( pFrame->HasChildWindow( SID_NAVIGATOR ) ) ?
-                  (SdNavigatorWin*)( pFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) ) :
+    mpDropNavWin = ( mpFrame->HasChildWindow( SID_NAVIGATOR ) ) ?
+                  (SdNavigatorWin*)( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) ) :
                   NULL;
 
-    if( pDropNavWin )
+    if( mpDropNavWin )
     {
-        ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
+        ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
         String aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INET_PROT_FILE ).GetMainURL( INetURLObject::NO_DECODE );
-        NavigatorDragType   eDragType = pDropNavWin->GetNavigatorDragType();
+        NavigatorDragType   eDragType = mpDropNavWin->GetNavigatorDragType();
 
         aURL.Append( '#' );
         aURL.Append( GetSelectEntry() );
@@ -1016,20 +1012,20 @@ void SdPageObjsTLB::DoDrag()
 |*
 \************************************************************************/
 
-void SdPageObjsTLB::DragFinished( sal_uInt8 nDropAction )
+void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
 {
-    if( pFrame->HasChildWindow( SID_NAVIGATOR ) )
+    if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
     {
-        SdNavigatorWin* pNewNavWin = (SdNavigatorWin*) ( pFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
+        SdNavigatorWin* pNewNavWin = (SdNavigatorWin*) ( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
 
-        if( pDropNavWin == pNewNavWin)
+        if( mpDropNavWin == pNewNavWin)
         {
-            MouseEvent aMEvt( pDropNavWin->GetPointerPosPixel() );
+            MouseEvent aMEvt( mpDropNavWin->GetPointerPosPixel() );
             SvTreeListBox::MouseButtonUp( aMEvt );
         }
     }
 
-    pDropNavWin = NULL;
+    mpDropNavWin = NULL;
     bIsInDrag = FALSE;
 }
 
@@ -1059,16 +1055,16 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
         SdNavigatorWin* pNavWin = NULL;
         USHORT          nId = SID_NAVIGATOR;
 
-        if( pFrame->HasChildWindow( nId ) )
-            pNavWin = (SdNavigatorWin*)( pFrame->GetChildWindow( nId )->GetContextWindow( SD_MOD() ) );
+        if( mpFrame->HasChildWindow( nId ) )
+            pNavWin = (SdNavigatorWin*)( mpFrame->GetChildWindow( nId )->GetContextWindow( SD_MOD() ) );
 
-        if( pNavWin && ( pNavWin == pParent ) )
+        if( pNavWin && ( pNavWin == mpParent ) )
         {
             TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
             String                  aFile;
 
             if( aDataHelper.GetString( FORMAT_FILE, aFile ) &&
-                ( (SdNavigatorWin*) pParent)->InsertFile( aFile ) )
+                ( (SdNavigatorWin*) mpParent)->InsertFile( aFile ) )
             {
                 nRet = rEvt.mnAction;
             }
@@ -1099,11 +1095,11 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
     // is used.  The page does then belong to the standard show.
     bool bBelongsToShow = true;
 
-    if (pDoc->getPresentationSettings().mbCustomShow)
+    if (mpDoc->getPresentationSettings().mbCustomShow)
     {
         // Get the current custom show.
         SdCustomShow* pCustomShow = NULL;
-        List* pShowList = const_cast<SdDrawDocument*>(pDoc)->GetCustomShowList();
+        List* pShowList = const_cast<SdDrawDocument*>(mpDoc)->GetCustomShowList();
         if (pShowList != NULL)
         {
             ULONG nCurrentShowIndex = pShowList->GetCurPos();
