@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:22:38 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:43:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..$/..
 PRJNAME=sd
 TARGET=html
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE;
 
 # --- Settings -----------------------------------------------------
 
@@ -52,9 +53,6 @@ SLOFILES =	$(SLO)$/HtmlOptionsDialog.obj\
             $(SLO)$/htmlex.obj			\
             $(SLO)$/htmlattr.obj		\
             $(SLO)$/pubdlg.obj			
-
-EXCEPTIONSFILES = $(SLO)$/HtmlOptionsDialog.obj \
-                  $(SLO)$/htmlex.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	pubdlg.src					
