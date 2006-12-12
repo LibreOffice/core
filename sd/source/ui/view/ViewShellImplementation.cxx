@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:37:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include "sdresid.hxx"
 #include "glob.hrc"
 #include "app.hrc"
-#include "new_foil.hrc"
 #include "strings.hrc"
 #include "strings.hrc"
 #include "helpids.h"
@@ -116,9 +115,9 @@ ViewShell::Implementation::Implementation (ViewShell& rViewShell)
       mbIsMainViewShell(false),
       mbIsInitialized(false),
       mbArrangeActive(false),
+      mpSubShellFactory(),
       mpUpdateLockForMouse(),
-      mrViewShell(rViewShell),
-      mpSubShellFactory()
+      mrViewShell(rViewShell)
 {
 }
 
@@ -160,9 +159,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     String aOldName;
 
     AutoLayout aNewAutoLayout;
-
-    // #95981#
-    AutoLayout aOldAutoLayout;
 
     BOOL bBVisible;
     BOOL bBObjsVisible;
@@ -418,7 +414,7 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (ToolBarManage
 
 
 
-IMPL_LINK(ViewShell::Implementation::ToolBarManagerLock,TimeoutCallback,Timer*,pTimer)
+IMPL_LINK(ViewShell::Implementation::ToolBarManagerLock,TimeoutCallback,Timer*,EMPTYARG)
 {
     // If possible then release the lock now.  Otherwise start the timer
     // and try again later.
