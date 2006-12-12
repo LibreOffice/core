@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:54:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,7 @@ protected:
     void            ResetDrawDragMode();
     BOOL            IsDrawTextEdit() const;
     void            DrawEnableAnim(BOOL bSet);
-    void            DrawShowMarkHdl(BOOL bShow);
+    //HMHvoid           DrawShowMarkHdl(BOOL bShow);
 
     void            MakeDrawView( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
 
