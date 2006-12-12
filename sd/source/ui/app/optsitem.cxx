@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:24:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,13 +225,12 @@ SdOptionsLayout::SdOptionsLayout(  USHORT nConfigId, BOOL bUseConfig ) :
                         B2U( "Office.Impress/Layout" ) ) :
                       OUString() ),
     bRuler( TRUE ),
-    bHelplines( TRUE ),
-    bHandlesBezier( FALSE ),
     bMoveOutline( TRUE ),
     bDragStripes( FALSE ),
-    nMetric(isMetricSystem() ? FUNIT_CM : FUNIT_INCH),
+    bHandlesBezier( FALSE ),
+    bHelplines( TRUE ),
+    nMetric((UINT16)(isMetricSystem() ? FUNIT_CM : FUNIT_INCH)),
     nDefTab( 1250 )
-
 {
     EnableModify( TRUE );
 }
@@ -335,37 +334,39 @@ BOOL SdOptionsLayout::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsLayoutItem::SdOptionsLayoutItem( USHORT nWhich ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsLayout ( 0, FALSE )
+SdOptionsLayoutItem::SdOptionsLayoutItem( USHORT _nWhich )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsLayout ( 0, FALSE )
 {
 }
 
 // ----------------------------------------------------------------------
 
-SdOptionsLayoutItem::SdOptionsLayoutItem( USHORT nWhich, SdOptions* pOpts,
-    ::sd::FrameView* pView ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsLayout ( 0, FALSE )
+SdOptionsLayoutItem::SdOptionsLayoutItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsLayout ( 0, FALSE )
 {
-    SetMetric( pOpts->GetMetric() );
-    SetDefTab( pOpts->GetDefTab() );
+    if( pOpts )
+    {
+        maOptionsLayout.SetMetric( pOpts->GetMetric() );
+        maOptionsLayout.SetDefTab( pOpts->GetDefTab() );
+    }
 
     if( pView )
     {
-        SetRulerVisible( pView->HasRuler() );
-        SetMoveOutline( !pView->IsNoDragXorPolys() );
-        SetDragStripes( pView->IsDragStripes() );
-        SetHandlesBezier( pView->IsPlusHandlesAlwaysVisible() );
-        SetHelplines( pView->IsHlplVisible() );
+        maOptionsLayout.SetRulerVisible( pView->HasRuler() );
+        maOptionsLayout.SetMoveOutline( !pView->IsNoDragXorPolys() );
+        maOptionsLayout.SetDragStripes( pView->IsDragStripes() );
+        maOptionsLayout.SetHandlesBezier( pView->IsPlusHandlesAlwaysVisible() );
+        maOptionsLayout.SetHelplines( pView->IsHlplVisible() );
     }
-    else
+    else if( pOpts )
     {
-        SetRulerVisible( pOpts->IsRulerVisible() );
-        SetMoveOutline( pOpts->IsMoveOutline() );
-        SetDragStripes( pOpts->IsDragStripes() );
-        SetHandlesBezier( pOpts->IsHandlesBezier() );
-        SetHelplines( pOpts->IsHelplines() );
+        maOptionsLayout.SetRulerVisible( pOpts->IsRulerVisible() );
+        maOptionsLayout.SetMoveOutline( pOpts->IsMoveOutline() );
+        maOptionsLayout.SetDragStripes( pOpts->IsDragStripes() );
+        maOptionsLayout.SetHandlesBezier( pOpts->IsHandlesBezier() );
+        maOptionsLayout.SetHelplines( pOpts->IsHelplines() );
     }
 }
 
@@ -381,21 +382,25 @@ SfxPoolItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
 
 int SdOptionsLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "unterschiedliche Typen" );
-    return( (SdOptionsLayout&) *this == (const SdOptionsLayout&)(const SdOptionsLayoutItem&) rAttr );
+    const bool bSameType = SfxPoolItem::operator==( rAttr );
+    DBG_ASSERT( bSameType, "SdOptionsLayoutItem::operator==(), differen pool item type!" );
+    return bSameType && ( maOptionsLayout == static_cast< const SdOptionsLayoutItem& >( rAttr ).maOptionsLayout );
 }
 
 // -----------------------------------------------------------------------
 
 void SdOptionsLayoutItem::SetOptions( SdOptions* pOpts ) const
 {
-    pOpts->SetRulerVisible( IsRulerVisible() );
-    pOpts->SetMoveOutline( IsMoveOutline() );
-    pOpts->SetDragStripes( IsDragStripes() );
-    pOpts->SetHandlesBezier( IsHandlesBezier() );
-    pOpts->SetHelplines( IsHelplines() );
-    pOpts->SetMetric( GetMetric() );
-    pOpts->SetDefTab( GetDefTab() );
+    if( pOpts )
+    {
+        pOpts->SetRulerVisible( maOptionsLayout.IsRulerVisible() );
+        pOpts->SetMoveOutline( maOptionsLayout.IsMoveOutline() );
+        pOpts->SetDragStripes( maOptionsLayout.IsDragStripes() );
+        pOpts->SetHandlesBezier( maOptionsLayout.IsHandlesBezier() );
+        pOpts->SetHelplines( maOptionsLayout.IsHelplines() );
+        pOpts->SetMetric( maOptionsLayout.GetMetric() );
+        pOpts->SetDefTab( maOptionsLayout.GetDefTab() );
+    }
 }
 
 /*************************************************************************
@@ -485,31 +490,31 @@ BOOL SdOptionsContents::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsContentsItem::SdOptionsContentsItem( USHORT nWhich ) :
-    SfxPoolItem         ( nWhich ),
-    SdOptionsContents   ( 0, FALSE )
+SdOptionsContentsItem::SdOptionsContentsItem( USHORT _nWhich )
+:   SfxPoolItem         ( _nWhich )
+,   maOptionsContents   ( 0, FALSE )
 {
 }
 
 // ----------------------------------------------------------------------
 
-SdOptionsContentsItem::SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
-    SfxPoolItem         ( nWhich ),
-    SdOptionsContents   ( 0, FALSE )
+SdOptionsContentsItem::SdOptionsContentsItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
+:   SfxPoolItem         ( _nWhich )
+,   maOptionsContents   ( 0, FALSE )
 {
     if( pView )
     {
-        SetExternGraphic( pView->IsGrafDraft() );
-        SetOutlineMode( pView->IsFillDraft() );
-        SetHairlineMode( pView->IsLineDraft() );
-        SetNoText( pView->IsTextDraft() );
+        maOptionsContents.SetExternGraphic( pView->IsGrafDraft() );
+        maOptionsContents.SetOutlineMode( pView->IsFillDraft() );
+        maOptionsContents.SetHairlineMode( pView->IsLineDraft() );
+        maOptionsContents.SetNoText( pView->IsTextDraft() );
     }
-    else
+    else if( pOpts )
     {
-        SetExternGraphic( pOpts->IsExternGraphic() );
-        SetOutlineMode( pOpts->IsOutlineMode() );
-        SetHairlineMode( pOpts->IsHairlineMode() );
-        SetNoText( pOpts->IsNoText() );
+        maOptionsContents.SetExternGraphic( pOpts->IsExternGraphic() );
+        maOptionsContents.SetOutlineMode( pOpts->IsOutlineMode() );
+        maOptionsContents.SetHairlineMode( pOpts->IsHairlineMode() );
+        maOptionsContents.SetNoText( pOpts->IsNoText() );
     }
 }
 
@@ -524,18 +529,22 @@ SfxPoolItem* SdOptionsContentsItem::Clone( SfxItemPool* ) const
 
 int SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
-    return( (SdOptionsContents&) *this == (const SdOptionsContents&)(const SdOptionsContentsItem&) rAttr );
+    const bool bSameType = SfxPoolItem::operator==(rAttr);
+    DBG_ASSERT( bSameType, "SdOptionsContentsItem::operator==(), differen pool item type!" );
+    return bSameType && ( maOptionsContents == static_cast<const SdOptionsContentsItem&>( rAttr ).maOptionsContents );
 }
 
 // -----------------------------------------------------------------------
 
 void SdOptionsContentsItem::SetOptions( SdOptions* pOpts ) const
 {
-    pOpts->SetExternGraphic( IsExternGraphic() );
-    pOpts->SetOutlineMode( IsOutlineMode() );
-    pOpts->SetHairlineMode(IsHairlineMode() );
-    pOpts->SetNoText( IsNoText() );
+    if( pOpts )
+    {
+        pOpts->SetExternGraphic( maOptionsContents.IsExternGraphic() );
+        pOpts->SetOutlineMode( maOptionsContents.IsOutlineMode() );
+        pOpts->SetHairlineMode( maOptionsContents.IsHairlineMode() );
+        pOpts->SetNoText( maOptionsContents.IsNoText() );
+    }
 }
 
 /*************************************************************************
@@ -550,6 +559,9 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
                         B2U( "Office.Draw/Misc" ) :
                         B2U( "Office.Impress/Misc" ) ) :
                       OUString() ),
+    // #97016#
+    nDefaultObjectSizeWidth(8000),
+    nDefaultObjectSizeHeight(5000),
     bStartWithTemplate( TRUE ),
     bMarkedHitMovesAlways( TRUE ),
     bMoveOnlyDragging( FALSE ),
@@ -562,23 +574,18 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     bDoubleClickTextEdit( TRUE ),
     bClickChangeRotation( FALSE ),
     bStartWithActualPage( FALSE ),
-    bSummationOfParagraphs( FALSE ),
     bSolidDragging( FALSE ),
     bSolidMarkHdl( TRUE ),
+    bSummationOfParagraphs( FALSE ),
     // #90356#
     bShowUndoDeleteWarning( TRUE ),
-    // The default for 6.1-and-above documents is to use printer-independent
-    // formatting.
-    mnPrinterIndependentLayout (1),
-    // #97016#
-    nDefaultObjectSizeWidth(8000),
-    nDefaultObjectSizeHeight(5000),
-
     bPreviewNewEffects( TRUE ),
     bPreviewChangedEffects( FALSE ),
     bPreviewTransitions( TRUE ),
-
-    mnDisplay( 0 )
+    mnDisplay( 0 ),
+    // The default for 6.1-and-above documents is to use printer-independent
+    // formatting.
+    mnPrinterIndependentLayout (1)
 {
     EnableModify( TRUE );
 }
@@ -791,67 +798,69 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsMisc   ( 0, FALSE )
+SdOptionsMiscItem::SdOptionsMiscItem( USHORT _nWhich )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsMisc   ( 0, FALSE )
 {
 }
 
 // ----------------------------------------------------------------------
 
-SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts,
-    ::sd::FrameView* pView ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsMisc   ( 0, FALSE )
+SdOptionsMiscItem::SdOptionsMiscItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsMisc   ( 0, FALSE )
 {
-    SetStartWithTemplate( pOpts->IsStartWithTemplate() );
-    SetStartWithActualPage( pOpts->IsStartWithActualPage() );
-    SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
-    // #90356#
-    SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
-    SetPrinterIndependentLayout( pOpts->GetPrinterIndependentLayout() );
-    // #97016#
-    SetDefaultObjectSizeWidth( pOpts->GetDefaultObjectSizeWidth() );
-    SetDefaultObjectSizeHeight( pOpts->GetDefaultObjectSizeHeight() );
+    if( pOpts )
+    {
+        maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
+        maOptionsMisc.SetStartWithActualPage( pOpts->IsStartWithActualPage() );
+        maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
+        // #90356#
+        maOptionsMisc.SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
+        maOptionsMisc.SetPrinterIndependentLayout( pOpts->GetPrinterIndependentLayout() );
+        // #97016#
+        maOptionsMisc.SetDefaultObjectSizeWidth( pOpts->GetDefaultObjectSizeWidth() );
+        maOptionsMisc.SetDefaultObjectSizeHeight( pOpts->GetDefaultObjectSizeHeight() );
 
-    SetPreviewNewEffects(pOpts->IsPreviewNewEffects());
-    SetPreviewChangedEffects(pOpts->IsPreviewChangedEffects());
-    SetPreviewTransitions(pOpts->IsPreviewTransitions());
+        maOptionsMisc.SetPreviewNewEffects(pOpts->IsPreviewNewEffects());
+        maOptionsMisc.SetPreviewChangedEffects(pOpts->IsPreviewChangedEffects());
+        maOptionsMisc.SetPreviewTransitions(pOpts->IsPreviewTransitions());
 
-    SetDisplay(pOpts->GetDisplay());
+        maOptionsMisc.SetDisplay(pOpts->GetDisplay());
+    }
 
     if( pView )
     {
-        SetMarkedHitMovesAlways( pView->IsMarkedHitMovesAlways() );
-        SetMoveOnlyDragging( pView->IsMoveOnlyDragging() );
-        SetCrookNoContortion( pView->IsCrookNoContortion() );
-        SetQuickEdit( pView->IsQuickEdit() );
+        maOptionsMisc.SetMarkedHitMovesAlways( pView->IsMarkedHitMovesAlways() );
+        maOptionsMisc.SetMoveOnlyDragging( pView->IsMoveOnlyDragging() );
+        maOptionsMisc.SetCrookNoContortion( pView->IsCrookNoContortion() );
+        maOptionsMisc.SetQuickEdit( pView->IsQuickEdit() );
 
         // #i26631#
-        SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
+        maOptionsMisc.SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
-        SetDragWithCopy( pView->IsDragWithCopy() );
-        SetPickThrough( pView->GetModel()->IsPickThroughTransparentTextFrames() );
-        SetBigHandles( pView->IsBigHandles() );
-        SetDoubleClickTextEdit( pView->IsDoubleClickTextEdit() );
-        SetClickChangeRotation( pView->IsClickChangeRotation() );
-        SetSolidDragging( pView->IsSolidDragging() );
-        SetSolidMarkHdl( pView->IsSolidMarkHdl() );
+        maOptionsMisc.SetDragWithCopy( pView->IsDragWithCopy() );
+        maOptionsMisc.SetPickThrough( (BOOL)pView->GetModel()->IsPickThroughTransparentTextFrames() );
+        maOptionsMisc.SetBigHandles( (BOOL)pView->IsBigHandles() );
+        maOptionsMisc.SetDoubleClickTextEdit( pView->IsDoubleClickTextEdit() );
+        maOptionsMisc.SetClickChangeRotation( pView->IsClickChangeRotation() );
+        maOptionsMisc.SetSolidDragging( pView->IsSolidDragging() );
+        maOptionsMisc.SetSolidMarkHdl( pView->IsSolidMarkHdl() );
     }
-    else
+    else if( pOpts )
     {
-        SetMarkedHitMovesAlways( pOpts->IsMarkedHitMovesAlways() );
-        SetMoveOnlyDragging( pOpts->IsMoveOnlyDragging() );
-        SetCrookNoContortion( pOpts->IsCrookNoContortion() );
-        SetQuickEdit( pOpts->IsQuickEdit() );
-        SetMasterPagePaintCaching( pOpts->IsMasterPagePaintCaching() );
-        SetDragWithCopy( pOpts->IsDragWithCopy() );
-        SetPickThrough( pOpts->IsPickThrough() );
-        SetBigHandles( pOpts->IsBigHandles() );
-        SetDoubleClickTextEdit( pOpts->IsDoubleClickTextEdit() );
-        SetClickChangeRotation( pOpts->IsClickChangeRotation() );
-        SetSolidDragging( pOpts->IsSolidDragging() );
-        SetSolidMarkHdl( pOpts->IsSolidMarkHdl() );
+        maOptionsMisc.SetMarkedHitMovesAlways( pOpts->IsMarkedHitMovesAlways() );
+        maOptionsMisc.SetMoveOnlyDragging( pOpts->IsMoveOnlyDragging() );
+        maOptionsMisc.SetCrookNoContortion( pOpts->IsCrookNoContortion() );
+        maOptionsMisc.SetQuickEdit( pOpts->IsQuickEdit() );
+        maOptionsMisc.SetMasterPagePaintCaching( pOpts->IsMasterPagePaintCaching() );
+        maOptionsMisc.SetDragWithCopy( pOpts->IsDragWithCopy() );
+        maOptionsMisc.SetPickThrough( pOpts->IsPickThrough() );
+        maOptionsMisc.SetBigHandles( pOpts->IsBigHandles() );
+        maOptionsMisc.SetDoubleClickTextEdit( pOpts->IsDoubleClickTextEdit() );
+        maOptionsMisc.SetClickChangeRotation( pOpts->IsClickChangeRotation() );
+        maOptionsMisc.SetSolidDragging( pOpts->IsSolidDragging() );
+        maOptionsMisc.SetSolidMarkHdl( pOpts->IsSolidMarkHdl() );
     }
 }
 
@@ -867,41 +876,45 @@ SfxPoolItem* SdOptionsMiscItem::Clone( SfxItemPool* ) const
 
 int SdOptionsMiscItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
-    return( (SdOptionsMisc&) *this == (const SdOptionsMisc&)(const SdOptionsMiscItem&) rAttr );
+    const bool bSameType = SfxPoolItem::operator==(rAttr);
+    DBG_ASSERT( bSameType, "SdOptionsMiscItem::operator==(), differen pool item type!" );
+    return bSameType && ( maOptionsMisc == static_cast< const SdOptionsMiscItem& >(rAttr).maOptionsMisc );
 }
 
 // -----------------------------------------------------------------------
 
 void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
 {
-    pOpts->SetStartWithTemplate( IsStartWithTemplate() );
-    pOpts->SetMarkedHitMovesAlways( IsMarkedHitMovesAlways() );
-    pOpts->SetMoveOnlyDragging( IsMoveOnlyDragging() );
-    pOpts->SetCrookNoContortion( IsCrookNoContortion() );
-    pOpts->SetQuickEdit( IsQuickEdit() );
-    pOpts->SetMasterPagePaintCaching( IsMasterPagePaintCaching() );
-    pOpts->SetDragWithCopy( IsDragWithCopy() );
-    pOpts->SetPickThrough( IsPickThrough() );
-    pOpts->SetBigHandles( IsBigHandles() );
-    pOpts->SetDoubleClickTextEdit( IsDoubleClickTextEdit() );
-    pOpts->SetClickChangeRotation( IsClickChangeRotation() );
-    pOpts->SetStartWithActualPage( IsStartWithActualPage() );
-    pOpts->SetSummationOfParagraphs( IsSummationOfParagraphs() );
-    pOpts->SetSolidDragging( IsSolidDragging() );
-    pOpts->SetSolidMarkHdl( IsSolidMarkHdl() );
-    // #90356#
-    pOpts->SetShowUndoDeleteWarning( IsShowUndoDeleteWarning() );
-    pOpts->SetPrinterIndependentLayout( GetPrinterIndependentLayout() );
-    // #97016#
-    pOpts->SetDefaultObjectSizeWidth( GetDefaultObjectSizeWidth() );
-    pOpts->SetDefaultObjectSizeHeight( GetDefaultObjectSizeHeight() );
+    if( pOpts )
+    {
+        pOpts->SetStartWithTemplate( maOptionsMisc.IsStartWithTemplate() );
+        pOpts->SetMarkedHitMovesAlways( maOptionsMisc.IsMarkedHitMovesAlways() );
+        pOpts->SetMoveOnlyDragging( maOptionsMisc.IsMoveOnlyDragging() );
+        pOpts->SetCrookNoContortion( maOptionsMisc.IsCrookNoContortion() );
+        pOpts->SetQuickEdit( maOptionsMisc.IsQuickEdit() );
+        pOpts->SetMasterPagePaintCaching( maOptionsMisc.IsMasterPagePaintCaching() );
+        pOpts->SetDragWithCopy( maOptionsMisc.IsDragWithCopy() );
+        pOpts->SetPickThrough( maOptionsMisc.IsPickThrough() );
+        pOpts->SetBigHandles( maOptionsMisc.IsBigHandles() );
+        pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
+        pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
+        pOpts->SetStartWithActualPage( maOptionsMisc.IsStartWithActualPage() );
+        pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
+        pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
+        pOpts->SetSolidMarkHdl( maOptionsMisc.IsSolidMarkHdl() );
+        // #90356#
+        pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
+        pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
+        // #97016#
+        pOpts->SetDefaultObjectSizeWidth( maOptionsMisc.GetDefaultObjectSizeWidth() );
+        pOpts->SetDefaultObjectSizeHeight( maOptionsMisc.GetDefaultObjectSizeHeight() );
 
-    pOpts->SetPreviewNewEffects( IsPreviewNewEffects() );
-    pOpts->SetPreviewChangedEffects( IsPreviewChangedEffects() );
-    pOpts->SetPreviewTransitions( IsPreviewTransitions() );
+        pOpts->SetPreviewNewEffects( maOptionsMisc.IsPreviewNewEffects() );
+        pOpts->SetPreviewChangedEffects( maOptionsMisc.IsPreviewChangedEffects() );
+        pOpts->SetPreviewTransitions( maOptionsMisc.IsPreviewTransitions() );
 
-    pOpts->SetDisplay( GetDisplay() );
+        pOpts->SetDisplay( maOptionsMisc.GetDisplay() );
+    }
 }
 
 /*************************************************************************
@@ -1027,43 +1040,43 @@ BOOL SdOptionsSnap::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsSnapItem::SdOptionsSnapItem( USHORT nWhich ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsSnap   ( 0, FALSE )
+SdOptionsSnapItem::SdOptionsSnapItem( USHORT _nWhich )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsSnap   ( 0, FALSE )
 {
 }
 
 // ----------------------------------------------------------------------
 
-SdOptionsSnapItem::SdOptionsSnapItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsSnap   ( 0, FALSE )
+SdOptionsSnapItem::SdOptionsSnapItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsSnap   ( 0, FALSE )
 {
     if( pView )
     {
-        SetSnapHelplines( pView->IsHlplSnap() );
-        SetSnapBorder( pView->IsBordSnap() );
-        SetSnapFrame( pView->IsOFrmSnap() );
-        SetSnapPoints( pView->IsOPntSnap() );
-        SetOrtho( pView->IsOrtho() );
-        SetBigOrtho( pView->IsBigOrtho() );
-        SetRotate( pView->IsAngleSnapEnabled() );
-        SetSnapArea( pView->GetSnapMagneticPixel() );
-        SetAngle( (INT16) pView->GetSnapAngle() );
-        SetEliminatePolyPointLimitAngle( (INT16) pView->GetEliminatePolyPointLimitAngle() );
+        maOptionsSnap.SetSnapHelplines( pView->IsHlplSnap() );
+        maOptionsSnap.SetSnapBorder( pView->IsBordSnap() );
+        maOptionsSnap.SetSnapFrame( pView->IsOFrmSnap() );
+        maOptionsSnap.SetSnapPoints( pView->IsOPntSnap() );
+        maOptionsSnap.SetOrtho( pView->IsOrtho() );
+        maOptionsSnap.SetBigOrtho( pView->IsBigOrtho() );
+        maOptionsSnap.SetRotate( pView->IsAngleSnapEnabled() );
+        maOptionsSnap.SetSnapArea( pView->GetSnapMagneticPixel() );
+        maOptionsSnap.SetAngle( (INT16) pView->GetSnapAngle() );
+        maOptionsSnap.SetEliminatePolyPointLimitAngle( (INT16) pView->GetEliminatePolyPointLimitAngle() );
     }
-    else
+    else if( pOpts )
     {
-        SetSnapHelplines( pOpts->IsSnapHelplines() );
-        SetSnapBorder( pOpts->IsSnapBorder() );
-        SetSnapFrame( pOpts->IsSnapFrame() );
-        SetSnapPoints( pOpts->IsSnapPoints() );
-        SetOrtho( pOpts->IsOrtho() );
-        SetBigOrtho( pOpts->IsBigOrtho() );
-        SetRotate( pOpts->IsRotate() );
-        SetSnapArea( pOpts->GetSnapArea() );
-        SetAngle( pOpts->GetAngle() );
-        SetEliminatePolyPointLimitAngle( pOpts->GetEliminatePolyPointLimitAngle() );
+        maOptionsSnap.SetSnapHelplines( pOpts->IsSnapHelplines() );
+        maOptionsSnap.SetSnapBorder( pOpts->IsSnapBorder() );
+        maOptionsSnap.SetSnapFrame( pOpts->IsSnapFrame() );
+        maOptionsSnap.SetSnapPoints( pOpts->IsSnapPoints() );
+        maOptionsSnap.SetOrtho( pOpts->IsOrtho() );
+        maOptionsSnap.SetBigOrtho( pOpts->IsBigOrtho() );
+        maOptionsSnap.SetRotate( pOpts->IsRotate() );
+        maOptionsSnap.SetSnapArea( pOpts->GetSnapArea() );
+        maOptionsSnap.SetAngle( pOpts->GetAngle() );
+        maOptionsSnap.SetEliminatePolyPointLimitAngle( pOpts->GetEliminatePolyPointLimitAngle() );
     }
 }
 
@@ -1079,24 +1092,28 @@ SfxPoolItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
 
 int SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
-    return( (SdOptionsSnap&) *this == (const SdOptionsSnap&)(const SdOptionsSnapItem&) rAttr );
+    const bool bSameType = SfxPoolItem::operator==(rAttr);
+    DBG_ASSERT( bSameType, "SdOptionsSnapItem::operator==(), differen pool item type!" );
+    return bSameType && ( maOptionsSnap == static_cast< const SdOptionsSnapItem& >(rAttr).maOptionsSnap );
 }
 
 // -----------------------------------------------------------------------
 
 void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 {
-    pOpts->SetSnapHelplines( IsSnapHelplines() );
-    pOpts->SetSnapBorder( IsSnapBorder() );
-    pOpts->SetSnapFrame( IsSnapFrame() );
-    pOpts->SetSnapPoints( IsSnapPoints() );
-    pOpts->SetOrtho( IsOrtho() );
-    pOpts->SetBigOrtho( IsBigOrtho() );
-    pOpts->SetRotate( IsRotate() );
-    pOpts->SetSnapArea( GetSnapArea() );
-    pOpts->SetAngle( GetAngle() );
-    pOpts->SetEliminatePolyPointLimitAngle( GetEliminatePolyPointLimitAngle() );
+    if( pOpts )
+    {
+        pOpts->SetSnapHelplines( maOptionsSnap.IsSnapHelplines() );
+        pOpts->SetSnapBorder( maOptionsSnap.IsSnapBorder() );
+        pOpts->SetSnapFrame( maOptionsSnap.IsSnapFrame() );
+        pOpts->SetSnapPoints( maOptionsSnap.IsSnapPoints() );
+        pOpts->SetOrtho( maOptionsSnap.IsOrtho() );
+        pOpts->SetBigOrtho( maOptionsSnap.IsBigOrtho() );
+        pOpts->SetRotate( maOptionsSnap.IsRotate() );
+        pOpts->SetSnapArea( maOptionsSnap.GetSnapArea() );
+        pOpts->SetAngle( maOptionsSnap.GetAngle() );
+        pOpts->SetEliminatePolyPointLimitAngle( maOptionsSnap.GetEliminatePolyPointLimitAngle() );
+    }
 }
 
 /*************************************************************************
@@ -1154,12 +1171,12 @@ void SdOptionsZoom::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
 BOOL SdOptionsZoom::ReadData( const Any* pValues )
 {
-    INT32 nX = 1, nY = 1;
+    INT32 x = 1, y = 1;
 
-    if( pValues[0].hasValue() ) nX = ( *(sal_Int32*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) nY = ( *(sal_Int32*) pValues[ 1 ].getValue() );
+    if( pValues[0].hasValue() ) x = ( *(sal_Int32*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) y = ( *(sal_Int32*) pValues[ 1 ].getValue() );
 
-    SetScale( nX, nY );
+    SetScale( x, y );
 
     return TRUE;
 }
@@ -1168,12 +1185,12 @@ BOOL SdOptionsZoom::ReadData( const Any* pValues )
 
 BOOL SdOptionsZoom::WriteData( Any* pValues ) const
 {
-    INT32 nX, nY;
+    INT32 x, y;
 
-    GetScale( nX, nY );
+    GetScale( x, y );
 
-    pValues[ 0 ] <<= (sal_Int32) nX;
-    pValues[ 1 ] <<= (sal_Int32) nY;
+    pValues[ 0 ] <<= (sal_Int32) x;
+    pValues[ 1 ] <<= (sal_Int32) y;
 
     return TRUE;
 }
@@ -1184,22 +1201,25 @@ BOOL SdOptionsZoom::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsZoomItem::SdOptionsZoomItem( USHORT nWhich ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsZoom   ( 0, FALSE )
+SdOptionsZoomItem::SdOptionsZoomItem( USHORT _nWhich )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsZoom   ( 0, FALSE )
 {
 }
 
 // ----------------------------------------------------------------------
 
-SdOptionsZoomItem::SdOptionsZoomItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsZoom   ( 0, FALSE )
+SdOptionsZoomItem::SdOptionsZoomItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsZoom   ( 0, FALSE )
 {
-    INT32 nX, nY;
+    if( pOpts )
+    {
+        INT32 nX, nY;
 
-    pOpts->GetScale( nX, nY );
-    SetScale( nX, nY );
+        pOpts->GetScale( nX, nY );
+        maOptionsZoom.SetScale( nX, nY );
+    }
 }
 
 // ----------------------------------------------------------------------
@@ -1214,18 +1234,22 @@ SfxPoolItem* SdOptionsZoomItem::Clone( SfxItemPool* ) const
 
 int SdOptionsZoomItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
-    return( (SdOptionsZoom&) *this == (const SdOptionsZoom&)(const SdOptionsZoomItem&) rAttr );
+    const bool bSameType = SfxPoolItem::operator==(rAttr);
+    DBG_ASSERT( bSameType, "SdOptionsZoomItem::operator==(), differen pool item type!" );
+    return bSameType && ( maOptionsZoom == static_cast< const SdOptionsZoomItem& >(rAttr).maOptionsZoom );
 }
 
 // -----------------------------------------------------------------------
 
 void SdOptionsZoomItem::SetOptions( SdOptions* pOpts ) const
 {
-    INT32 nX, nY;
+    if( pOpts )
+    {
+        INT32 nX, nY;
 
-    GetScale( nX, nY );
-    pOpts->SetScale( nX, nY );
+        maOptionsZoom.GetScale( nX, nY );
+        pOpts->SetScale( nX, nY );
+    }
 }
 
 /*************************************************************************
@@ -1379,15 +1403,15 @@ BOOL SdOptionsGrid::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich ) :
-    SvxGridItem( nWhich )
+SdOptionsGridItem::SdOptionsGridItem( USHORT _nWhich ) :
+    SvxGridItem( _nWhich )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
-    SvxGridItem( nWhich )
+SdOptionsGridItem::SdOptionsGridItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
+    SvxGridItem( _nWhich )
 {
     SetSynchronize( pOpts->IsSynchronize() );
     SetEqualGrid( pOpts->IsEqualGrid() );
@@ -1661,37 +1685,40 @@ void SdOptionsPrint::SetPrinterOptions( const SdOptionsPrint* pOptions )
 |*
 \************************************************************************/
 
-SdOptionsPrintItem::SdOptionsPrintItem( USHORT nWhich ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsPrint  ( 0, FALSE )
+SdOptionsPrintItem::SdOptionsPrintItem( USHORT _nWhich )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsPrint  ( 0, FALSE )
 {
 }
 
 // ----------------------------------------------------------------------
 
-SdOptionsPrintItem::SdOptionsPrintItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsPrint  ( 0, FALSE )
+SdOptionsPrintItem::SdOptionsPrintItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* )
+:   SfxPoolItem     ( _nWhich )
+,   maOptionsPrint  ( 0, FALSE )
 {
-    SetDraw( pOpts->IsDraw() );
-    SetNotes( pOpts->IsNotes() );
-    SetHandout( pOpts->IsHandout() );
-    SetOutline( pOpts->IsOutline() );
-    SetDate( pOpts->IsDate() );
-    SetTime( pOpts->IsTime() );
-    SetPagename( pOpts->IsPagename() );
-    SetHiddenPages( pOpts->IsHiddenPages() );
-    SetPagesize( pOpts->IsPagesize() );
-    SetPagetile( pOpts->IsPagetile() );
-    SetWarningPrinter( pOpts->IsWarningPrinter() );
-    SetWarningSize( pOpts->IsWarningSize() );
-    SetWarningOrientation( pOpts->IsWarningOrientation() );
-    SetBooklet( pOpts->IsBooklet() );
-    SetFrontPage( pOpts->IsFrontPage() );
-    SetBackPage( pOpts->IsBackPage() );
-    SetCutPage( pOpts->IsCutPage() );
-    SetPaperbin( pOpts->IsPaperbin() );
-    SetOutputQuality( pOpts->GetOutputQuality() );
+    if( pOpts )
+    {
+        maOptionsPrint.SetDraw( pOpts->IsDraw() );
+        maOptionsPrint.SetNotes( pOpts->IsNotes() );
+        maOptionsPrint.SetHandout( pOpts->IsHandout() );
+        maOptionsPrint.SetOutline( pOpts->IsOutline() );
+        maOptionsPrint.SetDate( pOpts->IsDate() );
+        maOptionsPrint.SetTime( pOpts->IsTime() );
+        maOptionsPrint.SetPagename( pOpts->IsPagename() );
+        maOptionsPrint.SetHiddenPages( pOpts->IsHiddenPages() );
+        maOptionsPrint.SetPagesize( pOpts->IsPagesize() );
+        maOptionsPrint.SetPagetile( pOpts->IsPagetile() );
+        maOptionsPrint.SetWarningPrinter( pOpts->IsWarningPrinter() );
+        maOptionsPrint.SetWarningSize( pOpts->IsWarningSize() );
+        maOptionsPrint.SetWarningOrientation( pOpts->IsWarningOrientation() );
+        maOptionsPrint.SetBooklet( pOpts->IsBooklet() );
+        maOptionsPrint.SetFrontPage( pOpts->IsFrontPage() );
+        maOptionsPrint.SetBackPage( pOpts->IsBackPage() );
+        maOptionsPrint.SetCutPage( pOpts->IsCutPage() );
+        maOptionsPrint.SetPaperbin( pOpts->IsPaperbin() );
+        maOptionsPrint.SetOutputQuality( pOpts->GetOutputQuality() );
+    }
 }
 
 // ----------------------------------------------------------------------
@@ -1705,40 +1732,37 @@ SfxPoolItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
 
 int SdOptionsPrintItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "SdOptionsPrintItem::operator==(), differen pool item type!" );
-
-    const SdOptionsPrintItem* pRHS = dynamic_cast<const SdOptionsPrintItem *>(&rAttr);
-    DBG_ASSERT( pRHS, "SdOptionsPrintItem::operator==(), compare not possible for non SdOptionsPrintItem" );
-
-    if( pRHS )
-        return SdOptionsPrint::operator==(*pRHS);
-    else
-        return 0;
+    const bool bSameType = SfxPoolItem::operator==(rAttr);
+    DBG_ASSERT( bSameType, "SdOptionsPrintItem::operator==(), differen pool item type!" );
+    return bSameType && ( maOptionsPrint == static_cast< const SdOptionsPrintItem& >( rAttr ).maOptionsPrint );
 }
 
 // -----------------------------------------------------------------------
 
 void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 {
-    pOpts->SetDraw( IsDraw() );
-    pOpts->SetNotes( IsNotes() );
-    pOpts->SetHandout( IsHandout() );
-    pOpts->SetOutline( IsOutline() );
-    pOpts->SetDate( IsDate() );
-    pOpts->SetTime( IsTime() );
-    pOpts->SetPagename( IsPagename() );
-    pOpts->SetHiddenPages( IsHiddenPages() );
-    pOpts->SetPagesize( IsPagesize() );
-    pOpts->SetPagetile( IsPagetile() );
-    pOpts->SetWarningPrinter( IsWarningPrinter() );
-    pOpts->SetWarningSize( IsWarningSize() );
-    pOpts->SetWarningOrientation( IsWarningOrientation() );
-    pOpts->SetBooklet( IsBooklet() );
-    pOpts->SetFrontPage( IsFrontPage() );
-    pOpts->SetBackPage( IsBackPage() );
-    pOpts->SetCutPage( IsCutPage() );
-    pOpts->SetPaperbin( IsPaperbin() );
-    pOpts->SetOutputQuality( GetOutputQuality() );
+    if( pOpts )
+    {
+        pOpts->SetDraw( maOptionsPrint.IsDraw() );
+        pOpts->SetNotes( maOptionsPrint.IsNotes() );
+        pOpts->SetHandout( maOptionsPrint.IsHandout() );
+        pOpts->SetOutline( maOptionsPrint.IsOutline() );
+        pOpts->SetDate( maOptionsPrint.IsDate() );
+        pOpts->SetTime( maOptionsPrint.IsTime() );
+        pOpts->SetPagename( maOptionsPrint.IsPagename() );
+        pOpts->SetHiddenPages( maOptionsPrint.IsHiddenPages() );
+        pOpts->SetPagesize( maOptionsPrint.IsPagesize() );
+        pOpts->SetPagetile( maOptionsPrint.IsPagetile() );
+        pOpts->SetWarningPrinter( maOptionsPrint.IsWarningPrinter() );
+        pOpts->SetWarningSize( maOptionsPrint.IsWarningSize() );
+        pOpts->SetWarningOrientation( maOptionsPrint.IsWarningOrientation() );
+        pOpts->SetBooklet( maOptionsPrint.IsBooklet() );
+        pOpts->SetFrontPage( maOptionsPrint.IsFrontPage() );
+        pOpts->SetBackPage( maOptionsPrint.IsBackPage() );
+        pOpts->SetCutPage( maOptionsPrint.IsCutPage() );
+        pOpts->SetPaperbin( maOptionsPrint.IsPaperbin() );
+        pOpts->SetOutputQuality( maOptionsPrint.GetOutputQuality() );
+    }
 }
 
 /*************************************************************************
@@ -1766,7 +1790,7 @@ SdOptions::~SdOptions()
 
 // ----------------------------------------------------------------------
 
-void SdOptions::SetDefaults( ULONG nOptionsRange )
+void SdOptions::SetRangeDefaults( ULONG nOptionsRange )
 {
     if( nOptionsRange & SD_OPTIONS_LAYOUT )
         SdOptionsLayout::SetDefaults();
