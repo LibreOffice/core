@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 15:11:11 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:01:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -320,6 +320,7 @@ $(SHL$(TNR)TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @-+echo linking $@.manifest ...
     +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    +$(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
@@ -337,6 +338,7 @@ $(SHL$(TNR)TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @-+echo linking $@.manifest ...
     +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    +$(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
@@ -353,6 +355,7 @@ $(SHL$(TNR)TARGETN) : \
     )
     @-+echo linking $@.manifest ...
     +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+    +$(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
@@ -373,6 +376,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)LINKER) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
         @-+echo linking $@.manifest ...
         +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+        +$(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
