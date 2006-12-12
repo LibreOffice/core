@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationSchemesPane.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:28:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,8 +315,10 @@ void AnimationSchemesPane::updateControls()
     mbUpdatingControls = true;
 
     // get model data for first page
+#ifdef DBG_UTIL
     SdPage * pFirstPage = aSelectedPages.front();
     DBG_ASSERT( pFirstPage, "Invalid Page" );
+#endif
 
 //     // merge with other pages
 //     ::std::vector< SdPage * >::const_iterator aIt( aSelectedPages.begin());
