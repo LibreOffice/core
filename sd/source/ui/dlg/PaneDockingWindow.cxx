@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:34:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,14 @@
 namespace sd {
 
 PaneDockingWindow::PaneDockingWindow (
-    SfxBindings *pBindings,
+    SfxBindings *_pBindings,
     SfxChildWindow *pChildWindow,
     ::Window* pParent,
     const ResId& rResId,
     PaneManager::PaneType ePane,
     const String& rsTitle)
     : SfxDockingWindow (
-        pBindings,
+        _pBindings,
         pChildWindow,
         pParent,
         rResId
@@ -141,7 +141,6 @@ void PaneDockingWindow::Resize (void)
         ViewShell* pViewShell = pBase->GetPaneManager().GetViewShell (mePane);
         if (pViewShell != NULL)
         {
-            ::sd::Window* pWindow = pViewShell->GetActiveWindow();
             if (nTitleBarHeight < aToolBoxSize.Height())
                 nTitleBarHeight = aToolBoxSize.Height();
             aWindowSize.Height() -= nTitleBarHeight;
@@ -278,8 +277,8 @@ USHORT PaneDockingWindow::AddMenu (
     const Link& rCallback)
 {
     // Add the menu before the closer button.
-    int nItemCount (mpTitleToolBox->GetItemCount());
-    USHORT nItemId = nItemCount+1;
+    USHORT nItemCount (mpTitleToolBox->GetItemCount());
+    USHORT nItemId = (nItemCount+1);
     mpTitleToolBox->InsertItem (
         nItemId,
         rsMenuName,
@@ -345,7 +344,7 @@ void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
     switch (rEvent.GetType())
     {
         case DATACHANGED_SETTINGS:
-            if ((rEvent.GetFlags() & SETTINGS_STYLE) == NULL)
+            if ((rEvent.GetFlags() & SETTINGS_STYLE) == 0)
                 break;
             // else fall through.
         case DATACHANGED_FONTS:
