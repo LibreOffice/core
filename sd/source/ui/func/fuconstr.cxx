@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:28:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,36 +127,36 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
     bMBDown = TRUE;
     bSelectionChanged = FALSE;
 
-    if ( pView->IsAction() )
+    if ( mpView->IsAction() )
     {
         // #90235# this extra triggering is an error and leads to
         // erasing the last two points when creating a polygon.
         // if ( rMEvt.IsRight() )
-        //  pView->BckAction();
+        //  mpView->BckAction();
         return TRUE;
     }
 
     bFirstMouseMove = TRUE;
     aDragTimer.Start();
 
-    aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
-    USHORT nHitLog = USHORT (pWindow->PixelToLogic(Size(HITPIX,0)).Width());
+    aMDPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
+    USHORT nHitLog = USHORT (mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
 
-    if (rMEvt.IsLeft() && pView->IsExtendedMouseEventDispatcherEnabled())
+    if (rMEvt.IsLeft() && mpView->IsExtendedMouseEventDispatcherEnabled())
     {
-        pWindow->CaptureMouse();
+        mpWindow->CaptureMouse();
 
-        SdrHdl* pHdl = pView->PickHandle(aMDPos);
+        SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
-        if ( pHdl != NULL || pView->IsMarkedHit(aMDPos, nHitLog) )
+        if ( pHdl != NULL || mpView->IsMarkedHit(aMDPos, nHitLog) )
         {
-            USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+            USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+            mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             bReturn = TRUE;
         }
-        else if ( pView->AreObjectsMarked() )
+        else if ( mpView->AreObjectsMarked() )
         {
-            pView->UnmarkAll();
+            mpView->UnmarkAll();
             bReturn = TRUE;
         }
     }
@@ -183,12 +183,12 @@ BOOL FuConstruct::MouseMove(const MouseEvent& rMEvt)
     }
 
     Point aPix(rMEvt.GetPosPixel());
-    Point aPnt( pWindow->PixelToLogic(aPix) );
+    Point aPnt( mpWindow->PixelToLogic(aPix) );
 
-    if ( pView->IsAction() )
+    if ( mpView->IsAction() )
     {
         ForceScroll(aPix);
-        pView->MovAction(aPnt);
+        mpView->MovAction(aPnt);
     }
 
     return TRUE;
@@ -212,48 +212,47 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
     FuDraw::MouseButtonUp(rMEvt);
 
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( pView && pView->IsDragObj() )
+    if ( mpView && mpView->IsDragObj() )
     {
-        FrameView* pFrameView = pViewShell->GetFrameView();
+        FrameView* pFrameView = mpViewShell->GetFrameView();
         BOOL bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
         if (bDragWithCopy)
         {
-            bDragWithCopy = !pView->IsPresObjSelected(FALSE, TRUE);
+            bDragWithCopy = !mpView->IsPresObjSelected(FALSE, TRUE);
         }
 
-        pView->SetDragWithCopy(bDragWithCopy);
-        pView->EndDragObj( pView->IsDragWithCopy() );
+        mpView->SetDragWithCopy(bDragWithCopy);
+        mpView->EndDragObj( mpView->IsDragWithCopy() );
     }
-    else if ( pView && pView->IsMarkObj() )
+    else if ( mpView && mpView->IsMarkObj() )
     {
-        pView->EndMarkObj();
+        mpView->EndMarkObj();
     }
     else
     {
         bReturn = FALSE;
     }
 
-    if ( pView &&  !pView->IsAction() )
+    if ( mpView &&  !mpView->IsAction() )
     {
-        pWindow->ReleaseMouse();
-        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-        SdrHdl* pHdl = pView->PickHandle(aPnt);
+        mpWindow->ReleaseMouse();
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        if ( !pView->AreObjectsMarked() )
+        if ( !mpView->AreObjectsMarked() )
         {
             SdrObject* pObj;
             SdrPageView* pPV;
-            USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+            USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-            if (!pView->PickObj(aPnt, pObj, pPV))
+            if (!mpView->PickObj(aPnt, pObj, pPV))
             {
-                pView->MarkObj(aPnt, nHitLog);
+                mpView->MarkObj(aPnt, nHitLog);
             }
 
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
         }
         else if (rMEvt.IsLeft() && !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                  !bSelectionChanged                   &&
@@ -264,22 +263,22 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
             * Toggle zw. Selektion und Rotation
             **************************************************************/
             SdrObject* pSingleObj = NULL;
-            ULONG nMarkCount = pView->GetMarkedObjectList().GetMarkCount();
+            ULONG nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
             if (nMarkCount==1)
             {
-                pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             }
 
-            if (pView->GetDragMode() == SDRDRAG_MOVE && pView->IsRotateAllowed() &&
-                (pViewShell->GetFrameView()->IsClickChangeRotation() ||
+            if (mpView->GetDragMode() == SDRDRAG_MOVE && mpView->IsRotateAllowed() &&
+                (mpViewShell->GetFrameView()->IsClickChangeRotation() ||
                  (pSingleObj && pSingleObj->GetObjInventor()==E3dInventor)))
             {
-                pView->SetDragMode(SDRDRAG_ROTATE);
+                mpView->SetDragMode(SDRDRAG_ROTATE);
             }
             else
             {
-                pView->SetDragMode(SDRDRAG_MOVE);
+                mpView->SetDragMode(SDRDRAG_MOVE);
             }
         }
     }
@@ -323,7 +322,7 @@ BOOL FuConstruct::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstruct::Activate()
 {
-    pView->SetEditMode(SDREDITMODE_CREATE);
+    mpView->SetEditMode(SDREDITMODE_CREATE);
     FuDraw::Activate();
 }
 
@@ -336,7 +335,7 @@ void FuConstruct::Activate()
 void FuConstruct::Deactivate()
 {
     FuDraw::Deactivate();
-    pView->SetEditMode(SDREDITMODE_EDIT);
+    mpView->SetEditMode(SDREDITMODE_EDIT);
 }
 
 /*************************************************************************
@@ -391,9 +390,9 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         const sal_Bool bForceFillStyle, const sal_Bool bForceNoFillStyle )
 {
-    SdPage* pPage = (SdPage*)pView->GetSdrPageView()->GetPage();
+    SdPage* pPage = (SdPage*)mpView->GetSdrPageView()->GetPage();
     if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&
-         pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+         mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
         /**********************************************
         * Objects was created on the slide master page
@@ -401,7 +400,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         String aName( pPage->GetLayoutName() );
         String aSep = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
         USHORT n = aName.Search(aSep);
-        n += aSep.Len();
+        n = n + aSep.Len();
         aName.Erase(n);
         aName.Append( String ( SdResId( STR_LAYOUT_BACKGROUNDOBJECTS ) ) );
         SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
@@ -441,13 +440,13 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             if (pSheet)
             {
                 pObj->SetStyleSheet(pSheet, FALSE);
-                SfxItemSet aAttr(*pView->GetDefaultAttr().Clone());
+                SfxItemSet aAttr(*mpView->GetDefaultAttr().Clone());
                 aAttr.Put(pSheet->GetItemSet().Get(XATTR_FILLSTYLE));
                 pObj->SetMergedItemSet(aAttr);
             }
             else
             {
-                SfxItemSet aAttr(*pView->GetDefaultAttr().Clone());
+                SfxItemSet aAttr(*mpView->GetDefaultAttr().Clone());
                 rAttr.Put(XFillStyleItem(XFILL_NONE));
                 pObj->SetMergedItemSet(aAttr);
             }
