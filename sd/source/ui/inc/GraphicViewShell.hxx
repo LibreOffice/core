@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicViewShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:06:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ public:
     TYPEINFO();
 
     SFX_DECL_VIEWFACTORY(GraphicViewShell);
-    SFX_DECL_INTERFACE(SD_IF_SDGRAPHICVIEWSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDGRAPHICVIEWSHELL)
 
     GraphicViewShell (
         SfxViewFrame* pFrame,
@@ -88,7 +88,7 @@ public:
     virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
 protected:
-    void Construct (void);
+    void ConstructGraphicViewShell (void);
     virtual void ArrangeGUIElements (void);
 
 private:
