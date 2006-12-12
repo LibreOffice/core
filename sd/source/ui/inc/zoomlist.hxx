@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomlist.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:01:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,7 @@ namespace sd {
 
 class ViewShell;
 
-class ZoomList
-    : public List
+class ZoomList : public List
 {
 public:
     ZoomList(ViewShell* pViewShell);
@@ -65,8 +64,8 @@ public:
     BOOL        IsPreviousPossible() const;
 
 private:
-    ViewShell* mpViewShell;
-    ULONG mnCurPos;
+    ViewShell*  mpViewShell;
+    ULONG       mnCurPos;
 };
 
 } // end of namespace sd
