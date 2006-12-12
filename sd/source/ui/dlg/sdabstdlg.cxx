@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdabstdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:42:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
     if ( aDialogLibrary.is() || aDialogLibrary.load( String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
         fp = ( SdAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
     if ( fp )
         return fp();
     return 0;
