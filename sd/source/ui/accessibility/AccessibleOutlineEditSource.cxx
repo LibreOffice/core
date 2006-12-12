@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,23 +192,18 @@ namespace accessibility
         return Point();
     }
 
-    void AccessibleOutlineEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    void AccessibleOutlineEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+        const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
 
-        if( pSdrHint )
+        if( pSdrHint && ( pSdrHint->GetKind() == HINT_MODELCLEARED ) )
         {
-            switch( pSdrHint->GetKind() )
-            {
-                case HINT_MODELCLEARED:
-                    // model is dying under us, going defunc
-                    if( mpOutliner )
-                        mpOutliner->SetNotifyHdl( Link() );
-                    mpOutliner = NULL;
-                    mpOutlinerView = NULL;
-                    Broadcast( TextHint( SFX_HINT_DYING ) );
-                    break;
-            }
+            // model is dying under us, going defunc
+            if( mpOutliner )
+                mpOutliner->SetNotifyHdl( Link() );
+            mpOutliner = NULL;
+            mpOutlinerView = NULL;
+            Broadcast( TextHint( SFX_HINT_DYING ) );
         }
     }
 
