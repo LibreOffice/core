@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,7 +429,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarMath" ) ) );
                 }
 
-                pView->HideMarkHdl();
+                //HMHpView->HideMarkHdl();
                 pOleObj->SetLogicRect(aRect);
                 Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aUnit );
                 aSz.Width = aTmp.Width();
@@ -623,7 +623,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
                             Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
 
-                            pView->HideMarkHdl();
+                            //HMHpView->HideMarkHdl();
 
                             if ( nAspect == embed::Aspects::MSOLE_ICON )
                             {
@@ -690,7 +690,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     if (bCreateNew)
                     {
-                        pView->HideMarkHdl();
+                        //HMHpView->HideMarkHdl();
                         pObj->SetLogicRect(aRect);
 
                         if ( nAspect != embed::Aspects::MSOLE_ICON )
