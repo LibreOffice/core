@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,7 +538,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                         pObj->SetMergedItem( aGeometryItem );
                         pObj->BroadcastObjectChange();
                         pSdrView->EndUndo();
-                        pSdrView->AdjustMarkHdl( sal_True );
+                        pSdrView->AdjustMarkHdl(); //HMH sal_True );
                         rBindings.Invalidate( SID_FONTWORK_SHAPE_TYPE );
                     }
                 }
