@@ -1,5 +1,5 @@
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\bin\animcore.dll %_DEST%\bin%_EXT%\animcore.dll
+..\%__SRC%\lib\libanimcore.so %_DEST%\lib%_EXT%\libanimcore.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
 ..\source\animcore\animcore.xml %_DEST%\xml%_EXT%\animcore.xml
 
