@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:31:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,8 +141,8 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
     friend class SdLayerManager;
 
 private:
-    ::sd::DrawDocShell* pDocShell;
-    SdDrawDocument* pDoc;
+    ::sd::DrawDocShell* mpDocShell;
+    SdDrawDocument* mpDoc;
     bool mbDisposed;
 
     SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
@@ -167,7 +167,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxMarkerTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDrawingPool;
 
-    SvxItemPropertySet  aPropSet;
+    SvxItemPropertySet  maPropSet;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 
@@ -180,11 +180,11 @@ public:
     virtual ~SdXImpressDocument() throw();
 
     // intern
-    virtual int operator==( const SdXImpressDocument& rModel ) const { return pDoc == rModel.pDoc; }
-    virtual int operator!=( const SdXImpressDocument& rModel ) const { return pDoc != rModel.pDoc; }
+    virtual int operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }
+    virtual int operator!=( const SdXImpressDocument& rModel ) const { return mpDoc != rModel.mpDoc; }
 
-    ::sd::DrawDocShell* GetDocShell() const { return pDocShell; }
-    SdDrawDocument* GetDoc() const { return pDoc; }
+    ::sd::DrawDocShell* GetDocShell() const { return mpDocShell; }
+    SdDrawDocument* GetDoc() const { return mpDoc; }
     sal_Bool IsImpressDocument() const { return mbImpressDoc; }
 
     void SetModified( sal_Bool bModified = sal_True ) throw();
