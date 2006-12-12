@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:21:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
 #include <svx/bulitem.hxx>
 #include <svx/xtable.hxx>
+#include <svx/sxmsuitm.hxx>
 #ifndef _SVX_XIT_HXX //autogen
 #include <svx/xit.hxx>
 #endif
@@ -651,6 +652,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(XLINE_SOLID));
+    pISet->Put(SdrMeasureShowUnitItem(true));
 
 /*
 
