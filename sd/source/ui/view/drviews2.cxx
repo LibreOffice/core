@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:41:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -812,25 +812,38 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     break;
                 }
 
+                // create new object
                 SdrGrafObj* pGraphicObj = new SdrGrafObj (aGraphic);
 
-                // fit rectangle of graphic-object to  mark-rect
+                // get some necessary info and ensure it
+                const SdrMarkList& rMarkList(pDrView->GetMarkedObjectList());
+                const sal_uInt32 nMarkCount(rMarkList.GetMarkCount());
+                SdrPageView* pPageView = pDrView->GetSdrPageView();
+                OSL_ENSURE(nMarkCount, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP with empty selection (!)");
+                OSL_ENSURE(pPageView, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP without SdrPageView (!)");
+
+                // fit rectangle of new graphic object to selection's mark rect
                 Rectangle aAllMarkedRect;
-                SdrMarkList aMarkList = pDrView->GetMarkedObjectList();
-                for (int i=0; i < (int) aMarkList.GetMarkCount(); i++)
+                rMarkList.TakeBoundRect(pPageView, aAllMarkedRect);
+                pGraphicObj->SetLogicRect(aAllMarkedRect);
+
+                // #i71540# to keep the order, it is necessary to replace the lowest object
+                // of the selection with the new object. This also means that with multi
+                // selection, all other objects need to be deleted first
+                SdrMark* pFirstMark = rMarkList.GetMark(0L);
+                SdrObject* pReplacementCandidate = pFirstMark->GetMarkedSdrObj();
+
+                if(nMarkCount > 1L)
                 {
-                    aAllMarkedRect.Union ( aMarkList.GetMark(i)->GetMarkedSdrObj()->GetCurrentBoundRect() );
+                    // take first object out of selection
+                    pDrView->MarkObj(pReplacementCandidate, pPageView, true, true);
+
+                    // clear remaining selection
+                    pDrView->DeleteMarkedObj();
                 }
-                pGraphicObj->SetLogicRect (aAllMarkedRect);
 
-                // get page-view
-                SdrPageView* pPageView = pDrView->GetMarkedObjectList().GetMark(0)->GetPageView();
-
-                // delete marked objects
-                pDrView->DeleteMarkedObj(); // #69979# delete the objects, not only the marked area
-
-                // insert new object
-                pDrView->InsertObjectAtView(pGraphicObj, *pPageView);
+                // now replace lowest object with new one
+                pDrView->ReplaceObjectAtView(pReplacementCandidate, *pPageView, pGraphicObj);
 
                 // switch off undo
                 pDrView->EndUndo();
