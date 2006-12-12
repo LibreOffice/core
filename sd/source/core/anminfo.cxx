@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:20:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,57 +64,57 @@ using namespace ::com::sun::star;
 SdAnimationInfo::SdAnimationInfo()
                : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID, 0),
                  mePresObjKind              (PRESOBJ_NONE),
-                 eEffect                    (presentation::AnimationEffect_NONE),
-                 eTextEffect                (presentation::AnimationEffect_NONE),
-                 eSpeed                     (presentation::AnimationSpeed_SLOW),
-                 bActive                    (TRUE),
-                 bDimPrevious               (FALSE),
-                 bIsMovie                   (FALSE),
-                 bDimHide                   (FALSE),
-                 bSoundOn                   (FALSE),
-                 bPlayFull                  (FALSE),
-                 pPathObj                   (NULL),
-                 eClickAction               (presentation::ClickAction_NONE),
-                 eSecondEffect              (presentation::AnimationEffect_NONE),
-                 eSecondSpeed               (presentation::AnimationSpeed_SLOW),
-                 bSecondSoundOn             (FALSE),
-                 bSecondPlayFull            (FALSE),
-                 nVerb                      (0),
-                 nPresOrder                 (LIST_APPEND)
+                 meEffect                   (presentation::AnimationEffect_NONE),
+                 meTextEffect               (presentation::AnimationEffect_NONE),
+                 meSpeed                    (presentation::AnimationSpeed_SLOW),
+                 mbActive                   (TRUE),
+                 mbDimPrevious              (FALSE),
+                 mbIsMovie                  (FALSE),
+                 mbDimHide                  (FALSE),
+                 mbSoundOn                  (FALSE),
+                 mbPlayFull                 (FALSE),
+                 mpPathObj                  (NULL),
+                 meClickAction              (presentation::ClickAction_NONE),
+                 meSecondEffect             (presentation::AnimationEffect_NONE),
+                 meSecondSpeed              (presentation::AnimationSpeed_SLOW),
+                 mbSecondSoundOn            (FALSE),
+                 mbSecondPlayFull           (FALSE),
+                 mnVerb                     (0),
+                 mnPresOrder                (LIST_APPEND)
 {
-    aBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
-    aDimColor = RGB_Color(COL_LIGHTGRAY);
+    maBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
+    maDimColor = RGB_Color(COL_LIGHTGRAY);
 }
 
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                : SdrObjUserData             (rAnmInfo),
                     mePresObjKind               (PRESOBJ_NONE),
-                 eEffect                    (rAnmInfo.eEffect),
-                 eTextEffect                (rAnmInfo.eTextEffect),
-                 eSpeed                     (rAnmInfo.eSpeed),
-                 bActive                    (rAnmInfo.bActive),
-                 bDimPrevious               (rAnmInfo.bDimPrevious),
-                 bIsMovie                   (rAnmInfo.bIsMovie),
-                 bDimHide                   (rAnmInfo.bDimHide),
-                 aBlueScreen                (rAnmInfo.aBlueScreen),
-                 aDimColor                  (rAnmInfo.aDimColor),
-                 aSoundFile                 (rAnmInfo.aSoundFile),
-                 bSoundOn                   (rAnmInfo.bSoundOn),
-                 bPlayFull                  (rAnmInfo.bPlayFull),
-                 pPathObj                   (NULL),
-                 eClickAction               (rAnmInfo.eClickAction),
-                 eSecondEffect              (rAnmInfo.eSecondEffect),
-                 eSecondSpeed               (rAnmInfo.eSecondSpeed),
-                 bSecondSoundOn             (rAnmInfo.bSecondSoundOn),
-                 bSecondPlayFull            (rAnmInfo.bSecondPlayFull),
-                 nVerb                      (rAnmInfo.nVerb),
-                 aBookmark                  (rAnmInfo.aBookmark),
-                 aSecondSoundFile           (rAnmInfo.aSecondSoundFile),
-                 nPresOrder                 (LIST_APPEND)
+                 meEffect                   (rAnmInfo.meEffect),
+                 meTextEffect               (rAnmInfo.meTextEffect),
+                 meSpeed                    (rAnmInfo.meSpeed),
+                 mbActive                   (rAnmInfo.mbActive),
+                 mbDimPrevious              (rAnmInfo.mbDimPrevious),
+                 mbIsMovie                  (rAnmInfo.mbIsMovie),
+                 mbDimHide                  (rAnmInfo.mbDimHide),
+                 maBlueScreen               (rAnmInfo.maBlueScreen),
+                 maDimColor                 (rAnmInfo.maDimColor),
+                 maSoundFile                (rAnmInfo.maSoundFile),
+                 mbSoundOn                  (rAnmInfo.mbSoundOn),
+                 mbPlayFull                 (rAnmInfo.mbPlayFull),
+                 mpPathObj                  (NULL),
+                 meClickAction              (rAnmInfo.meClickAction),
+                 meSecondEffect             (rAnmInfo.meSecondEffect),
+                 meSecondSpeed              (rAnmInfo.meSecondSpeed),
+                 maSecondSoundFile          (rAnmInfo.maSecondSoundFile),
+                 mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
+                 mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
+                 maBookmark                 (rAnmInfo.maBookmark),
+                 mnVerb                     (rAnmInfo.mnVerb),
+                 mnPresOrder                (LIST_APPEND)
 {
     // can not be copied
-    if (eEffect == presentation::AnimationEffect_PATH)
-        eEffect =  presentation::AnimationEffect_NONE;
+    if(meEffect == presentation::AnimationEffect_PATH)
+        meEffect =  presentation::AnimationEffect_NONE;
 }
 
 
@@ -122,7 +122,7 @@ SdAnimationInfo::~SdAnimationInfo()
 {
 }
 
-SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObj) const
+SdrObjUserData* SdAnimationInfo::Clone(SdrObject*) const
 {
     return new SdAnimationInfo(*this);
 }
