@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids3_tmpl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:27:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,12 +156,22 @@
         Text [ x-comment ] = " ";\
     };
 
+#define MN_SHOW_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_SHOW_SLIDE ; \
+        HelpID = SID_SHOW_SLIDE ; \
+        Text [ de ] = "Folie ~einblenden" ; \
+        Text [ en-US ] = "~Show Slide" ; \
+        Text [ x-comment ] = " ";\
+    };
+
 #define MN_HIDE_SLIDE \
     MenuItem\
     {\
         Identifier = SID_HIDE_SLIDE ; \
         HelpID = SID_HIDE_SLIDE ; \
-        Text [ de ] = "Folie ausblenden" ; \
+        Text [ de ] = "Folie ~ausblenden" ; \
         Text [ en-US ] = "~Hide Slide" ; \
         Text [ x-comment ] = " ";\
     };
