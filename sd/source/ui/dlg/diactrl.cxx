@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diactrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:36:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ SdPagesField::~SdPagesField()
 
 // -----------------------------------------------------------------------
 
-void SdPagesField::Update( const SfxUInt16Item* pItem )
+void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 {
     if( pItem )
     {
@@ -161,7 +161,7 @@ SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 
 //========================================================================
 
-void SdTbxCtlDiaPages::StateChanged( USHORT nSID,
+void SdTbxCtlDiaPages::StateChanged( USHORT,
                 SfxItemState eState, const SfxPoolItem* pState )
 {
     SdPagesField* pFld = (SdPagesField*) GetToolBox().GetItemWindow( GetId() );
@@ -176,13 +176,14 @@ void SdTbxCtlDiaPages::StateChanged( USHORT nSID,
     {
         pFld->Enable();
 
+        const SfxUInt16Item* pItem = 0;
         if ( eState == SFX_ITEM_AVAILABLE )
         {
-            DBG_ASSERT( pState->ISA(SfxUInt16Item), "falscher ItemType" )
-            pFld->Update( (const SfxUInt16Item*) pState );
+            pItem = dynamic_cast< const SfxUInt16Item* >( pState );
+            DBG_ASSERT( pItem, "sd::SdTbxCtlDiaPages::StateChanged(), wrong item type!" );
         }
-        else
-            pFld->Update( NULL );
+
+        pFld->UpdatePagesField( pItem );
     }
 }
 
