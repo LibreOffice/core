@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:46:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ class SdPageNameControllerItem;
 class NavDocInfo
 {
 public:
-            NavDocInfo() { pDocShell = NULL; }
+            NavDocInfo() { mpDocShell = NULL; }
 
     BOOL    HasName() { return( (BOOL) bName ); }
     BOOL    IsActive() { return( (BOOL) bActive ); }
@@ -101,7 +101,7 @@ private:
     friend class SdNavigatorWin;
     BOOL            bName   : 1;
     BOOL            bActive : 1;
-    ::sd::DrawDocShell* pDocShell;
+    ::sd::DrawDocShell* mpDocShell;
 };
 
 //------------------------------------------------------------------------
@@ -125,7 +125,7 @@ public:
     BOOL                        InsertFile(const String& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
-    void                        SetNavigatorDragType(NavigatorDragType eType) { eDragType = eType; }
+    void                        SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
 
 protected:
     virtual void                Resize();
@@ -137,21 +137,21 @@ private:
     friend class SdNavigatorControllerItem;
     friend class SdPageNameControllerItem;
 
-    ToolBox                     aToolbox;
-    SdPageObjsTLB               aTlbObjects;
-    ListBox                     aLbDocs;
+    ToolBox                     maToolbox;
+    SdPageObjsTLB               maTlbObjects;
+    ListBox                     maLbDocs;
 
-    ::sd::NavigatorChildWindow*     pChildWinContext;
-    Size                        aSize;
-    Size                        aMinSize;
-    Size                        aFltWinSize;
-    BOOL                        bDocImported;
-    String                      aDropFileName;
-    NavigatorDragType           eDragType;
-    List*                       pDocList;
-    SfxBindings*                pBindings;
-    SdNavigatorControllerItem*  pNavigatorCtrlItem;
-    SdPageNameControllerItem*   pPageNameCtrlItem;
+    ::sd::NavigatorChildWindow*     mpChildWinContext;
+    Size                        maSize;
+    Size                        maMinSize;
+//  Size                        maFltWinSize;
+    BOOL                        mbDocImported;
+    String                      maDropFileName;
+    NavigatorDragType           meDragType;
+    List*                       mpDocList;
+    SfxBindings*                mpBindings;
+    SdNavigatorControllerItem*  mpNavigatorCtrlItem;
+    SdPageNameControllerItem*   mpPageNameCtrlItem;
 
     ImageList                   maImageList;
     ImageList                   maImageListH;
