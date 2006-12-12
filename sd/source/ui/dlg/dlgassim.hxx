@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgassim.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:55:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ public:
     friend SvStream& operator << (SvStream& rOut, const TemplateCacheInfo& rInfo);
 };
 
-DECLARE_LIST( TemplateCacheInfoList, TemplateCacheInfo * );
+DECLARE_LIST( TemplateCacheInfoList, TemplateCacheInfo * )
 
 class TemplateCacheDirEntry
 {
@@ -116,7 +116,7 @@ public:
     TemplateCacheInfoList       m_aFiles;
 };
 
-DECLARE_LIST( TemplateCacheDirEntryList, TemplateCacheDirEntry * );
+DECLARE_LIST( TemplateCacheDirEntryList, TemplateCacheDirEntry * )
 
 class TemplateCache
 {
