@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuspell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:56:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,19 +104,19 @@ FunctionReference FuSpell::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd:
     return xFunc;
 }
 
-void FuSpell::DoExecute( SfxRequest& rReq )
+void FuSpell::DoExecute( SfxRequest& )
 {
-    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
-    if ( pViewShell->ISA(DrawViewShell) )
+    if ( mpViewShell->ISA(DrawViewShell) )
     {
         bOwnOutliner = TRUE;
-        pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+        pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( pViewShell->ISA(OutlineViewShell) )
+    else if ( mpViewShell->ISA(OutlineViewShell) )
     {
         bOwnOutliner = FALSE;
-        pSdOutliner = pDoc->GetOutliner();
+        pSdOutliner = mpDoc->GetOutliner();
     }
 
     if (pSdOutliner)
@@ -133,7 +133,7 @@ void FuSpell::DoExecute( SfxRequest& rReq )
 
 FuSpell::~FuSpell()
 {
-    pDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
+    mpDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if (pSdOutliner)
         pSdOutliner->EndSpelling();
@@ -152,28 +152,28 @@ void FuSpell::StartSpelling()
 {
     // Get current main view shell.
     ViewShellBase* pBase (ViewShellBase::GetViewShellBase (
-        pDocSh->GetViewShell()->GetViewFrame()));
+        mpDocSh->GetViewShell()->GetViewFrame()));
     if (pBase != NULL)
-        pViewShell = pBase->GetMainViewShell ();
+        mpViewShell = pBase->GetMainViewShell ();
     else
-        pViewShell = NULL;
-    if (pViewShell != NULL)
+        mpViewShell = NULL;
+    if (mpViewShell != NULL)
     {
-        if ( pSdOutliner && pViewShell->ISA(DrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && mpViewShell->ISA(DrawViewShell) && !bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
 
             bOwnOutliner = TRUE;
-            pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+            pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
-        else if ( pSdOutliner && pViewShell->ISA(OutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && mpViewShell->ISA(OutlineViewShell) && bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
             delete pSdOutliner;
 
             bOwnOutliner = FALSE;
-            pSdOutliner = pDoc->GetOutliner();
+            pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->PrepareSpelling();
         }
 
