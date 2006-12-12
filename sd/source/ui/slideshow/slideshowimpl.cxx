@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:34:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:07:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,12 +276,12 @@ void AnimationSlideController::setPreviewNode( const Reference< XAnimationNode >
 }
 
 AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > xSlides, Mode eMode  )
-:   mnCurrentSlideIndex(0),
-    mnStartSlideNumber(-1),
-    mnSlideCount( 0 ),
-    mxSlides( xSlides ),
-    mnHiddenSlideNumber( -1 ),
-    meMode( eMode )
+:   meMode( eMode )
+,   mnStartSlideNumber(-1)
+,   mnSlideCount( 0 )
+,   mnCurrentSlideIndex(0)
+,   mnHiddenSlideNumber( -1 )
+,   mxSlides( xSlides )
 {
     if( mxSlides.is() )
         mnSlideCount = xSlides->getCount();
@@ -553,31 +553,32 @@ SlideshowImpl::SlideshowImpl(
     mpViewShell(pViewSh),
     mpDocSh(pDoc->GetDocSh()),
     mpDoc(pDoc),
+
+    mpNewAttr(0),
     mpShowWindow(0),
-    mpTimeButton(0),
     mpSaveOptions( new SvtSaveOptions ),
+    mpTimeButton(0),
     mnRestoreSlide(0),
-    mbRehearseTimings(false),
-    mbAutoSaveSuppressed(false),
-    meAnimationMode(ANIMATIONMODE_SHOW),
     maPresSize( -1, -1 ),
+    meAnimationMode(ANIMATIONMODE_SHOW),
     mpOldActiveWindow(0),
+    mnChildMask( 0 ),
     mbGridVisible(false),
     mbBordVisible(false),
     mbSlideBorderVisible(false),
-    mpNewAttr(0),
     mbSetOnlineSpelling(false),
     mbDisposed(false),
-    mnChildMask( 0 ),
-    maPresSettings( pDoc->getPresentationSettings() ),
+    mbAutoSaveSuppressed(false),
+    mbRehearseTimings(false),
     mbDesignMode(false),
+    mbIsPaused(false),
+    mbInputFreeze(false),
+    maPresSettings( pDoc->getPresentationSettings() ),
+    mnEntryCounter(0),
+    mnLastSlideNumber(-1),
     msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
     msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
-    mnEntryCounter(0),
-    mnLastSlideNumber(-1),
-    mbIsPaused(false),
-    mbInputFreeze(false),
     mnEndShowEvent(0)
 {
     if( mpViewShell )
@@ -2215,12 +2216,12 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
             {
                 if( mpSlideController->isVisibleSlideNumber( nPageNumber ) )
                 {
-                    SdPage* pPage = mpDoc->GetSdPage(nPageNumber, PK_STANDARD);
+                    SdPage* pPage = mpDoc->GetSdPage((USHORT)nPageNumber, PK_STANDARD);
                     if (pPage)
                     {
-                        pPageMenu->InsertItem( CM_SLIDES + nPageNumber, pPage->GetName() );
+                        pPageMenu->InsertItem( (USHORT)(CM_SLIDES + nPageNumber), pPage->GetName() );
                         if( nPageNumber == nCurrentSlideNumber )
-                            pPageMenu->CheckItem( CM_SLIDES + nPageNumber );
+                            pPageMenu->CheckItem( (USHORT)(CM_SLIDES + nPageNumber) );
                     }
                 }
             }
