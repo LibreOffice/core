@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCloner.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:12:16 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ namespace sd
         return aCloner.Clone( xSourceNode, pSource, pTarget );
     }
 
-    Reference< XAnimationNode > CustomAnimationClonerImpl::Clone( const Reference< XAnimationNode >& xSourceNode, const SdPage* pSource, const SdPage* pTarget )
+    Reference< XAnimationNode > CustomAnimationClonerImpl::Clone( const Reference< XAnimationNode >& xSourceNode, const SdPage* pSourcePage, const SdPage* pTargetPage )
     {
         try
         {
@@ -154,10 +154,10 @@ namespace sd
             Reference< XAnimationNode > xCloneNode( xClonable->createClone(), UNO_QUERY_THROW );
 
             // create a dictionary to map source to cloned shapes
-            if( pSource && pTarget )
+            if( pSourcePage && pTargetPage )
             {
-                SdrObjListIter aSourceIter( *pSource, IM_DEEPWITHGROUPS );
-                SdrObjListIter aTargetIter( *pTarget, IM_DEEPWITHGROUPS );
+                SdrObjListIter aSourceIter( *pSourcePage, IM_DEEPWITHGROUPS );
+                SdrObjListIter aTargetIter( *pTargetPage, IM_DEEPWITHGROUPS );
 
                 while( aSourceIter.IsMore() && aTargetIter.IsMore() )
                 {
