@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:47:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ void TabControl::TabControlTransferable::AddSupportedFormats()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& )
 {
     return sal_False;
 }
@@ -219,7 +219,7 @@ void TabControl::DoubleClick()
 |*
 \************************************************************************/
 
-void TabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void TabControl::StartDrag( sal_Int8, const Point& )
 {
     bInternalMove = TRUE;
 
@@ -233,7 +233,7 @@ void TabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 |*
 \************************************************************************/
 
-void TabControl::DragFinished( sal_Int8 nDropAction )
+void TabControl::DragFinished( sal_Int8 )
 {
     bInternalMove = FALSE;
 }
@@ -270,13 +270,11 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
         {
             HideDropPos();
 
-            USHORT nPageId = GetPageId( aPos ) - 1;
+            sal_Int32 nPageId = GetPageId( aPos ) - 1;
 
-            if( ( nPageId >= 0 ) && pDoc->GetPage( nPageId ) )
+            if( ( nPageId >= 0 ) && pDoc->GetPage( (USHORT)nPageId ) )
             {
-                ::sd::Window* pWindow = NULL;
-
-                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, SDRLAYER_NOTFOUND );
+                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, (USHORT)nPageId, SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
             }
         }
@@ -353,11 +351,11 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
     else
     {
-        USHORT nPageId = GetPageId( aPos ) - 1;
+        sal_Int32 nPageId = GetPageId( aPos ) - 1;
 
-        if( ( nPageId >= 0 ) && pDoc->GetPage( nPageId ) )
+        if( ( nPageId >= 0 ) && pDoc->GetPage( (USHORT)nPageId ) )
         {
-            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, SDRLAYER_NOTFOUND );
+            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, (USHORT)nPageId, SDRLAYER_NOTFOUND );
         }
     }
 
