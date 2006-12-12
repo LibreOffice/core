@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:55:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     nTab( pData->GetTabNo() ),
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
-    bDisableHdl( FALSE ),
+    //HMHbDisableHdl( FALSE ),
     bInConstruct( TRUE )
 {
     SetBufferedOverlayAllowed(true);
@@ -83,7 +83,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable 
     nTab( nTable ),
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
-    bDisableHdl( FALSE ),
+    //HMHbDisableHdl( FALSE ),
     bInConstruct( TRUE )
 {
     SetBufferedOverlayAllowed(true);
