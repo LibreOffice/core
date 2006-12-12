@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vectdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:44:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 SdVectorizeDlg::SdVectorizeDlg(
     Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) :
         ModalDialog     ( pParent, SdResId( DLG_VECTORIZE ) ),
-        pDocSh          ( pDocShell ),
+        mpDocSh          ( pDocShell ),
         aGrpSettings    ( this, SdResId( GRP_SETTINGS ) ),
         aFtLayers       ( this, SdResId( FT_LAYERS ) ),
         aNmLayers       ( this, SdResId( NM_LAYERS ) ),
@@ -95,8 +95,8 @@ SdVectorizeDlg::SdVectorizeDlg(
         aMtFillHoles    ( this, SdResId( MT_FILLHOLES ) ),
         aCbFillHoles    ( this, SdResId( CB_FILLHOLES ) ),
         aFtOriginal     ( this, SdResId( FT_ORIGINAL ) ),
-        aFtVectorized   ( this, SdResId( FT_VECTORIZED ) ),
         aBmpWin         ( this, SdResId( CTL_BMP ) ),
+        aFtVectorized   ( this, SdResId( FT_VECTORIZED ) ),
         aMtfWin         ( this, SdResId( CTL_WMF ) ),
         aGrpPrgs        ( this, SdResId( GRP_PRGS ) ),
         aPrgs           ( this, SdResId( WND_PRGS ) ),
@@ -197,7 +197,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 
 void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 {
-    pDocSh->SetWaitCursor( TRUE );
+    mpDocSh->SetWaitCursor( TRUE );
     aPrgs.SetValue( 0 );
 
     Fraction    aScale;
@@ -265,7 +265,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     }
 
     aPrgs.SetValue( 0 );
-    pDocSh->SetWaitCursor( FALSE );
+    mpDocSh->SetWaitCursor( FALSE );
 }
 
 // -----------------------------------------------------------------------------
@@ -320,7 +320,7 @@ IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdVectorizeDlg, ClickPreviewHdl, PushButton*, pBtn )
+IMPL_LINK( SdVectorizeDlg, ClickPreviewHdl, PushButton*, EMPTYARG )
 {
     Calculate( aBmp, aMtf );
     aMtfWin.SetGraphic( aMtf );
@@ -331,7 +331,7 @@ IMPL_LINK( SdVectorizeDlg, ClickPreviewHdl, PushButton*, pBtn )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdVectorizeDlg, ClickOKHdl, OKButton*, pBtn )
+IMPL_LINK( SdVectorizeDlg, ClickOKHdl, OKButton*, EMPTYARG )
 {
     if( aBtnPreview.IsEnabled() )
         Calculate( aBmp, aMtf );
@@ -364,7 +364,7 @@ IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdVectorizeDlg, ModifyHdl, void*, p )
+IMPL_LINK( SdVectorizeDlg, ModifyHdl, void*, EMPTYARG )
 {
     aBtnPreview.Enable();
     return 0L;
