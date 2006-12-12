@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:30:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ void DrawViewWrapper::MarkObject( SdrObject* pObj )
         bFrameDragSingles = m_pMarkHandleProvider->getFrameDragSingles();
     this->SetFrameDragSingles(bFrameDragSingles);//decide wether each single object should get handles
     this->SdrView::MarkObj( pObj, m_pWrappedDLPageView );
-    this->SetMarkHdlHidden(FALSE);
+    this->showMarkHandles();
 }
 
 
