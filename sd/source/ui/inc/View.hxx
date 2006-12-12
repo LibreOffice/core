@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ class ViewClipboard;
 
 struct SdViewRedrawRec
 {
-    OutputDevice* pOut;
+    OutputDevice* mpOut;
     Rectangle     aRect;
 };
 
@@ -105,7 +105,7 @@ public:
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
 
-    void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode = 0, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
     virtual BOOL            GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
     virtual BOOL            SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
@@ -117,7 +117,7 @@ public:
     virtual void            DoPaste(::Window* pWindow=NULL);
     virtual void            DoConnect(SdrOle2Obj* pOleObj);
     virtual BOOL            SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr = FALSE);
-    virtual void            StartDrag( const Point& rStartPos, Window* pWindow );
+    virtual void            StartDrag( const Point& rStartPos, ::Window* pWindow );
     virtual void            DragFinished( sal_Int8 nDropAction );
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
@@ -149,7 +149,7 @@ public:
     inline SdDrawDocument* GetDoc (void) const;
     inline ViewShell* GetViewShell (void) const;
 
-    sal_Bool SdrBeginTextEdit(
+    sal_Bool BeginTextEdit(
         SdrObject* pObj, SdrPageView* pPV = 0L, Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
         sal_Bool bDontDeleteOutliner = sal_False, sal_Bool bOnlyOneView = sal_False, sal_Bool bGrabFocus = sal_True);
@@ -193,29 +193,30 @@ public:
 
     virtual SdrModel*   GetMarkedObjModel() const;
     virtual BOOL        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, UINT32 nOptions=0);
+    using SdrExchangeView::Paste;
 
     /** returns true if we have an undo manager and there is an open list undo action */
     bool isRecordingUndo() const;
 
 protected:
-    DECL_LINK( ParagraphInsertedHdl, ::Outliner * );
-    DECL_LINK( ParagraphRemovingHdl, ::Outliner * );
+    DECL_LINK( OnParagraphInsertedHdl, ::Outliner * );
+    DECL_LINK( OnParagraphRemovingHdl, ::Outliner * );
 
-    SdDrawDocument*         pDoc;
-    DrawDocShell*       pDocSh;
-    ViewShell* pViewSh;
-    SdrMarkList*            pDragSrcMarkList;
-    SdrObject*              pDropMarkerObj;
-    SdrDropMarkerOverlay*   pDropMarker;
-    USHORT                  nDragSrcPgNum;
-    Point                   aDropPos;
-    ::std::vector< String > aDropFileVector;
-    sal_Int8                nAction;
-    Timer                   aDropErrorTimer;
-    Timer                   aDropInsertFileTimer;
-    USHORT                  nLockRedrawSmph;
-    List*                   pLockedRedraws;
-    bool bIsDropAllowed;
+    SdDrawDocument*         mpDoc;
+    DrawDocShell*           mpDocSh;
+    ViewShell*              mpViewSh;
+    SdrMarkList*            mpDragSrcMarkList;
+    SdrObject*              mpDropMarkerObj;
+    SdrDropMarkerOverlay*   mpDropMarker;
+    USHORT                  mnDragSrcPgNum;
+    Point                   maDropPos;
+    ::std::vector< String > maDropFileVector;
+    sal_Int8                mnAction;
+    Timer                   maDropErrorTimer;
+    Timer                   maDropInsertFileTimer;
+    USHORT                  mnLockRedrawSmph;
+    List*                   mpLockedRedraws;
+    bool                    mbIsDropAllowed;
 
                             DECL_LINK( DropErrorHdl, Timer* );
                             DECL_LINK( DropInsertFileHdl, Timer* );
@@ -229,16 +230,16 @@ private:
 
 DrawDocShell* View::GetDocSh (void) const
 {
-    return pDocSh;
+    return mpDocSh;
 }
 SdDrawDocument* View::GetDoc (void) const
 {
-    return pDoc;
+    return mpDoc;
 }
 
 ViewShell* View::GetViewShell (void) const
 {
-    return pViewSh;
+    return mpViewSh;
 }
 
 } // end of namespace sd
