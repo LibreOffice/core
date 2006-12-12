@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:06:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,7 @@ public:
     virtual void CompleteRedraw (
         OutputDevice* pDevice,
         const Region& rPaintArea,
+        USHORT nPaintMode,
         ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
     virtual void InvalidateOneWin (
         ::Window& rWindow);
