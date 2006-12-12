@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:28:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
     bool bKillTable = false;
     const SfxPoolItem* pItem = NULL;
 
-    if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
+    if ( pDocSh && ( ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
     if ( !pColorTable )
@@ -342,7 +342,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
     {
         XColorEntry* pEntry = pColorTable->GetColor(i);
         USHORT nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-        if( pEntry->GetColor().GetRGBColor() == nColor )
+        if( pEntry->GetColor().GetRGBColor() == (sal_uInt32)nColor )
             mpControl->SelectEntryPos( nPos );
     }
 
@@ -418,7 +418,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const
     const FontList* pFontList = 0;
     bool bMustDelete = false;
 
-    if ( pDocSh && ( pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
+    if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) != 0) )
         pFontList = ( (SvxFontListItem*)pItem )->GetFontList();
 
     if(!pFontList)
@@ -682,7 +682,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     mpMetric->SetMax( 100 );
 
     mpMenu = new PopupMenu();
-    for( int i = 25; i < 101; i += 25 )
+    for( USHORT i = 25; i < 101; i += 25 )
     {
         String aStr( String::CreateFromInt32( i ) );
         aStr += sal_Unicode('%');
@@ -693,8 +693,8 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
 
-    Link implModifyHdl( LINK( this, TransparencyPropertyBox, implModifyHdl ) );
-    mpControl->SetModifyHdl( implModifyHdl );
+    Link aLink( LINK( this, TransparencyPropertyBox, implModifyHdl ) );
+    mpControl->SetModifyHdl( aLink );
 
     OUString aPresetId;
     setValue( rValue, aPresetId  );
@@ -712,7 +712,7 @@ TransparencyPropertyBox::~TransparencyPropertyBox()
 void TransparencyPropertyBox::updateMenu()
 {
     long nValue = mpMetric->GetValue();
-    for( int i = 25; i < 101; i += 25 )
+    for( USHORT i = 25; i < 101; i += 25 )
         mpMenu->CheckItem( i, nValue == i );
 }
 
@@ -809,8 +809,8 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, Window* pParen
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
 
-    Link implModifyHdl( LINK( this, RotationPropertyBox, implModifyHdl ) );
-    mpControl->SetModifyHdl( implModifyHdl );
+    Link aLink( LINK( this, RotationPropertyBox, implModifyHdl ) );
+    mpControl->SetModifyHdl( aLink );
 
     OUString aPresetId;
     setValue( rValue, aPresetId );
@@ -950,8 +950,8 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, Window* pParent, con
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
 
-    Link implModifyHdl( LINK( this, ScalePropertyBox, implModifyHdl ) );
-    mpControl->SetModifyHdl( implModifyHdl );
+    Link aLink( LINK( this, ScalePropertyBox, implModifyHdl ) );
+    mpControl->SetModifyHdl( aLink );
 
     OUString aPresetId;
     setValue( rValue, aPresetId );
@@ -1295,7 +1295,7 @@ static void move_down( Control* pControl, int nOffsetX, int nOffsetY )
 }
 
 CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, const ResId& rResId, const STLPropertySet* pSet )
-: TabPage( pParent, rResId ), mpSet(pSet ), mbHasText( sal_False )
+: TabPage( pParent, rResId ), mbHasText( sal_False ), mpSet(pSet )
 {
     mpFLSettings = new FixedLine( this, SdResId( FL_SETTINGS ) );
     mpFTProperty1 = new FixedText( this, SdResId( FT_PROPERTY_1 ) );
@@ -1347,7 +1347,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     bool bKillTable = false;
     const SfxPoolItem* pItem = NULL;
 
-    if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
+    if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0 ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
     if ( !pColorTable )
@@ -2293,7 +2293,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
         String aText( mpCBDuration->GetText() );
         if( aText.Len() )
         {
-            double fDuration = aText.ToDouble();
+            fDuration = aText.ToDouble();
         }
     }
 
@@ -2331,7 +2331,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 
     if( mpRBInteractive->IsChecked() )
     {
-        USHORT nPos = mpLBTrigger->GetSelectEntryPos();
+        nPos = mpLBTrigger->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_Int32 nShape = (sal_Int32)(sal_IntPtr)mpLBTrigger->GetEntryData( nPos );
@@ -2381,13 +2381,13 @@ private:
 
 CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, const ResId& rResId, const STLPropertySet* pSet)
 :   TabPage( pParent, rResId ),
-    mpSet( pSet ),
     maFTGroupText( this, SdResId( FT_GROUP_TEXT ) ),
     maLBGroupText( this, SdResId( LB_GROUP_TEXT ) ),
     maCBXGroupAuto( this, SdResId( CBX_GROUP_AUTO ) ),
     maMFGroupAuto( this, SdResId( MF_GROUP_AUTO ) ),
     maCBXAnimateForm( this, SdResId( CBX_ANIMATE_FORM ) ),
-    maCBXReverse( this, SdResId( CBX_REVERSE ) )
+    maCBXReverse( this, SdResId( CBX_REVERSE ) ),
+    mpSet( pSet )
 {
     FreeResource();
 
@@ -2514,7 +2514,7 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
     maCBXReverse.Enable( nPos > 0 );
 }
 
-IMPL_LINK( CustomAnimationTextAnimTabPage, implSelectHdl, Control*, pControl )
+IMPL_LINK( CustomAnimationTextAnimTabPage, implSelectHdl, Control*, EMPTYARG )
 {
     updateControlStates();
     return 0;
@@ -2537,7 +2537,7 @@ CustomAnimationDialog::CustomAnimationDialog( Window* pParent, STLPropertySet* p
     mpDurationTabPage = new CustomAnimationDurationTabPage( mpTabControl, SdResId( RID_TP_CUSTOMANIMATION_DURATION ), mpSet );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_DURATION, mpDurationTabPage );
 
-    sal_Bool bHasText = -1;
+    sal_Bool bHasText = sal_False;
     if( pSet->getPropertyState( nHandleHasText ) != STLPropertyState_AMBIGUOUS )
         pSet->getPropertyValue( nHandleHasText ) >>= bHasText;
 
