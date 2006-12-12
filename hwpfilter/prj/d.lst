@@ -1,5 +1,5 @@
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.lib %_DEST%\bin%_EXT%\*.lib
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\bin\hwp.dll %_DEST%\bin%_EXT%\hwp.dll
+..\%__SRC%\lib\ihwp*.lib %_DEST%\bin%_EXT%\ihwp*.lib
+..\%__SRC%\lib\libhwp.so %_DEST%\lib%_EXT%\libhwp.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
