@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:28:25 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             bColor = FALSE;
 
         // Handles wegnehmen
-        pView->HideMarkHdl();
+        //HMHpView->HideMarkHdl();
 
         SfxProgress*    pProgress = NULL;
         BOOL            bWaiting = FALSE;
@@ -340,8 +340,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             pDocSh->SetWaitCursor( FALSE );
 
         // Handles zeigen
-        pView->AdjustMarkHdl( TRUE );
-        pView->ShowMarkHdl();
+        pView->AdjustMarkHdl(); //HMH TRUE );
+        //HMHpView->ShowMarkHdl();
 
         pView->EndUndo();
     }
