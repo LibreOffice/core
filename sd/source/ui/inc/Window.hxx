@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Window.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:21:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ public:
         @param nZoom
             The zoom factor is given as integral percent value.
     */
-    void    SetZoom(long nZoom);
+    void    SetZoomIntegral(long nZoom);
 
     /** This internally used method performs the actual adaption of the
         window's map mode to the specified zoom factor.
@@ -178,7 +178,6 @@ public:
     */
     void SetUseDropScroll (bool bUseDropScroll);
     void DropScroll (const Point& rMousePos);
-
 protected:
     ::sd::Window* mpShareWin;
     Point maWinPos;
