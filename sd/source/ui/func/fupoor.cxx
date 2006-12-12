@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:30:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,7 +392,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !pDocSh->IsUIActive() )
                     {
-                        pView->HideMarkHdl();
+                        //HMHpView->HideMarkHdl();
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
