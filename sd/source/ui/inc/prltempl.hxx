@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prltempl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:50:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ class XDashList;
 class XLineEndList;
 class SfxObjectShell;
 class SfxStyleSheetBase;
+class SfxStyleSheetBasePool;
 
 /*************************************************************************
 |*
@@ -67,7 +68,7 @@ class SfxStyleSheetBase;
 class SdPresLayoutTemplateDlg : public SfxTabDialog
 {
 private:
-    const SfxObjectShell*   pDocShell;
+    const SfxObjectShell*   mpDocShell;
 
     XColorTable*        pColorTab;
     XGradientList*      pGradientList;
@@ -97,6 +98,8 @@ private:
     const SfxItemSet* pOrgSet;
 
     USHORT GetOutlineLevel() const;
+
+    using SfxTabDialog::GetOutputItemSet;
 
 public:
     SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
