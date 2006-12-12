@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shortcut_ooo.scp,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:42:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,7 @@ End
 #endif
 
 #ifdef UNX
+#ifndef SYSTEM_ICU
 
 Shortcut gid_Shortcut_Lib_Icudata_0
     FileID = gid_File_Lib_Icudata;
@@ -175,20 +176,12 @@ Shortcut gid_Shortcut_Lib_Icudata_0
     Styles = (NETWORK,RELATIVE);
 End
 
-#endif
-
-#ifdef UNX
-
 Shortcut gid_Shortcut_Lib_Icudata_1
     FileID = gid_File_Lib_Icudata;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
-
-#endif
-
-#ifdef UNX
 
 Shortcut gid_Shortcut_Lib_Icui18n_0
     FileID = gid_File_Lib_Icui18n;
@@ -197,20 +190,12 @@ Shortcut gid_Shortcut_Lib_Icui18n_0
     Styles = (NETWORK,RELATIVE);
 End
 
-#endif
-
-#ifdef UNX
-
 Shortcut gid_Shortcut_Lib_Icui18n_1
     FileID = gid_File_Lib_Icui18n;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
-
-#endif
-
-#ifdef UNX
 
 Shortcut gid_Shortcut_Lib_Icule_0
     FileID = gid_File_Lib_Icule;
@@ -219,20 +204,12 @@ Shortcut gid_Shortcut_Lib_Icule_0
     Styles = (NETWORK,RELATIVE);
 End
 
-#endif
-
-#ifdef UNX
-
 Shortcut gid_Shortcut_Lib_Icule_1
     FileID = gid_File_Lib_Icule;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
-
-#endif
-
-#ifdef UNX
 
 Shortcut gid_Shortcut_Lib_Icuuc_0
     FileID = gid_File_Lib_Icuuc;
@@ -241,17 +218,14 @@ Shortcut gid_Shortcut_Lib_Icuuc_0
     Styles = (NETWORK,RELATIVE);
 End
 
-#endif
-
-#ifdef UNX
-
 Shortcut gid_Shortcut_Lib_Icuuc_1
     FileID = gid_File_Lib_Icuuc;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
+#endif
 #endif
 
 #ifdef UNX
