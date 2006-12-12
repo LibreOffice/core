@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:22:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,19 +436,18 @@ public:
 // =====================================================================
 // Konstruktor des Dialogs
 // =====================================================================
-SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType):
-    ModalDialog(pWindow, SdResId( DLG_PUBLISHING )),
-    aBottomLine( this, SdResId( BOTTOM_LINE ) ),
-    aNextPageButton(this,SdResId(BUT_NEXT)),
-    aFinishButton(this,SdResId(BUT_FINISH)),
-    aCancelButton(this,SdResId(BUT_CANCEL)),
-    aHelpButton(this,SdResId(BUT_HELP)),
-    aLastPageButton(this,SdResId(BUT_LAST)),
-    aAssistentFunc(NOOFPAGES),
-    m_pDesign(NULL),
-    m_bDesignListDirty(FALSE),
-    m_bButtonsDirty(TRUE)
-
+SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
+:   ModalDialog(pWindow, SdResId( DLG_PUBLISHING ))
+,   aBottomLine( this, SdResId( BOTTOM_LINE ) )
+,   aHelpButton(this,SdResId(BUT_HELP))
+,   aCancelButton(this,SdResId(BUT_CANCEL))
+,   aLastPageButton(this,SdResId(BUT_LAST))
+,   aNextPageButton(this,SdResId(BUT_NEXT))
+,   aFinishButton(this,SdResId(BUT_FINISH))
+,   aAssistentFunc(NOOFPAGES)
+,   m_bButtonsDirty(TRUE)
+,   m_bDesignListDirty(FALSE)
+,   m_pDesign(NULL)
 {
     m_bImpress = eDocType == DOCUMENT_TYPE_IMPRESS;
 
@@ -543,7 +542,7 @@ SdPublishingDlg::~SdPublishingDlg()
     if( m_pDesignList )
     {
         for( UINT16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
-            delete m_pDesignList->GetObject(nIndex);
+            delete (SdPublishingDesign*)m_pDesignList->GetObject(nIndex);
     }
 
     delete m_pDesignList;
@@ -1114,7 +1113,7 @@ IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
 // =====================================================================
 // Clickhandler fuer die Radiobuttons Stanrard/Frames
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, pButton )
+IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, EMPTYARG )
 {
 /*
     if(pButton == pPage3_Standard)
@@ -1130,7 +1129,7 @@ IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, pButton )
 // =====================================================================
 // Clickhandler fuer die CheckBox der Titelseite
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, ContentHdl, RadioButton *, pButton )
+IMPL_LINK( SdPublishingDlg, ContentHdl, RadioButton *, EMPTYARG )
 {
     if(pPage2_Content->IsChecked())
     {
@@ -1218,7 +1217,7 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
     return 0;
 }
 
-IMPL_LINK( SdPublishingDlg, SlideChgHdl, RadioButton*, pButton )
+IMPL_LINK( SdPublishingDlg, SlideChgHdl, RadioButton*, EMPTYARG )
 {
     UpdatePage();
     return 0;
@@ -1315,7 +1314,7 @@ static UINT16 nPreviewBitmapOffests[] = { 0,2,4,6,7,8,9,10 };
 // =====================================================================
 void SdPublishingDlg::ChangePage()
 {
-    UINT8 nPage = aAssistentFunc.GetCurrentPage();
+    int nPage = aAssistentFunc.GetCurrentPage();
     SetHelpId(aPageHelpIds[nPage-1]);
 
     UpdatePage();
@@ -1331,7 +1330,7 @@ void SdPublishingDlg::UpdatePage()
     aNextPageButton.Enable(!aAssistentFunc.IsLastPage());
     aLastPageButton.Enable(!aAssistentFunc.IsFirstPage());
 
-    UINT8 nPage = aAssistentFunc.GetCurrentPage();
+    int nPage = aAssistentFunc.GetCurrentPage();
 
     switch( nPage )
     {
