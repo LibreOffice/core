@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudspord.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:28:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,15 +70,10 @@ TYPEINIT1( FuDisplayOrder, FuPoor );
 |*
 \************************************************************************/
 
-FuDisplayOrder::FuDisplayOrder (
-    ViewShell*  pViewSh,
-    ::sd::Window*       pWin,
-    ::sd::View*         pView,
-    SdDrawDocument* pDoc,
-    SfxRequest&     rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-        mpOverlay(0L),
-        pRefObj(NULL)
+FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
+: FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+, mpRefObj(NULL)
+, mpOverlay(0L)
 {
 }
 
@@ -132,25 +127,25 @@ BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 {
     SdrObject* pPickObj;
     SdrPageView* pPV;
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( pView->PickObj(aPnt, pPickObj, pPV) )
+    if ( mpView->PickObj(aPnt, pPickObj, pPV) )
     {
-        if (pRefObj != pPickObj)
+        if (mpRefObj != pPickObj)
         {
             // delete current overlay
             implClearOverlay();
 
             // create new one
-            mpOverlay = new SdrDropMarkerOverlay(*pView, *pPickObj);
+            mpOverlay = new SdrDropMarkerOverlay(*mpView, *pPickObj);
 
             // remember referenced object
-            pRefObj = pPickObj;
+            mpRefObj = pPickObj;
         }
     }
     else
     {
-        pRefObj = NULL;
+        mpRefObj = NULL;
         implClearOverlay();
     }
 
@@ -169,21 +164,21 @@ BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     SdrPageView* pPV = NULL;
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( pView->PickObj(aPnt, pRefObj, pPV) )
+    if ( mpView->PickObj(aPnt, mpRefObj, pPV) )
     {
         if (nSlotId == SID_BEFORE_OBJ)
         {
-            pView->PutMarkedInFrontOfObj(pRefObj);
+            mpView->PutMarkedInFrontOfObj(mpRefObj);
         }
         else
         {
-            pView->PutMarkedBehindObj(pRefObj);
+            mpView->PutMarkedBehindObj(mpRefObj);
         }
     }
 
-    pViewShell->Cancel();
+    mpViewShell->Cancel();
 
     return TRUE;
 }
@@ -196,8 +191,8 @@ BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 
 void FuDisplayOrder::Activate()
 {
-    aPtr = pWindow->GetPointer();
-    pWindow->SetPointer( Pointer( POINTER_REFHAND ) );
+    maPtr = mpWindow->GetPointer();
+    mpWindow->SetPointer( Pointer( POINTER_REFHAND ) );
 }
 
 /*************************************************************************
@@ -208,7 +203,7 @@ void FuDisplayOrder::Activate()
 
 void FuDisplayOrder::Deactivate()
 {
-    pWindow->SetPointer( aPtr );
+    mpWindow->SetPointer( maPtr );
 }
 
 
