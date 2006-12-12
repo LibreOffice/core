@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:46:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,8 @@
 #include <basic/sbx.hxx>
 #endif
 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
@@ -115,10 +115,10 @@ TYPEINIT1( FuBullet, FuPoor );
 FuBullet::FuBullet (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
-    ::sd::View* pView,
+    ::sd::View* _pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(pViewSh, pWin, _pView, pDoc, rReq)
 {
 }
 
@@ -161,17 +161,17 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     ::Outliner*   pOL = NULL;
 
     // depending on ViewShell set Outliner and OutlinerView
-    if (pViewShell->ISA(DrawViewShell))
+    if (mpViewShell->ISA(DrawViewShell))
     {
-        pOV = pView->GetTextEditOutlinerView();
+        pOV = mpView->GetTextEditOutlinerView();
         if (pOV)
-            pOL = pView->GetTextEditOutliner();
+            pOL = mpView->GetTextEditOutliner();
     }
-    else if (pViewShell->ISA(OutlineViewShell))
+    else if (mpViewShell->ISA(OutlineViewShell))
     {
-        pOL = static_cast<OutlineView*>(pView)->GetOutliner();
-        pOV = static_cast<OutlineView*>(pView)->GetViewByWindow(
-            pViewShell->GetActiveWindow());
+        pOL = static_cast<OutlineView*>(mpView)->GetOutliner();
+        pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
+            mpViewShell->GetActiveWindow());
     }
 
     // insert string
@@ -182,7 +182,6 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
         pOL->SetUpdateMode(FALSE);
 
         // remove old selected text
-        String aEmptyStr;
         pOV->InsertText( aEmptyStr );
 
         // prepare undo
@@ -209,14 +208,14 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 
 void FuBullet::InsertSpecialCharacter()
 {
-    //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL,  ResId(RID_SVXDLG_CHARMAP), FALSE );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    AbstractSvxCharacterMap* pDlg = pFact ? pFact->CreateSvxCharacterMap( NULL,  ResId(RID_SVXDLG_CHARMAP), FALSE ) : 0;
 
-    SfxItemSet aFontAttr( pDoc->GetPool() );
-    pView->GetAttributes( aFontAttr );
+    if( !pDlg )
+        return;
+
+    SfxItemSet aFontAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aFontAttr );
     const SvxFontItem* pFontItem = (const SvxFontItem*)aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
     if( pFontItem )
     {
@@ -247,25 +246,24 @@ void FuBullet::InsertSpecialCharacter()
         ::Outliner*   pOL = NULL;
 
         // je nach ViewShell Outliner und OutlinerView bestimmen
-        if(pViewShell && pViewShell->ISA(DrawViewShell))
+        if(mpViewShell && mpViewShell->ISA(DrawViewShell))
         {
-            pOV = pView->GetTextEditOutlinerView();
+            pOV = mpView->GetTextEditOutlinerView();
             if (pOV)
             {
-                pOL = pView->GetTextEditOutliner();
+                pOL = mpView->GetTextEditOutliner();
             }
         }
-        else if(pViewShell && pViewShell->ISA(OutlineViewShell))
+        else if(mpViewShell && mpViewShell->ISA(OutlineViewShell))
         {
-            pOL = static_cast<OutlineView*>(pView)->GetOutliner();
-            pOV = static_cast<OutlineView*>(pView)->GetViewByWindow(
-                pViewShell->GetActiveWindow());
+            pOL = static_cast<OutlineView*>(mpView)->GetOutliner();
+            pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
+                mpViewShell->GetActiveWindow());
         }
 
         // Sonderzeichen einfuegen
         if (pOV)
         {
-            String aEmptyStr;
             // nicht flackern
             pOV->HideCursor();
             pOL->SetUpdateMode(FALSE);
@@ -277,7 +275,7 @@ void FuBullet::InsertSpecialCharacter()
             // Einfuegen eines Leerstrings geloescht)
             pOV->InsertText( aEmptyStr );
 
-            SfxItemSet aOldSet( pDoc->GetPool(), ITEMID_FONT, ITEMID_FONT, 0 );
+            SfxItemSet aOldSet( mpDoc->GetPool(), ITEMID_FONT, ITEMID_FONT, 0 );
             aOldSet.Put( pOV->GetAttribs() );
 
             SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
