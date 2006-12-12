@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unchss.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:44:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,8 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
 void StyleSheetUndoAction::Undo()
 {
-    SfxItemSet aNewSet( pDoc->GetItemPool(), pOldSet->GetRanges() );
-    pDoc->MigrateItemSet( pOldSet, &aNewSet, pDoc );
+    SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
+    mpDoc->MigrateItemSet( pOldSet, &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
@@ -128,25 +128,14 @@ void StyleSheetUndoAction::Undo()
 
 void StyleSheetUndoAction::Redo()
 {
-    SfxItemSet aNewSet( pDoc->GetItemPool(), pOldSet->GetRanges() );
-    pDoc->MigrateItemSet( pNewSet, &aNewSet, pDoc );
+    SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
+    mpDoc->MigrateItemSet( pNewSet, &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
         ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-}
-
-/*************************************************************************
-|*
-|* Repeat()
-|*
-\************************************************************************/
-
-void StyleSheetUndoAction::Repeat()
-{
-    DBG_ASSERT(FALSE, "StyleSheetUndoAction::Repeat: nicht implementiert");
 }
 
 /*************************************************************************
@@ -171,9 +160,3 @@ String StyleSheetUndoAction::GetComment() const
 {
     return aComment;
 }
-
-
-
-
-
-
