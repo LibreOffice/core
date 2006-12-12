@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,11 +93,11 @@ public:
     SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
     SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
 
-    virtual void AddWindowToPaintView(::sd::Window* pWin);
-    virtual void DeleteWindowFromPaintView(::sd::Window* pWin);
+    virtual void AddWindowToPaintView(OutputDevice* pWin);
+    virtual void DeleteWindowFromPaintView(OutputDevice* pWin);
 
     OutlinerView*   GetViewByWindow (::Window* pWin) const;
-    SdrOutliner*    GetOutliner() { return(pOutliner) ; }
+    SdrOutliner*    GetOutliner() { return(mpOutliner) ; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);
@@ -185,28 +185,19 @@ private:
     /** creates and inserts an empty slide for the given paragraph */
     SdPage* InsertSlideForParagraph( Paragraph* pPara );
 
-    OutlineViewShell* pOutlineViewShell;
-    SdrOutliner*        pOutliner;
-    OutlinerView*       pOutlinerView[MAX_OUTLINERVIEWS];
+    OutlineViewShell*   mpOutlineViewShell;
+    SdrOutliner*        mpOutliner;
+    OutlinerView*       mpOutlinerView[MAX_OUTLINERVIEWS];
 
-    Link                aOldParagraphInsertedHdl;
-    Link                aOldParagraphRemovingHdl;
-    Link                aOldDepthChangedHdl;
-    Link                aOldStatusEventHdl;
-    Link                aOldBeginMovingHdl;
-    Link                aOldEndMovingHdl;
-    Link                aOldRemovingPagesHdl;
-    Link                aOldIndentingPagesHdl;
+    List*               mpOldParaOrder;
+    List*               mpSelectedParas;
 
-    List*               pOldParaOrder;
-    List*               pSelectedParas;
+    USHORT              mnPagesToProcess;    // fuer die Fortschrittsanzeige
+    USHORT              mnPagesProcessed;
 
-    USHORT              nPagesToProcess;     // fuer die Fortschrittsanzeige
-    USHORT              nPagesProcessed;
+    BOOL                mbFirstPaint;
 
-    BOOL                bFirstPaint;
-
-    SfxProgress* mpProgress;
+    SfxProgress*        mpProgress;
 
     /** stores the last used high contrast mode.
         this is changed in onUpdateStyleSettings()
