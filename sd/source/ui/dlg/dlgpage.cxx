@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:38:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,7 @@
 #define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
 #define ITEMID_HATCH_LIST       SID_HATCH_LIST
 #define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-#include <svtools/intitem.hxx> //add CHINA001
-//CHINA001 #ifndef _SVX_PAGE_HXX
-//CHINA001 #include <svx/page.hxx>
-//CHINA001 #endif
+#include <svtools/intitem.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
@@ -65,11 +62,11 @@
 
 #include "DrawDocShell.hxx"
 
-#ifndef _AEITEM_HXX //CHINA001
-#include <svtools/aeitem.hxx> //CHINA001
-#endif //CHINA001
-#include <svx/flagsdef.hxx> //CHINA001
-#include <svx/svxenum.hxx> //CHINA001
+#ifndef _AEITEM_HXX
+#include <svtools/aeitem.hxx>
+#endif
+#include <svx/flagsdef.hxx>
+#include <svx/svxenum.hxx>
 
 /*************************************************************************
 |*
@@ -79,37 +76,27 @@
 
 SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, BOOL bAreaPage ) :
         SfxTabDialog ( pParent, SdResId( TAB_PAGE ), pAttr ),
-        rOutAttrs           ( *pAttr ),
-        pDocShell           ( pDocSh )
+        mrOutAttrs          ( *pAttr ),
+        mpDocShell          ( pDocSh )
 {
     SvxColorTableItem aColorTableItem(*( (const SvxColorTableItem*)
-        ( pDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
+        ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
     SvxGradientListItem aGradientListItem(*( (const SvxGradientListItem*)
-        ( pDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
     SvxBitmapListItem aBitmapListItem(*( (const SvxBitmapListItem*)
-        ( pDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
     SvxHatchListItem aHatchListItem(*( (const SvxHatchListItem*)
-        ( pDocShell->GetItem( SID_HATCH_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
 
-    pColorTab = aColorTableItem.GetColorTable();
-    pGradientList = aGradientListItem.GetGradientList();
-    pHatchingList = aHatchListItem.GetHatchList();
-    pBitmapList = aBitmapListItem.GetBitmapList();
+    mpColorTab = aColorTableItem.GetColorTable();
+    mpGradientList = aGradientListItem.GetGradientList();
+    mpHatchingList = aHatchListItem.GetHatchList();
+    mpBitmapList = aBitmapListItem.GetBitmapList();
 
     FreeResource();
 
-    AddTabPage( RID_SVXPAGE_PAGE); //CHINA001 AddTabPage( RID_SVXPAGE_PAGE, SvxPageDescPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_AREA); //CHINA001 AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0 );
-
-
-    nDlgType = 1; // Vorlagen-Dialog
-    nPageType = 0;
-    nPos = 0;
-
-    nColorTableState = CT_NONE;
-    nBitmapListState = CT_NONE;
-    nGradientListState = CT_NONE;
-    nHatchingListState = CT_NONE;
+    AddTabPage( RID_SVXPAGE_PAGE);
+    AddTabPage( RID_SVXPAGE_AREA);
 
     if(!bAreaPage)  // I have to add the page before I remove it !
         RemoveTabPage( RID_SVXPAGE_AREA );
@@ -128,33 +115,19 @@ void SdPageDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     switch(nId)
     {
     case RID_SVXPAGE_PAGE:
-        //CHINA001 ( (SvxPageDescPage&) rPage).SetMode(SVX_PAGE_MODE_PRESENTATION);
-        //CHINA001 ( (SvxPageDescPage&) rPage).SetPaperFormatRanges( SVX_PAPER_A0, SVX_PAPER_E );
-        aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION)); //CHINA001
-        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, SVX_PAPER_A0)); //CHINA001
-        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, SVX_PAPER_E)); //CHINA001
-        rPage.PageCreated(aSet); //CHINA001
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, SVX_PAPER_A0));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, SVX_PAPER_E));
+        rPage.PageCreated(aSet);
         break;
     case RID_SVXPAGE_AREA:
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetColorTable( pColorTab );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetGradientList( pGradientList );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetHatchingList( pHatchingList );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetBitmapList( pBitmapList );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetPageType( &nPageType );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetDlgType( &nDlgType );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetPos( &nPos );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &nGradientListState );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetHtchChgd( &nHatchingListState );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &nBitmapListState );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).SetColorChgd( &nColorTableState );
-//CHINA001      ( (SvxAreaTabPage&) rPage ).Construct();
-            aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
-            aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
-            aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
-            aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
-            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
-            aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
+            aSet.Put (SvxColorTableItem(mpColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxGradientListItem(mpGradientList,SID_GRADIENT_LIST));
+            aSet.Put (SvxHatchListItem(mpHatchingList,SID_HATCH_LIST));
+            aSet.Put (SvxBitmapListItem(mpBitmapList,SID_BITMAP_LIST));
+            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
+            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
+            aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));
             rPage.PageCreated(aSet);
         break;
     }
