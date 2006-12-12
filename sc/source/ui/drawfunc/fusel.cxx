@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,7 +428,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             if (((SdrOle2Obj*) pObj)->GetObjRef().is())
                             {
-                                pView->HideMarkHdl();
+                                //HMHpView->HideMarkHdl();
                                 pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0 );
                             }
                         }
@@ -475,7 +475,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
         //((VCManager*)(pForm->GetVCContainer()))->
         //    MouseButtonUp( pWindow, rMEvt );
-        pView->ShowMarkHdl();
+        //HMHpView->ShowMarkHdl();
         bVCAction = FALSE;
         bReturn = TRUE;
     }
