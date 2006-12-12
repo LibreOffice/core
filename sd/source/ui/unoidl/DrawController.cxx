@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:37:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,10 +310,9 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
 //=====  lang::XEventListener  ================================================
 
 void SAL_CALL
-    DrawController::disposing (const lang::EventObject& rEventObject)
+    DrawController::disposing (const lang::EventObject& )
     throw (uno::RuntimeException)
 {
-    (void)rEventObject;
 }
 
 
