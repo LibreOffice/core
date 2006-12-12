@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:21:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,7 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
 //===== view::XSelectionChangeListener ========================================
 
 void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
-    const lang::EventObject& rEvent)
+    const lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
 {
     CallListeners (EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION);
@@ -601,7 +601,7 @@ void EventMultiplexer::Implementation::ThrowIfDisposed (void)
 
 
 void EventMultiplexer::Implementation::Notify (
-    SfxBroadcaster& rBroadcaster,
+    SfxBroadcaster&,
     const SfxHint& rHint)
 {
     if (rHint.ISA(SdrHint))
@@ -631,6 +631,8 @@ void EventMultiplexer::Implementation::Notify (
             case HINT_OBJREMOVED:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_REMOVED,
                     const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                break;
+            default:
                 break;
         }
     }
@@ -732,8 +734,7 @@ IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
 
 
 
-IMPL_LINK(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener,
-    void*, pEvent)
+IMPL_LINK(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener, void*, EMPTYARG)
 {
     CallListeners (EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
     return 0;
