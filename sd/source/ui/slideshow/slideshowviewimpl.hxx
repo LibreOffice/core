@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:33:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,6 +270,7 @@ class SlideShowViewPaintListeners : public SlideShowViewPaintListeners_Base
 public:
     SlideShowViewPaintListeners( ::osl::Mutex& rMutex );
 
+    using  comphelper::OListenerContainer::notify;
 protected:
     virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener,
                              const ::com::sun::star::awt::PaintEvent&                       rEvent ) throw( ::com::sun::star::uno::Exception );
@@ -375,6 +376,8 @@ public:
     // XMouseMotionListener implementation
     virtual void SAL_CALL mouseDragged( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL mouseMoved( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+
+    using cppu::WeakComponentImplHelperBase::disposing;
 
 protected:
     ~SlideShowView() {}
