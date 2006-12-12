@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:20:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,35 @@
 
 using namespace com::sun::star;
 
+static PHLayout pPHLayout[] =
+{
+    { EPP_LAYOUT_TITLESLIDE,            { 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, TRUE, TRUE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x15, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,      { 0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_LEFTCOLUMN2ROWS,       { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TOPROW2COLUMN,         { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_4OBJECTS,              { 0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_ONLYTITLE,             { 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
+    { EPP_LAYOUT_TITLERIGHT2BODIESLEFT, { 0x11, 0x12, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x11, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLERIGHTBODYLEFT,    { 0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x11, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, TRUE, TRUE, FALSE }
+};
+
 //============================ PPTWriter ==================================
 
 PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
@@ -161,24 +190,24 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
     mbStatus                ( sal_False ),
     mbUseNewAnimations      ( sal_True ),
+    mnLatestStatValue       ( 0 ),
+    maFraction              ( 1, 576 ),
+    maMapModeSrc            ( MAP_100TH_MM ),
+    maMapModeDest           ( MAP_INCH, Point(), maFraction, maFraction ),
+    meLatestPageType        ( NORMAL ),
     mXModel                 ( rXModel ),
     mXStatusIndicator       ( rXStatInd ),
-    mnLatestStatValue       ( 0 ),
     mbStatusIndicator       ( FALSE ),
     mpCurUserStrm           ( NULL ),
     mpStrm                  ( NULL ),
     mpPicStrm               ( NULL ),
     mpPptEscherEx           ( NULL ),
-    maFraction              ( 1, 576 ),
-    maMapModeSrc            ( MAP_100TH_MM ),
-    maMapModeDest           ( MAP_INCH, Point(), maFraction, maFraction ),
-    meLatestPageType        ( NORMAL ),
-    mnTxId                  ( 0x7a2f64 ),
-    mnPagesWritten          ( 0 ),
     mnVBAOleOfs             ( 0 ),
-    mnExEmbed               ( 0 ),
     mpVBA                   ( pVBA ),
-    mpExEmbed               ( new SvMemoryStream )
+    mnExEmbed               ( 0 ),
+    mpExEmbed               ( new SvMemoryStream ),
+    mnPagesWritten          ( 0 ),
+    mnTxId                  ( 0x7a2f64 )
 {
     sal_uInt32 i;
     if ( !ImplInitSOIface() )
@@ -575,9 +604,9 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
                     aXDocumentInfo( aXDocumentInfoSupplier->getDocumentInfo() );
             if ( aXDocumentInfo.is() )
             {
-                INT32 nUserFieldCount = aXDocumentInfo->getUserFieldCount();
+                sal_Int16 nUserFieldCount = aXDocumentInfo->getUserFieldCount();
                 PropItem aPropItem;
-                for ( int i = 0; i < nUserFieldCount; i++ )
+                for ( sal_Int16 i = 0; i < nUserFieldCount; i++ )
                 {
                     aPropItem.Clear();
                     ::rtl::OUString aUValue( aXDocumentInfo->getUserFieldValue( i ) );
@@ -710,6 +739,8 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
                 case SVXTIMEFORMAT_12_HMS :
                     nFormat = 12;
                 break;
+                default:
+                    break;
             }
             nVal |= nFormat;
         }
@@ -850,13 +881,13 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                 if ( ImplGetShapeByIndex( nIndex + 1 ) && mType == "presentation.Outliner" )
                                 {
                                     bSecOutl = TRUE;
-                                    TextRuleEntry* pRule = new TextRuleEntry( i );
-                                    SvMemoryStream aExtBu( 0x200, 0x200 );
+                                    TextRuleEntry* pTempRule = new TextRuleEntry( i );
+                                    SvMemoryStream aTmpStrm( 0x200, 0x200 );
                                     if ( !mbEmptyPresObj )
                                         ImplGetText();
-                                    ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
-                                    ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
-                                    maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
+                                    ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pTempRule, aTmpStrm );
+                                    ImplWriteExtParaHeader( aTmpStrm, nPObjects++, nTextType, i + 0x100 );
+                                    maTextRuleList.Insert( (void*)pTempRule, LIST_APPEND );
                                 }
                             }
                         }
@@ -1050,12 +1081,12 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     {
                         ::com::sun::star::uno::Sequence< ::rtl::OUString> aNameSeq( aXCont->getElementNames() );
                         const ::rtl::OUString* pUString = aNameSeq.getArray();
-                        sal_Int16 nCount = (sal_Int16)aNameSeq.getLength();
+                        sal_uInt32 nCount = aNameSeq.getLength();
                         if ( nCount )
                         {
                             mpPptEscherEx->OpenContainer( EPP_NamedShows );
                             sal_uInt32 nCustomShowIndex = 0;
-                            for ( sal_Int16 i = 0; i < nCount; i++ )        // Anzahl der Custom Shows
+                            for( i = 0; i < nCount; i++ )        // Anzahl der Custom Shows
                             {
                                 if ( pUString[ i ].getLength() )
                                 {
@@ -1265,6 +1296,10 @@ sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
         }
+        break;
+
+        default:
+            break;
     }
 
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
@@ -1331,7 +1366,7 @@ sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
 
-    mpPptEscherEx->EnterGroup();
+    mpPptEscherEx->EnterGroup(0,0);
     ImplWritePage( pPHLayout[ 0 ], aSolverContainer, MASTER, TRUE );    // Die Shapes der Seite werden im PPT Dok. erzeugt
     mpPptEscherEx->LeaveGroup();
 
@@ -1391,7 +1426,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
             << (sal_uInt32)0;                                                       // follow nothing
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-    mpPptEscherEx->EnterGroup();
+    mpPptEscherEx->EnterGroup(0,0);
 
     ImplWritePage( pPHLayout[ 20 ], aSolverContainer, NOTICE, TRUE );
 
@@ -1518,7 +1553,7 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
             aAny >>= aAs;
             nSpeed = (sal_uInt8)aAs;
         }
-        sal_Int16 nTT, nTST;
+        sal_Int16 nTT = 0, nTST = 0;
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) )
             && ( aAny >>= nTT ) )
         {
@@ -1735,7 +1770,7 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
     EscherSolverContainer aSolverContainer;
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-    mpPptEscherEx->EnterGroup();
+    mpPptEscherEx->EnterGroup(0,0);
     ImplWritePage( rLayout, aSolverContainer, NORMAL, FALSE, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
     mpPptEscherEx->LeaveGroup();
 
@@ -1827,7 +1862,7 @@ sal_Bool PPTWriter::ImplCreateNotes( sal_uInt32 nPageNum )
 
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-    mpPptEscherEx->EnterGroup();
+    mpPptEscherEx->EnterGroup(0,0);
 
     ImplWritePage( pPHLayout[ 20 ], aSolverContainer, NOTICE, FALSE );  // Die Shapes der Seite werden im PPT Dok. erzeugt
 
@@ -2152,7 +2187,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
 
 PPTExCharSheet::PPTExCharSheet( int nInstance )
 {
-    sal_uInt16 nFontHeight;
+    sal_uInt16 nFontHeight = 24;
 
     for ( int nDepth = 0; nDepth < 5; nDepth++ )
     {
@@ -2215,7 +2250,7 @@ void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     rLev.mnFlags = aPortionObj.mnCharAttr;
 }
 
-void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bool, sal_Bool bSimpleText,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExCharLevel& rLev = maCharLevel[ nLev ];
@@ -2262,9 +2297,9 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
     sal_Bool bHasBullet = FALSE;
 
     sal_uInt16 nUpperDist = 0;
-    sal_uInt16 nBulletChar;
-    sal_uInt16 nBulletOfs;
-    sal_uInt16 nTextOfs;
+    sal_uInt16 nBulletChar = 0x2022;
+    sal_uInt16 nBulletOfs = 0;
+    sal_uInt16 nTextOfs = 0;
 
     for ( int nDepth = 0; nDepth < 5; nDepth++ )
     {
@@ -2413,32 +2448,32 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         if ( ( aParagraphObj.meBullet ==  ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
                     && aParagraphObj.bExtendedParameters )
         {
-            for ( int i = 0; i < 5; i++ )
+            for ( sal_Int16 i = 0; i < 5; i++ )
             {
-                PPTExParaLevel& rLev = maParaLevel[ i ];
+                PPTExParaLevel& rLevel = maParaLevel[ i ];
                 if ( i )
                     aParagraphObj.ImplGetNumberingLevel( rBuProv, i, FALSE );
-//              rLev.mbIsBullet = ( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
-                rLev.mnTextOfs = aParagraphObj.nTextOfs;
-                rLev.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
-                rLev.mnBulletChar = aParagraphObj.cBulletId;
+//              rLevel.mbIsBullet = ( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
+                rLevel.mnTextOfs = aParagraphObj.nTextOfs;
+                rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
+                rLevel.mnBulletChar = aParagraphObj.cBulletId;
                 FontCollectionEntry aFontDescEntry( aParagraphObj.aFontDesc.Name, aParagraphObj.aFontDesc.Family,
                                                         aParagraphObj.aFontDesc.Pitch, aParagraphObj.aFontDesc.CharSet );
-                rLev.mnBulletFont = (sal_uInt16)rFontCollection.GetId( aFontDescEntry );
-                rLev.mnBulletHeight = aParagraphObj.nBulletRealSize;
-                rLev.mnBulletColor = aParagraphObj.nBulletColor;
+                rLevel.mnBulletFont = (sal_uInt16)rFontCollection.GetId( aFontDescEntry );
+                rLevel.mnBulletHeight = aParagraphObj.nBulletRealSize;
+                rLevel.mnBulletColor = aParagraphObj.nBulletColor;
 
-                rLev.mbExtendedBulletsUsed = aParagraphObj.bExtendedBulletsUsed;
-                rLev.mnBulletId = aParagraphObj.nBulletId;
-                rLev.mnNumberingType = aParagraphObj.nNumberingType;
-                rLev.mnBulletStart = aParagraphObj.nStartWith;
-                rLev.mnMappedNumType = aParagraphObj.nMappedNumType;
+                rLevel.mbExtendedBulletsUsed = aParagraphObj.bExtendedBulletsUsed;
+                rLevel.mnBulletId = aParagraphObj.nBulletId;
+                rLevel.mnNumberingType = aParagraphObj.nNumberingType;
+                rLevel.mnBulletStart = aParagraphObj.nStartWith;
+                rLevel.mnMappedNumType = aParagraphObj.nMappedNumType;
             }
         }
     }
 }
 
-void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bool, sal_Bool bSimpleText,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExParaLevel& rLev = maParaLevel[ nLev ];
@@ -2578,6 +2613,8 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
         case CharAttr_FontHeight : return ( rChar.mnFontHeight != nValue );
         case CharAttr_FontColor : return ( rChar.mnFontColor != nValue );
         case CharAttr_Escapement : return ( rChar.mnEscapement != nValue );
+        default:
+            break;
     };
     if ( nFlag )
     {
@@ -2600,7 +2637,6 @@ sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const
 void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
 {
     const PPTExCharLevel& rCharStyle = mpCharSheet[ EPP_TEXTTYPE_Other ]->maCharLevel[ 0 ];
-    const PPTExParaLevel& rParaStyle = mpParaSheet[ EPP_TEXTTYPE_Other ]->maParaLevel[ 0 ];
 
     sal_uInt16 nFlags = 0x60        // ??
                       | 0x02        // fontsize;
