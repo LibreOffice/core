@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTreeNode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:27:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,11 +78,11 @@ AccessibleTreeNode::AccessibleTreeNode(
     : AccessibleTreeNodeBase(MutexOwner::maMutex),
       mxParent(NULL),
       mrTreeNode(rNode),
+      mrStateSet(new ::utl::AccessibleStateSetHelper()),
       msName(rsName),
       msDescription(rsDescription),
       meRole(eRole),
-      mnClientId(0),
-      mrStateSet(new ::utl::AccessibleStateSetHelper())
+      mnClientId(0)
 {
     ::Window* pWindow = mrTreeNode.GetWindow();
     if (pWindow != NULL)
@@ -106,11 +106,11 @@ AccessibleTreeNode::AccessibleTreeNode(
     : AccessibleTreeNodeBase(MutexOwner::maMutex),
       mxParent(rxParent),
       mrTreeNode(rNode),
+      mrStateSet(new ::utl::AccessibleStateSetHelper()),
       msName(rsName),
       msDescription(rsDescription),
       meRole(eRole),
-      mnClientId(0),
-      mrStateSet(new ::utl::AccessibleStateSetHelper())
+      mnClientId(0)
 {
     CommonConstructor();
 }
@@ -318,8 +318,6 @@ Reference<XAccessibleStateSet > SAL_CALL
 
 void AccessibleTreeNode::UpdateStateSet (void)
 {
-    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
-
     if (mrTreeNode.IsExpandable())
     {
         UpdateState(AccessibleStateType::EXPANDABLE, true);
