@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,10 +180,10 @@ DrawView::DrawView (
     OutputDevice* pOutDev,
     DrawViewShell* pShell)
     : ::sd::View(pDocSh->GetDoc(), pOutDev, pShell),
-      pDrawViewShell(pShell),
-      pDocShell(pDocSh),
-      nPOCHSmph(0),
-      pVDev(NULL),
+      mpDocShell(pDocSh),
+      mpDrawViewShell(pShell),
+      mpVDev(NULL),
+      mnPOCHSmph(0),
       mpSlideShow(NULL)
 {
     SetCurrentObj(OBJ_RECT, SdrInventor);
@@ -197,7 +197,7 @@ DrawView::DrawView (
 
 DrawView::~DrawView()
 {
-    delete pVDev;
+    delete mpVDev;
 
     if( mpSlideShow )
         mpSlideShow->dispose();
@@ -213,8 +213,8 @@ void DrawView::MarkListHasChanged()
 {
     ::sd::View::MarkListHasChanged();
 
-    if (pDrawViewShell)
-        pDrawViewShell->SelectionHasChanged();
+    if (mpDrawViewShell)
+        mpDrawViewShell->SelectionHasChanged();
 }
 
 /*************************************************************************
@@ -228,11 +228,11 @@ void DrawView::ModelHasChanged()
     ::sd::View::ModelHasChanged();
 
     // den Gestalter zur Neudarstellung zwingen
-    SfxStyleSheetBasePool* pSSPool = pDoc->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pSSPool = mpDoc->GetStyleSheetPool();
     pSSPool->Broadcast(SfxStyleSheetPoolHint(SFX_STYLESHEETPOOL_CHANGES));
 
-    if( pDrawViewShell )
-        pDrawViewShell->ModelHasChanged();
+    if( mpDrawViewShell )
+        mpDrawViewShell->ModelHasChanged();
 
 }
 
@@ -249,24 +249,24 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
     BOOL bOk = FALSE;
 
     // wird eine Masterpage bearbeitet?
-    if ( pDrawViewShell && pDrawViewShell->GetEditMode() == EM_MASTERPAGE )
+    if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
     {
-        SfxStyleSheetBasePool* pStShPool = pDoc->GetStyleSheetPool();
-        SdPage& rPage = (SdPage&)pDrawViewShell->GetActualPage()->TRG_GetMasterPage();
+        SfxStyleSheetBasePool* pStShPool = mpDoc->GetStyleSheetPool();
+        SdPage& rPage = (SdPage&)mpDrawViewShell->GetActualPage()->TRG_GetMasterPage();
         String aLayoutName = rPage.GetName();
-        SdrTextObj* pObject = (SdrTextObj*)GetTextEditObject();
+        SdrTextObj* pEditObject = static_cast< SdrTextObj* >( GetTextEditObject() );
 
-        if (pObject)
+        if (pEditObject)
         {
             // Textedit
             String aTemplateName(aLayoutName);
 
-            UINT32 nInv = pObject->GetObjInventor();
+            UINT32 nInv = pEditObject->GetObjInventor();
 
             if (nInv == SdrInventor)
             {
-                UINT16 eObjKind = pObject->GetObjIdentifier();
-                PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);
+                UINT16 eObjKind = pEditObject->GetObjIdentifier();
+                PresObjKind ePresObjKind = rPage.GetPresObjKind(pEditObject);
 
                 if ( ePresObjKind == PRESOBJ_TITLE ||
                      ePresObjKind == PRESOBJ_NOTES )
@@ -280,8 +280,8 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     aTempSet.ClearInvalidItems();
 
                     // Undo-Action
-                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
-                    pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                    mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                     pSheet->GetItemSet().Put(aTempSet);
                     pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
@@ -296,14 +296,14 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
 
                     pOutliner->SetUpdateMode(FALSE);
-                    pDocSh->SetWaitCursor( TRUE );
+                    mpDocSh->SetWaitCursor( TRUE );
 
                     // Platzhalter durch Vorlagennamen ersetzen
                     String aComment(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
                     xub_StrLen nPos = aComment.Search( (sal_Unicode)'$' );
                     aComment.Erase(nPos, 1);
                     aComment.Insert( String((SdResId(STR_PSEUDOSHEET_OUTLINE))), nPos);
-                    pDocSh->GetUndoManager()->EnterListAction( aComment, String() );
+                    mpDocSh->GetUndoManager()->EnterListAction( aComment, String() );
 
                     Paragraph* pPara = (Paragraph*)pList->Last();
                     while (pPara)
@@ -327,8 +327,8 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                         }
 
                         // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
-                        pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                        mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                         pSheet->GetItemSet().Put(aTempSet);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
@@ -337,13 +337,13 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                         USHORT nChild;
                         for( nChild = nDepth + 1; nChild < 10; nChild++ )
                         {
-                            String aName(rPage.GetLayoutName());
-                            aName += (sal_Unicode)(' ');
-                            aName += String::CreateFromInt32( (sal_Int32)nChild );
-                            SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_LT_FAMILY);
+                            String aSheetName(rPage.GetLayoutName());
+                            aSheetName += (sal_Unicode)(' ');
+                            aSheetName += String::CreateFromInt32( (sal_Int32)nChild );
+                            SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_LT_FAMILY));
 
-                            if( pSheet )
-                                pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                            if( pOutlSheet )
+                                pOutlSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
 
                         pPara = (Paragraph*)pList->Prev();
@@ -353,10 +353,10 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                             pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 
-                    pDocSh->SetWaitCursor( FALSE );
+                    mpDocSh->SetWaitCursor( FALSE );
                     pOV->GetOutliner()->SetUpdateMode(TRUE);
 
-                    pDocSh->GetUndoManager()->LeaveListAction();
+                    mpDocSh->GetUndoManager()->LeaveListAction();
 
                     delete pList;
                     bOk = TRUE;
@@ -372,10 +372,9 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
             // Selection
             const SdrMarkList& rList = GetMarkedObjectList();
             ULONG nMarkCount         = rList.GetMarkCount();
-            SdrObject* pObject = NULL;
             for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
             {
-                pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
+                SdrObject* pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
                 UINT32 nInv = pObject->GetObjInventor();
 
                 if (nInv == SdrInventor)
@@ -397,8 +396,8 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                         aTempSet.ClearInvalidItems();
 
                         // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
-                        pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                        mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                         pSheet->GetItemSet().Put(aTempSet);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
@@ -442,8 +441,8 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                             aTempSet.ClearInvalidItems();
 
                             // Undo-Action
-                            StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
-                            pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                            StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
+                            mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                             pSheet->GetItemSet().Set(aTempSet,false);
                             pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
@@ -485,17 +484,17 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
 void DrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                                  const SfxHint& rHint, const TypeId& rHintType)
 {
-    if ( pDrawViewShell && rHint.ISA(SdrHint) )
+    if ( mpDrawViewShell && rHint.ISA(SdrHint) )
     {
         SdrHintKind eHintKind = ( (SdrHint&) rHint).GetKind();
 
-        if ( nPOCHSmph == 0 && eHintKind == HINT_PAGEORDERCHG )
+        if ( mnPOCHSmph == 0 && eHintKind == HINT_PAGEORDERCHG )
         {
-            pDrawViewShell->ResetActualPage();
+            mpDrawViewShell->ResetActualPage();
         }
         else if ( eHintKind == HINT_LAYERCHG || eHintKind == HINT_LAYERORDERCHG )
         {
-            pDrawViewShell->ResetActualLayer();
+            mpDrawViewShell->ResetActualLayer();
         }
 
         // #94278# switch to that page when it's not a master page
@@ -505,10 +504,10 @@ void DrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 
             if(pPage && !pPage->IsMasterPage())
             {
-                if(pDrawViewShell->GetActualPage() != pPage)
+                if(mpDrawViewShell->GetActualPage() != pPage)
                 {
                     sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) / 2; // Sdr --> Sd
-                    pDrawViewShell->SwitchPage(nPageNum);
+                    mpDrawViewShell->SwitchPage(nPageNum);
                 }
             }
         }
@@ -526,11 +525,11 @@ void DrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 void DrawView::BlockPageOrderChangedHint(BOOL bBlock)
 {
     if (bBlock)
-        nPOCHSmph++;
+        mnPOCHSmph++;
     else
     {
-        DBG_ASSERT(nPOCHSmph, "Zaehlerunterlauf");
-        nPOCHSmph--;
+        DBG_ASSERT(mnPOCHSmph, "Zaehlerunterlauf");
+        mnPOCHSmph--;
     }
 }
 
@@ -546,12 +545,12 @@ BOOL DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAtt
     BOOL bResult = TRUE;
 
     // wird eine Masterpage bearbeitet?
-    if (pDrawViewShell && pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+    if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {
         if (IsPresObjSelected(FALSE, TRUE))
         {
 
-            InfoBox(pDrawViewShell->GetActiveWindow(),
+            InfoBox(mpDrawViewShell->GetActiveWindow(),
                     String(SdResId(STR_ACTION_NOTPOSSIBLE))).Execute();
             bResult = FALSE;
         }
@@ -573,52 +572,24 @@ BOOL DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAtt
 |*
 \************************************************************************/
 
-void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
-
-    BOOL bMPCache = FALSE;
-
-// #110094#-7
-//  if (pViewSh && pViewSh == (ViewShell*) SfxViewShell::Current() &&
-//      pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
-//      pOutDev->GetOutDevType() != OUTDEV_PRINTER)
-//  {
-//      // Aktive ViewShell
-//      bMPCache = TRUE;
-//  }
-//
-//  if( bMPCache )
-//  {
-//      if( !IsMasterPagePaintCaching() )
-//      {
-//          SetMasterPagePaintCaching( TRUE );
-//      }
-//  }
-//  else
-//  {
-//      if( IsMasterPagePaintCaching() )
-//      {
-//          ReleaseMasterPagePaintCache();
-//          SetMasterPagePaintCaching( FALSE );
-//      }
-//  }
-
-    if( pVDev )
+    if( mpVDev )
     {
-        delete pVDev;
-        pVDev = NULL;
+        delete mpVDev;
+        mpVDev = NULL;
     }
 
     BOOL bStandardPaint = TRUE;
 
-    SdDrawDocument* pDoc = pDocShell->GetDoc();
+    SdDrawDocument* pDoc = mpDocShell->GetDoc();
     if(pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
     {
         sd::Slideshow* pSlideShow = mpSlideShow;
 
         // Paint-Event fuer eine Praesentation im Vollbildmodus oder Fenster?
-        if(!pSlideShow && pViewSh)
-            pSlideShow = pViewSh->GetSlideShow();
+        if(!pSlideShow && mpViewSh)
+            pSlideShow = mpViewSh->GetSlideShow();
 
         if(pSlideShow)
         {
@@ -634,7 +605,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::
 
     if (bStandardPaint)
     {
-        ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);
+        ::sd::View::CompleteRedraw(pOutDev, rReg, nPaintMode, pRedirector);
     }
 }
 
@@ -685,8 +656,8 @@ void DrawView::PresPaint(const Region& rRegion)
 {
     Slideshow* pSlideShow = mpSlideShow;
 
-    if(!pSlideShow && pViewSh)
-        pSlideShow = pViewSh->GetSlideShow();
+    if(!pSlideShow && mpViewSh)
+        pSlideShow = mpViewSh->GetSlideShow();
 
     if( pSlideShow )
         pSlideShow->paint( rRegion.GetBoundRect() );
@@ -712,7 +683,7 @@ void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
     if (!rRect.IsEmpty())
     {
-        pDrawViewShell->MakeVisible(rRect, rWin);
+        mpDrawViewShell->MakeVisible(rRect, rWin);
     }
 }
 /*************************************************************************
@@ -723,9 +694,9 @@ void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 
 void DrawView::HideSdrPage()
 {
-    if (pDrawViewShell)
+    if (mpDrawViewShell)
     {
-        pDrawViewShell->HidePage();
+        mpDrawViewShell->HidePage();
     }
 
     ::sd::View::HideSdrPage();
@@ -744,7 +715,7 @@ SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
 
 void DrawView::DeleteMarked()
 {
-    sd::UndoManager* pUndoManager = pDoc->GetUndoManager();
+    sd::UndoManager* pUndoManager = mpDoc->GetUndoManager();
     DBG_ASSERT( pUndoManager, "sd::DrawView::DeleteMarked(), ui action without undo manager!?" );
 
     if( pUndoManager )
