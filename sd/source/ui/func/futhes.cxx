@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:57:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:25:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,18 +118,18 @@ FunctionReference FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
     return xFunc;
 }
 
-void FuThesaurus::DoExecute( SfxRequest& rReq )
+void FuThesaurus::DoExecute( SfxRequest& )
 {
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, String(),
-                             pWindow, RID_SVXERRCTX, DIALOG_MGR() );
+                             mpWindow, RID_SVXERRCTX, DIALOG_MGR() );
 
-    if( pViewShell && pViewShell->ISA(DrawViewShell) )
+    if( mpViewShell && mpViewShell->ISA(DrawViewShell) )
     {
         SdrTextObj* pTextObj = NULL;
 
-        if ( pView->AreObjectsMarked() )
+        if ( mpView->AreObjectsMarked() )
         {
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
             if ( rMarkList.GetMarkCount() == 1 )
             {
@@ -143,8 +143,8 @@ void FuThesaurus::DoExecute( SfxRequest& rReq )
             }
         }
 
-        ::Outliner* pOutliner = pView->GetTextEditOutliner();
-        const OutlinerView* pOutlView = pView->GetTextEditOutlinerView();
+        ::Outliner* pOutliner = mpView->GetTextEditOutliner();
+        const OutlinerView* pOutlView = mpView->GetTextEditOutlinerView();
 
         if ( pTextObj && pOutliner && pOutlView )
         {
@@ -158,7 +158,7 @@ void FuThesaurus::DoExecute( SfxRequest& rReq )
                 if( xHyphenator.is() )
                     pOutliner->SetHyphenator( xHyphenator );
 
-                pOutliner->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+                pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
             }
 
             EESpellState eState = ( (OutlinerView*) pOutlView)->StartThesaurus();
@@ -166,13 +166,13 @@ void FuThesaurus::DoExecute( SfxRequest& rReq )
 
             if (eState == EE_SPELL_NOLANGUAGE)
             {
-                ErrorBox(pWindow, WB_OK, String(SdResId(STR_NOLANGUAGE))).Execute();
+                ErrorBox(mpWindow, WB_OK, String(SdResId(STR_NOLANGUAGE))).Execute();
             }
         }
     }
-    else if ( pViewShell->ISA(OutlineViewShell) )
+    else if ( mpViewShell->ISA(OutlineViewShell) )
     {
-        Outliner* pOutliner = pDoc->GetOutliner();
+        Outliner* pOutliner = mpDoc->GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);
 
         if ( !pOutliner->GetSpeller().is() )
@@ -185,7 +185,7 @@ void FuThesaurus::DoExecute( SfxRequest& rReq )
             if( xHyphenator.is() )
                 pOutliner->SetHyphenator( xHyphenator );
 
-            pOutliner->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+            pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
         }
 
         EESpellState eState = pOutlView->StartThesaurus();
@@ -193,7 +193,7 @@ void FuThesaurus::DoExecute( SfxRequest& rReq )
 
         if (eState == EE_SPELL_NOLANGUAGE)
         {
-            ErrorBox(pWindow, WB_OK, String(SdResId(STR_NOLANGUAGE))).Execute();
+            ErrorBox(mpWindow, WB_OK, String(SdResId(STR_NOLANGUAGE))).Execute();
         }
     }
 }
