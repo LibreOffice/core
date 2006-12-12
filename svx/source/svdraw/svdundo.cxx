@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:50:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,20 @@
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
 #endif
+
+#include "svdviter.hxx"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// iterates over all views and unmarks this SdrObject if it is marked
+static void ImplUnmarkObject( SdrObject* pObj )
+{
+    SdrViewIter aIter( pObj );
+    for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
+    {
+        pView->MarkObj( pObj, pView->GetSdrPageView(), TRUE );
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -806,6 +820,8 @@ void SdrUndoRemoveObj::Redo()
     DBG_ASSERT(pObj->IsInserted(),"RedoRemoveObj: pObj ist nicht Inserted");
     if (pObj->IsInserted())
     {
+        ImplUnmarkObject( pObj );
+
 #ifdef DBG_UTIL
         SdrObject* pChkObj=
 #endif
@@ -833,6 +849,8 @@ void SdrUndoInsertObj::Undo()
     DBG_ASSERT(pObj->IsInserted(),"UndoInsertObj: pObj ist nicht Inserted");
     if (pObj->IsInserted())
     {
+        ImplUnmarkObject( pObj );
+
 #ifdef DBG_UTIL
         SdrObject* pChkObj=
 #endif
@@ -997,26 +1015,37 @@ void SdrUndoReplaceObj::Undo()
     // #94278# Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    if (IsOldOwner() && !IsNewOwner()) {
+    if (IsOldOwner() && !IsNewOwner())
+    {
         DBG_ASSERT(!pObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Altes Objekt ist bereits inserted!");
         DBG_ASSERT(pNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Neues Objekt ist nicht inserted!");
         SetOldOwner(FALSE);
         SetNewOwner(TRUE);
+
+        ImplUnmarkObject( pNewObj );
         pObjList->ReplaceObject(pObj,nOrdNum);
-    } else {
+    }
+    else
+    {
         DBG_ERROR("SdrUndoReplaceObj::Undo(): IsMine-Flags stehen verkehrt. Doppelter Undo-Aufruf?");
     }
 }
 
 void SdrUndoReplaceObj::Redo()
 {
-    if (!IsOldOwner() && IsNewOwner()) {
+    if (!IsOldOwner() && IsNewOwner())
+    {
         DBG_ASSERT(!pNewObj->IsInserted(),"SdrUndoReplaceObj::Redo(): Neues Objekt ist bereits inserted!");
         DBG_ASSERT(pObj->IsInserted(),"SdrUndoReplaceObj::Redo(): Altes Objekt ist nicht inserted!");
         SetOldOwner(TRUE);
         SetNewOwner(FALSE);
+
+        ImplUnmarkObject( pObj );
         pObjList->ReplaceObject(pNewObj,nOrdNum);
-    } else {
+
+    }
+    else
+    {
         DBG_ERROR("SdrUndoReplaceObj::Redo(): IsMine-Flags stehen verkehrt. Doppelter Redo-Aufruf?");
     }
 
