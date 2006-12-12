@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:44:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,27 +79,27 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 {
     DBG_ASSERT(pThePage, "Undo ohne Seite ???");
 
-    pPage                   = pThePage;
-    aNewName                = aTheNewName;
-    eNewAutoLayout          = eTheNewAutoLayout;
-    bNewBckgrndVisible      = bTheNewBckgrndVisible;
-    bNewBckgrndObjsVisible  = bTheNewBckgrndObjsVisible;
+    mpPage                  = pThePage;
+    maNewName               = aTheNewName;
+    meNewAutoLayout         = eTheNewAutoLayout;
+    mbNewBckgrndVisible     = bTheNewBckgrndVisible;
+    mbNewBckgrndObjsVisible = bTheNewBckgrndObjsVisible;
 
-    eOldAutoLayout          = pPage->GetAutoLayout();
+    meOldAutoLayout         = mpPage->GetAutoLayout();
 
-    if (!pPage->IsMasterPage())
+    if (!mpPage->IsMasterPage())
     {
-        aOldName = pPage->GetName();
-        SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+        maOldName = mpPage->GetName();
+        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-        SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+        SetOfByte aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
 
-        bOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
-        bOldBckgrndObjsVisible = aVisibleLayers.IsSet(aBckgrndObj);
+        mbOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
+        mbOldBckgrndObjsVisible = aVisibleLayers.IsSet(aBckgrndObj);
     }
 
-    aComment = String(SdResId(STR_UNDO_MODIFY_PAGE));
+    maComment = String(SdResId(STR_UNDO_MODIFY_PAGE));
 }
 
 /*************************************************************************
@@ -118,7 +118,7 @@ void ModifyPageUndoAction::Undo()
 {
     // #94637# invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
-      SdrViewIter aIter(pPage);
+      SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
 
     while(pView)
@@ -128,28 +128,28 @@ void ModifyPageUndoAction::Undo()
         pView = aIter.NextView();
     }
 
-    pPage->SetAutoLayout( eOldAutoLayout );
+    mpPage->SetAutoLayout( meOldAutoLayout );
 
-    if (!pPage->IsMasterPage())
+    if (!mpPage->IsMasterPage())
     {
-        if (pPage->GetName() != aOldName)
+        if (mpPage->GetName() != maOldName)
         {
-            pPage->SetName(aOldName);
+            mpPage->SetName(maOldName);
 
-            if (pPage->GetPageKind() == PK_STANDARD)
+            if (mpPage->GetPageKind() == PK_STANDARD)
             {
-                SdPage* pNotesPage = (SdPage*)pDoc->GetPage(pPage->GetPageNum() + 1);
-                pNotesPage->SetName(aOldName);
+                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNum() + 1);
+                pNotesPage->SetName(maOldName);
             }
         }
 
-        SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
         SetOfByte aVisibleLayers;
-        aVisibleLayers.Set(aBckgrnd, bOldBckgrndVisible);
-        aVisibleLayers.Set(aBckgrndObj, bOldBckgrndObjsVisible);
-        pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
+        aVisibleLayers.Set(aBckgrnd, mbOldBckgrndVisible);
+        aVisibleLayers.Set(aBckgrndObj, mbOldBckgrndObjsVisible);
+        mpPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
 
     // Redisplay
@@ -167,7 +167,7 @@ void ModifyPageUndoAction::Redo()
 {
     // #94637# invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
-      SdrViewIter aIter(pPage);
+      SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
 
     while(pView)
@@ -177,45 +177,33 @@ void ModifyPageUndoAction::Redo()
         pView = aIter.NextView();
     }
 
-    // pPage->SetAutoLayout(eNewAutoLayout, TRUE);
-    pPage->eAutoLayout = eNewAutoLayout;
+    mpPage->meAutoLayout = meNewAutoLayout;
 
-    if (!pPage->IsMasterPage())
+    if (!mpPage->IsMasterPage())
     {
-        if (pPage->GetName() != aNewName)
+        if (mpPage->GetName() != maNewName)
         {
-            pPage->SetName(aNewName);
+            mpPage->SetName(maNewName);
 
-            if (pPage->GetPageKind() == PK_STANDARD)
+            if (mpPage->GetPageKind() == PK_STANDARD)
             {
-                SdPage* pNotesPage = (SdPage*)pDoc->GetPage(pPage->GetPageNum() + 1);
-                pNotesPage->SetName(aNewName);
+                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNum() + 1);
+                pNotesPage->SetName(maNewName);
             }
         }
 
-        SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
         SetOfByte aVisibleLayers;
-        aVisibleLayers.Set(aBckgrnd, bNewBckgrndVisible);
-        aVisibleLayers.Set(aBckgrndObj, bNewBckgrndObjsVisible);
-        pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
+        aVisibleLayers.Set(aBckgrnd, mbNewBckgrndVisible);
+        aVisibleLayers.Set(aBckgrndObj, mbNewBckgrndObjsVisible);
+        mpPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
 
     // Redisplay
     SfxViewFrame::Current()->GetDispatcher()->Execute(
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-}
-
-/*************************************************************************
-|*
-|* Repeat()
-|*
-\************************************************************************/
-
-void ModifyPageUndoAction::Repeat()
-{
-    DBG_ASSERT(FALSE, "ModifyPageUndoAction::Repeat: nicht implementiert");
 }
 
 /*************************************************************************
@@ -236,7 +224,7 @@ ModifyPageUndoAction::~ModifyPageUndoAction()
 
 String ModifyPageUndoAction::GetComment() const
 {
-    return aComment;
+    return maComment;
 }
 
 
