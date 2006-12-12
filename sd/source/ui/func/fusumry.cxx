@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:53:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,14 +105,14 @@ FunctionReference FuSummaryPage::Create( ViewShell* pViewSh, ::sd::Window* pWin,
     return xFunc;
 }
 
-void FuSummaryPage::DoExecute( SfxRequest& rReq )
+void FuSummaryPage::DoExecute( SfxRequest& )
 {
     ::sd::Outliner* pOutl = NULL;
     SdPage* pSummaryPage = NULL;
     USHORT i = 0;
     USHORT nFirstPage = SDRPAGE_NOTFOUND;
     USHORT nSelectedPages = 0;
-    USHORT nCount = pDoc->GetSdPageCount(PK_STANDARD);
+    USHORT nCount = mpDoc->GetSdPageCount(PK_STANDARD);
 
     while (i < nCount && nSelectedPages <= 1)
     {
@@ -121,7 +121,7 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
         * Genau eine Seite selektiert: Ab dieser Seite alles zusammenfassen
         * sonst: Nur die selektierten Seiten zusammenfassen
         **********************************************************************/
-        SdPage* pActualPage = pDoc->GetSdPage(i, PK_STANDARD);
+        SdPage* pActualPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
         if (pActualPage->IsSelected())
         {
@@ -140,11 +140,11 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
 
     for (i = nFirstPage; i < nCount; i++)
     {
-        SdPage* pActualPage = pDoc->GetSdPage(i, PK_STANDARD);
+        SdPage* pActualPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
         if (nSelectedPages <= 1 || pActualPage->IsSelected())
         {
-            SdPage* pActualNotesPage = pDoc->GetSdPage(i, PK_NOTES);
+            SdPage* pActualNotesPage = mpDoc->GetSdPage(i, PK_NOTES);
             SdrTextObj* pTextObj = (SdrTextObj*) pActualPage->GetPresObj(PRESOBJ_TITLE);
 
             if (pTextObj && !pTextObj->IsEmptyPresObj())
@@ -154,11 +154,11 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
                     /**********************************************************
                     * Inhaltsverzeichnis-Seite einfuegen und Outliner anlegen
                     **********************************************************/
-                    pView->BegUndo(String(SdResId(STR_UNDO_SUMMARY_PAGE)));
+                    mpView->BegUndo(String(SdResId(STR_UNDO_SUMMARY_PAGE)));
                     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // Seite mit Titel & Gliederung!
-                    pSummaryPage = (SdPage*) pDoc->AllocPage(FALSE);
+                    pSummaryPage = (SdPage*) mpDoc->AllocPage(FALSE);
                     pSummaryPage->SetSize(pActualPage->GetSize() );
                     pSummaryPage->SetBorder(pActualPage->GetLftBorder(),
                                      pActualPage->GetUppBorder(),
@@ -166,8 +166,8 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
                                      pActualPage->GetLwrBorder() );
 
                     // Seite hinten einfuegen
-                    pDoc->InsertPage(pSummaryPage, nCount * 2 + 1);
-                    pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
+                    mpDoc->InsertPage(pSummaryPage, nCount * 2 + 1);
+                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
@@ -177,7 +177,7 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
                     // Notiz-Seite
-                    SdPage* pNotesPage = (SdPage*) pDoc->AllocPage(FALSE);
+                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(FALSE);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
                                           pActualNotesPage->GetUppBorder(),
@@ -186,8 +186,8 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
                     pNotesPage->SetPageKind(PK_NOTES);
 
                     // Seite hinten einfuegen
-                    pDoc->InsertPage(pNotesPage, nCount * 2 + 2);
-                    pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
+                    mpDoc->InsertPage(pNotesPage, nCount * 2 + 2);
+                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
@@ -196,15 +196,15 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 
-                    pOutl = new ::sd::Outliner( pDoc, OUTLINERMODE_OUTLINEOBJECT );
+                    pOutl = new ::sd::Outliner( mpDoc, OUTLINERMODE_OUTLINEOBJECT );
                     pOutl->SetUpdateMode(FALSE);
                     pOutl->EnableUndo(FALSE);
 
-                    if (pDocSh)
-                        pOutl->SetRefDevice(SD_MOD()->GetRefDevice( *pDocSh ));
+                    if (mpDocSh)
+                        pOutl->SetRefDevice(SD_MOD()->GetRefDevice( *mpDocSh ));
 
-                    pOutl->SetDefTab( pDoc->GetDefaultTabulator() );
-                    pOutl->SetStyleSheetPool((SfxStyleSheetPool*) pDoc->GetStyleSheetPool());
+                    pOutl->SetDefTab( mpDoc->GetDefaultTabulator() );
+                    pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
                     pStyle = pSummaryPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
                     pOutl->SetStyleSheet( 0, pStyle );
                     pOutl->SetMinDepth(0);
@@ -225,7 +225,7 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
         SdrTextObj* pTextObj = (SdrTextObj*) pSummaryPage->GetPresObj(PRESOBJ_OUTLINE);
 
         // Harte Absatz- und Zeichenattribute entfernen
-        SfxItemSet aEmptyEEAttr(pDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
+        SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
         ULONG nParaCount = pOutl->GetParagraphCount();
 
         for (USHORT nPara = 0; nPara < nParaCount; nPara++)
@@ -240,15 +240,15 @@ void FuSummaryPage::DoExecute( SfxRequest& rReq )
         pTextObj->SetEmptyPresObj(FALSE);
 
         // Harte Attribute entfernen (Flag auf TRUE)
-        SfxItemSet aAttr(pDoc->GetPool());
+        SfxItemSet aAttr(mpDoc->GetPool());
         aAttr.Put(XLineStyleItem(XLINE_NONE));
         aAttr.Put(XFillStyleItem(XFILL_NONE));
         pTextObj->SetMergedItemSet(aAttr);
 
-        pView->EndUndo();
+        mpView->EndUndo();
         delete pOutl;
 
-        DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( pViewShell );
+        DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( mpViewShell );
         if(pDrawViewShell)
         {
             pDrawViewShell->SwitchPage( (pSummaryPage->GetPageNum() - 1) / 2);
