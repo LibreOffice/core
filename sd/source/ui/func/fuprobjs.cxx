@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuprobjs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:54:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,8 @@
 #endif
 #include "glob.hxx"
 #include "prlayout.hxx"
-//CHINA001 #include "prltempl.hxx"
 #include "unchss.hxx"
-#include "sdabstdlg.hxx" //CHINA001
+#include "sdabstdlg.hxx"
 namespace sd {
 
 TYPEINIT1( FuPresentationObjects, FuPoor );
@@ -102,16 +101,16 @@ FunctionReference FuPresentationObjects::Create( ViewShell* pViewSh, ::sd::Windo
     return xFunc;
 }
 
-void FuPresentationObjects::DoExecute( SfxRequest& rReq )
+void FuPresentationObjects::DoExecute( SfxRequest& )
 {
-    OutlineViewShell* pOutlineViewShell = dynamic_cast< OutlineViewShell* >( pViewShell );
+    OutlineViewShell* pOutlineViewShell = dynamic_cast< OutlineViewShell* >( mpViewShell );
     DBG_ASSERT( pOutlineViewShell, "sd::FuPresentationObjects::DoExecute(), does not work without an OutlineViewShell!");
     if( !pOutlineViewShell )
         return;
 
     // ergibt die Selektion ein eindeutiges Praesentationslayout?
     // wenn nicht, duerfen die Vorlagen nicht bearbeitet werden
-    SfxItemSet aSet(pDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
+    SfxItemSet aSet(mpDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
     pOutlineViewShell->GetStatusBarState( aSet );
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
     DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
@@ -119,7 +118,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& rReq )
     BOOL    bUnique = FALSE;
     USHORT  nDepth, nTmp;
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) pWindow );
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
@@ -160,7 +159,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& rReq )
             aStyleName.Append( UniString::CreateFromInt32( nDepth ) );
         }
 
-        SfxStyleSheetBasePool* pStyleSheetPool = pDocSh->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
         SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName,
                             (SfxStyleFamily) SD_LT_FAMILY );
         DBG_ASSERT(pStyleSheet, "StyleSheet nicht gefunden");
@@ -169,17 +168,16 @@ void FuPresentationObjects::DoExecute( SfxRequest& rReq )
         {
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdPresLayoutTemplateDlg(ResId( TAB_PRES_LAYOUT_TEMPLATE ), pDocSh, NULL, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : 0;
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : 0;
             if( pDlg && (pDlg->Execute() == RET_OK) )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 // Undo-Action
                 StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                (pDoc, (SfxStyleSheet*)pStyleSheet,
+                                                (mpDoc, (SfxStyleSheet*)pStyleSheet,
                                                     pOutSet);
-                pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                 pStyleSheet->GetItemSet().Put( *pOutSet );
                 ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
