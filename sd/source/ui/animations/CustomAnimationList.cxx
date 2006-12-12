@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:29:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,10 @@ private:
 // --------------------------------------------------------------------
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvLBoxEntry* pEntry, USHORT nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
-: SvLBoxString( pEntry, nFlags, aDescription ), mpParent( pParent ), mpEffect(pEffect), maDescription( aDescription )
+: SvLBoxString( pEntry, nFlags, aDescription )
+, mpParent( pParent )
+, maDescription( aDescription )
+, mpEffect(pEffect)
 {
 }
 
@@ -304,7 +307,7 @@ void CustomAnimationListEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* pEn
 
 // --------------------------------------------------------------------
 
-void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry )
+void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
 {
     const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -368,7 +371,7 @@ SvLBoxItem* CustomAnimationListEntryItem::Create() const
 
 // --------------------------------------------------------------------
 
-void CustomAnimationListEntryItem::Clone( SvLBoxItem* pSource )
+void CustomAnimationListEntryItem::Clone( SvLBoxItem* )
 {
 }
 
@@ -441,7 +444,7 @@ CustomAnimationTriggerEntryItem::~CustomAnimationTriggerEntryItem()
 
 USHORT CustomAnimationTriggerEntryItem::IsA()
 {
-    return -1;
+    return (USHORT)-1;
 }
 
 // --------------------------------------------------------------------
@@ -465,10 +468,8 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* 
 
 // --------------------------------------------------------------------
 
-void CustomAnimationTriggerEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry )
+void CustomAnimationTriggerEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* )
 {
-    SvViewDataItem* pViewData = mpParent->GetViewDataItem( pEntry, this );
-
     Size aSize( rDev.GetOutputSizePixel().Width(), static_cast< SvTreeListBox* >(&rDev)->GetEntryHeight() );
 
     Point aPos( 0, rPos.Y() );
@@ -513,16 +514,17 @@ SvLBoxItem* CustomAnimationTriggerEntryItem::Create() const
 
 // --------------------------------------------------------------------
 
-void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* pSource )
+void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 {
 }
 
 // ====================================================================
 
 CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId, ICustomAnimationListController* pController )
-: SvTreeListBox( pParent, rResId ), mpLastParentEntry(0),
-  mpController( pController ),
-  mbIgnorePaint( false )
+:   SvTreeListBox( pParent, rResId )
+,   mbIgnorePaint( false )
+,   mpController( pController )
+,   mpLastParentEntry(0)
 {
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT ) );
 
@@ -950,9 +952,9 @@ EffectSequence CustomAnimationList::getSelection() const
             {
                 if( !IsSelected( pChild ) )
                 {
-                    CustomAnimationEffectPtr pEffect( pChild->getEffect() );
-                    if( pEffect.get() )
-                        aSelection.push_back( pEffect );
+                    CustomAnimationEffectPtr pChildEffect( pChild->getEffect() );
+                    if( pChildEffect.get() )
+                        aSelection.push_back( pChildEffect );
                 }
 
                 pChild = dynamic_cast< CustomAnimationListEntry* >(  NextSibling( pChild ) );
