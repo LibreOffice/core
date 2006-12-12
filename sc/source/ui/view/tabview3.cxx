@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:46:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2638,8 +2638,8 @@ void ScTabView::ActivateView( BOOL bActivate, BOOL bFirst )
     else if (!bFirst)
         ShowAllCursors();
 
-    if (pDrawView)
-        DrawShowMarkHdl(bActivate);     // Drawing-Markierung
+    //HMHif (pDrawView)
+    //HMH   DrawShowMarkHdl(bActivate);     // Drawing-Markierung
 
     if (bActivate)
     {
