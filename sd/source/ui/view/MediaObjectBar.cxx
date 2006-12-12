@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MediaObjectBar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:30:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,14 +84,14 @@ SFX_IMPL_INTERFACE( MediaObjectBar, SfxShell, SdResId( STR_MEDIAOBJECTBARSHELL )
 
 MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SfxShell( pSdViewShell->GetViewShell() ),
-    pView( pSdView ),
-    pViewSh( pSdViewShell )
+    mpView( pSdView ),
+    mpViewSh( pSdViewShell )
 {
-    DrawDocShell* pDocShell = pViewSh->GetDocSh();
+    DrawDocShell* pDocShell = mpViewSh->GetDocSh();
 
     SetPool( &pDocShell->GetPool() );
     SetUndoManager( pDocShell->GetUndoManager() );
-    SetRepeatTarget( pView );
+    SetRepeatTarget( mpView );
     SetHelpId( SD_IF_SDDRAWMEDIAOBJECTBAR );
     SetName( String( SdResId( RID_DRAW_MEDIA_TOOLBOX ) ) );
 }
@@ -114,7 +114,7 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
     {
         if( SID_AVMEDIA_TOOLBOX == nWhich )
         {
-            SdrMarkList* pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+            SdrMarkList* pMarkList = new SdrMarkList( mpView->GetMarkedObjectList() );
             bool         bDisable = true;
 
             if( 1 == pMarkList->GetMarkCount() )
@@ -149,15 +149,13 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
         const SfxPoolItem*  pItem;
-        USHORT              nSlot = rReq.GetSlot();
-        BOOL                bGeometryChanged = FALSE;
 
         if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
             pItem = NULL;
 
         if( pItem )
         {
-            SdrMarkList* pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+            SdrMarkList* pMarkList = new SdrMarkList( mpView->GetMarkedObjectList() );
 
             if( 1 == pMarkList->GetMarkCount() )
             {
