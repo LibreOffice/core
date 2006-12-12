@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageObserver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:19:30 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,6 +332,9 @@ void MasterPageObserver::Implementation::Notify(
                         AnalyzeUsedMasterPages (rDocument);
                     }
                 }
+                break;
+
+            default:
                 break;
         }
     }
