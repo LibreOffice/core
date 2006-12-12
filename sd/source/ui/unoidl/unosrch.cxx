@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:28:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ const SfxItemPropertyMap* ImplGetSearchPropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_SEARCH_BACKWARDS),  WID_SEARCH_BACKWARDS,   &::getBooleanCppuType(),    0,  0 },
         { MAP_CHAR_LEN(UNO_NAME_SEARCH_CASE),       WID_SEARCH_CASE,        &::getBooleanCppuType(),    0,  0 },
         { MAP_CHAR_LEN(UNO_NAME_SEARCH_WORDS),      WID_SEARCH_WORDS,       &::getBooleanCppuType(),    0,  0 },
-        { 0,0,0,0,0}
+        { 0,0,0,0,0,0}
     };
 
     return aSearchPropertyMap_Impl;
@@ -387,10 +387,11 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
 {
     SdUnoSearchReplaceDescriptor* pDescr = SdUnoSearchReplaceDescriptor::getImplementation( xDesc );
 
+    uno::Reference< uno::XInterface > xFound;
+
     uno::Reference< text::XTextRange > xRange( xStartAt, uno::UNO_QUERY );
     if(pDescr && xRange.is() )
     {
-        uno::Reference< text::XTextRange > xFound;
 
         uno::Reference< text::XTextRange > xCurrentRange( xStartAt, uno::UNO_QUERY );
 
@@ -414,9 +415,9 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
                     // get next shape on our page
                     if( xShapes.is() )
                     {
-                        uno::Reference< drawing::XShape > xFound( GetNextShape( xShapes, xCurrentShape ) );
-                        if( xFound.is() && (xFound.get() != xCurrentShape.get()) )
-                            xCurrentShape = xFound;
+                        uno::Reference< drawing::XShape > xFound2( GetNextShape( xShapes, xCurrentShape ) );
+                        if( xFound2.is() && (xFound2.get() != xCurrentShape.get()) )
+                            xCurrentShape = xFound2;
                         else
                             xCurrentShape = NULL;
 
@@ -432,11 +433,8 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
                 }
             }
         }
-
-        return xFound;
     }
-    else
-        return uno::Reference< uno::XInterface > ();
+    return xFound;
 }
 
 /** this method returns the shape that follows xCurrentShape in the shape collection xShapes.
@@ -538,26 +536,20 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
         while(xParaEnum->hasMoreElements())
         {
-            uno::Reference< text::XTextContent >  xParagraph;
-
-            xParaEnum->nextElement() >>= xParagraph;
+            uno::Reference< text::XTextContent >  xParagraph( xParaEnum->nextElement(), uno::UNO_QUERY );
             if( xParagraph.is() )
-            {
-                xParagraph->queryInterface( ITYPE( container::XEnumerationAccess )) >>= xEnumAccess;
-            }
+                xEnumAccess.query( xParagraph );
+            else
+                xEnumAccess.clear();
 
             if( xEnumAccess.is() )
             {
-                 uno::Reference< container::XEnumeration >  xParagraph( xEnumAccess->createEnumeration() );
-
-                 if( xParagraph.is() )
+                 uno::Reference< container::XEnumeration >  xPortionEnum( xEnumAccess->createEnumeration() );
+                 if( xPortionEnum.is() )
                  {
-
-                    while(xParagraph->hasMoreElements())
+                    while(xPortionEnum->hasMoreElements())
                     {
-                        uno::Reference< text::XTextRange >  xPortion;
-
-                        xParagraph->nextElement() >>= xPortion;
+                        uno::Reference< text::XTextRange >  xPortion( xPortionEnum->nextElement(), uno::UNO_QUERY );
                         if( xPortion.is() )
                         {
                             const OUString aPortion( xPortion->getString() );
@@ -637,9 +629,9 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     if( xRangeRef.is() )
         aSel = GetSelection( xRangeRef );
 
-    sal_Int32 nStartPos = 0;
+    sal_Int32 nStartPos;
     sal_Int32 nEndPos   = 0;
-    for( nStartPos; nStartPos < nTextLen; nStartPos++ )
+    for( nStartPos = 0; nStartPos < nTextLen; nStartPos++ )
     {
         if( pConvertPara[nStartPos] == aSel.nStartPara && pConvertPos[nStartPos] == aSel.nStartPos )
             break;
@@ -649,8 +641,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     {
         if( nStartPos <= nTextLen && nEndPos <= nTextLen )
         {
-            ESelection aSel( pConvertPara[nStartPos], pConvertPos[nStartPos],
-                             pConvertPara[nEndPos], pConvertPos[nEndPos] );
+            ESelection aSelection( (USHORT)pConvertPara[nStartPos], (USHORT)pConvertPos[nStartPos],
+                             (USHORT)pConvertPara[nEndPos], (USHORT)pConvertPos[nEndPos] );
             SvxUnoTextRange *pRange;
 
             SvxUnoTextBase* pParent = SvxUnoTextBase::getImplementation( xParent );
@@ -659,7 +651,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
             {
                 pRange = new SvxUnoTextRange( *pParent );
                 xFound = (text::XText*)pRange;
-                pRange->SetSelection(aSel);
+                pRange->SetSelection(aSelection);
 
 //              pDescr->SetStartPos( nEndPos );
             }
@@ -687,7 +679,7 @@ sal_Bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nSta
         aSearchStr.toAsciiLowerCase();
     }
 
-    sal_Int16 nFound = aText.indexOf( aSearchStr, nStartPos );
+    sal_Int32 nFound = aText.indexOf( aSearchStr, nStartPos );
     if( nFound != -1 )
     {
         nStartPos = nFound;
@@ -860,10 +852,10 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::O
     return aAny;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
 
 
 /* ================================================================= */
