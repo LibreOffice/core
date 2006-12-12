@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspagob.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:44:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ private:
     HelpButton              aBtnHelp;
 
     SfxMedium*              pMedium;
-    const SdDrawDocument*   pDoc;
+    const SdDrawDocument*   mpDoc;
     const String&           rName;
 
     void                    Reset();
