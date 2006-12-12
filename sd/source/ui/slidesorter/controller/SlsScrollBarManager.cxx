@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:08:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ namespace sd { namespace slidesorter { namespace controller {
 
 ScrollBarManager::ScrollBarManager (
     SlideSorterController& rController,
-    ::Window* pParentWindow,
+    ::Window*,
     ::Window* pContentWindow,
     ScrollBar* pHorizontalScrollBar,
     ScrollBar* pVerticalScrollBar,
@@ -66,10 +66,10 @@ ScrollBarManager::ScrollBarManager (
       mpVerticalScrollBar (pVerticalScrollBar),
       mnHorizontalPosition (0),
       mnVerticalPosition (0),
-      mpScrollBarFiller (pScrollBarFiller),
       maScrollBorder (10,10),
       mnHorizontalScrollFactor (0.1),
       mnVerticalScrollFactor (0.1),
+      mpScrollBarFiller (pScrollBarFiller),
       mpContentWindow (pContentWindow)
 {
     // Hide the scroll bars by default to prevent display errors while
@@ -84,7 +84,6 @@ ScrollBarManager::ScrollBarManager (
     maAutoScrollTimer.SetTimeout(50);
     maAutoScrollTimer.SetTimeoutHdl (
         LINK(this, ScrollBarManager, AutoScrollTimeoutHandler));
-    Timer maAutoScrollTimer;
 }
 
 
@@ -514,7 +513,6 @@ int ScrollBarManager::GetHorizontalScrollBarHeight (void) const
 
 void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 {
-    bool bResult = false;
     ::sd::Window* pWindow = mrController.GetView().GetWindow();
 
     int nDx = 0;
@@ -610,7 +608,7 @@ bool ScrollBarManager::RepeatAutoScroll (void)
 
 
 
-IMPL_LINK(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, pTimer)
+IMPL_LINK(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, EMPTYARG)
 {
     RepeatAutoScroll();
 
