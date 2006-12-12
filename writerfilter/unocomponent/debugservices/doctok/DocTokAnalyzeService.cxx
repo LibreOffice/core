@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokAnalyzeService.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:36:49 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-12 16:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,38 +206,59 @@ sal_Int32 SAL_CALL AnalyzeService::run
                                  OUSTRING_TO_OSTRING_CVTFLAGS);
 
             fprintf(stdout, "<file><name>%s</name>\n", aStr.getStr());
+            fprintf(stderr, "%s\n", aStr.getStr());
+            fflush(stderr);
 
+            bool bStatus = true;
             try
             {
                 try
                 {
                     uno::Reference<io::XInputStream> xInputStream =
                         xFileAccess->openFileRead(aURL);
-                    doctok::WW8Stream::Pointer_t pDocStream =
-                        doctok::WW8DocumentFactory::createStream
-                        (xContext, xInputStream);
+                    {
+                        doctok::WW8Stream::Pointer_t pDocStream =
+                            doctok::WW8DocumentFactory::createStream
+                            (xContext, xInputStream);
 
-                    doctok::WW8Document::Pointer_t pDocument =
-                        doctok::WW8DocumentFactory::createDocument(pDocStream);
+                        if (pDocStream.get() != NULL)
+                        {
+                            doctok::WW8Document::Pointer_t pDocument =
+                                doctok::WW8DocumentFactory::createDocument
+                                (pDocStream);
 
-                    doctok::Stream::Pointer_t pAnalyzer =
-                        doctok::createAnalyzer();
-                    pDocument->resolve(*pAnalyzer);
+                            doctok::Stream::Pointer_t pAnalyzer =
+                                doctok::createAnalyzer();
+                            pDocument->resolve(*pAnalyzer);
+                        }
+                        else
+                        {
+                            fprintf(stdout,
+                                    "<exception>file open failed</exception>\n");
+                            bStatus = false;
+                        }
+                    }
 
-                    fprintf(stdout, "<status>ok</status>\n");
+                    xInputStream->closeInput();
                 }
                 catch (doctok::Exception e)
                 {
                     fprintf(stdout, "<exception>%s</exception>\n",
                             e.getText().c_str());
-                    fprintf(stdout, "<status>failed</status>\n");
+                    bStatus = false;
                 }
             }
             catch (...)
             {
                 fprintf(stdout, "<exception>unknown</exception>\n");
-                fprintf(stdout, "<status>failed</status>\n");
+                bStatus = false;
             }
+
+            if (bStatus)
+                fprintf(stdout, "<status>ok</status>\n");
+            else
+                fprintf(stdout, "<status>failed</status>\n");
+
             aURL = aLister.getURL();
 
             fprintf(stdout, "</file>\n");
@@ -248,6 +269,8 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
         rtl_uString_release(dir);
         ::ucb::ContentBroker::deinitialize();
+
+
     }
     else
     {
