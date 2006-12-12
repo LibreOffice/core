@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:27:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ class SlideSorterViewShell
     friend class controller::SlotManager;
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
     enum TabBarEntry
     {
