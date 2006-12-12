@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpreslt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:52:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,24 +76,24 @@ public:
     DECL_LINK(ClickLoadHdl, void *);
 
 private:
-    ::sd::DrawDocShell*     pDocSh;
-    ::sd::ViewShell* pViewSh;
-    FixedText           aFtLayout;
-    ValueSet            aVS;
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-    CheckBox            aCbxMasterPage;
-    CheckBox            aCbxCheckMasters;
-    PushButton          aBtnLoad;
+    ::sd::DrawDocShell* mpDocSh;
+    ::sd::ViewShell*    mpViewSh;
+    FixedText           maFtLayout;
+    ValueSet            maVS;
+    OKButton            maBtnOK;
+    CancelButton        maBtnCancel;
+    HelpButton          maBtnHelp;
+    CheckBox            maCbxMasterPage;
+    CheckBox            maCbxCheckMasters;
+    PushButton          maBtnLoad;
 
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet&   mrOutAttrs;
 
-    List*               pLayoutNames;
+    List*               mpLayoutNames;
 
-    String              aName;          // Layoutname oder Dateiname
-    long                nLayoutCount;   // Anzahl, der im Dokument vorhandenen MasterPages
-    String              aStrNone;
+    String              maName;          // Layoutname oder Dateiname
+    long                mnLayoutCount;  // Anzahl, der im Dokument vorhandenen MasterPages
+    const String        maStrNone;
 
     void                FillValueSet();
     void                Reset();
