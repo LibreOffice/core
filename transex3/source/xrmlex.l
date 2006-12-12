@@ -63,6 +63,14 @@ int bText=0;
 	WorkOnTokenSet( XRM_README_END, yytext );
 }
 
+"<apochelp"[^\>]*\> {
+	WorkOnTokenSet( XRM_README_START, yytext );
+}
+
+"</apochelp>" {
+	WorkOnTokenSet( XRM_README_END, yytext );
+}
+
 "<Section"[^\>]*\> {
 	WorkOnTokenSet( XRM_SECTION_START, yytext );
 }
