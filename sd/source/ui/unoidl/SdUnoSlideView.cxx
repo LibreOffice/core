@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:23:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ Any SAL_CALL SdUnoSlideView::getSelection (void)
 //===== XDraw View ============================================================
 
 void SAL_CALL SdUnoSlideView::setCurrentPage (
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& )
     throw(::com::sun::star::uno::RuntimeException)
 {
 }
@@ -164,7 +164,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
 
 
 void SdUnoSlideView::FillPropertyTable (
-    ::std::vector< ::com::sun::star::beans::Property>& rProperties)
+    ::std::vector< ::com::sun::star::beans::Property>& )
 {
     /* no additional properties */
 }
@@ -173,10 +173,10 @@ void SdUnoSlideView::FillPropertyTable (
 
 
 sal_Bool SAL_CALL SdUnoSlideView::convertFastPropertyValue(
-    ::com::sun::star::uno::Any & rConvertedValue,
-    ::com::sun::star::uno::Any & rOldValue,
-    sal_Int32 nHandle,
-    const ::com::sun::star::uno::Any& rValue )
+    ::com::sun::star::uno::Any & ,
+    ::com::sun::star::uno::Any & ,
+    sal_Int32 ,
+    const ::com::sun::star::uno::Any&  )
     throw (::com::sun::star::lang::IllegalArgumentException)
 {
     return sal_False;
@@ -186,8 +186,8 @@ sal_Bool SAL_CALL SdUnoSlideView::convertFastPropertyValue(
 
 
 void SAL_CALL SdUnoSlideView::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle,
-    const ::com::sun::star::uno::Any& rValue )
+    sal_Int32 ,
+    const ::com::sun::star::uno::Any&  )
     throw (::com::sun::star::uno::Exception)
 {
 }
@@ -195,9 +195,7 @@ void SAL_CALL SdUnoSlideView::setFastPropertyValue_NoBroadcast(
 
 
 
-void SAL_CALL SdUnoSlideView::getFastPropertyValue(
-    ::com::sun::star::uno::Any& rValue,
-    sal_Int32 nHandle ) const
+void SAL_CALL SdUnoSlideView::getFastPropertyValue( ::com::sun::star::uno::Any&, sal_Int32  ) const
 {
 }
 
