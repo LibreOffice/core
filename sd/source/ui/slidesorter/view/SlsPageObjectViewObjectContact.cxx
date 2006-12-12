@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:36:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,8 +556,6 @@ void PageObjectViewObjectContact::PaintFocusIndicator (
 {
     if (GetPageDescriptor().IsFocused())
     {
-        PageObjectViewContact& rViewContact (
-            static_cast<PageObjectViewContact&>(GetViewContact()));
         Rectangle aPagePixelBBox (GetPreviewPixelBox(rDevice));
 
         aPagePixelBBox.Left() -= mnFocusIndicatorOffset;
@@ -591,7 +589,7 @@ void PageObjectViewObjectContact::PaintFocusIndicator (
 
 void PageObjectViewObjectContact::PaintFadeEffectIndicator (
     DisplayInfo& rDisplayInfo,
-    bool bHighlight) const
+    bool ) const
 {
     if (GetPage() != NULL
         && static_cast<const SdPage*>(GetPage())->getTransitionType() > 0)
@@ -700,7 +698,6 @@ void PageObjectViewObjectContact::PaintPageNumber (
 Rectangle PageObjectViewObjectContact::GetFadeEffectIndicatorArea (
     OutputDevice* pDevice) const
 {
-    const SdPage* pPage = static_cast<const SdPage*>(GetPage());
     Rectangle aPageModelBox (GetModelBoundingBox ());
     Size aModelOffset = pDevice->PixelToLogic (
         Size (0, mnFadeEffectIndicatorOffset));
@@ -725,7 +722,6 @@ Rectangle PageObjectViewObjectContact::GetFadeEffectIndicatorArea (
 Rectangle PageObjectViewObjectContact::GetPageNumberArea (
     OutputDevice* pDevice)
 {
-    const SdPage* pPage = static_cast<const SdPage*>(GetPage());
     Rectangle aPageModelBox (GetModelBoundingBox ());
     Size aModelOffset = pDevice->PixelToLogic (
         Size (mnPageNumberOffset, mnPageNumberOffset));
