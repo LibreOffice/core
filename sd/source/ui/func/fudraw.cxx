@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:28:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -927,7 +927,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                     /**********************************************************
                     * aktivate OLE-object
                     **********************************************************/
-                    pView->HideMarkHdl();
+                    //HMHpView->HideMarkHdl();
                     pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0);
                 }
             }
