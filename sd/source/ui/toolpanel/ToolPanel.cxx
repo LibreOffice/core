@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:37:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,8 @@ ToolPanel::ToolPanel (
     Window* pParentWindow,
     TaskPaneViewShell& rViewShell)
     : Control (pParentWindow, WB_DIALOGCONTROL),
-      mrViewShell(rViewShell),
       TreeNode (NULL),
+      mrViewShell(rViewShell),
       mbRearrangeActive(false)
 {
     SetBackground (Wallpaper ());
@@ -248,7 +248,7 @@ Size ToolPanel::GetPreferredSize (void)
 
 
 
-sal_Int32 ToolPanel::GetPreferredWidth (sal_Int32 nHeight)
+sal_Int32 ToolPanel::GetPreferredWidth (sal_Int32 )
 {
     return 300;
 }
@@ -256,7 +256,7 @@ sal_Int32 ToolPanel::GetPreferredWidth (sal_Int32 nHeight)
 
 
 
-sal_Int32 ToolPanel::GetPreferredHeight (sal_Int32 nWidth)
+sal_Int32 ToolPanel::GetPreferredHeight (sal_Int32 )
 {
     return 300;
 }
