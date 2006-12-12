@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:40:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,7 +442,7 @@ protected:
 
     void init();
 
-    void create();
+    void createMainSequence();
     virtual void reset();
 
     InteractiveSequencePtr createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
