@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,19 +550,19 @@ void ScTabView::DrawEnableAnim(BOOL bSet)
     }
 }
 
-void ScTabView::DrawShowMarkHdl(BOOL bShow)
-{
-    if (!pDrawView)
-        return;
+//HMHvoid ScTabView::DrawShowMarkHdl(BOOL bShow)
+//HMH{
+    //HMHif (!pDrawView)
+    //HMH   return;
 
-    if (bShow)
-    {
-        if (!pDrawView->IsDisableHdl())
-            pDrawView->ShowMarkHdl();
-    }
-    else
-        pDrawView->HideMarkHdl();
-}
+    //HMHif (bShow)
+    //HMH{
+    //HMH   if (!pDrawView->IsDisableHdl())
+    //HMH       pDrawView->ShowMarkHdl();
+    //HMH}
+    //HMHelse
+    //HMH   pDrawView->HideMarkHdl();
+//HMH}
 
 void ScTabView::UpdateDrawTextOutliner()
 {
