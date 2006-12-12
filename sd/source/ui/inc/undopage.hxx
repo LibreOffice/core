@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undopage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:58:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,27 +52,27 @@ class SdPage;
 
 class SdPageFormatUndoAction : public SdUndoAction
 {
-    SdPage*     pPage;
+    SdPage*     mpPage;
 
-    Size        aOldSize;
-    INT32       nOldLeft;
-    INT32       nOldRight;
-    INT32       nOldUpper;
-    INT32       nOldLower;
-    BOOL        bOldScale;
-    Orientation eOldOrientation;
-    USHORT      nOldPaperBin;
-    BOOL        bOldFullSize;
+    Size        maOldSize;
+    INT32       mnOldLeft;
+    INT32       mnOldRight;
+    INT32       mnOldUpper;
+    INT32       mnOldLower;
+    BOOL        mbOldScale;
+    Orientation meOldOrientation;
+    USHORT      mnOldPaperBin;
+    BOOL        mbOldFullSize;
 
-    Size        aNewSize;
-    INT32       nNewLeft;
-    INT32       nNewRight;
-    INT32       nNewUpper;
-    INT32       nNewLower;
-    BOOL        bNewScale;
-    Orientation eNewOrientation;
-    USHORT      nNewPaperBin;
-    BOOL        bNewFullSize;
+    Size        maNewSize;
+    INT32       mnNewLeft;
+    INT32       mnNewRight;
+    INT32       mnNewUpper;
+    INT32       mnNewLower;
+    BOOL        mbNewScale;
+    Orientation meNewOrientation;
+    USHORT      mnNewPaperBin;
+    BOOL        mbNewFullSize;
 
 public:
     TYPEINFO();
@@ -99,46 +99,45 @@ public:
                             BOOL            bNFullSize
                             ) :
         SdUndoAction(pDoc),
-        pPage       (pThePage),
-        aOldSize    (rOldSz),
-        nOldLeft    (nOldLft),
-        nOldRight   (nOldRgt),
-        nOldUpper   (nOldUpr),
-        nOldLower   (nOldLwr),
-        bOldScale   (bOldScl),
-        eOldOrientation(eOldOrient),
-        nOldPaperBin (nOPaperBin),
-        bOldFullSize (bOFullSize),
+        mpPage      (pThePage),
+        maOldSize   (rOldSz),
+        mnOldLeft   (nOldLft),
+        mnOldRight  (nOldRgt),
+        mnOldUpper  (nOldUpr),
+        mnOldLower  (nOldLwr),
+        mbOldScale   (bOldScl),
+        meOldOrientation(eOldOrient),
+        mnOldPaperBin (nOPaperBin),
+        mbOldFullSize (bOFullSize),
 
 
-        aNewSize    (rNewSz),
-        nNewLeft    (nNewLft),
-        nNewRight   (nNewRgt),
-        nNewUpper   (nNewUpr),
-        nNewLower   (nNewLwr),
-        bNewScale   (bNewScl),
-        eNewOrientation(eNewOrient),
-        nNewPaperBin (nNPaperBin),
-        bNewFullSize (bNFullSize)
+        maNewSize   (rNewSz),
+        mnNewLeft   (nNewLft),
+        mnNewRight  (nNewRgt),
+        mnNewUpper  (nNewUpr),
+        mnNewLower   (nNewLwr),
+        mbNewScale   (bNewScl),
+        meNewOrientation(eNewOrient),
+        mnNewPaperBin (nNPaperBin),
+        mbNewFullSize (bNFullSize)
 
         {}
     virtual ~SdPageFormatUndoAction();
 
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat();
 };
 
 /************************************************************************/
 
 class SdPageLRUndoAction : public SdUndoAction
 {
-    SdPage* pPage;
+    SdPage* mpPage;
 
-    INT32   nOldLeft;
-    INT32   nOldRight;
-    INT32   nNewLeft;
-    INT32   nNewRight;
+    INT32   mnOldLeft;
+    INT32   mnOldRight;
+    INT32   mnNewLeft;
+    INT32   mnNewRight;
 
 public:
     TYPEINFO();
@@ -146,29 +145,28 @@ public:
                         INT32 nOldLft, INT32 nOldRgt,
                         INT32 nNewLft, INT32 nNewRgt ) :
         SdUndoAction(pDoc),
-        pPage       (pThePage),
-        nOldLeft    (nOldLft),
-        nOldRight   (nOldRgt),
-        nNewLeft    (nNewLft),
-        nNewRight   (nNewRgt)
+        mpPage      (pThePage),
+        mnOldLeft   (nOldLft),
+        mnOldRight  (nOldRgt),
+        mnNewLeft   (nNewLft),
+        mnNewRight  (nNewRgt)
         {}
     virtual ~SdPageLRUndoAction();
 
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat();
 };
 
 /************************************************************************/
 
 class SdPageULUndoAction : public SdUndoAction
 {
-    SdPage* pPage;
+    SdPage* mpPage;
 
-    INT32   nOldUpper;
-    INT32   nOldLower;
-    INT32   nNewUpper;
-    INT32   nNewLower;
+    INT32   mnOldUpper;
+    INT32   mnOldLower;
+    INT32   mnNewUpper;
+    INT32   mnNewLower;
 
 public:
     TYPEINFO();
@@ -176,17 +174,16 @@ public:
                         INT32 nOldUpr, INT32 nOldLwr,
                         INT32 nNewUpr, INT32 nNewLwr ) :
         SdUndoAction(pDoc),
-        pPage       (pThePage),
-        nOldUpper   (nOldUpr),
-        nOldLower   (nOldLwr),
-        nNewUpper   (nNewUpr),
-        nNewLower   (nNewLwr)
+        mpPage      (pThePage),
+        mnOldUpper  (nOldUpr),
+        mnOldLower  (nOldLwr),
+        mnNewUpper  (nNewUpr),
+        mnNewLower  (nNewLwr)
         {}
     virtual ~SdPageULUndoAction();
 
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat();
 };
 
 
