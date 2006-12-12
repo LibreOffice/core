@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:39:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:05:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,7 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HeaderFooterDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK( HeaderFooterDialog, DeactivatePageHdl, TabControl *, EMPTYARG )
 {
     return TRUE;
 }
@@ -378,7 +378,7 @@ void HeaderFooterDialog::Apply( TabPage* pPage )
 
 // -----------------------------------------------------------------------
 
-void HeaderFooterDialog::Cancel( TabPage* pPage )
+void HeaderFooterDialog::Cancel( TabPage* )
 {
     EndDialog();
 }
@@ -409,7 +409,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
             int nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
-                SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
+                SdPage* pPage = mpDoc->GetSdPage( (USHORT)nPage, PK_STANDARD );
                 change( pUndoGroup, pPage, aNewSettings );
             }
         }
@@ -450,7 +450,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         int nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            SdPage* pPage = mpDoc->GetSdPage( nPage, PK_NOTES );
+            SdPage* pPage = mpDoc->GetSdPage( (USHORT)nPage, PK_NOTES );
 
             change( pUndoGroup, pPage, aNewSettings );
         }
@@ -482,11 +482,6 @@ inline void moveY( ::Window& rWin, int deltaY )
 
 HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
         TabPage( pWindow, SdResId( RID_SD_TABPAGE_HEADERFOOTER ) ),
-        mbHandoutMode( bHandoutMode ),
-        maPBApplyToAll( this, SdResId( BT_APPLYTOALL ) ),
-        maPBApply( this, SdResId( BT_APPLY ) ),
-        maPBCancel( this, SdResId( BT_CANCEL ) ),
-        maPBHelp( this, SdResId( BT_HELP ) ),
         maFLIncludeOnPage( this, SdResId( FL_INCLUDE_ON_PAGE ) ),
         maCBHeader( this, SdResId( CB_HEADER ) ),
         maFTHeader( this, SdResId( FT_HEADER ) ),
@@ -499,21 +494,32 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
         maCBDateTimeFormat( this, SdResId( CB_DATETIME_FORMAT ) ),
         maFTDateTimeLanguage( this, SdResId( FT_DATETIME_LANGUAGE ) ),
         maCBDateTimeLanguage( this, SdResId( CB_DATETIME_LANGUAGE ) ),
+
         maFLFooter( this, SdResId( FL_FOOTER ) ),
         maCBFooter( this, SdResId( CB_FOOTER ) ),
         maFTFooter( this, SdResId( FT_FOOTER ) ),
         maTBFooter( this, SdResId( TB_FOOTER_FIXED ) ),
+
         maFLSlideNumber( this, SdResId( FL_SLIDENUMBER ) ),
         maCBSlideNumber( this, SdResId( CB_SLIDENUMBER ) ),
+
         maFLNotOnTitle( this, SdResId( FL_NOTONTITLE ) ),
         maCBNotOnTitle( this, SdResId( CB_NOTONTITLE ) ),
+
+        maPBApplyToAll( this, SdResId( BT_APPLYTOALL ) ),
+        maPBApply( this, SdResId( BT_APPLY ) ),
+        maPBCancel( this, SdResId( BT_CANCEL ) ),
+        maPBHelp( this, SdResId( BT_HELP ) ),
+
         maCTPreview( this, SdResId( CT_PREVIEW ),
             pActualPage ?
                 (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)(&(pActualPage->TRG_GetMasterPage()))) :
                 (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) ),
         mpCurrentPage(pActualPage),
         mpDoc(pDoc),
-        mpDialog(pDialog)
+        mpDialog(pDialog),
+        mbHandoutMode( bHandoutMode )
+
 {
     pDoc->StopWorkStartupDelay();
 
@@ -748,8 +754,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         // if set, set it on all notes master pages
         if( bSet )
         {
-            int nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
-            int nPage;
+            USHORT nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
+            USHORT nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
                 GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_NOTES ) );
@@ -763,8 +769,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     {
         // get the language from the first master page
         // or set it to all master pages
-        int nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
-        int nPage;
+        USHORT nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
+        USHORT nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
             GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_STANDARD ) );
@@ -920,7 +926,7 @@ void PresLayoutPreview::Paint( XOutputDevice& aXOut, SdrTextObj* pObj, bool bVis
 
 // -----------------------------------------------------------------------
 
-void PresLayoutPreview::Paint( const Rectangle& rRect )
+void PresLayoutPreview::Paint( const Rectangle& )
 {
     Push();
 
