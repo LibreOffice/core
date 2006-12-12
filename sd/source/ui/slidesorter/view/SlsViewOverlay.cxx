@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:37:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,7 +534,7 @@ void InsertionIndicatorOverlay::SetPosition (const Point& rPoint)
     Layouter& rLayouter (
         mrViewOverlay.GetController().GetView().GetLayouter());
     USHORT nPageCount
-        = mrViewOverlay.GetController().GetModel().GetPageCount();
+        = (USHORT)mrViewOverlay.GetController().GetModel().GetPageCount();
 
     sal_Int32 nInsertionIndex = rLayouter.GetInsertionIndex (rPoint,
         bAllowHorizontalInsertMarker);
