@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:35:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ void Clipboard::DoCut (::Window* pWindow)
 
 
 
-void Clipboard::DoDelete (::Window* pWindow)
+void Clipboard::DoDelete (::Window* )
 {
     if (mrController.GetModel().GetPageCount() > 1)
     {
@@ -364,7 +364,6 @@ void Clipboard::CreateSlideTransferable (
     bool bDrag)
 {
     List aBookmarkList;
-    SdPage* pPage = NULL;
 
     // Insert all selected pages into a bookmark list and remember them in
     // maPagesToRemove for possible later removal.
@@ -434,7 +433,7 @@ void Clipboard::CreateSlideTransferable (
 
 
 void Clipboard::StartDrag (
-    const Point& rDragPoint,
+    const Point&,
     ::Window* pWindow)
 {
     maPagesToRemove.clear();
@@ -509,7 +508,6 @@ sal_Int8 Clipboard::AcceptDrop (
     {
         case DT_PAGE:
         {
-            const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
             // Accept a drop.
             nResult = rEvent.mnAction;
 
@@ -534,6 +532,8 @@ sal_Int8 Clipboard::AcceptDrop (
                 pTargetWindow,
                 nPage,
                 nLayer);
+            break;
+        default:
             break;
     }
 
@@ -620,6 +620,8 @@ sal_Int8 Clipboard::ExecuteDrop (
                 nPage,
                 nLayer);
             break;
+        default:
+            break;
     }
 
     return nResult;
@@ -628,7 +630,7 @@ sal_Int8 Clipboard::ExecuteDrop (
 
 
 
-USHORT Clipboard::DetermineInsertPosition (const SdTransferable& rTransferable)
+USHORT Clipboard::DetermineInsertPosition (const SdTransferable& )
 {
     USHORT nInsertPosition = SDRPAGE_NOTFOUND;
 
