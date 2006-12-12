@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -858,7 +858,7 @@ BOOL GalleryTheme::GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress )
                         aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
                         FmFormView aView( &aModel, &aVDev );
 
-                        aView.SetMarkHdlHidden( TRUE );
+                        aView.hideMarkHandles();
                         aView.ShowSdrPage(aView.GetModel()->GetPage(0));
 //                      aView.ShowSdrPage(aView.GetModel()->GetPage(0), Point());
                         aView.MarkAll();
