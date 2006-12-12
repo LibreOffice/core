@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xrmmerge.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:20:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ private:
     BOOL bError;
     BOOL bText;
 
-    ByteString sLocalized;
+    bool sLocalized;
 
     ByteString sCurrentOpenTag;
     ByteString sCurrentCloseTag;
