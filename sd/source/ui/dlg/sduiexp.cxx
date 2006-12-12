@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sduiexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:43:17 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ namespace sdui
             pFactory = new SdAbstractDialogFactory_Impl;
         return pFactory;
     }
-};
+}
 
 extern "C"
 {
