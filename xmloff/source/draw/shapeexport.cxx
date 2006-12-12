@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:29:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1016,16 +1016,31 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
             {
                 // drawing shapes
                 if     (aType.EqualsAscii("Rectangle", 21, 9)) { eShapeType = XmlShapeTypeDrawRectangleShape; }
-                else if(aType.EqualsAscii("CustomShape", 21, 9)) { eShapeType = XmlShapeTypeDrawCustomShape; }
+
+                // #i72177# Note: Correcting CustomShape, CustomShape->Custom, len from 9 (was wrong anyways) to 6.
+                // As can be seen at the other compares, the appendix "Shape" is left out of the comparison.
+                else if(aType.EqualsAscii("Custom", 21, 6)) { eShapeType = XmlShapeTypeDrawCustomShape; }
+
                 else if(aType.EqualsAscii("Ellipse", 21, 7)) { eShapeType = XmlShapeTypeDrawEllipseShape; }
                 else if(aType.EqualsAscii("Control", 21, 7)) { eShapeType = XmlShapeTypeDrawControlShape; }
                 else if(aType.EqualsAscii("Connector", 21, 9)) { eShapeType = XmlShapeTypeDrawConnectorShape; }
                 else if(aType.EqualsAscii("Measure", 21, 7)) { eShapeType = XmlShapeTypeDrawMeasureShape; }
                 else if(aType.EqualsAscii("Line", 21, 4)) { eShapeType = XmlShapeTypeDrawLineShape; }
+
+                // #i72177# Note: This covers two types by purpose, PolyPolygonShape and PolyPolygonPathShape
                 else if(aType.EqualsAscii("PolyPolygon", 21, 11)) { eShapeType = XmlShapeTypeDrawPolyPolygonShape; }
+
+                // #i72177# Note: This covers two types by purpose, PolyLineShape and PolyLinePathShape
                 else if(aType.EqualsAscii("PolyLine", 21, 8)) { eShapeType = XmlShapeTypeDrawPolyLineShape; }
+
                 else if(aType.EqualsAscii("OpenBezier", 21, 10)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
                 else if(aType.EqualsAscii("ClosedBezier", 21, 12)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
+
+                // #i72177# FreeHand (opened and closed) now supports the types OpenFreeHandShape and
+                // ClosedFreeHandShape respectively. Represent them as bezier shapes
+                else if(aType.EqualsAscii("OpenFreeHand", 21, 12)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
+                else if(aType.EqualsAscii("ClosedFreeHand", 21, 14)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
+
                 else if(aType.EqualsAscii("GraphicObject", 21, 13)) { eShapeType = XmlShapeTypeDrawGraphicObjectShape; }
                 else if(aType.EqualsAscii("Group", 21, 5)) { eShapeType = XmlShapeTypeDrawGroupShape; }
                 else if(aType.EqualsAscii("Text", 21, 4)) { eShapeType = XmlShapeTypeDrawTextShape; }
