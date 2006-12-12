@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:41:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,17 +164,17 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     const SfxPoolItem* pPoolItem = NULL;
     USHORT nSlot = rReq.GetSlot();
     BOOL bOutlineMode = FALSE;
-    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
 
-    if (pView->ISA(OutlineView))
+    if (mpView->ISA(OutlineView))
     {
         bOutlineMode = TRUE;
-        pOLV = static_cast<OutlineView*>(pView)
-            ->GetViewByWindow(pViewShell->GetActiveWindow());
+        pOLV = static_cast<OutlineView*>(mpView)
+            ->GetViewByWindow(mpViewShell->GetActiveWindow());
 
-        aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*pView) ) );
+        aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*mpView) ) );
     }
 
     switch (nSlot)
@@ -183,9 +183,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         {
             if( pArgs )
             {
-                SdDrawDocument* pDoc = pView->GetDoc();
-                OSL_ASSERT (pViewShell->GetViewShell()!=NULL);
-                FunctionReference xFunc( FuTemplate::Create( pViewShell, static_cast< ::sd::Window*>( pViewShell->GetViewShell()->GetWindow()), pView, pDoc, rReq ) );
+                SdDrawDocument* pDoc = mpView->GetDoc();
+                OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
+                FunctionReference xFunc( FuTemplate::Create( mpViewShell, static_cast< ::sd::Window*>( mpViewShell->GetViewShell()->GetWindow()), mpView, pDoc, rReq ) );
 
                 if(xFunc.is())
                 {
@@ -194,15 +194,15 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                     if( rReq.GetSlot() == SID_STYLE_APPLY )
                     {
-                        if( pViewShell && pViewShell->GetViewFrame() )
-                            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
+                        if( mpViewShell && mpViewShell->GetViewFrame() )
+                            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                     }
                 }
             }
             else
             {
-                if( pViewShell && pViewShell->GetViewFrame() )
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON );
+                if( mpViewShell && mpViewShell->GetViewFrame() )
+                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON );
             }
 
             rReq.Done();
@@ -263,8 +263,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // JOE einen richtigen Status (DontCare) bekomme;
 
                 // Wird enabled, obwohl es nicht richtig funktioniert (s.o.)
-                SfxItemSet aEditAttr( pView->GetDoc()->GetPool() );
-                pView->GetAttributes( aEditAttr );
+                SfxItemSet aEditAttr( mpView->GetDoc()->GetPool() );
+                mpView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( ITEMID_ULSPACE ) >= SFX_ITEM_AVAILABLE )
                 {
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
@@ -294,7 +294,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     aNewAttrs.Put( *pNewItem );
                     delete pNewItem;
 
-                    pView->SetAttributes( aNewAttrs );
+                    mpView->SetAttributes( aNewAttrs );
                 }
             }
             rReq.Done();
@@ -302,7 +302,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             Invalidate();
             // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
             // der Slot invalidiert werden:
-            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         }
         break;
 
@@ -313,7 +313,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustDepth( -1 );
 
                 // #96551# trigger preview refresh
-                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
@@ -326,7 +326,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustDepth( 1 );
 
                 // #96551# trigger preview refresh
-                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
@@ -339,7 +339,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustHeight( -1 );
 
                 // #96551# trigger preview refresh
-                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
@@ -352,7 +352,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustHeight( 1 );
 
                 // #96551# trigger preview refresh
-                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
@@ -361,21 +361,21 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
-            pView->SdrEndTextEdit();
-            SfxItemSet aAttr( pView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
+            mpView->SdrEndTextEdit();
+            SfxItemSet aAttr( mpView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
             aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
             rReq.Done( aAttr );
-            pView->SetAttributes( aAttr );
+            mpView->SetAttributes( aAttr );
             Invalidate();
-            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         }
         break;
 
 
         default:
         {
-            SfxItemSet aEditAttr( pView->GetDoc()->GetPool() );
-            pView->GetAttributes( aEditAttr );
+            SfxItemSet aEditAttr( mpView->GetDoc()->GetPool() );
+            mpView->GetAttributes( aEditAttr );
             SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
 
             if( !pArgs )
@@ -506,7 +506,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
-                            pViewShell->GetViewFrame()->GetDispatcher()->
+                            mpViewShell->GetViewFrame()->GetDispatcher()->
                             Execute( SID_CHAR_DLG, SFX_CALLMODE_ASYNCHRON );
                     }
                     break;
@@ -518,7 +518,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
-                            pViewShell->GetViewFrame()->GetDispatcher()->
+                            mpViewShell->GetViewFrame()->GetDispatcher()->
                             Execute( SID_CHAR_DLG, SFX_CALLMODE_ASYNCHRON );
                     }
                     break;
@@ -590,32 +590,32 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                       nSlot == SID_ATTR_CHAR_POSTURE    ||
                       nSlot == SID_ATTR_CHAR_WEIGHT )
             {
-                USHORT nScriptType = pView->GetScriptType();
+                USHORT nScriptType = mpView->GetScriptType();
 
                 if( (nSlot == SID_ATTR_CHAR_FONT) || (nSlot == SID_ATTR_CHAR_FONTHEIGHT) )
                 {
                     // #42732# input language should be preferred over
                     // current cursor position to detect script type
-                    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+                    OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();
 
-                    if (pView->ISA(OutlineView))
+                    if (mpView->ISA(OutlineView))
                     {
-                        pOLV = static_cast<OutlineView*>(pView)->GetViewByWindow(
-                            pViewShell->GetActiveWindow());
+                        pOutlinerView = static_cast<OutlineView*>(mpView)->GetViewByWindow(
+                            mpViewShell->GetActiveWindow());
                     }
 
-                    if(pOLV && !pOLV->GetSelection().HasRange())
+                    if(pOutlinerView && !pOutlinerView->GetSelection().HasRange())
                     {
-                        if( pViewShell && pViewShell->GetViewShell() && pViewShell->GetViewShell()->GetWindow() )
+                        if( mpViewShell && mpViewShell->GetViewShell() && mpViewShell->GetViewShell()->GetWindow() )
                         {
-                            LanguageType nInputLang = pViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
+                            LanguageType nInputLang = mpViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
                             if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
                                 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
                         }
                     }
                 }
 
-                SfxItemPool& rPool = pView->GetDoc()->GetPool();
+                SfxItemPool& rPool = mpView->GetDoc()->GetPool();
                 SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
                 aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhich( nSlot ) ) );
                 aNewAttr.Put( aSvxScriptSetItem.GetItemSet() );
@@ -623,7 +623,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pArgs = rReq.GetArgs();
             }
 
-            pView->SetAttributes(*pArgs);
+            mpView->SetAttributes(*pArgs);
 
             // Aus Performance- und Erweiterungsgruenden wird
             // jetzt die komplette Shell invalidiert
@@ -631,7 +631,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
             // der Slot invalidiert werden:
-            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         }
         break;
     }
