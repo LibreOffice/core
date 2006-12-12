@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdfilter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:20:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ class DrawDocShell;
 }
 class SdDrawDocument;
 class SfxProgress;
-namespace vos { class OModule; }
+namespace osl { class Module; }
 
 class SdFilter
 {
@@ -82,7 +82,7 @@ protected:
     sal_Bool                    mbIsDraw : 1;
     sal_Bool                    mbShowProgress : 1;
 
-    ::vos::OModule*             OpenLibrary( const ::rtl::OUString& rLibraryName ) const;
+    ::osl::Module*              OpenLibrary( const ::rtl::OUString& rLibraryName ) const;
     void                        CreateStatusIndicator();
 
 private:
