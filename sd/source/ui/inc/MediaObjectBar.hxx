@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MediaObjectBar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:08:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ class MediaObjectBar
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE( SD_IF_SDDRAWMEDIAOBJECTBAR );
+    SFX_DECL_INTERFACE( SD_IF_SDDRAWMEDIAOBJECTBAR )
 
     MediaObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~MediaObjectBar (void);
@@ -66,8 +66,8 @@ public:
     void            Execute( SfxRequest& rReq );
 
 protected:
-    ::sd::View* pView;
-    ViewShell*  pViewSh;
+    ::sd::View* mpView;
+    ViewShell*  mpViewSh;
 };
 
 } // end of namespace sd
