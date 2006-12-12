@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unovwcrs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:39:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ sal_Bool SdXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
     return sal_True;
 }
 
-void SdXTextViewCursor::setVisible(sal_Bool bVisible) throw( uno::RuntimeException )
+void SdXTextViewCursor::setVisible(sal_Bool ) throw( uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -167,29 +167,29 @@ sal_Bool SdXTextViewCursor::isCollapsed(void) throw( uno::RuntimeException )
 
 }
 
-sal_Bool SdXTextViewCursor::goLeft(sal_Int16 nCount, sal_Bool bExpand) throw( uno::RuntimeException )
+sal_Bool SdXTextViewCursor::goLeft(sal_Int16 , sal_Bool ) throw( uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
     return sal_False;
 }
 
-sal_Bool SdXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand) throw( uno::RuntimeException )
+sal_Bool SdXTextViewCursor::goRight(sal_Int16, sal_Bool ) throw( uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
     return sal_False;
 }
 
-void SdXTextViewCursor::gotoRange(const uno::Reference< text::XTextRange > & xRange, sal_Bool bExpand) throw (::com::sun::star::uno::RuntimeException)
+void SdXTextViewCursor::gotoRange(const uno::Reference< text::XTextRange > &, sal_Bool ) throw (::com::sun::star::uno::RuntimeException)
 {
     DBG_WARNING("not implemented")
 }
 
-void SdXTextViewCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeException )
+void SdXTextViewCursor::gotoStart(sal_Bool ) throw( uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 
-void SdXTextViewCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException )
+void SdXTextViewCursor::gotoEnd(sal_Bool ) throw( uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -197,47 +197,12 @@ void SdXTextViewCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException )
 sal_Bool SdXTextViewCursor::screenDown(void) throw( uno::RuntimeException )
 {
     OGuard aGuard(Application::GetSolarMutex());
-    sal_Bool bRet = sal_False;
-
-/*
-
-    if( mpView && mpView->GetDocSh() )
-    {
-        ::sd::ViewShell* pViewSh = mpView->GetDocSh()->GetViewShell();
-        if( pViewSh )
-        {
-            ::sd::FuSlideShow* pShow = pViewSh->GetSlideShow();
-            if( pShow )
-            {
-                pShow->KeyInput( KeyEvent( 32, KeyCode( KEY_SPACE ) ) );
-                return sal_True;
-            }
-        }
-    }
-*/
     return sal_False;
 }
 
 sal_Bool SdXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
 {
     OGuard aGuard(Application::GetSolarMutex());
-/*
-    sal_Bool bRet = sal_False;
-
-    if( mpView && mpView->GetDocSh() )
-    {
-        ::sd::ViewShell* pViewSh = mpView->GetDocSh()->GetViewShell();
-        if( pViewSh )
-        {
-            ::sd::FuSlideShow* pShow = pViewSh->GetSlideShow();
-            if( pShow )
-            {
-                pShow->KeyInput( KeyEvent( 32, KeyCode( KEY_BACKSPACE ) ) );
-                return sal_True;
-            }
-        }
-    }
-*/
     return sal_False;
 }
 
@@ -265,7 +230,7 @@ OUString SdXTextViewCursor::getString(void) throw( uno::RuntimeException )
     return OUString();
 }
 
-void SdXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeException )
+void SdXTextViewCursor::setString(const OUString& ) throw( uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
