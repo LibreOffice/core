@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:40:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:40:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,7 +726,7 @@ void SdrEditView::DeleteMarkedObj()
 {
     if (GetMarkedObjectCount()) {
         BrkAction();
-        HideMarkHdl();
+        //HMHHideMarkHdl();
         BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_DELETE);
         DeleteMarkedList(GetMarkedObjectList());
         GetMarkedObjectListWriteAccess().Clear();
