@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:42:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,11 @@
 #include "prntopts.hrc"
 #include "sdresid.hxx"
 #include "prntopts.hxx"
-#include "app.hrc" //CHINA001
-#ifndef _SFXINTITEM_HXX //CHINA001
-#include <svtools/intitem.hxx> //CHINA001
-#endif //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include "app.hrc"
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+#include <sfx2/request.hxx>
 // STATIC DATA -----------------------------------------------------------
 
 static USHORT pPrintOptRanges[] =
@@ -69,38 +69,35 @@ static USHORT pPrintOptRanges[] =
 
 SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage          ( pParent, SdResId( TP_PRINT_OPTIONS ), rInAttrs ),
-        //aLbPrint          ( this, SdResId( LB_PRINT ) ),
 
+        aGrpPrint               ( this, SdResId( GRP_PRINT ) ),
         aCbxDraw                ( this, SdResId( CBX_DRAW ) ),
         aCbxNotes               ( this, SdResId( CBX_NOTES ) ),
         aCbxHandout             ( this, SdResId( CBX_HANDOUTS ) ),
         aCbxOutline             ( this, SdResId( CBX_OUTLINE ) ),
-        aGrpPrint               ( this, SdResId( GRP_PRINT ) ),
 
         aSeparator1FL            ( this, SdResId( FL_SEPARATOR1 ) ),
+        aGrpOutput              ( this, SdResId( GRP_OUTPUT ) ),
+        aRbtColor               ( this, SdResId( RBT_COLOR ) ),
+        aRbtGrayscale           ( this, SdResId( RBT_GRAYSCALE ) ),
+        aRbtBlackWhite          ( this, SdResId( RBT_BLACKWHITE ) ),
+
+        aGrpPrintExt            ( this, SdResId( GRP_PRINT_EXT ) ),
+        aCbxPagename            ( this, SdResId( CBX_PAGENAME ) ),
         aCbxDate                ( this, SdResId( CBX_DATE ) ),
         aCbxTime                ( this, SdResId( CBX_TIME ) ),
-        aCbxPagename            ( this, SdResId( CBX_PAGENAME ) ),
-        aGrpPrintExt            ( this, SdResId( GRP_PRINT_EXT ) ),
-
         aCbxHiddenPages         ( this, SdResId( CBX_HIDDEN_PAGES ) ),
+
+        aSeparator2FL            ( this, SdResId( FL_SEPARATOR2 ) ),
+        aGrpPageoptions         ( this, SdResId( GRP_PAGE ) ),
         aRbtDefault             ( this, SdResId( RBT_DEFAULT ) ),
         aRbtPagesize            ( this, SdResId( RBT_PAGESIZE ) ),
         aRbtPagetile            ( this, SdResId( RBT_PAGETILE ) ),
         aRbtBooklet             ( this, SdResId( RBT_BOOKLET ) ),
         aCbxFront               ( this, SdResId( CBX_FRONT ) ),
         aCbxBack                ( this, SdResId( CBX_BACK ) ),
-        aGrpPageoptions         ( this, SdResId( GRP_PAGE ) ),
-
-/// Neu
-        aRbtColor               ( this, SdResId( RBT_COLOR ) ),
-        aRbtGrayscale           ( this, SdResId( RBT_GRAYSCALE ) ),
-        aRbtBlackWhite          ( this, SdResId( RBT_BLACKWHITE ) ),
-        aGrpOutput              ( this, SdResId( GRP_OUTPUT ) ),
-/// Neu
 
         aCbxPaperbin            ( this, SdResId( CBX_PAPERBIN ) ),
-        aSeparator2FL            ( this, SdResId( FL_SEPARATOR2 ) ),
 
         rOutAttrs               ( rInAttrs )
 {
@@ -143,37 +140,33 @@ BOOL SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
         aCbxFront.GetSavedValue() != aCbxFront.IsChecked() ||
         aCbxBack.GetSavedValue() != aCbxBack.IsChecked() ||
         aCbxPaperbin.GetSavedValue() != aCbxPaperbin.IsChecked() ||
-/// Neu
         aRbtColor.GetSavedValue() != aRbtColor.IsChecked() ||
         aRbtGrayscale.GetSavedValue() != aRbtGrayscale.IsChecked() ||
         aRbtBlackWhite.GetSavedValue() != aRbtBlackWhite.IsChecked() )
-/// Neu
     {
         SdOptionsPrintItem aOptions( ATTR_OPTIONS_PRINT );
 
-        aOptions.SetDraw( aCbxDraw.IsChecked() );
-        aOptions.SetNotes( aCbxNotes.IsChecked() );
-        aOptions.SetHandout( aCbxHandout.IsChecked() );
-        aOptions.SetOutline( aCbxOutline.IsChecked() );
-        aOptions.SetDate( aCbxDate.IsChecked() );
-        aOptions.SetTime( aCbxTime.IsChecked() );
-        aOptions.SetPagename( aCbxPagename.IsChecked() );
-        aOptions.SetHiddenPages( aCbxHiddenPages.IsChecked() );
-        aOptions.SetPagesize( aRbtPagesize.IsChecked() );
-        aOptions.SetPagetile( aRbtPagetile.IsChecked() );
-        aOptions.SetBooklet( aRbtBooklet.IsChecked() );
-        aOptions.SetFrontPage( aCbxFront.IsChecked() );
-        aOptions.SetBackPage( aCbxBack.IsChecked() );
-        aOptions.SetPaperbin( aCbxPaperbin.IsChecked() );
+        aOptions.GetOptionsPrint().SetDraw( aCbxDraw.IsChecked() );
+        aOptions.GetOptionsPrint().SetNotes( aCbxNotes.IsChecked() );
+        aOptions.GetOptionsPrint().SetHandout( aCbxHandout.IsChecked() );
+        aOptions.GetOptionsPrint().SetOutline( aCbxOutline.IsChecked() );
+        aOptions.GetOptionsPrint().SetDate( aCbxDate.IsChecked() );
+        aOptions.GetOptionsPrint().SetTime( aCbxTime.IsChecked() );
+        aOptions.GetOptionsPrint().SetPagename( aCbxPagename.IsChecked() );
+        aOptions.GetOptionsPrint().SetHiddenPages( aCbxHiddenPages.IsChecked() );
+        aOptions.GetOptionsPrint().SetPagesize( aRbtPagesize.IsChecked() );
+        aOptions.GetOptionsPrint().SetPagetile( aRbtPagetile.IsChecked() );
+        aOptions.GetOptionsPrint().SetBooklet( aRbtBooklet.IsChecked() );
+        aOptions.GetOptionsPrint().SetFrontPage( aCbxFront.IsChecked() );
+        aOptions.GetOptionsPrint().SetBackPage( aCbxBack.IsChecked() );
+        aOptions.GetOptionsPrint().SetPaperbin( aCbxPaperbin.IsChecked() );
 
-/// Neu
         UINT16 nQuality = 0; // Standard, also Color
         if( aRbtGrayscale.IsChecked() )
             nQuality = 1;
         if( aRbtBlackWhite.IsChecked() )
             nQuality = 2;
-        aOptions.SetOutputQuality( nQuality );
-/// Neu
+        aOptions.GetOptionsPrint().SetOutputQuality( nQuality );
 
         rAttrs.Put( aOptions );
 
@@ -190,20 +183,20 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
     if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, FALSE,
                             (const SfxPoolItem**) &pPrintOpts ) )
     {
-        aCbxDraw.Check(              pPrintOpts->IsDraw() );
-        aCbxNotes.Check(             pPrintOpts->IsNotes() );
-        aCbxHandout.Check(           pPrintOpts->IsHandout() );
-        aCbxOutline.Check(           pPrintOpts->IsOutline() );
-        aCbxDate.Check(              pPrintOpts->IsDate() );
-        aCbxTime.Check(              pPrintOpts->IsTime() );
-        aCbxPagename.Check(          pPrintOpts->IsPagename() );
-        aCbxHiddenPages.Check(       pPrintOpts->IsHiddenPages() );
-        aRbtPagesize.Check(          pPrintOpts->IsPagesize() );
-        aRbtPagetile.Check(          pPrintOpts->IsPagetile() );
-        aRbtBooklet.Check(           pPrintOpts->IsBooklet() );
-        aCbxFront.Check(             pPrintOpts->IsFrontPage() );
-        aCbxBack.Check(              pPrintOpts->IsBackPage() );
-        aCbxPaperbin.Check(          pPrintOpts->IsPaperbin() );
+        aCbxDraw.Check(              pPrintOpts->GetOptionsPrint().IsDraw() );
+        aCbxNotes.Check(             pPrintOpts->GetOptionsPrint().IsNotes() );
+        aCbxHandout.Check(           pPrintOpts->GetOptionsPrint().IsHandout() );
+        aCbxOutline.Check(           pPrintOpts->GetOptionsPrint().IsOutline() );
+        aCbxDate.Check(              pPrintOpts->GetOptionsPrint().IsDate() );
+        aCbxTime.Check(              pPrintOpts->GetOptionsPrint().IsTime() );
+        aCbxPagename.Check(          pPrintOpts->GetOptionsPrint().IsPagename() );
+        aCbxHiddenPages.Check(       pPrintOpts->GetOptionsPrint().IsHiddenPages() );
+        aRbtPagesize.Check(          pPrintOpts->GetOptionsPrint().IsPagesize() );
+        aRbtPagetile.Check(          pPrintOpts->GetOptionsPrint().IsPagetile() );
+        aRbtBooklet.Check(           pPrintOpts->GetOptionsPrint().IsBooklet() );
+        aCbxFront.Check(             pPrintOpts->GetOptionsPrint().IsFrontPage() );
+        aCbxBack.Check(              pPrintOpts->GetOptionsPrint().IsBackPage() );
+        aCbxPaperbin.Check(          pPrintOpts->GetOptionsPrint().IsPaperbin() );
 
         if( !aRbtPagesize.IsChecked() &&
             !aRbtPagetile.IsChecked() &&
@@ -212,16 +205,13 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
             aRbtDefault.Check();
         }
 
-/// Neu
-        UINT16 nQuality = pPrintOpts->GetOutputQuality();
+        UINT16 nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
         if( nQuality == 0 )
             aRbtColor.Check();
         else if( nQuality == 1 )
             aRbtGrayscale.Check();
         else
             aRbtBlackWhite.Check();
-/// Neu
-
     }
     aCbxDraw.SaveValue();
     aCbxNotes.SaveValue();
@@ -235,11 +225,9 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
     aRbtPagetile.SaveValue();
     aRbtBooklet.SaveValue();
     aCbxPaperbin.SaveValue();
-/// Neu
     aRbtColor.SaveValue();
     aRbtGrayscale.SaveValue();
     aRbtBlackWhite.SaveValue();
-/// Neu
 
     ClickBookletHdl( NULL );
 }
@@ -263,8 +251,6 @@ USHORT* SdPrintOptions::GetRanges()
 
 IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
 {
-    BOOL bPageNameAllowed = TRUE;
-
     // there must be at least one of them checked
     if( !aCbxDraw.IsChecked() && !aCbxNotes.IsChecked() && !aCbxOutline.IsChecked() && !aCbxHandout.IsChecked() )
         pCbx->Check();
@@ -326,7 +312,7 @@ void    SdPrintOptions::SetDrawMode()
     }
 }
 
-void SdPrintOptions::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SdPrintOptions::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
     if (pFlagItem)
