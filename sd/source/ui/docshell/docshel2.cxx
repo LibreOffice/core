@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:26:33 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,8 @@
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include "helpids.h"
 #ifndef SD_VIEW_SHELL_HXX
@@ -92,8 +92,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
-                                   USHORT nAspect)
+void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
 {
     if (nAspect == ASPECT_THUMBNAIL)
     {
@@ -112,14 +111,14 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
 
     SdPage* pSelectedPage = NULL;
 
-    List* pFrameViewList = pDoc->GetFrameViewList();
+    List* pFrameViewList = mpDoc->GetFrameViewList();
     if( pFrameViewList && pFrameViewList->Count() )
     {
         FrameView* pFrameView = (FrameView*)pFrameViewList->GetObject(0);
         if( pFrameView && pFrameView->GetPageKind() == PK_STANDARD )
         {
             USHORT nSelectedPage = pFrameView->GetSelectedPage();
-            pSelectedPage = pDoc->GetSdPage(nSelectedPage, PK_STANDARD);
+            pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
         }
     }
 
@@ -127,11 +126,11 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
     {
         SdPage* pPage = NULL;
         USHORT nSelectedPage = 0;
-        USHORT nPageCnt = (USHORT) pDoc->GetSdPageCount(PK_STANDARD);
+        USHORT nPageCnt = (USHORT) mpDoc->GetSdPageCount(PK_STANDARD);
 
         for (USHORT i = 0; i < nPageCnt; i++)
         {
-            pPage = pDoc->GetSdPage(i, PK_STANDARD);
+            pPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
             if ( pPage->IsSelected() )
             {
@@ -141,7 +140,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
         }
 
         if( NULL == pSelectedPage )
-            pSelectedPage = pDoc->GetSdPage(0, PK_STANDARD);
+            pSelectedPage = mpDoc->GetSdPage(0, PK_STANDARD);
     }
 
     Rectangle aVisArea = GetVisArea(nAspect);
@@ -209,7 +208,7 @@ Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
         // Groesse der ersten Seite herausgeben
         MapMode aSrcMapMode(MAP_PIXEL);
         MapMode aDstMapMode(MAP_100TH_MM);
-        Size aSize = pDoc->GetSdPage(0, PK_STANDARD)->GetSize();
+        Size aSize = mpDoc->GetSdPage(0, PK_STANDARD)->GetSize();
         aSrcMapMode.SetMapUnit(MAP_100TH_MM);
 
         aSize = Application::GetDefaultDevice()->LogicToLogic(aSize, &aSrcMapMode, &aDstMapMode);
@@ -220,9 +219,9 @@ Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
         aVisArea = SfxObjectShell::GetVisArea(nAspect);
     }
 
-    if (aVisArea.IsEmpty() && pViewShell)
+    if (aVisArea.IsEmpty() && mpViewShell)
     {
-        Window* pWin = pViewShell->GetActiveWindow();
+        Window* pWin = mpViewShell->GetActiveWindow();
 
         if (pWin)
         {
@@ -241,7 +240,7 @@ Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
 
 void DrawDocShell::Connect(ViewShell* pViewSh)
 {
-    pViewShell = pViewSh;
+    mpViewShell = pViewSh;
 }
 
 /*************************************************************************
@@ -252,9 +251,9 @@ void DrawDocShell::Connect(ViewShell* pViewSh)
 
 void DrawDocShell::Disconnect(ViewShell* pViewSh)
 {
-    if (pViewShell == pViewSh)
+    if (mpViewShell == pViewSh)
     {
-        pViewShell = NULL;
+        mpViewShell = NULL;
     }
 }
 
@@ -268,9 +267,9 @@ FrameView* DrawDocShell::GetFrameView()
 {
     FrameView* pFrameView = NULL;
 
-    if (pViewShell)
+    if (mpViewShell)
     {
-        pFrameView = pViewShell->GetFrameView();
+        pFrameView = mpViewShell->GetFrameView();
     }
 
     return(pFrameView);
@@ -400,26 +399,26 @@ BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
     if( ! bIsNameValid )
     {
         String aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
-        //CHINA001 SvxNameDialog aNameDlg( pWin, aStrForDlg, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc, ResId(RID_SVXDLG_NAME) );
-        DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
-        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE ); //CHINA001 aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
-
-        if( pViewShell )
-            aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) ); //CHINA001 aNameDlg.SetCheckNameHdl( LINK( this, SdDrawDocShell, RenameSlideHdl ) );
-
-        FunctionReference xFunc( pViewShell->GetCurrentFunction() );
-        if( xFunc.is() )
-            xFunc->cancel();
-
-        if( aNameDlg->Execute() == RET_OK ) //CHINA001 if( aNameDlg.Execute() == RET_OK )
+        AbstractSvxNameDialog* aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc, ResId(RID_SVXDLG_NAME) ) : 0;
+        if( aNameDlg )
         {
-            aNameDlg->GetName( rName ); //CHINA001 aNameDlg.GetName( rName );
-            bIsNameValid = IsNewPageNameValid( rName );
+            aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+
+            if( mpViewShell )
+                aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
+
+            FunctionReference xFunc( mpViewShell->GetCurrentFunction() );
+            if( xFunc.is() )
+                xFunc->cancel();
+
+            if( aNameDlg->Execute() == RET_OK )
+            {
+                aNameDlg->GetName( rName );
+                bIsNameValid = IsNewPageNameValid( rName );
+            }
+            delete aNameDlg;
         }
-        delete aNameDlg; //add by CHINA001
     }
 
     return ( bIsNameValid ? TRUE : FALSE );
@@ -516,7 +515,7 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
         if( rInOutPageName.Len() > 0 )
         {
             BOOL   bOutDummy;
-            USHORT nExistingPageNum = pDoc->GetPageByName( rInOutPageName, bOutDummy );
+            USHORT nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
             bCanUseNewName = ( nExistingPageNum == SDRPAGE_NOTFOUND );
         }
         else
