@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:19:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ namespace sd
 {
     class FrameView;
     class Outliner;
-};
+}
 
 
 class Timer;
@@ -195,36 +195,35 @@ class SdDrawDocument
     : public FmFormModel
 {
 private:
-    ::sd::Outliner* pOutliner;          // local outliner for outline mode
-    ::sd::Outliner* pInternalOutliner;  // internal outliner for creation of text objects
-    Timer*              pWorkStartupTimer;
-    Timer*              pOnlineSpellingTimer;
-    sd::ShapeList*      pOnlineSpellingList;
-    SvxSearchItem*      pOnlineSearchItem;
-    List*               pFrameViewList;
-    List*               pCustomShowList;
-    ::sd::DrawDocShell*     pDocSh;
-    SdTransferable *    pCreatingTransferable;
-    BOOL                bHasOnlineSpellErrors;
-    BOOL                bInitialOnlineSpellingEnabled;
-    String              aBookmarkFile;
-    ::sd::DrawDocShellRef   xBookmarkDocShRef;
+    ::sd::Outliner*     mpOutliner;         // local outliner for outline mode
+    ::sd::Outliner*     mpInternalOutliner;  // internal outliner for creation of text objects
+    Timer*              mpWorkStartupTimer;
+    Timer*              mpOnlineSpellingTimer;
+    sd::ShapeList*      mpOnlineSpellingList;
+    SvxSearchItem*      mpOnlineSearchItem;
+    List*               mpFrameViewList;
+    List*               mpCustomShowList;
+    ::sd::DrawDocShell* mpDocSh;
+    SdTransferable *    mpCreatingTransferable;
+    BOOL                mbHasOnlineSpellErrors;
+    BOOL                mbInitialOnlineSpellingEnabled;
+    String              maBookmarkFile;
+    ::sd::DrawDocShellRef   mxBookmarkDocShRef;
 
     sd::PresentationSettings maPresentationSettings;
-    BOOL                bNewOrLoadCompleted;
+    BOOL                mbNewOrLoadCompleted;
 
-    BOOL                bOnlineSpell;
-    BOOL                bHideSpell;
-    BOOL                bSummationOfParagraphs;
+    BOOL                mbOnlineSpell;
+    BOOL                mbHideSpell;
+    BOOL                mbSummationOfParagraphs;
     bool                mbStartWithPresentation;        // is set to true when starting with command line parameter -start
-    LanguageType        eLanguage;
-    LanguageType        eLanguageCJK;
-    LanguageType        eLanguageCTL;
-    SvxNumType          ePageNumType;
-    ::sd::DrawDocShellRef   xAllocedDocShRef;   // => AllocModel()
-    BOOL                bAllocDocSh;        // => AllocModel()
-    DocumentType        eDocType;
-    UINT16              nFileFormatVersion;
+    LanguageType        meLanguage;
+    LanguageType        meLanguageCJK;
+    LanguageType        meLanguageCTL;
+    SvxNumType          mePageNumType;
+    ::sd::DrawDocShellRef   mxAllocedDocShRef;   // => AllocModel()
+    BOOL                mbAllocDocSh;       // => AllocModel()
+    DocumentType        meDocType;
     CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
 
@@ -266,20 +265,20 @@ public:
     ::sd::Outliner* GetOutliner(BOOL bCreateOutliner=TRUE);
     SD_DLLPUBLIC ::sd::Outliner* GetInternalOutliner(BOOL bCreateOutliner=TRUE);
 
-    ::sd::DrawDocShell*     GetDocSh() const { return(pDocSh) ; }
+    ::sd::DrawDocShell*     GetDocSh() const { return mpDocSh; }
 
     LanguageType        GetLanguage( const USHORT nId ) const;
     void                SetLanguage( const LanguageType eLang, const USHORT nId );
 
     SvxNumType          GetPageNumType() const;
-    void                SetPageNumType(SvxNumType eType) { ePageNumType = eType; }
+    void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
     String              CreatePageNumValue(USHORT nNum) const;
 
-    DocumentType        GetDocumentType() const { return eDocType; }
+    DocumentType        GetDocumentType() const { return meDocType; }
 
     void                SetAllocDocSh(BOOL bAlloc);
 
-    void                CreatingDataObj( SdTransferable* pTransferable ) { pCreatingTransferable = pTransferable; }
+    void                CreatingDataObj( SdTransferable* pTransferable ) { mpCreatingTransferable = pTransferable; }
 
     /** if the document does not contain at least one handout, one slide and one notes page with
         at least one master each this methods creates them.
@@ -395,8 +394,8 @@ public:
     const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
     sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
 
-       void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { bSummationOfParagraphs = bOn; }
-    const BOOL          IsSummationOfParagraphs() const { return bSummationOfParagraphs; }
+       void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { mbSummationOfParagraphs = bOn; }
+    const BOOL          IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
 
     /** Set the mode that controls whether (and later how) the formatting of the document
         depends on the current printer metrics.
@@ -421,7 +420,7 @@ public:
     sal_Int32 GetPrinterIndependentLayout (void);
 
     void                SetOnlineSpell( BOOL bIn );
-    BOOL                GetOnlineSpell() const { return bOnlineSpell; }
+    BOOL                GetOnlineSpell() const { return mbOnlineSpell; }
     void                StopOnlineSpelling();
     void                StartOnlineSpelling(BOOL bForceSpelling=TRUE);
 
@@ -431,11 +430,11 @@ public:
     void                RemoveObject(SdrObject* pObj, SdPage* pPage);
 
     void                SetHideSpell( BOOL bIn );
-    BOOL                GetHideSpell() const { return bHideSpell; }
+    BOOL                GetHideSpell() const { return mbHideSpell; }
 
     ULONG               GetLinkCount();
 
-    List*               GetFrameViewList() const { return pFrameViewList; }
+    List*               GetFrameViewList() const { return mpFrameViewList; }
     SD_DLLPUBLIC List*  GetCustomShowList(BOOL bCreate = FALSE);
 
     void                NbcSetChanged(sal_Bool bFlag = sal_True);
@@ -449,11 +448,11 @@ public:
 
     void                NewOrLoadCompleted(DocCreationMode eMode);
     void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
-    BOOL                IsNewOrLoadCompleted() const {return bNewOrLoadCompleted; }
+    BOOL                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     ::sd::FrameView* GetFrameView(ULONG nPos) {
         return static_cast< ::sd::FrameView*>(
-            pFrameViewList->GetObject(nPos));}
+            mpFrameViewList->GetObject(nPos));}
 
     /** deprecated*/
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
@@ -462,8 +461,6 @@ public:
 
     SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
     IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
-
-    Graphic             GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj );
 
     CharClass*          GetCharClass() const { return mpCharClass; }
 
