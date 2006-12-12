@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:52:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@ public:
 protected:
     DECL_LINK(MasterPageListListener, void*);
     virtual void Fill (ItemList& rItemList);
+
+    using sd::toolpanel::controls::MasterPagesSelector::Fill;
 
     /** Forward this call to the base class but save and restore the
         currently selected item.
