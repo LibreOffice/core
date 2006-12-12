@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:17:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,9 +123,9 @@ TYPEINIT1(SdStyleSheet, SfxStyleSheet);
 |*
 \************************************************************************/
 
-SdStyleSheet::SdStyleSheet(const String& rName, SfxStyleSheetBasePool& rPool,
-                           SfxStyleFamily eFamily, USHORT nMask) :
-    SfxStyleSheet(rName, rPool, eFamily, nMask)
+SdStyleSheet::SdStyleSheet(const String& rName, SfxStyleSheetBasePool& _rPool,
+                           SfxStyleFamily eFamily, USHORT _nMask) :
+    SfxStyleSheet(rName, _rPool, eFamily, _nMask)
 {
 }
 
@@ -442,6 +442,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 
     aRealStyle += aInternalName;
     pRealStyle = (SdStyleSheet*)rPool.Find(aRealStyle, SD_LT_FAMILY);
+#ifdef DBG_UTIL
     if( !pRealStyle )
     {
         SfxStyleSheetIterator aIter(&rPool, SD_LT_FAMILY);
@@ -449,6 +450,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
             // StyleSheet not found, but pool already loaded
             DBG_ASSERT(pRealStyle, "Internal StyleSheet not found");
     }
+#endif
 
     return pRealStyle;
 }
