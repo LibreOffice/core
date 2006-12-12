@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,8 +188,6 @@ sal_Int32 SAL_CALL
 {
     // forward
     return maTextHelper.GetChildCount();
-
-    return 0;
 }
 
 
