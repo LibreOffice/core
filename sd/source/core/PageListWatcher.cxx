@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageListWatcher.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:13:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
     {
         case PK_STANDARD:
         {
-            if (nPgNum>=0 && nPgNum<maPageVectorStandard.size())
+            if( nPgNum < (sal_uInt32)maPageVectorStandard.size() )
                 pRetval = maPageVectorStandard[nPgNum];
             else
             {
@@ -122,7 +122,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
         }
         case PK_NOTES:
         {
-            if (nPgNum>=0 && nPgNum<maPageVectorNotes.size())
+            if( nPgNum < (sal_uInt32)maPageVectorNotes.size() )
                 pRetval = maPageVectorNotes[nPgNum];
             else
             {
