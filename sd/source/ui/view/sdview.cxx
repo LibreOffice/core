@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:45:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,17 +182,17 @@ TYPEINIT1(View, FmFormView);
 View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
                ViewShell* pViewShell)
   : FmFormView(pDrawDoc, pOutDev),
-    pDoc(pDrawDoc),
-    pDocSh( pDrawDoc->GetDocSh() ),
-    pViewSh(pViewShell),
-    pDragSrcMarkList(NULL),
-    nDragSrcPgNum(SDRPAGE_NOTFOUND),
-    pDropMarkerObj(NULL),
-    pDropMarker(NULL),
-    pLockedRedraws(NULL),
-    nLockRedrawSmph(0),
-    nAction(DND_ACTION_NONE),
-    bIsDropAllowed(TRUE),
+    mpDoc(pDrawDoc),
+    mpDocSh( pDrawDoc->GetDocSh() ),
+    mpViewSh(pViewShell),
+    mpDragSrcMarkList(NULL),
+    mpDropMarkerObj(NULL),
+    mpDropMarker(NULL),
+    mnDragSrcPgNum(SDRPAGE_NOTFOUND),
+    mnAction(DND_ACTION_NONE),
+    mnLockRedrawSmph(0),
+    mpLockedRedraws(NULL),
+    mbIsDropAllowed(TRUE),
     mpClipboard (new ViewClipboard (*this))
 {
     // #114898#
@@ -212,18 +212,18 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     SetMeasureLayer(String(SdResId(STR_LAYER_MEASURELINES)));
 
     // Timer fuer verzoegertes Drop (muss fuer MAC sein)
-    aDropErrorTimer.SetTimeoutHdl( LINK(this, View, DropErrorHdl) );
-    aDropErrorTimer.SetTimeout(50);
-    aDropInsertFileTimer.SetTimeoutHdl( LINK(this, View, DropInsertFileHdl) );
-    aDropInsertFileTimer.SetTimeout(50);
+    maDropErrorTimer.SetTimeoutHdl( LINK(this, View, DropErrorHdl) );
+    maDropErrorTimer.SetTimeout(50);
+    maDropInsertFileTimer.SetTimeoutHdl( LINK(this, View, DropInsertFileHdl) );
+    maDropInsertFileTimer.SetTimeout(50);
 }
 
 void View::ImplClearDrawDropMarker()
 {
-    if(pDropMarker)
+    if(mpDropMarker)
     {
-        delete pDropMarker;
-        pDropMarker = 0L;
+        delete mpDropMarker;
+        mpDropMarker = 0L;
     }
 }
 
@@ -238,8 +238,8 @@ View::~View()
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( TRUE );
 
-    aDropErrorTimer.Stop();
-    aDropInsertFileTimer.Stop();
+    maDropErrorTimer.Stop();
+    maDropInsertFileTimer.Stop();
 
     ImplClearDrawDropMarker();
 
@@ -250,15 +250,15 @@ View::~View()
     }
 
     // gespeicherte Redraws loeschen
-    if (pLockedRedraws)
+    if (mpLockedRedraws)
     {
-        SdViewRedrawRec* pRec = (SdViewRedrawRec*)pLockedRedraws->First();
+        SdViewRedrawRec* pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
         while (pRec)
         {
             delete pRec;
-            pRec = (SdViewRedrawRec*)pLockedRedraws->Next();
+            pRec = (SdViewRedrawRec*)mpLockedRedraws->Next();
         }
-        delete pLockedRedraws;
+        delete mpLockedRedraws;
     }
 }
 
@@ -291,7 +291,6 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
     if(pObject)
     {
         OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
-        UINT16 nID = pObject->GetObjIdentifier();
 
         if( (pObject->GetPage() == NULL) || !pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true ) )
             return;
@@ -433,6 +432,8 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
                                         aOut = aNumberAreaStr;
                                     break;
                                 }
+                                default:
+                                    break;
                             }
 
                             if( aOut.Len() )
@@ -476,10 +477,10 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
 |*
 \************************************************************************/
 
-void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
     // ausfuehren ??
-    if (nLockRedrawSmph == 0)
+    if (mnLockRedrawSmph == 0)
     {
         SdrPageView* pPgView = GetSdrPageView();
 
@@ -488,24 +489,24 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::cont
             SdPage* pPage = (SdPage*) pPgView->GetPage();
             if( pPage )
             {
-                SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
+                SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
                 rOutl.SetBackgroundColor( pPage->GetBackgroundColor(pPgView) );
             }
         }
 
         ViewRedirector aViewRedirector;
-        FmFormView::CompleteRedraw(pOutDev, rReg, 0, pRedirector ? pRedirector : &aViewRedirector);
+        FmFormView::CompleteRedraw(pOutDev, rReg, nPaintMode, pRedirector ? pRedirector : &aViewRedirector);
     }
     // oder speichern?
     else
     {
-        if (!pLockedRedraws)
-            pLockedRedraws = new List;
+        if (!mpLockedRedraws)
+            mpLockedRedraws = new List;
 
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
-        pRec->pOut  = pOutDev;
+        pRec->mpOut = pOutDev;
         pRec->aRect = rReg.GetBoundRect();
-        pLockedRedraws->Insert(pRec, LIST_APPEND);
+        mpLockedRedraws->Insert(pRec, LIST_APPEND);
     }
 }
 
@@ -560,13 +561,13 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
     **************************************************************************/
     SdrMarkList* pMarkList;
 
-    if (nDragSrcPgNum != SDRPAGE_NOTFOUND &&
-        nDragSrcPgNum != GetSdrPageView()->GetPage()->GetPageNum())
+    if (mnDragSrcPgNum != SDRPAGE_NOTFOUND &&
+        mnDragSrcPgNum != GetSdrPageView()->GetPage()->GetPageNum())
     {
         // Es laeuft gerade Drag&Drop
         // Source- und Destination-Page unterschiedlich:
         // es wird die gemerkte MarkList verwendet
-        pMarkList = pDragSrcMarkList;
+        pMarkList = mpDragSrcMarkList;
     }
     else
     {
@@ -614,7 +615,7 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
         }
     }
 
-    if (pMarkList != pDragSrcMarkList)
+    if (pMarkList != mpDragSrcMarkList)
     {
        delete pMarkList;
     }
@@ -674,7 +675,7 @@ BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 |*
 \************************************************************************/
 
-sal_Bool View::SdrBeginTextEdit(
+sal_Bool View::BeginTextEdit(
     SdrObject* pObj, SdrPageView* pPV, Window* pWin,
     sal_Bool bIsNewObj, SdrOutliner* pGivenOutliner,
     OutlinerView* pGivenOutlinerView,
@@ -694,8 +695,8 @@ sal_Bool View::SdrBeginTextEdit(
         if( pObj && pObj->GetPage() )
             pOL->SetBackgroundColor( pObj->GetPage()->GetBackgroundColor(pPV) );
 
-        pOL->SetParaInsertedHdl(LINK(this, View, ParagraphInsertedHdl));
-        pOL->SetParaRemovingHdl(LINK(this, View, ParagraphRemovingHdl));
+        pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
+        pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
     }
 
     return(bReturn);
@@ -717,11 +718,9 @@ SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally, FunctionReferenc
 {
     SdrObject* pObj = GetTextEditObject();
 
-    BOOL bIsTextEdit = IsTextEdit();
-
     SdrEndTextEditKind eKind;
 
-    ViewShell* pViewShell= pDocSh->GetViewShell();
+    ViewShell* pViewShell= mpDocSh->GetViewShell();
 
     if( !xFunc.is() )
     {
@@ -798,7 +797,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally, FunctionReferenc
 
 void View::SetMarkedOriginalSize()
 {
-    SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*pDoc);
+    SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*mpDoc);
     ULONG           nCount = GetMarkedObjectCount();
     BOOL            bOK = FALSE;
 
@@ -841,7 +840,7 @@ void View::SetMarkedOriginalSize()
                     {
                         Rectangle   aDrawRect( pObj->GetLogicRect() );
 
-                        pUndoGroup->AddAction( pDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+                        pUndoGroup->AddAction( mpDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
                         pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                            Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
                     }
@@ -874,7 +873,7 @@ void View::SetMarkedOriginalSize()
     if( bOK )
     {
         pUndoGroup->SetComment( String(SdResId(STR_UNDO_ORIGINALSIZE)) );
-        pDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
+        mpDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
     }
     else
         delete pUndoGroup;
@@ -884,7 +883,7 @@ void View::SetMarkedOriginalSize()
     The caller must delete the returned device */
 VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nWidthPixel)
 {
-    ViewShell*  pViewShell = pDocSh->GetViewShell();
+    ViewShell*  pViewShell = mpDocSh->GetViewShell();
     OutputDevice* pRefDevice = 0;
     if( pViewShell )
         pRefDevice = pViewShell->GetActiveWindow();
@@ -902,7 +901,7 @@ VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nW
 
     MapMode         aMM( MAP_100TH_MM );
 
-    SdPage* pPage = pDoc->GetSdPage(nSdPage, ePageKind);
+    SdPage* pPage = mpDoc->GetSdPage(nSdPage, ePageKind);
     DBG_ASSERT(pPage, "sd::View::CreatePageVDev(), slide not found!");
 
     if( pPage )
@@ -925,7 +924,7 @@ VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nW
         pVDev->SetMapMode( aMM );
         if( pVDev->SetOutputSize(aPageSize) )
         {
-            std::auto_ptr< SdrView > pView( new SdrView(pDoc, pVDev) );
+            std::auto_ptr< SdrView > pView( new SdrView(mpDoc, pVDev) );
             pView->SetPageVisible( FALSE );
             pView->SetBordVisible( FALSE );
             pView->SetGridVisible( FALSE );
@@ -971,23 +970,23 @@ VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nW
 
 void View::DoConnect(SdrOle2Obj* pObj)
 {
-    if (pViewSh)
+    if (mpViewSh)
     {
         uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
         if( xObj.is() )
         {
-            ::sd::Window* pWindow = pViewSh->GetActiveWindow();
-            SfxInPlaceClient* pSdClient = pViewSh-> GetViewShellBase().FindIPClient( xObj, pWindow );
+            ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
+            SfxInPlaceClient* pSdClient = mpViewSh-> GetViewShellBase().FindIPClient( xObj, pWindow );
             if ( !pSdClient )
             {
-                pSdClient = new Client(pObj, pViewSh, pWindow);
+                pSdClient = new Client(pObj, mpViewSh, pWindow);
                 Rectangle aRect = pObj->GetLogicRect();
                 {
                     // TODO/LEAN: working with visual area can switch object to running state
                     Size aDrawSize = aRect.GetSize();
                     awt::Size aSz;
 
-                    MapMode aMapMode( pDoc->GetScaleUnit() );
+                    MapMode aMapMode( mpDoc->GetScaleUnit() );
                     Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
@@ -1040,8 +1039,8 @@ BOOL View::IsMorphingAllowed() const
              ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
              !pObj1->ISA( E3dObject) && !pObj2->ISA( E3dObject) )
         {
-            SfxItemSet      aSet1( pDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
-            SfxItemSet      aSet2( pDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet      aSet1( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet      aSet2( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
 
             aSet1.Put(pObj1->GetMergedItemSet());
             aSet2.Put(pObj2->GetMergedItemSet());
@@ -1082,9 +1081,9 @@ BOOL View::IsVectorizeAllowed() const
 
 void View::onAccessibilityOptionsChanged()
 {
-    if( pViewSh )
+    if( mpViewSh )
     {
-        ::sd::Window* pWindow = pViewSh->GetActiveWindow();
+        ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
         if( pWindow )
         {
             const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
@@ -1093,7 +1092,7 @@ void View::onAccessibilityOptionsChanged()
 
             SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
 
-            if( pViewSh->GetViewFrame() && pViewSh->GetViewFrame()->GetDispatcher() )
+            if( mpViewSh->GetViewFrame() && mpViewSh->GetViewFrame()->GetDispatcher() )
             {
                 if( rStyleSettings.GetHighContrastMode() )
                 {
@@ -1113,16 +1112,16 @@ void View::onAccessibilityOptionsChanged()
                     nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
                 }
 
-                pViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
-                pViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
+                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
+                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
             }
 
-            pViewSh->Invalidate();
+            mpViewSh->Invalidate();
         }
     }
 }
 
-IMPL_LINK( View, ParagraphInsertedHdl, ::Outliner *, pOutliner )
+IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();
@@ -1142,7 +1141,7 @@ IMPL_LINK( View, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 |*
 \************************************************************************/
 
-IMPL_LINK( View, ParagraphRemovingHdl, ::Outliner *, pOutliner )
+IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();
@@ -1158,7 +1157,7 @@ IMPL_LINK( View, ParagraphRemovingHdl, ::Outliner *, pOutliner )
 
 bool View::isRecordingUndo() const
 {
-    sd::UndoManager* pUndoManager = pDoc ? pDoc->GetUndoManager() : 0;
+    sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
     return pUndoManager && pUndoManager->isInListAction();
 }
 
