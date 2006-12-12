@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:04:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,30 +72,30 @@ public:
                                     SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, BOOL bInitOnGetData );
                                     ~SdTransferable();
 
-    void                            SetDocShell( const SfxObjectShellRef& rRef ) { aDocShellRef = rRef; }
-    const SfxObjectShellRef&        GetDocShell() const { return aDocShellRef; }
+    void                            SetDocShell( const SfxObjectShellRef& rRef ) { maDocShellRef = rRef; }
+    const SfxObjectShellRef&        GetDocShell() const { return maDocShellRef; }
 
-    void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { pSdDrawDocument = pSdDrawDocumentIntern = (SdDrawDocument*) pWorkDoc; }
-    const SdDrawDocument*           GetWorkDocument() const { return pSdDrawDocument; }
+    void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { mpSdDrawDocument = mpSdDrawDocumentIntern = (SdDrawDocument*) pWorkDoc; }
+    const SdDrawDocument*           GetWorkDocument() const { return mpSdDrawDocument; }
 
-    void                            SetView( const ::sd::View* pView ) { pSdView = pView; }
-    const ::sd::View*                   GetView() const { return pSdView; }
+    void                            SetView( const ::sd::View* pView ) { mpSdView = pView; }
+    const ::sd::View*                   GetView() const { return mpSdView; }
 
     void                            SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc );
 
-    void                            SetStartPos( const Point& rStartPos ) { aStartPos = rStartPos; }
-    const Point&                    GetStartPos() const { return aStartPos; }
+    void                            SetStartPos( const Point& rStartPos ) { maStartPos = rStartPos; }
+    const Point&                    GetStartPos() const { return maStartPos; }
 
-    void                            SetInternalMove( BOOL bSet ) { bInternalMove = bSet; }
-    BOOL                            IsInternalMove() const { return bInternalMove; }
+    void                            SetInternalMove( BOOL bSet ) { mbInternalMove = bSet; }
+    BOOL                            IsInternalMove() const { return mbInternalMove; }
 
-    BOOL                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( pSourceDoc == pDoc ); }
+    BOOL                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
 
     void                            SetPageBookmarks( const List& rPageBookmarks, BOOL bPersistent );
-    BOOL                            IsPageTransferable() const { return bPageTransferable; }
-    BOOL                            HasPageBookmarks() const { return( pPageDocShell && ( aPageBookmarks.Count() > 0 ) ); }
-    const List&                     GetPageBookmarks() const { return aPageBookmarks; }
-    ::sd::DrawDocShell*                 GetPageDocShell() const { return pPageDocShell; }
+    BOOL                            IsPageTransferable() const { return mbPageTransferable; }
+    BOOL                            HasPageBookmarks() const { return( mpPageDocShell && ( maPageBookmarks.Count() > 0 ) ); }
+    const List&                     GetPageBookmarks() const { return maPageBookmarks; }
+    ::sd::DrawDocShell*                 GetPageDocShell() const { return mpPageDocShell; }
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
@@ -116,28 +116,28 @@ protected:
 
 private:
 
-    SfxObjectShellRef             aDocShellRef;
-    ::sd::DrawDocShell*                 pPageDocShell;
-    List                            aPageBookmarks;
-    TransferableDataHelper*         pOLEDataHelper;
-    TransferableObjectDescriptor*   pObjDesc;
-    const ::sd::View*                   pSdView;
-    ::sd::View*                         pSdViewIntern;
-    SdDrawDocument*                 pSdDrawDocument;
-    SdDrawDocument*                 pSdDrawDocumentIntern;
-    SdDrawDocument*                 pSourceDoc;
-    VirtualDevice*                  pVDev;
-    INetBookmark*                   pBookmark;
-    Graphic*                        pGraphic;
-    ImageMap*                       pImageMap;
-    Rectangle                       aVisArea;
-    Point                           aStartPos;
-    BOOL                            bInternalMove               : 1;
-    BOOL                            bOwnDocument                : 1;
-    BOOL                            bOwnView                    : 1;
-    BOOL                            bLateInit                   : 1;
-    BOOL                            bPageTransferable           : 1;
-    BOOL                            bPageTransferablePersistent : 1;
+    SfxObjectShellRef               maDocShellRef;
+    ::sd::DrawDocShell*             mpPageDocShell;
+    List                            maPageBookmarks;
+    TransferableDataHelper*         mpOLEDataHelper;
+    TransferableObjectDescriptor*   mpObjDesc;
+    const ::sd::View*               mpSdView;
+    ::sd::View*                     mpSdViewIntern;
+    SdDrawDocument*                 mpSdDrawDocument;
+    SdDrawDocument*                 mpSdDrawDocumentIntern;
+    SdDrawDocument*                 mpSourceDoc;
+    VirtualDevice*                  mpVDev;
+    INetBookmark*                   mpBookmark;
+    Graphic*                        mpGraphic;
+    ImageMap*                       mpImageMap;
+    Rectangle                       maVisArea;
+    Point                           maStartPos;
+    BOOL                            mbInternalMove               : 1;
+    BOOL                            mbOwnDocument                : 1;
+    BOOL                            mbOwnView                    : 1;
+    BOOL                            mbLateInit                   : 1;
+    BOOL                            mbPageTransferable           : 1;
+    BOOL                            mbPageTransferablePersistent : 1;
     bool                            mbIsUnoObj                  : 1;
 
                                     // not available
