@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:04:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,6 @@ public:
     sal_Int32 mnCurrentGroup;
 };
 
-}; // namespace ppt
+} // namespace ppt
 
 #endif
