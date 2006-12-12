@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:23:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,7 +426,7 @@ sal_Int32 ReadThroughComponent(
     const OUString& rName,
     sal_Bool bMustBeSuccessfull )
 {
-    DBG_ASSERT(NULL != xStorage.is(), "Need storage!");
+    DBG_ASSERT(xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
@@ -662,8 +662,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     // Set base URI
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName, makeAny( mrMedium.GetBaseURL() ) );
+    const OUString sBaseURI( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sBaseURI, makeAny( mrMedium.GetBaseURL() ) );
 
     if( 0 == nRet && SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
     {
@@ -680,8 +680,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
         if( aName.getLength() )
         {
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
-            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+            const OUString sStreamRelPath(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+            xInfoSet->setPropertyValue( sStreamRelPath, Any( aName ) );
         }
     }
 
@@ -827,10 +827,10 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
-            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sPropName) )
+            const OUString sBuildId( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sBuildId) )
             {
-                xModelSet->setPropertyValue( sPropName, xInfoSet->getPropertyValue(sPropName) );
+                xModelSet->setPropertyValue( sBuildId, xInfoSet->getPropertyValue(sBuildId) );
             }
         }
     }
@@ -1058,8 +1058,8 @@ sal_Bool SdXMLFilter::Export()
                         xProps->setPropertyValue( aUseCommonPassPropName, uno::makeAny( (sal_Bool)sal_True ) );
                     }
 
-                    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
-                    xInfoSet->setPropertyValue( sPropName, makeAny( sDocName ) );
+                    const OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+                    xInfoSet->setPropertyValue( sStreamName, Any( sDocName ) );
                 }
 
                 uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
