@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylepool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:25:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ namespace {
 
 ::rtl::OUString StylePool::nameOf( SfxItemSet_Pointer_t pSet )
 {
-    return ::rtl::OUString::valueOf( reinterpret_cast<sal_Int32>( pSet.get() ), 16 );
+    return ::rtl::OUString::valueOf( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
 }
 
 // class StylePoolImpl organized a tree-structure where every node represents a SfxItemSet.
