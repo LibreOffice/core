@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:24:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:47:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,8 +278,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
 
 //=====  IAccessibleViewForwarderListener  ====================================
 
-void AccessibleDocumentViewBase::ViewForwarderChanged (ChangeType aChangeType,
-    const IAccessibleViewForwarder* pViewForwarder)
+void AccessibleDocumentViewBase::ViewForwarderChanged(ChangeType, const IAccessibleViewForwarder* )
 {
     // Empty
 }
@@ -610,23 +609,17 @@ void SAL_CALL
     }
 }
 
-
-
-
 //=====  XPropertyChangeListener  =============================================
 
-void SAL_CALL
-    AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& rEventObject)
+void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& )
     throw (::com::sun::star::uno::RuntimeException)
-{}
-
-
-
+{
+}
 
 //=====  XWindowListener  =====================================================
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowResized (const ::com::sun::star::awt::WindowEvent& e)
+    AccessibleDocumentViewBase::windowResized (const ::com::sun::star::awt::WindowEvent& )
     throw (::com::sun::star::uno::RuntimeException)
 {
     if( IsDisposed() )
@@ -641,7 +634,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& e)
+    AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& )
     throw (::com::sun::star::uno::RuntimeException)
 {
     if( IsDisposed() )
@@ -656,7 +649,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowShown (const ::com::sun::star::lang::EventObject& e)
+    AccessibleDocumentViewBase::windowShown (const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
 {
     if( IsDisposed() )
@@ -671,7 +664,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowHidden (const ::com::sun::star::lang::EventObject& e)
+    AccessibleDocumentViewBase::windowHidden (const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
 {
     if( IsDisposed() )
@@ -850,7 +843,7 @@ uno::Reference< XAccessibleContext >
 
 // return sal_False in default case
 sal_Bool
-    AccessibleDocumentViewBase::implIsSelected( sal_Int32 nAccessibleChildIndex )
+    AccessibleDocumentViewBase::implIsSelected( sal_Int32 )
     throw (uno::RuntimeException)
 {
     return( sal_False );
@@ -858,7 +851,7 @@ sal_Bool
 
 // return nothing in default case
 void
-    AccessibleDocumentViewBase::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+    AccessibleDocumentViewBase::implSelect( sal_Int32, sal_Bool )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
 }
