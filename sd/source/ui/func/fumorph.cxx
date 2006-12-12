@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,14 +89,10 @@
 #include <goodies/b3dcolor.hxx>
 #endif
 
-//CHINA001 #ifndef SD_MORPH_DLG_HXX
-//CHINA001 #include "morphdlg.hxx"
-//CHINA001 #endif
 #include "strings.hrc"
 #include "sdresid.hxx"
 
-#include "sdabstdlg.hxx" //CHINA001
-#include "morphdlg.hrc" //CHINA001
+#include "sdabstdlg.hxx"
 
 // #i48168#
 #ifndef _SVDITER_HXX
@@ -128,9 +124,9 @@ FunctionReference FuMorph::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd:
     return xFunc;
 }
 
-void FuMorph::DoExecute( SfxRequest& rReq )
+void FuMorph::DoExecute( SfxRequest& )
 {
-    const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
+    const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
 
     if(rMarkList.GetMarkCount() == 2)
     {
@@ -147,19 +143,16 @@ void FuMorph::DoExecute( SfxRequest& rReq )
         // Path-Objekte erzeugen
         SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
         SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
-        //CHINA001 MorphDlg aDlg (static_cast< ::Window*>(pWindow), pObj1, pObj2);
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-        AbstractMorphDlg* pDlg = pFact->CreateMorphDlg(ResId( DLG_MORPH ), static_cast< ::Window*>(pWindow), pObj1, pObj2 );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK)) //CHINA001 if(pPolyObj1 && pPolyObj2 && (aDlg.Execute() == RET_OK))
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        AbstractMorphDlg* pDlg = pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0;
+        if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
         {
             List aPolyPolyList;
             ::basegfx::B2DPolyPolygon aPolyPoly1;
             ::basegfx::B2DPolyPolygon aPolyPoly2;
             ::basegfx::B2DPolyPolygon* pPolyPoly;
 
-            pDlg->SaveSettings(); //CHINA001 aDlg.SaveSettings();
+            pDlg->SaveSettings();
 
             // #i48168# Not always is the pPolyObj1/pPolyObj2 a SdrPathObj, it may also be a group object
             // containing SdrPathObjs. To get the polygons, i add two iters here
@@ -202,7 +195,7 @@ void FuMorph::DoExecute( SfxRequest& rReq )
                     ImpAddPolys(aPolyPoly2, aPolyPoly1);
 
                 // use orientation flag from dialog
-                if(!pDlg->IsOrientationFade()) //CHINA001 if(!aDlg.IsOrientationFade())
+                if(!pDlg->IsOrientationFade())
                     aPolyPoly2.flip();
 
                 // force same point counts
@@ -220,16 +213,16 @@ void FuMorph::DoExecute( SfxRequest& rReq )
                     aPolyPoly2.setB2DPolygon(a, aSub2);
                 }
 
-                if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList)) //CHINA001 if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, aDlg.GetFadeSteps(), aPolyPolyList))
+                if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList))
                 {
-                    String aString(pView->GetDescriptionOfMarkedObjects());
+                    String aString(mpView->GetDescriptionOfMarkedObjects());
 
                     aString.Append(sal_Unicode(' '));
                     aString.Append(String(SdResId(STR_UNDO_MORPHING)));
 
-                    pView->BegUndo(aString);
-                    ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2); //CHINA001 ImpInsertPolygons(aPolyPolyList, aDlg.IsAttributeFade(), pObj1, pObj2);
-                    pView->EndUndo();
+                    mpView->BegUndo(aString);
+                    ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2);
+                    mpView->EndUndo();
                 }
 
                 // erzeugte Polygone wieder loeschen
@@ -239,7 +232,7 @@ void FuMorph::DoExecute( SfxRequest& rReq )
                 }
             }
         }
-        delete pDlg; //add by CHINA001
+        delete pDlg;
         delete pCloneObj1;
         delete pCloneObj2;
 
@@ -334,8 +327,8 @@ void FuMorph::ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::b
 //
 sal_uInt32 FuMorph::ImpGetNearestIndex(const ::basegfx::B2DPolygon& rPoly, const ::basegfx::B2DPoint& rPos)
 {
-    double fMinDist;
-    sal_uInt32 nActInd;
+    double fMinDist = 0.0;
+    sal_uInt32 nActInd = 0;
 
     for(sal_uInt32 a(0L); a < rPoly.count(); a++)
     {
@@ -388,9 +381,9 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
     Color               aEndFillCol;
     Color               aStartLineCol;
     Color               aEndLineCol;
-    long                nStartLineWidth;
-    long                nEndLineWidth;
-    SdrPageView*        pPageView = pView->GetSdrPageView();
+    long                nStartLineWidth = 0;
+    long                nEndLineWidth = 0;
+    SdrPageView*        pPageView = mpView->GetSdrPageView();
     SfxItemPool*        pPool = pObj1->GetObjectItemPool();
     SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
     SfxItemSet          aSet2( aSet1 );
@@ -442,7 +435,6 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         SfxItemSet      aSet( aSet1 );
         SdrObjGroup*    pObjGroup = new SdrObjGroup;
         SdrObjList*     pObjList = pObjGroup->GetSubList();
-        const String    aEmptyStr;
         const ULONG     nCount = rPolyPolyList3D.Count();
         const double    fStep = 1. / ( nCount + 1 );
         const double    fDelta = nEndLineWidth - nStartLineWidth;
@@ -484,8 +476,8 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         {
             pObjList->InsertObject( pObj1->Clone(), 0 );
             pObjList->InsertObject( pObj2->Clone(), LIST_APPEND );
-            pView->DeleteMarked();
-            pView->InsertObjectAtView( pObjGroup, *pPageView, SDRINSERT_SETDEFLAYER );
+            mpView->DeleteMarked();
+            mpView->InsertObjectAtView( pObjGroup, *pPageView, SDRINSERT_SETDEFLAYER );
         }
     }
 }
