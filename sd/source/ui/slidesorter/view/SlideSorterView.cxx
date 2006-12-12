@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:36:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,8 +147,7 @@ SlideSorterView::~SlideSorterView (void)
 
 controller::SlideSorterController& SlideSorterView::GetController (void)
 {
-    return static_cast<SlideSorterViewShell*>(pViewSh)
-        ->GetSlideSorterController();
+    return static_cast<SlideSorterViewShell*>(mpViewSh)->GetSlideSorterController();
 }
 
 
@@ -565,9 +564,10 @@ Rectangle SlideSorterView::GetPageBoundingBox (
 void SlideSorterView::CompleteRedraw (
     OutputDevice* pDevice,
     const Region& rPaintArea,
+    USHORT nPaintMode,
     ::sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
-    if (nLockRedrawSmph == 0)
+    if (mnLockRedrawSmph == 0)
     {
         // Update the page visibilities when they have been invalidated.
         if ( ! mbPageObjectVisibilitiesValid)
@@ -581,14 +581,14 @@ void SlideSorterView::CompleteRedraw (
         // during this call and restored afterwards so that its XOR painting
         // works properly.
         GetOverlay().HideAndSave(ViewOverlay::OPT_PAINT);
-        View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
+        View::CompleteRedraw (pDevice, rPaintArea, nPaintMode, pRedirector);
         GetOverlay().Restore();
     }
     else
     {
         // In sd::View::CompleteRedraw() this call is recorded and given
         // region is painted when the view is unlocked.
-        View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
+        View::CompleteRedraw (pDevice, rPaintArea, nPaintMode, pRedirector);
     }
 }
 
