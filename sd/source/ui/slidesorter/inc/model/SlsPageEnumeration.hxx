@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageEnumeration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:24:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,10 @@ public:
         new enumeration points to the same element as the given one.
     */
     PageEnumeration (const PageEnumeration& rEnumeration);
+
+    /**
+    */
+    virtual ~PageEnumeration();
 
     /** Create a new enumeration object.  The ownership of the
         implementation object goes to the new object.  Use this copy
