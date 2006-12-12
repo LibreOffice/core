@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:05:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -654,7 +654,7 @@ const ::rtl::OUString ToolBarManager::Implementation::msToolBarResourcePrefix(
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
     sd::tools::EventMultiplexer& rMultiplexer,
-    PaneManager& rPaneManager,
+    PaneManager&,
     ViewShellManager& rViewShellManager,
     ToolBarManager& rToolBarManager)
     : maMutex(),
@@ -1062,7 +1062,7 @@ ToolBarRules& ToolBarManager::Implementation::GetToolBarRules (void)
 
 
 
-IMPL_LINK(ToolBarManager::Implementation,UpdateCallback,bool*,pValid)
+IMPL_LINK(ToolBarManager::Implementation,UpdateCallback,bool*,EMPTYARG)
 {
     mnPendingUpdateCall = 0;
     if (mnLockCount == 0)
@@ -1108,7 +1108,7 @@ IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
 
 
 
-IMPL_LINK(ToolBarManager::Implementation, SetValidCallback,void*,pDummy)
+IMPL_LINK(ToolBarManager::Implementation, SetValidCallback,void*,EMPTYARG)
 {
     mnPendingSetValidCall = 0;
     SetValid(true);
@@ -1286,6 +1286,7 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
         case ::sd::ViewShell::ST_IMPRESS:
         case ::sd::ViewShell::ST_DRAW:
         case ::sd::ViewShell::ST_NOTES:
+        {
             const DrawViewShell* pDrawViewShell
                 = dynamic_cast<const DrawViewShell*>(&rMainViewShell);
             if (pDrawViewShell != NULL)
@@ -1293,6 +1294,9 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
                     mrToolBarManager.AddToolBar(
                         ToolBarManager::TBG_MASTER_MODE,
                         ToolBarManager::msMasterViewToolBar);
+            break;
+        }
+        default:
             break;
     }
 }
@@ -1332,6 +1336,8 @@ void ToolBarRules::SelectionHasChanged (
                     mrToolBarManager.SetToolBar(
                         ToolBarManager::TBG_FUNCTION,
                         ToolBarManager::msDrawingObjectToolBar);
+                    break;
+                default:
                     break;
             }
             break;
@@ -1575,8 +1581,8 @@ ToolBarShellList::ShellDescriptor::ShellDescriptor (
 
 
 ToolBarShellList::ToolBarShellList (void)
-    : maCurrentList(),
-      maNewList()
+: maNewList()
+, maCurrentList()
 {
 }
 
