@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:10:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,7 +414,7 @@ void SwFEShell::ShGetFcs( BOOL bUpdate )
 
     if ( HasDrawView() )
     {
-        Imp()->GetDrawView()->SetMarkHdlHidden( FALSE );
+        Imp()->GetDrawView()->showMarkHandles();
         if ( Imp()->GetDrawView()->AreObjectsMarked() )
             FrameNotify( this, FLY_DRAG_START );
     }
@@ -426,7 +426,7 @@ void SwFEShell::ShLooseFcs()
 
     if ( HasDrawView() && Imp()->GetDrawView()->AreObjectsMarked() )
     {
-        Imp()->GetDrawView()->SetMarkHdlHidden( TRUE );
+        Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }
 //  ::ResetShell();
