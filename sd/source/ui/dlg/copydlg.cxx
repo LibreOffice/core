@@ -4,9 +4,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:35:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,58 +95,57 @@ CopyDlg::CopyDlg(
     XColorTable* pColTab,
     ::sd::View* pInView )
     : SfxModalDialog     ( pWindow, SdResId( DLG_COPY ) ),
-      aFtCopies           ( this, SdResId( FT_COPIES ) ),
-      aNumFldCopies       ( this, SdResId( NUM_FLD_COPIES ) ),
-      aFtMoveX            ( this, SdResId( FT_MOVE_X ) ),
-      aMtrFldMoveX        ( this, SdResId( MTR_FLD_MOVE_X ) ),
-      aFtMoveY            ( this, SdResId( FT_MOVE_Y ) ),
-      aMtrFldMoveY        ( this, SdResId( MTR_FLD_MOVE_Y ) ),
-      aFtAngle            ( this, SdResId( FT_ANGLE ) ),
-      aMtrFldAngle        ( this, SdResId( MTR_FLD_ANGLE ) ),
-      aGrpMovement        ( this, SdResId( GRP_MOVEMENT ) ),
-      aFtWidth            ( this, SdResId( FT_WIDTH ) ),
-      aMtrFldWidth        ( this, SdResId( MTR_FLD_WIDTH ) ),
-      aFtHeight           ( this, SdResId( FT_HEIGHT ) ),
-      aMtrFldHeight       ( this, SdResId( MTR_FLD_HEIGHT ) ),
-      aGrpEnlargement     ( this, SdResId( GRP_ENLARGEMENT ) ),
-      aFtStartColor       ( this, SdResId( FT_START_COLOR ) ),
-      aLbStartColor       ( this, SdResId( LB_START_COLOR ) ),
-      aFtEndColor         ( this, SdResId( FT_END_COLOR ) ),
-      aLbEndColor         ( this, SdResId( LB_END_COLOR ) ),
-      aGrpColor           ( this, SdResId( GRP_COLOR ) ),
-      aBtnOK              ( this, SdResId( BTN_OK ) ),
-      aBtnCancel          ( this, SdResId( BTN_CANCEL ) ),
-      aBtnHelp            ( this, SdResId( BTN_HELP ) ),
-      aBtnSetViewData     ( this, SdResId( BTN_SET_VIEWDATA ) ),
-      aBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
-      rOutAttrs         ( rInAttrs ),
-      pColorTab         ( pColTab ),
-      pView             ( pInView ),
-      eUIUnit(pInView->GetDoc()->GetUIUnit()),
-      aUIScale(pInView->GetDoc()->GetUIScale())
+      maFtCopies           ( this, SdResId( FT_COPIES ) ),
+      maNumFldCopies       ( this, SdResId( NUM_FLD_COPIES ) ),
+      maBtnSetViewData     ( this, SdResId( BTN_SET_VIEWDATA ) ),
+      maFtMoveX            ( this, SdResId( FT_MOVE_X ) ),
+      maMtrFldMoveX        ( this, SdResId( MTR_FLD_MOVE_X ) ),
+      maFtMoveY            ( this, SdResId( FT_MOVE_Y ) ),
+      maMtrFldMoveY        ( this, SdResId( MTR_FLD_MOVE_Y ) ),
+      maFtAngle            ( this, SdResId( FT_ANGLE ) ),
+      maMtrFldAngle        ( this, SdResId( MTR_FLD_ANGLE ) ),
+      maGrpMovement        ( this, SdResId( GRP_MOVEMENT ) ),
+      maFtWidth            ( this, SdResId( FT_WIDTH ) ),
+      maMtrFldWidth        ( this, SdResId( MTR_FLD_WIDTH ) ),
+      maFtHeight           ( this, SdResId( FT_HEIGHT ) ),
+      maMtrFldHeight       ( this, SdResId( MTR_FLD_HEIGHT ) ),
+      maGrpEnlargement     ( this, SdResId( GRP_ENLARGEMENT ) ),
+      maFtStartColor       ( this, SdResId( FT_START_COLOR ) ),
+      maLbStartColor       ( this, SdResId( LB_START_COLOR ) ),
+      maFtEndColor         ( this, SdResId( FT_END_COLOR ) ),
+      maLbEndColor         ( this, SdResId( LB_END_COLOR ) ),
+      maGrpColor           ( this, SdResId( GRP_COLOR ) ),
+      maBtnOK              ( this, SdResId( BTN_OK ) ),
+      maBtnCancel          ( this, SdResId( BTN_CANCEL ) ),
+      maBtnHelp            ( this, SdResId( BTN_HELP ) ),
+      maBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
+      mrOutAttrs            ( rInAttrs ),
+      mpColorTab            ( pColTab ),
+      maUIScale(pInView->GetDoc()->GetUIScale()),
+      mpView                ( pInView )
 {
     FreeResource();
 
     // Set up the view data button (image and accessible name).
-    aBtnSetViewData.SetModeImage( Image( SdResId( IMG_PIPETTE_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSetViewData.SetAccessibleName (aBtnSetViewData.GetQuickHelpText());
+    maBtnSetViewData.SetModeImage( Image( SdResId( IMG_PIPETTE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtnSetViewData.SetAccessibleName (maBtnSetViewData.GetQuickHelpText());
 
     // Farbtabellen
-    DBG_ASSERT( pColorTab, "Keine gueltige ColorTable uebergeben!" );
-    aLbStartColor.Fill( pColorTab );
-    aLbEndColor.CopyEntries( aLbStartColor );
+    DBG_ASSERT( mpColorTab, "Keine gueltige ColorTable uebergeben!" );
+    maLbStartColor.Fill( mpColorTab );
+    maLbEndColor.CopyEntries( maLbStartColor );
 
-    aLbStartColor.SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
-    aBtnSetViewData.SetClickHdl( LINK( this, CopyDlg, SetViewData ) );
-    aBtnSetDefault.SetClickHdl( LINK( this, CopyDlg, SetDefault ) );
+    maLbStartColor.SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
+    maBtnSetViewData.SetClickHdl( LINK( this, CopyDlg, SetViewData ) );
+    maBtnSetDefault.SetClickHdl( LINK( this, CopyDlg, SetDefault ) );
 
 
     FieldUnit eFUnit( GetModuleFieldUnit() );
 
-    SetFieldUnit( aMtrFldMoveX, eFUnit, TRUE );
-    SetFieldUnit( aMtrFldMoveY, eFUnit, TRUE );
-    SetFieldUnit( aMtrFldWidth, eFUnit, TRUE );
-    SetFieldUnit( aMtrFldHeight, eFUnit, TRUE );
+    SetFieldUnit( maMtrFldMoveX, eFUnit, TRUE );
+    SetFieldUnit( maMtrFldMoveY, eFUnit, TRUE );
+    SetFieldUnit( maMtrFldWidth, eFUnit, TRUE );
+    SetFieldUnit( maMtrFldHeight, eFUnit, TRUE );
 
     Reset(0L);
 }
@@ -161,28 +160,28 @@ CopyDlg::~CopyDlg()
 {
     String& rStr = GetExtraData();
 
-    rStr = UniString::CreateFromInt32( aNumFldCopies.GetValue() );
+    rStr = UniString::CreateFromInt32( maNumFldCopies.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( aMtrFldMoveX.GetValue() );
+    rStr += UniString::CreateFromInt32( maMtrFldMoveX.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( aMtrFldMoveY.GetValue() );
+    rStr += UniString::CreateFromInt32( maMtrFldMoveY.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( aMtrFldAngle.GetValue() );
+    rStr += UniString::CreateFromInt32( maMtrFldAngle.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( aMtrFldWidth.GetValue() );
+    rStr += UniString::CreateFromInt32( maMtrFldWidth.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( aMtrFldHeight.GetValue() );
+    rStr += UniString::CreateFromInt32( maMtrFldHeight.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( (long)aLbStartColor.GetSelectEntryColor().GetColor() );
+    rStr += UniString::CreateFromInt32( (long)maLbStartColor.GetSelectEntryColor().GetColor() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( (long)aLbEndColor.GetSelectEntryColor().GetColor() );
+    rStr += UniString::CreateFromInt32( (long)maLbEndColor.GetSelectEntryColor().GetColor() );
 }
 
 /*************************************************************************
@@ -191,83 +190,83 @@ CopyDlg::~CopyDlg()
 |*
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, Reset, void*, p )
+IMPL_LINK( CopyDlg, Reset, void*, EMPTYARG )
 {
     const SfxPoolItem* pPoolItem = NULL;
     String aStr( GetExtraData() );
 
     if( aStr.GetTokenCount( TOKEN ) < 8 )
     {
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_NUMBER, TRUE, &pPoolItem ) )
-            aNumFldCopies.SetValue( ( ( const SfxUInt16Item* ) pPoolItem )->GetValue() );
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, TRUE, &pPoolItem ) )
+            maNumFldCopies.SetValue( ( ( const SfxUInt16Item* ) pPoolItem )->GetValue() );
         else
-            aNumFldCopies.SetValue( 1L );
+            maNumFldCopies.SetValue( 1L );
 
         long nMoveX = 500L;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_MOVE_X, TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, TRUE, &pPoolItem ) )
             nMoveX = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( aMtrFldMoveX, Fraction(nMoveX) / aUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( maMtrFldMoveX, Fraction(nMoveX) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
         long nMoveY = 500L;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, TRUE, &pPoolItem ) )
             nMoveY = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( aMtrFldMoveY, Fraction(nMoveY) / aUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( maMtrFldMoveY, Fraction(nMoveY) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_ANGLE, TRUE, &pPoolItem ) )
-            aMtrFldAngle.SetValue( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, TRUE, &pPoolItem ) )
+            maMtrFldAngle.SetValue( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         else
-            aMtrFldAngle.SetValue( 0L );
+            maMtrFldAngle.SetValue( 0L );
 
         long nWidth = 0L;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_WIDTH, TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, TRUE, &pPoolItem ) )
             nWidth = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( aMtrFldWidth, Fraction(nWidth) / aUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( maMtrFldWidth, Fraction(nWidth) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
         long nHeight = 0L;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_HEIGHT, TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, TRUE, &pPoolItem ) )
             nHeight = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( aMtrFldHeight, Fraction(nHeight) / aUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( maMtrFldHeight, Fraction(nHeight) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
         {
             Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
-            aLbStartColor.SelectEntry( aColor );
-            aLbEndColor.SelectEntry( aColor );
+            maLbStartColor.SelectEntry( aColor );
+            maLbEndColor.SelectEntry( aColor );
         }
         else
         {
-            aLbStartColor.SetNoSelection();
-            aLbEndColor.SetNoSelection();
-            aLbEndColor.Disable();
-            aFtEndColor.Disable();
+            maLbStartColor.SetNoSelection();
+            maLbEndColor.SetNoSelection();
+            maLbEndColor.Disable();
+            maFtEndColor.Disable();
         }
     }
     else
     {
         long nTmp;
         nTmp = (long)aStr.GetToken( 0, TOKEN ).ToInt32();
-        aNumFldCopies.SetValue( nTmp );
+        maNumFldCopies.SetValue( nTmp );
 
         nTmp = (long)aStr.GetToken( 1, TOKEN ).ToInt32();
-        aMtrFldMoveX.SetValue( nTmp );
+        maMtrFldMoveX.SetValue( nTmp );
 
         nTmp = (long)aStr.GetToken( 2, TOKEN ).ToInt32();
-        aMtrFldMoveY.SetValue( nTmp );
+        maMtrFldMoveY.SetValue( nTmp );
 
         nTmp = (long)aStr.GetToken( 3, TOKEN ).ToInt32();
-        aMtrFldAngle.SetValue( nTmp );
+        maMtrFldAngle.SetValue( nTmp );
 
         nTmp = (long)aStr.GetToken( 4, TOKEN ).ToInt32();
-        aMtrFldWidth.SetValue( nTmp );
+        maMtrFldWidth.SetValue( nTmp );
 
         nTmp = (long)aStr.GetToken( 5, TOKEN ).ToInt32();
-        aMtrFldHeight.SetValue( nTmp );
+        maMtrFldHeight.SetValue( nTmp );
 
         nTmp = (long)aStr.GetToken( 6, TOKEN ).ToInt32();
-        aLbStartColor.SelectEntry( Color( nTmp ) );
+        maLbStartColor.SelectEntry( Color( nTmp ) );
 
         nTmp = (long)aStr.GetToken( 7, TOKEN ).ToInt32();
-        aLbEndColor.SelectEntry( Color( nTmp ) );
+        maLbEndColor.SelectEntry( Color( nTmp ) );
     }
 
     return 0;
@@ -281,28 +280,28 @@ IMPL_LINK( CopyDlg, Reset, void*, p )
 
 void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 {
-    long nMoveX = Fraction( GetCoreValue( aMtrFldMoveX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
-    long nMoveY = Fraction( GetCoreValue( aMtrFldMoveY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
-    long nHeight = Fraction( GetCoreValue( aMtrFldHeight, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
-    long nWidth  = Fraction( GetCoreValue( aMtrFldWidth, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
+    long nMoveX = Fraction( GetCoreValue( maMtrFldMoveX, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
+    long nMoveY = Fraction( GetCoreValue( maMtrFldMoveY, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
+    long nHeight = Fraction( GetCoreValue( maMtrFldHeight, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
+    long nWidth  = Fraction( GetCoreValue( maMtrFldWidth, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
 
-    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (UINT16) aNumFldCopies.GetValue() ) );
+    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (UINT16) maNumFldCopies.GetValue() ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_Y, nMoveY ) );
-    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, aMtrFldAngle.GetValue() ) );
+    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, maMtrFldAngle.GetValue() ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_WIDTH, nWidth ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_HEIGHT, nHeight ) );
 
-    if( aLbStartColor.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+    if( maLbStartColor.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
-        XColorItem aXColorItem( ATTR_COPY_START_COLOR, aLbStartColor.GetSelectEntry(),
-                                    aLbStartColor.GetSelectEntryColor() );
+        XColorItem aXColorItem( ATTR_COPY_START_COLOR, maLbStartColor.GetSelectEntry(),
+                                    maLbStartColor.GetSelectEntryColor() );
         rOutAttrs.Put( aXColorItem );
     }
-    if( aLbEndColor.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+    if( maLbEndColor.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
-        XColorItem aXColorItem( ATTR_COPY_END_COLOR, aLbEndColor.GetSelectEntry(),
-                                    aLbEndColor.GetSelectEntryColor() );
+        XColorItem aXColorItem( ATTR_COPY_END_COLOR, maLbEndColor.GetSelectEntry(),
+                                    maLbEndColor.GetSelectEntryColor() );
         rOutAttrs.Put( aXColorItem );
     }
 }
@@ -313,16 +312,16 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 |*
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, SelectColorHdl, void *, p )
+IMPL_LINK( CopyDlg, SelectColorHdl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbStartColor.GetSelectEntryPos();
+    USHORT nPos = maLbStartColor.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-        !aLbEndColor.IsEnabled() )
+        !maLbEndColor.IsEnabled() )
     {
-        aLbEndColor.SelectEntryPos( nPos );
-        aLbEndColor.Enable();
-        aFtEndColor.Enable();
+        maLbEndColor.SelectEntryPos( nPos );
+        maLbEndColor.Enable();
+        maFtEndColor.Enable();
     }
     return 0;
 }
@@ -333,19 +332,19 @@ IMPL_LINK( CopyDlg, SelectColorHdl, void *, p )
 
 IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
 {
-    Rectangle aRect = pView->GetAllMarkedRect();
+    Rectangle aRect = mpView->GetAllMarkedRect();
 
-    SetMetricValue( aMtrFldMoveX, Fraction( aRect.GetWidth() ) /
-                                    aUIScale, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( aMtrFldMoveY, Fraction( aRect.GetHeight() ) /
-                                    aUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( maMtrFldMoveX, Fraction( aRect.GetWidth() ) /
+                                    maUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( maMtrFldMoveY, Fraction( aRect.GetHeight() ) /
+                                    maUIScale, SFX_MAPUNIT_100TH_MM);
 
     // Farb-Attribut setzen
     const SfxPoolItem*  pPoolItem = NULL;
-    if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
+    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
-        aLbStartColor.SelectEntry( aColor );
+        maLbStartColor.SelectEntry( aColor );
     }
 
     return 0;
@@ -357,24 +356,24 @@ IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
 
 IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
 {
-    aNumFldCopies.SetValue( 1L );
+    maNumFldCopies.SetValue( 1L );
 
     long nValue = 500L;
-    SetMetricValue( aMtrFldMoveX, Fraction(nValue) / aUIScale, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( aMtrFldMoveY, Fraction(nValue) / aUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( maMtrFldMoveX, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( maMtrFldMoveY, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
     nValue = 0L;
-    aMtrFldAngle.SetValue( nValue );
-    SetMetricValue( aMtrFldWidth, Fraction(nValue) / aUIScale, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( aMtrFldHeight, Fraction(nValue) / aUIScale, SFX_MAPUNIT_100TH_MM);
+    maMtrFldAngle.SetValue( nValue );
+    SetMetricValue( maMtrFldWidth, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( maMtrFldHeight, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
     // Farb-Attribut setzen
     const SfxPoolItem*  pPoolItem = NULL;
-    if( SFX_ITEM_SET == rOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
+    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
-        aLbStartColor.SelectEntry( aColor );
-        aLbEndColor.SelectEntry( aColor );
+        maLbStartColor.SelectEntry( aColor );
+        maLbEndColor.SelectEntry( aColor );
     }
 
     return 0;
