@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:12:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1805,6 +1805,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
 {
     String aString( rXTextRange->getString() );
     String aURL;
+    BOOL bRTL_endingParen = FALSE;
 
     mnTextSize = aString.Len();
     if ( bLast )
@@ -1853,8 +1854,15 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         }
         else
         {
-            mpText = new sal_uInt16[ mnTextSize ];
             const sal_Unicode* pText = aString.GetBuffer();
+            // For i39516 - a closing parenthesis that ends an RTL string is displayed backwards by PPT
+            // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
+            if ( bLast && pText[ aString.Len() - 1 ] == sal_Unicode(')') && mnAsianOrComplexFont )
+            {
+                mnTextSize++;
+                bRTL_endingParen = TRUE;
+            }
+            mpText = new sal_uInt16[ mnTextSize ];
             sal_uInt16 nChar;
             for ( int i = 0; i < aString.Len(); i++ )
             {
@@ -1905,6 +1913,9 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
                 mpText[ i ] = nChar;
             }
         }
+        if ( bRTL_endingParen )
+            mpText[ mnTextSize - 2 ] = 0x200F; // Unicode Right-to-Left mark
+
         if ( bLast )
             mpText[ mnTextSize - 1 ] = 0xd;
 
