@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmovss.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:00:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction(
 
 void SdMoveStyleSheetsUndoAction::Undo()
 {
-    SfxStyleSheetBasePool* pPool  = pDoc->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pPool  = mpDoc->GetStyleSheetPool();
     SdStyleSheet*          pSheet = NULL;
 
     /********************************************************************
@@ -143,17 +143,6 @@ void SdMoveStyleSheetsUndoAction::Undo()
 void SdMoveStyleSheetsUndoAction::Redo()
 {
     Undo();
-}
-
-/*************************************************************************
-|*
-|* Repeat()
-|*
-\************************************************************************/
-
-void SdMoveStyleSheetsUndoAction::Repeat()
-{
-    DBG_ASSERT(FALSE, "SdMoveStyleSheetsUndoAction::Repeat: nicht implementiert");
 }
 
 /*************************************************************************

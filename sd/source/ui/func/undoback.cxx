@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoback.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:59:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
 // -----------------------------------------------------------------------------
 
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPage& rPage, const SdrObject* pBackgroundObj ) :
-    SdUndoAction( pDoc ),
+    SdUndoAction( &rDoc ),
     mrPage( rPage ),
     mpBackgroundObj( pBackgroundObj ? pBackgroundObj->Clone() : NULL )
 {
@@ -98,20 +98,7 @@ void SdBackgroundObjUndoAction::Redo()
 
 // -----------------------------------------------------------------------------
 
-void SdBackgroundObjUndoAction::Repeat()
-{
-}
-
-// -----------------------------------------------------------------------------
-
-BOOL SdBackgroundObjUndoAction::CanRepeat( SfxRepeatTarget& ) const
-{
-    return FALSE;
-}
-
-// -----------------------------------------------------------------------------
-
 SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 {
-    return new SdBackgroundObjUndoAction( *pDoc, mrPage, mpBackgroundObj );
+    return new SdBackgroundObjUndoAction( *mpDoc, mrPage, mpBackgroundObj );
 }

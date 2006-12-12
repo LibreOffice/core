@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoheaderfooter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:59:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,5 @@ void SdHeaderFooterUndoAction::Redo()
 {
     mpPage->setHeaderFooterSettings( maNewSettings );
     SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-}
-
-void SdHeaderFooterUndoAction::Repeat()
-{
-    Redo();
 }
 
