@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:12:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:28:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,15 +176,15 @@ void SwViewImp::LockPaint()
 {
     if ( HasDrawView() )
     {
-        bShowHdlPaint = GetDrawView()->IsMarkHdlShown();
-        if ( bShowHdlPaint )
-            GetDrawView()->HideMarkHdl();
-        bResetHdlHiddenPaint = !GetDrawView()->IsMarkHdlHidden();
-        GetDrawView()->SetMarkHdlHidden( TRUE );
+        //HMHbShowHdlPaint = GetDrawView()->IsMarkHdlShown();
+        //HMHif ( bShowHdlPaint )
+        //HMH   GetDrawView()->HideMarkHdl();
+        bResetHdlHiddenPaint = !GetDrawView()->areMarkHandlesHidden();
+        GetDrawView()->hideMarkHandles();
     }
     else
     {
-        bShowHdlPaint = FALSE;
+        //HMHbShowHdlPaint = FALSE;
         bResetHdlHiddenPaint = FALSE;
     }
 }
@@ -194,9 +194,9 @@ void SwViewImp::LockPaint()
 void SwViewImp::UnlockPaint()
 {
     if ( bResetHdlHiddenPaint )
-        GetDrawView()->SetMarkHdlHidden( FALSE );
-    if ( bShowHdlPaint )
-        GetDrawView()->ShowMarkHdl();
+        GetDrawView()->showMarkHandles();
+    //HMHif ( bShowHdlPaint )
+    //HMH   GetDrawView()->ShowMarkHdl();
 }
 
 
