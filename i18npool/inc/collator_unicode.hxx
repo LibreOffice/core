@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:40:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/module.h>
 
-// External unicode includes (from icu) cause warning C4668 on Windows.
-// We want to minimize the patches to external headers, so the warnings are
-// disabled here instead of in the header file itself.
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <unicode/tblcoll.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "warnings_guard_unicode_tblcoll.h"
 
 //      ----------------------------------------------------
 //      class Collator_Unicode
@@ -94,6 +85,7 @@ protected:
     const sal_Char *implementationName;
 private:
     RuleBasedCollator *collator;
+    oslModule hModule;
 };
 
 } } } }
