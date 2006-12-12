@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:19:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,7 @@ void MasterPagesSelector::Fill (void)
 
 
 
-IMPL_LINK(MasterPagesSelector, ClickHandler, PreviewValueSet*, pValueSet)
+IMPL_LINK(MasterPagesSelector, ClickHandler, PreviewValueSet*, EMPTYARG)
 {
     // We use the framework to assign the clicked-on master page because we
     // so use the same mechanism as the context menu does (where we do not
@@ -473,9 +473,9 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
             if (nIndex >= 0)
             {
                 mpPageSet->SetItemImage (
-                    nIndex,
+                    (USHORT)nIndex,
                     mpContainer->GetPreviewForToken(rEvent.maChildToken));
-                mpPageSet->Invalidate(mpPageSet->GetItemRect(nIndex));
+                mpPageSet->Invalidate(mpPageSet->GetItemRect((USHORT)nIndex));
             }
         }
         break;
@@ -486,6 +486,9 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
             Fill();
         }
         break;
+
+        default:
+            break;
    }
 }
 
@@ -507,7 +510,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
     const ::osl::MutexGuard aGuard (maMutex);
 
     if (nIndex>0 && nIndex<=mpPageSet->GetItemCount())
-        return reinterpret_cast<UserData*>(mpPageSet->GetItemData(nIndex));
+        return reinterpret_cast<UserData*>(mpPageSet->GetItemData((USHORT)nIndex));
     else
         return NULL;
 }
@@ -524,7 +527,7 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
         UserData* pOldData = GetUserData(nIndex);
         if (pOldData!=NULL && pOldData!=pData)
             delete pOldData;
-        mpPageSet->SetItemData(nIndex, pData);
+        mpPageSet->SetItemData((USHORT)nIndex, pData);
     }
 }
 
@@ -595,7 +598,6 @@ void MasterPagesSelector::Execute (SfxRequest& rRequest)
             mrBase.SetBusyState (false);
             break;
         }
-        break;
 
         case SID_CUT:
         case SID_COPY:
