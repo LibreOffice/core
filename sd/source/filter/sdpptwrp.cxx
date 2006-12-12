@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <svx/msoleexp.hxx>
 #include <svx/svxmsbas.hxx>
 #include <svx/svxerr.hxx>
@@ -120,7 +120,7 @@ sal_Bool SdPPTFilter::Import()
             MSFilterTracer aTracer( aTraceConfigPath, &aConfigData );
             aTracer.StartTracing();
             SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
-            if ( !( bRet = pImport->Import() ) )
+            if ( ( bRet = pImport->Import() ) == sal_False )
             {
                 if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
                     mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT );
@@ -140,7 +140,7 @@ sal_Bool SdPPTFilter::Import()
 
 sal_Bool SdPPTFilter::Export()
 {
-    ::vos::OModule* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
+    ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
     sal_Bool        bRet = sal_False;
 
     if( pLibrary )
@@ -148,7 +148,7 @@ sal_Bool SdPPTFilter::Export()
         if( mxModel.is() )
         {
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), FALSE );
-            ExportPPT       PPTExport = ( ExportPPT ) pLibrary->getSymbol( ::rtl::OUString::createFromAscii("ExportPPT") );
+            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("ExportPPT") ));
 
             /* !!!
             if ( pViewShell && pViewShell->GetView() )
