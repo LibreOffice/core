@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:16:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,19 +81,19 @@ typedef std::vector< std::pair< SdrObject*, Ppt97AnimationPtr > > tAnimationVect
 
 class ImplSdPPTImport : public SdrPowerPointImport
 {
-    SfxMedium&      rMed;
-    SvStorage&      rStorage;
-    SvStream*       pPicStream;
-    DffRecordHeader aDocHd;
-    List            aSlideNameList;
-    BOOL            bDocumentFound;
-    sal_uInt32      nFilterOptions;
-    SdDrawDocument* pDoc;
-    PresChange      ePresChange;
-    SdrLayerID      nBackgroundLayerID;
-    SdrLayerID      nBackgroundObjectsLayerID;
+    SfxMedium&      mrMed;
+    SvStorage&      mrStorage;
+//  SvStream*       mpPicStream;
+    DffRecordHeader maDocHd;
+    List            maSlideNameList;
+    BOOL            mbDocumentFound;
+    sal_uInt32      mnFilterOptions;
+    SdDrawDocument* mpDoc;
+    PresChange      mePresChange;
+    SdrLayerID      mnBackgroundLayerID;
+    SdrLayerID      mnBackgroundObjectsLayerID;
 
-    tAnimationMap   aAnimations;
+    tAnimationMap   maAnimations;
 
     void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     void            ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
