@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:38:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,7 @@ public:
 
     ShowWindow* getShowWindow() const { return mpShowWindow; }
 
+    using cppu::WeakComponentImplHelperBase::disposing;
 private:
     bool startShowImpl(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
