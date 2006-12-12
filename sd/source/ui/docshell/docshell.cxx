@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:45:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:12:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,20 +206,22 @@ SFX_IMPL_OBJECTFACTORY(
 
 void DrawDocShell::Construct()
 {
-    bInDestruction = FALSE;
+    mbInDestruction = FALSE;
     SetSlotFilter();     // setzt Filter zurueck
 
-    pDoc = new SdDrawDocument(eDocType, this);
+    mbOwnDocument = mpDoc == 0;
+    if( mbOwnDocument )
+        mpDoc = new SdDrawDocument(meDocType, this);
 
     // The document has been created so we can call UpdateRefDevice() to set
     // the document's ref device.
     UpdateRefDevice();
 
     SetModel( new SdXImpressDocument( this ) );
-    SetPool( &pDoc->GetItemPool() );
-    pUndoManager = new sd::UndoManager;
-    pDoc->SetSdrUndoManager( pUndoManager );
-    pDoc->SetSdrUndoFactory( new sd::UndoFactory );
+    SetPool( &mpDoc->GetItemPool() );
+    mpUndoManager = new sd::UndoManager;
+    mpDoc->SetSdrUndoManager( mpUndoManager );
+    mpDoc->SetSdrUndoFactory( new sd::UndoFactory );
     UpdateTablePointers();
     SetStyleFamily(5);       //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
 }
@@ -234,16 +236,16 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode),
-    pPrinter(NULL),
-    pViewShell(NULL),
-    pDoc(NULL),
-    pUndoManager(NULL),
-    pFontList(NULL),
-    pFormatClipboard(new SdFormatClipboard()),
-    pProgress(NULL),
-    bSdDataObj(bDataObject),
-    bOwnPrinter(FALSE),
-    eDocType(eDocumentType),
+    mpFormatClipboard(new SdFormatClipboard()),
+    mpDoc(NULL),
+    mpUndoManager(NULL),
+    mpPrinter(NULL),
+    mpViewShell(NULL),
+    mpFontList(NULL),
+    meDocType(eDocumentType),
+    mpFilterSIDs(0),
+    mbSdDataObj(bDataObject),
+    mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
     Construct();
@@ -259,16 +261,16 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode),
-    pPrinter(NULL),
-    pViewShell(NULL),
-    pDoc(pDoc),
-    pUndoManager(NULL),
-    pFontList(NULL),
-    pFormatClipboard(new SdFormatClipboard()),
-    pProgress(NULL),
-    bSdDataObj(bDataObject),
-    bOwnPrinter(FALSE),
-    eDocType(eDocumentType),
+    mpFormatClipboard(new SdFormatClipboard()),
+    mpDoc(pDoc),
+    mpUndoManager(NULL),
+    mpPrinter(NULL),
+    mpViewShell(NULL),
+    mpFontList(NULL),
+    meDocType(eDocumentType),
+    mpFilterSIDs(0),
+    mbSdDataObj(bDataObject),
+    mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
     Construct();
@@ -288,27 +290,28 @@ DrawDocShell::~DrawDocShell()
     // may be usefull in other places as well.
     Broadcast(SfxSimpleHint(SFX_HINT_DYING));
 
-    bInDestruction = TRUE;
+    mbInDestruction = TRUE;
 
     SetDocShellFunction(0);
 
-    delete pFontList;
+    delete mpFontList;
 
-    if( pDoc )
-        pDoc->SetSdrUndoManager( 0 );
-    delete pUndoManager;
+    if( mpDoc )
+        mpDoc->SetSdrUndoManager( 0 );
+    delete mpUndoManager;
 
-    if(pFormatClipboard)
-        delete pFormatClipboard;
+    if(mpFormatClipboard)
+        delete mpFormatClipboard;
 
-    if (bOwnPrinter)
-        delete pPrinter;
+    if (mbOwnPrinter)
+        delete mpPrinter;
 
-    delete pDoc;
+    if( mbOwnDocument )
+        delete mpDoc;
 
     // damit der Navigator das Verschwinden des Dokuments mitbekommt
     SfxBoolItem     aItem(SID_NAVIGATOR_INIT, TRUE);
-    SfxViewFrame*   pFrame = pViewShell ? pViewShell->GetFrame() : GetFrame();
+    SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 
     if( !pFrame )
         pFrame = SfxViewFrame::GetFirst( this );
@@ -347,42 +350,6 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             case SID_CLOSEDOC:
             {
                 BOOL bDisabled = FALSE;
-/* with new slide show, closing document should always be possible
-                if (pViewShell && pViewShell->GetSlideShow() &&
-                    pViewShell->GetSlideShow()->IsInputLocked())
-                {
-                    // Es laeuft ein Effekt in der Slideshow
-                    bDisabled = TRUE;
-                }
-                else if (pViewShell && pViewShell->GetView() && pViewShell->GetView()->ISA(DrawView) &&
-                         static_cast<DrawView*>(pViewShell->GetView())->GetSlideShow() &&
-                    static_cast<DrawView*>(pViewShell->GetView())->GetSlideShow()->IsInputLocked())
-                {
-                    // Es laeuft ein Effekt auf dem Zeichentisch
-                    bDisabled = TRUE;
-                }
-                else
-                {
-                    SfxViewFrame* pFrame = pViewShell ? pViewShell->GetFrame() : GetFrame();
-
-                    if( !pFrame )
-                        pFrame = SfxViewFrame::GetFirst( this );
-                    DBG_ASSERT( pFrame, "kein ViewFrame" );
-
-                    SfxChildWindow* pPreviewChildWindow = pFrame->GetChildWindow(PreviewChildWindow::GetChildWindowId());
-                    PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
-                        pPreviewChildWindow
-                        ? pPreviewChildWindow->GetWindow()
-                        : NULL);
-                    FuSlideShow* pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
-
-                    if (pShow && pShow->IsInputLocked())
-                    {
-                        // Es laeuft ein Effekt in der Preview
-                        bDisabled = TRUE;
-                    }
-                }
-*/
                 if (bDisabled)
                 {
                     rSet.DisableItem(SID_CLOSEDOC);
@@ -450,7 +417,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
     if( !bActive )
     {
         FrameView* pFrameView = NULL;
-        List* pFrameViewList = pDoc->GetFrameViewList();
+        List* pFrameViewList = mpDoc->GetFrameViewList();
 
         DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
         if( pFrameViewList )
@@ -480,7 +447,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
                 if ( pViewSh && pViewSh->GetFrameView() )
                 {
                     pViewSh->WriteFrameViewData();
-                    pFrameViewList->Insert( new FrameView( pDoc, pViewSh->GetFrameView() ) );
+                    pFrameViewList->Insert( new FrameView( mpDoc, pViewSh->GetFrameView() ) );
                 }
 
                 pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0, false);
@@ -492,8 +459,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
 
     if( bActive )
     {
-        FrameView* pFrameView = NULL;
-        List* pFrameViewList = pDoc->GetFrameViewList();
+        List* pFrameViewList = mpDoc->GetFrameViewList();
 
         DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
         if( pFrameViewList )
@@ -531,7 +497,7 @@ void DrawDocShell::Activate( BOOL bMDI)
     if (bMDI)
     {
         ApplySlotFilter();
-        pDoc->StartOnlineSpelling();
+        mpDoc->StartOnlineSpelling();
     }
 }
 
@@ -553,7 +519,7 @@ void DrawDocShell::Deactivate( BOOL )
 
 SfxUndoManager* DrawDocShell::GetUndoManager()
 {
-    return pUndoManager;
+    return mpUndoManager;
 }
 
 
@@ -566,12 +532,12 @@ SfxUndoManager* DrawDocShell::GetUndoManager()
 
 void DrawDocShell::UpdateTablePointers()
 {
-    PutItem( SvxColorTableItem( pDoc->GetColorTable() ) );
-    PutItem( SvxGradientListItem( pDoc->GetGradientList() ) );
-    PutItem( SvxHatchListItem( pDoc->GetHatchList() ) );
-    PutItem( SvxBitmapListItem( pDoc->GetBitmapList() ) );
-    PutItem( SvxDashListItem( pDoc->GetDashList() ) );
-    PutItem( SvxLineEndListItem( pDoc->GetLineEndList() ) );
+    PutItem( SvxColorTableItem( mpDoc->GetColorTable() ) );
+    PutItem( SvxGradientListItem( mpDoc->GetGradientList() ) );
+    PutItem( SvxHatchListItem( mpDoc->GetHatchList() ) );
+    PutItem( SvxBitmapListItem( mpDoc->GetBitmapList() ) );
+    PutItem( SvxDashListItem( mpDoc->GetDashList() ) );
+    PutItem( SvxLineEndListItem( mpDoc->GetLineEndList() ) );
 
     UpdateFontList();
 }
@@ -609,8 +575,8 @@ void DrawDocShell::ApplySlotFilter() const
         {
             SfxDispatcher* pDispatcher = pTestViewShell->GetViewFrame()->GetDispatcher();
 
-            if( pFilterSIDs )
-                pDispatcher->SetSlotFilter( bFilterEnable, nFilterCount, pFilterSIDs );
+            if( mpFilterSIDs )
+                pDispatcher->SetSlotFilter( mbFilterEnable, mnFilterCount, mpFilterSIDs );
             else
                 pDispatcher->SetSlotFilter();
 
@@ -629,8 +595,8 @@ void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 
     // #100237# change model state, too
     // #103182# only set the changed state if modification is enabled
-    if( IsEnableSetModified() && pDoc )
-        pDoc->NbcSetChanged( bSet );
+    if( IsEnableSetModified() && mpDoc )
+        mpDoc->NbcSetChanged( bSet );
 
     Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
 }
@@ -670,7 +636,7 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
         pObj = GetViewShell()->GetView()->GetTextEditObject();
     }
 
-    pDoc->ImpOnlineSpellCallback(pInfo, pObj, pOutl);
+    mpDoc->ImpOnlineSpellCallback(pInfo, pObj, pOutl);
     return(0);
 }
 #endif // !SVX_LIGHT
