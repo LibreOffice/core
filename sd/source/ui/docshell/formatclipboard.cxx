@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:45:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ bool SdFormatClipboard::CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectI
         case OBJ_NONE:
         case OBJ_GRUP:
             return false;
-            break;
         case OBJ_LINE:
         case OBJ_RECT:
         case OBJ_CIRC:
@@ -101,33 +100,26 @@ bool SdFormatClipboard::CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectI
         case OBJ_TEXTEXT:
         case OBJ_TITLETEXT:
             return true;
-            break;
         case OBJ_OUTLINETEXT:
         case OBJ_GRAF:
         case OBJ_OLE2:
         case OBJ_EDGE:
         case OBJ_CAPTION:
             return false;
-            break;
         case OBJ_PATHPOLY:
         case OBJ_PATHPLIN:
             return true;
-            break;
         case OBJ_PAGE:
         case OBJ_MEASURE:
         case OBJ_DUMMY:
         case OBJ_FRAME:
         case OBJ_UNO:
             return false;
-            break;
         case OBJ_CUSTOMSHAPE:
             return true;
-            break;
         default:
             return false;
-            break;
     }
-    return true;
 }
 
 bool SdFormatClipboard::HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const
@@ -156,8 +148,7 @@ void SdFormatClipboard::Copy( ::sd::View& rDrawView, bool bPersistentCopy )
     }
 }
 
-void SdFormatClipboard::Paste( ::sd::View& rDrawView
-                              , bool bNoCharacterFormats, bool bNoParagraphFormats )
+void SdFormatClipboard::Paste( ::sd::View& rDrawView, bool, bool )
 {
     if( !rDrawView.AreObjectsMarked() )
     {
@@ -190,7 +181,6 @@ void SdFormatClipboard::Paste( ::sd::View& rDrawView
     {
         //modify source itemset
         {
-            BOOL bOnlyHardAttr = FALSE;
             SfxItemSet aTargetSet( pObj->GetStyleSheet()->GetItemSet() );
 
             USHORT nWhich=0;
