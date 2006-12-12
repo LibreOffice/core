@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:25:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNam
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+                const uno::Reference< lang::XMultiServiceFactory > & )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -106,7 +106,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServi
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+                const uno::Reference< lang::XMultiServiceFactory > &  )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
