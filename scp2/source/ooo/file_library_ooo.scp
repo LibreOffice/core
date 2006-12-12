@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.216 $
+ *  $Revision: 1.217 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:07:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1411,7 +1411,7 @@ End
 
 #ifdef WNT
 
-#if defined(M1310)
+#if defined(M1310) || (defined(M1400) && (!defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)))
 
 File gid_File_Lib_Msvcr71
     BIN_FILE_BODY;
@@ -1430,7 +1430,7 @@ End
 
 #ifdef WNT
 
-#if defined(M1310)
+#if defined(M1310) || (defined(M1400) && (!defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)))
 
 File gid_File_Lib_Msvcp71
     BIN_FILE_BODY;
