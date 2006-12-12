@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocpres.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:25:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createIn
     return xRef;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const uno::Sequence< uno::Any >& aArguments )
+uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const uno::Sequence< uno::Any >& )
     throw(uno::Exception, uno::RuntimeException)
 {
     return createInstance();
@@ -353,7 +353,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     OGuard aGuard( Application::GetSolarMutex() );
 
     // get the documents custom show list
-    List* pList;
+    List* pList = 0;
     if(mrModel.GetDoc())
         pList = mrModel.GetDoc()->GetCustomShowList(sal_True);
 
