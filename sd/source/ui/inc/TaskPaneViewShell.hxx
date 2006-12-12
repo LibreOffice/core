@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:27:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ class TaskPaneViewShell
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDTASKPANEVIEWSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDTASKPANEVIEWSHELL)
 
     /** List of top level panels that can be shown in the task pane.
     */
@@ -109,6 +109,7 @@ public:
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
     virtual void KeyInput (const KeyEvent& rEvent);
+    using sd::ViewShell::KeyInput;
 
     virtual SdPage* GetActualPage (void);
     virtual SdPage* getCurrentPage (void) const;
