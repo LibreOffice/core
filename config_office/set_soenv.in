@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.127 $
-# Date:        $Date: 2006-12-01 14:53:16 $
+# Version:     $Revision: 1.128 $
+# Date:        $Date: 2006-12-12 16:05:54 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1788,9 +1788,9 @@ ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
 ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
-#ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
-#ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
-#ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
+ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
+ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
+ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
 ToFile( "SYSTEM_JPEG",       "@SYSTEM_JPEG@",      "e" );
 ToFile( "SYSTEM_FREETYPE",   "@SYSTEM_FREETYPE@",  "e" );
 ToFile( "FREETYPE_CFLAGS",   "@FREETYPE_CFLAGS@",  "e" );
