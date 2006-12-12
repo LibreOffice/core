@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:40:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,7 @@
 
 #include <breakiteratorImpl.hxx>
 
-// External unicode includes (from icu) cause warning C4668 on Windows.
-// We want to minimize the patches to external headers, so the warnings are
-// disabled here instead of in the header file itself.
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <unicode/brkiter.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "warnings_guard_unicode_brkiter.h"
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -101,7 +92,7 @@ protected:
     Boundary result; // for word break iterator
 
     struct {
-        rtl::OUString aText;
+        UnicodeString aICUText;
         icu::BreakIterator *aBreakIterator;
     } character, word, sentence, line, *icuBI;
     com::sun::star::lang::Locale aLocale;
