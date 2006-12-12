@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undopage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,164 +87,64 @@ SdPageFormatUndoAction::~SdPageFormatUndoAction()
 
 void SdPageFormatUndoAction::Undo()
 {
-    Rectangle aOldBorderRect(nOldLeft, nOldUpper, nOldRight, nOldLower);
-    pPage->ScaleObjects(aOldSize, aOldBorderRect, bNewScale);
-    pPage->SetSize(aOldSize);
-    pPage->SetLftBorder(nOldLeft);
-    pPage->SetRgtBorder(nOldRight);
-    pPage->SetUppBorder(nOldUpper);
-    pPage->SetLwrBorder(nOldLower);
-    pPage->SetOrientation(eOldOrientation);
-    pPage->SetPaperBin( nOldPaperBin );
+    Rectangle aOldBorderRect(mnOldLeft, mnOldUpper, mnOldRight, mnOldLower);
+    mpPage->ScaleObjects(maOldSize, aOldBorderRect, mbNewScale);
+    mpPage->SetSize(maOldSize);
+    mpPage->SetLftBorder(mnOldLeft);
+    mpPage->SetRgtBorder(mnOldRight);
+    mpPage->SetUppBorder(mnOldUpper);
+    mpPage->SetLwrBorder(mnOldLower);
+    mpPage->SetOrientation(meOldOrientation);
+    mpPage->SetPaperBin( mnOldPaperBin );
 
-    pPage->SetBackgroundFullSize( bOldFullSize );
-    if( !pPage->IsMasterPage() )
-        ( (SdPage&) pPage->TRG_GetMasterPage() ).SetBackgroundFullSize( bOldFullSize );
+    mpPage->SetBackgroundFullSize( mbOldFullSize );
+    if( !mpPage->IsMasterPage() )
+        ( (SdPage&) mpPage->TRG_GetMasterPage() ).SetBackgroundFullSize( mbOldFullSize );
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-
-    /*  if ( pViewShell->ISA(::sd::DrawViewShell))
-    {
-        ::sd::DrawViewShell* pDrViewShell =
-              static_cast< ::sd::DrawViewShell*>(pViewShell);
-        long nWidth = pPage->GetSize().Width();
-        long nHeight = pPage->GetSize().Height();
-
-        Point aPageOrg = Point(nWidth, nHeight / 2);
-        Size aViewSize = Size(nWidth * 3, nHeight * 2);
-
-        pDrViewShell->InitWindows(aPageOrg, aViewSize, Point(-1, -1), TRUE);
-        pDrViewShell->GetView()->SetWorkArea(Rectangle(Point(0,0) - aPageOrg, aViewSize));
-
-        pDrViewShell->UpdateScrollBars();
-        pDrViewShell->GetView()->GetPageViewByIndex(0)->SetPageOrigin(Point(0,0));
-        pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-    }
-    */
 }
-
-/*************************************************************************
-|*
-|* Redo()
-|*
-\************************************************************************/
 
 void SdPageFormatUndoAction::Redo()
 {
-    Rectangle aNewBorderRect(nNewLeft, nNewUpper, nNewRight, nNewLower);
-    pPage->ScaleObjects(aNewSize, aNewBorderRect, bNewScale);
-    pPage->SetSize(aNewSize);
-    pPage->SetLftBorder(nNewLeft);
-    pPage->SetRgtBorder(nNewRight);
-    pPage->SetUppBorder(nNewUpper);
-    pPage->SetLwrBorder(nNewLower);
-    pPage->SetOrientation(eNewOrientation);
-    pPage->SetPaperBin( nNewPaperBin );
+    Rectangle aNewBorderRect(mnNewLeft, mnNewUpper, mnNewRight, mnNewLower);
+    mpPage->ScaleObjects(maNewSize, aNewBorderRect, mbNewScale);
+    mpPage->SetSize(maNewSize);
+    mpPage->SetLftBorder(mnNewLeft);
+    mpPage->SetRgtBorder(mnNewRight);
+    mpPage->SetUppBorder(mnNewUpper);
+    mpPage->SetLwrBorder(mnNewLower);
+    mpPage->SetOrientation(meNewOrientation);
+    mpPage->SetPaperBin( mnNewPaperBin );
 
-    pPage->SetBackgroundFullSize( bNewFullSize );
-    if( !pPage->IsMasterPage() )
-        ( (SdPage&) pPage->TRG_GetMasterPage() ).SetBackgroundFullSize( bNewFullSize );
+    mpPage->SetBackgroundFullSize( mbNewFullSize );
+    if( !mpPage->IsMasterPage() )
+        ( (SdPage&) mpPage->TRG_GetMasterPage() ).SetBackgroundFullSize( mbNewFullSize );
 
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-
-    /*  if ( pViewShell->ISA(::sd::DrawViewShell))
-    {
-        ::sd::DrawViewShell* pDrViewShell =
-              static_cast< ::sd::DrawViewShell*>(pViewShell);
-        long nWidth = pPage->GetSize().Width();
-        long nHeight = pPage->GetSize().Height();
-
-        Point aPageOrg = Point(nWidth, nHeight / 2);
-        Size aViewSize = Size(nWidth * 3, nHeight * 2);
-
-        pDrViewShell->InitWindows(aPageOrg, aViewSize, Point(-1, -1), TRUE);
-        pDrViewShell->GetView()->SetWorkArea(Rectangle(Point(0,0) - aPageOrg, aViewSize));
-
-        pDrViewShell->UpdateScrollBars();
-        pDrViewShell->GetView()->GetPageViewByIndex(0)->SetPageOrigin(Point(0,0));
-        pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-    }
-    */
 }
-
-/*************************************************************************
-|*
-|* Repeat()
-|*
-\************************************************************************/
-
-void SdPageFormatUndoAction::Repeat()
-{
-    Redo();
-}
-
-/*************************************************************************
-|*
-|* LR-Destruktor
-|*
-\************************************************************************/
 
 SdPageLRUndoAction::~SdPageLRUndoAction()
 {
 }
 
-/*************************************************************************
-|*
-|* LR-Undo()
-|*
-\************************************************************************/
-
 void SdPageLRUndoAction::Undo()
 {
-    pPage->SetLftBorder(nOldLeft);
-    pPage->SetRgtBorder(nOldRight);
+    mpPage->SetLftBorder(mnOldLeft);
+    mpPage->SetRgtBorder(mnOldRight);
 }
-
-/*************************************************************************
-|*
-|* LR-Redo()
-|*
-\************************************************************************/
 
 void SdPageLRUndoAction::Redo()
 {
-    pPage->SetLftBorder(nNewLeft);
-    pPage->SetRgtBorder(nNewRight);
+    mpPage->SetLftBorder(mnNewLeft);
+    mpPage->SetRgtBorder(mnNewRight);
 }
-
-/*************************************************************************
-|*
-|* LR-Repeat()
-|*
-\************************************************************************/
-
-void SdPageLRUndoAction::Repeat()
-{
-    Redo();
-}
-
-/*************************************************************************
-|*
-|* UL-Destruktor
-|*
-\************************************************************************/
 
 SdPageULUndoAction::~SdPageULUndoAction()
 {
 }
 
-/*************************************************************************
-|*
-|* UL-Undo()
-|*
-\************************************************************************/
-
 void SdPageULUndoAction::Undo()
 {
-    pPage->SetUppBorder(nOldUpper);
-    pPage->SetLwrBorder(nOldLower);
+    mpPage->SetUppBorder(mnOldUpper);
+    mpPage->SetLwrBorder(mnOldLower);
 }
 
 /*************************************************************************
@@ -255,20 +155,7 @@ void SdPageULUndoAction::Undo()
 
 void SdPageULUndoAction::Redo()
 {
-    pPage->SetUppBorder(nNewUpper);
-    pPage->SetLwrBorder(nNewLower);
+    mpPage->SetUppBorder(mnNewUpper);
+    mpPage->SetLwrBorder(mnNewLower);
 }
-
-/*************************************************************************
-|*
-|* UL-Repeat()
-|*
-\************************************************************************/
-
-void SdPageULUndoAction::Repeat()
-{
-    Redo();
-}
-
-
 
