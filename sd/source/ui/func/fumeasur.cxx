@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumeasur.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:51:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:19:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 
 #include "fumeasur.hxx"
 
-//CHINA001 #include <svx/measure.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -54,8 +53,8 @@
 #include "ViewShell.hxx"
 #endif
 #include "drawdoc.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 namespace sd {
 
@@ -86,39 +85,25 @@ FunctionReference FuMeasureDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin, 
 
 void FuMeasureDlg::DoExecute( SfxRequest& rReq )
 {
-    SfxItemSet aNewAttr( pDoc->GetPool() );
-    pView->GetAttributes( aNewAttr );
+    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aNewAttr );
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    ::std::auto_ptr<AbstractSfxSingleTabDialog> pDlg (NULL);
     if( !pArgs )
     {
-        //CHINA001 SvxMeasureDialog* pDlg = new SvxMeasureDialog( NULL, aNewAttr, pView );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
-        pDlg.reset (pFact->CreateSfxSingleTabDialog( NULL,
-                aNewAttr,
-                pView,
-                ResId(RID_SVXPAGE_MEASURE)));
-        DBG_ASSERT(pDlg.get()!=NULL, "Dialogdiet fail!");//CHINA001
+        ::std::auto_ptr<AbstractSfxSingleTabDialog> pDlg( pFact ? pFact->CreateSfxSingleTabDialog( NULL, aNewAttr, mpView, ResId(RID_SVXPAGE_MEASURE)) : 0 );
 
-        USHORT nResult = pDlg->Execute();
-
-        switch( nResult )
+        if( pDlg.get() && (pDlg->Execute() == RET_OK) )
         {
-            case RET_OK:
-            {
-                pArgs = pDlg->GetOutputItemSet();
-                rReq.Done( *pArgs );
-            }
-            break;
-
-            default:
-                return; // Abbruch
+            rReq.Done( *pDlg->GetOutputItemSet() );
+            pArgs = rReq.GetArgs();
         }
     }
-    pView->SetAttributes( *pArgs );
+
+    if( pArgs )
+        mpView->SetAttributes( *pArgs );
 }
 
 
