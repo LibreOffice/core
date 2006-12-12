@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:46:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ ShowView::ShowView (
     ::Window* pWin)
     : FmFormView(pDoc, pOut),
       pDrDoc(pDoc),
-      pViewSh(pViewShell),
+      mpViewSh(pViewShell),
       pWindowForPlugIns(pWin),
       nAllowInvalidateSmph(0),
       bAllowMasterPageCaching(TRUE)
@@ -165,36 +165,8 @@ void ShowView::InvalidateOneWin (::Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void ShowView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void ShowView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT, ::sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
-// #110094#-7
-//  BOOL bMPCache = FALSE;
-
-//  if (bAllowMasterPageCaching && pViewSh &&
-//      pViewSh == (ViewShell*) SfxViewShell::Current() &&
-//      pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
-//      pOutDev->GetOutDevType() != OUTDEV_PRINTER)
-//  {
-//      // Aktive ViewShell: Caching einschalten
-//      bMPCache = TRUE;
-//  }
-
-//  if (bMPCache)
-//  {
-//      if (!IsMasterPagePaintCaching())
-//      {
-//          SetMasterPagePaintCaching(TRUE);
-//      }
-//  }
-//  else
-//  {
-//      if (IsMasterPagePaintCaching())
-//      {
-//          ReleaseMasterPagePaintCache();
-//          SetMasterPagePaintCaching(FALSE);
-//      }
-//  }
-
     FmFormView::CompleteRedraw(pOutDev, rReg, SDRPAINTMODE_ANILIKEPRN, pRedirector);
 }
 
@@ -204,7 +176,7 @@ void ShowView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::
 |*
 \************************************************************************/
 
-void ShowView::DoConnect(SdrOle2Obj* pOleObj)
+void ShowView::DoConnect(SdrOle2Obj* )
 {
     // connected wird jetzt in FuSlideShow::ShowPlugIns()
 }
