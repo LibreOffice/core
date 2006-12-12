@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:37:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 #include <tools/debug.hxx>
 #include <osl/file.hxx>
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <svtools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -85,13 +85,13 @@ using namespace ::com::sun::star::frame;
 // - SdFilter -
 // ------------
 
-SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
-    mrMedium( rMedium ),
-    mrDocShell( rDocShell ),
-    mrDocument( *rDocShell.GetDoc() ),
-    mxModel( rDocShell.GetModel() ),
-    mbIsDraw( rDocShell.GetDocumentType() == DOCUMENT_TYPE_DRAW ),
-    mbShowProgress( bShowProgress )
+SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress )
+:   mxModel( rDocShell.GetModel() )
+,   mrMedium( rMedium )
+,   mrDocShell( rDocShell )
+,   mrDocument( *rDocShell.GetDoc() )
+,   mbIsDraw( rDocShell.GetDocumentType() == DOCUMENT_TYPE_DRAW )
+,   mbShowProgress( bShowProgress )
 {
 }
 
@@ -114,11 +114,11 @@ SdFilter::~SdFilter()
 
 // -----------------------------------------------------------------------------
 
-::vos::OModule* SdFilter::OpenLibrary( const ::rtl::OUString& rLibraryName ) const
+::osl::Module* SdFilter::OpenLibrary( const ::rtl::OUString& rLibraryName ) const
 {
     ::rtl::OUString aDest;
     ::rtl::OUString aNormalizedPath;
-    ::vos::OModule* pRet;
+    ::osl::Module*  pRet;
 
     if ( ::osl::FileBase::getFileURLFromSystemPath( SvtPathOptions().GetModulePath(), aDest ) != ::osl::FileBase::E_None )
         aDest = SvtPathOptions().GetModulePath();
@@ -126,7 +126,7 @@ SdFilter::~SdFilter()
     aDest += ::rtl::OUString( ImplGetFullLibraryName( rLibraryName ) );
     ::osl::FileBase::getSystemPathFromFileURL( aDest, aNormalizedPath );
 
-    if( !( pRet = new ::vos::OModule( aNormalizedPath ) )->isLoaded() )
+    if( !( pRet = new ::osl::Module( aNormalizedPath ) )->is() )
         delete pRet, pRet = NULL;
 
     return pRet;
