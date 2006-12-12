@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:57:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@ namespace sd {
 
 void FuText::SetSpellOptions( ULONG& rCntrl )
 {
-    BOOL bHideSpell = pDoc->GetHideSpell();
-    BOOL bOnlineSpell = pDoc->GetOnlineSpell();
+    BOOL bHideSpell = mpDoc->GetHideSpell();
+    BOOL bOnlineSpell = mpDoc->GetOnlineSpell();
 
     if( bHideSpell )
         rCntrl |= EE_CNTRL_NOREDLINES;
