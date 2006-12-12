@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,9 @@ namespace sd {
 
 FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
   : SdrView(pDrawDoc, (OutputDevice*) NULL),
-  nRefCount(0),
-  nPresViewShellId(SID_VIEWSHELL0),
-  nSlotId(SID_OBJECT_SELECT)
+  mnRefCount(0),
+  mnPresViewShellId(SID_VIEWSHELL0),
+  mnSlotId(SID_OBJECT_SELECT)
 {
     EndListening(*pDrawDoc);
 
@@ -144,18 +144,19 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                     switch (pBase->GetPaneManager().GetViewShellType(
                         PaneManager::PT_CENTER))
                     {
-                        case ViewShell::ST_IMPRESS:
-                        case ViewShell::ST_NOTES:
-                        case ViewShell::ST_HANDOUT:
-                            nPresViewShellId = SID_VIEWSHELL0;
+                        default:
+//                        case ViewShell::ST_IMPRESS:
+//                        case ViewShell::ST_NOTES:
+//                        case ViewShell::ST_HANDOUT:
+                            mnPresViewShellId = SID_VIEWSHELL0;
                             break;
 
                         case ViewShell::ST_SLIDE:
-                            nPresViewShellId = SID_VIEWSHELL1;
+                            mnPresViewShellId = SID_VIEWSHELL1;
                             break;
 
                         case ViewShell::ST_OUTLINE:
-                            nPresViewShellId = SID_VIEWSHELL2;
+                            mnPresViewShellId = SID_VIEWSHELL2;
                             break;
                     }
                 }
@@ -213,37 +214,37 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetSolidMarkHdl( pFrameView->IsSolidMarkHdl() );
         SetSolidDragging( pFrameView->IsSolidDragging() );
 
-        aVisibleLayers = pFrameView->GetVisibleLayers();
-        aPrintableLayers = pFrameView->GetPrintableLayers();
-        aLockedLayers = pFrameView->GetLockedLayers();
-        aStandardHelpLines = pFrameView->GetStandardHelpLines();
-        aNotesHelpLines = pFrameView->GetNotesHelpLines();
-        aHandoutHelpLines = pFrameView->GetHandoutHelpLines();
+        maVisibleLayers = pFrameView->GetVisibleLayers();
+        maPrintableLayers = pFrameView->GetPrintableLayers();
+        maLockedLayers = pFrameView->GetLockedLayers();
+        maStandardHelpLines = pFrameView->GetStandardHelpLines();
+        maNotesHelpLines = pFrameView->GetNotesHelpLines();
+        maHandoutHelpLines = pFrameView->GetHandoutHelpLines();
         SetActiveLayer( pFrameView->GetActiveLayer() );
-        bNoColors = pFrameView->IsNoColors();
-        bNoAttribs = pFrameView->IsNoAttribs() ;
-        aVisArea = pFrameView->GetVisArea();
-        ePageKind = pFrameView->GetPageKind();
-        ePageKindOnLoad = pFrameView->GetPageKindOnLoad();
-        nSelectedPage = pFrameView->GetSelectedPage();
-        nSelectedPageOnLoad = pFrameView->GetSelectedPageOnLoad();
-        eStandardEditMode = pFrameView->GetViewShEditMode(PK_STANDARD);
-        eNotesEditMode = pFrameView->GetViewShEditMode(PK_NOTES);
-        eHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
+        mbNoColors = pFrameView->IsNoColors();
+        mbNoAttribs = pFrameView->IsNoAttribs() ;
+        maVisArea = pFrameView->GetVisArea();
+        mePageKind = pFrameView->GetPageKind();
+        mePageKindOnLoad = pFrameView->GetPageKindOnLoad();
+        mnSelectedPage = pFrameView->GetSelectedPage();
+        mnSelectedPageOnLoad = pFrameView->GetSelectedPageOnLoad();
+        meStandardEditMode = pFrameView->GetViewShEditMode(PK_STANDARD);
+        meNotesEditMode = pFrameView->GetViewShEditMode(PK_NOTES);
+        meHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
         SetViewShEditModeOnLoad(pFrameView->GetViewShEditModeOnLoad());
-        bLayerMode = pFrameView->IsLayerMode();
-        bQuickEdit = pFrameView->IsQuickEdit();
+        mbLayerMode = pFrameView->IsLayerMode();
+        mbQuickEdit = pFrameView->IsQuickEdit();
 
         // #i26631#
         SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
 
-        bDragWithCopy = pFrameView->IsDragWithCopy();
-        bBigHandles          = pFrameView->IsBigHandles();
-        bDoubleClickTextEdit = pFrameView->IsDoubleClickTextEdit();
-        bClickChangeRotation = pFrameView->IsClickChangeRotation();
-        nSlidesPerRow = pFrameView->GetSlidesPerRow();
-        nDrawMode = pFrameView->GetDrawMode();
-        nTabCtrlPercent = pFrameView->GetTabCtrlPercent();
+        SetDragWithCopy( pFrameView->IsDragWithCopy() );
+        mbBigHandles         = pFrameView->IsBigHandles();
+        mbDoubleClickTextEdit = pFrameView->IsDoubleClickTextEdit();
+        mbClickChangeRotation = pFrameView->IsClickChangeRotation();
+        mnSlidesPerRow = pFrameView->GetSlidesPerRow();
+        mnDrawMode = pFrameView->GetDrawMode();
+        mnTabCtrlPercent = pFrameView->GetTabCtrlPercent();
         SetPreviousViewShellType (pFrameView->GetPreviousViewShellType());
         SetViewShellTypeOnLoad (pFrameView->GetViewShellTypeOnLoad());
     }
@@ -252,30 +253,34 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         /**********************************************************************
         * FrameView mit den Applikationsdaten initialisieren
         **********************************************************************/
-        aVisibleLayers.SetAll();
-        aPrintableLayers.SetAll();
+        maVisibleLayers.SetAll();
+        maPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
         SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
         SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
-        bNoColors = TRUE;
-        bNoAttribs = FALSE;
-        aVisArea = Rectangle( Point(), Size(0, 0) );
-        ePageKind = PK_STANDARD;
-        ePageKindOnLoad = PK_STANDARD;
-        nSelectedPage = 0;
-        nSelectedPageOnLoad = 0;
-        eStandardEditMode = EM_PAGE;
-        eNotesEditMode = EM_PAGE;
-        eHandoutEditMode = EM_MASTERPAGE;
+        mbNoColors = TRUE;
+        mbNoAttribs = FALSE;
+        maVisArea = Rectangle( Point(), Size(0, 0) );
+        mePageKind = PK_STANDARD;
+        mePageKindOnLoad = PK_STANDARD;
+        mnSelectedPage = 0;
+        mnSelectedPageOnLoad = 0;
+        meStandardEditMode = EM_PAGE;
+        meNotesEditMode = EM_PAGE;
+        meHandoutEditMode = EM_MASTERPAGE;
         SetViewShEditModeOnLoad(EM_PAGE);
-        bLayerMode = FALSE;
+        mbLayerMode = FALSE;
         SetEliminatePolyPoints(FALSE);
+        mbBigHandles = FALSE;
+        mbDoubleClickTextEdit = FALSE;
+        mbClickChangeRotation = FALSE;
+        mnSlidesPerRow = 4;
 
         {
             bool bUseContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-            nDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
+            mnDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
         }
-        nTabCtrlPercent = 0.0;
+        mnTabCtrlPercent = 0.0;
         SetPreviousViewShellType (ViewShell::ST_NONE);
         SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
 
@@ -287,10 +292,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         }
 
         SfxObjectShell* pObjShell = pDrawDoc->GetObjectShell();
-        sal_Bool bReadOnly = sal_False;
-        if( pObjShell )
-            bReadOnly = pObjShell->IsReadOnly();
-        if( bReadOnly )
+        if( pObjShell && pObjShell->IsReadOnly() )
             bInitDesignMode = sal_False;
         SetDesignMode( bInitDesignMode );
 
@@ -318,7 +320,7 @@ FrameView::~FrameView()
 
 void FrameView::Connect()
 {
-    nRefCount++;
+    mnRefCount++;
 }
 
 
@@ -330,12 +332,12 @@ void FrameView::Connect()
 
 void FrameView::Disconnect()
 {
-    if (nRefCount > 0)
+    if (mnRefCount > 0)
     {
-        nRefCount--;
+        mnRefCount--;
     }
 
-    if (nRefCount == 0)
+    if (mnRefCount == 0)
     {
         delete this;
     }
@@ -351,7 +353,7 @@ void FrameView::Update(SdOptions* pOptions)
 {
     if (pOptions)
     {
-        bRuler = pOptions->IsRulerVisible();
+        mbRuler = pOptions->IsRulerVisible();
         SetGridVisible( pOptions->IsGridVisible() );
         SetSnapAngle( pOptions->GetAngle() );
         SetGridSnap( pOptions->IsUseGridSnap() );
@@ -411,15 +413,15 @@ void FrameView::SetViewShEditMode(EditMode eMode, PageKind eKind)
 {
     if (eKind == PK_STANDARD)
     {
-        eStandardEditMode = eMode;
+        meStandardEditMode = eMode;
     }
     else if (eKind == PK_NOTES)
     {
-        eNotesEditMode = eMode;
+        meNotesEditMode = eMode;
     }
     else if (eKind == PK_HANDOUT)
     {
-        eHandoutEditMode = eMode;
+        meHandoutEditMode = eMode;
     }
 }
 
@@ -436,15 +438,15 @@ EditMode FrameView::GetViewShEditMode(PageKind eKind)
 
     if (eKind == PK_STANDARD)
     {
-        eMode = eStandardEditMode;
+        eMode = meStandardEditMode;
     }
     else if (eKind == PK_NOTES)
     {
-        eMode = eNotesEditMode;
+        eMode = meNotesEditMode;
     }
     else if (eKind == PK_HANDOUT)
     {
-        eMode = eHandoutEditMode;
+        eMode = meHandoutEditMode;
     }
 
     return (eMode);
@@ -504,7 +506,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 }
 
 #define addValue( n, v ) push_back( std::pair< OUString, Any >( OUString( RTL_CONSTASCII_USTRINGPARAM( n ) ), v ) )
-void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rValues, sal_Bool bBrowse )
+void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rValues, sal_Bool )
 {
     std::vector< std::pair< OUString, Any > > aUserData;
 
@@ -695,7 +697,7 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
     }
 }
 
-void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool )
 {
     const sal_Int32 nLength = rSequence.getLength();
     if (nLength)
@@ -1158,9 +1160,9 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
 
         switch (GetPageKindOnLoad())
         {
-            case PK_STANDARD: SetViewShEditModeOnLoad(eStandardEditMode); break;
-            case PK_NOTES: SetViewShEditModeOnLoad(eNotesEditMode); break;
-            case PK_HANDOUT: SetViewShEditModeOnLoad(eHandoutEditMode); break;
+            case PK_STANDARD: SetViewShEditModeOnLoad(meStandardEditMode); break;
+            case PK_NOTES: SetViewShEditModeOnLoad(meNotesEditMode); break;
+            case PK_HANDOUT: SetViewShEditModeOnLoad(meHandoutEditMode); break;
             default: SetViewShEditModeOnLoad(EM_PAGE); break;
         }
 
@@ -1208,7 +1210,7 @@ ViewShell::ShellType FrameView::GetViewShellTypeOnLoad (void) const
 
 void FrameView::SetSelectedPage(USHORT nPage)
 {
-    nSelectedPage = nPage;
+    mnSelectedPage = nPage;
 }
 
 
@@ -1216,7 +1218,7 @@ void FrameView::SetSelectedPage(USHORT nPage)
 
 const USHORT FrameView::GetSelectedPage (void) const
 {
-    return nSelectedPage;
+    return mnSelectedPage;
 }
 
 } // end of namespace sd
