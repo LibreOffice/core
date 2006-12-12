@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageFileAccess.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:55:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@ package com.sun.star.sdbcx.comp.hsqldb;
 import org.hsqldb.lib.FileAccess;
 import com.sun.star.embed.XStorage;
 import com.sun.star.lib.util.NativeLibraryLoader;
+import org.hsqldb.lib.FileSystemRuntimeException;
+
 /**
  *
  * @author  oj93728
@@ -80,16 +82,24 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
         return new NativeOutputStreamHelper(key,streamName);
     }
 
-    public void removeElement(java.lang.String filename) throws java.util.NoSuchElementException, java.io.IOException {
-        if ( isStreamElement(key,filename) )
-            removeElement(key,filename);
+    public void removeElement(java.lang.String filename) throws java.util.NoSuchElementException {
+        try {
+            if ( isStreamElement(key,filename) )
+                removeElement(key,filename);
+        } catch (java.io.IOException e) {
+           throw new FileSystemRuntimeException( e, FileSystemRuntimeException.fileAccessRemoveElementFailed );
+       }
     }
 
-    public void renameElement(java.lang.String oldName, java.lang.String newName) throws java.util.NoSuchElementException, java.io.IOException {
-        if ( isStreamElement(key,oldName) ){
-            removeElement(key,newName);
-            renameElement(key,oldName, newName);
-        }
+    public void renameElement(java.lang.String oldName, java.lang.String newName) throws java.util.NoSuchElementException {
+        try {
+            if ( isStreamElement(key,oldName) ){
+                removeElement(key,newName);
+                renameElement(key,oldName, newName);
+            }
+       } catch (java.io.IOException e) {
+           throw new FileSystemRuntimeException( e, FileSystemRuntimeException.fileAccessRenameElementFailed );
+       }
     }
 
     public class FileSync implements FileAccess.FileSync
