@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WindowUpdater.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:34:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 
 
 
-void WindowUpdater::Notify (SfxBroadcaster& rBC, const SfxHint& rHint)
+void WindowUpdater::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint& rSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
     if (rSimpleHint.GetId() == SFX_HINT_CTL_SETTINGS_CHANGED)
