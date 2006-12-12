@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaybitmapex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:06:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayBitmapEx : public OverlayObjectWithBasePosition
+        class SVX_DLLPUBLIC OverlayBitmapEx : public OverlayObjectWithBasePosition
         {
         protected:
             // the Bitmap itself

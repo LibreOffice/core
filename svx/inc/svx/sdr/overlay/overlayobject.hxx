@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlayobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:08:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayObjectWithBasePosition : public OverlayObject
+        class SVX_DLLPUBLIC OverlayObjectWithBasePosition : public OverlayObject
         {
         protected:
             // base position in logical coordinates
