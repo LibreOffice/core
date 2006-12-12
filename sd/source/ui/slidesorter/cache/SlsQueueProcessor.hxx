@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:35:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:20:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@ class QueueProcessorBase
 {
 public:
     QueueProcessorBase (void);
+    virtual ~QueueProcessorBase();
+
     /** Start the processor.  This implementation is timer based and waits
         an defined amount of time that depends on the given argument before
         the next entry in the queue is processed.
@@ -89,7 +91,7 @@ protected:
 private:
     /// This time controls when to process the next element from the queue.
     Timer maTimer;
-    DECL_LINK(ProcessRequest, Timer*);
+    DECL_LINK(ProcessRequestHdl, Timer*);
 };
 
 
@@ -111,6 +113,7 @@ public:
         view::SlideSorterView& rView,
         Queue& rQueue,
         const ::boost::shared_ptr<BitmapCache>& rpCache);
+    virtual ~QueueProcessor();
 
     void Terminate (void);
 
@@ -160,7 +163,10 @@ template <class Queue, class RequestData, class BitmapFactory>
 {
 }
 
-
+template <class Queue, class RequestData, class BitmapFactory>
+QueueProcessor<Queue, RequestData, BitmapFactory>::~QueueProcessor()
+{
+}
 
 
 template <class Queue, class RequestData, class BitmapFactory>
@@ -277,7 +283,7 @@ template <class Queue, class RequestData, class BitmapFactory>
 
 
 template <class Queue, class RequestData, class BitmapFactory>
-    void QueueProcessor<Queue, RequestData, BitmapFactory>::RemoveRequest (RequestData& rRequest)
+    void QueueProcessor<Queue, RequestData, BitmapFactory>::RemoveRequest (RequestData& )
 {
     // See the method declaration above for an explanation why this makes sense.
     ::osl::MutexGuard aGuard (maMutex);
