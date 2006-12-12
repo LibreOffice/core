@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:55:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,11 +71,12 @@ public:
 
                     SdIMapInfo( const SdIMapInfo& rIMapInfo ) :
                         SdrObjUserData( SdUDInventor, SD_IMAPINFO_ID, 0 ),
+                        SfxListener(),
                         aImageMap( rIMapInfo.aImageMap ) {};
 
     virtual         ~SdIMapInfo() {};
 
-    virtual SdrObjUserData* Clone( SdrObject* pObj ) const { return new SdIMapInfo( *this ); }
+    virtual SdrObjUserData* Clone( SdrObject* ) const { return new SdIMapInfo( *this ); }
 
     void            SetImageMap( const ImageMap& rIMap ) { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const { return aImageMap; }
