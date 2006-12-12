@@ -1,0 +1,261 @@
+*** misc/icu/source/common/putil.c	Mon Jul 31 20:14:28 2006
+--- misc/build/icu/source/common/putil.c	Thu Aug 17 07:16:33 2006
+***************
+*** 48,54 ****
+  #endif
+  
+  /* Make sure things like readlink and such functions work. */
+! #ifndef _XOPEN_SOURCE_EXTENDED
+  #define _XOPEN_SOURCE_EXTENDED 1
+  #endif
+  
+--- 48,55 ----
+  #endif
+  
+  /* Make sure things like readlink and such functions work. */
+! /* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 */
+! #if !defined(_XOPEN_SOURCE_EXTENDED) && __STDC_VERSION__ < 199901L
+  #define _XOPEN_SOURCE_EXTENDED 1
+  #endif
+  
+*** misc/icu/source/config/mh-irix	Thu Mar 23 19:51:52 2006
+--- misc/build/icu/source/config/mh-irix	Thu Aug 17 07:16:33 2006
+***************
+*** 23,28 ****
+--- 23,31 ----
+  SHLIB.c=    $(CC) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+  SHLIB.cc=   $(CXX) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+  
++ # Environment variable to set a runtime search path
++ LDLIBRARYPATH_ENVVAR = LD_LIBRARYN32_PATH
++ 
+  ## Additional flags when building libraries with thread safety
+  THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
+  LIBCPPFLAGS =
+*** misc/icu/source/config/mh-linux	Thu Mar 23 19:51:52 2006
+--- misc/build/icu/source/config/mh-linux	Thu Aug 17 07:16:33 2006
+***************
+*** 20,25 ****
+--- 20,32 ----
+  LD_RPATH=	
+  LD_RPATH_PRE = -Wl,-rpath,
+  
++ ## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++ ENABLE_RPATH=YES
++ RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN'
++ 
++ #SH#  ENABLE_RPATH=YES
++ #SH#  RPATHLDFLAGS="${LD_RPATH_PRE}'$$ORIGIN'"
++ 
+  ## These are the library specific LDFLAGS
+  LDFLAGSICUDT=-nodefaultlibs -nostdlib
+  
+*** misc/icu/source/config/mh-solaris	Fri Feb 24 20:31:14 2006
+--- misc/build/icu/source/config/mh-solaris	Thu Aug 17 07:16:33 2006
+***************
+*** 18,34 ****
+  
+  ## Commands to link
+  ## For Sun Workshop, use CC to link to bring in C++ runtime
+! LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
+! LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
+  
+  ## Commands to make a shared library
+  SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
+! SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G
+  
+  ## Compiler switch to embed a runtime search path
+  LD_RPATH=	-R
+  LD_RPATH_PRE=	
+  
+  #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
+  
+  ## Compiler switch to embed a library name
+--- 18,42 ----
+  
+  ## Commands to link
+  ## For Sun Workshop, use CC to link to bring in C++ runtime
+! ## For Sun Workshop, -norunpath stops compiler to record a useless RPATH
+! LINK.c=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
+! LINK.cc=    $(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
+  
+  ## Commands to make a shared library
+  SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
+! SHLIB.cc=   $(CXX) $(CXXFLAGS) $(LDFLAGS) -G -norunpath
+  
+  ## Compiler switch to embed a runtime search path
+  LD_RPATH=	-R
+  LD_RPATH_PRE=	
+  
++ ## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++ ENABLE_RPATH=YES
++ RPATHLDFLAGS=${LD_RPATH}'$$ORIGIN'
++ 
++ #SH#  ENABLE_RPATH=YES
++ #SH#  RPATHLDFLAGS="${LD_RPATH}'$$ORIGIN'"
++ 
+  #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
+  
+  ## Compiler switch to embed a library name
+*** misc/icu/source/data/Makefile.in	Sat Aug 12 00:22:24 2006
+--- misc/build/icu/source/data/Makefile.in	Thu Aug 17 07:16:33 2006
+***************
+*** 344,350 ****
+  ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
+  	@echo "Unpacking $(ICUDATA_SOURCE_ARCHIVE) and generating $@ (list of data files)"
+  	@-$(RMV) $@
+! 	$(INVOKE) $(BINDIR)/icupkg -d $(BUILDDIR) --list -x \* $(ICUDATA_SOURCE_ARCHIVE) > $@
+  else
+  	@echo "$@" > $@
+  endif
+--- 344,350 ----
+  ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
+  	@echo "Unpacking $(ICUDATA_SOURCE_ARCHIVE) and generating $@ (list of data files)"
+  	@-$(RMV) $@
+! 	$(INVOKE) $(BINDIR)/icupkg -d $(BUILDDIR) --list -x \* $(ICUDATA_SOURCE_ARCHIVE) | grep -v ".cnv" > $@
+  else
+  	@echo "$@" > $@
+  endif
+*** misc/icu/source/layout/GXLayoutEngine.cpp	Fri Sep  2 20:22:10 2005
+--- misc/build/icu/source/layout/GXLayoutEngine.cpp	Thu Aug 17 08:59:44 2006
+***************
+*** 39,45 ****
+          return 0;
+      }
+  
+!     mapCharsToGlyphs(chars, offset, count, FALSE, rightToLeft, TRUE, glyphStorage, success);
+  
+      if (LE_FAILURE(success)) {
+          return 0;
+--- 39,45 ----
+          return 0;
+      }
+  
+!     mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, TRUE, glyphStorage, success);
+  
+      if (LE_FAILURE(success)) {
+          return 0;
+*** misc/icu/source/layout/LESwaps.h	Thu Jun 23 00:39:36 2005
+--- misc/build/icu/source/layout/LESwaps.h	Thu Aug 17 07:16:34 2006
+***************
+*** 2,7 ****
+--- 2,8 ----
+  /*
+   *
+   * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
++  * with additions by Sun Microsystems 2002-2006
+   *
+   */
+  
+***************
+*** 17,28 ****
+  
+  U_NAMESPACE_BEGIN
+  
+  /**
+!  * A convenience macro which invokes the swapWord member function
+   * from a concise call.
+   *
+   * @stable ICU 2.8
+   */
+  #if defined(U_IS_BIG_ENDIAN)
+      #if U_IS_BIG_ENDIAN
+          #define SWAPW(value) (value)
+--- 18,38 ----
+  
+  U_NAMESPACE_BEGIN
+  
++ // There exist popular font files which contain unaligned tables
++ // (e.g. "Watanabe Gothic"'s "mort" table)
++ // On some platforms unaligned memory accesses cause a crash.
++ // The ALLOW_UNALIGNED hack prevents these crashes by assuming that
++ // every use of the SWAPx macros in ICU's layout engine is intended
++ // for loading a big endian value and replaces them appropriately.
++ #define ALLOW_UNALIGNED_HACK
++ 
+  /**
+!  * A convenience macro which invokes the swapLong member function
+   * from a concise call.
+   *
+   * @stable ICU 2.8
+   */
++ #ifndef ALLOW_UNALIGNED_HACK
+  #if defined(U_IS_BIG_ENDIAN)
+      #if U_IS_BIG_ENDIAN
+          #define SWAPW(value) (value)
+***************
+*** 49,54 ****
+--- 59,83 ----
+      #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
+  #endif
+  
++ #else // ALLOW_UNALIGNED_HACK
++ 
++ #define SWAPW(rValue) loadBigEndianWord(reinterpret_cast<const le_uint16&>(rValue))
++ #define SWAPL(rValue) loadBigEndianLong(reinterpret_cast<const le_uint32&>(rValue))
++ 
++ inline le_uint16 loadBigEndianWord( const le_uint16& rValue )
++ {
++     const le_uint8* p = reinterpret_cast<const le_uint8*>(&rValue);
++     return ((p[0] << 8) + p[1]);
++ }
++ 
++ inline le_uint32 loadBigEndianLong( const le_uint32& rValue )
++ {
++     const le_uint8* p = reinterpret_cast<const le_uint8*>(&rValue);
++     return ((p[0]<<24) + (p[1]<<16) + (p[2]<<8) + p[3]);
++ }
++ 
++ #endif // ALLOW_UNALIGNED_HACK
++ 
+  /**
+   * This class is used to access data which stored in big endian order
+   * regardless of the conventions of the platform. It has been designed
+*** misc/icu/source/test/intltest/loctest.cpp	Thu Jul  6 03:50:04 2006
+--- misc/build/icu/source/test/intltest/loctest.cpp	Thu Aug 17 07:16:34 2006
+***************
+*** 4,9 ****
+--- 4,10 ----
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
++ #include "unicode/utypes.h"
+  #include "loctest.h"
+  #include "unicode/decimfmt.h"
+  #include "unicode/ucurr.h"
+*** misc/icu/source/test/intltest/tsputil.cpp	Wed Jul 19 00:18:10 2006
+--- misc/build/icu/source/test/intltest/tsputil.cpp	Thu Aug 17 07:16:34 2006
+***************
+*** 4,9 ****
+--- 4,10 ----
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
++ #include "unicode/utypes.h"
+  #include "tsputil.h"
+  
+  #include <float.h> // DBL_MAX, DBL_MIN
+*** misc/icu/source/test/intltest/uobjtest.cpp	Thu Mar 23 01:54:12 2006
+--- misc/build/icu/source/test/intltest/uobjtest.cpp	Thu Aug 17 07:16:34 2006
+***************
+*** 4,9 ****
+--- 4,10 ----
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
++ #include "unicode/utypes.h"
+  #include "uobjtest.h"
+  #include "cmemory.h" // UAlignedMemory
+  #include <string.h>
+*** misc/icu/source/test/intltest/ustrtest.cpp	Tue Dec 28 22:13:54 2004
+--- misc/build/icu/source/test/intltest/ustrtest.cpp	Thu Aug 17 07:16:34 2006
+***************
+*** 4,9 ****
+--- 4,10 ----
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
++ #include "unicode/utypes.h"
+  #include "ustrtest.h"
+  #include "unicode/unistr.h"
+  #include "unicode/uchar.h"
