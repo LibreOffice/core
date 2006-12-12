@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:35:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,9 @@ void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg)
+void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg,USHORT nPaintMode, ::sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
-    DrawView::CompleteRedraw(pOutDev, rReg);
+    DrawView::CompleteRedraw(pOutDev, rReg, nPaintMode, pRedirector);
 }
 
 
