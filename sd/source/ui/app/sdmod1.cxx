@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:31:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,7 @@
 #endif
 #include "drawdoc.hxx"
 #include "assclass.hxx"
-//CHINA001 #include "dlgass.hxx"
-#include "sdenumdef.hxx" //CHINA001
+#include "sdenumdef.hxx"
 #include "sdresid.hxx"
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
@@ -120,8 +119,7 @@
 #ifndef SD_FACTORY_IDS_HXX
 #include "FactoryIds.hxx"
 #endif
-#include "sdabstdlg.hxx" //CHINA001
-#include "dlgass.hrc" //CHINA001
+#include "sdabstdlg.hxx"
 #include <memory>
 
 /*************************************************************************
@@ -202,10 +200,12 @@ void SdModule::Execute(SfxRequest& rReq)
                                 PutItem( *pItem );
                                 SdOptions* pOptions = GetSdOptions( eDocType );
                                 if(pOptions)
-                                    pOptions->SetMetric( eUnit );
+                                    pOptions->SetMetric( (UINT16)eUnit );
                                 rReq.Done();
                             }
                         }
+                        break;
+                    default:
                         break;
                     }
                 }
@@ -269,8 +269,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 {
                     if (pViewShell->GetSlideShow())
                     {
-                        const SfxItemSet* pSet = rReq.GetArgs();
-                        if (pSet == NULL)
+                        if (rReq.GetArgs() == NULL)
                         {
                             // e.g. open button during a presentation.
                             bIntercept = TRUE;
@@ -344,7 +343,6 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                 if (pViewSh)
                 {
                     // AutoLayouts muessen fertig sein
-                    SdDrawDocument* pDoc = pDocSh->GetDoc();
                     pDoc->StopWorkStartupDelay();
 
                     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
@@ -619,15 +617,8 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         }
         else
         {
-            String aFileToOpen;
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::auto_ptr< AbstractAssistentDlg > pPilotDlg;
-            if( pFact )
-            {
-                pPilotDlg.reset( pFact->CreateAssistentDlg(ResId( DLG_ASS ), NULL, !bNewDocDirect ) );
-            }
-
-            DBG_ASSERT(pPilotDlg.get(), "Dialogdiet fail!");
+            std::auto_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( NULL, !bNewDocDirect ) : 0 );
 
             // Open the Pilot
             if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
@@ -752,7 +743,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 pViewSh->ReadFrameViewData(pFrameView);
                             }
 
-                            const sal_Int32 eMedium = pPilotDlg->GetOutputMedium();
                             ChangeMedium( pDocShell, pViewFrame, pPilotDlg->GetOutputMedium() );
 
                             if(pPilotDlg->IsSummary())
@@ -864,10 +854,10 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
 
     // settings for the Outputmedium
     Size aNewSize;
-    UINT32 nLeft;
-    UINT32 nRight;
-    UINT32 nLower;
-    UINT32 nUpper;
+    UINT32 nLeft = 0;
+    UINT32 nRight = 0;
+    UINT32 nLower = 0;
+    UINT32 nUpper = 0;
     switch(eMedium)
     {
         case OUTPUT_PAGE:
