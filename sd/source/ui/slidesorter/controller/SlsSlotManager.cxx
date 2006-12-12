@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:36:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         rShell.SetCurrentFunction(xEmpty);
     }
 
-    ::sd::Window* pWindow = rShell.GetActiveWindow();
     switch (rRequest.GetSlot())
     {
         case SID_PRESENTATION:
@@ -152,6 +151,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
 
         case SID_HIDE_SLIDE:
+        case SID_SHOW_SLIDE:
             rShell.SetCurrentFunction( HideSlideFunction::Create( mrController, rRequest));
             rShell.Cancel();
             break;
@@ -414,7 +414,6 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
             // Muss sofort beendet werden
             return;
         }
-        break;
 
         case SID_OUTPUT_QUALITY_COLOR:
         case SID_OUTPUT_QUALITY_GRAYSCALE:
@@ -745,6 +744,34 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         {
             rSet.DisableItem(SID_RENAMEPAGE);
             rSet.DisableItem(SID_RENAME_MASTER_PAGE);
+        }
+    }
+
+    if (rSet.GetItemState(SID_HIDE_SLIDE) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_SHOW_SLIDE)  == SFX_ITEM_AVAILABLE)
+    {
+        model::PageEnumeration aSelectedPages (
+            mrController.GetModel().GetSelectedPagesEnumeration());
+        HideSlideFunction::ExclusionState eState (
+            HideSlideFunction::GetExclusionState(aSelectedPages));
+        switch (eState)
+        {
+            case HideSlideFunction::MIXED:
+                // Show both entries.
+                break;
+
+            case HideSlideFunction::EXCLUDED:
+                rSet.DisableItem(SID_HIDE_SLIDE);
+                break;
+
+            case HideSlideFunction::INCLUDED:
+                rSet.DisableItem(SID_SHOW_SLIDE);
+                break;
+
+            case HideSlideFunction::UNDEFINED:
+                rSet.DisableItem(SID_HIDE_SLIDE);
+                rSet.DisableItem(SID_SHOW_SLIDE);
+                break;
         }
     }
 }
