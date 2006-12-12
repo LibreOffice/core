@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:46:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,8 +326,6 @@ void Window::Paint(const Rectangle& rRect)
 
 void Window::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL aReturn = FALSE;
-
     if (!(mpViewShell && mpViewShell->KeyInput(rKEvt, this)))
     {
         if (mpViewShell && rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
@@ -524,10 +522,7 @@ long Window::SetZoomFactor(long nZoom)
     return nZoom;
 }
 
-
-
-
-void Window::SetZoom(long nZoom)
+void Window::SetZoomIntegral(long nZoom)
 {
     // Clip the zoom factor to the valid range marked by nMinZoom as
     // previously calculated by <member>CalcMinZoom()</member> and the
@@ -566,7 +561,7 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
     {
         // The given rectangle is degenerate.  Use the default zoom factor
         // (above) of 100%.
-        SetZoom(nNewZoom);
+        SetZoomIntegral(nNewZoom);
     }
     else
     {
@@ -1108,8 +1103,6 @@ void Window::SetUseDropScroll (bool bUseDropScroll)
 
 void Window::DropScroll(const Point& rMousePos)
 {
-    BOOL bReturn = FALSE;
-
     short nDx = 0;
     short nDy = 0;
 
