@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:31:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,6 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 :   SfxModule( SfxApplication::CreateResManager("sd"), FALSE,
                   pFact1, pFact2, NULL ),
-    bWaterCan(FALSE),
     pTransferClip(NULL),
     pTransferDrag(NULL),
     pTransferSelection(NULL),
@@ -142,6 +141,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pDrawOptions(NULL),
     pSearchItem(NULL),
     pNumberFormatter( NULL ),
+    bWaterCan(FALSE),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
@@ -240,7 +240,7 @@ void SdModule::FillStatusBar(StatusBar& rStatusBar)
 |*
 \************************************************************************/
 
-void SdModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxSimpleHint ) &&
         ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_DEINITIALIZING )
@@ -359,7 +359,7 @@ OutputDevice* SdModule::GetVirtualRefDevice (void)
 /** This method is deprecated and only an alias to
     <member>GetVirtualRefDevice()</member>.  The given argument is ignored.
 */
-OutputDevice* SdModule::GetRefDevice (::sd::DrawDocShell& rDocShell)
+OutputDevice* SdModule::GetRefDevice (::sd::DrawDocShell& )
 {
     return GetVirtualRefDevice();
 }
