@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicObjectBar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:39:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,15 +118,15 @@ GraphicObjectBar::GraphicObjectBar (
     ViewShell* pSdViewShell,
     ::sd::View* pSdView )
     : SfxShell (pSdViewShell->GetViewShell()),
-      pView  ( pSdView ),
-      pViewSh ( pSdViewShell ),
+      mpView     ( pSdView ),
+      mpViewSh ( pSdViewShell ),
       nMappedSlotFilter ( SID_GRFFILTER_INVERT )
 {
-    DrawDocShell* pDocShell = pViewSh->GetDocSh();
+    DrawDocShell* pDocShell = mpViewSh->GetDocSh();
 
     SetPool( &pDocShell->GetPool() );
     SetUndoManager( pDocShell->GetUndoManager() );
-    SetRepeatTarget( pView );
+    SetRepeatTarget( mpView );
     SetHelpId( SD_IF_SDDRAWGRAFOBJECTBAR );
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Graphic objectbar" )));
 }
@@ -142,17 +142,17 @@ GraphicObjectBar::~GraphicObjectBar()
 
 void GraphicObjectBar::GetAttrState( SfxItemSet& rSet )
 {
-    if( pView )
-        SvxGrafAttrHelper::GetGrafAttrState( rSet, *pView );
+    if( mpView )
+        SvxGrafAttrHelper::GetGrafAttrState( rSet, *mpView );
 }
 
 // -----------------------------------------------------------------------------
 
 void GraphicObjectBar::Execute( SfxRequest& rReq )
 {
-    if( pView )
+    if( mpView )
     {
-        SvxGrafAttrHelper::ExecuteGrafAttr( rReq, *pView );
+        SvxGrafAttrHelper::ExecuteGrafAttr( rReq, *mpView );
         Invalidate();
     }
 }
@@ -161,7 +161,7 @@ void GraphicObjectBar::Execute( SfxRequest& rReq )
 
 void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 {
-    const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
+    const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
     BOOL                bEnable = FALSE;
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -180,7 +180,7 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 
 void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
 {
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -193,19 +193,19 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
             if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
             {
-                SdrPageView* pPageView = pView->GetSdrPageView();
+                SdrPageView* pPageView = mpView->GetSdrPageView();
 
                 if( pPageView )
                 {
                     SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
+                    String      aStr( mpView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_GRAFFILTER ) ) );
-                    pView->BegUndo( aStr );
+                    mpView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
-                    pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
-                    pView->EndUndo();
+                    mpView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
+                    mpView->EndUndo();
                 }
             }
         }
