@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:35:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,7 +625,7 @@ namespace sdr
                 // output from VOCOfMasterPageDescriptor::PaintObject(...)
                 if(!rAssociatedVOC.GetObjectContact().IsMasterPageBufferingAllowed())
                 {
-                    PaintBackgroundPageBordersAndGrids(rDisplayInfo);
+                    PaintBackgroundPageBordersAndGrids(rDisplayInfo, rAssociatedVOC);
                 }
             }
 
@@ -683,7 +683,7 @@ namespace sdr
 
         // #i37869# Support method to paint borders and grids which are overpainted from
         // this MasterPage content to let the MasterPage appear as page background
-        void ViewContactOfMasterPageDescriptor::PaintBackgroundPageBordersAndGrids(DisplayInfo& rDisplayInfo)
+        void ViewContactOfMasterPageDescriptor::PaintBackgroundPageBordersAndGrids(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             const SdrPageView* pPageView = rDisplayInfo.GetPageView();
             if(pPageView)
@@ -701,14 +701,21 @@ namespace sdr
                     ViewContactOfSdrPage::DrawBorder(rDisplayInfo, rOwnerPage);
                 }
 
-                if(rView.IsGridVisible() && !rView.IsGridFront())
-                {
-                    ViewContactOfSdrPage::DrawGrid(rDisplayInfo);
-                }
+                // #i71130# find out if OC is preview renderer
+                const bool bPreviewRenderer(rAssociatedVOC.GetObjectContact().IsPreviewRenderer());
 
-                if(rView.IsHlplVisible() && !rView.IsHlplFront())
+                // #i71130# no grid and no helplines for page previews
+                if(!bPreviewRenderer)
                 {
-                    ViewContactOfSdrPage::DrawHelplines(rDisplayInfo);
+                    if(rView.IsGridVisible() && !rView.IsGridFront())
+                    {
+                        ViewContactOfSdrPage::DrawGrid(rDisplayInfo);
+                    }
+
+                    if(rView.IsHlplVisible() && !rView.IsHlplFront())
+                    {
+                        ViewContactOfSdrPage::DrawHelplines(rDisplayInfo);
+                    }
                 }
             }
         }
