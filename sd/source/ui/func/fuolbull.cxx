@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuolbull.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:52:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,9 @@
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
 #endif
-//CHINA001 #ifndef SD_OUTLINE_BULLET_DLG_HXX
-//CHINA001 #include "OutlineBulletDlg.hxx"
-//CHINA001 #endif
 #include "drawdoc.hxx"
-#include "sdabstdlg.hxx" //CHINA001
-#include "dlgolbul.hrc" //CHINA001
+#include "sdabstdlg.hxx"
+
 namespace sd {
 
 TYPEINIT1( FuOutlineBullet, FuPoor );
@@ -110,58 +107,58 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         // ItemSet fuer Dialog fuellen
-        SfxItemSet aEditAttr( pDoc->GetPool() );
-        pView->GetAttributes( aEditAttr );
+        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        mpView->GetAttributes( aEditAttr );
 
-        SfxItemSet aNewAttr( pViewShell->GetPool(),
+        SfxItemSet aNewAttr( mpViewShell->GetPool(),
                              EE_ITEMS_START, EE_ITEMS_END );
         aNewAttr.Put( aEditAttr, FALSE );
 
         // Dialog hochfahren und ausfuehren
-        //CHINA001 OutlineBulletDlg* pDlg = new OutlineBulletDlg( NULL, &aNewAttr, pView );
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-        SfxAbstractTabDialog* pDlg = pFact->CreateSdItemSetTabDlg(ResId( TAB_OUTLINEBULLET ), NULL, &aNewAttr, pView );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        USHORT nResult = pDlg->Execute();
-
-        switch( nResult )
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0;
+        if( pDlg )
         {
-            case RET_OK:
-            {
-                SfxItemSet aSet( *pDlg->GetOutputItemSet() );
+            USHORT nResult = pDlg->Execute();
 
-                if (pView->ISA(DrawViewShell) )
+            switch( nResult )
+            {
+                case RET_OK:
                 {
-                    if( pView->GetMarkedObjectList().GetMarkCount() == 0)
+                    SfxItemSet aSet( *pDlg->GetOutputItemSet() );
+
+                    if (mpView->ISA(DrawViewShell) )
                     {
-                        SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 0 );
-                        aSet.Put(aBulletState);
+                        if( mpView->GetMarkedObjectList().GetMarkCount() == 0)
+                        {
+                            SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 0 );
+                            aSet.Put(aBulletState);
+                        }
                     }
+
+                    rReq.Done( aSet );
+                    pArgs = rReq.GetArgs();
                 }
+                break;
 
-                rReq.Done( aSet );
-                pArgs = rReq.GetArgs();
+                default:
+                {
+                    delete pDlg;
+                    return;
+                }
             }
-            break;
 
-            default:
-            {
-                delete pDlg;
-                return;
-            }
+            delete pDlg;
         }
-
-        delete pDlg;
     }
 
     // nicht direkt an pOlView, damit SdDrawView::SetAttributes
     // Aenderungen auf der Masterpage abfangen und in eine
     // Vorlage umleiten kann
-    pView->SetAttributes(*pArgs);
+    mpView->SetAttributes(*pArgs);
 
     // evtl. Betroffene Felder invalidieren
-    pViewShell->Invalidate( FN_NUM_BULLET_ON );
+    mpViewShell->Invalidate( FN_NUM_BULLET_ON );
 }
 
 
