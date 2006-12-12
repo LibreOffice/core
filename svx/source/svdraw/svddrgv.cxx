@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:40:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ void SdrDragView::ImpClearVars()
     bDragSpecial=FALSE;
     pDragBla=NULL;
     bDragStripes=FALSE;
-    bNoDragHdl=TRUE;
+    //HMHbNoDragHdl=TRUE;
     bMirrRefDragObj=TRUE;
     bSolidDragging=FALSE;
     bDragWithCopy=FALSE;
@@ -656,17 +656,18 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
 void SdrDragView::MovDragObj(const Point& rPnt)
 {
-    if (pDragBla!=NULL) {
+    if (pDragBla!=NULL)
+    {
         Point aPnt(rPnt);
         ImpLimitToWorkArea(aPnt);
-        pDragBla->Mov(aPnt);
-        if (IsDragHdlHide() && aDragStat.IsMinMoved() && !bDragHdl && IsMarkHdlShown()) {
-            BOOL bLeaveRefs=IS_TYPE(SdrDragMirror,pDragBla) || IS_TYPE(SdrDragRotate,pDragBla);
-            BOOL bFlag=IsSolidMarkHdl() && aDragStat.IsShown();
-            if (bFlag) HideDragObj();
-            HideMarkHdl(bLeaveRefs);
-            if (bFlag) ShowDragObj();
-        }
+        pDragBla->Mov(aPnt); // this call already makes a Hide()/Show combination
+//SDO       if (/*HMHIsDragHdlHide() &&*/ aDragStat.IsMinMoved() && !bDragHdl /*HMH&& IsMarkHdlShown()*/) {
+//SDO           //HMHBOOL bLeaveRefs=IS_TYPE(SdrDragMirror,pDragBla) || IS_TYPE(SdrDragRotate,pDragBla);
+//SDO           BOOL bFlag=IsSolidMarkHdl() && aDragStat.IsShown();
+//SDO           if (bFlag) HideDragObj();
+//SDO           //HMHHideMarkHdl(bLeaveRefs);
+//SDO           if (bFlag) ShowDragObj();
+//SDO       }
     }
 }
 
@@ -692,21 +693,21 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
         }
         pDragBla=NULL;
         if (bInsPolyPoint) {
-            BOOL bVis=IsMarkHdlShown();
-            if (bVis) HideMarkHdl();
+            //HMHBOOL bVis=IsMarkHdlShown();
+            //HMHif (bVis) HideMarkHdl();
             SetMarkHandles();
             bInsPolyPoint=FALSE;
-            if (bVis) ShowMarkHdl();
+            //HMHif (bVis) ShowMarkHdl();
             BegUndo(aInsPointUndoStr);
             AddUndo(pInsPointUndo);
             EndUndo();
         }
         if (!bSomeObjChgdFlag) { // Aha, Obj hat nicht gebroadcastet (z.B. Writer FlyFrames)
-            if (IsDragHdlHide() && !bDragHdl &&
+            if (/*HMHIsDragHdlHide() &&*/ !bDragHdl &&
                 !IS_TYPE(SdrDragMirror,pDragBla) && !IS_TYPE(SdrDragRotate,pDragBla))
             {
                 AdjustMarkHdl();
-                ShowMarkHdl();
+                //HMHShowMarkHdl();
             }
         }
         eDragHdl=HDL_MOVE;
@@ -728,14 +729,14 @@ void SdrDragView::BrkDragObj()
         delete pDragBla;
         pDragBla=NULL;
         if (bInsPolyPoint) {
-            BOOL bVis=IsMarkHdlShown();
-            if (bVis) HideMarkHdl();
+            //HMHBOOL bVis=IsMarkHdlShown();
+            //HMHif (bVis) HideMarkHdl();
             pInsPointUndo->Undo(); // Den eingefuegten Punkt wieder raus
             delete pInsPointUndo;
             pInsPointUndo=NULL;
             SetMarkHandles();
             bInsPolyPoint=FALSE;
-            if (bVis) ShowMarkHdl();
+            //HMHif (bVis) ShowMarkHdl();
         }
         if (IsInsertGluePoint()) {
             pInsPointUndo->Undo(); // Den eingefuegten Klebepunkt wieder raus
@@ -743,11 +744,11 @@ void SdrDragView::BrkDragObj()
             pInsPointUndo=NULL;
             SetInsertGluePoint(FALSE);
         }
-        if (IsDragHdlHide() && !bDragHdl &&
-            !IS_TYPE(SdrDragMirror,pDragBla) && !IS_TYPE(SdrDragRotate,pDragBla))
-        {
-            ShowMarkHdl();
-        }
+//HMH       if (IsDragHdlHide() && !bDragHdl &&
+//HMH           !IS_TYPE(SdrDragMirror,pDragBla) && !IS_TYPE(SdrDragRotate,pDragBla))
+//HMH       {
+//HMH           ShowMarkHdl();
+//HMH       }
         eDragHdl=HDL_MOVE;
         pDragHdl=NULL;
         SetDragPolys(true);
@@ -808,17 +809,17 @@ sal_Bool SdrDragView::ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, con
 
         if(0xffffffff != mnInsPointNum)
         {
-            sal_Bool bVis(IsMarkHdlShown());
+            //HMHsal_Bool bVis(IsMarkHdlShown());
 
-            if(bVis)
-                HideMarkHdl();
+            //HMHif(bVis)
+            //HMH   HideMarkHdl();
 
             bInsPolyPoint = sal_True;
             UnmarkAllPoints();
             AdjustMarkHdl();
 
-            if(bVis)
-                ShowMarkHdl();
+            //HMHif(bVis)
+            //HMH   ShowMarkHdl();
 
             bRet = BegDragObj(rPnt, pOut, aHdl.GetHdl(mnInsPointNum), 0);
 
@@ -994,15 +995,15 @@ void SdrDragView::SetDragStripes(BOOL bOn)
     }
 }
 
-void SdrDragView::SetDragHdlHide(BOOL bOn)
-{
-    bNoDragHdl=bOn;
-    if (pDragBla!=NULL && !bDragHdl && !IS_TYPE(SdrDragMirror,pDragBla) && !IS_TYPE(SdrDragRotate,pDragBla))
-    {
-        if (bOn) HideMarkHdl();
-        else ShowMarkHdl();
-    }
-}
+//HMHvoid SdrDragView::SetDragHdlHide(BOOL bOn)
+//HMH{
+//HMH   bNoDragHdl=bOn;
+//HMH   if (pDragBla!=NULL && !bDragHdl && !IS_TYPE(SdrDragMirror,pDragBla) && !IS_TYPE(SdrDragRotate,pDragBla))
+//HMH   {
+//HMH       if (bOn) HideMarkHdl();
+//HMH       else ShowMarkHdl();
+//HMH   }
+//HMH}
 
 BOOL SdrDragView::IsOrthoDesired() const
 {
