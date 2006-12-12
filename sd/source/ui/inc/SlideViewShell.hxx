@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideViewShell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ public:
     TYPEINFO();
 
     SFX_DECL_VIEWFACTORY(SlideViewShell);
-    SFX_DECL_INTERFACE(SD_IF_SDSLIDEVIEWSHELL);
+    SFX_DECL_INTERFACE(SD_IF_SDSLIDEVIEWSHELL)
 
     /** Create a new view shell for the slide view.
         @param rViewShellBase
