@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:35:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -962,11 +962,12 @@ void SlideSorterController::SelectionHasChanged (
 {
     if (bMakeSelectionVisible)
         mbIsMakeSelectionVisiblePending = true;
-    //        MakeSelectionVisible();
 
     SlideSorterViewShell& rViewShell (GetViewShell());
     rViewShell.Invalidate (SID_EXPAND_PAGE);
     rViewShell.Invalidate (SID_SUMMARY_PAGE);
+    rViewShell.Invalidate(SID_SHOW_SLIDE);
+    rViewShell.Invalidate(SID_HIDE_SLIDE);
 
     // StatusBar
     rViewShell.Invalidate (SID_STATUS_PAGE);
