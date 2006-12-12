@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfield.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:37:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@ SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInFiel
     aBtnOK      ( this, SdResId( BTN_OK ) ),
     aBtnCancel  ( this, SdResId( BTN_CANCEL ) ),
     aBtnHelp    ( this, SdResId( BTN_HELP ) ),
-    pField      ( pInField ),
-    maInputSet  ( rSet )
+    maInputSet  ( rSet ),
+    pField      ( pInField )
 {
     FreeResource();
 
@@ -187,7 +187,6 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         }
         else if( pField->ISA( SvxAuthorField ) )
         {
-            const SvxAuthorField* pAuthorField = (const SvxAuthorField*) pField;
             SvxAuthorType   eType;
             SvxAuthorFormat eFormat;
 
