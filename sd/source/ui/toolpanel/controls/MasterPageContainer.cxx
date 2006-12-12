@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:18:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -723,15 +723,16 @@ MasterPageContainer::Implementation::Implementation (void)
       mpDocument(NULL),
       maPreviewRenderer(),
       mbFirstPageObjectSeen(false),
-      maSmallPreviewBeingCreated(),
       maLargePreviewBeingCreated(),
-      maSmallPreviewNotAvailable(),
+      maSmallPreviewBeingCreated(),
       maLargePreviewNotAvailable(),
+      maSmallPreviewNotAvailable(),
       maChangeListeners(),
       maSmallPreviewSizePixel(),
       maLargePreviewSizePixel(),
       mbPageRatioKnown(false),
       mbContainerCleaningPending(true)
+
 {
     UpdatePreviewSizePixel();
 }
