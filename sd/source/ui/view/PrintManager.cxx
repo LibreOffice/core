@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,27 +281,21 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
     return pDlg;
 }
 
-
-
-
-
-SfxTabPage*  PrintManager::CreatePrintOptionsPage(
-    ::Window *pParent,
-    const SfxItemSet &rOptions)
+SfxTabPage*  PrintManager::CreatePrintOptionsPage( ::Window *pParent, const SfxItemSet &rOptions)
 {
+    SfxTabPage* pPage = 0;
     DocumentType eDocType = mrBase.GetDocument()->GetDocumentType();
-    //CHINA001 SdPrintOptions* pPage = new SdPrintOptions( pParent, rOptions );
-    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_PRINT_OPTIONS );
-    DBG_ASSERT(fnCreatePage, "SdAbstractDialogFactory fail!");//CHINA001
-    SfxTabPage* pPage = (*fnCreatePage)( pParent, rOptions );
-    if( eDocType == DOCUMENT_TYPE_DRAW )
-    { //add by CHINA001
-        //CHINA001 pPage->SetDrawMode();
-        SfxAllItemSet aSet(*(rOptions.GetPool())); //CHINA001
-        aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_DRAW_MODE));
-        pPage->PageCreated(aSet);
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    ::CreateTabPage fnCreatePage = pFact ? pFact->GetSdPrintOptionsTabPageCreatorFunc() : 0;
+    if( fnCreatePage )
+    {
+        pPage = (*fnCreatePage)( pParent, rOptions );
+        if( eDocType == DOCUMENT_TYPE_DRAW )
+        {
+            SfxAllItemSet aSet(*(rOptions.GetPool()));
+            aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_DRAW_MODE));
+            pPage->PageCreated(aSet);
+        }
     }
     return pPage;
 }
@@ -373,35 +367,35 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
         {
             SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
 
-            if( pPrintOpts->IsDate() )
+            if( pPrintOpts->GetOptionsPrint().IsDate() )
             {
                 aTimeDateStr += GetSdrGlobalData().pLocaleData->getDate( Date() );
                 aTimeDateStr += (sal_Unicode)' ';
             }
 
-            if( pPrintOpts->IsTime() )
+            if( pPrintOpts->GetOptionsPrint().IsTime() )
                 aTimeDateStr += GetSdrGlobalData().pLocaleData->getTime( Time(), FALSE, FALSE );
 
-            if( pPrintOpts->IsOutline() )
+            if( pPrintOpts->GetOptionsPrint().IsOutline() )
                 bPrintOutline = TRUE;
 
-            if( pPrintOpts->IsHandout() )
+            if( pPrintOpts->GetOptionsPrint().IsHandout() )
                 bPrintHandout = TRUE;
 
-            if( pPrintOpts->IsDraw() )
+            if( pPrintOpts->GetOptionsPrint().IsDraw() )
                 bPrintDraw = TRUE;
 
-            if( pPrintOpts->IsNotes() )
+            if( pPrintOpts->GetOptionsPrint().IsNotes() )
             {
                 bPrintNotes = TRUE;
                 ePageKind = PK_NOTES;
             }
 
-            pPrintOpts->SetWarningPrinter( pMisc->IsNotFoundWarning() );
-            pPrintOpts->SetWarningSize( pMisc->IsPaperSizeWarning() );
-            pPrintOpts->SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningPrinter( pMisc->IsNotFoundWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningSize( pMisc->IsPaperSizeWarning() );
+            pPrintOpts->GetOptionsPrint().SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
 
-            UINT16  nQuality = pPrintOpts->GetOutputQuality();
+            UINT16  nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
             ULONG   nMode = DRAWMODE_DEFAULT;
 
             if( nQuality == 1 )
@@ -499,7 +493,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
         if( bPrintNotes || bPrintDraw || bPrintHandout )
         {
             if( pPrintOpts )
-                bPrintExcluded = pPrintOpts->IsHiddenPages();
+                bPrintExcluded = pPrintOpts->GetOptionsPrint().IsHiddenPages();
 
             for( USHORT j = nPage; ( j < nPageMax && !bContainsTransparency ); j++ )
             {
@@ -510,11 +504,12 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
 
                     if( pPage && ( !pPage->IsExcluded() || bPrintExcluded ) )
                     {
-                        if( !( bContainsTransparency = pPage->HasTransparentObjects() ) )
+                        bContainsTransparency = (BOOL)pPage->HasTransparentObjects();
+                        if( !bContainsTransparency )
                         {
                             if(pPage->TRG_HasMasterPage())
                             {
-                                bContainsTransparency = pPage->TRG_GetMasterPage().HasTransparentObjects();
+                                bContainsTransparency = (BOOL)pPage->TRG_GetMasterPage().HasTransparentObjects();
                             }
                         }
                     }
@@ -654,10 +649,8 @@ ErrCode PrintManager::DoPrint (
 
 
 
-void PrintManager::PreparePrint (PrintDialog* pPrintDialog)
+void PrintManager::PreparePrint (PrintDialog* )
 {
-    (void)pPrintDialog;
-
     SfxPrinter* pPrinter = GetPrinter(TRUE);
 
     if (!pPrinter)
@@ -676,27 +669,27 @@ void PrintManager::PreparePrint (PrintDialog* pPrintDialog)
 
     if (pPrintOpts)
     {
-        if ( pPrintOpts->IsHandout() )
+        if ( pPrintOpts->GetOptionsPrint().IsHandout() )
         {
             // Handzettel
             SdPage* pPage = mrBase.GetDocument()->GetSdPage(0, PK_HANDOUT);
 
             // Papierschacht
-            if (!pPrintOpts->IsPaperbin()) // Drucken NICHT aus Druckereinstellung
+            if (!pPrintOpts->GetOptionsPrint().IsPaperbin()) // Drucken NICHT aus Druckereinstellung
             {
                 pPrinter->SetPaperBin(pPage->GetPaperBin());
             }
 
             pPrinter->SetOrientation(pPage->TRG_GetMasterPage().GetOrientation());
         }
-        else if ( pPrintOpts->IsDraw() || pPrintOpts->IsNotes() )
+        else if ( pPrintOpts->GetOptionsPrint().IsDraw() || pPrintOpts->GetOptionsPrint().IsNotes() )
         {
             // Standard- oder Notizseiten
-            if( !pPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
+            if( !pPrintOpts->GetOptionsPrint().IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
             {
                 PageKind ePageKind = PK_NOTES;
 
-                if (pPrintOpts->IsDraw())
+                if (pPrintOpts->GetOptionsPrint().IsDraw())
                 {
                     ePageKind = PK_STANDARD;
                 }
@@ -706,7 +699,7 @@ void PrintManager::PreparePrint (PrintDialog* pPrintDialog)
 
                 Orientation eOrientation = ORIENTATION_PORTRAIT;
 
-                if ( !pPrintOpts->IsBooklet() )
+                if ( !pPrintOpts->GetOptionsPrint().IsBooklet() )
                 {
                     eOrientation = pPage->GetOrientation();
                 }
@@ -766,9 +759,9 @@ bool PrintManager::FitPageToPrinterWithDialog (
 
         if( rOptions.GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrintOpts ) == SFX_ITEM_SET )
         {
-            bScalePage = pPrintOpts->IsPagesize();
-            bPrintBooklet = pPrintOpts->IsBooklet();
-            pPrintOpts->SetCutPage( FALSE );
+            bScalePage = pPrintOpts->GetOptionsPrint().IsPagesize();
+            bPrintBooklet = pPrintOpts->GetOptionsPrint().IsBooklet();
+            pPrintOpts->GetOptionsPrint().SetCutPage( FALSE );
         }
         else
             pPrintOpts = NULL;
@@ -796,26 +789,25 @@ bool PrintManager::FitPageToPrinterWithDialog (
             {
                 // For the screen format the page content is always scaled
                 // to the printable area of the printer pages.
-                pPrintOpts->SetPagesize();
+                pPrintOpts->GetOptionsPrint().SetPagesize();
             }
             else
             {
+
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");
-                AbstractSdPrintDlg* pDlg = pFact->CreateSdPrintDlg(ResId( DLG_PRINT_WARNINGS ), mrBase.GetWindow() );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                AbstractSdPrintDlg* pDlg = pFact ? pFact->CreateSdPrintDlg(mrBase.GetWindow() ) : 0;
                 // Do not show the dialog when the bSilent flag is set.  We
                 // do create the dialog anyway so that we can extract the
                 // default method of mapping internal pages to printer pages
                 // from it.
-                if ( ! bSilent)
+                if( ! bSilent && pDlg )
                     nRet = pDlg->Execute();
                 if( nRet == RET_OK )
                 {
                     switch (pDlg->GetAttr())
                     {
                         case 1:
-                            pPrintOpts->SetPagesize();
+                            pPrintOpts->GetOptionsPrint().SetPagesize();
                             break;
 
                         case 2:
@@ -826,7 +818,7 @@ bool PrintManager::FitPageToPrinterWithDialog (
                             break;
 
                         case 3:
-                            pPrintOpts->SetCutPage();
+                            pPrintOpts->GetOptionsPrint().SetCutPage();
                             break;
                     }
                     bContinuePrinting = true;
@@ -860,7 +852,7 @@ void PrintManager::PrintOutline (
     // (also auch nicht der Druckerschacht), deswegen wird der Druckerschacht
     // von der Seite PK_STANDARD genommen.
     /*
-    if( pPrintOpts && !pPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
+    if( pPrintOpts && !pPrintOpts->GetOptionsPrint().IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
     {
         USHORT nPaperBin = GetDoc()->GetSdPage(nPage, PK_STANDARD)->GetPaperBin();
         rPrinter.SetPaperBin( nPaperBin );
@@ -881,7 +873,7 @@ void PrintManager::PrintOutline (
     rInfo.mrPrinter.SetOrientation(ORIENTATION_PORTRAIT);
 
     if ( rInfo.mpPrintOpts )
-        bPrintExcluded = rInfo.mpPrintOpts->IsHiddenPages();
+        bPrintExcluded = rInfo.mpPrintOpts->GetOptionsPrint().IsHiddenPages();
 
     Rectangle aOutRect(aPageOfs, rInfo.mrPrinter.GetOutputSize());
 
@@ -921,7 +913,7 @@ void PrintManager::PrintOutline (
                 aTmp += String( SdResId( STR_PRINT_OUTLINE ) );
                 rInfo.mrProgress.SetStateText(nPageCount, aTmp, rInfo.mnTotal );
 
-                nPageCount += rInfo.mnCopies;
+                nPageCount = nPageCount + rInfo.mnCopies;
 
                 SdPage* pPage = (SdPage*)rInfo.mrViewShell.GetDoc()->GetSdPage(nPage, PK_STANDARD);
                 SdrTextObj* pTextObj = NULL;
@@ -972,12 +964,11 @@ void PrintManager::PrintOutline (
                     if ( bSubTitle )
                     {
                         ULONG nParaCount2 = pOutliner->GetParagraphCount();
-                        Paragraph* pPara = NULL;
                         for (ULONG nPara = nParaCount1; nPara < nParaCount2; nPara++)
                         {
-                            pPara = pOutliner->GetParagraph(nPara);
-                            if(pPara && pOutliner->GetDepth( (USHORT) nPara ) !=1 )
-                                pOutliner->SetDepth(pPara, 1);
+                            Paragraph* pP = pOutliner->GetParagraph(nPara);
+                            if(pP && pOutliner->GetDepth( (USHORT) nPara ) !=1 )
+                                pOutliner->SetDepth(pP, 1);
                         }
                     }
 
@@ -1034,11 +1025,11 @@ void PrintManager::PrintHandout (
     BOOL        bScalePage = TRUE;
     if ( rInfo.mpPrintOpts )
     {
-        bScalePage = rInfo.mpPrintOpts->IsPagesize();
+        bScalePage = rInfo.mpPrintOpts->GetOptionsPrint().IsPagesize();
     }
 
     // Papierschacht
-    if( rInfo.mpPrintOpts && !rInfo.mpPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
+    if( rInfo.mpPrintOpts && !rInfo.mpPrintOpts->GetOptionsPrint().IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
     {
         USHORT nPaperBin = pPage->GetPaperBin();
         rInfo.mrPrinter.SetPaperBin( nPaperBin );
@@ -1050,7 +1041,7 @@ void PrintManager::PrintHandout (
     short nDlgResult = RET_OK;
 
     if ( !rInfo.mrPrinter.SetOrientation(eOrientation) &&
-        (!rInfo.mpPrintOpts || rInfo.mpPrintOpts->IsWarningOrientation()) )
+        (!rInfo.mpPrintOpts || rInfo.mpPrintOpts->GetOptionsPrint().IsWarningOrientation()) )
     {
         // eine Warnung anzeigen
         WarningBox aWarnBox(rInfo.mrViewShell.GetActiveWindow(),(WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
@@ -1103,13 +1094,10 @@ void PrintManager::PrintHandout (
         rInfo.mrViewShell.SetPrintedHandoutPageNum(0);
 
         if ( rInfo.mpPrintOpts )
-            bPrintExcluded = rInfo.mpPrintOpts->IsHiddenPages();
+            bPrintExcluded = rInfo.mpPrintOpts->GetOptionsPrint().IsHiddenPages();
 
         while ( nPage < rInfo.mnPageMax )
         {
-            // Anzahl ALLER Seiten im Dokument:
-            USHORT nAbsPageCnt = pDocument->GetPageCount();
-
             SdrObject* pIter = rShapeList.getNextShape(0);
             while( pIter && (nPage < rInfo.mnPageMax) )
             {
@@ -1125,7 +1113,7 @@ void PrintManager::PrintHandout (
                         aTmp += String( SdResId( STR_PRINT_HANDOUT ) );
                         rInfo.mrProgress.SetStateText( nPageCount, aTmp, rInfo.mnTotal );
 
-                        nPageCount += rInfo.mnCopies;
+                        nPageCount = nPageCount + rInfo.mnCopies;
 
                         SdPage* pPg = pDocument->GetSdPage(nPage, PK_STANDARD);
 
@@ -1177,7 +1165,7 @@ void PrintManager::PrintHandout (
 
         USHORT nRealPage = 0;
         SdrObject* pIter = 0;
-        while( pIter = rShapeList.getNextShape(pIter) )
+        while( (pIter = rShapeList.getNextShape(pIter)) != 0 )
         {
             SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(pIter);
             if( pPageObj && (rMaster.GetPresObjKind(pPageObj) == PRESOBJ_HANDOUT) )
@@ -1214,20 +1202,20 @@ void PrintManager::PrintStdOrNotes (
     BOOL        bPrintBackPage = FALSE;
     SdDrawDocument* pDocument = rInfo.mrViewShell.GetDoc();
 
-    SdPage* pPage = pDocument->GetSdPage(nPage, ePageKind);
+    SdPage* pRefPage = pDocument->GetSdPage(nPage, ePageKind);
 
     if ( rInfo.mpPrintOpts )
     {
-        bScalePage = rInfo.mpPrintOpts->IsPagesize();
-        bTilePage = rInfo.mpPrintOpts->IsPagetile();
-        bPrintPageName = rInfo.mpPrintOpts->IsPagename();
-        bPrintExcluded = rInfo.mpPrintOpts->IsHiddenPages();
-        bPrintBooklet = rInfo.mpPrintOpts->IsBooklet();
-        bPrintFrontPage = rInfo.mpPrintOpts->IsFrontPage();
-        bPrintBackPage = rInfo.mpPrintOpts->IsBackPage();
+        bScalePage = rInfo.mpPrintOpts->GetOptionsPrint().IsPagesize();
+        bTilePage = rInfo.mpPrintOpts->GetOptionsPrint().IsPagetile();
+        bPrintPageName = rInfo.mpPrintOpts->GetOptionsPrint().IsPagename();
+        bPrintExcluded = rInfo.mpPrintOpts->GetOptionsPrint().IsHiddenPages();
+        bPrintBooklet = rInfo.mpPrintOpts->GetOptionsPrint().IsBooklet();
+        bPrintFrontPage = rInfo.mpPrintOpts->GetOptionsPrint().IsFrontPage();
+        bPrintBackPage = rInfo.mpPrintOpts->GetOptionsPrint().IsBackPage();
 
         // Papierschacht
-        if( !rInfo.mpPrintOpts->IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
+        if( !rInfo.mpPrintOpts->GetOptionsPrint().IsPaperbin() ) // Drucken NICHT aus Druckereinstellung
         {
             USHORT nPaperBin = pDocument->GetSdPage(nPage, ePageKind)->GetPaperBin();
             rInfo.mrPrinter.SetPaperBin( nPaperBin );
@@ -1236,20 +1224,20 @@ void PrintManager::PrintStdOrNotes (
     }
 
     // Hoch/Querformat aendern?
-    Size aPageSize(pPage->GetSize());
+    Size aPageSize(pRefPage->GetSize());
     Orientation eOrientation = ORIENTATION_PORTRAIT;
 
     short nDlgResult = RET_OK;
 
     if( !bPrintBooklet )
     {
-        eOrientation = pPage->GetOrientation();
+        eOrientation = pRefPage->GetOrientation();
     }
     else if( aPageSize.Width() < aPageSize.Height() )
         eOrientation = ORIENTATION_LANDSCAPE;
 
     if ( !rInfo.mrPrinter.SetOrientation(eOrientation) &&
-        (!rInfo.mpPrintOpts || rInfo.mpPrintOpts->IsWarningOrientation()) )
+        (!rInfo.mpPrintOpts || rInfo.mpPrintOpts->GetOptionsPrint().IsWarningOrientation()) )
     {
         // eine Warnung anzeigen
         WarningBox aWarnBox(
@@ -1281,7 +1269,6 @@ void PrintManager::PrintStdOrNotes (
         // Als Broschuere drucken ?
         if( bPrintBooklet )
         {
-            SdPage*                                         pPage;
             MapMode                                         aStdMap( rInfo.mrPrinter.GetMapMode() );
             ::std::vector< USHORT >                         aPageVector;
             ::std::vector< ::std::pair< USHORT, USHORT > >  aPairVector;
@@ -1330,9 +1317,9 @@ void PrintManager::PrintStdOrNotes (
             {
                 if( rInfo.mrSelPages.IsSelected( nPage + 1 )  )
                 {
-                    SdPage* pPage = pDocument->GetSdPage( nPage, ePageKind );
+                    SdPage* pP = pDocument->GetSdPage( nPage, ePageKind );
 
-                    if( pPage && ( !pPage->IsExcluded() || bPrintExcluded ) )
+                    if( pP && ( !pP->IsExcluded() || bPrintExcluded ) )
                         aPageVector.push_back( nPage );
                 }
 
@@ -1366,18 +1353,18 @@ void PrintManager::PrintStdOrNotes (
 
                     rInfo.mrPrinter.StartPage();
 
-                    pPage = pDocument->GetSdPage( aPair.first, ePageKind );
+                    SdPage* pPageToPrint = pDocument->GetSdPage( aPair.first, ePageKind );
 
-                    if( pPage )
+                    if( pPageToPrint )
                     {
                         aMap.SetOrigin( aOffset );
                         rInfo.mrPrinter.SetMapMode( aMap );
-                        PrintPage(rInfo, pPrintView, pPage, bPrintMarkedOnly );
+                        PrintPage(rInfo, pPrintView, pPageToPrint, bPrintMarkedOnly );
                     }
 
-                    pPage = pDocument->GetSdPage( aPair.second, ePageKind );
+                    pPageToPrint = pDocument->GetSdPage( aPair.second, ePageKind );
 
-                    if( pPage )
+                    if( pPageToPrint )
                     {
                         Point aSecondOffset( aOffset );
 
@@ -1388,7 +1375,7 @@ void PrintManager::PrintStdOrNotes (
 
                         aMap.SetOrigin( aSecondOffset );
                         rInfo.mrPrinter.SetMapMode( aMap );
-                        PrintPage(rInfo, pPrintView, pPage, bPrintMarkedOnly );
+                        PrintPage(rInfo, pPrintView, pPageToPrint, bPrintMarkedOnly );
                     }
 
                     rInfo.mrPrinter.EndPage();
@@ -1412,7 +1399,7 @@ void PrintManager::PrintStdOrNotes (
                     aPageSize = pPage->GetSize();
 
                     rInfo.mrProgress.SetState( nPageCount, rInfo.mnTotal );
-                    nPageCount += rInfo.mnCopies;
+                    nPageCount = nPageCount + rInfo.mnCopies;
 
                     if ( bScalePage )
                     {
@@ -1557,7 +1544,7 @@ void PrintManager::PrintStdOrNotes (
                         if (bPrint)
                         {
                             if (bScalePage
-                                || (rInfo.mpPrintOpts && rInfo.mpPrintOpts->IsCutPage()))
+                                || (rInfo.mpPrintOpts && rInfo.mpPrintOpts->GetOptionsPrint().IsCutPage()))
                             {
                                 // Handlee 1 and 2.
                                 PrintPagePart(
@@ -1675,7 +1662,7 @@ void PrintManager::PrintPage (
     else
         pPrintView->CompleteRedraw(
             &rInfo.mrPrinter,
-            Rectangle(Point(0,0), pPage->GetSize()));
+            Rectangle(Point(0,0), pPage->GetSize()), 0);
 
     pPrintView->HideSdrPage(); //  pPrintView->GetPageView( pPage ) );
 }
