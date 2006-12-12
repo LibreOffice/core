@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:08:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,8 +781,6 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
 
 void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 {
-    SlideSorterViewShell& rShell (mrController.GetViewShell());
-
     // Seitenanzeige und Layout
     /*
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) ||
@@ -791,7 +789,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     SdPage* pPage      = NULL;
     SdPage* pFirstPage = NULL;
     USHORT  nFirstPage;
-    USHORT  nSelectedPages = mrController.GetPageSelector().GetSelectedPageCount();
+    USHORT  nSelectedPages = (USHORT)mrController.GetPageSelector().GetSelectedPageCount();
     String aPageStr;
     String aLayoutStr;
 
@@ -921,8 +919,11 @@ void SlotManager::RenameSlide (void)
                 aNameDlg->GetName( aNewName );
                 if( ! aNewName.Equals( aPageName ) )
                 {
-                    bool bResult = RenameSlideFromDrawViewShell(
-                        pSelectedPage->GetPageNum()/2, aNewName );
+#ifdef DBG_UTIL
+                    bool bResult =
+#endif
+                        RenameSlideFromDrawViewShell(
+                          pSelectedPage->GetPageNum()/2, aNewName );
                     DBG_ASSERT( bResult, "Couldn't rename slide" );
                 }
             }
@@ -1081,7 +1082,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         nInsertionIndex = -1;
     }
 
-    USHORT nPageCount (mrController.GetModel().GetPageCount());
+    USHORT nPageCount ((USHORT)mrController.GetModel().GetPageCount());
 
     rSelector.DisableBroadcasting();
     // In order for SlideSorterController::GetActualPage() to select the
@@ -1143,7 +1144,6 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
 void SlotManager::AssignTransitionEffect (void)
 {
-    SlideSorterViewShell& rShell (mrController.GetViewShell());
     model::SlideSorterModel& rModel (mrController.GetModel());
 
     // We have to manually select the pages in the document that are
@@ -1176,13 +1176,10 @@ void SlotManager::ExecuteCommandAsynchronously (::std::auto_ptr<Command> pComman
     // Ownership of command is (implicitely) transferred to the queue.
     maCommandQueue.push(pCommand.get());
     pCommand.release();
-    ULONG nUserEventId = Application::PostUserEvent(LINK(this,SlotManager,UserEventCallback));
+    Application::PostUserEvent(LINK(this,SlotManager,UserEventCallback));
 }
 
-
-
-
-IMPL_LINK(SlotManager, UserEventCallback, void*, pFoo)
+IMPL_LINK(SlotManager, UserEventCallback, void*, EMPTYARG)
 {
     if ( ! maCommandQueue.empty())
     {
