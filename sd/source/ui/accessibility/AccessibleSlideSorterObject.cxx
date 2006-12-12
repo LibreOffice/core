@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,12 +165,11 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void)
 
 
 
-Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int32 i)
+Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int32 )
     throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ThrowIfDisposed();
     throw lang::IndexOutOfBoundsException();
-    return Reference<XAccessible>();
 }
 
 
@@ -391,7 +390,7 @@ sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& a
 
 
 Reference<XAccessible> SAL_CALL
-    AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& aPoint)
+    AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& )
     throw (uno::RuntimeException)
 {
     return NULL;
