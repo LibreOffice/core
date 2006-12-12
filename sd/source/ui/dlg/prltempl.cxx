@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:41:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/flstitem.hxx>
-//CHINA001 #include <svx/chardlg.hxx>
-//CHINA001 #include <svx/paragrph.hxx>
 #include <svx/drawitem.hxx>
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
@@ -82,7 +80,6 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-//CHINA001 #include <svx/numpages.hxx>
 #include <svx/numitem.hxx>
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
@@ -96,9 +93,9 @@
 #include "enumdlg.hrc"
 //#include "enumdlg.hxx"
 #include "bulmaper.hxx"
-#include <svtools/intitem.hxx> //add CHINA001
-#include <svx/svxgrahicitem.hxx> //CHINA001
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svtools/intitem.hxx>
+#include <svx/svxgrahicitem.hxx>
+#include <svx/flagsdef.hxx>
 #define IS_OUTLINE(x) (x >= PO_OUTLINE_1 && x <= PO_OUTLINE_9)
 
 /*************************************************************************
@@ -114,11 +111,11 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 PresentationObjects _ePO,
                                 SfxStyleSheetBasePool* pSSPool ) :
         SfxTabDialog        ( pParent, DlgId ),
-        aInputSet           ( *rStyleBase.GetItemSet().GetPool(), SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL ),
+        mpDocShell          ( pDocSh ),
         ePO                 ( _ePO ),
-        pDocShell           ( pDocSh ),
-        pOrgSet             ( &rStyleBase.GetItemSet() ),
-        pOutSet             ( NULL )
+        aInputSet           ( *rStyleBase.GetItemSet().GetPool(), SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL ),
+        pOutSet             ( NULL ),
+        pOrgSet             ( &rStyleBase.GetItemSet() )
 {
     if( DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE_3 && IS_OUTLINE(ePO))
     {
@@ -198,17 +195,17 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     FreeResource();
 
     SvxColorTableItem aColorTableItem(*( (const SvxColorTableItem*)
-        ( pDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
+        ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
     SvxGradientListItem aGradientListItem(*( (const SvxGradientListItem*)
-        ( pDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
     SvxBitmapListItem aBitmapListItem(*( (const SvxBitmapListItem*)
-        ( pDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
     SvxHatchListItem aHatchListItem(*( (const SvxHatchListItem*)
-        ( pDocShell->GetItem( SID_HATCH_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
     SvxDashListItem aDashListItem(*( (const SvxDashListItem*)
-        ( pDocShell->GetItem( SID_DASH_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_DASH_LIST ) ) ) );
     SvxLineEndListItem aLineEndListItem(*( (const SvxLineEndListItem*)
-        ( pDocShell->GetItem( SID_LINEEND_LIST ) ) ) );
+        ( mpDocShell->GetItem( SID_LINEEND_LIST ) ) ) );
 
     pColorTab = aColorTableItem.GetColorTable();
     pDashList = aDashListItem.GetDashList();
@@ -221,35 +218,35 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     {
         case TAB_PRES_LAYOUT_TEMPLATE:
         {
-            AddTabPage( RID_SVXPAGE_LINE);//CHINA001 AddTabPage( RID_SVXPAGE_LINE, SvxLineTabPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_AREA);//CHINA001 AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_SHADOW);//CHINA001 AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_TRANSPARENCE);//CHINA001 AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
-            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_LINE);
+            AddTabPage( RID_SVXPAGE_AREA);
+            AddTabPage( RID_SVXPAGE_SHADOW);
+            AddTabPage( RID_SVXPAGE_TRANSPARENCE);
+            AddTabPage( RID_SVXPAGE_CHAR_NAME );
+            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
+            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
         }
         break;
 
         case TAB_PRES_LAYOUT_TEMPLATE_1:
-            AddTabPage( RID_SVXPAGE_LINE);//CHINA001 AddTabPage( RID_SVXPAGE_LINE, SvxLineTabPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_LINE);
         break;
 
         case TAB_PRES_LAYOUT_TEMPLATE_2:
-            AddTabPage( RID_SVXPAGE_AREA);//CHINA001 AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_AREA);
         break;
 
         case TAB_PRES_LAYOUT_TEMPLATE_3:
         {
-            AddTabPage( RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
-            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_NAME );
+            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
+            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
             if(IS_OUTLINE(ePO))
             {
-                AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM, &SvxSingleNumPickTabPage::Create, 0);
-                AddTabPage( RID_SVXPAGE_PICK_BULLET );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_BULLET    , &SvxBulletPickTabPage::Create, 0);
-                AddTabPage( RID_SVXPAGE_PICK_BMP );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_BMP     , &SvxBitmapPickTabPage::Create, 0);
-                AddTabPage( RID_SVXPAGE_NUM_OPTIONS ); //CHINA001 AddTabPage(RID_SVXPAGE_NUM_OPTIONS      , &SvxNumOptionsTabPage::Create, 0);
+                AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
+                AddTabPage( RID_SVXPAGE_PICK_BULLET );
+                AddTabPage( RID_SVXPAGE_PICK_BMP );
+                AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
             }
             else
             {
@@ -356,15 +353,6 @@ void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     {
         case RID_SVXPAGE_LINE:
         {
-//CHINA001          ( (SvxLineTabPage&) rPage ).SetColorTable( pColorTab );
-//CHINA001          ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
-//CHINA001          ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
-//CHINA001          //( (SvxLineTabPage&) rPage ).SetPageType( &nPageType );
-//CHINA001          ( (SvxLineTabPage&) rPage ).SetDlgType( &nDlgType );
-//CHINA001          //( (SvxLineTabPage&) rPage ).SetPos( &nPos );
-//CHINA001          ( (SvxLineTabPage&) rPage ).Construct();
-//CHINA001          ( (SvxLineTabPage&) rPage ).SetDashChgd( &nDashListState );
-//CHINA001          ( (SvxLineTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
             aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
             aSet.Put (SvxLineEndListItem(pLineEndList,SID_LINEEND_LIST));
@@ -376,20 +364,6 @@ void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
         case RID_SVXPAGE_AREA:
         {
-
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetColorTable( pColorTab );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetGradientList( pGradientList );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetHatchingList( pHatchingList );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetBitmapList( pBitmapList );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetPageType( &nPageType );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetDlgType( &nDlgType );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetPos( &nPos );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &nGradientListState );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetHtchChgd( &nHatchingListState );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &nBitmapListState );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).SetColorChgd( &nColorTableState );
-//CHINA001          ( (SvxAreaTabPage&) rPage ).Construct();
-
             aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
             aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
@@ -403,11 +377,6 @@ void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_SHADOW:
-//CHINA001          ( (SvxShadowTabPage&) rPage ).SetColorTable( pColorTab );
-//CHINA001          ( (SvxShadowTabPage&) rPage ).SetPageType( &nPageType );
-//CHINA001          ( (SvxShadowTabPage&) rPage ).SetDlgType( &nDlgType );
-//CHINA001          ( (SvxShadowTabPage&) rPage ).SetColorChgd( &nColorTableState );
-//CHINA001          ( (SvxShadowTabPage&) rPage ).Construct();
                 aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE)); //add CHINA001
                 aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
                 aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
@@ -415,9 +384,6 @@ void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             break;
 
         case RID_SVXPAGE_TRANSPARENCE:
-            //CHINA001 ( (SvxTransparenceTabPage&) rPage ).SetPageType( &nPageType );
-//CHINA001          ( (SvxTransparenceTabPage&) rPage ).SetDlgType( &nDlgType );
-//CHINA001          ( (SvxTransparenceTabPage&) rPage ).Construct();
             aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
@@ -426,17 +392,15 @@ void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         case RID_SVXPAGE_CHAR_NAME:
         {
             SvxFontListItem aItem(*( (const SvxFontListItem*)
-                ( pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
+                ( mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            //CHINA001 ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
             aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rPage.PageCreated(aSet);
         }
         break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            //CHINA001 ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
-            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
             rPage.PageCreated(aSet);
         break;
 
