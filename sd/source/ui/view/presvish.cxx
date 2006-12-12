@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:45:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,8 +266,8 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
         if( HasCurrentFunction() )
             GetCurrentFunction()->Activate();
 
-        if( pView )
-            pView->ShowMarkHdl();
+        //HMHif( pView )
+        //HMH   pView->ShowMarkHdl();
     }
 
     if( bIsMDIActivate )
