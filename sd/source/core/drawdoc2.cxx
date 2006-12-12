@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:21:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,6 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
 USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage) const
 {
     SdPage* pPage = NULL;
-    SdPage* pPageFound = NULL;
     USHORT nPage = 0;
     const USHORT nMaxPages = GetPageCount();
     USHORT nPageNum = SDRPAGE_NOTFOUND;
@@ -434,12 +433,12 @@ SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
 
     ((SdPage*)pPage)->DisconnectLink();
-    if (pCustomShowList)
+    if (mpCustomShowList)
     {
-        for (ULONG i = 0; i < pCustomShowList->Count(); i++)
+        for (ULONG i = 0; i < mpCustomShowList->Count(); i++)
         {
             // Ggf. Seite aus der CustomShows ausfuegen
-            SdCustomShow* pCustomShow = (SdCustomShow*) pCustomShowList->GetObject(i);
+            SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(i);
             pCustomShow->Remove(pPage);
         }
     }
@@ -502,34 +501,6 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 
     if (nPageCount <= 1)
     {
-        /**********************************************************************
-        * Default-Papiergroesse vom Drucker holen
-        **********************************************************************/
-
-        SdPage* pRefPage = NULL;
-
-        if( pRefDocument )
-            SdPage* pRefHandout = pRefDocument->GetSdPage( 0, PK_HANDOUT );
-
-/*
-        if(pDocSh)
-        {
-            SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
-
-            if (pPrinter->IsValid())
-            {
-                // Der Printer gibt leider kein exaktes Format (z.B. A4) zurueck
-                aDefSize = pPrinter->GetPaperSize();
-                SvxPaper ePaper = SvxPaperInfo::GetSvxPaper(aDefSize, MAP_100TH_MM, TRUE);
-
-                if (ePaper != SVX_PAPER_USER)
-                {
-                    // Korrekte Size holen
-                    aDefSize = SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM);
-                }
-            }
-        }
-*/
         // #i57181# Paper size depends on Language, like in Writer
         SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
         Size aDefSize( SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM) );
@@ -539,6 +510,11 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         **********************************************************************/
         BOOL bMasterPage;
         SdPage* pHandoutPage = dynamic_cast< SdPage* >( AllocPage(bMasterPage=FALSE) );
+
+        SdPage* pRefPage = NULL;
+
+        if( pRefDocument )
+            pRefPage = pRefDocument->GetSdPage( 0, PK_HANDOUT );
 
         if( pRefPage )
         {
@@ -596,12 +572,12 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 pPage->SetSize( pRefPage->GetSize() );
                 pPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
             }
-            else if (eDocType == DOCUMENT_TYPE_DRAW)
+            else if (meDocType == DOCUMENT_TYPE_DRAW)
             {
                 // Draw: stets Default-Groesse mit Raendern
                 pPage->SetSize(aDefSize);
 
-                SfxPrinter* pPrinter = pDocSh->GetPrinter(FALSE);
+                SfxPrinter* pPrinter = mpDocSh->GetPrinter(FALSE);
                 if (pPrinter && pPrinter->IsValid())
                 {
                     Size aOutSize(pPrinter->GetOutputSize());
@@ -703,10 +679,10 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         if( bClipboard )
             pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
 
-        pWorkStartupTimer = new Timer();
-        pWorkStartupTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, WorkStartupHdl) );
-        pWorkStartupTimer->SetTimeout(2000);
-        pWorkStartupTimer->Start();
+        mpWorkStartupTimer = new Timer();
+        mpWorkStartupTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, WorkStartupHdl) );
+        mpWorkStartupTimer->SetTimeout(2000);
+        mpWorkStartupTimer->Start();
 
         SetChanged(FALSE);
     }
@@ -901,19 +877,19 @@ void SdDrawDocument::SetLanguage( const LanguageType eLang, const USHORT nId )
 {
     BOOL bChanged = FALSE;
 
-    if( nId == EE_CHAR_LANGUAGE && eLanguage != eLang )
+    if( nId == EE_CHAR_LANGUAGE && meLanguage != eLang )
     {
-        eLanguage = eLang;
+        meLanguage = eLang;
         bChanged = TRUE;
     }
-    else if( nId == EE_CHAR_LANGUAGE_CJK && eLanguageCJK != eLang )
+    else if( nId == EE_CHAR_LANGUAGE_CJK && meLanguageCJK != eLang )
     {
-        eLanguageCJK = eLang;
+        meLanguageCJK = eLang;
         bChanged = TRUE;
     }
-    else if( nId == EE_CHAR_LANGUAGE_CTL && eLanguageCTL != eLang )
+    else if( nId == EE_CHAR_LANGUAGE_CTL && meLanguageCTL != eLang )
     {
-        eLanguageCTL = eLang;
+        meLanguageCTL = eLang;
         bChanged = TRUE;
     }
 
@@ -935,12 +911,12 @@ void SdDrawDocument::SetLanguage( const LanguageType eLang, const USHORT nId )
 
 LanguageType SdDrawDocument::GetLanguage( const USHORT nId ) const
 {
-    LanguageType eLangType = eLanguage;
+    LanguageType eLangType = meLanguage;
 
     if( nId == EE_CHAR_LANGUAGE_CJK )
-        eLangType = eLanguageCJK;
+        eLangType = meLanguageCJK;
     else if( nId == EE_CHAR_LANGUAGE_CTL )
-        eLangType = eLanguageCTL;
+        eLangType = meLanguageCTL;
 
     return eLangType;
 }
@@ -952,10 +928,10 @@ LanguageType SdDrawDocument::GetLanguage( const USHORT nId ) const
 |*
 \************************************************************************/
 
-IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
+IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, EMPTYARG )
 {
-    if( pDocSh )
-        pDocSh->SetWaitCursor( TRUE );
+    if( mpDocSh )
+        mpDocSh->SetWaitCursor( TRUE );
 
     BOOL bChanged = IsChanged();        // merken
 
@@ -986,8 +962,8 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
 
     SetChanged(bChanged || FALSE);
 
-    if( pDocSh )
-        pDocSh->SetWaitCursor( FALSE );
+    if( mpDocSh )
+        mpDocSh->SetWaitCursor( FALSE );
     return 0;
 }
 
@@ -1002,17 +978,17 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
 
 void SdDrawDocument::StopWorkStartupDelay()
 {
-    if (pWorkStartupTimer)
+    if (mpWorkStartupTimer)
     {
-        if ( pWorkStartupTimer->IsActive() )
+        if ( mpWorkStartupTimer->IsActive() )
         {
             // Timer war noch nicht abgelaufen -> WorkStartup wird eingeleitet
-            pWorkStartupTimer->Stop();
+            mpWorkStartupTimer->Stop();
             WorkStartupHdl(NULL);
         }
 
-        delete pWorkStartupTimer;
-        pWorkStartupTimer = NULL;
+        delete mpWorkStartupTimer;
+        mpWorkStartupTimer = NULL;
     }
 }
 
@@ -1096,7 +1072,7 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
 
 IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
                                               const Point& rWinPoint,
-                                              const ::Window& rCmpWnd )
+                                              const ::Window& /* rCmpWnd */ )
 {
     SdIMapInfo* pIMapInfo = GetIMapInfo( pObj );
     IMapObject* pIMapObj = NULL;
@@ -1159,41 +1135,6 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
 
     return pIMapObj;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-Graphic SdDrawDocument::GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj )
-{
-    Graphic             aGraphic;
-/*
-    ::uno::Reference < embed::XVisualObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef(), UNO_QUERY );
-    if ( xObj.is() )
-    {
-        VirtualDevice   aVDev;
-        GDIMetaFile     aGDIMtf;
-        const MapMode   aMap100( MAP_100TH_MM );
-        awt::Size       aSz = xObj->getVisualAreaSize();
-        Size            aSize = Size( aSz.Width, aSz.Height );
-
-        aVDev.SetMapMode( aMap100 );
-        aGDIMtf.Record( &aVDev );
-
-        aIPObjRef->DoDraw( &aVDev, Point(), aSize, JobSetup() );
-
-        aGDIMtf.Stop();
-        aGDIMtf.WindStart();
-        aGDIMtf.SetPrefMapMode( aMap100 );
-        aGDIMtf.SetPrefSize( rSize );
-        aGraphic = Graphic( aGDIMtf );
-    }*/
-    return aGraphic;
-}
-
 
 /** this method enforces that the masterpages are in the currect order,
     that is at position 1 is a PK_STANDARD masterpage followed by a
@@ -1302,19 +1243,19 @@ void SdDrawDocument::CheckMasterPages()
                     if( nFound == nMaxPages )
                         pRefNotesPage = NULL;
 
-                    SdPage* pNotesPage = static_cast<SdPage*>(AllocPage(sal_True));
-                    pNotesPage->SetPageKind(PK_NOTES);
+                    SdPage* pNewNotesPage = static_cast<SdPage*>(AllocPage(sal_True));
+                    pNewNotesPage->SetPageKind(PK_NOTES);
                     if( pRefNotesPage )
                     {
-                        pNotesPage->SetSize( pRefNotesPage->GetSize() );
-                        pNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),
+                        pNewNotesPage->SetSize( pRefNotesPage->GetSize() );
+                        pNewNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),
                                                 pRefNotesPage->GetUppBorder(),
                                                 pRefNotesPage->GetRgtBorder(),
                                                 pRefNotesPage->GetLwrBorder() );
                     }
-                    InsertMasterPage(pNotesPage,  nPage );
-                    pNotesPage->SetLayoutName( pPage->GetLayoutName() );
-                    pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True );
+                    InsertMasterPage(pNewNotesPage,  nPage );
+                    pNewNotesPage->SetLayoutName( pPage->GetLayoutName() );
+                    pNewNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True );
                     nMaxPages++;
                 }
             }
@@ -1638,7 +1579,7 @@ void SdDrawDocument::SetupNewPage (
 
 sd::UndoManager* SdDrawDocument::GetUndoManager() const
 {
-    return pDocSh ? dynamic_cast< sd::UndoManager* >(pDocSh->GetUndoManager()) : 0;
+    return mpDocSh ? dynamic_cast< sd::UndoManager* >(mpDocSh->GetUndoManager()) : 0;
 }
 
 // eof
