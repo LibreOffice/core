@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:43:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,21 +183,21 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
     {
         case SID_ATTRIBUTES_LINE:  // BASIC
         {
-            SetCurrentFunction( FuLine::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuLine::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_ATTRIBUTES_AREA:  // BASIC
         {
-            SetCurrentFunction( FuArea::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuArea::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_ATTR_TRANSFORM:
         {
-            SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Invalidate(SID_RULER_OBJECT);
             Cancel();
         }
@@ -205,21 +205,21 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_CHAR_DLG:  // BASIC
         {
-            SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_PARA_DLG:
         {
-            SetCurrentFunction( FuParagraph::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuParagraph::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_OUTLINE_BULLET:
         {
-            SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
@@ -233,21 +233,21 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_ZWSP:
         case SID_BULLET:
         {
-            SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_PRESENTATION_LAYOUT:
         {
-            SetCurrentFunction( FuPresentationLayout::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
+            SetCurrentFunction( FuPresentationLayout::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             Cancel();
         }
         break;
 
         case SID_PASTE2:
         {
-            SetCurrentFunction( FuInsertClipboard::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuInsertClipboard::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
         }
@@ -255,7 +255,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_INSERT_GRAPHIC:
         {
-            SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
             Invalidate(SID_DRAWTBX_INSERT);
@@ -264,7 +264,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_INSERT_AVMEDIA:
         {
-            SetCurrentFunction( FuInsertAVMedia::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuInsertAVMedia::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
 
             Cancel();
             rReq.Ignore ();
@@ -283,7 +283,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_DIAGRAM:
         case SID_ATTR_TABLE:
         {
-            SetCurrentFunction( FuInsertOLE::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuInsertOLE::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
 
             Cancel();
             rReq.Ignore ();
@@ -294,19 +294,19 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_COPYOBJECTS:
         {
-            if ( pDrView->IsPresObjSelected(FALSE, TRUE) )
+            if ( mpDrawView->IsPresObjSelected(FALSE, TRUE) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
             {
-                if ( pDrView->IsTextEdit() )
+                if ( mpDrawView->IsTextEdit() )
                 {
-                    pDrView->SdrEndTextEdit();
+                    mpDrawView->SdrEndTextEdit();
                 }
 
-                SetCurrentFunction( FuCopy::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+                SetCurrentFunction( FuCopy::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             }
             Cancel();
             rReq.Ignore ();
@@ -316,7 +316,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERTFILE:  // BASIC
         {
             Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
-            SetCurrentFunction( FuInsertFile::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuInsertFile::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
             Cancel();
             rReq.Done ();
@@ -327,7 +327,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_PAGESETUP:  // BASIC ??
         {
-            SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore (); // es werden eigenstaendige macros generiert !!
         }
@@ -336,8 +336,8 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_ZOOM_OUT:
         case SID_ZOOM_PANNING:
         {
-            bZoomOnPage = FALSE;
-            SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
+            mbZoomOnPage = FALSE;
+            SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             // Beendet sich selbst, kein Cancel() notwendig!
             Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Ignore ();
@@ -347,7 +347,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_BEFORE_OBJ:
         case SID_BEHIND_OBJ:
         {
-            SetCurrentFunction( FuDisplayOrder::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
+            SetCurrentFunction( FuDisplayOrder::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             Invalidate( SID_POSITION );
             rReq.Ignore ();
             // Beendet sich selbst, kein Cancel() notwendig!
@@ -356,7 +356,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_REVERSE_ORDER:   // BASIC
         {
-            pDrView->ReverseOrderOfMarked();
+            mpDrawView->ReverseOrderOfMarked();
             Invalidate( SID_POSITION );
             Cancel();
             rReq.Done ();
@@ -365,31 +365,31 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_ANIMATION_EFFECTS:
         {
-            SetCurrentFunction( FuObjectAnimationParameters::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
+            SetCurrentFunction( FuObjectAnimationParameters::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             Cancel();
         }
         break;
 
         case SID_LINEEND_POLYGON:
         {
-            SetCurrentFunction( FuLineEnd::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuLineEnd::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_CAPTUREPOINT:
             // negative Werte um Aufruf aus Menue zu signalisieren
-            aMousePos = Point(-1,-1);
+            maMousePos = Point(-1,-1);
         case SID_SET_SNAPITEM:
         {
-            SetCurrentFunction( FuSnapLine::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
+            SetCurrentFunction( FuSnapLine::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             Cancel();
         }
         break;
 
         case SID_MANAGE_LINKS:
         {
-            SetCurrentFunction( FuLink::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuLink::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
         }
@@ -397,7 +397,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_THESAURUS:
         {
-            SetCurrentFunction( FuThesaurus::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuThesaurus::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
         }
@@ -405,7 +405,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TEXTATTR_DLG:
         {
-            SetCurrentFunction( FuTextAttrDlg::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuTextAttrDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
         }
@@ -413,7 +413,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_MEASURE_DLG:
         {
-            SetCurrentFunction( FuMeasureDlg::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuMeasureDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
         }
@@ -421,7 +421,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_CONNECTION_DLG:
         {
-            SetCurrentFunction( FuConnectionDlg::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuConnectionDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Done();
         }
@@ -510,14 +510,14 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_POLYGON_MORPHING:
         {
-            SetCurrentFunction( FuMorph::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuMorph::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_VECTORIZE:
         {
-            SetCurrentFunction( FuVectorize::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuVectorize::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
@@ -539,7 +539,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject )
+void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 {
     if( mxScannerManager.is() )
     {
@@ -557,7 +557,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEv
                 if( !!aScanBmp )
                 {
                     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                    SdrPage*            pPage = pDrView->GetSdrPageView()->GetPage();
+                    SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();
                     Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
                     const MapMode       aMap100( MAP_100TH_MM );
 
@@ -597,7 +597,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEv
 
                     if( GetView()->AreObjectsMarked() )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+                        const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
                         if( rMarkList.GetMarkCount() == 1 )
                         {
