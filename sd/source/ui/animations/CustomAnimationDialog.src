@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:25:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,17 @@
 #include "CustomAnimationDialog.hrc"
 #include "CustomAnimation.hrc"
 
+#define X0 6
+#define X1 6
+#define X2 73
+#define W0 268
+#define W1 67
+#define W2 100
+#define WIDTH 260
+
 TabDialog DLG_CUSTOMANIMATION
 {
-    Size = MAP_APPFONT ( 239 , 200 ) ;
+    Size = MAP_APPFONT ( WIDTH+6 , 200 ) ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -50,7 +58,7 @@ TabDialog DLG_CUSTOMANIMATION
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 180 , 159 ) ;
+        Size = MAP_APPFONT ( 240 , 159 ) ;
         PageList =
         {
             PageItem
@@ -101,15 +109,15 @@ TabDialog DLG_CUSTOMANIMATION
 TabPage RID_TP_CUSTOMANIMATION_EFFECT
 {
     Hide = TRUE;
-    Size = MAP_APPFONT ( 180 , 159 );
+    Size = MAP_APPFONT ( WIDTH , 159 );
     Text [ de ] = "Effekte" ;
     Text [ en-US ] = "Effect";
 
     FixedLine FL_SETTINGS
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT( 244, 8 );
+        Pos = MAP_APPFONT ( X0 , 3  ) ;
+        Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
         Text [ de ] = "Einstellungen";
@@ -119,15 +127,15 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedText FT_PROPERTY_1
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X1+6 , 16  ) ;
+        Size = MAP_APPFONT( W1, 8 );
         Hide = TRUE;
     };
 
     ListBox LB_PROPERTY_1
     {
-        Pos = MAP_APPFONT ( 57 , 14  ) ;
-        Size = MAP_APPFONT ( 80, 100 );
+        Pos = MAP_APPFONT ( X2+6 , 14  ) ;
+        Size = MAP_APPFONT ( W2, 100 );
         Hide = TRUE;
         TabStop = TRUE ;
         Border = TRUE ;
@@ -138,15 +146,15 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedText FT_PROPERTY_2
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X1+6 , 16  ) ;
+        Size = MAP_APPFONT( W1, 8 );
         Hide = TRUE;
     };
 
     ListBox LB_PROPERTY_2
     {
-        Pos = MAP_APPFONT ( 57 , 14  ) ;
-        Size = MAP_APPFONT ( 80, 100 );
+        Pos = MAP_APPFONT ( X2+6 , 14  ) ;
+        Size = MAP_APPFONT ( W2, 100 );
         Hide = TRUE;
         TabStop = TRUE ;
         Border = TRUE ;
@@ -155,8 +163,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     CheckBox CB_SMOOTH_START
     {
-        Pos = MAP_APPFONT( 12, 14 );
-        Size = MAP_APPFONT ( 81 , 10 ) ;
+        Pos = MAP_APPFONT( X1+6, 14 );
+        Size = MAP_APPFONT ( (W0 / 2) , 10 ) ;
         Hide = TRUE;
 
         Text [ de ] = "Beschleunigter Start";
@@ -165,8 +173,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     CheckBox CB_SMOOTH_END
     {
-        Pos = MAP_APPFONT( 96, 14 );
-        Size = MAP_APPFONT ( 81 , 10 ) ;
+        Pos = MAP_APPFONT( X1 + (W0 / 2) + 3, 14 );
+        Size = MAP_APPFONT ( (W0 / 2) , 10 ) ;
         Hide = TRUE;
 
         Text [ de ] = "Verlangsamtes Ende";
@@ -175,8 +183,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     CheckBox CB_AUTORESTART
     {
-        Pos = MAP_APPFONT( 12, 14 );
-        Size = MAP_APPFONT ( 165 , 10 ) ;
+        Pos = MAP_APPFONT( X1+6, 14 );
+        Size = MAP_APPFONT ( W0 , 10 ) ;
         Hide = TRUE;
 
         Text [ de ] = "Automatisch umkehren";
@@ -190,8 +198,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedLine FL_PLAY
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT( 244, 8 );
+        Pos = MAP_APPFONT ( X0 , 3  ) ;
+        Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
         Text [ de ] = "Wiedergabe starten";
@@ -201,8 +209,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     RadioButton RB_FROM_START
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
-        Size = MAP_APPFONT( 232, 10 );
+        Pos = MAP_APPFONT ( X1 , 16  ) ;
+        Size = MAP_APPFONT( W0, 10 );
         TabStop = TRUE ;
         Hide = TRUE;
 
@@ -213,8 +221,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     RadioButton RB_FROM_LAST
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 29  ) ;
-        Size = MAP_APPFONT( 232, 10 );
+        Pos = MAP_APPFONT ( X1 , 29  ) ;
+        Size = MAP_APPFONT( W0, 10 );
         TabStop = TRUE ;
         Hide = TRUE;
 
@@ -225,8 +233,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     RadioButton RB_FROM_TIME
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 42  ) ;
-        Size = MAP_APPFONT( 232, 10 );
+        Pos = MAP_APPFONT ( X1 , 42  ) ;
+        Size = MAP_APPFONT( W0, 10 );
         TabStop = TRUE ;
         Hide = TRUE;
 
@@ -237,8 +245,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     MetricField MF_START_TIME
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 55  ) ;
-        Size = MAP_APPFONT ( 42, 12 );
+        Pos = MAP_APPFONT ( X1 , 55  ) ;
+        Size = MAP_APPFONT ( W1, 12 );
         OutputSize = TRUE;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -258,8 +266,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedLine FL_STOP
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 70  ) ;
-        Size = MAP_APPFONT( 244, 8 );
+        Pos = MAP_APPFONT ( X0 , 70  ) ;
+        Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
         Text [ de ] = "Wiedergabe beenden";
@@ -269,8 +277,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     RadioButton RB_STOP_ON_CLICK
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 81  ) ;
-        Size = MAP_APPFONT( 232, 10 );
+        Pos = MAP_APPFONT ( X1 , 81  ) ;
+        Size = MAP_APPFONT( W0, 10 );
         TabStop = TRUE ;
         Hide = TRUE;
 
@@ -281,8 +289,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     RadioButton RB_STOP_ON_NEXT_SLIDE
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 94 ) ;
-        Size = MAP_APPFONT( 232, 10 );
+        Pos = MAP_APPFONT ( X1 , 94 ) ;
+        Size = MAP_APPFONT( W0, 10 );
         TabStop = TRUE ;
         Hide = TRUE;
 
@@ -293,8 +301,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     RadioButton RB_STOP_AFTER_N_SLIDES
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 107  ) ;
-        Size = MAP_APPFONT( 232, 10 );
+        Pos = MAP_APPFONT ( X1 , 107  ) ;
+        Size = MAP_APPFONT( W0, 10 );
         TabStop = TRUE ;
         Hide = TRUE;
 
@@ -305,8 +313,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     MetricField MF_STOP_AFTER_SLIDES
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12 , 55  ) ;
-        Size = MAP_APPFONT ( 42, 12 );
+        Pos = MAP_APPFONT ( X1 , 55  ) ;
+        Size = MAP_APPFONT ( W1, 12 );
         OutputSize = TRUE;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -330,8 +338,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedLine FL_ENHANCEMENTS
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT( 244, 8 );
+        Pos = MAP_APPFONT ( X0 , 3  ) ;
+        Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
         Text [ de ] = "Erweiterungen";
@@ -341,8 +349,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedText FT_SOUND
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 5  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X1 , 5  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Klang";
         Text [ en-US ] = "Sound";
@@ -350,8 +358,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_SOUND
     {
-        Pos = MAP_APPFONT ( 51 , 3  ) ;
-        Size = MAP_APPFONT ( 80, 100 );
+        Pos = MAP_APPFONT ( X2 , 3  ) ;
+        Size = MAP_APPFONT ( W2 - 19, 100 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -359,7 +367,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     PushButton PB_SOUND_PREVIEW
     {
-        Pos = MAP_APPFONT ( 134 , 2  ) ;
+        Pos = MAP_APPFONT ( X2 + W2 - 16 , 2  ) ;
         Size = MAP_APPFONT( 16, 14 );
         OutputSize = TRUE;
         TabStop = TRUE;
@@ -368,8 +376,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedText FT_AFTER_EFFECT
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 20  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X1 , 20  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Nach der Animation";
         Text [ en-US ] = "After animation ";
@@ -377,8 +385,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_AFTER_EFFECT
     {
-        Pos = MAP_APPFONT ( 51 , 18  ) ;
-        Size = MAP_APPFONT ( 80, 100 );
+        Pos = MAP_APPFONT ( X2 , 18  ) ;
+        Size = MAP_APPFONT ( W2, 100 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -401,16 +409,16 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     FixedText FT_DIMCOLOR
     {
-        Pos = MAP_APPFONT( 6, 35 );
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT( X1, 35 );
+        Size = MAP_APPFONT( W1, 8 );
         Text [ de ] = "Abblendfarbe" ;
         Text [ en-US ] = "Dim Color";
     };
 
     ListBox CLB_DIMCOLOR
     {
-        Pos = MAP_APPFONT( 51, 33 );
-        Size = MAP_APPFONT ( 80, 100 );
+        Pos = MAP_APPFONT( X2, 33 );
+        Size = MAP_APPFONT ( W2, 100 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -419,8 +427,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedText FT_TEXT_ANIM
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 50  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X1 , 50  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Text animieren";
         Text [ en-US ] = "Text animation";
@@ -428,8 +436,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_TEXT_ANIM
     {
-        Pos = MAP_APPFONT ( 51 , 48  ) ;
-        Size = MAP_APPFONT ( 80, 100 );
+        Pos = MAP_APPFONT ( X2 , 48  ) ;
+        Size = MAP_APPFONT ( W2, 100 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -451,8 +459,8 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     FixedText FT_TEXT_DELAY
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 51 + 42 + 3, 66  ) ;
-        Size = MAP_APPFONT( 120, 8 );
+        Pos = MAP_APPFONT ( X2 + 45, 66  ) ;
+        Size = MAP_APPFONT( W0 - X2 - 45, 8 );
 
         Text [ de ] = "verzögerung zwischen Buchstaben";
         Text [ en-US ] = "delay between characters";
@@ -460,7 +468,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     MetricField MF_TEXT_DELAY
     {
-        Pos = MAP_APPFONT ( 51, 64  ) ;
+        Pos = MAP_APPFONT ( X2, 64  ) ;
         Size = MAP_APPFONT ( 42, 12 );
         TabStop = TRUE ;
         Border = TRUE ;
@@ -480,15 +488,15 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 TabPage RID_TP_CUSTOMANIMATION_DURATION
 {
     Hide = TRUE;
-    Size = MAP_APPFONT ( 180 , 159 );
+    Size = MAP_APPFONT ( WIDTH , 159 );
     Text [ de ] = "Anzeigedauer" ;
     Text [ en-US ] = "Timing";
 
     FixedText FT_START
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 5  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X0 , 5  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Starten";
         Text [ en-US ] = "Start";
@@ -496,8 +504,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     ListBox LB_START
     {
-        Pos = MAP_APPFONT ( 51 , 3  ) ;
-        Size = MAP_APPFONT ( 80, 48 );
+        Pos = MAP_APPFONT ( X2 , 3  ) ;
+        Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -519,8 +527,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
     FixedText FT_START_DELAY
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 20  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X0 , 20  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Verzögerung";
         Text [ en-US ] = "Delay";
@@ -528,8 +536,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     MetricField MF_START_DELAY
     {
-        Pos = MAP_APPFONT ( 51 , 18  ) ;
-        Size = MAP_APPFONT ( 42, 12 );
+        Pos = MAP_APPFONT ( X2 , 18  ) ;
+        Size = MAP_APPFONT ( W2, 12 );
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -547,8 +555,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
     FixedText FT_DURATION
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 35  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X0 , 35  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Geschwindigkeit";
         Text [ en-US ] = "Speed";
@@ -556,8 +564,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     ComboBox CB_DURATION
     {
-        Pos = MAP_APPFONT ( 51 , 33  ) ;
-        Size = MAP_APPFONT ( 80, 48 );
+        Pos = MAP_APPFONT ( X2 , 33  ) ;
+        Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -566,8 +574,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
     FixedText FT_REPEAT
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 50  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X0 , 50  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Wiederholen";
         Text [ en-US ] = "Repeat";
@@ -575,8 +583,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     ComboBox CB_REPEAT
     {
-        Pos = MAP_APPFONT ( 51 , 48 ) ;
-        Size = MAP_APPFONT ( 80, 48 );
+        Pos = MAP_APPFONT ( X2 , 48 ) ;
+        Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -584,8 +592,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     CheckBox CBX_REWIND
     {
-        Pos = MAP_APPFONT ( 6 , 66  ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
+        Pos = MAP_APPFONT ( X0 , 66  ) ;
+        Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Nach der Wiedergabe zurückspulen" ;
         Text [ en-US ] = "Rewind when done playing" ;
@@ -594,8 +602,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
     FixedLine FL_TRIGGER
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 79  ) ;
-        Size = MAP_APPFONT( 168, 8 );
+        Pos = MAP_APPFONT ( X0 , 79  ) ;
+        Size = MAP_APPFONT( W0, 8 );
 
         Text [ de ] = "Auslösen";
         Text [ en-US ] = "Trigger";
@@ -603,8 +611,8 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     RadioButton RB_CLICKSEQUENCE
     {
-        Pos = MAP_APPFONT ( 12, 92  ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Pos = MAP_APPFONT ( X1+6, 92  ) ;
+        Size = MAP_APPFONT ( W0 , 10 ) ;
         Text [ de ] = "Animation als Teil der Klickreihenfolge" ;
         Text [ en-US ] = "Animate as part of click sequence" ;
         TabStop = TRUE ;
@@ -612,17 +620,17 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     RadioButton RB_INTERACTIVE
     {
-        Pos = MAP_APPFONT ( 12, 105  ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
-        Text [ de ] = "Effect starten beim Klicken auf" ;
+        Pos = MAP_APPFONT ( X1+6, 105  ) ;
+        Size = MAP_APPFONT ( W0 , 10 ) ;
+        Text [ de ] = "Effekt starten beim Klicken auf" ;
         Text [ en-US ] = "Start effect on click of" ;
         TabStop = TRUE ;
     };
 
     ListBox LB_TRIGGER
     {
-        Pos = MAP_APPFONT ( 24 , 118  );
-        Size = MAP_APPFONT ( 80, 80 );
+        Pos = MAP_APPFONT ( X1+18 , 118  );
+        Size = MAP_APPFONT ( W2, 80 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -632,15 +640,15 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 TabPage RID_TP_CUSTOMANIMATION_TEXT
 {
     Hide = TRUE;
-    Size = MAP_APPFONT ( 180 , 159 );
+    Size = MAP_APPFONT ( WIDTH , 159 );
     Text [ de ] = "Textanimation" ;
     Text [ en-US ] = "Text Animation";
 
     FixedText FT_GROUP_TEXT
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 6 , 5  ) ;
-        Size = MAP_APPFONT( 42, 8 );
+        Pos = MAP_APPFONT ( X0 , 5  ) ;
+        Size = MAP_APPFONT( W1, 8 );
 
         Text [ de ] = "Texte gruppieren";
         Text [ en-US ] = "Group text";
@@ -648,8 +656,8 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 
     ListBox LB_GROUP_TEXT
     {
-        Pos = MAP_APPFONT ( 45 , 3 ) ;
-        Size = MAP_APPFONT ( 80, 48 );
+        Pos = MAP_APPFONT ( X2 , 3 ) ;
+        Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -678,8 +686,8 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 
     Checkbox CBX_GROUP_AUTO
     {
-        Pos = MAP_APPFONT ( 6 , 20  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( X0 , 20  ) ;
+        Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Automatisch nach" ;
         Text [ en-US ] = "Automatically after" ;
@@ -688,8 +696,8 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 
     MetricField MF_GROUP_AUTO
     {
-        Pos = MAP_APPFONT ( 69 , 18 ) ;
-        Size = MAP_APPFONT ( 42, 12 );
+        Pos = MAP_APPFONT ( X2 , 18 ) ;
+        Size = MAP_APPFONT ( W2, 12 );
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -706,8 +714,8 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 
     Checkbox CBX_ANIMATE_FORM
     {
-        Pos = MAP_APPFONT ( 6 , 33  ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
+        Pos = MAP_APPFONT ( X0 , 33  ) ;
+        Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Angefügte Form animieren" ;
         Text [ en-US ] = "Animate attached shape" ;
@@ -715,8 +723,8 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 
     Checkbox CBX_REVERSE
     {
-        Pos = MAP_APPFONT ( 6 , 46  ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
+        Pos = MAP_APPFONT ( X0 , 46  ) ;
+        Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "In umgekehrter Reihenfolge" ;
         Text [ en-US ] = "In reverse order" ;
