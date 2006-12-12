@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:39:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,16 +38,7 @@
 #include "calendarImpl.hxx"
 #include "nativenumbersupplier.hxx"
 
-// External unicode includes (from icu) cause warning C4668 on Windows.
-// We want to minimize the patches to external headers, so the warnings are
-// disabled here instead of in the header file itself.
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include "unicode/calendar.h"
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "warnings_guard_unicode_calendar.h"
 
 //  ----------------------------------------------------
 //  class Calendar_gregorian
