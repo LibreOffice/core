@@ -6,11 +6,12 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\updchk.uno.so %_DEST%\lib%_EXT%\updchk.uno.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
+..\%__SRC%\bin\pluginapp.bin %_DEST%\bin%_EXT%\pluginapp.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
-..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
+..\%__SRC%\bin\nsplugin.exe %_DEST%\bin%_EXT%\nsplugin.exe
 ..\%__SRC%\bin\nsplugin %_DEST%\bin%_EXT%\nsplugin
 ..\%__SRC%\bin\npsoplugin.dll %_DEST%\bin%_EXT%\npsoplugin.dll
 ..\%__SRC%\bin\npsoplugin_so.dll %_DEST%\bin%_EXT%\so\npsoplugin.dll
