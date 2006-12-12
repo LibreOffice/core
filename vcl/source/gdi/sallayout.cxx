@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:54:04 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
+
+#include <algorithm>
 
 // =======================================================================
 
@@ -638,48 +640,48 @@ void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 
 bool ImplLayoutArgs::PrepareFallback()
 {
-    // return early if a fallback is not needed
+    // short circuit if no fallback is needed
     if( maReruns.IsEmpty() )
     {
         maRuns.Clear();
         return false;
     }
 
-    // convert the fallback request to a layout request
-
-    // sort out chars that were not requested anyway
-    ImplLayoutRuns aOrigRuns = maRuns;
-    maRuns.Clear();
+    // convert the fallback requests to layout requests
     bool bRTL;
-    int nMin1, nEnd1;
+    int nMin, nEnd;
+
+    // get the individual fallback requests
+    typedef std::vector<int> IntVector;
+    IntVector aPosVector;
+    aPosVector.reserve( mnLength );
     maReruns.ResetPos();
-    for(; maReruns.GetRun( &nMin1, &nEnd1, &bRTL ); maReruns.NextRun() )
+    for(; maReruns.GetRun( &nMin, &nEnd, &bRTL ); maReruns.NextRun() )
+        for( int i = nMin; i < nEnd; ++i )
+            aPosVector.push_back( i );
+    maReruns.Clear();
+
+    // sort the individual fallback requests
+    std::sort( aPosVector.begin(), aPosVector.end() );
+
+    // adjust fallback runs to have the same order and limits of the original runs
+    ImplLayoutRuns aNewRuns;
+    maRuns.ResetPos();
+    for(; maRuns.GetRun( &nMin, &nEnd, &bRTL ); maRuns.NextRun() )
     {
-        // find a matching layout run and clip the fallback run to it
-        // TODO: improve O(n^2) algorithm
-        int nMin2, nEnd2;
-        aOrigRuns.ResetPos();
-        for(; aOrigRuns.GetRun( &nMin2, &nEnd2, &bRTL ); aOrigRuns.NextRun() )
-        {
-            // ignore runs that don't overlap
-            if( nMin1 >= nEnd2 )
-                continue;
-            if( nEnd1 <= nMin2 )
-                continue;
-            // clip the fallback run to the layout run
-            if( nMin1 < nMin2 )
-                nMin1 = nMin2;
-            if( nEnd1 > nEnd2 )
-                nEnd1 = nEnd2;
-            // if there is something left request the fallback
-            if( nMin1 < nEnd1 )
-                maRuns.AddRun( nMin1, nEnd1, bRTL );
-            break;
+        if( !bRTL) {
+            IntVector::const_iterator it = std::lower_bound( aPosVector.begin(), aPosVector.end(), nMin );
+            for(; (it != aPosVector.end()) && (*it < nEnd); ++it )
+                aNewRuns.AddPos( *it, bRTL );
+        } else {
+            IntVector::const_iterator it = std::upper_bound( aPosVector.begin(), aPosVector.end(), nEnd );
+            while( (it != aPosVector.begin()) && (*--it >= nMin) )
+                aNewRuns.AddPos( *it, bRTL );
         }
     }
 
+    maRuns = aNewRuns;  // TODO: use vector<>::swap()
     maRuns.ResetPos();
-    maReruns.Clear();
     return true;
 }
 
@@ -1066,7 +1068,8 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
         n = pG->mnCharPos - rArgs.mnMinCharPos;
         if( (n < 0) || (nCharCount <= n) )
             continue;
-        pLogCluster[ n ] = i;
+        if( pLogCluster[ n ] < 0 )
+            pLogCluster[ n ] = i;
         if( nBasePointX < 0 )
             nBasePointX = pG->maLinearPos.X();
     }
@@ -1769,20 +1772,23 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             }
         }
 
-        // if a justification array is available => override the advance width
+        // if a justification array is available
+        // => use it directly to advance to the next x-position
         if( aMultiArgs.mpDXArray )
         {
             // the run advance is the width from the first char
             // in the run to the first char in the next run
             nRunAdvance = 0;
-            int nRelPos = nCharPos[0] - mnMinCharPos;
-            if( nRelPos > 0 )
-                nRunAdvance += aMultiArgs.mpDXArray[ nRelPos-1 ];
-            nRelPos = nActiveCharPos - mnMinCharPos;
-            if( nRelPos > 0 )
-                nRunAdvance -= aMultiArgs.mpDXArray[ nRelPos-1 ];
-            if( nRunAdvance < 0 )
+            const bool bLTR = (nActiveCharPos < nCharPos[0]);
+            int nDXIndex = nCharPos[0] - mnMinCharPos - bLTR;
+            if( nDXIndex >= 0 )
+                nRunAdvance += aMultiArgs.mpDXArray[ nDXIndex ];
+            nDXIndex = nActiveCharPos - mnMinCharPos - bLTR;
+            if( nDXIndex >= 0 )
+                nRunAdvance -= aMultiArgs.mpDXArray[ nDXIndex ];
+            if( !bLTR )
                 nRunAdvance = -nRunAdvance;
+
             // convert justification array units into fallback font units
             nRunAdvance *= mpLayouts[n]->GetUnitsPerPixel();
         }
