@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:54:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
     }
 
     if( bIsMDIActivate )
-        ReadFrameViewData( pFrameView );
+        ReadFrameViewData( mpFrameView );
     GetDocSh()->Connect( this );
 
     if( mpSlideShow && !mbShowStarted )
