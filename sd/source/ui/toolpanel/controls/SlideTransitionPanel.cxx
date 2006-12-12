@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPanel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:20:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,11 @@ Size SlideTransitionPanel::GetPreferredSize()
 {
     return maPreferredSize;
 }
-sal_Int32 SlideTransitionPanel::GetPreferredWidth(sal_Int32 nHeigh)
+sal_Int32 SlideTransitionPanel::GetPreferredWidth(sal_Int32 )
 {
     return maPreferredSize.Width();
 }
-sal_Int32 SlideTransitionPanel::GetPreferredHeight(sal_Int32 nWidth)
+sal_Int32 SlideTransitionPanel::GetPreferredHeight(sal_Int32 )
 {
     return maPreferredSize.Height();
 }
@@ -106,7 +106,7 @@ bool SlideTransitionPanel::IsExpandable() const
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible> SlideTransitionPanel::CreateAccessibleObject (
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent)
+        ::com::sun::star::accessibility::XAccessible>& )
 {
     if (GetWindow() != NULL)
         return GetWindow()->GetAccessible();
