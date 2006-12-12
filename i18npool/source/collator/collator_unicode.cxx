@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:17:17 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,13 @@ Collator_Unicode::Collator_Unicode()
 {
     implementationName = "com.sun.star.i18n.Collator_Unicode";
     collator = NULL;
+    hModule = NULL;
 }
 
 Collator_Unicode::~Collator_Unicode()
 {
     if (collator) delete collator;
+    if (hModule) osl_unloadModule(hModule);
 }
 
 sal_Int32 SAL_CALL
@@ -76,15 +78,28 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
     throw(RuntimeException)
 {
     if (!collator) {
+        /** ICU collators are loaded using a locale only.
+            ICU uses Variant as collation algorithm name (like de__PHONEBOOK
+            locale), note the empty territory (Country) designator in this special
+            case here. The icu::Locale contructor changes the algorithm name to
+            uppercase itself, so we don't have to bother with that.
+        */
+        icu::Locale icuLocale(
+               OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr(),
+               OUStringToOString(rLocale.Country, RTL_TEXTENCODING_ASCII_US).getStr(),
+               OUStringToOString(rAlgorithm, RTL_TEXTENCODING_ASCII_US).getStr());
         // load ICU collator
         UErrorCode status = U_ZERO_ERROR;
+        collator = (RuleBasedCollator*) icu::Collator::createInstance(icuLocale, status);
+        if (! U_SUCCESS(status))
+            throw RuntimeException();
         if (OUString::createFromAscii(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
             OUStringBuffer aBuf;
 #ifdef SAL_DLLPREFIX
             aBuf.appendAscii(SAL_DLLPREFIX);
 #endif
             aBuf.appendAscii( "collator_data" ).appendAscii( SAL_DLLEXTENSION );
-            oslModule hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+            hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
             if (hModule) {
                 const sal_uInt8* (*func)() = NULL;
                 aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
@@ -111,29 +126,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 }
                 if (func) {
                     const sal_uInt8* ruleImage=func();
-                    collator = new RuleBasedCollator(reinterpret_cast<const uint8_t*>(ruleImage), status);
+                    collator = new RuleBasedCollator(reinterpret_cast<const uint8_t*>(ruleImage), -1, collator, status);
                     if (! U_SUCCESS(status))
                         throw RuntimeException();
                 }
-                osl_unloadModule(hModule);
             }
-        }
-        if (!collator) {
-           // load ICU collator
-            /** ICU collators are loaded using a locale only.
-                ICU uses Variant as collation algorithm name (like de__PHONEBOOK
-                locale), note the empty territory (Country) designator in this special
-                case here. The icu::Locale contructor changes the algorithm name to
-                uppercase itself, so we don't have to bother with that.
-            */
-           icu::Locale icuLocale(
-                   OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr(),
-                   OUStringToOString(rLocale.Country, RTL_TEXTENCODING_ASCII_US).getStr(),
-                   OUStringToOString(rAlgorithm, RTL_TEXTENCODING_ASCII_US).getStr());
-
-            collator = (RuleBasedCollator*) icu::Collator::createInstance(icuLocale, status);
-            if (! U_SUCCESS(status))
-                throw RuntimeException();
         }
     }
 
