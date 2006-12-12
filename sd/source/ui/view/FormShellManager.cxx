@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormShellManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:29:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:04:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,8 @@ IMPL_LINK(FormShellManager, PaneManagerEventHandler, PaneManagerEvent*, pEvent)
             case PaneManagerEvent::EID_VIEW_SHELL_ADDED:
                 RegisterAtCenterPane();
                 break;
+            default:
+                break;
         }
     }
 
@@ -279,9 +281,6 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
 {
     if (pEvent != NULL)
     {
-        ::Window* pEventWindow
-            = static_cast<VclWindowEvent*>(pEvent)->GetWindow();
-
         switch (pEvent->GetId())
         {
             case VCLEVENT_WINDOW_GETFOCUS:
@@ -319,7 +318,7 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
 
 
 void FormShellManager::SFX_NOTIFY(
-        SfxBroadcaster& rBC,
+        SfxBroadcaster&,
         const TypeId& rBCType,
         const SfxHint& rHint,
         const TypeId& rHintType)
@@ -363,8 +362,8 @@ FormShellManagerFactory::FormShellManagerFactory (
 
 FmFormShell* FormShellManagerFactory::CreateShell (
     ::sd::ShellId nId,
-    ::Window* pParentWindow,
-    ::sd::FrameView* pFrameView)
+    ::Window*,
+    ::sd::FrameView*)
 {
     FmFormShell* pShell = NULL;
 
