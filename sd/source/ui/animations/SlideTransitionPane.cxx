@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:30:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:53:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,7 +417,7 @@ String lcl_getSoundFileURL(
         // the first three entries are no actual sounds
         if( nPos >= 3 )
         {
-            DBG_ASSERT( rListBox.GetEntryCount() - 3 == rSoundList.size(),
+            DBG_ASSERT( (sal_uInt32)(rListBox.GetEntryCount() - 3) == rSoundList.size(),
                         "Sound list-box is not synchronized to sound list" );
             nPos -= 3;
             if( rSoundList.size() > nPos )
@@ -860,7 +860,7 @@ void SlideTransitionPane::updateControls()
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
                 // skip first three entries
-                maLB_SOUND.SelectEntryPos( nPos + 3 );
+                maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
             else
@@ -990,7 +990,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
         if( bValidSoundFile )
             // skip first three entries in list
-            maLB_SOUND.SelectEntryPos( nPos + 3 );
+            maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
     }
 
     if( ! bValidSoundFile )
@@ -999,7 +999,7 @@ void SlideTransitionPane::openSoundFileDialog()
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
-                maLB_SOUND.SelectEntryPos( nPos + 3 );
+                maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
             else
                 maLB_SOUND.SelectEntryPos( 0 );  // NONE
         }
@@ -1274,12 +1274,12 @@ IMPL_LINK( SlideTransitionPane, AutoPreviewClicked, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, pTimer )
+IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, EMPTYARG )
 {
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
     TransitionPresetList::const_iterator aIter( rPresetList.begin() );
     const TransitionPresetList::const_iterator aEnd( rPresetList.end() );
-    ::std::size_t nIndex = 0;
+    sal_uInt16 nIndex = 0;
     ::std::size_t nUIIndex = 0;
     while( aIter != aEnd )
     {
@@ -1288,7 +1288,7 @@ IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, pTimer )
          if( aUIName.getLength() )
         {
             maLB_SLIDE_TRANSITIONS.InsertEntry( aUIName );
-            m_aPresetIndexes[ nIndex ] = nUIIndex;
+            m_aPresetIndexes[ nIndex ] = (sal_uInt16)nUIIndex;
             ++nUIIndex;
         }
         ++nIndex;
