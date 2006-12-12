@@ -1,3 +1,3 @@
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
-..\%__SRC%\bin\*.dll %_DEST%\lib%_EXT%\*.dll
+..\%__SRC%\lib\libwpft*.so %_DEST%\lib%_EXT%
+..\%__SRC%\bin\wpft*.dll %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
