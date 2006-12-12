@@ -4,63 +4,36 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 #*************************************************************************
 #
+#   OpenOffice.org - a multi-platform office productivity suite
+#
 #   $RCSfile: XMLBuildListParser.pm,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: obo $ $Date: 2006-04-26 12:25:21 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:30:19 $
 #
-#   The Contents of this file are made available subject to the terms of
-#   either of the following licenses
-#
-#          - GNU Lesser General Public License Version 2.1
-#          - Sun Industry Standards Source License Version 1.1
-#
-#   Sun Microsystems Inc., October, 2000
-#
-#   GNU Lesser General Public License Version 2.1
-#   =============================================
-#   Copyright 2000 by Sun Microsystems, Inc.
-#   901 San Antonio Road, Palo Alto, CA 94303, USA
-#
-#   This library is free software; you can redistribute it and/or
-#   modify it under the terms of the GNU Lesser General Public
-#   License version 2.1, as published by the Free Software Foundation.
-#
-#   This library is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#   Lesser General Public License for more details.
-#
-#   You should have received a copy of the GNU Lesser General Public
-#   License along with this library; if not, write to the Free Software
-#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-#   MA  02111-1307  USA
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
 #
 #
-#   Sun Industry Standards Source License Version 1.1
-#   =================================================
-#   The contents of this file are subject to the Sun Industry Standards
-#   Source License Version 1.1 (the "License"); You may not use this file
-#   except in compliance with the License. You may obtain a copy of the
-#   License at http://www.openoffice.org/license.html.
+#     GNU Lesser General Public License Version 2.1
+#     =============================================
+#     Copyright 2005 by Sun Microsystems, Inc.
+#     901 San Antonio Road, Palo Alto, CA 94303, USA
 #
-#   Software provided under this License is provided on an "AS IS" basis,
-#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
-#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
-#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-#   See the License for the specific provisions governing your rights and
-#   obligations concerning the Software.
+#     This library is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU Lesser General Public
+#     License version 2.1, as published by the Free Software Foundation.
 #
-#   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+#     This library is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#     Lesser General Public License for more details.
 #
-#   Copyright: 2000 by Sun Microsystems, Inc.
-#
-#   All Rights Reserved.
-#
-#   Contributor(s): _______________________________________
-#
-#
+#     You should have received a copy of the GNU Lesser General Public
+#     License along with this library; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#     MA  02111-1307  USA
 #
 #*************************************************************************
 
@@ -351,56 +324,36 @@ sub saveXMLFile
    print"<!--\n"
        ."***************************************************************************\n"
        ."*                                                                          \n"
-       ."*  The Contents of this file are made available subject to the terms of    \n"
-       ."*  either of the following licenses                                        \n"
+       ."*   OpenOffice.org - a multi-platform office productivity suite            \n"
        ."*                                                                          \n"
-       ."*         - GNU Lesser General Public License Version 2.1                  \n"
-       ."*         - Sun Industry Standards Source License Version 1.1              \n"
+       ."*   \$RCSfile: XMLBuildListParser.pm,v $                                  \n"
        ."*                                                                          \n"
-       ."*  Sun Microsystems Inc., October, 2000                                    \n"
+       ."*   \$Revision: 1.2 $                                                 \n"
        ."*                                                                          \n"
-       ."*  GNU Lesser General Public License Version 2.1                           \n"
-       ."*  =============================================                           \n"
-       ."*  Copyright 2000 by Sun Microsystems, Inc.                                \n"
-       ."*  901 San Antonio Road, Palo Alto, CA 94303, USA                          \n"
+       ."*   last change: \$Author: kz $ \$Date: 2006-12-12 16:30:19 $           \n"
        ."*                                                                          \n"
-       ."*  This library is free software; you can redistribute it and/or           \n"
-       ."*  modify it under the terms of the GNU Lesser General Public              \n"
-       ."*  License version 2.1, as published by the Free Software Foundation.      \n"
-       ."*                                                                          \n"
-       ."*  This library is distributed in the hope that it will be useful,         \n"
-       ."*  but WITHOUT ANY WARRANTY; without even the implied warranty of          \n"
-       ."*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU       \n"
-       ."*  Lesser General Public License for more details.                         \n"
-       ."*                                                                          \n"
-       ."*  You should have received a copy of the GNU Lesser General Public        \n"
-       ."*  License along with this library; if not, write to the Free Software     \n"
-       ."*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,                   \n"
-       ."*  MA  02111-1307  USA                                                     \n"
+       ."*   The Contents of this file are made available subject to                \n"
+       ."*   the terms of GNU Lesser General Public License Version 2.1.            \n"
        ."*                                                                          \n"
        ."*                                                                          \n"
-       ."*  Sun Industry Standards Source License Version 1.1                       \n"
-       ."*  =================================================                       \n"
-       ."*  The contents of this file are subject to the Sun Industry Standards     \n"
-       ."*  Source License Version 1.1 (the \"License\"); You may not use this file \n"
-       ."*  except in compliance with the License. You may obtain a copy of the     \n"
-       ."*  License at http://www.openoffice.org/license.html.                      \n"
+       ."*     GNU Lesser General Public License Version 2.1                        \n"
+       ."*     =============================================                        \n"
+       ."*     Copyright 2005 by Sun Microsystems, Inc.                             \n"
+       ."*     901 San Antonio Road, Palo Alto, CA 94303, USA                       \n"
        ."*                                                                          \n"
-       ."*  Software provided under this License is provided on an \"AS IS\" basis, \n"
-       ."*  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,     \n"
-       ."*  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,    \n"
-       ."*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.          \n"
-       ."*  See the License for the specific provisions governing your rights and   \n"
-       ."*  obligations concerning the Software.                                    \n"
+       ."*     This library is free software; you can redistribute it and/or        \n"
+       ."*     modify it under the terms of the GNU Lesser General Public           \n"
+       ."*     License version 2.1, as published by the Free Software Foundation.   \n"
        ."*                                                                          \n"
-       ."*  The Initial Developer of the Original Code is: Sun Microsystems, Inc..  \n"
+       ."*     This library is distributed in the hope that it will be useful,      \n"
+       ."*     but WITHOUT ANY WARRANTY; without even the implied warranty of       \n"
+       ."*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    \n"
+       ."*     Lesser General Public License for more details.                      \n"
        ."*                                                                          \n"
-       ."*  Copyright: 2000 by Sun Microsystems, Inc.                               \n"
-       ."*                                                                          \n"
-       ."*  All Rights Reserved.                                                    \n"
-       ."*                                                                          \n"
-       ."*  Contributor(s): _______________________________________                 \n"
-       ."*                                                                          \n"
+       ."*     You should have received a copy of the GNU Lesser General Public     \n"
+       ."*     License along with this library; if not, write to the Free Software  \n"
+       ."*     Foundation, Inc., 59 Temple Place, Suite 330, Boston,                \n"
+       ."*     MA  02111-1307  USA                                                  \n"
        ."*                                                                          \n"
        ."***************************************************************************\n"
        ."-->\n";
