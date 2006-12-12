@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:47:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,8 @@
 #endif
 
 using namespace com::sun::star;
+
+const String aEmptyStr;
 
 namespace sd {
 
@@ -293,7 +295,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     {
         SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
         USHORT nCurPage = (pPage->GetPageNum() - 1) >> 1;
-        USHORT nNewPage = pVScroll->GetThumbPos()/256;
+        USHORT nNewPage = (USHORT)pVScroll->GetThumbPos()/256;
         if( nCurPage != nNewPage )
             static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
     }
@@ -337,6 +339,29 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     return 0;
 }
 
+SvxRuler* ViewShell::CreateHRuler(::sd::Window* , BOOL )
+{
+    return NULL;
+}
+
+SvxRuler* ViewShell::CreateVRuler(::sd::Window* )
+{
+    return NULL;
+}
+
+void ViewShell::UpdateHRuler()
+{
+}
+
+void ViewShell::UpdateVRuler()
+{
+}
+
+long ViewShell::GetHCtrlWidth()
+{
+    return 0;
+}
+
 /*************************************************************************
 |*
 |* Eine bestimmte Anzahl von Zeilen scrollen (wird beim automatischen
@@ -368,8 +393,6 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
 {
     if (nScrollX)
     {
-        long nLineSize = mpHorizontalScrollBar->GetLineSize();
-
         long nNewThumb = mpHorizontalScrollBar->GetThumbPos() + nScrollX;
         mpHorizontalScrollBar->SetThumbPos(nNewThumb);
     }
@@ -426,7 +449,7 @@ void ViewShell::SetZoom(long nZoom)
 
     if (mpContentWindow.get() != NULL)
     {
-        mpContentWindow->SetZoom(nZoom);
+        mpContentWindow->SetZoomIntegral(nZoom);
         mpContentWindow->Invalidate();
     }
 
@@ -469,7 +492,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
         Point aNewPos = mpContentWindow->GetWinViewPos();
         aNewPos.X() = aPos.X();
         aNewPos.Y() = aPos.Y();
-        mpContentWindow->SetZoom(nZoom);
+        mpContentWindow->SetZoomIntegral(nZoom);
         mpContentWindow->SetWinViewPos(aNewPos);
         mpContentWindow->UpdateMapOrigin();
         mpContentWindow->Invalidate();
@@ -589,7 +612,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                                        Orientation eOrientation, USHORT nPaperBin,
                                        BOOL bBackgroundFullSize)
 {
-    SdPage* pPage;
+    SdPage* pPage = 0;
     SdUndoGroup* pUndoGroup = NULL;
     pUndoGroup = new SdUndoGroup(GetDoc());
     String aString(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
@@ -624,8 +647,6 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                             nPaperBin,
                             bBackgroundFullSize);
         pUndoGroup->AddAction(pUndo);
-
-        const SfxPoolItem* pPoolItem = NULL;
 
         if (rNewSize.Width() > 0 ||
             nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0)
@@ -759,7 +780,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 |*
 \************************************************************************/
 
-void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
+void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 {
     long nZoom = (long)((double) rZoomX * 100);
     SetZoom(nZoom);
@@ -823,7 +844,7 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 |*
 \************************************************************************/
 
-BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window* pWin)
+BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 {
     BOOL bReturn = FALSE;
 
@@ -847,7 +868,7 @@ BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window* pWin)
 
 FrameView* ViewShell::GetFrameView (void)
 {
-    return pFrameView;
+    return mpFrameView;
 }
 
 
@@ -855,8 +876,8 @@ FrameView* ViewShell::GetFrameView (void)
 
 void ViewShell::SetFrameView (FrameView* pNewFrameView)
 {
-    pFrameView = pNewFrameView;
-    ReadFrameViewData (pFrameView);
+    mpFrameView = pNewFrameView;
+    ReadFrameViewData (mpFrameView);
 }
 
 
@@ -868,7 +889,7 @@ void ViewShell::SetFrameView (FrameView* pNewFrameView)
 |*
 \************************************************************************/
 
-void ViewShell::ReadFrameViewData(FrameView* pView)
+void ViewShell::ReadFrameViewData(FrameView*)
 {
 }
 
@@ -1046,13 +1067,6 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         // the object area size must be set after scaling, since it triggers the resizing
         pSdClient->SetObjArea(aRect);
 
-        // switching to edit mode for OLEs was disabled when OLE
-        // is member of a group all the time. I dont know why it
-        // was possible in previous versions. But I see no
-        // reason not to allow it. (src539)
-//          if( !pView->IsGroupEntered() )
-        SfxViewShell* pViewShell = GetViewShell();
-        OSL_ASSERT (pViewShell!=NULL);
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
             SID_NAVIGATOR_STATE, TRUE, FALSE);
@@ -1086,7 +1100,7 @@ const Rectangle& ViewShell::GetAllWindowRect()
 |* Read user data
 |*
 \************************************************************************/
-void ViewShell::ReadUserData(const String& rString)
+void ViewShell::ReadUserData(const String&)
 {
     // Auf an FrameView gemerkte VisArea zoomen
     GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
@@ -1099,7 +1113,7 @@ void ViewShell::ReadUserData(const String& rString)
 |*
 \************************************************************************/
 
-void ViewShell::WriteUserData(String& rString)
+void ViewShell::WriteUserData(String&)
 {
     // Das Schreiben unserer Daten erfolgt stets in WriteFrameViewData()
     WriteFrameViewData();
@@ -1203,13 +1217,13 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
     sBuffer.append( static_cast<sal_Int32>(nViewID));
     rSequence[nIndex].Value <<= sBuffer.makeStringAndClear();
 
-    pFrameView->WriteUserDataSequence( rSequence, bBrowse );
+    mpFrameView->WriteUserDataSequence( rSequence, bBrowse );
 }
 
 
 void ViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
-    pFrameView->ReadUserDataSequence( rSequence, bBrowse );
+    mpFrameView->ReadUserDataSequence( rSequence, bBrowse );
 }
 
 void ViewShell::VisAreaChanged(const Rectangle& rRect)
