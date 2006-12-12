@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoanim.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:03:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,8 @@ public:
 
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat();
 
     virtual String GetComment() const;
-
-    virtual BOOL CanRepeat(SfxRepeatTarget&) const;
 
 private:
     UndoAnimationImpl*  mpImpl;
@@ -77,11 +74,8 @@ public:
 
     virtual void Undo();
     virtual void Redo();
-    virtual void Repeat();
 
     virtual String GetComment() const;
-
-    virtual BOOL CanRepeat(SfxRepeatTarget&) const;
 
 private:
     UndoTransitionImpl* mpImpl;

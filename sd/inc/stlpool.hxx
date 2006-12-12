@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:03:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@ class SdDrawDocument;
 class SdStyleSheetPool : public SfxStyleSheetPool
 {
 private:
-    SfxStyleSheetBase* pActualStyleSheet;
-    SdDrawDocument*    pDoc;
+    SfxStyleSheetBase* mpActualStyleSheet;
+    SdDrawDocument*    mpDoc;
 
 protected:
     virtual SfxStyleSheetBase* Create(const String& rName,
@@ -57,13 +57,14 @@ protected:
                                       USHORT nMask);
     virtual SfxStyleSheetBase* Create(const SdStyleSheet& rStyle);
 
+    using  SfxStyleSheetPool::Create;
 public:
                         SdStyleSheetPool(SfxItemPool& rPool, SdDrawDocument* pDocument);
     virtual             ~SdStyleSheetPool();
 
     void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)
-                                       { pActualStyleSheet = pActStyleSheet; }
-    SfxStyleSheetBase*  GetActualStyleSheet()    { return pActualStyleSheet; }
+                                       { mpActualStyleSheet = pActStyleSheet; }
+    SfxStyleSheetBase*  GetActualStyleSheet()    { return mpActualStyleSheet; }
 
     SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
     String              GetLayoutName() const;
@@ -90,11 +91,10 @@ public:
 
     void                CreatePseudosIfNecessary();
     void                UpdateStdNames();
-    void                AdjustLRSpaceItems();
     static void         PutNumBulletItem( SfxStyleSheetBase* pSheet, Font& rBulletFont );
     Font                GetBulletFont() const;
 
-    SdDrawDocument*     GetDoc() const { return pDoc; }
+    SdDrawDocument*     GetDoc() const { return mpDoc; }
 };
 
 #endif     // _SD_STLPOOL_HXX
