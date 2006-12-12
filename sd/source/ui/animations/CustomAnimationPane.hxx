@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:44:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:51:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,6 @@ private:
     const CustomAnimationPresets& getPresets (void);
 };
 
-};
+}
 
 #endif // _SD_CUSTOMANIMATIONPANE_HXX
