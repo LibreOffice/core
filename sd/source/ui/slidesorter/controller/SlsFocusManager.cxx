@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsFocusManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:05:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,8 +309,8 @@ void FocusManager::NotifyFocusChangeListeners (void) const
 
 
 FocusManager::FocusHider::FocusHider (FocusManager& rManager)
-    : mrManager(rManager),
-      mbFocusVisible(rManager.IsFocusShowing())
+: mbFocusVisible(rManager.IsFocusShowing())
+, mrManager(rManager)
 {
     mrManager.HideFocus();
 }
