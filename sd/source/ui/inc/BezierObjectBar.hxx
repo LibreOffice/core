@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BezierObjectBar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:01:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ class BezierObjectBar
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDDRAWBEZIEROBJECTBAR);
+    SFX_DECL_INTERFACE(SD_IF_SDDRAWBEZIEROBJECTBAR)
 
     BezierObjectBar (ViewShell* pSdViewShell, View* pSdView);
     virtual ~BezierObjectBar (void);
@@ -66,8 +66,8 @@ public:
     void Execute(SfxRequest &rReq);
 
 protected:
-    View* pView;
-    ViewShell* pViewSh;
+    View* mpView;
+    ViewShell* mpViewSh;
 };
 
 } // end of namespace sd
