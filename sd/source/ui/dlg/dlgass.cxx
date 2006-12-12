@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:36:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -995,10 +995,19 @@ void AssistentDlgImpl::TemplateScanDone (
     int i;
     for (i=0,I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++,i++)
     {
-        TemplateDir * pDir = *I;
-        //HACK! presnt directory is always initially selected.
-        if (pDir->msUrl.SearchAscii ("presnt") != STRING_NOTFOUND)
-            nFirstEntry = i;
+        TemplateDir* pDir = *I;
+        if (pDir == NULL)
+            continue;
+
+        // HACK! presnt directory is always initially selected.
+        // We have to look at the first entry to get a URL.
+        if (pDir->maEntries.size() > 0)
+        {
+            TemplateEntry* pEntry = pDir->maEntries.front();
+            if (pEntry != NULL)
+                if (pEntry->msPath.SearchAscii("presnt") != STRING_NOTFOUND)
+                    nFirstEntry = i;
+        }
 
         m_pPage1RegionLB->InsertEntry (pDir->msRegion);
     }
@@ -1011,10 +1020,19 @@ void AssistentDlgImpl::TemplateScanDone (
     m_pPage2RegionLB->Clear();
     for (i=0,I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++,i++)
     {
-        TemplateDir * pDir = *I;
-        //HACK! layout directory is always initially selected.
-        if (pDir->msUrl.SearchAscii ("layout") != STRING_NOTFOUND)
-            nFirstEntry = i;
+        TemplateDir* pDir = *I;
+        if (pDir == NULL)
+            continue;
+
+        // HACK! layout directory is always initially selected.
+        // We have to look at the first entry to get a URL.
+        if (pDir->maEntries.size() > 0)
+        {
+            TemplateEntry* pEntry = pDir->maEntries.front();
+            if (pEntry != NULL)
+                if (pEntry->msPath.SearchAscii("layout") != STRING_NOTFOUND)
+                    nFirstEntry = i;
+        }
 
         m_pPage2RegionLB->InsertEntry (pDir->msRegion);
     }
