@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:35:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,26 +162,33 @@ TextObjectBar::TextObjectBar (
     SfxItemPool& rItemPool,
     ::sd::View* pSdView )
     : SfxShell(pSdViewSh->GetViewShell()),
-      rPool( rItemPool ),
-      pViewShell( pSdViewSh ),
-      pView( pSdView )
+      mpViewShell( pSdViewSh ),
+      mpView( pSdView )
 {
     SetPool(&rItemPool);
 
-    if (pSdViewSh->ISA(OutlineViewShell))
+    if( mpView )
     {
-        SfxUndoManager& rUndoMgr = static_cast<OutlineView*>(pSdView)
-            ->GetOutliner()->GetUndoManager();
-        SetUndoManager(&rUndoMgr);
-    }
-    else
-    {
-        SdDrawDocument* pDoc      = pView->GetDoc();
-        DrawDocShell* pDocShell = pDoc->GetDocSh();
-        SfxUndoManager* pUndoMgr  = pDocShell->GetUndoManager();
-        SetUndoManager(pUndoMgr);
-        if ( pSdViewSh->ISA(DrawViewShell) )
-            SetRepeatTarget(pSdView);
+        OutlineView* pOutlinerView = dynamic_cast< OutlineView* >( mpView );
+        if( pOutlinerView )
+        {
+            SetUndoManager(&pOutlinerView->GetOutliner()->GetUndoManager());
+        }
+        else
+        {
+            SdDrawDocument* pDoc = mpView->GetDoc();
+            if( pDoc )
+            {
+                DrawDocShell* pDocShell = pDoc->GetDocSh();
+                if( pDocShell )
+                {
+                    SetUndoManager(pDocShell->GetUndoManager());
+                    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( pSdViewSh );
+                    if ( pDrawViewShell )
+                        SetRepeatTarget(pSdView);
+                }
+            }
+        }
     }
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "TextObjectBar" )));
@@ -200,10 +207,6 @@ TextObjectBar::~TextObjectBar()
     SetRepeatTarget(NULL);
 }
 
-
-
-
-
 /*************************************************************************
 |*
 |* Status der Attribut-Items
@@ -215,12 +218,12 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     SfxWhichIter        aIter( rSet );
     USHORT              nWhich = aIter.FirstWhich();
     BOOL                bTemplate = FALSE;
-    SfxItemSet          aAttrSet( pView->GetDoc()->GetPool() );
+    SfxItemSet          aAttrSet( mpView->GetDoc()->GetPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
     sal_Bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
-    pView->GetAttributes( aAttrSet );
+    mpView->GetAttributes( aAttrSet );
 
     while ( nWhich )
     {
@@ -235,29 +238,28 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_POSTURE:
             {
-                SfxItemPool& rPool = GetPool();
-                SvxScriptSetItem aSetItem( nSlotId, rPool );
+                SvxScriptSetItem aSetItem( nSlotId, GetPool() );
                 aSetItem.GetItemSet().Put( aAttrSet, FALSE );
 
-                USHORT nScriptType = pView->GetScriptType();
+                USHORT nScriptType = mpView->GetScriptType();
 
                 if( (nSlotId == SID_ATTR_CHAR_FONT) || (nSlotId == SID_ATTR_CHAR_FONTHEIGHT) )
                 {
                     // #42732# input language should be preferred over
                     // current cursor position to detect script type
-                    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                    if (pView->ISA(OutlineView))
+                    if (mpView->ISA(OutlineView))
                     {
-                        pOLV = static_cast<OutlineView*>(pView)->GetViewByWindow(
-                            pViewShell->GetActiveWindow());
+                        pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
+                            mpViewShell->GetActiveWindow());
                     }
 
                     if(pOLV && !pOLV->GetSelection().HasRange())
                     {
-                        if( pViewShell && pViewShell->GetViewShell() && pViewShell->GetViewShell()->GetWindow() )
+                        if( mpViewShell && mpViewShell->GetViewShell() && mpViewShell->GetViewShell()->GetWindow() )
                         {
-                            LanguageType nInputLang = pViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
+                            LanguageType nInputLang = mpViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
                             if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
                                 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
                         }
@@ -276,7 +278,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_STYLE_APPLY:
             case SID_STYLE_FAMILY2:
             {
-                SfxStyleSheet* pStyleSheet = pView->GetStyleSheetFromMarked();
+                SfxStyleSheet* pStyleSheet = mpView->GetStyleSheetFromMarked();
                 if( pStyleSheet )
                     rSet.Put( SfxTemplateItem( nWhich, pStyleSheet->GetName() ) );
                 else
@@ -296,15 +298,15 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 BOOL bDisableRight    = TRUE;
                 BOOL bDisableUp       = TRUE;
                 BOOL bDisableDown     = TRUE;
-                OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+                OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                if (pView->ISA(OutlineView))
+                if (mpView->ISA(OutlineView))
                 {
-                    pOLV = static_cast<OutlineView*>(pView)->GetViewByWindow(
-                        pViewShell->GetActiveWindow());
+                    pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
+                        mpViewShell->GetActiveWindow());
                 }
 
-                BOOL bOutlineViewSh = pViewShell->ISA(OutlineViewShell);
+                BOOL bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
 
                 if (pOLV &&
                     ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
@@ -341,7 +343,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     USHORT nMinDepth = 0;
 
-                    if (pViewShell->ISA(DrawViewShell))
+                    if (mpViewShell->ISA(DrawViewShell))
                     {
                         nMinDepth = 1;
                     }
@@ -416,7 +418,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     BOOL bLeftToRight = TRUE;
 
-                    SdrOutliner* pOutl = pView->GetTextEditOutliner();
+                    SdrOutliner* pOutl = mpView->GetTextEditOutliner();
                     if( pOutl )
                     {
                         if( pOutl->IsVertical() )
@@ -449,7 +451,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 */
 
     // die sind im Gliederungsmodus disabled
-    if (!pViewShell->ISA(DrawViewShell))
+    if (!mpViewShell->ISA(DrawViewShell))
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );
@@ -468,7 +470,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     else
     {
         // Absatzabstand
-        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
         if( pOLV )
         {
             ESelection aSel = pOLV->GetSelection();
@@ -513,6 +515,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SVX_ADJUST_BLOCK:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, TRUE ) );
             break;
+            default:
+            break;
         }
 
         // paragraph text direction
@@ -547,7 +551,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 // The case for the superordinate object is missing.
                 case FRMDIR_ENVIRONMENT:
                 {
-                    SdDrawDocument* pDoc = pView->GetDoc();
+                    SdDrawDocument* pDoc = mpView->GetDoc();
                     ::com::sun::star::text::WritingMode eMode = pDoc->GetDefaultWritingMode();
                     sal_Bool bIsLeftToRight(sal_False);
 
@@ -610,7 +614,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void TextObjectBar::Command( const CommandEvent& rCEvt )
+void TextObjectBar::Command( const CommandEvent& )
 {
 }
 
