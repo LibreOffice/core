@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:43:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
 
 namespace sd {
 
-BOOL DrawViewShell::bPipette = FALSE;
+BOOL DrawViewShell::mbPipette = FALSE;
 
 // ------------------------
 // - ScannerEventListener -
@@ -204,29 +204,12 @@ DrawViewShell::DrawViewShell (
     PageKind ePageKind,
     FrameView* pFrameViewArgument)
     : ViewShell (pFrame, pParentWindow, rViewShellBase),
-      aTabControl(this, pParentWindow),
-      pActualPage(NULL),
-//      pXPolygon (0),
-//      nPolygonIndex (0),
-//      bLineError (FALSE),
-//      bLastWasLineTo (FALSE),
-//      bLastWasMoveTo (FALSE),
-//      bLastWasBezierTo (FALSE),
-      bMousePosFreezed (FALSE),
-      nLastSlot(0),
-      bReadOnly(GetDocSh()->IsReadOnly()),
-      bInEffectAssignment(FALSE),
-      pSlotArray( NULL ),
-      pClipEvtLstnr(NULL),
-      mbIsLayerModeActive(false),
-      bPastePossible(FALSE),
-      mpCurrentClipboardFormats(NULL),
-      maAsynchronousSwitchPageCall()
+    maTabControl(this, pParentWindow)
 {
     if (pFrameViewArgument != NULL)
-        pFrameView = pFrameViewArgument;
+        mpFrameView = pFrameViewArgument;
     else
-        pFrameView = new FrameView(GetDoc());
+        mpFrameView = new FrameView(GetDoc());
     Construct(GetDocSh(), ePageKind);
 }
 
@@ -241,26 +224,9 @@ DrawViewShell::DrawViewShell (
     ::Window* pParentWindow,
     const DrawViewShell& rShell)
     : ViewShell(pFrame, pParentWindow, rShell),
-      aTabControl(this, pParentWindow),
-      pActualPage(NULL),
-//      pXPolygon (0),
-//      nPolygonIndex (0),
-//      bLineError (FALSE),
-//      bLastWasLineTo (FALSE),
-//      bLastWasMoveTo (FALSE),
-//      bLastWasBezierTo (FALSE),
-      bMousePosFreezed (FALSE),
-      nLastSlot(0),
-      bReadOnly(GetDocSh()->IsReadOnly()),
-      bInEffectAssignment(FALSE),
-      pSlotArray( NULL ),
-      pClipEvtLstnr(NULL),
-      mbIsLayerModeActive(false),
-      bPastePossible(FALSE),
-      mpCurrentClipboardFormats(NULL),
-      maAsynchronousSwitchPageCall()
+      maTabControl(this, pParentWindow)
 {
-    pFrameView = new FrameView(GetDoc());
+    mpFrameView = new FrameView(GetDoc());
     Construct (GetDocSh(), PK_STANDARD);
 }
 
@@ -272,8 +238,7 @@ DrawViewShell::DrawViewShell (
 
 DrawViewShell::~DrawViewShell()
 {
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    OSL_ASSERT (GetViewShell()!=NULL);
 
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
@@ -297,14 +262,13 @@ DrawViewShell::~DrawViewShell()
     DisposeFunctions();
 
     SdPage* pPage;
-    USHORT nSelectedPage = 0;
-    USHORT aPageCnt = GetDoc()->GetSdPageCount(ePageKind);
+    USHORT aPageCnt = GetDoc()->GetSdPageCount(mePageKind);
 
     for (USHORT i = 0; i < aPageCnt; i++)
     {
-        pPage = GetDoc()->GetSdPage(i, ePageKind);
+        pPage = GetDoc()->GetSdPage(i, mePageKind);
 
-        if (pPage == pActualPage)
+        if (pPage == mpActualPage)
         {
             GetDoc()->SetSelected(pPage, TRUE);
         }
@@ -314,21 +278,20 @@ DrawViewShell::~DrawViewShell()
         }
     }
 
-    if ( pClipEvtLstnr )
+    if ( mpClipEvtLstnr )
     {
-        pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
-        pClipEvtLstnr->ClearCallbackLink();     // #103849# prevent callback if another thread is waiting
-        pClipEvtLstnr->release();
+        mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
+        mpClipEvtLstnr->ClearCallbackLink();        // #103849# prevent callback if another thread is waiting
+        mpClipEvtLstnr->release();
     }
 
-    delete pDrView;
+    delete mpDrawView;
     // Set mpView to NULL so that the destructor of the ViewShell base class
     // does not access it.
-    mpView = pDrView = NULL;
+    mpView = mpDrawView = NULL;
 
-    pFrameView->Disconnect();
-//  delete pXPolygon;
-    delete [] pSlotArray;
+    mpFrameView->Disconnect();
+    delete [] mpSlotArray;
 }
 
 /*************************************************************************
@@ -339,57 +302,64 @@ DrawViewShell::~DrawViewShell()
 
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
-    pFrameView->Connect();
+    mpActualPage = 0;
+    mbMousePosFreezed = FALSE;
+    mbReadOnly = GetDocSh()->IsReadOnly();
+    mpSlotArray = 0;
+    mpClipEvtLstnr = 0;
+    mbPastePossible = FALSE;
+    mbIsLayerModeActive = false;
 
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    mpFrameView->Connect();
+
+    OSL_ASSERT (GetViewShell()!=NULL);
 
     // Array fuer Slot-/ImageMapping:
     // Gerader Eintrag: Haupt-/ToolboxSlot
     // Ungerader Eintrag: gemappter Slot
     // Achtung: Anpassen von GetIdBySubId() !!!
     // Reihenfolge (insbesondere Zoom) darf nicht geaendert werden !!!
-    pSlotArray = new USHORT[ SLOTARRAY_COUNT ];
-    pSlotArray[ 0 ]  = SID_OBJECT_CHOOSE_MODE;
-    pSlotArray[ 1 ]  = SID_OBJECT_ROTATE;
-    pSlotArray[ 2 ]  = SID_OBJECT_ALIGN;
-    pSlotArray[ 3 ]  = SID_OBJECT_ALIGN_LEFT;
-    pSlotArray[ 4 ]  = SID_ZOOM_TOOLBOX;
-    pSlotArray[ 5 ]  = SID_ZOOM_TOOLBOX;
-    pSlotArray[ 6 ]  = SID_DRAWTBX_TEXT;
-    pSlotArray[ 7 ]  = SID_ATTR_CHAR;
-    pSlotArray[ 8 ]  = SID_DRAWTBX_RECTANGLES;
-    pSlotArray[ 9 ]  = SID_DRAW_RECT;
-    pSlotArray[ 10 ] = SID_DRAWTBX_ELLIPSES;
-    pSlotArray[ 11 ] = SID_DRAW_ELLIPSE;
-    pSlotArray[ 12 ] = SID_DRAWTBX_LINES;
-    pSlotArray[ 13 ] = SID_DRAW_FREELINE_NOFILL;
-    pSlotArray[ 14 ] = SID_DRAWTBX_3D_OBJECTS;
-    pSlotArray[ 15 ] = SID_3D_CUBE;
-    pSlotArray[ 16 ] = SID_DRAWTBX_INSERT;
-    pSlotArray[ 17 ] = SID_INSERT_DIAGRAM;
-    pSlotArray[ 18 ] = SID_POSITION;
-    pSlotArray[ 19 ] = SID_FRAME_TO_TOP;
-    pSlotArray[ 20 ] = SID_DRAWTBX_CONNECTORS;
-    pSlotArray[ 21 ] = SID_TOOL_CONNECTOR;
-    pSlotArray[ 22 ] = SID_DRAWTBX_ARROWS;
-    pSlotArray[ 23 ] = SID_LINE_ARROW_END;
+    mpSlotArray = new USHORT[ SLOTARRAY_COUNT ];
+    mpSlotArray[ 0 ]  = SID_OBJECT_CHOOSE_MODE;
+    mpSlotArray[ 1 ]  = SID_OBJECT_ROTATE;
+    mpSlotArray[ 2 ]  = SID_OBJECT_ALIGN;
+    mpSlotArray[ 3 ]  = SID_OBJECT_ALIGN_LEFT;
+    mpSlotArray[ 4 ]  = SID_ZOOM_TOOLBOX;
+    mpSlotArray[ 5 ]  = SID_ZOOM_TOOLBOX;
+    mpSlotArray[ 6 ]  = SID_DRAWTBX_TEXT;
+    mpSlotArray[ 7 ]  = SID_ATTR_CHAR;
+    mpSlotArray[ 8 ]  = SID_DRAWTBX_RECTANGLES;
+    mpSlotArray[ 9 ]  = SID_DRAW_RECT;
+    mpSlotArray[ 10 ] = SID_DRAWTBX_ELLIPSES;
+    mpSlotArray[ 11 ] = SID_DRAW_ELLIPSE;
+    mpSlotArray[ 12 ] = SID_DRAWTBX_LINES;
+    mpSlotArray[ 13 ] = SID_DRAW_FREELINE_NOFILL;
+    mpSlotArray[ 14 ] = SID_DRAWTBX_3D_OBJECTS;
+    mpSlotArray[ 15 ] = SID_3D_CUBE;
+    mpSlotArray[ 16 ] = SID_DRAWTBX_INSERT;
+    mpSlotArray[ 17 ] = SID_INSERT_DIAGRAM;
+    mpSlotArray[ 18 ] = SID_POSITION;
+    mpSlotArray[ 19 ] = SID_FRAME_TO_TOP;
+    mpSlotArray[ 20 ] = SID_DRAWTBX_CONNECTORS;
+    mpSlotArray[ 21 ] = SID_TOOL_CONNECTOR;
+    mpSlotArray[ 22 ] = SID_DRAWTBX_ARROWS;
+    mpSlotArray[ 23 ] = SID_LINE_ARROW_END;
 
     SetPool( &GetDoc()->GetPool() );
 
     GetDoc()->CreateFirstPages();
 
-    pDrView = new DrawView(pDocSh, GetActiveWindow(), this);
-    mpView = pDrView;            // Pointer der Basisklasse ViewShell
-    pDrView->SetSwapAsynchron(TRUE); // Asynchrones Laden von Graphiken
+    mpDrawView = new DrawView(pDocSh, GetActiveWindow(), this);
+    mpView = mpDrawView;             // Pointer der Basisklasse ViewShell
+    mpDrawView->SetSwapAsynchron(TRUE); // Asynchrones Laden von Graphiken
 
     // We do not read the page kind from the frame view anymore so we have
     // to set it in order to resync frame view and this view.
-    pFrameView->SetPageKind(eInitialPageKind);
-    ePageKind = eInitialPageKind;
-    eEditMode = EM_PAGE;
+    mpFrameView->SetPageKind(eInitialPageKind);
+    mePageKind = eInitialPageKind;
+    meEditMode = EM_PAGE;
     DocumentType eDocType = GetDoc()->GetDocumentType(); // RTTI fasst hier noch nicht
-    switch (ePageKind)
+    switch (mePageKind)
     {
         case PK_STANDARD:
             meShellType = ST_IMPRESS;
@@ -404,10 +374,10 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             break;
     }
 
-    Size aPageSize = GetDoc()->GetSdPage(0, ePageKind)->GetSize();
-    Point aPageOrg = Point(aPageSize.Width(), aPageSize.Height() / 2);
-    Size aViewSize = Size(aPageSize.Width() * 3, aPageSize.Height() * 2);
-    InitWindows(aPageOrg, aViewSize, Point(-1, -1));
+    Size aPageSize( GetDoc()->GetSdPage(0, mePageKind)->GetSize() );
+    Point aPageOrg( aPageSize.Width(), aPageSize.Height() / 2);
+    Size aSize(aPageSize.Width() * 3, aPageSize.Height() * 2);
+    InitWindows(aPageOrg, aSize, Point(-1, -1));
 
     Point aVisAreaPos;
 
@@ -416,27 +386,27 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         aVisAreaPos = pDocSh->GetVisArea(ASPECT_CONTENT).TopLeft();
     }
 
-    pDrView->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aViewSize));
+    mpDrawView->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
 
     // Objekte koennen max. so gross wie die ViewSize werden
-    GetDoc()->SetMaxObjSize(aViewSize);
+    GetDoc()->SetMaxObjSize(aSize);
 
     // Split-Handler fuer TabControls
-    aTabControl.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
+    maTabControl.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
 
     // Damit der richtige EditMode von der FrameView komplett eingestellt
     // werden kann, wird hier ein aktuell anderer gewaehlt (kleiner Trick)
-    if (pFrameView->GetViewShEditMode(ePageKind) == EM_PAGE)
+    if (mpFrameView->GetViewShEditMode(mePageKind) == EM_PAGE)
     {
-        eEditMode = EM_MASTERPAGE;
+        meEditMode = EM_MASTERPAGE;
     }
     else
     {
-        eEditMode = EM_PAGE;
+        meEditMode = EM_PAGE;
     }
 
     // Einstellungen der FrameView uebernehmen
-    ReadFrameViewData(pFrameView);
+    ReadFrameViewData(mpFrameView);
 
     if( eDocType == DOCUMENT_TYPE_DRAW )
     {
@@ -446,7 +416,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     }
     else
     {
-        if (ePageKind == PK_NOTES)
+        if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
             GetActiveWindow()->SetHelpId( SID_NOTESMODE );
@@ -455,7 +425,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
         }
-        else if (ePageKind == PK_HANDOUT)
+        else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
             GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
@@ -475,23 +445,23 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     // Selektionsfunktion starten
     SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
     FuPermanent(aReq);
-    pDrView->SetFrameDragSingles(TRUE);
+    mpDrawView->SetFrameDragSingles(TRUE);
 
     if (pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
     {
-        bZoomOnPage = FALSE;
+        mbZoomOnPage = FALSE;
     }
     else
     {
-        bZoomOnPage = TRUE;
+        mbZoomOnPage = TRUE;
     }
 
-    bIsRulerDrag = FALSE;
+    mbIsRulerDrag = FALSE;
 
     String aName( RTL_CONSTASCII_USTRINGPARAM("DrawViewShell"));
     SetName (aName);
 
-    nLockCount = 0UL;
+    mnLockCount = 0UL;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
@@ -567,77 +537,18 @@ void DrawViewShell::Init (bool bIsMainViewShell)
 
 void DrawViewShell::CheckLineTo(SfxRequest& rReq)
 {
+    (void)rReq;
+#ifdef DBG_UTIL
     if(rReq.IsAPI())
     {
-#ifdef DBG_UTIL
         if(SID_LINETO == rReq.GetSlot() || SID_BEZIERTO == rReq.GetSlot() || SID_MOVETO == rReq.GetSlot() )
         {
             DBG_ERROR("DrawViewShell::CheckLineTo: slots SID_LINETO, SID_BEZIERTO, SID_MOVETO no longer supported.");
         }
-#endif
-//      if ((rReq.GetSlot () == SID_LINETO) || (rReq.GetSlot () == SID_BEZIERTO))
-//      {
-//          if ((bLastWasLineTo && (rReq.GetSlot () == SID_LINETO)) ||
-//              (bLastWasBezierTo && (rReq.GetSlot () == SID_BEZIERTO)) ||
-//              bLastWasMoveTo)
-//          {
-//              const SfxItemSet* pArgs = rReq.GetArgs ();
-//
-//              if (pArgs)
-//                  if (pArgs->Count () == 2)
-//                  {
-//                      SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSEEND_X, FALSE);
-//                      SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, FALSE);
-//
-//                      Point aTempPoint (pMouseStartX->GetValue (), pMouseStartY->GetValue ());
-//                      if (nPolygonIndex < 30) pXPolygon->Insert (nPolygonIndex ++, aTempPoint, XPOLY_NORMAL);
-//
-//                      bLastWasLineTo   = (rReq.GetSlot () == SID_LINETO);
-//                      bLastWasBezierTo = (rReq.GetSlot () == SID_BEZIERTO);
-//                      bLastWasMoveTo   = FALSE;
-//                  }
-//                  else DestroyPolygons ();
-//              else DestroyPolygons ();
-//          }
-//          else DestroyPolygons ();
-//      }
-//      else
-//      {
-//          if (bLastWasLineTo || bLastWasBezierTo)
-//          {
-//              SdrPageView *pPV = pDrView->GetPageViewPvNum (0);
-//
-//              pDrView->InsertObject (new SdrPathObj (bLastWasLineTo
-//                                                         ? OBJ_PLIN
-//                                                         : OBJ_PATHLINE, *pXPolygon), *pPV, SDRINSERT_SETDEFLAYER);
-//              if (bLastWasBezierTo) pDrView->ConvertMarkedToPathObj(FALSE);
-//              DestroyPolygons ();
-//          }
-//
-//          if (rReq.GetSlot () == SID_MOVETO)
-//          {
-//              const SfxItemSet* pArgs = rReq.GetArgs ();
-//
-//              if (pArgs)
-//                  if (pArgs->Count () == 2)
-//                  {
-//                      SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, FALSE);
-//                      SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, FALSE);
-//
-//                      nPolygonIndex = 0;
-//                      Point aTempPoint (pMouseStartX->GetValue (), pMouseStartY->GetValue ());
-//                      pXPolygon->Insert (nPolygonIndex ++, aTempPoint, XPOLY_NORMAL);
-//
-//                      bLastWasMoveTo = TRUE;
-//                  }
-//                  else DestroyPolygons ();
-//              else DestroyPolygons ();
-//          }
-//          else bLastWasMoveTo = FALSE;
-//      }
     }
+#endif
 
-    rReq.Ignore();
+    rReq.Ignore ();
 }
 
 /*************************************************************************
@@ -655,7 +566,7 @@ void DrawViewShell::SetupPage (Size &rSize,
                                  BOOL bMargin,
                                  BOOL bScaleAll)
 {
-    USHORT nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
+    USHORT nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
     USHORT i;
 
     for (i = 0; i < nPageCnt; i++)
@@ -663,12 +574,10 @@ void DrawViewShell::SetupPage (Size &rSize,
         /**********************************************************************
         * Erst alle MasterPages bearbeiten
         **********************************************************************/
-        SdPage *pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
+        SdPage *pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
 
         if( pPage )
         {
-            const SfxPoolItem *pPoolItem = NULL;
-
             if( bSize )
             {
                 Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
@@ -684,7 +593,7 @@ void DrawViewShell::SetupPage (Size &rSize,
                 pPage->SetLwrBorder(nLower);
             }
 
-            if ( ePageKind == PK_STANDARD )
+            if ( mePageKind == PK_STANDARD )
             {
                 GetDoc()->GetMasterSdPage(i, PK_NOTES)->CreateTitleAndLayout();
             }
@@ -693,14 +602,14 @@ void DrawViewShell::SetupPage (Size &rSize,
         }
     }
 
-    nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
+    nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
 
     for (i = 0; i < nPageCnt; i++)
     {
         /**********************************************************************
         * Danach alle Pages bearbeiten
         **********************************************************************/
-        SdPage *pPage = GetDoc()->GetSdPage(i, ePageKind);
+        SdPage *pPage = GetDoc()->GetSdPage(i, mePageKind);
 
         if( pPage )
         {
@@ -718,7 +627,7 @@ void DrawViewShell::SetupPage (Size &rSize,
                 pPage->SetLwrBorder(nLower);
             }
 
-            if ( ePageKind == PK_STANDARD )
+            if ( mePageKind == PK_STANDARD )
             {
                 SdPage* pNotesPage = GetDoc()->GetSdPage(i, PK_NOTES);
                 pNotesPage->SetAutoLayout( pNotesPage->GetAutoLayout() );
@@ -728,20 +637,19 @@ void DrawViewShell::SetupPage (Size &rSize,
         }
     }
 
-    if ( ePageKind == PK_STANDARD )
+    if ( mePageKind == PK_STANDARD )
     {
         SdPage* pHandoutPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
         pHandoutPage->CreateTitleAndLayout(TRUE);
     }
 
-    long nWidth = pActualPage->GetSize().Width();
-    long nHeight = pActualPage->GetSize().Height();
+    long nWidth = mpActualPage->GetSize().Width();
+    long nHeight = mpActualPage->GetSize().Height();
 
-    Point aPageOrg = Point(nWidth, nHeight / 2);
-    Size aViewSize = Size(nWidth * 3, nHeight * 2);
+    Point aPageOrg(nWidth, nHeight / 2);
+    Size aSize( nWidth * 3, nHeight * 2);
 
-    InitWindows(aPageOrg, aViewSize, Point(-1, -1), TRUE);
-//    GetView()->SetWorkArea(Rectangle(Point(0,0) - aPageOrg, aViewSize));
+    InitWindows(aPageOrg, aSize, Point(-1, -1), TRUE);
 
     Point aVisAreaPos;
 
@@ -750,11 +658,11 @@ void DrawViewShell::SetupPage (Size &rSize,
         aVisAreaPos = GetDocSh()->GetVisArea(ASPECT_CONTENT).TopLeft();
     }
 
-    GetView()->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aViewSize));
+    GetView()->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
 
     UpdateScrollBars();
 
-    Point aNewOrigin(pActualPage->GetLftBorder(), pActualPage->GetUppBorder());
+    Point aNewOrigin(mpActualPage->GetLftBorder(), mpActualPage->GetUppBorder());
     GetView()->GetSdrPageView()->SetPageOrigin(aNewOrigin);
 
     GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
@@ -786,17 +694,17 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SvxZoomItem* pZoomItem;
             UINT16 nZoom = (UINT16) GetActiveWindow()->GetZoom();
 
-            if( bZoomOnPage )
+            if( mbZoomOnPage )
                 pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nZoom );
             else
                 pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
 
             // Bereich einschraenken
             USHORT nZoomValues = SVX_ZOOM_ENABLE_ALL;
-            SdrPageView* pPageView = pDrView->GetSdrPageView();
+            SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                // || ( pDrView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+                // || ( mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 ) )
             {
                 nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             }
@@ -807,23 +715,23 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
     }
 
-    Point aPos = GetActiveWindow()->PixelToLogic(aMousePos);
-    pDrView->GetSdrPageView()->LogicToPagePos(aPos);
+    Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
+    mpDrawView->GetSdrPageView()->LogicToPagePos(aPos);
     Fraction aUIScale(GetDoc()->GetUIScale());
     aPos.X() = Fraction(aPos.X()) / aUIScale;
     aPos.Y() = Fraction(aPos.Y()) / aUIScale;
 
     // Position- und Groesse-Items
-    if ( pDrView->IsAction() )
+    if ( mpDrawView->IsAction() )
     {
         Rectangle aRect;
-        pDrView->TakeActionRect( aRect );
+        mpDrawView->TakeActionRect( aRect );
 
         if ( aRect.IsEmpty() )
             rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
         else
         {
-            pDrView->GetSdrPageView()->LogicToPagePos(aRect);
+            mpDrawView->GetSdrPageView()->LogicToPagePos(aRect);
             aPos = aRect.TopLeft();
             aPos.X() = Fraction(aPos.X()) / aUIScale;
             aPos.Y() = Fraction(aPos.Y()) / aUIScale;
@@ -836,10 +744,10 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
     else
     {
-        if ( pDrView->AreObjectsMarked() )
+        if ( mpDrawView->AreObjectsMarked() )
         {
-            Rectangle aRect = pDrView->GetAllMarkedRect();
-            pDrView->GetSdrPageView()->LogicToPagePos(aRect);
+            Rectangle aRect = mpDrawView->GetAllMarkedRect();
+            mpDrawView->GetSdrPageView()->LogicToPagePos(aRect);
 
             // Show the position of the selected shape(s)
             Point aShapePosition (aRect.TopLeft());
@@ -865,9 +773,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         // Allways show the slide/page number.
         String aString (SdResId( STR_SD_PAGE ));
         aString += sal_Unicode(' ');
-        aString += UniString::CreateFromInt32( aTabControl.GetCurPageId() );
+        aString += UniString::CreateFromInt32( maTabControl.GetCurPageId() );
         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aString += UniString::CreateFromInt32( GetDoc()->GetSdPageCount( ePageKind ) );
+        aString += UniString::CreateFromInt32( GetDoc()->GetSdPageCount( mePageKind ) );
 
         // If in layer mode additionally show the layer that contains all
         // selected shapes of the page.  If the shapes are distributed on
@@ -875,10 +783,10 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         if (IsLayerModeActive())
         {
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            SdrLayerID nLayer, nOldLayer;
+            SdrLayerID nLayer = 0, nOldLayer = 0;
             SdrLayer*  pLayer = NULL;
             SdrObject* pObj = NULL;
-            const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             ULONG nMarkCount = rMarkList.GetMarkCount();
             FASTBOOL bOneLayer = TRUE;
 
@@ -917,7 +825,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Layout
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
     {
-        String aString = pActualPage->GetLayoutName();
+        String aString = mpActualPage->GetLayoutName();
         aString.Erase( aString.SearchAscii( SD_LT_SEPARATOR ) );
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aString ) );
     }
@@ -925,9 +833,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
 
 
-void DrawViewShell::Notify (SfxBroadcaster& rBC, const SfxHint& rHint)
+void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
-    SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
+    const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
     if (pSimple!=NULL && pSimple->GetId()==SFX_HINT_MODECHANGED)
     {
         // Change to selection when turning on read-only mode.
@@ -938,11 +846,11 @@ void DrawViewShell::Notify (SfxBroadcaster& rBC, const SfxHint& rHint)
         }
 
         // Turn on design mode when document is not read-only.
-        if (GetDocSh()->IsReadOnly() != bReadOnly )
+        if (GetDocSh()->IsReadOnly() != mbReadOnly )
         {
-            bReadOnly = GetDocSh()->IsReadOnly();
+            mbReadOnly = GetDocSh()->IsReadOnly();
 
-            SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly );
+            SfxBoolItem aItem( SID_FM_DESIGN_MODE, !mbReadOnly );
             GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE,
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
