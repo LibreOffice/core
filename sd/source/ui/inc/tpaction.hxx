@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpaction.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:56:17 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,8 @@ private:
     PushButton              aBtnSeek;
 
     const SfxItemSet&       rOutAttrs;
-    const ::sd::View*           pView;
-    SdDrawDocument*         pDoc;
+    const ::sd::View*       mpView;
+    SdDrawDocument*         mpDoc;
     XColorTable*            pColTab;
 
     BOOL                    bTreeUpdated;
@@ -165,6 +165,9 @@ public:
     void    Construct();
 
     void    SetView( const ::sd::View* pSdView );
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 };
 
 #endif      // _SD_TPACTION_HXX

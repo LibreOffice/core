@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:56:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,9 +140,8 @@ private:
     FixedText   aTxtTabstop;
     MetricField aMtrFldTabstop;
 
-    FixedLine   aGrpStartWithActualPage;
     CheckBox    aCbxStartWithActualPage;
-
+    FixedLine   aGrpStartWithActualPage;
     FixedLine   aTxtCompatibility;
     CheckBox    aCbxUsePrinterMetrics;
     CheckBox    aCbxCompatibility;
@@ -209,7 +208,12 @@ public:
         <member>SetDrawMode()</member> method more than once.
     */
     void SetImpressMode (void);
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+    using OutputDevice::SetDrawMode;
+
 };
 
 
