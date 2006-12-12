@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:06:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,11 +267,12 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
 
         mpHorizontalScrollBar->SetVisibleSize (aWindowModelSize.Width());
 
-        mpHorizontalScrollBar->SetLineSize (1000);
+        const long nWidth (mpContentWindow->PixelToLogic(
+            mpContentWindow->GetSizePixel()).Width());
+        // Make the line size about 10% of the visible width.
+        mpHorizontalScrollBar->SetLineSize (nWidth / 10);
         // Make the page size about 90% of the visible width.
-        mpHorizontalScrollBar->SetPageSize (
-            mpContentWindow->PixelToLogic(
-                mpContentWindow->GetSizePixel()).Width() * 9 / 10);
+        mpHorizontalScrollBar->SetPageSize ((nWidth * 9) / 10);
     }
     else
     {
@@ -295,11 +296,12 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
 
         mpVerticalScrollBar->SetVisibleSize (aWindowModelSize.Height());
 
-        mpVerticalScrollBar->SetLineSize (1000);
+        const long nHeight (mpContentWindow->PixelToLogic(
+            mpContentWindow->GetSizePixel()).Height());
+        // Make the line size about 10% of the visible height.
+        mpVerticalScrollBar->SetLineSize (nHeight / 10);
         // Make the page size about 90% of the visible height.
-        mpVerticalScrollBar->SetPageSize (
-            (mpContentWindow->PixelToLogic(
-                mpContentWindow->GetSizePixel()).Height() * 9) / 10);
+        mpVerticalScrollBar->SetPageSize ((nHeight * 9) / 10);
     }
     else
     {
