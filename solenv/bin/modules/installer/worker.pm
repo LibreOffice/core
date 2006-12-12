@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:04:53 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:04:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1243,9 +1243,9 @@ sub prepare_linuxlinkfiles
 {
     my ( $filesref ) = @_;
 
-
     @installer::globals::linuxlinks = (); # empty this array, because it could be already used
     @installer::globals::linuxpatchfiles = (); # empty this array, because it could be already used
+    @installer::globals::allfilessav = (); # empty this array, because it could be already used. Required for forced links
 
     my @filesarray = ();
 
@@ -1260,6 +1260,13 @@ sub prepare_linuxlinkfiles
         my $styles = "";
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
         if ( $styles =~ /\bPATCH\b/ ) { $ispatchfile = 1; }
+
+        # Collecting all files for the mechanism with forced links
+        # Saving a copy
+        my %copyfilehash = ();
+        my $copyfile = \%copyfilehash;
+        installer::converter::copy_item_object($onefile, $copyfile);
+        push( @installer::globals::allfilessav, $copyfile);
 
         my $original_destination = $onefile->{'destination'};
         # $onefile->{'destination'} is used in the epm list file. This value can be changed now!
@@ -1287,6 +1294,68 @@ sub prepare_linuxlinkfiles
     }
 
     return \@filesarray;
+}
+
+###########################################################
+# Adding links into "u-RPMs", that have the flag
+# FORCE_INTO_UPDATE_PACKAGE
+# This is only relevant for Linux
+###########################################################
+
+sub prepare_forced_linuxlinkfiles
+{
+    my ( $linksref ) = @_;
+
+    my @linksarray = ();
+
+    for ( my $i = 0; $i <= $#{$linksref}; $i++ )
+    {
+        my $onelink = ${$linksref}[$i];
+
+        my $isforcedlink = 0;
+        my $styles = "";
+        if ( $onelink->{'Styles'} ) { $styles = $onelink->{'Styles'}; }
+        if ( $styles =~ /\bFORCE_INTO_UPDATE_PACKAGE\b/ ) { $isforcedlink = 1; }
+
+        if ( $isforcedlink )
+        {
+            my $fileid = $onelink->{'FileID'};
+            my $searchedlinkfile = find_file_by_id(\@installer::globals::allfilessav, $fileid);
+
+            # making a copy!
+
+            my %linkfilehash = ();
+            my $linkfile = \%linkfilehash;
+            installer::converter::copy_item_object($searchedlinkfile, $linkfile);
+
+            $linkfile->{'Name'} = $onelink->{'Name'};
+            $linkfile->{'destinationfile'} = $linkfile->{'destination'};
+            my $linkdestination = $linkfile->{'destinationfile'};
+            installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$linkdestination);
+            $linkfile->{'destinationfile'} = $linkdestination;
+
+            my $localdestination = $linkfile->{'destination'};
+            # Getting the path
+            installer::pathanalyzer::get_path_from_fullqualifiedname(\$localdestination);
+            $localdestination =~ s/\Q$installer::globals::separator\E\s*$//;
+            $linkfile->{'destination'} = $localdestination . $installer::globals::separator . $onelink->{'Name'};
+
+            $infoline = "Forced link into update file: $linkfile->{'destination'} pointing to $linkfile->{'destinationfile'} !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            # The file, defined by the link, has to be included into the
+            # link array @installer::globals::linuxlinks
+            push( @installer::globals::linuxlinks, $linkfile );
+        }
+        else
+        {
+            # Links with flag FORCE_INTO_UPDATE_PACKAGE are forced into "u"-RPM. All other
+            # links are included into the non-"u"-package.
+            push( @linksarray, $onelink );
+        }
+    }
+
+    return \@linksarray;
 }
 
 ###########################################################
@@ -2171,6 +2240,37 @@ sub collect_all_files_from_includepathes
 
     installer::logger::globallog("Reading all directories: End");
     push( @installer::globals::globallogfileinfo, "\n");
+}
+
+##############################################
+# Searching for a file with the gid
+##############################################
+
+sub find_file_by_id
+{
+    my ( $filesref, $gid ) = @_;
+
+    my $foundfile = 0;
+    my $onefile;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        $onefile = ${$filesref}[$i];
+        my $filegid = $onefile->{'gid'};
+
+        if ( $filegid eq $gid )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    # It does not need to exist. For example products that do not contain the libraries.
+    # if (! $foundfile ) { installer::exiter::exit_program("ERROR: No unique file name found for $filename !", "get_selfreg_file"); }
+
+    if (! $foundfile ) { $onefile  = ""; }
+
+    return $onefile;
 }
 
 1;
