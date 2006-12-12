@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN("TransitionDirection"),          WID_TRANSITION_DIRECTION, &::getCppuType((const sal_Bool*)0),           0,  0},
         { MAP_CHAR_LEN("TransitionFadeColor"),          WID_TRANSITION_FADE_COLOR, &::getCppuType((const sal_Int32*)0),         0,  0},
         { MAP_CHAR_LEN("TransitionDuration"),           WID_TRANSITION_DURATION, &::getCppuType((const double*)0),          0,  0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
     };
 
     static const SfxItemPropertyMap aDrawPageNotesHandoutPropertyMap_Impl[] =
@@ -278,7 +278,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN("DateTimeText"),                 WID_PAGE_DATETIMETEXT, &::getCppuType((const OUString*)0),              0,  0},
         { MAP_CHAR_LEN("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, &::getCppuType((const sal_Int32*)0),           0,  0},
 
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
     };
 
     static const SfxItemPropertyMap aGraphicPagePropertyMap_Impl[] =
@@ -299,7 +299,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
         { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
         { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
     };
 
     if( bImpress )
@@ -336,7 +336,7 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN("BackgroundFullSize"),           WID_PAGE_BACKFULL,  &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
         { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
     };
 
     static const SfxItemPropertyMap aHandoutMasterPagePropertyMap_Impl[] =
@@ -360,7 +360,7 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, &::getBooleanCppuType(),                    0, 0},
         { MAP_CHAR_LEN("DateTimeText"),                 WID_PAGE_DATETIMETEXT, &::getCppuType((const OUString*)0),              0,  0},
         { MAP_CHAR_LEN("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, &::getCppuType((const sal_Int32*)0),           0,  0},
-        {0,0,0,0,0}
+        {0,0,0,0,0,0}
     };
 
     if( ePageKind == PK_HANDOUT )
@@ -380,11 +380,11 @@ UNO3_GETIMPLEMENTATION2_IMPL( SdGenericDrawPage, SvxFmDrawPage );
 ***********************************************************************/
 SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPage, const SfxItemPropertyMap* pMap ) throw()
 :       SvxFmDrawPage( (SdrPage*) pInPage ),
-        mpModel     ( _pModel ),
-        maPropSet   ( (pInPage&& (pInPage->GetPageKind() != PK_STANDARD) && (pInPage->GetPageKind() != PK_HANDOUT) )?&pMap[1]:pMap ),
         SdUnoSearchReplaceShape(this),
-        mbHasBackgroundObject(sal_False),
+        mpModel     ( _pModel ),
         mpSdrModel(0),
+        maPropSet   ( (pInPage&& (pInPage->GetPageKind() != PK_STANDARD) && (pInPage->GetPageKind() != PK_HANDOUT) )?&pMap[1]:pMap ),
+        mbHasBackgroundObject(sal_False),
         mbIsImpressDocument(false)
 {
     mpSdrModel = SvxFmDrawPage::mpModel;
@@ -923,7 +923,6 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
         default:
             throw beans::UnknownPropertyException();
-            break;
     }
 
     GetModel()->SetModified();
@@ -1206,15 +1205,14 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     default:
         throw beans::UnknownPropertyException();
-        break;
     }
     return aAny;
 }
 
-void SAL_CALL SdGenericDrawPage::addPropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& xListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdGenericDrawPage::removePropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdGenericDrawPage::addVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdGenericDrawPage::addPropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdGenericDrawPage::removePropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdGenericDrawPage::addVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj ) const throw()
 {
@@ -1313,9 +1311,15 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
             case PRESOBJ_DATETIME:
                 aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("DateTimeShape") );
                 break;
+            case PRESOBJ_NONE:
+            case PRESOBJ_IMAGE:
+            case PRESOBJ_MAX:
+                break;
             }
 
-            SvxShape* pShape = SvxShape::getImplementation( xShape );
+            if( !pShape )
+                pShape = SvxShape::getImplementation( xShape );
+
             if( pShape )
                 pShape->SetShapeType( aShapeType );
         }
@@ -1355,14 +1359,14 @@ Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
 
 //----------------------------------------------------------------------
 
-void SdGenericDrawPage::setBackground( const Any& rValue ) throw(lang::IllegalArgumentException)
+void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
 {
     DBG_ERROR( "Don't call me, I'm useless!" );
 }
 
 //----------------------------------------------------------------------
 
-void SdGenericDrawPage::getBackground( Any& rValue ) throw()
+void SdGenericDrawPage::getBackground( Any& ) throw()
 {
     DBG_ERROR( "Don't call me, I'm useless!" );
 }
@@ -1893,8 +1897,8 @@ uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
 // SdDrawPage
 //========================================================================
 
-SdDrawPage::SdDrawPage(  SdXImpressDocument* mpModel, SdPage* pPage ) throw()
-: SdGenericDrawPage( mpModel, pPage, ImplGetDrawPagePropertyMap( mpModel->IsImpressDocument(), pPage->GetPageKind() ) )
+SdDrawPage::SdDrawPage(  SdXImpressDocument* pModel, SdPage* pPage ) throw()
+: SdGenericDrawPage( pModel, pPage, ImplGetDrawPagePropertyMap( pModel->IsImpressDocument(), pPage->GetPageKind() ) )
 {
 }
 
@@ -2453,8 +2457,8 @@ void SdDrawPage::getBackground( Any& rValue ) throw()
 // class SdMasterPage
 //========================================================================
 
-SdMasterPage::SdMasterPage( SdXImpressDocument* mpModel, SdPage* pPage ) throw()
-: SdGenericDrawPage( mpModel, pPage, ImplGetMasterPagePropertyMap( pPage ? pPage->GetPageKind() : PK_STANDARD ) ),
+SdMasterPage::SdMasterPage( SdXImpressDocument* pModel, SdPage* pPage ) throw()
+: SdGenericDrawPage( pModel, pPage, ImplGetMasterPagePropertyMap( pPage ? pPage->GetPageKind() : PK_STANDARD ) ),
   mpBackgroundObj(NULL)
 {
     if( pPage && GetPage()->GetPageKind() == PK_STANDARD )
