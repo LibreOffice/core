@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:53:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:55:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,14 @@
  // Werkzeugleiste (Impress)
  // Objektleiste (Impress)
  // Optionsleiste (Impress)
-#include "toolbox2.src"
+#include "toolbox2_tmpl.src"
  // Werkzeugleiste (Draw (Graphic))
  // Objektleiste (Draw (Graphic))
  // Optionsleiste (Draw (Graphic))
 #undef SD_TOOLBOX
 #define SD_TOOLBOX RID_GRAPHIC_TOOLBOX
-#include "toolbox2.src"
+#include "toolbox2_tmpl.src"
+
 ToolBox RID_SLIDE_TOOLBOX
 {
     HelpId = HID_SD_SLIDE_TOOLBOX ;
