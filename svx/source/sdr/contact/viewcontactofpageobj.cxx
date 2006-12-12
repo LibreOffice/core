@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:36:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,8 @@ namespace sdr
         :   ObjectContactOfPagePainter(pPage),
             mrUserViewContact(rUserViewContact)
         {
+            // #i71130# Mark this view as preview renderer
+            mbIsPreviewRenderer = true;
         }
 
         OCOfPageObjPagePainter::~OCOfPageObjPagePainter()
