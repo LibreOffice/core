@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:15:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ TYPEINIT1_AUTOFACTORY( DiaEffectItem, SfxEnumItem );
 
 
 DiaEffectItem::DiaEffectItem( presentation::FadeEffect eFE ) :
-    SfxEnumItem( ATTR_DIA_EFFECT, eFE )
+    SfxEnumItem( ATTR_DIA_EFFECT, (USHORT)eFE )
 {
 }
 
@@ -61,13 +61,13 @@ DiaEffectItem::DiaEffectItem( SvStream& rIn ) :
 }
 
 
-SfxPoolItem* DiaEffectItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaEffectItem::Clone( SfxItemPool* ) const
 {
     return new DiaEffectItem( *this );
 }
 
 
-SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, USHORT nVer ) const
+SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, USHORT ) const
 {
     return new DiaEffectItem( rIn );
 }
@@ -81,7 +81,7 @@ TYPEINIT1_AUTOFACTORY( DiaSpeedItem, SfxEnumItem );
 
 
 DiaSpeedItem::DiaSpeedItem( FadeSpeed eFS ) :
-    SfxEnumItem( ATTR_DIA_SPEED, eFS )
+    SfxEnumItem( ATTR_DIA_SPEED, (USHORT)eFS )
 {
 }
 
@@ -92,13 +92,13 @@ DiaSpeedItem::DiaSpeedItem( SvStream& rIn ) :
 }
 
 
-SfxPoolItem* DiaSpeedItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaSpeedItem::Clone( SfxItemPool* ) const
 {
     return new DiaSpeedItem( *this );
 }
 
 
-SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT nVer ) const
+SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT ) const
 {
     return new DiaSpeedItem( rIn );
 }
@@ -111,7 +111,7 @@ SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT nVer ) const
 TYPEINIT1_AUTOFACTORY( DiaAutoItem, SfxEnumItem );
 
 DiaAutoItem::DiaAutoItem( PresChange eChange ) :
-    SfxEnumItem( ATTR_DIA_AUTO, eChange )
+    SfxEnumItem( ATTR_DIA_AUTO, (USHORT)eChange )
 {
 }
 
@@ -122,13 +122,13 @@ DiaAutoItem::DiaAutoItem( SvStream& rIn ) :
 }
 
 
-SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* ) const
 {
     return new DiaAutoItem( *this );
 }
 
 
-SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT nVer ) const
+SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT ) const
 {
     return new DiaAutoItem( rIn );
 }
@@ -147,7 +147,7 @@ DiaTimeItem::DiaTimeItem( UINT32 nValue ) :
 }
 
 
-SfxPoolItem* DiaTimeItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaTimeItem::Clone( SfxItemPool* ) const
 {
     return new DiaTimeItem( *this );
 }
