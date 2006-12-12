@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:27:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      &::getCppuType((const sal_Int32*)0),                       0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},
         { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},
-        { 0,0,0,0,0}
+        { 0,0,0,0,0,0}
     };
 
     static const SfxItemPropertyMap aDraw_SdXShapePropertyMap_Impl[] =
@@ -245,7 +245,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { 0,0,0,0,0}
+        { 0,0,0,0,0,0}
     };
 
     if( bImpress )
@@ -256,7 +256,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
 
 SfxItemPropertyMap aEmpty_SdXShapePropertyMap_Impl[] =
 {
-    { 0,0,0,0,0}
+    { 0,0,0,0,0,0}
 };
 
 const SvEventDescription* ImplGetSupportedMacroItems()
@@ -296,15 +296,16 @@ SdXShape::SdXShape() throw()
 }
 
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
-:   maPropSet( pModel?
+:   mpShape( pShape ),
+    maPropSet( pModel?
                     ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
                 :   aEmpty_SdXShapePropertyMap_Impl ),
     mpMap( pModel?
                     ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
                 :   aEmpty_SdXShapePropertyMap_Impl ),
     mpModel(pModel),
-    mpImplementationId( NULL ),
-    mpShape( pShape )
+    mpImplementationId( NULL )
+
 {
     pShape->setMaster( this );
 }
@@ -523,7 +524,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= bIsAnimation))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->bIsMovie = bIsAnimation;
+                    pInfo->mbIsMovie = bIsAnimation;
                     break;
                 }
 */
@@ -533,16 +534,16 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->aBookmark = SdDrawPage::getUiNameFromPageApiName( aString );
+                    pInfo->maBookmark = SdDrawPage::getUiNameFromPageApiName( aString );
                     break;
                 }
                 case WID_CLICKACTION:
-                    ::cppu::any2enum< presentation::ClickAction >( pInfo->eClickAction, aValue);
+                    ::cppu::any2enum< presentation::ClickAction >( pInfo->meClickAction, aValue);
                     break;
 
 /* todo?
                 case WID_PLAYFULL:
-                    pInfo->bPlayFull = ::cppu::any2bool(aValue);
+                    pInfo->mbPlayFull = ::cppu::any2bool(aValue);
                     break;
 */
                 case WID_SOUNDFILE:
@@ -550,14 +551,14 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     OUString aString;
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
-                    pInfo->aSoundFile = aString;
+                    pInfo->maSoundFile = aString;
                     EffectMigration::UpdateSoundEffect( mpShape, pInfo );
                     break;
                 }
 
                 case WID_SOUNDON:
                 {
-                    if( !(aValue >>= pInfo->bSoundOn) )
+                    if( !(aValue >>= pInfo->mbSoundOn) )
                         throw lang::IllegalArgumentException();
                     EffectMigration::UpdateSoundEffect( mpShape, pInfo );
                     break;
@@ -569,7 +570,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= nColor))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->aBlueScreen.SetColor( nColor );
+                    pInfo->maBlueScreen.SetColor( nColor );
                     break;
                 }
 */
@@ -579,7 +580,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= nVerb))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->nVerb = (USHORT)nVerb;
+                    pInfo->mnVerb = (USHORT)nVerb;
                     break;
                 }
                 case WID_DIMCOLOR:
@@ -641,7 +642,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if( pObj == NULL || !pObj->ISA( SdrPathObj ) )
                         throw lang::IllegalArgumentException();
 
-                    pInfo->pPathObj = (SdrPathObj*)pObj;
+                    pInfo->mpPathObj = (SdrPathObj*)pObj;
 
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                     if( pDoc )
@@ -652,7 +653,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                             pInfo = new SdAnimationInfo(pDoc);
                             pObj->InsertUserData( pInfo );
                         }
-                        pInfo->bInvisibleInPresentation = sal_True;
+                        pInfo->mbInvisibleInPresentation = sal_True;
                     }
 
                     break;
@@ -757,7 +758,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aRet <<= EffectMigration::GetAnimationSpeed( mpShape );
             break;
         case WID_ISANIMATION:
-            aRet <<= (sal_Bool)( pInfo && pInfo->bIsMovie);
+            aRet <<= (sal_Bool)( pInfo && pInfo->mbIsMovie);
             break;
         case WID_BOOKMARK:
         {
@@ -767,13 +768,13 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                 // is the bookmark a page?
                 BOOL bIsMasterPage;
-                if(pDoc->GetPageByName( pInfo->aBookmark, bIsMasterPage ) != SDRPAGE_NOTFOUND)
+                if(pDoc->GetPageByName( pInfo->maBookmark, bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
-                    aString = SdDrawPage::getPageApiNameFromUiName( pInfo->aBookmark );
+                    aString = SdDrawPage::getPageApiNameFromUiName( pInfo->maBookmark );
                 }
                 else
                 {
-                    aString = pInfo->aBookmark ;
+                    aString = pInfo->maBookmark ;
                     sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
                     if( nPos >= 0 )
                     {
@@ -792,10 +793,10 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             break;
         }
         case WID_CLICKACTION:
-            aRet = ::cppu::enum2any< presentation::ClickAction >( pInfo?pInfo->eClickAction:presentation::ClickAction_NONE );
+            aRet = ::cppu::enum2any< presentation::ClickAction >( pInfo?pInfo->meClickAction:presentation::ClickAction_NONE );
             break;
         case WID_PLAYFULL:
-            aRet <<= (sal_Bool)( pInfo && pInfo->bPlayFull );
+            aRet <<= (sal_Bool)( pInfo && pInfo->mbPlayFull );
             break;
         case WID_SOUNDFILE:
             aRet <<= EffectMigration::GetSoundFile( mpShape );
@@ -804,10 +805,10 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aRet <<= EffectMigration::GetSoundOn( mpShape );
             break;
         case WID_BLUESCREEN:
-            aRet <<= (sal_Int32)( pInfo?pInfo->aBlueScreen.GetColor():0x00ffffff );
+            aRet <<= (sal_Int32)( pInfo?pInfo->maBlueScreen.GetColor():0x00ffffff );
             break;
         case WID_VERB:
-            aRet <<= (sal_Int32)( pInfo?pInfo->nVerb:0 );
+            aRet <<= (sal_Int32)( pInfo?pInfo->mnVerb:0 );
             break;
         case WID_DIMCOLOR:
             aRet <<= EffectMigration::GetDimColor( mpShape );
@@ -825,8 +826,8 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             aRet = GetStyleSheet();
             break;
         case WID_ANIMPATH:
-            if( pInfo && pInfo->pPathObj )
-                aRet <<= pInfo->pPathObj->getUnoShape();
+            if( pInfo && pInfo->mpPathObj )
+                aRet <<= pInfo->mpPathObj->getUnoShape();
             break;
         case WID_IMAGEMAP:
             {
@@ -1021,7 +1022,6 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
 
                 OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
                 pOutliner->SetText( *pOutlinerParaObject );
-                SfxStyleSheetPool* pStyle = pOutliner->GetStyleSheetPool();
                 const sal_Bool bVertical = pOutliner->IsVertical();
 
                 pOutliner->Clear();
@@ -1216,11 +1216,12 @@ uno::Reference< container::XNameReplace > SAL_CALL SdXShape::getEvents(  ) throw
 }
 
 SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
-: mpShape( pShape ), mxShape( pShape ),
-  maStrOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
+: maStrOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
   maStrServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.documents.Events") ),
   maStrEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
   maStrPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
+  maStrLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
+  maStrMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
   maStrClickAction( RTL_CONSTASCII_USTRINGPARAM("ClickAction") ),
   maStrBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
   maStrEffect( RTL_CONSTASCII_USTRINGPARAM("Effect") ),
@@ -1230,8 +1231,7 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
   maStrSpeed( RTL_CONSTASCII_USTRINGPARAM("Speed") ),
   maStrStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") ),
   maStrScript( RTL_CONSTASCII_USTRINGPARAM("Script") ),
-  maStrLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
-  maStrMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
+  mpShape( pShape ), mxShape( pShape )
 {
 }
 
@@ -1249,13 +1249,13 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
 static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 {
     const String aEmpty;
-    pInfo->aBookmark = aEmpty;
-    pInfo->bSecondSoundOn = sal_False;
-    pInfo->bSecondPlayFull = sal_False;
-    pInfo->eClickAction = presentation::ClickAction_NONE;
-    pInfo->eSecondEffect = presentation::AnimationEffect_NONE;
-    pInfo->eSecondSpeed = presentation::AnimationSpeed_MEDIUM;
-    pInfo->nVerb = 0;
+    pInfo->maBookmark = aEmpty;
+    pInfo->mbSecondSoundOn = sal_False;
+    pInfo->mbSecondPlayFull = sal_False;
+    pInfo->meClickAction = presentation::ClickAction_NONE;
+    pInfo->meSecondEffect = presentation::AnimationEffect_NONE;
+    pInfo->meSecondSpeed = presentation::AnimationSpeed_MEDIUM;
+    pInfo->mnVerb = 0;
 }
 
 // XNameReplace
@@ -1273,12 +1273,12 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
     const beans::PropertyValue* pProperties = aProperties.getConstArray();
 
     OUString aStrEventType;
-    presentation::ClickAction eClickAction;
-    presentation::AnimationEffect eEffect;
-    presentation::AnimationSpeed eSpeed;
+    presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
+    presentation::AnimationEffect eEffect = presentation::AnimationEffect_NONE;
+    presentation::AnimationSpeed eSpeed = presentation::AnimationSpeed_MEDIUM;
     OUString aStrSoundURL;
-    sal_Bool bPlayFull;
-    sal_Int32 nVerb;
+    sal_Bool bPlayFull = sal_False;
+    sal_Int32 nVerb = 0;
     OUString aStrMacro;
     OUString aStrLibrary;
     OUString aStrBookmark;
@@ -1397,7 +1397,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 break;
 
             clearEventsInAnimationInfo( pInfo );
-            pInfo->eClickAction = eClickAction;
+            pInfo->meClickAction = eClickAction;
 
             switch( eClickAction )
             {
@@ -1433,7 +1433,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                         }
                     }
 
-                    pInfo->aBookmark = aStrBookmark;
+                    pInfo->maBookmark = aStrBookmark;
                     bOk = sal_True;
                 }
                 break;
@@ -1441,7 +1441,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_MACRO:
                 if( nFound & FOUND_MACRO )
                 {
-                    pInfo->aBookmark = aStrMacro;
+                    pInfo->maBookmark = aStrMacro;
                     bOk = sal_True;
                 }
                 break;
@@ -1449,7 +1449,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_VERB:
                 if( nFound & FOUND_VERB )
                 {
-                    pInfo->nVerb = (USHORT)nVerb;
+                    pInfo->mnVerb = (USHORT)nVerb;
                     bOk = sal_True;
                 }
                 break;
@@ -1458,8 +1458,8 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 if( ( nFound & FOUND_EFFECT ) == 0 )
                     break;
 
-                pInfo->eSecondEffect = eEffect;
-                pInfo->eSecondSpeed = nFound & FOUND_SPEED ? eSpeed : presentation::AnimationSpeed_MEDIUM;
+                pInfo->meSecondEffect = eEffect;
+                pInfo->meSecondSpeed = nFound & FOUND_SPEED ? eSpeed : presentation::AnimationSpeed_MEDIUM;
 
                 bOk = sal_True;
 
@@ -1468,13 +1468,15 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_SOUND:
                 if( nFound & FOUND_SOUNDURL )
                 {
-                    pInfo->aBookmark = aStrSoundURL;
+                    pInfo->maBookmark = aStrSoundURL;
                     if( eClickAction != presentation::ClickAction_SOUND )
-                        pInfo->bSecondSoundOn = aStrSoundURL.getLength() != 0;
-                    pInfo->bSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : sal_False;
+                        pInfo->mbSecondSoundOn = aStrSoundURL.getLength() != 0;
+                    pInfo->mbSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : sal_False;
 
                     bOk = sal_True;
                 }
+                break;
+            case presentation::ClickAction_MAKE_FIXED_SIZE:
                 break;
             }
         }
@@ -1487,11 +1489,11 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 break;
 
             clearEventsInAnimationInfo( pInfo );
-            pInfo->eClickAction = presentation::ClickAction_MACRO;
+            pInfo->meClickAction = presentation::ClickAction_MACRO;
 
             if ( SfxApplication::IsXScriptURL( aStrMacro ) )
             {
-                pInfo->aBookmark = aStrMacro;
+                pInfo->maBookmark = aStrMacro;
             }
             else
             {
@@ -1518,7 +1520,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                     sBuffer.append( aStrLibrary );
                 }
 
-                pInfo->aBookmark = sBuffer.makeStringAndClear();
+                pInfo->maBookmark = sBuffer.makeStringAndClear();
             }
             bOk = sal_True;
         }
@@ -1540,7 +1542,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
     if( pInfo )
-        eClickAction = pInfo->eClickAction;
+        eClickAction = pInfo->meClickAction;
 
     sal_Int32 nPropertyCount = 2;
     switch( eClickAction )
@@ -1558,7 +1560,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     case presentation::ClickAction_BOOKMARK:
     case presentation::ClickAction_DOCUMENT:
     case presentation::ClickAction_MACRO:
-        if ( !SfxApplication::IsXScriptURL( pInfo->aBookmark ) )
+        if ( !SfxApplication::IsXScriptURL( pInfo->maBookmark ) )
             nPropertyCount += 1;
         break;
 
@@ -1569,6 +1571,8 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     case presentation::ClickAction_VANISH:
         nPropertyCount += 4;
         break;
+    default:
+        break;
     }
 
     uno::Sequence< beans::PropertyValue > aProperties( nPropertyCount );
@@ -1578,7 +1582,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
     if( eClickAction == presentation::ClickAction_MACRO )
     {
-        if ( SfxApplication::IsXScriptURL( pInfo->aBookmark ) )
+        if ( SfxApplication::IsXScriptURL( pInfo->maBookmark ) )
         {
             // Scripting Framework URL
             aAny <<= maStrScript;;
@@ -1588,7 +1592,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            aAny <<= OUString( pInfo->aBookmark );
+            aAny <<= OUString( pInfo->maBookmark );
             pProperties->Name = maStrScript;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1605,7 +1609,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            String aMacro = pInfo->aBookmark;
+            String aMacro = pInfo->maBookmark;
 
             // aMacro has got following format:
             // "Macroname.Modulname.Libname.Documentname" or
@@ -1664,7 +1668,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             break;
         case presentation::ClickAction_BOOKMARK:
             {
-                const OUString aStrBookmark( getPageApiNameFromUiNameImpl( pInfo->aBookmark ) );
+                const OUString aStrBookmark( getPageApiNameFromUiNameImpl( pInfo->maBookmark ) );
                 pProperties->Name = maStrBookmark;
                 pProperties->Handle = -1;
                 pProperties->Value <<= aStrBookmark;
@@ -1675,7 +1679,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         case presentation::ClickAction_DOCUMENT:
         case presentation::ClickAction_PROGRAM:
             {
-                OUString aString( pInfo->aBookmark );
+                OUString aString( pInfo->maBookmark );
                 sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
                 if( nPos >= 0 )
                 {
@@ -1691,14 +1695,14 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             break;
 
         case presentation::ClickAction_VANISH:
-            aAny <<= pInfo->eSecondEffect;
+            aAny <<= pInfo->meSecondEffect;
             pProperties->Name = maStrEffect;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            aAny <<= pInfo->eSecondSpeed;
+            aAny <<= pInfo->meSecondSpeed;
             pProperties->Name = maStrSpeed;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1708,9 +1712,9 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             // NOTE: no break here!!!
 
         case presentation::ClickAction_SOUND:
-            if( eClickAction == presentation::ClickAction_SOUND || pInfo->bSecondSoundOn )
+            if( eClickAction == presentation::ClickAction_SOUND || pInfo->mbSecondSoundOn )
             {
-                aAny <<= OUString( pInfo->aBookmark );
+                aAny <<= OUString( pInfo->maBookmark );
                 pProperties->Name = maStrSoundURL;
                 pProperties->Handle = -1;
                 pProperties->Value = aAny;
@@ -1719,17 +1723,19 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
                 pProperties->Name = maStrPlayFull;
                 pProperties->Handle = -1;
-                pProperties->Value = ::cppu::bool2any(pInfo->bSecondPlayFull);
+                pProperties->Value = ::cppu::bool2any(pInfo->mbSecondPlayFull);
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
             }
             break;
 
         case presentation::ClickAction_VERB:
-            aAny <<= (sal_Int32)pInfo->nVerb;
+            aAny <<= (sal_Int32)pInfo->mnVerb;
             pProperties->Name = maStrVerb;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            break;
+        default:
             break;
         }
     }
@@ -1796,11 +1802,11 @@ void SdXShape::modelChanged( SdrModel* pNewModel )
     }
 }
 
-void SdXShape::pageChanged( SdrPage* pNewPage )
+void SdXShape::pageChanged( SdrPage*  )
 {
 }
 
-void SdXShape::objectChanged( SdrObject* pNewObj )
+void SdXShape::objectChanged( SdrObject*  )
 {
 }
 
