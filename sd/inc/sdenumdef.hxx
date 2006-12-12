@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdenumdef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,11 @@
 #ifndef _SD_ENUMDEF_HXX
 #define _SD_ENUMDEF_HXX
 
-//CHINA001 move from dlgass.hxx
 enum OutputType { OUTPUT_PAGE, OUTPUT_OVERHEAD, OUTPUT_SLIDE, OUTPUT_PRESENTATION, OUTPUT_ORIGINAL };
 enum StartType { ST_EMPTY, ST_TEMPLATE, ST_OPEN };
-//CHINA001 end
 
-//CHINA001 move from dlgsnap.hxx
 #define RET_SNAP_DELETE 111
 enum SnapKind { SK_HORIZONTAL, SK_VERTICAL, SK_POINT };
-//CHINA001 end
 
 #endif
 
