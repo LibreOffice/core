@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:22:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@ public:
     /** Copy all master pages that are to be shown into the given list.
     */
     virtual void Fill (ItemList& rItemList);
+
+    using sd::toolpanel::controls::MasterPagesSelector::Fill;
 
 protected:
     /** Return the master page whose preview is currently selected in the
