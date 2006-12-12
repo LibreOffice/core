@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusldlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:52:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-//CHINA001 #include "present.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "sdattr.hxx"
@@ -61,8 +60,7 @@
 #include "Window.hxx"
 #endif
 #include "optsitem.hxx"
-#include "sdabstdlg.hxx" //CHINA001
-#include "present.hrc" //CHINA001
+#include "sdabstdlg.hxx"
 
 namespace sd {
 
@@ -94,11 +92,11 @@ FunctionReference FuSlideShowDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin
     return xFunc;
 }
 
-void FuSlideShowDlg::DoExecute( SfxRequest& rReq )
+void FuSlideShowDlg::DoExecute( SfxRequest& )
 {
-    PresentationSettings& rPresentationSettings = pDoc->getPresentationSettings();
+    PresentationSettings& rPresentationSettings = mpDoc->getPresentationSettings();
 
-    SfxItemSet      aDlgSet( pDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
+    SfxItemSet      aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
     List            aPageNameList;
     const String&   rPresPage = rPresentationSettings.maPresPage;
     String          aFirstPage;
@@ -106,9 +104,9 @@ void FuSlideShowDlg::DoExecute( SfxRequest& rReq )
     SdPage*         pPage = NULL;
     long            nPage;
 
-    for( nPage = pDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
+    for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
     {
-        pPage = pDoc->GetSdPage( (USHORT) nPage, PK_STANDARD );
+        pPage = mpDoc->GetSdPage( (USHORT) nPage, PK_STANDARD );
         String* pStr = new String( pPage->GetName() );
 
         if ( !pStr->Len() )
@@ -125,9 +123,9 @@ void FuSlideShowDlg::DoExecute( SfxRequest& rReq )
         else if ( pPage->IsSelected() && !aFirstPage.Len() )
             aFirstPage = *pStr;
     }
-    List* pCustomShowList = pDoc->GetCustomShowList(); // No Create
+    List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
-    BOOL bStartWithActualPage = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() )->IsStartWithActualPage();
+    BOOL bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
 /* #109180# change in behaviour, even when always start with current page is enabled, range settings are
             still used
     if( bStartWithActualPage )
@@ -158,19 +156,16 @@ void FuSlideShowDlg::DoExecute( SfxRequest& rReq )
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     aDlgSet.Put( SfxInt32Item( ATTR_PRESENT_DISPLAY, pOptions->GetDisplay() ) );
 
-    //CHINA001 SdStartPresentationDlg aDlg (pWindow, aDlgSet, aPageNameList, pCustomShowList );
-    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-    AbstractSdStartPresDlg* pDlg = pFact->CreateSdStartPresentationDlg(ResId( DLG_START_PRESENTATION ), pWindow, aDlgSet, aPageNameList, pCustomShowList );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-    if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    AbstractSdStartPresDlg* pDlg = pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList ) : 0;
+    if( pDlg && (pDlg->Execute() == RET_OK) )
     {
         rtl::OUString aPage;
         long    nValue32;
         sal_Bool bValue;
         bool    bValuesChanged = FALSE;
 
-        pDlg->GetAttr( aDlgSet ); //CHINA001 aDlg.GetAttr( aDlgSet );
+        pDlg->GetAttr( aDlgSet );
 
         aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
         if( aPage != rPresentationSettings.maPresPage )
@@ -274,9 +269,9 @@ void FuSlideShowDlg::DoExecute( SfxRequest& rReq )
 
         // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
         if ( bValuesChanged )
-            pDoc->SetChanged( TRUE );
+            mpDoc->SetChanged( TRUE );
     }
-    delete pDlg; //add by CHINA001
+    delete pDlg;
     // Strings aus Liste loeschen
     for( void* pStr = aPageNameList.First(); pStr; pStr = aPageNameList.Next() )
         delete (String*) pStr;
