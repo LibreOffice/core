@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:15:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ enum MenuId {
     MID_UNLOCK_TASK_PANEL = 1,
     MID_LOCK_TASK_PANEL = 2,
     MID_CUSTOMIZE = 3,
-    MID_FIRST_CONTROL = 4,
+    MID_FIRST_CONTROL = 4
 };
 
 /** This control is used for extracting the title string from the resource
@@ -332,9 +332,9 @@ TaskPaneViewShell::TaskPaneViewShell (
     SetPool (&GetDoc()->GetPool());
 
     if (pFrameViewArgument != NULL)
-        pFrameView = pFrameViewArgument;
+        mpFrameView = pFrameViewArgument;
     else
-        pFrameView = new FrameView(GetDoc());
+        mpFrameView = new FrameView(GetDoc());
     GetFrameView()->Connect();
 
     // Hide or delete unused controls that we have inherited from the
@@ -390,8 +390,8 @@ void TaskPaneViewShell::ArrangeGUIElements (void)
 {
     ViewShell::ArrangeGUIElements();
 
-    Point aOrigin (aViewPos);
-    Size aSize (aViewSize);
+    Point aOrigin (maViewPos);
+    Size aSize (maViewSize);
 
     if ( ! mbIsInitialized)
     {
@@ -518,8 +518,12 @@ IMPL_LINK(TaskPaneViewShell, MenuSelectHandler, Menu*, pMenu)
             pFloat->GetPopupModeFlags()
             | FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE);
     }
+
+    // warning free code changes:
+    // FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE is 0x10000, so cast to USHORT is 0
+    // so why was this used anyway?
     pMenu->SetMenuFlags (
-        pMenu->GetMenuFlags() | (USHORT)FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE);
+        pMenu->GetMenuFlags() /* | (USHORT)FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE */ );
 
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
@@ -573,7 +577,7 @@ SdPage* TaskPaneViewShell::getCurrentPage(void) const
 
 
 
-void TaskPaneViewShell::Execute (SfxRequest& rRequest)
+void TaskPaneViewShell::Execute (SfxRequest& )
 {
 }
 
