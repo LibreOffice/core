@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:47:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,15 +93,15 @@ private:
     Rectangle           aParaBound;
     Point               aTextOffset;
     OutlinerParagraph*  pParagraphs;
-    OutputDevice*       pOut;
+    OutputDevice*       mpOut;
     ULONG               nParaCount;
     ULONG               nCurPara;
     long                nExtraData;
     BOOL                bInit;
     BOOL                mbVertical;
 
-                        OutlinerInfo( const OutlinerInfo& rInfo ) {}
-    OutlinerInfo&       operator=( const OutlinerInfo& rInfo ) { return *this; }
+                        OutlinerInfo( const OutlinerInfo& ) {}
+    OutlinerInfo&       operator=( const OutlinerInfo& ) { return *this; }
 
                         DECL_LINK( DrawPortionHdl, DrawPortionInfo* );
 
