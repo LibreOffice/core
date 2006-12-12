@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:51:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@
 #endif
 #include "drawdoc.hxx"
 #include "app.hrc"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 namespace sd {
 
@@ -111,64 +111,25 @@ FunctionReference FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    BOOL        bHasMarked = pView->AreObjectsMarked();
+    BOOL        bHasMarked = mpView->AreObjectsMarked();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     if( !pArgs )
     {
-        // erst einmal alle eingabeparameter fuer den dialog retten
-        SfxItemSet aInputAttr( pDoc->GetPool() );
-        pView->GetAttributes( aInputAttr );
-
-        const XLineStyleItem &rILineStyleItem = (const XLineStyleItem &) aInputAttr.Get (XATTR_LINESTYLE);
-        XLineStyle           eILineStyle      = rILineStyleItem.GetValue ();
-
-        const XLineDashItem  &rILineDashItem  = (const XLineDashItem &) aInputAttr.Get (XATTR_LINEDASH);
-        const XDash          &rIDash          = rILineDashItem.GetDashValue ();
-
-        const XLineWidthItem &rILineWidthItem = (const XLineWidthItem &) aInputAttr.Get (XATTR_LINEWIDTH);
-        long                 nILineWidth      = rILineWidthItem.GetValue ();
-
-        const XLineColorItem &rILineColorItem = (const XLineColorItem &) aInputAttr.Get (XATTR_LINECOLOR);
-        const Color          &rIColor         = rILineColorItem.GetColorValue ();
-
         const SdrObject* pObj = NULL;
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if( rMarkList.GetMarkCount() == 1 )
             pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-        SfxItemSet* pNewAttr = new SfxItemSet( pDoc->GetPool() );
-        pView->GetAttributes( *pNewAttr );
+        SfxItemSet* pNewAttr = new SfxItemSet( mpDoc->GetPool() );
+        mpView->GetAttributes( *pNewAttr );
 
-        //CHINA001 SvxLineTabDialog* pDlg = new SvxLineTabDialog( NULL, pNewAttr, pDoc, pObj, bHasMarked );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
-        SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog(NULL,
-                    pNewAttr,
-                    pDoc,
-                ResId(RID_SVXDLG_LINE),
-                pObj,
-                bHasMarked);
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        if ( pDlg->Execute() == RET_OK )
+        SfxAbstractTabDialog * pDlg = pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr,mpDoc,ResId(RID_SVXDLG_LINE),pObj,bHasMarked) : 0;
+        if( pDlg && (pDlg->Execute() == RET_OK) )
         {
-            // die ausgabeparameter des dialogs bestimmen
-            SfxItemSet           *pOutputAttr     = (SfxItemSet *) pDlg->GetOutputItemSet();
-
-            const XLineStyleItem &rOLineStyleItem = (const XLineStyleItem &) pOutputAttr->Get (XATTR_LINESTYLE);
-            XLineStyle           eOLineStyle      = rOLineStyleItem.GetValue ();
-
-            const XLineDashItem  &rOLineDashItem  = (const XLineDashItem &) pOutputAttr->Get (XATTR_LINEDASH);
-            const XDash          &rODash          = rOLineDashItem.GetDashValue ();
-
-            const XLineWidthItem &rOLineWidthItem = (const XLineWidthItem &) pOutputAttr->Get (XATTR_LINEWIDTH);
-            long                 nOLineWidth      = rOLineWidthItem.GetValue ();
-
-            const XLineColorItem &rOLineColorItem = (const XLineColorItem &) pOutputAttr->Get (XATTR_LINECOLOR);
-            const Color          &rOColor         = rOLineColorItem.GetColorValue ();
-
-            pView->SetAttributes (*(pDlg->GetOutputItemSet ()));
+            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
         }
 
         // Attribute wurden geaendert, Listboxes in Objectbars muessen aktualisiert werden
@@ -179,7 +140,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
                         SID_ATTR_LINE_COLOR,
                         0 };
 
-        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
         delete pDlg;
         delete pNewAttr;
