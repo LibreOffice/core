@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-09 15:42:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:50:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ class MasterPagesSelector
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDMASTERPAGESSELECTOR);
+    SFX_DECL_INTERFACE(SD_IF_SDMASTERPAGESSELECTOR)
 
     MasterPagesSelector (
         TreeNode* pParent,
