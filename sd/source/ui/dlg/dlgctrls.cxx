@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrls.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:37:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {
     const USHORT nPos = GetSelectEntryPos();
 
-    if( pSlide && (nPos >= 0) && (nPos < mpImpl->maPresets.size() ) )
+    if( pSlide && (nPos < mpImpl->maPresets.size() ) )
     {
         TransitionPresetPtr pPreset( mpImpl->maPresets[nPos] );
 
