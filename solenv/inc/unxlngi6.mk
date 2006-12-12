@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 14:37:21 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:18:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,6 @@ MODULES_WITH_WARNINGS := \
     lingu \
     r_tools \
     sc \
-    sd \
     soldep \
     starmath \
     sw \
