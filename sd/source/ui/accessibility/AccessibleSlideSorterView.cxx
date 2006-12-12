@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:24:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,9 +194,6 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::GetAccessibleChildImplem
     return pResult;
 }
 
-
-
-
 void AccessibleSlideSorterView::Destroyed (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -209,10 +206,6 @@ void AccessibleSlideSorterView::Destroyed (void)
     }
 }
 
-
-
-
-
 //=====  XAccessible  =========================================================
 
 Reference<XAccessibleContext > SAL_CALL
@@ -221,9 +214,6 @@ Reference<XAccessibleContext > SAL_CALL
 {
     return this;
 }
-
-
-
 
 //=====  XAccessibleContext  ==================================================
 
@@ -234,9 +224,6 @@ sal_Int32 SAL_CALL AccessibleSlideSorterView::getAccessibleChildCount (void)
     ::osl::MutexGuard aGuard (maMutex);
     return mpImpl->GetVisibleChildCount();
 }
-
-
-
 
 Reference<XAccessible > SAL_CALL
     AccessibleSlideSorterView::getAccessibleChild (sal_Int32 nIndex)
@@ -250,9 +237,6 @@ Reference<XAccessible > SAL_CALL
 
     return  mpImpl->GetVisibleChild(nIndex);
 }
-
-
-
 
 Reference<XAccessible > SAL_CALL AccessibleSlideSorterView::getAccessibleParent (void)
     throw (uno::RuntimeException)
@@ -270,9 +254,6 @@ Reference<XAccessible > SAL_CALL AccessibleSlideSorterView::getAccessibleParent 
 
     return xParent;
 }
-
-
-
 
 sal_Int32 SAL_CALL AccessibleSlideSorterView::getAccessibleIndexInParent (void)
     throw (uno::RuntimeException)
@@ -799,9 +780,6 @@ sal_Bool AccessibleSlideSorterView::IsDisposed (void)
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
-
-
-
 //===== AccessibleSlideSorterView::Implementation =============================
 
 AccessibleSlideSorterView::Implementation::Implementation (
@@ -971,7 +949,7 @@ void AccessibleSlideSorterView::Implementation::ReleaseListeners (void)
 
 
 void AccessibleSlideSorterView::Implementation::Notify (
-    SfxBroadcaster& rBroadcaster,
+    SfxBroadcaster&,
     const SfxHint& rHint)
 {
     if (rHint.ISA(SdrHint))
@@ -988,6 +966,8 @@ void AccessibleSlideSorterView::Implementation::Notify (
                         Any(),
                         Any());
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -1007,6 +987,8 @@ void AccessibleSlideSorterView::Implementation::Notify (
                     AccessibleEventId::INVALIDATE_ALL_CHILDREN,
                     Any(),
                     Any());
+                break;
+            default:
                 break;
         }
     }
@@ -1042,7 +1024,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWin
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, SelectionChangeListener, void*, pDummy)
+IMPL_LINK(AccessibleSlideSorterView::Implementation, SelectionChangeListener, void*, EMPTYARG )
 {
     mrAccessibleSlideSorter.FireAccessibleEvent(
         AccessibleEventId::SELECTION_CHANGED,
@@ -1054,7 +1036,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, SelectionChangeListener, vo
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, FocusChangeListener, void*, pDummy)
+IMPL_LINK(AccessibleSlideSorterView::Implementation, FocusChangeListener, void*, EMPTYARG )
 {
     sal_Int32 nNewFocusedIndex (mrController.GetFocusManager().GetFocusedPageIndex());
 
