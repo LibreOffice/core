@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:16:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,10 +139,10 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     /*********************************************************************
     |* Layoutname der Seite
     \********************************************************************/
-    String aOldLayoutName(aLayoutName);     // merken
-    aLayoutName = rLayoutName;
-    aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
-    aLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
+    String aOldLayoutName(maLayoutName);    // merken
+    maLayoutName = rLayoutName;
+    maLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    maLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
 
     /*********************************************************************
     |* ggf. Masterpage suchen und setzen
@@ -159,7 +159,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
             for ( nMaster = 0; nMaster < nMasterCount; nMaster++ )
             {
                 pMaster = static_cast<SdPage*>(pModel->GetMasterPage(nMaster));
-                if (pMaster->GetPageKind() == ePageKind && pMaster->GetLayoutName() == aLayoutName)
+                if (pMaster->GetPageKind() == mePageKind && pMaster->GetLayoutName() == maLayoutName)
                 {
                     pFoundMaster = pMaster;
                     break;
@@ -171,7 +171,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
             for ( nMaster = nMasterCount; nMaster > 0; nMaster-- )
             {
                 pMaster = static_cast<SdPage*>(pModel->GetMasterPage(nMaster - 1));
-                if (pMaster->GetPageKind() == ePageKind && pMaster->GetLayoutName() == aLayoutName)
+                if (pMaster->GetPageKind() == mePageKind && pMaster->GetLayoutName() == maLayoutName)
                 {
                     pFoundMaster = pMaster;
                     break;
@@ -183,7 +183,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
         // this should never happen, but we play failsafe here
         if( pFoundMaster == 0 )
-            pFoundMaster = static_cast< SdDrawDocument *>(pModel)->GetSdPage( 0, ePageKind );
+            pFoundMaster = static_cast< SdDrawDocument *>(pModel)->GetSdPage( 0, mePageKind );
 
         if( pFoundMaster )
             TRG_SetMasterPage(*pFoundMaster);
@@ -218,7 +218,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
                 for (USHORT i = 1; i < 10; i++)
                 {
-                    aFullName = aLayoutName;
+                    aFullName = maLayoutName;
                     aOldFullName = aOldLayoutName;
                     aFullName += sal_Unicode( ' ' );
                     aFullName += String::CreateFromInt32( (sal_Int32)i );
@@ -325,7 +325,7 @@ void SdPage::EndListenOutlineText()
     {
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*)pModel->GetStyleSheetPool();
         DBG_ASSERT(pSPool, "StyleSheetPool nicht gefunden");
-        String aTrueLayoutName(aLayoutName);
+        String aTrueLayoutName(maLayoutName);
         aTrueLayoutName.Erase( aTrueLayoutName.SearchAscii( SD_LT_SEPARATOR ));
         List* pOutlineStyles = pSPool->CreateOutlineSheetList(aTrueLayoutName);
         for (SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineStyles->First();
@@ -363,18 +363,7 @@ void SdPage::SetModel(SdrModel* pNewModel)
 
 FASTBOOL SdPage::IsReadOnly() const
 {
-    BOOL bReadOnly = FALSE;
-
-    if (pPageLink)
-    {
-        // Seite ist gelinkt
-        // bReadOnly = TRUE wuerde dazu fuehren, dass diese Seite nicht
-        // bearbeitet werden kann. Dieser Effekt ist jedoch z.Z. nicht
-        // gewuenscht, daher auskommentiert:
-//        bReadOnly = TRUE;
-    }
-
-    return (bReadOnly);
+    return FALSE;
 }
 
 /*************************************************************************
@@ -387,8 +376,8 @@ void SdPage::ConnectLink()
 {
     SvxLinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
 
-    if (pLinkManager && !pPageLink && aFileName.Len() && aBookmarkName.Len() &&
-        ePageKind==PK_STANDARD && !IsMasterPage() &&
+    if (pLinkManager && !mpPageLink && maFileName.Len() && maBookmarkName.Len() &&
+        mePageKind==PK_STANDARD && !IsMasterPage() &&
         ( (SdDrawDocument*) pModel)->IsNewOrLoadCompleted())
     {
         /**********************************************************************
@@ -397,14 +386,14 @@ void SdPage::ConnectLink()
         **********************************************************************/
         ::sd::DrawDocShell* pDocSh = ((SdDrawDocument*) pModel)->GetDocSh();
 
-        if (!pDocSh || pDocSh->GetMedium()->GetOrigURL() != aFileName)
+        if (!pDocSh || pDocSh->GetMedium()->GetOrigURL() != maFileName)
         {
             // Keine Links auf Dokument-eigene Seiten!
-            pPageLink = new SdPageLink(this, aFileName, aBookmarkName);
+            mpPageLink = new SdPageLink(this, maFileName, maBookmarkName);
             String aFilterName(SdResId(STR_IMPRESS));
-            pLinkManager->InsertFileLink(*pPageLink, OBJECT_CLIENT_FILE,
-                                         aFileName, &aFilterName, &aBookmarkName);
-            pPageLink->Connect();
+            pLinkManager->InsertFileLink(*mpPageLink, OBJECT_CLIENT_FILE,
+                                         maFileName, &aFilterName, &maBookmarkName);
+            mpPageLink->Connect();
         }
     }
 }
@@ -420,14 +409,14 @@ void SdPage::DisconnectLink()
 {
     SvxLinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
 
-    if (pLinkManager && pPageLink)
+    if (pLinkManager && mpPageLink)
     {
         /**********************************************************************
         * Abmelden
         * (Bei Remove wird *pGraphicLink implizit deleted)
         **********************************************************************/
-        pLinkManager->Remove(pPageLink);
-        pPageLink=NULL;
+        pLinkManager->Remove(mpPageLink);
+        mpPageLink=NULL;
     }
 }
 
@@ -437,43 +426,44 @@ void SdPage::DisconnectLink()
 |*
 \************************************************************************/
 
-SdPage::SdPage(const SdPage& rSrcPage) :
-    FmFormPage(rSrcPage),
-    mpItems(NULL)
+SdPage::SdPage(const SdPage& rSrcPage)
+:   FmFormPage(rSrcPage)
+,   SdrObjUserCall()
+,   mpItems(NULL)
 {
-    ePageKind           = rSrcPage.ePageKind;
-    eAutoLayout         = rSrcPage.eAutoLayout;
+    mePageKind           = rSrcPage.mePageKind;
+    meAutoLayout         = rSrcPage.meAutoLayout;
 
     SdrObject* pObj = 0;
-    while(pObj = rSrcPage.maPresentationShapeList.getNextShape(pObj))
+    while((pObj = rSrcPage.maPresentationShapeList.getNextShape(pObj)) != 0)
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
 
-    bSelected           = FALSE;
+    mbSelected           = FALSE;
     mnTransitionType    = rSrcPage.mnTransitionType;
     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
     mbTransitionDirection = rSrcPage.mbTransitionDirection;
     mnTransitionFadeColor = rSrcPage.mnTransitionFadeColor;
     mfTransitionDuration = rSrcPage.mfTransitionDuration;
-    ePresChange         = rSrcPage.ePresChange;
-    nTime               = rSrcPage.nTime;
-    bSoundOn            = rSrcPage.bSoundOn;
-    bExcluded           = rSrcPage.bExcluded;
+    mePresChange            = rSrcPage.mePresChange;
+    mnTime               = rSrcPage.mnTime;
+    mbSoundOn            = rSrcPage.mbSoundOn;
+    mbExcluded           = rSrcPage.mbExcluded;
 
-    aLayoutName         = rSrcPage.aLayoutName;
-    aSoundFile          = rSrcPage.aSoundFile;
-    aCreatedPageName    = String();
-    aFileName           = rSrcPage.aFileName;
-    aBookmarkName       = rSrcPage.aBookmarkName;
-    bScaleObjects       = rSrcPage.bScaleObjects;
-    bBackgroundFullSize = rSrcPage.bBackgroundFullSize;
-    eCharSet            = rSrcPage.eCharSet;
-    nPaperBin           = rSrcPage.nPaperBin;
-    eOrientation        = rSrcPage.eOrientation;
+    maLayoutName         = rSrcPage.maLayoutName;
+    maSoundFile          = rSrcPage.maSoundFile;
+    maCreatedPageName    = String();
+    maFileName           = rSrcPage.maFileName;
+    maBookmarkName       = rSrcPage.maBookmarkName;
+    mbScaleObjects       = rSrcPage.mbScaleObjects;
+    mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
+    meCharSet            = rSrcPage.meCharSet;
+    mnPaperBin           = rSrcPage.mnPaperBin;
+    meOrientation        = rSrcPage.meOrientation;
 
     // header footer
     setHeaderFooterSettings( rSrcPage.getHeaderFooterSettings() );
 
-    pPageLink           = NULL;    // Wird beim Einfuegen ueber ConnectLink() gesetzt
+    mpPageLink           = NULL;    // Wird beim Einfuegen ueber ConnectLink() gesetzt
 }
 
 
@@ -486,13 +476,21 @@ SdPage::SdPage(const SdPage& rSrcPage) :
 
 SdrPage* SdPage::Clone() const
 {
-    SdPage* pPage = new SdPage(*this);
+    return Clone(NULL);
+}
 
-    cloneAnimations( *pPage );
+SdrPage* SdPage::Clone(SdrModel* pNewModel) const
+{
+    DBG_ASSERT( pNewModel == 0, "sd::SdPage::Clone(), new page ignored, please check code! CL" );
+    (void)pNewModel;
+
+    SdPage* pNewPage = new SdPage(*this);
+
+    cloneAnimations( *pNewPage );
 
     // fix user calls for duplicated slide
     SdrObjListIter aSourceIter( *this, IM_DEEPWITHGROUPS );
-    SdrObjListIter aTargetIter( *pPage, IM_DEEPWITHGROUPS );
+    SdrObjListIter aTargetIter( *pNewPage, IM_DEEPWITHGROUPS );
 
     while( aSourceIter.IsMore() && aTargetIter.IsMore() )
     {
@@ -500,10 +498,10 @@ SdrPage* SdPage::Clone() const
         SdrObject* pTarget = aTargetIter.Next();
 
         if( pSource->GetUserCall() )
-            pTarget->SetUserCall( pPage );
+            pTarget->SetUserCall( pNewPage );
     }
 
-    return pPage;
+    return pNewPage;
 }
 
 /*************************************************************************
