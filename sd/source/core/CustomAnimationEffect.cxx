@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:12:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,16 +189,19 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     mfBegin(-1.0),
     mfDuration(-1.0),
     mfAbsoluteDuration(-1.0),
-    mbAfterEffectOnNextEffect(false),
-    mbHasAfterEffect(false),
-    mfIterateInterval(0.0),
+    mnGroupId(-1),
     mnIterateType(0),
+    mfIterateInterval(0.0),
     mnParaDepth( -1 ),
     mbHasText(sal_False),
+    mfAcceleration( 1.0 ),
+    mfDecelerate( 1.0 ),
+    mbAutoReverse(false),
     mnTargetSubItem(0),
-    mnGroupId(-1),
-    mpEffectSequence(0),
-    mnCommand(0)
+    mnCommand(0),
+    mpEffectSequence( 0 ),
+    mbHasAfterEffect(false),
+    mbAfterEffectOnNextEffect(false)
 {
     setNode( xNode );
 }
@@ -764,20 +767,20 @@ void CustomAnimationEffect::setDuration( double fDuration )
                         continue;
 
 
-                    double fBegin = 0.0;
-                    xChildNode->getBegin() >>= fBegin;
-                    if(  fBegin != 0.0 )
+                    double fChildBegin = 0.0;
+                    xChildNode->getBegin() >>= fChildBegin;
+                    if(  fChildBegin != 0.0 )
                     {
-                        fBegin *= fScale;
-                        xChildNode->setBegin( makeAny( fBegin ) );
+                        fChildBegin *= fScale;
+                        xChildNode->setBegin( makeAny( fChildBegin ) );
                     }
 
-                    double fDuration = 0.0;
-                    xChildNode->getDuration() >>= fDuration;
-                    if( fDuration != 0.0 )
+                    double fChildDuration = 0.0;
+                    xChildNode->getDuration() >>= fChildDuration;
+                    if( fChildDuration != 0.0 )
                     {
-                        fDuration *= fScale;
-                        xChildNode->setDuration( makeAny( fDuration ) );
+                        fChildDuration *= fScale;
+                        xChildNode->setDuration( makeAny( fChildDuration ) );
                     }
                 }
             }
@@ -2149,8 +2152,6 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
 
 bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
 {
-    bool bChanges = false;
-
     EffectSequence::iterator aIter( maEffects.begin() );
     while( aIter != maEffects.end() )
     {
@@ -2610,8 +2611,6 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
     }
     else
     {
-        double fTextGroupingAuto = pTextGroup->mfGroupingAuto;
-
         EffectSequence aEffects( pTextGroup->maEffects );
         pTextGroup->reset();
 
@@ -2811,6 +2810,7 @@ void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
 
 struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*, void>
 {
+    stl_notify_listeners_func() {}
     void operator()(ISequenceListener* pListener) { pListener->notify_change(); }
 };
 
@@ -3027,13 +3027,13 @@ private:
     MainSequence* mpMainSequence;
 };
 
-void SAL_CALL AnimationChangeListener::changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (RuntimeException)
+void SAL_CALL AnimationChangeListener::changesOccurred( const ::com::sun::star::util::ChangesEvent& ) throw (RuntimeException)
 {
     if( mpMainSequence )
         mpMainSequence->startRecreateTimer();
 }
 
-void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
+void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::EventObject& ) throw (RuntimeException)
 {
 }
 
@@ -3084,7 +3084,7 @@ void MainSequence::init()
 
     mxChangesListener.set( new AnimationChangeListener( this ) );
 
-    create();
+    createMainSequence();
 }
 
 // --------------------------------------------------------------------
@@ -3095,7 +3095,7 @@ void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::st
 
     mxTimingRootNode.set( xTimingRootNode, UNO_QUERY );
 
-    create();
+    createMainSequence();
 }
 
 // --------------------------------------------------------------------
@@ -3116,7 +3116,7 @@ Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootN
 
 // --------------------------------------------------------------------
 
-void MainSequence::create()
+void MainSequence::createMainSequence()
 {
     if( mxTimingRootNode.is() ) try
     {
@@ -3464,7 +3464,7 @@ IMPL_LINK( MainSequence, onTimerHdl, Timer *, EMPTYARG )
     else
     {
         reset();
-        create();
+        createMainSequence();
     }
 
     return 0;
@@ -3550,4 +3550,4 @@ MainSequenceRebuildGuard::~MainSequenceRebuildGuard()
 }
 
 
-};
+}
