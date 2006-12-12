@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ FuZoom::~FuZoom()
     if (bVisible)
     {
         // Hide ZoomRect
-        pViewShell->DrawMarkRect(aZoomRect);
+        mpViewShell->DrawMarkRect(aZoomRect);
 
         bVisible = FALSE;
         bStartDrag = FALSE;
@@ -134,26 +134,26 @@ BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    pWindow->CaptureMouse();
+    mpWindow->CaptureMouse();
     bStartDrag = TRUE;
 
     aBeginPosPix = rMEvt.GetPosPixel();
-    aBeginPos = pWindow->PixelToLogic(aBeginPosPix);
+    aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
 
     if (nSlotId == SID_ZOOM_PANNING)
     {
         // Ersatzdarstellung merken
-        FrameView* pFrameView = pViewShell->GetFrameView();
+        FrameView* pFrameView = mpViewShell->GetFrameView();
         bLineDraft = pFrameView->IsLineDraft();
         bFillDraft = pFrameView->IsFillDraft();
         bTextDraft = pFrameView->IsTextDraft();
         bGrafDraft = pFrameView->IsGrafDraft();
 
         // Ersatzdarstellungen einschalten
-        pView->SetLineDraft(TRUE);
-        pView->SetFillDraft(TRUE);
-        pView->SetTextDraft(TRUE);
-        pView->SetGrafDraft(TRUE);
+        mpView->SetLineDraft(TRUE);
+        mpView->SetFillDraft(TRUE);
+        mpView->SetTextDraft(TRUE);
+        mpView->SetGrafDraft(TRUE);
     }
 
     return TRUE;
@@ -171,14 +171,14 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
     {
         if (bVisible)
         {
-            pViewShell->DrawMarkRect(aZoomRect);
+            mpViewShell->DrawMarkRect(aZoomRect);
         }
 
         Point aPosPix = rMEvt.GetPosPixel();
         ForceScroll(aPosPix);
 
-        aEndPos = pWindow->PixelToLogic(aPosPix);
-        aBeginPos = pWindow->PixelToLogic(aBeginPosPix);
+        aEndPos = mpWindow->PixelToLogic(aPosPix);
+        aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
 
         if (nSlotId == SID_ZOOM_PANNING)
         {
@@ -192,11 +192,11 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
 
             if (aScroll.X() != 0 || aScroll.Y() != 0)
             {
-                Size aWorkSize = pView->GetWorkArea().GetSize();
-                Size aPageSize = pView->GetSdrPageView()->GetPage()->GetSize();
+                Size aWorkSize = mpView->GetWorkArea().GetSize();
+                Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
                 aScroll.X() /= aWorkSize.Width()  / aPageSize.Width();
                 aScroll.Y() /= aWorkSize.Height() / aPageSize.Height();
-                pViewShell->Scroll(aScroll.X(), aScroll.Y());
+                mpViewShell->Scroll(aScroll.X(), aScroll.Y());
                 aBeginPosPix = aPosPix;
             }
         }
@@ -205,7 +205,7 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
             Rectangle aRect(aBeginPos, aEndPos);
             aZoomRect = aRect;
             aZoomRect.Justify();
-            pViewShell->DrawMarkRect(aZoomRect);
+            mpViewShell->DrawMarkRect(aZoomRect);
         }
 
         bVisible = TRUE;
@@ -228,7 +228,7 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     if (bVisible)
     {
         // Hide ZoomRect
-        pViewShell->DrawMarkRect(aZoomRect);
+        mpViewShell->DrawMarkRect(aZoomRect);
         bVisible = FALSE;
     }
 
@@ -238,22 +238,22 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Panning
         // Ersatzdarstellung restaurieren
-        pView->SetLineDraft(bLineDraft);
-        pView->SetFillDraft(bFillDraft);
-        pView->SetTextDraft(bTextDraft);
-        pView->SetGrafDraft(bGrafDraft);
+        mpView->SetLineDraft(bLineDraft);
+        mpView->SetFillDraft(bFillDraft);
+        mpView->SetTextDraft(bTextDraft);
+        mpView->SetGrafDraft(bGrafDraft);
     }
     else
     {
         // Zoom
-        Size aZoomSizePixel = pWindow->LogicToPixel(aZoomRect).GetSize();
+        Size aZoomSizePixel = mpWindow->LogicToPixel(aZoomRect).GetSize();
         ULONG nTol = DRGPIX + DRGPIX;
 
         if ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol )
         {
             // Klick auf der Stelle: Zoomfaktor verdoppeln
-            Point aPos = pWindow->PixelToLogic(aPosPix);
-            Size aSize = pWindow->PixelToLogic(pWindow->GetOutputSizePixel());
+            Point aPos = mpWindow->PixelToLogic(aPosPix);
+            Size aSize = mpWindow->PixelToLogic(mpWindow->GetOutputSizePixel());
             aSize.Width() /= 2;
             aSize.Height() /= 2;
             aPos.X() -= aSize.Width() / 2;
@@ -262,16 +262,16 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
             aZoomRect.SetSize(aSize);
         }
 
-        pViewShell->SetZoomRect(aZoomRect);
+        mpViewShell->SetZoomRect(aZoomRect);
     }
 
-    Rectangle aVisAreaWin = pWindow->PixelToLogic(Rectangle(Point(0,0),
-                                           pWindow->GetOutputSizePixel()));
-    pViewShell->GetZoomList()->InsertZoomRect(aVisAreaWin);
+    Rectangle aVisAreaWin = mpWindow->PixelToLogic(Rectangle(Point(0,0),
+                                           mpWindow->GetOutputSizePixel()));
+    mpViewShell->GetZoomList()->InsertZoomRect(aVisAreaWin);
 
     bStartDrag = FALSE;
-    pWindow->ReleaseMouse();
-    pViewShell->Cancel();
+    mpWindow->ReleaseMouse();
+    mpViewShell->Cancel();
 
     return TRUE;
 }
@@ -284,15 +284,15 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 
 void FuZoom::Activate()
 {
-    aPtr = pWindow->GetPointer();
+    aPtr = mpWindow->GetPointer();
 
     if (nSlotId == SID_ZOOM_PANNING)
     {
-        pWindow->SetPointer(Pointer(POINTER_HAND));
+        mpWindow->SetPointer(Pointer(POINTER_HAND));
     }
     else
     {
-        pWindow->SetPointer(Pointer(POINTER_MAGNIFY));
+        mpWindow->SetPointer(Pointer(POINTER_MAGNIFY));
     }
 }
 
@@ -304,7 +304,7 @@ void FuZoom::Activate()
 
 void FuZoom::Deactivate()
 {
-    pWindow->SetPointer( aPtr );
-    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
+    mpWindow->SetPointer( aPtr );
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
 }
 } // end of namespace sd
