@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:44:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,11 @@
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+// #i71130#
+#ifndef _SDR_CONTACT_OBJECTCONTACT_HXX
+#include <svx/sdr/contact/objectcontact.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -215,14 +220,21 @@ namespace sdr
                                 DrawBorder(rDisplayInfo, GetSdrPage());
                             }
 
-                            if(rView.IsGridVisible() && !rView.IsGridFront())
-                            {
-                                DrawGrid(rDisplayInfo);
-                            }
+                            // #i71130# find out if OC is preview renderer
+                            const bool bPreviewRenderer(rAssociatedVOC.GetObjectContact().IsPreviewRenderer());
 
-                            if(rView.IsHlplVisible() && !rView.IsHlplFront())
+                            // #i71130# no grid and no helplines for page previews
+                            if(!bPreviewRenderer)
                             {
-                                DrawHelplines(rDisplayInfo);
+                                if(!bPreviewRenderer && rView.IsGridVisible() && !rView.IsGridFront())
+                                {
+                                    DrawGrid(rDisplayInfo);
+                                }
+
+                                if(!bPreviewRenderer && rView.IsHlplVisible() && !rView.IsHlplFront())
+                                {
+                                    DrawHelplines(rDisplayInfo);
+                                }
                             }
 
                             // #i31599# restore remembered ghosted setting
@@ -237,7 +249,7 @@ namespace sdr
         }
 
         // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
-        void ViewContactOfSdrPage::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
+        void ViewContactOfSdrPage::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             // test for page painting
             if(!rDisplayInfo.GetMasterPagePainting()
@@ -262,14 +274,21 @@ namespace sdr
 
                             const SdrView& rView = pPageView->GetView();
 
-                            if(rView.IsGridVisible() && rView.IsGridFront())
-                            {
-                                DrawGrid(rDisplayInfo);
-                            }
+                            // #i71130# find out if OC is preview renderer
+                            const bool bPreviewRenderer(rAssociatedVOC.GetObjectContact().IsPreviewRenderer());
 
-                            if(rView.IsHlplVisible() && rView.IsHlplFront())
+                            // #i71130# no grid and no helplines for page previews
+                            if(!bPreviewRenderer)
                             {
-                                DrawHelplines(rDisplayInfo);
+                                if(rView.IsGridVisible() && rView.IsGridFront())
+                                {
+                                    DrawGrid(rDisplayInfo);
+                                }
+
+                                if(rView.IsHlplVisible() && rView.IsHlplFront())
+                                {
+                                    DrawHelplines(rDisplayInfo);
+                                }
                             }
 
                             // #i31599# restore remembered ghosted setting
