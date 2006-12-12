@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:17:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,75 @@ std::vector<ByteString> Export::aLanguages       = std::vector<ByteString>();
 std::vector<ByteString> Export::aForcedLanguages = std::vector<ByteString>();
 
 
+/*****************************************************************************/
+void Export::QuotHTMLXRM( ByteString &rString )
+/*****************************************************************************/
+{
+    ByteString sReturn;
+    //BOOL bBreak = FALSE;
+    for ( USHORT i = 0; i < rString.Len(); i++ ) {
+        ByteString sTemp = rString.Copy( i );
+        if ( sTemp.Search( "<Arg n=" ) == 0 ) {
+            while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
+                 sReturn += rString.GetChar( i );
+                i++;
+            }
+            if ( rString.GetChar( i ) == '>' ) {
+                sReturn += ">";
+                i++;
+            }
+        }
+
+        if ( i < rString.Len()) {
+            switch ( rString.GetChar( i )) {
+                case '<':
+                    if( i+2 < rString.Len() &&
+                        rString.GetChar( i+1 ) == 'b' || rString.GetChar( i+1 ) == 'B' &&
+                        rString.GetChar( +2 ) == '>' )
+                    {
+                           sReturn +="<b>";
+                           i += 2;
+                    }
+                    else if( i+3 < rString.Len() &&
+                             rString.GetChar( i+1 ) == '/' &&
+                             rString.GetChar( i+2 ) == 'b' || rString.GetChar( i+2 ) == 'B' &&
+                             rString.GetChar( i+3 ) == '>' )
+                    {
+                           sReturn +="</b>";
+                           i += 3;
+                    }
+                    else
+                        sReturn += "&lt;";
+                break;
+
+                case '>':
+                    sReturn += "&gt;";
+                break;
+
+                case '\"':
+                    sReturn += "&quot;";
+                break;
+
+                case '\'':
+                    sReturn += "&apos;";
+                break;
+
+                case '&':
+                    if ((( i + 4 ) < rString.Len()) &&
+                        ( rString.Copy( i, 5 ) == "&amp;" ))
+                            sReturn += rString.GetChar( i );
+                    else
+                        sReturn += "&amp;";
+                break;
+
+                default:
+                    sReturn += rString.GetChar( i );
+                break;
+            }
+        }
+    }
+    rString = sReturn;
+}
 /*****************************************************************************/
 void Export::QuotHTML( ByteString &rString )
 /*****************************************************************************/
