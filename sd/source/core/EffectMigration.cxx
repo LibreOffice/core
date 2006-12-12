@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EffectMigration.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:12:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1079,8 +1079,6 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
 
             EffectSequence::iterator aIter;
-            bool bNeedRebuild = false;
-
             for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
@@ -1155,8 +1153,6 @@ sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
 
             EffectSequence::iterator aIter;
-            bool bNeedRebuild = false;
-
             for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
@@ -1189,33 +1185,36 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
     sal_Int32 nCurrentPos = -1;
     std::vector< std::vector< EffectSequence::iterator > > aEffectVector(1);
 
-    Reference< XShape > xThis( pShape );
-    Reference< XShape > xCurrent;
-
-    EffectSequence::iterator aIter( rSequence.begin() );
-    EffectSequence::iterator aEnd( rSequence.end() );
-    for( nPos = 0; aIter != aEnd; aIter++ )
+    if( !rSequence.empty() )
     {
-        CustomAnimationEffectPtr pEffect = (*aIter);
+        Reference< XShape > xThis( pShape );
+        Reference< XShape > xCurrent;
 
-        if( !xCurrent.is() )
+        EffectSequence::iterator aIter( rSequence.begin() );
+        EffectSequence::iterator aEnd( rSequence.end() );
+        for( nPos = 0; aIter != aEnd; aIter++ )
         {
-            xCurrent = pEffect->getTargetShape();
-        }
-        else if( pEffect->getTargetShape() != xCurrent )
-        {
-            nPos++;
-            xCurrent = pEffect->getTargetShape();
-            aEffectVector.resize( nPos+1 );
-        }
+            CustomAnimationEffectPtr pEffect = (*aIter);
 
-        // is this the first effect for xThis shape?
-        if(( nCurrentPos == -1 ) && ( xCurrent == xThis ) )
-        {
-            nCurrentPos = nPos;
-        }
+            if( !xCurrent.is() )
+            {
+                xCurrent = pEffect->getTargetShape();
+            }
+            else if( pEffect->getTargetShape() != xCurrent )
+            {
+                nPos++;
+                xCurrent = pEffect->getTargetShape();
+                aEffectVector.resize( nPos+1 );
+            }
 
-        aEffectVector[nPos].push_back( aIter );
+            // is this the first effect for xThis shape?
+            if(( nCurrentPos == -1 ) && ( xCurrent == xThis ) )
+            {
+                nCurrentPos = nPos;
+            }
+
+            aEffectVector[nPos].push_back( aIter );
+        }
     }
 
     // check if there is at least one effect for xThis
@@ -1244,7 +1243,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
         std::vector< CustomAnimationEffectPtr >::iterator aTempIter( aEffects.begin() );
         std::vector< CustomAnimationEffectPtr >::iterator aTempEnd( aEffects.end() );
 
-        if( nNewPos == aEffectVector.size() )
+        if( nNewPos == (sal_Int32)aEffectVector.size() )
         {
             while( aTempIter != aTempEnd )
             {
@@ -1318,8 +1317,8 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInf
         bool bNeedRebuild = false;
 
         OUString aSoundFile;
-        if( pInfo->bSoundOn )
-            aSoundFile = pInfo->aSoundFile;
+        if( pInfo->mbSoundOn )
+            aSoundFile = pInfo->maSoundFile;
 
         for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
         {
