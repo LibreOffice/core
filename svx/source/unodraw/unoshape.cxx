@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:14:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,7 +699,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     SdrPage* pPage = mpObj->GetPage();
 
     E3dView* pView = new E3dView( pModel, &aVDev );
-    pView->SetMarkHdlHidden( sal_True );
+    pView->hideMarkHandles();
     SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
     SdrObject *pTempObj = mpObj.get();
