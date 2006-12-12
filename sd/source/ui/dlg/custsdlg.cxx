@@ -4,9 +4,9 @@
  *
  *  $RCSfile: custsdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:35:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,9 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
     aBtnEdit        ( this, SdResId( BTN_EDIT ) ),
     aBtnRemove      ( this, SdResId( BTN_REMOVE ) ),
     aBtnCopy        ( this, SdResId( BTN_COPY ) ),
+    aBtnHelp        ( this, SdResId( BTN_HELP ) ),
     aBtnStartShow   ( this, SdResId( BTN_STARTSHOW ) ),
     aBtnOK          ( this, SdResId( BTN_OK ) ),
-    aBtnHelp        ( this, SdResId( BTN_HELP ) ),
 
     rDoc            ( rDrawDoc ),
     pCustomShowList ( NULL ),
@@ -147,8 +147,6 @@ void SdCustomShowDlg::CheckState()
 \************************************************************************/
 IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 {
-    SdDefineCustomShowDlg* pDlg = NULL;
-
     // Neue CustomShow
     if( p == &aBtnNew )
     {
@@ -220,19 +218,19 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             String aStr( pShow->GetName() );
             String aStrCopy( SdResId( STR_COPY_CUSTOMSHOW ) );
 
-            USHORT nPos = aStr.Search( aStrCopy );
+            USHORT nStrPos = aStr.Search( aStrCopy );
             USHORT nNum = 1;
-            if( nPos == STRING_NOTFOUND )
+            if( nStrPos == STRING_NOTFOUND )
             {
                 aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) );
                 aStr.Append( aStrCopy );
                 aStr.Append( UniString::CreateFromInt32( nNum ) );
                 aStr.Append( sal_Unicode(')') );
-                nPos = aStr.Search( aStrCopy );
+                nStrPos = aStr.Search( aStrCopy );
             }
-            nPos += aStrCopy.Len();
+            nStrPos = nStrPos + (USHORT)aStrCopy.Len();
             // Um nicht ins Nirvana zu greifen (--> Endlosschleife)
-            if( nPos >= aStr.Len() )
+            if( nStrPos >= aStr.Len() )
             {
                 aStr.Append( sal_Unicode(' ') );
                 aStr.Append( UniString::CreateFromInt32( nNum ) );
@@ -256,9 +254,9 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                     // Nummer entfernen und durch um 1 erhoehte ersetzen
 
                     const CharClass* pCharClass = rDoc.GetCharClass();
-                    while( pCharClass->isDigit( aStr, nPos ) )
-                        aStr.Erase( nPos, 1 );
-                    aStr.Insert( UniString::CreateFromInt32( ++nNum ), nPos);
+                    while( pCharClass->isDigit( aStr, nStrPos ) )
+                        aStr.Erase( nStrPos, 1 );
+                    aStr.Insert( UniString::CreateFromInt32( ++nNum ), nStrPos);
                 }
 
             }
@@ -295,7 +293,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 /*************************************************************************
 |* StartShow-Hdl
 \************************************************************************/
-IMPL_LINK( SdCustomShowDlg, StartShowHdl, Button *, pBtn )
+IMPL_LINK( SdCustomShowDlg, StartShowHdl, Button *, EMPTYARG )
 {
     EndDialog( RET_YES );
 
@@ -534,7 +532,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
 /*************************************************************************
 |* OK-Hdl
 \************************************************************************/
-IMPL_LINK( SdDefineCustomShowDlg, OKHdl, Button *, pBtn )
+IMPL_LINK( SdDefineCustomShowDlg, OKHdl, Button *, EMPTYARG )
 {
     // Name ueberpruefen...
     BOOL bDifferent = TRUE;
