@@ -3,7 +3,6 @@ go	goodies									usr1	-	all	g_mkout NULL
 go	goodies\inc								nmake	-	all	g_inc NULL
 go	goodies\prj								get		-	all	g_prj NULL
 go	goodies\source\base3d					nmake	-	all	g_base3d g_inc NULL
-go	goodies\source\base2d					nmake	-	all	g_base2d g_inc NULL
 go	goodies\source\inv					nmake	-	all	g_inv g_inc NULL
 go	goodies\source\graphic					nmake	-	all	g_graph g_inc NULL
 go	goodies\source\filter.vcl\eos2met		nmake	-	all	g_vfeom g_inc NULL
@@ -29,4 +28,4 @@ go	goodies\source\filter.vcl\ipsd			nmake	-	all	g_ipsd g_inc NULL
 go	goodies\source\filter.vcl\ieps			nmake	-	all	g_ieps g_inc NULL
 go	goodies\source\filter.vcl\icgm			nmake	-	all	g_icgm g_inc NULL
 go	goodies\source\unographic				nmake	-	all	g_unographic g_inc NULL
-go	goodies\util							nmake	-	all	g_util g_base2d g_base3d g_inv g_graph g_unographic NULL
+go	goodies\util							nmake	-	all	g_util g_base3d g_inv g_graph g_unographic NULL
