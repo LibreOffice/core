@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdundogr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:53:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ public:
 
     virtual void   Undo();
     virtual void   Redo();
-    virtual void   Repeat();
 
     void           AddAction(SdUndoAction* pAction);
     SdUndoAction*  GetAction(ULONG nAction) const;
