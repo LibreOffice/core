@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@
 #include "masterlayoutdlg.hxx"
 #include "Ruler.hxx"
 #include "DrawDocShell.hxx"
-#include "sdabstdlg.hxx" //CHINA001
+#include "sdabstdlg.hxx"
 #include "PaneManager.hxx"
 #include <sfx2/ipclient.hxx>
 #ifndef SD_VIEW_SHELL_BASE_HXX
@@ -168,7 +168,7 @@
 #include "FormShellManager.hxx"
 #endif
 #include "LayerTabBar.hxx"
-#include "sdabstdlg.hxx" //CHINA001
+#include "sdabstdlg.hxx"
 #include "sdpage.hxx"
 
 namespace sd {
@@ -208,9 +208,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             // Do nothing.
             break;
         default:
-            if ( pDrView->IsTextEdit() )
+            if ( mpDrawView->IsTextEdit() )
             {
-                pDrView->SdrEndTextEdit();
+                mpDrawView->SdrEndTextEdit();
             }
     }
 
@@ -230,35 +230,36 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             else
             {
                 const SfxItemSet *pArgs = rReq.GetArgs ();
-                USHORT nSelectedPage;
+                USHORT nSelectedPage = 0;
 
                 if (! pArgs)
                 {
-                    nSelectedPage = aTabControl.GetCurPageId() - 1;
+                    nSelectedPage = maTabControl.GetCurPageId() - 1;
                 }
                 else if (pArgs->Count () == 2)
                 {
                     SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
                     SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, FALSE);
 
-                    if (! CHECK_RANGE (PK_STANDARD, pWhatKind->GetValue (), PK_HANDOUT))
+                    sal_Int32 nWhatPage = (sal_Int32)pWhatPage->GetValue ();
+                    sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
+                    if (! CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
                     {
                         StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
                         rReq.Ignore ();
                         break;
                     }
-                    else if (eEditMode != EM_MASTERPAGE)
+                    else if (meEditMode != EM_MASTERPAGE)
                     {
-                        if (! CHECK_RANGE (0, pWhatPage->GetValue (),
-                            GetDoc()->GetSdPageCount ((PageKind) pWhatKind->GetValue ())))
+                        if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount((PageKind)nWhatKind)))
                         {
                             StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
                             rReq.Ignore ();
                             break;
                         }
 
-                        nSelectedPage = (short) pWhatPage->GetValue ();
-                        ePageKind     = (PageKind) pWhatKind->GetValue ();
+                        nSelectedPage = (short) nWhatPage;
+                        mePageKind    = (PageKind) nWhatKind;
                         bWasBasic     = TRUE;
                     }
                 }
@@ -297,7 +298,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     nCurPage = (short) pWhatLayer->GetValue ();
             }
 
-            pDrView->SetActiveLayer( GetLayerTabControl()->GetPageText(nCurPage) );
+            mpDrawView->SetActiveLayer( GetLayerTabControl()->GetPageText(nCurPage) );
             Invalidate();
             rReq.Done ();
 
@@ -314,15 +315,16 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, ID_VAL_ISACTIVE, FALSE);
                 SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, FALSE);
 
-                if (CHECK_RANGE (PK_STANDARD, pWhatKind->GetValue (), PK_HANDOUT))
+                sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
+                if (CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
                 {
                     mbIsLayerModeActive = pIsActive->GetValue ();
-                    ePageKind = (PageKind) pWhatKind->GetValue ();
+                    mePageKind = (PageKind) nWhatKind;
                 }
             }
 
             // Default-Layer der Page einschalten
-            pDrView->SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
+            mpDrawView->SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
 
             ChangeEditMode(EM_PAGE, mbIsLayerModeActive);
 
@@ -341,14 +343,15 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 SFX_REQUEST_ARG (rReq, pWhatLayerMode, SfxBoolItem, ID_VAL_ISACTIVE, FALSE);
                 SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, FALSE);
 
-                if (CHECK_RANGE (EM_PAGE, pWhatLayer->GetValue (), EM_MASTERPAGE))
+                sal_Int32 nWhatLayer = (sal_Int32)pWhatLayer->GetValue ();
+                if (CHECK_RANGE (EM_PAGE, nWhatLayer, EM_MASTERPAGE))
                 {
                     mbIsLayerModeActive = pWhatLayerMode->GetValue ();
-                    eEditMode = (EditMode) pWhatLayer->GetValue ();
+                    meEditMode = (EditMode) nWhatLayer;
                 }
             }
 
-            ChangeEditMode(eEditMode, !mbIsLayerModeActive);
+            ChangeEditMode(meEditMode, !mbIsLayerModeActive);
 
             Invalidate();
             rReq.Done ();
@@ -360,15 +363,16 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_INSERT_PAGE_NUMBER:
         case SID_INSERT_DATE_TIME:
         {
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            AbstractHeaderFooterDialog* pDlg = pFact->CreateHeaderFooterDialog( (::ViewShell*)this, GetActiveWindow(), GetDoc(), pActualPage );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            pDlg->Execute();
-            delete pDlg;
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            AbstractHeaderFooterDialog* pDlg = pFact ? pFact->CreateHeaderFooterDialog( (::ViewShell*)this, GetActiveWindow(), GetDoc(), mpActualPage ) : 0;
+            if( pDlg )
+            {
+                pDlg->Execute();
+                delete pDlg;
 
-            GetActiveWindow()->Invalidate();
-            UpdatePreview( pActualPage );
+                GetActiveWindow()->Invalidate();
+                UpdatePreview( mpActualPage );
+            }
 
             Invalidate();
             rReq.Done ();
@@ -379,82 +383,21 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_MASTER_LAYOUTS:
         {
             SdPage* pPage = GetActualPage();
-            if (eEditMode == EM_MASTERPAGE)
+            if (meEditMode == EM_MASTERPAGE)
                 // Use the master page of the current page.
                 pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
 
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            pDlg->Execute();
-            delete pDlg;
-            Invalidate();
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact ? pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ) : 0;
+            if( pDlg )
+            {
+                pDlg->Execute();
+                delete pDlg;
+                Invalidate();
+            }
             rReq.Done ();
             break;
         }
-        /*
-        case SID_MASTER_LAYOUTS_SLIDE:
-        {
-            SdPage* pPage = pActualPage;
-            if( pPage->GetPageKind() == PK_NOTES )
-            {
-                pPage = (SdPage*)GetDoc()->GetPage( pPage->GetPageNum() - 1 );
-            }
-            else if( pPage->GetPageKind() == PK_HANDOUT )
-            {
-                pPage = GetDoc()->GetMasterSdPage(0,PK_STANDARD);
-            }
-
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            pDlg->Execute();
-            delete pDlg;
-            Invalidate();
-            rReq.Done ();
-            break;
-        }
-
-        case SID_MASTER_LAYOUTS_NOTES:
-        {
-            SdPage* pPage = pActualPage;
-            if( pPage->GetPageKind() == PK_STANDARD )
-            {
-                pPage = (SdPage*)GetDoc()->GetPage( pPage->GetPageNum() + 1 );
-            }
-            else if( pPage->GetPageKind() == PK_HANDOUT )
-            {
-                pPage = GetDoc()->GetMasterSdPage(0,PK_NOTES);
-            }
-
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            pDlg->Execute();
-            delete pDlg;
-
-            Invalidate();
-            rReq.Done ();
-            break;
-        }
-
-        case SID_MASTER_LAYOUTS_HANDOUTS:
-        {
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), GetDoc()->GetMasterSdPage(0,PK_HANDOUT) );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            pDlg->Execute();
-            delete pDlg;
-
-            Invalidate();
-            rReq.Done ();
-            break;
-        }
-        */
         case SID_OBJECTRESIZE:
         {
             /******************************************************************
@@ -469,23 +412,21 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                 Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
 
-                if ( pDrView->AreObjectsMarked() )
+                if ( mpDrawView->AreObjectsMarked() )
                 {
-                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
                     {
                         SdrMark* pMark = rMarkList.GetMark(0);
                         SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                        UINT16 nSdrObjKind = pObj->GetObjIdentifier();
-
-                        if (pObj->GetObjInventor() == SdrInventor &&
-                            pObj->GetObjIdentifier() == OBJ_OLE2)
+                        SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( pObj );
+                        if(pOle2Obj)
                         {
-                            if ( ( (SdrOle2Obj*) pObj)->GetObjRef().is() )
+                            if( pOle2Obj->GetObjRef().is() )
                             {
-                                pObj->SetLogicRect(aRect);
+                                pOle2Obj->SetLogicRect(aRect);
                             }
                         }
                     }
@@ -511,8 +452,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     p3DWin->DocumentReload();
             }
 
-            // DER SLOT KANN IN DEN SFX VERSCHOBEN WERDEN
-            SFX_REQUEST_ARG(rReq, pForceReloadItem, SfxBoolItem, SID_NOCACHE, FALSE);
             // Normale Weiterleitung an ViewFrame zur Ausfuehrung
             GetViewFrame()->ExecuteSlot(rReq);
 
@@ -525,7 +464,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             // We have to return immediately to avoid accessing this object.
             return;
         }
-        break;
 
         case SID_JUMPTOMARK:
         {
@@ -565,7 +503,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             ExecReq( rReq );
             break;
         }
-        break;
 
         case SID_ATTR_YEAR2000:
         {
@@ -586,7 +523,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OPT_LOCALE_CHANGED:
         {
             GetActiveWindow()->Invalidate();
-            UpdatePreview( pActualPage );
+            UpdatePreview( mpActualPage );
             rReq.Done();
         }
 
@@ -610,8 +547,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
     CheckLineTo (rReq);
 
     const SfxItemSet* pArgs = rReq.GetArgs();
-    Point aPagePos = GetActiveWindow()->GetViewOrigin();
-    Size aPageSize = pActualPage->GetSize();
+    const Point aPagePos( GetActiveWindow()->GetViewOrigin() );
+    Size aPageSize = mpActualPage->GetSize();
     Size aViewSize = GetActiveWindow()->GetViewSize();
     SdUndoGroup* pUndoGroup = NULL;
 
@@ -630,18 +567,17 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             const SvxLongLRSpaceItem& rLRSpace = (const SvxLongLRSpaceItem&)
                     pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE));
 
-            if( pDrView->IsTextEdit() )
+            if( mpDrawView->IsTextEdit() )
             {
-                Point aPagePos = GetActiveWindow()->GetViewOrigin();
-                Rectangle aRect = aMarkRect;
+                Rectangle aRect = maMarkRect;
                 aRect.SetPos(aRect.TopLeft() + aPagePos);
                 aRect.Left()  = rLRSpace.GetLeft();
                 aRect.Right() = aViewSize.Width() - rLRSpace.GetRight();
                 aRect.SetPos(aRect.TopLeft() - aPagePos);
-                if ( aRect != aMarkRect)
+                if ( aRect != maMarkRect)
                 {
-                    pDrView->SetAllMarkedRect(aRect);
-                    aMarkRect = pDrView->GetAllMarkedRect();
+                    mpDrawView->SetAllMarkedRect(aRect);
+                    maMarkRect = mpDrawView->GetAllMarkedRect();
                     Invalidate( SID_RULER_OBJECT );
                 }
             }
@@ -651,11 +587,11 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 long nRight = Max(0L, rLRSpace.GetRight() + aPagePos.X() +
                                       aPageSize.Width() - aViewSize.Width());
 
-                USHORT nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
+                USHORT nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
                 USHORT i;
                 for ( i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
+                    SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
                     SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetLftBorder(),
@@ -665,11 +601,11 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     pPage->SetLftBorder(nLeft);
                     pPage->SetRgtBorder(nRight);
                 }
-                nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
+                nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
 
                 for (i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
+                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
                     SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetLftBorder(),
@@ -688,19 +624,18 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             const SvxLongULSpaceItem& rULSpace = (const SvxLongULSpaceItem&)
                     pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE));
 
-            if( pDrView->IsTextEdit() )
+            if( mpDrawView->IsTextEdit() )
             {
-                Point aPagePos = GetActiveWindow()->GetViewOrigin();
-                Rectangle aRect = aMarkRect;
+                Rectangle aRect = maMarkRect;
                 aRect.SetPos(aRect.TopLeft() + aPagePos);
                 aRect.Top()  = rULSpace.GetUpper();
                 aRect.Bottom() = aViewSize.Height() - rULSpace.GetLower();
                 aRect.SetPos(aRect.TopLeft() - aPagePos);
 
-                if ( aRect != aMarkRect)
+                if ( aRect != maMarkRect)
                 {
-                    pDrView->SetAllMarkedRect(aRect);
-                    aMarkRect = pDrView->GetAllMarkedRect();
+                    mpDrawView->SetAllMarkedRect(aRect);
+                    maMarkRect = mpDrawView->GetAllMarkedRect();
                     Invalidate( SID_RULER_OBJECT );
                 }
             }
@@ -710,11 +645,11 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 long nLower = Max(0L, rULSpace.GetLower() + aPagePos.Y() +
                                       aPageSize.Height() - aViewSize.Height());
 
-                USHORT nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
+                USHORT nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
                 USHORT i;
                 for ( i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
+                    SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
                     SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetUppBorder(),
@@ -724,11 +659,11 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     pPage->SetUppBorder(nUpper);
                     pPage->SetLwrBorder(nLower);
                 }
-                nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
+                nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
 
                 for (i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
+                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
                     SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetUppBorder(),
@@ -745,8 +680,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
         case SID_RULER_OBJECT:
         {
-            Point aPagePos = GetActiveWindow()->GetViewOrigin();
-            Rectangle aRect = aMarkRect;
+            Rectangle aRect = maMarkRect;
             aRect.SetPos(aRect.TopLeft() + aPagePos);
 
             const SvxObjectItem& rOI = (const SvxObjectItem&)
@@ -763,10 +697,10 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 aRect.Bottom() = rOI.GetEndY();
             }
             aRect.SetPos(aRect.TopLeft() - aPagePos);
-            if ( aRect != aMarkRect)
+            if ( aRect != maMarkRect)
             {
-                pDrView->SetAllMarkedRect(aRect);
-                aMarkRect = pDrView->GetAllMarkedRect();
+                mpDrawView->SetAllMarkedRect(aRect);
+                maMarkRect = mpDrawView->GetAllMarkedRect();
                 Invalidate( SID_RULER_OBJECT );
             }
             break;
@@ -774,7 +708,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
         case SID_ATTR_TABSTOP:
         {
-            if( pDrView->IsTextEdit() )
+            if( mpDrawView->IsTextEdit() )
             {
                 const SvxTabStopItem& rItem = (const SvxTabStopItem&)
                             pArgs->Get( ITEMID_TABSTOP );
@@ -782,7 +716,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 SfxItemSet aEditAttr( GetPool(), ITEMID_TABSTOP, ITEMID_TABSTOP );
 
                 aEditAttr.Put( rItem );
-                pDrView->SetAttributes( aEditAttr );
+                mpDrawView->SetAttributes( aEditAttr );
 
                 // #91081# Invalidate is missing here
                 Invalidate(SID_ATTR_TABSTOP);
@@ -792,7 +726,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
         case SID_ATTR_PARA_LRSPACE:
         {
-            if( pDrView->IsTextEdit() )
+            if( mpDrawView->IsTextEdit() )
             {
                 USHORT nId = SID_ATTR_PARA_LRSPACE;
                 const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
@@ -805,7 +739,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );
                 aEditAttr.Put( aLRSpaceItem );
-                pDrView->SetAttributes( aEditAttr );
+                mpDrawView->SetAttributes( aEditAttr );
 
                 // #92557# Invalidate is missing here
                 Invalidate(SID_ATTR_PARA_LRSPACE);
@@ -828,20 +762,20 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 {
     Point aOrigin;
 
-    if (pDrView->GetSdrPageView())
+    if (mpDrawView->GetSdrPageView())
     {
-        aOrigin = pDrView->GetSdrPageView()->GetPageOrigin();
+        aOrigin = mpDrawView->GetSdrPageView()->GetPageOrigin();
     }
 
     Size aViewSize = GetActiveWindow()->GetViewSize();
 
-    Point aPagePos = GetActiveWindow()->GetViewOrigin();
-    Size aPageSize = pActualPage->GetSize();
+    const Point aPagePos( GetActiveWindow()->GetViewOrigin() );
+    Size aPageSize = mpActualPage->GetSize();
 
     Rectangle aRect(aPagePos, Point( aViewSize.Width() - (aPagePos.X() + aPageSize.Width()),
                                      aViewSize.Height() - (aPagePos.Y() + aPageSize.Height())));
 
-    if( pDrView->IsTextEdit() )
+    if( mpDrawView->IsTextEdit() )
     {
         Point aPnt1 = GetActiveWindow()->GetWinViewPos();
         Point aPnt2 = GetActiveWindow()->GetViewOrigin();
@@ -853,11 +787,11 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aRect) );
     }
 
-    SvxLongLRSpaceItem aLRSpace(aPagePos.X() + pActualPage->GetLftBorder(),
-                                aRect.Right() + pActualPage->GetRgtBorder(),
+    SvxLongLRSpaceItem aLRSpace(aPagePos.X() + mpActualPage->GetLftBorder(),
+                                aRect.Right() + mpActualPage->GetRgtBorder(),
                                 GetPool().GetWhich(SID_ATTR_LONG_LRSPACE));
-    SvxLongULSpaceItem aULSpace(aPagePos.Y() + pActualPage->GetUppBorder(),
-                                aRect.Bottom() + pActualPage->GetLwrBorder(),
+    SvxLongULSpaceItem aULSpace(aPagePos.Y() + mpActualPage->GetUppBorder(),
+                                aRect.Bottom() + mpActualPage->GetLwrBorder(),
                                 GetPool().GetWhich(SID_ATTR_LONG_ULSPACE));
     rSet.Put(SvxPagePosSizeItem(Point(0,0) - aPagePos, aViewSize.Width(),
                                                        aViewSize.Height()));
@@ -865,26 +799,26 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
     SvxProtectItem aProtect( SID_RULER_PROTECT );
 
-    aMarkRect = pDrView->GetAllMarkedRect();
+    maMarkRect = mpDrawView->GetAllMarkedRect();
 
     const sal_Bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
 
-    if( pDrView->AreObjectsMarked() )
+    if( mpDrawView->AreObjectsMarked() )
     {
-        if( pDrView->IsTextEdit() )
+        if( mpDrawView->IsTextEdit() )
         {
-            SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
+            SdrObject* pObj = mpDrawView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
-                pDrView->GetAttributes( aEditAttr );
+                mpDrawView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( ITEMID_TABSTOP ) >= SFX_ITEM_AVAILABLE )
                 {
                     const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( ITEMID_TABSTOP );
                     rSet.Put( rItem );
 
-                    //Rectangle aRect = aMarkRect;
+                    //Rectangle aRect = maMarkRect;
 
                     const SvxLRSpaceItem& rLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( ITEMID_LRSPACE );
                     USHORT nId = SID_ATTR_PARA_LRSPACE;
@@ -893,7 +827,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                             rLRSpaceItem.GetTxtFirstLineOfst(), nId );
                     rSet.Put( aLRSpaceItem );
 
-                    Point aPos( aPagePos + aMarkRect.TopLeft() );
+                    Point aPos( aPagePos + maMarkRect.TopLeft() );
 
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SFX_ITEM_ON )
                     {
@@ -905,7 +839,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     aPointItem.SetValue( aPos );
 
-                    aLRSpace.SetLeft( aPagePos.X() + aMarkRect.Left() );
+                    aLRSpace.SetLeft( aPagePos.X() + maMarkRect.Left() );
 
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SFX_ITEM_ON )
                     {
@@ -915,9 +849,9 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                         aLRSpace.SetLeft( aLRSpace.GetLeft() + nLD );
                     }
 
-                    aLRSpace.SetRight( aRect.Right() + aPageSize.Width() - aMarkRect.Right() );
-                    aULSpace.SetUpper( aPagePos.Y() + aMarkRect.Top() );
-                    aULSpace.SetLower( aRect.Bottom() + aPageSize.Height() - aMarkRect.Bottom() );
+                    aLRSpace.SetRight( aRect.Right() + aPageSize.Width() - maMarkRect.Right() );
+                    aULSpace.SetUpper( aPagePos.Y() + maMarkRect.Top() );
+                    aULSpace.SetLower( aRect.Bottom() + aPageSize.Height() - maMarkRect.Bottom() );
 
                     rSet.DisableItem( SID_RULER_OBJECT );
 
@@ -929,9 +863,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                 if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SFX_ITEM_AVAILABLE )
                 {
                     const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR );
-
-                    const sal_Bool bRTL = rItem.GetValue() == ::com::sun::star::text::WritingMode_RL_TB;
-                    rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
+                    rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, rItem.GetValue() == ::com::sun::star::text::WritingMode_RL_TB));
                 }
             }
         }
@@ -940,13 +872,13 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
             rSet.DisableItem( ITEMID_TABSTOP );
             rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
-            if( pDrView->IsResizeAllowed(TRUE) )
+            if( mpDrawView->IsResizeAllowed(TRUE) )
             {
-                Rectangle aRect = aMarkRect;
+                Rectangle aResizeRect( maMarkRect );
 
-                aRect.SetPos(aRect.TopLeft() + aPagePos);
-                SvxObjectItem aObjItem(aRect.Left(), aRect.Right(),
-                                       aRect.Top(), aRect.Bottom());
+                aResizeRect.SetPos(aResizeRect.TopLeft() + aPagePos);
+                SvxObjectItem aObjItem(aResizeRect.Left(), aResizeRect.Right(),
+                                       aResizeRect.Top(), aResizeRect.Bottom());
                 rSet.Put(aObjItem);
                 rSet.DisableItem( ITEMID_TABSTOP );
             }
@@ -984,8 +916,6 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 
     CheckLineTo (rReq);
 
-    const SfxItemSet* pArgs = rReq.GetArgs();
-
     switch ( rReq.GetSlot() )
     {
         case SID_ATTR_SIZE:
@@ -1011,12 +941,12 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     SdrPageView* pPV;
-    Point   aMPos = GetActiveWindow()->PixelToLogic(aMousePos);
+    Point   aMPos = GetActiveWindow()->PixelToLogic(maMousePos);
     USHORT  nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
         Size(FuPoor::HITPIX,0)).Width();
     USHORT  nHelpLine;
 
-    if ( pDrView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
+    if ( mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
     {
         const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
 
@@ -1046,7 +976,7 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 
 void DrawViewShell::AddWindow (::sd::Window* pWin)
 {
-    pDrView->AddWindowToPaintView(pWin);
+    mpDrawView->AddWindowToPaintView(pWin);
 }
 
 /*************************************************************************
@@ -1057,7 +987,7 @@ void DrawViewShell::AddWindow (::sd::Window* pWin)
 
 void DrawViewShell::RemoveWindow(::sd::Window* pWin)
 {
-    pDrView->DeleteWindowFromPaintView(pWin);
+    mpDrawView->DeleteWindowFromPaintView(pWin);
 }
 
 } // end of namespace sd
