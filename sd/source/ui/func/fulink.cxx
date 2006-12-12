@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fulink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:51:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:19:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,16 +88,16 @@ FunctionReference FuLink::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
     return xFunc;
 }
 
-void FuLink::DoExecute( SfxRequest& rReq )
+void FuLink::DoExecute( SfxRequest& )
 {
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    SvxLinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pViewShell->GetActiveWindow(), pLinkManager );
+    SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager );
     if ( pDlg )
     {
         pDlg->Execute();
-        pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
+        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
         delete pDlg;
     }
 }
