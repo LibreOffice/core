@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuhhconv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:50:33 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,15 +108,15 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     pSdOutliner(NULL),
     bOwnOutliner(FALSE)
 {
-    if ( pViewShell->ISA(DrawViewShell) )
+    if ( mpViewShell->ISA(DrawViewShell) )
     {
         bOwnOutliner = TRUE;
-        pSdOutliner = new Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+        pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( pViewShell->ISA(OutlineViewShell) )
+    else if ( mpViewShell->ISA(OutlineViewShell) )
     {
         bOwnOutliner = FALSE;
-        pSdOutliner = pDoc->GetOutliner();
+        pSdOutliner = mpDoc->GetOutliner();
     }
 
     if (pSdOutliner)
@@ -157,29 +157,29 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
 {
 
     String aString( SdResId(STR_UNDO_HANGULHANJACONVERSION) );
-    pView->BegUndo( aString );
+    mpView->BegUndo( aString );
 
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     if (pBase != NULL)
-        pViewShell = pBase->GetMainViewShell();
+        mpViewShell = pBase->GetMainViewShell();
 
-    if( pViewShell )
+    if( mpViewShell )
     {
-        if ( pSdOutliner && pViewShell->ISA(DrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && mpViewShell->ISA(DrawViewShell) && !bOwnOutliner )
         {
             pSdOutliner->EndConversion();
 
             bOwnOutliner = TRUE;
-            pSdOutliner = new Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+            pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->BeginConversion();
         }
-        else if ( pSdOutliner && pViewShell->ISA(OutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && mpViewShell->ISA(OutlineViewShell) && bOwnOutliner )
         {
             pSdOutliner->EndConversion();
             delete pSdOutliner;
 
             bOwnOutliner = FALSE;
-            pSdOutliner = pDoc->GetOutliner();
+            pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->BeginConversion();
         }
 
@@ -189,29 +189,29 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
 
     // Due to changing between edit mode, notes mode, and handout mode the
     // view has most likely changed.  Get the new one.
-    pViewShell = pBase->GetMainViewShell();
-    if (pViewShell != NULL)
+    mpViewShell = pBase->GetMainViewShell();
+    if (mpViewShell != NULL)
     {
-        pView = pViewShell->GetView();
-        pWindow = pViewShell->GetActiveWindow();
+        mpView = mpViewShell->GetView();
+        mpWindow = mpViewShell->GetActiveWindow();
     }
     else
     {
-        pView;
-        pWindow = NULL;
+        mpView = 0;
+        mpWindow = NULL;
     }
 
-    if (pView != NULL)
-        pView->EndUndo();
+    if (mpView != NULL)
+        mpView->EndUndo();
 }
 
 
 void FuHangulHanjaConversion::ConvertStyles( INT16 nTargetLanguage, const Font *pTargetFont )
 {
-    if( !pDoc )
+    if( !mpDoc )
         return;
 
-    SfxStyleSheetBasePool* pStyleSheetPool = pDoc->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pStyleSheetPool = mpDoc->GetStyleSheetPool();
     if( !pStyleSheetPool )
         return;
 
@@ -241,7 +241,7 @@ void FuHangulHanjaConversion::ConvertStyles( INT16 nTargetLanguage, const Font *
         pStyle = pStyleSheetPool->Next();
     }
 
-    pDoc->SetLanguage( EE_CHAR_LANGUAGE_CJK, nTargetLanguage );
+    mpDoc->SetLanguage( EE_CHAR_LANGUAGE_CJK, nTargetLanguage );
 }
 
 void FuHangulHanjaConversion::StartChineseConversion()
@@ -300,7 +300,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
                     if( !bCommonTerms )
                         nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                    Font aTargetFont = pWindow->GetDefaultFont(
+                    Font aTargetFont = mpWindow->GetDefaultFont(
                                         DEFAULTFONT_CJK_PRESENTATION,
                                         nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
