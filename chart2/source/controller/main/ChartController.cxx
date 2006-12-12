@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:31:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:46:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,7 +463,7 @@ void SAL_CALL ChartController
     if( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
         this->EndTextEdit();
     if( m_pDrawViewWrapper )
-        m_pDrawViewWrapper->SetMarkHdlHidden(TRUE);
+        m_pDrawViewWrapper->hideMarkHandles();
 
     DELETEZ( m_pDrawViewWrapper );
     delete m_pChartView; m_pChartView = NULL;
