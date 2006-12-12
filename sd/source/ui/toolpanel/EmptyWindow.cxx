@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EmptyWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:12:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ EmptyWindow::~EmptyWindow (void)
 
 
 
-void EmptyWindow::Paint (const Rectangle& rBoundingBox)
+void EmptyWindow::Paint (const Rectangle& )
 {
     Size aWindowSize (GetOutputSizePixel());
     Point aPosition(aWindowSize.Width()/2,aWindowSize.Height()/2);
