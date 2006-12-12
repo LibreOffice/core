@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:11:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,6 @@ private:
     CustomAnimationTextAnimTabPage* mpTextAnimTabPage;
 };
 
-};
+}
 
 #endif // _SD_CUSTOMANIMATIONDIALOG_HXX
