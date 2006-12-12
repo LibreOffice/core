@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationSchemesPanel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:17:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,11 @@ Size AnimationSchemesPanel::GetPreferredSize()
 {
     return maPreferredSize;
 }
-sal_Int32 AnimationSchemesPanel::GetPreferredWidth(sal_Int32 nHeigh)
+sal_Int32 AnimationSchemesPanel::GetPreferredWidth(sal_Int32 )
 {
     return maPreferredSize.Width();
 }
-sal_Int32 AnimationSchemesPanel::GetPreferredHeight(sal_Int32 nWidth)
+sal_Int32 AnimationSchemesPanel::GetPreferredHeight(sal_Int32 )
 {
     return maPreferredSize.Height();
 }
