@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prntopts.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:50:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ private:
 
     void updateControls();
 
+    using OutputDevice::SetDrawMode;
 public:
             SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs);
             ~SdPrintOptions();
@@ -114,7 +115,7 @@ public:
     virtual void Reset( const SfxItemSet & );
 
     void    SetDrawMode();
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 
