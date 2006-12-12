@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:34:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,14 @@ static const ULONG SHOW_MOUSE_TIMEOUT = 1000;
 
 ShowWindow::ShowWindow( ::Window* pParent )
 : ::sd::Window( pParent ),
-    meShowWindowMode(SHOWWINDOWMODE_NORMAL),
-    mnRestartPageIndex( PAGE_NO_END ),
     mnPauseTimeout( SLIDE_NO_TIMEOUT ),
+    mnRestartPageIndex( PAGE_NO_END ),
+    meShowWindowMode(SHOWWINDOWMODE_NORMAL),
     mbShowNavigatorAfterSpecialMode( FALSE ),
-    mpSlideshow(0),
-    mnFirstMouseMove(0),
+    mbMouseAutoHide(true),
     mbMouseCursorHidden(false),
-    mbMouseAutoHide(true)
+    mnFirstMouseMove(0),
+    mpSlideshow(0)
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_SLIDESHOW );
 
@@ -713,7 +713,7 @@ IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
     return 0L;
 }
 
-IMPL_LINK( ShowWindow, MouseTimeoutHdl, Timer*, pTimer )
+IMPL_LINK( ShowWindow, MouseTimeoutHdl, Timer*, EMPTYARG )
 {
     if( mbMouseCursorHidden )
     {
