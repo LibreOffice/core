@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:45:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,8 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "glob.hrc"
-#include "new_foil.hrc"
 #include "sdabstdlg.hxx"
 
-#include "new_foil.hxx"
 #include "fupoor.hxx"
 
 #ifndef _SFXDISPATCH_HXX
@@ -192,7 +190,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STYLE_FAMILY ) )
     {
-        UINT16 nFamily = (SfxStyleFamily)GetDocSh()->GetStyleFamily();
+        UINT16 nFamily = (UINT16)GetDocSh()->GetStyleFamily();
 
         SdrView* pDrView = GetDrawView();
 
@@ -303,7 +301,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 {
     USHORT nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
-    USHORT nPageCount = pDocument->GetSdPageCount(ePageKind);
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
     BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
     BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
@@ -411,7 +408,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     View* pDrView = GetView();
     pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
 
-    USHORT nNewPageIndex;
+    USHORT nNewPageIndex = 0xffff;
     switch (nSId)
     {
         case SID_INSERTPAGE:
@@ -485,7 +482,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         default:
             DBG_WARNING("wrong slot id given to CreateOrDuplicatePage");
             // Try to handle another slot id gracefully.
-            nNewPageIndex = 0xffff;
     }
     SdPage* pNewPage = 0;
     if(nNewPageIndex != 0xffff)
