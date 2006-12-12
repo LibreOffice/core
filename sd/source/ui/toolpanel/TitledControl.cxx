@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitledControl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:16:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,7 +467,7 @@ TitleBar* TitledControl::GetTitleBar (void)
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible> TitledControl::CreateAccessibleObject (
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent)
+        ::com::sun::star::accessibility::XAccessible>& )
 {
     return new ::accessibility::AccessibleTreeNode(
         *this,
