@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:30:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ namespace sd {
 
         bool operator==( const HeaderFooterSettings& rSettings ) const;
     };
-};
+}
 
 namespace sd {
     class UndoAnimation;
@@ -156,27 +156,27 @@ friend class sd::UndoGeoObject;
 friend class sd::UndoAttrObject;
 
 protected:
-    PageKind    ePageKind;                // Seitentyp
-    AutoLayout  eAutoLayout;              // AutoLayout
+    PageKind    mePageKind;               // Seitentyp
+    AutoLayout  meAutoLayout;             // AutoLayout
     sd::ShapeList maPresentationShapeList;            // Praesentationsobjekte
     sd::ScopeLock maLockAutoLayoutArrangement;
-    BOOL        bSelected;                // Selektionskennung
-    PresChange  ePresChange;              // manuell/automatisch/halbautomatisch
-    UINT32      nTime;                    // Anzeigedauer in Sekunden
-    BOOL        bSoundOn;                 // mit/ohne Sound (TRUE/FALSE)
-    BOOL        bExcluded;                // wird in der Show nicht/doch
+    BOOL        mbSelected;               // Selektionskennung
+    PresChange  mePresChange;             // manuell/automatisch/halbautomatisch
+    UINT32      mnTime;                   // Anzeigedauer in Sekunden
+    BOOL        mbSoundOn;                // mit/ohne Sound (TRUE/FALSE)
+    BOOL        mbExcluded;               // wird in der Show nicht/doch
                                           // angezeigt (TRUE/FALSE)
-    String      aLayoutName;              // Name des Layouts
-    String      aSoundFile;               // Pfad zum Soundfile (MSDOS-Notation)
-    String      aCreatedPageName;         // von GetPageName erzeugter Seitenname
-    String      aFileName;                // Filename
-    String      aBookmarkName;            // Bookmarkname
-    BOOL        bScaleObjects;            // Objekte sollen skaliert werden
-    BOOL        bBackgroundFullSize;      // Hintergrundobjekt auf ganze Seite darstellen
-    rtl_TextEncoding eCharSet;            // Text-Encoding
-    USHORT      nPaperBin;                // PaperBin
-    Orientation eOrientation;             // Print-Orientation
-    SdPageLink* pPageLink;                // PageLink (nur bei gelinkten Seiten)
+    String      maLayoutName;             // Name des Layouts
+    String      maSoundFile;               // Pfad zum Soundfile (MSDOS-Notation)
+    String      maCreatedPageName;         // von GetPageName erzeugter Seitenname
+    String      maFileName;                // Filename
+    String      maBookmarkName;           // Bookmarkname
+    BOOL        mbScaleObjects;           // Objekte sollen skaliert werden
+    BOOL        mbBackgroundFullSize;     // Hintergrundobjekt auf ganze Seite darstellen
+    rtl_TextEncoding meCharSet;            // Text-Encoding
+    USHORT      mnPaperBin;                // PaperBin
+    Orientation meOrientation;             // Print-Orientation
+    SdPageLink* mpPageLink;               // PageLink (nur bei gelinkten Seiten)
 
     /** holds the smil animation sequences for this page */
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
@@ -208,6 +208,7 @@ public:
     SdPage(const SdPage& rSrcPage);
     ~SdPage();
     virtual SdrPage* Clone() const;
+    virtual SdrPage* Clone(SdrModel* pNewModel) const;
 
     virtual void    SetSize(const Size& aSize);
     virtual void    SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 Lwr);
@@ -238,7 +239,7 @@ public:
     void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
 
     void            SetAutoLayout(AutoLayout eLayout, BOOL bInit=FALSE, BOOL bCreate=FALSE);
-    AutoLayout      GetAutoLayout() const { return eAutoLayout; }
+    AutoLayout      GetAutoLayout() const { return meAutoLayout; }
     void            CreateTitleAndLayout(BOOL bInit=FALSE, BOOL bCreate=FALSE);
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit );
 
@@ -256,32 +257,32 @@ public:
 
     void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const String& rStr );
 
-    void        SetPageKind(PageKind ePgType)        { ePageKind = ePgType; }
-    PageKind    GetPageKind() const                  { return ePageKind; }
+    void        SetPageKind(PageKind ePgType)        { mePageKind = ePgType; }
+    PageKind    GetPageKind() const                  { return mePageKind; }
 
-    void        SetSelected(BOOL bSel)               { bSelected = bSel; }
-    BOOL        IsSelected() const                   { return bSelected; }
+    void        SetSelected(BOOL bSel)               { mbSelected = bSel; }
+    BOOL        IsSelected() const                   { return mbSelected; }
 
     void        SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect);
     ::com::sun::star::presentation::FadeEffect  GetFadeEffect() const;
 
-    void        SetPresChange(PresChange eChange)    { ePresChange = eChange; }
-    PresChange  GetPresChange() const                { return ePresChange; }
+    void        SetPresChange(PresChange eChange)    { mePresChange = eChange; }
+    PresChange  GetPresChange() const                { return mePresChange; }
 
-    void        SetTime(UINT32 nNewTime)             { nTime = nNewTime; }
-    UINT32      GetTime() const                      { return nTime; }
+    void        SetTime(UINT32 nNewTime)             { mnTime = nNewTime; }
+    UINT32      GetTime() const                      { return mnTime; }
 
-    void        SetSound(BOOL bNewSoundOn)           { bSoundOn = bNewSoundOn; }
-    BOOL        IsSoundOn() const                    { return bSoundOn; }
+    void        SetSound(BOOL bNewSoundOn)           { mbSoundOn = bNewSoundOn; }
+    BOOL        IsSoundOn() const                    { return mbSoundOn; }
 
-    void        SetExcluded(BOOL bNewExcluded)      { bExcluded = bNewExcluded; }
-    BOOL        IsExcluded() const                  { return bExcluded; }
+    void        SetExcluded(BOOL bNewExcluded)      { mbExcluded = bNewExcluded; }
+    BOOL        IsExcluded() const                  { return mbExcluded; }
 
-    void        SetScaleObjects(BOOL bScale)        { bScaleObjects = bScale; }
-    BOOL        IsScaleObjects() const              { return bScaleObjects; }
+    void        SetScaleObjects(BOOL bScale)        { mbScaleObjects = bScale; }
+    BOOL        IsScaleObjects() const              { return mbScaleObjects; }
 
-    void        SetSoundFile(const String& rStr)    { aSoundFile = rStr; }
-    String      GetSoundFile() const                { return aSoundFile; }
+    void        SetSoundFile(const String& rStr)    { maSoundFile = rStr; }
+    String      GetSoundFile() const                { return maSoundFile; }
 
     sal_Int16   getTransitionType() const;
     void        setTransitionType( sal_Int16 nTransitionType );
@@ -303,13 +304,13 @@ public:
                          const Rectangle& rOldBoundRect);
 
     void            SetLayoutName(String aName);
-    virtual String  GetLayoutName() const       { return aLayoutName; }
+    virtual String  GetLayoutName() const       { return maLayoutName; }
 
-    void            SetFileName(const String& aName) { aFileName = aName; }
-    virtual String  GetFileName() const       { return aFileName; }
-    void            SetBookmarkName(const String& aName) { aBookmarkName = aName; }
-    virtual String  GetBookmarkName() const       { return aBookmarkName; }
-    SdPageLink*     GetLink() { return pPageLink; }
+    void            SetFileName(const String& aName) { maFileName = aName; }
+    virtual String  GetFileName() const       { return maFileName; }
+    void            SetBookmarkName(const String& aName) { maBookmarkName = aName; }
+    virtual String  GetBookmarkName() const       { return maBookmarkName; }
+    SdPageLink*     GetLink() { return mpPageLink; }
 
     void            ConnectLink();
     void            DisconnectLink();
@@ -317,7 +318,7 @@ public:
     void    ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
                          BOOL bScaleAllObj);
 
-    const String&   GetName();
+    const String&   GetName() const;
     String          GetRealName() const { return FmFormPage::GetName(); };
 
     void    SetPresentationLayout(const String& rLayoutName,
@@ -327,12 +328,12 @@ public:
     void    EndListenOutlineText();
 
     void    SetBackgroundFullSize( BOOL bIn );
-    BOOL    IsBackgroundFullSize() const { return bBackgroundFullSize; }
+    BOOL    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
 
-    rtl_TextEncoding GetCharSet() { return(eCharSet); }
+    rtl_TextEncoding GetCharSet() { return(meCharSet); }
 
-    void    SetPaperBin(USHORT nBin) { nPaperBin = nBin; }
-    USHORT  GetPaperBin() const { return nPaperBin; }
+    void    SetPaperBin(USHORT nBin) { mnPaperBin = nBin; }
+    USHORT  GetPaperBin() const { return mnPaperBin; }
     virtual void        SetOrientation(Orientation eOrient);
     virtual Orientation GetOrientation() const;
 
