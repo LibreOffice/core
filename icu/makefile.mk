@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:00:31 $
+#   last change: $Author: kz $ $Date: 2006-12-12 15:51:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #*************************************************************************
 PRJ=.
 
-PRJNAME=so_icu
+PRJNAME=icu
 TARGET=so_icu
 
 # --- Settings -----------------------------------------------------
@@ -43,18 +43,18 @@ TARGET=so_icu
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=icu-2.6
+.INCLUDE :	icuversion.mk
+
+.IF "$(ICU_MICRO)"!="0"
+TARFILE_NAME=icu-$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO)
+.ELSE
+TARFILE_NAME=icu-$(ICU_MAJOR).$(ICU_MINOR)
+.ENDIF
 TARFILE_ROOTDIR=icu
 
-PATCH_FILE_NAME=icu-2.6.patch
+PATCH_FILE_NAME=${TARFILE_NAME}.patch
 
-ADDITIONAL_FILES= \
-    source$/layout$/TibetanLayoutEngine.cpp \
-    source$/layout$/TibetanLayoutEngine.h \
-    source$/layout$/KhmerLayoutEngine.cpp \
-    source$/layout$/KhmerLayoutEngine.h \
-    source$/layout$/KhmerReordering.cpp \
-    source$/layout$/KhmerReordering.h
+# ADDITIONAL_FILES=
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -92,30 +92,26 @@ CONFIGURE_FLAGS=
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE)
 OUT2LIB= \
-    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).26.0 \
-    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).26 \
-    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST) \
-    $(BUILD_DIR)$/common$/libicuuc.a \
-    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).26.0 \
-    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).26 \
-    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST) \
-    $(BUILD_DIR)$/i18n$/libicui18n.a \
-    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).26.0 \
-    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).26 \
-    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST) \
-    $(BUILD_DIR)$/layout$/libicule.a \
-    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).26.0 \
-    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).26 \
-    $(BUILD_DIR)$/layout$/libicule$(DLLPOST) \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil.a \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST).26.0 \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST).26 \
-    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST)
+    $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicudata$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/libicule$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicule$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicule$(DLLPOST) \
+    $(BUILD_DIR)$/lib$/libicutu$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicutu$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicutu$(DLLPOST)
 
 OUT2BIN= \
-    $(BUILD_DIR)$/tools$/genccode$/genccode \
-    $(BUILD_DIR)$/tools$/genbrk$/genbrk \
-    $(BUILD_DIR)$/tools$/gencmn$/gencmn
+    $(BUILD_DIR)$/bin$/genccode \
+    $(BUILD_DIR)$/bin$/genbrk \
+    $(BUILD_DIR)$/bin$/gencmn
 
 .ENDIF
 
@@ -156,9 +152,9 @@ ICU_BUILD_LIBPOST=
 CONFIGURE_ACTION+= $(COPY) ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
 
 .IF "$(CCNUMVER)"<="001400000000"
-BUILD_ACTION=cd allinone$/all && cmd /c nmake /f all.mak CFG="all - Win32 Release" EXCEPTIONSWITCH="-EHsc" && cd ..$/..
+BUILD_ACTION=cd allinone && nmake /f all.mak CFG="all - Win32 Release" EXFLAGS="-EHsc" && cd ..$/..
 .ELSE
-BUILD_ACTION=cd allinone$/all && cmd /c nmake /f all.mak CFG="all - Win32 Release" EXCEPTIONSWITCH="-EHa -Zc:wchar_t-" && cd ..$/..
+BUILD_ACTION=cd allinone && nmake /f all.mak CFG="all - Win32 Release" EXFLAGS="-EHa -Zc:wchar_t-" && cd ..$/..
 .ENDIF
 
 OUT2LIB= \
@@ -169,11 +165,11 @@ OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icutu$(ICU_BUILD_LIBPOST).lib
 
 OUT2BIN= \
-    $(BUILD_DIR)$/..$/bin$/icudt26l.dll \
-    $(BUILD_DIR)$/..$/bin$/icuin26$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/..$/bin$/icuuc26$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/..$/bin$/icule26$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/..$/bin$/icutu26$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/icudt$(ICU_MAJOR)$(ICU_MINOR).dll \
+    $(BUILD_DIR)$/..$/bin$/icuin$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/icuuc$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/icule$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/..$/bin$/icutu$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
     $(BUILD_DIR)$/..$/bin$/genccode.exe \
     $(BUILD_DIR)$/..$/bin$/genbrk.exe \
     $(BUILD_DIR)$/..$/bin$/gencmn.exe
