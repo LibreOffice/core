@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:52:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:46:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ protected:
 public:
 
                             SdOptionsGeneric( USHORT nConfigId, const ::rtl::OUString& rSubTree );
-                            ~SdOptionsGeneric();
+                            virtual ~SdOptionsGeneric();
 
     const ::rtl::OUString&  GetSubTree() const { return maSubTree; }
     USHORT                  GetConfigId() const { return mnConfigId; }
@@ -183,7 +183,7 @@ protected:
 
 public:
             SdOptionsLayout( USHORT nConfigId, BOOL bUseConfig );
-            ~SdOptionsLayout() {}
+            virtual ~SdOptionsLayout() {}
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsLayout& rOpt ) const;
@@ -193,7 +193,7 @@ public:
     BOOL    IsDragStripes() const { Init(); return (BOOL) bDragStripes; }
     BOOL    IsHandlesBezier() const { Init(); return (BOOL) bHandlesBezier; }
     BOOL    IsHelplines() const { Init(); return (BOOL) bHelplines; }
-    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? GetModuleFieldUnit() : nMetric ); }
+    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? (UINT16)GetModuleFieldUnit() : nMetric ); }
     UINT16  GetDefTab() const { Init(); return nDefTab; }
 
     void    SetRulerVisible( BOOL bOn = TRUE ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }
@@ -207,7 +207,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem, public SdOptionsLayout
+class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem
 {
 public:
 
@@ -218,6 +218,10 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
 
     void                    SetOptions( SdOptions* pOpts ) const;
+
+    SdOptionsLayout&        GetOptionsLayout() { return maOptionsLayout; }
+private:
+    SdOptionsLayout maOptionsLayout;
 };
 
 // ---------------------
@@ -242,7 +246,7 @@ protected:
 public:
 
             SdOptionsContents( USHORT nConfigId, BOOL bUseConfig );
-            ~SdOptionsContents() {}
+            virtual ~SdOptionsContents() {}
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsContents& rOpt ) const;
@@ -260,7 +264,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem, public SdOptionsContents
+class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem
 {
 public:
 
@@ -272,6 +276,9 @@ public:
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
+    SdOptionsContents&      GetOptionsContents() { return maOptionsContents; }
+private:
+    SdOptionsContents       maOptionsContents;
 };
 
 // -----------------
@@ -327,7 +334,7 @@ protected:
 public:
 
             SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig );
-            ~SdOptionsMisc() {}
+            virtual ~SdOptionsMisc() {}
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsMisc& rOpt ) const;
@@ -401,7 +408,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem, public SdOptionsMisc
+class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem
 {
 public:
 
@@ -413,6 +420,10 @@ public:
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
+    SdOptionsMisc&          GetOptionsMisc() { return maOptionsMisc; }
+    const SdOptionsMisc&    GetOptionsMisc() const { return maOptionsMisc; }
+private:
+    SdOptionsMisc           maOptionsMisc;
 };
 
 // -----------------
@@ -443,7 +454,7 @@ protected:
 public:
 
             SdOptionsSnap( USHORT nConfigId, BOOL bUseConfig );
-            ~SdOptionsSnap() {}
+            virtual ~SdOptionsSnap() {}
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsSnap& rOpt ) const;
@@ -473,7 +484,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem, public SdOptionsSnap
+class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
 {
 public:
 
@@ -485,6 +496,9 @@ public:
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
+    SdOptionsSnap&          GetOptionsSnap() { return maOptionsSnap; }
+private:
+    SdOptionsSnap           maOptionsSnap;
 };
 
 // -----------------
@@ -507,7 +521,7 @@ protected:
 public:
 
             SdOptionsZoom( USHORT nConfigId, BOOL bUseConfig );
-            ~SdOptionsZoom() {}
+            virtual ~SdOptionsZoom() {}
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsZoom& rOpt ) const;
@@ -518,7 +532,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SdOptionsZoomItem : public SfxPoolItem, public SdOptionsZoom
+class SdOptionsZoomItem : public SfxPoolItem
 {
 public:
 
@@ -530,6 +544,9 @@ public:
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
+    SdOptionsZoom&          GetOptionsZoom() { return maOptionsZoom; }
+private:
+    SdOptionsZoom   maOptionsZoom;
 };
 
 // -----------------
@@ -547,7 +564,7 @@ protected:
 public:
 
             SdOptionsGrid( USHORT nConfigId, BOOL bUseConfig );
-            ~SdOptionsGrid();
+            virtual ~SdOptionsGrid();
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsGrid& rOpt ) const;
@@ -624,7 +641,7 @@ protected:
 public:
 
             SdOptionsPrint( USHORT nConfigId, BOOL bUseConfig );
-            ~SdOptionsPrint() {}
+            virtual ~SdOptionsPrint() {}
 
     void    SetPrinterOptions( const SdOptionsPrint* pOptions );
 
@@ -674,7 +691,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem, public SdOptionsPrint
+class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
 {
 public:
 
@@ -685,6 +702,11 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
 
     void                    SetOptions( SdOptions* pOpts ) const;
+
+    SdOptionsPrint&         GetOptionsPrint() { return maOptionsPrint; }
+    const SdOptionsPrint&   GetOptionsPrint() const { return maOptionsPrint; }
+private:
+    SdOptionsPrint  maOptionsPrint;
 };
 
 // -------------
@@ -699,9 +721,9 @@ class SdOptions : public SdOptionsLayout, public SdOptionsContents,
 public:
 
                         SdOptions( USHORT nConfigId );
-                        ~SdOptions();
+                        virtual ~SdOptions();
 
-    void                SetDefaults( ULONG nOptionRange );
+    void                SetRangeDefaults( ULONG nOptionRange );
     void                StoreConfig( ULONG nOptionRange = SD_OPTIONS_ALL );
 };
 
