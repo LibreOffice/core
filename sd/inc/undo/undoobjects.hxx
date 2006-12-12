@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoobjects.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:24:25 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,10 @@
 #ifndef _SD_UNDOOBJECTS_HXX
 #define _SD_UNDOOBJECTS_HXX
 
-#ifndef _SVDUNDO_HXX
 #include <svx/svdundo.hxx>
-#endif
-#ifndef _SDR_OBJECTUSER_HXX
-#include <svx/sdrobjectuser.hxx>
-#endif
-
-#ifndef _PRESENTATION_HXX
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
 #include "pres.hxx"
-#endif
 
 class SdrObjUserCall;
 class SdPage;
@@ -53,21 +47,6 @@ class SdPage;
 namespace sd
 {
     class UndoManager;
-
-///////////////////////////////////////////////////////////////////////
-
-class UndoShapeWatcher : public sdr::ObjectUser
-{
-public:
-    UndoShapeWatcher( SdrObject& rObject );
-    ~UndoShapeWatcher();
-
-protected:
-    SdrObject*  mpObjectSafe;
-
-private:
-    virtual void ObjectInDestruction(const SdrObject& rObject);
-};
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -88,40 +67,49 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
-class UndoRemoveObject : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl, public UndoShapeWatcher
+class UndoRemoveObject : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl
 {
 public:
     UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect );
 
     virtual void Undo();
     virtual void Redo();
+
+private:
+    SdrObjectWeakRef mxSdrObject;
 };
 
 ///////////////////////////////////////////////////////////////////////
 
-class UndoDeleteObject : public SdrUndoDelObj, public UndoRemovePresObjectImpl, public UndoShapeWatcher
+class UndoDeleteObject : public SdrUndoDelObj, public UndoRemovePresObjectImpl
 {
 public:
     UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect );
 
     virtual void Undo();
     virtual void Redo();
+
+private:
+    SdrObjectWeakRef mxSdrObject;
 };
 
 ///////////////////////////////////////////////////////////////////////
 
-class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl, public UndoShapeWatcher
+class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
 {
 public:
     UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect );
 
     virtual void Undo();
     virtual void Redo();
+
+private:
+    SdrObjectWeakRef mxSdrObject;
 };
 
 ///////////////////////////////////////////////////////////////////////
 
-class UndoObjectSetText : public SdrUndoObjSetText, public UndoShapeWatcher
+class UndoObjectSetText : public SdrUndoObjSetText
 {
 public:
     UndoObjectSetText( SdrObject& rNewObj );
@@ -133,12 +121,13 @@ public:
 private:
     SfxUndoAction* mpUndoAnimation;
     bool            mbNewEmptyPresObj;
+    SdrObjectWeakRef mxSdrObject;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // Undo for SdrObject::SetUserCall()
 
-class UndoObjectUserCall : public SdrUndoObj, public UndoShapeWatcher
+class UndoObjectUserCall : public SdrUndoObj
 {
 public:
     UndoObjectUserCall(SdrObject& rNewObj);
@@ -149,12 +138,13 @@ public:
 protected:
     SdrObjUserCall* mpOldUserCall;
     SdrObjUserCall* mpNewUserCall;
+    SdrObjectWeakRef mxSdrObject;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
-class UndoObjectPresentationKind : public SdrUndoObj, public UndoShapeWatcher
+class UndoObjectPresentationKind : public SdrUndoObj
 {
 public:
     UndoObjectPresentationKind(SdrObject& rObject);
@@ -165,7 +155,8 @@ public:
 protected:
     PresObjKind meOldKind;
     PresObjKind meNewKind;
-    SdPage*     mpPage;
+    SdrPageWeakRef mxPage;
+    SdrObjectWeakRef mxSdrObject;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -181,12 +172,12 @@ public:
     virtual void Redo();
 
 protected:
-    SdPage& mrPage;
+    SdrPageWeakRef mxPage;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-class UndoGeoObject : public SdrUndoGeoObj, public UndoShapeWatcher
+class UndoGeoObject : public SdrUndoGeoObj
 {
 public:
     UndoGeoObject( SdrObject& rNewObj );
@@ -195,12 +186,13 @@ public:
     virtual void Redo();
 
 protected:
-    SdPage* mpPage;
+    SdrPageWeakRef mxPage;
+    SdrObjectWeakRef mxSdrObject;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-class UndoAttrObject : public SdrUndoAttrObj, public UndoShapeWatcher
+class UndoAttrObject : public SdrUndoAttrObj
 {
 public:
     UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText );
@@ -209,7 +201,8 @@ public:
     virtual void Redo();
 
 protected:
-    SdPage* mpPage;
+    SdrPageWeakRef mxPage;
+    SdrObjectWeakRef mxSdrObject;
 };
 
 } // namespace sd
