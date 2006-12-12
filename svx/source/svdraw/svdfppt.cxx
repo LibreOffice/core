@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:41:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4031,7 +4031,7 @@ void PPTCharSheet::Read( SvStream& rIn, sal_Bool /*bMasterStyle*/, sal_uInt32 nL
     if ( nCMask & ( 1 << PPT_CharAttr_FontColor ) )             // 0x00040000
     {
         rIn >> maCharLevel[ nLevel ].mnFontColor;
-        if( ! (maCharLevel[ nLevel ].mnFontColor && 0xff000000 ) )
+        if( ! (maCharLevel[ nLevel ].mnFontColor & 0xff000000 ) )
             maCharLevel[ nLevel ].mnFontColor = PPT_COLSCHEME_HINTERGRUND;
     }
     if ( nCMask & ( 1 << PPT_CharAttr_Escapement ) )            // 0x00080000
