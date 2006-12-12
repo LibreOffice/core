@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuvect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,10 @@
 #endif
 #include "strings.hrc"
 #include "sdresid.hxx"
-//CHINA001 #include "vectdlg.hxx"
-#include "sdabstdlg.hxx" //CHINA001
-#include "vectdlg.hrc" //CHINA001
-namespace sd {
+#include "sdabstdlg.hxx"
+
+namespace sd
+{
 
 TYPEINIT1( FuVectorize, FuPoor );
 
@@ -97,9 +97,9 @@ FunctionReference FuVectorize::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
     return xFunc;
 }
 
-void FuVectorize::DoExecute( SfxRequest& rReq )
+void FuVectorize::DoExecute( SfxRequest& )
 {
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -108,24 +108,23 @@ void FuVectorize::DoExecute( SfxRequest& rReq )
         if( pObj && pObj->ISA( SdrGrafObj ) )
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            AbstractSdVectorizeDlg* pDlg = pFact ? pFact->CreateSdVectorizeDlg(ResId( DLG_VECTORIZE ), pWindow, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh ) : 0;
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            AbstractSdVectorizeDlg* pDlg = pFact ? pFact->CreateSdVectorizeDlg( mpWindow, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0;
             if( pDlg && pDlg->Execute() == RET_OK )
             {
-                const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile(); //CHINA001 const GDIMetaFile&    rMtf = aDlg.GetGDIMetaFile();
-                SdrPageView*        pPageView = pView->GetSdrPageView();
+                const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
+                SdrPageView*        pPageView = mpView->GetSdrPageView();
 
                 if( pPageView && rMtf.GetActionCount() )
                 {
                     SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
+                    String      aStr( mpView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_VECTORIZE ) ) );
-                    pView->BegUndo( aStr );
+                    mpView->BegUndo( aStr );
                     pVectObj->SetGraphic( rMtf );
-                    pView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );
-                    pView->EndUndo();
+                    mpView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );
+                    mpView->EndUndo();
                 }
             }
             delete pDlg;
