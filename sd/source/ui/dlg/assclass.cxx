@@ -4,9 +4,9 @@
  *
  *  $RCSfile: assclass.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:35:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,137 +50,137 @@
 #include "assclass.hxx"
 
 
-Assistent::Assistent(UINT8 nNoOfPages)
+Assistent::Assistent(int nNoOfPages)
 {
-    nPages=nNoOfPages;
-    if(nPages>MAX_PAGES)
+    mnPages=nNoOfPages;
+    if(mnPages>MAX_PAGES)
     {
-        nPages=MAX_PAGES;
+        mnPages=MAX_PAGES;
     }
 
-    pPageStatus = new BOOL[nPages];
+    mpPageStatus = new bool[mnPages];
 
-    for(UINT8 i=0;i<nPages;i++)
+    for(UINT8 i=0;i<mnPages;i++)
     {
-        pPages[i]=new List();
-        pPageStatus[i] = TRUE;
+        mpPages[i]=new List();
+        mpPageStatus[i] = TRUE;
     }
-    nCurrentPage=1;
+    mnCurrentPage=1;
 }
 
 
 
-BOOL Assistent::InsertControl(UINT8 nDestPage,Control* pUsedControl)
+bool Assistent::InsertControl(int nDestPage,Control* pUsedControl)
 {
-    DBG_ASSERT( (nDestPage > 0) && (nDestPage <= nPages), "Seite nicht vorhanden!");
-    if((nDestPage>0)&&(nDestPage<=nPages))
+    DBG_ASSERT( (nDestPage > 0) && (nDestPage <= mnPages), "Seite nicht vorhanden!");
+    if((nDestPage>0)&&(nDestPage<=mnPages))
     {
-        pPages[nDestPage-1]->Insert(pUsedControl,LIST_APPEND);
+        mpPages[nDestPage-1]->Insert(pUsedControl,LIST_APPEND);
         pUsedControl->Hide();
         pUsedControl->Disable();
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 
 
-BOOL Assistent::NextPage()
+bool Assistent::NextPage()
 {
-    if(nCurrentPage<nPages)
+    if(mnCurrentPage<mnPages)
     {
-        UINT8 nPage = nCurrentPage+1;
-        while(nPage <= nPages && !pPageStatus[nPage-1])
+        int nPage = mnCurrentPage+1;
+        while(nPage <= mnPages && !mpPageStatus[nPage-1])
           nPage++;
 
-        if(nPage <= nPages)
+        if(nPage <= mnPages)
             return GotoPage(nPage);
     }
-    return FALSE;
+    return false;
 }
 
 
-BOOL Assistent::PreviousPage()
+bool Assistent::PreviousPage()
 {
-    if(nCurrentPage>1)
+    if(mnCurrentPage>1)
     {
-        UINT8 nPage = nCurrentPage-1;
-        while(nPage >= 0 && !pPageStatus[nPage-1])
+        int nPage = mnCurrentPage-1;
+        while(nPage >= 0 && !mpPageStatus[nPage-1])
             nPage--;
 
         if(nPage >= 0)
             return GotoPage(nPage);
     }
-    return FALSE;
+    return false;
 }
 
 
-BOOL Assistent::GotoPage(const UINT8 nPageToGo)
+bool Assistent::GotoPage(const int nPageToGo)
 {
-    DBG_ASSERT( (nPageToGo > 0) && (nPageToGo <= nPages), "Seite nicht vorhanden!");
+    DBG_ASSERT( (nPageToGo > 0) && (nPageToGo <= mnPages), "Seite nicht vorhanden!");
 
-    if((nPageToGo>0)&&(nPageToGo<=nPages)&&pPageStatus[nPageToGo-1])
+    if((nPageToGo>0)&&(nPageToGo<=mnPages)&&mpPageStatus[nPageToGo-1])
     {
-        ULONG i;
+        int i;
         Control* pCurControl;
-        UINT8 nIndex=nCurrentPage-1;
+        int nIndex=mnCurrentPage-1;
 
-        for(i=0;i<pPages[nIndex]->Count();i++)
+        for(i=0;i<(int)mpPages[nIndex]->Count();i++)
         {
-            pCurControl=(Control*)pPages[nIndex]->GetObject(i);
+            pCurControl=(Control*)mpPages[nIndex]->GetObject(i);
             pCurControl->Disable();
             pCurControl->Hide();
                 //schaltet die Controls der vorherigen Seite
                 //zurueck
         }
-        nCurrentPage=nPageToGo;
-        nIndex=nCurrentPage-1;
-        for(i=0;i<pPages[nIndex]->Count();i++)
+        mnCurrentPage=nPageToGo;
+        nIndex=mnCurrentPage-1;
+        for(i=0;i<(int)mpPages[nIndex]->Count();i++)
         {
 
-            pCurControl=(Control*)pPages[nIndex]->GetObject(i);
+            pCurControl=(Control*)mpPages[nIndex]->GetObject(i);
             pCurControl->Enable();
             pCurControl->Show();
                 //zeigt die neue Seite im Fenster an
         }
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 
 
-BOOL Assistent::IsLastPage()
+bool Assistent::IsLastPage()
 {
-    if(nCurrentPage==nPages)
+    if(mnCurrentPage==mnPages)
     {
-        return TRUE;
+        return true;
     }
     else
     {
-        UINT8 nPage = nCurrentPage+1;
-        while(nPage <= nPages && !pPageStatus[nPage-1])
+        int nPage = mnCurrentPage+1;
+        while(nPage <= mnPages && !mpPageStatus[nPage-1])
             nPage++;
 
-        return nPage > nPages;
+        return nPage > mnPages;
     }
 }
 
 
-BOOL Assistent::IsFirstPage()
+bool Assistent::IsFirstPage()
 {
-    if(nCurrentPage==1)
+    if(mnCurrentPage==1)
     {
-        return TRUE;
+        return true;
     }
     else
     {
-        UINT8 nPage = nCurrentPage-1;
-        while(nPage > 0 && !pPageStatus[nPage-1])
+        int nPage = mnCurrentPage-1;
+        while(nPage > 0 && !mpPageStatus[nPage-1])
             nPage--;
 
         return nPage == 0;
@@ -189,46 +189,46 @@ BOOL Assistent::IsFirstPage()
 
 
 
-UINT8 Assistent::GetCurrentPage()
+int Assistent::GetCurrentPage()
 {
-    return nCurrentPage;
+    return mnCurrentPage;
 }
 
 Assistent::~Assistent()
 {
-    for( UINT8 i=0;i<nPages;i++)
+    for( int i=0;i<mnPages;i++)
     {
-        delete pPages[i];
+        delete mpPages[i];
     }
 
-    delete [] pPageStatus;
+    delete [] mpPageStatus;
 }
 
-BOOL Assistent::IsEnabled( UINT8 nPage )
+bool Assistent::IsEnabled( int nPage )
 {
-    DBG_ASSERT( (nPage>0) && (nPage <= nPages), "Seite nicht vorhanden!" );
+    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Seite nicht vorhanden!" );
 
-    return (nPage>0) && (nPage <= nPages && pPageStatus[nPage-1]);
+    return (nPage>0) && (nPage <= mnPages && mpPageStatus[nPage-1]);
 }
 
-void Assistent::EnablePage( UINT8 nPage )
+void Assistent::EnablePage( int nPage )
 {
-    DBG_ASSERT( (nPage>0) && (nPage <= nPages), "Seite nicht vorhanden!" );
+    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Seite nicht vorhanden!" );
 
-    if((nPage>0) && (nPage < nPages && !pPageStatus[nPage-1]))
+    if((nPage>0) && (nPage < mnPages && !mpPageStatus[nPage-1]))
     {
-        pPageStatus[nPage-1] = TRUE;
+        mpPageStatus[nPage-1] = true;
     }
 }
 
-void Assistent::DisablePage( UINT8 nPage )
+void Assistent::DisablePage( int nPage )
 {
-    DBG_ASSERT( (nPage>0) && (nPage <= nPages), "Seite nicht vorhanden!" );
+    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Seite nicht vorhanden!" );
 
-    if((nPage>0) && (nPage <= nPages && pPageStatus[nPage-1]))
+    if((nPage>0) && (nPage <= mnPages && mpPageStatus[nPage-1]))
     {
-        pPageStatus[nPage-1] = FALSE;
-        if(nCurrentPage == nPage)
+        mpPageStatus[nPage-1] = false;
+        if(mnCurrentPage == nPage)
             GotoPage(1);
     }
 }

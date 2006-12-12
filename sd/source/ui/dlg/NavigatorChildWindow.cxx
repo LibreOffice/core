@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NavigatorChildWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:33:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:57:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ NavigatorChildWindow::NavigatorChildWindow (
     ::Window* pParent,
     USHORT nId,
     SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo )
+    SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
     SdNavigatorWin* pNavWin = new SdNavigatorWin( pParent, this,
