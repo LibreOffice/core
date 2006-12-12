@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:25:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,7 +367,7 @@ void SdTransferable::CreateData()
         pVDev->SetMapMode( MapMode( pSdDrawDocumentIntern->GetScaleUnit(), Point(), pSdDrawDocumentIntern->GetScaleFraction(), pSdDrawDocumentIntern->GetScaleFraction() ) );
         pSdViewIntern = new ::sd::View( pSdDrawDocumentIntern, pVDev );
         pSdViewIntern->EndListening(*pSdDrawDocumentIntern );
-        pSdViewIntern->SetMarkHdlHidden( TRUE );
+        pSdViewIntern->hideMarkHandles();
         SdrPageView* pPageView = pSdViewIntern->ShowSdrPage(pPage);
         ((SdrMarkView*)pSdViewIntern)->MarkAllObj(pPageView);
     }
