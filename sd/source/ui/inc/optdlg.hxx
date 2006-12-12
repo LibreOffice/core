@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:47:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ class SfxItemSet;
 class SdOptionsDlg : public SfxTabDialog
 {
 private:
-    DocumentType    eDocType;
+    DocumentType    meDocType;
 
 public:
                 SdOptionsDlg( Window* pParent, const SfxItemSet& rInAttrs,
