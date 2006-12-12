@@ -4,9 +4,9 @@
  *
  *  $RCSfile: copydlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:23:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,40 +79,39 @@ public:
     DECL_LINK( Reset, void* );
 
 private:
-    FixedText           aFtCopies;
-    NumericField        aNumFldCopies;
-    ImageButton         aBtnSetViewData;
+    FixedText           maFtCopies;
+    NumericField        maNumFldCopies;
+    ImageButton         maBtnSetViewData;
 
-    FixedText           aFtMoveX;
-    MetricField         aMtrFldMoveX;
-    FixedText           aFtMoveY;
-    MetricField         aMtrFldMoveY;
-    FixedText           aFtAngle;
-    MetricField         aMtrFldAngle;
-    FixedLine           aGrpMovement;
+    FixedText           maFtMoveX;
+    MetricField         maMtrFldMoveX;
+    FixedText           maFtMoveY;
+    MetricField         maMtrFldMoveY;
+    FixedText           maFtAngle;
+    MetricField         maMtrFldAngle;
+    FixedLine           maGrpMovement;
 
-    FixedText           aFtWidth;
-    MetricField         aMtrFldWidth;
-    FixedText           aFtHeight;
-    MetricField         aMtrFldHeight;
-    FixedLine           aGrpEnlargement;
+    FixedText           maFtWidth;
+    MetricField         maMtrFldWidth;
+    FixedText           maFtHeight;
+    MetricField         maMtrFldHeight;
+    FixedLine           maGrpEnlargement;
 
-    FixedText           aFtStartColor;
-    ColorLB             aLbStartColor;
-    FixedText           aFtEndColor;
-    ColorLB             aLbEndColor;
-    FixedLine           aGrpColor;
+    FixedText           maFtStartColor;
+    ColorLB             maLbStartColor;
+    FixedText           maFtEndColor;
+    ColorLB             maLbEndColor;
+    FixedLine           maGrpColor;
 
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-    PushButton          aBtnSetDefault;
+    OKButton            maBtnOK;
+    CancelButton        maBtnCancel;
+    HelpButton          maBtnHelp;
+    PushButton          maBtnSetDefault;
 
-    const SfxItemSet&   rOutAttrs;
-    XColorTable*        pColorTab;
-    FieldUnit           eUIUnit;
-    Fraction            aUIScale;
-    ::sd::View*             pView;
+    const SfxItemSet&   mrOutAttrs;
+    XColorTable*        mpColorTab;
+    Fraction            maUIScale;
+    ::sd::View*         mpView;
 
     DECL_LINK( SelectColorHdl, void * );
     DECL_LINK( SetViewData, void * );

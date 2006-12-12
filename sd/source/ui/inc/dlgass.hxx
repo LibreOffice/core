@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:25:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,19 @@
 #ifndef INC_DLGASS
 #define INC_DLGASS
 
-#ifndef _GROUP_HXX //autogen
+#ifndef _GROUP_HXX
 #include <vcl/group.hxx>
 #endif
-#ifndef _EDIT_HXX //autogen
+#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-#ifndef _FIXED_HXX //autogen
+#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-#ifndef _BUTTON_HXX //autogen
+#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#ifndef _DIALOG_HXX //autogen
+#ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
 #include <svtools/svmedit.hxx>
@@ -57,33 +57,28 @@
 #include "assclass.hxx"
 #endif
 
-#ifndef _SV_LSTBOX_HXX //autogen    // !!!TEMP
+#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
 
-#ifndef _SFXAPP_HXX //autogen
+#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
 
-#include "sdenumdef.hxx" //CHINA001
-//move to sdenumdef.hxx
-//CHINA001 enum OutputType { OUTPUT_PAGE, OUTPUT_OVERHEAD, OUTPUT_SLIDE, OUTPUT_PRESENTATION, OUTPUT_ORIGINAL };
-//CHINA001 enum StartType { ST_EMPTY, ST_TEMPLATE, ST_OPEN };
+#include "sdenumdef.hxx"
 
 class AssistentDlgImpl;
 
 class AssistentDlg:public ModalDialog
 {
 private:
-    AssistentDlgImpl* m_pImpl;
+    AssistentDlgImpl* mpImpl;
 
 public:
     AssistentDlg(Window* pParent, BOOL bAutoPilot);
     ~AssistentDlg();
 
     DECL_LINK( FinishHdl, OKButton * );
-        //erstellt die eingestellte Praesentation und beendet den
-        //Assistenten
 
     SfxObjectShellLock GetDocument();
     String GetTopic() const;
