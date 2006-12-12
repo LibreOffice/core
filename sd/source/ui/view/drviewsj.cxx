@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:40:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     // Status der Menueintraege, bzw. Buttons
     // Einfachselektion
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount == 1 )
@@ -284,9 +284,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             if ( nInv == E3dInventor                          ||
-                 (!pDrView->IsConvertToPathObjPossible(FALSE) &&
-                  !pDrView->IsShearAllowed()                  &&
-                  !pDrView->IsDistortAllowed()) )
+                 (!mpDrawView->IsConvertToPathObjPossible(FALSE) &&
+                  !mpDrawView->IsShearAllowed()                  &&
+                  !mpDrawView->IsDistortAllowed()) )
             {
                 rSet.DisableItem( SID_OBJECT_SHEAR );
             }
@@ -312,21 +312,21 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DISMANTLE ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BREAK ) )
         {
-            if ( !pDrView->IsDismantlePossible(FALSE) )
+            if ( !mpDrawView->IsDismantlePossible(FALSE) )
             {
                 rSet.DisableItem( SID_DISMANTLE );
             }
 
-            if ( !pDrView->IsDismantlePossible(TRUE) &&
-                 !pDrView->IsImportMtfPossible()     &&
-                 !pDrView->IsBreak3DObjPossible() )
+            if ( !mpDrawView->IsDismantlePossible(TRUE) &&
+                 !mpDrawView->IsImportMtfPossible()     &&
+                 !mpDrawView->IsBreak3DObjPossible() )
             {
                 rSet.DisableItem( SID_BREAK );
             }
         }
         if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MODIFY_FIELD ) )
         {
-            OutlinerView* pOLV = pDrView->GetTextEditOutlinerView();
+            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
 
             if( pOLV )
             {
@@ -466,9 +466,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             if (b3dObj                                        ||
-                 (!pDrView->IsConvertToPathObjPossible(FALSE) &&
-                  !pDrView->IsShearAllowed()                  &&
-                  !pDrView->IsDistortAllowed()) )
+                 (!mpDrawView->IsConvertToPathObjPossible(FALSE) &&
+                  !mpDrawView->IsShearAllowed()                  &&
+                  !mpDrawView->IsDistortAllowed()) )
             {
                 rSet.DisableItem( SID_OBJECT_SHEAR );
             }
@@ -512,32 +512,32 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
         }
 
-        if ( !pDrView->IsDismantlePossible(FALSE) )
+        if ( !mpDrawView->IsDismantlePossible(FALSE) )
         {
             rSet.DisableItem( SID_DISMANTLE );
         }
-        if ( !pDrView->IsDismantlePossible(TRUE) &&
-             !pDrView->IsImportMtfPossible()     &&
-             !pDrView->IsBreak3DObjPossible() )
+        if ( !mpDrawView->IsDismantlePossible(TRUE) &&
+             !mpDrawView->IsImportMtfPossible()     &&
+             !mpDrawView->IsBreak3DObjPossible() )
         {
             rSet.DisableItem( SID_BREAK );
         }
-        if ( !pDrView->IsCombinePossible(FALSE) )
+        if ( !mpDrawView->IsCombinePossible(FALSE) )
         {
             rSet.DisableItem( SID_COMBINE );
             rSet.DisableItem(SID_POLY_MERGE);
             rSet.DisableItem(SID_POLY_SUBSTRACT);
             rSet.DisableItem(SID_POLY_INTERSECT);
         }
-        if ( !pDrView->IsCombinePossible(TRUE) )
+        if ( !mpDrawView->IsCombinePossible(TRUE) )
         {
             rSet.DisableItem( SID_CONNECT );
         }
-        if ( !pDrView->IsGroupPossible() )
+        if ( !mpDrawView->IsGroupPossible() )
         {
             rSet.DisableItem( SID_GROUP );
         }
-        if ( !pDrView->IsUnGroupPossible() )
+        if ( !mpDrawView->IsUnGroupPossible() )
         {
             rSet.DisableItem( SID_UNGROUP );
         }
