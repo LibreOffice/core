@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,18 +409,15 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         }
                     }
                 }
-                else
-                {
-                    if(rMEvt.GetClicks() == 2)
-                    {
-                        // Neu: Doppelklick ins Leere
-                        // Gruppe verlassen
-                        pPV = pView->GetSdrPageView();
 
-                        if(pPV && pPV->GetAktGroup())
-                        {
-                            pPV->LeaveOneGroup();
-                        }
+                // #i71727# replaced else here with two possibilities, once the original else (!pObj)
+                // and also ignoring the found object when it's on a masterpage
+                if(!pObj || (pObj->GetPage() && pObj->GetPage()->IsMasterPage()))
+                {
+                    if(pView->IsGroupEntered() && 2 == rMEvt.GetClicks())
+                    {
+                        // New: double click on empty space/on obj on MasterPage, leave group
+                        pView->LeaveOneGroup();
                         bReturn = TRUE;
                     }
                 }
