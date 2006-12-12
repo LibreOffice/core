@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:43:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                 Size aSize = aWindow.PixelToLogic(aSizePix);
 
                 // Groesse ggf. auf Seitengroesse begrenzen
-                SdrPage* pPage = pDrView->GetSdrPageView()->GetPage();
+                SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
                 Size aPageSize = pPage->GetSize();
                 aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
                 aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
@@ -230,12 +230,12 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                 BOOL bInsertNewObject = TRUE;
 
-                if ( pDrView->AreObjectsMarked() )
+                if ( mpDrawView->AreObjectsMarked() )
                 {
                     /******************************************************
                     * Ist ein leeres Graphik-Objekt vorhanden?
                     ******************************************************/
-                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
                     {
@@ -259,13 +259,13 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                                 pNewGrafObj->SetOutlinerParaObject(NULL);
                                 pNewGrafObj->SetGraphic(aGraphic);
 
-                                String aStr(pDrView->GetDescriptionOfMarkedObjects());
+                                String aStr(mpDrawView->GetDescriptionOfMarkedObjects());
                                 aStr += sal_Unicode(' ');
                                 aStr += String(SdResId(STR_UNDO_REPLACE));
-                                pDrView->BegUndo(aStr);
-                                SdrPageView* pPV = pDrView->GetSdrPageView();
-                                pDrView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);
-                                pDrView->EndUndo();
+                                mpDrawView->BegUndo(aStr);
+                                SdrPageView* pPV = mpDrawView->GetSdrPageView();
+                                mpDrawView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);
+                                mpDrawView->EndUndo();
                             }
                         }
                     }
@@ -275,8 +275,8 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                 if( bInsertNewObject )
                 {
                     pGrafObj = new SdrGrafObj(aGraphic, aRect);
-                    SdrPageView* pPV = pDrView->GetSdrPageView();
-                    pDrView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+                    SdrPageView* pPV = mpDrawView->GetSdrPageView();
+                    mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
                 }
 
                 // Soll nur ein Link benutzt werden?
@@ -302,7 +302,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void DrawViewShell::GetGalleryState(SfxItemSet& rSet)
+void DrawViewShell::GetGalleryState(SfxItemSet& )
 {
 }
 
@@ -342,7 +342,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     SFX_REQUEST_ARG (rReq, pFillStyle, SfxUInt32Item, ID_VAL_STYLE, FALSE);
-                    if (CHECK_RANGE (XFILL_NONE, pFillStyle->GetValue (), XFILL_BITMAP))
+                    if (CHECK_RANGE (XFILL_NONE, (sal_Int32)pFillStyle->GetValue (), XFILL_BITMAP))
                     {
                         pAttr->ClearItem (XATTR_FILLSTYLE);
                         pAttr->Put (XFillStyleItem ((XFillStyle) pFillStyle->GetValue ()), XATTR_FILLSTYLE);
@@ -362,7 +362,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     SFX_REQUEST_ARG (rReq, pLineStyle, SfxUInt32Item, ID_VAL_STYLE, FALSE);
-                    if (CHECK_RANGE (XLINE_NONE, pLineStyle->GetValue (), XLINE_DASH))
+                    if (CHECK_RANGE (XLINE_NONE, (sal_Int32)pLineStyle->GetValue (), XLINE_DASH))
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
                         pAttr->Put (XLineStyleItem ((XLineStyle) pLineStyle->GetValue ()), XATTR_LINESTYLE);
@@ -561,7 +561,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pDashLen, SfxUInt32Item, ID_VAL_DASHLEN, FALSE);
                     SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE, FALSE);
 
-                    if (CHECK_RANGE (XDASH_RECT, pStyle->GetValue (), XDASH_ROUNDRELATIVE))
+                    if (CHECK_RANGE (XDASH_RECT, (sal_Int32)pStyle->GetValue (), XDASH_ROUNDRELATIVE))
                     {
                         XDash aNewDash ((XDashStyle) pStyle->GetValue (), (short) pDots->GetValue (), pDotLen->GetValue (),
                                         (short) pDashes->GetValue (), pDashLen->GetValue (), pDistance->GetValue ());
@@ -610,13 +610,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pStart, SfxUInt32Item, ID_VAL_STARTINTENS, FALSE);
                     SFX_REQUEST_ARG (rReq, pEnd, SfxUInt32Item, ID_VAL_ENDINTENS, FALSE);
 
-                    if (CHECK_RANGE (XGRAD_LINEAR, pStyle->GetValue (), XGRAD_RECT) &&
-                        CHECK_RANGE (0, pAngle->GetValue (), 360) &&
-                        CHECK_RANGE (0, pBorder->GetValue (), 100) &&
-                        CHECK_RANGE (0, pCenterX->GetValue (), 100) &&
-                        CHECK_RANGE (0, pCenterY->GetValue (), 100) &&
-                        CHECK_RANGE (0, pStart->GetValue (), 100) &&
-                        CHECK_RANGE (0, pEnd->GetValue (), 100))
+                    if (CHECK_RANGE (XGRAD_LINEAR, (sal_Int32)pStyle->GetValue (), XGRAD_RECT) &&
+                        CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360) &&
+                        CHECK_RANGE (0, (sal_Int32)pBorder->GetValue (), 100) &&
+                        CHECK_RANGE (0, (sal_Int32)pCenterX->GetValue (), 100) &&
+                        CHECK_RANGE (0, (sal_Int32)pCenterY->GetValue (), 100) &&
+                        CHECK_RANGE (0, (sal_Int32)pStart->GetValue (), 100) &&
+                        CHECK_RANGE (0, (sal_Int32)pEnd->GetValue (), 100))
                     {
                         pAttr->ClearItem (XATTR_FILLGRADIENT);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -681,8 +681,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE, FALSE);
                     SFX_REQUEST_ARG (rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE, FALSE);
 
-                    if (CHECK_RANGE (XHATCH_SINGLE, pStyle->GetValue (), XHATCH_TRIPLE) &&
-                        CHECK_RANGE (0, pAngle->GetValue (), 360))
+                    if (CHECK_RANGE (XHATCH_SINGLE, (sal_Int32)pStyle->GetValue (), XHATCH_TRIPLE) &&
+                        CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360))
                     {
                         pAttr->ClearItem (XATTR_FILLHATCH);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -800,7 +800,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             break;
 
         case SID_UNSELECT :
-            pDrView->UnmarkAll ();
+            mpDrawView->UnmarkAll ();
             break;
 
         case SID_GETRED :
@@ -836,7 +836,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             ;
     }
 
-    pDrView->SetAttributes (*(const SfxItemSet *) pAttr);
+    mpDrawView->SetAttributes (*(const SfxItemSet *) pAttr);
     rReq.Ignore ();
     delete pAttr;
 }
@@ -852,7 +852,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
     SfxWhichIter     aIter (rSet);
     USHORT           nWhich = aIter.FirstWhich ();
     SfxItemSet aAttr( GetDoc()->GetPool() );
-    pDrView->GetAttributes( aAttr );
+    mpDrawView->GetAttributes( aAttr );
 
     while (nWhich)
     {
