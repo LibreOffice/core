@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:39:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 19:05:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,8 +407,11 @@ void Outliner::StartSpelling (void)
     mpSearchItem = NULL;
 }
 
-
-
+/** Proxy for method from base class to avoid compiler warning */
+void Outliner::StartSpelling(EditView& rView, unsigned char c)
+{
+    SdrOutliner::StartSpelling( rView, c );
+}
 
 /** Free all resources acquired during the search/spell check.  After a
     spell check the start position is restored here.
@@ -988,7 +991,7 @@ void Outliner::RestoreStartPosition (void)
     bool bRestore = true;
     // Take a negative start page index as inidicator that restoring the
     // start position is not requested.
-    if (mnStartPageIndex < 0)
+    if (mnStartPageIndex == (USHORT)-1 )
         bRestore = false;
     // Dont't resore when the view shell is not valid.
     if (mpViewShell == NULL)
@@ -1016,8 +1019,7 @@ void Outliner::RestoreStartPosition (void)
                     ToolBarManager::TBG_FUNCTION,
                     RID_DRAW_TEXT_TOOLBOX);
 
-                mpView->SdrBeginTextEdit(mpStartEditedObject);
-
+                mpView->BeginTextEdit(mpStartEditedObject);
                 ::Outliner* pOutliner =
                       static_cast<DrawView*>(mpView)->GetTextEditOutliner();
                 if (pOutliner!=NULL && pOutliner->GetViewCount()>0)
@@ -1424,7 +1426,6 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
         SetPaperSize( mpTextObj->GetLogicRect().GetSize() );
         SdrPageView* pPV = mpView->GetSdrPageView();
-        BOOL bIsNewObj = TRUE;
 
         // Make FuText the current function.
         SfxUInt16Item aItem (SID_TEXTEDIT, 1);
@@ -1441,9 +1442,7 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
         mpView->MarkObj (mpTextObj, pPV);
 
         // Turn on the edit mode for the text object.
-        mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this,
-            pOutlinerView, sal_True, sal_True, bGrabFocus);
-
+        mpView->BeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this, pOutlinerView, sal_True, sal_True, bGrabFocus);
 
         SetUpdateMode(TRUE);
         mbFoundObject = TRUE;
