@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SimpleLayoutWrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:32:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@ public:
     virtual bool IsResizable (void);
     virtual ::Window* GetWindow (void);
 
+    using sd::toolpanel::ILayoutableWindow::GetPreferredWidth;
+    using sd::toolpanel::ILayoutableWindow::GetPreferredHeight;
 private:
     ::std::auto_ptr< ::Window> mpWindow;
     int mnPreferredWidth;
