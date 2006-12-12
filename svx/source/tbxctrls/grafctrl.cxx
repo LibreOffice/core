@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:52:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,10 +521,13 @@ long ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
 
 void ImplGrafModeControl::ImplReleaseFocus()
 {
-    Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+    if( SfxViewShell::Current() )
+    {
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
-    if( pShellWnd )
-        pShellWnd->GrabFocus();
+        if( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
 }
 
 // -----------------------------------------------------------------------
