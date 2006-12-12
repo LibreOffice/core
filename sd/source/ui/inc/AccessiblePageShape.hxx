@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePageShape.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:06:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,8 @@ public:
         disposing (const ::com::sun::star::lang::EventObject& Source)
         throw (::com::sun::star::uno::RuntimeException);
 
+
+    using AccessibleShape::disposing;
 
 protected:
     /** Create a base name string that contains the accessible name.
