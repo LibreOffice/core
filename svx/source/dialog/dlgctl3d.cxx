@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:43:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ void Svx3DPreviewControl::Construct()
     // PageView
     SdrPageView* pPageView = p3DView->ShowSdrPage( pFmPage );
 //  SdrPageView* pPageView = p3DView->ShowPage( pFmPage, Point() );
-    p3DView->SetMarkHdlHidden( TRUE );
+    p3DView->hideMarkHandles();
 
     // Szene markieren
     p3DView->MarkObj( pScene, pPageView );
