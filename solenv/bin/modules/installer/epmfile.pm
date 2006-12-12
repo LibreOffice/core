@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-27 12:08:40 $
+#   last change: $Author: kz $ $Date: 2006-12-12 15:49:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -938,11 +938,18 @@ sub set_solaris_parameter_in_pkginfo
     $newline = "SUNW_PKGVERS=1\.0\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
+    if ( $allvariables->{'SUNW_PKGTYPE'} )
+    {
+        $newline = "SUNW_PKGTYPE=$allvariables->{'SUNW_PKGTYPE'}\n";
+        add_one_line_into_file($changefile, $newline, $filename);
+    }
+
     $newline = "HOTLINE=Please contact your local service provider\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
     $newline = "EMAIL=\n";
     add_one_line_into_file($changefile, $newline, $filename);
+
 }
 
 #####################################################################
@@ -2198,11 +2205,20 @@ sub analyze_rootpath
     # Version 2: "/opt/openofficeorg20" is variable and "" fixed
     ##############################################################
 
-    my $staticpath = "";
-    $$staticpathref = $staticpath;              # will be ""
-
-    my $relocatablepath = $rootpath . "\/";
-    $$relocatablepathref = $relocatablepath;    # will be "/opt/openofficeorg20/"
+    if ( $$relocatablepathref eq "" )   # relocatablepath is not defined in package list
+    {
+        $$staticpathref = "";   # will be ""
+        $$relocatablepathref = $rootpath . "\/"; # relocatable path must end with "/", will be "/opt/openofficeorg20/"
+    }
+    else    # relocatablepath is defined in package list
+    {
+        $$relocatablepathref =~ s/\/\s*$//;         # removing ending slash
+        $$relocatablepathref = $$relocatablepathref . "\/"; # relocatable path must end with "/"
+        my $staticpath = $rootpath;
+        $staticpath =~ s/\Q$$relocatablepathref\E//;
+        $staticpath =~ s/\/\s*$//;
+        $$staticpathref = $staticpath;
+    }
 }
 
 ######################################################
