@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-22 10:44:58 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:17:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ USE_JAVAVER=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  icuversion.mk
 .INCLUDE :  i18npool/version.mk
 
 .IF "$(ENABLE_CRASHDUMP)"!=""
@@ -184,17 +183,30 @@ SCPDEFS+=-DGCJ
 SCPDEFS+=-DENABLE_CAIRO
 .ENDIF
 
+.IF "$(SYSTEM_ICU)" == "YES"
+SCPDEFS+=-DSYSTEM_ICU
+.ELSE
+.INCLUDE :  icuversion.mk
 SCPDEFS+=\
     -DICU_MAJOR=$(ICU_MAJOR) \
     -DICU_MINOR=$(ICU_MINOR) \
-    -DICU_MICRO=$(ICU_MICRO) \
-    -DISOLANG_MAJOR=$(ISOLANG_MAJOR)
+    -DICU_MICRO=$(ICU_MICRO)
+.ENDIF
+
+SCPDEFS+=-DISOLANG_MAJOR=$(ISOLANG_MAJOR)
 
 .IF "$(DISABLE_NEON)" == "TRUE"
 SCPDEFS+=-DDISABLE_NEON
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
+
+ICUVERSION_DEPENDENT_FILES= \
+        $(PAR)$/$(SCP_PRODUCT_TYPE)$/file_library_ooo.par \
+        $(PAR)$/$(SCP_PRODUCT_TYPE)$/shortcut_ooo.par
+
+ISOLANGVERSION_DEPENDENT_FILES= \
+        $(PAR)$/$(SCP_PRODUCT_TYPE)$/file_library_ooo.par
 
 PARFILES=                          \
         installation_ooo.par       \
@@ -230,3 +242,7 @@ ULFFILES=                          \
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
+
+$(ICUVERSION_DEPENDENT_FILES) : $(SOLARINCDIR)$/icuversion.mk
+
+$(ISOLANGVERSION_DEPENDENT_FILES) : $(SOLARINCDIR)$/i18npool/version.mk
