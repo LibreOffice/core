@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationChildWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:33:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,14 +63,14 @@ SFX_IMPL_DOCKINGWINDOW(AnimationChildWindow, SID_ANIMATION_OBJECTS)
 \************************************************************************/
 
 AnimationChildWindow::AnimationChildWindow(
-    ::Window* pParent,
+    ::Window* _pParent,
     USHORT nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo )
-    : SfxChildWindow( pParent, nId )
+    : SfxChildWindow( _pParent, nId )
 {
     AnimationWindow* pAnimWin = new AnimationWindow(
-        pBindings, this, pParent, SdResId( FLT_WIN_ANIMATION ) );
+        pBindings, this, _pParent, SdResId( FLT_WIN_ANIMATION ) );
     pWindow = pAnimWin;
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;

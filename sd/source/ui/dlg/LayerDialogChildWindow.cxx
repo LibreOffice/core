@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayerDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:33:17 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,18 +69,18 @@ namespace sd {
 
 
 LayerDialogChildWindow::LayerDialogChildWindow (
-    ::Window* pParent,
+    ::Window* _pParent,
     USHORT nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
-    : SfxChildWindow (pParent, nId)
+    : SfxChildWindow (_pParent, nId)
 {
     ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(
         pBindings->GetDispatcher()->GetFrame()));
     LayerDialogContent* pContent = new LayerDialogContent (
         pBindings,
         this,
-        pParent,
+        _pParent,
         SdResId( FLT_WIN_LAYER_DIALOG),
         rBase);
     pWindow = pContent;
