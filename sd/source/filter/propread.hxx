@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propread.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:16:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ class PropItem : public SvMemoryStream
         void            SetTextEncoding( sal_uInt16 nTextEnc ){ mnTextEnc = nTextEnc; };
         sal_Bool        Read( String& rString, sal_uInt32 nType = VT_EMPTY, sal_Bool bDwordAlign = sal_True );
         PropItem&       operator=( PropItem& rPropItem );
+
+    using SvStream::Read;
 };
 
 // ------------------------------------------------------------------------
