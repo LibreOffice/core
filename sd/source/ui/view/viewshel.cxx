@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:12:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 15:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,12 +456,12 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         if(!GetDocSh()->IsUIActive())
             UpdatePreview( GetActualPage(), TRUE );
 
-        ::sd::View* pView = GetView();
+        //HMH::sd::View* pView = GetView();
 
-        if (pView)
-        {
-            pView->ShowMarkHdl();
-        }
+        //HMHif (pView)
+        //HMH{
+        //HMH   pView->ShowMarkHdl();
+        //HMH}
     }
 
     ReadFrameViewData( pFrameView );
@@ -520,12 +520,12 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
             GetCurrentFunction()->Deactivate();
         }
 
-        ::sd::View* pView = GetView();
+        //HMH::sd::View* pView = GetView();
 
-        if (pView)
-        {
-            pView->HideMarkHdl();
-        }
+        //HMHif (pView)
+        //HMH{
+        //HMH   pView->HideMarkHdl();
+        //HMH}
     }
 
     if (mpHorizontalRuler.get() != NULL)
