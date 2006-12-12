@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#ifdef WNT
 #pragma warning (disable:4190)
+#endif
 
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -224,11 +226,9 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
     if( !m_xInter.is() )
         return;
 
-    com::sun::star::uno::Any aRequest = xRequest->getRequest();
-
     com::sun::star::drawing::GraphicFilterRequest aErr;
-    if ( aRequest >>= aErr )
-        nFilterError = aErr.ErrCode;
+    if ( xRequest->getRequest() >>= aErr )
+        nFilterError = (USHORT)aErr.ErrCode;
     else
         m_xInter->handle( xRequest );
 }
@@ -574,7 +574,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
         std::map< OUString, OUString > aMimeTypeMap;
 
-        for ( int i = 0; i < nCount; i++ )
+        for ( USHORT i = 0; i < nCount; i++ )
         {
             const OUString aExportFormatName( rGF.GetExportFormatName( i ) );
             const OUString aFilterMimeType( rGF.GetExportFormatMediaType( i ) );
@@ -587,7 +587,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
         if( aDefaultFormatName.getLength() == 0 )
         {
             nCount = rGF.GetImportFormatCount();
-            for( int i = 0; i < nCount; i++ )
+            for( USHORT i = 0; i < nCount; i++ )
             {
                 const OUString aFilterMimeType( rGF.GetImportFormatMediaType( i ) );
                 if( aMimeType == aFilterMimeType )
