@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlideFunction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:07:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:32:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,18 +75,18 @@ void SlideFunction::ScrollEnd (void)
 {
 }
 
-BOOL SlideFunction::MouseMove(const MouseEvent& rMEvt)
+BOOL SlideFunction::MouseMove(const MouseEvent& )
 {
     return FALSE;
 }
 
-BOOL SlideFunction::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL SlideFunction::MouseButtonUp(const MouseEvent& )
 {
     return FALSE;
 
 }
 
-BOOL SlideFunction::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL SlideFunction::MouseButtonDown(const MouseEvent& )
 {
     return FALSE;
 }
