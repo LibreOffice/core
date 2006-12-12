@@ -36,6 +36,3 @@ hedabu: ..\inc\soldlg.hrc %_DEST%\inc%_EXT%\soldep\soldlg.hrc
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 ..\%__SRC%\bin\dep*.res %_DEST%\bin%_EXT%\additional\dep*.res
 
-
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
