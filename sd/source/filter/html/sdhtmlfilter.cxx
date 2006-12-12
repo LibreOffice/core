@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdhtmlfilter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:22:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 16:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,6 @@ SdHTMLFilter::~SdHTMLFilter()
 
 sal_Bool SdHTMLFilter::Export()
 {
-    //CHINA001 SdPublishingDlg aDlg( mrDocShell.GetWindow(), mrDocument.GetDocumentType() );
-    //CHINA001 aDlg is not used at all, so delete upper line.
     mrMedium.Close();
     mrMedium.Commit();
 
