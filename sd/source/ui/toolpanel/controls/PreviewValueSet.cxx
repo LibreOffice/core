@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewValueSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:20:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 18:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ USHORT PreviewValueSet::CalculateColumnCount (int nWidth) const
         else if (mnMaxColumnCount>0 && nColumnCount>mnMaxColumnCount)
             nColumnCount = mnMaxColumnCount;
     }
-    return nColumnCount;
+    return (USHORT)nColumnCount;
 }
 
 
@@ -204,7 +204,7 @@ USHORT PreviewValueSet::CalculateRowCount (USHORT nColumnCount) const
             nRowCount = 1;
     }
 
-    return nRowCount;
+    return (USHORT)nRowCount;
 }
 
 
