@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:14:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-12 17:43:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ public:
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     const sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
-    DrawDocShell* GetDocSh() { return pDocSh; }
-    SdDrawDocument* GetDoc() { return pDoc; }
+    DrawDocShell* GetDocSh() { return mpDocSh; }
+    SdDrawDocument* GetDoc() { return mpDoc; }
 
     virtual void DoCut();
     virtual void DoCopy();
@@ -100,7 +100,7 @@ public:
 
     // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
+    virtual BOOL MouseMove(const MouseEvent& );
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
 
     // #95491# moved from inline to *.cxx
@@ -108,7 +108,7 @@ public:
 
     virtual BOOL Command(const CommandEvent& rCEvt);
     virtual BOOL RequestHelp(const HelpEvent& rHEvt);
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) {}
+    virtual void Paint(const Rectangle&, ::sd::Window* );
     virtual void ReceiveRequest(SfxRequest& rReq);
 
     virtual void Activate();        // Function aktivieren
@@ -117,7 +117,7 @@ public:
     virtual void ScrollStart() {}   // diese Funktionen werden von
     virtual void ScrollEnd() {}     // ForceScroll aufgerufen
 
-    void SetWindow(::sd::Window* pWin) { pWindow = pWin; }
+    void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
     void WriteStatus(const String& aStr);  // Statuszeile schreiben
 
     // #97016# II
@@ -187,11 +187,11 @@ protected:
     */
     void SwitchLayer (sal_Int32 nOffset);
 
-    ::sd::View* pView;
-    ViewShell* pViewShell;
-    ::sd::Window* pWindow;
-    DrawDocShell* pDocSh;
-    SdDrawDocument* pDoc;
+    ::sd::View* mpView;
+    ViewShell* mpViewShell;
+    ::sd::Window* mpWindow;
+    DrawDocShell* mpDocSh;
+    SdDrawDocument* mpDoc;
 
     USHORT          nSlotId;
     USHORT          nSlotValue;
