@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.108 $
+#   $Revision: 1.109 $
 #
-#   last change: $Author: hr $ $Date: 2006-10-24 15:33:37 $
+#   last change: $Author: kz $ $Date: 2006-12-12 16:23:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.108 $ ';
+$id_str = ' $Revision: 1.109 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -75,7 +75,6 @@ print "$script_name -- version: $script_rev\n";
 # copy filter: files matching these patterns won't be copied by
 # the copy action
 @copy_filter_patterns = (
-                        '\/_[\w\-]+\.dll$' # Win32 debug dll's
                         );
 
 $is_debug           = 0;
@@ -347,6 +346,9 @@ sub do_mkdir
             print "MKDIR: $path\n";
         } else {
             mkpath($path, 0, 0777-$umask);
+            if ( ! -d $path ) {
+                print_error("mkdir: could not create directory '$path'", 0);
+            }
         }
     }
 }
@@ -466,14 +468,10 @@ sub init_globals
     my $build_sosl    = $ENV{'BUILD_SOSL'};
     my $common_outdir = $ENV{'COMMON_OUTDIR'};
     my $inpath        = $ENV{'INPATH'};
-    my $outpath       = $ENV{'OUTPATH'};
     my $solarversion  = $ENV{'SOLARVERSION'};
     my $updater       = $ENV{'UPDATER'};
     my $updminor      = $ENV{'UPDMINOR'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
-
-    my $l10n_framework    = $ENV{'L10N_framework'};
-    $l10n_framework = "INVALID" if ! defined $l10n_framework;
 
     # special security check for release engineers
     if ( defined($updater) && !defined($build_sosl) && !$opt_force) {
@@ -534,6 +532,8 @@ sub init_globals
     # %SOLARVER%
     # %__OFFENV%
     # %DLLSUFFIX%'
+    # %OUTPATH%
+    # %L10N_FRAMEWORK%
 
     # valid macros
     @macros = (
@@ -544,9 +544,7 @@ sub init_globals
                 [ '%COMMON_OUTDIR%',    $common_outdir  ],
                 [ '%COMMON_DEST%',      $common_dest    ],
                 [ '%GUI%',              $gui            ],
-                [ '%OUTPATH%',          $outpath        ],
-                [ '%UPD%',              $upd            ],
-                [ '%L10N_FRAMEWORK%',   $l10n_framework ]
+                [ '%UPD%',              $upd            ]
               );
 
     # find out if the system supports symlinks
@@ -601,7 +599,7 @@ sub parse_dlst
         else {
             if ( /^\s*%(COMMON)?_DEST%\\/ ) {
                 # only copy from source dir to solver, not from solver to solver
-                print_error("illegal copy action, ignored: \'$_\'", $line_cnt);
+                print_warning("illegal copy action, ignored: \'$_\'", $line_cnt);
                 next;
             }
             push(@action_data, ['copy', $_]);
@@ -634,7 +632,6 @@ sub expand_macros
         if ( $1 ne '%OS%' ) {   # %OS% looks like a macro but is not ...
             print_error("unknown/obsolete macro: \'$1\'", $line_cnt);
         }
-    #   exit(5);
     }
     $line =~ s#\\#/#g;
     return $line;
@@ -821,7 +818,8 @@ sub copy_if_newer
         if ( is_newer($temp_file, $from, 0) ) {
             $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
             if ( !$rc ) {
-                print_error("can't update temporary file modification time '$temp_file': $!",0);
+                print_warning("can't update temporary file modification time '$temp_file': $!\n
+                               Check file permissions of '$from'.",0);
             }
         }
         fix_file_permissions($$from_stat_ref[2], $temp_file);
@@ -842,6 +840,10 @@ sub copy_if_newer
     }
     else {
         print_error("can't copy $from: $!",0);
+        my $destdir = dirname($to);
+        if ( ! -d $destdir ) {
+            print_error("directory '$destdir' does not exist", 0);
+        }
     }
     unlink($temp_file);
     return 0;
@@ -1327,6 +1329,7 @@ sub cleanup
         }
     }
 }
+
 sub delete_output
 {
     my $output_path = expand_macros("../%__SRC%");
@@ -1341,6 +1344,21 @@ sub delete_output
     else {
         print_error("Output not deleted - INPATH is not set");
     }
+}
+
+sub print_warning
+{
+    my $message = shift;
+    my $line = shift;
+
+    print STDERR "$script_name: ";
+    if ( $dlst_file ) {
+        print STDERR "$dlst_file: ";
+    }
+    if ( $line ) {
+        print STDERR "line $line: ";
+    }
+    print STDERR "WARNING: $message\n";
 }
 
 sub print_error
