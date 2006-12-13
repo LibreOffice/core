@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,104 +140,30 @@ namespace dbaui
         static  SfxTabPage* CreateLDAP( Window* _pParent, const SfxItemSet& _rAttrSet );
 
 
-        /** Creates the detail page for Text
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
-        */
+        /// Creates the detail page for Text
         static  SfxTabPage* CreateText( Window* _pParent, const SfxItemSet& _rAttrSet );
 
 
-        /** Creates the GeneratedValues page
-            @param  _pParent
-            @param  _rAttrSet
+        /// creates the GeneratedValues page
+        static  SfxTabPage* CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* CreateGeneratedValues( Window* _pParent, const SfxItemSet& _rAttrSet );
+        /// creates a common page with the attributes needed for MySQL advanced settings.
+        static  SfxTabPage* CreateMySQLSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-        /** Creates a common page with the attribute
-              CBTP_USE_ENABLEOUTERJOIN
-            @param  _pParent
-            @param  _rAttrSet
+        /// creates a common page with the attributes needed for Adabas advanced settings.
+        static  SfxTabPage* CreateAdabasSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* CreateOJDsProperties( Window* _pParent, const SfxItemSet& _rAttrSet );
+        /// creates a common page with the attributes needed for ADO advanced settings.
+        static  SfxTabPage* CreateADOSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-        /** Creates a common page with the attribute
-              CBTP_USE_APPENDTABLEALIAS
-            | CBTP_USE_BOOLEANCOMPARISON
-            @param  _pParent
-            @param  _rAttrSet
+        /// creates a common page with the attributes needed for file-based (dBase, CSV) advanced settings.
+        static  SfxTabPage* CreateFileSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* Create1DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet );
+        /// creates a common page with the attributes needed for MSA advanced settings.
+        static  SfxTabPage* CreateAccessSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-        /** Creates a common page with the attribute
-              CBTP_USE_SQL92CHECK
-            | CBTP_USE_APPENDTABLEALIAS
-            | CBTP_USE_SUPPRESS_VERSION_COLUMN
-            | CBTP_USE_BOOLEANCOMPARISON
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* Create2DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /** Creates a common page with the attribute
-              CBTP_USE_SQL92CHECK
-            | CBTP_USE_APPENDTABLEALIAS
-            | CBTP_USE_SUPPRESS_VERSION_COLUMN
-            | CBTP_USE_ENABLEOUTERJOIN
-            | CBTP_USE_BOOLEANCOMPARISON
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* Create3DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /** Creates a common page with the attribute
-              CBTP_USE_SQL92CHECK
-            | CBTP_USE_APPENDTABLEALIAS
-            | CBTP_USE_BOOLEANCOMPARISON
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* CreateFileDsProperties( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /** Creates a common page with the attribute
-              CBTP_USE_SQL92CHECK
-            | CBTP_USE_APPENDTABLEALIAS
-            | CBTP_USE_ENABLEOUTERJOIN
-            | CBTP_USE_BOOLEANCOMPARISON
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* CreateAccessDsProperties( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /** Creates a common page with the attribute
-              CBTP_USE_SQL92CHECK
-            | CBTP_USE_APPENDTABLEALIAS
-            | CBTP_USE_ENABLEOUTERJOIN
-            | CBTP_USE_PARAMETERNAMESUBST
-            | CBTP_USE_IGNOREDRIVER_PRIV
-            | CBTP_USE_SUPPRESS_VERSION_COLUMN
-            | CBTP_USE_BOOLEANCOMPARISON
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
-        */
-        static  SfxTabPage* Create4DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet );
+        /// creates a common page with all supported advanced attributes
+        static  SfxTabPage* CreateFullSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
     };
 }
 
