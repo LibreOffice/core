@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfunction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:06:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,14 @@
 #ifndef _SLIDESHOW_ANIMATIONFUNCTION_HXX
 #define _SLIDESHOW_ANIMATIONFUNCTION_HXX
 
-#ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 
 /* Definition of AnimationFunction interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
