@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidechangebase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:00:25 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,20 @@
 #if ! defined(INCLUDED_PRESENTATION_INTERNAL_TRANSITIONS_SLIDECHANGEBASE_HXX)
 #define INCLUDED_PRESENTATION_INTERNAL_TRANSITIONS_SLIDECHANGEBASE_HXX
 
+#include <osl/mutex.hxx>
+
 #include "unoview.hxx"
-#include "slidechangeanimation.hxx"
+#include "vieweventhandler.hxx"
+#include "numberanimation.hxx"
 #include "slide.hxx"
 #include "soundplayer.hxx"
-#include "rtl/ref.hxx"
-#include "osl/mutex.hxx"
-#include "cppuhelper/compbase1.hxx"
-#include "comphelper/broadcasthelper.hxx"
-#include "com/sun/star/util/XModifyListener.hpp"
-#include "com/sun/star/presentation/XSlideShowView.hpp"
-#include "boost/utility.hpp" // for boost::noncopyable
-#include "boost/optional.hpp"
-#include "boost/bind.hpp"
 
-namespace presentation {
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/utility.hpp>
+#include <boost/optional.hpp>
+
+namespace slideshow {
 namespace internal {
-
-typedef ::cppu::WeakComponentImplHelper1<
-    ::com::sun::star::util::XModifyListener > UnoBaseT;
 
 /** Base class for all slide change effects.
 
@@ -62,9 +57,9 @@ typedef ::cppu::WeakComponentImplHelper1<
     functionality.  Derived classes should normally only need to
     implement the perform() method.
 */
-class SlideChangeBase : private ::comphelper::OBaseMutex,
-                        public SlideChangeAnimation,
-                        public UnoBaseT,
+class SlideChangeBase : public ViewEventHandler,
+                        public NumberAnimation,
+                        public boost::enable_shared_from_this<SlideChangeBase>,
                         private ::boost::noncopyable
 {
 public:
@@ -77,56 +72,64 @@ public:
                         const ShapeAttributeLayerSharedPtr& );
     virtual void end();
 
-    // SlideChangeAnimation
-    virtual void addView( UnoViewSharedPtr const & pView );
-    virtual bool removeView( UnoViewSharedPtr const & pView );
+    // ViewEventHandler
+    virtual void viewAdded( const UnoViewSharedPtr& rView );
+    virtual void viewRemoved( const UnoViewSharedPtr& rView );
+    virtual void viewChanged( const UnoViewSharedPtr& rView );
 
 protected:
-    virtual ~SlideChangeBase();
-
     /** Create a new SlideChanger, for the given leaving and
         entering slides.
     */
     SlideChangeBase(
         ::boost::optional<SlideSharedPtr> const & leavingSlide,
-        const SlideSharedPtr& pEnteringSlide,
-        const SoundPlayerSharedPtr& pSoundPlayer,
-        bool bCreateLeavingSprites = true, bool bCreateEnteringSprites = true );
+        const SlideSharedPtr&                     pEnteringSlide,
+        const SoundPlayerSharedPtr&               pSoundPlayer,
+        const UnoViewContainer&                   rViewContainer,
+        EventMultiplexer&                         rEventMultiplexer,
+        bool                                      bCreateLeavingSprites = true,
+        bool                                      bCreateEnteringSprites = true );
 
-    SlideBitmapSharedPtr getLeavingBitmap() const;
-    SlideBitmapSharedPtr getEnteringBitmap() const;
+    /// Info on a per-view basis
+    struct ViewEntry
+    {
+        ViewEntry() {}
 
-    SlideBitmapSharedPtr createBitmap(
-        ::boost::optional<SlideSharedPtr> const & rSlide_ ) const;
+        explicit ViewEntry( const UnoViewSharedPtr& rView ) :
+            mpView( rView )
+        {
+        }
 
-    /// Query the size of the bitmaps in device pixel
-    ::basegfx::B2ISize getEnteringSizePixel(
-        UnoViewSharedPtr const & pView ) const;
-    /// Query the XDrawPage's size
-    ::basegfx::B2DSize getEnteringSize() const;
+        /// The view this entry is for
+        UnoViewSharedPtr                    mpView;
+        /// outgoing slide sprite
+        cppcanvas::CustomSpriteSharedPtr    mpOutSprite;
+        /// incoming slide sprite
+        cppcanvas::CustomSpriteSharedPtr    mpInSprite;
+        /// outgoing slide bitmap
+        mutable SlideBitmapSharedPtr        mpLeavingBitmap;
+        /// incoming slide bitmap
+        mutable SlideBitmapSharedPtr        mpEnteringBitmap;
+
+        // for algo access
+        const UnoViewSharedPtr& getView() const { return mpView; }
+    };
+
+    typedef ::std::vector<ViewEntry> ViewsVecT;
+
+    ViewsVecT::const_iterator beginViews() { return maViewData.begin(); }
+    ViewsVecT::const_iterator endViews() { return maViewData.end(); }
+
+    SlideBitmapSharedPtr getLeavingBitmap( const ViewEntry& rViewEntry ) const;
+    SlideBitmapSharedPtr getEnteringBitmap( const ViewEntry& rViewEntry ) const;
+
+    SlideBitmapSharedPtr createBitmap( const UnoViewSharedPtr&                pView,
+                                       const boost::optional<SlideSharedPtr>& rSlide_ ) const;
+
+    ::basegfx::B2ISize getEnteringSizePixel( const UnoViewSharedPtr& pView ) const;
 
     void renderBitmap( SlideBitmapSharedPtr const & pSlideBitmap,
                        ::cppcanvas::CanvasSharedPtr const & pCanvas );
-
-    /** Loop over each View, and call func with that
-     */
-    template <typename FuncT>
-    void for_each_view( FuncT const& func ) const {
-        ::std::for_each( maViews.begin(), maViews.end(), func );
-    }
-
-    /** Loop over each View's canvas, and call func with that
-     */
-    template <typename FuncT>
-    void for_each_canvas( FuncT const& func ) const {
-        UnoViewVector::const_iterator const iEnd( maViews.end() );
-        for ( UnoViewVector::const_iterator iPos( maViews.begin() );
-              iPos != iEnd; ++iPos )
-        {
-            ::cppcanvas::CanvasSharedPtr const pCanvas( (*iPos)->getCanvas() );
-            func( pCanvas );
-        }
-    }
 
     /** Called on derived classes to implement actual slide change.
 
@@ -136,12 +139,12 @@ protected:
         Current sprite to operate on. This is the sprite of the
         'entering' slide
 
-        @param x
+        @param t
         Current parameter value
     */
     virtual void performIn(
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-        UnoViewSharedPtr const &                    pView,
+        const ViewEntry&                            rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
         double                                      t );
 
@@ -153,58 +156,39 @@ protected:
         Current sprite to operate on. This is the sprite of the
         'leaving' slide
 
-        @param x
+        @param t
         Current parameter value
     */
     virtual void performOut(
         const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-        UnoViewSharedPtr const &                   pView,
+        const ViewEntry&                           rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
         double                                     t );
 
 private:
-    // XModifyListener
-    virtual void SAL_CALL modified(
-        ::com::sun::star::lang::EventObject const& evt )
-        throw (::com::sun::star::uno::RuntimeException);
-    // XEventListener
-    virtual void SAL_CALL disposing(
-        ::com::sun::star::lang::EventObject const& evt )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    /// WeakComponentImplHelperBase:
-    virtual void SAL_CALL disposing();
-
-private:
-
-    // view mangement:
-    UnoViewVector maViews;
-    UnoViewSharedPtr findUnoView(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::presentation::XSlideShowView> const & xSlideShowView )
-        const;
-    bool removeView_( UnoViewSharedPtr const& pView,
-                      bool bDisposedView = false );
-    void removeTransformationChangedListenerFrom(UnoViewSharedPtr const& pView);
-
-    SoundPlayerSharedPtr mpSoundPlayer;
-
-    ::boost::optional<SlideSharedPtr> mLeavingSlide;
-    SlideSharedPtr mpEnteringSlide;
-    mutable SlideBitmapSharedPtr mpLeavingBitmap;
-    mutable SlideBitmapSharedPtr mpEnteringBitmap;
-
-    typedef ::std::vector< ::cppcanvas::CustomSpriteSharedPtr > SpriteVector;
-    SpriteVector maOutSprites;
-    SpriteVector maInSprites;
-    const bool mbCreateLeavingSprites;
-    const bool mbCreateEnteringSprites;
-    bool mbSpritesVisible;
 
     ::cppcanvas::CustomSpriteSharedPtr createSprite(
-        UnoViewSharedPtr const & pView,
-        ::basegfx::B2DSize const & rSpriteSize ) const;
-    void addSprites( UnoViewSharedPtr const & pView );
+        UnoViewSharedPtr const &   pView,
+        ::basegfx::B2DSize const & rSpriteSize,
+        double                     nPrio ) const;
+
+    void addSprites( ViewEntry& rEntry );
+
+    ViewsVecT::iterator lookupView( UnoViewSharedPtr const & pView );
+    ViewsVecT::const_iterator lookupView( UnoViewSharedPtr const & pView ) const;
+
+    SoundPlayerSharedPtr                mpSoundPlayer;
+
+    const UnoViewContainer&             mrViewContainer;
+    EventMultiplexer&                   mrEventMultiplexer;
+
+    ::boost::optional<SlideSharedPtr>   mLeavingSlide;
+    SlideSharedPtr                      mpEnteringSlide;
+
+    ViewsVecT                           maViewData;
+    const bool                          mbCreateLeavingSprites;
+    const bool                          mbCreateEnteringSprites;
+    bool                                mbSpritesVisible;
 };
 
 } // namespace internal
