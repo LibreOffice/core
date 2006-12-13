@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowexceptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:20:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SLIDESHOW_SLIDESHOWEXCEPTIONS_HXX
 
 
-namespace presentation
+namespace slideshow
 {
     class SlideShowException {};
 
@@ -45,7 +45,7 @@ namespace presentation
         able to convert an API object into our internal
         representation.
      */
-    struct ImportFailedException : public SlideShowException {};
+    struct ShapeLoadFailedException : public SlideShowException {};
 
     /** This exception is thrown, when the SMIL arithmetic expression
         parser failed to parse a string.
