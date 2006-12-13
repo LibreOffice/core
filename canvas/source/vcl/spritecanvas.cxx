@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:31:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <comphelper/servicedecl.hxx>
 
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
@@ -61,31 +62,23 @@
 
 using namespace ::com::sun::star;
 
-#define IMPLEMENTATION_NAME "VCLCanvas::SpriteCanvas"
 #define SERVICE_NAME "com.sun.star.rendering.VCLCanvas"
-
-namespace
-{
-    static ::rtl::OUString SAL_CALL getImplementationName_SpriteCanvas()
-    {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
-    }
-
-    static uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_SpriteCanvas()
-    {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
-        return aRet;
-    }
-
-}
 
 namespace vclcanvas
 {
-    SpriteCanvas::SpriteCanvas( const uno::Reference< uno::XComponentContext >& rxContext ) :
+    SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
+                                const uno::Reference< uno::XComponentContext >& rxContext ) :
         mxComponentContext( rxContext )
     {
+        // #i64742# Only call initialize when not in probe mode
+        if( aArguments.getLength() != 0 )
+            initialize( aArguments );
+    }
+
+    void SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments )
+    {
+        tools::LocalGuard aGuard;
+
         OSL_TRACE( "SpriteCanvas created" );
 
         // add our own property to GraphicDevice
@@ -103,6 +96,33 @@ namespace vclcanvas
              boost::bind(&SpriteCanvasHelper::enableSpriteBounds,
                          boost::ref(maCanvasHelper),
                          _1)));
+
+        VERBOSE_TRACE( "VCLSpriteCanvas::initialize called" );
+
+        CHECK_AND_THROW( aArguments.getLength() >= 1,
+                         "SpriteCanvas::initialize: wrong number of arguments" );
+
+        // We expect a single Any here, containing a pointer to a valid
+        // VCL window, on which to output
+        if( aArguments.getLength() >= 1 &&
+            aArguments[0].getValueTypeClass() == uno::TypeClass_HYPER )
+        {
+            sal_Int64 nWindowPtr = 0;
+            aArguments[0] >>= nWindowPtr;
+            Window* pOutputWindow = reinterpret_cast<Window*>(nWindowPtr);
+
+            CHECK_AND_THROW( pOutputWindow != NULL,
+                             "SpriteCanvas::initialize: invalid Window pointer" );
+
+            // setup helper
+            maDeviceHelper.init( *pOutputWindow,
+                                 *this );
+            maCanvasHelper.init( *this,
+                                 maDeviceHelper.getBackBuffer(),
+                                 false,   // no OutDev state preservation
+                                 false ); // no alpha on surface
+            maCanvasHelper.setRedrawManager( maRedrawManager );
+        }
     }
 
     SpriteCanvas::~SpriteCanvas()
@@ -152,63 +172,9 @@ namespace vclcanvas
                                                                   mbSurfaceDirty);
     }
 
-
-    void SAL_CALL SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments ) throw( uno::Exception,
-                                                                                                 uno::RuntimeException)
-    {
-        tools::LocalGuard aGuard;
-
-        VERBOSE_TRACE( "VCLSpriteCanvas::initialize called" );
-
-        CHECK_AND_THROW( aArguments.getLength() >= 1,
-                         "SpriteCanvas::initialize: wrong number of arguments" );
-
-        // We expect a single Any here, containing a pointer to a valid
-        // VCL window, on which to output
-        if( aArguments.getLength() >= 1 &&
-            aArguments[0].getValueTypeClass() == uno::TypeClass_HYPER )
-        {
-            sal_Int64 nWindowPtr = 0;
-            aArguments[0] >>= nWindowPtr;
-            Window* pOutputWindow = reinterpret_cast<Window*>(nWindowPtr);
-
-            CHECK_AND_THROW( pOutputWindow != NULL,
-                             "SpriteCanvas::initialize: invalid Window pointer" );
-
-            // setup helper
-            maDeviceHelper.init( *pOutputWindow,
-                                 *this );
-            maCanvasHelper.init( *this,
-                                 maDeviceHelper.getBackBuffer(),
-                                 false,   // no OutDev state preservation
-                                 false ); // no alpha on surface
-            maCanvasHelper.setRedrawManager( maRedrawManager );
-        }
-    }
-
-    ::rtl::OUString SAL_CALL SpriteCanvas::getImplementationName() throw( uno::RuntimeException )
-    {
-        return getImplementationName_SpriteCanvas();
-    }
-
-    sal_Bool SAL_CALL SpriteCanvas::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
-    {
-        return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
-    }
-
-    uno::Sequence< ::rtl::OUString > SAL_CALL SpriteCanvas::getSupportedServiceNames()  throw( uno::RuntimeException )
-    {
-        return getSupportedServiceNames_SpriteCanvas();
-    }
-
     ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
-    }
-
-    uno::Reference< uno::XInterface > SAL_CALL SpriteCanvas::createInstance( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::Exception )
-    {
-        return uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(new SpriteCanvas( xContext )) );
     }
 
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
@@ -299,46 +265,19 @@ namespace vclcanvas
         maPropHelper.removeVetoableChangeListener( aPropertyName,
                                                    xListener );
     }
+
+    namespace sdecl = comphelper::service_decl;
+#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl;
+    const sdecl::ServiceDecl vclCanvasDecl(
+        serviceImpl,
+#else
+    const sdecl::ServiceDecl vclCanvasDecl(
+        sdecl::class_<SpriteCanvas, sdecl::with_args<true> >(),
+#endif
+        "com.sun.star.comp.rendering.VCLCanvas",
+        SERVICE_NAME );
 }
 
-namespace
-{
-    /* shared lib exports implemented with helpers */
-    static struct ::cppu::ImplementationEntry s_component_entries [] =
-    {
-        {
-            vclcanvas::SpriteCanvas::createInstance, getImplementationName_SpriteCanvas,
-            getSupportedServiceNames_SpriteCanvas, ::cppu::createSingleComponentFactory,
-            0, 0
-        },
-        { 0, 0, 0, 0, 0, 0 }
-    };
-}
-
-
-/* Exported UNO methods for registration and object creation.
-   ==========================================================
- */
-extern "C"
-{
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char**  ppEnvTypeName,
-                                                          uno_Environment**  )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory*  xMgr,
-                                           registry::XRegistryKey*      xRegistry )
-    {
-        return ::cppu::component_writeInfoHelper(
-            xMgr, xRegistry, s_component_entries );
-    }
-
-    void * SAL_CALL component_getFactory( sal_Char const*               implName,
-                                          lang::XMultiServiceFactory*   xMgr,
-                                          registry::XRegistryKey*       xRegistry )
-    {
-        return ::cppu::component_getFactoryHelper(
-            implName, xMgr, xRegistry, s_component_entries );
-    }
-}
+// The C shared lib entry points
+COMPHELPER_SERVICEDECL_EXPORTS1(vclcanvas::vclCanvasDecl)
