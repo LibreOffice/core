@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:10:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,11 +492,20 @@ void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape ) throw (Ru
         mxWindowPeer->setPointer( mxPointer );
 }
 
+static void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
+{
+    if( pSlideShow )
+    {
+        SlideShowImplGuard aSLGuard( pSlideShow );
+        rGuard.clear();
+        pSlideShow->startUpdateTimer();
+    }
+}
 
 // XWindowListener methods
 void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if( mpViewListeners.get() )
     {
@@ -506,6 +515,7 @@ void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e ) throw (R
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
         mpViewListeners->notify( aEvent );
+        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
 
@@ -522,16 +532,6 @@ void SAL_CALL SlideShowView::windowShown( const lang::EventObject& ) throw (Runt
 void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& ) throw (RuntimeException)
 {
     // ignored
-}
-
-static void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
-{
-    if( pSlideShow )
-    {
-        SlideShowImplGuard aSLGuard( pSlideShow );
-        rGuard.clear();
-        pSlideShow->startUpdateTimer();
-    }
 }
 
 // XMouseListener implementation
