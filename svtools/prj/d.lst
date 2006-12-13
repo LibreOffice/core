@@ -189,6 +189,7 @@ hedabu: ..\inc\framestatuslistener.hxx %_DEST%\inc%_EXT%\svtools\framestatuslist
 hedabu: ..\inc\statusbarcontroller.hxx %_DEST%\inc%_EXT%\svtools\statusbarcontroller.hxx
 hedabu: ..\inc\generictoolboxcontroller.hxx %_DEST%\inc%_EXT%\svtools\generictoolboxcontroller.hxx
 hedabu: ..\inc\restrictedpaths.hxx %_DEST%\inc%_EXT%\svtools\restrictedpaths.hxx
+hedabu: ..\inc\dialogcontrolling.hxx %_DEST%\inc%_EXT%\svtools\dialogcontrolling.hxx
 
 hedabu: ..\inc\imap.hxx %_DEST%\inc%_EXT%\svtools\imap.hxx
 hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
