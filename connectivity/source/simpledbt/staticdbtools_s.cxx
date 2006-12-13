@@ -4,9 +4,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:14:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:27:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,14 +217,6 @@ namespace connectivity
     {
         return ::dbtools::getFieldNamesByCommandDescriptor( _rxConnection, _nCommandType,
             _rCommand, _pErrorInfo );
-    }
-
-    //----------------------------------------------------------------
-    sal_Bool ODataAccessStaticTools::isDataSourcePropertyEnabled(const Reference< XInterface>& _xProp
-                                        ,const ::rtl::OUString& _sProperty,
-                                        sal_Bool _bDefault) const
-    {
-        return ::dbtools::isDataSourcePropertyEnabled( _xProp,_sProperty ,_bDefault );
     }
 
     // ------------------------------------------------
