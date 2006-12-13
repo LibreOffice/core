@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fanwipe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:39:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include "transitiontools.hxx"
 #include "clockwipe.hxx"
 #include "fanwipe.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 ::basegfx::B2DPolyPolygon FanWipe::operator () ( double t )
