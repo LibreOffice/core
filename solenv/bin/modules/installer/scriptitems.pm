@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-13 10:36:29 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:06:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -450,6 +450,14 @@ sub replace_setup_variables
 
     if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
+    # $updateid
+    my $updateid = $productname . "_" . $productversion . "_" . $languagesstring;
+
+    # $useragent
+    # OpenOffice.org/2.2 (680m212 (Build:9263); Solaris; SPARC; BundledLanguages=en-US_fr)
+    my $useragent = $productname . " " . $productversion . " (" . $buildidstring . "; \$_OS; \$_ARCH; " .
+            "BundledLanguages=" . $languagesstring . ")";
+
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
         my $oneitem = ${$itemsarrayref}[$i];
@@ -466,6 +474,8 @@ sub replace_setup_variables
         $value =~ s/\<productbuildid\>/$installer::globals::buildid/;
         $value =~ s/\<sourceid\>/$installer::globals::build/;
         $value =~ s/\<productupdate\>/$productupdatestring/;
+        $value =~ s/\<updateid\>/$updateid/;
+        $value =~ s/\<useragent\>/$useragent/;
 
         $oneitem->{'Value'} = $value;
     }
