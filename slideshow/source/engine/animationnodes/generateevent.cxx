@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generateevent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:27:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include "com/sun/star/animations/EventTrigger.hpp"
 #include "com/sun/star/animations/Event.hpp"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 using namespace com::sun::star;
@@ -227,5 +227,5 @@ EventSharedPtr generateEvent(
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
