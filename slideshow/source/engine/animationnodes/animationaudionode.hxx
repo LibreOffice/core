@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationaudionode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:58:30 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "com/sun/star/animations/XAnimationNode.hpp"
 #include "com/sun/star/animations/XAudio.hpp"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** Audio node.
@@ -80,6 +80,6 @@ private:
 };
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
 #endif /* INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX */
