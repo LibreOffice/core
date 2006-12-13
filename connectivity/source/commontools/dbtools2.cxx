@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:42:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,16 @@
 #endif
 #include "connectivity/dbconversion.hxx"
 #ifndef _DBHELPER_DBCHARSET_HXX_
-#include <connectivity/dbcharset.hxx>
+#include "connectivity/dbcharset.hxx"
 #endif
+
+#ifndef CONNECTIVITY_SHAREDRESOURCES_HXX
+#include "resource/sharedresources.hxx"
+#endif
+#ifndef CONNECTIVITY_RESOURCE_COMMON_HRC
+#include "resource/common_res.hrc"
+#endif
+
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
@@ -94,6 +102,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
+
+#include <tools/diagnose_ex.h>
 
 //.........................................................................
 namespace dbtools
@@ -569,6 +579,31 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
 
     return xProp;
 }
+
+// -----------------------------------------------------------------------------
+bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection, const sal_Char* _pAsciiSettingName )
+{
+    bool bValue( false );
+    try
+    {
+        Reference< XPropertySet> xDataSourceProperties( findDataSource( _rxConnection ), UNO_QUERY );
+        OSL_ENSURE( xDataSourceProperties.is(), "::dbtools::getBooleanDataSourceSetting: somebody is using this with a non-SDB-level connection!" );
+        if ( xDataSourceProperties.is() )
+        {
+            Reference< XPropertySet > xSettings(
+                xDataSourceProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings") ) ),
+                UNO_QUERY_THROW
+            );
+            OSL_VERIFY( xSettings->getPropertyValue( ::rtl::OUString::createFromAscii( _pAsciiSettingName ) ) >>= bValue );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return bValue;
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const ::rtl::OUString& _sProperty,sal_Bool _bDefault)
 {
@@ -589,7 +624,7 @@ sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const :
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(!"isDataSourcePropertyEnabled");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return bEnabled;
 }
@@ -816,39 +851,77 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
     }
     return bIsEmbedded;
 }
-    // -----------------------------------------------------------------------------
-sal_Int32 DBTypeConversion::convertUnicodeString( const ::rtl::OUString& _rSource, ::rtl::OString& _rDest, rtl_TextEncoding _eEncoding ) SAL_THROW((com::sun::star::sdbc::SQLException))
+// -----------------------------------------------------------------------------
+namespace
+{
+    ::rtl::OUString lcl_getEncodingName( rtl_TextEncoding _eEncoding )
     {
-        if ( !rtl_convertUStringToString( &_rDest.pData, _rSource.getStr(), _rSource.getLength(),
-                _eEncoding,
-                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
-                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
-                RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
-                RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE )
-           )
-        {
-            ::rtl::OUString sExplanation( RTL_CONSTASCII_USTRINGPARAM( "The string '" ) );
-            sExplanation += _rSource;
-            sExplanation += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "' cannot be converted using the encoding '" ) );
+        ::rtl::OUString sEncodingName;
 
-            OCharsetMap aCharsets;
-            OCharsetMap::CharsetIterator aEncodingPos = aCharsets.find( _eEncoding );
-            OSL_ENSURE( aEncodingPos != aCharsets.end(), "ODbaseTable::UpdateBuffer: *which* encoding?" );
-            if ( aEncodingPos != aCharsets.end() )
-                sExplanation += (*aEncodingPos).getIanaName();
-            sExplanation += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "'." ) );
+        OCharsetMap aCharsets;
+        OCharsetMap::CharsetIterator aEncodingPos = aCharsets.find( _eEncoding );
+        OSL_ENSURE( aEncodingPos != aCharsets.end(), "lcl_getEncodingName: *which* encoding?" );
+        if ( aEncodingPos != aCharsets.end() )
+            sEncodingName = (*aEncodingPos).getIanaName();
 
-            throw SQLException(
-                sExplanation,
-                NULL,
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "22018" ) ),
-                22018,
-                Any()
-            );
-        }
-
-        return _rDest.getLength();
+        return sEncodingName;
     }
+}
+
+// -----------------------------------------------------------------------------
+sal_Int32 DBTypeConversion::convertUnicodeString( const ::rtl::OUString& _rSource, ::rtl::OString& _rDest, rtl_TextEncoding _eEncoding ) SAL_THROW((com::sun::star::sdbc::SQLException))
+{
+    if ( !rtl_convertUStringToString( &_rDest.pData, _rSource.getStr(), _rSource.getLength(),
+            _eEncoding,
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
+            RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
+            RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE )
+        )
+    {
+        SharedResources aResources;
+        ::rtl::OUString sMessage = aResources.getResourceStringWithSubstitution( STR_CANNOT_CONVERT_STRING,
+            "$string$", _rSource,
+            "$charset$", lcl_getEncodingName( _eEncoding )
+        );
+
+        throw SQLException(
+            sMessage,
+            NULL,
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "22018" ) ),
+            22018,
+            Any()
+        );
+    }
+
+    return _rDest.getLength();
+}
+
+// -----------------------------------------------------------------------------
+sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString& _rSource, ::rtl::OString&  _rDest,
+   sal_Int32 _nMaxLen, rtl_TextEncoding _eEncoding ) SAL_THROW((SQLException))
+{
+    sal_Int32 nLen = convertUnicodeString( _rSource, _rDest, _eEncoding );
+    if ( nLen > _nMaxLen )
+    {
+        SharedResources aResources;
+        ::rtl::OUString sMessage = aResources.getResourceStringWithSubstitution( STR_STRING_LENGTH_EXCEEDED,
+            "$string$", _rSource,
+            "$maxlen$", ::rtl::OUString::valueOf( _nMaxLen ),
+            "$charset$", lcl_getEncodingName( _eEncoding )
+        );
+
+        throw SQLException(
+            sMessage,
+            NULL,
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "22001" ) ),
+            22001,
+            Any()
+        );
+    }
+
+   return nLen;
+}
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
