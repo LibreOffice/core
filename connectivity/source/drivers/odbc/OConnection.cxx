@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:50:25 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #endif
 #ifndef _CONNECTIVITY_ODBC_ODATABASEMETADATA_HXX_
 #include "odbc/ODatabaseMetaData.hxx"
-#endif
-#ifndef _CONNECTIVITY_RESOURCE_HRC_
-#include "Resource.hrc"
 #endif
 #ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
 #include "odbc/OFunctions.hxx"
@@ -415,7 +412,6 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
 
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
     if(!xMetaData.is())
