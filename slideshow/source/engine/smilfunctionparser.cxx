@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smilfunctionparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:20:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,19 +47,11 @@
 #include <smilfunctionparser.hxx>
 #include <expressionnodefactory.hxx>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
 
 // Makes parser a static resource,
 // we're synchronized externally.
@@ -83,7 +75,7 @@
 
 /* Implementation of SmilFunctionParser class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -121,7 +113,7 @@ namespace presentation
                     maGenerator( aGenerator ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext.get(),
+                    ENSURE_AND_THROW( mpContext,
                                       "ShapeBoundsFunctor::ShapeBoundsFunctor(): Invalid context" );
                 }
 
@@ -154,7 +146,7 @@ namespace presentation
                     mnValue( rValue ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext.get(),
+                    ENSURE_AND_THROW( mpContext,
                                       "ConstantFunctor::ConstantFunctor(): Invalid context" );
                 }
 
@@ -177,7 +169,7 @@ namespace presentation
                 DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext.get(),
+                    ENSURE_AND_THROW( mpContext,
                                       "DoubleConstantFunctor::DoubleConstantFunctor(): Invalid context" );
                 }
 
@@ -200,7 +192,7 @@ namespace presentation
                 ValueTFunctor( const ParserContextSharedPtr& rContext ) :
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext.get(),
+                    ENSURE_AND_THROW( mpContext,
                                       "ValueTFunctor::ValueTFunctor(): Invalid context" );
                 }
 
@@ -259,7 +251,7 @@ namespace presentation
                     maFunctor( rFunctor ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext.get(),
+                    ENSURE_AND_THROW( mpContext,
                                       "UnaryFunctionFunctor::UnaryFunctionFunctor(): Invalid context" );
                 }
 
@@ -334,7 +326,7 @@ namespace presentation
                     maGenerator( rGenerator ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext.get(),
+                    ENSURE_AND_THROW( mpContext,
                                       "BinaryFunctionFunctor::BinaryFunctionFunctor(): Invalid context" );
                 }
 
