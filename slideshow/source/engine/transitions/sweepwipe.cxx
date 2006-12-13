@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sweepwipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:42:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include "clockwipe.hxx"
 #include "sweepwipe.hxx"
 #include "transitiontools.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/numeric/ftools.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 ::basegfx::B2DPolyPolygon SweepWipe::operator () ( double t )
@@ -73,7 +73,7 @@ namespace internal {
         }
         else {
             aTransform.translate( -0.5, -0.5 );
-            aTransform.rotate( F_PI );
+            aTransform.rotate( M_PI );
             aTransform.translate( 0.5, 0.5 );
             poly.transform( aTransform );
         }
