@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:31:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -591,39 +591,31 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     if ( pSalData->mbObjClassInit )
     {
         WinSalObject* pObject = new WinSalObject;
-        HWND        hWnd;
-        HWND        hWndChild = 0;
-        // #95301# shockwave plugin has bug; expects ASCII functions to be used
-        if ( false )//aSalShlData.mbWNT )
+
+        // #135235# Clip siblings of this
+        // SystemChildWindow. Otherwise, DXCanvas (using a hidden
+        // SystemChildWindow) clobbers applets/plugins during
+        // animations .
+        HWND hWnd = CreateWindowExA( 0, SAL_OBJECT_CLASSNAMEA, "",
+                                     WS_CHILD | WS_CLIPSIBLINGS, 0, 0, 0, 0,
+                                     pParent->mhWnd, 0,
+                                     pInst->mhInst, (void*)pObject );
+
+        HWND hWndChild = 0;
+        if ( hWnd )
         {
-            hWnd = CreateWindowExW( 0, SAL_OBJECT_CLASSNAMEW, L"",
-                                    WS_CHILD, 0, 0, 0, 0,
-                                    pParent->mhWnd, 0,
-                                    pInst->mhInst, (void*)pObject );
-            if ( hWnd )
-            {
-                hWndChild = CreateWindowExW( 0, SAL_OBJECT_CHILDCLASSNAMEW, L"",
-                                             WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
-                                             0, 0, 0, 0,
-                                             hWnd, 0,
-                                             pInst->mhInst, NULL );
-            }
+            // #135235# Explicitely stack SystemChildWindows in
+            // the order they're created - since there's no notion
+            // of zorder.
+            SetWindowPos(hWnd,HWND_TOP,0,0,0,0,
+                         SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
+            hWndChild = CreateWindowExA( 0, SAL_OBJECT_CHILDCLASSNAMEA, "",
+                                         WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
+                                         0, 0, 0, 0,
+                                         hWnd, 0,
+                                         pInst->mhInst, NULL );
         }
-        else
-        {
-            hWnd = CreateWindowExA( 0, SAL_OBJECT_CLASSNAMEA, "",
-                                    WS_CHILD, 0, 0, 0, 0,
-                                    pParent->mhWnd, 0,
-                                    pInst->mhInst, (void*)pObject );
-            if ( hWnd )
-            {
-                hWndChild = CreateWindowExA( 0, SAL_OBJECT_CHILDCLASSNAMEA, "",
-                                             WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
-                                             0, 0, 0, 0,
-                                             hWnd, 0,
-                                             pInst->mhInst, NULL );
-            }
-        }
+
         if ( !hWndChild )
         {
             delete pObject;
