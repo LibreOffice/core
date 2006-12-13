@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:58:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 
 using namespace com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 AnimationAudioNode::AnimationAudioNode(
@@ -81,7 +81,7 @@ void AnimationAudioNode::activate_st()
 
     AnimationEventHandlerSharedPtr aHandler(
         boost::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
-    OSL_ENSURE( aHandler.get(),
+    OSL_ENSURE( aHandler,
                 "could not cas self to AnimationEventHandler?" );
     getContext().mrEventMultiplexer.addCommandStopAudioHandler( aHandler );
 
@@ -111,7 +111,7 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 {
     AnimationEventHandlerSharedPtr aHandler(
         boost::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
-    OSL_ENSURE( aHandler.get(),
+    OSL_ENSURE( aHandler,
                 "could not cas self to AnimationEventHandler?" );
     getContext().mrEventMultiplexer.removeCommandStopAudioHandler( aHandler );
 
