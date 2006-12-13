@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_spritecanvas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:23:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <comphelper/servicedecl.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -59,31 +60,46 @@
 
 using namespace ::com::sun::star;
 
-#define IMPLEMENTATION_NAME "NullCanvas::SpriteCanvas"
 #define SERVICE_NAME "com.sun.star.rendering.NullCanvas"
-
-namespace
-{
-    static ::rtl::OUString SAL_CALL getImplementationName_SpriteCanvas()
-    {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
-    }
-
-    static uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_SpriteCanvas()
-    {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
-        return aRet;
-    }
-
-}
 
 namespace nullcanvas
 {
-    SpriteCanvas::SpriteCanvas( const uno::Reference< uno::XComponentContext >& rxContext ) :
+    SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
+                                const uno::Reference< uno::XComponentContext >& rxContext ) :
         mxComponentContext( rxContext )
     {
+        // #i64742# Only call initialize when not in probe mode
+        if( aArguments.getLength() != 0 )
+            initialize( aArguments );
+    }
+
+    void SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments )
+    {
+        VERBOSE_TRACE( "SpriteCanvas::initialize called" );
+
+        // At index 1, we expect a system window handle here,
+        // containing a pointer to a valid window, on which to output
+        // At index 2, we expect the current window bound rect
+        CHECK_AND_THROW( aArguments.getLength() >= 4 &&
+                         aArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
+                         "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+
+        awt::Rectangle aRect;
+        aArguments[2] >>= aRect;
+        const ::basegfx::B2ISize aSize(aRect.Width,
+                                       aRect.Height);
+
+        sal_Bool bIsFullscreen( sal_False );
+        aArguments[3] >>= bIsFullscreen;
+
+        // setup helper
+        maDeviceHelper.init( *this,
+                             aSize,
+                             bIsFullscreen );
+        maCanvasHelper.init( maRedrawManager,
+                             *this,
+                             aSize,
+                             false );
     }
 
     void SAL_CALL SpriteCanvas::disposing()
@@ -129,102 +145,23 @@ namespace nullcanvas
             mbSurfaceDirty );
     }
 
-    void SAL_CALL SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments ) throw( uno::Exception,
-                                                                                                 uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        VERBOSE_TRACE( "SpriteCanvas::initialize called" );
-
-        // At index 1, we expect a system window handle here,
-        // containing a pointer to a valid window, on which to output
-        // At index 2, we expect the current window bound rect
-        CHECK_AND_THROW( aArguments.getLength() >= 4 &&
-                         aArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
-                         "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
-
-        awt::Rectangle aRect;
-        aArguments[2] >>= aRect;
-        const ::basegfx::B2ISize aSize(aRect.Width,
-                                       aRect.Height);
-
-        sal_Bool bIsFullscreen( sal_False );
-        aArguments[3] >>= bIsFullscreen;
-
-        // setup helper
-        maDeviceHelper.init( *this,
-                             aSize,
-                             bIsFullscreen );
-        maCanvasHelper.init( maRedrawManager,
-                             *this,
-                             aSize,
-                             false );
-    }
-
-    ::rtl::OUString SAL_CALL SpriteCanvas::getImplementationName() throw( uno::RuntimeException )
-    {
-        return getImplementationName_SpriteCanvas();
-    }
-
-    sal_Bool SAL_CALL SpriteCanvas::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
-    {
-        return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
-    }
-
-    uno::Sequence< ::rtl::OUString > SAL_CALL SpriteCanvas::getSupportedServiceNames()  throw( uno::RuntimeException )
-    {
-        return getSupportedServiceNames_SpriteCanvas();
-    }
-
     ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
     }
 
-    uno::Reference< uno::XInterface > SAL_CALL SpriteCanvas::createInstance( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::Exception )
-    {
-        return uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>( new SpriteCanvas( xContext ) ) );
-    }
+    namespace sdecl = comphelper::service_decl;
+#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl;
+    const sdecl::ServiceDecl nullCanvasDecl(
+        serviceImpl,
+#else
+    const sdecl::ServiceDecl nullCanvasDecl(
+        sdecl::class_<SpriteCanvas, sdecl::with_args<true> >(),
+#endif
+        "com.sun.star.comp.rendering.NullCanvas",
+        SERVICE_NAME );
 }
 
-namespace
-{
-    /* shared lib exports implemented with helpers */
-    static struct ::cppu::ImplementationEntry s_component_entries [] =
-    {
-        {
-            nullcanvas::SpriteCanvas::createInstance, getImplementationName_SpriteCanvas,
-            getSupportedServiceNames_SpriteCanvas, ::cppu::createSingleComponentFactory,
-            0, 0
-        },
-        { 0, 0, 0, 0, 0, 0 }
-    };
-}
-
-
-/* Exported UNO methods for registration and object creation.
-   ==========================================================
- */
-extern "C"
-{
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char**  ppEnvTypeName,
-                                                          uno_Environment** /*ppEnv*/ )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory*  xMgr,
-                                           registry::XRegistryKey*      xRegistry )
-    {
-        return ::cppu::component_writeInfoHelper(
-            xMgr, xRegistry, s_component_entries );
-    }
-
-    void * SAL_CALL component_getFactory( sal_Char const*               implName,
-                                          lang::XMultiServiceFactory*   xMgr,
-                                          registry::XRegistryKey*       xRegistry )
-    {
-        return ::cppu::component_getFactoryHelper(
-            implName, xMgr, xRegistry, s_component_entries );
-    }
-}
+// The C shared lib entry points
+COMPHELPER_SERVICEDECL_EXPORTS1(nullcanvas::nullCanvasDecl)
