@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:59:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1653,8 +1653,8 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 
                     // convert the string, using the connection's encoding
                     ::rtl::OString sEncoded;
-                    DBTypeConversion::convertUnicodeString( sStringToWrite, sEncoded, getConnection()->getTextEncoding() );
-                    memcpy( pData, sEncoded.getStr(), ::std::min( nLen, sEncoded.getLength() ) );
+                    DBTypeConversion::convertUnicodeStringToLength( sStringToWrite, sEncoded, nLen, getConnection()->getTextEncoding() );
+                    memcpy( pData, sEncoded.getStr(), sEncoded.getLength() );
 
                 }
                 break;
