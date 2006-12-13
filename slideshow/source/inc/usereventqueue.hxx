@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usereventqueue.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:55:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,17 @@
 #ifndef INCLUDED_SLIDESHOW_USEREVENTQUEUE_HXX
 #define INCLUDED_SLIDESHOW_USEREVENTQUEUE_HXX
 
-#include "com/sun/star/animations/XAnimationNode.hpp"
+#include <com/sun/star/animations/XAnimationNode.hpp>
+
 #include "eventmultiplexer.hxx"
 #include "eventqueue.hxx"
 #include "shape.hxx"
-#include "boost/noncopyable.hpp"
+
+#include <boost/noncopyable.hpp>
 
 /* Definition of UserEventQueue class */
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class PlainEventHandler;
