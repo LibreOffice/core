@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatableshape.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:04:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,12 @@
 #ifndef _SLIDESHOW_ANIMATABLESHAPE_HXX
 #define _SLIDESHOW_ANIMATABLESHAPE_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include <shape.hxx>
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
