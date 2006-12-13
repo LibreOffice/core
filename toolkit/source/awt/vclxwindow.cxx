@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:25:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,9 @@
 #endif
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -2073,6 +2076,14 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             {
                 ::rtl::OUString aText = GetWindow()->GetQuickHelpText();
                 aProp <<= aText;
+            }
+            break;
+            case BASEPROPERTY_HELPURL:
+            {
+                ::rtl::OUStringBuffer aURL;
+                aURL.appendAscii( "HID:" );
+                aURL.append( (sal_Int32) GetWindow()->GetHelpId() );
+                aProp <<= aURL.makeStringAndClear();
             }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:
