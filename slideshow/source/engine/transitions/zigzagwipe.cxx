@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zigzagwipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:43:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:49:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "zigzagwipe.hxx"
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include "transitiontools.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/point/b2dpoint.hxx"
-// #include "basegfx/numeric/ftools.hxx"
+#include "zigzagwipe.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 ZigZagWipe::ZigZagWipe( sal_Int32 nZigs ) : m_zigEdge( 1.0 / nZigs )
