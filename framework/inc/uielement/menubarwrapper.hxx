@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarwrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:05:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #ifndef __FRAMEWORK_HELPER_UICONFIGELEMENTWRAPPERBASE_HXX_
 #include <helper/uiconfigelementwrapperbase.hxx>
 #endif
-
 #ifndef __FRAMEWORK_UIELEMENT_MENUBARMANAGER_HXX_
 #include <uielement/menubarmanager.hxx>
 #endif
@@ -55,23 +54,31 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef __COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
+#include <stl/hash_map>
+
 namespace framework
 {
 
-class MenuBarWrapper : public UIConfigElementWrapperBase
+class MenuBarWrapper : public UIConfigElementWrapperBase,
+                       public ::com::sun::star::container::XNameAccess
+
 {
     public:
         // #110897#
@@ -79,10 +86,17 @@ class MenuBarWrapper : public UIConfigElementWrapperBase
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~MenuBarWrapper();
 
+        //---------------------------------------------------------------------------------------------------------
+        //  XInterface, XTypeProvider
+        //---------------------------------------------------------------------------------------------------------
+        FWK_DECLARE_XINTERFACE
+        FWK_DECLARE_XTYPEPROVIDER
+
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
+        void            InvalidatePopupControllerCache() { m_bRefreshPopupControllerCache = sal_True; }
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -98,9 +112,22 @@ class MenuBarWrapper : public UIConfigElementWrapperBase
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& UISettings ) throw (::com::sun::star::uno::RuntimeException);
 
-private:
+        // XElementAccess
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException);
+
+        // XNameAccess
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        void fillPopupControllerCache();
+
+        sal_Bool                                                                                m_bRefreshPopupControllerCache : 1;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                      m_xMenuBarManager;
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
+        PopupControllerCache                                                                    m_aPopupControllerCache;
 };
 
 } // namespace framework
