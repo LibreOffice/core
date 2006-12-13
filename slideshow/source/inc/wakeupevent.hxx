@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wakeupevent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:55:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,15 @@
 #if ! defined(INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX)
 #define INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX
 
+#include <canvas/elapsedtime.hxx>
+
 #include "event.hxx"
 #include "activitiesqueue.hxx"
-#include "canvas/elapsedtime.hxx"
-#include "boost/bind.hpp"
-#include "boost/noncopyable.hpp"
 
-namespace presentation {
+#include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
+
+namespace slideshow {
 namespace internal {
 
 /** Little helper class, used to set Activities active again
