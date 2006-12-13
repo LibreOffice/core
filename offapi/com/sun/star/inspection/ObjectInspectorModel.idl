@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectInspectorModel.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:21:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,11 +76,47 @@ service ObjectInspectorModel : XObjectInspectorModel
             a sequence of handler factories, as to be provided in the XObjectInspectorModel::HandlerFactories
             method.
         @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given sequence is empty.
 
         @see XObjectInspectorModel::HandlerFactories
-            if the given sequence is empty.
     */
     createWithHandlerFactories( [in] sequence< any > handlerFactories )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** creates a default ObjectInspectorModel, using an externally provided sequence of property handler
+        factories, and describing an ObjectInspector which has a help section.
+
+        @param handlerFactories
+            a sequence of handler factories, as to be provided in the XObjectInspectorModel::HandlerFactories
+            method.
+
+        @param minHelpTextLines
+            denotes the minimum number of lines of text to be reserved for the help
+            section.
+
+        @param maxHelpTextLines
+            denotes the maximum number of lines of text to be reserved for the help
+            section.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <arg>handlerFactories</arg> is empty.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <arg>minHelpTextLines</arg> or <arg>maxHelpTextLines</arg> are negative,
+            or if <arg>minHelpTextLines</arg> is greater than <arg>maxHelpTextLines</arg>.
+
+        @see XObjectInspectorModel::HandlerFactories
+        @see XObjectInspectorModel::HasHelpSection
+        @see XObjectInspectorModel::MinHelpTextLines
+        @see XObjectInspectorModel::MaxHelpTextLines
+
+        @since OOo 2.2
+    */
+    createWithHandlerFactoriesAndHelpSection(
+        [in] sequence< any > handlerFactories,
+        [in] long minHelpTextLines,
+        [in] long maxHelpTextLines
+    )
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
