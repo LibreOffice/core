@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interruptabledelayevent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:13:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <delayevent.hxx>
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -61,8 +61,7 @@ namespace presentation
 
             virtual bool fire()
             {
-                if( mpEvent.get() != NULL &&
-                    isCharged() )
+                if( mpEvent && isCharged() )
                 {
                     // pass on directly - we're supposed to be called
                     // from EventQueue here, anyway - and if not,
@@ -78,7 +77,7 @@ namespace presentation
                 // pass on to wrappee - this ensures that we return
                 // false on isCharged(), even if the other event has
                 // been fired outside our own fire() method
-                return mpEvent.get() == NULL ? false : mpEvent->isCharged();
+                return !mpEvent ? false : mpEvent->isCharged();
             }
 
             virtual double getActivationTime( double nCurrentTime ) const
