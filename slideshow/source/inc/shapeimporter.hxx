@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimporter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:02:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,15 @@
 #ifndef INCLUDED_SLIDESHOW_SHAPEIMPORTER_HXX
 #define INCLUDED_SLIDESHOW_SHAPEIMPORTER_HXX
 
-#include "com/sun/star/drawing/XDrawPage.hpp"
-#include "com/sun/star/drawing/XShapes.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include "shape.hxx"
+
 #include <stack>
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** This class imports all shapes from a given XShapes object
@@ -73,11 +75,12 @@ public:
         object imports the draw page.
     */
     ShapeImporter( const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::drawing::XDrawPage >& xPage,
+                         ::com::sun::star::drawing::XDrawPage >& xPage,
                    const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::drawing::XDrawPage >& xActualPage,
-                   sal_Int32 nOrdNumStart,
-                   bool bConvertingMasterPage );
+                         ::com::sun::star::drawing::XDrawPage >& xActualPage,
+                   const SlideShowContext&                       rContext,
+                   sal_Int32                                     nOrdNumStart,
+                   bool                                          bConvertingMasterPage );
 
     /** This method imports presentation-visible shapes (and skips all others).
 
@@ -104,9 +107,6 @@ private:
         ::com::sun::star::beans::XPropertySet> const& xPropSet,
         ::rtl::OUString const& shapeType ) const;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XDrawPage> mxPage;
-
     struct XShapesEntry {
         ShapeSharedPtr const mpGroupShape;
         ::com::sun::star::uno::Reference<
@@ -126,10 +126,14 @@ private:
     };
     typedef ::std::stack<XShapesEntry> XShapesStack;
 
-    XShapesStack maShapesStack;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XDrawPage> mxPage;
+    const SlideShowContext&                   mrContext;
 
-    double mnAscendingPrio;
-    bool mbConvertingMasterPage;
+    XShapesStack                              maShapesStack;
+
+    double                                    mnAscendingPrio;
+    bool                                      mbConvertingMasterPage;
 };
 
 } // namespace internal
