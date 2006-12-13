@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eformspropertyhandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:16:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -490,10 +490,10 @@ namespace pcr
         switch ( nControlType )
         {
         case PropertyControlType::ListBox:
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_True );
             break;
         case PropertyControlType::ComboBox:
-            aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False, sal_True );
             break;
         default:
             aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
