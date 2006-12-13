@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericpropertyhandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:18:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -691,7 +691,8 @@ namespace pcr
         case TypeClass_ENUM:
             aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory,
                 impl_getEnumConverter( pos->second.Type )->getDescriptions(),
-                PropertyHandlerHelper::requiresReadOnlyControl( pos->second.Attributes ) );
+                PropertyHandlerHelper::requiresReadOnlyControl( pos->second.Attributes ),
+                sal_False );
             break;
         case TypeClass_STRING:
         {
