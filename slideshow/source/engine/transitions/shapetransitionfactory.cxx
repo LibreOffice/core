@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapetransitionfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:41:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:45:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
+#include <canvas/debug.hxx>
+
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <canvas/debug.hxx>
-#include <transitionfactory.hxx>
-#include <transitiontools.hxx>
-#include <parametricpolypolygonfactory.hxx>
-#include <animationfactory.hxx>
-#include <clippingfunctor.hxx>
+
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 
-#ifndef BOOST_BIND_HPP_INCLUDED
+#include "transitionfactory.hxx"
+#include "transitiontools.hxx"
+#include "parametricpolypolygonfactory.hxx"
+#include "animationfactory.hxx"
+#include "clippingfunctor.hxx"
+
 #include <boost/bind.hpp>
-#endif
 
 
 using namespace ::com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /***************************************************
@@ -115,29 +118,38 @@ ClippingAnimation::ClippingAnimation(
         mbSpriteActive(false)
 {
     ENSURE_AND_THROW(
-        rLayerManager.get(),
+        rLayerManager,
         "ClippingAnimation::ClippingAnimation(): Invalid LayerManager" );
 }
 
 ClippingAnimation::~ClippingAnimation()
 {
-    end_();
+    try
+    {
+        end_();
+    }
+    catch (uno::Exception &) {
+        OSL_ENSURE( false, rtl::OUStringToOString(
+                        comphelper::anyToString(
+                            cppu::getCaughtException() ),
+                        RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
 }
 
 void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
                                const ShapeAttributeLayerSharedPtr&  rAttrLayer )
 {
-    OSL_ENSURE( !mpShape.get(),
+    OSL_ENSURE( !mpShape,
                 "ClippingAnimation::start(): Shape already set" );
-    OSL_ENSURE( !mpAttrLayer.get(),
+    OSL_ENSURE( !mpAttrLayer,
                 "ClippingAnimation::start(): Attribute layer already set" );
 
     mpShape = rShape;
     mpAttrLayer = rAttrLayer;
 
-    ENSURE_AND_THROW( rShape.get(),
+    ENSURE_AND_THROW( rShape,
                       "ClippingAnimation::start(): Invalid shape" );
-    ENSURE_AND_THROW( rAttrLayer.get(),
+    ENSURE_AND_THROW( rAttrLayer,
                       "ClippingAnimation::start(): Invalid attribute layer" );
 
     mpShape = rShape;
@@ -170,7 +182,7 @@ void ClippingAnimation::end_()
 bool ClippingAnimation::operator()( double nValue )
 {
     ENSURE_AND_RETURN(
-        mpAttrLayer.get() && mpShape.get(),
+        mpAttrLayer && mpShape,
         "ClippingAnimation::operator(): Invalid ShapeAttributeLayer" );
 
     // set new clip
@@ -186,7 +198,7 @@ bool ClippingAnimation::operator()( double nValue )
 double ClippingAnimation::getUnderlyingValue() const
 {
     ENSURE_AND_THROW(
-        mpAttrLayer.get(),
+        mpAttrLayer,
         "ClippingAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
     return 0.0;     // though this should be used in concert with
@@ -368,7 +380,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
         }
     }
 
-    if( !pGeneratedActivity.get() )
+    if( !pGeneratedActivity )
     {
         // No animation generated, maybe no table entry for given
         // transition?
