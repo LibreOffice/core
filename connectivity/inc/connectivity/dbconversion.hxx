@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:00:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,37 @@ namespace dbtools
             ::rtl::OString&  _rDest,
             rtl_TextEncoding _eEncoding
         )
+            SAL_THROW((::com::sun::star::sdbc::SQLException));
+
+        /** converts a Unicode string into a 8-bit string, using the given encoding
+
+            @param _rSource
+                the source string to convert
+
+            @param _rDest
+                the destination string
+
+            @param _nMaxLen
+                the maximum length of the destination string
+
+            @param _eEncoding
+                the encoding to use for the conversion
+
+            @throws com::sun::star::sdbc::SQLException
+                if convertUnicodeString, which is called internally, throws such an exception
+
+            @throws com::sun::star::sdbc::SQLException
+                if the conversion results in a string which is longer than _nMaxLen
+
+            @return
+                the length of the converted string
+        */
+        static sal_Int32 convertUnicodeStringToLength(
+            const ::rtl::OUString& _rSource,
+            ::rtl::OString&  _rDest,
+            sal_Int32 _nMaxLen,
+            rtl_TextEncoding _eEncoding
+       )
             SAL_THROW((::com::sun::star::sdbc::SQLException));
     };
 
