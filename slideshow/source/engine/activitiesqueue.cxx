@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesqueue.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:22:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,8 @@
 
 // must be first
 #include <canvas/debug.hxx>
-#ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
-#endif
+
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -56,7 +55,7 @@
 
 using namespace ::com::sun::star;
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -91,9 +90,9 @@ namespace presentation
 
         bool ActivitiesQueue::addActivity( const ActivitySharedPtr& pActivity )
         {
-            OSL_ENSURE( pActivity.get() != NULL, "ActivitiesQueue::addActivity: activity ptr NULL" );
+            OSL_ENSURE( pActivity, "ActivitiesQueue::addActivity: activity ptr NULL" );
 
-            if( pActivity.get() == NULL )
+            if( !pActivity )
                 return false;
 
             // add entry to waiting list
