@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationcolornode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:33:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 namespace {
@@ -65,7 +65,7 @@ public:
         : mpAnimation( rAnimation )
     {
         ENSURE_AND_THROW(
-            mpAnimation.get(),
+            mpAnimation,
             "HSLWrapper::HSLWrapper(): Invalid color animation delegate" );
     }
 
@@ -134,5 +134,5 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
