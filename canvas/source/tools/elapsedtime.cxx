@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elapsedtime.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:31:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,17 +165,6 @@ void ElapsedTime::reset()
 
 void ElapsedTime::adjustTimer( double fOffset, bool /*bLimitToLastQueriedTime*/ )
 {
-#if 0
-    if (bLimitToLastQueriedTime) {
-        const double fCurrentTime = getElapsedTimeImpl();
-        if (m_fLastQueriedTime > (fCurrentTime + fOffset)) {
-            // TODO(Q3): Once the dust has settled, reduce to
-            // OSL_TRACE here!
-            OSL_ENSURE( false, "### adjustTimer(): clamping!" );
-            fOffset = (m_fLastQueriedTime - fCurrentTime);
-        }
-    }
-#endif
     // to make getElapsedTime() become _larger_, have to reduce
     // m_fStartTime.
     m_fStartTime -= fOffset;
