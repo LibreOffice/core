@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:54:03 $
+#   last change: $Author: kz $ $Date: 2006-12-13 16:25:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,12 @@ CDEFS+=-DCONN_SHARED_RESOURCE_FILE=$(TARGET)
 
 
 # --- Files -------------------------------------
+
+EXCEPTIONSFILES=\
+    $(SLO)$/sharedresources.obj
+
+SLOFILES=\
+        $(EXCEPTIONSFILES)
 
 SRS1NAME=conn_shared_res
 SRC1FILES= \
