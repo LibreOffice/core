@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase1.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:23:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #endif
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 namespace cppu
@@ -181,6 +184,11 @@ namespace cppu
         /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData1< Ifc1, ImplInheritanceHelper1< BaseClass, Ifc1 > > > {};
     protected:
+#if (defined __SUNPRO_CC && __SUNPRO_CC <= 0x550)
+        // Hack, to get comphelper::service_decl to work for non-trivial impl classes
+        ImplInheritanceHelper1( com::sun::star::uno::Sequence<com::sun::star::uno::Any> const& args,
+                                com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& xContext ) : BaseClass(args,xContext) {}
+#endif
         template< typename T1 >
         explicit ImplInheritanceHelper1(T1 const & arg1): BaseClass(arg1) {}
         template< typename T1, typename T2 >
