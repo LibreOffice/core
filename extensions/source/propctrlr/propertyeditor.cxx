@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:22:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 12:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,11 @@ namespace pcr
 {
 //............................................................................
 
+    #define LAYOUT_BORDER_LEFT      3
+    #define LAYOUT_BORDER_TOP       3
+    #define LAYOUT_BORDER_RIGHT     3
+    #define LAYOUT_BORDER_BOTTOM    3
+
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::inspection::XPropertyControl;
@@ -71,8 +76,11 @@ namespace pcr
     //------------------------------------------------------------------
     OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
-            ,m_aTabControl(this)
+            ,m_aTabControl( this )
             ,m_nNextId(1)
+            ,m_bHasHelpSection( false )
+            ,m_nMinHelpLines( 0 )
+            ,m_nMaxHelpLines( 0 )
     {
         DBG_CTOR(OPropertyEditor,NULL);
 
@@ -121,7 +129,31 @@ namespace pcr
         }
     }
 
-    // #95343# ---------------------------------------------------------
+    //------------------------------------------------------------------
+    sal_Int32 OPropertyEditor::getMinimumHeight()
+    {
+        sal_Int32 nMinHeight( LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM );
+
+        if ( m_aTabControl.GetPageCount() > 0 )
+        {
+            sal_uInt16 nFirstID = m_aTabControl.GetPageId( 0 );
+
+            // reserve space for the tabs themself
+            Rectangle aTabArea( m_aTabControl.GetTabBounds( nFirstID ) );
+            nMinHeight += aTabArea.GetHeight();
+
+            // ask the page how much it requires
+            OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( nFirstID ) );
+            if ( pPage )
+                nMinHeight += pPage->getMinimumHeight();
+        }
+        else
+            nMinHeight += 250;  // arbitrary ...
+
+        return nMinHeight;
+    }
+
+    //------------------------------------------------------------------
     sal_Int32 OPropertyEditor::getMinimumWidth()
     {
         sal_uInt16 nCount = m_aTabControl.GetPageCount();
@@ -151,8 +183,8 @@ namespace pcr
             sal_uInt16 nID = m_aTabControl.GetPageId( i );
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( nID ) );
 
-            if ( pPage && pPage->getListBox() && pPage->getListBox()->IsModified() )
-                pPage->getListBox()->CommitModified();
+            if ( pPage && pPage->getListBox().IsModified() )
+                pPage->getListBox().CommitModified();
         }
     }
 
@@ -193,11 +225,16 @@ namespace pcr
     //------------------------------------------------------------------
     void OPropertyEditor::Resize()
     {
-        Size aSize( GetOutputSizePixel() );
-        aSize.Width() -= 6;
-        aSize.Height() -= 6;
-        m_aTabControl.SetPosSizePixel( Point( 3, 3 ), aSize );
+        Rectangle aPlayground(
+            Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ),
+            Size(
+                GetOutputSizePixel().Width() - LAYOUT_BORDER_LEFT - LAYOUT_BORDER_RIGHT,
+                GetOutputSizePixel().Height() - LAYOUT_BORDER_TOP - LAYOUT_BORDER_BOTTOM
+            )
+        );
 
+        Rectangle aTabArea( aPlayground );
+        m_aTabControl.SetPosSizePixel( aTabArea.TopLeft(), aTabArea.GetSize() );
     }
 
     //------------------------------------------------------------------
@@ -213,7 +250,10 @@ namespace pcr
         pPage->SetText( _rText );
         // some knittings
         pPage->SetSizePixel(m_aTabControl.GetTabPageSizePixel());
-        pPage->getListBox()->setListener(m_pListener);
+        pPage->getListBox().SetListener(m_pListener);
+        pPage->getListBox().SetObserver(m_pObserver);
+        pPage->getListBox().EnableHelpSection( m_bHasHelpSection );
+        pPage->getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
         pPage->SetHelpId(_nHelpId);
 
         // immediately activate the page
@@ -262,7 +302,7 @@ namespace pcr
     {
         OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
         if (pPage)
-            return pPage->getListBox()->CalcVisibleLines();
+            return pPage->getListBox().CalcVisibleLines();
         else return 0;
     }
 
@@ -276,7 +316,7 @@ namespace pcr
             sal_uInt16 nID = m_aTabControl.GetPageId(i);
             OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
             if (pPage)
-                pPage->getListBox()->EnableUpdate();
+                pPage->getListBox().EnableUpdate();
         }
     }
 
@@ -290,25 +330,98 @@ namespace pcr
             sal_uInt16 nID = m_aTabControl.GetPageId(i);
             OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
             if (pPage)
-                pPage->getListBox()->DisableUpdate();
+                pPage->getListBox().DisableUpdate();
         }
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::forEachPage( PageOperation _pOperation, const void* _pArgument )
+    {
+        sal_uInt16 nCount = m_aTabControl.GetPageCount();
+        for ( sal_uInt16 i=0; i<nCount; ++i )
+        {
+            sal_uInt16 nID = m_aTabControl.GetPageId(i);
+            OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( nID ) );
+            if ( !pPage )
+                continue;
+            (this->*_pOperation)( *pPage, _pArgument );
+        }
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::setPageLineListener( OBrowserPage& _rPage, const void* )
+    {
+        _rPage.getListBox().SetListener( m_pListener );
     }
 
     //------------------------------------------------------------------
     void OPropertyEditor::SetLineListener(IPropertyLineListener* _pListener)
     {
         m_pListener = _pListener;
+        forEachPage( &OPropertyEditor::setPageLineListener );
+    }
 
-        // forward the new listener to our pages
-        sal_uInt16 nCount = m_aTabControl.GetPageCount();
-        for (sal_uInt16 i=0;i<nCount;++i)
-        {
-            sal_uInt16 nID = m_aTabControl.GetPageId(i);
-            OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
-            if (pPage)
-                pPage->getListBox()->setListener(m_pListener);
-        }
+    //------------------------------------------------------------------
+    void OPropertyEditor::setPageControlObserver( OBrowserPage& _rPage, const void* )
+    {
+        _rPage.getListBox().SetObserver( m_pObserver );
+    }
 
+    //------------------------------------------------------------------
+    void OPropertyEditor::SetControlObserver( IPropertyControlObserver* _pObserver )
+    {
+        m_pObserver = _pObserver;
+        forEachPage( &OPropertyEditor::setPageControlObserver );
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::EnableHelpSection( bool _bEnable )
+    {
+        m_bHasHelpSection = _bEnable;
+        forEachPage( &OPropertyEditor::enableHelpSection );
+    }
+
+    //------------------------------------------------------------------
+    bool OPropertyEditor::HasHelpSection() const
+    {
+        return m_bHasHelpSection;
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::SetHelpText( const ::rtl::OUString& _rHelpText )
+    {
+        forEachPage( &OPropertyEditor::setHelpSectionText, &_rHelpText );
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines )
+    {
+        m_nMinHelpLines = _nMinLines;
+        m_nMaxHelpLines = _nMaxLines;
+        forEachPage( &OPropertyEditor::setHelpLineLimits );
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::enableHelpSection( OBrowserPage& _rPage, const void* )
+    {
+        _rPage.getListBox().EnableHelpSection( m_bHasHelpSection );
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString )
+    {
+        OSL_ENSURE( _pPointerToOUString, "OPropertyEditor::setHelpSectionText: invalid argument!" );
+        if ( !_pPointerToOUString )
+            return;
+
+        const ::rtl::OUString& rText( *(const ::rtl::OUString*)_pPointerToOUString );
+        _rPage.getListBox().SetHelpText( rText );
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::setHelpLineLimits( OBrowserPage& _rPage, const void* )
+    {
+        _rPage.getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
     }
 
     //------------------------------------------------------------------
@@ -320,7 +433,7 @@ namespace pcr
         if ( !pPage )
             return LISTBOX_ENTRY_NOTFOUND;
 
-        sal_uInt16 nEntry = pPage->getListBox()->InsertEntry( rData, nPos );
+        sal_uInt16 nEntry = pPage->getListBox().InsertEntry( rData, nPos );
 
         OSL_ENSURE( m_aPropertyPageIds.find( rData.sName ) == m_aPropertyPageIds.end(),
             "OPropertyEditor::InsertEntry: property already present in the map!" );
@@ -335,7 +448,7 @@ namespace pcr
         OBrowserPage* pPage = getPage( _rName );
         if ( pPage )
         {
-            OSL_VERIFY( pPage->getListBox()->RemoveEntry( _rName ) );
+            OSL_VERIFY( pPage->getListBox().RemoveEntry( _rName ) );
 
             OSL_ENSURE( m_aPropertyPageIds.find( _rName ) != m_aPropertyPageIds.end(),
                 "OPropertyEditor::RemoveEntry: property not present in the map!" );
@@ -348,7 +461,7 @@ namespace pcr
     {
         OBrowserPage* pPage = getPage( rData.sName );
         if ( pPage )
-            pPage->getListBox()->ChangeEntry( rData, EDITOR_LIST_REPLACE_EXISTING );
+            pPage->getListBox().ChangeEntry( rData, EDITOR_LIST_REPLACE_EXISTING );
     }
 
     //------------------------------------------------------------------
@@ -356,7 +469,7 @@ namespace pcr
     {
         OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
-            pPage->getListBox()->SetPropertyValue( rEntryName, _rValue );
+            pPage->getListBox().SetPropertyValue( rEntryName, _rValue );
     }
 
     //------------------------------------------------------------------
@@ -365,7 +478,7 @@ namespace pcr
         Any aValue;
         const OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
-            aValue = pPage->getListBox()->GetPropertyValue( rEntryName );
+            aValue = pPage->getListBox().GetPropertyValue( rEntryName );
         return aValue;
     }
 
@@ -375,7 +488,7 @@ namespace pcr
         sal_uInt16 nVal=LISTBOX_ENTRY_NOTFOUND;
         const OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
-            nVal = pPage->getListBox()->GetPropertyPos( rEntryName );
+            nVal = pPage->getListBox().GetPropertyPos( rEntryName );
         return nVal;
     }
 
@@ -389,7 +502,7 @@ namespace pcr
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )
-                if ( !pPage->getListBox()->IsPropertyInputEnabled( _rEntryName) )
+                if ( !pPage->getListBox().IsPropertyInputEnabled( _rEntryName) )
                     return sal_False;
         }
         return sal_True;
@@ -429,7 +542,7 @@ namespace pcr
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )
-                pPage->getListBox()->EnablePropertyControls( _rEntryName, _nControls, _bEnable );
+                pPage->getListBox().EnablePropertyControls( _rEntryName, _nControls, _bEnable );
         }
     }
 
@@ -440,9 +553,8 @@ namespace pcr
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )
-                pPage->getListBox()->EnablePropertyLine( _rEntryName, _bEnable );
+                pPage->getListBox().EnablePropertyLine( _rEntryName, _bEnable );
         }
-
     }
 
     //------------------------------------------------------------------
@@ -452,7 +564,7 @@ namespace pcr
         // let the current page handle this
         OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
         if (pPage)
-            xControl = pPage->getListBox()->GetPropertyControl(rEntryName);
+            xControl = pPage->getListBox().GetPropertyControl(rEntryName);
         return xControl;
     }
 
@@ -471,9 +583,11 @@ namespace pcr
         // (79404)
         sal_Int32 nCurrentId = m_aTabControl.GetCurPageId();
         OBrowserPage* pCurrentPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage((sal_uInt16)nCurrentId));
-        OBrowserListBox* pListBox = pCurrentPage ? pCurrentPage->getListBox() : NULL;
-        if ( pListBox && pListBox->IsModified() )
-            pListBox->CommitModified();
+        if ( !pCurrentPage )
+            return 1L;
+
+        if ( pCurrentPage->getListBox().IsModified() )
+            pCurrentPage->getListBox().CommitModified();
 
         return 1L;
     }
