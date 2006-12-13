@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:16:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:11:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,15 +335,19 @@ namespace dbtools
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> findDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent);
 
+    /** determines the value of a booolean data source setting, given by ASCII name
+
+        @param _rxConnection
+            the connection belonging to the data source whose setting is to be retrieved
+        @param _pAsciiSettingName
+            the ASCII name of the setting
+    */
+    bool getBooleanDataSourceSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection, const sal_Char* _pAsciiSettingName );
+
     /** check if a specific property is enabled in the info sequence
-        @param  _xProp
-            The datasource or a child of it.
-        @param  _sProperty
-            The property to search in the info property of the data source.
-        @param  _bDefault
-            This value will be returned, if the property doesn't exist in the data source.
-        @return
-            <TRUE/> if so otherwise <FALSE/>
+        @deprecated
+            Use getBooleanDataSourceSetting instead, which cares for the default of the property itself,
+            instead of spreading this knowledge through all callers.
     */
     sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
                                         ,const ::rtl::OUString& _sProperty,
