@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:04:17 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:41:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,17 +354,6 @@ namespace svxform
                 _rCommand, _pErrorInfo );
 
         return aNames;
-    }
-    //----------------------------------------------------------------
-    sal_Bool OStaticDataAccessTools::isDataSourcePropertyEnabled(const Reference< XInterface>& _xProp
-                                        ,const ::rtl::OUString& _sProperty,
-                                        sal_Bool _bDefault) const
-    {
-        sal_Bool bRet = _bDefault;
-        checkIfLoaded();
-        if ( m_xDataAccessTools.is() )
-            bRet = m_xDataAccessTools->isDataSourcePropertyEnabled( _xProp,_sProperty ,_bDefault );
-        return bRet;
     }
 
     //----------------------------------------------------------------
