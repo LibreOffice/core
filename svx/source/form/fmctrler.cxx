@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:25:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -723,7 +723,7 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
                             {
                                 aCriteria = ::rtl::OUString();
                                 // don't use a parse context here, we need it unlocalized
-                                xParseNode->parseNodeToStr(aCriteria, xMetaData,NULL);
+                                xParseNode->parseNodeToStr( aCriteria, xConnection, NULL );
                                 aFilter += aCriteria;
                             }
                         }
@@ -2735,7 +2735,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                             {
                                 ::rtl::OUString sCriteria;
                                 xParseNode->parseNodeToPredicateStr( sCriteria
-                                                                    ,xMetaData
+                                                                    ,xConnection
                                                                     ,xFormatter
                                                                     ,xField
                                                                     ,aAppLocale
