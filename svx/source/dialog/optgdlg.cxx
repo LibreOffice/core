@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:21:25 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -564,6 +564,11 @@ namespace
         return "com.sun.star.rendering.DXCanvas";
     }
     // ...................................................................
+    static const sal_Char* getDirectX9RendererAsciiName()
+    {
+        return "com.sun.star.rendering.DX9Canvas";
+    }
+    // ...................................................................
     static const sal_Char* getVCLRendererAsciiName()
     {
         return "com.sun.star.rendering.VCLCanvas";
@@ -583,13 +588,15 @@ namespace
                 if ( xORB.is() )
                 {
                     xAcceleratedRenderer = xORB->createInstance(
-                        ::rtl::OUString::createFromAscii( getDirectXRendererAsciiName() )
-                    );
+                        ::rtl::OUString::createFromAscii( getDirectX9RendererAsciiName() ));
 
                     if( !xAcceleratedRenderer.is() )
                         xAcceleratedRenderer = xORB->createInstance(
-                            ::rtl::OUString::createFromAscii( getCairoRendererAsciiName() )
-                        );
+                            ::rtl::OUString::createFromAscii( getDirectXRendererAsciiName() ));
+
+                    if( !xAcceleratedRenderer.is() )
+                        xAcceleratedRenderer = xORB->createInstance(
+                            ::rtl::OUString::createFromAscii( getCairoRendererAsciiName() ));
                 }
             }
             catch( const Exception& )
@@ -648,10 +655,12 @@ namespace
         do
         {
             ::rtl::OUString sServiceName = sPreferredServices.getToken( 0, ';', nTokenPos );
-            if ( sServiceName.equalsAscii( getDirectXRendererAsciiName() ) ||
+            if ( sServiceName.equalsAscii( getDirectX9RendererAsciiName() ) ||
+                 sServiceName.equalsAscii( getDirectXRendererAsciiName() ) ||
                  sServiceName.equalsAscii( getCairoRendererAsciiName() ) )
                 // the accelerated renderers are to be preferred (over the VCL renderer)
                 return TRUE;
+
             if ( sServiceName.equalsAscii( getVCLRendererAsciiName() ) )
                 // the VCL renderer is to be preferred (over the accelerated renderers)
                 return FALSE;
@@ -666,6 +675,8 @@ namespace
         ::rtl::OUStringBuffer aPreferredServices;
         if( _bEnabled )
         {
+            aPreferredServices.appendAscii( getDirectX9RendererAsciiName() );
+            aPreferredServices.append( (sal_Unicode)';' );
             aPreferredServices.appendAscii( getDirectXRendererAsciiName() );
             aPreferredServices.append( (sal_Unicode)';' );
             aPreferredServices.appendAscii( getCairoRendererAsciiName() );
