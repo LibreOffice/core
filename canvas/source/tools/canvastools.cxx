@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:25:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -60,8 +61,10 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 
+#include <canvas/canvastools.hxx>
 #include <canvas/base/linepolypolygonbase.hxx>
 
 #include <limits>
@@ -601,7 +604,27 @@ namespace canvas
             return o_rxParams;
         }
 
-        ::basegfx::B2DPolyPolygon getBoundMarkPolyPolygon( const ::basegfx::B2DRange& rRange )
+        awt::Rectangle getAbsoluteWindowRect( const awt::Rectangle&                  rRect,
+                                              const uno::Reference< awt::XWindow2 >& xWin  )
+        {
+            awt::Rectangle aRetVal( rRect );
+
+            ::Window* pWindow = VCLUnoHelper::GetWindow(xWin);
+            if( pWindow )
+            {
+                ::Point aPoint( aRetVal.X,
+                                aRetVal.Y );
+
+                aPoint = pWindow->OutputToScreenPixel( aPoint );
+
+                aRetVal.X = aPoint.X();
+                aRetVal.Y = aPoint.Y();
+            }
+
+            return aRetVal;
+        }
+
+        ::basegfx::B2DPolyPolygon getBoundMarksPolyPolygon( const ::basegfx::B2DRange& rRange )
         {
             ::basegfx::B2DPolyPolygon aPolyPoly;
             ::basegfx::B2DPolygon     aPoly;
