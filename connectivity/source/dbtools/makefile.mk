@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 12:14:08 $
+#   last change: $Author: kz $ $Date: 2006-12-13 16:14:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,8 @@ LIB1FILES=\
         $(SLB)$/sdbcx.lib		\
         $(SLB)$/commontools.lib \
         $(SLB)$/sql.lib			\
-        $(SLB)$/simpledbt.lib
+        $(SLB)$/simpledbt.lib   \
+        $(SLB)$/cnr.lib
 
 # --- dynamic library ---------------------------
 
