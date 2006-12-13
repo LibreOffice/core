@@ -4,9 +4,9 @@
  *
  *  $RCSfile: predicateinput.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:03:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:14:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ namespace dbtools
                 // translate it back into a string
                 sTransformedText = ::rtl::OUString();
                 pParseNode->parseNodeToPredicateStr(
-                    sTransformedText, m_xConnection->getMetaData(), m_xFormatter, _rxField,
+                    sTransformedText, m_xConnection, m_xFormatter, _rxField,
                     rParseContext.getPreferredLocale(), (sal_Char)nDecSeparator, &rParseContext
                 );
                 _rPredicateValue = sTransformedText;
@@ -372,7 +372,7 @@ namespace dbtools
                         OSL_ENSURE( pFuncSpecParent, "OPredicateInputController::getPredicateValue: an ODBC func spec node without parent?" );
                         if ( pFuncSpecParent )
                             pFuncSpecParent->parseNodeToStr(
-                                sReturn, m_xConnection->getMetaData(), &m_aParser.getContext(), sal_False, sal_True
+                                sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
                             );
                     }
                 }
@@ -388,12 +388,12 @@ namespace dbtools
                                 sReturn = pValueNode->getTokenValue();
                             else
                                 pValueNode->parseNodeToStr(
-                                    sReturn, m_xConnection->getMetaData(), &m_aParser.getContext(), sal_False, sal_True
+                                    sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
                                 );
                         }
                         else
                             pValueNode->parseNodeToStr(
-                                sReturn, m_xConnection->getMetaData(), &m_aParser.getContext(), sal_False, sal_True
+                                sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
                             );
                     }
                     else
