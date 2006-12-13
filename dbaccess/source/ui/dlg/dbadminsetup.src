@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:13:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT ( START_X , 8 ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 2* FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Bitte entscheiden Sie wie Sie fortfahren möchten" ;
+        Text [ de ] = "Bitte entscheiden Sie, wie Sie fortfahren möchten" ;
         Text[ en-US ] = "Decide how to proceed after saving the database";
         WordBreak = TRUE;
     };
@@ -348,14 +348,14 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT (START_X , 100 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 8 ) ;
-        Text[ de ] = "Wie möchten sie fortfahren, nachdem die Datenbank gespeichert wurde?";
+        Text[ de ] = "Wie möchten Sie fortfahren, nachdem die Datenbank gespeichert wurde?";
         Text[ en-US ] = "~After the database file has been saved, what do you want to do?" ;
     };
 
     CheckBox CB_OPENAFTERWARDS
     {
         HelpId = HID_PAGE_DBWIZARD_FINAL_CB_OPENAFTERWARDS ;
-        Pos = MAP_APPFONT (START_X +10, 118 )  ;
+        Pos = MAP_APPFONT (START_X + 6, 118 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X , 8 ) ;
         Text[ de ] = "Die Datenbank zum  ~Bearbeiten öffnen";
         Text[ en-US ] = "Open the database for editing" ;
@@ -364,7 +364,7 @@ TabPage PAGE_DBWIZARD_FINAL
     CheckBox CB_STARTTABLEWIZARD
     {
         HelpId = HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD ;
-        Pos = MAP_APPFONT (START_X + 10, 130 )  ;
+        Pos = MAP_APPFONT (START_X + 6, 130 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 8 ) ;
         Text[ de ] = "Eine ~Tabelle mit Hilfe des Tabellen-Assistenten erstellen";
         Text[ en-US ] = "Create tables using the table wizard" ;
