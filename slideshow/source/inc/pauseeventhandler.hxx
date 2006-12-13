@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pauseeventhandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:16:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:00:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,12 @@
 #ifndef _SLIDESHOW_PAUSEEVENTHANDLER_HXX
 #define _SLIDESHOW_PAUSEEVENTHANDLER_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
-
-#include <disposable.hxx>
 
 
 /* Definition of PauseHandler interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -56,7 +52,7 @@ namespace presentation
             EventMultiplexer object, and are called from there to
             handle pause events.
          */
-        class PauseEventHandler : public Disposable
+        class PauseEventHandler
         {
         public:
             /** Handle the event.
@@ -74,7 +70,6 @@ namespace presentation
         };
 
         typedef ::boost::shared_ptr< PauseEventHandler > PauseEventHandlerSharedPtr;
-
     }
 }
 
