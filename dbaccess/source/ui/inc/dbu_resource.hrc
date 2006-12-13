@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:05:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,15 +149,15 @@
 #define PAGE_USERDRIVER                 RID_PAGE_START + 19
 #define PAGE_MYSQL_JDBC                 RID_PAGE_START + 20
 #define PAGE_GENERATED_VALUES           RID_PAGE_START + 22
-#define PAGE_DS_PROPERTIES_1            RID_PAGE_START + 23
-#define PAGE_DS_PROPERTIES_2            RID_PAGE_START + 24
-#define PAGE_DS_PROPERTIES_4            RID_PAGE_START + 25
+    // FREE
+#define PAGE_DS_ADABAS_SETTINGS         RID_PAGE_START + 24
+#define PAGE_DS_FULL_ADVANCED_SETTINGS  RID_PAGE_START + 25
 #define PAGE_DS_PROPERTIES_FILE         RID_PAGE_START + 26
 #define PAGE_ORACLE_JDBC                RID_PAGE_START + 27
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
-#define PAGE_DS_PROPERTIES_3            RID_PAGE_START + 29
+#define PAGE_DS_ADO_SETTINGS            RID_PAGE_START + 29
 #define PAGE_DS_PROPERTIES_ACCESS       RID_PAGE_START + 30
-#define PAGE_DS_PROPERTIES_ENABLEOJ     RID_PAGE_START + 31
+#define PAGE_DS_MYSQL_SETTINGS          RID_PAGE_START + 31
 #define PAGE_MOZILLA                    RID_PAGE_START + 32
 
 #define PAGE_DBWIZARD_INTRO                     RID_PAGE_START + 40
