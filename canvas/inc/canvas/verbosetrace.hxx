@@ -4,9 +4,9 @@
  *
  *  $RCSfile: verbosetrace.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:06:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:35:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _CANVAS_VERBOSETRACE_HXX
-#define _CANVAS_VERBOSETRACE_HXX
+#ifndef INCLUDED_CANVAS_VERBOSETRACE_HXX
+#define INCLUDED_CANVAS_VERBOSETRACE_HXX
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
 /// Wrap OSL_TRACE with a verbosity switch
@@ -43,4 +43,4 @@
 #define VERBOSE_TRACE     1 ? ((void)0) : OSL_TRACE
 #endif
 
-#endif /* _CANVAS_VERBOSETRACE_HXX */
+#endif /* INCLUDED_CANVAS_VERBOSETRACE_HXX */
