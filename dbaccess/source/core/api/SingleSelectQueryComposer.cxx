@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:32:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,13 +220,13 @@ namespace
     /** transforms a parse node describing a complete statement into a pure select
         statement, without any filter/order/groupby/having clauses
     */
-    ::rtl::OUString getPureSelectStatement( const OSQLParseNode* _pRootNode, Reference< XDatabaseMetaData > _rxMedaData )
+    ::rtl::OUString getPureSelectStatement( const OSQLParseNode* _pRootNode, Reference< XConnection > _rxConnection )
     {
         ::rtl::OUString sSQL = STR_SELECT;
-        _pRootNode->getChild(1)->parseNodeToStr( sSQL, _rxMedaData );
-        _pRootNode->getChild(2)->parseNodeToStr( sSQL, _rxMedaData );
+        _pRootNode->getChild(1)->parseNodeToStr( sSQL, _rxConnection );
+        _pRootNode->getChild(2)->parseNodeToStr( sSQL, _rxConnection );
         sSQL += STR_FROM;
-        _pRootNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr( sSQL, _rxMedaData );
+        _pRootNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr( sSQL, _rxConnection );
         return sSQL;
     }
 
@@ -385,7 +385,7 @@ void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
     parseAndCheck_throwError( m_aSqlParser, command, m_aSqlIterator, *this );
 
     // strip it from all clauses, to have the pure SELECT statement
-    m_aPureSelectSQL = getPureSelectStatement( m_aSqlIterator.getParseTree(), m_xMetaData );
+    m_aPureSelectSQL = getPureSelectStatement( m_aSqlIterator.getParseTree(), m_xConnection );
 
     // update columns and tables
     getColumns();
@@ -965,9 +965,9 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
 
 
             //  pCondition->parseNodeToStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
-            pCondition->parseNodeToStr(aValue,m_xMetaData,NULL);
+            pCondition->parseNodeToStr( aValue, m_xConnection, NULL );
             //  pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
-            pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, NULL);
+            pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection, NULL );
 
             // don't display the column name
             aValue = aValue.copy(aColumnName.getLength());
@@ -1069,7 +1069,8 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
             // go forward
             for (;i < pCondition->count();i++)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
+                pCondition->getChild(i)->parseNodeToPredicateStr(
+                    aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>(m_sDecimalSep.toChar() ) );
         }
         else if (SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
         {
@@ -1117,7 +1118,8 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
             // go backward
             for (; i >= 0; i--)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
+                pCondition->getChild(i)->parseNodeToPredicateStr(
+                    aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
         }
         else
             return sal_False;
@@ -1133,8 +1135,8 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         ::rtl::OUString aValue;
         ::rtl::OUString aColumnName;
 
-        pCondition->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
-        pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
+        pCondition->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
+        pCondition->getChild(0)->parseNodeToPredicateStr( aColumnName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep .toChar() ) );
 
         // don't display the column name
         aValue = aValue.copy(aColumnName.getLength());
@@ -1156,13 +1158,13 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         // Feldnamen
         sal_uInt16 i;
         for (i=0;i< pLhs->count();i++)
-             pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
+             pCondition->getChild(i)->parseNodeToPredicateStr( aName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
         // Kriterium
         aItem.Handle = pCondition->getChild(1)->getNodeType();
         aValue       = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
-            pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
+            pCondition->getChild(i)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
         aItem.Name = aName;
         aItem.Value <<= aValue;
@@ -1380,7 +1382,7 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getOrderColumns( 
 
     const OSQLParseNode* pNode = _aGetFunctor( &_rIterator );
     if ( pNode )
-        pNode->parseNodeToStr(sResult,m_xMetaData);
+        pNode->parseNodeToStr( sResult, m_xConnection );
 
     return sResult;
 }
