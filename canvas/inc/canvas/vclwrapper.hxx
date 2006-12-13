@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclwrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:05:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:35:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _CANVAS_VCLWRAPPER_HXX
-#define _CANVAS_VCLWRAPPER_HXX
+#ifndef INCLUDED_CANVAS_VCLWRAPPER_HXX
+#define INCLUDED_CANVAS_VCLWRAPPER_HXX
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -160,4 +160,4 @@ namespace canvas
     }
 }
 
-#endif /* _CANVAS_VCLWRAPPER_HXX */
+#endif /* INCLUDED_CANVAS_VCLWRAPPER_HXX */
