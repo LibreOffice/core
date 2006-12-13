@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:29:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,24 @@ ProfileItem gid_Profileitem_Version_Updateurl
   #else
     Value = "";
   #endif
+End
+
+ProfileItem gid_Profileitem_Version_Updateid
+    ProfileID = gid_Profile_Version_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Order = 16;
+    Key = "UpdateID";
+    Value = "<updateid>";
+End
+
+ProfileItem gid_Profileitem_Version_Useragent
+    ProfileID = gid_Profile_Version_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Order = 17;
+    Key = "UpdateUserAgent";
+    Value = "<useragent>";
 End
 
 // for the configmgr
