@@ -4,9 +4,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:40:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,11 +198,6 @@ namespace connectivity
                 const ::rtl::OUString& _rCommand,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
-
-        // ------------------------------------------------
-        virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
-                                        ,const ::rtl::OUString& _sProperty,
-                                        sal_Bool _bDefault = sal_False) const;
 
         // ------------------------------------------------
         virtual bool isEmbeddedInDatabase(
