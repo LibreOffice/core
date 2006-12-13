@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesqueue.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 14:48:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,11 @@
 
 #include <deque>
 
-#include <activity.hxx>
-#include <unoviewcontainer.hxx>
-#include <eventmultiplexer.hxx>
+#include "activity.hxx"
+#include "unoviewcontainer.hxx"
+#include "eventmultiplexer.hxx"
 
-#include "canvas/elapsedtime.hxx"
+#include <canvas/elapsedtime.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp> // for boost::noncopyable
@@ -50,7 +50,7 @@
 
 /* Definition of ActivitiesQueue class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
