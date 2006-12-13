@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smilfunctionparser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:21:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 #include <expressionnode.hxx>
 #include <slideshowexceptions.hxx>
 
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
+
+#include <boost/utility.hpp>
 
 namespace rtl
 {
@@ -50,11 +50,11 @@ namespace rtl
 
 /* Definition of SmilFunctionParser class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
-        class SmilFunctionParser
+        class SmilFunctionParser : private boost::noncopyable
         {
         public:
             /** Parse a string containing a SMIL value.
@@ -168,10 +168,6 @@ namespace presentation
             // disabled constructor/destructor, since this is
             // supposed to be a singleton
             SmilFunctionParser();
-
-            // default: disabled copy/assignment
-            SmilFunctionParser(const SmilFunctionParser&);
-            SmilFunctionParser& operator=( const SmilFunctionParser& );
         };
     }
 }
