@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parsenode_s.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:13:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:26:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,17 +88,17 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    void OSimpleParseNode::parseNodeToStr(::rtl::OUString& _rString, const Reference< XDatabaseMetaData >& _rxMeta,const IParseContext* _pContext) const
+    void OSimpleParseNode::parseNodeToStr(::rtl::OUString& _rString, const Reference< XConnection >& _rxConnection,const IParseContext* _pContext) const
     {
-        m_pFullNode->parseNodeToStr(_rString, _rxMeta,_pContext);
+        m_pFullNode->parseNodeToStr( _rString, _rxConnection, _pContext );
     }
 
     //----------------------------------------------------------------
-    void OSimpleParseNode::parseNodeToPredicateStr(::rtl::OUString& _rString, const Reference< XDatabaseMetaData >& _rxMeta,
+    void OSimpleParseNode::parseNodeToPredicateStr(::rtl::OUString& _rString, const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField,
         const Locale& _rIntl, const sal_Char _cDecSeparator,const IParseContext* _pContext) const
     {
-        m_pFullNode->parseNodeToPredicateStr(_rString, _rxMeta, _rxFormatter, _rxField, _rIntl, _cDecSeparator,_pContext);
+        m_pFullNode->parseNodeToPredicateStr( _rString, _rxConnection, _rxFormatter, _rxField, _rIntl, _cDecSeparator, _pContext );
     }
 
 //........................................................................
