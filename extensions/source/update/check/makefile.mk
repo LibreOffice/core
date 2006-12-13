@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:00:30 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:17:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,6 @@ PACKAGE=org.openoffice.Office
 
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE=$(UNOUCROUT)
 
 XSLDIR=$(SOLARXMLDIR)$/processing
 XCSROOT=$(SOLARXMLDIR)
@@ -99,6 +94,16 @@ MYXCUFILES= \
 LOCALIZEDFILES= \
     Addons.xcu \
     Jobs.xcu
+
+.IF "$(test)" != ""
+APP1TARGET=updateprotocoltest
+APP1STDLIBS= $(SHL1STDLIBS)
+APP1OBJS= \
+    $(SLO)$/updateprotocol.obj \
+    $(SLO)$/updateprotocoltest.obj
+
+
+.ENDIF # "$(test)" != ""
 
 # --- Targets ---
 
