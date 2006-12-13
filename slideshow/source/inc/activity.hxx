@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activity.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:47:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:50:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,16 @@
 #ifndef _SLIDESHOW_ACTIVITY_HXX
 #define _SLIDESHOW_ACTIVITY_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include <disposable.hxx>
 
 
 /* Definition of Activity interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
