@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shape.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:05:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,21 @@
 #ifndef _SLIDESHOW_SHAPE_HXX
 #define _SLIDESHOW_SHAPE_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
 
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
+#include <boost/utility.hpp>
 
 #include <viewlayer.hxx>
+#include <set>
 
 #include <vector>
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -73,7 +65,7 @@ namespace presentation
             slide's shape, providing bound rect, underlying XShape and
             basic paint methods.
          */
-        class Shape
+        class Shape : private boost::noncopyable
         {
         public:
             virtual ~Shape() {}
@@ -116,6 +108,22 @@ namespace presentation
              */
             virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) = 0;
 
+            /** Withdraw all view layers at once
+
+                This method will be faster than repeated
+                removeViewLayer() calls.
+             */
+            virtual bool clearAllViewLayers() = 0;
+
+            // TODO(Q3): This is a wart. Use broadcaster, where
+            // everyone interested can register at.
+
+            /** Notify that view layer has changed
+
+                @param rNewLayer
+                View layer that changed (size, transformation etc.)
+             */
+            virtual void viewLayerChanged( const ViewLayerSharedPtr& rNewLayer ) = 0;
 
             // render methods
             //------------------------------------------------------------------
@@ -236,8 +244,9 @@ namespace presentation
              */
             virtual bool hasIntrinsicAnimation() const = 0;
 
-            typedef ::std::pair< ::basegfx::B2DRectangle, ::rtl::OUString >
-            HyperLinkRegion;
+            typedef ::std::pair< ::basegfx::B2DRectangle,
+                                 ::rtl::OUString >        HyperLinkRegion;
+            typedef ::std::vector<HyperLinkRegion>        HyperLinkRegions;
 
             /** Checks whether this shape has hyperlinks to be clicked.
              */
@@ -246,8 +255,7 @@ namespace presentation
             /** @return the position and size of all hyperlinks relative to
                         the upper left corner of the shape.
             */
-            virtual ::std::vector<HyperLinkRegion> getHyperlinkRegions() const
-                = 0;
+            virtual HyperLinkRegions getHyperlinkRegions() const = 0;
 
             // Misc
             //------------------------------------------------------------------
@@ -262,6 +270,9 @@ namespace presentation
              */
             struct lessThanShape
             {
+                // make functor adaptable (to boost::bind)
+                typedef bool result_type;
+
                 // since the ZOrder property on the XShape has somewhat
                 // peculiar attributes (it's basically the index of the shapes
                 // in the drawing layer's SdrObjList - which means, it starts
@@ -287,6 +298,9 @@ namespace presentation
 
         typedef ::boost::shared_ptr< Shape > ShapeSharedPtr;
 
+        /** A set which contains all shapes in an ordered fashion.
+         */
+        typedef ::std::set< ShapeSharedPtr, Shape::lessThanShape >  ShapeSet;
     }
 }
 
