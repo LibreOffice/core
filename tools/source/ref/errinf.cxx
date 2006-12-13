@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errinf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:00:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,8 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
-USHORT ErrorHandler::HandleError(ULONG lId, USHORT nFlags)
+USHORT ErrorHandler::HandleError_Impl(
+    ULONG lId, USHORT nFlags, BOOL bJustCreateString, String & rError)
 {
 
 /*  [Beschreibung]
@@ -340,39 +341,76 @@ USHORT ErrorHandler::HandleError(ULONG lId, USHORT nFlags)
 
     if(ErrHdl_Impl::CreateString(pData->pFirstHdl,pInfo,aErr,nErrFlags))
     {
-        delete pInfo;
+    if (bJustCreateString)
+    {
+        rError = aErr;
+        return 1;
+    }
+    else
+    {
         if(!pData->pDsp)
         {
-
-            ByteString aStr("Action: ");
-            aStr += ByteString( aAction, RTL_TEXTENCODING_ASCII_US );
-            aStr += ByteString("\nFehler: ");
-            aStr += ByteString( aErr, RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aStr.GetBuffer() );
+        ByteString aStr("Action: ");
+        aStr += ByteString( aAction, RTL_TEXTENCODING_ASCII_US );
+        aStr += ByteString("\nFehler: ");
+        aStr += ByteString( aErr, RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aStr.GetBuffer() );
         }
         else
-            if(!pData->bIsWindowDsp)
-            {
-                (*(BasicDisplayErrorFunc*)pData->pDsp)(aErr,aAction);
-                return 0;
-            }
-            else
-            {
-                if( nFlags != USHRT_MAX )
-                    nErrFlags = nFlags;
-                return (*(WindowDisplayErrorFunc*)pData->pDsp)(
-                    pParent, nErrFlags, aErr, aAction);
-            }
+        {
+        delete pInfo;
+        if(!pData->bIsWindowDsp)
+        {
+            (*(BasicDisplayErrorFunc*)pData->pDsp)(aErr,aAction);
+            return 0;
+        }
+        else
+        {
+            if( nFlags != USHRT_MAX )
+            nErrFlags = nFlags;
+            return (*(WindowDisplayErrorFunc*)pData->pDsp)(
+            pParent, nErrFlags, aErr, aAction);
+        }
+        }
     }
-
+    }
     DBG_ERROR("Error nicht behandelt");
     // Error 1 ist General Error im Sfx
     if(pInfo->GetErrorCode()!=1)
-        HandleError(1, USHRT_MAX);
+        HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
     else
         DBG_ERROR("Error 1 nicht gehandeled");
     delete pInfo;
     return 0;
+}
+
+// static
+BOOL ErrorHandler::GetErrorString(ULONG lId, String& rStr)
+{
+    return (BOOL)HandleError_Impl( lId, USHRT_MAX, TRUE, rStr );
+}
+
+USHORT ErrorHandler::HandleError(ULONG lId, USHORT nFlags)
+{
+
+/*  [Beschreibung]
+    Handelt einen Fehler ab. lId ist die FehlerId, nFlags sind die
+    ErrorFlags. Werden nFlags nicht abgegeben, so werden die in
+    der DynamicErrorInfo angegebenen Flags bzw. die aus der Resource
+    verwendet.
+
+    Also:
+
+    1. nFlags,
+    2. Resource Flags
+    3. Dynamic Flags
+    4. Default ERRCODE_BUTTON_OK, ERRCODE_MSG_ERROR
+
+
+    */
+
+    String aDummy;
+    return HandleError_Impl( lId, nFlags, FALSE, aDummy );
 }
 
 BOOL ErrorHandler::ForwCreateString(const ErrorInfo* pInfo, String& rStr, USHORT &rFlags) const
