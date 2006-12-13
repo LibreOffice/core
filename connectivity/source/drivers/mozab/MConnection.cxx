@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:08:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@
 #ifndef CONNECTIVITY_DIAGNOSE_EX_H
 #include "diagnose_ex.h"
 #endif
+
+#include "resource/mozab_res.hrc"
 
 #ifndef COMPHELPER_OFFICE_RESOURCE_BUNDLE_HXX
 #include <comphelper/officeresourcebundle.hxx>
@@ -167,6 +169,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
 {
+    acquire();
     if(!isClosed())
         close();
     m_pDriver->release();
@@ -206,8 +209,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else
         {
             OSL_TRACE( "No subschema given!!!\n");
-            ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No subschema provided")),NULL);
+            throwGenericSQLException( STR_URI_SYNTAX_ERROR );
         }
     }
     else
@@ -317,10 +319,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         if ( m_sHostName.getLength() != 0 ) {
             m_sMozillaURI += m_sHostName;
         }
-        else {
-            ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No HostName provided")),NULL);
-        }
+        else
+            throwGenericSQLException( STR_NO_HOSTNAME );
 
         if ( nPortNumber > 0 ) {
             m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(":") );
@@ -331,10 +331,9 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") );
             m_sMozillaURI += sBaseDN;
         }
-        else {
-            ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No BaseDN provided")),NULL);
-        }
+        else
+            throwGenericSQLException( STR_NO_BASEDN );
+
         // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
         m_sMozillaURI += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?(or(DisplayName,=,DontDoThisAtHome)))"));
 
@@ -350,8 +349,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     else
     {
         OSL_TRACE("Invalid subschema given!!!\n");
-        ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid subschema provided")),NULL);
+        throwGenericSQLException( STR_URI_SYNTAX_ERROR );
     }
 
     OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")), usesFactory() ? "uses factory" : "no factory");
