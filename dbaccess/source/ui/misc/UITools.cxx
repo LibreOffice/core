@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:31:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1372,12 +1372,18 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 // check if SQL92 name checking is enabled
 sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
-    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLESQL92CHECK);
+    return ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_ENABLESQL92CHECK );
 }
 // -----------------------------------------------------------------------------
 sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
 {
-    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,INFO_APPEND_TABLE_ALIAS,sal_False);
+    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_APPEND_TABLE_ALIAS );
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool generateAsBeforeTableAlias(const Reference<XConnection>& _xConnection)
+{
+    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_AS_BEFORE_CORRELATION_NAME );
 }
 
 // -----------------------------------------------------------------------------
