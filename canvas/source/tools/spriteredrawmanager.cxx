@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spriteredrawmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:27:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,10 +355,12 @@ namespace canvas
         aTotalBounds.expand( o_rMoveEnd );
 
         OSL_POSTCOND( rUpdateArea.maTotalBounds.equal(
-                          ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( aTotalBounds )),
+                          ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( aTotalBounds ),
+                          0.5 ),
                       "SpriteRedrawManager::isAreaUpdateScroll(): sprite area and total area mismatch" );
         OSL_POSTCOND( o_rMoveStart.getRange().equal(
-                          o_rMoveEnd.getRange()),
+                          o_rMoveEnd.getRange(),
+                          0.5 ),
                       "SpriteRedrawManager::isAreaUpdateScroll(): scroll start and end area have mismatching size" );
 #endif
 
