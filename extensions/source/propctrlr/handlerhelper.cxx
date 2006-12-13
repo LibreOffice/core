@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:19:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_HANDLERHELPER_HXX
 #include "handlerhelper.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
+#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
