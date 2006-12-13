@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_slotid.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:48:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@
 #define SID_QUERY_VIEW_ALIASES          ( SID_DBACCESS_START +  48 )
 #define SID_QUERY_DISTINCT_VALUES       ( SID_DBACCESS_START +  49 )
 #define SID_FORM_CREATE_REPWIZ_PRE_SEL  ( SID_DBACCESS_START +  50 )
-#define SID_REPORT_CREATE_REPWIZ_PRE_SEL    ( SID_DBACCESS_START +  51 )
+#define SID_REPORT_CREATE_REPWIZ_PRE_SEL ( SID_DBACCESS_START + 51 )
 #define SID_DB_QUERY_PREVIEW            ( SID_DBACCESS_START +  52 )
 #define SID_APP_NEW_FOLDER              ( SID_DBACCESS_START +  53 )
 #define SID_APP_NEW_FORM                ( SID_DBACCESS_START +  54 )
@@ -114,6 +114,7 @@
 #define SID_DB_FORM_NEW_PILOT           ( SID_DBACCESS_START +  63 )
 #define SID_DB_NEW_VIEW_SQL             ( SID_DBACCESS_START +  64 )
 
+#define SID_DB_APP_EDIT_SQL_VIEW        ( SID_DBACCESS_START +  65 )
 
 
 #endif // _DBACCESS_SLOTID_HRC_
