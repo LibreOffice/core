@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:05:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,9 @@ namespace connectivity
             SQLHANDLE       createStatementHandle();
             // close and free the handle and set it to SQL_NULLHANDLE
             void            freeStatementHandle(SQLHANDLE& _pHandle);
+
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
+                getConnectionInfo() const { return m_aInfo; }
         };
     }
 }
