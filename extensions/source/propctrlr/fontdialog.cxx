@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:16:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_FONTDIALOG_HXX_
 #include "fontdialog.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
+#ifndef EXTENSIONS_PROPRESID_HRC
 #include "formresid.hrc"
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
