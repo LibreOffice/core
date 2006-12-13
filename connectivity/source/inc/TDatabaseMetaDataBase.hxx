@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDatabaseMetaDataBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:39:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
 #define _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA2_HPP_
+#include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -52,17 +52,30 @@
 namespace connectivity
 {
         class ODatabaseMetaDataBase :   public  comphelper::OBaseMutex,
-                                        public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDatabaseMetaData,
+                                        public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDatabaseMetaData2,
                                                                         ::com::sun::star::lang::XEventListener>
         {
+        private:
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aConnectionInfo;
+
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>   m_xListenerHelper; // forward the calls from the connection to me
 
             virtual ~ODatabaseMetaDataBase();
+
+        protected:
+            inline  void    setConnectionInfo( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo )
+            {
+                m_aConnectionInfo = _rInfo;
+            }
+
         public:
 
             ODatabaseMetaDataBase(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection);
+
+            // XDatabaseMetaData2
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getConnectionInfo(  ) throw (::com::sun::star::uno::RuntimeException);
 
             // XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
