@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:43:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ namespace dbaui
                 <TRUE/> if an error occured otherwise <FALSE/>
         */
         sal_Bool        fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                         OTableFieldDescRef& _pEntry,
                                         sal_Bool& _bListAction);
         sal_Bool        fillColumnRef(  const ::rtl::OUString& _sColumnName,
