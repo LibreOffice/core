@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainernode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:35:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 
 using namespace com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 BaseContainerNode::BaseContainerNode(
@@ -179,5 +179,5 @@ void BaseContainerNode::showState() const
 #endif
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
