@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:40:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,6 +459,13 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         //////////////////////////////////////////////////////////////////
         // delete
         //////////////////////////////////////////////////////////////////
+        Sequence< ::rtl::OUString> aSeq = getElementNames();
+        const ::rtl::OUString* pIter = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        for(;pIter != pEnd;++pIter)
+            removeByName(*pIter);
+
+        dispose();
     }
     else
         aRet = OContentHelper::execute(aCommand,CommandId,Environment);
