@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:05:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -876,6 +876,40 @@ DBG_NAME(OFinalDBPageSetup)
         m_aCBStartTableWizard.SetClickHdl(getControlModifiedLink());
         m_aRBRegisterDataSource.SetState(sal_True);
         FreeResource();
+
+        sal_Int32 nUnrelatedHeight  = LogicToPixel( Size( 0, UNRELATED_CONTROLS ), MAP_APPFONT ).Height();
+        sal_Int32 nRelatedHeight    = LogicToPixel( Size( 0, RELATED_CONTROLS ), MAP_APPFONT ).Height();
+
+        ::std::pair<Window*,sal_Int32> pWindows[] = {
+            ::std::pair<Window*,sal_Int32>(&m_aFTFinalHelpText,nRelatedHeight)
+            ,::std::pair<Window*,sal_Int32>(&m_aRBRegisterDataSource,nRelatedHeight)
+            ,::std::pair<Window*,sal_Int32>(&m_aRBDontregisterDataSource,nUnrelatedHeight)
+            ,::std::pair<Window*,sal_Int32>(&m_aFTAdditionalSettings,nRelatedHeight)
+            ,::std::pair<Window*,sal_Int32>(&m_aCBOpenAfterwards,nRelatedHeight)
+            ,::std::pair<Window*,sal_Int32>(&m_aCBStartTableWizard,nUnrelatedHeight)
+            ,::std::pair<Window*,sal_Int32>(&m_aFTFinalText,nUnrelatedHeight)
+        };
+
+        Point aPos(m_aFTFinalHeader.GetPosPixel());
+        Size aStart(m_aFTFinalHeader.GetSizePixel());
+        aPos.Y() += aStart.Height() + nUnrelatedHeight;
+        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        for (sal_Int32 i=0; i < nCount; ++i)
+        {
+            aPos.X() = pWindows[i].first->GetPosPixel().X();
+            Size aSize = pWindows[i].first->GetSizePixel();
+            FixedText* pText = dynamic_cast<FixedText*>(pWindows[i].first);
+            CheckBox* pCheck = dynamic_cast<CheckBox*>(pWindows[i].first);
+            RadioButton* pRadio = dynamic_cast<RadioButton*>(pWindows[i].first);
+            if ( pText )
+                aSize = pText->CalcMinimumSize(aSize.Width());
+            else if ( pRadio )
+                aSize = pRadio->CalcMinimumSize(aSize.Width());
+            else if ( pCheck )
+                aSize = pCheck->CalcMinimumSize(aSize.Width());
+            pWindows[i].first->SetPosSizePixel(aPos,aSize);
+            aPos.Y() += aSize.Height() + pWindows[i].second;
+        }
     }
 
 
