@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:29:30 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,6 +749,14 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() > 0
                                     && getContainer()->isALeafSelected();
                 break;
+            case SID_DB_APP_EDIT_SQL_VIEW:
+                aReturn.bEnabled =
+                    (   ( !isDataSourceReadOnly() )
+                    &&  ( getContainer()->getElementType() == E_QUERY )
+                    &&  ( getContainer()->getSelectionCount() > 0 )
+                    &&  ( getContainer()->isALeafSelected() )
+                    );
+                break;
             case SID_DB_APP_OPEN:
             case SID_DB_APP_TABLE_OPEN:
             case SID_DB_APP_QUERY_OPEN:
@@ -1188,6 +1196,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 renameEntry();
                 break;
             case SID_DB_APP_EDIT:
+            case SID_DB_APP_EDIT_SQL_VIEW:
             case SID_DB_APP_TABLE_EDIT:
             case SID_DB_APP_QUERY_EDIT:
             case SID_DB_APP_FORM_EDIT:
@@ -1333,6 +1342,7 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:Delete",             SID_DB_APP_DELETE,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBRename",           SID_DB_APP_RENAME,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBEdit",             SID_DB_APP_EDIT,           CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBEditSqlView",      SID_DB_APP_EDIT_SQL_VIEW,  CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBOpen",             SID_DB_APP_OPEN,           CommandGroup::EDIT );
 
     implDescribeSupportedFeature( ".uno:DBTableDelete",      SID_DB_APP_TABLE_DELETE,   CommandGroup::EDIT );
@@ -1619,7 +1629,11 @@ bool OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
     {
         try
         {
-            openElement( getContainer()->getQualifiedName( _pTree->GetHdlEntry() ), getContainer()->getElementType() );
+            openElement(
+                getContainer()->getQualifiedName( _pTree->GetHdlEntry() ),
+                getContainer()->getElementType(),
+                OLinkedDocumentsAccess::OPEN_NORMAL
+            );
             return true;    // handled
         }
         catch(const Exception&)
@@ -1630,7 +1644,8 @@ bool OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
     return false;   // not handled
 }
 // -----------------------------------------------------------------------------
-Reference< XComponent > OApplicationController::openElement(const ::rtl::OUString& _sName,ElementType _eType,OLinkedDocumentsAccess::EOpenMode _eOpenMode)
+Reference< XComponent > OApplicationController::openElement(const ::rtl::OUString& _sName, ElementType _eType,
+    OLinkedDocumentsAccess::EOpenMode _eOpenMode, sal_uInt16 _nInstigatorCommand )
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
     Reference< XComponent > xRet;
@@ -1667,7 +1682,11 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                         }
                         else
                         {
-                            pDesigner.reset( new QueryDesigner( getORB(), this, sal_False, sal_False ) );
+                            sal_Bool bQuerySQLMode =
+                                (   ( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW )
+                                &&  ( _eType == E_QUERY )
+                                );
+                            pDesigner.reset( new QueryDesigner( getORB(), this, sal_False, bQuerySQLMode ) );
                         }
                         aDataSource <<= m_xDataSource;
                     }
