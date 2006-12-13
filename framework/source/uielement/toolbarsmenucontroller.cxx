@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:26:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,6 +625,7 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( Ru
     m_xDispatch.clear();
     m_xDocCfgMgr.clear();
     m_xModuleCfgMgr.clear();
+    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -893,6 +894,10 @@ void SAL_CALL ToolbarsMenuController::deactivate( const css::awt::MenuEvent& ) t
 void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
@@ -934,7 +939,9 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
         {
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
-            m_bInitialized = sal_True;
+            m_bInitialized  = true;
+
+            m_aBaseURL      = determineBaseURL( aCommandURL );
 
             Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance(
                                                             SERVICENAME_MODULEMANAGER ),
