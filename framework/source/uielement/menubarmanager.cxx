@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:43:52 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -878,7 +878,24 @@ void MenuBarManager::RemoveListener()
                     xEventListener->disposing( aEventObject );
                 }
 
-                // Release references to destroy controller and popup menu
+                // We now provide a popup menu controller to external code.
+                // Therefore the life-time must be explicitly handled via
+                // dispose!!
+                try
+                {
+                    Reference< XComponent > xComponent( pItemHandler->xPopupMenuController, UNO_QUERY );
+                    if ( xComponent.is() )
+                        xComponent->dispose();
+                }
+                catch ( RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( Exception& )
+                {
+                }
+
+                // Release references to controller and popup menu
                 pItemHandler->xPopupMenuController.clear();
                 pItemHandler->xPopupMenu.clear();
             }
@@ -2201,6 +2218,52 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
         // add itself as frame action listener
         m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+    }
+}
+
+void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController )
+{
+    String aPopupScheme = String::CreateFromAscii( "vnd.sun.star.popup:" );
+
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+    std::vector< MenuItemHandler* >::iterator p;
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    {
+        MenuItemHandler* pItemHandler = *p;
+        if ( pItemHandler->xPopupMenuController.is() )
+        {
+            Reference< XDispatchProvider > xDispatchProvider( pItemHandler->xPopupMenuController, UNO_QUERY );
+
+            PopupControllerEntry aPopupControllerEntry;
+            aPopupControllerEntry.m_xDispatchProvider = xDispatchProvider;
+
+            // Just use the main part of the URL for popup menu controllers
+            sal_Int32     nQueryPart( 0 );
+            sal_Int32     nSchemePart( 0 );
+            rtl::OUString aMainURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:" ));
+            rtl::OUString aMenuURL( pItemHandler->aMenuItemURL );
+
+            nSchemePart = aMenuURL.indexOf( ':' );
+            if (( nSchemePart > 0 ) &&
+                ( aMenuURL.getLength() > ( nSchemePart+1 )))
+            {
+                nQueryPart  = aMenuURL.indexOf( '?', nSchemePart );
+                if ( nQueryPart > 0 )
+                    aMainURL += aMenuURL.copy( nSchemePart, nQueryPart-nSchemePart );
+                else if ( nQueryPart == -1 )
+                    aMainURL += aMenuURL.copy( nSchemePart+1 );
+
+                rPopupController.insert( PopupControllerCache::value_type(
+                                           aMainURL, aPopupControllerEntry ));
+            }
+        }
+        if ( pItemHandler->xSubMenuManager.is() )
+        {
+            MenuBarManager* pMenuBarManager = (MenuBarManager*)(pItemHandler->xSubMenuManager.get());
+            if ( pMenuBarManager )
+                pMenuBarManager->GetPopupController( rPopupController );
+        }
     }
 }
 
