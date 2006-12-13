@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:38:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:23:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,25 +37,32 @@
 #define WAITSYMBOL_HXX_INCLUDED
 
 #include <com/sun/star/rendering/XBitmap.hpp>
+#include <cppcanvas/customsprite.hxx>
 
-#include "cppcanvas/customsprite.hxx"
 #include "disposable.hxx"
+#include "vieweventhandler.hxx"
 #include "eventmultiplexer.hxx"
 #include "unoview.hxx"
-#include "boost/shared_ptr.hpp"
-#include "boost/bind.hpp"
-#include "boost/utility.hpp" // for noncopyable
+
+#include <boost/shared_ptr.hpp>
+#include <boost/bind.hpp>
+#include <boost/utility.hpp> // for noncopyable
 #include <vector>
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
-class WaitSymbol : public Disposable, private ::boost::noncopyable
+typedef boost::shared_ptr<class WaitSymbol> WaitSymbolSharedPtr;
+
+class WaitSymbol : public Disposable,
+                   public ViewEventHandler,
+                   private ::boost::noncopyable
 {
 public:
-    WaitSymbol( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap>& xBitmap,
-                EventMultiplexer&                      rEventMultiplexer );
+    static WaitSymbolSharedPtr create( const ::com::sun::star::uno::Reference<
+                                             ::com::sun::star::rendering::XBitmap>& xBitmap,
+                                       EventMultiplexer&                            rEventMultiplexer,
+                                       const UnoViewContainer&                      rViewContainer );
 
     /** Shows the wait symbol.
      */
@@ -65,18 +72,20 @@ public:
      */
     void hide() { setVisible(false); }
 
-    /** Adds a view for display.
-     */
-    void addView( UnoViewSharedPtr const & rView );
-
-    void removeView( UnoViewSharedPtr const & rView );
-
-    void notifyViewChange();
-
     // Disposable:
     virtual void dispose();
 
+    // ViewEventHandler
+    void viewAdded( const UnoViewSharedPtr& rView );
+    void viewRemoved( const UnoViewSharedPtr& rView );
+    void viewChanged( const UnoViewSharedPtr& rView );
+
 private:
+    WaitSymbol( const ::com::sun::star::uno::Reference<
+                      ::com::sun::star::rendering::XBitmap>& xBitmap,
+                EventMultiplexer&                            rEventMultiplexer,
+                const UnoViewContainer&                      rViewContainer );
+
     ::com::sun::star::uno::Reference<
         ::com::sun::star::rendering::XBitmap> m_xBitmap;
 
