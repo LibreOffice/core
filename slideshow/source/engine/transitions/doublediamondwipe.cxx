@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doublediamondwipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:38:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include "doublediamondwipe.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/point/b2dpoint.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 ::basegfx::B2DPolyPolygon DoubleDiamondWipe::operator () ( double t )
