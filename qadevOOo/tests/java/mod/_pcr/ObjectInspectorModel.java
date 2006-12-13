@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectInspectorModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:50:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,12 +131,20 @@ public class ObjectInspectorModel extends TestCase {
             Object[] oHandlerFactories = new Object[1];
             oHandlerFactories[0] = new PropertyHandlerFactroy();
 
+            int minHelpTextLines = 200;
+            int maxHelpTextLines = 400;
+
             XObjectInspectorModel oInspectorModel = com.sun.star.inspection.ObjectInspectorModel.
-                    createWithHandlerFactories(xDefaultContext, oHandlerFactories);
+                    createWithHandlerFactoriesAndHelpSection(xDefaultContext, oHandlerFactories,
+                                                             minHelpTextLines, maxHelpTextLines);
 
             log.println("ImplementationName '" + utils.getImplName(oInspectorModel) + "'");
 
             TestEnvironment tEnv = new TestEnvironment(oInspectorModel);
+
+            // com.sun.star.inspection.XObjectInspectorModel
+            tEnv.addObjRelation("minHelpTextLines", new Integer(minHelpTextLines));
+            tEnv.addObjRelation("maxHelpTextLines", new Integer(maxHelpTextLines));
 
             return tEnv;
         } catch (com.sun.star.uno.Exception e) {
