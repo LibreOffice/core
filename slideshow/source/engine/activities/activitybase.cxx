@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitybase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:57:17 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <activitybase.hxx>
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -69,7 +69,7 @@ namespace presentation
             mbIsActive = false;
 
             // dispose event
-            if( mpEndEvent.get() )
+            if( mpEndEvent )
                 mpEndEvent->dispose();
 
             // release references
@@ -139,9 +139,9 @@ namespace presentation
         void ActivityBase::setTargets( const AnimatableShapeSharedPtr&      rShape,
                                        const ShapeAttributeLayerSharedPtr&  rAttrLayer )
         {
-            ENSURE_AND_THROW( rShape.get(),
+            ENSURE_AND_THROW( rShape,
                               "ActivityBase::setTargets(): Invalid shape" );
-            ENSURE_AND_THROW( rAttrLayer.get(),
+            ENSURE_AND_THROW( rAttrLayer,
                               "ActivityBase::setTargets(): Invalid attribute layer" );
 
             mpShape = rShape;
@@ -154,7 +154,7 @@ namespace presentation
             mbIsActive = false;
 
             // Activity is ending, queue event, then
-            if( mpEndEvent.get() )
+            if( mpEndEvent )
                 mrEventQueue.addEvent( mpEndEvent );
 
             // release references
