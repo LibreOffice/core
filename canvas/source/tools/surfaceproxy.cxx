@@ -4,9 +4,9 @@
  *
  *  $RCSfile: surfaceproxy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:27:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <boost/bind.hpp>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "surfaceproxy.hxx"
 
 namespace canvas
@@ -159,10 +160,21 @@ namespace canvas
                              const ::basegfx::B2DPolyPolygon& rClipPoly,
                              const ::basegfx::B2DHomMatrix&   rTransform )
     {
-        const ::basegfx::B2DPolyPolygon& rPreparedPolyPolygon(
-            ::basegfx::tools::addPointsAtCutsAndTouches(rClipPoly) );
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
-            ::basegfx::triangulator::triangulate(rPreparedPolyPolygon));
+            ::basegfx::triangulator::triangulate(rClipPoly));
+
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+        // dump polygons
+        OSL_TRACE( "Original clip polygon: %s\n"
+                   "Triangulated polygon: %s\n",
+                   rtl::OUStringToOString(
+                       basegfx::tools::exportToSvgD( rClipPoly ),
+                       RTL_TEXTENCODING_ASCII_US).getStr(),
+                   rtl::OUStringToOString(
+                       basegfx::tools::exportToSvgD(
+                           basegfx::B2DPolyPolygon(rTriangulatedPolygon) ),
+                       RTL_TEXTENCODING_ASCII_US).getStr() );
+#endif
 
         ::std::for_each( maSurfaceList.begin(),
                          maSurfaceList.end(),
