@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodetools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:45:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,9 @@
 #ifndef _SLIDESHOW_NODETOOLS_HXX
 #define _SLIDESHOW_NODETOOLS_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
 
 #include <layermanager.hxx>
 #include <basenode.hxx>
@@ -60,7 +54,7 @@
 # define DEBUG_NODES_SHOWTREE_WITHIN(a)
 #endif
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
