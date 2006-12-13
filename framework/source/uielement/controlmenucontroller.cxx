@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlmenucontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:43:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,6 +336,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
     ResetableGuard aLock( m_aLock );
     m_xFrame.clear();
     m_xDispatch.clear();
+    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -407,7 +408,7 @@ void SAL_CALL ControlMenuController::select( const css::awt::MenuEvent& rEvent )
 
     ResetableGuard aLock( m_aLock );
     xPopupMenu      = m_xPopupMenu;
-    xRefDispatch       = m_xDispatch;
+    xRefDispatch    = m_xDispatch;
     xServiceManager = m_xServiceManager;
     aLock.unlock();
 
@@ -481,6 +482,9 @@ void SAL_CALL ControlMenuController::setPopupMenu( const Reference< css::awt::XP
 {
     ResetableGuard aLock( m_aLock );
 
+    if ( m_bDisposed )
+        throw DisposedException();
+
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
@@ -522,6 +526,9 @@ void SAL_CALL ControlMenuController::setPopupMenu( const Reference< css::awt::XP
 void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
 
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
