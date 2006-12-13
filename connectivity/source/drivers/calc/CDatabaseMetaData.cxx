@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:18:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,7 +550,7 @@ sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-        const ::rtl::OUString& /*tableNamePattern*/, const Sequence< ::rtl::OUString >& types )
+        const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types )
         throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -570,11 +570,11 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     {
         bTableFound = sal_False;
 
-        const ::rtl::OUString* pBegin = types.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + nLength;
-        for(;pBegin != pEnd;++pBegin)
+        const ::rtl::OUString* pIter = types.getConstArray();
+        const ::rtl::OUString* pEnd = pIter + nLength;
+        for(;pIter != pEnd;++pIter)
         {
-            if(*pBegin == aTable)
+            if(*pIter == aTable)
             {
                 bTableFound = sal_True;
                 break;
@@ -599,7 +599,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     for (sal_Int32 nSheet=0; nSheet<nSheetCount; nSheet++)
     {
         ::rtl::OUString aName = aSheetNames[nSheet];
-        if ( !lcl_IsEmptyOrHidden( xSheets, aName ) )
+        if ( !lcl_IsEmptyOrHidden( xSheets, aName ) && match(tableNamePattern,aName,'\0') )
         {
             ODatabaseMetaDataResultSet::ORow aRow(3);
             aRow.reserve(6);
@@ -624,7 +624,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
             for (sal_Int32 nRange=0; nRange<nDBCount; nRange++)
             {
                 ::rtl::OUString aName = aDBNames[nRange];
-                if ( !lcl_IsUnnamed( xRanges, aName ) )
+                if ( !lcl_IsUnnamed( xRanges, aName ) && match(tableNamePattern,aName,'\0') )
                 {
                     ODatabaseMetaDataResultSet::ORow aRow(3);
                     aRow.reserve(6);
