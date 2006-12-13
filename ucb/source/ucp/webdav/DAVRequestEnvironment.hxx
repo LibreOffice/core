@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVRequestEnvironment.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:33:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _DAVREQUESTENVIRONMENT_HXX_
 #define _DAVREQUESTENVIRONMENT_HXX_
 
+#include <vector>
+
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
@@ -45,6 +47,8 @@
 
 namespace webdav_ucp
 {
+    typedef std::pair< rtl::OUString, rtl::OUString > DAVRequestHeader;
+    typedef std::vector< DAVRequestHeader > DAVRequestHeaders;
 
 struct DAVRequestEnvironment
 {
@@ -52,10 +56,14 @@ struct DAVRequestEnvironment
     rtl::Reference< DAVAuthListener >     m_xAuthListener;
 //    rtl::Reference< DAVStatusListener >   m_xStatusListener;
 //    rtl::Reference< DAVProgressListener > m_xStatusListener;
+    DAVRequestHeaders                     m_aRequestHeaders;
 
     DAVRequestEnvironment( const rtl::OUString & rRequestURI,
-                           const rtl::Reference< DAVAuthListener > & xListener )
-    : m_aRequestURI( rRequestURI ), m_xAuthListener( xListener ) {}
+                           const rtl::Reference< DAVAuthListener > & xListener,
+                           const DAVRequestHeaders & rRequestHeaders )
+    : m_aRequestURI( rRequestURI ),
+      m_xAuthListener( xListener ),
+      m_aRequestHeaders( rRequestHeaders ) {}
 
     DAVRequestEnvironment() {}
 };
