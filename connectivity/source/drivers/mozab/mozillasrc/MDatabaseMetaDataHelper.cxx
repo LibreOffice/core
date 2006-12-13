@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:01:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,8 @@
 // Mozilla includes.
 #include <MNSInclude.hxx>
 
-#ifndef CONNECTIVITY_SHARED_RES_HRC
-#include "conn_shared_res.hrc"
-#endif
+#include "resource/mozab_res.hrc"
+
 #ifndef _CONNECTIVITY_MAB_DATABASEMETADATAHELPER_HXX_
 #include "MDatabaseMetaDataHelper.hxx"
 #endif
@@ -735,25 +734,28 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
     args.arg4 = (void*)&useSSL;
 
     MNSMozabProxy xMProxy;
-    if (xMProxy.StartProxy(&args,m_ProductType,::rtl::OUString()))  //Init LDAP,pass OUString() to StarProxy to ignore profile switch
+    rv = xMProxy.StartProxy( &args, m_ProductType, ::rtl::OUString() );
+    if ( NS_SUCCEEDED( rv ) )   //Init LDAP,pass OUString() to StarProxy to ignore profile switch
     {
         args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
-        TimeValue               timeValue = { 1, 0 };  // 1 * 60 Seconds timeout
+        TimeValue               timeValue = { 1, 0 };  // 1 * 30 Seconds timeout
         sal_Int32               times=0;
-        while( times < 60 )
+        while ( times++ < 30 )
         {
-            rv = xMProxy.StartProxy(&args,m_ProductType,::rtl::OUString()); //check whether ldap is connect
-            if (!rv )
-            {
-                osl_waitThread(&timeValue);
-                times++;
-            }
-            else
+            rv = xMProxy.StartProxy( &args, m_ProductType, ::rtl::OUString() );
+            if ( NS_SUCCEEDED( rv ) )
+                // connected successfully
                 break;
+
+            if ( rv == (nsresult)PR_NOT_CONNECTED_ERROR )
+                // connection failed
+                break;
+
+            // not yet decided - continue waiting
+            osl_waitThread( &timeValue );
         }
-        args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
-        rv = xMProxy.StartProxy(&args,m_ProductType,::rtl::OUString()); //release resource
-        }
+    }
+    setError( STR_COULD_NOT_CONNECT_LDAP );
     return NS_SUCCEEDED( rv );
 }
 
