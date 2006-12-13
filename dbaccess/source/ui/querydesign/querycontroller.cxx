@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:26:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -611,7 +611,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 // change the view of the data
                                 m_bDesign = !m_bDesign;
                                 ::rtl::OUString sNewStatement;
-                                pNode->parseNodeToStr( sNewStatement, getMetaData() );
+                                pNode->parseNodeToStr( sNewStatement, getConnection() );
                                 setStatement_fireEvent( sNewStatement );
                                 getContainer()->SaveUIConfig();
                                 switchDesignModeImpl(this,getContainer(),m_bDesign);
@@ -1442,8 +1442,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
             ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bDesign );
             if(pNode)
             {
-                pNode->parseNodeToStr(  sTranslatedStmt,
-                                        getMetaData());
+                pNode->parseNodeToStr( sTranslatedStmt, getConnection() );
                 delete pNode;
             }
 
