@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parametricpolypolygonfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:40:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:43:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,11 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
-#include <parametricpolypolygonfactory.hxx>
+
+#include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
+
+#include "parametricpolypolygonfactory.hxx"
 #include "barwipepolypolygon.hxx"
 #include "boxwipe.hxx"
 #include "fourboxwipe.hxx"
@@ -57,13 +61,11 @@
 #include "sweepwipe.hxx"
 #include "figurewipe.hxx"
 #include "zigzagwipe.hxx"
-#include "com/sun/star/animations/TransitionType.hpp"
-#include "com/sun/star/animations/TransitionSubType.hpp"
 
 
 using namespace ::com::sun::star;
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
