@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:53:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:06:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,33 @@ namespace basegfx
             points are ignored.
          */
         bool isRectangle( const B2DPolyPolygon& rPoly );
+
+        /** Export poly-polygon to SVG.
+
+            This function exports a poly-polygon into an SVG-D
+            statement. Currently, output of relative point sequences
+            is not yet supported (might cause slightly larger output)
+
+            @param rPolyPoly
+            The poly-polygon to export
+
+            @param bUseRelativeCoordinates
+            When true, all coordinate values are exported as relative
+            to the current position. This tends to save some space,
+            since fewer digits needs to be written.
+
+            @param bDetectQuadraticBeziers
+            When true, the export tries to detect cubic bezier
+            segments in the input polygon, which can be represented by
+            quadratic bezier segments. Note that the generated string
+            causes versions prior to OOo2.0 to crash.
+
+            @return the generated SVG-D statement (the XML d attribute
+            value alone, without any "<path ...>" or "d="...")
+         */
+        ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
+                                      bool                  bUseRelativeCoordinates=true,
+                                      bool                  bDetectQuadraticBeziers=true );
 
     } // end of namespace tools
 } // end of namespace basegfx
