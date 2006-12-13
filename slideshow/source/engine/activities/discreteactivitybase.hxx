@@ -4,9 +4,9 @@
  *
  *  $RCSfile: discreteactivitybase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:40:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <vector>
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {

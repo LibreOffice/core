@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:41:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:27:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <activitybase.hxx>
 #include <canvas/elapsedtime.hxx>
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
