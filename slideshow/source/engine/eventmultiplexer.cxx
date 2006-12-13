@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:44:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,23 +37,31 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
+
+#include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/presentation/XSlideShowView.hpp>
+#include <basegfx/numeric/ftools.hxx>
+
 #include "tools.hxx"
 #include "eventmultiplexer.hxx"
-#include "com/sun/star/awt/SystemPointer.hpp"
-#include "com/sun/star/awt/XWindow.hpp"
-#include "com/sun/star/awt/MouseButton.hpp"
-#include "com/sun/star/presentation/XSlideShowView.hpp"
-#include "basegfx/numeric/ftools.hxx"
 #include "delayevent.hxx"
-#include "boost/bind.hpp"
 
-namespace css = ::com::sun::star;
-using namespace css;
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/bind.hpp>
+
+#include <vector>
+#include <hash_map>
+#include <algorithm>
+
+using namespace ::com::sun::star;
 
 /* Implementation of EventMultiplexer class */
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 template <typename HandlerT>
@@ -83,26 +91,86 @@ public:
     }
 };
 
-template <typename ContainerT, typename FuncT>
-bool EventMultiplexer::notifyAllHandlers( ContainerT const& rContainer,
-                                          FuncT const& func,
-                                          bool bOperateOnCopy )
+/** Notify handlers
+
+    @return true, if at least one handler was called.
+ */
+template <typename T, typename FuncT>
+bool EventMultiplexer::notifyAllHandlers( std::vector< boost::shared_ptr<T> > const& rContainer,
+                                          FuncT const& func )
 {
-    if (bOperateOnCopy) {
-        osl::ClearableMutexGuard guard( m_aMutex );
-        // generate a local copy of all handlers, since we have to
-        // release the object mutex before firing.
-        ContainerT const local( rContainer );
-        guard.clear();
-        // true: at least one handler returned true
-        // false: not a single handler returned true
-        return (std::count_if( local.begin(), local.end(), func ) > 0);
+    osl::ClearableMutexGuard guard( m_aMutex );
+    // generate a local copy of all handlers, since we have to
+    // release the object mutex before firing.
+    std::vector< boost::shared_ptr<T> >  const local( rContainer );
+    guard.clear();
+    // true: at least one handler returned true
+    // false: not a single handler returned true
+    return (std::count_if( local.begin(), local.end(), func ) > 0);
+}
+
+/** Notify weakly held handlers
+
+    @return true, if at least one handler was called.
+ */
+template <typename FuncT>
+bool EventMultiplexer::notifyAllViewHandlers( FuncT const& func )
+{
+    osl::ResettableMutexGuard guard( m_aMutex );
+
+    if( maViewHandlers.empty() )
+        return false;
+
+    // generate a local copy of all handlers, since we have to
+    // release the object mutex before firing.
+    ImplViewHandlers local( maViewHandlers );
+    guard.clear();
+
+    // call handler for each alife container entry
+    unsigned int nStalePtrs(0);
+    ImplViewHandlers::const_iterator       aCurr( local.begin() );
+    ImplViewHandlers::const_iterator const aEnd( local.end() );
+    while( aCurr != aEnd )
+    {
+        ViewEventHandlerSharedPtr pCurrHandler( aCurr->lock() );
+
+        if( pCurrHandler )
+            func( pCurrHandler );
+        else
+            ++nStalePtrs;
+
+        ++aCurr;
     }
-    else {
-        // true: at least one handler returned true
-        // false: not a single handler returned true
-        return (std::count_if( rContainer.begin(), rContainer.end(), func ) >0);
+
+    // needs to be two-step, because the notification above happens
+    // with unlocked mutex.
+    if( nStalePtrs )
+    {
+        // re-acquire lock.
+        guard.reset();
+
+        // prune handlers from stale ones
+        ImplViewHandlers aAliveHandlers;
+
+        ImplViewHandlers::const_iterator       aCurrHandler( maViewHandlers.begin() );
+        ImplViewHandlers::const_iterator const aEndHandler( maViewHandlers.end() );
+        while( aCurrHandler != aEndHandler )
+        {
+            ViewEventHandlerSharedPtr pCurrHandler( aCurrHandler->lock() );
+
+            if( pCurrHandler )
+                aAliveHandlers.push_back( *aCurrHandler );
+
+            ++aCurrHandler;
+        }
+
+        const bool bRet( maViewHandlers.size() > nStalePtrs );
+        std::swap(aAliveHandlers, maViewHandlers);
+        return bRet;
     }
+
+    // at least one handler was called.
+    return true;
 }
 
 template <typename ContainerT, typename FuncT>
@@ -139,9 +207,17 @@ void EventMultiplexer::addHandler( ContainerT & rContainer,
                                    boost::shared_ptr<HandlerT> const& pHandler )
 {
     ENSURE_AND_THROW(
-        pHandler.get() != 0,
+        pHandler,
         "EventMultiplexer::addHandler(): Invalid handler" );
 
+    osl::MutexGuard const guard( m_aMutex );
+    rContainer.push_back( pHandler );
+}
+
+template <typename ContainerT, typename HandlerT>
+void EventMultiplexer::addHandler( ContainerT & rContainer,
+                                   HandlerT const& pHandler )
+{
     osl::MutexGuard const guard( m_aMutex );
     rContainer.push_back( pHandler );
 }
@@ -153,7 +229,7 @@ void EventMultiplexer::addPrioritizedHandler(
     double nPriority )
 {
     ENSURE_AND_THROW(
-        pHandler.get() != 0,
+        pHandler,
         "EventMultiplexer::addHandler(): Invalid handler" );
 
     osl::MutexGuard const guard( m_aMutex );
@@ -178,8 +254,19 @@ void EventMultiplexer::removeHandler(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ENSURE_AND_THROW(
-        rHandler.get(),
+        rHandler,
         "EventMultiplexer::removeHandler(): Invalid handler" );
+
+    const typename Container::iterator aEnd( rContainer.end() );
+    rContainer.erase( ::std::remove(rContainer.begin(), aEnd, rHandler), aEnd );
+}
+
+template< typename Container, typename Handler >
+void EventMultiplexer::removeHandler(
+    Container &    rContainer,
+    const Handler& rHandler )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     const typename Container::iterator aEnd( rContainer.end() );
     rContainer.erase( ::std::remove(rContainer.begin(), aEnd, rHandler), aEnd );
@@ -190,8 +277,8 @@ void EventMultiplexer::forEachView( XSlideShowViewFunc pViewMethod )
 {
     if (pViewMethod) {
         // (un)register mouse listener on all views
-        for( UnoViewVector::const_iterator aIter( maViews.begin() ),
-                 aEnd( maViews.end() ); aIter != aEnd; ++aIter ) {
+        for( UnoViewVector::const_iterator aIter( maViewContainer.begin() ),
+                 aEnd( maViewContainer.end() ); aIter != aEnd; ++aIter ) {
             ((*aIter)->getUnoView().get()->*pViewMethod)( this );
         }
     }
@@ -207,7 +294,7 @@ void EventMultiplexer::addMouseHandler(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ENSURE_AND_THROW(
-        rHandler.get(),
+        rHandler,
         "EventMultiplexer::addMouseHandler(): Invalid handler" );
 
     // register mouse listener on all views
@@ -276,67 +363,8 @@ void EventMultiplexer::handleTicks()
 void EventMultiplexer::implSetMouseCursor( sal_Int16 nCursor ) const
 {
     // change all views to the requested cursor ID
-    std::for_each( maViews.begin(), maViews.end(),
+    std::for_each( maViewContainer.begin(), maViewContainer.end(),
                    boost::bind( &View::setMouseCursor, _1, nCursor ) );
-}
-
-bool EventMultiplexer::addView( const UnoViewSharedPtr& rView )
-{
-    ENSURE_AND_THROW( rView.get(), "EventMultiplexer::addView(): Invalid view");
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    // check whether same view is already added
-    const UnoViewVector::iterator aEnd( maViews.end() );
-
-    // already added?
-    if( ::std::find( maViews.begin(),
-                     aEnd,
-                     rView ) != aEnd )
-    {
-        // yes, nothing to do
-        return false;
-    }
-
-    maViews.push_back( rView );
-
-    return true;
-}
-
-bool EventMultiplexer::removeView( const UnoViewSharedPtr& rView )
-{
-    ENSURE_AND_THROW( rView.get(),
-                      "EventMultiplexer::removeView(): Invalid view" );
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    // check whether same view is already added
-    const UnoViewVector::iterator aEnd( maViews.end() );
-    UnoViewVector::iterator aIter;
-
-    // view added?
-    if( (aIter=::std::find( maViews.begin(),
-                            aEnd,
-                            rView )) == aEnd )
-    {
-        // nope, nothing to do
-        return false;
-    }
-
-    // revoke event listeners
-    uno::Reference<css::presentation::XSlideShowView> const rUnoView(
-        rView->getUnoView() );
-
-    if( isMouseListenerRegistered() )
-        rUnoView->removeMouseListener( this );
-
-    if( !maMouseMoveHandlers.empty() )
-        rUnoView->removeMouseMotionListener( this );
-
-    // actually erase from container
-    maViews.erase( aIter );
-
-    return true;
 }
 
 void EventMultiplexer::clear()
@@ -346,7 +374,7 @@ void EventMultiplexer::clear()
     // deregister from all views.
     if( isMouseListenerRegistered() )
     {
-        for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+        for( UnoViewVector::const_iterator aIter=maViewContainer.begin(), aEnd=maViewContainer.end();
              aIter!=aEnd;
              ++aIter )
         {
@@ -356,7 +384,7 @@ void EventMultiplexer::clear()
 
     if( !maMouseMoveHandlers.empty() )
     {
-        for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+        for( UnoViewVector::const_iterator aIter=maViewContainer.begin(), aEnd=maViewContainer.end();
              aIter!=aEnd;
              ++aIter )
         {
@@ -365,8 +393,6 @@ void EventMultiplexer::clear()
     }
 
     // release all references
-    maViews.clear();
-
     maNextEffectHandlers.clear();
     maSlideStartHandlers.clear();
     maSlideEndHandlers.clear();
@@ -376,6 +402,7 @@ void EventMultiplexer::clear()
     maAudioStoppedHandlers.clear();
     maCommandStopAudioHandlers.clear();
     maPauseHandlers.clear();
+    maViewHandlers.clear();
     maMouseClickHandlers.clear();
     maMouseDoubleClickHandlers.clear();
     maMouseMoveHandlers.clear();
@@ -411,26 +438,59 @@ void EventMultiplexer::setLayerManager(
     mpLayerManager = rMgr;
 }
 
-void EventMultiplexer::updateScreenContent( bool bForceUpdate )
+void EventMultiplexer::updateScreenContent( const UnoViewSharedPtr& rView,
+                                            bool                    bForceUpdate )
 {
+    const bool bLayerUpdate( mpLayerManager &&
+                             mpLayerManager->isUpdatePending() );
+
     // perform screen update (either if we're forced to do it,
     // or if the layer manager signals that it needs one).
-    if( bForceUpdate ||
-        (mpLayerManager.get() &&
-         mpLayerManager->isUpdatePending() ) )
+    if( bForceUpdate || bLayerUpdate )
     {
         // call update() on the registered
         // LayerManager. This will only update the
         // backbuffer, not flush anything to screen
-        if( mpLayerManager.get() )
+        if( bLayerUpdate )
+        {
+            mpLayerManager->update();
+
+            // call updateScreen() on all registered views (which will
+            // copy the backbuffers to the front). This is because
+            // LayerManager::update() updated all views.
+            std::for_each( maViewContainer.begin(),
+                           maViewContainer.end(),
+                           ::boost::mem_fn( &View::updateScreen ) );
+        }
+        else
+        {
+            // selectively only update affected view
+            rView->updateScreen();
+        }
+    }
+}
+
+void EventMultiplexer::updateScreenContent( bool bForceUpdate )
+{
+    const bool bLayerUpdate( mpLayerManager &&
+                             mpLayerManager->isUpdatePending() );
+
+    // perform screen update (either if we're forced to do it,
+    // or if the layer manager signals that it needs one).
+    if( bForceUpdate || bLayerUpdate )
+    {
+        // call update() on the registered
+        // LayerManager. This will only update the
+        // backbuffer, not flush anything to screen
+        if( bLayerUpdate )
             mpLayerManager->update();
 
         // call updateScreen() on all registered views (which
         // will copy the backbuffers to the front). Do NOT use
         // LayerManager::updateScreen(), we might need screen
         // updates independent from a valid LayerManager!
-        ::std::for_each( maViews.begin(),
-                         maViews.end(),
+        ::std::for_each( maViewContainer.begin(),
+                         maViewContainer.end(),
                          ::boost::mem_fn( &View::updateScreen ) );
     }
 }
@@ -472,6 +532,8 @@ void EventMultiplexer::addNextEffectHandler(
     EventHandlerSharedPtr const& rHandler,
     double                       nPriority )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addPrioritizedHandler( maNextEffectHandlers, rHandler, nPriority );
 
     // Enable tick events, if not done already
@@ -481,116 +543,161 @@ void EventMultiplexer::addNextEffectHandler(
 void EventMultiplexer::removeNextEffectHandler(
     const EventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maNextEffectHandlers, rHandler );
 }
 
 void EventMultiplexer::addSlideStartHandler(
     const EventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maSlideStartHandlers, rHandler );
 }
 
 void EventMultiplexer::removeSlideStartHandler(
     const EventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maSlideStartHandlers, rHandler );
 }
 
 void EventMultiplexer::addSlideEndHandler(
     const EventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maSlideEndHandlers, rHandler );
 }
 
 void EventMultiplexer::removeSlideEndHandler(
     const EventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maSlideEndHandlers, rHandler );
 }
 
 void EventMultiplexer::addAnimationStartHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maAnimationStartHandlers, rHandler );
 }
 
 void EventMultiplexer::removeAnimationStartHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maAnimationStartHandlers, rHandler );
 }
 
 void EventMultiplexer::addAnimationEndHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maAnimationEndHandlers, rHandler );
 }
 
 void EventMultiplexer::removeAnimationEndHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maAnimationEndHandlers, rHandler );
 }
 
 void EventMultiplexer::addSlideAnimationsEndHandler(
     const EventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maSlideAnimationsEndHandlers, rHandler );
 }
 
 void EventMultiplexer::removeSlideAnimationsEndHandler(
     const EventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maSlideAnimationsEndHandlers, rHandler );
 }
 
 void EventMultiplexer::addAudioStoppedHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maAudioStoppedHandlers, rHandler );
 }
 
 void EventMultiplexer::removeAudioStoppedHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maAudioStoppedHandlers, rHandler );
 }
 
 void EventMultiplexer::addCommandStopAudioHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maCommandStopAudioHandlers, rHandler );
 }
 
 void EventMultiplexer::removeCommandStopAudioHandler(
     const AnimationEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maCommandStopAudioHandlers, rHandler );
 }
 
 void EventMultiplexer::addPauseHandler(
     const PauseEventHandlerSharedPtr& rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addHandler( maPauseHandlers, rHandler );
 }
 
 void EventMultiplexer::removePauseHandler(
     const PauseEventHandlerSharedPtr&  rHandler )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     removeHandler( maPauseHandlers, rHandler );
+}
+
+void EventMultiplexer::addViewHandler(
+    const ViewEventHandlerWeakPtr& rHandler )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    // TODO(Q1): Maybe prune vector even here, some times...
+    addHandler( maViewHandlers, rHandler );
 }
 
 void EventMultiplexer::addClickHandler(
     const MouseEventHandlerSharedPtr& rHandler,
     double                            nPriority )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addMouseHandler(
         maMouseClickHandlers,
         rHandler,
         nPriority,
         isMouseListenerRegistered()
         ? NULL
-        : &css::presentation::XSlideShowView::addMouseListener );
+        : &presentation::XSlideShowView::addMouseListener );
 }
 
 void EventMultiplexer::removeClickHandler(
@@ -602,7 +709,7 @@ void EventMultiplexer::removeClickHandler(
                    rHandler );
 
     if( !isMouseListenerRegistered() ) {
-        forEachView( &css::presentation::XSlideShowView::removeMouseListener );
+        forEachView( &presentation::XSlideShowView::removeMouseListener );
     }
 }
 
@@ -610,13 +717,15 @@ void EventMultiplexer::addDoubleClickHandler(
     const MouseEventHandlerSharedPtr&   rHandler,
     double                              nPriority )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addMouseHandler(
         maMouseDoubleClickHandlers,
         rHandler,
         nPriority,
         isMouseListenerRegistered()
         ? NULL
-        : &css::presentation::XSlideShowView::addMouseListener );
+        : &presentation::XSlideShowView::addMouseListener );
 }
 
 void EventMultiplexer::removeDoubleClickHandler(
@@ -628,7 +737,7 @@ void EventMultiplexer::removeDoubleClickHandler(
                    rHandler );
 
     if( !isMouseListenerRegistered() ) {
-        forEachView( &css::presentation::XSlideShowView::removeMouseListener );
+        forEachView( &presentation::XSlideShowView::removeMouseListener );
     }
 }
 
@@ -636,12 +745,14 @@ void EventMultiplexer::addMouseMoveHandler(
     const MouseEventHandlerSharedPtr& rHandler,
     double                            nPriority )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     addMouseHandler(
         maMouseMoveHandlers,
         rHandler,
         nPriority,
         maMouseMoveHandlers.empty()
-        ? &css::presentation::XSlideShowView::addMouseMotionListener
+        ? &presentation::XSlideShowView::addMouseMotionListener
         : NULL );
 }
 
@@ -655,7 +766,7 @@ void EventMultiplexer::removeMouseMoveHandler(
 
     if( maMouseMoveHandlers.empty() ) {
         forEachView(
-            &css::presentation::XSlideShowView::removeMouseMotionListener );
+            &presentation::XSlideShowView::removeMouseMotionListener );
     }
 }
 
@@ -728,7 +839,92 @@ bool EventMultiplexer::notifyPauseMode( bool bPauseShow )
 {
     return notifyAllHandlers( maPauseHandlers,
                               boost::bind( &PauseEventHandler::handlePause,
-                                           _1, bPauseShow ) );
+                                           _1, bPauseShow ));
+}
+
+bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
+{
+    ENSURE_AND_THROW( rView, "EventMultiplexer::notifyViewAdded(): Invalid view");
+
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+    maViewContainer.push_back( rView );
+
+    // register event listeners
+    uno::Reference<presentation::XSlideShowView> const rUnoView(
+        rView->getUnoView() );
+
+    if( isMouseListenerRegistered() )
+        rUnoView->addMouseListener( this );
+
+    if( !maMouseMoveHandlers.empty() )
+        rUnoView->addMouseMotionListener( this );
+
+    aGuard.clear();
+
+    return notifyAllViewHandlers( boost::bind( &ViewEventHandler::viewAdded,
+                                               _1,
+                                               rView ));
+}
+
+bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
+{
+    ENSURE_AND_THROW( rView,
+                      "EventMultiplexer::removeView(): Invalid view" );
+
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+    // revoke event listeners
+    uno::Reference<presentation::XSlideShowView> const rUnoView(
+        rView->getUnoView() );
+
+    if( isMouseListenerRegistered() )
+        rUnoView->removeMouseListener( this );
+
+    if( !maMouseMoveHandlers.empty() )
+        rUnoView->removeMouseMotionListener( this );
+
+    UnoViewVector::iterator aEnd( maViewContainer.end() );
+    maViewContainer.erase( ::std::remove(maViewContainer.begin(), aEnd, rView), aEnd );
+
+    aGuard.clear();
+
+    return notifyAllViewHandlers( boost::bind( &ViewEventHandler::viewRemoved,
+                                               _1,
+                                               rView ));
+}
+
+bool EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
+{
+    return notifyAllViewHandlers( boost::bind( &ViewEventHandler::viewChanged,
+                                               _1,
+                                               rView ));
+}
+
+struct EventMultiplexer::AllViewNotifier
+{
+    AllViewNotifier( const UnoViewVector& rViews ) : mrViews( rViews ) {}
+
+    void operator()( const ViewEventHandlerWeakPtr& rHandler ) const
+    {
+        ViewEventHandlerSharedPtr pHandler( rHandler.lock() );
+
+        if( pHandler )
+        {
+            std::for_each( mrViews.begin(),
+                           mrViews.end(),
+                           boost::bind( &ViewEventHandler::viewChanged,
+                                        boost::cref(pHandler),
+                                        _1 ));
+        }
+    }
+
+    const UnoViewVector& mrViews;
+};
+
+bool EventMultiplexer::notifyViewsChanged()
+{
+    return notifyAllViewHandlers( AllViewNotifier( maViewContainer ));
 }
 
 struct EventMultiplexer::HyperLinkNotifier {
@@ -756,22 +952,15 @@ void EventMultiplexer::disposing()
 
 // XMouseListener implementation
 void SAL_CALL EventMultiplexer::disposing(
-    const lang::EventObject& rSource ) throw (uno::RuntimeException)
+    const lang::EventObject& /*rSource*/ ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    // remove given event source
-    for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
-         aIter!=aEnd;
-         ++aIter )
-    {
-        if( (*aIter)->getUnoView() == rSource.Source )
-        {
-            // one instance found, remove
-            aIter = maViews.erase( aIter );
-            aEnd = maViews.end(); // erase might invalidate all iterators!
-        }
-    }
+    // there's no real point in acting on this message - after all,
+    // the event sources are the XSlideShowViews, which must be
+    // explicitely removed from the slideshow via
+    // XSlideShow::removeView(). thus, if a XSlideShowView has
+    // properly removed itself from the slideshow, it will not be
+    // found here. and if it hasn't, there'll be other references at
+    // other places within the slideshow.
 }
 
 bool EventMultiplexer::notifyMouseHandlers(
@@ -779,19 +968,20 @@ bool EventMultiplexer::notifyMouseHandlers(
     bool (MouseEventHandler::*pHandlerMethod)( const awt::MouseEvent& ),
     const awt::MouseEvent& e )
 {
-    uno::Reference<css::presentation::XSlideShowView> xView(
+    uno::Reference<presentation::XSlideShowView> xView(
         e.Source, uno::UNO_QUERY );
 
     ENSURE_AND_RETURN( xView.is(), "EventMultiplexer::notifyHandlers(): "
                        "event source is not an XSlideShowView" );
 
     // find corresponding view (to mouse position into user coordinate space)
-    UnoViewVector::iterator         aIter;
-    const UnoViewVector::iterator   aEnd( maViews.end() );
+    UnoViewVector::const_iterator       aIter;
+    const UnoViewVector::const_iterator aBegin( maViewContainer.begin() );
+    const UnoViewVector::const_iterator aEnd  ( maViewContainer.end() );
     if( (aIter=::std::find_if(
-             maViews.begin(), aEnd,
+             aBegin, aEnd,
              boost::bind( std::equal_to< uno::Reference<
-                          css::presentation::XSlideShowView > >(),
+                          presentation::XSlideShowView > >(),
                           boost::cref( xView ),
                           boost::bind( &UnoView::getUnoView, _1 ) ) ) ) == aEnd)
     {
@@ -1024,36 +1214,41 @@ EventMultiplexer::~EventMultiplexer()
     // if object has not been disposed yet.
 }
 
-EventMultiplexer::EventMultiplexer( EventQueue & rEventQueue )
-    : Listener_UnoBase( m_aMutex ),
-      mrEventQueue( rEventQueue ),
-      maViews(),
-      maNextEffectHandlers(),
-      maSlideStartHandlers(),
-      maSlideEndHandlers(),
-      maAnimationStartHandlers(),
-      maAnimationEndHandlers(),
-      maSlideAnimationsEndHandlers(),
-      maAudioStoppedHandlers(),
-      maCommandStopAudioHandlers(),
-      maPauseHandlers(),
-      maMouseClickHandlers(),
-      maMouseDoubleClickHandlers(),
-      maMouseMoveHandlers(),
-      maHyperlinkHandlers(),
-      mnTimeout( 0.0 ),
-      mpTickEvent(),
-      mnMouseCursor( awt::SystemPointer::ARROW ),
-      mnVolatileMouseCursor( -1 ),
-      mnLastVolatileMouseCursor( mnMouseCursor ),
-      mbIsAutoMode( false )
+EventMultiplexer::EventMultiplexer( EventQueue&             rEventQueue,
+                                    const UnoViewContainer& rViewContainer ) :
+    Listener_UnoBase( m_aMutex ),
+    mrEventQueue( rEventQueue ),
+    maViewContainer(rViewContainer.begin(),
+                    rViewContainer.end()),
+    maNextEffectHandlers(),
+    maSlideStartHandlers(),
+    maSlideEndHandlers(),
+    maAnimationStartHandlers(),
+    maAnimationEndHandlers(),
+    maSlideAnimationsEndHandlers(),
+    maAudioStoppedHandlers(),
+    maCommandStopAudioHandlers(),
+    maPauseHandlers(),
+    maViewHandlers(),
+    maMouseClickHandlers(),
+    maMouseDoubleClickHandlers(),
+    maMouseMoveHandlers(),
+    maHyperlinkHandlers(),
+    mnTimeout( 0.0 ),
+    mpTickEvent(),
+    mnMouseCursor( awt::SystemPointer::ARROW ),
+    mnVolatileMouseCursor( -1 ),
+    mnLastVolatileMouseCursor( mnMouseCursor ),
+    mbIsAutoMode( false )
 {
 }
 
 rtl::Reference<EventMultiplexer> EventMultiplexer::create(
-    EventQueue & rEventQueue )
+    EventQueue&             rEventQueue,
+    const UnoViewContainer& rViews     )
 {
-    return new EventMultiplexer(rEventQueue);
+    return new EventMultiplexer(rEventQueue,
+                                rViews);
 }
 
 } // namespace internal
