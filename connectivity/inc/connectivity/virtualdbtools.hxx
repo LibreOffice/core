@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:17:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,20 +230,6 @@ namespace connectivity
             */
             virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
 
-            /** check if a specific property is enabled in the info sequence
-                @param  _xProp
-                    The datasource or a child of it.
-                @param  _sProperty
-                    The property to search in the info property of the data source.
-                @param  _bDefault
-                    This value will be returned, if the property doesn't exist in the data source.
-                @return
-                    <TRUE/> if so otherwise <FALSE/>
-            */
-            virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
-                                        ,const ::rtl::OUString& _sProperty,
-                                        sal_Bool _bDefault = sal_False) const = 0;
-
             /** determines whether the given component is part of a document which is an embedded database
                 document (such as a form)
             */
@@ -307,12 +293,12 @@ namespace connectivity
         {
         public:
             virtual void parseNodeToStr(::rtl::OUString& _rString,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const IParseContext* _pContext
             ) const = 0;
 
             virtual void parseNodeToPredicateStr(::rtl::OUString& _rString,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
                 const ::com::sun::star::lang::Locale& _rIntl,
