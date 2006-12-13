@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,13 +91,14 @@
 #define DSID_DOCUMENT_URL           50
 #define DSID_DOSLINEENDS            51
 #define DSID_DATABASENAME           52
+#define DSID_AS_BEFORE_CORRNAME     53
 
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_DATABASENAME
+#define DSID_LAST_ITEM_ID   DSID_AS_BEFORE_CORRNAME
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
