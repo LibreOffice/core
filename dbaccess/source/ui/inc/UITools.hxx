@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:52:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,6 +313,10 @@ namespace dbaui
             <TRUE/> if so otherwise <FALSE/>
     */
     sal_Bool isAppendTableAliasEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** determines whether when generating SQL statements, AS should be placed before a table alias
+    */
+    sal_Bool generateAsBeforeTableAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection );
 
     /** fills the bool and string value with information out of the datasource info property
         @param  _xDatasource
