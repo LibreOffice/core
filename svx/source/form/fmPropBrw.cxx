@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:23:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,11 +91,20 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTOR_HPP_
-#include <com/sun/star/inspection/XObjectInspector.hpp>
+#ifndef _COM_SUN_STAR_INSPECTION_OBJECTINSPECTOR_HPP_
+#include <com/sun/star/inspection/ObjectInspector.hpp>
 #endif
-#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORMODEL_HPP_
-#include <com/sun/star/inspection/XObjectInspectorModel.hpp>
+#ifndef _COM_SUN_STAR_INSPECTION_OBJECTINSPECTORMODEL_HPP_
+#include <com/sun/star/inspection/ObjectInspectorModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_INSPECTION_DEFAULTFORMCOMPONENTINSPECTORMODEL_HPP_
+#include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORUI_HPP_
+#include <com/sun/star/inspection/XObjectInspectorUI.hpp>
+#endif
+#ifndef _COM_SUN_STAR_INSPECTION_DEFAULTHELPPROVIDER_HPP_
+#include <com/sun/star/inspection/DefaultHelpProvider.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -107,6 +116,9 @@
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
@@ -138,6 +150,9 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
 
 #ifndef _SDRPAGEWINDOW_HXX
 #include <sdrpagewindow.hxx>
@@ -149,6 +164,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::inspection;
+using namespace ::com::sun::star::form::inspection;
 using ::com::sun::star::awt::XWindow;
 
 /*************************************************************************/
@@ -516,8 +532,12 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         {
             ::Size aConstrainedSize;
             ::com::sun::star::awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
-            aMinSize.Height += 4;
-            aMinSize.Width += 4;
+
+            sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
+            GetBorder( nLeft, nTop, nRight, nBottom );
+            aMinSize.Width += nLeft + nRight + 8;
+            aMinSize.Height += nTop + nBottom + 8;
+
             aConstrainedSize.setHeight( aMinSize.Height );
             aConstrainedSize.setWidth( aMinSize.Width );
             SetMinOutputSizePixel( aConstrainedSize );
@@ -554,6 +574,22 @@ IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 
+//-----------------------------------------------------------------------
+namespace
+{
+    static bool lcl_shouldEnableHelpSection( const Reference< XMultiServiceFactory >& _rxFactory )
+    {
+        const ::rtl::OUString sConfigName( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Forms/PropertyBrowser/" ) );
+        const ::rtl::OUString sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "DirectHelp" ) );
+
+        ::utl::OConfigurationTreeRoot aConfiguration(
+            ::utl::OConfigurationTreeRoot::createWithServiceFactory( _rxFactory, sConfigName ) );
+
+        bool bEnabled = false;
+        OSL_VERIFY( aConfiguration.getNodeValue( sPropertyName ) >>= bEnabled );
+        return bEnabled;
+    }
+}
 //-----------------------------------------------------------------------
 void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 {
@@ -599,20 +635,37 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
         xOwnContext ) );
 
-    // create a an object inspector
-    Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
-    const ::rtl::OUString sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.PropertyBrowserController");
+    bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
+
+    // an object inspector model
+    Reference< XObjectInspectorModel > xModel(
+            bEnableHelpSection
+        ?   DefaultFormComponentInspectorModel::createWithHelpSection( xInspectorContext, 3, 5 )
+        :   DefaultFormComponentInspectorModel::createDefault( xInspectorContext ) );
+
+    // an object inspector
     m_xBrowserController = m_xBrowserController.query(
-        xFactory->createInstanceWithContext( sControllerServiceName, xInspectorContext ) );
+        ObjectInspector::createWithModel(
+            xInspectorContext, xModel
+        ) );
+
     if ( !m_xBrowserController.is() )
     {
-        ShowServiceNotAvailableError( GetParent(), sControllerServiceName, sal_True );
+        ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.ObjectInspector" ) );
+        ShowServiceNotAvailableError( GetParent(), sServiceName, sal_True );
     }
     else
     {
         m_xBrowserController->attachFrame( m_xMeAsFrame );
         m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
         DBG_ASSERT( m_xBrowserComponentWindow.is(), "FmPropBrw::impl_createPropertyBrowser_throw: attached the controller, but have no component window!" );
+    }
+
+    if ( bEnableHelpSection )
+    {
+        Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
+        Reference< XObjectInspectorUI > xInspectorUI( xInspector->getInspectorUI() );
+        Reference< XInterface > xDefaultHelpProvider( DefaultHelpProvider::create( xInspectorContext, xInspectorUI ) );
     }
 }
 
@@ -641,16 +694,9 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
         // and create a new one
         impl_createPropertyBrowser_throw( _pFormShell );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-    #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sMessage( "FmPropBrw::impl_ensurePropertyBrowser_nothrow: caught an exception!\n" );
-        sMessage += "message:\n";
-        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-        OSL_ENSURE( false, sMessage );
-    #else
-        (void)e; // make compiler happy
-    #endif
+        DBG_UNHANDLED_EXCEPTION();
     }
     m_xLastKnownDocument = xDocument;
 }
