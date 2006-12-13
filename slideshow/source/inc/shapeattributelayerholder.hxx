@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeattributelayerholder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:18:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,9 @@
 #include <attributableshape.hxx>
 #include <shapeattributelayer.hxx>
 
+#include <boost/utility.hpp>
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -54,7 +55,7 @@ namespace presentation
             process that is required for shape and attribute layer
             interaction).
          */
-        class ShapeAttributeLayerHolder
+        class ShapeAttributeLayerHolder : private boost::noncopyable
         {
         public:
             /** Create a ShapeAttributeLayerHolder instance.
@@ -77,7 +78,7 @@ namespace presentation
 
             void reset()
             {
-                if( mpShape.get() && mpAttributeLayer.get() )
+                if( mpShape && mpAttributeLayer )
                     mpShape->revokeAttributeLayer( mpAttributeLayer );
             }
 
@@ -95,10 +96,10 @@ namespace presentation
 
                 mpShape = rShape;
 
-                if( mpShape.get() )
+                if( mpShape )
                     mpAttributeLayer = mpShape->createAttributeLayer();
 
-                return mpAttributeLayer.get() != NULL;
+                return mpAttributeLayer;
             }
 
             ShapeAttributeLayerSharedPtr get() const
@@ -107,10 +108,6 @@ namespace presentation
             }
 
         private:
-            // default: disabled copy/assignment
-            ShapeAttributeLayerHolder(const ShapeAttributeLayerHolder&);
-            ShapeAttributeLayerHolder& operator=( const ShapeAttributeLayerHolder& );
-
             AttributableShapeSharedPtr      mpShape;
             ShapeAttributeLayerSharedPtr    mpAttributeLayer;
         };
