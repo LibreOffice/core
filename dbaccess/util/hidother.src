@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:58:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,7 @@ hidspecial UID_DLG_TABLE_FILTER                         { HelpId = UID_DLG_TABLE
 hidspecial HID_APP_SWAP_ICONCONTROL                     { HelpId = HID_APP_SWAP_ICONCONTROL ; };
 
 hidspecial HID_DSADMIN_APPENDTABLEALIAS                 { HelpId = HID_DSADMIN_APPENDTABLEALIAS ; };
+hidspecial HID_DSADMIN_AS_BEFORE_CORRELATION_NAME       { HelpId = HID_DSADMIN_AS_BEFORE_CORRELATION_NAME ; };
 hidspecial HID_DSADMIN_PARAMETERNAMESUBST               { HelpId = HID_DSADMIN_PARAMETERNAMESUBST ; };
 hidspecial HID_DSADMIN_IGNOREDRIVER_PRIV                { HelpId = HID_DSADMIN_IGNOREDRIVER_PRIV ; };
 hidspecial HID_DSADMIN_HOSTNAME                         { HelpId = HID_DSADMIN_HOSTNAME ; };
@@ -402,6 +403,7 @@ hidspecial SID_DB_APP_REPORT_OPEN { HelpId = SID_DB_APP_REPORT_OPEN; };
 hidspecial SID_DB_APP_DELETE { HelpId = SID_DB_APP_DELETE; };
 hidspecial SID_DB_APP_RENAME { HelpId = SID_DB_APP_RENAME; };
 hidspecial SID_DB_APP_EDIT { HelpId = SID_DB_APP_EDIT; };
+hidspecial SID_DB_APP_EDIT_SQL_VIEW { HelpId = SID_DB_APP_EDIT_SQL_VIEW; };
 hidspecial SID_DB_APP_OPEN { HelpId = SID_DB_APP_OPEN; };
 
 hidspecial SID_BROWSER_CLEAR_QUERY { HelpId = SID_BROWSER_CLEAR_QUERY; };
