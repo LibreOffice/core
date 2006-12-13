@@ -4,9 +4,9 @@
  *
  *  $RCSfile: event.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:39:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,11 @@
 #define INCLUDED_SLIDESHOW_EVENT_HXX
 
 #include "disposable.hxx"
-#include "boost/shared_ptr.hpp"
+
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** Definition of Event interface
