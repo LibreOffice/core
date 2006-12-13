@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pinwheelwipe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:56:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,11 @@
 #if ! defined INCLUDED_SLIDESHOW_PINWHEELWIPE_HXX
 #define INCLUDED_SLIDESHOW_PINWHEELWIPE_HXX
 
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include "parametricpolypolygon.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /// Generates a n-blade pinWheel wipe:
