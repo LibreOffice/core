@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctreenodesupplier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:09:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 /* Definition of DocTreeNodeSupplier interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -60,7 +60,7 @@ namespace presentation
             true). If, on the other hand, the shape cannot determine,
             for internal reasons, the internal tree node structure,
             all those methods will throw an
-            ImportFailedException. This is, in fact, a delayed error
+            ShapeLoadFailedException. This is, in fact, a delayed error
             that could also have been reported during shape
             construction, but might be postponed until the missing
             information is actually requested.
@@ -75,10 +75,10 @@ namespace presentation
                 maximum value permissible at the getTreeNode()
                 method, for the given node type.
 
-                @throws ImportFailedException, if tree node structure
+                @throws ShapeLoadFailedException, if tree node structure
                 cannot be determined.
              */
-            virtual sal_Int32 getNumberOfTreeNodes( DocTreeNode::NodeType eNodeType ) const = 0; // throw ImportFailedException;
+            virtual sal_Int32 getNumberOfTreeNodes( DocTreeNode::NodeType eNodeType ) const = 0; // throw ShapeLoadFailedException;
 
             /** Create DocTreeNode from shape.
 
@@ -97,11 +97,11 @@ namespace presentation
                 @return the DocTreeNode found, or the empty
                 DocTreeNode, if nothing was found.
 
-                @throws ImportFailedException, if tree node structure
+                @throws ShapeLoadFailedException, if tree node structure
                 cannot be determined.
             */
             virtual DocTreeNode getTreeNode( sal_Int32              nNodeIndex,
-                                             DocTreeNode::NodeType  eNodeType ) const = 0; // throw ImportFailedException;
+                                             DocTreeNode::NodeType  eNodeType ) const = 0; // throw ShapeLoadFailedException;
 
             /** Query number of tree nodes of the given type this
                 subset contains.
@@ -118,11 +118,11 @@ namespace presentation
                 @param eNodeType
                 Node type to count.
 
-                @throws ImportFailedException, if tree node structure
+                @throws ShapeLoadFailedException, if tree node structure
                 cannot be determined.
              */
             virtual sal_Int32 getNumberOfSubsetTreeNodes( const DocTreeNode&    rParentNode,
-                                                          DocTreeNode::NodeType eNodeType ) const = 0; // throw ImportFailedException;
+                                                          DocTreeNode::NodeType eNodeType ) const = 0; // throw ShapeLoadFailedException;
 
             /** Create DocTreeNode from shape subset.
 
@@ -145,12 +145,12 @@ namespace presentation
                 @return the DocTreeNode found, or the empty
                 DocTreeNode, if nothing was found.
 
-                @throws ImportFailedException, if tree node structure
+                @throws ShapeLoadFailedException, if tree node structure
                 cannot be determined.
             */
             virtual DocTreeNode getSubsetTreeNode( const DocTreeNode&       rParentNode,
                                                    sal_Int32                nNodeIndex,
-                                                   DocTreeNode::NodeType    eNodeType ) const = 0; // throw ImportFailedException;
+                                                   DocTreeNode::NodeType    eNodeType ) const = 0; // throw ShapeLoadFailedException;
         };
 
     }
