@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationnodefactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:34:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,9 @@
 #include <algorithm>
 #include <iterator>
 
-namespace css = com::sun::star;
-using namespace css;
+using namespace ::com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 namespace {
@@ -112,12 +111,12 @@ protected:
                                                            mrParent,
                                                            rContext ) );
 
-        OSL_ENSURE( pChild.get(),
+        OSL_ENSURE( pChild,
                     "NodeCreator::operator(): child creation failed" );
 
         // TODO(Q1): This yields circular references, which, it seems, is
         // unavoidable here
-        if( pChild.get() )
+        if( pChild )
             mrParent->appendChildNode( pChild );
     }
 
@@ -215,9 +214,9 @@ bool implCreateIteratedNodes(
     uno::Reference< drawing::XShape > xTargetShape( xIterNode->getTarget(),
                                                     uno::UNO_QUERY );
 
-    css::presentation::ParagraphTarget aTarget;
-    sal_Int16 nSubItem( xIterNode->getSubItem() );
-    bool bParagraphTarget( false );
+    presentation::ParagraphTarget aTarget;
+    sal_Int16                     nSubItem( xIterNode->getSubItem() );
+    bool                          bParagraphTarget( false );
 
     if( !xTargetShape.is() )
     {
@@ -237,7 +236,7 @@ bool implCreateIteratedNodes(
         // we've a paragraph target to iterate over, thus,
         // the whole animation container refers only to
         // the text
-        nSubItem = css::presentation::ShapeAnimationSubType::ONLY_TEXT;
+        nSubItem = presentation::ShapeAnimationSubType::ONLY_TEXT;
 
         bParagraphTarget = true;
     }
@@ -310,7 +309,7 @@ bool implCreateIteratedNodes(
     // ================
 
     if( bParagraphTarget ||
-        nSubItem != css::presentation::ShapeAnimationSubType::ONLY_TEXT )
+        nSubItem != presentation::ShapeAnimationSubType::ONLY_TEXT )
     {
         // prepend with animations for
         // full Shape (will be subtracted
@@ -346,7 +345,7 @@ bool implCreateIteratedNodes(
     // slideshow engine, only that the text won't be
     // currently visible, because animations are always in
     // the foreground)
-    if( nSubItem != css::presentation::ShapeAnimationSubType::ONLY_BACKGROUND )
+    if( nSubItem != presentation::ShapeAnimationSubType::ONLY_BACKGROUND )
     {
         // determine type of subitem iteration (logical
         // text unit to animate)
@@ -355,15 +354,15 @@ bool implCreateIteratedNodes(
 
         switch( xIterNode->getIterateType() )
         {
-        case css::presentation::TextAnimationType::BY_PARAGRAPH:
+        case presentation::TextAnimationType::BY_PARAGRAPH:
             eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH;
             break;
 
-        case css::presentation::TextAnimationType::BY_WORD:
+        case presentation::TextAnimationType::BY_WORD:
             eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_WORD;
             break;
 
-        case css::presentation::TextAnimationType::BY_LETTER:
+        case presentation::TextAnimationType::BY_LETTER:
             eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL;
             break;
 
@@ -561,7 +560,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
 
     // if we've got a container node object, recursively add
     // its children
-    if( pCreatedContainer.get() )
+    if( pCreatedContainer )
     {
         uno::Reference< animations::XIterateContainer > xIterNode(
             xNode, uno::UNO_QUERY );
@@ -617,12 +616,12 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
 #if defined(VERBOSE) && defined(DBG_UTIL)
 void AnimationNodeFactory::showTree( AnimationNodeSharedPtr& pRootNode )
 {
-    if( pRootNode.get() )
+    if( pRootNode )
         DEBUG_NODES_SHOWTREE( dynamic_cast<BaseContainerNode*>(
-                                  pRootNode.get()));
+                                  pRootNode));
 }
 #endif
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
