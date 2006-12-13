@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transitionfactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:55:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,27 +36,26 @@
 #ifndef _SLIDESHOW_TRANSITIONFACTORY_HXX
 #define _SLIDESHOW_TRANSITIONFACTORY_HXX
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_XTRANSITIONFILTER_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
-#endif
 
-#include <animatableshape.hxx>
-#include <rgbcolor.hxx>
-#include <slide.hxx>
-#include <layermanager.hxx>
-#include <animationactivity.hxx>
-#include <activitiesfactory.hxx>
-#include <slidechangeanimation.hxx>
-#include <transitioninfo.hxx>
-#include <soundplayer.hxx>
+#include "animatableshape.hxx"
+#include "rgbcolor.hxx"
+#include "slide.hxx"
+#include "layermanager.hxx"
+#include "animationactivity.hxx"
+#include "activitiesfactory.hxx"
+#include "numberanimation.hxx"
+#include "transitioninfo.hxx"
+#include "soundplayer.hxx"
 
+#include <boost/utility.hpp>
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
         /* Definition of Transitionfactory class */
-        class TransitionFactory
+        class TransitionFactory : private boost::noncopyable
         {
         public:
             /** Create a transition effect for shapes.
@@ -90,7 +89,7 @@ namespace presentation
 
             /** Create a transition effect for slides.
 
-                This method creates a SlideChangeAnimation, which,
+                This method creates a NumberAnimation, which,
                 when run, performs the requested transition effect
                 with the slide bitmaps.
 
@@ -115,9 +114,11 @@ namespace presentation
                 @return the created animation, or NULL for no
                 transition effect
              */
-            static SlideChangeAnimationSharedPtr createSlideTransition(
+            static NumberAnimationSharedPtr createSlideTransition(
                 const SlideSharedPtr&       rLeavingSlide,
                 const SlideSharedPtr&       rEnteringSlide,
+                const UnoViewContainer&     rViewContainer,
+                EventMultiplexer&           rEventMultiplexer,
                 sal_Int16                   nTransitionType,
                 sal_Int16                   nTransitionSubType,
                 bool                        bTransitionDirection,
@@ -137,10 +138,6 @@ namespace presentation
                     ::com::sun::star::animations::XTransitionFilter > const& xTransition,
                 sal_Int16                                               nTransitionType,
                 sal_Int16                                               nTransitionSubType );
-
-            // default: disabled copy/assignment
-            TransitionFactory(const TransitionFactory&);
-            TransitionFactory& operator=( const TransitionFactory& );
 
             // static factory
             TransitionFactory();
