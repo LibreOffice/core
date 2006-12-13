@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:42:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -646,12 +646,12 @@ void OSelectionBrowseBox::clearEntryFunctionField(const String& _sFieldName,OTab
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OSelectionBrowseBox::fillColumnRef(const OSQLParseNode* _pColumnRef,const Reference<XDatabaseMetaData>& _xMetaData,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction)
+sal_Bool OSelectionBrowseBox::fillColumnRef(const OSQLParseNode* _pColumnRef, const Reference< XConnection >& _rxConnection, OTableFieldDescRef& _pEntry, sal_Bool& _bListAction )
 {
     OSL_ENSURE(_pColumnRef,"No valid parsenode!");
     ::rtl::OUString sColumnName,sTableRange;
-    OSQLParseTreeIterator::getColumnRange(_pColumnRef,_xMetaData,sColumnName,sTableRange);
-    return fillColumnRef(sColumnName,sTableRange,_xMetaData,_pEntry,_bListAction);
+    OSQLParseTreeIterator::getColumnRange(_pColumnRef,_rxConnection,sColumnName,sTableRange);
+    return fillColumnRef(sColumnName,sTableRange,_rxConnection->getMetaData(),_pEntry,_bListAction);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,const ::rtl::OUString& _sTableRange,const Reference<XDatabaseMetaData>& _xMetaData,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction)
@@ -824,7 +824,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
             if ( SQL_ISRULE(pColumnRef,column_ref) ) // we found a valid column name or more column names
             {
                 // look if we can find the corresponding table
-                bError = fillColumnRef(pColumnRef,xMetaData,aSelEntry,_bListAction);
+                bError = fillColumnRef( pColumnRef, xConnection, aSelEntry, _bListAction );
 
                 // we found a simple column so we must clear the function fields but only when the column name is '*'
                 // and the function is different to count
@@ -845,9 +845,9 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         sal_Bool bQuote = sal_False;
                         // may be there exists only one parameter which is a column, fill all information into our fields
                         if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
-                            bError = fillColumnRef(pColumnRef->getChild(3),xMetaData,aSelEntry,_bListAction);
+                            bError = fillColumnRef( pColumnRef->getChild(3), xConnection, aSelEntry, _bListAction );
                         else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
-                            bError = fillColumnRef(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),::rtl::OUString(),xMetaData,aSelEntry,_bListAction);
+                            bError = fillColumnRef( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), ::rtl::OUString(), xMetaData, aSelEntry, _bListAction );
                         else
                         {
                             nFunctionType |= FKT_NUMERIC;
@@ -859,7 +859,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         // now parse the parameters
                         ::rtl::OUString sParameters;
                         for(sal_uInt32 function = 2; function < nFunCount; ++function) // we only want to parse the parameters of the function
-                            pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
+                            pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, bQuote );
 
                         aSelEntry->SetFunctionType(nFunctionType);
                         aSelEntry->SetField(sParameters);
@@ -910,7 +910,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                     sal_uInt32 nFunCount = pColumnRef->count();
                     ::rtl::OUString sParameters;
                     for(sal_uInt32 function = 0; function < nFunCount; ++function)
-                        pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
+                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, bQuote );
 
                     ::rtl::OUString aSelectionAlias = aSelEntry->GetAlias();
                     aSelEntry->SetAlias(::rtl::OUString());
@@ -932,7 +932,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
 
                     ::rtl::OUString aColumns;
                     pColumnRef->parseNodeToStr( aColumns,
-                                                xMetaData,
+                                                xConnection,
                                                 &pController->getParser().getContext(),
                                                 sal_True,
                                                 sal_True);
@@ -1035,8 +1035,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             Reference<XConnection> xConnection = pController->getConnection();
                             if ( !xConnection.is() )
                                 return sal_False;
-                            Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
-                            bError = fillColumnRef(sColumnName,sTableAlias,xMetaData,pEntry,bListAction);
+                            bError = fillColumnRef( sColumnName, sTableAlias, xConnection->getMetaData(), pEntry, bListAction );
                         }
                         else
                             bError = sal_True;
@@ -1177,7 +1176,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     if (pParseNode)
                     {
                         pParseNode->parseNodeToPredicateStr(aCrit,
-                                                            xConnection->getMetaData(),
+                                                            xConnection,
                                                             static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                             xColumn,
                                                             getDesignView()->getLocale(),
@@ -1215,7 +1214,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             if (pParseNode)
                             {
                                 pParseNode->parseNodeToPredicateStr(aCrit,
-                                                                    xConnection->getMetaData(),
+                                                                    xConnection,
                                                                     static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                                     xColumn,
                                                                     getDesignView()->getLocale(),
