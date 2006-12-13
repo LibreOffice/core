@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowcontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:20:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,18 @@
 #ifndef _SLIDESHOW_SLIDESHOWCONTEXT_HXX
 #define _SLIDESHOW_SLIDESHOWCONTEXT_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
-#include <layermanager.hxx>
-#include <eventqueue.hxx>
-#include <activitiesqueue.hxx>
-#include <usereventqueue.hxx>
+#include "layermanager.hxx"
+#include "eventqueue.hxx"
+#include "activitiesqueue.hxx"
+#include "usereventqueue.hxx"
+#include "eventmultiplexer.hxx"
+#include "unoviewcontainer.hxx"
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -77,26 +75,28 @@ namespace presentation
                 @param rUserEventQueue
                 User event queue
             */
-            SlideShowContext( const LayerManagerSharedPtr&                  rLayerManager,
-                              EventQueue&                                   rEventQueue,
-                              EventMultiplexer&                             rEventMultiplexer,
-                              ActivitiesQueue&                              rActivitiesQueue,
-                              UserEventQueue&                               rUserEventQueue,
+            SlideShowContext( const LayerManagerSharedPtr&                      rLayerManager,
+                              EventQueue&                                       rEventQueue,
+                              EventMultiplexer&                                 rEventMultiplexer,
+                              ActivitiesQueue&                                  rActivitiesQueue,
+                              UserEventQueue&                                   rUserEventQueue,
+                              const UnoViewContainer&                           rViewContainer,
                               const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::uno::XComponentContext>&    rComponentContext ) :
+                                    ::com::sun::star::uno::XComponentContext>&  rComponentContext ) :
                 mpLayerManager( rLayerManager ),
                 mrEventQueue( rEventQueue ),
                 mrEventMultiplexer( rEventMultiplexer ),
                 mrActivitiesQueue( rActivitiesQueue ),
                 mrUserEventQueue( rUserEventQueue ),
+                mrViewContainer( rViewContainer ),
                 mxComponentContext( rComponentContext )
             {
             }
 
             void dispose()
             {
-                mpLayerManager.reset();
                 mxComponentContext.clear();
+                mpLayerManager.reset();
             }
 
             LayerManagerSharedPtr                           mpLayerManager;
@@ -104,6 +104,7 @@ namespace presentation
             EventMultiplexer&                               mrEventMultiplexer;
             ActivitiesQueue&                                mrActivitiesQueue;
             UserEventQueue&                                 mrUserEventQueue;
+            const UnoViewContainer&                         mrViewContainer;
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>   mxComponentContext;
         };
