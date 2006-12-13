@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoviewcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:29:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,7 @@
 #include <canvas/debug.hxx>
 #include <unoviewcontainer.hxx>
 
-#ifndef BOOST_BIND_HPP_INCLUDED
 #include <boost/bind.hpp>
-#endif
 
 #include <algorithm>
 
@@ -50,7 +48,7 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------------
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -68,7 +66,7 @@ namespace presentation
             if( ::std::find_if( maViews.begin(),
                                 aEnd,
                                 ::boost::bind(
-                                    ::std::equal_to< uno::Reference< ::com::sun::star::presentation::XSlideShowView > >(),
+                                    ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
                                     ::boost::cref( rView->getUnoView() ),
                                     ::boost::bind(
                                         &UnoView::getUnoView,
@@ -84,7 +82,7 @@ namespace presentation
             return true;
         }
 
-        UnoViewSharedPtr UnoViewContainer::removeView( const uno::Reference< ::com::sun::star::presentation::XSlideShowView >& xView )
+        UnoViewSharedPtr UnoViewContainer::removeView( const uno::Reference< presentation::XSlideShowView >& xView )
         {
             // check whether same view is already added
             const UnoViewVector::iterator aEnd( maViews.end() );
@@ -94,7 +92,7 @@ namespace presentation
             if( (aIter=::std::remove_if( maViews.begin(),
                                          aEnd,
                                          ::boost::bind(
-                                             ::std::equal_to< uno::Reference< ::com::sun::star::presentation::XSlideShowView > >(),
+                                             ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
                                              ::boost::cref( xView ),
                                              ::boost::bind(
                                                  &UnoView::getUnoView,
@@ -137,35 +135,12 @@ namespace presentation
             return true;
         }
 
-        bool UnoViewContainer::empty() const
+        void UnoViewContainer::dispose()
         {
-            return maViews.empty();
-        }
-
-        void UnoViewContainer::clear()
-        {
+            ::std::for_each( maViews.begin(),
+                             maViews.end(),
+                             ::boost::mem_fn(&UnoView::_dispose) );
             maViews.clear();
         }
-
-        UnoViewVector::iterator UnoViewContainer::begin()
-        {
-            return maViews.begin();
-        }
-
-        UnoViewVector::const_iterator UnoViewContainer::begin() const
-        {
-            return maViews.begin();
-        }
-
-        UnoViewVector::iterator UnoViewContainer::end()
-        {
-            return maViews.end();
-        }
-
-        UnoViewVector::const_iterator UnoViewContainer::end() const
-        {
-            return maViews.end();
-        }
-
     }
 }
