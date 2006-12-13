@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeattributelayer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:53:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,35 +36,17 @@
 #ifndef _SLIDESHOW_SHAPEATTRIBUTELAYER_HXX
 #define _SLIDESHOW_SHAPEATTRIBUTELAYER_HXX
 
-#ifndef _COM_SUN_STAR_UTIL_TRISTATE_HPP_
 #include <com/sun/star/util/TriState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
 
 #include <stack>
 
@@ -72,7 +54,7 @@
 #include <rgbcolor.hxx>
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -502,7 +484,7 @@ namespace presentation
             // ShapeAttributeLayer(const ShapeAttributeLayer&);
             // ShapeAttributeLayer& operator=( const ShapeAttributeLayer& );
 
-            bool haveChild() const { return mpChild.get() != NULL; }
+            bool haveChild() const { return mpChild; }
             void updateStateIds();
 
             template< typename T > T calcValue( const T&                   rCurrValue,
