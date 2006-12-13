@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:51:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@
 #include <nsIAbDirectoryQueryProxy.h>
 #include <nsIAbDirFactory.h>
 #include <nsIRunnable.h>
+
+#include <prerr.h>
 
 #include "post_include_mozilla.h"
 
