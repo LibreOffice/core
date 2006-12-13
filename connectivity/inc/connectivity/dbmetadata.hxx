@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:20:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,12 @@ namespace dbtools
             *this = DatabaseMetaData( _connection );
         }
 
+        /// wraps XDatabaseMetaData::getIdentifierQuoteString
+        const ::rtl::OUString&  SAL_CALL getIdentifierQuoteString() const;
+
+        /// wraps XDatabaseMetaData::getCatalogSeparator
+        const ::rtl::OUString&  SAL_CALL getCatalogSeparator() const;
+
         /** determines whether the database supports sub queries in the FROM part
             of a SELECT clause are supported.
             @throws ::com::sun::star::sdbc::SQLException
@@ -122,6 +128,14 @@ namespace dbtools
             if present.
         */
         bool SAL_CALL restrictIdentifiersToSQL92() const;
+
+        /** determines whether when generating SQL statements, an AS keyword should be generated
+            before a correlation name.
+
+            E.g., it determines whether <code>SELECT * FROM table AS correlation_name</code> or
+            <code>SELECT * FROM table correlation_name</code> is generated.
+        */
+        bool SAL_CALL generateASBeforeCorrelationName() const;
     };
 
 //........................................................................
