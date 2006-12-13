@@ -4,9 +4,9 @@
  *
  *  $RCSfile: figurewipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:39:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:41:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include "transitiontools.hxx"
 #include "figurewipe.hxx"
-#include "basegfx/numeric/ftools.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/point/b2dpoint.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 ::basegfx::B2DPolyPolygon FigureWipe::operator () ( double t )
@@ -59,8 +59,8 @@ namespace internal {
 
 FigureWipe * FigureWipe::createTriangleWipe()
 {
-    const double s60 = sin( 60.0 * F_PI180 );
-    const double s30 = sin( 30.0 * F_PI180 );
+    const double s60 = sin( basegfx::deg2rad(60.0) );
+    const double s30 = sin( basegfx::deg2rad(30.0) );
     ::basegfx::B2DPolygon figure;
     figure.append( ::basegfx::B2DPoint( 0.5 + s30, 0.5 ) );
     figure.append( ::basegfx::B2DPoint( 0.0, -0.5 - s60 ) );
@@ -71,8 +71,8 @@ FigureWipe * FigureWipe::createTriangleWipe()
 
 FigureWipe * FigureWipe::createArrowHeadWipe()
 {
-    const double s60 = sin( 60.0 * F_PI180 );
-    const double s30 = sin( 30.0 * F_PI180 );
+    const double s60 = sin( basegfx::deg2rad(60.0) );
+    const double s30 = sin( basegfx::deg2rad(30.0) );
     const double off = s30;
     ::basegfx::B2DPolygon figure;
     figure.append( ::basegfx::B2DPoint( 0.5 + s30 + off, 0.5 + off ) );
@@ -85,12 +85,12 @@ FigureWipe * FigureWipe::createArrowHeadWipe()
 
 FigureWipe * FigureWipe::createPentagonWipe()
 {
-    const double s = sin( 18.0 * F_PI180 );
-    const double c = cos( 18.0 * F_PI180 );
+    const double s = sin( basegfx::deg2rad(18.0) );
+    const double c = cos( basegfx::deg2rad(18.0) );
     ::basegfx::B2DPolygon figure;
     figure.append( ::basegfx::B2DPoint( 0.5, 0.5 ) );
     figure.append( ::basegfx::B2DPoint( 0.5 + s, 0.5 - c ) );
-    figure.append( ::basegfx::B2DPoint( 0.0, 0.5 - c - sin(36.0 * F_PI180) ) );
+    figure.append( ::basegfx::B2DPoint( 0.0, 0.5 - c - sin(basegfx::deg2rad(36.0)) ) );
     figure.append( ::basegfx::B2DPoint( -0.5 - s, 0.5 - c ) );
     figure.append( ::basegfx::B2DPoint( -0.5, 0.5 ) );
     figure.setClosed(true);
@@ -99,8 +99,8 @@ FigureWipe * FigureWipe::createPentagonWipe()
 
 FigureWipe * FigureWipe::createHexagonWipe()
 {
-    const double s = sin( 30.0 * F_PI180 );
-    const double c = cos( 30.0 * F_PI180 );
+    const double s = sin( basegfx::deg2rad(30.0) );
+    const double c = cos( basegfx::deg2rad(30.0) );
     ::basegfx::B2DPolygon figure;
     figure.append( ::basegfx::B2DPoint( 0.5, c ) );
     figure.append( ::basegfx::B2DPoint( 0.5 + s, 0.0 ) );
@@ -114,11 +114,11 @@ FigureWipe * FigureWipe::createHexagonWipe()
 
 FigureWipe * FigureWipe::createStarWipe( sal_Int32 nPoints )
 {
-    const double v = (F_PI / nPoints);
+    const double v = (M_PI / nPoints);
     const ::basegfx::B2DPoint p_( 0.0, -M_SQRT2 );
     ::basegfx::B2DPolygon figure;
     for ( sal_Int32 pos = 0; pos < nPoints; ++pos ) {
-        const double w = (pos * F_2PI / nPoints);
+        const double w = (pos * 2.0 * M_PI / nPoints);
         ::basegfx::B2DHomMatrix aTransform;
         ::basegfx::B2DPoint p(p_);
         aTransform.rotate( -w );
