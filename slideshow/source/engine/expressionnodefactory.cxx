@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expressionnodefactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:53:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,10 @@
 #include <canvas/debug.hxx>
 #include <expressionnodefactory.hxx>
 
-#ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
 
 #include <functional>
 #include <algorithm>
@@ -57,7 +51,7 @@
 
 /* Implementation of ExpressionNodeFactory class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
