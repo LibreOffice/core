@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationpathmotionnode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:34:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include "animationpathmotionnode.hxx"
 #include "animationfactory.hxx"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 void AnimationPathMotionNode::dispose()
@@ -68,5 +68,5 @@ AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
