@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ellipsewipe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:01:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:40:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /// Generate a iris wipe
