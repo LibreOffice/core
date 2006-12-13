@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:51:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 17:55:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
-//CHINA001 #ifndef SD_COPY_DLG_HXX
-//CHINA001 #include "copydlg.hxx"
-//CHINA001 #endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 
@@ -86,8 +83,8 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-#include "sdabstdlg.hxx" //CHINA001
-#include "copydlg.hrc" //CHINA001
+#include "sdabstdlg.hxx"
+#include "copydlg.hrc"
 namespace sd {
 
 TYPEINIT1( FuCopy, FuPoor );
@@ -117,24 +114,24 @@ FunctionReference FuCopy::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 void FuCopy::DoExecute( SfxRequest& rReq )
 {
-    if( pView->AreObjectsMarked() )
+    if( mpView->AreObjectsMarked() )
     {
         // Undo
-        String aString( pView->GetDescriptionOfMarkedObjects() );
+        String aString( mpView->GetDescriptionOfMarkedObjects() );
         aString.Append( sal_Unicode(' ') );
         aString.Append( String( SdResId( STR_UNDO_COPYOBJECTS ) ) );
-        pView->BegUndo( aString );
+        mpView->BegUndo( aString );
 
         const SfxItemSet* pArgs = rReq.GetArgs();
 
         if( !pArgs )
         {
-            SfxItemSet aSet( pViewShell->GetPool(),
+            SfxItemSet aSet( mpViewShell->GetPool(),
                                 ATTR_COPY_START, ATTR_COPY_END, 0 );
 
             // Farb-Attribut angeben
-            SfxItemSet aAttr( pDoc->GetPool() );
-            pView->GetAttributes( aAttr );
+            SfxItemSet aAttr( mpDoc->GetPool() );
+            mpView->GetAttributes( aAttr );
             const SfxPoolItem*  pPoolItem = NULL;
 
             if( SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLSTYLE, TRUE, &pPoolItem ) )
@@ -152,33 +149,36 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 }
             }
 
-            //CHINA001 CopyDlg*  pDlg = new CopyDlg( NULL, aSet, pDoc->GetColorTable(), pView );
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            AbstractCopyDlg* pDlg = pFact->CreateCopyDlg(ResId( DLG_COPY ), NULL, aSet, pDoc->GetColorTable(), pView );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            USHORT      nResult = pDlg->Execute();
-
-            switch( nResult )
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            if( pFact )
             {
-                case RET_OK:
-                    pDlg->GetAttr( aSet );
-                    rReq.Done( aSet );
-                    pArgs = rReq.GetArgs();
-                break;
-
-                default:
+                AbstractCopyDlg* pDlg = pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorTable(), mpView );
+                if( pDlg )
                 {
-                    delete pDlg;
-                    pView->EndUndo();
+                    USHORT nResult = pDlg->Execute();
+
+                    switch( nResult )
+                    {
+                        case RET_OK:
+                            pDlg->GetAttr( aSet );
+                            rReq.Done( aSet );
+                            pArgs = rReq.GetArgs();
+                        break;
+
+                        default:
+                        {
+                            delete pDlg;
+                            mpView->EndUndo();
+                        }
+                        return; // Abbruch
+                    }
+                    delete( pDlg );
                 }
-                return; // Abbruch
             }
-            delete( pDlg );
         }
 
         Rectangle           aRect;
-        INT32               lWidth, lHeight, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
+        INT32               lWidth = 0, lHeight = 0, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
         UINT16              nNumber = 0;
         Color               aStartColor, aEndColor;
         BOOL                bColor = FALSE;
@@ -218,7 +218,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             bColor = FALSE;
 
         // Handles wegnehmen
-        //HMHpView->HideMarkHdl();
+        //HMHmpView->HideMarkHdl();
 
         SfxProgress*    pProgress = NULL;
         BOOL            bWaiting = FALSE;
@@ -229,18 +229,17 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             aStr.Append( sal_Unicode(' ') );
             aStr.Append( String( SdResId( STR_UNDO_COPYOBJECTS ) ) );
 
-            pProgress = new SfxProgress( pDocSh, aStr, nNumber );
-            pDocSh->SetWaitCursor( TRUE );
+            pProgress = new SfxProgress( mpDocSh, aStr, nNumber );
+            mpDocSh->SetWaitCursor( TRUE );
             bWaiting = TRUE;
         }
 
-        const SdrMarkList   aMarkList( pView->GetMarkedObjectList() );
+        const SdrMarkList   aMarkList( mpView->GetMarkedObjectList() );
         const ULONG         nMarkCount = aMarkList.GetMarkCount();
-        SdrPageView*        pPageView = pView->GetSdrPageView();
         SdrObject*          pObj = NULL;
 
         // Anzahl moeglicher Kopien berechnen
-        aRect = pView->GetAllMarkedRect();
+        aRect = mpView->GetAllMarkedRect();
 
         if( lWidth < 0L )
         {
@@ -259,21 +258,21 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             if( pProgress )
                 pProgress->SetState( i );
 
-            aRect = pView->GetAllMarkedRect();
+            aRect = mpView->GetAllMarkedRect();
 
             if( ( 1 == i ) && bColor )
             {
-                SfxItemSet aNewSet( pViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
+                SfxItemSet aNewSet( mpViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
                 aNewSet.Put( XFillColorItem( String(), aStartColor ) );
-                pView->SetAttributes( aNewSet );
+                mpView->SetAttributes( aNewSet );
             }
 
             // make a copy of selected objects
-            pView->CopyMarked();
+            mpView->CopyMarked();
 
             // get newly selected objects
-            SdrMarkList aCopyMarkList( pView->GetMarkedObjectList() );
+            SdrMarkList aCopyMarkList( mpView->GetMarkedObjectList() );
             ULONG       j, nCopyMarkCount = aMarkList.GetMarkCount();
 
             // set protection flags at marked copies to null
@@ -291,14 +290,14 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             Fraction aWidth( aRect.Right() - aRect.Left() + lWidth, aRect.Right() - aRect.Left() );
             Fraction aHeight( aRect.Bottom() - aRect.Top() + lHeight, aRect.Bottom() - aRect.Top() );
 
-            if( pView->IsResizeAllowed() )
-                pView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );
+            if( mpView->IsResizeAllowed() )
+                mpView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );
 
-            if( pView->IsRotateAllowed() )
-                pView->RotateAllMarked( aRect.Center(), lAngle * 100 );
+            if( mpView->IsRotateAllowed() )
+                mpView->RotateAllMarked( aRect.Center(), lAngle * 100 );
 
-            if( pView->IsMoveAllowed() )
-                pView->MoveAllMarked( Size( lSizeX, lSizeY ) );
+            if( mpView->IsMoveAllowed() )
+                mpView->MoveAllMarked( Size( lSizeX, lSizeY ) );
 
             // set protection flags at marked copies to original values
             if( nMarkCount == nCopyMarkCount )
@@ -326,10 +325,10 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 BYTE nGreen = aStartColor.GetGreen() + (BYTE) ( ( (long) aEndColor.GetGreen() - (long) aStartColor.GetGreen() ) *  (long) i / (long) nNumber );
                 BYTE nBlue = aStartColor.GetBlue() + (BYTE) ( ( (long) aEndColor.GetBlue() - (long) aStartColor.GetBlue() ) * (long) i / (long) nNumber );
                 Color aNewColor( nRed, nGreen, nBlue );
-                SfxItemSet aNewSet( pViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
+                SfxItemSet aNewSet( mpViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
                 aNewSet.Put( XFillColorItem( String(), aNewColor ) );
-                pView->SetAttributes( aNewSet );
+                mpView->SetAttributes( aNewSet );
             }
         }
 
@@ -337,13 +336,13 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             delete pProgress;
 
         if ( bWaiting )
-            pDocSh->SetWaitCursor( FALSE );
+            mpDocSh->SetWaitCursor( FALSE );
 
         // Handles zeigen
-        pView->AdjustMarkHdl(); //HMH TRUE );
+        mpView->AdjustMarkHdl(); //HMH TRUE );
         //HMHpView->ShowMarkHdl();
 
-        pView->EndUndo();
+        mpView->EndUndo();
     }
 }
 
