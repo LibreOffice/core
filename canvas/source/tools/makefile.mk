@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 11:31:58 $
+#   last change: $Author: kz $ $Date: 2006-12-13 14:46:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ SLOFILES =	\
 
 SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
-SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(TOOLSLIB)
+SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(TKLIB)
 
 .IF "$(ENABLE_AGG)"=="YES"
     SLOFILES += $(SLO)$/bitmap.obj \
