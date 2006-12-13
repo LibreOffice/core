@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:50:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,24 +35,28 @@
 #if ! defined(INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX)
 #define INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX
 
-#include "cppuhelper/compbase2.hxx"
-#include "comphelper/broadcasthelper.hxx"
+#include <rtl/ref.hxx>
+#include <com/sun/star/awt/XMouseListener.hpp>
+#include <com/sun/star/awt/XMouseMotionListener.hpp>
+#include <cppuhelper/compbase2.hxx>
+#include <comphelper/broadcasthelper.hxx>
+
 #include "eventhandler.hxx"
+#include "unoviewcontainer.hxx"
 #include "mouseeventhandler.hxx"
 #include "animationeventhandler.hxx"
 #include "pauseeventhandler.hxx"
+#include "vieweventhandler.hxx"
 #include "layermanager.hxx"
 #include "animationnode.hxx"
 #include "eventqueue.hxx"
 #include "unoview.hxx"
-#include "com/sun/star/awt/XMouseListener.hpp"
-#include "com/sun/star/awt/XMouseMotionListener.hpp"
-#include "rtl/ref.hxx"
-#include "boost/weak_ptr.hpp"
-#include "boost/function.hpp"
-#include "boost/noncopyable.hpp"
 
-namespace presentation {
+#include <boost/weak_ptr.hpp>
+#include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
+
+namespace slideshow {
 namespace internal {
 
 typedef cppu::WeakComponentImplHelper2<
@@ -90,25 +94,11 @@ public:
         phased mode: first clear both of any remaining events,
         then destruct them.
     */
-    static ::rtl::Reference<EventMultiplexer> create( EventQueue& rEventQueue );
+    static ::rtl::Reference<EventMultiplexer> create( EventQueue&             rEventQueue,
+                                                      const UnoViewContainer& rViews );
 
     // Management methods
     // =========================================================
-
-    /** Add a view the show is displayed upon.
-
-        This method adds another view, which the show is
-        displayed on. On every added view, the EventMultiplexer
-        registers mouse and motion event listeners.
-    */
-    bool addView( const UnoViewSharedPtr& rView );
-
-    /** Remove a view the show was displayed upon.
-
-        This method removes a view. Registered mouse and
-        motion event listeners are revoked.
-    */
-    bool removeView( const UnoViewSharedPtr& rView );
 
     /** Clear all registered handlers.
      */
@@ -145,6 +135,25 @@ public:
 
     /** Update screen content
 
+        This method updates the screen content for the given view, by
+        first updating all layers (if setLayerManager() was called
+        with a valid layer manager previously), and then calling
+        updateScreen() on the view.
+
+        @param rView
+        The view to update
+
+        @param bForceUpdate
+        Force updateScreen() call, even if layer manager has
+        no updates pending. Set this parameter to true, if you
+        changed screen content or sprites and bypassed the
+        layer manager.
+    */
+    void updateScreenContent( const UnoViewSharedPtr& rView,
+                              bool                    bForceUpdate );
+
+    /** Update screen content
+
         This method updates the screen content, by first
         updating all layers (if setLayerManager() was called
         with a valid layer manager previously), and then
@@ -157,6 +166,7 @@ public:
         layer manager.
     */
     void updateScreenContent( bool bForceUpdate );
+
 
     // Automatic mode methods
     // =========================================================
@@ -188,6 +198,22 @@ public:
 
     // Handler registration methods
     // =========================================================
+
+    /** Register an event handler that will be called when views are
+        changed.
+
+        For each view added, viewAdded() will be called on the
+        handler. For each view removed, viewRemoved() will be
+        called. Each modified view will cause a viewChanged() call on
+        each handler.
+
+        You don't need to deregister the handler, it will be
+        automatically removed, once the pointee becomes stale.
+
+        @param rHandler
+        Handler to call.
+    */
+    void addViewHandler( const ViewEventHandlerWeakPtr& rHandler );
 
     /** Register an event handler that will be called when the
         user requests the next effect.
@@ -354,10 +380,10 @@ public:
 
     /** Register a mouse handler that is called for mouse moves.
 
-    For every mouse move, only one of the handlers
-    registered here is called. The handlers are considered
-    with decreasing priority, i.e. the handler with the
-    currently highest priority will be called.
+        For every mouse move, only one of the handlers
+        registered here is called. The handlers are considered
+        with decreasing priority, i.e. the handler with the
+        currently highest priority will be called.
     */
     void addMouseMoveHandler( const MouseEventHandlerSharedPtr& rHandler,
                               double                            nPriority );
@@ -388,6 +414,36 @@ public:
 
     // External event notifications
     // =========================================================
+
+    /** View added.
+
+        This method adds another view, which the show is
+        displayed on. On every added view, the EventMultiplexer
+        registers mouse and motion event listeners.
+    */
+    bool notifyViewAdded( const UnoViewSharedPtr& rView );
+
+    /** View removed
+
+        This method removes a view. Registered mouse and
+        motion event listeners are revoked.
+    */
+    bool notifyViewRemoved( const UnoViewSharedPtr& rView );
+
+    /** View changed
+
+        This method announces a changed view to all view
+        listeners. View changes include size and transformation.
+    */
+    bool notifyViewChanged( const UnoViewSharedPtr& rView );
+
+    /** All Views changed
+
+        This method announces to all view listeners that
+        <em>every</em> known view has changed. View changes include
+        size and transformation.
+    */
+    bool notifyViewsChanged();
 
     /** Notify that the user requested the next effect.
 
@@ -515,7 +571,8 @@ public:
     bool notifyHyperlinkClicked( ::rtl::OUString const& hyperLink );
 
 private:
-    EventMultiplexer( EventQueue& );
+    EventMultiplexer( EventQueue&,
+                      const UnoViewContainer& );
     virtual ~EventMultiplexer();
 
 private:
@@ -568,10 +625,15 @@ private:
     typedef std::vector<EventHandlerSharedPtr>          ImplEventHandlers;
     typedef std::vector<AnimationEventHandlerSharedPtr> ImplAnimationHandlers;
     typedef std::vector<PauseEventHandlerSharedPtr>     ImplPauseHandlers;
+    typedef std::vector<ViewEventHandlerWeakPtr>        ImplViewHandlers;
 
     template <typename ContainerT, typename HandlerT>
     void addHandler( ContainerT & rContainer,
                      boost::shared_ptr<HandlerT> const& pHandler );
+
+    template <typename ContainerT, typename HandlerT>
+    void addHandler( ContainerT & rContainer,
+                     HandlerT const& pHandler );
 
     template <typename ContainerT, typename HandlerT>
     void addPrioritizedHandler( ContainerT & rContainer,
@@ -581,6 +643,10 @@ private:
     template< typename Container, typename Handler >
     void removeHandler( Container&                              rContainer,
                         const ::boost::shared_ptr< Handler >&   rHandler );
+
+    template< typename Container, typename Handler >
+    void removeHandler( Container&                              rContainer,
+                        const Handler&                          rHandler );
 
     template <typename XSlideShowViewFunc>
     void forEachView( XSlideShowViewFunc pViewMethod );
@@ -601,9 +667,13 @@ private:
     /** @return true: at least one handler returned true
                 false: not a single handler returned true
     */
-    template <typename ContainerT, typename FuncT>
-    bool notifyAllHandlers( ContainerT const& rContainer, FuncT const& func,
-                            bool bOperateOnCopy = true );
+    template <typename T, typename FuncT>
+    bool notifyAllHandlers( std::vector< boost::shared_ptr<T> > const& rContainer, FuncT const& func );
+
+    /** @return true: at least one handler returned true
+                false: not a single handler returned true
+    */
+    template <typename FuncT> bool notifyAllViewHandlers( FuncT const& func );
 
     bool notifyAllEventHandlers( ImplEventHandlers const& rContainer ) {
         return notifyAllHandlers( rContainer,
@@ -636,7 +706,7 @@ private:
     void implSetMouseCursor( sal_Int16 ) const;
 
     EventQueue&                 mrEventQueue;
-    UnoViewVector               maViews;
+    UnoViewVector               maViewContainer;
 
     ImplNextEffectHandlers      maNextEffectHandlers;
     ImplEventHandlers           maSlideStartHandlers;
@@ -647,9 +717,13 @@ private:
     ImplAnimationHandlers       maAudioStoppedHandlers;
     ImplAnimationHandlers       maCommandStopAudioHandlers;
     ImplPauseHandlers           maPauseHandlers;
+    ImplViewHandlers            maViewHandlers;
     ImplMouseHandlers           maMouseClickHandlers;
     ImplMouseHandlers           maMouseDoubleClickHandlers;
     ImplMouseHandlers           maMouseMoveHandlers;
+
+    struct AllViewNotifier;
+    friend struct AllViewNotifier;
 
     typedef std::hash_map<HandlerId, HyperLinkHandlerFunc,
                           hash<HandlerId> > ImplHyperLinkHandlers;
