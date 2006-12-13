@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundplayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:29:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,19 +38,17 @@
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
-#include <soundplayer.hxx>
 
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_NOSUPPORTEXCEPTION_HPP_
 #include <com/sun/star/lang/NoSupportException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HDL_
 #include <com/sun/star/lang/XComponent.hdl>
-#endif
 
 #include <tools/urlobj.hxx>
+
+#include "soundplayer.hxx"
 
 #include <algorithm>
 
@@ -67,7 +65,7 @@ using namespace ::com::sun::star;
 #endif
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -94,16 +92,18 @@ namespace presentation
 
         void SoundPlayer::dispose()
         {
-            if (mThis.get() != 0) {
+            if( mThis )
+            {
                 mrEventMultiplexer.removePauseHandler( mThis );
                 mThis.reset();
             }
 
-            if (mxPlayer.is()) {
+            if( mxPlayer.is() )
+            {
                 mxPlayer->stop();
                 uno::Reference<lang::XComponent> xComponent(
                     mxPlayer, uno::UNO_QUERY );
-                if (xComponent.is())
+                if( xComponent.is() )
                     xComponent->dispose();
                 mxPlayer.clear();
             }
@@ -147,7 +147,16 @@ namespace presentation
 
         SoundPlayer::~SoundPlayer()
         {
-            dispose();
+            try
+            {
+                dispose();
+            }
+            catch (uno::Exception &) {
+                OSL_ENSURE( false, rtl::OUStringToOString(
+                                comphelper::anyToString(
+                                    cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+            }
         }
 
         double SoundPlayer::getDuration() const
