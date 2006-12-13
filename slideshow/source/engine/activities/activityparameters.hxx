@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activityparameters.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:39:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,11 @@
 #include "eventqueue.hxx"
 #include "expressionnode.hxx"
 #include "wakeupevent.hxx"
-#include "boost/optional.hpp"
+
+#include <boost/optional.hpp>
 #include <vector>
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** Parameter struct for animation activities
