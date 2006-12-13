@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:03:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,11 +64,11 @@ namespace pcr
         OBrowserPage(Window* pParent, WinBits nWinStyle = 0);
         ~OBrowserPage();
 
-        // #95343# -------------
         sal_Int32 getMinimumWidth();
+        sal_Int32 getMinimumHeight();
 
-              OBrowserListBox* getListBox();
-        const OBrowserListBox* getListBox() const;
+              OBrowserListBox& getListBox();
+        const OBrowserListBox& getListBox() const;
     };
 
 //............................................................................
