@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:13:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,20 @@
 #ifndef _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 #include "browserlistbox.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
+#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_PROPLINELISTENER_HXX_
 #include "proplinelistener.hxx"
 #endif
+#ifndef PROPCONTROLOBSERVER_HXX
+#include "propcontrolobserver.hxx"
+#endif
 #ifndef _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
 #include "linedescriptor.hxx"
+#endif
+#ifndef INSPECTORHELPWINDOW_HXX
+#include "inspectorhelpwindow.hxx"
 #endif
 
 /** === begin UNO includes === **/
@@ -82,9 +88,10 @@ namespace pcr
 {
 //............................................................................
 
-#define FRAME_OFFSET 4
-    // TODO: find out what this is really for ... and check if it does make sense in the new
-    // browser environment
+    #define FRAME_OFFSET 4
+        // TODO: find out what this is really for ... and check if it does make sense in the new
+        // browser environment
+    #define LAYOUT_HELP_WINDOW_DISTANCE_APPFONT 3
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
@@ -211,9 +218,10 @@ namespace pcr
     protected:
         ~PropertyControlContext_Impl();
 
-        // XPropertyControlContext
+        // XPropertyControlObserver
         virtual void SAL_CALL focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException);
-        virtual void SAL_CALL controlValueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException);
+        virtual void SAL_CALL valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException);
+        // XPropertyControlContext
         virtual void SAL_CALL activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException);
 
         // IEventProcessor
@@ -314,7 +322,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyControlContext_Impl::controlValueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
+    void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
     {
         DBG_TRACE( "PropertyControlContext_Impl: VALUE_CHANGED" );
         impl_notify_throw( Control, VALUE_CHANGED );
@@ -370,7 +378,7 @@ namespace pcr
             break;
         case VALUE_CHANGED:
             DBG_TRACE( "PropertyControlContext_Impl::processEvent: VALUE_CHANGED" );
-            m_pContext->controlValueChanged( rControlEvent.xControl );
+            m_pContext->valueChanged( rControlEvent.xControl );
             break;
         case ACTIVATE_NEXT:
             DBG_TRACE( "PropertyControlContext_Impl::processEvent: ACTIVATE_NEXT" );
@@ -386,12 +394,15 @@ namespace pcr
     //------------------------------------------------------------------
     OBrowserListBox::OBrowserListBox( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle| WB_CLIPCHILDREN)
+            ,m_aLinesPlayground(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN)
             ,m_aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG)
-            ,m_aPlayGround(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN)
+            ,m_pHelpWindow( new InspectorHelpWindow( this ) )
             ,m_pLineListener(NULL)
+            ,m_pControlObserver( NULL )
             ,m_bUpdate(sal_True)
             ,m_bIsActive(sal_False)
             ,m_nYOffset(0)
+            ,m_nCurrentPreferredHelpHeight(0)
             ,m_nTheNameSize(0)
             ,m_pControlContextImpl( new PropertyControlContext_Impl( *this ) )
     {
@@ -401,14 +412,13 @@ namespace pcr
         aListBox.SetPosSizePixel(Point(0,0),Size(100,100));
         m_nRowHeight = (sal_uInt16)aListBox.GetSizePixel().Height()+2;
         SetBackground( pParent->GetBackground() );
-        m_aPlayGround.SetBackground( GetBackground() );
+        m_aLinesPlayground.SetBackground( GetBackground() );
 
-        m_aPlayGround.SetPosPixel(Point(0,0));
-        m_aPlayGround.SetPaintTransparent(sal_True);
-        m_aPlayGround.Show();
+        m_aLinesPlayground.SetPosPixel(Point(0,0));
+        m_aLinesPlayground.SetPaintTransparent(sal_True);
+        m_aLinesPlayground.Show();
         m_aVScroll.Hide();
         m_aVScroll.SetScrollHdl(LINK(this, OBrowserListBox, ScrollHdl));
-
     }
 
     //------------------------------------------------------------------
@@ -474,39 +484,51 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    long OBrowserListBox::impl_getPrefererredHelpHeight()
+    {
+        return HasHelpSection() ? m_pHelpWindow->GetOptimalHeightPixel() : 0;
+    }
+
+    //------------------------------------------------------------------
     void OBrowserListBox::Resize()
     {
-        Size aSize(GetOutputSizePixel());
-        m_aPlayGround.SetSizePixel(aSize);
+        Rectangle aPlayground( Point( 0, 0 ), GetOutputSizePixel() );
+        Size aHelpWindowDistance( LogicToPixel( Size( 0, LAYOUT_HELP_WINDOW_DISTANCE_APPFONT ), MAP_APPFONT ) );
+
+        long nHelpWindowHeight = m_nCurrentPreferredHelpHeight = impl_getPrefererredHelpHeight();
+        bool bPositionHelpWindow = ( nHelpWindowHeight != 0 );
+
+        Rectangle aLinesArea( aPlayground );
+        if ( bPositionHelpWindow )
+        {
+            aLinesArea.Bottom() -= nHelpWindowHeight;
+            aLinesArea.Bottom() -= aHelpWindowDistance.Height();
+        }
+        m_aLinesPlayground.SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
 
         UpdateVScroll();
 
-        Size a2Size(aSize);
-        Size aVScrollSize;
-
-        sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
-        sal_Int32 nLines = CalcVisibleLines();
-
-        sal_Bool bNeedScrollbar = m_aOrderedLines.size() > (sal_uInt32)nLines;
-        if (!bNeedScrollbar)
-        {   // don't need a scrollbar
-            if (m_aVScroll.IsVisible())
+        sal_Bool bNeedScrollbar = m_aOrderedLines.size() > (sal_uInt32)CalcVisibleLines();
+        if ( !bNeedScrollbar )
+        {
+            if ( m_aVScroll.IsVisible() )
                 m_aVScroll.Hide();
-            nThumbPos=0;
-            m_nYOffset=0;
-            m_aPlayGround.SetSizePixel(aSize);
-            m_aVScroll.SetThumbPos(nThumbPos);
+            // scroll to top
+            m_nYOffset = 0;
+            m_aVScroll.SetThumbPos( 0 );
         }
         else
-        {   // need a scrollbar -> adjust the playground
-            Point aPos(0,0);
-            aVScrollSize = m_aVScroll.GetSizePixel();
-            aVScrollSize.Height() = aSize.Height();
-            a2Size.Width() -= aVScrollSize.Width();
-            aPos.X() = a2Size.Width();
-            m_aVScroll.SetPosPixel(aPos);
-            m_aVScroll.SetSizePixel(aVScrollSize);
-            m_aPlayGround.SetSizePixel(a2Size);
+        {
+            Size aVScrollSize( m_aVScroll.GetSizePixel() );
+
+            // adjust the playground's width
+            aLinesArea.Right() -= aVScrollSize.Width();
+            m_aLinesPlayground.SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
+
+            // position the scrollbar
+            aVScrollSize.Height() = aLinesArea.GetHeight();
+            Point aVScrollPos( aLinesArea.GetWidth(), 0 );
+            m_aVScroll.SetPosSizePixel( aVScrollPos, aVScrollSize );
         }
 
         for ( sal_uInt16 i = 0; i < m_aOrderedLines.size(); ++i )
@@ -518,20 +540,62 @@ namespace pcr
         EnablePaint(sal_True);
 
         // show the scrollbar
-        if (bNeedScrollbar)
+        if ( bNeedScrollbar )
             m_aVScroll.Show();
+
+        // position the help window
+        if ( bPositionHelpWindow )
+        {
+            Rectangle aHelpArea( aPlayground );
+            aHelpArea.Top() = aLinesArea.Bottom() + aHelpWindowDistance.Height();
+            m_pHelpWindow->SetPosSizePixel( aHelpArea.TopLeft(), aHelpArea.GetSize() );
+        }
     }
 
     //------------------------------------------------------------------
-    void OBrowserListBox::setListener(IPropertyLineListener* _pPLL)
+    void OBrowserListBox::SetListener( IPropertyLineListener* _pListener )
     {
-        m_pLineListener = _pPLL;
+        m_pLineListener = _pListener;
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserListBox::SetObserver( IPropertyControlObserver* _pObserver )
+    {
+        m_pControlObserver = _pObserver;
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserListBox::EnableHelpSection( bool _bEnable )
+    {
+        m_pHelpWindow->Show( _bEnable );
+        Resize();
+    }
+
+    //------------------------------------------------------------------
+    bool OBrowserListBox::HasHelpSection() const
+    {
+        return m_pHelpWindow->IsVisible();
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserListBox::SetHelpText( const ::rtl::OUString& _rHelpText )
+    {
+        OSL_ENSURE( HasHelpSection(), "OBrowserListBox::SetHelpText: help section not visible!" );
+        m_pHelpWindow->SetText( _rHelpText );
+        if ( m_nCurrentPreferredHelpHeight != impl_getPrefererredHelpHeight() )
+            Resize();
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserListBox::SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines )
+    {
+        m_pHelpWindow->SetLimits( _nMinLines, _nMaxLines );
     }
 
     //------------------------------------------------------------------
     sal_uInt16 OBrowserListBox::CalcVisibleLines()
     {
-        Size aSize(m_aPlayGround.GetOutputSizePixel());
+        Size aSize(m_aLinesPlayground.GetOutputSizePixel());
         sal_uInt16 nResult = 0;
         if (0 != m_nRowHeight)
             nResult = (sal_uInt16) aSize.Height()/m_nRowHeight;
@@ -562,7 +626,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OBrowserListBox::PositionLine( sal_uInt16 _nIndex )
     {
-        Size aSize(m_aPlayGround.GetOutputSizePixel());
+        Size aSize(m_aLinesPlayground.GetOutputSizePixel());
         Point aPos(0, m_nYOffset);
 
         aSize.Height() = m_nRowHeight;
@@ -719,7 +783,7 @@ namespace pcr
     sal_uInt16 OBrowserListBox::InsertEntry(const OLineDescriptor& _rPropertyData, sal_uInt16 _nPos)
     {
         // create a new line
-        BrowserLinePointer pBrowserLine( new OBrowserLine( _rPropertyData.sName, &m_aPlayGround ) );
+        BrowserLinePointer pBrowserLine( new OBrowserLine( _rPropertyData.sName, &m_aLinesPlayground ) );
 
         ListBoxLine aNewLine( pBrowserLine, _rPropertyData.xPropertyHandler );
         ::std::pair< ListBoxLines::iterator, bool > insertPoint =
@@ -756,10 +820,27 @@ namespace pcr
         return nInsertPos;
     }
 
-    // #95343# ---------------------------------------------------------
+    //------------------------------------------------------------------
     sal_Int32 OBrowserListBox::GetMinimumWidth()
     {
         return m_nTheNameSize + 2 * FRAME_OFFSET + (m_nRowHeight - 4) * 8;
+    }
+
+    //------------------------------------------------------------------
+    sal_Int32 OBrowserListBox::GetMinimumHeight()
+    {
+        // assume that we want to display 5 rows, at least
+        sal_Int32 nMinHeight = m_nRowHeight * 5;
+
+        if ( HasHelpSection() )
+        {
+            Size aHelpWindowDistance( LogicToPixel( Size( 0, LAYOUT_HELP_WINDOW_DISTANCE_APPFONT ), MAP_APPFONT ) );
+            nMinHeight += aHelpWindowDistance.Height();
+
+            nMinHeight += m_pHelpWindow->GetMinimalHeightPixel();
+        }
+
+        return nMinHeight;
     }
 
     //------------------------------------------------------------------
@@ -785,7 +866,7 @@ namespace pcr
     void OBrowserListBox::MoveThumbTo(sal_Int32 _nNewThumbPos)
     {
         // disable painting to prevent flicker
-        m_aPlayGround.EnablePaint(sal_False);
+        m_aLinesPlayground.EnablePaint(sal_False);
 
         sal_Int32 nDelta = _nNewThumbPos - m_aVScroll.GetThumbPos();
         // adjust the scrollbar
@@ -797,7 +878,7 @@ namespace pcr
         sal_Int32 nLines = CalcVisibleLines();
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
 
-        m_aPlayGround.Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
+        m_aLinesPlayground.Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
 
         if (1 == nDelta)
         {
@@ -814,8 +895,8 @@ namespace pcr
             UpdatePlayGround();
         }
 
-        m_aPlayGround.EnablePaint(sal_True);
-        m_aPlayGround.Invalidate(INVALIDATE_CHILDREN);
+        m_aLinesPlayground.EnablePaint(sal_True);
+        m_aLinesPlayground.Invalidate(INVALIDATE_CHILDREN);
     }
 
     //------------------------------------------------------------------
@@ -824,7 +905,7 @@ namespace pcr
         DBG_ASSERT(_pScrollBar == &m_aVScroll, "OBrowserListBox::ScrollHdl: where does this come from?");
 
         // disable painting to prevent flicker
-        m_aPlayGround.EnablePaint(sal_False);
+        m_aLinesPlayground.EnablePaint(sal_False);
 
         sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
 
@@ -833,7 +914,7 @@ namespace pcr
 
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + CalcVisibleLines());
 
-        m_aPlayGround.Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
+        m_aLinesPlayground.Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
 
         if (1 == nDelta)
         {
@@ -849,7 +930,7 @@ namespace pcr
             UpdatePlayGround();
         }
 
-        m_aPlayGround.EnablePaint(sal_True);
+        m_aLinesPlayground.EnablePaint(sal_True);
         return 0;
     }
 
@@ -964,18 +1045,24 @@ namespace pcr
         if ( !_rxControl.is() )
             return;
 
+        if ( m_pControlObserver )
+            m_pControlObserver->focusGained( _rxControl );
+
         m_xActiveControl = _rxControl;
         ShowEntry( impl_getControlPos( m_xActiveControl ) );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OBrowserListBox::controlValueChanged( const Reference< XPropertyControl >& _rxControl ) throw (RuntimeException)
+    void SAL_CALL OBrowserListBox::valueChanged( const Reference< XPropertyControl >& _rxControl ) throw (RuntimeException)
     {
         DBG_TESTSOLARMUTEX();
 
-        DBG_ASSERT( _rxControl.is(), "OBrowserListBox::controlValueChanged: invalid event source!" );
+        DBG_ASSERT( _rxControl.is(), "OBrowserListBox::valueChanged: invalid event source!" );
         if ( !_rxControl.is() )
             return;
+
+        if ( m_pControlObserver )
+            m_pControlObserver->valueChanged( _rxControl );
 
         if ( m_pLineListener )
         {
@@ -1135,7 +1222,7 @@ namespace pcr
             rLine.pLine->SetTitle(_rPropertyData.DisplayName);
             rLine.xHandler = _rPropertyData.xPropertyHandler;
 
-            sal_uInt16 nTextWidth = (sal_uInt16)m_aPlayGround.GetTextWidth(_rPropertyData.DisplayName);
+            sal_uInt16 nTextWidth = (sal_uInt16)m_aLinesPlayground.GetTextWidth(_rPropertyData.DisplayName);
             if (m_nTheNameSize< nTextWidth)
                 m_nTheNameSize = nTextWidth;
 
