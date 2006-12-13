@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapesubset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:19:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,9 @@
 #include <layermanager.hxx>
 #include <doctreenode.hxx>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
