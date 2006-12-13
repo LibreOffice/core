@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newmenucontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:43:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:09:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
     for ( USHORT i = 0; i < nItemCount; i++ )
     {
-        USHORT nItemId = pPopupMenu->GetItemId( i );
+        USHORT nItemId = pPopupMenu->GetItemId( sal::static_int_cast<USHORT>( i ));
         if ( nItemId != 0 )
         {
             if ( bSetImages )
@@ -433,7 +433,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         // store it in a hash_map.
         for ( USHORT i = 0; i < pSubMenu->GetItemCount(); i++ )
         {
-            USHORT nItemId = pSubMenu->GetItemId( i );
+            USHORT nItemId = pSubMenu->GetItemId( sal::static_int_cast<USHORT>( i ) );
             if (( nItemId != 0 ) &&
                 ( pSubMenu->GetItemType( nItemId ) != MENUITEM_SEPARATOR ))
             {
@@ -463,6 +463,7 @@ void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( Runtime
     ResetableGuard aLock( m_aLock );
     m_xFrame.clear();
     m_xDispatch.clear();
+    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -572,6 +573,9 @@ void SAL_CALL NewMenuController::setPopupMenu( const Reference< css::awt::XPopup
 {
     ResetableGuard aLock( m_aLock );
 
+    if ( m_bDisposed )
+        throw DisposedException();
+
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
@@ -631,6 +635,9 @@ void SAL_CALL NewMenuController::setPopupMenu( const Reference< css::awt::XPopup
 
 void SAL_CALL NewMenuController::updatePopupMenu() throw (RuntimeException)
 {
+    ResetableGuard aLock( m_aLock );
+    if ( m_bDisposed )
+        throw DisposedException();
 }
 
 // XInitialization
