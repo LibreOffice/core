@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-26 10:25:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:47:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,14 @@ Menu RID_MENU_APP_EDIT
         };
         MenuItem
         {
+            Identifier = SID_DB_APP_EDIT_SQL_VIEW;
+            HelpID = SID_DB_APP_EDIT_SQL_VIEW ;
+            Text [ de ] ="In SQL-Ansicht bearbeiten..." ;
+            Text [ en-US ] = "Edit in SQL View...";
+            Command = ".uno:DBEditSqlView";
+        };
+        MenuItem
+        {
             Identifier = SID_DB_APP_OPEN;
             HelpID = SID_DB_APP_OPEN ;
             Text [ de ] ="Öffnen" ;
@@ -287,7 +295,7 @@ Menu RID_MENU_APP_EDIT
                     {
                         Identifier = SID_DB_APP_DSCONNECTION_TYPE;
                         HelpID = SID_DB_APP_DSCONNECTION_TYPE ;
-                        Text [ de ] ="Verbingungsart" ;
+                        Text [ de ] ="Verbindungsart" ;
                         Text[ en-US ] = "Connection Type";
                         Command = ".uno:DBDSConnectionType";
                     };
@@ -404,7 +412,7 @@ QueryBox APP_CLOSEDOCUMENTS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Die Verbingungsart wurde geändert.\nDamit die Änderungen wirksam werden, müssen alle Formulare, Berichte, Abfragen und Tabellen geschlossen werden.\n\nMöchten Sie jetzt alle Dokumente schließen?" ;
+    Message [ de ] = "Die Verbindungsart wurde geändert.\nDamit die Änderungen wirksam werden, müssen alle Formulare, Berichte, Abfragen und Tabellen geschlossen werden.\n\nMöchten Sie jetzt alle Dokumente schließen?" ;
     Message [ en-US ] = "The connection type has been altered.\nFor the changes to take effect, all forms, reports, queries and tables must be closed.\n\nDo you want to close all documents now?" ;
 };
 
