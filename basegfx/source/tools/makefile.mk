@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:51:40 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:08:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES= $(SLO)$/canvastools.obj	\
+          $(SLO)$/debugplotter.obj	\
           $(SLO)$/liangbarsky.obj	\
           $(SLO)$/tools.obj
 
