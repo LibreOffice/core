@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:06:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,8 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
             OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
             if(pNode)
             {   // special handling for parameters
-                /* we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å" */
                 OSQLParseNode::substituteParameterNames(pNode);
-                pNode->parseNodeToStr(sNewSql,_pConnection->getMetaData());
+                pNode->parseNodeToStr( sNewSql, _pConnection );
                 delete pNode;
                 m_sSqlStatement = sNewSql;
             }
