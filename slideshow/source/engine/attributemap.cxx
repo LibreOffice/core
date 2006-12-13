@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributemap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:26:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "tools.hxx"
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -109,7 +109,7 @@ namespace presentation
                 };
 
             static AnimateAttributeMap aMap( lcl_attributeMap,
-                                             sizeof(lcl_attributeMap)/sizeof(AnimateAttributeMap::MapEntry),
+                                             sizeof(lcl_attributeMap)/sizeof(*lcl_attributeMap),
                                              false );
 
             AttributeType eAttributeType = ATTRIBUTE_INVALID;
