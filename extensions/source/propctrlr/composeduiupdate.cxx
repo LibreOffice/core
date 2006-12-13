@@ -4,9 +4,9 @@
  *
  *  $RCSfile: composeduiupdate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:14:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@ namespace pcr
     using ::com::sun::star::inspection::XObjectInspectorUI;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::lang::NoSupportException;
+    using ::com::sun::star::inspection::XPropertyControlObserver;
     /** === end UNO using === **/
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
@@ -179,6 +181,9 @@ namespace pcr
         virtual void SAL_CALL hidePropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException);
         virtual void SAL_CALL showCategory( const ::rtl::OUString& _rCategory, ::sal_Bool _bShow ) throw (RuntimeException);
         virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException);
+        virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException);
+        virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException);
+        virtual void SAL_CALL setHelpSectionText( const ::rtl::OUString& _HelpText ) throw (NoSupportException, RuntimeException);
 
         // UNOCompatibleNonUNOReference overridables
         virtual void SAL_CALL acquire() throw();
@@ -387,6 +392,30 @@ namespace pcr
         return m_rMaster.getDelegatorUI()->getPropertyControl( _rPropertyName );
     }
 
+    //--------------------------------------------------------------------
+    void SAL_CALL CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
+    {
+        OSL_ENSURE( false, "CachedInspectorUI::registerControlObserver: not expected to be called!" );
+            // CachedInspectorUI is used as context for the controls, and we don't expect them to
+            // register listeners themself
+        m_rMaster.getDelegatorUI()->registerControlObserver( _Observer );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
+    {
+        OSL_ENSURE( false, "CachedInspectorUI::revokeControlObserver: not expected to be called!" );
+            // CachedInspectorUI is used as context for the controls, and we don't expect them to
+            // register listeners themself
+        m_rMaster.getDelegatorUI()->revokeControlObserver( _Observer );
+    }
+
+    //----------------------------------------------------------------
+    void SAL_CALL CachedInspectorUI::setHelpSectionText( const ::rtl::OUString& _HelpText ) throw (NoSupportException, RuntimeException)
+    {
+        m_rMaster.getDelegatorUI()->setHelpSectionText( _HelpText );
+    }
+
     //====================================================================
     //= HandlerMap
     //====================================================================
@@ -530,6 +559,8 @@ namespace pcr
         {
         public:
             virtual void updateUIForKey( const ::rtl::OUString& _rKey, sal_Bool _bFlag ) const = 0;
+
+            virtual ~IStringKeyBooleanUIUpdate() { }
         };
 
         //============================================================
