@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:56:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
-
-#include <vector>
-#include <iterator>
-#include <algorithm>
-#include <cstring>
-#include <limits.h>
-#include <cmath>
 
 #define _SV_POLY_CXX
 
@@ -88,6 +81,14 @@
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
+
+#include <vector>
+#include <iterator>
+#include <algorithm>
+#include <cstring>
+#include <limits.h>
+#include <cmath>
+
 
 // =======================================================================
 
