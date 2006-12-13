@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:34:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:17:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,7 +460,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
 //                      0, String() );
             //  return;
         //  }
-        pColumnRef->getChild(2)->parseNodeToStr(aColumnName,m_xDBMetaData,NULL,sal_False,sal_False);
+        pColumnRef->getChild(2)->parseNodeToStr( aColumnName, getOwnConnection(), NULL, sal_False, sal_False );
     }
     else
     {
