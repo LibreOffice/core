@@ -4,9 +4,9 @@
  *
  *  $RCSfile: discreteactivitybase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:32:33 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <discreteactivitybase.hxx>
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -54,7 +54,7 @@ namespace presentation
             mnSimpleDuration( rParms.mnMinDuration ),
             mnCurrPerformCalls( 0 )
         {
-            ENSURE_AND_THROW( mpWakeupEvent.get(),
+            ENSURE_AND_THROW( mpWakeupEvent,
                               "DiscreteActivityBase::DiscreteActivityBase(): Invalid wakeup event" );
 
             ENSURE_AND_THROW( !maDiscreteTimes.empty(),
@@ -201,7 +201,7 @@ namespace presentation
         void DiscreteActivityBase::dispose()
         {
             // dispose event
-            if( mpWakeupEvent.get() )
+            if( mpWakeupEvent )
                 mpWakeupEvent->dispose();
 
             // release references
