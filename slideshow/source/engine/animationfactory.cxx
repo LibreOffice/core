@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:25:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:12:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,46 +38,22 @@
 
 // must be first
 #include <canvas/debug.hxx>
-
-#ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
-#endif
 
 #include <animationfactory.hxx>
 #include <attributemap.hxx>
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
 #include <com/sun/star/animations/AnimationTransformType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
 
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
 
 #include <functional>
 
@@ -85,7 +61,7 @@
 using namespace ::com::sun::star;
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -119,7 +95,7 @@ namespace presentation
                     maDefaultValue( rDefaultValue ),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rLayerManager.get(),
+                    ENSURE_AND_THROW( rLayerManager,
                                       "TupleAnimation::TupleAnimation(): Invalid LayerManager" );
                     ENSURE_AND_THROW( pIs1stValid && pIs2ndValid && pGet1stValue && pGet2ndValue && pSetValue,
                                       "TupleAnimation::TupleAnimation(): One of the method pointers is NULL" );
@@ -135,17 +111,17 @@ namespace presentation
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
                                     const ShapeAttributeLayerSharedPtr& rAttrLayer )
                 {
-                    OSL_ENSURE( !mpShape.get(),
+                    OSL_ENSURE( !mpShape,
                                 "TupleAnimation::start(): Shape already set" );
-                    OSL_ENSURE( !mpAttrLayer.get(),
+                    OSL_ENSURE( !mpAttrLayer,
                                 "TupleAnimation::start(): Attribute layer already set" );
 
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    ENSURE_AND_THROW( rShape.get(),
+                    ENSURE_AND_THROW( rShape,
                                       "TupleAnimation::start(): Invalid shape" );
-                    ENSURE_AND_THROW( rAttrLayer.get(),
+                    ENSURE_AND_THROW( rAttrLayer,
                                       "TupleAnimation::start(): Invalid attribute layer" );
 
                     if( !mbAnimationStarted )
@@ -177,7 +153,7 @@ namespace presentation
 
                 virtual bool operator()( const ::basegfx::B2DTuple& rValue )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer.get() && mpShape.get(),
+                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
                                        "TupleAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ValueT aValue( rValue.getX(),
@@ -198,7 +174,7 @@ namespace presentation
 
                 virtual ::basegfx::B2DTuple getUnderlyingValue() const
                 {
-                    ENSURE_AND_THROW( mpAttrLayer.get(),
+                    ENSURE_AND_THROW( mpAttrLayer,
                                       "TupleAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
                     ::basegfx::B2DTuple aRetVal;
@@ -256,7 +232,7 @@ namespace presentation
                     mnFlags( nFlags ),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rLayerManager.get(),
+                    ENSURE_AND_THROW( rLayerManager,
                                       "PathAnimation::PathAnimation(): Invalid LayerManager" );
 
                     ::basegfx::B2DPolyPolygon aPolyPoly;
@@ -282,17 +258,17 @@ namespace presentation
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
                                     const ShapeAttributeLayerSharedPtr& rAttrLayer )
                 {
-                    OSL_ENSURE( !mpShape.get(),
+                    OSL_ENSURE( !mpShape,
                                 "PathAnimation::start(): Shape already set" );
-                    OSL_ENSURE( !mpAttrLayer.get(),
+                    OSL_ENSURE( !mpAttrLayer,
                                 "PathAnimation::start(): Attribute layer already set" );
 
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    ENSURE_AND_THROW( rShape.get(),
+                    ENSURE_AND_THROW( rShape,
                                       "PathAnimation::start(): Invalid shape" );
-                    ENSURE_AND_THROW( rAttrLayer.get(),
+                    ENSURE_AND_THROW( rAttrLayer,
                                       "PathAnimation::start(): Invalid attribute layer" );
 
                     // TODO(F1): Check whether _shape_ bounds are correct here.
@@ -330,7 +306,7 @@ namespace presentation
 
                 virtual bool operator()( double nValue )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer.get() && mpShape.get(),
+                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
                                        "PathAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ::basegfx::B2DPoint rOutPos = ::basegfx::tools::getPositionRelative( maPathPoly,
@@ -359,7 +335,7 @@ namespace presentation
 
                 virtual double getUnderlyingValue() const
                 {
-                    ENSURE_AND_THROW( mpAttrLayer.get(),
+                    ENSURE_AND_THROW( mpAttrLayer,
                                       "PathAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
                     return 0.0; // though this should be used in concert with
@@ -456,7 +432,7 @@ namespace presentation
                     maDefaultValue(rDefaultValue),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rLayerManager.get(),
+                    ENSURE_AND_THROW( rLayerManager,
                                       "GenericAnimation::GenericAnimation(): Invalid LayerManager" );
                     ENSURE_AND_THROW( pIsValid && pGetValue && pSetValue,
                                       "GenericAnimation::GenericAnimation(): One of the method pointers is NULL" );
@@ -472,17 +448,17 @@ namespace presentation
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
                                     const ShapeAttributeLayerSharedPtr& rAttrLayer )
                 {
-                    OSL_ENSURE( !mpShape.get(),
+                    OSL_ENSURE( !mpShape,
                                 "GenericAnimation::start(): Shape already set" );
-                    OSL_ENSURE( !mpAttrLayer.get(),
+                    OSL_ENSURE( !mpAttrLayer,
                                 "GenericAnimation::start(): Attribute layer already set" );
 
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    ENSURE_AND_THROW( rShape.get(),
+                    ENSURE_AND_THROW( rShape,
                                       "GenericAnimation::start(): Invalid shape" );
-                    ENSURE_AND_THROW( rAttrLayer.get(),
+                    ENSURE_AND_THROW( rAttrLayer,
                                       "GenericAnimation::start(): Invalid attribute layer" );
 
                     // only start animation once per repeated start() call,
@@ -545,7 +521,7 @@ namespace presentation
                  */
                 bool operator()( const ValueT& x )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer.get() && mpShape.get(),
+                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
                                        "GenericAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );
@@ -560,7 +536,7 @@ namespace presentation
                  */
                 bool operator()( ValueT x )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer.get() && mpShape.get(),
+                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
                                        "GenericAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );
@@ -573,7 +549,7 @@ namespace presentation
 
                 ValueT getUnderlyingValue() const
                 {
-                    ENSURE_AND_THROW( mpAttrLayer.get(),
+                    ENSURE_AND_THROW( mpAttrLayer,
                                       "GenericAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
                     // deviated from the (*shared_ptr).*mpFuncPtr
