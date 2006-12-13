@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:26:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 12:03:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
+#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
 
@@ -41,23 +41,24 @@ String RID_STR_STANDARD
 {
     Text [ de ] = "Standard" ;
     Text [ en-US ] = "Default" ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPPAGE_DEFAULT
 {
     Text [ de ] = "Allgemein" ;
     Text [ en-US ] = "General" ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPPAGE_DATA
 {
     Text [ de ] = "Daten" ;
     Text [ en-US ] = "Data" ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_BOOL
 {
     Text [ de ] = "Nein;Ja" ;
     Text [ en-US ] = "No;Yes" ;
-    Text [ x-comment ] = " ";
+};
+String RID_STR_HELP_SECTION_LABEL
+{
+    Text [ de ] = "Hilfe";
+    Text [ en-US ] = "Help";
 };
