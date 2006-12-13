@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:59:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,9 @@
 #include <algorithm>
 #include <iterator>
 
-namespace css = com::sun::star;
-using namespace css;
+using namespace ::com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 namespace {
@@ -264,7 +263,7 @@ bool isMainSequenceRootNode_(
     // end-of-mainsequence signalling below)
     beans::NamedValue const aSearchKey(
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) ),
-        uno::makeAny( css::presentation::EffectNodeType::MAIN_SEQUENCE ) );
+        uno::makeAny( presentation::EffectNodeType::MAIN_SEQUENCE ) );
 
     uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());
     return findNamedValue( userData, aSearchKey );
@@ -405,7 +404,7 @@ sal_Int16 BaseNode::getFillDefaultMode() const
 {
     sal_Int16 nFillDefault = mxAnimationNode->getFillDefault();
     if (nFillDefault  == animations::AnimationFill::DEFAULT) {
-        nFillDefault = (mpParent.get() != 0
+        nFillDefault = (mpParent != 0
                         ? mpParent->getFillDefaultMode()
                         : animations::AnimationFill::AUTO);
     }
@@ -416,7 +415,7 @@ sal_Int16 BaseNode::getRestartDefaultMode() const
 {
     sal_Int16 nRestartDefaultMode = mxAnimationNode->getRestartDefault();
     if (nRestartDefaultMode == animations::AnimationRestart::DEFAULT) {
-        nRestartDefaultMode = (mpParent.get() != 0
+        nRestartDefaultMode = (mpParent != 0
                                ? mpParent->getRestartDefaultMode()
                                : animations::AnimationRestart::ALWAYS);
     }
@@ -670,7 +669,7 @@ bool BaseNode::registerDeactivatingListener(
         return false;
 
     ENSURE_AND_RETURN(
-        rNotifee.get(),
+        rNotifee,
         "BaseNode::registerDeactivatingListener(): invalid notifee" );
     maDeactivatingListeners.push_back( rNotifee );
 
@@ -681,7 +680,7 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 {
     ENSURE_AND_THROW( rSelf.get() == this,
                       "BaseNode::setSelf(): got ptr to different object" );
-    ENSURE_AND_THROW( !mpSelf.get(),
+    ENSURE_AND_THROW( !mpSelf,
                       "BaseNode::setSelf(): called multiple times" );
 
     mpSelf = rSelf;
@@ -756,12 +755,12 @@ void BaseNode::showTreeFromWithin() const
 {
     // find root node
     BaseNodeSharedPtr pCurrNode( mpSelf );
-    while( pCurrNode->mpParent.get() ) pCurrNode = pCurrNode->mpParent;
+    while( pCurrNode->mpParent ) pCurrNode = pCurrNode->mpParent;
 
     pCurrNode->showState();
 }
 #endif
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
