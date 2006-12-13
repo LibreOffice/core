@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:23:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,8 @@
 #ifndef _SLIDESHOW_UNOVIEW_HXX
 #define _SLIDESHOW_UNOVIEW_HXX
 
-#include <view.hxx>
+#include "view.hxx"
+
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace presentation
@@ -47,7 +48,7 @@ namespace com { namespace sun { namespace star { namespace presentation
 
 /* Definition of UnoView interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -64,6 +65,13 @@ namespace presentation
              */
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowView > getUnoView() const = 0;
 
+            /** Dispose view
+
+                This needs to be different from Disposable interface,
+                as the UNO XComponent also provides a dispose() (only
+                with a different calling convention under Windows).
+             */
+            virtual void _dispose() = 0;
         };
 
         typedef ::boost::shared_ptr< UnoView >      UnoViewSharedPtr;
