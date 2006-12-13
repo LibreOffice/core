@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:16:32 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:14:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,9 @@ IDLFILES=\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\
     XStatusIndicatorSupplier.idl\
-    XAbortChannel.idl
-
+    XAbortChannel.idl\
+    XInteractionRequestStringResolver.idl\
+    InteractionRequestStringResolver.idl
 
 # ------------------------------------------------------------------
 
