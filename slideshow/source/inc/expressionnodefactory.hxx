@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expressionnodefactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:12:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,13 @@
 
 #include <expressionnode.hxx>
 
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
 
 
 /* Definition of ExpressionNodeFactory class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {

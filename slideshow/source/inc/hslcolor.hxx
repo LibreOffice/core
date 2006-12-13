@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hslcolor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:13:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,12 @@
 #ifndef _SLIDESHOW_HSLCOLOR_HXX
 #define _SLIDESHOW_HSLCOLOR_HXX
 
-#ifndef _CPPCANVAS_COLOR_HXX
 #include <cppcanvas/color.hxx>
-#endif
 
 
 /* Definition of HSLColor class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
