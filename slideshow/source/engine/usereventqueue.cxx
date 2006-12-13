@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usereventqueue.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:56:16 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,15 +37,22 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
+#include <osl/mutex.hxx>
+
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+
+#include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/awt/MouseEvent.hpp>
+
+#include <boost/bind.hpp>
+
 #include "delayevent.hxx"
 #include "usereventqueue.hxx"
 #include "slideshowexceptions.hxx"
-#include "osl/mutex.hxx"
-#include "com/sun/star/awt/SystemPointer.hpp"
-#include "com/sun/star/awt/MouseButton.hpp"
-#include "com/sun/star/awt/MouseEvent.hpp"
-#include "boost/bind.hpp"
+
 #include <vector>
 #include <queue>
 #include <map>
@@ -57,7 +64,7 @@ using namespace com::sun::star;
 
 /* Implementation of UserEventQueue class */
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 namespace {
@@ -97,7 +104,7 @@ bool fireSingleEvent( ContainerT & rQueue, EventQueue & rEventQueue )
         // event, and events which return false on
         // isCharged() will never be activated by the
         // EventQueue)
-        if (pEvent->isCharged())
+        if(pEvent->isCharged())
             return rEventQueue.addEvent( pEvent );
     }
     return false; // no more (active) events in queue
@@ -183,7 +190,7 @@ public:
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
     {
         ENSURE_AND_RETURN(
-            rNode.get(),
+            rNode,
             "AllAnimationEventHandler::handleAnimationEvent(): Invalid node" );
 
         osl::MutexGuard aGuard( maMutex );
@@ -285,7 +292,7 @@ private:
     // triggered by mouse release:
     virtual bool handleMouseReleased( const awt::MouseEvent& evt )
     {
-        if (evt.Buttons != awt::MouseButton::LEFT)
+        if(evt.Buttons != awt::MouseButton::LEFT)
             return false;
 
         osl::MutexGuard const guard( maMutex );
@@ -326,7 +333,8 @@ private:
     {
         // fire all events, so animation nodes can register their
         // next effect listeners:
-        if (fireAllEvents( maEvents, mrEventQueue )) {
+        if(fireAllEvents( maEvents, mrEventQueue ))
+        {
             // then simulate a next effect event:
             // this skip effect handler is triggered upon next effect
             // events (multiplexer prio=-1)!
@@ -362,7 +370,7 @@ private:
 
     virtual bool handleMouseReleased( awt::MouseEvent const& evt )
     {
-        if (evt.Buttons != awt::MouseButton::RIGHT)
+        if(evt.Buttons != awt::MouseButton::RIGHT)
             return false;
 
         osl::MutexGuard const guard( maMutex );
@@ -517,7 +525,7 @@ public:
 
     virtual bool handleMouseReleased( const awt::MouseEvent& e )
     {
-        if (e.Buttons != awt::MouseButton::LEFT)
+        if(e.Buttons != awt::MouseButton::LEFT)
             return false;
         osl::MutexGuard aGuard( maMutex );
         return processEvent( e );
@@ -604,7 +612,7 @@ public:
         }
         else
         {
-            if( maLastIter->first.get() != NULL )
+            if( maLastIter->first )
             {
                 // last time, we were over a shape, now we're
                 // not - we thus just left that shape, raise
@@ -631,10 +639,10 @@ void UserEventQueue::registerEvent(
     const EventSharedPtr&         rEvent,
     const Functor&                rRegistrationFunctor )
 {
-    ENSURE_AND_THROW( rEvent.get(),
+    ENSURE_AND_THROW( rEvent,
                       "UserEventQueue::registerEvent(): Invalid event" );
 
-    if( !rHandler.get() ) {
+    if( !rHandler ) {
         // create handler
         rHandler.reset( new Handler( mrEventQueue ) );
         // register handler on EventMultiplexer
@@ -651,10 +659,10 @@ void UserEventQueue::registerEvent(
     const Arg&                    rArg,
     const Functor&                rRegistrationFunctor )
 {
-    ENSURE_AND_THROW( rEvent.get(),
+    ENSURE_AND_THROW( rEvent,
                       "UserEventQueue::registerEvent(): Invalid event" );
 
-    if( !rHandler.get() ) {
+    if( !rHandler ) {
         // create handler
         rHandler.reset( new Handler( mrEventQueue ) );
 
@@ -690,8 +698,17 @@ UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
 
 UserEventQueue::~UserEventQueue()
 {
-    // unregister all handlers
-    clear();
+    try
+    {
+        // unregister all handlers
+        clear();
+    }
+    catch (uno::Exception &) {
+        OSL_ENSURE( false, rtl::OUStringToOString(
+                        comphelper::anyToString(
+                            cppu::getCaughtException() ),
+                        RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
 }
 
 bool UserEventQueue::isEmpty() const
@@ -703,78 +720,78 @@ bool UserEventQueue::isEmpty() const
 
     // we're empty iff all handler queues are empty
     return
-        (mpStartEventHandler.get() ? mpStartEventHandler->isEmpty() : true) &&
-        (mpEndEventHandler.get() ? mpEndEventHandler->isEmpty() : true) &&
-        (mpAnimationStartEventHandler.get() ? mpAnimationStartEventHandler->isEmpty() : true) &&
-        (mpAnimationEndEventHandler.get() ? mpAnimationEndEventHandler->isEmpty() : true) &&
-        (mpAudioStoppedEventHandler.get() ? mpAudioStoppedEventHandler->isEmpty() : true) &&
-        (mpShapeClickEventHandler.get() ? mpShapeClickEventHandler->isEmpty() : true) &&
-        (mpClickEventHandler.get() ? mpClickEventHandler->isEmpty() : true) &&
-        (mpSkipEffectEventHandler.get() != 0 ? mpSkipEffectEventHandler->isEmpty() : true) &&
-        (mpRewindEffectEventHandler.get() != 0 ? mpRewindEffectEventHandler->isEmpty() : true) &&
-        (mpShapeDoubleClickEventHandler.get() ? mpShapeDoubleClickEventHandler->isEmpty() : true) &&
-        (mpDoubleClickEventHandler.get() ? mpDoubleClickEventHandler->isEmpty() : true) &&
-        (mpMouseEnterHandler.get() ? mpMouseEnterHandler->isEmpty() : true) &&
-        (mpMouseLeaveHandler.get() ? mpMouseLeaveHandler->isEmpty() : true);
+        (mpStartEventHandler ? mpStartEventHandler->isEmpty() : true) &&
+        (mpEndEventHandler ? mpEndEventHandler->isEmpty() : true) &&
+        (mpAnimationStartEventHandler ? mpAnimationStartEventHandler->isEmpty() : true) &&
+        (mpAnimationEndEventHandler ? mpAnimationEndEventHandler->isEmpty() : true) &&
+        (mpAudioStoppedEventHandler ? mpAudioStoppedEventHandler->isEmpty() : true) &&
+        (mpShapeClickEventHandler ? mpShapeClickEventHandler->isEmpty() : true) &&
+        (mpClickEventHandler ? mpClickEventHandler->isEmpty() : true) &&
+        (mpSkipEffectEventHandler ? mpSkipEffectEventHandler->isEmpty() : true) &&
+        (mpRewindEffectEventHandler ? mpRewindEffectEventHandler->isEmpty() : true) &&
+        (mpShapeDoubleClickEventHandler ? mpShapeDoubleClickEventHandler->isEmpty() : true) &&
+        (mpDoubleClickEventHandler ? mpDoubleClickEventHandler->isEmpty() : true) &&
+        (mpMouseEnterHandler ? mpMouseEnterHandler->isEmpty() : true) &&
+        (mpMouseLeaveHandler ? mpMouseLeaveHandler->isEmpty() : true);
 }
 
 void UserEventQueue::clear()
 {
     // unregister and delete all handlers
-    if( mpStartEventHandler.get() ) {
+    if( mpStartEventHandler ) {
         mrMultiplexer.removeSlideStartHandler( mpStartEventHandler );
         mpStartEventHandler.reset();
     }
-    if( mpEndEventHandler.get() ) {
+    if( mpEndEventHandler ) {
         mrMultiplexer.removeSlideEndHandler( mpEndEventHandler );
         mpEndEventHandler.reset();
     }
-    if( mpAnimationStartEventHandler.get() ) {
+    if( mpAnimationStartEventHandler ) {
         mrMultiplexer.removeAnimationStartHandler(
             mpAnimationStartEventHandler );
         mpAnimationStartEventHandler.reset();
     }
-    if( mpAnimationEndEventHandler.get() ) {
+    if( mpAnimationEndEventHandler ) {
         mrMultiplexer.removeAnimationEndHandler( mpAnimationEndEventHandler );
         mpAnimationEndEventHandler.reset();
     }
-    if( mpAudioStoppedEventHandler.get() ) {
+    if( mpAudioStoppedEventHandler ) {
         mrMultiplexer.removeAudioStoppedHandler( mpAudioStoppedEventHandler );
         mpAudioStoppedEventHandler.reset();
     }
-    if( mpShapeClickEventHandler.get() ) {
+    if( mpShapeClickEventHandler ) {
         mrMultiplexer.removeClickHandler( mpShapeClickEventHandler );
         mrMultiplexer.removeMouseMoveHandler( mpShapeClickEventHandler );
         mpShapeClickEventHandler.reset();
     }
-    if( mpClickEventHandler.get() ) {
+    if( mpClickEventHandler ) {
         mrMultiplexer.removeClickHandler( mpClickEventHandler );
         mrMultiplexer.removeNextEffectHandler( mpClickEventHandler );
         mpClickEventHandler.reset();
     }
-    if (mpSkipEffectEventHandler.get() != 0) {
+    if(mpSkipEffectEventHandler) {
         mrMultiplexer.removeClickHandler( mpSkipEffectEventHandler );
         mrMultiplexer.removeNextEffectHandler( mpSkipEffectEventHandler );
         mpSkipEffectEventHandler.reset();
     }
-    if (mpRewindEffectEventHandler.get() != 0) {
+    if(mpRewindEffectEventHandler) {
         mrMultiplexer.removeClickHandler( mpRewindEffectEventHandler );
         mpRewindEffectEventHandler.reset();
     }
-    if( mpShapeDoubleClickEventHandler.get() ) {
+    if( mpShapeDoubleClickEventHandler ) {
         mrMultiplexer.removeDoubleClickHandler( mpShapeDoubleClickEventHandler );
         mrMultiplexer.removeMouseMoveHandler( mpShapeDoubleClickEventHandler );
         mpShapeDoubleClickEventHandler.reset();
     }
-    if( mpDoubleClickEventHandler.get() ) {
+    if( mpDoubleClickEventHandler ) {
         mrMultiplexer.removeDoubleClickHandler( mpDoubleClickEventHandler );
         mpDoubleClickEventHandler.reset();
     }
-    if( mpMouseEnterHandler.get() ) {
+    if( mpMouseEnterHandler ) {
         mrMultiplexer.removeMouseMoveHandler( mpMouseEnterHandler );
         mpMouseEnterHandler.reset();
     }
-    if( mpMouseLeaveHandler.get() ) {
+    if( mpMouseLeaveHandler ) {
         mrMultiplexer.removeMouseMoveHandler( mpMouseLeaveHandler );
         mpMouseLeaveHandler.reset();
     }
@@ -786,7 +803,7 @@ void UserEventQueue::setAdvanceOnClick( bool bAdvanceOnClick )
 
     // forward to handler, if existing. Otherwise, the handler
     // creation will do the forwarding.
-    if( mpClickEventHandler.get() )
+    if( mpClickEventHandler )
         mpClickEventHandler->setAdvanceOnClick( bAdvanceOnClick );
 }
 
@@ -843,10 +860,10 @@ void UserEventQueue::registerShapeClickEvent( const EventSharedPtr& rEvent,
                                               const ShapeSharedPtr& rShape )
 {
     ENSURE_AND_THROW(
-        rEvent.get(),
+        rEvent,
         "UserEventQueue::registerShapeClickEvent(): Invalid event" );
 
-    if( !mpShapeClickEventHandler.get() )
+    if( !mpShapeClickEventHandler )
     {
         // create handler
         mpShapeClickEventHandler.reset(
@@ -908,7 +925,8 @@ void UserEventQueue::registerNextEffectEvent( const EventSharedPtr& rEvent )
 
 void UserEventQueue::registerSkipEffectEvent( EventSharedPtr const & pEvent )
 {
-    if (mpSkipEffectEventHandler.get() == 0) {
+    if(!mpSkipEffectEventHandler)
+    {
         mpSkipEffectEventHandler.reset(
             new SkipEffectEventHandler( mrEventQueue, mrMultiplexer ) );
         // register the handler on _two_ sources: we want the
@@ -939,10 +957,10 @@ void UserEventQueue::registerShapeDoubleClickEvent(
     const ShapeSharedPtr& rShape )
 {
     ENSURE_AND_THROW(
-        rEvent.get(),
+        rEvent,
         "UserEventQueue::registerShapeDoubleClickEvent(): Invalid event" );
 
-    if( !mpShapeDoubleClickEventHandler.get() )
+    if( !mpShapeDoubleClickEventHandler )
     {
         // create handler
         mpShapeDoubleClickEventHandler.reset(
