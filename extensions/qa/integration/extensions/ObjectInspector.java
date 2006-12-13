@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectInspector.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:17:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:55:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,18 +115,22 @@ public class ObjectInspector extends complexlib.ComplexTestCase
         inspectorFrame.initialize( floatingWindow );
         m_desktop.getFrames().append( inspectorFrame.getXFrame() );
 
-    // create the ObjectInspector
-        XObjectInspector inspector = (XObjectInspector)UnoRuntime.queryInterface(
-                XObjectInspector.class, m_orb.createInstance( "com.sun.star.inspection.ObjectInspector" ) );
-
         // handler factories:
         Object[] handlerFactories = new Object[] {
             "com.sun.star.inspection.GenericPropertyHandler",
             new ComponentFactory( ServicesHandler.class ),
             new ComponentFactory( MethodHandler.class )
         };
-        // knit a default model to the inspector
-        inspector.setInspectorModel( ObjectInspectorModel.createWithHandlerFactories( m_context, handlerFactories ) );
+        // a model
+        XObjectInspectorModel model = ObjectInspectorModel.createWithHandlerFactoriesAndHelpSection(
+            m_context, handlerFactories, 4, 4 );
+
+    // create the ObjectInspector
+        XObjectInspector inspector = com.sun.star.inspection.ObjectInspector.createWithModel(
+            m_context, model );
+
+        // add an observer which will emit help texts
+        new HelpTextProvider( inspector.getInspectorUI() );
 
         // plug it into the frame
         inspector.attachFrame( inspectorFrame.getXFrame() );
