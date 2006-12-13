@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:17:43 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:15:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -194,11 +194,11 @@ IDLFILES=\
      TransferCommandOperation.idl\
      TransferInfo.idl\
      TransferResult.idl\
-    TransientDocumentsContentProvider.idl \
-    TransientDocumentsRootContent.idl \
-    TransientDocumentsDocumentContent.idl \
-    TransientDocumentsFolderContent.idl \
-    TransientDocumentsStreamContent.idl \
+    TransientDocumentsContentProvider.idl\
+    TransientDocumentsRootContent.idl\
+    TransientDocumentsDocumentContent.idl\
+    TransientDocumentsFolderContent.idl\
+    TransientDocumentsStreamContent.idl\
      UniversalContentBroker.idl\
      UnsupportedCommandException.idl\
      UnsupportedDataSinkException.idl\
@@ -264,7 +264,8 @@ IDLFILES=\
      XSimpleFileAccess2.idl\
      XSimpleFileAccess3.idl\
      XSortedDynamicResultSetFactory.idl\
-    XSourceInitialization.idl
+    XSourceInitialization.idl\
+    XWebDAVCommandEnvironment.idl
 
 # ------------------------------------------------------------------
 
