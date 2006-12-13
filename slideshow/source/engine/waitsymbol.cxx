@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:31:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,30 +36,50 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
+#include <canvas/canvastools.hxx>
+
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+
 #include "waitsymbol.hxx"
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "canvas/canvastools.hxx"
+
 #include <algorithm>
 
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 10;
 
+WaitSymbolSharedPtr WaitSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
+                                        EventMultiplexer&                         rEventMultiplexer,
+                                        const UnoViewContainer&                   rViewContainer )
+{
+    WaitSymbolSharedPtr pRet( new WaitSymbol( xBitmap, rEventMultiplexer, rViewContainer ));
+
+    rEventMultiplexer.addViewHandler( pRet );
+
+    return pRet;
+}
+
 WaitSymbol::WaitSymbol(
     Reference<rendering::XBitmap> const &   xBitmap,
-    EventMultiplexer&                       rEventMultiplexer )
+    EventMultiplexer&                       rEventMultiplexer,
+    const UnoViewContainer&                 rViewContainer )
     : m_xBitmap(xBitmap),
       m_views(),
       mrEventMultiplexer( rEventMultiplexer ),
       m_bVisible(false)
 {
+    std::for_each( rViewContainer.begin(),
+                   rViewContainer.end(),
+                   boost::bind( &WaitSymbol::viewAdded,
+                                this,
+                                _1 ));
 }
 
 void WaitSymbol::setVisible( const bool bVisible )
@@ -96,25 +116,14 @@ basegfx::B2DPoint WaitSymbol::calcSpritePos(
                                                 - LOWER_BORDER_SPACE ) );
 }
 
-void WaitSymbol::addView( UnoViewSharedPtr const & rView )
+void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
 {
-    const ViewsVecT::iterator iEnd( m_views.end() );
-    if (std::find_if(
-            m_views.begin(), iEnd,
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) )
-        != iEnd)
-        return; // already added
-
     const geometry::IntegerSize2D spriteSize( m_xBitmap->getSize() );
     cppcanvas::CustomSpriteSharedPtr sprite(
         rView->createSprite( basegfx::B2DSize( spriteSize.Width,
-                                               spriteSize.Height ) ) );
-
-    try {
+                                               spriteSize.Height ) ));
+    try
+    {
         rendering::ViewState viewState;
         canvas::tools::initViewState( viewState );
         rendering::RenderState renderState;
@@ -122,16 +131,20 @@ void WaitSymbol::addView( UnoViewSharedPtr const & rView )
         sprite->getContentCanvas()->getUNOCanvas()->drawBitmap(
             m_xBitmap, viewState, renderState );
     }
-    catch (RuntimeException &) {
+    catch (RuntimeException &)
+    {
         throw;
     }
-    catch (Exception &) {
+    catch (Exception &)
+    {
         OSL_ENSURE( false,
                     rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
+    sprite->setPriority(1000.0); // sprite should be in front of all
+                                 // other sprites
     sprite->setAlpha( 0.9 );
     sprite->movePixel( calcSpritePos( rView ) );
     m_views.push_back( ViewsVecT::value_type( rView, sprite ) );
@@ -139,7 +152,7 @@ void WaitSymbol::addView( UnoViewSharedPtr const & rView )
         sprite->show();
 }
 
-void WaitSymbol::removeView( UnoViewSharedPtr const & rView )
+void WaitSymbol::viewRemoved( const UnoViewSharedPtr& rView )
 {
     m_views.erase(
         std::remove_if(
@@ -152,15 +165,24 @@ void WaitSymbol::removeView( UnoViewSharedPtr const & rView )
         m_views.end() );
 }
 
-void WaitSymbol::notifyViewChange()
+void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
 {
-    if (! m_views.empty()) {
-        // reposition all sprites:
-        const basegfx::B2DPoint spritePos(
-            calcSpritePos( m_views.begin()->first ) );
-        for_each_sprite( boost::bind( &cppcanvas::Sprite::movePixel,
-                                      _1, boost::cref(spritePos) ) );
-    }
+    // find entry corresponding to modified view
+    ViewsVecT::iterator aModifiedEntry(
+        std::find_if(
+            m_views.begin(),
+            m_views.end(),
+            boost::bind(
+                std::equal_to<UnoViewSharedPtr>(),
+                rView,
+                // select view:
+                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
+
+    OSL_ASSERT( aModifiedEntry != m_views.end() );
+    if( aModifiedEntry == m_views.end() )
+        return;
+
+    aModifiedEntry->second->movePixel( calcSpritePos( m_views.begin()->first ));
 }
 
 } // namespace internal
