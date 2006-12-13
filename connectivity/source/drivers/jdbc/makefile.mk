@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 06:14:50 $
+#   last change: $Author: kz $ $Date: 2006-12-13 16:19:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,13 +60,13 @@ SLOFILES=\
         $(SLO)$/CallableStatement.obj				\
         $(SLO)$/Class.obj							\
         $(SLO)$/Clob.obj							\
-        $(SLO)$/Connection.obj						\
         $(SLO)$/DatabaseMetaData.obj				\
         $(SLO)$/Date.obj							\
         $(SLO)$/DriverManager.obj					\
         $(SLO)$/DriverPropertyInfo.obj				\
         $(SLO)$/Exception.obj						\
         $(SLO)$/InputStream.obj						\
+        $(SLO)$/JConnection.obj                     \
         $(SLO)$/JDriver.obj							\
         $(SLO)$/Object.obj							\
         $(SLO)$/PreparedStatement.obj				\
