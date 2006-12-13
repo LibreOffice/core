@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:59:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include "boost/noncopyable.hpp"
 #include <vector>
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** Context for every node.
@@ -219,7 +219,7 @@ private:
 typedef ::boost::shared_ptr< BaseNode > BaseNodeSharedPtr;
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
 #endif /* INCLUDED_SLIDESHOW_BASENODE_HXX */
 
