@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transitiontools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:42:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include <transitiontools.hxx>
-
-#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include "transitiontools.hxx"
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 // TODO(Q2): Move this to basegfx
