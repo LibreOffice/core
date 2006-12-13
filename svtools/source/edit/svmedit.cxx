@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:15:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ private:
 
 protected:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void                ImpUpdateSrollBarVis( WinBits nWinStyle );
     void                ImpInitScrollBars();
     void                ImpSetScrollBarRanges();
     void                ImpSetHScrollBarThumbPos();
@@ -210,18 +211,30 @@ ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
     StartListening( *mpTextWindow->GetTextEngine() );
 }
 
-void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
+void ImpSvMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 {
-    const sal_Bool bHaveVScroll = (NULL != mpVScrollBar);
-    const sal_Bool bHaveHScroll = (NULL != mpHScrollBar);
-    const sal_Bool bHaveScrollBox = (NULL != mpScrollBox);
+    const BOOL bHaveVScroll = (NULL != mpVScrollBar);
+    const BOOL bHaveHScroll = (NULL != mpHScrollBar);
+    const BOOL bHaveScrollBox = (NULL != mpScrollBox);
 
-    const sal_Bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
-    const sal_Bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
-    const sal_Bool bNeedScrollBox = bNeedVScroll || bNeedHScroll;
+          BOOL bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
+    const BOOL bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
 
-    sal_Bool bScrollbarsChanged = sal_False;
-    if (bHaveVScroll != bNeedVScroll)
+    const BOOL bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
+    if ( !bNeedVScroll && bAutoVScroll )
+    {
+        TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
+        ULONG nOverallTextHeight(0);
+        for ( ULONG i=0; i<rEngine.GetParagraphCount(); ++i )
+            nOverallTextHeight += rEngine.GetTextHeight( i );
+        if ( nOverallTextHeight > (ULONG)mpTextWindow->GetOutputSizePixel().Height() )
+            bNeedVScroll = true;
+    }
+
+    const BOOL bNeedScrollBox = bNeedVScroll || bNeedHScroll;
+
+    BOOL bScrollbarsChanged = false;
+    if ( bHaveVScroll != bNeedVScroll )
     {
         delete mpVScrollBar;
         mpVScrollBar = bNeedVScroll ? new ScrollBar( pSvMultiLineEdit, WB_VSCROLL|WB_DRAG ) : NULL;
@@ -235,7 +248,7 @@ void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
         bScrollbarsChanged = sal_True;
     }
 
-    if (bHaveHScroll != bNeedHScroll)
+    if ( bHaveHScroll != bNeedHScroll )
     {
         delete mpHScrollBar;
         mpHScrollBar = bNeedHScroll ? new ScrollBar( pSvMultiLineEdit, WB_HSCROLL|WB_DRAG ) : NULL;
@@ -249,7 +262,7 @@ void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
         bScrollbarsChanged = sal_True;
     }
 
-    if (bHaveScrollBox != bNeedScrollBox)
+    if ( bHaveScrollBox != bNeedScrollBox )
     {
         delete mpScrollBox;
         mpScrollBox = bNeedScrollBox ? new ScrollBarBox( pSvMultiLineEdit, WB_SIZEABLE ) : NULL;
@@ -258,12 +271,16 @@ void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
             mpScrollBox->Show();
     }
 
-    if (bScrollbarsChanged)
+    if ( bScrollbarsChanged )
     {
         ImpInitScrollBars();
         Resize();
     }
+}
 
+void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
+{
+    ImpUpdateSrollBarVis( nWinStyle );
     SetAlign( nWinStyle );
 
     if ( nWinStyle & WB_NOHIDESELECTION )
@@ -448,6 +465,10 @@ String ImpSvMEdit::GetSelected( LineEnd aSeparator ) const
 
 void ImpSvMEdit::Resize()
 {
+    WinBits nWinStyle( pSvMultiLineEdit->GetStyle() );
+    if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
+        ImpUpdateSrollBarVis( nWinStyle );
+
     Size aSz = pSvMultiLineEdit->GetOutputSizePixel();
     Size aEditSize = aSz;
     long nSBWidth = pSvMultiLineEdit->GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -518,6 +539,10 @@ void ImpSvMEdit::SetText( const String& rStr )
         mpTextWindow->GetTextEngine()->SetModified( FALSE );
 
     mpTextWindow->GetTextView()->SetSelection( TextSelection() );
+
+    WinBits nWinStyle( pSvMultiLineEdit->GetStyle() );
+    if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
+        ImpUpdateSrollBarVis( nWinStyle );
 }
 
 String ImpSvMEdit::GetText() const
