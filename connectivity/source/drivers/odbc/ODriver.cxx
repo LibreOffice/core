@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:06:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,9 +154,9 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
-        Sequence< ::rtl::OUString > aBoolean(2);
-        aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-        aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+        Sequence< ::rtl::OUString > aBooleanValues(2);
+        aBooleanValues[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
+        aBooleanValues[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
 
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
@@ -169,8 +169,8 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalog"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Use catalog for file-based databases."))
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
-                ,aBoolean)
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemDriverSettings"))
@@ -183,22 +183,22 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Change named parameters with '?'."))
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
-                ,aBoolean)
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the privileges from the database driver."))
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
-                ,aBoolean)
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Retrieve generated values."))
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
-                ,aBoolean)
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
@@ -206,6 +206,13 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GenerateASBeforeCorrelationName"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Generate AS before table correlation names."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,aBooleanValues)
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
