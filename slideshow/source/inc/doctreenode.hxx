@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctreenode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:49:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,14 @@
 #ifndef _SLIDESHOW_DOCTREENODE_HXX
 #define _SLIDESHOW_DOCTREENODE_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
 #include <vector>
 
 
 /* Definition of DocTreeNode class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
