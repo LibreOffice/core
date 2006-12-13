@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:02:06 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:58:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -782,7 +782,7 @@ namespace pcr
                 break;
 
             case PropertyControlType::ComboBox:
-                xControl = new OComboboxControl( &getPropertyBox(), nWinBits | WB_TABSTOP | WB_SORT | WB_DROPDOWN);
+                xControl = new OComboboxControl( &getPropertyBox(), nWinBits | WB_TABSTOP | WB_DROPDOWN);
                 break;
 
             case PropertyControlType::TextField:
