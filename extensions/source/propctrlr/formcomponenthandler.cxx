@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:17:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1015,7 +1015,7 @@ namespace pcr
             ::std::vector< ::rtl::OUString > aListEntries;
             for ( xub_StrLen i=0; i<2; ++i )
                 aListEntries.push_back( aEntries.GetToken(i) );
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
             bNeedDefaultStringIfVoidAllowed = true;
         }
 
@@ -1055,10 +1055,10 @@ namespace pcr
 
             // create the control
             if ( PROPERTY_ID_TARGET_FRAME == nPropId )
-                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False );
+                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
             else
             {
-                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
                 bNeedDefaultStringIfVoidAllowed = true;
             }
         }
@@ -1127,7 +1127,7 @@ namespace pcr
                         aListEntries.begin() );
                 }
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
-                    _rxControlFactory, aListEntries, sal_False );
+                    _rxControlFactory, aListEntries, sal_False, sal_True );
             }
             break;
 
@@ -1136,7 +1136,7 @@ namespace pcr
                 ::std::vector< ::rtl::OUString > aFieldNames;
                 impl_initFieldList_nothrow( aFieldNames );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
-                    _rxControlFactory, aFieldNames, sal_False );
+                    _rxControlFactory, aFieldNames, sal_False, sal_False );
             }
             break;
 
@@ -2232,7 +2232,7 @@ namespace pcr
                     else
                         impl_fillQueryNames_throw( aNames );
                 }
-                _out_rProperty.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aNames, sal_False );
+                _out_rProperty.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aNames, sal_False, sal_True );
             }
             break;
 
@@ -2326,7 +2326,7 @@ namespace pcr
                 else
                     impl_fillTableNames_throw( aListEntries );
             }
-            _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False );
+            _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
         }
         break;
         }
