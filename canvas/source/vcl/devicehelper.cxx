@@ -4,9 +4,9 @@
  *
  *  $RCSfile: devicehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:30:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <canvas/canvastools.hxx>
 #include <canvas/base/linepolypolygonbase.hxx>
 
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
@@ -54,7 +55,6 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     DeviceHelper::DeviceHelper() :
-        mpOutputWindow(NULL),
         mpSpriteCanvas(NULL),
         mpBackBuffer()
     {
@@ -63,6 +63,11 @@ namespace vclcanvas
     void DeviceHelper::init( Window&        rOutputWindow,
                              SpriteCanvas&  rSpriteCanvas )
     {
+        rSpriteCanvas.setWindow(
+            uno::Reference<awt::XWindow2>(
+                VCLUnoHelper::GetInterface(&rOutputWindow),
+                uno::UNO_QUERY_THROW) );
+
         mpOutputWindow = &rOutputWindow;
         mpSpriteCanvas = &rSpriteCanvas;
 
@@ -209,26 +214,25 @@ namespace vclcanvas
     void DeviceHelper::disposing()
     {
         // release all references
-        mpOutputWindow = NULL;
         mpSpriteCanvas = NULL;
         mpBackBuffer.reset();
     }
 
-    ::com::sun::star::uno::Any DeviceHelper::getDeviceHandle() const
+    uno::Any DeviceHelper::getDeviceHandle() const
     {
         if( !mpOutputWindow )
-            return ::com::sun::star::uno::Any();
+            return uno::Any();
 
-        return ::com::sun::star::uno::makeAny(
+        return uno::makeAny(
             reinterpret_cast< sal_Int64 >(mpOutputWindow) );
     }
 
-    ::com::sun::star::uno::Any DeviceHelper::getSurfaceHandle() const
+    uno::Any DeviceHelper::getSurfaceHandle() const
     {
         if( !mpBackBuffer )
-            return ::com::sun::star::uno::Any();
+            return uno::Any();
 
-        return ::com::sun::star::uno::makeAny(
+        return uno::makeAny(
             reinterpret_cast< sal_Int64 >(&mpBackBuffer->getOutDev()) );
     }
 
@@ -255,7 +259,7 @@ namespace vclcanvas
             bool bOldMap( mpOutputWindow->IsMapModeEnabled() );
             mpOutputWindow->EnableMapMode( FALSE );
             aStream << mpOutputWindow->GetBitmap(aEmptyPoint,
-                                                 mpOutputWindow->GetOutputSizePixel());
+                                                mpOutputWindow->GetOutputSizePixel());
             mpOutputWindow->EnableMapMode( bOldMap );
 
             if( mpBackBuffer )
