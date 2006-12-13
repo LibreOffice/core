@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvasbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:44:07 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,9 @@ namespace canvas
         {
         }
 
+#if defined __SUNPRO_CC
+        using Base::disposing;
+#endif
         virtual void SAL_CALL disposing()
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
