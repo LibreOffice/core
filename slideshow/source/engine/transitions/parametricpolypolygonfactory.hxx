@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parametricpolypolygonfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:55:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,24 +37,21 @@
 #define _SLIDESHOW_PARAMETRICPOLYPOLYGONFACTORY_HXX
 
 #include <parametricpolypolygon.hxx>
+#include <boost/utility.hpp>
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
         /* Definition of Transitionfactory class */
 
-        class ParametricPolyPolygonFactory
+        class ParametricPolyPolygonFactory : private boost::noncopyable
         {
         public:
             static ParametricPolyPolygonSharedPtr createClipPolyPolygon( sal_Int16 nTransitionType,
                                                                          sal_Int16 nTransitionSubType );
 
         private:
-            // default: disabled copy/assignment
-            ParametricPolyPolygonFactory(const ParametricPolyPolygonFactory&);
-            ParametricPolyPolygonFactory& operator=( const ParametricPolyPolygonFactory& );
-
             // static factory
             ParametricPolyPolygonFactory();
             ~ParametricPolyPolygonFactory();
