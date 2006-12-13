@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:22:20 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@
 #include <rtl/logfile.hxx>
 
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
@@ -116,11 +117,44 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
+//*****************************************************************************************************************
+//  XInterface, XTypeProvider
+//*****************************************************************************************************************
+DEFINE_XINTERFACE_11    (   MenuBarWrapper                                                    ,
+                            UIConfigElementWrapperBase                                        ,
+                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider          ),
+                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement               ),
+                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementSettings       ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet     ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet      ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet          ),
+                            DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization        ),
+                            DIRECT_INTERFACE( ::com::sun::star::lang::XComponent             ),
+                            DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable             ),
+                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationListener ),
+                            DERIVED_INTERFACE( ::com::sun::star::container::XNameAccess, ::com::sun::star::container::XElementAccess )
+                        )
+
+DEFINE_XTYPEPROVIDER_11 (   MenuBarWrapper                                  ,
+                            ::com::sun::star::lang::XTypeProvider           ,
+                            ::com::sun::star::ui::XUIElement                ,
+                            ::com::sun::star::ui::XUIElementSettings        ,
+                            ::com::sun::star::beans::XMultiPropertySet      ,
+                            ::com::sun::star::beans::XFastPropertySet       ,
+                            ::com::sun::star::beans::XPropertySet           ,
+                            ::com::sun::star::lang::XInitialization         ,
+                            ::com::sun::star::lang::XComponent              ,
+                            ::com::sun::star::util::XUpdatable              ,
+                            ::com::sun::star::ui::XUIConfigurationListener  ,
+                            ::com::sun::star::container::XNameAccess
+                        )
+
 // #110897#
 MenuBarWrapper::MenuBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
     )
 :    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
+     m_bRefreshPopupControllerCache( sal_True ),
      mxServiceFactory( xServiceManager )
 {
 }
@@ -314,6 +348,107 @@ Reference< XIndexAccess > SAL_CALL MenuBarWrapper::getSettings( sal_Bool bWritea
         return m_xConfigData;
 }
 
+void MenuBarWrapper::fillPopupControllerCache()
+{
+    if ( m_bRefreshPopupControllerCache )
+    {
+        MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
+        if ( pMenuBarManager )
+            pMenuBarManager->GetPopupController( m_aPopupControllerCache );
+        if ( m_aPopupControllerCache.size() > 0 )
+            m_bRefreshPopupControllerCache = sal_False;
+    }
+}
+
+// XElementAccess
+Type SAL_CALL MenuBarWrapper::getElementType()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::getCppuType(( Reference< XDispatchProvider >*)0);
+}
+
+::sal_Bool SAL_CALL MenuBarWrapper::hasElements()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    fillPopupControllerCache();
+    return ( m_aPopupControllerCache.size() > 0 );
+}
+
+// XNameAccess
+Any SAL_CALL MenuBarWrapper::getByName(
+    const ::rtl::OUString& aName )
+throw ( container::NoSuchElementException,
+        lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    fillPopupControllerCache();
+
+    PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.find( aName );
+    if ( pIter != m_aPopupControllerCache.end() )
+    {
+        Any a;
+        uno::Reference< frame::XDispatchProvider > xDispatchProvider;
+        xDispatchProvider = pIter->second.m_xDispatchProvider;
+
+        a = uno::makeAny( xDispatchProvider );
+        return a;
+    }
+    else
+        throw container::NoSuchElementException();
+}
+
+Sequence< ::rtl::OUString > SAL_CALL MenuBarWrapper::getElementNames()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    fillPopupControllerCache();
+
+    Sequence< rtl::OUString > aSeq( m_aPopupControllerCache.size() );
+
+    sal_Int32 i( 0 );
+    PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.begin();
+    while ( pIter != m_aPopupControllerCache.end() )
+    {
+        aSeq[i++] = pIter->first;
+        ++pIter;
+    }
+
+    return aSeq;
+}
+
+::sal_Bool SAL_CALL MenuBarWrapper::hasByName(
+    const ::rtl::OUString& aName )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    fillPopupControllerCache();
+
+    PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.find( aName );
+    if ( pIter != m_aPopupControllerCache.end() )
+        return sal_True;
+    else
+        return sal_False;
+}
+
+// XUIElement
 Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( RuntimeException )
 {
     if ( m_bDisposed )
@@ -323,4 +458,3 @@ Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( Runt
 }
 
 } // namespace framework
-
