@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoviewcontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:23:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,10 @@
 #ifndef _SLIDESHOW_UNOVIEWCONTAINER_HXX
 #define _SLIDESHOW_UNOVIEWCONTAINER_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
+#include <boost/utility.hpp>
 
 #include <vector>
 
@@ -56,13 +53,13 @@ namespace com { namespace sun { namespace star { namespace presentation
 
 /* Definition of UnoViewContainer class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
         /** Contains UnoViews
          */
-        class UnoViewContainer
+        class UnoViewContainer : private boost::noncopyable
         {
         public:
             UnoViewContainer();
@@ -91,22 +88,24 @@ namespace presentation
             UnoViewSharedPtr removeView( const ::com::sun::star::uno::Reference<
                                                      ::com::sun::star::presentation::XSlideShowView >& xView );
 
+            /// Dispose all stored views. Implies clear().
+            void dispose();
+
             // the following parrots STL container concept methods
             // ===================================================
 
-            bool empty() const;
-            void clear();
+            std::size_t size() const { return maViews.size(); }
+            bool empty() const { return maViews.empty(); }
 
-            UnoViewVector::iterator         begin();
-            UnoViewVector::const_iterator   begin() const;
-            UnoViewVector::iterator         end();
-            UnoViewVector::const_iterator   end() const;
+            void clear() { maViews.clear(); }
+
+
+            UnoViewVector::iterator         begin() { return maViews.begin(); }
+            UnoViewVector::const_iterator   begin() const { return maViews.begin(); }
+            UnoViewVector::iterator         end() { return maViews.end(); }
+            UnoViewVector::const_iterator   end() const { return maViews.end(); }
 
         private:
-            // default: disabled copy/assignment
-            UnoViewContainer(const UnoViewContainer&);
-            UnoViewContainer& operator=( const UnoViewContainer& );
-
             /// All added views
             UnoViewVector   maViews;
         };
