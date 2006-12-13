@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:34:33 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
         sal_Int32 nParameterCount = 0;
         ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
         replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
-        pNode->parseNodeToStr(sNewSql,_pConnection->getMetaData());
+        pNode->parseNodeToStr( sNewSql, _pConnection );
         delete pNode;
     }
     else
