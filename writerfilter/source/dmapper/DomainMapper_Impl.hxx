@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
+ *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,6 +199,11 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetPageStyles();
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               GetBodyText();
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > GetTextFactory()
+    {
+        return m_xTextFactory;
+    }
+
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       GetTextDocument()
     {
         return m_xTextDocument;

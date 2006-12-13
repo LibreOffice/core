@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-11-20 12:19:03 $
+ *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -668,33 +668,6 @@ void DomainMapper_Impl::appendTextContent( const uno::Reference< text::XTextCont
         }
     }
 }
-/*-- 24.07.2006 09:41:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-::rtl::OUString lcl_FindUnusedPageStyleName(const uno::Sequence< ::rtl::OUString >& rPageStyleNames)
-{
-    static const sal_Char cDefaultStyle[] = "Converted";
-    //find the hightest number x in each style with the name "cDefaultStyle+x" and
-    //return an incremented name
-    sal_Int32 nMaxIndex = 0;
-    const sal_Int32 nDefaultLength = sizeof(cDefaultStyle)/sizeof(sal_Char) - 1;
-    const ::rtl::OUString sDefaultStyle( cDefaultStyle, nDefaultLength, RTL_TEXTENCODING_ASCII_US );
-
-    const ::rtl::OUString* pStyleNames = rPageStyleNames.getConstArray();
-    for( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle)
-    {
-        if( pStyleNames[nStyle].getLength() > nDefaultLength &&
-                !rtl_ustr_compare_WithLength( sDefaultStyle, nDefaultLength, pStyleNames[nStyle], nDefaultLength))
-        {
-            sal_Int32 nIndex = pStyleNames[nStyle].copy( nDefaultLength ).toInt32();
-            if( nIndex > nMaxIndex)
-                nMaxIndex = nIndex;
-        }
-    }
-    ::rtl::OUString sRet( sDefaultStyle );
-    sRet += rtl::OUString::valueOf( nMaxIndex + 1);
-    return sRet;
-}
 
 void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 {
@@ -704,30 +677,26 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     if(pSectionContext)
     {
-        ::rtl::OUString sPageStyleName = pSectionContext->GetPageStyleName( eType );
-        //if there's none create one
+        uno::Reference< beans::XPropertySet > xPageStyle =
+            pSectionContext->GetPageStyle(
+                GetPageStyles(),
+                m_xTextFactory,
+                eType == SectionPropertyMap::PAGE_FIRST );
         try
         {
-            uno::Reference< beans::XPropertySet > xPageStyle;
-            if(!sPageStyleName.getLength())
-            {
-                uno::Sequence< ::rtl::OUString > aPageStyleNames = GetPageStyles()->getElementNames();
-                sPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
-                xPageStyle = uno::Reference< beans::XPropertySet > (
-                        m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.PageStyle") )),
-                        uno::UNO_QUERY);
-                GetPageStyles()->insertByName( sPageStyleName, uno::makeAny(xPageStyle) );
-                pSectionContext->SetPageStyleName( eType, sPageStyleName );
-            }
-            else
-                GetPageStyles()->getByName( sPageStyleName ) >>= xPageStyle;
+            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
             //switch on header use
             xPageStyle->setPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderIsOn")),
+                    rPropNameSupplier.GetName(PROP_HEADER_IS_ON),
                     uno::makeAny(sal_True) );
+            // if a left header is available then header are not shared
+            bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
+            if( bLeft )
+                xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_SHARED), uno::makeAny( false ));
+
             //set the interface
             uno::Reference< text::XText > xHeaderText;
-            xPageStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderText") )) >>= xHeaderText;
+            xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_HEADER_TEXT_LEFT : PROP_HEADER_TEXT) ) >>= xHeaderText;
             m_aTextAppendStack.push( uno::Reference< text::XTextAppendAndConvert >( xHeaderText, uno::UNO_QUERY_THROW));
         }
         catch( uno::Exception& )
@@ -746,31 +715,26 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     if(pSectionContext)
     {
-        ::rtl::OUString sPageStyleName = pSectionContext->GetPageStyleName( eType );
-        //if there's none create one
+        uno::Reference< beans::XPropertySet > xPageStyle =
+                pSectionContext->GetPageStyle(
+                    GetPageStyles(),
+                    m_xTextFactory,
+                    eType == SectionPropertyMap::PAGE_FIRST );
         try
         {
-            uno::Reference< beans::XPropertySet > xPageStyle;
-            if(!sPageStyleName.getLength())
-            {
-                uno::Sequence< ::rtl::OUString > aPageStyleNames = GetPageStyles()->getElementNames();
-                sPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
-                xPageStyle = uno::Reference< beans::XPropertySet >(
-                        m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.PageStyle") )),
-                        uno::UNO_QUERY);
-                GetPageStyles()->insertByName( sPageStyleName, uno::makeAny(xPageStyle) );
-                pSectionContext->SetPageStyleName( eType, sPageStyleName );
-            }
-            else
-                GetPageStyles()->getByName( sPageStyleName ) >>= xPageStyle;
+            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
             //switch on footer use
             xPageStyle->setPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsOn")),
+                    rPropNameSupplier.GetName(PROP_FOOTER_IS_ON),
                     uno::makeAny(sal_True) );
+            // if a left header is available then footer is not shared
+            bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
+            if( bLeft )
+                xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_SHARED), uno::makeAny( false ));
             //set the interface
             uno::Reference< text::XText > xFooterText;
-            xPageStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterText") )) >>= xFooterText;
-            m_aTextAppendStack.push(uno::Reference< text::XTextAppendAndConvert >( xFooterText, uno::UNO_QUERY_THROW));
+            xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_FOOTER_TEXT_LEFT : PROP_FOOTER_TEXT) ) >>= xFooterText;
+            m_aTextAppendStack.push(uno::Reference< text::XTextAppendAndConvert >( xFooterText, uno::UNO_QUERY_THROW ));
         }
         catch( uno::Exception& )
         {

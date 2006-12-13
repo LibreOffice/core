@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-12-04 15:42:28 $
+ *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,20 +157,39 @@ enum PropertyIds
 /*115*/ , PROP_CONTOUR_OUTSIDE
 /*116*/ , PROP_CONTOUR_POLY_POLYGON
 /*117*/ , PROP_PAGE_TOGGLE
-///*118*/ ,
-///*119*/ , PROP_
-///*120*/ , PROP_
-///*121*/ , PROP_
-///*122*/ , PROP_
-///*123*/ , PROP_
-///*124*/ , PROP_
-///*125*/ , PROP_
-///*126*/ , PROP_
-///*127*/ , PROP_
-///*128*/ , PROP_
-///*129*/ , PROP_
-///*130*/ , PROP_
-///*131*/ , PROP_
+/*118*/ , PROP_BACK_COLOR
+/*119*/ , PROP_ALTERNATIVE_TEXT
+/*120*/ , PROP_HEADER_TEXT_LEFT
+/*121*/ , PROP_HEADER_TEXT
+/*122*/ , PROP_HEADER_IS_SHARED
+/*123*/ , PROP_HEADER_IS_ON
+/*124*/ , PROP_FOOTER_TEXT_LEFT
+/*125*/ , PROP_FOOTER_TEXT
+/*126*/ , PROP_FOOTER_IS_SHARED
+/*127*/ , PROP_FOOTER_IS_ON
+/*128*/ , PROP_WIDTH
+/*129*/ , PROP_HEIGHT
+/*130*/ , PROP_SEPARATOR_LINE_IS_ON
+/*131*/ , PROP_TEXT_COLUMNS
+/*132*/ , PROP_AUTOMATIC_DISTANCE
+/*133*/ , PROP_IS_LANDSCAPE
+/*134*/ , PROP_PRINTER_PAPER_TRAY_INDEX
+///*135*/ , PROP_
+///*136*/ , PROP_
+///*137*/ , PROP_
+///*138*/ , PROP_
+///*139*/ , PROP_
+///*140*/ , PROP_
+///*141*/ , PROP_
+///*142*/ , PROP_
+///*143*/ , PROP_
+///*144*/ , PROP_
+///*145*/ , PROP_
+///*146*/ , PROP_
+///*147*/ , PROP_
+///*148*/ , PROP_
+///*149*/ , PROP_
+
 
 };
 struct PropertyNameSupplier_Impl;

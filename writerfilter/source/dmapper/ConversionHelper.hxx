@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2006-11-22 14:03:57 $
+ *  last change: $Author: os $ $Date: 2006-12-13 14:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ namespace ConversionHelper{
             const ::rtl::OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);
     sal_Int32 convertToMM100(sal_Int32 _t);
     sal_Int32 ConvertColor(sal_Int32 nWordColor );
+    sal_Int32 SnapPageDimension( sal_Int32 nVal );
 
 } // namespace ConversionHelper
 } //namespace dmapper

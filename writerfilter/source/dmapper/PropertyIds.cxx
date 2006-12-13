@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2006-12-04 15:42:28 $
+ *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,10 +214,29 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_GAMMA                 :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Gamma")); break;
             case PROP_HORI_MIRRORED_ON_EVEN_PAGES:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriMirroredOnEvenPages")); break;
             case PROP_HORI_MIRRORED_ON_ODD_PAGES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriMirroredOnOddPages")); break;
-            case PROP_VERT_MIRRORED              :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertMirrored")); break;
+            case PROP_VERT_MIRRORED        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertMirrored")); break;
             case PROP_CONTOUR_OUTSIDE      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContourOutside")); break;
             case PROP_CONTOUR_POLY_POLYGON :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")); break;
             case PROP_PAGE_TOGGLE          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageToggle")); break;
+            case PROP_BACK_COLOR           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackColor")); break;
+            case PROP_ALTERNATIVE_TEXT     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")); break;
+            case PROP_HEADER_TEXT_LEFT     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderTextLeft")); break;
+            case PROP_HEADER_TEXT          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderText")); break;
+            case PROP_HEADER_IS_SHARED     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderIsShared")); break;
+            case PROP_HEADER_IS_ON         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderIsOn")); break;
+            case PROP_FOOTER_TEXT_LEFT     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterTextLeft")); break;
+            case PROP_FOOTER_TEXT          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterText")); break;
+            case PROP_FOOTER_IS_SHARED     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsShared")); break;
+            case PROP_FOOTER_IS_ON         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsOn")); break;
+            case PROP_WIDTH                :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")); break;
+            case PROP_HEIGHT               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")); break;
+            case PROP_SEPARATOR_LINE_IS_ON :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn")); break;
+            case PROP_TEXT_COLUMNS         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextColumns")); break;
+            case PROP_AUTOMATIC_DISTANCE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance")); break;
+            case PROP_IS_LANDSCAPE         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsLandscape")); break;
+            case PROP_PRINTER_PAPER_TRAY_INDEX:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrinterPaperTrayIndex")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

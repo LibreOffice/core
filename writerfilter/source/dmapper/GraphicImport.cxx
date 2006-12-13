@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-12-04 15:42:28 $
+ *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@
 #ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
 #endif
+#include <rtl/ustrbuf.hxx>
 
 
 #include <iostream>
@@ -264,21 +265,25 @@ struct GraphicImport_Impl
     sal_Int32 nBrightness;
     double    fGamma;
 
+    sal_Int32 nFillColor;
+
     drawing::ColorMode eColorMode;
 
     GraphicBorderLine   aBorders[4];
     sal_Int32           nCurrentBorderLine;
 
-    sal_Int32   nDffType;
-    bool        bIsBitmap;
-    bool        bIsTiff;
-    sal_Int32   nBitsPerPixel;
+    sal_Int32       nDffType;
+    bool            bIsBitmap;
+    bool            bIsTiff;
+    sal_Int32       nBitsPerPixel;
 
-    bool    bHoriFlip;
-    bool    bVertFlip;
+    bool            bHoriFlip;
+    bool            bVertFlip;
 
-    bool      bInShapeOptionMode;
-    sal_Int32 nShapeOptionType;
+    bool            bInShapeOptionMode;
+    sal_Int32       nShapeOptionType;
+
+    ::rtl::OUString sAlternativeText;
 
     GraphicImport_Impl(bool bIsShape) :
         bIsShapeImport( bIsShape )
@@ -309,6 +314,7 @@ struct GraphicImport_Impl
         ,nContrast(0)
         ,nBrightness(0)
         ,fGamma( -1.0 )
+        ,nFillColor( 0xffffffff )
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
         ,nDffType( 0 )
@@ -563,13 +569,19 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         /* WRITERFILTERSTATUS: done: 50, planned: 10, spent: 5 */
         case NS_rtf::LN_shpop:
         {
-            ProcessShapeOptions( val );
+            if(NS_dff::LN_shpwzDescription != m_pImpl->nShapeOptionType )
+                ProcessShapeOptions( val );
         }
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpname:    break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_rtf::LN_shpvalue:   break;
+        case NS_rtf::LN_shpvalue:
+        {
+            if( NS_dff::LN_shpwzDescription == m_pImpl->nShapeOptionType )
+                ProcessShapeOptions( val );
+        }
+        break;
 
         //BLIP store entry
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -1112,9 +1124,16 @@ void GraphicImport::ProcessShapeOptions(doctok::Value& val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shpfillType /*384*/:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_dff::LN_shpfillColor           /*385*/:  break;  // rtf:shpfillColor
+        case NS_dff::LN_shpfillColor           /*385*/:
+            m_pImpl->nFillColor = (m_pImpl->nFillColor & 0xff000000) + ConversionHelper::ConvertColor( nIntValue );
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_dff::LN_shpfillOpacity         /*386*/:  break;  // rtf:shpfillOpacity
+        case NS_dff::LN_shpfillOpacity         /*386*/:
+        {
+            sal_Int32 nTrans = 0xff - ( nIntValue * 0xff ) / 0xffff;
+            m_pImpl->nFillColor = (nTrans << 0x18 ) + (m_pImpl->nFillColor & 0xffffff);
+        }
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shpfillBackColor /*387*/:
           /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -1461,7 +1480,9 @@ void GraphicImport::ProcessShapeOptions(doctok::Value& val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shpwzName /*896*/:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-//        case NS_dff::LN_shpwzDescription /*897*/:
+        case NS_dff::LN_shpwzDescription /*897*/: //alternative text
+            m_pImpl->sAlternativeText = val.getString();
+        break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shppihlShape /*898*/:
         case NS_dff::LN_shppWrapPolygonVertices/*899*/:  break;  // rtf:shppWrapPolygonVertices
@@ -1734,7 +1755,10 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
                 if( m_pImpl->bVertFlip )
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
                         uno::makeAny( m_pImpl->bVertFlip ));
-
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ALTERNATIVE_TEXT ),
+                    uno::makeAny( m_pImpl->sAlternativeText ));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
+                    uno::makeAny( m_pImpl->nFillColor ));
                 //there seems to be no way to detect the original size via _real_ API
                 uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
                 awt::Size aGraphicSize, aGraphicSizePixel;
@@ -1799,13 +1823,13 @@ void GraphicImport::endCharacterGroup()
 /*-- 01.11.2006 09:45:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::text(const sal_uInt8 * /*data*/, size_t /*len*/)
+void GraphicImport::text(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
 /*-- 01.11.2006 09:45:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::utext(const sal_uInt8 * /*data*/, size_t /*len*/)
+void GraphicImport::utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
 /*-- 01.11.2006 09:45:05---------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
+ *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,13 @@
 #endif
 #include <boost/shared_ptr.hpp>
 #include <map>
+#include <vector>
 namespace com{namespace sun{namespace star{
     namespace beans{
     struct PropertyValue;
+    }
+    namespace lang{
+        class XMultiServiceFactory;
     }
     namespace table{
         struct BorderLine;
@@ -108,19 +112,33 @@ class SectionPropertyMap : public PropertyMap
 {
     //'temporarily' the section page settings are imported as page styles
     // empty strings mark page settings as not yet imported
-    ::rtl::OUString                                                             sPageStyleNames[3];
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   aPageStyles[3];
-//    ::rtl::OUString sFirstPage;
-//    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xFirstPage;
-//    ::rtl::OUString sRightPage;
-//    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xRightPage;
-//    ::rtl::OUString sLeftPage;
-//    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xLeftPage;
+    ::rtl::OUString                                                             m_sFirstPageStyleName;
+    ::rtl::OUString                                                             m_sFollowPageStyleName;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFirstPageStyle;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFollowPageStyle;
 
-    ::com::sun::star::table::BorderLine*    pBorderLines[4];
-    sal_Int32                               nBorderDistances[4];
+    ::com::sun::star::table::BorderLine*    m_pBorderLines[4];
+    sal_Int32                               m_nBorderDistances[4];
 
-    public:
+    bool                                    m_bTitlePage;
+    sal_Int16                               m_nColumnCount;
+    sal_Int32                               m_nColumnDistance;
+    ::std::vector< sal_Int32 >              m_aColWidth;
+    ::std::vector< sal_Int32 >              m_aColDistance;
+
+    bool                                    m_bSeparatorLineIsOn;
+    bool                                    m_bEvenlySpaced;
+    bool                                    m_bIsLandscape;
+
+    sal_Int32                               m_nPageNumber;
+    sal_Int32                               m_nBreakType;
+    sal_Int32                               m_nPaperBin;
+    sal_Int32                               m_nFirstPaperBin;
+
+
+    void _ApplyProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle );
+
+public:
         SectionPropertyMap();
         ~SectionPropertyMap();
 
@@ -131,18 +149,39 @@ class SectionPropertyMap : public PropertyMap
         PAGE_RIGHT
     };
 
-    const ::rtl::OUString&  GetPageStyleName( PageType eType );
-    void                    SetPageStyleName( PageType eType, const ::rtl::OUString& rName);
+    const ::rtl::OUString&  GetPageStyleName( bool bFirst );
+    void                    SetPageStyleName( bool bFirst, const ::rtl::OUString& rName);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetPageStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
-            PageType eType);
+            const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
+            bool bFirst );
 
     void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine& rBorderLine );
+
+    void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
+    void SetColumnDistance( sal_Int32 nDist ) { m_nColumnDistance = nDist; }
+    void AppendColumnWidth( sal_Int32 nWidth ) { m_aColWidth.push_back( nWidth ); }
+    void AppendColumnSpacing( sal_Int32 nDist ) {m_aColDistance.push_back( nDist ); }
+
+    void SetTitlePage( bool bSet ) { m_bTitlePage = bSet; }
+    void SetSeparatorLine( bool bSet ) { m_bSeparatorLineIsOn = bSet; }
+    void SetEvenlySpaced( bool bSet ) {    m_bEvenlySpaced = bSet; }
+    void SetLandscape( bool bSet ) { m_bIsLandscape = bSet; }
+    void SetPageNumber( sal_Int32 nSet ) { m_nPageNumber = nSet; }
+    void SetBreakType( sal_Int32 nSet ) { m_nBreakType = nSet; }
+    void SetPaperBin( sal_Int32 nSet );
+    void SetFirstPaperBin( sal_Int32 nSet );
+
     //determine which style gets the borders
     void ApplyBorderToPageStyles(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
+            const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
             sal_Int32 nValue );
+
+    void ApplyPropertiesToPageStyles(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
+            const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory);
 };
 
 } //namespace dmapper
