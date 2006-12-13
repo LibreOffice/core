@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:14:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ namespace pcr
         {
             try
             {
-                m_xContext->controlValueChanged( &m_rAntiImpl );
+                m_xContext->valueChanged( &m_rAntiImpl );
                 m_bModified = sal_False;
             }
             catch( const Exception& e )
