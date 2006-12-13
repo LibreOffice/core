@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:14:58 $
+#   last change: $Author: kz $ $Date: 2006-12-13 12:00:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,9 @@ SLOFILES=           $(SLO)$/controlfontdialog.obj \
                     $(SLO)$/pcrcommon.obj	\
                     $(SLO)$/newdatatype.obj \
                     $(SLO)$/propeventtranslation.obj \
-                    $(SLO)$/objectinspectormodel.obj
+                    $(SLO)$/objectinspectormodel.obj \
+                    $(SLO)$/inspectorhelpwindow.obj \
+                    $(SLO)$/defaulthelpprovider.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=			propres.src	 \
