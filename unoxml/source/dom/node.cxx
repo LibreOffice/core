@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:47:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:07:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -572,7 +572,8 @@ namespace DOM
             m_aNodePtr->ns != NULL)
         {
             const xmlChar* xPrefix = m_aNodePtr->ns->prefix;
-            aPrefix = OUString((sal_Char*)xPrefix, strlen((char*)xPrefix), RTL_TEXTENCODING_UTF8);
+            if( xPrefix != NULL )
+                aPrefix = OUString((sal_Char*)xPrefix, strlen((char*)xPrefix), RTL_TEXTENCODING_UTF8);
         }
         return aPrefix;
 
