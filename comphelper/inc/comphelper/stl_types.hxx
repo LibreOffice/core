@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:54:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:10:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,13 @@
 
 #include <stack>
 #include <set>
+
+#ifdef _MSC_VER
+# ifndef _USE_MATH_DEFINES
+#  define _USE_MATH_DEFINES // needed by Visual C++ for math constants
+# endif
+#endif
+
 #include <math.h> // prevent conflict between exception and std::exception
 #include <functional>
 
