@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:15:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:11:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,10 @@ extern "C" {
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 
 #ifdef _MSC_VER
+
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES // needed by Visual C++ for math constants
+#endif
 
 /* warnings ought to be disabled using /wd:n option of msvc.net compiler */
 #if _MSC_VER < 1300
