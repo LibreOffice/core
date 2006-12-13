@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedsprite.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:22:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:12:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,39 +41,29 @@
 
 #include <animatedsprite.hxx>
 
-#ifndef _CPPCANVAS_CANVAS_HXX
 #include <cppcanvas/canvas.hxx>
-#endif
-#ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
 
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
 
 
 using namespace ::com::sun::star;
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
         AnimatedSprite::AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
-                                        const ::basegfx::B2DSize&   rSpriteSizePixel ) :
+                                        const ::basegfx::B2DSize&   rSpriteSizePixel,
+                                        double                      nSpritePrio ) :
             mpViewLayer( rViewLayer ),
             mpSprite(),
             maEffectiveSpriteSizePixel( rSpriteSizePixel ),
             maContentPixelOffset(),
+            mnSpritePrio(nSpritePrio),
             mnAlpha(0.0),
             maPosPixel(),
             maPos(),
@@ -81,7 +71,7 @@ namespace presentation
             maTransform(),
             mbSpriteVisible( false )
         {
-            ENSURE_AND_THROW( mpViewLayer.get(), "AnimatedSprite::AnimatedSprite(): Invalid view layer" );
+            ENSURE_AND_THROW( mpViewLayer, "AnimatedSprite::AnimatedSprite(): Invalid view layer" );
 
             // Add half a pixel tolerance to sprite size, since we later on compare
             // against it in resize(). And view transformations will almost never yield
@@ -89,8 +79,9 @@ namespace presentation
             maEffectiveSpriteSizePixel += ::basegfx::B2DSize(0.5, 0.5);
 
             mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel );
+                                                  //TODO(F3): prio! mnSpritePrio );
 
-            ENSURE_AND_THROW( mpSprite.get(), "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
+            ENSURE_AND_THROW( mpSprite, "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
         }
 
         AnimatedSprite::~AnimatedSprite()
@@ -99,7 +90,7 @@ namespace presentation
 
         ::cppcanvas::CanvasSharedPtr AnimatedSprite::getContentCanvas() const
         {
-            ENSURE_AND_THROW( mpViewLayer->getCanvas().get(), "AnimatedSprite::getContentCanvas(): No view layer canvas" );
+            ENSURE_AND_THROW( mpViewLayer->getCanvas(), "AnimatedSprite::getContentCanvas(): No view layer canvas" );
 
             const ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
 
@@ -162,12 +153,13 @@ namespace presentation
 
                 maEffectiveSpriteSizePixel = aNewSize;
                 mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel );
+                                                      // TODO(F3): prio! mnSpritePrio );
 
-                ENSURE_AND_THROW( mpSprite.get(),
+                ENSURE_AND_THROW( mpSprite,
                                   "AnimatedSprite::resize(): Could not create new sprite" );
 
                 // set attributes similar to previous sprite
-                if( mpSprite.get() && mbSpriteVisible )
+                if( mpSprite && mbSpriteVisible )
                 {
                     mpSprite->show();
                     mpSprite->setAlpha( mnAlpha );
@@ -182,7 +174,7 @@ namespace presentation
                 }
             }
 
-            return mpSprite.get() != NULL;
+            return mpSprite;
         }
 
         void AnimatedSprite::setPixelOffset( const ::basegfx::B2DSize& rPixelOffset )
@@ -225,9 +217,9 @@ namespace presentation
             mpSprite->transform( rTransform );
         }
 
-        void AnimatedSprite::setPriority( double )
+        void AnimatedSprite::setPriority( double nPrio )
         {
-            // TODO(F3): Missing sprite priority
+            mpSprite->setPriority( nPrio );
         }
 
         void AnimatedSprite::hide()
