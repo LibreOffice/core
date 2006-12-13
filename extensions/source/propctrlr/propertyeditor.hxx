@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:30:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 12:02:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ namespace pcr
 //............................................................................
 
     class IPropertyLineListener;
+    class IPropertyControlObserver;
     class OBrowserPage;
     struct OLineDescriptor;
 
@@ -67,68 +68,79 @@ namespace pcr
     class OPropertyEditor : public Control
     {
     private:
-                typedef ::std::map< ::rtl::OUString, sal_uInt16 >   MapStringToPageId;
-                struct HiddenPage
-                {
-                    sal_uInt16  nPos;
-                    TabPage*    pPage;
-                    HiddenPage() : nPos( 0 ), pPage( NULL ) { }
-                    HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
-                };
+        typedef ::std::map< ::rtl::OUString, sal_uInt16 >   MapStringToPageId;
+        struct HiddenPage
+        {
+            sal_uInt16  nPos;
+            TabPage*    pPage;
+            HiddenPage() : nPos( 0 ), pPage( NULL ) { }
+            HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
+        };
 
     private:
-                TabControl                  m_aTabControl;
-                IPropertyLineListener*      m_pListener;
-                sal_uInt16                  m_nNextId;
-                Link                        m_aPageActivationHandler;
+        TabControl                  m_aTabControl;
+        IPropertyLineListener*      m_pListener;
+        IPropertyControlObserver*   m_pObserver;
+        sal_uInt16                  m_nNextId;
+        Link                        m_aPageActivationHandler;
+        bool                        m_bHasHelpSection;
+        sal_Int32                   m_nMinHelpLines;
+        sal_Int32                   m_nMaxHelpLines;
 
-                MapStringToPageId                       m_aPropertyPageIds;
-                ::std::map< sal_uInt16, HiddenPage >    m_aHiddenPages;
+        MapStringToPageId                       m_aPropertyPageIds;
+        ::std::map< sal_uInt16, HiddenPage >    m_aHiddenPages;
 
     protected:
-                void                        Resize();
-                void                        GetFocus();
+        void                        Resize();
+        void                        GetFocus();
 
     public:
-                                            OPropertyEditor (Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
+                                    OPropertyEditor (Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
-                                            ~OPropertyEditor();
+                                    ~OPropertyEditor();
 
-                sal_uInt16                  CalcVisibleLines();
-                void                        EnableUpdate();
-                void                        DisableUpdate();
+        sal_uInt16                  CalcVisibleLines();
+        void                        EnableUpdate();
+        void                        DisableUpdate();
 
-                void                        SetLineListener(IPropertyLineListener *);
+        void                        SetLineListener( IPropertyLineListener* );
+        void                        SetControlObserver( IPropertyControlObserver* );
 
-                void                        SetHelpId( sal_uInt32 nHelpId );
-                sal_uInt16                  AppendPage( const String& r,sal_uInt32 nHelpId=0);
-                void                        SetPage( sal_uInt16 );
-                void                        RemovePage(sal_uInt16 nID);
-                sal_uInt16                  GetCurPage();
-                void                        ClearAll();
+        void                        EnableHelpSection( bool _bEnable );
+        bool                        HasHelpSection() const;
+        void                        SetHelpText( const ::rtl::OUString& _rHelpText );
+        void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
-                void                        SetPropertyValue(const ::rtl::OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue );
-                ::com::sun::star::uno::Any  GetPropertyValue(const ::rtl::OUString& rEntryName ) const;
-                sal_uInt16                  GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
-                ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
-                                            GetPropertyControl( const ::rtl::OUString& rEntryName );
-                void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
-                void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
-                sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
+        void                        SetHelpId( sal_uInt32 nHelpId );
+        sal_uInt16                  AppendPage( const String& r,sal_uInt32 nHelpId=0);
+        void                        SetPage( sal_uInt16 );
+        void                        RemovePage(sal_uInt16 nID);
+        sal_uInt16                  GetCurPage();
+        void                        ClearAll();
 
-                void                        ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
+        void                        SetPropertyValue(const ::rtl::OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue );
+        ::com::sun::star::uno::Any  GetPropertyValue(const ::rtl::OUString& rEntryName ) const;
+        sal_uInt16                  GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+                                    GetPropertyControl( const ::rtl::OUString& rEntryName );
+        void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
+        void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
+        sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
-                sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 _nPageId, sal_uInt16 nPos = EDITOR_LIST_APPEND );
-                void                        RemoveEntry( const ::rtl::OUString& _rName );
-                void                        ChangeEntry( const OLineDescriptor& );
+        void                        ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
+
+        sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 _nPageId, sal_uInt16 nPos = EDITOR_LIST_APPEND );
+        void                        RemoveEntry( const ::rtl::OUString& _rName );
+        void                        ChangeEntry( const OLineDescriptor& );
 
         void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
         Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
 
         // #95343# -------------------------------
         sal_Int32 getMinimumWidth();
+        sal_Int32 getMinimumHeight();
 
-                void                        CommitModified();
+        void                        CommitModified();
 
     private:
         OBrowserPage* getPage( sal_uInt16& _rPageId );
@@ -136,6 +148,15 @@ namespace pcr
 
         OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName );
         const OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName ) const;
+
+        typedef void (OPropertyEditor::*PageOperation)( OBrowserPage&, const void* );
+        void    forEachPage( PageOperation _pOperation, const void* _pArgument = NULL );
+
+        void    setPageLineListener( OBrowserPage& _rPage, const void* );
+        void    setPageControlObserver( OBrowserPage& _rPage, const void* );
+        void    enableHelpSection( OBrowserPage& _rPage, const void* );
+        void    setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString );
+        void    setHelpLineLimits( OBrowserPage& _rPage, const void* );
 
     protected:
         DECL_LINK(OnPageDeactivate, TabControl*);
