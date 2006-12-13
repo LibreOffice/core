@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectInspectorModelImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:48:49 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,12 +93,33 @@ public class ObjectInspectorModelImpl implements XObjectInspectorModel{
     }
 
     /**
-     * returns currelty nothing
+     * returns currently nothing
      * @return nothing
      */
     public Object[] getHandlerFactories() {
         return null;
     }
+
+    /** determines whether the object inspector should have a help section
+        @return false
+    */
+    public boolean getHasHelpSection() {
+        return false;
+    }
+
+    /** returns minimum number of lines in the help text section.
+        @return 3
+    */
+    public int getMinHelpTextLines() {
+        return 3;
+    };
+
+    /** returns maximum number of lines in the help text section.
+        @return 8
+    */
+    public int getMaxHelpTextLines() {
+        return 8;
+    };
 
     /**
      * retrieves an index in a global property ordering, for a given property name
