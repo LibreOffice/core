@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicdevicebase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:14:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,9 @@ namespace canvas
                                                       _1)));
         }
 
+#if defined __SUNPRO_CC
+        using Base::disposing;
+#endif
         virtual void SAL_CALL disposing()
         {
             MutexType aGuard( BaseType::m_aMutex );
@@ -178,7 +181,7 @@ namespace canvas
             maDeviceHelper.disposing();
 
             // pass on to base class
-            BaseType::disposing();
+            cppu::WeakComponentImplHelperBase::disposing();
         }
 
         // XGraphicDevice
