@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:29:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,10 @@ namespace dbaui
         friend class OTableWindowListBox;
 
         mutable ::osl::Mutex    m_aMutex;
+
     protected:
         // und die Tabelle selber (brauche ich, da ich sie locken will, solange das Fenster lebt)
+        FixedImage              m_aTypeImage;
         OTableWindowTitle       m_aTitle;
         OTableWindowListBox*    m_pListBox;
         OTableWindowAccess*     m_pAccessible;
@@ -152,6 +154,10 @@ namespace dbaui
             exception was thrown. Expected to throw.
         */
         virtual void    onNoColumns_throw();
+
+        /** updates m_aTypeImage
+        */
+        void    impl_updateImage();
 
         OTableWindow( Window* pParent, OTableWindowData* pTabWinData );
 
