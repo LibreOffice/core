@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidechangebase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:01:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,156 +36,128 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
+#include <canvas/debug.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <cppcanvas/basegfxfactory.hxx>
 #include "slidechangebase.hxx"
-#include "canvas/debug.hxx"
-#include "basegfx/numeric/ftools.hxx"
-#include "basegfx/polygon/b2dpolygontools.hxx"
-#include "basegfx/polygon/b2dpolypolygontools.hxx"
-#include "cppcanvas/basegfxfactory.hxx"
-#include "boost/bind.hpp"
+
+#include <boost/bind.hpp>
 #include <algorithm>
 
 using namespace com::sun::star;
-namespace css = com::sun::star; // resolving conflicts with ::presentation
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
-SlideChangeBase::~SlideChangeBase()
-{
-}
-
-SlideChangeBase::SlideChangeBase(
-    boost::optional<SlideSharedPtr> const & leavingSlide,
-    const SlideSharedPtr& pEnteringSlide,
-    const SoundPlayerSharedPtr& pSoundPlayer,
-    bool bCreateLeavingSprites, bool bCreateEnteringSprites )
-    : UnoBaseT( m_aMutex ),
-      maViews(),
+SlideChangeBase::SlideChangeBase( boost::optional<SlideSharedPtr> const & leavingSlide,
+                                  const SlideSharedPtr&                   pEnteringSlide,
+                                  const SoundPlayerSharedPtr&             pSoundPlayer,
+                                  const UnoViewContainer&                 rViewContainer,
+                                  EventMultiplexer&                       rEventMultiplexer,
+                                  bool                                    bCreateLeavingSprites,
+                                  bool                                    bCreateEnteringSprites ) :
       mpSoundPlayer( pSoundPlayer ),
+      mrViewContainer(rViewContainer),
+      mrEventMultiplexer(rEventMultiplexer),
       mLeavingSlide( leavingSlide ),
       mpEnteringSlide( pEnteringSlide ),
-      mpLeavingBitmap(),
-      mpEnteringBitmap(),
-      maOutSprites(),
-      maInSprites(),
+      maViewData(),
       mbCreateLeavingSprites(bCreateLeavingSprites),
       mbCreateEnteringSprites(bCreateEnteringSprites),
       mbSpritesVisible(false)
 {
     ENSURE_AND_THROW(
-        pEnteringSlide.get(),
+        pEnteringSlide,
         "SlideChangeBase::SlideChangeBase(): Invalid entering slide!" );
 }
 
-SlideBitmapSharedPtr SlideChangeBase::getLeavingBitmap() const
+SlideBitmapSharedPtr SlideChangeBase::getLeavingBitmap( const ViewEntry& rViewEntry ) const
 {
-    osl::ResettableMutexGuard guard(m_aMutex);
-    if (mpLeavingBitmap.get() == 0) {
-        guard.clear();
-        const SlideBitmapSharedPtr pBitmap( createBitmap(mLeavingSlide) );
-        guard.reset();
-        if (mpLeavingBitmap.get() == 0)
-            mpLeavingBitmap = pBitmap;
-    }
-    return mpLeavingBitmap;
+    if( !rViewEntry.mpLeavingBitmap )
+        rViewEntry.mpLeavingBitmap = createBitmap(rViewEntry.mpView,
+                                                  mLeavingSlide);
+
+    return rViewEntry.mpLeavingBitmap;
 }
 
-SlideBitmapSharedPtr SlideChangeBase::getEnteringBitmap() const
+SlideBitmapSharedPtr SlideChangeBase::getEnteringBitmap( const ViewEntry& rViewEntry ) const
 {
-    osl::ResettableMutexGuard guard(m_aMutex);
-    if (mpEnteringBitmap.get() == 0) {
-        guard.clear();
-        const SlideBitmapSharedPtr pBitmap(
-            createBitmap( boost::optional<SlideSharedPtr>(mpEnteringSlide) ) );
-        guard.reset();
-        if (mpEnteringBitmap.get() == 0)
-            mpEnteringBitmap = pBitmap;
-    }
-    return mpEnteringBitmap;
+    if( !rViewEntry.mpEnteringBitmap )
+        rViewEntry.mpEnteringBitmap = createBitmap( rViewEntry.mpView,
+                                                    boost::optional<SlideSharedPtr>(mpEnteringSlide) );
+
+    return rViewEntry.mpEnteringBitmap;
 }
 
-SlideBitmapSharedPtr SlideChangeBase::createBitmap(
-    boost::optional<SlideSharedPtr> const & rSlide ) const
+SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&                rView,
+                                                    const boost::optional<SlideSharedPtr>& rSlide ) const
 {
     SlideBitmapSharedPtr pRet;
-    OSL_ASSERT( ! maViews.empty() );
-    if (rSlide && !maViews.empty())
+    if( !rSlide )
+        return pRet;
+
+    SlideSharedPtr const & pSlide = *rSlide;
+    if( !pSlide )
     {
-        SlideSharedPtr const & pSlide = *rSlide;
-        if (pSlide.get() == 0)
-        {
-            // TODO(F2): Generalize to multiple, multi-device views
-            const basegfx::B2ISize slideSizePixel(
-                getEnteringSizePixel( maViews.front() ) );
+        // TODO(P3): No need to generate a bitmap here. This only made
+        // the code more uniform. Faster would be to simply clear the
+        // sprite to black.
 
-            cppcanvas::CanvasSharedPtr pCanvas(
-                maViews.front()->getCanvas() );
+        // create empty, black-filled bitmap
+        const basegfx::B2ISize slideSizePixel(
+            getEnteringSizePixel( rView ));
 
-            // create a bitmap of appropriate size
-            cppcanvas::BitmapSharedPtr pBitmap(
-                cppcanvas::BaseGfxFactory::getInstance().createBitmap(
-                    pCanvas,
-                    slideSizePixel ) );
+        cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
-            ENSURE_AND_THROW(
-                pBitmap.get(),
-                "SlideChangeBase::createBitmap(): Cannot create page bitmap" );
+        // create a bitmap of appropriate size
+        cppcanvas::BitmapSharedPtr pBitmap(
+            cppcanvas::BaseGfxFactory::getInstance().createBitmap(
+                pCanvas,
+                slideSizePixel ) );
 
-            cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(
-                pBitmap->getBitmapCanvas() );
+        ENSURE_AND_THROW(
+            pBitmap,
+            "SlideChangeBase::createBitmap(): Cannot create page bitmap" );
 
-            ENSURE_AND_THROW( pBitmapCanvas.get(),
-                              "SlideChangeBase::createBitmap(): "
-                              "Cannot create page bitmap canvas" );
+        cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(
+            pBitmap->getBitmapCanvas() );
 
-            // set transformation to identitiy (->device pixel)
-            pBitmapCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
+        ENSURE_AND_THROW( pBitmapCanvas,
+                          "SlideChangeBase::createBitmap(): "
+                          "Cannot create page bitmap canvas" );
 
-            // fill the bounds rectangle in white
-            const ::basegfx::B2DPolygon aPoly(
-                ::basegfx::tools::createPolygonFromRect(
-                    ::basegfx::B2DRectangle( 0.0, 0.0,
-                                             slideSizePixel.getX(),
-                                             slideSizePixel.getY() ) ) );
+        // set transformation to identitiy (->device pixel)
+        pBitmapCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
-            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pBitmapCanvas,
-                                                                              aPoly ) );
+        // clear bitmap to black
+        fillRect( pBitmapCanvas,
+                  ::basegfx::B2DRectangle( 0.0, 0.0,
+                                           slideSizePixel.getX(),
+                                           slideSizePixel.getY() ),
+                  0x000000FFU );
 
-            if( pPolyPoly.get() )
-            {
-                pPolyPoly->setRGBAFillColor( 0x000000FFU );
-                pPolyPoly->draw();
-            }
-
-            pRet = SlideBitmapSharedPtr( new SlideBitmap( pBitmap ) );
-        }
-        else
-        {
-            // TODO(F2): Generalize to multiple, multi-device views
-            pRet = pSlide->getCurrentSlideBitmap( *maViews.begin() );
-        }
+        pRet.reset( new SlideBitmap( pBitmap ));
     }
+    else
+    {
+        pRet = pSlide->getCurrentSlideBitmap( rView );
+    }
+
     return pRet;
 }
 
-basegfx::B2ISize SlideChangeBase::getEnteringSizePixel(
-    UnoViewSharedPtr const & pView ) const
+basegfx::B2ISize SlideChangeBase::getEnteringSizePixel( const UnoViewSharedPtr& pView ) const
 {
     return mpEnteringSlide->getSlideSizePixel( pView );
-}
-
-basegfx::B2DSize SlideChangeBase::getEnteringSize() const
-{
-    return mpEnteringSlide->getSlideSize();
 }
 
 void SlideChangeBase::renderBitmap(
     SlideBitmapSharedPtr const & pSlideBitmap,
     cppcanvas::CanvasSharedPtr const & pCanvas )
 {
-    if (pSlideBitmap.get() != 0 && pCanvas.get() != 0)
+    if( pSlideBitmap && pCanvas )
     {
         // need to render without any transformation (we
         // assume device units):
@@ -207,15 +179,19 @@ void SlideChangeBase::renderBitmap(
 void SlideChangeBase::start( const AnimatableShapeSharedPtr&,
                              const ShapeAttributeLayerSharedPtr& )
 {
-    // create slide bitmaps
-    getEnteringBitmap();
-    getLeavingBitmap();
+    // register ourselves for view change events
+    mrEventMultiplexer.addViewHandler( shared_from_this() );
 
-    // create sprites:
-    for_each_view( boost::bind( &SlideChangeBase::addSprites, this, _1 ) );
+    // init views and create slide bitmaps
+    std::for_each( mrViewContainer.begin(),
+                   mrViewContainer.end(),
+                   boost::bind( &SlideChangeBase::viewAdded,
+                                this,
+                                _1 ));
 
     // start accompanying sound effect, if any
-    if (mpSoundPlayer) {
+    if( mpSoundPlayer )
+    {
         mpSoundPlayer->startPlayback();
         // xxx todo: for now, presentation.cxx takes care about the slide
         // #i50492#  transition sound object, so just release it here
@@ -223,72 +199,46 @@ void SlideChangeBase::start( const AnimatableShapeSharedPtr&,
     }
 }
 
-void SlideChangeBase::removeTransformationChangedListenerFrom(
-    UnoViewSharedPtr const& pView )
-{
-    uno::Reference<css::presentation::XSlideShowView> const xSlideShowView(
-        pView->getUnoView(), uno::UNO_QUERY );
-    if (xSlideShowView.is()) {
-        xSlideShowView->removeTransformationChangedListener( this );
-    }
-}
 void SlideChangeBase::end()
 {
-    // draw fully entered bitmap:
-    const SlideBitmapSharedPtr pSlideBitmap( getEnteringBitmap() );
-    pSlideBitmap->clip( basegfx::B2DPolyPolygon() /* no clipping */ );
-    for_each_canvas( boost::bind( &SlideChangeBase::renderBitmap, this,
-                                  boost::cref(pSlideBitmap), _1 ) );
-    // TODO: Slide::show() initial Sliderendering may be obsolete now
+    try
+    {
+        // draw fully entered bitmap:
+        ViewsVecT::const_iterator aCurr( beginViews() );
+        const ViewsVecT::const_iterator aEnd( endViews() );
+        while( aCurr != aEnd )
+        {
+            const SlideBitmapSharedPtr pSlideBitmap( getEnteringBitmap( *aCurr ));
+            pSlideBitmap->clip( basegfx::B2DPolyPolygon() /* no clipping */ );
+            renderBitmap( pSlideBitmap,
+                          aCurr->mpView->getCanvas() );
 
+            ++aCurr;
+        }
+    }
+    catch( uno::Exception& )
+    {
+        // make sure releasing below happens
+    }
+
+    // TODO(P3): Slide::show() initial Sliderendering may be obsolete
+    // now
     mbSpritesVisible = false;
 
     // drop all references
+    ViewsVecT().swap(maViewData);
     mLeavingSlide.reset();
     mpEnteringSlide.reset();
-    {
-        const osl::MutexGuard guard(m_aMutex);
-        maOutSprites.clear();
-        maInSprites.clear();
-        mpEnteringBitmap.reset();
-        mpLeavingBitmap.reset();
-    }
-
-    // xxx todo: discuss whether to stop listening for view changes here...
-    //           too early?
-    for_each_view(
-        boost::bind(
-            &SlideChangeBase::removeTransformationChangedListenerFrom, this,
-            _1 ) );
-    maViews.clear();
-}
-/// WeakComponentImplHelperBase:
-void SlideChangeBase::disposing()
-{
-    // we are about to die, release listeners if not already done in end(), e.g.
-    // if user has just aborted slideshow pressing ESC:
-    for_each_view(
-        boost::bind(
-            &SlideChangeBase::removeTransformationChangedListenerFrom, this,
-            _1 ) );
-    maViews.clear();
 }
 
 bool SlideChangeBase::operator()( double nValue )
 {
-    SpriteVector aInSprites, aOutSprites;
-    {
-        const osl::MutexGuard guard(m_aMutex);
-        if (maInSprites.empty() && maOutSprites.empty())
-            return false;
-        aInSprites = maInSprites;
-        aOutSprites = maOutSprites;
-    }
+    if( maViewData.empty() )
+        return false;
 
-    const std::size_t nEntries = std::max<std::size_t>(aInSprites.size(),
-                                                       aOutSprites.size());
+    const std::size_t nEntries( maViewData.size() );
     ENSURE_AND_RETURN(
-        maViews.size() == nEntries,
+        mrViewContainer.size() == nEntries,
         "SlideChangeBase::operator(): Mismatching sprite/view numbers" );
 
     bool bSpritesVisible( mbSpritesVisible );
@@ -303,79 +253,80 @@ bool SlideChangeBase::operator()( double nValue )
         // variable is already in device coordinate space
         // (i.e. pixel).
 
-        UnoViewSharedPtr const & pView = maViews[i];
-        ::cppcanvas::CanvasSharedPtr const & pCanvas = pView->getCanvas();
-        ::cppcanvas::CustomSpriteSharedPtr pInSprite, pOutSprite;
-
-        if (i < aInSprites.size())
-            pInSprite = aInSprites[i];
-        if (i < aOutSprites.size())
-            pOutSprite = aOutSprites[i];
+        ViewEntry& rViewEntry( maViewData[i] );
+        const ::cppcanvas::CanvasSharedPtr& rCanvas( rViewEntry.mpView->getCanvas() );
+        ::cppcanvas::CustomSpriteSharedPtr& rInSprite( rViewEntry.mpInSprite );
+        ::cppcanvas::CustomSpriteSharedPtr& rOutSprite( rViewEntry.mpOutSprite );
 
         // TODO(F2): Properly respect clip here.
 
         // Might have to be transformed, too.
         const ::basegfx::B2DHomMatrix aViewTransform(
-            pCanvas->getTransformation() );
+            rCanvas->getTransformation() );
         const ::basegfx::B2DPoint aSpritePosPixel(
             aViewTransform * ::basegfx::B2DPoint() );
 
         // move sprite to final output position, in
         // device coordinates
-        if (pOutSprite.get() != 0)
-            pOutSprite->movePixel( aSpritePosPixel );
-        if (pInSprite.get() != 0)
-            pInSprite->movePixel( aSpritePosPixel );
+        if( rOutSprite )
+            rOutSprite->movePixel( aSpritePosPixel );
+        if( rInSprite )
+            rInSprite->movePixel( aSpritePosPixel );
 
-        if (! mbSpritesVisible)
+        if( !mbSpritesVisible )
         {
-            if (pOutSprite.get() != 0) {
+            if( rOutSprite )
+            {
                 // only render once: clipping is done
                 // exclusively with the sprite
                 const ::cppcanvas::CanvasSharedPtr pOutContentCanvas(
-                    pOutSprite->getContentCanvas() );
-                if (pOutContentCanvas.get() != 0) {
+                    rOutSprite->getContentCanvas() );
+                if( pOutContentCanvas)
+                {
                     // TODO(Q2): Use basegfx bitmaps here
 
                     // TODO(F1): SlideBitmap is not fully portable
                     // between different canvases!
 
                     // render the content
-                    OSL_ASSERT( getLeavingBitmap().get() != 0 );
-                    if (getLeavingBitmap().get() != 0)
-                        getLeavingBitmap()->draw( pOutContentCanvas );
+                    OSL_ASSERT( getLeavingBitmap( rViewEntry ) );
+                    if( getLeavingBitmap( rViewEntry ) )
+                        getLeavingBitmap( rViewEntry )->draw( pOutContentCanvas );
                 }
             }
 
-            if (pInSprite.get() != 0) {
+            if( rInSprite )
+            {
                 // only render once: clipping is done
                 // exclusively with the sprite
                 const ::cppcanvas::CanvasSharedPtr pInContentCanvas(
-                    pInSprite->getContentCanvas() );
-                if (pInContentCanvas.get() != 0) {
+                    rInSprite->getContentCanvas() );
+                if( pInContentCanvas )
+                {
                     // TODO(Q2): Use basegfx bitmaps here
 
                     // TODO(F1): SlideBitmap is not fully portable
                     // between different canvases!
 
                     // render the content
-                    getEnteringBitmap()->draw( pInContentCanvas );
+                    getEnteringBitmap( rViewEntry )->draw( pInContentCanvas );
                 }
             }
         }
 
-        if (pOutSprite.get() != 0)
-            performOut( pOutSprite, pView, pCanvas, nValue );
-        if (pInSprite.get() != 0)
-            performIn( pInSprite, pView, pCanvas, nValue );
+        if( rOutSprite )
+            performOut( rOutSprite, rViewEntry, rCanvas, nValue );
+        if( rInSprite )
+            performIn( rInSprite, rViewEntry, rCanvas, nValue );
 
         // finishing deeds for first run.
-        if (! mbSpritesVisible) {
+        if( !mbSpritesVisible)
+        {
             // enable sprites:
-            if (pOutSprite.get() != 0)
-                pOutSprite->show();
-            if (pInSprite.get() != 0)
-                pInSprite->show();
+            if( rOutSprite )
+                rOutSprite->show();
+            if( rInSprite )
+                rInSprite->show();
             bSpritesVisible = true;
         }
     } // for_each( sprite )
@@ -387,7 +338,7 @@ bool SlideChangeBase::operator()( double nValue )
 
 void SlideChangeBase::performIn(
     const cppcanvas::CustomSpriteSharedPtr&   /*rSprite*/,
-    UnoViewSharedPtr const &                  /*pView*/,
+    const ViewEntry&                          /*rViewEntry*/,
     const cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
     double                                    /*t*/ )
 {
@@ -395,7 +346,7 @@ void SlideChangeBase::performIn(
 
 void SlideChangeBase::performOut(
     const cppcanvas::CustomSpriteSharedPtr&  /*rSprite*/,
-    UnoViewSharedPtr const &                 /*pView*/,
+    const ViewEntry&                         /*rViewEntry*/,
     const cppcanvas::CanvasSharedPtr&        /*rDestinationCanvas*/,
     double                                   /*t*/ )
 {
@@ -410,163 +361,99 @@ double SlideChangeBase::getUnderlyingValue() const
 }
 
 cppcanvas::CustomSpriteSharedPtr SlideChangeBase::createSprite(
-    UnoViewSharedPtr const & pView, basegfx::B2DSize const & rSpriteSize ) const
+    UnoViewSharedPtr const & pView,
+    basegfx::B2DSize const & rSpriteSize,
+    double                   nPrio ) const
 {
     // TODO(P2): change to bitmapsprite once that's working
     const cppcanvas::CustomSpriteSharedPtr pSprite(
-        pView->createSprite( rSpriteSize ) );
+        pView->createSprite( rSpriteSize ));
+
     // alpha default is 0.0, which seems to be
     // a bad idea when viewing content...
     pSprite->setAlpha( 1.0 );
+    pSprite->setPriority( nPrio );
     if (mbSpritesVisible)
         pSprite->show();
+
     return pSprite;
 }
 
-void SlideChangeBase::addSprites( UnoViewSharedPtr const & pView )
+void SlideChangeBase::addSprites( ViewEntry& rEntry )
 {
-    if (mbCreateLeavingSprites && mLeavingSlide)
+    if( mbCreateLeavingSprites && mLeavingSlide )
     {
         // create leaving sprite:
         const basegfx::B2ISize leavingSlideSizePixel(
-            getLeavingBitmap()->getSize() );
+            getLeavingBitmap( rEntry )->getSize() );
 
-        const cppcanvas::CustomSpriteSharedPtr pLeavingSprite(
-            createSprite( pView, leavingSlideSizePixel ) );
-
-        const osl::MutexGuard guard(m_aMutex);
-        maOutSprites.push_back( pLeavingSprite );
+        rEntry.mpOutSprite = createSprite( rEntry.mpView,
+                                           leavingSlideSizePixel,
+                                           100 );
     }
 
-    if (mbCreateEnteringSprites)
+    if( mbCreateEnteringSprites )
     {
         // create entering sprite:
         const basegfx::B2ISize enteringSlideSizePixel(
-            mpEnteringSlide->getSlideSizePixel( pView ) );
+            mpEnteringSlide->getSlideSizePixel( rEntry.mpView ) );
 
-        const cppcanvas::CustomSpriteSharedPtr pEnteringSprite(
-            createSprite( pView, enteringSlideSizePixel ) );
-
-        const osl::MutexGuard guard(m_aMutex);
-        maInSprites.push_back( pEnteringSprite );
+        rEntry.mpInSprite = createSprite( rEntry.mpView,
+                                          enteringSlideSizePixel,
+                                          101 );
     }
 }
 
-UnoViewSharedPtr SlideChangeBase::findUnoView(
-    uno::Reference<css::presentation::XSlideShowView> const & xSlideShowView )
-    const
+void SlideChangeBase::viewAdded( const UnoViewSharedPtr& rView )
 {
-    UnoViewVector::const_iterator iFind;
-    const UnoViewVector::const_iterator iBegin( maViews.begin() );
-    const UnoViewVector::const_iterator iEnd( maViews.end() );
-    if ((iFind = std::find_if(
-             iBegin, iEnd,
-             boost::bind(
-                 std::equal_to<
-                     uno::Reference<css::presentation::XSlideShowView> >(),
-                 boost::bind( &UnoView::getUnoView, _1 ),
-                 boost::cref(xSlideShowView) ) )) != iEnd)
-    {
-        return *iFind;
-    }
-    else
-        return UnoViewSharedPtr();
+    maViewData.push_back( ViewEntry(rView) );
+
+    ViewEntry& rEntry( maViewData.back() );
+    getEnteringBitmap( rEntry );
+    getLeavingBitmap( rEntry );
+    addSprites( rEntry );
 }
 
-void SlideChangeBase::addView( UnoViewSharedPtr const & pView )
+void SlideChangeBase::viewRemoved( const UnoViewSharedPtr& rView )
 {
-    const osl::MutexGuard guard(m_aMutex);
-    const UnoViewVector::iterator iEnd( maViews.end() );
-    if (std::find( maViews.begin(), iEnd, pView ) == iEnd) {
-        // listen for view changes:
-        const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
-            pView->getUnoView(), uno::UNO_QUERY_THROW );
-        xSlideShowView->addTransformationChangedListener( this );
-        maViews.push_back( pView );
-    }
+    // erase corresponding entry from maViewData
+    maViewData.erase(
+        std::remove_if(
+            maViewData.begin(),
+            maViewData.end(),
+            boost::bind(
+                std::equal_to<UnoViewSharedPtr>(),
+                rView,
+                // select view:
+                boost::bind( &ViewEntry::getView, _1 ))),
+        maViewData.end() );
 }
 
-bool SlideChangeBase::removeView( UnoViewSharedPtr const& pView )
+void SlideChangeBase::viewChanged( const UnoViewSharedPtr& rView )
 {
-    osl::MutexGuard const guard(m_aMutex);
-    return removeView_(pView);
-}
-bool SlideChangeBase::removeView_( UnoViewSharedPtr const& pView,
-                                   bool bDisposedView )
-{
-    UnoViewVector::iterator iBegin( maViews.begin() );
-    const UnoViewVector::iterator iEnd( maViews.end() );
-    UnoViewVector::iterator iPos;
-    if ((iPos = std::find( iBegin, iEnd, pView )) == iEnd) {
-        // view seemingly was not added, failed
-        return false;
-    }
+    // find entry corresponding to modified view
+    ViewsVecT::iterator aModifiedEntry(
+        std::find_if(
+            maViewData.begin(),
+            maViewData.end(),
+            boost::bind(
+                std::equal_to<UnoViewSharedPtr>(),
+                rView,
+                // select view:
+                boost::bind( &ViewEntry::getView, _1 ) )));
 
-    if (! bDisposedView) {
-        // don't listen for view changes anymore:
-        const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
-            pView->getUnoView(), uno::UNO_QUERY_THROW );
-        xSlideShowView->removeTransformationChangedListener( this );
-    }
+    OSL_ASSERT( aModifiedEntry != maViewData.end() );
+    if( aModifiedEntry != maViewData.end() )
+        return;
 
-    const std::size_t dist = std::distance( iBegin, iPos );
-    maViews.erase( iPos );
-    if (mLeavingSlide && dist < maOutSprites.size())
-        maOutSprites.erase( maOutSprites.begin() + dist );
-    if (dist < maInSprites.size())
-        maInSprites.erase( maInSprites.begin() + dist );
-#if OSL_DEBUG_LEVEL > 1
-    const std::size_t nEntries = std::max<std::size_t>(maInSprites.size(),
-                                                       maOutSprites.size());
-    OSL_ENSURE( maViews.size() == nEntries, "Mismatching sprite/view numbers" );
-#endif
-    return true;
-}
+    // clear stale info (both bitmaps and sprites prolly need a
+    // resize)
+    aModifiedEntry->mpEnteringBitmap.reset();
+    aModifiedEntry->mpLeavingBitmap.reset();
+    aModifiedEntry->mpInSprite.reset();
+    aModifiedEntry->mpOutSprite.reset();
 
-// XModifyListener
-void SlideChangeBase::modified( lang::EventObject const& evt )
-    throw (uno::RuntimeException)
-{
-    // notify view change:
-    const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
-        evt.Source, uno::UNO_QUERY );
-    if (xSlideShowView.is()) {
-        osl::MutexGuard const guard(m_aMutex);
-        const UnoViewSharedPtr pView( findUnoView( xSlideShowView ) );
-        OSL_ASSERT( pView.get() );
-        if (pView.get() != 0) {
-            // invalidate bitmaps and sprites for next update():
-            mpLeavingBitmap.reset();
-            mpEnteringBitmap.reset();
-            maOutSprites.clear();
-            maInSprites.clear();
-
-            // and create new ones (!in same order as added views!):
-            for_each_view(
-                boost::bind( &SlideChangeBase::addSprites, this, _1 ) );
-
-#if OSL_DEBUG_LEVEL > 1
-            const std::size_t nEntries = std::max<std::size_t>(
-                maInSprites.size(), maOutSprites.size() );
-            OSL_ENSURE( maViews.size() == nEntries,
-                        "Mismatching sprite/view numbers" );
-#endif
-        }
-    }
-}
-
-// XEventListener
-void SlideChangeBase::disposing( lang::EventObject const& evt )
-    throw (uno::RuntimeException)
-{
-    const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
-        evt.Source, uno::UNO_QUERY );
-    if (xSlideShowView.is()) {
-        osl::MutexGuard const guard(m_aMutex);
-        UnoViewSharedPtr const pView( findUnoView( xSlideShowView ) );
-        if (pView)
-            removeView_( pView, true /* is a disposed view */ );
-    }
+    addSprites( *aModifiedEntry );
 }
 
 } // namespace internal
