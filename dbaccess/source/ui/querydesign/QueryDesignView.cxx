@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,11 +218,10 @@ namespace
         Reference< XConnection> xConnection = pController->getConnection();
         if ( xConnection.is() )
         {
-            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             sal_uInt32 nCount = pCondition->count();
             for(sal_uInt32 i = _nStartIndex ; i < nCount ; ++i)
                 pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
-                                xMetaData,
+                                xConnection,
                                 pController->getNumberFormatter(),
                                 _rLocale,
                                 static_cast<sal_Char>(_sDecimal.toChar()),
@@ -471,10 +470,12 @@ namespace
                 ::rtl::OUString aTableListStr = ::dbtools::composeTableNameForSelect( _xConnection, sCatalog, sSchema, sTable );
 
                 ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
-                if ( isAppendTableAliasEnabled(_xConnection) )
+                if ( isAppendTableAliasEnabled( _xConnection ) )
                 {
-                    aTableListStr += ::rtl::OUString::createFromAscii(" AS ");
-                    aTableListStr += ::dbtools::quoteName(aQuote, pEntryTab->GetAliasName());
+                    aTableListStr += ::rtl::OUString::createFromAscii(" ");
+                    if ( generateAsBeforeTableAlias( _xConnection ) )
+                        aTableListStr += ::rtl::OUString::createFromAscii("AS ");
+                    aTableListStr += ::dbtools::quoteName( aQuote, pEntryTab->GetAliasName() );
                 }
                 aDBName = aTableListStr;
             }
@@ -895,7 +896,7 @@ namespace
                                 sal_uInt32 nCount = pParseNode->count();
                                 for( sal_uInt32 node = 1 ; node < nCount ; ++node)
                                     pParseNode->getChild(node)->parseNodeToStr( sHavingStr,
-                                                                xMetaData,
+                                                                xConnection,
                                                                 &rContext,
                                                                 sal_False,
                                                                 !pEntryField->isOtherFunction());
@@ -924,7 +925,7 @@ namespace
                                     pParseNode->replaceNodeValue(pEntryField->GetAlias(),aFieldName);
                                 ::rtl::OUString aWhere = aWhereStr;
                                 pParseNode->parseNodeToStr( aWhere,
-                                                            xMetaData,
+                                                            xConnection,
                                                             &rContext,
                                                             sal_False,
                                                             !pEntryField->isOtherFunction() );
@@ -1156,7 +1157,7 @@ namespace
                             aTableNames[sTabName] = sal_True;
 
                         // create join
-                        sal_Bool bUseEscape = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_OUTERJOINESCAPE,sal_True);
+                        sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
                         ::rtl::OUString aStr;
                         if ( bUseEscape )
                             aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("{ OJ "));
@@ -1381,14 +1382,14 @@ namespace
                     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     // the international doesn't matter I have a string
                     pCondition->parseNodeToPredicateStr(aCondition,
-                                                        xMetaData,
+                                                        xConnection,
                                                         pController->getNumberFormatter(),
                                                         aLocale,
                                                         static_cast<sal_Char>(sDecimal.toChar()),
                                                         &pController->getParser().getContext());
 
                     pCondition->getChild(0)->parseNodeToPredicateStr(   aColumnName,
-                                                                        xMetaData,
+                                                                        xConnection,
                                                                         pController->getNumberFormatter(),
                                                                         aLocale,
                                                                         static_cast<sal_Char>(sDecimal.toChar()),
@@ -1468,14 +1469,14 @@ namespace
         {
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             pCondition->parseNodeToPredicateStr(aCondition,
-                                                xMetaData,
+                                                xConnection,
                                                 pController->getNumberFormatter(),
                                                 _pView->getLocale(),
                                                 static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
                                                 &pController->getParser().getContext());
 
             pFunction->parseNodeToPredicateStr(aColumnName,
-                                                xMetaData,
+                                                xConnection,
                                                 pController->getNumberFormatter(),
                                                 _pView->getLocale(),
                                                 static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
@@ -1511,7 +1512,7 @@ namespace
                 {
                     ::rtl::OUString sParameterValue;
                     pParamNode->parseNodeToStr( sParameterValue,
-                                                xConnection->getMetaData(),
+                                                xConnection,
                                                 &pController->getParser().getContext());
                     nFunctionType |= FKT_NUMERIC;
                     aDragLeft->SetField(sParameterValue);
@@ -1636,7 +1637,7 @@ namespace
                     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     for (; i >= 0; i--)
                         pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
-                                                xMetaData,
+                                                xConnection,
                                                 pController->getNumberFormatter(),
                                                 _pView->getLocale(),
                                                 static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
@@ -1671,15 +1672,14 @@ namespace
             Reference< XConnection> xConnection = pController->getConnection();
             if(xConnection.is())
             {
-                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 pLhs->parseNodeToStr(aName,
-                                            xMetaData,
-                                            &pController->getParser().getContext(),
-                                            sal_True);
+                                     xConnection,
+                                     &pController->getParser().getContext(),
+                                     sal_True);
                 // Kriterium
                 aCondition = pCondition->getChild(1)->getTokenValue();
                 pRhs->parseNodeToPredicateStr(aCondition,
-                                                            xMetaData,
+                                                            xConnection,
                                                             pController->getNumberFormatter(),
                                                             _pView->getLocale(),
                                                             static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
@@ -2079,7 +2079,6 @@ namespace
                     if ( !xConnection.is() )
                         break;
 
-                    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     ::rtl::OUString aColumnAlias(pController->getParseIterator().getColumnAlias(pColumnRef)); // kann leer sein
                     pColumnRef = pColumnRef->getChild(0);
                     OTableFieldDescRef aInfo = new OTableFieldDesc();
@@ -2103,7 +2102,7 @@ namespace
                     {
                         ::rtl::OUString aColumns;
                         pColumnRef->parseNodeToStr( aColumns,
-                                                    xMetaData,
+                                                    xConnection,
                                                     &pController->getParser().getContext(),
                                                     sal_True,
                                                     sal_True); // quote is to true because we need quoted elements inside the function
@@ -2145,7 +2144,7 @@ namespace
                                     nFunctionType |= FKT_NUMERIC;
                                     sFieldName = ::rtl::OUString();
                                     pParamRef->parseNodeToStr(  sFieldName,
-                                                        xMetaData,
+                                                        xConnection,
                                                         &pController->getParser().getContext(),
                                                         sal_True,
                                                         sal_True); // quote is to true because we need quoted elements inside the function
@@ -2179,7 +2178,7 @@ namespace
                     {
                         ::rtl::OUString aColumns;
                         pColumnRef->parseNodeToStr( aColumns,
-                                                    xMetaData,
+                                                    xConnection,
                                                     &pController->getParser().getContext(),
                                                     sal_True,
                                                     sal_True); // quote is to true because we need quoted elements inside the function
@@ -2272,10 +2271,9 @@ namespace
                     Reference< XConnection> xConnection = pController->getConnection();
                     if(xConnection.is())
                     {
-                        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                         ::rtl::OUString sCondition;
                         pArgument->parseNodeToPredicateStr(sCondition,
-                                                            xMetaData,
+                                                            xConnection,
                                                             pController->getNumberFormatter(),
                                                             _pView->getLocale(),
                                                             static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
