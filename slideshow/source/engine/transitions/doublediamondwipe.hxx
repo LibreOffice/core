@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doublediamondwipe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:51:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,13 @@
 #if ! defined INCLUDED_SLIDESHOW_DOUBLEDIAMONDWIPE_HXX
 #define INCLUDED_SLIDESHOW_DOUBLEDIAMONDWIPE_HXX
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+
 #include "parametricpolypolygon.hxx"
 #include "transitiontools.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /// Generates a double diamond wipe:
