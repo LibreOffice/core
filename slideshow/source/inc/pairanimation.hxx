@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pairanimation.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:16:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:00:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,12 @@
 
 #include <animation.hxx>
 
-#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
-#endif
 
 
 /* Definition of PairAnimation interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
