@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 14:40:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,43 +36,26 @@
 #ifndef _SLIDESHOW_TOOLS_HXX
 #define _SLIDESHOW_TOOLS_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HXX_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
-#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
 
-#ifndef BOOST_BIND_HPP_INCLUDED
 #include <boost/bind.hpp>
-#endif
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
-#include <shapeattributelayer.hxx>
+#include "shapeattributelayer.hxx"
+#include "shape.hxx"
+#include "rgbcolor.hxx"
+#include "hslcolor.hxx"
 
 #include <string.h> // for strcmp
 #include <algorithm>
 
-#include <shape.hxx>
-#include <rgbcolor.hxx>
-#include <hslcolor.hxx>
-
-#include "boost/optional.hpp"
+#include <boost/optional.hpp>
 #include <functional>
 #include <cstdlib>
 
@@ -86,7 +69,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 class GDIMetaFile;
 
 /* Definition of some animation tools */
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -141,6 +124,12 @@ namespace presentation
 
         /// extract unary double value from Any
         bool extractValue( double&                              o_rValue,
+                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const ShapeSharedPtr&                rShape,
+                           const LayerManagerSharedPtr&         rLayerManager );
+
+        /// extract int from Any
+        bool extractValue( sal_Int32&                           o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const LayerManagerSharedPtr&         rLayerManager );
@@ -303,6 +292,12 @@ namespace presentation
          */
         RGBColor unoColor2RGBColor( sal_Int32 );
 
+        /** Fill a plain rectangle on the given canvas with the given color
+         */
+        void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
+                       const ::basegfx::B2DRectangle&      rRect,
+                       ::cppcanvas::Color::IntSRGBA        aFillColor );
+
         /** Init canvas with default background (white)
          */
         void initSlideBackground( const ::cppcanvas::CanvasSharedPtr& rCanvas,
@@ -335,19 +330,73 @@ namespace presentation
             rtl::OUString const & propName )
         {
             try {
-                com::sun::star::uno::Any const a(
+                const com::sun::star::uno::Any& a(
                     xPropSet->getPropertyValue( propName ) );
                 bool const bRet = (a >>= rValue);
-                OSL_ENSURE( bRet, "property seems to have unexpected type!" );
+#if OSL_DEBUG_LEVEL > 0
+                if( !bRet )
+                    OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s\n",
+                               ::rtl::OUStringToOString( propName,
+                                                         RTL_TEXTENCODING_ASCII_US ).getStr(),
+                               BOOST_CURRENT_FUNCTION,
+                               ::rtl::OUStringToOString( a.getValueTypeRef()->pTypeName,
+                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
+#endif
                 return bRet;
             }
-            catch (com::sun::star::uno::RuntimeException &) {
+            catch (com::sun::star::uno::RuntimeException &)
+            {
                 throw;
             }
-            catch (com::sun::star::uno::Exception &) {
+            catch (com::sun::star::uno::Exception &)
+            {
                 return false;
             }
         }
+
+        template <typename ValueType>
+        inline bool getPropertyValue(
+            com::sun::star::uno::Reference< ValueType >& rIfc,
+            com::sun::star::uno::Reference<
+            com::sun::star::beans::XPropertySet> const & xPropSet,
+            rtl::OUString const & propName )
+        {
+            try
+            {
+                const com::sun::star::uno::Any& a(
+                    xPropSet->getPropertyValue( propName ));
+                rIfc.set( a,
+                          com::sun::star::uno::UNO_QUERY );
+
+                bool const bRet = rIfc.is();
+#if OSL_DEBUG_LEVEL > 0
+                if( !bRet )
+                    OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s to interface\n",
+                               ::rtl::OUStringToOString( propName,
+                                                         RTL_TEXTENCODING_ASCII_US ).getStr(),
+                               BOOST_CURRENT_FUNCTION,
+                               ::rtl::OUStringToOString( a.getValueTypeRef()->pTypeName,
+                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
+#endif
+                return bRet;
+            }
+            catch (com::sun::star::uno::RuntimeException &)
+            {
+                throw;
+            }
+            catch (com::sun::star::uno::Exception &)
+            {
+                return false;
+            }
+        }
+
+        /// Get the content of the BoundRect shape property
+        ::basegfx::B2DRectangle getAPIShapeBounds( const ::com::sun::star::uno::Reference<
+                                                         ::com::sun::star::drawing::XShape >& xShape );
+
+        /// Get the content of the ZOrder shape property
+        double getAPIShapePrio( const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::drawing::XShape >& xShape );
     }
 }
 
