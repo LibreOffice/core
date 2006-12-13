@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:45:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:18:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ java_sql_DatabaseMetaData::java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myO
     ,m_pConnection(_pConnection)
 {
     SDBThreadAttach::addRef();
+    setConnectionInfo( _pConnection->getConnectionInfo() );
 }
 
 // -------------------------------------------------------------------------

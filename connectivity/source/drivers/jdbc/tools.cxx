@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:50:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
         if( pBegin->Name.compareToAscii("JavaDriverClass") &&
             pBegin->Name.compareToAscii("CharSet") &&
             pBegin->Name.compareToAscii("AppendTableAlias") &&
+            pBegin->Name.compareToAscii("GenerateASBeforeCorrelationName") &&
             pBegin->Name.compareToAscii("ParameterNameSubstitution") &&
             pBegin->Name.compareToAscii("IsPasswordRequired") &&
             pBegin->Name.compareToAscii("IsAutoRetrievingEnabled") &&
