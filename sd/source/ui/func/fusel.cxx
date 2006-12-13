@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:53:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 17:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,8 +169,8 @@ FuSelection::FuSelection (
     SfxRequest& rReq)
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
       bTempRotation(FALSE),
-      bHideAndAnimate(FALSE),
       bSelectionChanged(FALSE),
+      bHideAndAnimate(FALSE),
       pHdl(NULL),
       bSuppressChangesOfSelection(FALSE),
       bMirrorSide0(FALSE),
@@ -204,15 +204,14 @@ void FuSelection::DoExecute( SfxRequest& rReq )
 FuSelection::~FuSelection()
 {
     HPUX_DTOR_BUG;
-    pView->UnmarkAllPoints();
-    //pView->ShowMirrored();
-    pView->ResetCreationActive();
+    mpView->UnmarkAllPoints();
+    mpView->ResetCreationActive();
     delete pSound;
     pSound = NULL;
 
-    if ( pView->GetDragMode() != SDRDRAG_MOVE )
+    if ( mpView->GetDragMode() != SDRDRAG_MOVE )
     {
-        pView->SetDragMode(SDRDRAG_MOVE);
+        mpView->SetDragMode(SDRDRAG_MOVE);
     }
 }
 
@@ -230,7 +229,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     pHdl = NULL;
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
     BOOL bWaterCan = SD_MOD()->GetWaterCan();
-    const bool bReadOnly = pDocSh->IsReadOnly();
+    const bool bReadOnly = mpDocSh->IsReadOnly();
     // When the right mouse button is pressed then only select objects
     // (and deselect others) as a preparation for showing the context
     // menu.
@@ -239,15 +238,15 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     bMBDown = TRUE;
     bSelectionChanged = FALSE;
 
-    if ( pView->IsAction() )
+    if ( mpView->IsAction() )
     {
         if ( rMEvt.IsRight() )
-            pView->BckAction();
+            mpView->BckAction();
         return TRUE;
     }
 
-    USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+    USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+    USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
     // The following code is executed for right clicks as well as for left
     // clicks in order to modify the selection for the right button as a
@@ -256,58 +255,57 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     // it makes no sense and b) to have IsAction() return FALSE when called
     // from Command() which is a prerequisite for the context menu.
     if ((rMEvt.IsLeft() || rMEvt.IsRight())
-        && !pView->IsAction()
-        && (pView->IsFrameDragSingles() || !pView->HasMarkablePoints()))
+        && !mpView->IsAction()
+        && (mpView->IsFrameDragSingles() || !mpView->HasMarkablePoints()))
     {
         /******************************************************************
         * KEIN BEZIER_EDITOR
         ******************************************************************/
-        pWindow->CaptureMouse();
-        pHdl = pView->PickHandle(aMDPos);
+        mpWindow->CaptureMouse();
+        pHdl = mpView->PickHandle(aMDPos);
         SdrObject* pObj;
         SdrPageView* pPV;
 
-        long nAngle0  = GetAngle(aMDPos - pView->GetRef1());
+        long nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
         nAngle0 -= 27000;
         nAngle0 = NormAngle360(nAngle0);
         bMirrorSide0 = BOOL (nAngle0 < 18000L);
 
-        if (!pHdl && pView->Is3DRotationCreationActive())
+        if (!pHdl && mpView->Is3DRotationCreationActive())
         {
             /******************************************************************
             * Wenn 3D-Rotationskoerper erstellt werden sollen, jetzt
             * die Erstellung beenden
             ******************************************************************/
             bSuppressChangesOfSelection = TRUE;
-            if(pWindow)
-                pWindow->EnterWait();
-            pView->End3DCreation();
+            if(mpWindow)
+                mpWindow->EnterWait();
+            mpView->End3DCreation();
             bSuppressChangesOfSelection = FALSE;
-            pView->ResetCreationActive();
-            if(pWindow)
-                pWindow->LeaveWait();
+            mpView->ResetCreationActive();
+            if(mpWindow)
+                mpWindow->LeaveWait();
         }
 
         BOOL bTextEdit = FALSE;
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-        if ( pViewShell->GetFrameView()->IsQuickEdit() && eHit == SDRHIT_TEXTEDITOBJ )
+        if ( mpViewShell->GetFrameView()->IsQuickEdit() && eHit == SDRHIT_TEXTEDITOBJ )
         {
             bTextEdit = TRUE;
         }
 
         if(!bTextEdit
-            && !pDocSh->IsReadOnly()
-            && ((pView->IsMarkedHit(aMDPos, nHitLog) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != NULL)
+            && !mpDocSh->IsReadOnly()
+            && ((mpView->IsMarkedHit(aMDPos, nHitLog) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != NULL)
             && (rMEvt.GetClicks() != 2)
             )
         {
-            if (!pHdl && pView->Is3DRotationCreationActive())
+            if (!pHdl && mpView->Is3DRotationCreationActive())
             {
                 // Wechsel Rotationskoerper -> Selektion
-                //pView->ShowMirrored();
-                pView->ResetCreationActive();
+                mpView->ResetCreationActive();
             }
             else if (bWaterCan)
             {
@@ -323,14 +321,14 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
 
             if ( ! rMEvt.IsRight())
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             bReturn = TRUE;
         }
         else
         {
-            if (!rMEvt.IsMod2() && pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKMACRO))
+            if (!rMEvt.IsMod2() && mpView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKMACRO))
             {
-                pView->BegMacroObj(aMDPos, nHitLog, pObj, pPV, pWindow);
+                mpView->BegMacroObj(aMDPos, nHitLog, pObj, pPV, mpWindow);
                 bReturn = TRUE;
             }
             else if ( bTextEdit )
@@ -345,10 +343,10 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     // Seamless Editing: Verzweigen zur Texteingabe
                     if (!rMEvt.IsShift())
-                        pView->UnmarkAll();
+                        mpView->UnmarkAll();
 
                     SfxUInt16Item aItem(SID_TEXTEDIT, 1);
-                    pViewShell->GetViewFrame()->GetDispatcher()->
+                    mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
                             SFX_CALLMODE_RECORD, &aItem, 0L);
                     return bReturn; // VORSICHT, durch den synchronen Slot ist das objekt jetzt geloescht
@@ -357,12 +355,12 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             else if ( !rMEvt.IsMod2() && rMEvt.GetClicks() == 1 &&
                       aVEvt.eEvent == SDREVENT_EXECUTEURL )
              {
-                pWindow->ReleaseMouse();
+                mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
-                SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
+                SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                 SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
-                SfxViewFrame* pFrame = pViewShell->GetViewFrame();
-                pWindow->ReleaseMouse();
+                SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+                mpWindow->ReleaseMouse();
 
                 if (rMEvt.IsMod1())
                 {
@@ -381,10 +379,10 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 bReturn = TRUE;
             }
             else if(!rMEvt.IsMod2()
-                && pViewShell->ISA(DrawViewShell)
+                && mpViewShell->ISA(DrawViewShell)
                 )
             {
-                if(pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                if(mpView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
                 {
                     // Animate object when not just selecting.
                     if ( ! bSelectionOnly)
@@ -395,7 +393,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         if(rMEvt.GetClicks() == 1)
                         {
                             // In die Gruppe hineinschauen
-                            if (pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                            if (mpView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                                 bReturn = AnimateObj(pObj, aMDPos);
                         }
                         else if( !bReadOnly && rMEvt.GetClicks() == 2)
@@ -417,7 +415,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     if(pView->IsGroupEntered() && 2 == rMEvt.GetClicks())
                     {
                         // New: double click on empty space/on obj on MasterPage, leave group
-                        pView->LeaveOneGroup();
+                        mpView->LeaveOneGroup();
                         bReturn = TRUE;
                     }
                 }
@@ -442,9 +440,9 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
                     {
-                        OSL_ASSERT (pViewShell->GetViewShell()!=NULL);
+                        OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
                         Client* pIPClient = static_cast<Client*>(
-                            pViewShell->GetViewShell()->GetIPClient());
+                            mpViewShell->GetViewShell()->GetIPClient());
 
                         if (pIPClient && pIPClient->IsObjectInPlaceActive())
                         {
@@ -452,7 +450,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             bDeactivateOLE = TRUE;
                         }
 
-                        pView->UnmarkAll();
+                        mpView->UnmarkAll();
                     }
 
                     BOOL bMarked = FALSE;
@@ -461,34 +459,34 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if ( rMEvt.IsMod2() )
                         {
-                            bMarked = pView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift() );
+                            bMarked = mpView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift() );
                         }
                         else
                         {
                             BOOL bToggle = FALSE;
 
-                            if (rMEvt.IsShift() && pView->GetMarkedObjectList().GetMarkCount() > 1)
+                            if (rMEvt.IsShift() && mpView->GetMarkedObjectList().GetMarkCount() > 1)
                             {
                                 // Bei Einfachselektion kein Toggle
                                 bToggle = TRUE;
                             }
 
-                            bMarked = pView->MarkObj(aMDPos, nHitLog, bToggle, FALSE);
+                            bMarked = mpView->MarkObj(aMDPos, nHitLog, bToggle, FALSE);
                         }
                     }
 
                     if ( !bReadOnly &&
                         bMarked                                                   &&
-                        (!rMEvt.IsShift() || pView->IsMarkedHit(aMDPos, nHitLog)))
+                        (!rMEvt.IsShift() || mpView->IsMarkedHit(aMDPos, nHitLog)))
                     {
                         /**********************************************************
                         * Objekt verschieben
                         **********************************************************/
                         aDragTimer.Start();
 
-                        pHdl=pView->PickHandle(aMDPos);
+                        pHdl=mpView->PickHandle(aMDPos);
                         if ( ! rMEvt.IsRight())
-                            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                            mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
                     }
                     else
                     {
@@ -496,7 +494,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         * Objekt selektieren
                         **********************************************************/
                         if ( ! rMEvt.IsRight())
-                            pView->BegMarkObj(aMDPos);
+                            mpView->BegMarkObj(aMDPos);
                     }
                 }
             }
@@ -504,14 +502,14 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     }
     else if ( !bReadOnly
               && (rMEvt.IsLeft() || rMEvt.IsRight())
-              && !pView->IsAction())
+              && !mpView->IsAction())
     {
         /**********************************************************************
         * BEZIER-EDITOR
         **********************************************************************/
-        pWindow->CaptureMouse();
+        mpWindow->CaptureMouse();
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
         if (eHit == SDRHIT_HANDLE && aVEvt.pHdl->GetKind() == HDL_BWGT)
         {
@@ -519,14 +517,14 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Handle draggen
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
         {
             /******************************************************************
             * Klebepunkt einfuegen
             ******************************************************************/
-            pView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
+            mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
         {
@@ -534,10 +532,10 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Klebepunkt selektieren
             ******************************************************************/
             if (!rMEvt.IsShift())
-                pView->UnmarkAllPoints();
+                mpView->UnmarkAllPoints();
 
             if ( ! rMEvt.IsRight())
-                pView->BegMarkPoints(aMDPos);
+                mpView->BegMarkPoints(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
@@ -545,48 +543,48 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Objekt verschieben
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
+                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
         }
         else if (eHit == SDRHIT_HANDLE)
         {
             /******************************************************************
             * Klebepunkt selektieren
             ******************************************************************/
-            if (!pView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift())
+            if (!mpView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift())
             {
                 if (!rMEvt.IsShift())
                 {
-                    pView->UnmarkAllPoints();
-                    pHdl = pView->PickHandle(aMDPos);
+                    mpView->UnmarkAllPoints();
+                    pHdl = mpView->PickHandle(aMDPos);
                 }
                 else
                 {
-                    if (pView->IsPointMarked(*aVEvt.pHdl))
+                    if (mpView->IsPointMarked(*aVEvt.pHdl))
                     {
-                        pView->UnmarkPoint(*aVEvt.pHdl);
+                        mpView->UnmarkPoint(*aVEvt.pHdl);
                         pHdl = NULL;
                     }
                     else
                     {
-                        pHdl = pView->PickHandle(aMDPos);
+                        pHdl = mpView->PickHandle(aMDPos);
                     }
                 }
 
                 if (pHdl)
                 {
-                    pView->MarkPoint(*pHdl);
+                    mpView->MarkPoint(*pHdl);
                     if ( ! rMEvt.IsRight())
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                        mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
                 }
             }
             else
             {
                 // #90239# point IS marked and NO shift is pressed. Start
                 // dragging of selected point(s)
-                pHdl = pView->PickHandle(aMDPos);
+                pHdl = mpView->PickHandle(aMDPos);
                 if(pHdl)
                     if ( ! rMEvt.IsRight())
-                        pView->BegDragObj(aMDPos, (OutputDevice*)NULL, pHdl, nDrgLog);
+                        mpView->BegDragObj(aMDPos, (OutputDevice*)NULL, pHdl, nDrgLog);
             }
         }
         else
@@ -596,7 +594,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             ******************************************************************/
             if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SDRHIT_UNMARKEDOBJECT)
             {
-               pView->UnmarkAllObj();
+               mpView->UnmarkAllObj();
             }
 
             BOOL bMarked = FALSE;
@@ -605,11 +603,11 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if (rMEvt.IsMod2())
                 {
-                    bMarked = pView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift());
+                    bMarked = mpView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift());
                 }
                 else
                 {
-                    bMarked = pView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), FALSE);
+                    bMarked = mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), FALSE);
                 }
             }
 
@@ -618,18 +616,18 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // Objekt verschieben
                 if ( ! rMEvt.IsRight())
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                    mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
-            else if (pView->AreObjectsMarked())
+            else if (mpView->AreObjectsMarked())
             {
                 /**************************************************************
                 * Klebepunkt selektieren
                 **************************************************************/
                 if (!rMEvt.IsShift())
-                    pView->UnmarkAllPoints();
+                    mpView->UnmarkAllPoints();
 
                 if ( ! rMEvt.IsRight())
-                    pView->BegMarkPoints(aMDPos);
+                    mpView->BegMarkPoints(aMDPos);
             }
             else
             {
@@ -637,7 +635,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 * Objekt selektieren
                 **************************************************************/
                 if ( ! rMEvt.IsRight())
-                    pView->BegMarkObj(aMDPos);
+                    mpView->BegMarkObj(aMDPos);
             }
 
             ForcePointer(&rMEvt);
@@ -674,20 +672,20 @@ BOOL FuSelection::MouseMove(const MouseEvent& rMEvt)
         }
     }
 
-    if (pView->IsAction())
+    if (mpView->IsAction())
     {
         Point aPix(rMEvt.GetPosPixel());
-        Point aPnt(pWindow->PixelToLogic(aPix));
+        Point aPnt(mpWindow->PixelToLogic(aPix));
 
         ForceScroll(aPix);
 
-        if (pView->IsInsObjPoint())
+        if (mpView->IsInsObjPoint())
         {
-            pView->MovInsObjPoint(aPnt);
+            mpView->MovInsObjPoint(aPnt);
         }
         else
         {
-            pView->MovAction(aPnt);
+            mpView->MovAction(aPnt);
         }
     }
 
@@ -715,7 +713,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         // Animation laeuft noch -> sofort returnieren
         bHideAndAnimate = FALSE;
         pHdl = NULL;
-        pWindow->ReleaseMouse();
+        mpWindow->ReleaseMouse();
         return(TRUE);
     }
 
@@ -725,35 +723,35 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         bIsInDragMode = FALSE;
     }
 
-    if( !pView )
+    if( !mpView )
         return (FALSE);
 
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-    USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+    Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+    USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-    if (pView->IsFrameDragSingles() || !pView->HasMarkablePoints())
+    if (mpView->IsFrameDragSingles() || !mpView->HasMarkablePoints())
     {
         /**********************************************************************
         * KEIN BEZIER_EDITOR
         **********************************************************************/
-        if ( pView->IsDragObj() )
+        if ( mpView->IsDragObj() )
         {
             /******************************************************************
             * Objekt wurde verschoben
             ******************************************************************/
-            FrameView* pFrameView = pViewShell->GetFrameView();
+            FrameView* pFrameView = mpViewShell->GetFrameView();
             BOOL bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
             if (bDragWithCopy)
             {
-                bDragWithCopy = !pView->IsPresObjSelected(FALSE, TRUE);
+                bDragWithCopy = !mpView->IsPresObjSelected(FALSE, TRUE);
             }
 
-            pView->SetDragWithCopy(bDragWithCopy);
-            pView->EndDragObj( pView->IsDragWithCopy() );
+            mpView->SetDragWithCopy(bDragWithCopy);
+            mpView->EndDragObj( mpView->IsDragWithCopy() );
 
-            pView->ForceMarkedToAnotherPage();
+            mpView->ForceMarkedToAnotherPage();
 
             if (!rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                 !bSelectionChanged                   &&
@@ -764,16 +762,16 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * Toggle zw. Selektion und Rotation
                 **************************************************************/
                 SdrObject* pSingleObj = NULL;
-                ULONG nMarkCount = pView->GetMarkedObjectList().GetMarkCount();
+                ULONG nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
                 if (nMarkCount==1)
                 {
-                    pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                    pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 }
 
                 if (nSlotId == SID_OBJECT_SELECT
-                    && pView->IsRotateAllowed()
-                    && (pViewShell->GetFrameView()->IsClickChangeRotation()
+                    && mpView->IsRotateAllowed()
+                    && (mpViewShell->GetFrameView()->IsClickChangeRotation()
                         || (pSingleObj
                             && pSingleObj->GetObjInventor()==E3dInventor))
                     && ! bSelectionOnly)
@@ -794,18 +792,18 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 if (!pHdl)
                 {
                     bSuppressChangesOfSelection = TRUE;
-                    pView->Start3DCreation();
+                    mpView->Start3DCreation();
                     bSuppressChangesOfSelection = FALSE;
                 }
                 else if (pHdl->GetKind() != HDL_MIRX &&
                          pHdl->GetKind() != HDL_REF1 &&
-                         pHdl->GetKind() != HDL_REF2 && pView->Is3DRotationCreationActive())
+                         pHdl->GetKind() != HDL_REF2 && mpView->Is3DRotationCreationActive())
                 {
                     /*********************************************************
                     * Wenn 3D-Rotationskoerper erstellt werden sollen, jetzt
                     * die Erstellung beenden
                     **********************************************************/
-                     long nAngle1  = GetAngle(aPnt - pView->GetRef1());
+                     long nAngle1  = GetAngle(aPnt - mpView->GetRef1());
                      nAngle1 -= 27000;
                      nAngle1 = NormAngle360(nAngle1);
                      BOOL bMirrorSide1 = BOOL (nAngle1 < 18000L);
@@ -813,13 +811,13 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                      if (bMirrorSide0 != bMirrorSide1)
                      {
                          bSuppressChangesOfSelection = TRUE;
-                        if(pWindow)
-                            pWindow->EnterWait();
-                         pView->End3DCreation();
+                        if(mpWindow)
+                            mpWindow->EnterWait();
+                         mpView->End3DCreation();
                          bSuppressChangesOfSelection = FALSE;
                          nSlotId = SID_OBJECT_SELECT;
-                        if(pWindow)
-                            pWindow->LeaveWait();
+                        if(mpWindow)
+                            mpWindow->LeaveWait();
                          Activate();
                     }
                 }
@@ -831,12 +829,12 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             && Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // Gruppe betreten
-            pView->MarkObj(aPnt, nHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
+            mpView->MarkObj(aPnt, nHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
         }
 
-        if (pView->IsAction() )
+        if (mpView->IsAction() )
         {
-            pView->EndAction();
+            mpView->EndAction();
         }
 
         if( SD_MOD()->GetWaterCan() )
@@ -844,7 +842,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             if( rMEvt.IsRight() )
             {
                 // Bei rechter Maustaste wird im Giesskannenmodus ein Undo ausgefuehrt
-                pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SFX_CALLMODE_ASYNCHRON );
+                mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SFX_CALLMODE_ASYNCHRON );
             }
             else if (pWaterCanCandidate != NULL)
             {
@@ -852,7 +850,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 if (pickObject (aPnt) == pWaterCanCandidate)
                 {
                     SdStyleSheetPool* pPool = static_cast<SdStyleSheetPool*>(
-                        pDocSh->GetStyleSheetPool());
+                        mpDocSh->GetStyleSheetPool());
                     if (pPool != NULL)
                     {
                         SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(
@@ -862,15 +860,15 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                             // #108981#
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
-                            SdrUndoAction* pUndoAttr = pDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, sal_True, sal_True);
-                            pView->BegUndo(pUndoAttr->GetComment());
-                            pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoGeoObject(*pWaterCanCandidate));
-                            pView->AddUndo(pUndoAttr);
+                            SdrUndoAction* pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, sal_True, sal_True);
+                            mpView->BegUndo(pUndoAttr->GetComment());
+                            mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoGeoObject(*pWaterCanCandidate));
+                            mpView->AddUndo(pUndoAttr);
 
                             pWaterCanCandidate->SetStyleSheet (pStyleSheet, FALSE);
 
                             // #108981#
-                            pView->EndUndo();
+                            mpView->EndUndo();
                         }
                     }
                 }
@@ -892,21 +890,21 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
         ForcePointer(&rMEvt);
         pHdl = NULL;
-        pWindow->ReleaseMouse();
+        mpWindow->ReleaseMouse();
         SdrObject* pSingleObj = NULL;
-        ULONG nMarkCount = pView->GetMarkedObjectList().GetMarkCount();
+        ULONG nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
         if (nMarkCount==1)
         {
-            pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+            pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         }
 
         if ( nSlotId != SID_OBJECT_SELECT                            &&
              (/* bTempRotation && */ nMarkCount==0)                    ||
-             ( pView->GetDragMode() == SDRDRAG_CROOK &&
-              !pView->IsCrookAllowed( pView->IsCrookNoContortion() ) ) ||
-             ( pView->GetDragMode() == SDRDRAG_SHEAR &&
-              !pView->IsShearAllowed() && !pView->IsDistortAllowed() ) ||
+             ( mpView->GetDragMode() == SDRDRAG_CROOK &&
+              !mpView->IsCrookAllowed( mpView->IsCrookNoContortion() ) ) ||
+             ( mpView->GetDragMode() == SDRDRAG_SHEAR &&
+              !mpView->IsShearAllowed() && !mpView->IsDistortAllowed() ) ||
              ( nSlotId==SID_CONVERT_TO_3D_LATHE && pSingleObj &&
               (pSingleObj->GetObjInventor() != SdrInventor         ||
                pSingleObj->GetObjIdentifier() == OBJ_MEASURE) ) )
@@ -914,9 +912,9 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             bReturn = TRUE;
             ForcePointer(&rMEvt);
             pHdl = NULL;
-            pWindow->ReleaseMouse();
+            mpWindow->ReleaseMouse();
             FuDraw::MouseButtonUp(rMEvt);
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SYNCHRON);
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SYNCHRON);
             return bReturn; // VORSICHT, durch den synchronen Slot ist das objekt jetzt geloescht
         }
 
@@ -927,43 +925,43 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         /**********************************************************************
         * BEZIER_EDITOR
         **********************************************************************/
-        if ( pView->IsAction() )
+        if ( mpView->IsAction() )
         {
-            if ( pView->IsInsObjPoint() )
+            if ( mpView->IsInsObjPoint() )
             {
-                pView->EndInsObjPoint(SDRCREATE_FORCEEND);
+                mpView->EndInsObjPoint(SDRCREATE_FORCEEND);
             }
-            else if ( pView->IsDragObj() )
+            else if ( mpView->IsDragObj() )
             {
-                FrameView* pFrameView = pViewShell->GetFrameView();
+                FrameView* pFrameView = mpViewShell->GetFrameView();
                 BOOL bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
                 if (bDragWithCopy)
                 {
-                    bDragWithCopy = !pView->IsPresObjSelected(FALSE, TRUE);
+                    bDragWithCopy = !mpView->IsPresObjSelected(FALSE, TRUE);
                 }
 
-                pView->SetDragWithCopy(bDragWithCopy);
-                pView->EndDragObj( pView->IsDragWithCopy() );
+                mpView->SetDragWithCopy(bDragWithCopy);
+                mpView->EndDragObj( mpView->IsDragWithCopy() );
             }
             else
             {
-                pView->EndAction();
+                mpView->EndAction();
 
-                USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                Point aPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+                USHORT nDrgLog2 = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+                Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-                if (Abs(aMDPos.X() - aPos.X()) < nDrgLog &&
-                    Abs(aMDPos.Y() - aPos.Y()) < nDrgLog &&
+                if (Abs(aMDPos.X() - aPos.X()) < nDrgLog2 &&
+                    Abs(aMDPos.Y() - aPos.Y()) < nDrgLog2 &&
                     !rMEvt.IsShift() && !rMEvt.IsMod2())
                 {
                     SdrViewEvent aVEvt;
-                    SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                    SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
                     if (eHit == SDRHIT_NONE)
                     {
                         // Klick auf der Stelle: deselektieren
-                        pView->UnmarkAllObj();
+                        mpView->UnmarkAllObj();
                     }
                 }
             }
@@ -973,13 +971,13 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                  Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // Gruppe betreten
-            pView->MarkObj(aPnt, nHitLog, FALSE, rMEvt.IsMod1());
+            mpView->MarkObj(aPnt, nHitLog, FALSE, rMEvt.IsMod1());
         }
 
 
         ForcePointer(&rMEvt);
         pHdl = NULL;
-        pWindow->ReleaseMouse();
+        mpWindow->ReleaseMouse();
 
         FuDraw::MouseButtonUp(rMEvt);
     }
@@ -999,7 +997,6 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FALSE;
-    BOOL bSwitchToSelection = FALSE;
 
     switch (rKEvt.GetKeyCode().GetCode())
     {
@@ -1014,12 +1011,11 @@ BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
     {
         bReturn = FuDraw::KeyInput(rKEvt);
 
-        if(pView->GetMarkedObjectList().GetMarkCount() == 0)
+        if(mpView->GetMarkedObjectList().GetMarkCount() == 0)
         {
-            //pView->ShowMirrored();
-            pView->ResetCreationActive();
+            mpView->ResetCreationActive();
 
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
         }
     }
 
@@ -1037,25 +1033,25 @@ BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
 void FuSelection::Activate()
 {
     SdrDragMode eMode;
-    pView->ResetCreationActive();
-    pView->SetEditMode(SDREDITMODE_EDIT);
+    mpView->ResetCreationActive();
+    mpView->SetEditMode(SDREDITMODE_EDIT);
 
     switch( nSlotId )
     {
         case SID_OBJECT_ROTATE:
         {
             // (gemapter) Slot wird explizit auf Rotate gesetzt #31052#
-            if( pViewShell->ISA(DrawViewShell) )
+            if( mpViewShell->ISA(DrawViewShell) )
             {
                 USHORT* pSlotArray =
-                    static_cast<DrawViewShell*>(pViewShell)->GetSlotArray();
+                    static_cast<DrawViewShell*>(mpViewShell)->GetSlotArray();
                 pSlotArray[ 1 ] = SID_OBJECT_ROTATE;
             }
 
             eMode = SDRDRAG_ROTATE;
 
-            if ( pView->GetDragMode() != eMode )
-                pView->SetDragMode(eMode);
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
         }
         break;
 
@@ -1063,8 +1059,8 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_MIRROR;
 
-            if ( pView->GetDragMode() != eMode )
-                pView->SetDragMode(eMode);
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
         }
         break;
 
@@ -1072,8 +1068,8 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_TRANSPARENCE;
 
-            if ( pView->GetDragMode() != eMode )
-                pView->SetDragMode(eMode);
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
         }
         break;
 
@@ -1081,8 +1077,8 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_GRADIENT;
 
-            if ( pView->GetDragMode() != eMode )
-                pView->SetDragMode(eMode);
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
         }
         break;
 
@@ -1090,8 +1086,8 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_SHEAR;
 
-            if ( pView->GetDragMode() != eMode )
-                pView->SetDragMode(eMode);
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
         }
         break;
 
@@ -1099,10 +1095,10 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_CROOK;
 
-            if ( pView->GetDragMode() != eMode )
+            if ( mpView->GetDragMode() != eMode )
             {
-                pView->SetDragMode(eMode);
-                pView->SetCrookMode(SDRCROOK_ROTATE);
+                mpView->SetDragMode(eMode);
+                mpView->SetCrookMode(SDRCROOK_ROTATE);
             }
         }
         break;
@@ -1111,10 +1107,10 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_CROOK;
 
-            if ( pView->GetDragMode() != eMode )
+            if ( mpView->GetDragMode() != eMode )
             {
-                pView->SetDragMode(eMode);
-                pView->SetCrookMode(SDRCROOK_SLANT);
+                mpView->SetDragMode(eMode);
+                mpView->SetCrookMode(SDRCROOK_SLANT);
             }
         }
         break;
@@ -1123,10 +1119,10 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_CROOK;
 
-            if ( pView->GetDragMode() != eMode )
+            if ( mpView->GetDragMode() != eMode )
             {
-                pView->SetDragMode(eMode);
-                pView->SetCrookMode(SDRCROOK_STRETCH);
+                mpView->SetDragMode(eMode);
+                mpView->SetCrookMode(SDRCROOK_STRETCH);
             }
         }
         break;
@@ -1136,11 +1132,11 @@ void FuSelection::Activate()
             eMode = SDRDRAG_MIRROR;
             bSuppressChangesOfSelection = TRUE;
 
-            if ( pView->GetDragMode() != eMode )
-                pView->SetDragMode(eMode);
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
 
-            if (!pView->Is3DRotationCreationActive())
-                pView->Start3DCreation();
+            if (!mpView->Is3DRotationCreationActive())
+                mpView->Start3DCreation();
 
             bSuppressChangesOfSelection = FALSE;
         }
@@ -1150,8 +1146,8 @@ void FuSelection::Activate()
         {
             eMode = SDRDRAG_MOVE;
 
-            if ( pView->GetDragMode() != eMode )
-                pView->SetDragMode(eMode);
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
         }
         break;
     }
@@ -1190,17 +1186,16 @@ void FuSelection::SelectionHasChanged()
 
     FuDraw::SelectionHasChanged();
 
-    if ((pView->Is3DRotationCreationActive() && !bSuppressChangesOfSelection))
+    if ((mpView->Is3DRotationCreationActive() && !bSuppressChangesOfSelection))
     {
         // Wechsel Rotationskoerper -> Selektion
-        //pView->ShowMirrored();
-        pView->ResetCreationActive();
+        mpView->ResetCreationActive();
         nSlotId = SID_OBJECT_SELECT;
         Activate();
     }
 
     // Activate the right tool bar for the current context of the view.
-    pViewShell->GetViewShellBase().GetToolBarManager().SelectionHasChanged(*pViewShell, *pView);
+    mpViewShell->GetViewShellBase().GetToolBarManager().SelectionHasChanged(*mpViewShell, *mpView);
 }
 
 
@@ -1216,16 +1211,16 @@ void FuSelection::SetEditMode(USHORT nMode)
 
     if (nEditMode == SID_BEZIER_INSERT)
     {
-        pView->SetInsObjPointMode(TRUE);
+        mpView->SetInsObjPointMode(TRUE);
     }
     else
     {
-        pView->SetInsObjPointMode(FALSE);
+        mpView->SetInsObjPointMode(FALSE);
     }
 
     ForcePointer();
 
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_BEZIER_MOVE);
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
@@ -1236,7 +1231,7 @@ void FuSelection::SetEditMode(USHORT nMode)
 |*
 \************************************************************************/
 
-IMPL_LINK( FuSelection, SoundHasStoppedHdl, void*, p )
+IMPL_LINK( FuSelection, SoundHasStoppedHdl, void*, EMPTYARG )
 {
     pSound->SetNotifyHdl( Link() );
     pSound->SetSoundName( String() );
@@ -1258,7 +1253,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
     if (bClosed)
     {
-        SfxItemSet aSet(pDoc->GetPool());
+        SfxItemSet aSet(mpDoc->GetPool());
 
         aSet.Put(pObj->GetMergedItemSet());
 
@@ -1266,8 +1261,8 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         bFilled = rFillStyle.GetValue() != XFILL_NONE;
     }
 
-    const SetOfByte* pVisiLayer = &pView->GetSdrPageView()->GetVisibleLayers();
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+    const SetOfByte* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
+    USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
     const long  n2HitLog = nHitLog * 2;
     Point aHitPosR(rPos);
     Point aHitPosL(rPos);
@@ -1286,20 +1281,20 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
           pObj->IsHit( aHitPosT, nHitLog, pVisiLayer ) &&
           pObj->IsHit( aHitPosB, nHitLog, pVisiLayer ) ) )
     {
-        if ( pDoc->GetIMapInfo( pObj ) )
+        if ( mpDoc->GetIMapInfo( pObj ) )
         {
-            const IMapObject* pIMapObj = pDoc->GetHitIMapObject( pObj, rPos, *pWindow );
+            const IMapObject* pIMapObj = mpDoc->GetHitIMapObject( pObj, rPos, *mpWindow );
 
             if ( pIMapObj && pIMapObj->GetURL().Len() )
             {
                 // Sprung zu Dokument
-                pWindow->ReleaseMouse();
+                mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem(SID_FILE_NAME, pIMapObj->GetURL());
-                SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
-                SfxViewFrame* pFrame = pViewShell->GetViewFrame();
+                SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
+                SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                 SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
-                pWindow->ReleaseMouse();
+                mpWindow->ReleaseMouse();
                 pFrame->GetDispatcher()->
                     Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                             &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
@@ -1307,24 +1302,24 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 bAnimated = TRUE;
             }
         }
-        else if (!pDocSh->ISA(GraphicDocShell)        &&
-                 pView->ISA(DrawView)                 &&
-                 pDoc->GetAnimationInfo(pObj))
+        else if (!mpDocSh->ISA(GraphicDocShell)        &&
+                 mpView->ISA(DrawView)                 &&
+                 mpDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
             * Animations-Objekt in der Mitte getroffen -> Interaktion
             **********************************************************/
-            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
-            DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
-            pWindow->ReleaseMouse();
+            SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
+            DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
+            mpWindow->ReleaseMouse();
 
-            switch (pInfo->eClickAction)
+            switch (pInfo->meClickAction)
             {
                 case presentation::ClickAction_BOOKMARK:
                 {
                      // Sprung zu Bookmark (Seite oder Objekt)
-                    SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->aBookmark);
-                    pViewShell->GetViewFrame()->GetDispatcher()->
+                    SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->maBookmark);
+                    mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L);
                     bAnimated = TRUE;
                 }
@@ -1333,11 +1328,11 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_DOCUMENT:
                 {
                     // Sprung zu Dokument
-                    if (pInfo->aBookmark.Len())
+                    if (pInfo->maBookmark.Len())
                     {
-                        SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
-                        SfxStringItem aStrItem(SID_FILE_NAME, pInfo->aBookmark);
-                        SfxViewFrame* pFrame = pViewShell->GetViewFrame();
+                        SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
+                        SfxStringItem aStrItem(SID_FILE_NAME, pInfo->maBookmark);
+                        SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                         SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                         SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
                         pFrame->GetDispatcher()->
@@ -1353,7 +1348,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Sprung zur vorherigen Seite
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_PREVIOUS);
-                    pViewShell->GetViewFrame()->GetDispatcher()->
+                    mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                             &aItem, 0L);
                     bAnimated = TRUE;
@@ -1364,7 +1359,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Sprung zur naechsten Seite
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_NEXT);
-                    pViewShell->GetViewFrame()->GetDispatcher()->
+                    mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                             &aItem, 0L);
                     bAnimated = TRUE;
@@ -1375,7 +1370,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Sprung zu erster Seite
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_FIRST);
-                    pViewShell->GetViewFrame()->GetDispatcher()->
+                    mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                             &aItem, 0L);
                     bAnimated = TRUE;
@@ -1386,7 +1381,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Sprung zu letzter Seite
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_LAST);
-                    pViewShell->GetViewFrame()->GetDispatcher()->
+                    mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                             &aItem, 0L);
                     bAnimated = TRUE;
@@ -1402,7 +1397,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     }
 
                     pSound->SetNotifyHdl( LINK( this, FuSelection, SoundHasStoppedHdl ) );
-                    pSound->SetSoundName( pInfo->aBookmark );
+                    pSound->SetSoundName( pInfo->maBookmark );
                     pSound->Play();
                     bAnimated = TRUE;
                 }
@@ -1411,9 +1406,9 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_VERB:
                 {
                     // Verb zuweisen
-                    pView->UnmarkAll();
-                    pView->MarkObj(pObj, pView->GetSdrPageView(), FALSE, FALSE);
-                    pDrViewSh->DoVerb((sal_Int16)pInfo->nVerb);
+                    mpView->UnmarkAll();
+                    mpView->MarkObj(pObj, mpView->GetSdrPageView(), FALSE, FALSE);
+                    pDrViewSh->DoVerb((sal_Int16)pInfo->mnVerb);
                     bAnimated = TRUE;
                 }
                 break;
@@ -1421,7 +1416,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_PROGRAM:
                 {
                    String aBaseURL = GetDocSh()->GetMedium()->GetBaseURL();
-                   INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->aBookmark,
+                   INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->maBookmark,
                                                 URIHelper::GetMaybeFileHdl(), true, false,
                                                 INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
 
@@ -1446,7 +1441,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_MACRO:
                 {
                     // Execute makro
-                    String aMacro = pInfo->aBookmark;
+                    String aMacro = pInfo->maBookmark;
 
                     if ( SfxApplication::IsXScriptURL( aMacro ) )
                     {
@@ -1456,7 +1451,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         uno::Sequence< uno::Any >* pInArgs =
                             new uno::Sequence< uno::Any >(0);
 
-                        ErrCode eErr = pDocSh->CallXScript( aMacro,
+                        ErrCode eErr = mpDocSh->CallXScript( aMacro,
                             *pInArgs, aRet, aOutArgsIndex, aOutArgs);
 
                         // Check the return value from the script
@@ -1492,7 +1487,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         String aExecMacro(aModulName);
                         aExecMacro.Append( sal_Unicode('.') );
                         aExecMacro.Append( aMacroName );
-                        bAnimated = pDocSh->GetBasic()->Call(aExecMacro);
+                        bAnimated = mpDocSh->GetBasic()->Call(aExecMacro);
                     }
                 }
                 break;
@@ -1506,59 +1501,25 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         }
 
         if (!bAnimated                               &&
-            pView->ISA(DrawView)                 &&
-            !pDocSh->ISA(GraphicDocShell)        &&
-            static_cast<DrawView*>(pView)->GetSlideShow()  &&
-            pDoc->GetAnimationInfo(pObj))
+            mpView->ISA(DrawView)                 &&
+            !mpDocSh->ISA(GraphicDocShell)        &&
+            static_cast<DrawView*>(mpView)->GetSlideShow()  &&
+            mpDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
             * Effekt-Objekt in der Mitte getroffen -> Effekt abspielen
             **********************************************************/
-            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
-            DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
+            SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
 
-            switch (pInfo->eClickAction)
+            switch (pInfo->meClickAction)
             {
                 case presentation::ClickAction_VANISH:
                 case presentation::ClickAction_INVISIBLE:
-                {
-/*
-                    if (static_cast<DrawView*>(pView)->GetSlideShow())
-                    {
-                        // Objekt ausblenden
-                        bHideAndAnimate = TRUE;
-                        pDrViewSh->LockInput();
-                        static_cast<DrawView*>(pView)
-                            ->HideAndAnimateObject(pObj);
-                        pDrViewSh->UnlockInput();
-                        pWindow->ReleaseMouse();
-                        bAnimated = TRUE;
-                    }
-*/
-                }
-                break;
+                    break;
 
                 default:
-                {
                     bAnimated = FALSE;
-                }
                 break;
-            }
-
-            if (!bAnimated && static_cast<DrawView*>(pView)->GetSlideShow() &&
-                ( pInfo->bActive &&
-                    ( pInfo->eEffect != presentation::AnimationEffect_NONE ||
-                    pInfo->eTextEffect != presentation::AnimationEffect_NONE )))
-            {
-/*
-                // Objekt ausblenden
-                bHideAndAnimate = TRUE;
-                pDrViewSh->LockInput();
-                static_cast<DrawView*>(pView)->HideAndAnimateObject(pObj);
-                pDrViewSh->UnlockInput();
-                pWindow->ReleaseMouse();
-                bAnimated = TRUE;
-*/
             }
         }
     }
@@ -1576,12 +1537,10 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 */
 bool FuSelection::cancel()
 {
-    if (pView->Is3DRotationCreationActive())
+    if (mpView->Is3DRotationCreationActive())
     {
-        //pView->ShowMirrored();
-        pView->ResetCreationActive();
-
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        mpView->ResetCreationActive();
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
         return true;
     }
     else
@@ -1597,8 +1556,8 @@ SdrObject* FuSelection::pickObject (const Point& rTestPoint)
 {
     SdrObject* pObject = NULL;
     SdrPageView* pPageView;
-    USHORT nHitLog = USHORT (pWindow->PixelToLogic(Size(HITPIX,0)).Width());
-    pView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SDRSEARCH_PICKMARKABLE);
+    USHORT nHitLog = USHORT (mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
+    mpView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SDRSEARCH_PICKMARKABLE);
     return pObject;
 }
 } // end of namespace sd
