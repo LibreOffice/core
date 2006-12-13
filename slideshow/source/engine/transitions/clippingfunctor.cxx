@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippingfunctor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:38:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "clippingfunctor.hxx"
 #include "transitiontools.hxx"
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -56,7 +56,7 @@ namespace presentation
             mbScaleIsotrophically( rTransitionInfo.mbScaleIsotrophically ),
             mbFlip(false)
         {
-            ENSURE_AND_THROW( rPolygon.get(),
+            ENSURE_AND_THROW( rPolygon,
                               "ClippingFunctor::ClippingFunctor(): Invalid parametric polygon" );
 
             // maBackgroundRect serves as the minuent when
@@ -89,7 +89,7 @@ namespace presentation
                 if (rTransitionInfo.mnRotationAngle != 0.0)
                 {
                     maStaticTransformation.rotate(
-                        rTransitionInfo.mnRotationAngle*F_PI180 );
+                        basegfx::deg2rad(rTransitionInfo.mnRotationAngle) );
                 }
                 if (rTransitionInfo.mnScaleX != 1.0 ||
                     rTransitionInfo.mnScaleY != 1.0)
@@ -132,7 +132,7 @@ namespace presentation
 
                     case TransitionInfo::REVERSEMETHOD_ROTATE_180:
                         maStaticTransformation.translate( -0.5, -0.5 );
-                        maStaticTransformation.rotate( F_PI );
+                        maStaticTransformation.rotate( M_PI );
                         maStaticTransformation.translate( 0.5, 0.5 );
                         break;
 
