@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-28 12:43:19 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#include <math.h>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
 
 namespace basebmp
 {
