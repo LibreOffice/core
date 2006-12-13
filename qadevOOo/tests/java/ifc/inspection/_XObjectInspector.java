@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XObjectInspector.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:49:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ package ifc.inspection;
 
 import com.sun.star.inspection.XObjectInspector;
 import com.sun.star.inspection.XObjectInspectorModel;
+import com.sun.star.inspection.XObjectInspectorUI;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
@@ -59,6 +60,7 @@ import lib.StatusException;
  * <ul> <p>
  *
  */
+
 public class _XObjectInspector extends MultiMethodTest {
 
     /**
@@ -71,11 +73,6 @@ public class _XObjectInspector extends MultiMethodTest {
      * test the method <CODE>inspect()</CODE>
      */
     public Object[] oInspect = null;
-    /**
-     * In the test of method <CODE>getInspectorModel()</CODE> this variable
-     * was assigned to the current <CODE>XModel</CODE>.
-     */
-    public XObjectInspectorModel xGetModel = null;
     /**
      * This variable was filled with the object relation
      * <CODE>XObjectInspector.InspectorModelToSet</CODE> and was used to
@@ -123,40 +120,46 @@ public class _XObjectInspector extends MultiMethodTest {
     }
 
     /**
-     * Call the method <CODE>getInspectorModel()</CODE> and assign the value to the
-     * module variable <CODE>xGetModel</CODE>.<br>
-     * Has <CODE>OK</CODE> status if the returned value is not null.
-     */
-    public void _getInspectorModel() {
-
-        xGetModel = oObj.getInspectorModel() ;
-        tRes.tested("getInspectorModel()", xGetModel != null) ;
-    }
-
-    /**
-     * Call the method <CODE>setInspectorModel()</CODE> with the module variable
+     * First call the method <CODE>getInspectorModel()</CODE> and save the value<br>
+     * Second call the method <CODE>setInspectorModel()</CODE> with the module variable
      * <CODE>xSetModel</CODE> as parameter.<br> Then <CODE>getInspectorModel()</CODE>
-     * was called and the returned valued was compared to the module variable
+     * was called and the returned valued was compared to the saved variable
      * <CODE>xSetModel</CODE><br>
      * Has <CODE>OK</CODE> status if the returned value is equal to
-     * <CODE>xSetModel</CODE>.
-     * The following method test has to be completed successfully before :
-     * <ul>
-     *    <li> <code> getInspectorModel() </code></li>
-     * </ul>
+     * <CODE>xSetModel</CODE>.and the saved value is not null.
      */
-    public void _setInspectorModel() {
-        requiredMethod("getInspectorModel()");
+    public void _InspectorModel() {
 
+        log.println("testing 'getInspectorModel()'...");
+        XObjectInspectorModel xGetModel = oObj.getInspectorModel() ;
+
+        boolean result = xGetModel != null;
+
+        log.println(result? "got a not null object -> OK" : "got a NULL object -> FAILED");
+
+        log.println("testing 'setInspectorModel()'...");
         oObj.setInspectorModel(xSetModel);
 
         XObjectInspectorModel xNewModel = oObj.getInspectorModel();
 
-        oObj.setInspectorModel(xGetModel);
+        if (result) oObj.setInspectorModel(xGetModel);
 
-        tRes.tested("setInspectorModel()", xSetModel.equals(xNewModel)) ;
+        result &= xSetModel.equals(xNewModel);
+
+        tRes.tested("InspectorModel()", result) ;
     }
 
+    /**
+     * Calls the method <CODE>getInspectorUI()</CODE>
+     * Has <b>OK</b> returned value is not null
+     */
+    public void _InspectorUI() {
+
+        XObjectInspectorUI oUI = oObj.getInspectorUI();
+
+        tRes.tested("InspectorUI()", oUI != null) ;
+
+    }
 }
 
 
