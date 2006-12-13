@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:29:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _CONNECTIVITY_EVOAB_CATALOG_HXX_
 #include "NCatalog.hxx"
-#endif
-#ifndef _CONNECTIVITY_RESOURCE_HRC_
-#include "Resource.hrc"
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
