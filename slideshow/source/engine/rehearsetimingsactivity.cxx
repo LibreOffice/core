@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:55:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,32 +36,36 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "rtl/ustrbuf.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/gdimtf.hxx"
-#include "vcl/virdev.hxx"
-#include "vcl/metric.hxx"
-#include "cppcanvas/vclfactory.hxx"
-#include "cppcanvas/basegfxfactory.hxx"
+#include <rtl/ustrbuf.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/metric.hxx>
+#include <cppcanvas/vclfactory.hxx>
+#include <cppcanvas/basegfxfactory.hxx>
+
+#include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/awt/MouseEvent.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+
 #include "eventqueue.hxx"
 #include "eventmultiplexer.hxx"
 #include "activitiesqueue.hxx"
 #include "mouseeventhandler.hxx"
 #include "rehearsetimingsactivity.hxx"
-#include "com/sun/star/awt/MouseButton.hpp"
-#include "com/sun/star/awt/MouseEvent.hpp"
-#include "com/sun/star/rendering/XBitmap.hpp"
-#include "boost/bind.hpp"
+
+#include <boost/bind.hpp>
 #include <algorithm>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class RehearseTimingsActivity::MouseHandler
-    : public MouseEventHandler, private boost::noncopyable
+    : public MouseEventHandler,
+      private boost::noncopyable
 {
 public:
     MouseHandler( boost::shared_ptr<RehearseTimingsActivity> const & rta );
@@ -80,40 +84,40 @@ public:
     virtual bool handleMouseMoved( awt::MouseEvent const & evt );
 
 private:
-    boost::shared_ptr<RehearseTimingsActivity> m_rta;
     bool isInArea( com::sun::star::awt::MouseEvent const & evt ) const;
-    bool isDisposed() const { return m_rta.get() == 0 || hasBeenClicked(); }
+    bool isDisposed() const { return !m_rta || hasBeenClicked(); }
     void updatePressedState( const bool pressedState ) const;
-    bool m_hasBeenClicked;
-    bool m_mouseStartedInArea;
+
+    boost::shared_ptr<RehearseTimingsActivity> m_rta;
+    bool                                       m_hasBeenClicked;
+    bool                                       m_mouseStartedInArea;
 };
 
 const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 30;
 
-RehearseTimingsActivity::RehearseTimingsActivity(
-    EventQueue & rEventQueue,
-    EventMultiplexer & rEventMultiplexer,
-    ActivitiesQueue & rActivitiesQueue )
-    : m_rEventQueue(rEventQueue),
-      m_rEventMultiplexer(rEventMultiplexer),
-      m_rActivitiesQueue(rActivitiesQueue),
-      m_this(),
-      m_elapsedTime( rEventQueue.getTimer() ),
-      m_views(),
-      m_spriteRectangle(),
-      m_font( Application::GetSettings().GetStyleSettings().GetInfoFont() ),
-      m_wakeUpEvent( new WakeupEvent( rEventQueue.getTimer(),
-                                      rActivitiesQueue ) ),
-      m_mouseHandler(),
-      m_bActive(false),
-      m_drawPressed(false)
+RehearseTimingsActivity::RehearseTimingsActivity( EventQueue &            rEventQueue,
+                                                  EventMultiplexer &      rEventMultiplexer,
+                                                  ActivitiesQueue &       rActivitiesQueue,
+                                                  const UnoViewContainer& rViewContainer ) :
+    m_rEventQueue(rEventQueue),
+    m_rEventMultiplexer(rEventMultiplexer),
+    m_rActivitiesQueue(rActivitiesQueue),
+    m_elapsedTime( rEventQueue.getTimer() ),
+    m_views(),
+    m_spriteRectangle(),
+    m_font( Application::GetSettings().GetStyleSettings().GetInfoFont() ),
+    m_wakeUpEvent( new WakeupEvent( rEventQueue.getTimer(),
+                                    rActivitiesQueue ) ),
+    m_mouseHandler(),
+    m_spriteSizePixel(),
+    m_nYOffset(0),
+    m_bActive(false),
+    m_drawPressed(false)
 {
-//     m_font.SetOutline(true);
     m_font.SetHeight( m_font.GetHeight() * 2 );
     m_font.SetWidth( m_font.GetWidth() * 2 );
     m_font.SetAlign( ALIGN_BASELINE );
-//     m_font.SetColor( COL_WHITE );
     m_font.SetColor( COL_BLACK );
 
     // determine sprite size (in pixel):
@@ -125,23 +129,32 @@ RehearseTimingsActivity::RehearseTimingsActivity(
     const FontMetric metric( blackHole.GetFontMetric() );
     blackHole.GetTextBoundRect(
         rect, String(RTL_CONSTASCII_USTRINGPARAM("XX:XX:XX")) );
-    m_spriteSizePixel = Size(
-        rect.getWidth() * 12 / 10, metric.GetLineHeight() * 11 / 10 );
+    m_spriteSizePixel.setX( rect.getWidth() * 12 / 10 );
+    m_spriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     m_nYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));
+
+    std::for_each( rViewContainer.begin(),
+                   rViewContainer.end(),
+                   boost::bind( &RehearseTimingsActivity::viewAdded,
+                                this,
+                                _1 ));
 }
 
 boost::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
-    EventQueue & rEventQueue,
-    EventMultiplexer & rEventMultiplexer,
-    ActivitiesQueue & rActivitiesQueue )
+    EventQueue &            rEventQueue,
+    EventMultiplexer &      rEventMultiplexer,
+    ActivitiesQueue &       rActivitiesQueue,
+    const UnoViewContainer& rViewContainer )
 {
     boost::shared_ptr<RehearseTimingsActivity> activity(
         new RehearseTimingsActivity( rEventQueue,
                                      rEventMultiplexer,
-                                     rActivitiesQueue ) );
-    activity->m_this = activity;
+                                     rActivitiesQueue,
+                                     rViewContainer ));
     activity->m_mouseHandler.reset( new MouseHandler(activity) );
     activity->m_wakeUpEvent->setActivity(activity);
+    rEventMultiplexer.addViewHandler( activity );
+
     return activity;
 }
 
@@ -155,7 +168,7 @@ void RehearseTimingsActivity::start()
     paintAllSprites();
     for_each_sprite( boost::bind( &cppcanvas::Sprite::show, _1 ) );
 
-    m_rActivitiesQueue.addActivity( m_this );
+    m_rActivitiesQueue.addActivity( shared_from_this() );
 
     m_mouseHandler->reset();
     m_rEventMultiplexer.addClickHandler(
@@ -175,7 +188,7 @@ double RehearseTimingsActivity::stop()
 
 bool RehearseTimingsActivity::hasBeenClicked() const
 {
-    if (m_mouseHandler.get() != 0)
+    if (m_mouseHandler)
         return m_mouseHandler->hasBeenClicked();
     return false;
 }
@@ -184,16 +197,15 @@ bool RehearseTimingsActivity::hasBeenClicked() const
 void RehearseTimingsActivity::dispose()
 {
     stop();
-    if (m_wakeUpEvent.get() != 0) {
+    if (m_wakeUpEvent) {
         m_wakeUpEvent->dispose();
         m_wakeUpEvent.reset();
     }
-    if (m_mouseHandler.get() != 0) {
+    if (m_mouseHandler) {
         m_mouseHandler->dispose();
         m_mouseHandler.reset();
     }
     ViewsVecT().swap( m_views );
-    m_this.reset();
 }
 
 // Activity:
@@ -206,8 +218,8 @@ bool RehearseTimingsActivity::perform()
 {
     if (! isActive())
         return false;
-    OSL_ENSURE( m_wakeUpEvent.get() != 0, "### no wake-up event!" );
-    if (m_wakeUpEvent.get() == 0)
+    OSL_ENSURE( m_wakeUpEvent, "### no wake-up event!" );
+    if (!m_wakeUpEvent)
         return false;
 
     m_wakeUpEvent->start();
@@ -252,13 +264,13 @@ basegfx::B2DRectangle RehearseTimingsActivity::calcSpriteRectangle(
     // pixel:
     basegfx::B2DPoint spritePos(
         std::min<sal_Int32>( realSize.Width, LEFT_BORDER_SPACE ),
-        std::max<sal_Int32>( 0, realSize.Height - m_spriteSizePixel.getHeight()
+        std::max<sal_Int32>( 0, realSize.Height - m_spriteSizePixel.getY()
                                                 - LOWER_BORDER_SPACE ) );
     basegfx::B2DHomMatrix transformation( rView->getTransformation() );
     transformation.invert();
     spritePos *= transformation;
-    basegfx::B2DSize spriteSize( m_spriteSizePixel.getWidth(),
-                                 m_spriteSizePixel.getHeight() );
+    basegfx::B2DSize spriteSize( m_spriteSizePixel.getX(),
+                                 m_spriteSizePixel.getY() );
     spriteSize *= transformation;
     return basegfx::B2DRectangle(
         spritePos.getX(), spritePos.getY(),
@@ -266,33 +278,31 @@ basegfx::B2DRectangle RehearseTimingsActivity::calcSpriteRectangle(
         spritePos.getY() + spriteSize.getY() );
 }
 
-void RehearseTimingsActivity::addView( UnoViewSharedPtr const & rView )
+void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
 {
-    const ViewsVecT::iterator iEnd( m_views.end() );
-    if (std::find_if(
-            m_views.begin(), iEnd,
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) )!=
-        iEnd)
-        return; // already added
-
     cppcanvas::CustomSpriteSharedPtr sprite(
         rView->createSprite( basegfx::B2DSize(
-                                 m_spriteSizePixel.getWidth(),
-                                 m_spriteSizePixel.getHeight() ) ) );
-    sprite->setAlpha( 0.9 );
-    const basegfx::B2DRectangle spriteRectangle( calcSpriteRectangle( rView ) );
+                                 m_spriteSizePixel.getX()+2,
+                                 m_spriteSizePixel.getY()+2 ) ));
+    sprite->setPriority(1001.0); // sprite should be in front of all
+                                 // other sprites
+    sprite->setAlpha( 0.8 );
+    const basegfx::B2DRectangle spriteRectangle(
+        calcSpriteRectangle( rView ) );
     sprite->move( basegfx::B2DPoint(
-                      spriteRectangle.getMinX(), spriteRectangle.getMinY() ) );
+                      spriteRectangle.getMinX(),
+                      spriteRectangle.getMinY() ) );
+
+    if( m_views.empty() )
+        m_spriteRectangle = spriteRectangle;
+
     m_views.push_back( ViewsVecT::value_type( rView, sprite ) );
+
     if (isActive())
         sprite->show();
 }
 
-void RehearseTimingsActivity::removeView( UnoViewSharedPtr const & rView )
+void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
 {
     m_views.erase(
         std::remove_if(
@@ -301,22 +311,32 @@ void RehearseTimingsActivity::removeView( UnoViewSharedPtr const & rView )
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) ),
+                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))),
         m_views.end() );
 }
 
-void RehearseTimingsActivity::notifyViewChange()
+void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
 {
-    if (! m_views.empty()) {
-        // new sprite pos, transformation might have changed:
-        m_spriteRectangle = calcSpriteRectangle( m_views.begin()->first );
+    // find entry corresponding to modified view
+    ViewsVecT::iterator aModifiedEntry(
+        std::find_if(
+            m_views.begin(),
+            m_views.end(),
+            boost::bind(
+                std::equal_to<UnoViewSharedPtr>(),
+                rView,
+                // select view:
+                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
 
-        // reposition all sprites:
-        const basegfx::B2DPoint spritePos(
-            m_spriteRectangle.getMinX(), m_spriteRectangle.getMinY() );
-        for_each_sprite( boost::bind( &cppcanvas::Sprite::move,
-                                      _1, boost::cref(spritePos) ) );
-    }
+    OSL_ASSERT( aModifiedEntry != m_views.end() );
+    if( aModifiedEntry == m_views.end() )
+        return;
+
+    // new sprite pos, transformation might have changed:
+    m_spriteRectangle = calcSpriteRectangle( rView );
+
+    // reposition sprite:
+    aModifiedEntry->second->move( m_spriteRectangle.getMinimum() );
 }
 
 void RehearseTimingsActivity::paintAllSprites() const
@@ -328,8 +348,7 @@ void RehearseTimingsActivity::paintAllSprites() const
                          &cppcanvas::CustomSprite::getContentCanvas, _1 ) ) );
 }
 
-void RehearseTimingsActivity::paint(
-    cppcanvas::CanvasSharedPtr const & canvas ) const
+void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas ) const
 {
     // build timer string:
     const sal_Int32 nTimeSecs =
@@ -359,7 +378,9 @@ void RehearseTimingsActivity::paint(
     blackHole.EnableOutput(false);
     blackHole.SetMapMode( MAP_PIXEL );
     blackHole.SetFont( m_font );
-    Rectangle rect = Rectangle( Point(), m_spriteSizePixel );
+    Rectangle rect = Rectangle( 0,0,
+                                m_spriteSizePixel.getX(),
+                                m_spriteSizePixel.getY());
     if (m_drawPressed) {
         blackHole.SetTextColor( COL_BLACK );
         blackHole.SetFillColor( COL_LIGHTGRAY );
@@ -373,7 +394,7 @@ void RehearseTimingsActivity::paint(
     blackHole.DrawRect( rect );
     blackHole.GetTextBoundRect( rect, time );
     blackHole.DrawText(
-        Point( (m_spriteSizePixel.getWidth() - rect.getWidth()) / 2,
+        Point( (m_spriteSizePixel.getX() - rect.getWidth()) / 2,
                m_nYOffset ), time );
 
     metaFile.Stop();
@@ -411,7 +432,7 @@ void RehearseTimingsActivity::MouseHandler::dispose()
 bool RehearseTimingsActivity::MouseHandler::isInArea(
     awt::MouseEvent const & evt ) const
 {
-    if (m_rta.get() != 0)
+    if (m_rta)
         return m_rta->m_spriteRectangle.isInside(
             basegfx::B2DPoint( evt.X, evt.Y ) );
     return false;
