@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parsenode_s.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:47:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,12 +66,12 @@ namespace connectivity
 
         // ISQLParseNode
         virtual void parseNodeToStr(::rtl::OUString& _rString,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const IParseContext* _pContext
         ) const;
 
         virtual void parseNodeToPredicateStr(::rtl::OUString& _rString,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
             const ::com::sun::star::lang::Locale& _rIntl,
