@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:31:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _CONNECTIVITY_FILE_ODATABASEMETADATA_HXX_
 #include "file/FDatabaseMetaData.hxx"
-#endif
-#ifndef _CONNECTIVITY_RESOURCE_HRC_
-#include "Resource.hrc"
 #endif
 #ifndef _CONNECTIVITY_FILE_ODRIVER_HXX_
 #include "file/FDriver.hxx"
