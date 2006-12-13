@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:34:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -665,7 +665,10 @@ void OApplicationController::doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::E
         if ( SID_DB_APP_CONVERTTOVIEW == _nId )
             convertToView(*aIter);
         else
-            aCompoments.push_back( ::std::pair< ::rtl::OUString ,Reference< XModel > >(*aIter,Reference< XModel >(openElement(*aIter,eType, _eOpenMode ),UNO_QUERY)));
+        {
+            Reference< XModel > xModel( openElement( *aIter, eType, _eOpenMode, _nId ), UNO_QUERY );
+            aCompoments.push_back( ::std::pair< ::rtl::OUString, Reference< XModel > >( *aIter, xModel ) );
+        }
     }
 
     // special handling for mail, if more than one document is selected attach them all
