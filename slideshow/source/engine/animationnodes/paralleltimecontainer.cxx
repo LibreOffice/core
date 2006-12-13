@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paralleltimecontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:00:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include "boost/mem_fn.hpp"
 #include <algorithm>
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 void ParallelTimeContainer::activate_st()
@@ -73,5 +73,5 @@ void ParallelTimeContainer::notifyDeactivating(
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
