@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:24:33 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,36 +36,26 @@
 #ifndef _SLIDESHOW_VIEW_HXX
 #define _SLIDESHOW_VIEW_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 
-#ifndef _CPPCANVAS_SPRITECANVAS_HXX
 #include <cppcanvas/spritecanvas.hxx>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include <vector>
 
 #include <viewlayer.hxx>
 
+namespace basegfx { class B2DRange; }
+
 
 /* Definition of View interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
