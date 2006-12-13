@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundplayer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:21:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,31 +36,22 @@
 #ifndef _SLIDESHOW_SOUNDPLAYER_HXX
 #define _SLIDESHOW_SOUNDPLAYER_HXX
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_MEDIA_XMANAGER_HPP_
 #include <com/sun/star/media/XManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HPP_
 #include <com/sun/star/media/XPlayer.hpp>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include "pauseeventhandler.hxx"
+#include "disposable.hxx"
 #include "eventmultiplexer.hxx"
 
 
 /* Definition of SoundPlayer class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -69,7 +60,8 @@ namespace presentation
             Must be explicitly disposed (as long as enable_shared_ptr_from_this
             isn't available)!
          */
-        class SoundPlayer : public PauseEventHandler
+        class SoundPlayer : public PauseEventHandler,
+                            public Disposable
         {
         public:
             /** Create a sound player object.
@@ -107,7 +99,8 @@ namespace presentation
 
             // PauseEventHandler:
             virtual bool handlePause( bool bPauseShow );
-            // Disposable:
+
+            // Disposable
             virtual void dispose();
 
         private:
