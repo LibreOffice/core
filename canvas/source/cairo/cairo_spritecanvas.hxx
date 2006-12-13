@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:38:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:43:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowListener.hpp>
+#include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
@@ -51,7 +52,7 @@
 #include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
-#include <cppuhelper/compbase11.hxx>
+#include <cppuhelper/compbase10.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
@@ -67,16 +68,15 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper11< ::com::sun::star::rendering::XSpriteCanvas,
+    typedef ::cppu::WeakComponentImplHelper10< ::com::sun::star::rendering::XSpriteCanvas,
                                                 ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::rendering::XGraphicDevice,
                                                ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
                                                ::com::sun::star::rendering::XBufferController,
                                                ::com::sun::star::rendering::XColorSpace,
-                                               ::com::sun::star::awt::XWindow,
+                                               ::com::sun::star::awt::XWindowListener,
+                                               ::com::sun::star::util::XUpdatable,
                                                ::com::sun::star::beans::XPropertySet,
-                                                ::com::sun::star::lang::XInitialization,
-                                                    ::com::sun::star::lang::XServiceInfo,
                                                ::com::sun::star::lang::XServiceName >   WindowGraphicDeviceBase_Base;
     typedef ::canvas::WindowGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
                                                DeviceHelper,
@@ -122,8 +122,16 @@ namespace cairocanvas
                          public RepaintTarget
     {
     public:
-        SpriteCanvas( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::uno::XComponentContext >& rxContext );
+        SpriteCanvas( const ::com::sun::star::uno::Sequence<
+                            ::com::sun::star::uno::Any >&               aArguments,
+                      const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::uno::XComponentContext >& rxContext );
+
+        void initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+
+#if defined __SUNPRO_CC
+        using SpriteCanvasBaseT::disposing;
+#endif
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -142,19 +150,8 @@ namespace cairocanvas
         // XSpriteCanvas (partial)
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw( ::com::sun::star::uno::Exception,
-                                                                                                                                   ::com::sun::star::uno::RuntimeException);
-        // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
-
         // XServiceName
         virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
-
-        // component factory
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) throw ( ::com::sun::star::uno::Exception );
 
         ::cairo::Surface* getSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = ::cairo::CAIRO_CONTENT_COLOR_ALPHA );
         ::cairo::Surface* getSurface( ::cairo::Content aContent = ::cairo::CAIRO_CONTENT_COLOR_ALPHA );
@@ -179,8 +176,8 @@ namespace cairocanvas
      private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
 
-    ::cairo::Surface* mpBackgroundSurface;
-    ::cairo::Cairo* mpBackgroundCairo;
+        ::cairo::Surface* mpBackgroundSurface;
+        ::cairo::Cairo*   mpBackgroundCairo;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;
