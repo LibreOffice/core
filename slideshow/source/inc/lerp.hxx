@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lerp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:15:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,9 @@
 #ifndef _SLIDESHOW_LERP_HXX
 #define _SLIDESHOW_LERP_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
