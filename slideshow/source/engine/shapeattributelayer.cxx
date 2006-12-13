@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeattributelayer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:55:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,41 +40,23 @@
 #include <canvas/debug.hxx>
 #include <shapeattributelayer.hxx>
 
-#ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
-#endif
 
 
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONADDITIVEMODE_HPP_
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
-#endif
 
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 
 
 using namespace ::com::sun::star;
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -189,11 +171,11 @@ namespace presentation
             maLineColor(),
             maCharColor(),
 
-            mnTransformationState( rChildLayer.get() ? rChildLayer->getTransformationState() : 0 ),
-            mnClipState( rChildLayer.get() ? rChildLayer->getClipState() : 0),
-            mnAlphaState( rChildLayer.get() ? rChildLayer->getAlphaState() : 0),
-            mnPositionState( rChildLayer.get() ? rChildLayer->getPositionState() : 0 ),
-            mnContentState( rChildLayer.get() ? rChildLayer->getContentState() : 0 ),
+            mnTransformationState( rChildLayer ? rChildLayer->getTransformationState() : 0 ),
+            mnClipState( rChildLayer ? rChildLayer->getClipState() : 0),
+            mnAlphaState( rChildLayer ? rChildLayer->getAlphaState() : 0),
+            mnPositionState( rChildLayer ? rChildLayer->getPositionState() : 0 ),
+            mnContentState( rChildLayer ? rChildLayer->getContentState() : 0 ),
 
             mnAdditiveMode( animations::AnimationAdditiveMode::BASE ),
 
@@ -232,7 +214,7 @@ namespace presentation
 
         bool ShapeAttributeLayer::revokeChildLayer( const ShapeAttributeLayerSharedPtr& rChildLayer )
         {
-            ENSURE_AND_RETURN( rChildLayer.get(),
+            ENSURE_AND_RETURN( rChildLayer,
                                "ShapeAttributeLayer::revokeChildLayer(): Will not remove NULL child" );
 
             if( !haveChild() )
