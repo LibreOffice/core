@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:07:46 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,11 +461,12 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_DOCUMENT_URL, String());
     *pCounter++ = new SfxBoolItem(DSID_DOSLINEENDS, sal_False);
     *pCounter++ = new SfxStringItem(DSID_DATABASENAME, String());
-
+    *pCounter++ = new SfxBoolItem(DSID_AS_BEFORE_CORRNAME, sal_True);
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
