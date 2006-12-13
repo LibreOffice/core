@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:22:33 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:09:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,9 @@ SLOFILES = \
     $(SLO)$/masterpasscrtdlg.obj \
     $(SLO)$/passworddlg.obj \
     $(SLO)$/passcrtdlg.obj \
-    $(SLO)$/fltdlg.obj
+    $(SLO)$/fltdlg.obj\
+    $(SLO)$/interactionhandler.obj\
+    $(SLO)$/requeststringresolver.obj
 SRS1NAME=$(TARGET)
 SRC1FILES = \
     cookiedg.src \
