@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:56:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:58:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <math.h>
-#include <string.h>
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
 #endif
