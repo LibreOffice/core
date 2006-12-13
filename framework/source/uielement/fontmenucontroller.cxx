@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmenucontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:19:33 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
     {
         rtl::OUString aEmpty;
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+        const rtl::OUString aFontNameCommandPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName?CharFontName.FamilyName:string=" ));
 
         for ( USHORT i = 0; i < rFontNameSeq.getLength(); i++ )
         {
@@ -169,7 +170,11 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
                 m_xPopupMenu->checkItem( i+1, sal_True );
 
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
-            pVCLPopupMenu->SetItemCommand( i+1, rName ); // Store font name into item command.
+            rtl::OUStringBuffer aCommandBuffer( aFontNameCommandPrefix );
+            aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, '%', INetURLObject::ENCODE_ALL ));
+
+            rtl::OUString aFontNameCommand = aCommandBuffer.makeStringAndClear();
+            pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); // Store font name into item command.
         }
     }
 }
@@ -183,6 +188,8 @@ void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( Runtim
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xFontListDispatch.clear();
+    m_xServiceManager.clear();
+
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
     m_xPopupMenu.clear();
@@ -229,9 +236,6 @@ void SAL_CALL FontMenuController::select( const css::awt::MenuEvent& rEvent ) th
         VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
         if ( pPopupMenu )
         {
-            // Command URL used to dispatch the selected font family name
-            const rtl::OUString aFontNameCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName?CharFontName.FamilyName:string=" ));
-
             css::util::URL               aTargetURL;
             Sequence<PropertyValue>      aArgs;
             Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
@@ -240,11 +244,10 @@ void SAL_CALL FontMenuController::select( const css::awt::MenuEvent& rEvent ) th
 
             {
                 vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
-                rtl::OUStringBuffer aCommandBuffer( aFontNameCommand );
-                aCommandBuffer.append( INetURLObject::encode( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ), INetURLObject::PART_HTTP_QUERY, '%', INetURLObject::ENCODE_ALL ));
-                aTargetURL.Complete = aCommandBuffer.makeStringAndClear();
+                // Command URL used to dispatch the selected font family name
+                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
             }
 
             xURLTransformer->parseStrict( aTargetURL );
@@ -299,6 +302,9 @@ void SAL_CALL FontMenuController::setPopupMenu( const Reference< css::awt::XPopu
 {
     ResetableGuard aLock( m_aLock );
 
+    if ( m_bDisposed )
+        throw DisposedException();
+
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
@@ -351,37 +357,7 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
 // XInitialization
 void SAL_CALL FontMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
-    ResetableGuard aLock( m_aLock );
-
-    sal_Bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
-    {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
-
-        for ( int i = 0; i < aArguments.getLength(); i++ )
-        {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-
-            m_bInitialized = sal_True;
-        }
-    }
+    PopupMenuControllerBase::initialize( aArguments );
 }
 
 }
