@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:26:26 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ using namespace ::com::sun::star::uno;
 DBG_NAME(OTableWindowTitle)
 //------------------------------------------------------------------------------
 OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
-     FixedText( pParent, WB_3DLOOK|WB_CENTER|WB_NOLABEL )
+     FixedText( pParent, WB_3DLOOK|WB_LEFT|WB_NOLABEL|WB_VCENTER )
     ,m_pTabWin( pParent )
 {
     DBG_CTOR(OTableWindowTitle,NULL);
