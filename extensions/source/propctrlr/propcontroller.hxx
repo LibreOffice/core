@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:59:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 12:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_PROPLINELISTENER_HXX_
 #include "proplinelistener.hxx"
+#endif
+#ifndef PROPCONTROLOBSERVER_HXX
+#include "propcontrolobserver.hxx"
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_BROWSERVIEW_HXX_
 #include "browserview.hxx"
@@ -125,6 +128,9 @@
 #ifndef _COM_SUN_STAR_INSPECTION_XPROPERTYHANDLER_HPP_
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
@@ -173,14 +179,18 @@ namespace pcr
                                     ,   ::com::sun::star::awt::XLayoutConstrains
                                     ,   ::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::inspection::XPropertyControlFactory
-                                    ,   ::com::sun::star::inspection::XObjectInspectorUI
                                     ,   ::com::sun::star::inspection::XObjectInspector
+                                    ,   ::com::sun::star::lang::XInitialization
                                     >   OPropertyBrowserController_Base;
 
     class OPropertyBrowserController
                 :public ::comphelper::OMutexAndBroadcastHelper
                 ,public OPropertyBrowserController_Base
+                ,public ::com::sun::star::inspection::XObjectInspectorUI
+                    // that's intentionally *not* part of the OPropertyBrowserController_Base
+                    // We do not want this to be available in queryInterface, getTypes, and the like.
                 ,public IPropertyLineListener
+                ,public IPropertyControlObserver
                 ,public IPropertyExistenceCheck
     {
     private:
@@ -196,6 +206,7 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xView;
 
         ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
+        ::cppu::OInterfaceContainerHelper   m_aControlObservers;
         // meta data about the properties
         OPropertyBrowserView*               m_pView;
 
@@ -227,10 +238,13 @@ namespace pcr
         typedef ::std::hash_map< ::rtl::OUString, sal_uInt16, ::rtl::OUStringHash >     HashString2Int16;
         HashString2Int16                                m_aPageIds;
 
-        bool        m_bContainerFocusListening      : 1;
-        bool        m_bSuspendingPropertyHandlers   : 1;
+        bool        m_bContainerFocusListening;
+        bool        m_bSuspendingPropertyHandlers;
+        bool        m_bConstructed;
 
     protected:
+        DECLARE_XINTERFACE()
+
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
@@ -288,6 +302,10 @@ namespace pcr
         virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary );
         virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal );
 
+        // IPropertyControlObserver
+        virtual void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control );
+        virtual void    valueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control );
+
         // IPropertyExistenceCheck
         virtual ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& _rName ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -299,15 +317,22 @@ namespace pcr
         virtual void SAL_CALL hidePropertyUI( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL showCategory( const ::rtl::OUString& _rCategory, ::sal_Bool _bShow ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL getPropertyControl( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL registerControlObserver( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlObserver >& _Observer ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL revokeControlObserver( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlObserver >& _Observer ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setHelpSectionText( const ::rtl::OUString& HelpText ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
         // XObjectInspector
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setInspectorModel( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _inspectormodel ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI > SAL_CALL getInspectorUI() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL inspect( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects ) throw (::com::sun::star::util::VetoException, ::com::sun::star::uno::RuntimeException);
 
         // XDispatchProvider
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& URL, const ::rtl::OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& Requests ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XInitialization
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     private:
         void UpdateUI();
@@ -319,8 +344,7 @@ namespace pcr
         void stopInspection( bool _bCommitModified );
 
         sal_Bool haveView() const { return NULL != m_pView; }
-
-        OPropertyEditor*    getPropertyBox() { return m_pView->getPropertyBox(); }
+        OPropertyEditor&    getPropertyBox() { return m_pView->getPropertyBox(); }
 
         // does the inspection of the objects as indicated by our model
         void doInspection();
@@ -430,8 +454,24 @@ namespace pcr
         */
         void    impl_toggleInspecteeListening_nothrow( bool _bOn );
 
+        /** binds the instance to a new model
+        */
+        void    impl_bindToNewModel_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _rxInspectorModel );
+
+        /** initializes our view, as indicated by the model's view-relevant properties
+
+            It's allowed to call this method when no model exists, yet. In this case, nothing
+            happens.
+        */
+        void    impl_initializeView_nothrow();
+
     private:
         DECL_LINK(OnPageActivation, void*);
+
+    private:
+        // constructors
+        void    createDefault();
+        void    createWithModel( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _rxModel );
     };
 
 //............................................................................
