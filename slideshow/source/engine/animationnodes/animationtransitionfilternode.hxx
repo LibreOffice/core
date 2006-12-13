@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtransitionfilternode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:33:32 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "animationbasenode.hxx"
 #include "com/sun/star/animations/XTransitionFilter.hpp"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class AnimationTransitionFilterNode : public AnimationBaseNode
@@ -70,6 +70,6 @@ private:
 };
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
 #endif /* INCLUDED_SLIDESHOW_ANIMATIONTRANSITIONFILTERNODE_HXX */
