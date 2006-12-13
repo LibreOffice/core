@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainernode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:34:02 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:32:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #include "basenode.hxx"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** This interface extends BaseNode with child handling methods.
