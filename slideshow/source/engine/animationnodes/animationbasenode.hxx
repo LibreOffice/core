@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationbasenode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:30:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,16 @@
 #ifndef INCLUDED_SLIDESHOW_ANIMATIONBASENODE_HXX
 #define INCLUDED_SLIDESHOW_ANIMATIONBASENODE_HXX
 
+#include <com/sun/star/animations/XAnimate.hpp>
+
 #include "basecontainernode.hxx"
 #include "activitiesfactory.hxx"
 #include "shapeattributelayer.hxx"
 #include "shapeattributelayerholder.hxx"
 #include "attributableshape.hxx"
 #include "shapesubset.hxx"
-#include "com/sun/star/animations/XAnimate.hpp"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** Common base class for all leaf animation nodes.
