@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:52:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 17:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,18 +143,18 @@ FuPoor::FuPoor (
     ::sd::View* pView,
     SdDrawDocument* pDrDoc,
     SfxRequest& rReq)
-    : pViewShell(pViewSh),
-      pWindow(pWin),
-      pView(pView),
-      pDoc(pDrDoc),
-      pDocSh( pDrDoc->GetDocSh() ),
+    : mpView(pView),
+      mpViewShell(pViewSh),
+      mpWindow(pWin),
+      mpDocSh( pDrDoc->GetDocSh() ),
+      mpDoc(pDrDoc),
       nSlotId( rReq.GetSlot() ),
+      nSlotValue(0),
       pDialog(NULL),
       bIsInDragMode(FALSE),
+      bNoScrollUntilInside (TRUE),
       bScrollable (FALSE),
       bDelayActive (FALSE),
-      bNoScrollUntilInside (TRUE),
-      nSlotValue(0),
       // #95491# remember MouseButton state
       mnCode(0)
 {
@@ -219,7 +219,7 @@ void FuPoor::Deactivate()
         pDialog->Hide();
     }
 
-    if (pWindow) pWindow->ReleaseMouse ();
+    if (mpWindow) mpWindow->ReleaseMouse ();
 }
 
 /*************************************************************************
@@ -233,10 +233,10 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 {
     aScrollTimer.Stop();
 
-    if ( !pView->IsDragHelpLine() && !pView->IsSetPageOrg() &&
-         !pViewShell->GetSlideShow() )
+    if ( !mpView->IsDragHelpLine() && !mpView->IsSetPageOrg() &&
+         !mpViewShell->GetSlideShow() )
     {
-/*      Size aSize = pWindow->GetSizePixel();
+/*      Size aSize = mpWindow->GetSizePixel();
         short dx = 0, dy = 0;
 
         if ( aPixPos.X() <= 0              ) dx = -1;
@@ -244,8 +244,8 @@ void FuPoor::ForceScroll(const Point& aPixPos)
         if ( aPixPos.Y() <= 0              ) dy = -1;
         if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
 */
-        Point aPos = pWindow->OutputToScreenPixel(aPixPos);
-        const Rectangle& rRect = pViewShell->GetAllWindowRect();
+        Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
+        const Rectangle& rRect = mpViewShell->GetAllWindowRect();
 
         if ( bNoScrollUntilInside )
         {
@@ -267,7 +267,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
                 {
                     // Scrollaktion in abgeleiteter Klasse
                     ScrollStart();
-                    pViewShell->ScrollLines(dx, dy);
+                    mpViewShell->ScrollLines(dx, dy);
                     ScrollEnd();
                     aScrollTimer.Start();
                 }
@@ -283,9 +283,9 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, pTimer )
+IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 {
-    Point aPnt(pWindow->GetPointerPosPixel());
+    Point aPnt(mpWindow->GetPointerPosPixel());
 
     // #95491# use remembered MouseButton state to create correct
     // MouseEvents for this artifical MouseMove.
@@ -301,13 +301,8 @@ IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 |*
 \************************************************************************/
 
-void FuPoor::WriteStatus(const String& aStr)
+void FuPoor::WriteStatus(const String& )
 {
-/*
-//  SFX_APP()->SetHelpText(aStr);
-    SfxStatusBarManager* pStatBarMan = SFX_APP()->GetStatusBarManager();
-    pStatBarMan->ShowHelpText(aStr);
-*/
 }
 
 /*************************************************************************
@@ -323,7 +318,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     USHORT          nCode = rKEvt.GetKeyCode().GetCode();
     BOOL            bReturn = FALSE;
-    BOOL            bSlideShow = pViewShell->GetSlideShow() != 0;
+    BOOL            bSlideShow = mpViewShell->GetSlideShow() != 0;
 
     switch (nCode)
     {
@@ -332,10 +327,10 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(rKEvt.GetKeyCode().IsMod1())
             {
-                if(pViewShell && pViewShell->ISA(DrawViewShell))
+                if(mpViewShell && mpViewShell->ISA(DrawViewShell))
                 {
                     DrawViewShell* pDrawViewShell =
-                        static_cast<DrawViewShell*>(pViewShell);
+                        static_cast<DrawViewShell*>(mpViewShell);
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
                     SdrTextObj* pCandidate = 0L;
 
@@ -363,16 +358,16 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(pCandidate)
                     {
-                        pView->UnMarkAll();
-                        pView->MarkObj(pCandidate, pView->GetSdrPageView());
+                        mpView->UnMarkAll();
+                        mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
 
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
                     }
                     else
                     {
                         // insert a new page with the same page layout
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
                     }
 
@@ -384,24 +379,24 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // #98255# activate OLE object on RETURN for selected object
                 // #98198# activate text edit on RETURN for selected object
-                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
-                if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
+                if( !mpView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-                    if( pObj && pObj->ISA( SdrOle2Obj ) && !pDocSh->IsUIActive() )
+                    if( pObj && pObj->ISA( SdrOle2Obj ) && !mpDocSh->IsUIActive() )
                     {
-                        //HMHpView->HideMarkHdl();
-                        pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
+                        //HMHmpView->HideMarkHdl();
+                        mpViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
                     {
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
                     }
                     else
                     {
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
                     }
 
                     // consumed
@@ -418,7 +413,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             if(rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
             {
                 // #97016# II do something with a selected handle?
-                const SdrHdlList& rHdlList = pView->GetHdlList();
+                const SdrHdlList& rHdlList = mpView->GetHdlList();
                 sal_Bool bForward(!rKEvt.GetKeyCode().IsShift());
 
                 ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
@@ -430,7 +425,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     Point aHdlPosition(pHdl->GetPos());
                     Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
-                    pView->MakeVisible(aVisRect, *pWindow);
+                    mpView->MakeVisible(aVisRect, *mpWindow);
                 }
 
                 // consumed
@@ -447,13 +442,13 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_ADD:
         {
-            if (!pView->IsTextEdit() && !bSlideShow && !pDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Zoom vergroessern
-                pViewShell->SetZoom(pWindow->GetZoom() * 3 / 2);
+                mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
 
-                if (pViewShell->ISA(DrawViewShell))
-                    static_cast<DrawViewShell*>(pViewShell)
+                if (mpViewShell->ISA(DrawViewShell))
+                    static_cast<DrawViewShell*>(mpViewShell)
                         ->SetZoomOnPage(FALSE);
 
                 bReturn = TRUE;
@@ -463,13 +458,13 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_SUBTRACT:
         {
-            if (!pView->IsTextEdit() && !bSlideShow && !pDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Zoom verringern
-                pViewShell->SetZoom(pWindow->GetZoom() * 2 / 3);
+                mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
 
-                if (pViewShell->ISA(DrawViewShell))
-                    static_cast<DrawViewShell*>(pViewShell)
+                if (mpViewShell->ISA(DrawViewShell))
+                    static_cast<DrawViewShell*>(mpViewShell)
                         ->SetZoomOnPage(FALSE);
 
                 bReturn = TRUE;
@@ -479,10 +474,10 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_MULTIPLY:
         {
-            if (!pView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit() && !bSlideShow)
             {
                 // Zoom auf Seite
-                pViewShell->GetViewFrame()->GetDispatcher()->
+                mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 bReturn = TRUE;
             }
@@ -491,10 +486,10 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_DIVIDE:
         {
-            if (!pView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit() && !bSlideShow)
             {
                 // Zoom auf selektierte Objekte
-                pViewShell->GetViewFrame()->GetDispatcher()->
+                mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_OPTIMAL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 bReturn = TRUE;
             }
@@ -503,12 +498,12 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_POINT:
         {
-            ZoomList* pZoomList = pViewShell->GetZoomList();
+            ZoomList* pZoomList = mpViewShell->GetZoomList();
 
-            if (!pView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !pDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Naechstes ZoomRect einstellen
-                pViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
+                mpViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
                 bReturn = TRUE;
             }
         }
@@ -516,12 +511,12 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_COMMA:
         {
-            ZoomList* pZoomList = pViewShell->GetZoomList();
+            ZoomList* pZoomList = mpViewShell->GetZoomList();
 
-            if (!pView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !pDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Vorheriges ZoomRect einstellen
-                pViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
+                mpViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
                 bReturn = TRUE;
             }
         }
@@ -529,12 +524,12 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_HOME:
         {
-            if (!pView->IsTextEdit()
-                && pViewShell->ISA(DrawViewShell)
+            if (!mpView->IsTextEdit()
+                && mpViewShell->ISA(DrawViewShell)
                 && !bSlideShow)
             {
                // Sprung zu erster Seite
-               static_cast<DrawViewShell*>(pViewShell)->SwitchPage(0);
+               static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(0);
                bReturn = TRUE;
             }
         }
@@ -542,15 +537,15 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_END:
         {
-            if (!pView->IsTextEdit()
-                && pViewShell->ISA(DrawViewShell)
+            if (!mpView->IsTextEdit()
+                && mpViewShell->ISA(DrawViewShell)
                 && !bSlideShow)
             {
                 // Sprung zu letzter Seite
                 SdPage* pPage =
-                    static_cast<DrawViewShell*>(pViewShell)->GetActualPage();
-                static_cast<DrawViewShell*>(pViewShell)
-                    ->SwitchPage(pDoc->GetSdPageCount(
+                    static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
+                static_cast<DrawViewShell*>(mpViewShell)
+                    ->SwitchPage(mpDoc->GetSdPageCount(
                         pPage->GetPageKind()) - 1);
                 bReturn = TRUE;
             }
@@ -559,7 +554,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEUP:
         {
-            if(pViewShell->ISA(DrawViewShell) && !bSlideShow)
+            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-up key switches layers or pages depending on the
                 // modifier key.
@@ -567,12 +562,11 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // With no modifier pressed we move to the previous
                     // slide.
-
-                    pView->SdrEndTextEdit();
+                    mpView->SdrEndTextEdit();
 
                     // Previous page.
                     bReturn = TRUE;
-                    SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)->GetActualPage();
+                    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
                     USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                     if (nSdPage > 0)
@@ -581,11 +575,11 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // deactivation the old page and activating the new
                         // one.
                         TabControl* pPageTabControl =
-                            static_cast<DrawViewShell*>(pViewShell)
+                            static_cast<DrawViewShell*>(mpViewShell)
                             ->GetPageTabControl();
                         if (pPageTabControl->IsReallyShown())
                             pPageTabControl->SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(pViewShell)->SwitchPage(nSdPage - 1);
+                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage - 1);
                         if (pPageTabControl->IsReallyShown())
                             pPageTabControl->SendActivatePageEvent ();
                     }
@@ -593,7 +587,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 else if (rKEvt.GetKeyCode().IsMod1())
                 {
                     // With the CONTROL modifier we switch layers.
-                    if (static_cast<DrawViewShell*>(pViewShell)->IsLayerModeActive())
+                    if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
                     {
                         // Moves to the previous layer.
                         SwitchLayer (-1);
@@ -605,31 +599,30 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEDOWN:
         {
-            if(pViewShell->ISA(DrawViewShell) && !bSlideShow)
+            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-down key switches layers or pages depending on the
                 // modifier key.
                 if ( ! rKEvt.GetKeyCode().GetAllModifier())
                 {
                     // With no modifier pressed we move to the next slide.
-
-                    pView->SdrEndTextEdit();
+                    mpView->SdrEndTextEdit();
 
                     // Next page.
                     bReturn = TRUE;
-                    SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)->GetActualPage();
+                    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
                     USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
 
-                    if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                    if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
                     {
                         // Switch the page and send events regarding
                         // deactivation the old page and activating the new
                         // one.
                         TabControl* pPageTabControl =
-                            static_cast<DrawViewShell*>(pViewShell)->GetPageTabControl();
+                            static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
                         if (pPageTabControl->IsReallyShown())
                             pPageTabControl->SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(pViewShell)->SwitchPage(nSdPage + 1);
+                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage + 1);
                         if (pPageTabControl->IsReallyShown())
                             pPageTabControl->SendActivatePageEvent ();
                     }
@@ -637,7 +630,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 else if (rKEvt.GetKeyCode().IsMod1())
                 {
                     // With the CONTROL modifier we switch layers.
-                    if (static_cast<DrawViewShell*>(pViewShell)->IsLayerModeActive())
+                    if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
                     {
                         // With the layer mode active pressing page-down
                         // moves to the next layer.
@@ -651,7 +644,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         // #97016# II change select state when focus is on poly point
         case KEY_SPACE:
         {
-            const SdrHdlList& rHdlList = pView->GetHdlList();
+            const SdrHdlList& rHdlList = mpView->GetHdlList();
             SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
             if(pHdl)
@@ -662,21 +655,21 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     sal_uInt32 nPol(pHdl->GetPolyNum());
                     sal_uInt32 nPnt(pHdl->GetPointNum());
 
-                    if(pView->IsPointMarked(*pHdl))
+                    if(mpView->IsPointMarked(*pHdl))
                     {
                         if(rKEvt.GetKeyCode().IsShift())
                         {
-                            pView->UnmarkPoint(*pHdl);
+                            mpView->UnmarkPoint(*pHdl);
                         }
                     }
                     else
                     {
                         if(!rKEvt.GetKeyCode().IsShift())
                         {
-                            pView->UnmarkAllPoints();
+                            mpView->UnmarkAllPoints();
                         }
 
-                        pView->MarkPoint(*pHdl);
+                        mpView->MarkPoint(*pHdl);
                     }
 
                     if(0L == rHdlList.GetFocusHdl())
@@ -714,7 +707,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_LEFT:
         case KEY_RIGHT:
         {
-            if (!pView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit() && !bSlideShow)
             {
                 long nX = 0;
                 long nY = 0;
@@ -744,16 +737,16 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                if (pView->AreObjectsMarked() && !rKEvt.GetKeyCode().IsMod1() &&
-                    !pDocSh->IsReadOnly())
+                if (mpView->AreObjectsMarked() && !rKEvt.GetKeyCode().IsMod1() &&
+                    !mpDocSh->IsReadOnly())
                 {
                     // #97016# II
-                    const SdrHdlList& rHdlList = pView->GetHdlList();
+                    const SdrHdlList& rHdlList = mpView->GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                     // #109007#
                     sal_Bool bIsMoveOfConnectedHandle(sal_False);
-                    sal_Bool bOldSuppress;
+                    sal_Bool bOldSuppress = false;
                     SdrEdgeObj* pEdgeObj = 0L;
 
                     if(pHdl && pHdl->GetObj() && pHdl->GetObj()->ISA(SdrEdgeObj) && 0 == pHdl->GetPolyNum())
@@ -787,9 +780,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     // #109007#
                     if(bIsMoveOfConnectedHandle)
                     {
-                        sal_uInt16 nMarkHdSiz(pView->GetMarkHdlSizePixel());
+                        sal_uInt16 nMarkHdSiz(mpView->GetMarkHdlSizePixel());
                         Size aHalfConSiz(nMarkHdSiz + 1, nMarkHdSiz + 1);
-                        aHalfConSiz = pWindow->PixelToLogic(aHalfConSiz);
+                        aHalfConSiz = mpWindow->PixelToLogic(aHalfConSiz);
 
                         if(100 < aHalfConSiz.Width())
                             nX *= aHalfConSiz.Width();
@@ -804,7 +797,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     else if(rKEvt.GetKeyCode().IsMod2())
                     {
                         // #97016# move in 1 pixel distance
-                        Size aLogicSizeOnePixel = (pWindow) ? pWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
+                        Size aLogicSizeOnePixel = (mpWindow) ? mpWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
                     }
@@ -818,14 +811,14 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     if(0L == pHdl)
                     {
                         // #67368# only take action when move is allowed
-                        if(pView->IsMoveAllowed())
+                        if(mpView->IsMoveAllowed())
                         {
                             // #90129# restrict movement to WorkArea
-                            const Rectangle& rWorkArea = pView->GetWorkArea();
+                            const Rectangle& rWorkArea = mpView->GetWorkArea();
 
                             if(!rWorkArea.IsEmpty())
                             {
-                                Rectangle aMarkRect(pView->GetMarkedObjRect());
+                                Rectangle aMarkRect(mpView->GetMarkedObjRect());
                                 aMarkRect.Move(nX, nY);
 
                                 if(!aMarkRect.IsInside(rWorkArea))
@@ -855,10 +848,10 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                             // no handle selected
                             if(0 != nX || 0 != nY)
                             {
-                                pView->MoveAllMarked(Size(nX, nY));
+                                mpView->MoveAllMarked(Size(nX, nY));
 
                                 // #97016# II
-                                pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
+                                mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
                             }
                         }
                     }
@@ -870,35 +863,35 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                             // now move the Handle (nX, nY)
                             Point aStartPoint(pHdl->GetPos());
                             Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
-                            const SdrDragStat& rDragStat = pView->GetDragStat();
+                            const SdrDragStat& rDragStat = mpView->GetDragStat();
 
                             // start dragging
-                            pView->BegDragObj(aStartPoint, 0, pHdl, 0);
+                            mpView->BegDragObj(aStartPoint, 0, pHdl, 0);
 
-                            if(pView->IsDragObj())
+                            if(mpView->IsDragObj())
                             {
                                 FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
-                                BOOL bWasSnapEnabled = pView->IsSnapEnabled();
+                                BOOL bWasSnapEnabled = mpView->IsSnapEnabled();
 
                                 // switch snapping off
                                 if(!bWasNoSnap)
                                     ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
                                 if(bWasSnapEnabled)
-                                    pView->SetSnapEnabled(FALSE);
+                                    mpView->SetSnapEnabled(FALSE);
 
-                                pView->MovAction(aEndPoint);
-                                pView->EndDragObj();
+                                mpView->MovAction(aEndPoint);
+                                mpView->EndDragObj();
 
                                 // restore snap
                                 if(!bWasNoSnap)
                                     ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
                                 if(bWasSnapEnabled)
-                                    pView->SetSnapEnabled(bWasSnapEnabled);
+                                    mpView->SetSnapEnabled(bWasSnapEnabled);
                             }
 
                             // make moved handle visible
                             Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
-                            pView->MakeVisible(aVisRect, *pWindow);
+                            mpView->MakeVisible(aVisRect, *mpWindow);
                         }
                     }
 
@@ -913,7 +906,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // Seite scrollen
                     ScrollStart();
-                    pViewShell->ScrollLines(nX, nY);
+                    mpViewShell->ScrollLines(nX, nY);
                     ScrollEnd();
                 }
 
@@ -925,17 +918,17 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
     if (bReturn)
     {
-        pWindow->ReleaseMouse();
+        mpWindow->ReleaseMouse();
     }
 
     // #98198# when a text-editable object is selected and the
     // input character is printable, activate text edit on that object
     // and feed character to object
-    if(!bReturn && !pDocSh->IsReadOnly())
+    if(!bReturn && !mpDocSh->IsReadOnly())
     {
-        if(!pView->IsTextEdit() && pViewShell)
+        if(!mpView->IsTextEdit() && mpViewShell)
         {
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
             if(1 == rMarkList.GetMarkCount())
             {
@@ -952,7 +945,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // try to activate textedit mode for the selected object
                         SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
 
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR,
                             SFX_CALLMODE_ASYNCHRON,
                             &aInputString,
@@ -967,11 +960,11 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // #99039# test if there is a title object there. If yes, try to
                 // set it to edit mode and start typing...
-                if(pViewShell->ISA(DrawViewShell)
+                if(mpViewShell->ISA(DrawViewShell)
                     && EditEngine::IsSimpleCharInput(rKEvt))
                 {
                     DrawViewShell* pDrawViewShell =
-                        static_cast<DrawViewShell*>(pViewShell);
+                        static_cast<DrawViewShell*>(mpViewShell);
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
                     SdrTextObj* pCandidate = 0L;
 
@@ -999,11 +992,11 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     // when candidate found and candidate is untouched, start editing text...
                     if(pCandidate && pCandidate->IsEmptyPresObj())
                     {
-                        pView->UnMarkAll();
-                        pView->MarkObj(pCandidate, pView->GetSdrPageView());
+                        mpView->UnMarkAll();
+                        mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
                         SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
 
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR,
                             SFX_CALLMODE_ASYNCHRON,
                             &aInputString,
@@ -1020,10 +1013,15 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     return(bReturn);
 }
 
+BOOL FuPoor::MouseMove(const MouseEvent& )
+{
+    return FALSE;
+}
+
 // #97016# II
 void FuPoor::SelectionHasChanged()
 {
-    const SdrHdlList& rHdlList = pView->GetHdlList();
+    const SdrHdlList& rHdlList = mpView->GetHdlList();
     ((SdrHdlList&)rHdlList).ResetFocusHdl();
 }
 
@@ -1035,9 +1033,9 @@ void FuPoor::SelectionHasChanged()
 
 void FuPoor::DoCut()
 {
-    if (pView)
+    if (mpView)
     {
-        pView->DoCut(pWindow);
+        mpView->DoCut(mpWindow);
     }
 }
 
@@ -1049,9 +1047,9 @@ void FuPoor::DoCut()
 
 void FuPoor::DoCopy()
 {
-    if (pView)
+    if (mpView)
     {
-        pView->DoCopy(pWindow);
+        mpView->DoCopy(mpWindow);
     }
 }
 
@@ -1063,9 +1061,9 @@ void FuPoor::DoCopy()
 
 void FuPoor::DoPaste()
 {
-    if (pView)
+    if (mpView)
     {
-        pView->DoPaste(pWindow);
+        mpView->DoPaste(mpWindow);
     }
 }
 
@@ -1075,19 +1073,19 @@ void FuPoor::DoPaste()
 |*
 \************************************************************************/
 
-IMPL_LINK( FuPoor, DragHdl, Timer *, pTimer )
+IMPL_LINK( FuPoor, DragHdl, Timer *, EMPTYARG )
 {
-    if( pView )
+    if( mpView )
     {
-        USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-        SdrHdl* pHdl = pView->PickHandle(aMDPos);
+        USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
-        if ( pHdl==NULL && pView->IsMarkedHit(aMDPos, nHitLog)
-             && !pView->IsPresObjSelected(FALSE, TRUE) )
+        if ( pHdl==NULL && mpView->IsMarkedHit(aMDPos, nHitLog)
+             && !mpView->IsPresObjSelected(FALSE, TRUE) )
         {
-            pWindow->ReleaseMouse();
+            mpWindow->ReleaseMouse();
             bIsInDragMode = TRUE;
-            pView->StartDrag( aMDPos, pWindow );
+            mpView->StartDrag( aMDPos, mpWindow );
         }
     }
     return 0;
@@ -1101,7 +1099,7 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, pTimer )
 
 BOOL FuPoor::Command(const CommandEvent& rCEvt)
 {
-    return( pView->Command(rCEvt,pWindow) );
+    return( mpView->Command(rCEvt,mpWindow) );
 }
 
 /*************************************************************************
@@ -1110,12 +1108,12 @@ BOOL FuPoor::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, pTimer )
+IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, EMPTYARG )
 {
     aDelayToScrollTimer.Stop ();
     bScrollable = TRUE;
 
-    Point aPnt(pWindow->GetPointerPosPixel());
+    Point aPnt(mpWindow->GetPointerPosPixel());
 
     // #95491# use remembered MouseButton state to create correct
     // MouseEvents for this artifical MouseMove.
@@ -1183,7 +1181,7 @@ BOOL FuPoor::RequestHelp(const HelpEvent& rHEvt)
 {
     BOOL bReturn = FALSE;
 
-    SdrPageView* pPV = pView->GetSdrPageView();
+    SdrPageView* pPV = mpView->GetSdrPageView();
 
     if (pPV)
     {
@@ -1191,11 +1189,15 @@ BOOL FuPoor::RequestHelp(const HelpEvent& rHEvt)
 
         if (pPage)
         {
-            bReturn = pPage->RequestHelp(pWindow, pView, rHEvt);
+            bReturn = pPage->RequestHelp(mpWindow, mpView, rHEvt);
         }
     }
 
     return(bReturn);
+}
+
+void FuPoor::Paint(const Rectangle&, ::sd::Window* )
+{
 }
 
 /*************************************************************************
@@ -1228,7 +1230,7 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const Rectangle& )
 {
     // empty base implementation
     return 0L;
@@ -1255,10 +1257,10 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
 
 void FuPoor::SwitchLayer (sal_Int32 nOffset)
 {
-    if(pViewShell && pViewShell->ISA(DrawViewShell))
+    if(mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
         DrawViewShell* pDrawViewShell =
-            static_cast<DrawViewShell*>(pViewShell);
+            static_cast<DrawViewShell*>(mpViewShell);
 
         // Calculate the new index.
         sal_Int32 nIndex = pDrawViewShell->GetActiveTabLayerIndex() + nOffset;
@@ -1273,7 +1275,7 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
         if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
         {
             LayerTabBar* pLayerTabControl =
-                static_cast<DrawViewShell*>(pViewShell)->GetLayerTabControl();
+                static_cast<DrawViewShell*>(mpViewShell)->GetLayerTabControl();
             if (pLayerTabControl != NULL)
                 pLayerTabControl->SendDeactivatePageEvent ();
 
@@ -1295,7 +1297,7 @@ bool FuPoor::cancel()
 {
     if ( !this->ISA(FuSelection) )
     {
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
         return true;
     }
 
