@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:27:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:21:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,46 +46,29 @@
 
 #include <tools.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_ANIMATIONS_VALUEPAIR_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
 
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
 
-#ifndef _CPPCANVAS_BASEGFXFACTORY_HXX
 #include <cppcanvas/basegfxfactory.hxx>
-#endif
 
 #include <lerp.hxx>
 #include <smilfunctionparser.hxx>
 #include <layermanager.hxx>
 
+#include <limits>
 
 
 using namespace ::com::sun::star;
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -206,7 +189,6 @@ namespace presentation
             {
                 // TODO(P2): Optimize the case that AttributeName and
                 // Value are identical!
-
                 ENSURE_AND_RETURN( rShape.get() && rLayerManager.get(),
                                    "extractValue(): need relative shape size for parsing, "
                                    "no shape or layer manager given" );
@@ -226,7 +208,7 @@ namespace presentation
         }
 
         /// extract enum/constant group value from Any
-        bool extractValue( sal_Int16&                       o_rValue,
+        bool extractValue( sal_Int32&                       o_rValue,
                            const uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            /*rShape*/,
                            const LayerManagerSharedPtr&     /*rLayerManager*/ )
@@ -268,6 +250,27 @@ namespace presentation
 
             // nothing left to try. Failure
             return false;
+        }
+
+        /// extract enum/constant group value from Any
+        bool extractValue( sal_Int16&                       o_rValue,
+                           const uno::Any&                  rSourceAny,
+                           const ShapeSharedPtr&            rShape,
+                           const LayerManagerSharedPtr&     rLayerManager )
+        {
+            sal_Int32 aValue;
+            if( !extractValue(aValue,rSourceAny,rShape,rLayerManager) )
+                return false;
+
+            if( std::numeric_limits<sal_Int16>::max() < aValue ||
+                std::numeric_limits<sal_Int16>::min() > aValue )
+            {
+                return false;
+            }
+
+            o_rValue = static_cast<sal_Int16>(aValue);
+
+            return true;
         }
 
         /// extract color value from Any
@@ -520,7 +523,7 @@ namespace presentation
         ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rShapeBounds,
                                                         const ShapeAttributeLayerSharedPtr& pAttr )
         {
-            if( !pAttr.get() )
+            if( !pAttr )
             {
                 ::basegfx::B2DHomMatrix aTransform;
 
@@ -542,7 +545,7 @@ namespace presentation
         {
             ::basegfx::B2DHomMatrix aTransform;
 
-            if( pAttr.get() )
+            if( pAttr )
             {
                 const double nShearX( pAttr->isShearXAngleValid() ?
                                       pAttr->getShearXAngle() :
@@ -608,12 +611,10 @@ namespace presentation
                                                     const ::basegfx::B2DHomMatrix&      rShapeTransform,
                                                     const ShapeAttributeLayerSharedPtr& pAttr )
         {
-            ENSURE_AND_THROW( pAttr.get(),
-                              "getShapeUpdateArea(): Invalid ShapeAttributeLayer" );
-
             ::basegfx::B2DHomMatrix aTransform;
 
-            if( pAttr->isCharScaleValid() &&
+            if( pAttr &&
+                pAttr->isCharScaleValid() &&
                 fabs(pAttr->getCharScale()) > 1.0 )
             {
                 // enlarge shape bounds. Have to consider the worst
@@ -663,7 +664,7 @@ namespace presentation
             // treatment. In fact, any changes applied below would
             // actually remove the special empty state, thus, don't
             // change!
-            if( !pAttr.get() ||
+            if( !pAttr ||
                 rOrigBounds.isEmpty() )
             {
                 return rOrigBounds;
@@ -711,6 +712,24 @@ namespace presentation
                     static_cast< sal_uInt8 >( nColor >> 24U ) ) );
         }
 
+        void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
+                       const ::basegfx::B2DRectangle&      rRect,
+                       ::cppcanvas::Color::IntSRGBA        aFillColor )
+        {
+            const ::basegfx::B2DPolygon aPoly(
+                ::basegfx::tools::createPolygonFromRect( rRect ));
+
+            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
+                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( rCanvas,
+                                                                              aPoly ) );
+
+            if( pPolyPoly )
+            {
+                pPolyPoly->setRGBAFillColor( aFillColor );
+                pPolyPoly->draw();
+            }
+        }
+
         void initSlideBackground( const ::cppcanvas::CanvasSharedPtr& rCanvas,
                                   const ::basegfx::B2ISize&           rSize )
         {
@@ -724,20 +743,11 @@ namespace presentation
             // pixel, and the bitmap is initialized white,
             // depending on the slide content a one pixel wide
             // line will show to the bottom and the right.
-            const ::basegfx::B2DPolygon aPoly(
-                ::basegfx::tools::createPolygonFromRect(
-                    ::basegfx::B2DRectangle( 0.0, 0.0,
-                                             rSize.getX(),
-                                             rSize.getY() ) ) );
-
-            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCanvas, aPoly ) );
-
-            if( pPolyPoly.get() )
-            {
-                pPolyPoly->setRGBAFillColor( 0x000000FFU );
-                pPolyPoly->draw();
-            }
+            fillRect( pCanvas,
+                      ::basegfx::B2DRectangle( 0.0, 0.0,
+                                               rSize.getX(),
+                                               rSize.getY() ),
+                      0x000000FFU );
 
             // fill the bounds rectangle in white. Subtract one pixel
             // from both width and height, because the slide size is
@@ -747,20 +757,48 @@ namespace presentation
             // off. OTOH, every other slide background (solid fill,
             // gradient, bitmap) render one pixel less, thus revealing
             // ugly white pixel to the right and the bottom.
-            const ::basegfx::B2DPolygon aPoly2(
-                ::basegfx::tools::createPolygonFromRect(
-                    ::basegfx::B2DRectangle( 0.0, 0.0,
-                                             rSize.getX()-1,
-                                             rSize.getY()-1 ) ) );
+            fillRect( pCanvas,
+                      ::basegfx::B2DRectangle( 0.0, 0.0,
+                                               rSize.getX()-1,
+                                               rSize.getY()-1 ),
+                      0xFFFFFFFFU );
+        }
 
-            pPolyPoly = ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon(
-                pCanvas, aPoly2 );
-
-            if( pPolyPoly.get() )
+        ::basegfx::B2DRectangle getAPIShapeBounds( const uno::Reference< drawing::XShape >& xShape )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( xShape,
+                                                            uno::UNO_QUERY_THROW );
+            // read bound rect
+            awt::Rectangle aTmpRect;
+            if( !(xPropSet->getPropertyValue(
+                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BoundRect") ) ) >>= aTmpRect) )
             {
-                pPolyPoly->setRGBAFillColor( 0xFFFFFFFFU );
-                pPolyPoly->draw();
+                ENSURE_AND_THROW( false,
+                                  "getAPIShapeBounds(): Could not get \"BoundRect\" property from shape" );
             }
+
+            return ::basegfx::B2DRectangle( aTmpRect.X,
+                                            aTmpRect.Y,
+                                            aTmpRect.X+aTmpRect.Width,
+                                            aTmpRect.Y+aTmpRect.Height );
+        }
+
+        double getAPIShapePrio( const uno::Reference< drawing::XShape >& xShape )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( xShape,
+                                                            uno::UNO_QUERY_THROW );
+            // read prio
+            sal_Int32 nPrio;
+            if( !(xPropSet->getPropertyValue(
+                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ) ) >>= nPrio) )
+            {
+                ENSURE_AND_THROW( false,
+                                  "getAPIShapePrio(): Could not get \"ZOrder\" property from shape" );
+            }
+
+            // TODO(F2): Check and adapt the range of possible values here.
+            // Maybe we can also take the total number of shapes here
+            return nPrio / 65535.0;
         }
     }
 }
