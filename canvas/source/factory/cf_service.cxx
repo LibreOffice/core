@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cf_service.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:22:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,8 @@ CanvasFactory::CanvasFactory(
     // append the usual preferred ones:
     sal_Int32 pos = m_services.getLength();
 #if defined WNT
-    m_services.realloc( pos + 5 );
+    m_services.realloc( pos + 6 );
+    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.DX9Canvas");
     m_services[ pos++ ] = OUSTR("com.sun.star.rendering.DXCanvas");
     m_services[ pos++ ] = OUSTR("com.sun.star.rendering.GLCanvas");
 #else
