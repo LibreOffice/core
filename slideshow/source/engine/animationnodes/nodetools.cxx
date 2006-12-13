@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodetools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:36:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
-#ifndef _COM_SUN_STAR_ANIMATIONS_TIMING_HPP_
 #include <com/sun/star/animations/Timing.hpp>
-#endif
 
 #include <tools.hxx>
 #include <nodetools.hxx>
@@ -50,7 +48,7 @@
 
 using namespace ::com::sun::star;
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -84,7 +82,7 @@ namespace presentation
         {
             ShapeSharedPtr pShape( rLayerManager->lookupShape( xShape ) );
 
-            ENSURE_AND_THROW( pShape.get(),
+            ENSURE_AND_THROW( pShape,
                               "lookupAttributableShape(): no shape found for given XShape" );
 
             AttributableShapeSharedPtr pRes(
@@ -93,7 +91,7 @@ namespace presentation
             // TODO(E3): Cannot throw here, people might set animation info
             // for non-animatable shapes from the API. AnimationNodes must catch
             // the exception and handle that differently
-            ENSURE_AND_THROW( pRes.get(),
+            ENSURE_AND_THROW( pRes,
                               "lookupAttributableShape(): shape found does not implement AttributableShape interface" );
 
             return pRes;
