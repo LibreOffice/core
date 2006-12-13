@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elapsedtime.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:04:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _CANVAS_ELAPSEDTIME_HXX
-#define _CANVAS_ELAPSEDTIME_HXX
+#ifndef INCLUDED_CANVAS_ELAPSEDTIME_HXX
+#define INCLUDED_CANVAS_ELAPSEDTIME_HXX
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -189,4 +189,4 @@ namespace canvas
     }
 }
 
-#endif /* _CANVAS_ELAPSEDTIME_HXX */
+#endif /* INCLUDED_CANVAS_ELAPSEDTIME_HXX */
