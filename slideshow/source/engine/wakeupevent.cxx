@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wakeupevent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:31:22 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <wakeupevent.hxx>
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -64,7 +64,7 @@ namespace presentation
 
         bool WakeupEvent::fire()
         {
-            if( !mpActivity.get() )
+            if( !mpActivity )
                 return false;
 
             return mrActivityQueue.addActivity( mpActivity );
