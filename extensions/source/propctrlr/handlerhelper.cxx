@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:59:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
+#include <algorithm>
+
 //........................................................................
 namespace pcr
 {
@@ -124,14 +126,14 @@ namespace pcr
 
         sal_Bool bReadOnlyControl = requiresReadOnlyControl( _rProperty.Attributes );
 
-        // special handling for bolleans (this will become a list)
+        // special handling for booleans (this will become a list)
         if ( _rProperty.Type.getTypeClass() == TypeClass_BOOLEAN )
         {
             String aBoolOptions = String( PcrRes( RID_STR_BOOL ) );
             Sequence< ::rtl::OUString > aEntries(2);
             for ( xub_StrLen i=0; i<2; ++i )
                 aEntries[i] = aBoolOptions.GetToken( i );
-            _out_rDescriptor.Control = createListBoxControl( _rxControlFactory, aEntries, bReadOnlyControl );
+            _out_rDescriptor.Control = createListBoxControl( _rxControlFactory, aEntries, bReadOnlyControl, sal_False );
             return;
         }
 
@@ -174,6 +176,7 @@ namespace pcr
                 const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< ::rtl::OUString >& _rInitialListEntries,
                 sal_Bool _bReadOnlyControl,
+                sal_Bool _bSorted,
                 sal_Bool _bTrueIfListBoxFalseIfComboBox
             )
         {
@@ -184,8 +187,12 @@ namespace pcr
                 UNO_QUERY_THROW
             );
 
-            for (   ::std::vector< ::rtl::OUString >::const_iterator loop = _rInitialListEntries.begin();
-                    loop != _rInitialListEntries.end();
+            ::std::vector< ::rtl::OUString > aInitialEntries( _rInitialListEntries );
+            if ( _bSorted )
+                ::std::sort( aInitialEntries.begin(), aInitialEntries.end() );
+
+            for (   ::std::vector< ::rtl::OUString >::const_iterator loop = aInitialEntries.begin();
+                    loop != aInitialEntries.end();
                     ++loop
                 )
                 xListControl->appendListEntry( *loop );
@@ -195,32 +202,32 @@ namespace pcr
 
     //--------------------------------------------------------------------
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const Sequence< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl )
+                const Sequence< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         ::std::vector< ::rtl::OUString > aAsVector( _rInitialListEntries.getConstArray(), _rInitialListEntries.getConstArray() + _rInitialListEntries.getLength() );
-        return lcl_implCreateListLikeControl( _rxControlFactory, aAsVector, _bReadOnlyControl, sal_True );
+        return lcl_implCreateListLikeControl( _rxControlFactory, aAsVector, _bReadOnlyControl, _bSorted, sal_True );
     }
 
     //--------------------------------------------------------------------
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const ::std::vector< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl )
+                const ::std::vector< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
-        return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, sal_True );
+        return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_True );
     }
 
     //--------------------------------------------------------------------
     Reference< XPropertyControl > PropertyHandlerHelper::createComboBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const Sequence< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl )
+                const Sequence< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         ::std::vector< ::rtl::OUString > aAsVector( _rInitialListEntries.getConstArray(), _rInitialListEntries.getConstArray() + _rInitialListEntries.getLength() );
-        return lcl_implCreateListLikeControl( _rxControlFactory, aAsVector, _bReadOnlyControl, sal_False );
+        return lcl_implCreateListLikeControl( _rxControlFactory, aAsVector, _bReadOnlyControl, _bSorted, sal_False );
     }
 
     //--------------------------------------------------------------------
     Reference< XPropertyControl > PropertyHandlerHelper::createComboBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const ::std::vector< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl )
+                const ::std::vector< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
-        return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, sal_False );
+        return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_False );
     }
 
     //--------------------------------------------------------------------
