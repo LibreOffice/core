@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:37 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1287,6 +1287,8 @@ Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(Runti
 // ------------------------------------------------------------------------
 Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  ) throw (RuntimeException)
 {
+    // creation of the context will certainly require the SolarMutex ...
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard( GetMutex() );
 
     Reference< XAccessibleContext > xCurrentContext( maAccessibleContext.get(), UNO_QUERY );
