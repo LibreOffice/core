@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:06:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,13 +215,12 @@ namespace connectivity
 //= SQLParseNodeParameter
 //=============================================================================
 //-----------------------------------------------------------------------------
-SQLParseNodeParameter::SQLParseNodeParameter( const ::rtl::OUString& _rIdentifierQuote, const ::rtl::OUString& _rCatalogSep,
+SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _xFormatter, const Reference< XPropertySet >& _xField,
         const Locale& _rLocale, const IParseContext* _pContext,
-        bool _bIntl, bool _bQuote, sal_Char _cDecSep, bool _bPredicate, bool _bParseToSDBC, bool _bCaseSensistiveIdentCompare  )
+        bool _bIntl, bool _bQuote, sal_Char _cDecSep, bool _bPredicate, bool _bParseToSDBC )
     :rLocale(_rLocale)
-    ,aIdentifierQuote(_rIdentifierQuote)
-    ,aCatalogSeparator(_rCatalogSep)
+    ,aMetaData( _rxConnection )
     ,pParser( NULL )
     ,pSubQueryHistory( new QueryNameSet )
     ,xFormatter(_xFormatter)
@@ -232,7 +231,6 @@ SQLParseNodeParameter::SQLParseNodeParameter( const ::rtl::OUString& _rIdentifie
     ,bInternational(_bIntl)
     ,bPredicate(_bPredicate)
     ,bParseToSDBCLevel( _bParseToSDBC )
-    ,bCaseSensistiveIdentCompare( _bCaseSensistiveIdentCompare )
 {
 }
 
@@ -283,21 +281,21 @@ SQLParseNodeParameter::~SQLParseNodeParameter()
 
 //-----------------------------------------------------------------------------
 void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
-                                   const Reference< XDatabaseMetaData > & xMeta,
+                                   const Reference< XConnection >& _rxConnection,
                                    const IParseContext* pContext,
                                    sal_Bool _bIntl,
                                    sal_Bool _bQuote) const
 {
 
     parseNodeToStr(
-        rString, xMeta, Reference< XNumberFormatter >(),  Reference< XPropertySet >(),
+        rString, _rxConnection, NULL, NULL,
         pContext ? pContext->getPreferredLocale() : OParseContext::getDefaultLocale(),
         pContext, _bIntl, _bQuote, '.', false, false );
 }
 
 //-----------------------------------------------------------------------------
 void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
-                                              const Reference< XDatabaseMetaData > & xMeta,
+                                              const Reference< XConnection >& _rxConnection,
                                               const Reference< XNumberFormatter > & xFormatter,
                                               const ::com::sun::star::lang::Locale& rIntl,
                                               sal_Char _cDec,
@@ -307,12 +305,12 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, xMeta, xFormatter, Reference< XPropertySet >(), rIntl, pContext, sal_True, sal_True, _cDec, true, false);
+        parseNodeToStr(rString, _rxConnection, xFormatter, NULL, rIntl, pContext, sal_True, sal_True, _cDec, true, false);
 }
 
 //-----------------------------------------------------------------------------
 void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
-                                              const Reference< XDatabaseMetaData > & xMeta,
+                                              const Reference< XConnection > & _rxConnection,
                                               const Reference< XNumberFormatter > & xFormatter,
                                               const Reference< XPropertySet > & _xField,
                                               const ::com::sun::star::lang::Locale& rIntl,
@@ -323,12 +321,12 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, xMeta, xFormatter, _xField, rIntl, pContext, true, true, _cDec, true, false);
+        parseNodeToStr( rString, _rxConnection, xFormatter, _xField, rIntl, pContext, true, true, _cDec, true, false );
 }
 
 //-----------------------------------------------------------------------------
 void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
-                      const Reference< XDatabaseMetaData > & xMeta,
+                      const Reference< XConnection > & _rxConnection,
                       const Reference< XNumberFormatter > & xFormatter,
                       const Reference< XPropertySet > & _xField,
                       const ::com::sun::star::lang::Locale& rIntl,
@@ -340,20 +338,16 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                       bool _bSubstitute) const
 {
 
-    OSL_ENSURE(xMeta.is(), "OSQLParseNode::parseNodeToStr:: no meta data!");
+    OSL_ENSURE( _rxConnection.is(), "OSQLParseNode::parseNodeToStr: invalid connection!" );
 
-    if (xMeta.is())
+    if ( _rxConnection.is() )
     {
-        ::rtl::OUString aIdentifierQuote(xMeta->getIdentifierQuoteString());
-        ::rtl::OUString aCatalogSeparator(xMeta->getCatalogSeparator());
-
         try
         {
             OSQLParseNode::impl_parseNodeToString_throw( rString,
                 SQLParseNodeParameter(
-                    aIdentifierQuote, aCatalogSeparator, xFormatter, _xField, rIntl, pContext,
-                    _bIntl, _bQuote, _cDecSep, _bPredicate, _bSubstitute,
-                    xMeta->storesMixedCaseQuotedIdentifiers()
+                    _rxConnection, xFormatter, _xField, rIntl, pContext,
+                    _bIntl, _bQuote, _cDecSep, _bPredicate, _bSubstitute
                 ) );
         }
         catch( const SQLException& )
@@ -371,14 +365,10 @@ bool OSQLParseNode::parseNodeToExecutableStatement( ::rtl::OUString& _out_rStrin
     OSQLParser& _rParser, ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const
 {
     OSL_PRECOND( _rxConnection.is(), "OSQLParseNode::parseNodeToExecutableStatement: invalid connection!" );
-    Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData() );
+    SQLParseNodeParameter aParseParam( _rxConnection,
+        NULL, NULL, OParseContext::getDefaultLocale(), NULL, false, true, '.', false, true );
 
-    SQLParseNodeParameter aParseParam( xMeta->getIdentifierQuoteString(), xMeta->getCatalogSeparator(),
-        NULL, NULL, OParseContext::getDefaultLocale(), NULL, false, true, '.', false, true,
-        xMeta->storesMixedCaseQuotedIdentifiers() );
-
-    DatabaseMetaData aMeta( _rxConnection );
-    if ( aMeta.supportsSubqueriesInFrom() )
+    if ( aParseParam.aMetaData.supportsSubqueriesInFrom() )
     {
         Reference< XQueriesSupplier > xSuppQueries( _rxConnection, UNO_QUERY );
         OSL_ENSURE( xSuppQueries.is(), "OSQLParseNode::parseNodeToExecutableStatement: cannot substitute everything without a QueriesSupplier!" );
@@ -506,7 +496,8 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
         break;
 
     case as:
-        rString += ::rtl::OUString::createFromAscii( " AS" );
+        if ( rParam.aMetaData.generateASBeforeCorrelationName() )
+            rString += ::rtl::OUString::createFromAscii( " AS" );
         bHandled = true;
         break;
 
@@ -718,7 +709,8 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rStr
         {
             rString += ::rtl::OUString::createFromAscii( " AS " );
             if ( rParam.bQuote )
-                rString += SetQuotation( sTableOrQueryName, rParam.aIdentifierQuote, rParam.aIdentifierQuote );
+                rString += SetQuotation( sTableOrQueryName,
+                    rParam.aMetaData.getIdentifierQuoteString(), rParam.aMetaData.getIdentifierQuoteString() );
         }
 
         // don't forget to remove the query name from the history, else multiple inclusions
@@ -2439,7 +2431,9 @@ void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParam
                     case ' ' :
                     case '.' : break;
                     default  :
-                        if (!rParam.aCatalogSeparator.getLength() || rString.getStr()[rString.getLength()-1] != rParam.aCatalogSeparator.toChar())
+                        if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
+                            ||  rString.getStr()[ rString.getLength()-1 ] != rParam.aMetaData.getCatalogSeparator().toChar()
+                            )
                             rString += ::rtl::OUString::createFromAscii(" "); break;
                 }
             }
@@ -2452,7 +2446,8 @@ void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParam
                     rString+= ::rtl::OUString::createFromAscii("]");
                 }
                 else
-                    rString += SetQuotation(m_aNodeValue, rParam.aIdentifierQuote, rParam.aIdentifierQuote);
+                    rString += SetQuotation(m_aNodeValue,
+                        rParam.aMetaData.getIdentifierQuoteString(), rParam.aMetaData.getIdentifierQuoteString() );
             }
             else
                 rString += m_aNodeValue;
@@ -2485,7 +2480,9 @@ void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParam
                     case ' ' :
                     case '.' : break;
                     default  :
-                        if (!rParam.aCatalogSeparator.getLength() || rString.getStr()[rString.getLength()-1] != rParam.aCatalogSeparator.toChar())
+                        if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
+                            ||  rString.getStr()[ rString.getLength()-1 ] != rParam.aMetaData.getCatalogSeparator().toChar()
+                            )
                             rString += ::rtl::OUString::createFromAscii(" "); break;
                 }
             }
