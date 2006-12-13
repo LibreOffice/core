@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidebitmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:20:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,15 @@
 #ifndef _SLIDESHOW_SLIDEBITMAP_HXX
 #define _SLIDESHOW_SLIDEBITMAP_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _CPPCANVAS_CANVAS_HXX
 #include <cppcanvas/canvas.hxx>
-#endif
-#ifndef _CPPCANVAS_BITMAP_HXX
 #include <cppcanvas/bitmap.hxx>
-#endif
 
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
+#include <boost/utility.hpp>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -65,7 +54,7 @@ namespace com { namespace sun { namespace star { namespace rendering
 
 /* Definition of SlideBitmap class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -84,7 +73,7 @@ namespace presentation
             Slide::getFinalSlideBitmap must also be adapted (they no
             longer need a Canvas ptr, which is actually a hack now).
          */
-        class SlideBitmap
+        class SlideBitmap : private boost::noncopyable
         {
         public:
             SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap );
@@ -95,10 +84,6 @@ namespace presentation
             void                clip( const ::basegfx::B2DPolyPolygon& rClipPoly );
 
         private:
-            // default: disabled copy/assignment
-            SlideBitmap(const SlideBitmap&);
-            SlideBitmap& operator=( const SlideBitmap& );
-
             ::basegfx::B2DPoint                                     maOutputPos;
             ::basegfx::B2DPolyPolygon                               maClipPoly;
 
@@ -107,8 +92,7 @@ namespace presentation
                 ::com::sun::star::rendering::XBitmap >      mxBitmap;
         };
 
-        typedef ::boost::shared_ptr< ::presentation::internal::SlideBitmap > SlideBitmapSharedPtr;
-
+        typedef ::boost::shared_ptr< SlideBitmap > SlideBitmapSharedPtr;
     }
 }
 
