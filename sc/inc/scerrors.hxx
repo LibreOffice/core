@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scerrors.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:16:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #define SCERR_EXPORT_CONNECT        (   1 | ERRCODE_CLASS_WRITE | ERRCODE_AREA_SC )
 #define SCERR_EXPORT_DATA           (   2 | ERRCODE_CLASS_WRITE | ERRCODE_AREA_SC )
 #define SCERR_EXPORT_ENCODING       (   3 | ERRCODE_CLASS_WRITE | ERRCODE_AREA_SC )
+#define SCERR_EXPORT_FIELDWIDTH     (   4 | ERRCODE_CLASS_WRITE | ERRCODE_AREA_SC )
 
 // ERRCODE_CLASS_IMPORT - does not display "Read-Error" in MsgBox
 #define SCWARN_IMPORT_RANGE_OVERFLOW (  1 | ERRCODE_CLASS_IMPORT | ERRCODE_WARNING_MASK | ERRCODE_AREA_SC )
