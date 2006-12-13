@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:26:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1447,11 +1447,11 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
             bOk = sal_False;
         }
         ::rtl::OUString sColumnName,sTableRange;
-        OSQLParseTreeIterator::getColumnRange(pNode->getChild(0),_xConnection->getMetaData(),sColumnName,sTableRange);
+        OSQLParseTreeIterator::getColumnRange( pNode->getChild(0), _xConnection, sColumnName, sTableRange );
         bOk = sTableRange == _sUpdateTableName;
         if ( !bOk )
         {
-            OSQLParseTreeIterator::getColumnRange(pNode->getChild(2),_xConnection->getMetaData(),sColumnName,sTableRange);
+            OSQLParseTreeIterator::getColumnRange( pNode->getChild(2), _xConnection, sColumnName, sTableRange );
             bOk =  sTableRange == _sUpdateTableName;
         }
     }
@@ -1505,7 +1505,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                     if(pTableRef->count() == 4)
                         sTableRange = pTableRef->getChild(2)->getTokenValue(); // Tabellenrange an Pos 2
                     if(!sTableRange.getLength())
-                        pTableRef->getChild(0)->parseNodeToStr(sTableRange,_xConnection->getMetaData(),NULL,sal_False,sal_False);
+                        pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, NULL, sal_False, sal_False );
                     bOk =  sTableRange == _sUpdateTableName;
                 }
             }
