@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosmenucontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:21:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:08:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,8 @@ MacrosMenuController::~MacrosMenuController()
 // private function
 void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu*                                     pVCLPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
-    PopupMenu*                                         pPopupMenu     = 0;
+    VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
+    PopupMenu*     pPopupMenu    = 0;
 
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
 
@@ -119,6 +119,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
     OSL_TRACE("disposing");
     m_xFrame.clear();
     m_xDispatch.clear();
+    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
     {
@@ -224,6 +225,9 @@ void SAL_CALL MacrosMenuController::setPopupMenu( const Reference< css::awt::XPo
 {
     ResetableGuard aLock( m_aLock );
 
+    if ( m_bDisposed )
+        throw DisposedException();
+
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
@@ -250,35 +254,7 @@ void SAL_CALL MacrosMenuController::setPopupMenu( const Reference< css::awt::XPo
 // XInitialization
 void SAL_CALL MacrosMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
-    ResetableGuard aLock( m_aLock );
-
-    sal_Bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
-    {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
-
-        for ( int i = 0; i < aArguments.getLength(); i++ )
-        {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-            m_bInitialized = sal_True;
-        }
-    }
+    PopupMenuControllerBase::initialize( aArguments );
 }
 
 String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
