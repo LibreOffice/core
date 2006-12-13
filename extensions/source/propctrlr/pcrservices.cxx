@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrservices.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:20:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 12:01:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ using namespace ::com::sun::star::registry;
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController();
 extern "C" void SAL_CALL createRegistryInfo_FormController();
 extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel();
+extern "C" void SAL_CALL createRegistryInfo_DefaultHelpProvider();
 extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog();
 extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog();
 extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler();
@@ -75,6 +76,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
         createRegistryInfo_OPropertyBrowserController();
         createRegistryInfo_FormController();
         createRegistryInfo_DefaultFormComponentInspectorModel();
+        createRegistryInfo_DefaultHelpProvider();
         createRegistryInfo_OControlFontDialog();
         createRegistryInfo_OTabOrderDialog();
         createRegistryInfo_CellBindingPropertyHandler();
@@ -95,7 +97,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
-                uno_Environment **ppEnv
+                uno_Environment ** /*ppEnv*/
             )
 {
     pcr_initializeModule();
@@ -127,7 +129,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* pRegistryKey)
+                    void* /*pRegistryKey*/)
 {
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
