@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvasfont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:34:35 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:39:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@
 #include <canvas/vclwrapper.hxx>
 
 #include "cairo_spritecanvas.hxx"
-#include "cairo_impltools.hxx"
 
 #include <boost/utility.hpp>
 
