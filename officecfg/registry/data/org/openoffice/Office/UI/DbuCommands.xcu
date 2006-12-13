@@ -105,6 +105,12 @@
                     <value xml:lang="en-US">Edit...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:DBEditSqlView" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">In SQL-Ansicht bearbeiten...</value>
+                    <value xml:lang="en-US">Edit in SQL View...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DBOpen" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Datenbankobjekt öffnen...</value>
@@ -323,7 +329,7 @@
             </node>
             <node oor:name=".uno:DBDSConnectionType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Verbingungsart...</value>
+                    <value xml:lang="de">Verbindungsart...</value>
                     <value xml:lang="en-US">Connection Type...</value>
                 </prop>
             </node>
