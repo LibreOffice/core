@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slide.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:54:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,40 +36,31 @@
 #ifndef _SLIDESHOW_SLIDE_HXX
 #define _SLIDESHOW_SLIDE_HXX
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
-
-#ifndef _CPPCANVAS_SPRITECANVAS_HXX
 #include <cppcanvas/spritecanvas.hxx>
-#endif
 
-#ifndef _BGFX_VECTOR_B2ISIZE_HXX
 #include <basegfx/vector/b2isize.hxx>
-#endif
+
+#include "unoview.hxx"
+#include "event.hxx"
+#include "layermanager.hxx"
+#include "userpaintoverlay.hxx"
+#include "slideanimations.hxx"
+#include "slidebitmap.hxx"
+#include "shapeeventbroadcaster.hxx"
+
+#include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
+#include <boost/optional.hpp>
 
 #include <vector>
 #include <utility>
 
-#include <unoview.hxx>
-#include <event.hxx>
-#include <layermanager.hxx>
-#include <userpaintoverlay.hxx>
-#include <slideanimations.hxx>
-#include <slidebitmap.hxx>
-#include <shapeeventbroadcaster.hxx>
-#include "boost/optional.hpp"
-
 /* Definition of Slide class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -77,7 +68,10 @@ namespace presentation
         class ActivitiesQueue;
         class UserEventQueue;
 
-        class Slide
+        typedef ::boost::shared_ptr< class Slide > SlideSharedPtr;
+
+        class Slide : private boost::noncopyable,
+                      public ViewEventHandler
         {
         public:
             /** Construct from XDrawPage
@@ -90,29 +84,23 @@ namespace presentation
                 rendered at (0,0) in the given canvas' view coordinate
                 system.
              */
-            Slide( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::drawing::XDrawPage >&          xDrawPage,
-                   const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::animations::XAnimationNode >&  xRootNode,
-                   EventQueue&                                          rEventQueue,
-                   ActivitiesQueue&                                     rActivitiesQueue,
-                   EventMultiplexer&                                    rEventMultiplexer,
-                   UserEventQueue&                                      rUserEventQueue,
-                   const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::uno::XComponentContext >& xContext );
-
+            static SlideSharedPtr create( const ::com::sun::star::uno::Reference<
+                                                ::com::sun::star::drawing::XDrawPage >&         xDrawPage,
+                                          const ::com::sun::star::uno::Reference<
+                                                ::com::sun::star::animations::XAnimationNode >& xRootNode,
+                                          EventQueue&                                           rEventQueue,
+                                          ActivitiesQueue&                                      rActivitiesQueue,
+                                          EventMultiplexer&                                     rEventMultiplexer,
+                                          UserEventQueue&                                       rUserEventQueue,
+                                          const ::com::sun::star::uno::Reference<
+                                                ::com::sun::star::uno::XComponentContext >&     xContext,
+                                          const UnoViewContainer&                               rViewContainer );
             ~Slide();
 
-            /** Add a view to this slide
-             */
-            void addView( const UnoViewSharedPtr& rView );
-
-            /** Remove a previously added a view from this slide
-
-                @return true, if this view was successfully removed, false
-                otherwise (e.g. if this view wasn't added in the first place)
-            */
-            bool removeView( const UnoViewSharedPtr& rView );
+            // ViewEventHandler
+            virtual void viewAdded( const UnoViewSharedPtr& rView );
+            virtual void viewRemoved( const UnoViewSharedPtr& rView );
+            virtual void viewChanged( const UnoViewSharedPtr& rView );
 
             /** Add the given listener for the given shape.
 
@@ -167,9 +155,9 @@ namespace presentation
              */
             bool prefetchShow();
 
-            /** Paint the slide on all registered views, without any effects
+            /** Paint the slide on given view, without any animation effects
              */
-            bool paint();
+            bool paint( const UnoViewSharedPtr& rView );
 
             /** Shows the slide on all registered views
              */
@@ -215,9 +203,8 @@ namespace presentation
                 View to retrieve bitmap for (note that the bitmap will
                 have device-pixel equivalence to the content that
                 would have been rendered onto the given view). Note
-                that the view must have been added to this slide via
-                addView() before, otherwise, this method will throw an
-                exception.
+                that the view must have been added to this slide
+                before via viewAdded().
              */
             // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
             // but on canvas-independent basegfx bitmaps
@@ -269,9 +256,17 @@ namespace presentation
             getXAnimationNode() const { return mxRootNode; }
 
         private:
-            // default: disabled copy/assignment
-            Slide(const Slide&);
-            Slide& operator=( const Slide& );
+            Slide( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::drawing::XDrawPage >&          xDrawPage,
+                   const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::animations::XAnimationNode >&  xRootNode,
+                   EventQueue&                                          rEventQueue,
+                   ActivitiesQueue&                                     rActivitiesQueue,
+                   EventMultiplexer&                                    rEventMultiplexer,
+                   UserEventQueue&                                      rUserEventQueue,
+                   const ::com::sun::star::uno::Reference<
+                         ::com::sun::star::uno::XComponentContext >&    xContext,
+                   const UnoViewContainer&                              rViewContainer );
 
             void enablePaintOverlay();
             void disablePaintOverlay();
@@ -313,40 +308,39 @@ namespace presentation
                 SlideAnimationState_NUM_ENTRIES=4
             };
 
+            typedef std::vector< SlideBitmapSharedPtr > VectorOfSlideBitmaps;
             /** Vector of slide bitmaps.
 
                 Since the bitmap content is sensitive to animation
                 effects, we have an inner vector containing a distinct
                 bitmap for each of the SlideAnimationStates.
              */
-            typedef ::std::vector< ::std::vector< SlideBitmapSharedPtr > > VectorOfSlideBitmaps;
+            typedef ::std::vector< std::pair< UnoViewSharedPtr,
+                                              VectorOfSlideBitmaps > > VectorOfVectorOfSlideBitmaps;
 
 
             // Member variables
             // ================
 
             /// The page model object
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XDrawPage > const mxDrawPage;
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimationNode > const mxRootNode;
+            const com::sun::star::uno::Reference<
+                com::sun::star::drawing::XDrawPage >            mxDrawPage;
+            const com::sun::star::uno::Reference<
+                com::sun::star::animations::XAnimationNode >    mxRootNode;
 
             /// Contains common objects needed throughout the slideshow
             SlideShowContext                                    maContext;
 
-            ::boost::shared_ptr<ShapeEventBroadcaster> mpEventBroadcaster;
+            ::boost::shared_ptr<ShapeEventBroadcaster>          mpEventBroadcaster;
 
             /// Handles the animation and event generation for us
             SlideAnimations                                     maAnimations;
 
-            /// All added views
-            UnoViewVector                                       maViews;
-
             ::boost::optional<RGBColor>                         maUserPaintColor;
             UserPaintOverlaySharedPtr                           mpPaintOverlay;
 
-            /// Bitmap with initial slide content
-            VectorOfSlideBitmaps                                maSlideBitmaps;
+            /// Bitmaps with slide content at various states
+            VectorOfVectorOfSlideBitmaps                        maSlideBitmaps;
 
             /// Timeout for automatic next slide display
             double                                              mnNextSlideTimeout;
@@ -385,9 +379,6 @@ namespace presentation
 
             struct ShapesIterationFunc;  friend struct ShapesIterationFunc;
         };
-
-        typedef ::boost::shared_ptr< ::presentation::internal::Slide > SlideSharedPtr;
-
     }
 }
 
