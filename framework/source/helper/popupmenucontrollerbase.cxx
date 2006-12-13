@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:59:47 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
 #endif
-
 #ifndef __FRAMEWORK_SERVICES_H_
 #include "services.h"
 #endif
@@ -59,19 +58,15 @@
 #ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_MENUITEMSTYLE_HPP_
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
@@ -87,6 +82,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -105,7 +101,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_8                     (   PopupMenuControllerBase                                                     ,
+DEFINE_XINTERFACE_11                    (   PopupMenuControllerBase                                                     ,
                                             OWeakObject                                                                 ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                  ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                   ),
@@ -113,24 +109,33 @@ DEFINE_XINTERFACE_8                     (   PopupMenuControllerBase             
                                             DIRECT_INTERFACE( css::lang::XInitialization                                ),
                                             DIRECT_INTERFACE( css::frame::XStatusListener                               ),
                                             DIRECT_INTERFACE( css::awt::XMenuListener                                   ),
+                                            DIRECT_INTERFACE( css::frame::XDispatchProvider                             ),
+                                            DIRECT_INTERFACE( css::frame::XDispatch                                     ),
+                                            DIRECT_INTERFACE( css::lang::XComponent                                     ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::frame::XStatusListener   ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::awt::XMenuListener       )
                                         )
 
-DEFINE_XTYPEPROVIDER_7                  (   PopupMenuControllerBase                             ,
+DEFINE_XTYPEPROVIDER_10                 (   PopupMenuControllerBase                             ,
                                             css::lang::XTypeProvider                            ,
                                             css::lang::XServiceInfo                             ,
                                             ::com::sun::star::frame::XPopupMenuController ,
                                             css::lang::XInitialization                          ,
                                             css::frame::XStatusListener                         ,
                                             css::awt::XMenuListener                             ,
-                                            css::lang::XEventListener
+                                            css::lang::XEventListener                           ,
+                                            css::frame::XDispatchProvider                       ,
+                                            css::frame::XDispatch                               ,
+                                            css::lang::XComponent
                                         )
 
 PopupMenuControllerBase::PopupMenuControllerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
-    m_bInitialized( sal_False ),
-    m_xServiceManager( xServiceManager )
+    ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() ),
+    m_bInitialized( false ),
+    m_bDisposed( false ),
+    m_xServiceManager( xServiceManager ),
+    m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
 }
 
@@ -155,6 +160,38 @@ void PopupMenuControllerBase::resetPopupMenu( com::sun::star::uno::Reference< co
     }
 }
 
+void SAL_CALL PopupMenuControllerBase::dispose()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    css::uno::Reference< css::lang::XComponent > xThis( static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY );
+
+    // Send message to all listener and forget their references.
+    css::lang::EventObject aEvent( xThis );
+    m_aListenerContainer.disposeAndClear( aEvent );
+
+    // Reset our members and set disposed flag
+    ResetableGuard aLock( m_aLock );
+    m_xFrame.clear();
+    m_xDispatch.clear();
+    m_xPopupMenu.clear();
+    m_xServiceManager.clear();
+    m_bDisposed = true;
+}
+
+void SAL_CALL PopupMenuControllerBase::addEventListener(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    m_aListenerContainer.addInterface( ::getCppuType( (const css::uno::Reference< css::lang::XEventListener >*)NULL ), xListener );
+}
+
+void SAL_CALL PopupMenuControllerBase::removeEventListener(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    m_aListenerContainer.removeInterface( ::getCppuType( (const css::uno::Reference< css::lang::XEventListener >*)NULL ), xListener );
+}
+
 // XStatusListener
 void SAL_CALL PopupMenuControllerBase::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
 {
@@ -173,6 +210,10 @@ void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& ) throw ( R
 // XMenuListener
 void SAL_CALL PopupMenuControllerBase::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
 }
 
 void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
@@ -180,6 +221,9 @@ void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent
     Reference< css::awt::XPopupMenu >   xPopupMenu;
     Reference< XDispatch >              xDispatch;
     Reference< XMultiServiceFactory >   xServiceManager;
+
+    if ( m_bDisposed )
+        throw DisposedException();
 
     ResetableGuard aLock( m_aLock );
     xPopupMenu      = m_xPopupMenu;
@@ -212,16 +256,27 @@ void SAL_CALL PopupMenuControllerBase::select( const css::awt::MenuEvent& rEvent
 
 void SAL_CALL PopupMenuControllerBase::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
 }
 
 void SAL_CALL PopupMenuControllerBase::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
 }
 
 // XPopupMenuController
 void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< css::awt::XPopupMenu >& PopupMenu ) throw (RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
 
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
         m_xPopupMenu = PopupMenu;
@@ -230,6 +285,10 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< css::awt::
 void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XDispatch > xDispatch( m_xDispatch );
     Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
@@ -246,6 +305,121 @@ void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::sta
         xDispatch->addStatusListener( xStatusListener, aTargetURL );
         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
     }
+}
+
+// XDispatchProvider
+Reference< XDispatch > SAL_CALL
+PopupMenuControllerBase::queryDispatch(
+    const URL& /*aURL*/,
+    const rtl::OUString& /*sTarget*/,
+    sal_Int32 /*nFlags*/ )
+throw( RuntimeException )
+{
+    // must be implemented by subclass
+    ResetableGuard aLock( m_aLock );
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    return Reference< XDispatch >();
+}
+
+Sequence< Reference< XDispatch > > SAL_CALL
+PopupMenuControllerBase::queryDispatches(
+    const Sequence< DispatchDescriptor >& lDescriptor )
+throw( RuntimeException )
+{
+    // Create return list - which must have same size then the given descriptor
+    // It's not allowed to pack it!
+    ResetableGuard aLock( m_aLock );
+    if ( m_bDisposed )
+        throw DisposedException();
+    aLock.unlock();
+
+    sal_Int32                                                          nCount = lDescriptor.getLength();
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+
+    // Step over all descriptors and try to get any dispatcher for it.
+    for( sal_Int32 i=0; i<nCount; ++i )
+    {
+        lDispatcher[i] = queryDispatch( lDescriptor[i].FeatureURL  ,
+                                        lDescriptor[i].FrameName   ,
+                                        lDescriptor[i].SearchFlags );
+    }
+
+    return lDispatcher;
+}
+
+// XDispatch
+void SAL_CALL
+PopupMenuControllerBase::dispatch(
+    const URL& /*aURL*/,
+    const Sequence< PropertyValue >& /*seqProperties*/ )
+throw( ::com::sun::star::uno::RuntimeException )
+{
+    // must be implemented by subclass
+    ResetableGuard aLock( m_aLock );
+    if ( m_bDisposed )
+        throw DisposedException();
+}
+
+void SAL_CALL
+PopupMenuControllerBase::addStatusListener(
+    const Reference< XStatusListener >& xControl,
+    const URL& aURL )
+throw( ::com::sun::star::uno::RuntimeException )
+{
+    ResetableGuard aLock( m_aLock );
+    if ( m_bDisposed )
+        throw DisposedException();
+    aLock.unlock();
+
+    bool bStatusUpdate( false );
+    m_aListenerContainer.addInterface( ::getCppuType( (const css::uno::Reference< css::frame::XStatusListener >*)NULL ), xControl );
+
+    aLock.lock();
+    if ( aURL.Complete.indexOf( m_aBaseURL ) == 0 )
+        bStatusUpdate = true;
+    aLock.unlock();
+
+    if ( bStatusUpdate )
+    {
+        // Dummy update for popup menu controllers
+        FeatureStateEvent aEvent;
+        aEvent.FeatureURL = aURL;
+        aEvent.IsEnabled  = sal_True;
+        aEvent.Requery    = sal_False;
+        aEvent.State      = Any();
+        xControl->statusChanged( aEvent );
+    }
+}
+
+void SAL_CALL PopupMenuControllerBase::removeStatusListener(
+    const Reference< XStatusListener >& xControl,
+    const URL& /*aURL*/ )
+throw( ::com::sun::star::uno::RuntimeException )
+{
+    m_aListenerContainer.removeInterface( ::getCppuType( (const css::uno::Reference< css::frame::XStatusListener >*)NULL ), xControl );
+}
+
+::rtl::OUString PopupMenuControllerBase::determineBaseURL( const ::rtl::OUString& aURL )
+{
+    // Just use the main part of the URL for popup menu controllers
+    sal_Int32     nQueryPart( 0 );
+    sal_Int32     nSchemePart( 0 );
+    rtl::OUString aMainURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:" ));
+
+    nSchemePart = aURL.indexOf( ':' );
+    if (( nSchemePart > 0 ) &&
+        ( aURL.getLength() > ( nSchemePart+1 )))
+    {
+        nQueryPart  = aURL.indexOf( '?', nSchemePart );
+        if ( nQueryPart > 0 )
+            aMainURL += aURL.copy( nSchemePart, nQueryPart-nSchemePart );
+        else if ( nQueryPart == -1 )
+            aMainURL += aURL.copy( nSchemePart+1 );
+    }
+
+    return aMainURL;
 }
 
 // XInitialization
@@ -278,6 +452,8 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
         {
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;
+            m_aBaseURL      = determineBaseURL( aCommandURL );
+            m_bInitialized  = true;
         }
     }
 }
