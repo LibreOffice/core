@@ -4,9 +4,9 @@
  *
  *  $RCSfile: randomwipe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:57:04 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,15 @@
 #if ! defined INCLUDED_SLIDESHOW_RANDOMWIPE_HXX
 #define INCLUDED_SLIDESHOW_RANDOMWIPE_HXX
 
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <boost/scoped_array.hpp>
+
 #include "parametricpolypolygon.hxx"
 #include "transitiontools.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/point/b2dpoint.hxx"
-#include "boost/scoped_array.hpp"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class RandomWipe : public ParametricPolyPolygon
