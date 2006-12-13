@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewlayer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:25:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,18 @@
 #ifndef _SLIDESHOW_VIEWLAYER_HXX
 #define _SLIDESHOW_VIEWLAYER_HXX
 
-#ifndef _CPPCANVAS_SPRITECANVAS_HXX
 #include <cppcanvas/spritecanvas.hxx>
-#endif
 
-#ifndef _BGFX_RANGE_B2IRECTANGLE_HXX
 #include <basegfx/range/b2irectangle.hxx>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
+
+namespace basegfx { class B1DRange; class B2DRange; }
 
 
 /* Definition of ViewLayer interface */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
