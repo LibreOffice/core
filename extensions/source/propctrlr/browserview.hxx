@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:18:01 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace pcr
 
         virtual ~OPropertyBrowserView();
 
-        OPropertyEditor*    getPropertyBox() { return m_pPropBox; }
+        OPropertyEditor&    getPropertyBox() { return *m_pPropBox; }
 
         // page handling
         sal_uInt16  getActivaPage() const { return m_nActivePage; }
