@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:05:50 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #include <boolanimation.hxx>
 #include <pairanimation.hxx>
 
+#include <boost/utility.hpp>
+
 #include <shape.hxx>
 #include <shapeattributelayer.hxx>
 #include <layermanager.hxx>
@@ -56,7 +58,7 @@ namespace rtl
 
 /* Definition of AnimationFactory class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -67,7 +69,7 @@ namespace presentation
             appropriate Animation object from that, which will modify
             the attribute as specified.
          */
-        class AnimationFactory
+        class AnimationFactory : private boost::noncopyable
         {
         public:
             /** Classifies the attribute name.
@@ -147,10 +149,6 @@ namespace presentation
             // default: constructor/destructor disabed
             AnimationFactory();
             ~AnimationFactory();
-
-            // default: disabled copy/assignment
-            AnimationFactory(const AnimationFactory&);
-            AnimationFactory& operator=( const AnimationFactory& );
         };
     }
 }
