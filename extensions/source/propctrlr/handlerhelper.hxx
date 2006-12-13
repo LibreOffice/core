@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:58:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,9 @@ namespace pcr
             @param _bReadOnlyControl
                 determines whether the control should be read-only
 
+            @param _bSorted
+                determines whether the list entries should be sorted
+
             @return
                 the newly created control
         */
@@ -123,14 +126,16 @@ namespace pcr
             createListBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl
+                sal_Bool _bReadOnlyControl,
+                sal_Bool _bSorted
             );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
             createListBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< ::rtl::OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl
+                sal_Bool _bReadOnlyControl,
+                sal_Bool _bSorted
             );
 
         /** creates an <member scope="com::sun::star::inspection">PropertyControlType::ComboBox</member>-type control
@@ -145,6 +150,9 @@ namespace pcr
             @param _bReadOnlyControl
                 determines whether the control should be read-only
 
+            @param _bSorted
+                determines whether the list entries should be sorted
+
             @return
                 the newly created control
         */
@@ -152,14 +160,16 @@ namespace pcr
             createComboBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl
+                sal_Bool _bReadOnlyControl,
+                sal_Bool _bSorted
             );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
             createComboBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< ::rtl::OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl
+                sal_Bool _bReadOnlyControl,
+                sal_Bool _bSorted
             );
 
         /** creates an <member scope="com::sun::star::inspection">PropertyControlType::NumericField</member>-type control
