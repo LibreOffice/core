@@ -4,9 +4,9 @@
  *
  *  $RCSfile: footermenucontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:20:04 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,15 +47,12 @@
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
 #endif
-
 #ifndef __FRAMEWORK_SERVICES_H_
 #include "services.h"
 #endif
-
 #ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
-
 #ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
 #include <classes/fwkresid.hxx>
 #endif
@@ -67,31 +64,24 @@
 #ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_MENUITEMSTYLE_HPP_
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -171,6 +161,10 @@ void FooterMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
         try
         {
             const rtl::OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageFooter" ));
+            const rtl::OUString aIsPhysicalStr( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ));
+            const rtl::OUString aDisplayNameStr( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" ));
+            const rtl::OUString aFooterIsOnStr( RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" ));
+
             Reference< XNameContainer > xNameContainer;
             Any a = xStyleFamilies->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageStyles" )));
             if ( a >>= xNameContainer )
@@ -181,6 +175,8 @@ void FooterMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 USHORT  nCount = 0;
                 sal_Bool bAllOneState( sal_True );
                 sal_Bool bLastCheck( sal_True );
+                sal_Bool bFirstChecked( sal_False );
+                sal_Bool bFirstItemInserted( sal_False );
                 for ( sal_Int32 n = 0; n < aSeqNames.getLength(); n++ )
                 {
                     rtl::OUString aName = aSeqNames[n];
@@ -188,22 +184,32 @@ void FooterMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                     if ( xPropSet.is() )
                     {
                         sal_Bool bIsPhysical( sal_False );
-                        a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" )));
+                        a = xPropSet->getPropertyValue( aIsPhysicalStr );
                         if (( a >>= bIsPhysical ) && bIsPhysical )
                         {
                             rtl::OUString aDisplayName;
                             sal_Bool      bHeaderIsOn( sal_False );
-                            a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" )));
+                            a = xPropSet->getPropertyValue( aDisplayNameStr );
                             a >>= aDisplayName;
-                            a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" )));
+                            a = xPropSet->getPropertyValue( aFooterIsOnStr );
                             a >>= bHeaderIsOn;
 
                             rtl::OUStringBuffer aStrBuf( aCmd );
                             aStrBuf.appendAscii( "?PageStyle:string=");
                             aStrBuf.append( aDisplayName );
-
+                            aStrBuf.appendAscii( "&On:bool=" );
+                            if ( !bHeaderIsOn )
+                                aStrBuf.appendAscii( "true" );
+                            else
+                                aStrBuf.appendAscii( "false" );
                             rtl::OUString aCommand( aStrBuf.makeStringAndClear() );
                             pVCLPopupMenu->InsertItem( nId, aDisplayName, MIB_CHECKABLE );
+                            if ( !bFirstItemInserted )
+                            {
+                                bFirstItemInserted = sal_True;
+                                bFirstChecked      = bHeaderIsOn;
+                            }
+
                             pVCLPopupMenu->SetItemCommand( nId, aCommand );
                             if ( bHeaderIsOn )
                                 pVCLPopupMenu->CheckItem( nId, sal_True );
@@ -222,7 +228,17 @@ void FooterMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 {
                     // Insert special item for all command
                     pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, String( FwkResId( STR_MENU_HEADFOOTALL )), 0, 0 );
-                    pVCLPopupMenu->SetItemCommand( 1, aCmd );
+
+                    rtl::OUStringBuffer aStrBuf( aCmd );
+                    aStrBuf.appendAscii( "&On:bool=" );
+
+                    // Command depends on check state of first menu item entry
+                    if ( !bFirstChecked )
+                        aStrBuf.appendAscii( "true" );
+                    else
+                        aStrBuf.appendAscii( "false" );
+
+                    pVCLPopupMenu->SetItemCommand( 1, aStrBuf.makeStringAndClear() );
                     pVCLPopupMenu->InsertSeparator( 1 );
                 }
             }
@@ -241,6 +257,7 @@ void SAL_CALL FooterMenuController::disposing( const EventObject& ) throw ( Runt
     ResetableGuard aLock( m_aLock );
     m_xFrame.clear();
     m_xDispatch.clear();
+    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -295,23 +312,6 @@ void SAL_CALL FooterMenuController::select( const css::awt::MenuEvent& rEvent ) 
                 aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
             }
 
-            sal_Bool bChecked( sal_False );
-            if ( rEvent.MenuId == ALL_MENUITEM_ID )
-                bChecked = pPopupMenu->isItemChecked( ALL_MENUITEM_ID+1 );
-            else
-                bChecked = pPopupMenu->isItemChecked( rEvent.MenuId );
-
-            if ( aTargetURL.Complete.indexOf( '?' ) > 0 )
-                aTargetURL.Complete += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&On:bool=" ));
-            else
-                aTargetURL.Complete += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?On:bool=" ));
-            aTargetURL.Complete += ( !bChecked ) ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" )) :
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ));
-
-/*
-            aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" ));
-            aArgs[0].Value <<= sal_Bool( !bChecked );
-*/
             xURLTransformer->parseStrict( aTargetURL );
             xDispatch->dispatch( aTargetURL, aArgs );
         }
@@ -330,6 +330,9 @@ void SAL_CALL FooterMenuController::deactivate( const css::awt::MenuEvent& ) thr
 void SAL_CALL FooterMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
 
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
@@ -356,6 +359,10 @@ void SAL_CALL FooterMenuController::setPopupMenu( const Reference< css::awt::XPo
 void SAL_CALL FooterMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
     Reference< com::sun::star::frame::XModel > xModel( m_xModel );
     aLock.unlock();
 
@@ -370,36 +377,7 @@ void SAL_CALL FooterMenuController::updatePopupMenu() throw (::com::sun::star::u
 // XInitialization
 void SAL_CALL FooterMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
-    ResetableGuard aLock( m_aLock );
-
-    sal_Bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
-    {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
-
-        for ( int i = 0; i < aArguments.getLength(); i++ )
-        {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-            m_bInitialized = sal_True;
-        }
-    }
+    PopupMenuControllerBase::initialize( aArguments );
 }
 
 }
