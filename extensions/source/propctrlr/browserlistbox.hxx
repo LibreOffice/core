@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:52:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,9 @@ namespace pcr
 //............................................................................
 
     class IPropertyLineListener;
+    class IPropertyControlObserver;
     struct OLineDescriptor;
+    class InspectorHelpWindow;
     class PropertyControlContext_Impl;
 
     //========================================================================
@@ -114,7 +116,7 @@ namespace pcr
     {
     public:
         virtual void SAL_CALL focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual void SAL_CALL controlValueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual void SAL_CALL valueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException) = 0;
         virtual void SAL_CALL activateNextControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& CurrentControl ) throw (::com::sun::star::uno::RuntimeException) = 0;
     };
 
@@ -127,12 +129,16 @@ namespace pcr
                             ,public PcrClient
     {
     protected:
-        Window                      m_aPlayGround;
+        Window                      m_aLinesPlayground;
         ScrollBar                   m_aVScroll;
+        ::std::auto_ptr< InspectorHelpWindow >
+                                    m_pHelpWindow;
         ListBoxLines                m_aLines;
         OrderedListBoxLines         m_aOrderedLines;
         IPropertyLineListener*      m_pLineListener;
+        IPropertyControlObserver*   m_pControlObserver;
         long                        m_nYOffset;
+        long                        m_nCurrentPreferredHelpHeight;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
                                     m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
@@ -166,7 +172,13 @@ namespace pcr
         void                        DisableUpdate();
         long                        Notify( NotifyEvent& _rNEvt );
 
-        void                        setListener(IPropertyLineListener* _pPLL);
+        void                        SetListener( IPropertyLineListener* _pListener );
+        void                        SetObserver( IPropertyControlObserver* _pObserver );
+
+        void                        EnableHelpSection( bool _bEnable );
+        bool                        HasHelpSection() const;
+        void                        SetHelpText( const ::rtl::OUString& _rHelpText );
+        void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
         void                        Clear();
 
@@ -183,8 +195,8 @@ namespace pcr
         void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
         sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
-        // #95343# --------------------------
         sal_Int32                   GetMinimumWidth();
+        sal_Int32                   GetMinimumHeight();
 
 
         sal_Bool    IsModified( ) const;
@@ -193,7 +205,7 @@ namespace pcr
     protected:
         // IControlContext
         virtual void SAL_CALL focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL controlValueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL valueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL activateNextControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& CurrentControl ) throw (::com::sun::star::uno::RuntimeException);
 
         // IButtonClickListener
@@ -244,6 +256,11 @@ namespace pcr
                 found.
         */
         bool        impl_getBrowserLineForName( const ::rtl::OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const;
+
+        /** returns the preferred height (in pixels) of the help section, or 0 if we
+            currently don't have a help section
+        */
+        long        impl_getPrefererredHelpHeight();
 
     private:
         using Window::Activate;
