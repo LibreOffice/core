@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:21:21 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _CONNECTIVITY_DBASE_CATALOG_HXX_
 #include "dbase/DCatalog.hxx"
-#endif
-#ifndef _CONNECTIVITY_RESOURCE_HRC_
-#include "Resource.hrc"
 #endif
 #ifndef _CONNECTIVITY_DBASE_ODRIVER_HXX_
 #include "dbase/DDriver.hxx"
