@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:53:57 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,23 +43,18 @@
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
 #endif
-
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
 #endif
-
 #ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/xinterface.hxx>
 #endif
-
 #ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
 #include <macros/xtypeprovider.hxx>
 #endif
-
 #ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
 #include <macros/xserviceinfo.hxx>
 #endif
-
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
 #endif
@@ -71,33 +66,35 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
 #include <com/sun/star/frame/XPopupMenuController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCE_HPP_
+#include <com/sun/star/uri/XUriReference.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -118,13 +115,17 @@
 
 namespace framework
 {
-    class PopupMenuControllerBase :  public com::sun::star::lang::XTypeProvider                 ,
-                                     public com::sun::star::lang::XServiceInfo                  ,
+    class PopupMenuControllerBase :  public com::sun::star::lang::XTypeProvider           ,
+                                     public com::sun::star::lang::XServiceInfo            ,
                                      public ::com::sun::star::frame::XPopupMenuController ,
-                                     public com::sun::star::lang::XInitialization               ,
-                                     public com::sun::star::frame::XStatusListener              ,
-                                     public com::sun::star::awt::XMenuListener                  ,
-                                     protected ThreadHelpBase                                   ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                     public com::sun::star::lang::XInitialization         ,
+                                     public com::sun::star::frame::XStatusListener        ,
+                                     public com::sun::star::awt::XMenuListener            ,
+                                     public com::sun::star::frame::XDispatchProvider      ,
+                                     public com::sun::star::frame::XDispatch              ,
+                                     public com::sun::star::lang::XComponent              ,
+                                     protected ThreadHelpBase                             , // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                     public ::cppu::OBroadcastHelper                      ,
                                      public ::cppu::OWeakObject
     {
         public:
@@ -156,18 +157,36 @@ namespace framework
             virtual void SAL_CALL activate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
+            // XDispatchProvider
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTarget, sal_Int32 nFlags ) throw( ::com::sun::star::uno::RuntimeException );
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException );
+
+            // XDispatch
+            virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& seqProperties ) throw( ::com::sun::star::uno::RuntimeException );
+            virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException );
+            virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException );
+
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
+            // XComponent
+            virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
         protected:
             virtual void resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            ::rtl::OUString determineBaseURL( const ::rtl::OUString& aURL );
 
-            sal_Bool                                                                            m_bInitialized;
-            rtl::OUString                                                                       m_aCommandURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >              m_xDispatch;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >               m_xPopupMenu;
+            bool                                                                             m_bInitialized;
+            bool                                                                             m_bDisposed;
+            rtl::OUString                                                                    m_aCommandURL;
+            rtl::OUString                                                                    m_aBaseURL;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >           m_xDispatch;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >            m_xPopupMenu;
+            ::cppu::OMultiTypeInterfaceContainerHelper                                       m_aListenerContainer; // container for ALL Listener
     };
 }
 
