@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:31:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,6 +271,20 @@ namespace vclcanvas
         const Size  aOutDevSize( rBackOutDev.GetOutputSizePixel() );
         const Point aEmptyPoint(0,0);
 
+        Window* pTargetWindow = NULL;
+        if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
+        {
+            pTargetWindow = &static_cast<Window&>(rOutDev); // TODO(Q3): Evil downcast.
+
+            // we're double-buffered, thus no need for paint area-limiting
+            // clips. besides that, will interfere with animations (as for
+            // Window-invalidate repaints, only parts of the window will
+            // be redrawn otherwise)
+            const Region aFullWindowRegion( Rectangle(aEmptyPoint,
+                                                      aOutDevSize) );
+            pTargetWindow->ExpandPaintClipRegion(aFullWindowRegion);
+        }
+
         // TODO(P1): Might be worthwile to track areas of background
         // changes, too.
         if( !bUpdateAll && !io_bSurfaceDirty )
@@ -345,10 +359,10 @@ namespace vclcanvas
         // render requests (calling code might rely on timing,
         // i.e. assume that things are visible on screen after
         // updateScreen() returns).
-        if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
+        if( pTargetWindow )
         {
-            // TODO(Q3): Evil downcast.
-            static_cast<Window&>(rOutDev).Sync();
+            // commit to screen
+            pTargetWindow->Sync();
         }
 
         return sal_True;
