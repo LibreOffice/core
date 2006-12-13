@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impltools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:31:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,10 +101,23 @@ namespace vclcanvas
                 uno::Reference< lang::XUnoTunnel > xTunnel( xBitmap, uno::UNO_QUERY );
                 if( xTunnel.is() )
                 {
-                    sal_Int64 nPtr = xTunnel->getSomething( vcl::unotools::getTunnelIdentifier( vcl::unotools::Id_BitmapEx ) );
+                    sal_Int64 nPtr = xTunnel->getSomething(
+                        vcl::unotools::getTunnelIdentifier(
+                            vcl::unotools::Id_BitmapEx ) );
+
                     if( nPtr )
                         return BitmapEx( *reinterpret_cast<BitmapEx*>(sal::static_int_cast<sal_uIntPtr>(nPtr)) );
                 }
+
+                SpriteCanvas* pCanvasImpl = dynamic_cast< SpriteCanvas* >( xBitmap.get() );
+                if( pCanvasImpl && pCanvasImpl->getBackBuffer() )
+                {
+                    const ::VirtualDevice& rVDev( pCanvasImpl->getBackBuffer()->getVirDev() );
+                    const ::Point aEmptyPoint;
+                    return rVDev.GetBitmapEx( aEmptyPoint,
+                                              rVDev.GetOutputSizePixel() );
+                }
+
                 // TODO(F1): extract pixel from XBitmap interface
                 ENSURE_AND_THROW( false,
                                   "bitmapExFromXBitmap(): could not extract bitmap" );
