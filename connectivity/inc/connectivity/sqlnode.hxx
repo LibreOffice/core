@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:16:48 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,17 +35,16 @@
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #define _CONNECTIVITY_SQLNODE_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
+#include "connectivity/dbmetadata.hxx"
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
 #include <vector>
 #include <functional>
@@ -59,10 +58,6 @@ namespace com
     {
         namespace star
         {
-            namespace sdbc
-            {
-                class XDatabaseMetaData;
-            }
             namespace beans
             {
                 class XPropertySet;
@@ -100,8 +95,7 @@ namespace connectivity
     struct SQLParseNodeParameter
     {
         const ::com::sun::star::lang::Locale&   rLocale;
-        const ::rtl::OUString                   aIdentifierQuote;
-        const ::rtl::OUString                   aCatalogSeparator;
+        ::dbtools::DatabaseMetaData             aMetaData;
         OSQLParser*                             pParser;
         ::boost::shared_ptr< QueryNameSet >     pSubQueryHistory;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    xFormatter;
@@ -113,11 +107,9 @@ namespace connectivity
         bool                bInternational              : 1;    /// should we internationalize keywords and placeholders?
         bool                bPredicate                  : 1;    /// are we going to parse a mere predicate?
         bool                bParseToSDBCLevel           : 1;    /// should we create an SDBC-level statement (e.g. with substituted sub queries)?
-        bool                bCaseSensistiveIdentCompare : 1;    /// should identifiers be compared case-sensitively?
 
         SQLParseNodeParameter(
-            const ::rtl::OUString& _rIdentifierQuote,
-            const ::rtl::OUString& _rCatalogSep,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xField,
             const ::com::sun::star::lang::Locale& _rLocale,
@@ -126,8 +118,7 @@ namespace connectivity
             bool _bQuote,
             sal_Char _cDecSep,
             bool _bPredicate,
-            bool _bParseToSDBC,
-            bool _bCaseSensistiveIdentCompare
+            bool _bParseToSDBC
         );
         ~SQLParseNodeParameter();
     };
@@ -331,21 +322,21 @@ namespace connectivity
             ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const;
 
         void parseNodeToStr(::rtl::OUString& rString,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const IParseContext* pContext = NULL,
                             sal_Bool _bIntl = sal_False,
                             sal_Bool _bQuote= sal_True) const;
 
         // quoted und internationalisert
         void parseNodeToPredicateStr(::rtl::OUString& rString,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                      const ::com::sun::star::lang::Locale& rIntl,
                                      sal_Char _cDec,
                                      const IParseContext* pContext = NULL ) const;
 
         void parseNodeToPredicateStr(::rtl::OUString& rString,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                                      const ::com::sun::star::lang::Locale& rIntl,
@@ -425,7 +416,7 @@ namespace connectivity
     protected:
         // ParseNodeToStr konkateniert alle Token (Blaetter) des ParseNodes
         void parseNodeToStr(::rtl::OUString& rString,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                             const ::com::sun::star::lang::Locale& rIntl,
