@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributableshape.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:48:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,13 @@
 #ifndef _SLIDESHOW_ATTRIBUTABLESHAPE_HXX
 #define _SLIDESHOW_ATTRIBUTABLESHAPE_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include <animatableshape.hxx>
 #include <shapeattributelayer.hxx>
 #include <doctreenodesupplier.hxx>
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
