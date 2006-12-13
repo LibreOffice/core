@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:46:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:50:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,9 @@
 #ifndef INCLUDED_SLIDESHOW_ACTIVITIESFACTORY_HXX
 #define INCLUDED_SLIDESHOW_ACTIVITIESFACTORY_HXX
 
-#include "com/sun/star/animations/XAnimate.hpp"
-#include "com/sun/star/animations/XAnimateColor.hpp"
+#include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/animations/XAnimateColor.hpp>
+
 #include "animationactivity.hxx"
 #include "activitiesqueue.hxx"
 #include "event.hxx"
@@ -51,12 +52,13 @@
 #include "stringanimation.hxx"
 #include "boolanimation.hxx"
 #include "pairanimation.hxx"
-#include "boost/optional.hpp"
-#include "boost/utility.hpp" // for boost::noncopyable
+
+#include <boost/optional.hpp>
+#include <boost/utility.hpp>
 
 /* Definition of ActivitiesFactory class */
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class ActivitiesFactory : private ::boost::noncopyable
