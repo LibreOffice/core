@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationpathmotionnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:32:17 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:30:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #include "animationbasenode.hxx"
 #include "com/sun/star/animations/XAnimateMotion.hpp"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class AnimationPathMotionNode : public AnimationBaseNode
@@ -68,6 +68,6 @@ private:
 };
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
 #endif /* INCLUDED_SLIDESHOW_ANIMATIONPATHMOTIONNODE_HXX */
