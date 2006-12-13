@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidebitmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:28:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,10 @@
 #include <canvas/debug.hxx>
 #include <slidebitmap.hxx>
 
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP_
 #include <com/sun/star/rendering/XBitmap.hpp>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
 
 #include <canvas/canvastools.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -57,7 +51,7 @@
 
 using namespace ::com::sun::star;
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -67,7 +61,7 @@ namespace presentation
             maClipPoly(),
             mxBitmap()
         {
-            if( rBitmap.get() )
+            if( rBitmap )
                 mxBitmap = rBitmap->getUNOBitmap();
 
             ENSURE_AND_THROW( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
@@ -75,7 +69,7 @@ namespace presentation
 
         bool SlideBitmap::draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const
         {
-            ENSURE_AND_RETURN( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
+            ENSURE_AND_RETURN( rCanvas && rCanvas->getUNOCanvas().is(),
                                "SlideBitmap::draw(): Invalid canvas" );
 
             // selectively only copy the transformation from current viewstate,
