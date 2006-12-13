@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:02:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:13:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,18 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA2_HPP_
+#include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
+#endif
 /** === end UNO includes === **/
 
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
+#include <comphelper/namedvaluecollection.hxx>
+
+#include <boost/optional.hpp>
 
 //........................................................................
 namespace dbtools
@@ -72,6 +79,7 @@ namespace dbtools
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XDatabaseMetaData;
+    using ::com::sun::star::sdbc::XDatabaseMetaData2;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
@@ -80,6 +88,8 @@ namespace dbtools
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
+    using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::uno::UNO_QUERY;
     /** === end UNO using === **/
 
     //====================================================================
@@ -89,11 +99,15 @@ namespace dbtools
     {
         Reference< XConnection >        xConnection;
         Reference< XDatabaseMetaData >  xConnectionMetaData;
+
+        ::boost::optional< ::rtl::OUString >    sCachedIdentifierQuoteString;
+        ::boost::optional< ::rtl::OUString >    sCachedCatalogSeparator;
     };
 
     //--------------------------------------------------------------------
     namespace
     {
+        //................................................................
         static void lcl_construct( DatabaseMetaData_Impl& _metaDataImpl, const Reference< XConnection >& _connection )
         {
             _metaDataImpl.xConnection = _connection;
@@ -105,38 +119,60 @@ namespace dbtools
                 throw IllegalArgumentException();
         }
 
-        static void lcl_checkConnected( DatabaseMetaData_Impl& _metaDataImpl )
+        //................................................................
+        static void lcl_checkConnected( const DatabaseMetaData_Impl& _metaDataImpl )
         {
-            if ( !_metaDataImpl.xConnection.is() )
+            if ( !_metaDataImpl.xConnection.is() || !_metaDataImpl.xConnectionMetaData.is() )
                 throwSQLException( "not connected", SQL_CONNECTION_DOES_NOT_EXIST, NULL );
         }
 
-        static bool lcl_getDataSourceSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        //................................................................
+        static bool lcl_getConnectionSettings( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             try
             {
-                Reference< XChild > connectionAsChild( _metaData.xConnection, UNO_QUERY_THROW );
-                Reference< XPropertySet > dataSource( connectionAsChild->getParent(), UNO_QUERY_THROW );
-
-                Sequence< PropertyValue > dataSourceSettings;
-                OSL_VERIFY( dataSource->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Info" ) ) ) >>= dataSourceSettings );
-
-                const PropertyValue* setting( dataSourceSettings.getConstArray() );
-                const PropertyValue* settingEnd( setting + dataSourceSettings.getLength() );
-                for ( ; setting != settingEnd; ++setting )
+                Reference< XChild > xConnectionAsChild( _metaData.xConnection, UNO_QUERY );
+                if ( xConnectionAsChild.is() )
                 {
-                    if ( setting->Name.equalsAscii( _asciiName ) )
-                    {
-                        _out_setting = setting->Value;
-                        return true;
-                    }
+                    Reference< XPropertySet > xDataSource( xConnectionAsChild->getParent(), UNO_QUERY_THROW );
+                    Reference< XPropertySet > xDataSourceSettings(
+                        xDataSource->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings" ) ) ),
+                        UNO_QUERY_THROW );
+
+                    _out_setting = xDataSourceSettings->getPropertyValue( ::rtl::OUString::createFromAscii( _asciiName ) );
                 }
+                else
+                {
+                    Reference< XDatabaseMetaData2 > xExtendedMetaData( _metaData.xConnectionMetaData, UNO_QUERY_THROW );
+                    ::comphelper::NamedValueCollection aSettings( xExtendedMetaData->getConnectionInfo() );
+                    _out_setting = aSettings.get( _asciiName );
+                    return _out_setting.hasValue();
+                }
+                return true;
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
             return false;
+        }
+
+        //................................................................
+        static const ::rtl::OUString& lcl_getConnectionStringSetting(
+            const DatabaseMetaData_Impl& _metaData, ::boost::optional< ::rtl::OUString >& _cachedSetting,
+            ::rtl::OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
+        {
+            lcl_checkConnected( _metaData );
+
+            if ( !_cachedSetting )
+            {
+                try
+                {
+                    _cachedSetting.reset( (_metaData.xConnectionMetaData.get()->*_getter)() );
+                }
+                catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+            }
+            return *_cachedSetting;
         }
     }
 
@@ -204,13 +240,37 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
+    const ::rtl::OUString&  SAL_CALL DatabaseMetaData::getIdentifierQuoteString() const
+    {
+        return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedIdentifierQuoteString, &XDatabaseMetaData::getIdentifierQuoteString );
+    }
+
+    //--------------------------------------------------------------------
+    const ::rtl::OUString&  SAL_CALL DatabaseMetaData::getCatalogSeparator() const
+    {
+        return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedCatalogSeparator, &XDatabaseMetaData::getCatalogSeparator );
+    }
+
+    //--------------------------------------------------------------------
     bool SAL_CALL DatabaseMetaData::restrictIdentifiersToSQL92() const
     {
+        lcl_checkConnected( *m_pImpl );
+
         bool restrict( false );
         Any setting;
-        if ( lcl_getDataSourceSetting( "EnableSQL92Check", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSettings( "EnableSQL92Check", *m_pImpl, setting ) )
             OSL_VERIFY( setting >>= restrict );
         return restrict;
+    }
+
+    //--------------------------------------------------------------------
+    bool SAL_CALL DatabaseMetaData::generateASBeforeCorrelationName() const
+    {
+        bool doGenerate( true );
+        Any setting;
+        if ( lcl_getConnectionSettings( "GenerateASBeforeCorrelationName", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= doGenerate );
+        return doGenerate;
     }
 
 //........................................................................
