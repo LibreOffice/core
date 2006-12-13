@@ -14,6 +14,7 @@
         <type>com.sun.star.beans.NamedValue</type>
         <type>com.sun.star.beans.PropertyValue</type>
         <type>com.sun.star.container.XNameReplace</type>
+        <type>com.sun.star.deployment.UpdateInformationProvider</type>
         <type>com.sun.star.frame.DispatchResultEvent</type>
         <type>com.sun.star.frame.DispatchResultState</type>
         <type>com.sun.star.frame.XFrame</type>
@@ -31,18 +32,13 @@
         <type>com.sun.star.system.XSystemShellExecute</type>
         <type>com.sun.star.task.XInteractionHandler</type>
         <type>com.sun.star.task.XJob</type>
-        <type>com.sun.star.ucb.PostCommandArgument2</type>
-        <type>com.sun.star.ucb.XCommandEnvironment</type>
-        <type>com.sun.star.ucb.XCommandProcessor2</type>
-        <type>com.sun.star.ucb.XContentIdentifierFactory</type>
-        <type>com.sun.star.ucb.XContentProvider</type>
-        <type>com.sun.star.ucb.XProgressHandler</type>
         <type>com.sun.star.uno.TypeClass</type>
         <type>com.sun.star.uno.XAggregation</type>
         <type>com.sun.star.uno.XComponentContext</type>
         <type>com.sun.star.uno.XCurrentContext</type>
         <type>com.sun.star.uno.XWeak</type>
         <type>com.sun.star.util.XChangesBatch</type>
+        <type>com.sun.star.xml.xpath.XXPathAPI</type>
     </component-description>
     <project-build-dependency>cppuhelper</project-build-dependency>
     <project-build-dependency>cppu</project-build-dependency>
