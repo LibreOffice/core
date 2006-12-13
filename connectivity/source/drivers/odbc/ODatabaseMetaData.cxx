@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:05:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
+    setConnectionInfo( _pCon->getConnectionInfo() );
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaData::~ODatabaseMetaData()
