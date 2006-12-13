@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:34:59 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,34 +36,42 @@
 #if ! defined(REHEARSETIMINGSACTIVITY_HXX_INCLUDED)
 #define REHEARSETIMINGSACTIVITY_HXX_INCLUDED
 
+#include <canvas/elapsedtime.hxx>
+#include <cppcanvas/customsprite.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/vector/b2isize.hxx>
+#include <vcl/font.hxx>
+
 #include "activity.hxx"
 #include "wakeupevent.hxx"
-#include "canvas/elapsedtime.hxx"
-#include "cppcanvas/customsprite.hxx"
-#include "basegfx/range/b2drectangle.hxx"
-#include "vcl/font.hxx"
-#include "boost/shared_ptr.hpp"
-#include "boost/bind.hpp"
-#include "boost/utility.hpp" // for noncopyable
+
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/bind.hpp>
+#include <boost/utility.hpp>
 #include <vector>
 #include <algorithm>
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class EventQueue;
 class ActivitiesQueue;
 class EventMultiplexer;
 
-class RehearseTimingsActivity : public Activity, private ::boost::noncopyable
+class RehearseTimingsActivity : public Activity,
+                                public ViewEventHandler,
+                                public boost::enable_shared_from_this<RehearseTimingsActivity>,
+                                private ::boost::noncopyable
 {
 public:
     /** Creates the activity.
      */
     static boost::shared_ptr<RehearseTimingsActivity> create(
-        EventQueue & rEventQueue,
-        EventMultiplexer & rEventMultiplexer,
-        ActivitiesQueue & rActivitiesQueue );
+        EventQueue&             rEventQueue,
+        EventMultiplexer&       rEventMultiplexer,
+        ActivitiesQueue&        rActivitiesQueue,
+        const UnoViewContainer& rViewContainer );
 
     /** Starts and shows the timer; adds to activity queue.
      */
@@ -78,13 +86,10 @@ public:
      */
     bool hasBeenClicked() const;
 
-    /** Adds a view for timer display.
-     */
-    void addView( UnoViewSharedPtr const & rView );
-
-    void removeView( UnoViewSharedPtr const & rView );
-
-    void notifyViewChange();
+    // ViewEventHandler interface
+    virtual void viewAdded( const UnoViewSharedPtr& rView );
+    virtual void viewRemoved( const UnoViewSharedPtr& rView );
+    virtual void viewChanged( const UnoViewSharedPtr& rView );
 
     // Disposable:
     virtual void dispose();
@@ -97,10 +102,10 @@ public:
     virtual void end();
 
 private:
-    RehearseTimingsActivity(
-        EventQueue & rEventQueue,
-        EventMultiplexer & rEventMultiplexer,
-        ActivitiesQueue & rActivitiesQueue );
+    RehearseTimingsActivity( EventQueue&             rEventQueue,
+                             EventMultiplexer&       rEventMultiplexer,
+                             ActivitiesQueue&        rActivitiesQueue,
+                             const UnoViewContainer& rViewContainer );
 
     void paint( ::cppcanvas::CanvasSharedPtr const & canvas ) const;
     void paintAllSprites() const;
@@ -108,16 +113,9 @@ private:
     class MouseHandler;
     friend class MouseHandler;
 
-    EventQueue & m_rEventQueue;
-    EventMultiplexer & m_rEventMultiplexer;
-    ActivitiesQueue & m_rActivitiesQueue;
-    boost::shared_ptr<RehearseTimingsActivity> m_this;
-    canvas::tools::ElapsedTime m_elapsedTime;
-
     typedef ::std::vector<
         ::std::pair<UnoViewSharedPtr,
                     cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
-    ViewsVecT m_views;
 
     template <typename func_type>
     void for_each_sprite( func_type const & func ) const
@@ -128,17 +126,26 @@ private:
             func( iPos->second );
     }
 
-    ::basegfx::B2DRectangle m_spriteRectangle;
     ::basegfx::B2DRectangle calcSpriteRectangle(
         UnoViewSharedPtr const & rView ) const;
 
-    Font m_font;
-    WakeupEventSharedPtr m_wakeUpEvent;
+    EventQueue&                     m_rEventQueue;
+    EventMultiplexer&               m_rEventMultiplexer;
+    ActivitiesQueue&                m_rActivitiesQueue;
+    canvas::tools::ElapsedTime      m_elapsedTime;
+
+    ViewsVecT                       m_views;
+
+    /// screen rect of sprite (in view coordinates!)
+    ::basegfx::B2DRectangle         m_spriteRectangle;
+
+    Font                            m_font;
+    WakeupEventSharedPtr            m_wakeUpEvent;
     boost::shared_ptr<MouseHandler> m_mouseHandler;
-    long m_nYOffset;
-    Size m_spriteSizePixel;
-    bool m_bActive;
-    bool m_drawPressed;
+    ::basegfx::B2ISize              m_spriteSizePixel;
+    sal_Int32                       m_nYOffset;
+    bool                            m_bActive;
+    bool                            m_drawPressed;
 };
 
 } // namespace internal
