@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDatabaseMetaDataBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:59:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
 using namespace comphelper;
 using namespace connectivity;
 
@@ -69,6 +70,13 @@ ODatabaseMetaDataBase::ODatabaseMetaDataBase(const Reference< XConnection >& _rx
 ODatabaseMetaDataBase::~ODatabaseMetaDataBase()
 {
 }
+
+// -----------------------------------------------------------------------------
+Sequence< PropertyValue > SAL_CALL ODatabaseMetaDataBase::getConnectionInfo(  ) throw (RuntimeException)
+{
+    return m_aConnectionInfo;
+}
+
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataBase::disposing( const EventObject& /*Source*/ ) throw(RuntimeException)
 {
