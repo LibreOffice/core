@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spiralwipe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:02:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:46:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "canvas/debug.hxx"
+#include <canvas/debug.hxx>
 #include "spiralwipe.hxx"
 #include "transitiontools.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/numeric/ftools.hxx"
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
@@ -74,7 +75,7 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
     if (! ::basegfx::fTools::equalZero( 1.0 - t )) {
         const sal_Int32 edge1 = (edge + 1);
         sal_Int32 len = static_cast<sal_Int32>( (e - (edge /2)) * edge1 * 4 );
-        double w = F_PI2;
+        double w = M_PI_2;
         while (len > 0) {
             const sal_Int32 alen = (len > edge1 ? edge1 : len);
             len -= alen;
@@ -89,7 +90,7 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
                 ::basegfx::pruneScaleValue(
                     static_cast<double>(edge / 2) / m_sqrtElements ) );
             aTransform.rotate( w );
-            w -= F_PI2;
+            w -= M_PI_2;
             aTransform.translate( 0.5, 0.5 );
             poly.transform( aTransform );
             res.append(poly);
