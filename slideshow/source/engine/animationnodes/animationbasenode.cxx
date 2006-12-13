@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:27:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,9 @@
 #include <vector>
 #include <algorithm>
 
-namespace css = com::sun::star;
-using namespace css;
+using namespace com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 AnimationBaseNode::AnimationBaseNode(
@@ -95,7 +94,7 @@ AnimationBaseNode::AnimationBaseNode(
     //
     //  - ParagraphTarget target at the XAnimationNode
     //  (generate an independent shape subset)
-    if( rContext.mpMasterShapeSubset.get() )
+    if( rContext.mpMasterShapeSubset )
     {
         if( rContext.mpMasterShapeSubset->isFullSet() )
         {
@@ -121,7 +120,7 @@ AnimationBaseNode::AnimationBaseNode(
         else
         {
             // no shape provided. Maybe a ParagraphTarget?
-            css::presentation::ParagraphTarget aTarget;
+            presentation::ParagraphTarget aTarget;
 
             if( !(mxAnimateNode->getTarget() >>= aTarget) )
                 ENSURE_AND_THROW(
@@ -139,9 +138,9 @@ AnimationBaseNode::AnimationBaseNode(
             // is set to ONLY_TEXT.
             OSL_ENSURE(
                 mxAnimateNode->getSubItem() ==
-                css::presentation::ShapeAnimationSubType::ONLY_TEXT ||
+                presentation::ShapeAnimationSubType::ONLY_TEXT ||
                 mxAnimateNode->getSubItem() ==
-                css::presentation::ShapeAnimationSubType::AS_WHOLE,
+                presentation::ShapeAnimationSubType::AS_WHOLE,
                 "ParagraphTarget given, but subitem not AS_TEXT or AS_WHOLE? "
                 "Make up your mind, I'll ignore the subitem." );
 
@@ -485,5 +484,5 @@ AttributableShapeSharedPtr AnimationBaseNode::getShape() const
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
