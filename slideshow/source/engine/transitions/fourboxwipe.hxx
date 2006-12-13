@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fourboxwipe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:53:55 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /// Generate a 4-box wipe
