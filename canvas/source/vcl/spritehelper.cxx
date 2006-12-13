@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:33:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,8 +352,7 @@ namespace vclcanvas
                             // or using alpha blending - cannot use
                             // XOR, thus, employing the still somewhat
                             // speedier triangle clip method
-                            const ::basegfx::B2DPolyPolygon aPreparedClip(::basegfx::tools::addPointsAtCutsAndTouches(aClipPoly));
-                            ::basegfx::B2DPolygon aTriangulatedClip(::basegfx::triangulator::triangulate(aPreparedClip));
+                            ::basegfx::B2DPolygon aTriangulatedClip(::basegfx::triangulator::triangulate(aClipPoly));
 
                             // restrict the clipping area to the visible portion of the output device.
                             Size aSize(rTargetSurface.GetOutputSizePixel());
@@ -402,7 +401,7 @@ namespace vclcanvas
                 if( mbShowSpriteBounds )
                 {
                     ::PolyPolygon aMarkerPoly(
-                        ::canvas::tools::getBoundMarkPolyPolygon(
+                        ::canvas::tools::getBoundMarksPolyPolygon(
                             ::basegfx::B2DRectangle(aOutPos.X(),
                                                     aOutPos.Y(),
                                                     aOutPos.X() + aOutputSize.Width()-1,
