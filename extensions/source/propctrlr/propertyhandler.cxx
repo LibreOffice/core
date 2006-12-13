@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyhandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:22:23 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ namespace pcr
         {
             aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(
                 _rxControlFactory, m_pInfoService->getPropertyEnumRepresentations( nPropId ),
-                PropertyHandlerHelper::requiresReadOnlyControl( rProperty.Attributes ) );
+                PropertyHandlerHelper::requiresReadOnlyControl( rProperty.Attributes ), sal_False );
         }
         else
             PropertyHandlerHelper::describePropertyLine( rProperty, aDescriptor, _rxControlFactory );
