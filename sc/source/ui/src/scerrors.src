@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:22:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,12 @@ Resource RID_ERRHDLSC
     {
         Text [ de ] = "Zelle $(ARG1) enth√§lt Zeichen, die im ausgew√§hlten Zielzeichensatz \"$(ARG2)\" nicht darstellbar sind." ;
         Text [ en-US ] = "Cell $(ARG1) contains characters that are not representable in the selected target character set \"$(ARG2)\"." ;
+        Text [ x-comment ] = " ";
+    };
+    String SCERR_EXPORT_FIELDWIDTH & ERRCODE_RES_MASK
+    {
+        Text [ de ] = "Zelle $(ARG1) enth‰lt eine Zeichenkette, die im ausgew‰hlten Zielzeichensatz \"$(ARG2)\" l‰nger ist als die angegebene Feldbreite." ;
+        Text [ en-US ] = "Cell $(ARG1) contains a string that is longer in the selected target character set \"$(ARG2)\" than the given field width." ;
         Text [ x-comment ] = " ";
     };
      //------------------------------------------------------------
