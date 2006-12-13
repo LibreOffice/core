@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:04:30 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,11 +985,8 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
     {
         ::rtl::OUString aPreparedText;
         ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
-        xParseNode->parseNodeToPredicateStr(aPreparedText,
-                                   xConnection->getMetaData(),
-                                   xFormatter,
-                                   xField,aAppLocale,'.',
-                                   getParseContext());
+        xParseNode->parseNodeToPredicateStr(
+            aPreparedText, xConnection, xFormatter, xField, aAppLocale, '.', getParseContext() );
         rText = aPreparedText;
         return sal_True;
     }
