@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsizemenucontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:19:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,12 +240,15 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             nSizeCount++;
 
         USHORT nPos = 0;
+        const rtl::OUString aFontHeightCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight?FontHeight.Height:float=" ));
 
         // first insert font size names (for simplified/traditional chinese)
         float           fPoint;
         rtl::OUString   aHeightString;
         FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguage() );
         m_pHeightArray = new long[nSizeCount+aFontSizeNames.Count()];
+        rtl::OUString   aCommand;
+
         if ( !aFontSizeNames.IsEmpty() )
         {
             if ( pAry == pFontList->GetStdSizeAry() )
@@ -260,7 +263,10 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                     nPos++; // Id is nPos+1
                     pVCLPopupMenu->InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
                     fPoint = float( m_pHeightArray[nPos-1] ) / 10;
-                    pVCLPopupMenu->SetItemCommand( nPos, rtl::OUString::valueOf( fPoint )); // Store font height into command
+
+                    // Create dispatchable .uno command and set it
+                    aCommand = aFontHeightCommand + rtl::OUString::valueOf( fPoint );
+                    pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                 }
             }
             else
@@ -276,7 +282,10 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                         nPos++; // Id is nPos+1
                         pVCLPopupMenu->InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
                         fPoint = float( m_pHeightArray[nPos-1] ) / 10;
-                        pVCLPopupMenu->SetItemCommand( nPos, rtl::OUString::valueOf( fPoint )); // Store font height into command
+
+                        // Create dispatchable .uno command and set it
+                        aCommand = aFontHeightCommand + rtl::OUString::valueOf( fPoint );
+                        pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                     }
                     pTempAry++;
                 }
@@ -292,7 +301,11 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             nPos++; // Id is nPos+1
             pVCLPopupMenu->InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, TRUE, FALSE ), MIB_RADIOCHECK | MIB_AUTOCHECK );
             fPoint = float( m_pHeightArray[nPos-1] ) / 10;
-            pVCLPopupMenu->SetItemCommand( nPos, rtl::OUString::valueOf( fPoint )); // Store font height into command
+
+            // Create dispatchable .uno command and set it
+            aCommand = aFontHeightCommand + rtl::OUString::valueOf( fPoint );
+            pVCLPopupMenu->SetItemCommand( nPos, aCommand );
+
             pTempAry++;
         }
 
@@ -379,8 +392,7 @@ void SAL_CALL FontSizeMenuController::select( const css::awt::MenuEvent& rEvent 
             {
                 vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
                 PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-                aTargetURL.Complete = aFontHeightCommand;
-                aTargetURL.Complete += pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
+                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
             }
 
             xURLTransformer->parseStrict( aTargetURL );
@@ -401,6 +413,9 @@ void SAL_CALL FontSizeMenuController::deactivate( const css::awt::MenuEvent& ) t
 void SAL_CALL FontSizeMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
 
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
@@ -434,6 +449,10 @@ void SAL_CALL FontSizeMenuController::setPopupMenu( const Reference< css::awt::X
 void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
     Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
@@ -455,37 +474,7 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
 // XInitialization
 void SAL_CALL FontSizeMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
-    ResetableGuard aLock( m_aLock );
-
-    sal_Bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
-    {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
-
-        for ( int i = 0; i < aArguments.getLength(); i++ )
-        {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-
-            m_bInitialized = sal_True;
-        }
-    }
+    PopupMenuControllerBase::initialize( aArguments );
 }
 
 }
