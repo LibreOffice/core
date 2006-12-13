@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:43:38 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
+#ifndef __FRAMEWORK_STDTYPES_H_
+#include <stdtypes.h>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -61,6 +64,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
@@ -138,6 +144,13 @@
 
 namespace framework
 {
+
+struct PopupControllerEntry
+{
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
+};
+
+typedef std::hash_map< rtl::OUString, PopupControllerEntry, OUStringHashCode, ::std::equal_to< rtl::OUString > > PopupControllerCache;
 
 class BmkMenu;
 class AddonMenu;
@@ -221,6 +234,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         static void FillMenu( USHORT& nId, Menu* pMenu, const ::rtl::OUString& rModuleIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
         void FillMenuManager( Menu* pMenu, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren );
         void SetItemContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
+        void GetPopupController( PopupControllerCache& rPopupController );
 
     protected:
         DECL_LINK( Highlight, Menu * );
