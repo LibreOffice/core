@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:37:14 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:17:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _CONNECTIVITY_FLAT_CATALOG_HXX_
 #include "flat/ECatalog.hxx"
-#endif
-#ifndef _CONNECTIVITY_RESOURCE_HRC_
-#include "Resource.hrc"
 #endif
 #ifndef _CONNECTIVITY_FLAT_ODRIVER_HXX_
 #include "flat/EDriver.hxx"
