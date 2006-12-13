@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combtransition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:38:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:39:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
+#include <canvas/debug.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "combtransition.hxx"
-#include "canvas/debug.hxx"
-#include "basegfx/polygon/b2dpolygontools.hxx"
-#include "basegfx/polygon/b2dpolypolygontools.hxx"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 namespace {
@@ -87,11 +87,14 @@ basegfx::B2DPolyPolygon createClipPolygon(
 
 CombTransition::CombTransition(
     boost::optional<SlideSharedPtr> const & leavingSlide,
-    const SlideSharedPtr& pEnteringSlide,
-    const SoundPlayerSharedPtr& pSoundPlayer,
-    const ::basegfx::B2DVector& rPushDirection,
-    sal_Int32                   nNumStripes )
+    const SlideSharedPtr&                   pEnteringSlide,
+    const SoundPlayerSharedPtr&             pSoundPlayer,
+    const UnoViewContainer&                 rViewContainer,
+    EventMultiplexer&                       rEventMultiplexer,
+    const ::basegfx::B2DVector&             rPushDirection,
+    sal_Int32                               nNumStripes )
     : SlideChangeBase( leavingSlide, pEnteringSlide, pSoundPlayer,
+                       rViewContainer, rEventMultiplexer,
                        false /* no leaving sprite */,
                        false /* no entering sprite */ ),
       maPushDirectionUnit( rPushDirection ),
@@ -99,10 +102,14 @@ CombTransition::CombTransition(
 {
 }
 
-void CombTransition::renderComb(
-    double t, UnoViewSharedPtr const & pView ) const
+void CombTransition::renderComb( double           t,
+                                 const ViewEntry& rViewEntry ) const
 {
-    const cppcanvas::CanvasSharedPtr pCanvas_ = pView->getCanvas();
+    const SlideBitmapSharedPtr& pEnteringBitmap = getEnteringBitmap(rViewEntry);
+    const cppcanvas::CanvasSharedPtr pCanvas_ = rViewEntry.mpView->getCanvas();
+
+    if( !pEnteringBitmap || !pCanvas_ )
+        return;
 
     // calc bitmap offsets. The enter/leaving bitmaps are only
     // as large as the actual slides. For scaled-down
@@ -111,9 +118,6 @@ void CombTransition::renderComb(
     // given view transform. The aBitmapPosPixel local
     // variable is already in device coordinate space
     // (i.e. pixel).
-
-    ENSURE_AND_THROW( pCanvas_.get(),
-                      "CombTransition::renderComb(): Invalid canvas" );
 
     // TODO(F2): Properly respect clip here. Might have to be transformed, too.
     const basegfx::B2DHomMatrix viewTransform( pCanvas_->getTransformation() );
@@ -129,7 +133,7 @@ void CombTransition::renderComb(
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
 
     const basegfx::B2DSize enteringSizePixel(
-        getEnteringSizePixel(pView) );
+        getEnteringSizePixel(rViewEntry.mpView) );
 
     const basegfx::B2DVector aPushDirection = basegfx::B2DVector(
         enteringSizePixel * maPushDirectionUnit );
@@ -142,8 +146,9 @@ void CombTransition::renderComb(
                            enteringSizePixel,
                            mnNumStripes, 1 ) );
 
-    SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap();
-    if (pLeavingBitmap.get() != 0) {
+    SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap(rViewEntry);
+    if( pLeavingBitmap )
+    {
         // render odd strips:
         pLeavingBitmap->clip( aClipPolygon1 );
         // don't modify bitmap object (no move!):
@@ -166,7 +171,6 @@ void CombTransition::renderComb(
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
 
     // render odd strips:
-    SlideBitmapSharedPtr const & pEnteringBitmap = getEnteringBitmap();
     pEnteringBitmap->clip( aClipPolygon1 );
     // don't modify bitmap object (no move!):
     transform.identity();
@@ -187,10 +191,12 @@ void CombTransition::renderComb(
 
 bool CombTransition::operator()( double t )
 {
-    SlideBitmapSharedPtr const & pSlideBitmap = getEnteringBitmap();
-    if (pSlideBitmap.get() == 0)
-        return false;
-    for_each_view( boost::bind( &CombTransition::renderComb, this, t, _1 ) );
+    std::for_each( beginViews(),
+                   endViews(),
+                   boost::bind( &CombTransition::renderComb,
+                                this,
+                                t,
+                                _1 ));
     return true;
 }
 
