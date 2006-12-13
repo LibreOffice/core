@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper_text.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:19:05 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
 #include "cairo_spritecanvas.hxx"
