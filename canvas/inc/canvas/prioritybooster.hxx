@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prioritybooster.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:05:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _CANVAS_PRIORITYBOOSTER_HXX
-#define _CANVAS_PRIORITYBOOSTER_HXX
+#ifndef INCLUDED_CANVAS_PRIORITYBOOSTER_HXX
+#define INCLUDED_CANVAS_PRIORITYBOOSTER_HXX
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -71,5 +71,5 @@ namespace canvas
     }
 }
 
-#endif /* _CANVAS_PRIORITYBOOSTER_HXX */
+#endif /* INCLUDED_CANVAS_PRIORITYBOOSTER_HXX */
 // eof
