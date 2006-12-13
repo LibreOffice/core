@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:25:39 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,6 @@
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #define _BGFX_NUMERIC_FTOOLS_HXX
 
-#ifndef  _USE_MATH_DEFINES
-#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
-#endif
-#include <math.h>           // M_PI definition
-
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
@@ -55,10 +50,10 @@
 #define F_PI        M_PI
 #endif
 #ifndef F_PI2
-#define F_PI2       (M_PI/2.0)
+#define F_PI2       M_PI_2
 #endif
 #ifndef F_PI4
-#define F_PI4       (M_PI/4.0)
+#define F_PI4       M_PI_4
 #endif
 #ifndef F_PI180
 #define F_PI180     (M_PI/180.0)
@@ -114,6 +109,25 @@ namespace basegfx
             (::std::min(fVal,-0.00001)) :
             (::std::max(fVal,0.00001));
     }
+
+    /** Convert value from degrees to radians
+     */
+    inline double deg2rad( double v )
+    {
+        // divide first, to get exact values for v being a multiple of
+        // 90 degrees
+        return v / 90.0 * M_PI_2;
+    }
+
+    /** Convert value radians to degrees
+     */
+    inline double rad2deg( double v )
+    {
+        // divide first, to get exact values for v being a multiple of
+        // pi/2
+        return v / M_PI_2 * 90.0;
+    }
+
 
     class fTools
     {
