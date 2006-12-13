@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:00:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,10 +314,11 @@ namespace accessibility
         if( nIndex == nTextLen )
         {
             // #i17014# Special-casing one-behind-the-end character
-            rBoundary.startPos = 0;
-            while( nLineCount > 1 )
-                rBoundary.startPos += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ),
-                                                          nLineCount-2 );
+            if( nLineCount <= 1 )
+                rBoundary.startPos = 0;
+            else
+                rBoundary.startPos = nTextLen - rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ),
+                                                                     nLineCount-1 );
 
             rBoundary.endPos = nTextLen;
         }
