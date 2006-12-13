@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectinspectormodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:20:00 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 12:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,12 +102,18 @@ namespace pcr
     private:
         ComponentContext        m_aContext;
         Sequence< Any >         m_aFactories;
+        bool                    m_bHasHelpSection;
+        sal_Int32               m_nMinHelpTextLines;
+        sal_Int32               m_nMaxHelpTextLines;
 
     public:
         ObjectInspectorModel( const Reference< XComponentContext >& _rxContext );
 
         // XObjectInspectorModel
         virtual Sequence< Any > SAL_CALL getHandlerFactories() throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL getHasHelpSection() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (::com::sun::star::uno::RuntimeException);
         virtual Sequence< PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) throw (RuntimeException);
         virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const ::rtl::OUString& PropertyName ) throw (RuntimeException);
 
@@ -128,6 +134,12 @@ namespace pcr
     protected:
         void    createDefault();
         void    createWithHandlerFactories( const Sequence< Any >& _rFactories );
+        void    createWithHandlerFactoriesAndHelpSection( const Sequence< Any >& _rFactories, sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );
+
+    private:
+        /** checks a given condition to be <TRUE/>, and throws an IllegalArgumentException if not
+        */
+        void    impl_verifyArgument_throw( bool _bCondition, sal_Int16 _nArgumentPosition );
     };
 
     //====================================================================
@@ -135,6 +147,9 @@ namespace pcr
     //====================================================================
     ObjectInspectorModel::ObjectInspectorModel( const Reference< XComponentContext >& _rxContext )
         :m_aContext( _rxContext )
+        ,m_bHasHelpSection( false )
+        ,m_nMinHelpTextLines( 3 )
+        ,m_nMaxHelpTextLines( 8 )
     {
     }
 
@@ -145,6 +160,24 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL ObjectInspectorModel::getHasHelpSection() throw (RuntimeException)
+    {
+        return m_bHasHelpSection;
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL ObjectInspectorModel::getMinHelpTextLines() throw (RuntimeException)
+    {
+        return m_nMinHelpTextLines;
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL ObjectInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
+    {
+        return m_nMaxHelpTextLines;
+    }
+
+    //--------------------------------------------------------------------
     Sequence< PropertyCategoryDescriptor > SAL_CALL ObjectInspectorModel::describeCategories(  ) throw (RuntimeException)
     {
         // no category info provided by this default implementation
@@ -152,7 +185,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL ObjectInspectorModel::getPropertyOrderIndex( const ::rtl::OUString& PropertyName ) throw (RuntimeException)
+    ::sal_Int32 SAL_CALL ObjectInspectorModel::getPropertyOrderIndex( const ::rtl::OUString& /*PropertyName*/ ) throw (RuntimeException)
     {
         // no ordering provided by this default implementation
         return 0;
@@ -172,13 +205,24 @@ namespace pcr
         }
 
         Sequence< Any > factories;
-        if ( ( arguments.size() == 1 ) && ( arguments[0] >>= factories ) )
-        {   // constructor: "createWithHandlerFactories(any[])"
+        impl_verifyArgument_throw( arguments[0] >>= factories, 1 );
+
+        if ( arguments.size() == 1 )
+        {   // constructor: "createWithHandlerFactories( any[] )"
             createWithHandlerFactories( factories );
             return;
         }
 
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
+        if ( arguments.size() == 3 )
+        {   // constructor: "createWithHandlerFactoriesAndHelpSection( any[], long, long )"
+            impl_verifyArgument_throw( arguments[1] >>= nMinHelpTextLines, 2 );
+            impl_verifyArgument_throw( arguments[2] >>= nMaxHelpTextLines, 3 );
+            createWithHandlerFactoriesAndHelpSection( factories, nMinHelpTextLines, nMaxHelpTextLines );
+            return;
+        }
+
+        impl_verifyArgument_throw( false, 2 );
     }
 
     //--------------------------------------------------------------------
@@ -236,10 +280,29 @@ namespace pcr
     //--------------------------------------------------------------------
     void ObjectInspectorModel::createWithHandlerFactories( const Sequence< Any >& _rFactories )
     {
-        if ( _rFactories.getLength() == 0 )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+        impl_verifyArgument_throw( _rFactories.getLength() > 0, 1 );
+        m_aFactories = _rFactories;
+    }
+
+    //--------------------------------------------------------------------
+    void ObjectInspectorModel::createWithHandlerFactoriesAndHelpSection( const Sequence< Any >& _rFactories, sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
+    {
+        impl_verifyArgument_throw( _rFactories.getLength() > 0, 1 );
+        impl_verifyArgument_throw( _nMinHelpTextLines >= 1, 2 );
+        impl_verifyArgument_throw( _nMaxHelpTextLines >= 1, 3 );
+        impl_verifyArgument_throw( _nMinHelpTextLines <= _nMaxHelpTextLines, 2 );
 
         m_aFactories = _rFactories;
+        m_bHasHelpSection = true;
+        m_nMinHelpTextLines = _nMinHelpTextLines;
+        m_nMaxHelpTextLines = _nMaxHelpTextLines;
+    }
+
+    //--------------------------------------------------------------------
+    void ObjectInspectorModel::impl_verifyArgument_throw( bool _bCondition, sal_Int16 _nArgumentPosition )
+    {
+        if ( !_bCondition )
+            throw IllegalArgumentException( ::rtl::OUString(), *this, _nArgumentPosition );
     }
 
 //........................................................................
