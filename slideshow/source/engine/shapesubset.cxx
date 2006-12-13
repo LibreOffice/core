@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapesubset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:28:12 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,16 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
-#include <shapesubset.hxx>
+
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+
+#include "shapesubset.hxx"
 
 
-namespace presentation
+using namespace ::com::sun::star;
+
+namespace slideshow
 {
     namespace internal
     {
@@ -52,20 +58,20 @@ namespace presentation
             maTreeNode( rTreeNode ),
             mpLayerManager( rLayerManager )
         {
-            ENSURE_AND_THROW( mpLayerManager.get(),
+            ENSURE_AND_THROW( mpLayerManager,
                               "ShapeSubset::ShapeSubset(): Invalid layer manager" );
         }
 
         ShapeSubset::ShapeSubset( const ShapeSubsetSharedPtr&   rOriginalSubset,
                                   const DocTreeNode&            rTreeNode ) :
-            mpOriginalShape( rOriginalSubset->mpSubsetShape.get() ?
+            mpOriginalShape( rOriginalSubset->mpSubsetShape ?
                              rOriginalSubset->mpSubsetShape :
                              rOriginalSubset->mpOriginalShape ),
             mpSubsetShape(),
             maTreeNode( rTreeNode ),
             mpLayerManager( rOriginalSubset->mpLayerManager )
         {
-            ENSURE_AND_THROW( mpLayerManager.get(),
+            ENSURE_AND_THROW( mpLayerManager,
                               "ShapeSubset::ShapeSubset(): Invalid layer manager" );
             ENSURE_AND_THROW( rOriginalSubset->maTreeNode.isEmpty() ||
                               (rTreeNode.getStartIndex() >= rOriginalSubset->maTreeNode.getStartIndex() &&
@@ -80,24 +86,33 @@ namespace presentation
             maTreeNode(),
             mpLayerManager( rLayerManager )
         {
-            ENSURE_AND_THROW( mpLayerManager.get(),
+            ENSURE_AND_THROW( mpLayerManager,
                               "ShapeSubset::ShapeSubset(): Invalid layer manager" );
         }
 
         ShapeSubset::~ShapeSubset()
         {
-            // if not done yet: revoke subset from original
-            disableSubsetShape();
+            try
+            {
+                // if not done yet: revoke subset from original
+                disableSubsetShape();
+            }
+            catch (uno::Exception &) {
+                OSL_ENSURE( false, rtl::OUStringToOString(
+                                comphelper::anyToString(
+                                    cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+            }
         }
 
         AttributableShapeSharedPtr ShapeSubset::getSubsetShape() const
         {
-            return mpSubsetShape.get() ? mpSubsetShape : mpOriginalShape;
+            return mpSubsetShape ? mpSubsetShape : mpOriginalShape;
         }
 
         bool ShapeSubset::enableSubsetShape()
         {
-            if( !mpSubsetShape.get() &&
+            if( !mpSubsetShape &&
                 !maTreeNode.isEmpty() )
             {
                 mpSubsetShape = mpLayerManager->getSubsetShape(
@@ -105,12 +120,12 @@ namespace presentation
                     maTreeNode );
             }
 
-            return mpSubsetShape.get();
+            return mpSubsetShape;
         }
 
         void ShapeSubset::disableSubsetShape()
         {
-            if( mpSubsetShape.get() )
+            if( mpSubsetShape )
             {
                 mpLayerManager->revokeSubset( mpOriginalShape,
                                               mpSubsetShape );
