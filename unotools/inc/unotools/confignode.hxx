@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confignode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:51:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,12 +32,12 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#define _UNOTOOLS_CONFIGNODE_HXX_
+
 #ifndef INCLUDED_UNOTOOLSDLLAPI_H
 #include "unotools/unotoolsdllapi.h"
 #endif
-
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#define _UNOTOOLS_CONFIGNODE_HXX_
 
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
