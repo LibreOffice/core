@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:13:40 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ namespace pcr
     void OPropertyBrowserView::activatePage(sal_uInt16 _nPage)
     {
         m_nActivePage = _nPage;
-        getPropertyBox()->SetPage(m_nActivePage);
+        getPropertyBox().SetPage(m_nActivePage);
     }
 
     //------------------------------------------------------------------------
@@ -131,9 +131,11 @@ namespace pcr
     ::com::sun::star::awt::Size OPropertyBrowserView::getMinimumSize()
     {
         Size aSize = GetOutputSizePixel();
-        aSize.setHeight( 250 );
         if( m_pPropBox )
+        {
+            aSize.setHeight( m_pPropBox->getMinimumHeight() );
             aSize.setWidth( m_pPropBox->getMinimumWidth() );
+        }
         return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
     }
 
