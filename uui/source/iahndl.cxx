@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:24:43 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,313 +32,84 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef UUI_IAHNDL_HXX
+
 #include "iahndl.hxx"
-#endif
 
-#ifndef UUI_COOKIEDG_HXX
-#include "cookiedg.hxx"
-#endif
-#ifndef UUI_IDS_HRC
-#include "ids.hrc"
-#endif
-#ifndef UUI_LOGINDLG_HXX
-#include "logindlg.hxx"
-#endif
-#ifndef UUI_MASTERPASSWORDDLG_HXX
-#include "masterpassworddlg.hxx"
-#endif
-#ifndef UUI_PASSCRTDLG_HXX
-#include "masterpasscrtdlg.hxx"
-#endif
-#ifndef UUI_PASSWORDDLG_HXX
-#include "passworddlg.hxx"
-#endif
-#ifndef UUI_PASSCRTDLG_HXX
-#include "passcrtdlg.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-#include "com/sun/star/awt/XWindow.hpp"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include "com/sun/star/beans/PropertyValue.hpp"
-#endif
-#ifndef _COM_SUN_STAR_JAVA_WRONGJAVAVERSIONEXCEPTION_HPP_
-#include "com/sun/star/java/WrongJavaVersionException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#endif
-#ifndef _COM_SUN_STAR_SYNC2_BADPARTNERSHIPEXCEPTION_HPP_
-#include "com/sun/star/sync2/BadPartnershipException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_INTERACTIONCLASSIFICATION_HPP_
-#include "com/sun/star/task/InteractionClassification.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_NOMASTEREXCEPTION_HPP_
-#include "com/sun/star/task/NoMasterException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUEST_HPP_
-#include "com/sun/star/task/PasswordRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_MASTERPASSWORDREQUEST_HPP_
-#include "com/sun/star/task/MasterPasswordRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_DOCUMENTPASSWORDREQUEST_HPP_
-#include "com/sun/star/task/DocumentPasswordRequest.hpp"
-#endif
-#include "com/sun/star/script/ModuleSizeExceededRequest.hpp"
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
-#include "com/sun/star/task/XInteractionApprove.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONCONTINUATION_HPP_
-#include "com/sun/star/task/XInteractionContinuation.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
-#include "com/sun/star/task/XInteractionDisapprove.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONRETRY_HPP_
-#include "com/sun/star/task/XInteractionRetry.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XPASSWORDCONTAINER_HPP_
-#include "com/sun/star/task/XPasswordContainer.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
-#include "com/sun/star/task/ErrorCodeRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_ERRORCODEIOEXCEPTION_HPP_
-#include "com/sun/star/task/ErrorCodeIOException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDNAMECLASHEXCEPTION_HPP_
-#include "com/sun/star/ucb/UnsupportedNameClashException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
-#include "com/sun/star/ucb/AuthenticationRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_HANDLECOOKIESREQUEST_HPP_
-#include "com/sun/star/ucb/HandleCookiesRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVECHAOSEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveCHAOSException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKCONNECTEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveNetworkConnectException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveNetworkException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKGENERALEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveNetworkGeneralException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKOFFLINEEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveNetworkOffLineException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKREADEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveNetworkReadException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKRESOLVENAMEEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKWRITEEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveNetworkWriteException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEWRONGMEDIUMEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveWrongMediumException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAPPEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveAppException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASHEXCEPTION_HPP_
-#include "com/sun/star/ucb/NameClashException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_XINTERACTIONCOOKIEHANDLING_HPP_
-#include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
-#include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
-#include "com/sun/star/document/XInteractionFilterSelect.hpp"
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTEROPTIONS_HPP_
-#include "com/sun/star/document/XInteractionFilterOptions.hpp"
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_BROKENPACKAGEREQUEST_HPP_
-#include "com/sun/star/document/BrokenPackageRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONPASSWORD_HPP_
-#include "com/sun/star/task/XInteractionPassword.hpp"
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_FILTEROPTIONSREQUEST_HPP_
-#include "com/sun/star/document/FilterOptionsRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include "com/sun/star/container/XNameContainer.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
-#include <com/sun/star/document/XImporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include "com/sun/star/uno/Any.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
-#include "com/sun/star/uno/Exception.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include "com/sun/star/uno/Reference.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UNO_RuntimeEXCEPTION_HPP_
-#include "com/sun/star/uno/RuntimeException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include "com/sun/star/uno/Sequence.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
-#include "com/sun/star/uno/XInterface.hpp"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
-#include "com/sun/star/container/XEnumeration.hpp"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
-#include "com/sun/star/container/XContainerQuery.hpp"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MERGERECOVERYREQUEST_HPP_
-#include <com/sun/star/configuration/backend/MergeRecoveryRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_STRATUMCREATIONEXCEPTION_HPP_
-#include <com/sun/star/configuration/backend/StratumCreationException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XFORMS_INVALIDDATAONSUBMITEXCEPTION_HPP_
-#include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include "osl/diagnose.h"
-#endif
-#ifndef _OSL_CONDITN_HXX_
-#include <osl/conditn.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include "osl/mutex.hxx"
-#endif
-#ifndef _RTL_DIGEST_H
-#include "rtl/digest.h"
-#endif
-#ifndef _RTL_STRING_H_
-#include "rtl/string.h"
-#endif
-#ifndef _RTL_STRING_HXX_
-#include "rtl/string.hxx"
-#endif
-#ifndef _RTL_TEXTENC_H
-#include "rtl/textenc.h"
-#endif
-#ifndef _RTL_USTRBUF_HXX_
-#include "rtl/ustrbuf.hxx"
-#endif
-#ifndef _RTL_USTRING_H_
-#include "rtl/ustring.h"
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include "rtl/ustring.hxx"
-#endif
-#ifndef _SAL_TYPES_H_
-#include "sal/types.h"
-#endif
-#ifndef SVTOOLS_HTTPCOOK_HXX
-#include "svtools/httpcook.hxx"
-#endif
-#ifndef _LOGINERR_HXX
-#include "svtools/loginerr.hxx"
-#endif
-#ifndef _SVTOOLS_HRC
-#include "svtools/svtools.hrc"
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include "toolkit/helper/vclunohelper.hxx"
-#endif
-#ifndef _LIST_HXX
-#include "tools/list.hxx"
-#endif
-#ifndef _TOOLS_RC_HXX
-#include "tools/rc.hxx"
-#endif
-#ifndef __RSC
-#include "tools/errinf.hxx"
-#endif
-#ifndef _TOOLS_RCID_H
-#include "tools/rcid.h"
-#endif
-#ifndef _TOOLS_RESID_HXX
-#include "tools/resid.hxx"
-#endif
-#ifndef _SOLAR_H
-#include "tools/solar.h"
-#endif
-#ifndef _LINK_HXX
-#include <tools/link.hxx>
-#endif
-#ifndef _STRING_HXX
-#include "tools/string.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include "vcl/msgbox.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
-#include "vcl/svapp.hxx"
-#endif
-#ifndef _SV_WINTYPES_HXX
-#include "vcl/wintypes.hxx"
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include "vos/mutex.hxx"
-#endif
-#ifndef _UNOTOOLS_CONFIGMGR_HXX
-#include <unotools/configmgr.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
-#include <comphelper/sequenceashashmap.hxx>
-#endif
-
-#ifndef INCLUDED_ALGORITHM
-#include <algorithm>
-#define INCLUDED_ALGORITHM
-#endif
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
-#ifndef INCLUDED_NEW
-#include <new>
-#define INCLUDED_NEW
-#endif
-#ifndef INCLUDED_VECTOR
-#include <vector>
-#define INCLUDED_VECTOR
-#endif
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-#include <stdio.h>
+#include "osl/diagnose.h"
+#include "osl/conditn.hxx"
+#include "rtl/digest.h"
+#include "rtl/ustrbuf.hxx"
+#include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/beans/XPropertyAccess.hpp"
+#include "com/sun/star/configuration/backend/MergeRecoveryRequest.hpp"
+#include "com/sun/star/configuration/backend/StratumCreationException.hpp"
+#include "com/sun/star/container/XContainerQuery.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/container/XNameContainer.hpp"
+#include "com/sun/star/document/BrokenPackageRequest.hpp"
+#include "com/sun/star/document/FilterOptionsRequest.hpp"
+#include "com/sun/star/document/NoSuchFilterRequest.hpp"
+#include "com/sun/star/document/AmbigousFilterRequest.hpp"
+#include "com/sun/star/document/XImporter.hpp"
+#include "com/sun/star/document/XInteractionFilterOptions.hpp"
+#include "com/sun/star/document/XInteractionFilterSelect.hpp"
+#include "com/sun/star/java/WrongJavaVersionException.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/script/ModuleSizeExceededRequest.hpp"
+#include "com/sun/star/sync2/BadPartnershipException.hpp"
+#include "com/sun/star/task/DocumentPasswordRequest.hpp"
+#include "com/sun/star/task/ErrorCodeIOException.hpp"
+#include "com/sun/star/task/ErrorCodeRequest.hpp"
+#include "com/sun/star/task/MasterPasswordRequest.hpp"
+#include "com/sun/star/task/NoMasterException.hpp"
+#include "com/sun/star/task/XInteractionAbort.hpp"
+#include "com/sun/star/task/XInteractionApprove.hpp"
+#include "com/sun/star/task/XInteractionDisapprove.hpp"
+#include "com/sun/star/task/XInteractionPassword.hpp"
+#include "com/sun/star/task/XInteractionRequest.hpp"
+#include "com/sun/star/task/XInteractionRetry.hpp"
+#include "com/sun/star/task/XPasswordContainer.hpp"
+#include "com/sun/star/ucb/AuthenticationRequest.hpp"
+#include "com/sun/star/ucb/HandleCookiesRequest.hpp"
+#include "com/sun/star/ucb/InteractiveAppException.hpp"
+#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
+#include "com/sun/star/ucb/InteractiveCHAOSException.hpp"
+#include "com/sun/star/ucb/InteractiveNetworkConnectException.hpp"
+#include "com/sun/star/ucb/InteractiveNetworkException.hpp"
+#include "com/sun/star/ucb/InteractiveNetworkGeneralException.hpp"
+#include "com/sun/star/ucb/InteractiveNetworkOffLineException.hpp"
+#include "com/sun/star/ucb/InteractiveNetworkReadException.hpp"
+#include "com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp"
+#include "com/sun/star/ucb/InteractiveNetworkWriteException.hpp"
+#include "com/sun/star/ucb/InteractiveWrongMediumException.hpp"
+#include "com/sun/star/ucb/IOErrorCode.hpp"
+#include "com/sun/star/ucb/NameClashException.hpp"
+#include "com/sun/star/ucb/UnsupportedNameClashException.hpp"
+#include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
+#include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
+
+#include "vos/mutex.hxx"
+#include "tools/rcid.h"
+#include "vcl/svapp.hxx"
+#include "svtools/svtools.hrc"
+#include "svtools/loginerr.hxx"
+#include "svtools/httpcook.hxx"
+#include "toolkit/helper/vclunohelper.hxx"
+#include "comphelper/sequenceashashmap.hxx"
+#include "unotools/configmgr.hxx"
+
+#include "ids.hrc"
+#include "cookiedg.hxx"
+#include "masterpasscrtdlg.hxx"
+#include "masterpassworddlg.hxx"
+#include "logindlg.hxx"
+#include "passcrtdlg.hxx"
+#include "passworddlg.hxx"
 
 using namespace com::sun;
 
@@ -384,8 +155,7 @@ bool ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
 void
 getContinuations(
     star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-        rContinuations,
+        star::task::XInteractionContinuation > > const & rContinuations,
     star::uno::Reference< star::task::XInteractionApprove > * pApprove,
     star::uno::Reference< star::task::XInteractionDisapprove > * pDisapprove,
     star::uno::Reference< star::task::XInteractionRetry > * pRetry,
@@ -438,8 +208,9 @@ getContinuations(
         }
         if (pPassword && !pPassword->is())
         {
-            *pPassword = star::uno::Reference< star::task::XInteractionPassword >(
-                          rContinuations[i], star::uno::UNO_QUERY);
+            *pPassword
+        = star::uno::Reference< star::task::XInteractionPassword >(
+            rContinuations[i], star::uno::UNO_QUERY);
             if (pPassword->is())
                 continue;
         }
@@ -448,7 +219,7 @@ getContinuations(
 
 bool
 getStringRequestArgument(star::uno::Sequence< star::uno::Any > const &
-                             rArguments,
+                 rArguments,
                          rtl::OUString const & rKey,
                          rtl::OUString * pValue)
     SAL_THROW(())
@@ -517,57 +288,60 @@ getResourceNameRequestArgument(star::uno::Sequence< star::uno::Any > const &
     return true;
 }
 
-}
-
-UUIInteractionHandler::UUIInteractionHandler(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
-        rServiceFactory)
-    SAL_THROW(()):
-    m_xServiceFactory(rServiceFactory)
-{}
-
-UUIInteractionHandler::~UUIInteractionHandler()
-{}
-
-rtl::OUString SAL_CALL UUIInteractionHandler::getImplementationName()
-    throw (star::uno::RuntimeException)
+bool isInformationalErrorMessageRequest(
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const &
+            rContinuations)
 {
-    return rtl::OUString::createFromAscii(m_aImplementationName);
-}
+    // Only requests with a single continuation (user has no choice, request
+    // is just informational)
+    if (rContinuations.getLength() != 1 )
+        return false;
 
-sal_Bool SAL_CALL
-UUIInteractionHandler::supportsService(rtl::OUString const & rServiceName)
-    throw (star::uno::RuntimeException)
-{
-    star::uno::Sequence< rtl::OUString >
-        aNames(getSupportedServiceNames_static());
-    for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
-        if (aNames[i] == rServiceName)
-            return true;
+    // user can only abort or approve, all other continuations are not
+    // considered to be informational.
+    star::uno::Reference< star::task::XInteractionApprove > xApprove(
+        rContinuations[0], star::uno::UNO_QUERY);
+    if (xApprove.is())
+        return true;
+
+    star::uno::Reference< star::task::XInteractionAbort > xAbort(
+        rContinuations[0], star::uno::UNO_QUERY);
+    if (xAbort.is())
+        return true;
+
     return false;
 }
 
-star::uno::Sequence< rtl::OUString > SAL_CALL
-UUIInteractionHandler::getSupportedServiceNames()
-    throw (star::uno::RuntimeException)
-{
-    return getSupportedServiceNames_static();
-}
+} /* namespace */
 
-void SAL_CALL
-UUIInteractionHandler::initialize(
+UUIInteractionHelper::UUIInteractionHelper(
+    star::uno::Reference< star::lang::XMultiServiceFactory > const &
+        rServiceFactory,
     star::uno::Sequence< star::uno::Any > const & rArguments)
-    throw (star::uno::Exception)
+    SAL_THROW(()):
+        m_xServiceFactory(rServiceFactory),
+        m_aProperties(rArguments)
 {
-    osl::MutexGuard aGuard(m_aPropertyMutex);
-    m_aProperties = rArguments;
 }
 
+UUIInteractionHelper::UUIInteractionHelper(
+    star::uno::Reference< star::lang::XMultiServiceFactory > const &
+        rServiceFactory)
+    SAL_THROW(()):
+        m_xServiceFactory(rServiceFactory)
+{
+}
+
+UUIInteractionHelper::~UUIInteractionHelper()
+{
+}
 
 class HandleData : public osl::Condition {
 public:
     HandleData(
-        star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
+        star::uno::Reference< star::task::XInteractionRequest > const &
+        rRequest)
         : osl::Condition(),
           m_rRequest(rRequest)
     {
@@ -576,19 +350,19 @@ public:
     star::uno::Reference< star::task::XInteractionRequest > m_rRequest;
 };
 
-
-long handlerequest(void* pHandleData,void* pInteractionHandler)
+long UUIInteractionHelper::handlerequest(
+    void* pHandleData,void* pInteractionHelper)
 {
     HandleData* pHND = (HandleData*) pHandleData;
-    UUIInteractionHandler* pUUI = (UUIInteractionHandler*) pInteractionHandler;
+    UUIInteractionHelper* pUUI = (UUIInteractionHelper*) pInteractionHelper;
     pUUI->handle_impl(pHND->m_rRequest);
     pHND->set();
     return 0;
 }
 
 
-void SAL_CALL
-UUIInteractionHandler::handle(
+void
+UUIInteractionHelper::handleRequest(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
     throw (star::uno::RuntimeException)
 {
@@ -613,8 +387,673 @@ UUIInteractionHandler::handle(
         handle_impl(rRequest);
 }
 
-void SAL_CALL
-UUIInteractionHandler::handle_impl(
+star::beans::Optional< rtl::OUString >
+UUIInteractionHelper::getStringFromRequest(
+    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
+    throw (star::uno::RuntimeException)
+{
+    bool bSuccess = false;
+    rtl::OUString aMessage;
+    handleMessageboxRequests(rRequest, true, bSuccess, aMessage);
+
+    if (!bSuccess)
+    handleErrorHandlerRequests(rRequest, true, bSuccess, aMessage);
+
+    return star::beans::Optional< rtl::OUString >(bSuccess, aMessage);
+}
+
+void UUIInteractionHelper::handleMessageboxRequests(
+    star::uno::Reference< star::task::XInteractionRequest > const & rRequest,
+    bool bObtainErrorStringOnly,
+    bool & bHasErrorString,
+    rtl::OUString & rErrorString)
+{
+    star::uno::Any aAnyRequest(rRequest->getRequest());
+
+    star::script::ModuleSizeExceededRequest aModSizeException;
+    if (aAnyRequest >>= aModSizeException )
+    {
+        ErrCode nErrorCode = ERRCODE_UUI_IO_MODULESIZEEXCEEDED;
+        std::vector< rtl::OUString > aArguments;
+        star::uno::Sequence< rtl::OUString > sModules
+            = aModSizeException.Names;
+        if ( sModules.getLength() )
+        {
+            rtl::OUString aName;
+            for ( sal_Int32 index=0; index< sModules.getLength(); ++index )
+            {
+                if ( index )
+                    aName = aName + rtl::OUString( ',' ) + sModules[index];
+                else
+                    aName = sModules[index]; // 1st name
+            }
+            aArguments.push_back( aName );
+        }
+        handleErrorRequest( star::task::InteractionClassification_WARNING,
+                            nErrorCode,
+                            aArguments,
+                            rRequest->getContinuations(),
+                            bObtainErrorStringOnly,
+                            bHasErrorString,
+                            rErrorString);
+        return;
+    }
+
+    star::ucb::NameClashException aNCException;
+    if (aAnyRequest >>= aNCException)
+    {
+        ErrCode nErrorCode = ERRCODE_UUI_IO_TARGETALREADYEXISTS;
+        std::vector< rtl::OUString > aArguments;
+
+        if( aNCException.Name.getLength() )
+        {
+            nErrorCode = ERRCODE_UUI_IO_ALREADYEXISTS;
+            aArguments.push_back( aNCException.Name );
+        }
+
+        handleErrorRequest( aNCException.Classification,
+                            nErrorCode,
+                            aArguments,
+                            rRequest->getContinuations(),
+                            bObtainErrorStringOnly,
+                            bHasErrorString,
+                            rErrorString);
+        return;
+    }
+
+    star::ucb::UnsupportedNameClashException aUORequest;
+    if (aAnyRequest >>= aUORequest)
+    {
+        ErrCode nErrorCode = ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE;
+        std::vector< rtl::OUString > aArguments;
+
+        star::uno::Reference< star::task::XInteractionApprove > xApprove;
+        star::uno::Reference<
+            star::task::XInteractionDisapprove > xDisapprove;
+        getContinuations(
+            rRequest->getContinuations(),
+            &xApprove, &xDisapprove, 0, 0, 0, 0);
+
+        if( xApprove.is() && xDisapprove.is() )
+        {
+        handleErrorRequest( star::task::InteractionClassification_QUERY,
+                            nErrorCode,
+                            aArguments,
+                            rRequest->getContinuations(),
+                            bObtainErrorStringOnly,
+                            bHasErrorString,
+                            rErrorString);
+        }
+        return;
+    }
+
+    star::document::BrokenPackageRequest aBrokenPackageRequest;
+    if (aAnyRequest >>= aBrokenPackageRequest)
+    {
+        std::vector< rtl::OUString > aArguments;
+
+        if( aBrokenPackageRequest.aName.getLength() )
+            aArguments.push_back( aBrokenPackageRequest.aName );
+
+        handleBrokenPackageRequest( aArguments,
+                                    rRequest->getContinuations(),
+                                    bObtainErrorStringOnly,
+                                    bHasErrorString,
+                                    rErrorString);
+        return;
+    }
+
+    star::ucb::InteractiveIOException aIoException;
+    if (aAnyRequest >>= aIoException)
+    {
+        star::uno::Sequence< star::uno::Any > aRequestArguments;
+        star::ucb::InteractiveAugmentedIOException aAugmentedIoException;
+        if (aAnyRequest >>= aAugmentedIoException)
+            aRequestArguments = aAugmentedIoException.Arguments;
+
+        ErrCode nErrorCode;
+        std::vector< rtl::OUString > aArguments;
+        static ErrCode const
+            aErrorCode[star::ucb::IOErrorCode_WRONG_VERSION + 1][2]
+            = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
+                { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
+                // ACCESS_DENIED
+                { ERRCODE_IO_ALREADYEXISTS,
+                  ERRCODE_UUI_IO_ALREADYEXISTS }, // ALREADY_EXISTING
+                { ERRCODE_IO_BADCRC, ERRCODE_UUI_IO_BADCRC }, // BAD_CRC
+                { ERRCODE_IO_CANTCREATE, ERRCODE_UUI_IO_CANTCREATE },
+                // CANT_CREATE
+                { ERRCODE_IO_CANTREAD, ERRCODE_UUI_IO_CANTREAD },
+                // CANT_READ
+                { ERRCODE_IO_CANTSEEK, ERRCODE_UUI_IO_CANTSEEK },
+                // CANT_SEEK
+                { ERRCODE_IO_CANTTELL, ERRCODE_UUI_IO_CANTTELL },
+                // CANT_TELL
+                { ERRCODE_IO_CANTWRITE, ERRCODE_UUI_IO_CANTWRITE },
+                // CANT_WRITE
+                { ERRCODE_IO_CURRENTDIR, ERRCODE_UUI_IO_CURRENTDIR },
+                // CURRENT_DIRECTORY
+                { ERRCODE_IO_DEVICENOTREADY, ERRCODE_UUI_IO_NOTREADY },
+                // DEVICE_NOT_READY
+                { ERRCODE_IO_NOTSAMEDEVICE,
+                  ERRCODE_UUI_IO_NOTSAMEDEVICE }, // DIFFERENT_DEVICES
+                { ERRCODE_IO_GENERAL, ERRCODE_UUI_IO_GENERAL }, // GENERAL
+                { ERRCODE_IO_INVALIDACCESS,
+                  ERRCODE_UUI_IO_INVALIDACCESS }, // INVALID_ACCESS
+                { ERRCODE_IO_INVALIDCHAR, ERRCODE_UUI_IO_INVALIDCHAR },
+                // INVALID_CHARACTER
+                { ERRCODE_IO_INVALIDDEVICE,
+                  ERRCODE_UUI_IO_INVALIDDEVICE }, // INVALID_DEVICE
+                { ERRCODE_IO_INVALIDLENGTH,
+                  ERRCODE_UUI_IO_INVALIDLENGTH }, // INVALID_LENGTH
+                { ERRCODE_IO_INVALIDPARAMETER,
+                  ERRCODE_UUI_IO_INVALIDPARAMETER }, // INVALID_PARAMETER
+                { ERRCODE_IO_ISWILDCARD, ERRCODE_UUI_IO_ISWILDCARD },
+                // IS_WILDCARD
+                { ERRCODE_IO_LOCKVIOLATION,
+                  ERRCODE_UUI_IO_LOCKVIOLATION }, // LOCKING_VIOLATION
+                { ERRCODE_IO_MISPLACEDCHAR,
+                  ERRCODE_UUI_IO_MISPLACEDCHAR }, // MISPLACED_CHARACTER
+                { ERRCODE_IO_NAMETOOLONG, ERRCODE_UUI_IO_NAMETOOLONG },
+                // NAME_TOO_LONG
+                { ERRCODE_IO_NOTEXISTS, ERRCODE_UUI_IO_NOTEXISTS },
+                // NOT_EXISTING
+                { ERRCODE_IO_NOTEXISTSPATH,
+                  ERRCODE_UUI_IO_NOTEXISTSPATH }, // NOT_EXISTING_PATH
+                { ERRCODE_IO_NOTSUPPORTED, ERRCODE_UUI_IO_NOTSUPPORTED },
+                // NOT_SUPPORTED
+                { ERRCODE_IO_NOTADIRECTORY,
+                  ERRCODE_UUI_IO_NOTADIRECTORY }, // NO_DIRECTORY
+                { ERRCODE_IO_NOTAFILE, ERRCODE_UUI_IO_NOTAFILE },
+                // NO_FILE
+                { ERRCODE_IO_OUTOFSPACE, ERRCODE_UUI_IO_OUTOFSPACE },
+                // OUT_OF_DISK_SPACE
+                { ERRCODE_IO_TOOMANYOPENFILES,
+                  ERRCODE_UUI_IO_TOOMANYOPENFILES },
+                // OUT_OF_FILE_HANDLES
+                { ERRCODE_IO_OUTOFMEMORY, ERRCODE_UUI_IO_OUTOFMEMORY },
+                // OUT_OF_MEMORY
+                { ERRCODE_IO_PENDING, ERRCODE_UUI_IO_PENDING }, // PENDING
+                { ERRCODE_IO_RECURSIVE, ERRCODE_UUI_IO_RECURSIVE },
+                // RECURSIVE
+                { ERRCODE_IO_UNKNOWN, ERRCODE_UUI_IO_UNKNOWN }, // UNKNOWN
+                { ERRCODE_IO_WRITEPROTECTED,
+                  ERRCODE_UUI_IO_WRITEPROTECTED }, // WRITE_PROTECTED
+                { ERRCODE_IO_WRONGFORMAT, ERRCODE_UUI_IO_WRONGFORMAT },
+                // WRONG_FORMAT
+                { ERRCODE_IO_WRONGVERSION,
+                  ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
+        switch (aIoException.Code)
+        {
+        case star::ucb::IOErrorCode_CANT_CREATE:
+            {
+                rtl::OUString aArgFolder;
+                if (getStringRequestArgument(
+                        aRequestArguments,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "Folder")),
+                        &aArgFolder))
+                {
+                    rtl::OUString aArgUri;
+                    if (getResourceNameRequestArgument(aRequestArguments,
+                                                       &aArgUri))
+                    {
+                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE;
+                        aArguments.reserve(2);
+                        aArguments.push_back(aArgUri);
+                        aArguments.push_back(aArgFolder);
+                    }
+                    else
+                    {
+                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE_NONAME;
+                        aArguments.push_back(aArgFolder);
+                    }
+                }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
+            }
+
+        case star::ucb::IOErrorCode_DEVICE_NOT_READY:
+            {
+                rtl::OUString aArgUri;
+                if (getResourceNameRequestArgument(aRequestArguments,
+                                                   &aArgUri))
+                {
+                    rtl::OUString aResourceType;
+                    getStringRequestArgument(
+                        aRequestArguments,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "ResourceType")),
+                        &aResourceType);
+                    bool bRemovable = false;
+                    getBoolRequestArgument(aRequestArguments,
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "Removable")),
+                                           &bRemovable);
+                    nErrorCode
+                        = aResourceType.equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM("volume"))
+                        ? (bRemovable
+                           ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
+                           : ERRCODE_UUI_IO_NOTREADY_VOLUME)
+                        : (bRemovable
+                           ? ERRCODE_UUI_IO_NOTREADY_REMOVABLE
+                           : ERRCODE_UUI_IO_NOTREADY);
+                    aArguments.push_back(aArgUri);
+                }
+                else
+            nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
+            }
+
+        case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
+            {
+                rtl::OUString aArgVolume;
+                rtl::OUString aArgOtherVolume;
+                if (getStringRequestArgument(
+                        aRequestArguments,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "Volume")),
+                        &aArgVolume)
+                    && getStringRequestArgument(
+                        aRequestArguments,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "OtherVolume")),
+                        &aArgOtherVolume))
+                {
+                    nErrorCode = aErrorCode[aIoException.Code][1];
+                    aArguments.reserve(2);
+                    aArguments.push_back(aArgVolume);
+                    aArguments.push_back(aArgOtherVolume);
+                }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
+        }
+
+        case star::ucb::IOErrorCode_NOT_EXISTING:
+            {
+                rtl::OUString aArgUri;
+                if (getResourceNameRequestArgument(aRequestArguments,
+                           &aArgUri))
+                {
+                    rtl::OUString aResourceType;
+                    getStringRequestArgument(
+                        aRequestArguments,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "ResourceType")),
+                        &aResourceType);
+                    nErrorCode
+                        = aResourceType.equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM("volume"))
+                        ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME
+                        : (aResourceType.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("folder"))
+                           ? ERRCODE_UUI_IO_NOTEXISTS_FOLDER
+                           : ERRCODE_UUI_IO_NOTEXISTS);
+                    aArguments.push_back(aArgUri);
+                }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
+            }
+
+        default:
+            {
+                rtl::OUString aArgUri;
+                if (getResourceNameRequestArgument(aRequestArguments,
+                                                   &aArgUri))
+                {
+                    nErrorCode = aErrorCode[aIoException.Code][1];
+                    aArguments.push_back(aArgUri);
+                }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
+            }
+        }
+
+        handleErrorRequest(aIoException.Classification,
+                           nErrorCode,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::ucb::InteractiveAppException aAppException;
+    if (aAnyRequest >>= aAppException)
+    {
+        std::vector< rtl::OUString > aArguments;
+        handleErrorRequest( aAppException.Classification,
+                            aAppException.Code,
+                            aArguments,
+                            rRequest->getContinuations(),
+                            bObtainErrorStringOnly,
+                            bHasErrorString,
+                            rErrorString);
+    }
+
+    star::ucb::InteractiveNetworkException aNetworkException;
+    if (aAnyRequest >>= aNetworkException)
+    {
+        ErrCode nErrorCode;
+        std::vector< rtl::OUString > aArguments;
+        star::ucb::InteractiveNetworkOffLineException aOffLineException;
+        star::ucb::InteractiveNetworkResolveNameException
+            aResolveNameException;
+        star::ucb::InteractiveNetworkConnectException aConnectException;
+        star::ucb::InteractiveNetworkReadException aReadException;
+        star::ucb::InteractiveNetworkWriteException aWriteException;
+        if (aAnyRequest >>= aOffLineException)
+            nErrorCode = ERRCODE_INET_OFFLINE;
+        else if (aAnyRequest >>= aResolveNameException)
+        {
+            nErrorCode = ERRCODE_INET_NAME_RESOLVE;
+            aArguments.push_back(aResolveNameException.Server);
+        }
+        else if (aAnyRequest >>= aConnectException)
+        {
+            nErrorCode = ERRCODE_INET_CONNECT;
+            aArguments.push_back(aConnectException.Server);
+        }
+        else if (aAnyRequest >>= aReadException)
+        {
+            nErrorCode = ERRCODE_INET_READ;
+            aArguments.push_back(aReadException.Diagnostic);
+        }
+        else if (aAnyRequest >>= aWriteException)
+        {
+            nErrorCode = ERRCODE_INET_WRITE;
+            aArguments.push_back(aWriteException.Diagnostic);
+        }
+        else
+            nErrorCode = ERRCODE_INET_GENERAL;
+
+        handleErrorRequest(aNetworkException.Classification,
+                           nErrorCode,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::ucb::InteractiveCHAOSException aChaosException;
+    if (aAnyRequest >>= aChaosException)
+    {
+        std::vector< rtl::OUString > aArguments;
+        sal_Int32 nCount
+            = std::min< sal_Int32 >(aChaosException.Arguments.getLength(),
+                                    2);
+        aArguments.
+            reserve(
+                static_cast< std::vector< rtl::OUString >::size_type >(
+                    nCount));
+        for (sal_Int32 i = 0; i < nCount; ++i)
+            aArguments.push_back(aChaosException.Arguments[i]);
+        handleErrorRequest(aChaosException.Classification,
+                           aChaosException.ID,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::ucb::InteractiveWrongMediumException aWrongMediumException;
+    if (aAnyRequest >>= aWrongMediumException)
+    {
+        sal_Int32 nMedium = 0;
+        aWrongMediumException.Medium >>= nMedium;
+        std::vector< rtl::OUString > aArguments;
+        aArguments.push_back(UniString::CreateFromInt32(nMedium + 1));
+        handleErrorRequest(aWrongMediumException.Classification,
+                           ERRCODE_UUI_WRONGMEDIUM,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::java::WrongJavaVersionException aWrongJavaVersionException;
+    if (aAnyRequest >>= aWrongJavaVersionException)
+    {
+        ErrCode nErrorCode;
+        std::vector< rtl::OUString > aArguments;
+        if (aWrongJavaVersionException.DetectedVersion.getLength() == 0)
+            if (aWrongJavaVersionException.LowestSupportedVersion.
+                getLength()
+                == 0)
+                nErrorCode = ERRCODE_UUI_WRONGJAVA;
+            else
+            {
+                nErrorCode = ERRCODE_UUI_WRONGJAVA_MIN;
+                aArguments.push_back(aWrongJavaVersionException.
+                                     LowestSupportedVersion);
+            }
+        else if (aWrongJavaVersionException.LowestSupportedVersion.
+                 getLength()
+                 == 0)
+        {
+            nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION;
+            aArguments.push_back(aWrongJavaVersionException.
+                                 DetectedVersion);
+        }
+        else
+        {
+            nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION_MIN;
+            aArguments.reserve(2);
+            aArguments.push_back(aWrongJavaVersionException.
+                                 DetectedVersion);
+            aArguments.push_back(aWrongJavaVersionException.
+                                 LowestSupportedVersion);
+        }
+        handleErrorRequest(star::task::InteractionClassification_ERROR,
+                           nErrorCode,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::sync2::BadPartnershipException aBadPartnershipException;
+    if (aAnyRequest >>= aBadPartnershipException)
+    {
+        ErrCode nErrorCode;
+        std::vector< rtl::OUString > aArguments;
+        if (aBadPartnershipException.Partnership.getLength() == 0)
+        nErrorCode = ERRCODE_UUI_BADPARTNERSHIP;
+        else
+        {
+            nErrorCode = ERRCODE_UUI_BADPARTNERSHIP_NAME;
+            aArguments.push_back(aBadPartnershipException.Partnership);
+        }
+        handleErrorRequest(star::task::InteractionClassification_ERROR,
+                           nErrorCode,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::configuration::backend::MergeRecoveryRequest aMergeRecoveryRequest;
+    if (aAnyRequest >>= aMergeRecoveryRequest)
+    {
+        ErrCode nErrorCode = aMergeRecoveryRequest.IsRemovalRequest
+            ? ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE
+            : ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE;
+
+        std::vector< rtl::OUString > aArguments;
+        aArguments.push_back(aMergeRecoveryRequest.ErrorLayerId);
+
+        handleErrorRequest(star::task::InteractionClassification_ERROR,
+                           nErrorCode,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::configuration::backend::StratumCreationException
+        aStratumCreationException;
+
+    if (aAnyRequest >>= aStratumCreationException)
+    {
+        const ErrCode nErrorCode = ERRCODE_UUI_CONFIGURATION_BACKENDMISSING;
+
+        rtl::OUString aStratum = aStratumCreationException.StratumData;
+        if (aStratum.getLength() == 0)
+            aStratum = aStratumCreationException.StratumService;
+
+        std::vector< rtl::OUString > aArguments;
+        aArguments.push_back(aStratum);
+
+        handleErrorRequest(star::task::InteractionClassification_ERROR,
+                           nErrorCode,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+        return;
+    }
+
+    star::xforms::InvalidDataOnSubmitException aInvalidDataOnSubmitException;
+    if (aAnyRequest >>= aInvalidDataOnSubmitException)
+    {
+        const ErrCode nErrorCode = ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA;
+
+        std::vector< rtl::OUString > aArguments;
+
+        handleErrorRequest(star::task::InteractionClassification_QUERY,
+                           nErrorCode,
+                           aArguments,
+                           rRequest->getContinuations(),
+                           bObtainErrorStringOnly,
+                           bHasErrorString,
+                           rErrorString);
+    }
+}
+
+void UUIInteractionHelper::handleDialogRequests(
+    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
+{
+    star::uno::Any aAnyRequest(rRequest->getRequest());
+
+    star::ucb::AuthenticationRequest aAuthenticationRequest;
+    if (aAnyRequest >>= aAuthenticationRequest)
+    {
+        handleAuthenticationRequest(aAuthenticationRequest,
+                                    rRequest->getContinuations());
+        return;
+    }
+
+    star::task::MasterPasswordRequest aMasterPasswordRequest;
+    if (aAnyRequest >>= aMasterPasswordRequest)
+    {
+        handleMasterPasswordRequest(aMasterPasswordRequest.Mode,
+                                    rRequest->getContinuations());
+        return;
+    }
+
+    star::task::DocumentPasswordRequest aDocumentPasswordRequest;
+    if (aAnyRequest >>= aDocumentPasswordRequest)
+    {
+        handlePasswordRequest(aDocumentPasswordRequest.Mode,
+                              rRequest->getContinuations(),
+                              aDocumentPasswordRequest.Name);
+        return;
+    }
+
+    star::task::PasswordRequest aPasswordRequest;
+    if (aAnyRequest >>= aPasswordRequest)
+    {
+        handlePasswordRequest(aPasswordRequest.Mode,
+                              rRequest->getContinuations());
+        return;
+    }
+
+    star::ucb::HandleCookiesRequest aCookiesRequest;
+    if (aAnyRequest >>= aCookiesRequest)
+    {
+        handleCookiesRequest(aCookiesRequest,
+                             rRequest->getContinuations());
+        return;
+    }
+
+    star::document::NoSuchFilterRequest aNoSuchFilterRequest;
+    if (aAnyRequest >>= aNoSuchFilterRequest)
+    {
+        handleNoSuchFilterRequest(aNoSuchFilterRequest,
+                                  rRequest->getContinuations());
+        return;
+    }
+
+    star::document::AmbigousFilterRequest aAmbigousFilterRequest;
+    if (aAnyRequest >>= aAmbigousFilterRequest)
+    {
+        handleAmbigousFilterRequest(aAmbigousFilterRequest,
+                                    rRequest->getContinuations());
+        return;
+    }
+
+    star::document::FilterOptionsRequest aFilterOptionsRequest;
+    if (aAnyRequest >>= aFilterOptionsRequest)
+    {
+        handleFilterOptionsRequest(aFilterOptionsRequest,
+                                   rRequest->getContinuations());
+        return;
+    }
+}
+
+void UUIInteractionHelper::handleErrorHandlerRequests(
+    star::uno::Reference< star::task::XInteractionRequest > const & rRequest,
+    bool bObtainErrorStringOnly,
+    bool & bHasErrorString,
+    rtl::OUString & rErrorString)
+{
+    star::uno::Any aAnyRequest(rRequest->getRequest());
+
+    star::task::ErrorCodeRequest aErrorCodeRequest;
+    if (aAnyRequest >>= aErrorCodeRequest)
+    {
+        handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
+                                   rRequest->getContinuations(),
+                   bObtainErrorStringOnly,
+                   bHasErrorString,
+                   rErrorString);
+        return;
+    }
+
+    star::task::ErrorCodeIOException aErrorCodeIOException;
+    if (aAnyRequest >>= aErrorCodeIOException)
+    {
+        handleGenericErrorRequest( aErrorCodeIOException.ErrCode,
+                                   rRequest->getContinuations(),
+                   bObtainErrorStringOnly,
+                   bHasErrorString,
+                   rErrorString);
+        return;
+    }
+}
+
+void
+UUIInteractionHelper::handle_impl(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
     throw (star::uno::RuntimeException)
 {
@@ -623,588 +1062,32 @@ UUIInteractionHandler::handle_impl(
         if (!rRequest.is())
             return;
 
-        star::uno::Any aAnyRequest(rRequest->getRequest());
+        ////////////////////////////////////////////////////////////
+        // Display Messagebox
+        ////////////////////////////////////////////////////////////
+        bool bDummy = false;
+        rtl::OUString aDummy;
+        handleMessageboxRequests(rRequest, false, bDummy, aDummy);
 
-        star::task::ErrorCodeRequest aErrorCodeRequest;
-        if (aAnyRequest >>= aErrorCodeRequest)
-        {
-            handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
-                                        rRequest->getContinuations());
-            return;
-        }
+        ////////////////////////////////////////////////////////////
+        // Use ErrorHandler::HandleError
+        ////////////////////////////////////////////////////////////
+        handleErrorHandlerRequests(rRequest, false, bDummy, aDummy);
 
-        star::task::ErrorCodeIOException aErrorCodeIOException;
-        if (aAnyRequest >>= aErrorCodeIOException )
-        {
-            handleGenericErrorRequest( aErrorCodeIOException.ErrCode,
-                                        rRequest->getContinuations());
-            return;
-        }
-
-        star::ucb::AuthenticationRequest aAuthenticationRequest;
-        if (aAnyRequest >>= aAuthenticationRequest)
-        {
-            handleAuthenticationRequest(aAuthenticationRequest,
-                                        rRequest->getContinuations());
-            return;
-        }
-
-        star::task::MasterPasswordRequest aMasterPasswordRequest;
-        if (aAnyRequest >>= aMasterPasswordRequest)
-        {
-            handleMasterPasswordRequest(aMasterPasswordRequest.Mode,
-                                  rRequest->getContinuations());
-            return;
-        }
-
-        star::task::DocumentPasswordRequest aDocumentPasswordRequest;
-        if (aAnyRequest >>= aDocumentPasswordRequest)
-        {
-            handlePasswordRequest(aDocumentPasswordRequest.Mode,
-                                  rRequest->getContinuations(),
-                                  aDocumentPasswordRequest.Name);
-            return;
-        }
-
-        star::task::PasswordRequest aPasswordRequest;
-        if (aAnyRequest >>= aPasswordRequest)
-        {
-            handlePasswordRequest(aPasswordRequest.Mode,
-                                  rRequest->getContinuations());
-            return;
-        }
-
-        star::ucb::HandleCookiesRequest aCookiesRequest;
-        if (aAnyRequest >>= aCookiesRequest)
-        {
-            handleCookiesRequest(aCookiesRequest,
-                                 rRequest->getContinuations());
-            return;
-        }
-
-        star::document::NoSuchFilterRequest aNoSuchFilterRequest;
-        if (aAnyRequest >>= aNoSuchFilterRequest)
-        {
-            handleNoSuchFilterRequest(aNoSuchFilterRequest,
-                                      rRequest->getContinuations());
-            return;
-        }
-
-        star::document::AmbigousFilterRequest aAmbigousFilterRequest;
-        if (aAnyRequest >>= aAmbigousFilterRequest)
-        {
-            handleAmbigousFilterRequest(aAmbigousFilterRequest,
-                                        rRequest->getContinuations());
-            return;
-        }
-
-        star::document::FilterOptionsRequest aFilterOptionsRequest;
-        if (aAnyRequest >>= aFilterOptionsRequest)
-        {
-            handleFilterOptionsRequest(aFilterOptionsRequest,
-                                       rRequest->getContinuations());
-            return;
-        }
-        star::script::ModuleSizeExceededRequest aModSizeException;
-        if (aAnyRequest >>= aModSizeException )
-        {
-            ErrCode nErrorCode = ERRCODE_UUI_IO_MODULESIZEEXCEEDED;
-            std::vector< rtl::OUString > aArguments;
-            star::uno::Sequence< rtl::OUString > sModules = aModSizeException.Names;
-            if ( sModules.getLength() )
-            {
-                rtl::OUString aName;
-                for ( sal_Int32 index=0; index< sModules.getLength(); ++index )
-                {
-                    if ( index )
-                        aName = aName + rtl::OUString( ',' ) + sModules[index];
-                    else
-                        aName = sModules[index]; // 1st name
-                }
-                aArguments.push_back( aName );
-            }
-            handleErrorRequest( star::task::InteractionClassification_WARNING,
-                                nErrorCode,
-                                aArguments,
-                                rRequest->getContinuations());
-            return;
-        }
-        star::ucb::NameClashException aNCException;
-        if (aAnyRequest >>= aNCException)
-        {
-            ErrCode nErrorCode = ERRCODE_UUI_IO_TARGETALREADYEXISTS;
-            std::vector< rtl::OUString > aArguments;
-
-            if( aNCException.Name.getLength() )
-            {
-                nErrorCode = ERRCODE_UUI_IO_ALREADYEXISTS;
-                aArguments.push_back( aNCException.Name );
-            }
-
-            handleErrorRequest( aNCException.Classification,
-                                nErrorCode,
-                                aArguments,
-                                rRequest->getContinuations());
-
-            return;
-        }
-
-        star::ucb::UnsupportedNameClashException aUORequest;
-        if (aAnyRequest >>= aUORequest)
-        {
-            ErrCode nErrorCode = ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE;
-            std::vector< rtl::OUString > aArguments;
-
-            star::uno::Reference< star::task::XInteractionApprove > xApprove;
-            star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
-            getContinuations(
-                rRequest->getContinuations(), &xApprove, &xDisapprove, 0, 0, 0, 0);
-
-            if( xApprove.is() && xDisapprove.is() )
-            {
-                handleErrorRequest( star::task::InteractionClassification_QUERY,
-                                    nErrorCode,
-                                    aArguments,
-                                    rRequest->getContinuations());
-            }
-
-            return;
-        }
-
-        star::document::BrokenPackageRequest aBrokenPackageRequest;
-        if (aAnyRequest >>= aBrokenPackageRequest)
-        {
-            std::vector< rtl::OUString > aArguments;
-
-            if( aBrokenPackageRequest.aName.getLength() )
-                aArguments.push_back( aBrokenPackageRequest.aName );
-
-            handleBrokenPackageRequest( aArguments, rRequest->getContinuations() );
-
-            return;
-        }
-
-        star::ucb::InteractiveIOException aIoException;
-        if (aAnyRequest >>= aIoException)
-        {
-            star::uno::Sequence< star::uno::Any > aRequestArguments;
-            star::ucb::InteractiveAugmentedIOException aAugmentedIoException;
-            if (aAnyRequest >>= aAugmentedIoException)
-                aRequestArguments = aAugmentedIoException.Arguments;
-
-            ErrCode nErrorCode;
-            std::vector< rtl::OUString > aArguments;
-            static ErrCode const
-                    aErrorCode[star::ucb::IOErrorCode_WRONG_VERSION + 1][2]
-                = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
-                    { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
-                        // ACCESS_DENIED
-                    { ERRCODE_IO_ALREADYEXISTS,
-                      ERRCODE_UUI_IO_ALREADYEXISTS }, // ALREADY_EXISTING
-                    { ERRCODE_IO_BADCRC, ERRCODE_UUI_IO_BADCRC }, // BAD_CRC
-                    { ERRCODE_IO_CANTCREATE, ERRCODE_UUI_IO_CANTCREATE },
-                        // CANT_CREATE
-                    { ERRCODE_IO_CANTREAD, ERRCODE_UUI_IO_CANTREAD },
-                        // CANT_READ
-                    { ERRCODE_IO_CANTSEEK, ERRCODE_UUI_IO_CANTSEEK },
-                        // CANT_SEEK
-                    { ERRCODE_IO_CANTTELL, ERRCODE_UUI_IO_CANTTELL },
-                        // CANT_TELL
-                    { ERRCODE_IO_CANTWRITE, ERRCODE_UUI_IO_CANTWRITE },
-                        // CANT_WRITE
-                    { ERRCODE_IO_CURRENTDIR, ERRCODE_UUI_IO_CURRENTDIR },
-                        // CURRENT_DIRECTORY
-                    { ERRCODE_IO_DEVICENOTREADY, ERRCODE_UUI_IO_NOTREADY },
-                        // DEVICE_NOT_READY
-                    { ERRCODE_IO_NOTSAMEDEVICE,
-                      ERRCODE_UUI_IO_NOTSAMEDEVICE }, // DIFFERENT_DEVICES
-                    { ERRCODE_IO_GENERAL, ERRCODE_UUI_IO_GENERAL }, // GENERAL
-                    { ERRCODE_IO_INVALIDACCESS,
-                      ERRCODE_UUI_IO_INVALIDACCESS }, // INVALID_ACCESS
-                    { ERRCODE_IO_INVALIDCHAR, ERRCODE_UUI_IO_INVALIDCHAR },
-                        // INVALID_CHARACTER
-                    { ERRCODE_IO_INVALIDDEVICE,
-                      ERRCODE_UUI_IO_INVALIDDEVICE }, // INVALID_DEVICE
-                    { ERRCODE_IO_INVALIDLENGTH,
-                      ERRCODE_UUI_IO_INVALIDLENGTH }, // INVALID_LENGTH
-                    { ERRCODE_IO_INVALIDPARAMETER,
-                      ERRCODE_UUI_IO_INVALIDPARAMETER }, // INVALID_PARAMETER
-                    { ERRCODE_IO_ISWILDCARD, ERRCODE_UUI_IO_ISWILDCARD },
-                        // IS_WILDCARD
-                    { ERRCODE_IO_LOCKVIOLATION,
-                      ERRCODE_UUI_IO_LOCKVIOLATION }, // LOCKING_VIOLATION
-                    { ERRCODE_IO_MISPLACEDCHAR,
-                      ERRCODE_UUI_IO_MISPLACEDCHAR }, // MISPLACED_CHARACTER
-                    { ERRCODE_IO_NAMETOOLONG, ERRCODE_UUI_IO_NAMETOOLONG },
-                        // NAME_TOO_LONG
-                    { ERRCODE_IO_NOTEXISTS, ERRCODE_UUI_IO_NOTEXISTS },
-                        // NOT_EXISTING
-                    { ERRCODE_IO_NOTEXISTSPATH,
-                      ERRCODE_UUI_IO_NOTEXISTSPATH }, // NOT_EXISTING_PATH
-                    { ERRCODE_IO_NOTSUPPORTED, ERRCODE_UUI_IO_NOTSUPPORTED },
-                        // NOT_SUPPORTED
-                    { ERRCODE_IO_NOTADIRECTORY,
-                      ERRCODE_UUI_IO_NOTADIRECTORY }, // NO_DIRECTORY
-                    { ERRCODE_IO_NOTAFILE, ERRCODE_UUI_IO_NOTAFILE },
-                        // NO_FILE
-                    { ERRCODE_IO_OUTOFSPACE, ERRCODE_UUI_IO_OUTOFSPACE },
-                        // OUT_OF_DISK_SPACE
-                    { ERRCODE_IO_TOOMANYOPENFILES,
-                      ERRCODE_UUI_IO_TOOMANYOPENFILES },
-                        // OUT_OF_FILE_HANDLES
-                    { ERRCODE_IO_OUTOFMEMORY, ERRCODE_UUI_IO_OUTOFMEMORY },
-                        // OUT_OF_MEMORY
-                    { ERRCODE_IO_PENDING, ERRCODE_UUI_IO_PENDING }, // PENDING
-                    { ERRCODE_IO_RECURSIVE, ERRCODE_UUI_IO_RECURSIVE },
-                        // RECURSIVE
-                    { ERRCODE_IO_UNKNOWN, ERRCODE_UUI_IO_UNKNOWN }, // UNKNOWN
-                    { ERRCODE_IO_WRITEPROTECTED,
-                      ERRCODE_UUI_IO_WRITEPROTECTED }, // WRITE_PROTECTED
-                    { ERRCODE_IO_WRONGFORMAT, ERRCODE_UUI_IO_WRONGFORMAT },
-                        // WRONG_FORMAT
-                    { ERRCODE_IO_WRONGVERSION,
-                      ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
-            switch (aIoException.Code)
-            {
-            case star::ucb::IOErrorCode_CANT_CREATE:
-                {
-                    rtl::OUString aArgFolder;
-                    if (getStringRequestArgument(
-                            aRequestArguments,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "Folder")),
-                            &aArgFolder))
-                    {
-                        rtl::OUString aArgUri;
-                        if (getResourceNameRequestArgument(aRequestArguments,
-                                                           &aArgUri))
-                        {
-                            nErrorCode = ERRCODE_UUI_IO_CANTCREATE;
-                            aArguments.reserve(2);
-                            aArguments.push_back(aArgUri);
-                            aArguments.push_back(aArgFolder);
-                        }
-                        else
-                        {
-                            nErrorCode = ERRCODE_UUI_IO_CANTCREATE_NONAME;
-                            aArguments.push_back(aArgFolder);
-                        }
-                    }
-                    else
-                        nErrorCode = aErrorCode[aIoException.Code][0];
-                    break;
-                }
-
-            case star::ucb::IOErrorCode_DEVICE_NOT_READY:
-                {
-                    rtl::OUString aArgUri;
-                    if (getResourceNameRequestArgument(aRequestArguments,
-                                                       &aArgUri))
-                    {
-                        rtl::OUString aResourceType;
-                        getStringRequestArgument(
-                            aRequestArguments,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "ResourceType")),
-                            &aResourceType);
-                        bool bRemovable = false;
-                        getBoolRequestArgument(aRequestArguments,
-                                               rtl::OUString(
-                                                   RTL_CONSTASCII_USTRINGPARAM(
-                                                       "Removable")),
-                                               &bRemovable);
-                        nErrorCode
-                            = aResourceType.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM("volume"))
-                            ? (bRemovable
-                               ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
-                               : ERRCODE_UUI_IO_NOTREADY_VOLUME)
-                            : (bRemovable
-                               ? ERRCODE_UUI_IO_NOTREADY_REMOVABLE
-                               : ERRCODE_UUI_IO_NOTREADY);
-                        aArguments.push_back(aArgUri);
-                    }
-                    else
-                        nErrorCode = aErrorCode[aIoException.Code][0];
-                    break;
-                }
-
-            case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
-                {
-                    rtl::OUString aArgVolume;
-                    rtl::OUString aArgOtherVolume;
-                    if (getStringRequestArgument(
-                            aRequestArguments,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "Volume")),
-                            &aArgVolume)
-                        && getStringRequestArgument(
-                            aRequestArguments,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "OtherVolume")),
-                            &aArgOtherVolume))
-                    {
-                        nErrorCode = aErrorCode[aIoException.Code][1];
-                        aArguments.reserve(2);
-                        aArguments.push_back(aArgVolume);
-                        aArguments.push_back(aArgOtherVolume);
-                    }
-                    else
-                        nErrorCode = aErrorCode[aIoException.Code][0];
-                    break;
-                }
-
-            case star::ucb::IOErrorCode_NOT_EXISTING:
-                {
-                    rtl::OUString aArgUri;
-                    if (getResourceNameRequestArgument(aRequestArguments,
-                                                       &aArgUri))
-                    {
-                        rtl::OUString aResourceType;
-                        getStringRequestArgument(
-                            aRequestArguments,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "ResourceType")),
-                            &aResourceType);
-                        nErrorCode
-                            = aResourceType.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM("volume"))
-                            ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME
-                            : (aResourceType.equalsAsciiL(
-                                   RTL_CONSTASCII_STRINGPARAM("folder"))
-                               ? ERRCODE_UUI_IO_NOTEXISTS_FOLDER
-                               : ERRCODE_UUI_IO_NOTEXISTS);
-                        aArguments.push_back(aArgUri);
-                    }
-                    else
-                        nErrorCode = aErrorCode[aIoException.Code][0];
-                    break;
-                }
-
-            default:
-                {
-                    rtl::OUString aArgUri;
-                    if (getResourceNameRequestArgument(aRequestArguments,
-                                                       &aArgUri))
-                    {
-                        nErrorCode = aErrorCode[aIoException.Code][1];
-                        aArguments.push_back(aArgUri);
-                    }
-                    else
-                        nErrorCode = aErrorCode[aIoException.Code][0];
-                    break;
-                }
-            }
-
-            handleErrorRequest(aIoException.Classification,
-                               nErrorCode,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::ucb::InteractiveAppException aAppException;
-        if (aAnyRequest >>= aAppException)
-        {
-            std::vector< rtl::OUString > aArguments;
-            handleErrorRequest( aAppException.Classification,
-                                aAppException.Code,
-                                aArguments,
-                                rRequest->getContinuations());
-        }
-
-        star::ucb::InteractiveNetworkException aNetworkException;
-        if (aAnyRequest >>= aNetworkException)
-        {
-            ErrCode nErrorCode;
-            std::vector< rtl::OUString > aArguments;
-            star::ucb::InteractiveNetworkOffLineException aOffLineException;
-            star::ucb::InteractiveNetworkResolveNameException
-                aResolveNameException;
-            star::ucb::InteractiveNetworkConnectException aConnectException;
-            star::ucb::InteractiveNetworkReadException aReadException;
-            star::ucb::InteractiveNetworkWriteException aWriteException;
-            if (aAnyRequest >>= aOffLineException)
-                nErrorCode = ERRCODE_INET_OFFLINE;
-            else if (aAnyRequest >>= aResolveNameException)
-            {
-                nErrorCode = ERRCODE_INET_NAME_RESOLVE;
-                aArguments.push_back(aResolveNameException.Server);
-            }
-            else if (aAnyRequest >>= aConnectException)
-            {
-                nErrorCode = ERRCODE_INET_CONNECT;
-                aArguments.push_back(aConnectException.Server);
-            }
-            else if (aAnyRequest >>= aReadException)
-            {
-                nErrorCode = ERRCODE_INET_READ;
-                aArguments.push_back(aReadException.Diagnostic);
-            }
-            else if (aAnyRequest >>= aWriteException)
-            {
-                nErrorCode = ERRCODE_INET_WRITE;
-                aArguments.push_back(aWriteException.Diagnostic);
-            }
-            else
-                nErrorCode = ERRCODE_INET_GENERAL;
-            handleErrorRequest(aNetworkException.Classification,
-                               nErrorCode,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::ucb::InteractiveCHAOSException aChaosException;
-        if (aAnyRequest >>= aChaosException)
-        {
-            std::vector< rtl::OUString > aArguments;
-            sal_Int32 nCount
-                = std::min< sal_Int32 >(aChaosException.Arguments.getLength(),
-                                        2);
-            aArguments.
-                reserve(
-                    static_cast< std::vector< rtl::OUString >::size_type >(
-                        nCount));
-            for (sal_Int32 i = 0; i < nCount; ++i)
-                aArguments.push_back(aChaosException.Arguments[i]);
-            handleErrorRequest(aChaosException.Classification,
-                               aChaosException.ID,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::ucb::InteractiveWrongMediumException aWrongMediumException;
-        if (aAnyRequest >>= aWrongMediumException)
-        {
-            sal_Int32 nMedium = 0;
-            aWrongMediumException.Medium >>= nMedium;
-            std::vector< rtl::OUString > aArguments;
-            aArguments.push_back(UniString::CreateFromInt32(nMedium + 1));
-            handleErrorRequest(aWrongMediumException.Classification,
-                               ERRCODE_UUI_WRONGMEDIUM,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::java::WrongJavaVersionException aWrongJavaVersionException;
-        if (aAnyRequest >>= aWrongJavaVersionException)
-        {
-            ErrCode nErrorCode;
-            std::vector< rtl::OUString > aArguments;
-            if (aWrongJavaVersionException.DetectedVersion.getLength() == 0)
-                if (aWrongJavaVersionException.LowestSupportedVersion.
-                                                   getLength()
-                        == 0)
-                    nErrorCode = ERRCODE_UUI_WRONGJAVA;
-                else
-                {
-                    nErrorCode = ERRCODE_UUI_WRONGJAVA_MIN;
-                    aArguments.push_back(aWrongJavaVersionException.
-                                             LowestSupportedVersion);
-                }
-            else if (aWrongJavaVersionException.LowestSupportedVersion.
-                                                    getLength()
-                         == 0)
-            {
-                nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION;
-                aArguments.push_back(aWrongJavaVersionException.
-                                         DetectedVersion);
-            }
-            else
-            {
-                nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION_MIN;
-                aArguments.reserve(2);
-                aArguments.push_back(aWrongJavaVersionException.
-                                         DetectedVersion);
-                aArguments.push_back(aWrongJavaVersionException.
-                                         LowestSupportedVersion);
-            }
-            handleErrorRequest(star::task::InteractionClassification_ERROR,
-                               nErrorCode,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::sync2::BadPartnershipException aBadPartnershipException;
-        if (aAnyRequest >>= aBadPartnershipException)
-        {
-            ErrCode nErrorCode;
-            std::vector< rtl::OUString > aArguments;
-            if (aBadPartnershipException.Partnership.getLength() == 0)
-                nErrorCode = ERRCODE_UUI_BADPARTNERSHIP;
-            else
-            {
-                nErrorCode = ERRCODE_UUI_BADPARTNERSHIP_NAME;
-                aArguments.push_back(aBadPartnershipException.Partnership);
-            }
-            handleErrorRequest(star::task::InteractionClassification_ERROR,
-                               nErrorCode,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::configuration::backend::MergeRecoveryRequest aMergeRecoveryRequest;
-        if (aAnyRequest >>= aMergeRecoveryRequest)
-        {
-            ErrCode nErrorCode = aMergeRecoveryRequest.IsRemovalRequest
-                ? ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE
-                : ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE;
-
-            std::vector< rtl::OUString > aArguments;
-            aArguments.push_back(aMergeRecoveryRequest.ErrorLayerId);
-
-            handleErrorRequest(star::task::InteractionClassification_ERROR,
-                               nErrorCode,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::configuration::backend::StratumCreationException aStratumCreationException;
-        if (aAnyRequest >>= aStratumCreationException)
-        {
-            const ErrCode nErrorCode = ERRCODE_UUI_CONFIGURATION_BACKENDMISSING;
-
-            rtl::OUString aStratum = aStratumCreationException.StratumData;
-            if (aStratum.getLength() == 0) aStratum = aStratumCreationException.StratumService;
-
-            std::vector< rtl::OUString > aArguments;
-            aArguments.push_back(aStratum);
-
-            handleErrorRequest(star::task::InteractionClassification_ERROR,
-                               nErrorCode,
-                               aArguments,
-                               rRequest->getContinuations());
-            return;
-        }
-
-        star::xforms::InvalidDataOnSubmitException aInvalidDataOnSubmitException;
-        if (aAnyRequest >>= aInvalidDataOnSubmitException)
-        {
-            const ErrCode nErrorCode = ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA;
-
-            std::vector< rtl::OUString > aArguments;
-
-            handleErrorRequest(star::task::InteractionClassification_QUERY,
-                               nErrorCode,
-                               aArguments,
-                               rRequest->getContinuations());
-        }
+        ////////////////////////////////////////////////////////////
+        // Display Special Dialog
+        ////////////////////////////////////////////////////////////
+        handleDialogRequests(rRequest);
     }
     catch (std::bad_alloc const &)
     {
-        throw com::sun::star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
+        throw star::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+            star::uno::Reference< star::uno::XInterface >());
     }
 }
 
-Window * UUIInteractionHandler::getParentProperty() SAL_THROW(())
+Window * UUIInteractionHelper::getParentProperty() SAL_THROW(())
 {
     osl::MutexGuard aGuard(m_aPropertyMutex);
     for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
@@ -1222,7 +1105,7 @@ Window * UUIInteractionHandler::getParentProperty() SAL_THROW(())
     return 0;
 }
 
-rtl::OUString UUIInteractionHandler::getContextProperty() SAL_THROW(())
+rtl::OUString UUIInteractionHelper::getContextProperty() SAL_THROW(())
 {
     osl::MutexGuard aGuard(m_aPropertyMutex);
     for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
@@ -1241,7 +1124,7 @@ rtl::OUString UUIInteractionHandler::getContextProperty() SAL_THROW(())
 }
 
 bool
-UUIInteractionHandler::initPasswordContainer(
+UUIInteractionHelper::initPasswordContainer(
     star::uno::Reference< star::task::XPasswordContainer > * pContainer)
     const SAL_THROW(())
 {
@@ -1264,7 +1147,7 @@ UUIInteractionHandler::initPasswordContainer(
     return pContainer->is();
 }
 
-void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
+void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
                                                rtl::OUString const & rRealm)
     SAL_THROW((star::uno::RuntimeException))
 {
@@ -1329,15 +1212,15 @@ void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
     {
         throw star::uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
+                  star::uno::Reference< star::uno::XInterface >());
     }
 }
 
 void
-UUIInteractionHandler::executeMasterPasswordDialog(LoginErrorInfo & rInfo,
-                                                   star::task::PasswordRequestMode
-                                                   nMode)
-    SAL_THROW((star::uno::RuntimeException))
+UUIInteractionHelper::executeMasterPasswordDialog(
+    LoginErrorInfo & rInfo,
+    star::task::PasswordRequestMode nMode)
+        SAL_THROW((star::uno::RuntimeException))
 {
     rtl::OString aMaster;
     try
@@ -1351,20 +1234,22 @@ UUIInteractionHandler::executeMasterPasswordDialog(LoginErrorInfo & rInfo,
             std::auto_ptr< MasterPasswordCreateDialog >
                     xDialog(new MasterPasswordCreateDialog(
                             getParentProperty(), xManager.get()));
-            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                                                       ERRCODE_BUTTON_CANCEL);
+            rInfo.SetResult(xDialog->Execute()
+                == RET_OK ? ERRCODE_BUTTON_OK
+                          : ERRCODE_BUTTON_CANCEL);
             aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
-                                                 RTL_TEXTENCODING_UTF8);
+                         RTL_TEXTENCODING_UTF8);
     }
     else
     {
             std::auto_ptr< MasterPasswordDialog >
                     xDialog(new MasterPasswordDialog(
                             getParentProperty(), nMode, xManager.get()));
-            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                                                       ERRCODE_BUTTON_CANCEL);
+            rInfo.SetResult(xDialog->Execute()
+                == RET_OK ? ERRCODE_BUTTON_OK
+                                          : ERRCODE_BUTTON_CANCEL);
             aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
-                                                 RTL_TEXTENCODING_UTF8);
+                         RTL_TEXTENCODING_UTF8);
     }
 
     }
@@ -1372,7 +1257,7 @@ UUIInteractionHandler::executeMasterPasswordDialog(LoginErrorInfo & rInfo,
     {
         throw star::uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
+                  star::uno::Reference< star::uno::XInterface >());
     }
 
     sal_uInt8 aKey[RTL_DIGEST_LENGTH_MD5];
@@ -1395,10 +1280,11 @@ UUIInteractionHandler::executeMasterPasswordDialog(LoginErrorInfo & rInfo,
 }
 
 void
-UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
-                                             star::task::PasswordRequestMode nMode,
-                                             ::rtl::OUString aDocName)
-    SAL_THROW((star::uno::RuntimeException))
+UUIInteractionHelper::executePasswordDialog(
+    LoginErrorInfo & rInfo,
+    star::task::PasswordRequestMode nMode,
+    ::rtl::OUString aDocName)
+       SAL_THROW((star::uno::RuntimeException))
 {
     try
     {
@@ -1406,55 +1292,55 @@ UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
 
         std::auto_ptr< ResMgr >
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
-        {
-            std::auto_ptr< PasswordCreateDialog >
-                    xDialog(new PasswordCreateDialog(
+    if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
+    {
+        std::auto_ptr< PasswordCreateDialog >
+        xDialog(new PasswordCreateDialog(
                             getParentProperty(), xManager.get()));
 
-            ::rtl::OUString aTitle( xDialog->GetText() );
-            if( aDocName.getLength() )
-            {
-                aTitle += ::rtl::OUString::createFromAscii( " [" );
-                aTitle += aDocName;
-                aTitle += ::rtl::OUString::createFromAscii( "]" );
-                xDialog->SetText( aTitle );
-            }
-
-            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                                                       ERRCODE_BUTTON_CANCEL);
-            rInfo.SetPassword( xDialog->GetPassword() );
-        }
-        else
+        ::rtl::OUString aTitle( xDialog->GetText() );
+        if( aDocName.getLength() )
         {
-            std::auto_ptr< PasswordDialog >
-                    xDialog(new PasswordDialog(
+        aTitle += ::rtl::OUString::createFromAscii( " [" );
+        aTitle += aDocName;
+        aTitle += ::rtl::OUString::createFromAscii( "]" );
+        xDialog->SetText( aTitle );
+        }
+
+        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                ERRCODE_BUTTON_CANCEL);
+        rInfo.SetPassword( xDialog->GetPassword() );
+    }
+    else
+    {
+        std::auto_ptr< PasswordDialog >
+        xDialog(new PasswordDialog(
                             getParentProperty(), nMode, xManager.get()));
 
-            ::rtl::OUString aTitle( xDialog->GetText() );
-            if( aDocName.getLength() )
-            {
-                aTitle += ::rtl::OUString::createFromAscii( " [" );
-                aTitle += aDocName;
-                aTitle += ::rtl::OUString::createFromAscii( "]" );
-                xDialog->SetText( aTitle );
-            }
-
-            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                                                       ERRCODE_BUTTON_CANCEL);
-            rInfo.SetPassword( xDialog->GetPassword() );
+        ::rtl::OUString aTitle( xDialog->GetText() );
+        if( aDocName.getLength() )
+        {
+        aTitle += ::rtl::OUString::createFromAscii( " [" );
+        aTitle += aDocName;
+        aTitle += ::rtl::OUString::createFromAscii( "]" );
+        xDialog->SetText( aTitle );
         }
+
+        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                ERRCODE_BUTTON_CANCEL);
+        rInfo.SetPassword( xDialog->GetPassword() );
+    }
     }
     catch (std::bad_alloc const &)
     {
         throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+            star::uno::Reference< star::uno::XInterface>());
     }
 }
 
 void
-UUIInteractionHandler::executeCookieDialog(CntHTTPCookieRequest & rRequest)
+UUIInteractionHelper::executeCookieDialog(CntHTTPCookieRequest & rRequest)
     SAL_THROW((star::uno::RuntimeException))
 {
     try
@@ -1465,21 +1351,22 @@ UUIInteractionHandler::executeCookieDialog(CntHTTPCookieRequest & rRequest)
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         std::auto_ptr< CookiesDialog >
             xDialog(new CookiesDialog(
-                            getParentProperty(), &rRequest, xManager.get()));
+            getParentProperty(), &rRequest, xManager.get()));
         xDialog->Execute();
     }
     catch (std::bad_alloc const &)
     {
         throw star::uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
+                  star::uno::Reference< star::uno::XInterface>());
     }
 }
 
-void UUIInteractionHandler::executeFilterDialog(rtl::OUString       const & rURL    ,
-                                                uui::FilterNameList const & rFilters,
-                                                rtl::OUString             & rFilter )
-    SAL_THROW((star::uno::RuntimeException))
+void UUIInteractionHelper::executeFilterDialog(
+    rtl::OUString       const & rURL    ,
+    uui::FilterNameList const & rFilters,
+    rtl::OUString             & rFilter )
+       SAL_THROW((star::uno::RuntimeException))
 {
     try
     {
@@ -1504,13 +1391,13 @@ void UUIInteractionHandler::executeFilterDialog(rtl::OUString       const & rURL
     catch (std::bad_alloc const &)
     {
         throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+        star::uno::Reference< star::uno::XInterface >());
     }
 }
 
 USHORT
-UUIInteractionHandler::executeErrorDialog(
+UUIInteractionHelper::executeErrorDialog(
     star::task::InteractionClassification eClassification,
     rtl::OUString const & rContext,
     rtl::OUString const & rMessage,
@@ -1532,72 +1419,72 @@ UUIInteractionHandler::executeErrorDialog(
         switch (eClassification)
         {
         case star::task::InteractionClassification_ERROR:
-            xBox.reset(new ErrorBox(getParentProperty(),
-                                    nButtonMask,
+        xBox.reset(new ErrorBox(getParentProperty(),
+                    nButtonMask,
                                     aText.makeStringAndClear()));
-            break;
+        break;
 
         case star::task::InteractionClassification_WARNING:
-            xBox.reset(new WarningBox(getParentProperty(),
+        xBox.reset(new WarningBox(getParentProperty(),
                                       nButtonMask,
-                                      aText.makeStringAndClear()));
-            break;
+                      aText.makeStringAndClear()));
+        break;
 
         case star::task::InteractionClassification_INFO:
-            if ((nButtonMask & 0x01F00000) == WB_DEF_OK)
+        if ((nButtonMask & 0x01F00000) == WB_DEF_OK)
                     //TODO! missing win bit button mask define (want to ignore
                     // any default button settings)...
                 xBox.reset(new InfoBox(getParentProperty(),
                                        aText.makeStringAndClear()));
-            else
-                xBox.reset(new ErrorBox(getParentProperty(),
-                                        nButtonMask,
-                                        aText.makeStringAndClear()));
+        else
+            xBox.reset(new ErrorBox(getParentProperty(),
+                        nButtonMask,
+                        aText.makeStringAndClear()));
             break;
 
         case star::task::InteractionClassification_QUERY:
-            xBox.reset(new QueryBox(getParentProperty(),
-                                    nButtonMask,
-                                    aText.makeStringAndClear()));
-            break;
+        xBox.reset(new QueryBox(getParentProperty(),
+                    nButtonMask,
+                    aText.makeStringAndClear()));
+        break;
 
         default:
-            OSL_ASSERT(false);
-            break;
-        }
+        OSL_ASSERT(false);
+        break;
+    }
     }
     catch (std::bad_alloc const &)
     {
         throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+        star::uno::Reference< star::uno::XInterface >());
     }
 
     USHORT aResult = xBox->Execute();
     switch( aResult )
     {
-        case BUTTONID_OK:
-            aResult = ERRCODE_BUTTON_OK;
-            break;
-        case BUTTONID_CANCEL:
-            aResult = ERRCODE_BUTTON_CANCEL;
-            break;
-        case BUTTONID_YES:
-            aResult = ERRCODE_BUTTON_YES;
-            break;
-        case BUTTONID_NO:
-            aResult = ERRCODE_BUTTON_NO;
-            break;
-        case BUTTONID_RETRY:
-            aResult = ERRCODE_BUTTON_RETRY;
-            break;
+    case BUTTONID_OK:
+        aResult = ERRCODE_BUTTON_OK;
+        break;
+    case BUTTONID_CANCEL:
+        aResult = ERRCODE_BUTTON_CANCEL;
+        break;
+    case BUTTONID_YES:
+        aResult = ERRCODE_BUTTON_YES;
+        break;
+    case BUTTONID_NO:
+        aResult = ERRCODE_BUTTON_NO;
+        break;
+    case BUTTONID_RETRY:
+        aResult = ERRCODE_BUTTON_RETRY;
+        break;
     }
 
     return aResult;
 }
 
 USHORT
-UUIInteractionHandler::executeMessageBox(
+UUIInteractionHelper::executeMessageBox(
     rtl::OUString const & rTitle,
     rtl::OUString const & rMessage,
     WinBits nButtonMask )
@@ -1611,34 +1498,62 @@ UUIInteractionHandler::executeMessageBox(
     USHORT aResult = xBox.Execute();
     switch( aResult )
     {
-        case BUTTONID_OK:
-            aResult = ERRCODE_BUTTON_OK;
-            break;
-        case BUTTONID_CANCEL:
-            aResult = ERRCODE_BUTTON_CANCEL;
-            break;
-        case BUTTONID_YES:
-            aResult = ERRCODE_BUTTON_YES;
-            break;
-        case BUTTONID_NO:
-            aResult = ERRCODE_BUTTON_NO;
-            break;
-        case BUTTONID_RETRY:
-            aResult = ERRCODE_BUTTON_RETRY;
-            break;
+    case BUTTONID_OK:
+        aResult = ERRCODE_BUTTON_OK;
+        break;
+    case BUTTONID_CANCEL:
+        aResult = ERRCODE_BUTTON_CANCEL;
+        break;
+    case BUTTONID_YES:
+        aResult = ERRCODE_BUTTON_YES;
+        break;
+    case BUTTONID_NO:
+        aResult = ERRCODE_BUTTON_NO;
+        break;
+    case BUTTONID_RETRY:
+        aResult = ERRCODE_BUTTON_RETRY;
+        break;
     }
 
     return aResult;
 }
+star::uno::Reference< star::task::XInteractionHandler >
+UUIInteractionHelper::getInteractionHandler() const
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionHandler > xIH;
+    try
+    {
+        xIH = star::uno::Reference< star::task::XInteractionHandler >(
+                m_xServiceFactory->createInstanceWithArguments(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.task.InteractionHandler")),
+                    m_aProperties),
+                star::uno::UNO_QUERY);
+    }
+    catch (star::uno::Exception const &)
+    {}
+
+    if (!xIH.is())
+        throw star::uno::RuntimeException(
+            rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "unable to instanciate Interaction Handler service")),
+            star::uno::Reference< star::uno::XInterface >());
+    return xIH;
+}
 
 void
-UUIInteractionHandler::handleAuthenticationRequest(
+UUIInteractionHelper::handleAuthenticationRequest(
     star::ucb::AuthenticationRequest const & rRequest,
     star::uno::Sequence< star::uno::Reference<
                              star::task::XInteractionContinuation > > const &
-        rContinuations)
+    rContinuations)
     SAL_THROW((star::uno::RuntimeException))
 {
+    star::uno::Reference< star::task::XInteractionHandler > xIH;
+
     star::uno::Reference< star::task::XInteractionRetry > xRetry;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
@@ -1674,12 +1589,14 @@ UUIInteractionHandler::handleAuthenticationRequest(
     if (rRequest.HasUserName
         && rRequest.HasPassword
         && initPasswordContainer(&xContainer))
+    {
+        xIH = getInteractionHandler();
         try
         {
             if (rRequest.UserName.getLength() == 0)
             {
                 star::task::UrlRecord
-                    aRec(xContainer->find(rRequest.ServerName, this));
+                    aRec(xContainer->find(rRequest.ServerName, xIH));
                 if (aRec.UserList.getLength() != 0)
                 {
                     if (xSupplyAuthentication->canSetUserName())
@@ -1690,7 +1607,8 @@ UUIInteractionHandler::handleAuthenticationRequest(
                         OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
                                    "empty password list");
                         xSupplyAuthentication->
-                            setPassword(aRec.UserList[0].Passwords[0].getStr());
+                            setPassword(
+                aRec.UserList[0].Passwords[0].getStr());
                     }
                     if (aRec.UserList[0].Passwords.getLength() > 1)
                         if (rRequest.HasRealm)
@@ -1698,12 +1616,12 @@ UUIInteractionHandler::handleAuthenticationRequest(
                             if (xSupplyAuthentication->canSetRealm())
                                 xSupplyAuthentication->
                                     setRealm(aRec.UserList[0].Passwords[1].
-                                                                  getStr());
+                                             getStr());
                         }
                         else if (xSupplyAuthentication->canSetAccount())
                             xSupplyAuthentication->
                                 setAccount(aRec.UserList[0].Passwords[1].
-                                                                getStr());
+                                           getStr());
                     xSupplyAuthentication->select();
                     return;
                 }
@@ -1713,7 +1631,7 @@ UUIInteractionHandler::handleAuthenticationRequest(
                 star::task::UrlRecord
                     aRec(xContainer->findForName(rRequest.ServerName,
                                                  rRequest.UserName,
-                                                 this));
+                                                 xIH));
                 if (aRec.UserList.getLength() != 0)
                 {
                     OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
@@ -1723,11 +1641,12 @@ UUIInteractionHandler::handleAuthenticationRequest(
                     {
                         if (xSupplyAuthentication->canSetUserName())
                             xSupplyAuthentication->
-                                setUserName(aRec.UserList[0].UserName.getStr());
+                                setUserName(
+                    aRec.UserList[0].UserName.getStr());
                         if (xSupplyAuthentication->canSetPassword())
                             xSupplyAuthentication->
                                 setPassword(aRec.UserList[0].Passwords[0].
-                                                                 getStr());
+                                            getStr());
                         if (aRec.UserList[0].Passwords.getLength() > 1)
                             if (rRequest.HasRealm)
                             {
@@ -1739,7 +1658,7 @@ UUIInteractionHandler::handleAuthenticationRequest(
                             else if (xSupplyAuthentication->canSetAccount())
                                 xSupplyAuthentication->
                                     setAccount(aRec.UserList[0].Passwords[1].
-                                                                    getStr());
+                                               getStr());
                         xSupplyAuthentication->select();
                         return;
                     }
@@ -1748,6 +1667,7 @@ UUIInteractionHandler::handleAuthenticationRequest(
         }
         catch (star::task::NoMasterException const &)
         {} // user did not enter master password
+    }
 
     LoginErrorInfo aInfo;
     aInfo.SetTitle(rRequest.ServerName);
@@ -1781,10 +1701,10 @@ UUIInteractionHandler::handleAuthenticationRequest(
             xSupplyAuthentication->
                 setRememberPassword(
                     aInfo.GetIsSavePassword() ?
-                        bRememberPersistent ?
-                            star::ucb::RememberAuthentication_PERSISTENT :
-                            star::ucb::RememberAuthentication_SESSION :
-                        star::ucb::RememberAuthentication_NO);
+                    bRememberPersistent ?
+                    star::ucb::RememberAuthentication_PERSISTENT :
+                    star::ucb::RememberAuthentication_SESSION :
+                    star::ucb::RememberAuthentication_NO);
             if (rRequest.HasRealm)
             {
                 if (xSupplyAuthentication->canSetRealm())
@@ -1807,16 +1727,21 @@ UUIInteractionHandler::handleAuthenticationRequest(
             try
             {
                 if (aInfo.GetIsSavePassword())
+                {
+                    if (!xIH.is())
+                        xIH = getInteractionHandler();
+
                     if (bRememberPersistent)
                         xContainer->addPersistent(rRequest.ServerName,
                                                   aInfo.GetUserName(),
                                                   aPassList,
-                                                  this);
+                                                  xIH);
                     else
                         xContainer->add(rRequest.ServerName,
                                         aInfo.GetUserName(),
                                         aPassList,
-                                        this);
+                                        xIH);
+                }
             }
             catch (star::task::NoMasterException const &)
             {} // user did not enter master password
@@ -1836,7 +1761,7 @@ UUIInteractionHandler::handleAuthenticationRequest(
 }
 
 void
-UUIInteractionHandler::handleMasterPasswordRequest(
+UUIInteractionHelper::handleMasterPasswordRequest(
     star::task::PasswordRequestMode nMode,
     star::uno::Sequence< star::uno::Reference<
                              star::task::XInteractionContinuation > > const &
@@ -1859,26 +1784,26 @@ UUIInteractionHandler::handleMasterPasswordRequest(
     case ERRCODE_BUTTON_OK:
         if (xSupplyAuthentication.is())
         {
-            if (xSupplyAuthentication->canSetPassword())
-                xSupplyAuthentication->setPassword(aInfo.GetPassword());
-            xSupplyAuthentication->select();
+        if (xSupplyAuthentication->canSetPassword())
+            xSupplyAuthentication->setPassword(aInfo.GetPassword());
+        xSupplyAuthentication->select();
         }
         break;
 
     case ERRCODE_BUTTON_RETRY:
         if (xRetry.is())
-            xRetry->select();
+        xRetry->select();
         break;
 
     default:
         if (xAbort.is())
-            xAbort->select();
+        xAbort->select();
         break;
     }
 }
 
 void
-UUIInteractionHandler::handlePasswordRequest(
+UUIInteractionHelper::handlePasswordRequest(
     star::task::PasswordRequestMode nMode,
     star::uno::Sequence< star::uno::Reference<
                              star::task::XInteractionContinuation > > const &
@@ -1894,21 +1819,21 @@ UUIInteractionHandler::handlePasswordRequest(
         rContinuations, 0, 0, &xRetry, &xAbort, 0, &xPassword);
     LoginErrorInfo aInfo;
 
-       executePasswordDialog(aInfo, nMode, aDocumentName);
+    executePasswordDialog(aInfo, nMode, aDocumentName);
 
     switch (aInfo.GetResult())
     {
     case ERRCODE_BUTTON_OK:
         if (xPassword.is())
         {
-            xPassword->setPassword(aInfo.GetPassword());
-            xPassword->select();
+        xPassword->setPassword(aInfo.GetPassword());
+        xPassword->select();
         }
         break;
 
     case ERRCODE_BUTTON_RETRY:
         if (xRetry.is())
-            xRetry->select();
+        xRetry->select();
         break;
 
     default:
@@ -1919,7 +1844,7 @@ UUIInteractionHandler::handlePasswordRequest(
 }
 
 void
-UUIInteractionHandler::handleCookiesRequest(
+UUIInteractionHelper::handleCookiesRequest(
     star::ucb::HandleCookiesRequest const & rRequest,
     star::uno::Sequence< star::uno::Reference<
                              star::task::XInteractionContinuation > > const &
@@ -1927,60 +1852,62 @@ UUIInteractionHandler::handleCookiesRequest(
     SAL_THROW((star::uno::RuntimeException))
 {
     CookieList aCookies;
-    {for (sal_Int32 i = 0; i < rRequest.Cookies.getLength(); ++i)
-        try
+    for (sal_Int32 i = 0; i < rRequest.Cookies.getLength(); ++i)
+    {
+    try
+    {
+        std::auto_ptr< CntHTTPCookie > xCookie(new CntHTTPCookie);
+        xCookie->m_aName = UniString(rRequest.Cookies[i].Name);
+        xCookie->m_aValue = UniString(rRequest.Cookies[i].Value);
+        xCookie->m_aDomain = UniString(rRequest.Cookies[i].Domain);
+        xCookie->m_aPath = UniString(rRequest.Cookies[i].Path);
+        xCookie->m_aExpires
+            = DateTime(Date(rRequest.Cookies[i].Expires.Day,
+                    rRequest.Cookies[i].Expires.Month,
+                    rRequest.Cookies[i].Expires.Year),
+                   Time(rRequest.Cookies[i].Expires.Hours,
+                    rRequest.Cookies[i].Expires.Minutes,
+                    rRequest.Cookies[i].Expires.Seconds,
+                    rRequest.Cookies[i].Expires.
+                    HundredthSeconds));
+        xCookie->m_nFlags
+            = rRequest.Cookies[i].Secure ? CNTHTTP_COOKIE_FLAG_SECURE : 0;
+        switch (rRequest.Cookies[i].Policy)
         {
-            std::auto_ptr< CntHTTPCookie > xCookie(new CntHTTPCookie);
-            xCookie->m_aName = UniString(rRequest.Cookies[i].Name);
-            xCookie->m_aValue = UniString(rRequest.Cookies[i].Value);
-            xCookie->m_aDomain = UniString(rRequest.Cookies[i].Domain);
-            xCookie->m_aPath = UniString(rRequest.Cookies[i].Path);
-            xCookie->m_aExpires
-                = DateTime(Date(rRequest.Cookies[i].Expires.Day,
-                                rRequest.Cookies[i].Expires.Month,
-                                rRequest.Cookies[i].Expires.Year),
-                           Time(rRequest.Cookies[i].Expires.Hours,
-                                rRequest.Cookies[i].Expires.Minutes,
-                                rRequest.Cookies[i].Expires.Seconds,
-                                rRequest.Cookies[i].Expires.
-                                                        HundredthSeconds));
-            xCookie->m_nFlags
-                = rRequest.Cookies[i].Secure ? CNTHTTP_COOKIE_FLAG_SECURE : 0;
-            switch (rRequest.Cookies[i].Policy)
-            {
             case star::ucb::CookiePolicy_CONFIRM:
-                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
-                break;
+            xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
+            break;
 
             case star::ucb::CookiePolicy_ACCEPT:
-                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_ACCEPTED;
-                break;
+            xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_ACCEPTED;
+            break;
 
             case star::ucb::CookiePolicy_IGNORE:
-                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_BANNED;
-                break;
+            xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_BANNED;
+            break;
 
             default:
-                OSL_ASSERT(false);
-                break;
-            }
-            aCookies.Insert(xCookie.get(), LIST_APPEND);
-            xCookie.release();
+            OSL_ASSERT(false);
+            break;
         }
-        catch (std::bad_alloc const &)
-        {
-            throw star::uno::RuntimeException(
-                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "out of memory")),
-                      *this);
-        }
+        aCookies.Insert(xCookie.get(), LIST_APPEND);
+        xCookie.release();
     }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "out of memory")),
+            star::uno::Reference< star::uno::XInterface >());
+    }
+    }
+
     CntHTTPCookieRequest
-        aRequest(rRequest.URL,
+    aRequest(rRequest.URL,
                  aCookies,
                  rRequest.Request == star::ucb::CookieRequest_RECEIVE ?
-                     CNTHTTP_COOKIE_REQUEST_RECV :
-                     CNTHTTP_COOKIE_REQUEST_SEND);
+         CNTHTTP_COOKIE_REQUEST_RECV :
+         CNTHTTP_COOKIE_REQUEST_SEND);
     executeCookieDialog(aRequest);
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
     {
@@ -1990,37 +1917,37 @@ UUIInteractionHandler::handleCookiesRequest(
         {
             switch (aRequest.m_nRet)
             {
-            case CNTHTTP_COOKIE_POLICY_INTERACTIVE:
-                xCookieHandling->
-                    setGeneralPolicy(star::ucb::CookiePolicy_CONFIRM);
-                break;
+        case CNTHTTP_COOKIE_POLICY_INTERACTIVE:
+            xCookieHandling->
+            setGeneralPolicy(star::ucb::CookiePolicy_CONFIRM);
+            break;
 
+        case CNTHTTP_COOKIE_POLICY_ACCEPTED:
+            xCookieHandling->
+            setGeneralPolicy(star::ucb::CookiePolicy_ACCEPT);
+            break;
+
+        case CNTHTTP_COOKIE_POLICY_BANNED:
+            xCookieHandling->
+            setGeneralPolicy(star::ucb::CookiePolicy_IGNORE);
+            break;
+            }
+            for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
+                if (rRequest.Cookies[j].Policy
+            == star::ucb::CookiePolicy_CONFIRM)
+                    switch (static_cast< CntHTTPCookie * >(aCookies.
+                               GetObject(j))->
+                m_nPolicy)
+                    {
             case CNTHTTP_COOKIE_POLICY_ACCEPTED:
                 xCookieHandling->
-                    setGeneralPolicy(star::ucb::CookiePolicy_ACCEPT);
+                            setSpecificPolicy(rRequest.Cookies[j], true);
                 break;
 
             case CNTHTTP_COOKIE_POLICY_BANNED:
                 xCookieHandling->
-                    setGeneralPolicy(star::ucb::CookiePolicy_IGNORE);
+                setSpecificPolicy(rRequest.Cookies[j], false);
                 break;
-            }
-            for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
-                if (rRequest.Cookies[j].Policy
-                        == star::ucb::CookiePolicy_CONFIRM)
-                    switch (static_cast< CntHTTPCookie * >(aCookies.
-                                                               GetObject(j))->
-                                m_nPolicy)
-                    {
-                    case CNTHTTP_COOKIE_POLICY_ACCEPTED:
-                        xCookieHandling->
-                            setSpecificPolicy(rRequest.Cookies[j], true);
-                        break;
-
-                    case CNTHTTP_COOKIE_POLICY_BANNED:
-                        xCookieHandling->
-                            setSpecificPolicy(rRequest.Cookies[j], false);
-                        break;
                     }
             xCookieHandling->select();
             break;
@@ -2029,23 +1956,32 @@ UUIInteractionHandler::handleCookiesRequest(
 }
 
 void
-UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRequest const &                                                 rRequest       ,
-                                                  star::uno::Sequence< star::uno::Reference< star::task::XInteractionContinuation > > const & rContinuations ) SAL_THROW((star::uno::RuntimeException))
+UUIInteractionHelper::handleNoSuchFilterRequest(
+    star::document::NoSuchFilterRequest const & rRequest,
+    star::uno::Sequence<
+        star::uno::Reference< star::task::XInteractionContinuation > > const &
+            rContinuations )
+    SAL_THROW((star::uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort >            xAbort          ;
-    star::uno::Reference< star::document::XInteractionFilterSelect > xFilterTransport;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference<
+    star::document::XInteractionFilterSelect > xFilterTransport;
 
     sal_Int32 nCount = rContinuations.getLength();
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
     {
         if( ! xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >(
+        rContinuations[nStep], star::uno::UNO_QUERY );
 
         if( ! xFilterTransport.is() )
-            xFilterTransport = star::uno::Reference< star::document::XInteractionFilterSelect >( rContinuations[nStep], star::uno::UNO_QUERY );
+            xFilterTransport = star::uno::Reference<
+        star::document::XInteractionFilterSelect >(
+            rContinuations[nStep], star::uno::UNO_QUERY );
     }
 
-    // check neccessary ressources - if they doesn't exist - abort or break this operation
+    // check neccessary ressources - if they doesn't exist - abort or
+    // break this operation
     if (!xAbort.is())
         return;
 
@@ -2055,7 +1991,11 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
         return;
     }
 
-    star::uno::Reference< star::container::XContainerQuery > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
+    star::uno::Reference< star::container::XContainerQuery >
+    xFilterContainer( m_xServiceFactory->createInstance(
+                  ::rtl::OUString::createFromAscii(
+                  "com.sun.star.document.FilterFactory") ),
+              star::uno::UNO_QUERY );
     if (!xFilterContainer.is())
     {
         xAbort->select();
@@ -2065,13 +2005,22 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
     uui::FilterNameList lNames;
 
     // Note: We look for all filters here which match the following criteria:
-    //          - they are import filters as minimum (of course they can support export too)
-    //          - we don't show any filter which are flaged as "don't show it at the UI" or "they are not installed"
-    //          - we ignore filters, which have not set any valid DocumentService (e.g. our pure graphic filters)
+    //          - they are import filters as minimum (of course they can
+    //            support export too)
+    //          - we don't show any filter which are flaged as "don't show it
+    //            at the UI" or "they are not installed"
+    //          - we ignore filters, which have not set any valid
+    //            DocumentService (e.g. our pure graphic filters)
     //          - we show it sorted by her UIName's
-    //          - We don't use the order flag or prefer default filters. (Because this list shows all filters and the user should find his filter vry easy by his UIName ...)
-    //          - We use "_query_all" here ... but we filter graphic filters out by using DocumentService property later!
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xFilters = xFilterContainer->createSubSetEnumerationByQuery(::rtl::OUString::createFromAscii("_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
+    //          - We don't use the order flag or prefer default filters.
+    //            (Because this list shows all filters and the user should
+    //            find his filter vry easy by his UIName ...)
+    //          - We use "_query_all" here ... but we filter graphic filters
+    //            out by using DocumentService property later!
+    star::uno::Reference< star::container::XEnumeration > xFilters
+    = xFilterContainer->createSubSetEnumerationByQuery(
+        ::rtl::OUString::createFromAscii(
+        "_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
     while (xFilters->hasMoreElements())
     {
         try
@@ -2079,21 +2028,27 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
             ::comphelper::SequenceAsHashMap lProps(xFilters->nextElement());
             uui::FilterNamePair             aPair;
 
-            aPair.sInternal = lProps.getUnpackedValueOrDefault(rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
-            aPair.sUI       = lProps.getUnpackedValueOrDefault(rtl::OUString::createFromAscii("UIName"), ::rtl::OUString());
+            aPair.sInternal = lProps.getUnpackedValueOrDefault(
+        rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
+            aPair.sUI       = lProps.getUnpackedValueOrDefault(
+        rtl::OUString::createFromAscii("UIName"), ::rtl::OUString());
             if (
                 (!aPair.sInternal.Len()) ||
                 (!aPair.sUI.Len()      )
-               )
+        )
             {
                continue;
             }
             lNames.push_back( aPair );
         }
-        catch(const ::com::sun::star::uno::RuntimeException&)
-            { throw; }
-        catch(const ::com::sun::star::uno::Exception&)
-            { continue; }
+        catch(const star::uno::RuntimeException&)
+    {
+        throw;
+    }
+        catch(const star::uno::Exception&)
+    {
+        continue;
+    }
     }
 
     // no list available for showing
@@ -2122,32 +2077,39 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
 }
 
 void
-UUIInteractionHandler::handleAmbigousFilterRequest(
-    com::sun::star::document::AmbigousFilterRequest const & rRequest,
-    com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-        rContinuations)
-    SAL_THROW((com::sun::star::uno::RuntimeException))
+UUIInteractionHelper::handleAmbigousFilterRequest(
+    star::document::AmbigousFilterRequest const & rRequest,
+    star::uno::Sequence<
+        star::uno::Reference<
+            star::task::XInteractionContinuation > > const & rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort >            xAbort          ;
-    star::uno::Reference< star::document::XInteractionFilterSelect > xFilterTransport;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference<
+    star::document::XInteractionFilterSelect > xFilterTransport;
 
     sal_Int32 nCount = rContinuations.getLength();
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
     {
         if( ! xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >(
+        rContinuations[nStep], star::uno::UNO_QUERY );
 
         if( ! xFilterTransport.is() )
-            xFilterTransport = star::uno::Reference< star::document::XInteractionFilterSelect >( rContinuations[nStep], star::uno::UNO_QUERY );
+            xFilterTransport = star::uno::Reference<
+        star::document::XInteractionFilterSelect >(
+            rContinuations[nStep], star::uno::UNO_QUERY );
     }
 
     uui::FilterNameList lNames;
 
     if( m_xServiceFactory.is() == sal_True )
     {
-        star::uno::Reference< star::container::XNameContainer > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
+        star::uno::Reference< star::container::XNameContainer >
+        xFilterContainer( m_xServiceFactory->createInstance(
+                  ::rtl::OUString::createFromAscii(
+                      "com.sun.star.document.FilterFactory") ),
+                  star::uno::UNO_QUERY );
         if( xFilterContainer.is() == sal_True )
         {
             star::uno::Any                                    aPackedSet    ;
@@ -2157,7 +2119,8 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
 
             try
             {
-                aPackedSet = xFilterContainer->getByName( rRequest.SelectedFilter );
+                aPackedSet
+            = xFilterContainer->getByName( rRequest.SelectedFilter );
             }
             catch(const ::com::sun::star::container::NoSuchElementException&)
             {
@@ -2179,7 +2142,8 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
 
             try
             {
-                aPackedSet = xFilterContainer->getByName( rRequest.DetectedFilter );
+                aPackedSet
+            = xFilterContainer->getByName( rRequest.DetectedFilter );
             }
             catch(const ::com::sun::star::container::NoSuchElementException&)
             {
@@ -2224,14 +2188,27 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
 }
 
 void
-UUIInteractionHandler::handleGenericErrorRequest(
+UUIInteractionHelper::handleGenericErrorRequest(
     sal_Int32 nErrorCode,
-    com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-        rContinuations)
-    SAL_THROW((com::sun::star::uno::RuntimeException))
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const & rContinuations,
+    bool bObtainErrorStringOnly,
+    bool & bHasErrorString,
+    rtl::OUString & rErrorString)
+    SAL_THROW((star::uno::RuntimeException))
 {
+    if (bObtainErrorStringOnly)
+    {
+        bHasErrorString = isInformationalErrorMessageRequest(rContinuations);
+        if (bHasErrorString)
+    {
+        String aErrorString;
+        ErrorHandler::GetErrorString(nErrorCode, aErrorString);
+        rErrorString = aErrorString;
+    }
+    }
+    else
+    {
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::task::XInteractionApprove > xApprove;
 
@@ -2239,14 +2216,19 @@ UUIInteractionHandler::handleGenericErrorRequest(
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
     {
         if( ! xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+        xAbort
+            = star::uno::Reference< star::task::XInteractionAbort >(
+            rContinuations[nStep], star::uno::UNO_QUERY );
 
         if( ! xApprove.is() )
-            xApprove = star::uno::Reference< star::task::XInteractionApprove >( rContinuations[nStep], star::uno::UNO_QUERY );
+        xApprove
+            = star::uno::Reference< star::task::XInteractionApprove >(
+            rContinuations[nStep], star::uno::UNO_QUERY );
     }
 
-    // Note: It's important to convert the transported long to the required unsigned long value.
-    // Otherwhise using as flag field can fail ...
+    // Note: It's important to convert the transported long to the
+        // required  unsigned long value. Otherwhise using as flag field
+    // can fail ...
     ErrCode  nError   = (ErrCode)nErrorCode;
     sal_Bool bWarning = !ERRCODE_TOERROR(nError);
     ErrorHandler::HandleError(nErrorCode);
@@ -2255,103 +2237,123 @@ UUIInteractionHandler::handleGenericErrorRequest(
         xApprove->select();
     else if (xAbort.is())
         xAbort->select();
+    }
 }
 
 void
-UUIInteractionHandler::handleFilterOptionsRequest(
-    com::sun::star::document::FilterOptionsRequest const & rRequest,
-    com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-        rContinuations)
+UUIInteractionHelper::handleFilterOptionsRequest(
+    star::document::FilterOptionsRequest const & rRequest,
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const & rContinuations)
     SAL_THROW((com::sun::star::uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort >            xAbort          ;
-    star::uno::Reference< star::document::XInteractionFilterOptions > xFilterOptions;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference<
+    star::document::XInteractionFilterOptions > xFilterOptions;
 
     sal_Int32 nCount = rContinuations.getLength();
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
     {
         if( ! xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >(
+        rContinuations[nStep], star::uno::UNO_QUERY );
 
         if( ! xFilterOptions.is() )
-            xFilterOptions = star::uno::Reference< star::document::XInteractionFilterOptions >( rContinuations[nStep], star::uno::UNO_QUERY );
+            xFilterOptions = star::uno::Reference<
+        star::document::XInteractionFilterOptions >(
+            rContinuations[nStep], star::uno::UNO_QUERY );
     }
 
     star::uno::Reference< star::container::XNameAccess > xFilterCFG;
     if( m_xServiceFactory.is() )
     {
-        xFilterCFG = star::uno::Reference< star::container::XNameAccess >(
-            m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
-            star::uno::UNO_QUERY );
+    xFilterCFG = star::uno::Reference< star::container::XNameAccess >(
+        m_xServiceFactory->createInstance(
+        ::rtl::OUString::createFromAscii(
+            "com.sun.star.document.FilterFactory" ) ),
+        star::uno::UNO_QUERY );
     }
 
     if( xFilterCFG.is() && rRequest.rProperties.getLength() )
     {
-        try {
-            ::rtl::OUString aFilterName;
-            sal_Int32 nPropCount = rRequest.rProperties.getLength();
-               for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
+    try {
+        ::rtl::OUString aFilterName;
+        sal_Int32 nPropCount = rRequest.rProperties.getLength();
+        for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
+        {
+        rtl::OUString tmp = rRequest.rProperties[ind].Name;
+        if( rRequest.rProperties[ind].Name.equals(
+            ::rtl::OUString::createFromAscii("FilterName")) )
+        {
+            rRequest.rProperties[ind].Value >>= aFilterName;
+            break;
+        }
+        }
+
+        star::uno::Sequence < star::beans::PropertyValue > aProps;
+        if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
+        {
+        sal_Int32 nPropertyCount = aProps.getLength();
+        for( sal_Int32 nProperty=0;
+             nProperty < nPropertyCount;
+             ++nProperty )
+            if( aProps[nProperty].Name.equals(
+                ::rtl::OUString::createFromAscii("UIComponent")) )
             {
-                rtl::OUString tmp = rRequest.rProperties[ind].Name;
-                   if( rRequest.rProperties[ind].Name.equals( ::rtl::OUString::createFromAscii("FilterName")) )
+            ::rtl::OUString aServiceName;
+            aProps[nProperty].Value >>= aServiceName;
+            if( aServiceName.getLength() )
+            {
+                star::uno::Reference<
+                star::ui::dialogs::XExecutableDialog >
+                xFilterDialog(
+                    m_xServiceFactory->createInstance(
+                    aServiceName ),
+                    star::uno::UNO_QUERY );
+                star::uno::Reference<
+                star::beans::XPropertyAccess >
+                xFilterProperties(
+                    xFilterDialog,
+                    star::uno::UNO_QUERY );
+
+                if( xFilterDialog.is() && xFilterProperties.is() )
                 {
-                    rRequest.rProperties[ind].Value >>= aFilterName;
-                    break;
+                star::uno::Reference<
+                    star::document::XImporter > xImporter(
+                    xFilterDialog,
+                    star::uno::UNO_QUERY );
+                if( xImporter.is() )
+                    xImporter->setTargetDocument(
+                    star::uno::Reference<
+                    star::lang::XComponent >(
+                        rRequest.rModel,
+                        star::uno::UNO_QUERY ) );
+
+                xFilterProperties->setPropertyValues(
+                    rRequest.rProperties );
+
+                if( xFilterDialog->execute() )
+                {
+                    xFilterOptions->setFilterOptions(
+                    xFilterProperties
+                        ->getPropertyValues() );
+                    xFilterOptions->select();
+                    return;
+
+                }
                 }
             }
-
-            star::uno::Sequence < star::beans::PropertyValue > aProps;
-            if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
-               {
-                   sal_Int32 nPropertyCount = aProps.getLength();
-                   for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                       if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
-                       {
-                        ::rtl::OUString aServiceName;
-                           aProps[nProperty].Value >>= aServiceName;
-                        if( aServiceName.getLength() )
-                        {
-                            star::uno::Reference< star::ui::dialogs::XExecutableDialog > xFilterDialog(
-                                        m_xServiceFactory->createInstance( aServiceName ),
-                                        star::uno::UNO_QUERY );
-                            star::uno::Reference< star::beans::XPropertyAccess > xFilterProperties(
-                                        xFilterDialog,
-                                        star::uno::UNO_QUERY );
-
-                            if( xFilterDialog.is() && xFilterProperties.is() )
-                            {
-                                star::uno::Reference< star::document::XImporter > xImporter(
-                                                xFilterDialog,
-                                                star::uno::UNO_QUERY );
-                                if( xImporter.is() )
-                                    xImporter->setTargetDocument( star::uno::Reference< star::lang::XComponent >(
-                                                    rRequest.rModel,
-                                                    star::uno::UNO_QUERY ) );
-
-                                xFilterProperties->setPropertyValues( rRequest.rProperties );
-
-                                if( xFilterDialog->execute() )
-                                {
-                                    xFilterOptions->setFilterOptions( xFilterProperties->getPropertyValues() );
-                                    xFilterOptions->select();
-                                    return;
-
-                                }
-                            }
-                        }
-                        break;
-                    }
+            break;
             }
         }
-        catch( star::container::NoSuchElementException& )
-        {
-            // the filter name is unknown
-        }
-        catch( star::uno::Exception& )
-        {
-        }
+    }
+    catch( star::container::NoSuchElementException& )
+    {
+        // the filter name is unknown
+    }
+    catch( star::uno::Exception& )
+    {
+    }
     }
 
     xAbort->select();
@@ -2364,8 +2366,7 @@ UUIInteractionHandler::handleFilterOptionsRequest(
     for (sal_Int32 i = 0;;)
     {
         i = aMessage.
-                indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")),
-                        i);
+        indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")), i);
         if (i == -1)
             break;
         if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
@@ -2377,7 +2378,7 @@ UUIInteractionHandler::handleFilterOptionsRequest(
             {
                 std::vector< rtl::OUString >::size_type nIndex
                     = static_cast< std::vector< rtl::OUString >::size_type >(
-                          c - '1');
+            c - '1');
                 if (nIndex < rArguments.size())
                 {
                     aMessage
@@ -2395,92 +2396,18 @@ UUIInteractionHandler::handleFilterOptionsRequest(
     return aMessage;
 }
 
-
 void
-UUIInteractionHandler::handleErrorRequest(
+UUIInteractionHelper::handleErrorRequest(
     star::task::InteractionClassification eClassification,
     ErrCode nErrorCode,
     std::vector< rtl::OUString > const & rArguments,
     star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-        rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
+    star::task::XInteractionContinuation > > const & rContinuations,
+    bool bObtainErrorStringOnly,
+    bool & bHasErrorString,
+    rtl::OUString & rErrorString)
+        SAL_THROW((star::uno::RuntimeException))
 {
-    //TODO! It can happen that the buttons calculated below do not match the
-    // error text from the resource (e.g., some text that is not a question,
-    // but YES and NO buttons).  Some error texts have ExtraData that
-    // specifies a set of buttons, but that data is not really useful, because
-    // a single error text may well make sense both with only an OK button and
-    // with RETRY and CANCEL buttons.
-
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-    star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
-    star::uno::Reference< star::task::XInteractionRetry > xRetry;
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    getContinuations(
-        rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0);
-
-    // The following mapping uses the bit mask
-    //     Approve = 8,
-    //     Disapprove = 4,
-    //     Retry = 2,
-    //     Abort = 1
-    //
-    // The mapping has five properties on which the code to select the correct
-    // continuation relies:
-    // 1  The OK button is mapped to Approve if that is available, otherwise
-    //    to Abort if that is available, otherwise to none.
-    // 2  The CANCEL button is always mapped to Abort.
-    // 3  The RETRY button is always mapped to Retry.
-    // 4  The NO button is always mapped to Disapprove.
-    // 5  The YES button is always mapped to Approve.
-    //
-    // Because the WinBits button combinations are quite restricted, not every
-    // request can be served here.
-    //
-    // Finally, it seems to be better to leave default button determination to
-    // VCL (the favouring of CANCEL as default button seems to not always be
-    // what the user wants)...
-    WinBits const aButtonMask[16]
-        = { 0,
-            WB_OK /*| WB_DEF_OK*/, // Abort
-            0,
-            WB_RETRY_CANCEL /*| WB_DEF_CANCEL*/, // Retry, Abort
-            0,
-            0,
-            0,
-            0,
-            WB_OK /*| WB_DEF_OK*/, // Approve
-            WB_OK_CANCEL /*| WB_DEF_CANCEL*/, // Approve, Abort
-            0,
-            0,
-            WB_YES_NO /*| WB_DEF_NO*/, // Approve, Disapprove
-            WB_YES_NO_CANCEL /*| WB_DEF_CANCEL*/,
-                // Approve, Disapprove, Abort
-            0,
-            0 };
-
-    WinBits nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
-                                          | (xDisapprove.is() ? 4 : 0)
-                                          | (xRetry.is() ? 2 : 0)
-                                          | (xAbort.is() ? 1 : 0)];
-    if (nButtonMask == 0)
-        return;
-
-    //TODO! remove this backwards compatibility?
-    rtl::OUString aContext(getContextProperty());
-    if (aContext.getLength() == 0 && nErrorCode != 0)
-    {
-        vos::OGuard aGuard(Application::GetSolarMutex());
-        ErrorContext * pContext = ErrorContext::GetContext();
-        if (pContext)
-        {
-            UniString aContextString;
-            if (pContext->GetString(nErrorCode, aContextString))
-                aContext = aContextString;
-        }
-    }
-
     rtl::OUString aMessage;
     {
         enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_SVX, SOURCE_UUI };
@@ -2492,20 +2419,20 @@ UUIInteractionHandler::handleErrorRequest(
         static USHORT const aId[4]
             = { RID_ERRHDL,
                 RID_CHAOS_START + 12,
-                    // cf. chaos/source/inc/cntrids.hrc, where
-                    // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
+                // cf. chaos/source/inc/cntrids.hrc, where
+                // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
                 RID_SVX_START + 350, // RID_SVXERRCODE
                 RID_UUI_ERRHDL };
         ErrCode nErrorId = nErrorCode & ~ERRCODE_WARNING_MASK;
         Source eSource = nErrorId < ERRCODE_AREA_LIB1 ?
-                             SOURCE_DEFAULT :
-                         nErrorId >= ERRCODE_AREA_CHAOS
-                         && nErrorId < ERRCODE_AREA_CHAOS_END ?
-                             SOURCE_CNT :
-                         nErrorId >= ERRCODE_AREA_SVX
-                         && nErrorId <= ERRCODE_AREA_SVX_END ?
-                             SOURCE_SVX :
-                             SOURCE_UUI;
+            SOURCE_DEFAULT :
+            nErrorId >= ERRCODE_AREA_CHAOS
+            && nErrorId < ERRCODE_AREA_CHAOS_END ?
+            SOURCE_CNT :
+            nErrorId >= ERRCODE_AREA_SVX
+            && nErrorId <= ERRCODE_AREA_SVX_END ?
+            SOURCE_SVX :
+            SOURCE_UUI;
 
         vos::OGuard aGuard(Application::GetSolarMutex());
         std::auto_ptr< ResMgr > xManager;
@@ -2522,50 +2449,139 @@ UUIInteractionHandler::handleErrorRequest(
 
     aMessage = replaceMessageWithArguments( aMessage, rArguments );
 
-    USHORT nResult = executeErrorDialog(
-                eClassification, aContext, aMessage, nButtonMask );
-    switch (nResult)
+    if (bObtainErrorStringOnly)
     {
-    case ERRCODE_BUTTON_OK:
-        OSL_ENSURE(xApprove.is() || xAbort.is(), "unexpected situation");
-        if (xApprove.is())
-            xApprove->select();
-        else if (xAbort.is())
-            xAbort->select();
-        break;
+        bHasErrorString = isInformationalErrorMessageRequest(rContinuations);
+        if (bHasErrorString)
+            rErrorString = aMessage;
+        return;
+    }
+    else
+    {
+        //TODO! It can happen that the buttons calculated below do not match
+        // the error text from the resource (e.g., some text that is not a
+        // question, but YES and NO buttons).  Some error texts have
+        // ExtraData that specifies a set of buttons, but that data is not
+        // really useful, because a single error text may well make sense
+        // both with only an OK button and with RETRY and CANCEL buttons.
 
-    case ERRCODE_BUTTON_CANCEL:
-        OSL_ENSURE(xAbort.is(), "unexpected situation");
-        if (xAbort.is())
-            xAbort->select();
-        break;
+        star::uno::Reference< star::task::XInteractionApprove > xApprove;
+        star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
+        star::uno::Reference< star::task::XInteractionRetry > xRetry;
+        star::uno::Reference< star::task::XInteractionAbort > xAbort;
+        getContinuations(
+            rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0);
 
-    case ERRCODE_BUTTON_RETRY:
-        OSL_ENSURE(xRetry.is(), "unexpected situation");
-        if (xRetry.is())
-            xRetry->select();
-        break;
+        // The following mapping uses the bit mask
+        //     Approve = 8,
+        //     Disapprove = 4,
+        //     Retry = 2,
+        //     Abort = 1
+        //
+        // The mapping has five properties on which the code to select the
+        // correct continuation relies:
+        // 1  The OK button is mapped to Approve if that is available,
+        //    otherwise to Abort if that is available, otherwise to none.
+        // 2  The CANCEL button is always mapped to Abort.
+        // 3  The RETRY button is always mapped to Retry.
+        // 4  The NO button is always mapped to Disapprove.
+        // 5  The YES button is always mapped to Approve.
+        //
+        // Because the WinBits button combinations are quite restricted, not
+        // every request can be served here.
+        //
+        // Finally, it seems to be better to leave default button
+        // determination to VCL (the favouring of CANCEL as default button
+        // seems to not always be what the user wants)...
+        WinBits const aButtonMask[16]
+            = { 0,
+                WB_OK /*| WB_DEF_OK*/, // Abort
+                0,
+                WB_RETRY_CANCEL /*| WB_DEF_CANCEL*/, // Retry, Abort
+                0,
+                0,
+                0,
+                0,
+                WB_OK /*| WB_DEF_OK*/, // Approve
+                WB_OK_CANCEL /*| WB_DEF_CANCEL*/, // Approve, Abort
+                0,
+                0,
+                WB_YES_NO /*| WB_DEF_NO*/, // Approve, Disapprove
+                WB_YES_NO_CANCEL /*| WB_DEF_CANCEL*/,
+                // Approve, Disapprove, Abort
+                0,
+                0 };
 
-    case ERRCODE_BUTTON_NO:
-        OSL_ENSURE(xDisapprove.is(), "unexpected situation");
-        if (xDisapprove.is())
-            xDisapprove->select();
-        break;
+        WinBits nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
+                                          | (xDisapprove.is() ? 4 : 0)
+                                          | (xRetry.is() ? 2 : 0)
+                                          | (xAbort.is() ? 1 : 0)];
+        if (nButtonMask == 0)
+            return;
 
-    case ERRCODE_BUTTON_YES:
-        OSL_ENSURE(xApprove.is(), "unexpected situation");
-        if (xApprove.is())
-            xApprove->select();
-        break;
+        //TODO! remove this backwards compatibility?
+        rtl::OUString aContext(getContextProperty());
+        if (aContext.getLength() == 0 && nErrorCode != 0)
+        {
+            vos::OGuard aGuard(Application::GetSolarMutex());
+            ErrorContext * pContext = ErrorContext::GetContext();
+            if (pContext)
+            {
+                UniString aContextString;
+                if (pContext->GetString(nErrorCode, aContextString))
+                    aContext = aContextString;
+            }
+        }
+
+        USHORT nResult = executeErrorDialog(
+            eClassification, aContext, aMessage, nButtonMask );
+        switch (nResult)
+        {
+        case ERRCODE_BUTTON_OK:
+            OSL_ENSURE(xApprove.is() || xAbort.is(), "unexpected situation");
+            if (xApprove.is())
+                xApprove->select();
+            else if (xAbort.is())
+                xAbort->select();
+            break;
+
+        case ERRCODE_BUTTON_CANCEL:
+            OSL_ENSURE(xAbort.is(), "unexpected situation");
+            if (xAbort.is())
+                xAbort->select();
+            break;
+
+        case ERRCODE_BUTTON_RETRY:
+            OSL_ENSURE(xRetry.is(), "unexpected situation");
+            if (xRetry.is())
+                xRetry->select();
+            break;
+
+        case ERRCODE_BUTTON_NO:
+            OSL_ENSURE(xDisapprove.is(), "unexpected situation");
+            if (xDisapprove.is())
+                xDisapprove->select();
+            break;
+
+        case ERRCODE_BUTTON_YES:
+            OSL_ENSURE(xApprove.is(), "unexpected situation");
+            if (xApprove.is())
+                xApprove->select();
+            break;
+        }
+
     }
 }
 
 void
-UUIInteractionHandler::handleBrokenPackageRequest(
+UUIInteractionHelper::handleBrokenPackageRequest(
     std::vector< rtl::OUString > const & rArguments,
     star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-        rContinuations)
+        star::task::XInteractionContinuation > > const &
+            rContinuations,
+    bool bObtainErrorStringOnly,
+    bool & bHasErrorString,
+    rtl::OUString & rErrorString)
     SAL_THROW((star::uno::RuntimeException))
 {
     star::uno::Reference< star::task::XInteractionApprove > xApprove;
@@ -2574,41 +2590,23 @@ UUIInteractionHandler::handleBrokenPackageRequest(
     getContinuations(
         rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0);
 
-    WinBits nButtonMask;
     ErrCode nErrorCode;
     if( xApprove.is() && xDisapprove.is() )
     {
         nErrorCode = ERRCODE_UUI_IO_BROKENPACKAGE;
-        nButtonMask = WB_YES_NO | WB_DEF_YES;
     }
     else if ( xAbort.is() )
     {
         nErrorCode = ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR;
-        nButtonMask = WB_OK;
     }
     else
         return;
 
-    star::uno::Any aProductNameAny =
-                ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    star::uno::Any aProductVersionAny =
-                ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-    ::rtl::OUString aProductName, aProductVersion;
-    if ( !( aProductNameAny >>= aProductName ) )
-        aProductName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice") );
-
-    ::rtl::OUString aTitle( aProductName );
-    if( aProductVersionAny >>= aProductVersion )
-    {
-        aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" ") );
-        aTitle += aProductVersion;
-    }
-
     ::rtl::OUString aMessage;
-
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
-        std::auto_ptr< ResMgr > xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< ResMgr > xManager(
+        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
             return;
 
@@ -2619,60 +2617,64 @@ UUIInteractionHandler::handleBrokenPackageRequest(
 
     aMessage = replaceMessageWithArguments( aMessage, rArguments );
 
-    switch ( executeMessageBox( aTitle, aMessage, nButtonMask ))
+    if (bObtainErrorStringOnly)
     {
-    case ERRCODE_BUTTON_OK:
-        OSL_ENSURE( xAbort.is(), "unexpected situation" );
-        if (xAbort.is())
-            xAbort->select();
-        break;
-
-    case ERRCODE_BUTTON_NO:
-        OSL_ENSURE(xDisapprove.is(), "unexpected situation");
-        if (xDisapprove.is())
-            xDisapprove->select();
-        break;
-
-    case ERRCODE_BUTTON_YES:
-        OSL_ENSURE(xApprove.is(), "unexpected situation");
-        if (xApprove.is())
-            xApprove->select();
-        break;
+        bHasErrorString = isInformationalErrorMessageRequest(rContinuations);
+        if (bHasErrorString)
+            rErrorString = aMessage;
+        return;
     }
-}
-
-char const UUIInteractionHandler::m_aImplementationName[]
-    = "com.sun.star.comp.uui.UUIInteractionHandler";
-
-star::uno::Sequence< rtl::OUString >
-UUIInteractionHandler::getSupportedServiceNames_static()
-{
-    star::uno::Sequence< rtl::OUString > aNames(3);
-    aNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.task.InteractionHandler"));
-    // added to indicate support for configuration.backend.MergeRecoveryRequest
-    aNames[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.backend.InteractionHandler"));
-    aNames[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.uui.InteractionHandler"));
-         // for backwards compatibility
-    return aNames;
-}
-
-star::uno::Reference< star::uno::XInterface > SAL_CALL
-UUIInteractionHandler::createInstance(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
-        rServiceFactory)
-    SAL_THROW((star::uno::Exception))
-{
-    try
+    else
     {
-        return *new UUIInteractionHandler(rServiceFactory);
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  0);
+        WinBits nButtonMask;
+        if( xApprove.is() && xDisapprove.is() )
+        {
+            nButtonMask = WB_YES_NO | WB_DEF_YES;
+        }
+        else if ( xAbort.is() )
+        {
+            nButtonMask = WB_OK;
+        }
+        else
+            return;
+
+        star::uno::Any aProductNameAny =
+            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+                ::utl::ConfigManager::PRODUCTNAME );
+        star::uno::Any aProductVersionAny =
+            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+                ::utl::ConfigManager::PRODUCTVERSION );
+        ::rtl::OUString aProductName, aProductVersion;
+        if ( !( aProductNameAny >>= aProductName ) )
+            aProductName
+                = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice") );
+
+        ::rtl::OUString aTitle( aProductName );
+        if( aProductVersionAny >>= aProductVersion )
+        {
+            aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" ") );
+            aTitle += aProductVersion;
+        }
+
+        switch ( executeMessageBox( aTitle, aMessage, nButtonMask ))
+        {
+        case ERRCODE_BUTTON_OK:
+            OSL_ENSURE( xAbort.is(), "unexpected situation" );
+            if (xAbort.is())
+                xAbort->select();
+            break;
+
+        case ERRCODE_BUTTON_NO:
+            OSL_ENSURE(xDisapprove.is(), "unexpected situation");
+            if (xDisapprove.is())
+                xDisapprove->select();
+            break;
+
+        case ERRCODE_BUTTON_YES:
+            OSL_ENSURE(xApprove.is(), "unexpected situation");
+            if (xApprove.is())
+                xApprove->select();
+            break;
+        }
     }
 }
