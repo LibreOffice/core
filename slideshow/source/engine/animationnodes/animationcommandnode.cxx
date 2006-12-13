@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationcommandnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:33:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include "tools.hxx"
 #include "nodetools.hxx"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 void AnimationCommandNode::dispose()
@@ -86,4 +86,4 @@ bool AnimationCommandNode::hasPendingAnimation() const
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
