@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventqueue.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:39:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 #ifndef _SLIDESHOW_EVENTQUEUE_HXX
 #define _SLIDESHOW_EVENTQUEUE_HXX
 
-#ifndef _CANVAS_ELAPSEDTIME_HXX
 #include <canvas/elapsedtime.hxx>
-#endif
 
 #include <queue>
 #include <vector>
@@ -49,7 +47,7 @@
 
 /* Definition of ActivitiesQueue class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
