@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:35:54 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,6 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-
-#ifndef _INC_MATH
-#ifndef  _USE_MATH_DEFINES
-#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
-#endif
-#include <math.h>
 #endif
 
 namespace basegfx
