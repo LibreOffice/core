@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setactivity.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:45:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,16 @@
 #define INCLUDED_SLIDESHOW_SETACTIVITY_HXX
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
 #include "animationactivity.hxx"
 #include "animation.hxx"
 #include "animatableshape.hxx"
 #include "shapeattributelayer.hxx"
 #include "activitiesfactory.hxx"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** Templated setter for animation values
@@ -73,7 +74,7 @@ public:
           maToValue( rToValue ),
           mbIsActive(true)
     {
-        ENSURE_AND_THROW( mpAnimation.get(), "Invalid animation" );
+        ENSURE_AND_THROW( mpAnimation, "Invalid animation" );
     }
 
     virtual void dispose()
@@ -134,8 +135,8 @@ public:
     virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
                              const ShapeAttributeLayerSharedPtr&    rAttrLayer )
     {
-        ENSURE_AND_THROW( rShape.get(), "Invalid shape" );
-        ENSURE_AND_THROW( rAttrLayer.get(), "Invalid attribute layer" );
+        ENSURE_AND_THROW( rShape, "Invalid shape" );
+        ENSURE_AND_THROW( rAttrLayer, "Invalid attribute layer" );
 
         mpShape = rShape;
         mpAttributeLayer = rAttrLayer;
