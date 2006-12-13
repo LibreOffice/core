@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:11:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #include "ado/ADatabaseMetaData.hxx"
 #endif
 
-#ifndef _CONNECTIVITY_RESOURCE_HRC_
-#include "Resource.hrc"
-#endif
 #ifndef _CONNECTIVITY_ADO_ADRIVER_HXX_
 #include "ado/ADriver.hxx"
 #endif
