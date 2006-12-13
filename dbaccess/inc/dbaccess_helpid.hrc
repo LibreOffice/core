@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:40:18 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,6 +357,8 @@
 #define HID_DSADMIN_DOSLINEENDS                     (HID_DBACCESS_START + 295)
 
 #define HID_BROWSER_ADMINISTRATE                    (HID_DBACCESS_START + 296)
+
+#define HID_DSADMIN_AS_BEFORE_CORRELATION_NAME      (HID_DBACCESS_START + 297)
 
 #define HID_PAGE_DBWIZARD_GENERALPAGE                           (HID_DBACCESS_START + 300)
 #define HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE           (HID_DBACCESS_START + 301)
