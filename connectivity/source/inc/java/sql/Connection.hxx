@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:20:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,11 +73,13 @@ namespace connectivity
                                             //  of all the Statement objects
                                             //  for this Connection
         const java_sql_Driver*  m_pDriver;
-        jobject             m_pDriverobject;
+        jobject                 m_pDriverobject;
 
-        jclass              m_Driver_theClass;
-        sal_Bool            m_bParameterSubstitution;
-        sal_Bool        m_bIgnoreDriverPrivileges;
+        jclass                  m_Driver_theClass;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                                m_aConnectionInfo;
+        sal_Bool                m_bParameterSubstitution;
+        sal_Bool                m_bIgnoreDriverPrivileges;
 
         /** transform named parameter into unnamed one.
             @param  _sSQL
@@ -102,6 +104,9 @@ namespace connectivity
         java_sql_Connection(const java_sql_Driver* _pDriver);
         sal_Bool construct( const ::rtl::OUString& url,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
+
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
+            getConnectionInfo() const { return m_aConnectionInfo; }
 
         inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
         // OComponentHelper
