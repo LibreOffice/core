@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultforminspection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:15:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #include "pcrcommon.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
+#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
@@ -59,6 +59,12 @@
 #endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_UCB_ALREADYINITIALIZEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/AlreadyInitializedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -90,6 +96,8 @@ namespace pcr
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::inspection::PropertyCategoryDescriptor;
     using ::com::sun::star::beans::UnknownPropertyException;
+    using ::com::sun::star::ucb::AlreadyInitializedException;
+    using ::com::sun::star::lang::IllegalArgumentException;
     /** === end UNO using === **/
 
     //====================================================================
@@ -98,6 +106,10 @@ namespace pcr
     //--------------------------------------------------------------------
     DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( const Reference< XComponentContext >& _rxContext, bool _bUseFormFormComponentHandlers )
         :m_bUseFormComponentHandlers( _bUseFormFormComponentHandlers )
+        ,m_bConstructed( false )
+        ,m_bHasHelpSection( false )
+        ,m_nMinHelpTextLines( 3 )
+        ,m_nMaxHelpTextLines( 8 )
         ,m_pInfoService( new OPropertyInfoService )
         ,m_aContext( _rxContext )
     {
@@ -205,6 +217,24 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL DefaultFormComponentInspectorModel::getHasHelpSection() throw (RuntimeException)
+    {
+        return m_bHasHelpSection;
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getMinHelpTextLines() throw (RuntimeException)
+    {
+        return m_nMinHelpTextLines;
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
+    {
+        return m_nMaxHelpTextLines;
+    }
+
+    //--------------------------------------------------------------------
     Sequence< PropertyCategoryDescriptor > SAL_CALL DefaultFormComponentInspectorModel::describeCategories(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -247,6 +277,49 @@ namespace pcr
             throw UnknownPropertyException();
         }
         return m_pInfoService->getPropertyPos( nPropertyId );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL DefaultFormComponentInspectorModel::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
+    {
+        if ( m_bConstructed )
+            throw AlreadyInitializedException();
+
+        StlSyntaxSequence< Any > arguments( _arguments );
+        if ( arguments.empty() )
+        {   // constructor: "createDefault()"
+            createDefault();
+            return;
+        }
+
+        sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
+        if ( arguments.size() == 2 )
+        {   // constructor: "createWithHelpSection( long, long )"
+            if ( !( arguments[0] >>= nMinHelpTextLines ) || !( arguments[1] >>= nMaxHelpTextLines ) )
+                throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+            createWithHelpSection( nMinHelpTextLines, nMaxHelpTextLines );
+            return;
+        }
+
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+    }
+
+    //--------------------------------------------------------------------
+    void DefaultFormComponentInspectorModel::createDefault()
+    {
+        m_bConstructed = true;
+    }
+
+    //--------------------------------------------------------------------
+    void DefaultFormComponentInspectorModel::createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
+    {
+        if ( ( _nMinHelpTextLines <= 0 ) || ( _nMaxHelpTextLines <= 0 ) || ( _nMinHelpTextLines > _nMaxHelpTextLines ) )
+            throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+
+        m_bHasHelpSection = true;
+        m_nMinHelpTextLines = _nMinHelpTextLines;
+        m_nMaxHelpTextLines = _nMaxHelpTextLines;
+        m_bConstructed = true;
     }
 
 //........................................................................
