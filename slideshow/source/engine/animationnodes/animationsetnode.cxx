@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationsetnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:34:34 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 void AnimationSetNode::implScheduleDeactivationEvent()
@@ -80,7 +80,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
         boost::shared_ptr<AnimationSetNode> const pSelf(
             boost::dynamic_pointer_cast<AnimationSetNode>(getSelf()) );
         ENSURE_AND_THROW(
-            pSelf.get(), "cannot cast getSelf() to my type!" );
+            pSelf, "cannot cast getSelf() to my type!" );
         aParms.mpEndEvent = makeEvent(
             boost::bind( &AnimationSetNode::implScheduleDeactivationEvent,
                          pSelf ) );
@@ -208,5 +208,5 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
