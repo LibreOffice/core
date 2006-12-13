@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:29:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,11 +196,18 @@ namespace dbaui
                 The name of the object to open
             @param  _eType
                 Defines the type to open
-            @param  _bOpenDesignMode
-                If <TRUE/> the design mode opens for the element
+            @param  _eOpenMode
+                denotes the mode in which to open the object
+            @param _nInstigatorCommand
+                denotes the command which instigated the action. Might be 0.
             @return the form or report model will only be returned, otherwise <NULL/>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElement(const ::rtl::OUString& _sName,ElementType _eType = E_TABLE,OLinkedDocumentsAccess::EOpenMode _eOpenMode = OLinkedDocumentsAccess::OPEN_NORMAL);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElement(
+            const ::rtl::OUString& _sName,
+            ElementType _eType,
+            OLinkedDocumentsAccess::EOpenMode _eOpenMode,
+            sal_uInt16 _nInstigatorCommand = 0
+        );
 
         /** opens a new frame for creation or auto pilot
             @param  _eType
