@@ -4,9 +4,9 @@
  *
  *  $RCSfile: snakewipe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:59:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,12 @@
 #define INCLUDED_SLIDESHOW_SNAKEWIPE_HXX
 
 #include "parametricpolypolygon.hxx"
-#include "basegfx/numeric/ftools.hxx"
-#include "basegfx/point/b2dpoint.hxx"
+
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /// Generates a snake wipe:
