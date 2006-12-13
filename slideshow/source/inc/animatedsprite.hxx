@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedsprite.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:47:36 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,34 +36,23 @@
 #ifndef _SLIDESHOW_ANIMATEDSPRITE_HXX
 #define _SLIDESHOW_ANIMATEDSPRITE_HXX
 
-#ifndef _CPPCANVAS_CUSTOMSPRITE_HXX
 #include <cppcanvas/customsprite.hxx>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
 
 #include <viewlayer.hxx>
 
-#include "boost/optional.hpp"
+#include <boost/optional.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
+
 
 /* Definition of AnimatedSprite class */
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
@@ -74,7 +63,7 @@ namespace presentation
             and all the gory details of offset calculations and
             rounding prevention.
          */
-        class AnimatedSprite
+        class AnimatedSprite : private boost::noncopyable
         {
         public:
             /** Create a new AnimatedSprite, for the given metafile
@@ -87,9 +76,14 @@ namespace presentation
                 The overall size of the sprite in device coordinate
                 space, sufficient to display all transformations,
                 shape changes and clips.
+
+                @param nSpritePrio
+                Priority of the sprite. Must remain static over the
+                lifetime of this object
              */
             AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
-                            const ::basegfx::B2DSize&   rSpriteSizePixel );
+                            const ::basegfx::B2DSize&   rSpriteSizePixel,
+                            double                      nSpritePrio );
 
             ~AnimatedSprite();
 
@@ -179,16 +173,13 @@ namespace presentation
             void setPriority( double rPrio );
 
         private:
-            // default: disabled copy/assignment
-            AnimatedSprite(const AnimatedSprite&);
-            AnimatedSprite& operator=( const AnimatedSprite& );
-
             ViewLayerSharedPtr                                          mpViewLayer;
 
             ::cppcanvas::CustomSpriteSharedPtr                          mpSprite;
             ::basegfx::B2DSize                                          maEffectiveSpriteSizePixel;
             ::basegfx::B2DSize                                          maContentPixelOffset;
 
+            double                                                      mnSpritePrio;
             double                                                      mnAlpha;
             ::boost::optional< ::basegfx::B2DPoint >                    maPosPixel;
             ::boost::optional< ::basegfx::B2DPoint >                    maPos;
