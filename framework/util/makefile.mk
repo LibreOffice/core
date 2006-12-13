@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.107 $
+#   $Revision: 1.108 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-08 08:35:06 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:10:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,8 @@ SHL4OBJS=       \
                 $(SLO)$/buttontoolbarcontroller.obj       \
                 $(SLO)$/spinfieldtoolbarcontroller.obj    \
                 $(SLO)$/edittoolbarcontroller.obj         \
-                $(SLO)$/dropdownboxtoolbarcontroller.obj
+                $(SLO)$/dropdownboxtoolbarcontroller.obj  \
+                $(SLO)$/popupmenudispatcher.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
