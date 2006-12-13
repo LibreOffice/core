@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSMozabProxy.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:01:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,7 @@
 #include "MNSMozabProxy.hxx"
 #endif
 
-#ifndef CONNECTIVITY_SHARED_RES_HRC
-#include "conn_shared_res.hrc"
-#endif
+#include "resource/mozab_res.hrc"
 
 #ifndef _CONNECTIVITY_MAB_DATABASEMETADATAHELPER_HXX_
 #include "MDatabaseMetaDataHelper.hxx"
@@ -239,14 +237,17 @@ nsresult MNSMozabProxy::QueryHelperStub()
 
 namespace connectivity {
     namespace mozab {
-        class MLDAPMessageListener : public nsILDAPMessageListener {
+        class MLDAPMessageListener : public nsILDAPMessageListener
+        {
             NS_DECL_ISUPPORTS
             NS_DECL_NSILDAPMESSAGELISTENER
 
             MLDAPMessageListener();
             virtual ~MLDAPMessageListener();
 
-            sal_Bool    connected();
+            sal_Bool    initialized() const;
+            sal_Bool    goodConnection() const { return initialized() && m_GoodConnection; }
+
         protected:
 
             ::osl::Mutex        m_aMutex;
@@ -274,10 +275,9 @@ MLDAPMessageListener::~MLDAPMessageListener()
 {
 }
 
-sal_Bool MLDAPMessageListener::connected()
+sal_Bool MLDAPMessageListener::initialized() const
 {
-
-    return m_aCondition.check();
+    return const_cast< MLDAPMessageListener* >( this )->m_aCondition.check();
 }
 
 void MLDAPMessageListener::setConnectionStatus( sal_Bool _good )
@@ -291,10 +291,7 @@ void MLDAPMessageListener::setConnectionStatus( sal_Bool _good )
 
 NS_IMETHODIMP MLDAPMessageListener::OnLDAPInit(nsILDAPConnection* /*aConn*/, nsresult aStatus )
 {
-    // Make sure that the Init() worked properly
-    if ( NS_FAILED(aStatus ) ) {
-        setConnectionStatus( sal_False );
-    }
+    setConnectionStatus( NS_SUCCEEDED( aStatus ) );
     return aStatus;
 }
 
@@ -344,10 +341,11 @@ MNSMozabProxy::testLDAPConnection( )
     case ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED:
         if (m_Args->arg5)
         {
-            if ( ((MLDAPMessageListener*)m_Args->arg5)->connected())
-            {
-                rv = 0;
-            }
+            const MLDAPMessageListener* pListener( static_cast< const MLDAPMessageListener* >( m_Args->arg5 ) );
+            if ( pListener->initialized() )
+                rv = pListener->goodConnection() ? 0 : PR_NOT_CONNECTED_ERROR;
+            else
+                rv = (nsresult)PR_CONNECT_TIMEOUT_ERROR;
         }
         break;
     case ProxiedFunc::FUNC_TESTLDAP_RELEASE_RESOURCE:
