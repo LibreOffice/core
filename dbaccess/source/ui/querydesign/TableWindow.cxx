@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:25:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:54:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #endif
 #ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
+#endif
+#ifndef DBACCESS_IMAGEPROVIDER_HXX
+#include "imageprovider.hxx"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -144,6 +147,7 @@ DBG_NAME(OTableWindow);
 //------------------------------------------------------------------------------
 OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
           :Window( pParent, WB_3DLOOK|WB_MOVEABLE )
+          ,m_aTypeImage( this )
           ,m_aTitle( this )
           ,m_pListBox(NULL)
           ,m_pAccessible(NULL)
@@ -343,7 +347,6 @@ void OTableWindow::onNoColumns_throw()
 //------------------------------------------------------------------------------
 void OTableWindow::clearListBox()
 {
-    // da ich defaultmaessig keine USerData an die Items haenge, kann ich hier einfach loeschen
     if ( m_pListBox )
     {
         SvLBoxEntry* pEntry = m_pListBox->First();
@@ -357,6 +360,25 @@ void OTableWindow::clearListBox()
             pEntry = pNextEntry;
         }
     }
+}
+
+//------------------------------------------------------------------------------
+void OTableWindow::impl_updateImage()
+{
+    ImageProvider aImageProvider( getDesignView()->getController()->getConnection() );
+
+    Image aImage( aImageProvider.getImage( GetComposedName(), isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, false ) );
+    Image aImageHC( aImageProvider.getImage( GetComposedName(), isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, true ) );
+
+    if ( !aImage || !aImageHC )
+    {
+        OSL_ENSURE( false, "OTableWindow::impl_updateImage: no images!" );
+        return;
+    }
+
+    m_aTypeImage.SetModeImage( aImage, BMP_COLOR_NORMAL );
+    m_aTypeImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
+    m_aTypeImage.Show();
 }
 
 //------------------------------------------------------------------------------
@@ -448,6 +470,8 @@ BOOL OTableWindow::Init()
         if ( bSuccess )
             m_pListBox->SelectAll( FALSE );
     }
+
+    impl_updateImage();
 
     return bSuccess;
 }
@@ -633,33 +657,32 @@ void OTableWindow::Resize()
     // Das Fenster darf nicht verschwinden, deshalb min. Groesse setzen
     Size    aOutSize = GetOutputSizePixel();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
-    Point   aPos = GetPosPixel();
 
-    long nCharHeight = CalcZoom(GetTextHeight())+ CalcZoom(4);
-//  if( aOutSize.Width() < TABWIN_WIDTH_MIN )
-//  {
-//      aOutSize.Width() = TABWIN_WIDTH_MIN;
-//      bChanged = sal_True;
-//  }
-//  if( aOutSize.Height() < TABWIN_HEIGHT_MIN )
-//  {
-//      aOutSize.Height() = TABWIN_HEIGHT_MIN;
-//      nCharHeight = GetTextHeight() + 4;
-//      bChanged = sal_True;
-//  }
-//  if(bChanged)
-//  {
-//      SetPosSizePixel( aPos, aOutSize );
-//      m_pData->SetSize( aOutSize );
-//  }
+    long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );
 
     //////////////////////////////////////////////////////////////////////
     // Titel und ListBox anpassen
-    //  long nCharHeight = GetTextHeight() + 4;
     long n5Pos = CalcZoom(5);
-    long n10Pos = CalcZoom(10);
-    m_aTitle.SetPosSizePixel( Point(n5Pos,n5Pos), Size( aOutSize.Width()-n10Pos, nCharHeight) );
-    m_pListBox->SetPosSizePixel( Point(n5Pos,nCharHeight+n5Pos), Size(aOutSize.Width()-n10Pos,aOutSize.Height()-nCharHeight-n10Pos) );
+    long nPositionX = n5Pos;
+    long nPositionY = n5Pos;
+
+    // position the image which indicates the type
+    m_aTypeImage.SetPosPixel( Point( nPositionX, nPositionY ) );
+    Size aImageSize( m_aTypeImage.GetImage().GetSizePixel() );
+    m_aTypeImage.SetSizePixel( aImageSize );
+
+    if ( nTitleHeight < aImageSize.Height() )
+        nTitleHeight = aImageSize.Height();
+
+    nPositionX += aImageSize.Width() + CalcZoom( 2 );
+    m_aTitle.SetPosSizePixel( Point( nPositionX, nPositionY ), Size( aOutSize.Width() - nPositionX - n5Pos, nTitleHeight ) );
+
+    long nTitleToList = CalcZoom( 3 );
+
+    m_pListBox->SetPosSizePixel(
+        Point( n5Pos, nPositionY + nTitleHeight + nTitleToList ),
+        Size( aOutSize.Width() - 2 * n5Pos, aOutSize.Height() - ( nPositionY + nTitleHeight + nTitleToList ) - n5Pos )
+    );
 
     Window::Invalidate();
 }
