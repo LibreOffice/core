@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:05:44 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_SQL92CHECK);
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_MSACCESS:
             _rDetailsIds.push_back(DSID_SQL92CHECK);
             _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
@@ -73,6 +74,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_ADABAS:
             _rDetailsIds.push_back(DSID_CHARSET);
             _rDetailsIds.push_back(DSID_SQL92CHECK);
@@ -93,6 +95,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
             _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
             _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
+            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
             _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
@@ -110,6 +113,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_CATALOG);
             _rDetailsIds.push_back(DSID_SCHEMA);
             _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
+            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
             _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
             _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
             _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
@@ -127,6 +131,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_MYSQL_ODBC:
             _rDetailsIds.push_back(DSID_CHARSET);
             _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
@@ -137,6 +142,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_LDAP:
             _rDetailsIds.push_back(DSID_CONN_LDAP_BASEDN);
             _rDetailsIds.push_back(DSID_CONN_LDAP_ROWCOUNT);
@@ -157,9 +163,11 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
         case DST_OUTLOOK:
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_OUTLOOKEXP:
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_JDBC:
             _rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             _rDetailsIds.push_back(DSID_SQL92CHECK);
@@ -173,10 +181,12 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_CATALOG);
             _rDetailsIds.push_back(DSID_SCHEMA);
             _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
+            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
             _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
             _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_ORACLE_JDBC:
             _rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             _rDetailsIds.push_back(DSID_SQL92CHECK);
@@ -190,10 +200,12 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_CATALOG);
             _rDetailsIds.push_back(DSID_SCHEMA);
             _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
+            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
             _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
             _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
+
         case DST_USERDEFINE1:   /// first user defined driver
         case DST_USERDEFINE2:
         case DST_USERDEFINE3:
@@ -218,6 +230,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_CATALOG);
             _rDetailsIds.push_back(DSID_SCHEMA);
             _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
+            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
             _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
             _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
             _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
