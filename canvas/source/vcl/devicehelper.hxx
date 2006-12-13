@@ -4,9 +4,9 @@
  *
  *  $RCSfile: devicehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:01:10 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define _VCLCANVAS_DEVICEHELPER_HXX
 
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
 
@@ -109,11 +110,12 @@ namespace vclcanvas
         void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
 
     private:
-        // TODO(Q3): Lifetime issue. Cannot control pointer validity
-        // over object lifetime, since we're a UNO component. Now that
-        // we've changed the ::Window canvas reference to a weak ref,
-        // might be okay to hold a uno::Reference to the VCL window
-        // here.
+        // TODO(Q2): Lifetime issue. Though WindowGraphicDeviceBase
+        // now listenes to the window component, I still consider
+        // holding a naked ptr unsafe here (especially as we pass it
+        // around via getOutDev). This _only_ works reliably, if
+        // disposing the SpriteCanvas correctly disposes all entities
+        // which hold this pointer.
         Window*                 mpOutputWindow;
 
         /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
