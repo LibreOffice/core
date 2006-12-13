@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:47:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,11 @@
 #define INCLUDED_SLIDESHOW_ANIMATIONNODE_HXX
 
 #include "disposable.hxx"
-#include "com/sun/star/animations/XAnimationNode.hpp"
-#include "boost/shared_ptr.hpp"
 
-namespace presentation {
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <boost/shared_ptr.hpp>
+
+namespace slideshow {
 namespace internal {
 
 /** This interface is used to mirror every XAnimateNode object
