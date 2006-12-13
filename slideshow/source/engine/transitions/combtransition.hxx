@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combtransition.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:51:08 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,10 @@
 #ifndef _SLIDESHOW_COMBTRANSITION_HXX
 #define _SLIDESHOW_COMBTRANSITION_HXX
 
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "slidechangebase.hxx"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 /** Comb transition class.
@@ -56,10 +56,12 @@ public:
         Number of comb-like stripes to show in this effect
     */
     CombTransition( ::boost::optional<SlideSharedPtr> const & leavingSlide,
-                    const SlideSharedPtr& pEnteringSlide,
-                    const SoundPlayerSharedPtr& pSoundPlayer,
-                    const ::basegfx::B2DVector& rPushDirection,
-                    sal_Int32                   nNumStripes );
+                    const SlideSharedPtr&                     pEnteringSlide,
+                    const SoundPlayerSharedPtr&               pSoundPlayer,
+                    const UnoViewContainer&                   rViewContainer,
+                    EventMultiplexer&                         rEventMultiplexer,
+                    const ::basegfx::B2DVector&               rPushDirection,
+                    sal_Int32                                 nNumStripes );
 
     // NumberAnimation
     virtual bool operator()( double x );
@@ -68,7 +70,7 @@ private:
     const ::basegfx::B2DVector maPushDirectionUnit;
     sal_Int32                  mnNumStripes;
 
-    void renderComb( double t, UnoViewSharedPtr const & pView ) const;
+    void renderComb( double t, const ViewEntry& rViewEntry ) const;
 };
 
 } // namespace internal
