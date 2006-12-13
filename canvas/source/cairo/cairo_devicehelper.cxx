@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_devicehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:46:09 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 
+#include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
 #include <vcl/syschild.hxx>
@@ -67,31 +68,36 @@ namespace cairocanvas
         mpSpriteCanvas( NULL ),
         maSize(),
         mbFullScreen( false ),
-    mpBufferSurface( NULL ),
-    mpBufferCairo( NULL ),
-    mpWindowSurface( NULL )
+        mpBufferSurface( NULL ),
+        mpBufferCairo( NULL ),
+        mpWindowSurface( NULL )
     {
     }
 
-    void DeviceHelper::init( Window&                rOutputWindow,
-                 SpriteCanvas&              rSpriteCanvas,
+    void DeviceHelper::init( Window&                    rOutputWindow,
+                             SpriteCanvas&              rSpriteCanvas,
                              const ::basegfx::B2ISize&  rSize,
                              bool                       bFullscreen )
     {
-    mpOutputWindow = &rOutputWindow;
+        rSpriteCanvas.setWindow(
+            uno::Reference<awt::XWindow2>(
+                VCLUnoHelper::GetInterface(&rOutputWindow),
+                uno::UNO_QUERY_THROW) );
+
+        mpOutputWindow = &rOutputWindow;
         mpSpriteCanvas = &rSpriteCanvas;
         mbFullScreen = bFullscreen;
 
-    // check whether we're a SysChild: have to fetch system data
-    // directly from SystemChildWindow, because the GetSystemData
-    // method is unfortunately not virtual
-    const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( mpOutputWindow );
-    if( pSysChild )
-        mpSysData = pSysChild->GetSystemData();
-    else
-        mpSysData = mpOutputWindow->GetSystemData();
+        // check whether we're a SysChild: have to fetch system data
+        // directly from SystemChildWindow, because the GetSystemData
+        // method is unfortunately not virtual
+        const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( mpOutputWindow );
+        if( pSysChild )
+            mpSysData = pSysChild->GetSystemData();
+        else
+            mpSysData = mpOutputWindow->GetSystemData();
 
-    setSize( rSize );
+        setSize( rSize );
     }
 
     void DeviceHelper::disposing()
@@ -99,20 +105,20 @@ namespace cairocanvas
         // release all references
         mpSpriteCanvas = NULL;
 
-    if( mpWindowSurface ) {
-        mpWindowSurface->Unref();
-        mpWindowSurface = NULL;
-    }
+        if( mpWindowSurface ) {
+            mpWindowSurface->Unref();
+            mpWindowSurface = NULL;
+        }
 
-    if( mpBufferCairo ) {
-        cairo_destroy( mpBufferCairo );
-        mpBufferCairo = NULL;
-    }
+        if( mpBufferCairo ) {
+            cairo_destroy( mpBufferCairo );
+            mpBufferCairo = NULL;
+        }
 
-    if( mpBufferSurface ) {
-        mpBufferSurface->Unref();
-        mpBufferSurface = NULL;
-    }
+        if( mpBufferSurface ) {
+            mpBufferSurface->Unref();
+            mpBufferSurface = NULL;
+        }
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
@@ -142,15 +148,6 @@ namespace cairocanvas
 
         return ::vcl::unotools::size2DFromSize( aLogSize );
     }
-//     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
-//     {
-//         return geometry::RealSize2D( 75, 75 );
-//     }
-
-//     geometry::RealSize2D DeviceHelper::getPhysicalSize()
-//     {
-//         return geometry::RealSize2D( 210, 280 );
-//     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
         const uno::Reference< rendering::XGraphicDevice >&              rDevice,
@@ -291,20 +288,6 @@ namespace cairocanvas
                                                  mpOutputWindow->GetOutputSizePixel());
             mpOutputWindow->EnableMapMode( bOldMap );
 
-//             if( mpBackBuffer )
-//             {
-//                 String aFilename2( String::CreateFromAscii("dbg_backbuffer") );
-//                 aFilename2 += String::CreateFromInt32(nFilePostfixCount);
-//                 aFilename2 += String::CreateFromAscii(".bmp");
-
-//                 SvFileStream aStream2( aFilename2, STREAM_STD_READWRITE );
-
-//                 const ::Point aEmptyPoint;
-//                 mpBackBuffer->getOutDev().EnableMapMode( FALSE );
-//                 aStream2 << mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint,
-//                                                                 mpBackBuffer->getOutDev().GetOutputSizePixel());
-//             }
-
             ++nFilePostfixCount;
         }
     }
@@ -350,17 +333,17 @@ namespace cairocanvas
 
     void DeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
     {
-    setSize( ::basegfx::B2ISize(rBounds.Width, rBounds.Height) );
+        setSize( ::basegfx::B2ISize(rBounds.Width, rBounds.Height) );
     }
 
     Surface* DeviceHelper::getBufferSurface()
     {
-    return mpBufferSurface;
+        return mpBufferSurface;
     }
 
     Surface* DeviceHelper::getWindowSurface()
     {
-    return mpWindowSurface;
+        return mpWindowSurface;
     }
 
     Surface* DeviceHelper::getSurface( const ::basegfx::B2ISize& rSize, Content aContent )
@@ -373,7 +356,7 @@ namespace cairocanvas
 
     Surface* DeviceHelper::getSurface( Content aContent )
     {
-    return getSurface( maSize, aContent );
+        return getSurface( maSize, aContent );
     }
 
     Surface* DeviceHelper::getSurface( BitmapSystemData& rData, const Size& rSize )
@@ -387,6 +370,6 @@ namespace cairocanvas
 
     void DeviceHelper::flush()
     {
-    cairoHelperFlush( mpSysData );
+        cairoHelperFlush( mpSysData );
     }
 }
