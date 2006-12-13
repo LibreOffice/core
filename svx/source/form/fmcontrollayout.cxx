@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmcontrollayout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:05:11 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,28 +160,6 @@ namespace svxform
                 if ( xPSI->hasPropertyByName( FM_PROP_VISUALEFFECT ) )
                     _rxControlModel->setPropertyValue( FM_PROP_VISUALEFFECT, makeAny( nVisualEffect ) );
             }
-
-            // if the control lives in an eForm or database, give it some nicer layout
-            // Notice that in such documents, and FmXFormController will additionally enable
-            // dynamic control border colors (i.e. the color changes when the mouse hovers over
-            // the control, or the control has the focus)
-/*
-            if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_BORDER ) && xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
-            {
-                sal_Int16 nCurrentBorder = VisualEffect::NONE;
-                OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_BORDER ) >>= nCurrentBorder );
-                if ( nCurrentBorder != VisualEffect::NONE )
-                {
-                    if ( ( eDocType == eElectronicForm ) || ( eDocType == eDatabaseForm ) )
-                    {
-                        _rxControlModel->setPropertyValue( FM_PROP_BORDER, makeAny( VisualEffect::FLAT ) );
-                        if ( nClassId != FormComponentType::GRIDCONTROL )
-                        {
-                        }
-                    }
-                }
-            }
-*/
         }
         catch( const Exception& )
         {
