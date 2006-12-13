@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:13:25 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,12 @@
 namespace pcr
 {
 //............................................................................
+
+    #define LAYOUT_BORDER_LEFT      3
+    #define LAYOUT_BORDER_TOP       3
+    #define LAYOUT_BORDER_RIGHT     3
+    #define LAYOUT_BORDER_BOTTOM    3
+
     //==================================================================
     // class OBrowserPage
     //==================================================================
@@ -54,8 +60,6 @@ namespace pcr
     {
         m_aListBox.SetBackground(GetBackground());
         m_aListBox.SetPaintTransparent( TRUE );
-        Point aPos(3,3);
-        m_aListBox.SetPosPixel(aPos);
         m_aListBox.Show();
     }
 
@@ -68,21 +72,21 @@ namespace pcr
     void OBrowserPage::Resize()
     {
         Size aSize( GetOutputSizePixel() );
-        aSize.Width() -= 6;
-        aSize.Height() -= 6;
-        m_aListBox.SetPosSizePixel( Point( 3, 3 ), aSize );
+        aSize.Width() -= LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
+        aSize.Height() -= LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
+        m_aListBox.SetPosSizePixel( Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ), aSize );
     }
 
     //------------------------------------------------------------------
-    OBrowserListBox* OBrowserPage::getListBox()
+    OBrowserListBox& OBrowserPage::getListBox()
     {
-        return &m_aListBox;
+        return m_aListBox;
     }
 
     //------------------------------------------------------------------
-    const OBrowserListBox* OBrowserPage::getListBox() const
+    const OBrowserListBox& OBrowserPage::getListBox() const
     {
-        return &m_aListBox;
+        return m_aListBox;
     }
 
     //------------------------------------------------------------------
@@ -93,10 +97,16 @@ namespace pcr
             m_aListBox.ActivateListBox(IsVisible());
     }
 
-    // #95343# ---------------------------------------------------------
+    //------------------------------------------------------------------
     sal_Int32 OBrowserPage::getMinimumWidth()
     {
-        return m_aListBox.GetMinimumWidth()+6;
+        return m_aListBox.GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
+    }
+
+    //------------------------------------------------------------------
+    sal_Int32 OBrowserPage::getMinimumHeight()
+    {
+        return m_aListBox.GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
     }
 
 //............................................................................
