@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:33 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -622,7 +622,7 @@ namespace drawinglayer
 
                     basegfx::B3DPoint aCenter(basegfx::tools::getRange(rSliceVector[0L].getB3DPolyPolygon()).getCenter());
 
-                    for(sal_uInt32 a(0L); a < nLoopCount; a++)
+                    for(a = 0L; a < nLoopCount; a++)
                     {
                         const basegfx::B3DPoint aNextCenter(basegfx::tools::getRange(rSliceVector[(a + 1L) % nNumSlices].getB3DPolyPolygon()).getCenter());
                         const double fLength(basegfx::B3DVector(aNextCenter - aCenter).getLength());
@@ -671,7 +671,13 @@ namespace drawinglayer
 
                                 if(bCreateNormals)
                                 {
-                                    const basegfx::B3DVector aNormal(aFront.count() ? -aFront.getB3DPolygon(0L).getNormal() : basegfx::B3DVector(0.0, 0.0, -1.0));
+                                    basegfx::B3DVector aNormal(0.0, 0.0, -1.0);
+
+                                    if(aFront.count())
+                                    {
+                                        aNormal = -aFront.getB3DPolygon(0L).getNormal();
+                                    }
+
                                     impSetNormal(aFront, aNormal);
 
                                     if(bHasSlant)

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-28 11:03:57 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,12 +960,20 @@ namespace drawinglayer
 
                         if(pContent)
                         {
+                            const double fConvertColor(1.0 / 255.0);
+
                             for(sal_uInt32 y(0L); y < (sal_uInt32)pContent->Height(); y++)
                             {
                                 for(sal_uInt32 x(0L); x < (sal_uInt32)pContent->Width(); x++)
                                 {
-                                    const basegfx::BColor aBColor(rModifier.getModifiedColor(Color(pContent->GetPixel(y, x)).getBColor()));
-                                    pContent->SetPixel(y, x, BitmapColor(Color(aBColor)));
+                                    const BitmapColor aBMCol(pContent->GetColor(y, x));
+                                    const basegfx::BColor aBSource(
+                                        (double)aBMCol.GetRed() * fConvertColor,
+                                        (double)aBMCol.GetGreen() * fConvertColor,
+                                        (double)aBMCol.GetBlue() * fConvertColor);
+                                    const basegfx::BColor aBDest(rModifier.getModifiedColor(aBSource));
+
+                                    pContent->SetPixel(y, x, BitmapColor(Color(aBDest)));
                                 }
                             }
 
@@ -1036,7 +1044,7 @@ namespace drawinglayer
                 {
                     // handle, there is no shear and no mirror
                     bPrimitiveAccepted = true;
-                    const Font aFont(getVclFontFromFontAttributes(rTextCandidate.getFontAttributes(), aScale, fRotate));
+                    const Font aFont(primitive2d::getVclFontFromFontAttributes(rTextCandidate.getFontAttributes(), aScale, fRotate));
                     const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
                     const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
 

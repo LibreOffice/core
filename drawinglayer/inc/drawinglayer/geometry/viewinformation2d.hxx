@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:31:22 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,13 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #define INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
+
+// the solaris compiler defines 'sun' as '1'. To avoid that (and to allow
+// pre-declarations of com/sun/star namespace), include sal/config.h here
+// where sun is redefined as 'sun' (so i guess the problem is known).
+#ifndef _SAL_CONFIG_H_
+#include <sal/config.h>
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

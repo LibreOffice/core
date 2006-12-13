@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-28 11:03:57 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,15 +199,15 @@ namespace drawinglayer
                         {
                             if(basegfx::fTools::equalZero(fShearX) && basegfx::fTools::equalZero(fRotate))
                             {
-                                basegfx::B2DVector aScale, aTranslate;
-                                double fRotate, fShearX;
+                                basegfx::B2DVector aScaleB, aTranslateB;
+                                double fRotateB, fShearXB;
 
-                                pNewTextBitmap->getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-                                basegfx::B2DVector aViewSize(basegfx::absolute(aScale));
-                                aViewSize *= rViewInformation.getViewTransformation();
+                                pNewTextBitmap->getTransform().decompose(aScaleB, aTranslateB, fRotateB, fShearXB);
+                                basegfx::B2DVector aViewSizeB(basegfx::absolute(aScaleB));
+                                aViewSizeB *= rViewInformation.getViewTransformation();
                                 const Size aSourceSizePixel(pNewTextBitmap->getBitmapEx().GetSizePixel());
-                                const bool bXEqual(aSourceSizePixel.getWidth() == basegfx::fround(aViewSize.getX()));
-                                const bool bYEqual(aSourceSizePixel.getHeight() == basegfx::fround(aViewSize.getY()));
+                                const bool bXEqual(aSourceSizePixel.getWidth() == basegfx::fround(aViewSizeB.getX()));
+                                const bool bYEqual(aSourceSizePixel.getHeight() == basegfx::fround(aViewSizeB.getY()));
                                 OSL_ENSURE(bXEqual && bYEqual, "3D renderer produced non-pixel-aligned graphic (!)");
                             }
                         }

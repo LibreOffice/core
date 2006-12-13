@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
     virtual sal_uInt32 getPrimitiveID() const;
 
 #define ImplPrimitrive2DIDBlock(TheClass, a, b, c, d) \
-    sal_uInt32 TheClass##::getPrimitiveID() const { return Create2DPrimitiveID(a, b, c, d); }
+    sal_uInt32 TheClass::getPrimitiveID() const { return Create2DPrimitiveID(a, b, c, d); }
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

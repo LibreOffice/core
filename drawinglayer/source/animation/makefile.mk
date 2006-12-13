@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: aw $ $Date: 2006-08-09 16:47:02 $
+#   last change: $Author: aw $ $Date: 2006-12-13 16:57:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 PRJ=..$/..
 PRJNAME=drawinglayer
 TARGET=animation
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:39:22 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -683,9 +683,9 @@ namespace drawinglayer
 
                         if(bUseTex)
                         {
-                            const basegfx::B2DPointInterpolator& rA(maGlobalTextureCoordinateInterpolators[rA.getTextureCoordinateIndex()]);
-                            const basegfx::B2DPointInterpolator& rB(maGlobalTextureCoordinateInterpolators[rB.getTextureCoordinateIndex()]);
-                            aTex = basegfx::B2DPointInterpolator(rA.getVal(), rB.getVal(), rA.getZVal(), rB.getZVal(), nSpanLength);
+                            const basegfx::B2DPointInterpolator& rLA(maGlobalTextureCoordinateInterpolators[rA.getTextureCoordinateIndex()]);
+                            const basegfx::B2DPointInterpolator& rLB(maGlobalTextureCoordinateInterpolators[rB.getTextureCoordinateIndex()]);
+                            aTex = basegfx::B2DPointInterpolator(rLA.getVal(), rLB.getVal(), rLA.getZVal(), rLB.getZVal(), nSpanLength);
                         }
 
                         if(bUseNrm)
@@ -1073,7 +1073,14 @@ namespace drawinglayer
 
             if(impIsValid(rUV, nX, nY))
             {
-                rBColor = Color(mpRead->GetColor(nY, nX)).getBColor();
+                const double fConvertColor(1.0 / 255.0);
+                const BitmapColor aBMCol(mpRead->GetColor(nY, nX));
+                const basegfx::BColor aBSource(
+                    (double)aBMCol.GetRed() * fConvertColor,
+                    (double)aBMCol.GetGreen() * fConvertColor,
+                    (double)aBMCol.GetBlue() * fConvertColor);
+
+                rBColor = aBSource;
             }
             else
             {
@@ -1087,7 +1094,10 @@ namespace drawinglayer
 
             if(impIsValid(rUV, nX, nY))
             {
-                rfOpacity = ((double)(0xff - Color(mpRead->GetColor(nY, nX)).GetLuminance()) * (1.0 / 255.0));
+                const BitmapColor aBMCol(mpRead->GetColor(nY, nX));
+                const Color aColor(aBMCol.GetRed(), aBMCol.GetGreen(), aBMCol.GetBlue());
+
+                rfOpacity = ((double)(0xff - aColor.GetLuminance()) * (1.0 / 255.0));
             }
             else
             {

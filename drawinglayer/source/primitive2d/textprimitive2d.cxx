@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,10 +334,10 @@ namespace drawinglayer
         :   TextSimplePortionPrimitive2D(rNewTransform, rText, rDXArray, rFontAttributes, rFontColor),
             meFontUnderline(eFontUnderline),
             meFontStrikeout(eFontStrikeout),
+            meFontEmphasisMark(eFontEmphasisMark),
             meFontRelief(eFontRelief),
             mbUnderlineAbove(bUnderlineAbove),
             mbWordLineMode(bWordLineMode),
-            meFontEmphasisMark(eFontEmphasisMark),
             mbEmphasisMarkAbove(bEmphasisMarkAbove),
             mbEmphasisMarkBelow(bEmphasisMarkBelow),
             mbShadow(bShadow),

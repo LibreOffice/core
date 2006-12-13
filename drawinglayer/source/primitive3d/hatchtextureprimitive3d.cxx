@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:10 $
+ *  last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,11 @@ namespace drawinglayer
             if(getChildren().hasElements())
             {
                 const Primitive3DSequence aSource(getChildren());
-                const sal_Int32 nSourceCount(aSource.getLength());
+                const sal_uInt32 nSourceCount(aSource.getLength());
                 std::vector< Primitive3DReference > aDestination;
+                sal_uInt32 a, b, c;
 
-                for(sal_Int32 a(0L); a < nSourceCount; a++)
+                for(a = 0L; a < nSourceCount; a++)
                 {
                     // get reference
                     const Primitive3DReference xReference(aSource[a]);
@@ -134,28 +135,27 @@ namespace drawinglayer
                                         basegfx::B3DPoint a3N;
                                         basegfx::B3DVector a3X, a3Y;
                                         bool b2N(false), b2X(false), b2Y(false);
-                                        sal_uInt32 a, b;
 
-                                        for(a = 0L; a < nPolyCount; a++)
+                                        for(b = 0L; b < nPolyCount; b++)
                                         {
-                                            const basegfx::B3DPolygon aPartPoly(aFillPolyPolygon.getB3DPolygon(a));
+                                            const basegfx::B3DPolygon aPartPoly(aFillPolyPolygon.getB3DPolygon(b));
                                             const sal_uInt32 nPointCount(aPartPoly.count());
                                             basegfx::B2DPolygon aTexPolygon;
 
-                                            for(b = 0L; b < nPointCount; b++)
+                                            for(c = 0L; c < nPointCount; c++)
                                             {
-                                                const basegfx::B2DPoint a2Candidate(aPartPoly.getTextureCoordinate(b));
+                                                const basegfx::B2DPoint a2Candidate(aPartPoly.getTextureCoordinate(c));
 
                                                 if(!b2N)
                                                 {
                                                     a2N = a2Candidate;
-                                                    a3N = aPartPoly.getB3DPoint(b);
+                                                    a3N = aPartPoly.getB3DPoint(c);
                                                     b2N = true;
                                                 }
                                                 else if(!b2X && !a2N.equal(a2Candidate))
                                                 {
                                                     a2X = a2Candidate - a2N;
-                                                    a3X = aPartPoly.getB3DPoint(b) - a3N;
+                                                    a3X = aPartPoly.getB3DPoint(c) - a3N;
                                                     b2X = true;
                                                 }
                                                 else if(!b2Y && !a2N.equal(a2Candidate) && !a2X.equal(a2Candidate))
@@ -166,7 +166,7 @@ namespace drawinglayer
 
                                                     if(!basegfx::fTools::equalZero(fCross))
                                                     {
-                                                        a3Y = aPartPoly.getB3DPoint(b) - a3N;
+                                                        a3Y = aPartPoly.getB3DPoint(c) - a3N;
                                                         b2Y = true;
                                                     }
                                                 }
@@ -300,9 +300,9 @@ namespace drawinglayer
                 const sal_uInt32 nDestSize(aDestination.size());
                 aRetval.realloc(nDestSize);
 
-                for(sal_uInt32 b(0L); b < nDestSize; b++)
+                for(a = 0L; a < nDestSize; a++)
                 {
-                    aRetval[b] = aDestination[b];
+                    aRetval[a] = aDestination[a];
                 }
             }
 
