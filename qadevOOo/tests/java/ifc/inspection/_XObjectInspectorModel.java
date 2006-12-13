@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XObjectInspectorModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:49:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 11:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,11 +64,11 @@ public class _XObjectInspectorModel extends MultiMethodTest {
      * calls the method <CODE>getHandlerFactories()</CODE>
      * Has <b>OK</b> status if returned value is not null.
      */
-    public void _getHandlerFactories() {
+    public void _HandlerFactories() {
 
         Object[] HandlerFactories = oObj.getHandlerFactories();
 
-        tRes.tested("getHandlerFactories()", HandlerFactories != null) ;
+        tRes.tested("HandlerFactories()", HandlerFactories != null) ;
     }
 
     /**
@@ -99,6 +99,51 @@ public class _XObjectInspectorModel extends MultiMethodTest {
         tRes.tested("describeCategories()", categories != null) ;
     }
 
+    /**
+     * Call the method <CODE>getHasHelpSection()</CODE>
+     * Has <b>OK</b> status if method returned </CODE>true</CODE>
+     */
+    public void _HasHelpSection() {
+
+        boolean hasHelpSection = oObj.getHasHelpSection();
+
+        tRes.tested("HasHelpSection()", hasHelpSection) ;
+    }
+
+    /**
+     * Call the method <CODE>getMinHelpTextLines()</CODE>
+     * Has <b>OK</b> status if returned value equals to object relation 'minHelpTextLines'
+     */
+    public void _MinHelpTextLines() {
+
+        Integer minHelpTextLines = (Integer) tEnv.getObjRelation("minHelpTextLines");
+
+        int getMinHelpTextLines = oObj.getMinHelpTextLines();
+
+        boolean result = (minHelpTextLines.intValue() == getMinHelpTextLines);
+
+        if (!result)
+            log.println("expected value:" + minHelpTextLines + " getted value:" + getMinHelpTextLines);
+
+        tRes.tested("MinHelpTextLines()", result) ;
+    }
+
+    /**
+     * Call the method <CODE>getMaxHelpTextLines())</CODE>
+     * Has <b>OK</b> status if returned value equals to object relation 'maxHelpTextLines'
+     */
+    public void _MaxHelpTextLines() {
+
+        Integer maxHelpTextLines = (Integer) tEnv.getObjRelation("maxHelpTextLines");
+
+        int getMaxHelpTextLines = oObj.getMaxHelpTextLines();
+
+        boolean result = (maxHelpTextLines.intValue() == getMaxHelpTextLines);
+
+        if (!result)
+            log.println("expected value:" + maxHelpTextLines + " getted value:" + getMaxHelpTextLines);
+
+        tRes.tested("MaxHelpTextLines()", result);
+    }
+
 }
-
-
