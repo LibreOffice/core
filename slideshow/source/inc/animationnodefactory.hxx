@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationnodefactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:06:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,16 +38,11 @@
 
 #include <animationnode.hxx>
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODE_HPP_
 #include <com/sun/star/animations/XAnimationNode.hpp>
-#endif
 
+#include <boost/utility.hpp>
 #include <vector>
 
 #include <slideshowcontext.hxx>
@@ -57,13 +52,13 @@
 #include <usereventqueue.hxx>
 
 
-namespace presentation
+namespace slideshow
 {
     namespace internal
     {
         /* Definition of AnimationNodeFactory class */
 
-        class AnimationNodeFactory
+        class AnimationNodeFactory : private boost::noncopyable
         {
         public:
             /** Create an AnimatioNode for the given XAnimationNode
@@ -84,10 +79,6 @@ namespace presentation
             // default: constructor/destructor disabled
             AnimationNodeFactory();
             ~AnimationNodeFactory();
-
-            // default: disabled copy/assignment
-            AnimationNodeFactory(const AnimationNodeFactory&);
-            AnimationNodeFactory& operator=( const AnimationNodeFactory& );
         };
     }
 }
