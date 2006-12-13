@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:13:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _CANVAS_CANVASTOOLS_HXX
-#define _CANVAS_CANVASTOOLS_HXX
+#ifndef INCLUDED_CANVAS_CANVASTOOLS_HXX
+#define INCLUDED_CANVAS_CANVASTOOLS_HXX
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -93,6 +93,11 @@ namespace com { namespace sun { namespace star { namespace rendering
     class  XPolyPolygon2D;
 } } } }
 
+namespace com { namespace sun { namespace star { namespace awt
+{
+    struct Rectangle;
+    class  XWindow2;
+} } } }
 
 namespace canvas
 {
@@ -525,9 +530,13 @@ namespace canvas
             return static_cast<Target>(arg);
         }
 
+        ::com::sun::star::awt::Rectangle getAbsoluteWindowRect(
+            const ::com::sun::star::awt::Rectangle&                                    rRect,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2 >& xWin  );
+
         /** Retrieve for small bound marks around each corner of the given rectangle
          */
-        ::basegfx::B2DPolyPolygon getBoundMarkPolyPolygon( const ::basegfx::B2DRange& rRange );
+        ::basegfx::B2DPolyPolygon getBoundMarksPolyPolygon( const ::basegfx::B2DRange& rRange );
 
 
         /** A very simplistic map for ASCII strings and arbitrary value
@@ -677,5 +686,5 @@ namespace canvas
     }
 }
 
-#endif /* _CANVAS_CANVASTOOLS_HXX */
+#endif /* INCLUDED_CANVAS_CANVASTOOLS_HXX */
 // eof
