@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submissionhandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:24:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,7 +354,7 @@ namespace pcr
         }
 
         LineDescriptor aDescriptor;
-        aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False );
+        aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_True );
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
