@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationcolornode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:30:41 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:29:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "animationbasenode.hxx"
 #include "com/sun/star/animations/XAnimateColor.hpp"
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 class AnimationColorNode : public AnimationBaseNode
