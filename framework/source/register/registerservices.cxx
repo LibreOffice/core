@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:06:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,6 +272,9 @@
 #include <uielement/simpletextstatusbarcontroller.hxx>
 #endif
 
+#include <dispatch/popupmenudispatcher.hxx>
+
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
@@ -324,6 +327,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::NewMenuController                       )
                         COMPONENTINFO( ::framework::TaskCreatorService                      )
                         COMPONENTINFO( ::framework::SimpleTextStatusbarController           )
+                        COMPONENTINFO( ::framework::PopupMenuDispatcher                     )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -376,6 +380,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::LogoTextStatusbarController             )   else
                         IFFACTORY( ::framework::TaskCreatorService                      )   else
                         IFFACTORY( ::framework::NewMenuController                       )   else
-                        IFFACTORY( ::framework::SimpleTextStatusbarController           )
+                        IFFACTORY( ::framework::SimpleTextStatusbarController           )   else
+                        IFFACTORY( ::framework::PopupMenuDispatcher                     )
             )
 
