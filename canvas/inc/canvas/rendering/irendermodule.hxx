@@ -4,9 +4,9 @@
  *
  *  $RCSfile: irendermodule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:45:24 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ namespace canvas
          */
         enum PrimitiveType
         {
-            PRIMITIVE_TYPE_UNKNONWN,
+            PRIMITIVE_TYPE_UNKNOWN,
             PRIMITIVE_TYPE_TRIANGLE,
             PRIMITIVE_TYPE_QUAD
         };
