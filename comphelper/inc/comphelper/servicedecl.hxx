@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicedecl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:44:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include "boost/function.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/repetition.hpp"
+#include "boost/preprocessor/seq/enum.hpp"
 
 namespace comphelper {
 namespace service_decl {
@@ -360,6 +361,75 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 
 } // namespace service_decl
 } // namespace comphelper
+
+/** The following preprocessor macro generates the C access functions,
+    that are used to initialize and register the components of a
+    shared library object.
+
+    If you have, say, written a lib that contains three distinct
+    components, each with its own ServiceDecl object, you might want
+    to employ the following code:
+
+    <pre>
+        // must reside outside _any_ namespace
+        COMPHELPER_SERVICEDECL_EXPORTS3(yourServiceDecl1,
+                                       yourServiceDecl2,
+                                       yourServiceDecl3);
+    </pre>
+
+    For your convenience, the COMPHELPER_SERVICEDECL_EXPORTS<N> macro
+    comes pre-defined up to N=8, if you should need more arguments,
+    call COMPHELPER_SERVICEDECL_make_exports directly, like this:
+
+    <pre>
+        // must reside outside _any_ namespace
+        COMPHELPER_SERVICEDECL_make_exports((yourServiceDecl1)(yourServiceDecl2)...(yourServiceDeclN));
+    </pre>
+
+    Note the missing colons between the bracketed arguments.
+ */
+#define COMPHELPER_SERVICEDECL_make_exports(varargs_ )  \
+extern "C" \
+{ \
+    void SAL_CALL component_getImplementationEnvironment( const sal_Char**  ppEnvTypeName, \
+                                                          uno_Environment** /*ppEnv*/ ) \
+    { \
+        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME; \
+    } \
+ \
+    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory*  pServiceManager, \
+                                           registry::XRegistryKey*      pRegistryKey ) \
+    { \
+        return component_writeInfoHelper( pServiceManager, pRegistryKey, \
+                                          BOOST_PP_SEQ_ENUM(varargs_) ); \
+    } \
+ \
+    void* SAL_CALL component_getFactory( sal_Char const*                pImplName, \
+                                         lang::XMultiServiceFactory*    pServiceManager, \
+                                         registry::XRegistryKey*        pRegistryKey ) \
+    { \
+        return component_getFactoryHelper( pImplName, pServiceManager, \
+                                           pRegistryKey, \
+                                           BOOST_PP_SEQ_ENUM(varargs_) ); \
+    } \
+}
+
+#define COMPHELPER_SERVICEDECL_EXPORTS1(comp0_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_))
+#define COMPHELPER_SERVICEDECL_EXPORTS2(comp0_,comp1_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_))
+#define COMPHELPER_SERVICEDECL_EXPORTS3(comp0_,comp1_,comp2_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_))
+#define COMPHELPER_SERVICEDECL_EXPORTS4(comp0_,comp1_,comp2_,comp3_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_))
+#define COMPHELPER_SERVICEDECL_EXPORTS5(comp0_,comp1_,comp2_,comp3_,comp4_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_))
+#define COMPHELPER_SERVICEDECL_EXPORTS6(comp0_,comp1_,comp2_,comp3_,comp4_,comp5_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_))
+#define COMPHELPER_SERVICEDECL_EXPORTS7(comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_))
+#define COMPHELPER_SERVICEDECL_EXPORTS8(comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_,comp7_) \
+    COMPHELPER_SERVICEDECL_make_exports((comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_)(comp7_))
 
 #endif //  ! defined(COMPHELPER_SERVICEDECL_HXX_INCLUDED)
 
