@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:04:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+#include "osl/diagnose.h"
 
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
-#include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
+#include "com/sun/star/task/XInteractionAbort.hpp"
+#include "com/sun/star/ucb/XWebDAVCommandEnvironment.hpp"
 
-#ifndef _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
-#include <ucbhelper/simpleauthenticationrequest.hxx>
-#endif
+#include "ucbhelper/simpleauthenticationrequest.hxx"
 
-#ifndef _DAVAUTHLISTENERIMPL_HXX_
 #include "DAVAuthListenerImpl.hxx"
-#endif
-#ifndef _DAVRESOURCEACCESS_HXX_
 #include "DAVResourceAccess.hxx"
-#endif
-
 
 using namespace webdav_ucp;
 using namespace com::sun::star;
-
 
 //=========================================================================
 //=========================================================================
@@ -78,10 +67,10 @@ int DAVAuthListener_Impl::authenticate(
 {
     if ( m_xEnv.is() )
     {
-        uno::Reference< task::XInteractionHandler > xIH
+    uno::Reference< task::XInteractionHandler > xIH
             = m_xEnv->getInteractionHandler();
-        if ( xIH.is() )
-        {
+    if ( xIH.is() )
+    {
             // #102871# - Supply username and password from previous try.
             // Password container service depends on this!
             if ( inoutUserName.getLength() == 0 )
@@ -101,12 +90,12 @@ int DAVAuthListener_Impl::authenticate(
                 = xRequest->getSelection();
 
             if ( xSelection.is() )
-            {
+        {
                 // Handler handled the request.
-                uno::Reference< task::XInteractionAbort > xAbort(
+        uno::Reference< task::XInteractionAbort > xAbort(
                     xSelection.get(), uno::UNO_QUERY );
-                if ( !xAbort.is() )
-                {
+        if ( !xAbort.is() )
+        {
                     const rtl::Reference<
                         ucbhelper::InteractionSupplyAuthentication > & xSupp
                         = xRequest->getAuthenticationSupplier();
@@ -119,10 +108,10 @@ int DAVAuthListener_Impl::authenticate(
                     m_aPrevPassword = outPassWord;
 
                     // go on.
-                    return 0;
-                }
-            }
+            return 0;
         }
+        }
+    }
     }
     // Abort.
     return -1;
@@ -138,9 +127,9 @@ int DAVAuthListener_Impl::authenticate(
 
 //=========================================================================
 DAVResourceAccess::DAVResourceAccess(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr,
-                rtl::Reference< DAVSessionFactory > const & rSessionFactory,
-                const rtl::OUString & rURL )
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr,
+    rtl::Reference< DAVSessionFactory > const & rSessionFactory,
+    const rtl::OUString & rURL )
 : m_aURL( rURL ),
   m_xSessionFactory( rSessionFactory ),
   m_xSMgr( rSMgr )
@@ -160,7 +149,7 @@ DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
 
 //=========================================================================
 DAVResourceAccess & DAVResourceAccess::operator=(
-                                const DAVResourceAccess & rOther )
+    const DAVResourceAccess & rOther )
 {
     m_aURL            = rOther.m_aURL;
     m_aPath           = rOther.m_aPath;
@@ -173,137 +162,169 @@ DAVResourceAccess & DAVResourceAccess::operator=(
 }
 
 //=========================================================================
-void DAVResourceAccess::OPTIONS( DAVCapabilities & rCapabilities,
-                                   const uno::Reference<
-                                      ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::OPTIONS(
+    DAVCapabilities & rCapabilities,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii(
+                       "OPTIONS" ),
+                   aHeaders );
+
             m_xSession->OPTIONS( getRequestURI(),
                                  rCapabilities,
                                  DAVRequestEnvironment(
-                                    getRequestURI(),
-                                    new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                     getRequestURI(),
+                     new DAVAuthListener_Impl( xEnv ),
+                     aHeaders) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::PROPFIND( const Depth nDepth,
-                          const std::vector< rtl::OUString > & rPropertyNames,
-                          std::vector< DAVResource > & rResources,
-                          const uno::Reference<
-                                  ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::PROPFIND(
+    const Depth nDepth,
+    const std::vector< rtl::OUString > & rPropertyNames,
+    std::vector< DAVResource > & rResources,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii(
+                       "PROPFIND" ),
+                   aHeaders );
+
             m_xSession->PROPFIND( getRequestURI(),
                                   nDepth,
                                   rPropertyNames,
                                   rResources,
                                   DAVRequestEnvironment(
-                                    getRequestURI(),
-                                    new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                      getRequestURI(),
+                      new DAVAuthListener_Impl( xEnv ),
+                      aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::PROPFIND( const Depth nDepth,
-                                    std::vector< DAVResourceInfo > & rResInfo,
-                                    const uno::Reference<
-                                      ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::PROPFIND(
+    const Depth nDepth,
+    std::vector< DAVResourceInfo > & rResInfo,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii(
+                       "PROPFIND" ),
+                   aHeaders );
+
             m_xSession->PROPFIND( getRequestURI(),
                                   nDepth,
                                   rResInfo,
                                   DAVRequestEnvironment(
-                                    getRequestURI(),
-                                    new DAVAuthListener_Impl( xEnv ) ) ) ;
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                      getRequestURI(),
+                      new DAVAuthListener_Impl( xEnv ),
+                      aHeaders ) ) ;
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::PROPPATCH( const std::vector< ProppatchValue >& rValues,
-                                      const uno::Reference<
-                                       ucb::XCommandEnvironment >& xEnv )
-    throw( DAVException )
+void DAVResourceAccess::PROPPATCH(
+    const std::vector< ProppatchValue >& rValues,
+    const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii(
+                       "PROPPATCH" ),
+                   aHeaders );
+
             m_xSession->PROPPATCH( getRequestURI(),
                                    rValues,
                                    DAVRequestEnvironment(
-                                    getRequestURI(),
-                                    new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                       getRequestURI(),
+                       new DAVAuthListener_Impl( xEnv ),
+                       aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
-                              DAVResource & rResource,
-                              const uno::Reference<
-                                ucb::XCommandEnvironment >& xEnv )
-    throw( DAVException )
+void DAVResourceAccess::HEAD(
+    const std::vector< rtl::OUString > & rHeaderNames,
+    DAVResource & rResource,
+    const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+  throw( DAVException )
 {
     initialize();
 
@@ -313,12 +334,20 @@ void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
         bRetry = sal_False;
         try
         {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "HEAD" ),
+                   aHeaders );
+
+
             m_xSession->HEAD( getRequestURI(),
                               rHeaderNames,
                               rResource,
                               DAVRequestEnvironment(
                                 getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ) );
+                                new DAVAuthListener_Impl( xEnv ),
+                aHeaders ) );
         }
         catch ( DAVException & e )
         {
@@ -332,8 +361,8 @@ void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
 
 //=========================================================================
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
-                const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
@@ -341,20 +370,27 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "GET" ),
+                   aHeaders );
+
             xStream = m_xSession->GET( getRequestURI(),
                                        DAVRequestEnvironment(
-                                        getRequestURI(),
-                                        new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                       getRequestURI(),
+                       new DAVAuthListener_Impl( xEnv ),
+                       aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 
@@ -362,41 +398,48 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
 }
 
 //=========================================================================
-void DAVResourceAccess::GET( uno::Reference< io::XOutputStream > & rStream,
-                               const uno::Reference<
-                                      ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::GET(
+    uno::Reference< io::XOutputStream > & rStream,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "GET" ),
+                   aHeaders );
+
             m_xSession->GET( getRequestURI(),
                              rStream,
                              DAVRequestEnvironment(
-                                getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                 getRequestURI(),
+                 new DAVAuthListener_Impl( xEnv ),
+                 aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
-                const std::vector< rtl::OUString > & rHeaderNames,
-                DAVResource & rResource,
-                const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+    const std::vector< rtl::OUString > & rHeaderNames,
+    DAVResource & rResource,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
@@ -407,12 +450,19 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "GET" ),
+                   aHeaders );
+
             xStream = m_xSession->GET( getRequestURI(),
                                        rHeaderNames,
                                        rResource,
                                        DAVRequestEnvironment(
-                                        getRequestURI(),
-                                        new DAVAuthListener_Impl( xEnv ) ) );
+                       getRequestURI(),
+                       new DAVAuthListener_Impl( xEnv ),
+                       aHeaders ) );
         }
         catch ( DAVException & e )
         {
@@ -428,11 +478,11 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
 
 //=========================================================================
 void DAVResourceAccess::GET(
-                    uno::Reference< io::XOutputStream > & rStream,
-                    const std::vector< rtl::OUString > & rHeaderNames,
-                    DAVResource & rResource,
-                    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+    uno::Reference< io::XOutputStream > & rStream,
+    const std::vector< rtl::OUString > & rHeaderNames,
+    DAVResource & rResource,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
@@ -442,13 +492,20 @@ void DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "GET" ),
+                   aHeaders );
+
             m_xSession->GET( getRequestURI(),
                              rStream,
                              rHeaderNames,
                              rResource,
                              DAVRequestEnvironment(
-                                getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ) );
+                 getRequestURI(),
+                 new DAVAuthListener_Impl( xEnv ),
+                 aHeaders ) );
         }
         catch ( DAVException & e )
         {
@@ -461,42 +518,50 @@ void DAVResourceAccess::GET(
 }
 
 //=========================================================================
-void DAVResourceAccess::PUT( const uno::Reference< io::XInputStream > & rStream,
-                               const uno::Reference<
-                                     ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::PUT(
+    const uno::Reference< io::XInputStream > & rStream,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
-            m_xSession->PUT( getRequestURI(),
-                             rStream,
-                             DAVRequestEnvironment(
-                                getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "PUT" ),
+                   aHeaders );
+
+        m_xSession->PUT( getRequestURI(),
+                 rStream,
+                 DAVRequestEnvironment(
+                 getRequestURI(),
+                 new DAVAuthListener_Impl( xEnv ),
+                 aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-uno::Reference< io::XInputStream > DAVResourceAccess::POST(
-                const rtl::OUString & rContentType,
-                    const rtl::OUString & rReferer,
-                const uno::Reference< io::XInputStream > & rInputStream,
-                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw ( DAVException )
+uno::Reference<
+    io::XInputStream > DAVResourceAccess::POST(
+    const rtl::OUString & rContentType,
+    const rtl::OUString & rReferer,
+    const uno::Reference< io::XInputStream > & rInputStream,
+    const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+  throw ( DAVException )
 {
     initialize();
 
@@ -504,23 +569,30 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "POST" ),
+                   aHeaders );
+
             xStream = m_xSession->POST( getRequestURI(),
                                         rContentType,
                                         rReferer,
                                         rInputStream,
                                         DAVRequestEnvironment(
                                             getRequestURI(),
-                                            new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                                            new DAVAuthListener_Impl( xEnv ),
+                        aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 
@@ -530,177 +602,214 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
 //=========================================================================
 
 void DAVResourceAccess::POST(
-                const rtl::OUString & rContentType,
-                const rtl::OUString & rReferer,
-                const uno::Reference< io::XInputStream > & rInputStream,
-                uno::Reference< io::XOutputStream > & rOutputStream,
-                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw ( DAVException )
+    const rtl::OUString & rContentType,
+    const rtl::OUString & rReferer,
+    const uno::Reference< io::XInputStream > & rInputStream,
+    uno::Reference< io::XOutputStream > & rOutputStream,
+    const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+  throw ( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "POST" ),
+                   aHeaders );
+
             m_xSession->POST( getRequestURI(),
                               rContentType,
                               rReferer,
                               rInputStream,
                               rOutputStream,
                               DAVRequestEnvironment(
-                                getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                  getRequestURI(),
+                  new DAVAuthListener_Impl( xEnv ),
+                  aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::MKCOL( const uno::Reference<
-                                      ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::MKCOL(
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "MKCOL" ),
+                   aHeaders );
+
             m_xSession->MKCOL( getRequestURI(),
                                DAVRequestEnvironment(
-                                getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                   getRequestURI(),
+                   new DAVAuthListener_Impl( xEnv ),
+                   aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::COPY( const ::rtl::OUString & rSourcePath,
-                              const ::rtl::OUString & rDestinationURI,
-                                sal_Bool bOverwrite,
-                                const uno::Reference<
-                                          ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::COPY(
+    const ::rtl::OUString & rSourcePath,
+    const ::rtl::OUString & rDestinationURI,
+    sal_Bool bOverwrite,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "COPY" ),
+                   aHeaders );
+
             m_xSession->COPY( rSourcePath,
                               rDestinationURI,
                               DAVRequestEnvironment(
-                                getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ),
+                  getRequestURI(),
+                  new DAVAuthListener_Impl( xEnv ),
+                  aHeaders ),
                               bOverwrite );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::MOVE( const ::rtl::OUString & rSourcePath,
-                              const ::rtl::OUString & rDestinationURI,
-                                sal_Bool bOverwrite,
-                                const uno::Reference<
-                                          ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::MOVE(
+    const ::rtl::OUString & rSourcePath,
+    const ::rtl::OUString & rDestinationURI,
+    sal_Bool bOverwrite,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii( "MOVE" ),
+                   aHeaders );
+
             m_xSession->MOVE( rSourcePath,
                               rDestinationURI,
                               DAVRequestEnvironment(
-                                getRequestURI(),
-                                new DAVAuthListener_Impl( xEnv ) ),
+                  getRequestURI(),
+                  new DAVAuthListener_Impl( xEnv ),
+                  aHeaders ),
                               bOverwrite );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::DESTROY( const uno::Reference<
-                                       ucb::XCommandEnvironment > & xEnv )
-    throw( DAVException )
+void DAVResourceAccess::DESTROY(
+    const uno::Reference<
+    ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
 {
     initialize();
 
     sal_Bool bRetry;
     do
     {
-        bRetry = sal_False;
-        try
-        {
+    bRetry = sal_False;
+    try
+    {
+        DAVRequestHeaders aHeaders;
+        getUserRequestHeaders( xEnv,
+                   getRequestURI(),
+                   rtl::OUString::createFromAscii(
+                       "DESTROY" ),
+                   aHeaders );
+
             m_xSession->DESTROY( getRequestURI(),
                                  DAVRequestEnvironment(
-                                    getRequestURI(),
-                                    new DAVAuthListener_Impl( xEnv ) ) );
-        }
-        catch ( DAVException & e )
-        {
-            bRetry = handleException( e );
-            if ( !bRetry )
-                throw;
-        }
+                     getRequestURI(),
+                     new DAVAuthListener_Impl( xEnv ),
+                     aHeaders ) );
+    }
+    catch ( DAVException & e )
+    {
+        bRetry = handleException( e );
+        if ( !bRetry )
+        throw;
+    }
     }
     while ( bRetry );
 }
 
 //=========================================================================
-void DAVResourceAccess::LOCK ( const ucb::Lock & /*rLock*/,
-                                 const uno::Reference<
-                                      ucb::XCommandEnvironment > & /*xEnv*/ )
-    throw( DAVException )
+void DAVResourceAccess::LOCK (
+    const ucb::Lock & /*rLock*/,
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
+  throw( DAVException )
 {
 //    initialize();
     OSL_ENSURE( sal_False, "DAVResourceAccess::LOCK - NYI" );
 }
 
 //=========================================================================
-void DAVResourceAccess::UNLOCK ( const ucb::Lock & /*rLock*/,
-                                   const uno::Reference<
-                                       ucb::XCommandEnvironment > & /*xEnv*/ )
-    throw( DAVException )
+void DAVResourceAccess::UNLOCK (
+    const ucb::Lock & /*rLock*/,
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
+  throw( DAVException )
 {
 //    initialize();
     OSL_ENSURE( sal_False, "DAVResourceAccess::UNLOCK - NYI" );
@@ -765,6 +874,37 @@ const rtl::OUString & DAVResourceAccess::getRequestURI() const
 }
 
 //=========================================================================
+// static
+void DAVResourceAccess::getUserRequestHeaders(
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv,
+    const rtl::OUString & rURI,
+    const rtl::OUString & rMethod,
+    DAVRequestHeaders & rRequestHeaders )
+{
+    if ( xEnv.is() )
+    {
+    uno::Reference< ucb::XWebDAVCommandEnvironment > xDAVEnv(
+        xEnv, uno::UNO_QUERY );
+    if ( xDAVEnv.is() )
+    {
+        uno::Sequence< beans::NamedValue > aRequestHeaders
+        = xDAVEnv->getUserRequestHeaders( rURI, rMethod );
+
+        for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
+        {
+        rtl::OUString aValue;
+        OSL_ENSURE( aRequestHeaders[ n ].Value >>= aValue,
+                "DAVResourceAccess::getUserRequestHeaders :"
+                    "Value is not a string! Ignoring..." );
+        rRequestHeaders.push_back( DAVRequestHeader(
+                           aRequestHeaders[ n ].Name,
+                           aValue ) );
+        }
+    }
+    }
+}
+
+//=========================================================================
 sal_Bool DAVResourceAccess::detectRedirectCycle(
                                 const rtl::OUString& rRedirectURL )
 {
@@ -791,7 +931,7 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e )
 {
     switch ( e.getError() )
     {
-        case DAVException::DAV_HTTP_REDIRECT:
+    case DAVException::DAV_HTTP_REDIRECT:
             try
             {
                 if ( !detectRedirectCycle( e.getData() ) )
@@ -807,7 +947,7 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e )
             }
             return sal_False;
 
-        default:
-            return sal_False; // Abort
+    default:
+        return sal_False; // Abort
     }
 }
