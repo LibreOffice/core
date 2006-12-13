@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvasfont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:45:29 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 14:38:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,30 @@
 
 using namespace ::com::sun::star;
 
-
 namespace cairocanvas
 {
+    namespace
+    {
+        // Little helper to encapsulate locking into policy class
+        class LocalGuard
+        {
+        public:
+            LocalGuard() :
+                aGuard( Application::GetSolarMutex() )
+            {
+            }
+
+            /// To be compatible with CanvasBase mutex concept
+            LocalGuard( const ::osl::Mutex& ) :
+                aGuard( Application::GetSolarMutex() )
+            {
+            }
+
+        private:
+            ::vos::OGuard aGuard;
+        };
+    }
+
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
                             const geometry::Matrix2D&                       rFontMatrix,
@@ -99,14 +120,14 @@ namespace cairocanvas
 
     void SAL_CALL CanvasFont::disposing()
     {
-        tools::LocalGuard aGuard;
+        LocalGuard aGuard;
 
         mpRefDevice.clear();
     }
 
     uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        LocalGuard aGuard;
 
         if( !mpRefDevice.is() )
             return uno::Reference< rendering::XTextLayout >(); // we're disposed
@@ -120,14 +141,14 @@ namespace cairocanvas
 
     rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        LocalGuard aGuard;
 
         return maFontRequest;
     }
 
     rendering::FontMetrics SAL_CALL  CanvasFont::getFontMetrics(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        LocalGuard aGuard;
 
         // TODO(F1)
         return rendering::FontMetrics();
@@ -135,7 +156,7 @@ namespace cairocanvas
 
     uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        LocalGuard aGuard;
 
         // TODO(F1)
         return uno::Sequence< double >();
@@ -143,7 +164,7 @@ namespace cairocanvas
 
     uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        LocalGuard aGuard;
 
         // TODO(F1)
         return uno::Sequence< beans::PropertyValue >();
