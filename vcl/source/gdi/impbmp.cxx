@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impbmp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:02:51 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
 ImpBitmap::ImpBitmap() :
             mnRefCount  ( 1UL ),
             mnChecksum  ( 0UL ),
-            mpRMBitmap  ( NULL ),
             mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() ),
             maSourceSize( 0, 0 )
 {
