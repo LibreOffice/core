@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:06:58 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #include "TextConnectionHelper.hxx"
 #endif
 
+#include <svtools/dialogcontrolling.hxx>
+
 
 //.........................................................................
 namespace dbaui
@@ -84,6 +86,7 @@ namespace dbaui
     #define     CBTP_USE_SCHEMA                     0x00004000
     #define     CBTP_USE_INDEXAPPENDIX              0x00010000
     #define     CBTP_USE_DOSLINEENDS                0x00020000
+    #define     CBTP_AS_BEFORE_CORRELATION_NAME     0x00040000
 
     /** eases the implementation of tab pages handling user/password and/or character
         set and/or generic options input
@@ -105,6 +108,7 @@ namespace dbaui
         FixedLine*          m_pDSFixedLine;
         CheckBox*           m_pIsSQL92Check;
         CheckBox*           m_pAppendTableAlias;
+        CheckBox*           m_pAsBeforeCorrelationName;
         CheckBox*           m_pParameterSubstitution;
         CheckBox*           m_pIgnoreDriverPrivileges;
         CheckBox*           m_pSuppressVersionColumn;
@@ -127,6 +131,8 @@ namespace dbaui
         OCharsetDisplay     m_aCharsets;
 
         sal_uInt32          m_nControlFlags;
+        ::svt::ControlDependencyManager
+                            m_aControlDependencies;
 
         DECL_LINK( OnCheckBoxClick, CheckBox * );
 
