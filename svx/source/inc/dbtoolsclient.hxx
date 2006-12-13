@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:43:15 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 16:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,11 +214,6 @@ namespace svxform
                 const ::rtl::OUString& _rCommand,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
-
-        // ------------------------------------------------
-        sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
-                                        ,const ::rtl::OUString& _sProperty,
-                                        sal_Bool _bDefault = sal_False) const;
 
         // ------------------------------------------------
         bool isEmbeddedInDatabase(
