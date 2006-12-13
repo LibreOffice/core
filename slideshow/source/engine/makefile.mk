@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2005-10-11 08:33:39 $
+#   last change: $Author: kz $ $Date: 2006-12-13 15:17:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,20 +63,25 @@ NOOPTFILES= $(SLO)$/smilfunctionparser.obj
 SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/animatedsprite.obj \
             $(SLO)$/animationfactory.obj \
+            $(SLO)$/appletshape.obj \
             $(SLO)$/attributemap.obj \
             $(SLO)$/backgroundshape.obj \
             $(SLO)$/color.obj \
+            $(SLO)$/delayevent.obj \
+            $(SLO)$/drawinglayeranimation.obj \
             $(SLO)$/drawshape.obj \
             $(SLO)$/drawshapesubsetting.obj \
             $(SLO)$/eventmultiplexer.obj \
             $(SLO)$/eventqueue.obj \
             $(SLO)$/expressionnodefactory.obj \
+            $(SLO)$/externalshapebase.obj \
             $(SLO)$/gdimtftools.obj \
             $(SLO)$/intrinsicanimationactivity.obj \
             $(SLO)$/layer.obj \
             $(SLO)$/layermanager.obj \
             $(SLO)$/mediashape.obj \
             $(SLO)$/presentation.obj \
+            $(SLO)$/rehearsetimingsactivity.obj \
             $(SLO)$/shapeattributelayer.obj \
             $(SLO)$/shapeeventbroadcaster.obj \
             $(SLO)$/shapeimporter.obj \
@@ -90,14 +95,12 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/unoviewcontainer.obj \
             $(SLO)$/usereventqueue.obj \
             $(SLO)$/userpaintoverlay.obj \
+            $(SLO)$/viewappletshape.obj \
             $(SLO)$/viewbackgroundshape.obj \
             $(SLO)$/viewmediashape.obj \
             $(SLO)$/viewshape.obj \
-            $(SLO)$/wakeupevent.obj \
-            $(SLO)$/rehearsetimingsactivity.obj \
             $(SLO)$/waitsymbol.obj \
-            $(SLO)$/drawinglayeranimation.obj \
-            $(SLO)$/delayevent.obj
+            $(SLO)$/wakeupevent.obj
 
 # ==========================================================================
 
