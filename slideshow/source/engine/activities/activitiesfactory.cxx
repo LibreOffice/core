@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesfactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:57:03 $
+ *  last change: $Author: kz $ $Date: 2006-12-13 15:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,11 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
-#include "com/sun/star/animations/AnimationCalcMode.hpp"
-#include "comphelper/sequence.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+#include <com/sun/star/animations/AnimationCalcMode.hpp>
+#include <comphelper/sequence.hxx>
+
 #include "activitiesfactory.hxx"
 #include "smilfunctionparser.hxx"
 #include "accumulation.hxx"
@@ -51,15 +52,17 @@
 #include "discreteactivitybase.hxx"
 #include "continuousactivitybase.hxx"
 #include "continuouskeytimeactivitybase.hxx"
-#include "boost/bind.hpp"
-#include "boost/optional.hpp"
+
+#include <boost/bind.hpp>
+#include <boost/optional.hpp>
+
 #include <cmath> // for modf
 #include <vector>
 #include <algorithm>
 
 using namespace com::sun::star;
 
-namespace presentation {
+namespace slideshow {
 namespace internal {
 
 namespace {
@@ -81,7 +84,7 @@ template<> struct FormulaTraits<double>
     static double getPresentationValue(
         double const& rVal, ExpressionNodeSharedPtr const& rFormula )
     {
-        return rFormula.get() ? (*rFormula)(rVal) : rVal;
+        return rFormula ? (*rFormula)(rVal) : rVal;
     }
 };
 
@@ -176,7 +179,7 @@ public:
           mbDynamicStartValue( false ),
           mbCumulative( bCumulative )
     {
-        ENSURE_AND_THROW( mpAnim.get(), "Invalid animation object" );
+        ENSURE_AND_THROW( mpAnim, "Invalid animation object" );
 
         ENSURE_AND_THROW(
             rTo || rBy,
@@ -462,7 +465,7 @@ public:
           maInterpolator( rInterpolator ),
           mbCumulative( bCumulative )
     {
-        ENSURE_AND_THROW( mpAnim.get(), "Invalid animation object" );
+        ENSURE_AND_THROW( mpAnim, "Invalid animation object" );
         ENSURE_AND_THROW( !rValues.empty(), "Empty value vector" );
     }
 
@@ -814,7 +817,7 @@ public:
         ContinuousActivityBase( rParms ),
         mpAnim( rAnim )
     {
-        ENSURE_AND_THROW( mpAnim.get(), "Invalid animation object" );
+        ENSURE_AND_THROW( mpAnim, "Invalid animation object" );
     }
 
     virtual void startAnimation()
