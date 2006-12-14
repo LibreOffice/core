@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:07:42 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 17:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#ifdef WNT
+#pragma warning (disable:4505)
+#endif
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
