@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:19:31 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 17:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 
     if( bIsMDIActivate )
     {
-        ::sd::View*     pView = GetView();
+        //HMH::sd::View*     pView = GetView();
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
