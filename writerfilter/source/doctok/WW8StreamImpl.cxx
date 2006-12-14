@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StreamImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-12 16:54:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:34:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@
 namespace doctok
 {
 using namespace ::com::sun::star;
+
+WW8Stream::~WW8Stream()
+{
+}
 
 WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
               uno::Reference<io::XInputStream> rStream)

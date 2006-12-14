@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Document.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-16 15:51:26 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,8 @@ public:
        Type for the content of the stream
      */
     typedef SubSequence<sal_uInt8> Sequence;
+
+    virtual ~WW8Stream();
 
     /**
        Returns pointer to a substream.
