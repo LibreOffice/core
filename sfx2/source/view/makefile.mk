@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: liyuan $ $Date: 2006-12-14 08:50:49 $
+#   last change: $Author: liyuan $ $Date: 2006-12-14 08:59:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
 
 
 
