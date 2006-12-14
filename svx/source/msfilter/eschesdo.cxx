@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:28:56 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 17:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <math.h>
 
 #ifndef _ESCHESDO_HXX
 #include "eschesdo.hxx"

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:25:53 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 17:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#if STLPORT_VERSION>=321
-#include <math.h>   // prevent conflict between exception and std::exception
-#endif
 
 #ifndef _SVX_GRIDCOLS_HXX
 #include "gridcols.hxx"
