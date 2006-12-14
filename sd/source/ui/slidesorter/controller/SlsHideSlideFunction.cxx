@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsHideSlideFunction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:07:27 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 10:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,16 +118,16 @@ void HideSlideFunction::DoExecute (SfxRequest& rRequest)
         {
             model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
             pDescriptor->GetPage()->SetExcluded (eState==EXCLUDED);
-            static_cast<view::SlideSorterView*>(pView)->RequestRepaint(pDescriptor);
+            static_cast<view::SlideSorterView*>(mpView)->RequestRepaint(pDescriptor);
         }
     }
 
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate (SID_PRESENTATION);
     rBindings.Invalidate (SID_REHEARSE_TIMINGS);
     rBindings.Invalidate (SID_HIDE_SLIDE);
     rBindings.Invalidate (SID_SHOW_SLIDE);
-    pDoc->SetChanged();
+    mpDoc->SetChanged();
 }
 
 
@@ -173,6 +173,5 @@ HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
 
     return eState;
 }
-
 
 } } } // end of namespace ::sd::slidesorter::controller
