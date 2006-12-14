@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:14:13 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 18:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,8 @@
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
 #endif
+
+#include <math.h>
 
 using namespace sw::types;
 using namespace sw::util;
