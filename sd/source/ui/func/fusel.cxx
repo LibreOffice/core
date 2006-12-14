@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 17:56:45 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 16:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,7 +412,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // and also ignoring the found object when it's on a masterpage
                 if(!pObj || (pObj->GetPage() && pObj->GetPage()->IsMasterPage()))
                 {
-                    if(pView->IsGroupEntered() && 2 == rMEvt.GetClicks())
+                    if(mpView->IsGroupEntered() && 2 == rMEvt.GetClicks())
                     {
                         // New: double click on empty space/on obj on MasterPage, leave group
                         mpView->LeaveOneGroup();
