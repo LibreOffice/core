@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:07:05 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,13 +514,6 @@ void DffUDefProp::resolveNoAuto(Properties & rHandler)
         {
             WW8Value::Pointer_t pVal = createValue(nValue);
             rHandler.attribute(nAttrid, *pVal);
-        }
-        else
-        {
-            char buffer[1024];
-            snprintf(buffer, sizeof(buffer),
-                     "<property id=\"0x%x\" value=\"0x%lx\"/>", nPid, nValue);
-            output.addItem(buffer);
         }
 
         nOffset += 6;
