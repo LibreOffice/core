@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:23:22 $
+ *  last change: $Author: vg $ $Date: 2006-12-15 00:48:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
+#include <boost/current_function.hpp>
 #include <canvas/canvastools.hxx>
 
 #include <comphelper/anytostring.hxx>
