@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-12 16:53:09 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1076,6 +1076,7 @@ doctok::Reference<Stream>::Pointer_t WW8DocumentImpl::getHeader(sal_uInt32 nPos)
     CpAndFc aCpAndFcStart(getHeaderCpAndFc(nPos));
     CpAndFc aCpAndFcEnd(getHeaderCpAndFc(nPos + 1));
 
+#if 0
     sal_uInt32 nEquals = 1;
     while (aCpAndFcEnd == aCpAndFcStart && nPos + nEquals < getHeaderCount())
     {
@@ -1083,6 +1084,7 @@ doctok::Reference<Stream>::Pointer_t WW8DocumentImpl::getHeader(sal_uInt32 nPos)
 
         aCpAndFcEnd = getHeaderCpAndFc(nPos + nEquals);
     }
+#endif
 
     if (aCpAndFcStart < aCpAndFcEnd)
         pResult = doctok::Reference<Stream>::Pointer_t
@@ -1519,23 +1521,24 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             (new WW8Fib(*mpFib));
         rStream.props(pFib);
 
-
+#if 0
         if (mpTextBoxStories.get() != NULL)
         {
             output.addItem("<textbox.boxes>");
             mpTextBoxStories->dump(output);
             output.addItem("</textbox.boxes>");
         }
-
+#endif
         if (mpFib->get_lcbPlcftxbxBkd() > 0)
         {
             PLCF<WW8BKD> aPLCF(*mpTableStream,
                                mpFib->get_fcPlcftxbxBkd(),
                                mpFib->get_lcbPlcftxbxBkd());
-
+#if 0
             output.addItem("<textbox.breaks>");
             aPLCF.dump(output);
             output.addItem("</textbox.breaks>");
+#endif
         }
 
         if (mpDffBlock.get() != NULL)
@@ -1548,24 +1551,17 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             rStream.props(pDffBlock);
         }
 
-#if 0
         {
+            rStream.info("headers");
             sal_uInt32 nHeaderCount = getHeaderCount();
             for (sal_uInt32 n = 0; n < nHeaderCount; ++n)
             {
-#if 0
-                clog << "<header num=\"" << n << "\" cp=\""
-                     << getHeaderCpAndFc(n) << "\"/>" << endl;
-#endif
-                doctok::Reference<Stream>::Pointer_t pHeader(getHeader(n));
-
-                QName_t qName = lcl_headerQName(n);
-
-                if (pHeader.get() != NULL)
-                    rStream.substream(qName, pHeader);
+                rStream.info(getHeaderCpAndFc(n).toString());
             }
+            rStream.info("/headers");
         }
 
+#if 0
         {
             sal_uInt32 nFootnoteCount = getFootnoteCount();
             for (sal_uInt32 n = 0; n < nFootnoteCount; ++n)
