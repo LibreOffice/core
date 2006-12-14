@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:36:28 $
+ *  last change: $Author: kz $ $Date: 2006-12-14 17:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,6 @@
 #include "precompiled_svx.hxx"
 
 #include "dialogs.hrc"
-
-#include <math.h>
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
 #include <xflclit.hxx>
