@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedresources.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:25:56 $
+ *  last change: $Author: vg $ $Date: 2006-12-15 01:38:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
 
 #ifndef CONNECTIVITY_SHAREDRESOURCES_HXX
 #include "resource/sharedresources.hxx"
