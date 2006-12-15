@@ -1,5 +1,5 @@
 *** misc/icu/source/common/putil.c	Mon Jul 31 20:14:28 2006
---- misc/build/icu/source/common/putil.c	Thu Aug 17 07:16:33 2006
+--- misc/build/icu/source/common/putil.c	Fri Dec 15 10:40:22 2006
 ***************
 *** 48,54 ****
   #endif
@@ -18,8 +18,27 @@
   #define _XOPEN_SOURCE_EXTENDED 1
   #endif
   
+*** misc/icu/source/config/mh-darwin	Wed Feb  1 08:52:42 2006
+--- misc/build/icu/source/config/mh-darwin	Fri Dec 15 10:50:25 2006
+***************
+*** 25,31 ****
+  SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS)
+  
+  ## Compiler switches to embed a library name and version information
+! LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
+  
+  ## Compiler switch to embed a runtime search path
+  LD_RPATH=
+--- 25,31 ----
+  SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS)
+  
+  ## Compiler switches to embed a library name and version information
+! LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @executable_path/$(notdir $(MIDDLE_SO_TARGET))
+  
+  ## Compiler switch to embed a runtime search path
+  LD_RPATH=
 *** misc/icu/source/config/mh-irix	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-irix	Thu Aug 17 07:16:33 2006
+--- misc/build/icu/source/config/mh-irix	Fri Dec 15 10:40:22 2006
 ***************
 *** 23,28 ****
 --- 23,31 ----
@@ -33,7 +52,7 @@
   THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
   LIBCPPFLAGS =
 *** misc/icu/source/config/mh-linux	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-linux	Thu Aug 17 07:16:33 2006
+--- misc/build/icu/source/config/mh-linux	Fri Dec 15 10:40:22 2006
 ***************
 *** 20,25 ****
 --- 20,32 ----
@@ -51,7 +70,7 @@
   LDFLAGSICUDT=-nodefaultlibs -nostdlib
   
 *** misc/icu/source/config/mh-solaris	Fri Feb 24 20:31:14 2006
---- misc/build/icu/source/config/mh-solaris	Thu Aug 17 07:16:33 2006
+--- misc/build/icu/source/config/mh-solaris	Fri Dec 15 10:40:22 2006
 ***************
 *** 18,34 ****
   
@@ -98,7 +117,7 @@
   
   ## Compiler switch to embed a library name
 *** misc/icu/source/data/Makefile.in	Sat Aug 12 00:22:24 2006
---- misc/build/icu/source/data/Makefile.in	Thu Aug 17 07:16:33 2006
+--- misc/build/icu/source/data/Makefile.in	Fri Dec 15 10:40:22 2006
 ***************
 *** 344,350 ****
   ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
@@ -117,7 +136,7 @@
   	@echo "$@" > $@
   endif
 *** misc/icu/source/layout/GXLayoutEngine.cpp	Fri Sep  2 20:22:10 2005
---- misc/build/icu/source/layout/GXLayoutEngine.cpp	Thu Aug 17 08:59:44 2006
+--- misc/build/icu/source/layout/GXLayoutEngine.cpp	Fri Dec 15 10:40:22 2006
 ***************
 *** 39,45 ****
           return 0;
@@ -136,7 +155,7 @@
       if (LE_FAILURE(success)) {
           return 0;
 *** misc/icu/source/layout/LESwaps.h	Thu Jun 23 00:39:36 2005
---- misc/build/icu/source/layout/LESwaps.h	Thu Aug 17 07:16:34 2006
+--- misc/build/icu/source/layout/LESwaps.h	Fri Dec 15 10:40:22 2006
 ***************
 *** 2,7 ****
 --- 2,8 ----
@@ -212,7 +231,7 @@
    * This class is used to access data which stored in big endian order
    * regardless of the conventions of the platform. It has been designed
 *** misc/icu/source/test/intltest/loctest.cpp	Thu Jul  6 03:50:04 2006
---- misc/build/icu/source/test/intltest/loctest.cpp	Thu Aug 17 07:16:34 2006
+--- misc/build/icu/source/test/intltest/loctest.cpp	Fri Dec 15 10:40:22 2006
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -224,7 +243,7 @@
   #include "unicode/decimfmt.h"
   #include "unicode/ucurr.h"
 *** misc/icu/source/test/intltest/tsputil.cpp	Wed Jul 19 00:18:10 2006
---- misc/build/icu/source/test/intltest/tsputil.cpp	Thu Aug 17 07:16:34 2006
+--- misc/build/icu/source/test/intltest/tsputil.cpp	Fri Dec 15 10:40:22 2006
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -236,7 +255,7 @@
   
   #include <float.h> // DBL_MAX, DBL_MIN
 *** misc/icu/source/test/intltest/uobjtest.cpp	Thu Mar 23 01:54:12 2006
---- misc/build/icu/source/test/intltest/uobjtest.cpp	Thu Aug 17 07:16:34 2006
+--- misc/build/icu/source/test/intltest/uobjtest.cpp	Fri Dec 15 10:40:22 2006
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -248,7 +267,7 @@
   #include "cmemory.h" // UAlignedMemory
   #include <string.h>
 *** misc/icu/source/test/intltest/ustrtest.cpp	Tue Dec 28 22:13:54 2004
---- misc/build/icu/source/test/intltest/ustrtest.cpp	Thu Aug 17 07:16:34 2006
+--- misc/build/icu/source/test/intltest/ustrtest.cpp	Fri Dec 15 10:40:22 2006
 ***************
 *** 4,9 ****
 --- 4,10 ----
