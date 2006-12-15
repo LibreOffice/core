@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.109 $
+#   $Revision: 1.110 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:23:39 $
+#   last change: $Author: rt $ $Date: 2006-12-15 10:31:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.109 $ ';
+$id_str = ' $Revision: 1.110 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -341,6 +341,8 @@ sub do_linklib
 sub do_mkdir
 {
     my $path = expand_macros(shift);
+    # strip whitespaces from path name
+    $path =~ s/\s$//;
     if ( ! $opt_delete ) {
         if ( $opt_check ) {
             print "MKDIR: $path\n";
