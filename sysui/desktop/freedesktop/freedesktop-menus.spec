@@ -69,6 +69,7 @@ for dir in *; do
   ln -s $iconname-spreadsheet-template.png   gnome-mime-application-vnd.sun.xml.calc.template.png
   ln -s $iconname-text.png                   gnome-mime-application-vnd.sun.xml.writer.png
   ln -s $iconname-text-template.png          gnome-mime-application-vnd.sun.xml.writer.template.png
+  ln -s $iconname-extension.png          gnome-mime-application-vnd.openofficeorg.extension.png
   cd ../..  
 done
 
@@ -102,7 +103,10 @@ rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%name-%version-build%unique
 # (the value of the 2nd one), so just run this always...
 # http://rhn.redhat.com/errata/RHBA-2004-098.html
 # https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=100509
-if (which update-desktop-database); then
+
+if [ -x /opt/gnome/bin/update-desktop-database ]; then
+    /opt/gnome/bin/update-desktop-database -q
+elif (which update-desktop-database); then
   update-desktop-database -q /usr/share/applications
 fi
 
@@ -113,7 +117,9 @@ if [ "$1" = "0" ] ; then
 fi
 if [ "$2" = "0" ] ; then  
   # the triggering package gets removed
-  if (which update-desktop-database); then
+  if [ -x /opt/gnome/bin/update-desktop-database ]; then
+      /opt/gnome/bin/update-desktop-database -q
+  elif (which update-desktop-database); then
     update-desktop-database -q /usr/share/applications
   fi
 fi
@@ -121,7 +127,13 @@ fi
 %post 
 # no need to run it when updating, since %postun of the old package is run
 # afterwards
+
 if [ "$1" = "1" ] ; then  # first install
+if [ -x /opt/gnome/bin/update-desktop-database ]; then
+    /opt/gnome/bin/update-desktop-database -q
+elif (which update-desktop-database); then
+  update-desktop-database -q /usr/share/applications
+fi
   if (which update-mime-database); then
     update-mime-database /usr/share/mime
   fi
@@ -129,8 +141,10 @@ if [ "$1" = "1" ] ; then  # first install
     if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
       # touch it, just in case we cannot find the binary...
       touch /usr/share/icons/$theme
-      if (which gtk-update-icon-cache); then
-        gtk-update-icon-cache /usr/share/icons/$theme
+      if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
+        /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/$theme 
+      elif (which gtk-update-icon-cache); then
+        gtk-update-icon-cache -q /usr/share/icons/$theme
       fi
       # ignore errors (e.g. when there is a cache, but no index.theme)
       true
@@ -144,6 +158,7 @@ sed '
 /application\/vnd\.oasis\.opendocument/d
 /application\/vnd\.sun/d
 /application\/vnd\.stardivision/d
+/application\/vnd\.openofficeorg/d
 ' /etc/mime.types 2>/dev/null >> /etc/mime.types.tmp$$
 
 # now append our stuff to the temporary file
@@ -179,6 +194,7 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.sun.xml.base odb
 application/vnd.stardivision.math smf
+application/vnd.openofficeorg.extension oxt
 END
 
 # and replace the original file
@@ -191,6 +207,7 @@ then
   sed '
 /^# OpenOffice.org/d
 /^application\/vnd\.oasis\.opendocument/d
+/^application\/vnd\.openofficeorg/d
 /^application\/vnd\.sun/d
 /^application\/vnd\.stardivision/d
 /^application\/vnd\.ms-word/d
@@ -250,10 +267,17 @@ application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
 application/vnd.oasis.opendocument.database; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
+application/vnd.openofficeorg.extension; unopkg_gui %s
 END
 
   # and replace the original file
   mv -f /etc/mailcap.tmp$$ /etc/mailcap
+fi
+
+if [ -x /opt/gnome/bin/update-desktop-database ]; then
+    /opt/gnome/bin/update-desktop-database -q
+elif (which update-desktop-database); then
+  update-desktop-database -q /usr/share/applications
 fi
 
 %preun 
@@ -269,9 +293,10 @@ fi
 
 %postun 
 if [ "$1" = 0 ] ; then # only run when erasing the package - other cases handled by the triggers
-  if (which update-desktop-database); then
-    update-desktop-database -q /usr/share/applications
-  fi
+if [ -x /opt/gnome/bin/update-desktop-database ]; then
+    /opt/gnome/bin/update-desktop-database -q 
+elif (which update-desktop-database); then
+  update-desktop-database -q
 fi
 # run always - both when upgrading as well as when erasing the package
 if (which update-mime-database); then
@@ -281,14 +306,16 @@ for theme in gnome hicolor locolor; do
   if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
     # touch it, just in case we cannot find the binary...
     touch /usr/share/icons/$theme
-    if (which gtk-update-icon-cache); then
-      gtk-update-icon-cache /usr/share/icons/$theme
+    if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
+      /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/$theme
+    elif (which gtk-update-icon-cache); then
+      gtk-update-icon-cache -q /usr/share/icons/$theme
     fi
     # ignore errors (e.g. when there is a cache, but no index.theme)
     true
   fi
 done
-
+fi
 %files 
 # specify stale symlinks verbatim, not as glob - a change in recent versions of 
 # glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
@@ -299,6 +326,7 @@ done
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-calc.desktop
 /usr/share/applications/%unixfilename-draw.desktop
+/usr/share/applications/%unixfilename-extension.desktop
 /usr/share/applications/%unixfilename-impress.desktop
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
