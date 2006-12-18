@@ -33,6 +33,7 @@ sed '
 /application\/vnd\.oasis\.opendocument/d
 /application\/vnd\.sun/d
 /application\/vnd\.stardivision/d
+/application\/vnd\.openofficeorg/d
 ' /etc/mime.types 2>/dev/null >> /etc/mime.types.tmp$$
 
 # now append our stuff to the temporary file
@@ -68,6 +69,7 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.stardivision.math smf
 application/vnd.sun.xml.base odb
+application/vnd.openofficeorg.extension oxt
 END
 
 # and replace the original file
@@ -80,6 +82,7 @@ then
   sed '
 /^# OpenOffice.org/d
 /^application\/vnd\.oasis\.opendocument/d
+/^application\/vnd\.openofficeorg/d
 /^application\/vnd\.sun/d
 /^application\/vnd\.stardivision/d
 /^application\/vnd\.ms-word/d
@@ -144,6 +147,7 @@ application/wordperfect5.1; %PREFIX -view %s
 application/x-wordperfect; %PREFIX -view %s
 application/wordperfect; %PREFIX -view %s
 application/wpwin; %PREFIX -view %s
+application/vnd.openofficeorg.extension; unopkg_gui %s
 END
 
   # and replace the original file
