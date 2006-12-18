@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 16:31:04 $
+#   last change: $Author: ihi $ $Date: 2006-12-18 15:46:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.19 $ ';
+$id_str = ' $Revision: 1.20 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -497,20 +497,32 @@ sub doInstall {
             if ($gui eq $cygwin) {
                 my $convertinstallset = ConvertCygwinToWin_Shell("$installsetpath$file");
                 my $convertdestdir = ConvertCygwinToWin_Shell($dest_installdir);
-                if ($is_admin_installation) {
-                    $Command = "msiexec.exe /a $convertinstallset -qn TARGETDIR=$convertdestdir";
+                $_inst_cmd=$ENV{SMOKETEST_SOINSTCMD};
+                if ( defined($_inst_cmd) ) {
+                    $Command = $_inst_cmd . " $convertinstallset -qn TARGETDIR=$convertdestdir";
                 }
                 else {
-                    $Command = "msiexec.exe -i $convertinstallset -qn INSTALLLOCATION=$convertdestdir";
+                    if ($is_admin_installation) {
+                        $Command = "msiexec.exe /a $convertinstallset -qn TARGETDIR=$convertdestdir";
+                    }
+                    else {
+                        $Command = "msiexec.exe -i $convertinstallset -qn INSTALLLOCATION=$convertdestdir";
+                    }
                 }
-
             }
             else {
-                if ($is_admin_installation) {
-                    $Command = "msiexec.exe /a $installsetpath$file -qn TARGETDIR=$dest_installdir";
+                $_inst_cmd=$ENV{SMOKETEST_SOINSTCMD};
+                if ( defined($_inst_cmd) ) {
+                    $Command = $_inst_cmd . " $installsetpath$file -qn TARGETDIR=$dest_installdir";
                 }
                 else {
-                    $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
+                    if ($is_admin_installation)
+                    {
+                        $Command = "msiexec.exe /a $installsetpath$file -qn TARGETDIR=$dest_installdir";
+                    }
+                    else {
+                        $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
+                    }
                 }
             }
             if (!$is_oo and !$is_admin_installation) {
