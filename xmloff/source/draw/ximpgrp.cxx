@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:31:34 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:27:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,11 @@
 #ifndef _XMLOFF_EVENTIMP_HXX
 #include "eventimp.hxx"
 #endif
+#include "descriptionimp.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_EVENT_LISTENERS;
-using ::xmloff::token::XML_GLUE_POINT;
+using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -90,7 +89,13 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext* pContext = 0L;
 
-    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
+    // #i68101#
+    if( nPrefix == XML_NAMESPACE_SVG &&
+        (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
+    {
+        pContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+    }
+    else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
