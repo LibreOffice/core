@@ -86,3 +86,8 @@ de = "OpenDocument Datenbank"
 en-US = "HTML Document Template"
 de = "HTML-Dokumentvorlage"
 
+[extension]
+en-US = "%PRODUCTNAME Extension"
+de = "%PRODUCTNAME Extension"
+
+
