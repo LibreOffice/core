@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:17:23 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,10 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_UNGROUP ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ENTER_GROUP ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_NAME_GROUP ) ||
+
+            // #i68101#
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_TITLE_DESCRIPTION ) ||
+
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEBEZIER ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEPOLYGON ) ||
@@ -365,6 +369,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_ENTER_GROUP );
         // Jetzt (28.10.96) muessen Namen fuer Objekte eindeutig sein
         rSet.DisableItem( SID_NAME_GROUP );
+        // #i68101#
+        rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
         rSet.DisableItem( SID_MODIFY_FIELD );
 
         if( 1 )
@@ -577,6 +583,10 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_GROUP );
         rSet.DisableItem( SID_UNGROUP );
         rSet.DisableItem( SID_NAME_GROUP );
+
+        // #i68101#
+        rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
+
         rSet.DisableItem( SID_DISMANTLE );
         rSet.DisableItem( SID_BREAK );
         rSet.DisableItem( SID_COMBINE );
