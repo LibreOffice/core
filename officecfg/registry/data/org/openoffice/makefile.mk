@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:59:12 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 13:54:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,8 @@ XCUFILES= \
     Inet.xcu \
     Setup.xcu \
     VCL.xcu \
-    FirstStartWizard.xcu
+    FirstStartWizard.xcu \
+    UserProfile.xcu
 
 MODULEFILES= \
     Inet-defaultsearchengine.xcu \
