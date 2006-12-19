@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPreset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-11-27 09:39:18 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 
 namespace sd {
 
-typedef std::hash_map<rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectsSubTypeMap;
-typedef std::hash_map<rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual> UStringMap;
+typedef std::hash_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
+typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 typedef std::vector< rtl::OUString > UStringList;
 
 class CustomAnimationPreset
