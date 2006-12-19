@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scalc.sdi,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 15:28:28 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5211,6 +5211,32 @@ SfxVoidItem Remove FID_DELETE_TABLE
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+// #i68101#
+SfxVoidItem ObjectTitleDescription SID_TITLE_DESCRIPTION_OBJECT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
 
