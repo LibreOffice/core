@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:26:08 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:03:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -732,8 +732,12 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
         }
     }
 
-    // ersetze [A-z0-9]--[A-z0-9] durch "emDash"
-    if( cEmDash && 4 <= nEndPos - nSttPos )
+    // Replace [A-z0-9]--[A-z0-9] double dash with "emDash" or "enDash".
+    // Finnish and Hungarian use enDash instead of emDash.
+    bool bEnDash = (((eLang == LANGUAGE_SYSTEM ? (eLang = GetAppLang()) :
+                    eLang) == LANGUAGE_HUNGARIAN) || eLang ==
+            LANGUAGE_FINNISH);
+    if( ((cEmDash && !bEnDash) || (cEnDash && bEnDash)) && 4 <= nEndPos - nSttPos )
     {
         String sTmp( rTxt.Copy( nSttPos, nEndPos - nSttPos ) );
         xub_StrLen nFndPos = sTmp.SearchAscii( "--" );
@@ -746,7 +750,7 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
         {
             nSttPos = nSttPos + nFndPos;
             rDoc.Delete( nSttPos, nSttPos + 2 );
-            rDoc.Insert( nSttPos, cEmDash );
+            rDoc.Insert( nSttPos, (bEnDash ? cEnDash : cEmDash) );
             bRet = TRUE;
         }
     }
