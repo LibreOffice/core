@@ -4,9 +4,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:12:02 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,11 @@ double SAL_CALL AnalysisAddIn::getAmorlinc( constREFXPS& xOpt,
 
 
 double SAL_CALL AnalysisAddIn::getAccrint( constREFXPS& xOpt,
-    sal_Int32 nIssue, sal_Int32 /*nFirstInter*/, sal_Int32 nSettle, double fRate, double fVal, sal_Int32 nFreq,
-    const ANY& rOB ) THROWDEF_RTE_IAE
+    sal_Int32 nIssue, sal_Int32 /*nFirstInter*/, sal_Int32 nSettle, double fRate,
+    const ANY &rVal, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
+    double      fVal = aAnyConv.getDouble( xOpt, rVal, 1000.0 );
+
     if( fRate <= 0.0 || fVal <= 0.0 || CHK_Freq || nIssue >= nSettle )
         THROW_IAE;
 
