@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:49:32 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 
 
 ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
-    ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meCharSet ),
+    ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
     XclExpRoot( rExpData )
 {
     // nur Teil der Root-Daten gebraucht
