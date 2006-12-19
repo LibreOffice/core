@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _drwbase.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:14:08 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,14 @@ interface BaseTextDrawBase
     SID_STYLE_CATALOG  // ole(no) api(play/rec)
     [
         StateMethod = StateDisableItems ;
+    ]
+
+    // #i68101#
+    FN_TITLE_DESCRIPTION_SHAPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_NAME_SHAPE
     [
