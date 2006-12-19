@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:24:24 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,3 +466,20 @@ WarningBox WARNINGBOX_NOSHAREDALLOWED
     Message[ en-US ] ="The extension %NAME cannot be installed under \"%PRODUCTNAME Extensions\", because "
         "every user has to agree to the license agreement of the extension. The extension will not be installed.";
 };
+
+InfoBox RID_QUERYBOX_INSTALL_EXTENSION {
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_CANCEL;
+    Message[de] = "Möchten Sie die Extension %NAME installieren?\nDrücken Sie Ok um mit der Installation fortzufahren.\nDrücken Sie Abbrechen um die Installation abzubrechen.";
+    Message[en-US] = "You are about to install the extension %NAME.\nPress Ok to proceed with the installation.\nPress Cancel to abort the installation.";
+};
+
+WarningBox WARNINGBOX_CONCURRENTINSTANCE
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK;
+    Message [ de ] ="Schließen Sie den bereits geöffneten Extension Manager, um fortzufahren.";
+    Message[ en-US ] ="You need to close the already opened Extension Manager to continue.";
+
+};
+
