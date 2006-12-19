@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:03:41 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 18:33:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -573,7 +573,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $loglanguagestring_orig = $loglanguagestring;
     if (length($loglanguagestring) > 120)
     {
-        chomp(my $shorter = `echo $loglanguagestring | md5sum | sed -e "s/  -//g"`);
+        chomp(my $shorter = `echo $loglanguagestring | md5sum | sed -e "s/ .*//g"`);
         $loglanguagestring = $shorter;
     }
 
