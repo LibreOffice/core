@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:20:47 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,9 +344,9 @@ struct XclFontData
 // *** conversion of VCL/SVX constants *** ------------------------------------
 
     /** Returns the Calc font family. */
-    FontFamily          GetScFamily( CharSet eDefCharSet ) const;
-    /** Returns the Calc font character set. */
-    CharSet             GetScCharSet() const;
+    FontFamily          GetScFamily( rtl_TextEncoding eDefTextEnc ) const;
+    /** Returns the font text encoding. */
+    rtl_TextEncoding    GetFontEncoding() const;
     /** Returns the Calc font posture. */
     FontItalic          GetScPosture() const;
     /** Returns the Calc font weight. */
@@ -362,8 +362,8 @@ struct XclFontData
     void                SetScHeight( sal_Int32 nTwips );
     /** Sets the Calc font family. */
     void                SetScFamily( FontFamily eScFamily );
-    /** Sets the Calc character set. */
-    void                SetScCharSet( CharSet eScCharSet );
+    /** Sets the font text encoding. */
+    void                SetFontEncoding( rtl_TextEncoding eFontEnc );
     /** Sets the Calc font posture. */
     void                SetScPosture( FontItalic eScPosture );
     /** Sets the Calc font weight. */
@@ -381,8 +381,8 @@ struct XclFontData
     float               GetApiHeight() const;
     /** Returns the API font family. */
     sal_Int16           GetApiFamily() const;
-    /** Returns the API character set. */
-    sal_Int16           GetApiCharSet() const;
+    /** Returns the API font text encoding. */
+    sal_Int16           GetApiFontEncoding() const;
     /** Returns the API font posture. */
     ::com::sun::star::awt::FontSlant GetApiPosture() const;
     /** Returns the API font weight. */
@@ -398,8 +398,8 @@ struct XclFontData
     void                SetApiHeight( float fPoint );
     /** Sets the API font family. */
     void                SetApiFamily( sal_Int16 nApiFamily );
-    /** Sets the API character set. */
-    void                SetApiCharSet( sal_Int16 nApiCharSet );
+    /** Sets the API font text encoding. */
+    void                SetApiFontEncoding( sal_Int16 nApiFontEnc );
     /** Sets the API font posture. */
     void                SetApiPosture( ::com::sun::star::awt::FontSlant eApiPosture );
     /** Sets the API font weight. */
