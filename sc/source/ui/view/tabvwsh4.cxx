@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:07 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,35 +408,35 @@ void __EXPORT ScTabViewShell::AdjustPosSizePixel( const Point &rPos, const Size 
 
 void __EXPORT ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 {
-    Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
-    if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
-    {
-        SvBorder aBorder( GetBorderPixel() );
-        Size aSize( rSize );
-        aSize.Width() -= (aBorder.Left() + aBorder.Right());
-        aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
-        Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_100TH_MM );
-        SfxViewShell::SetZoomFactor( Fraction( aSize.Width(),aObjSizePixel.Width() ),
-                        Fraction( aSize.Height(),aObjSizePixel.Height() ) );
-    }
-
     Size aNewSize( rSize );
-    SvBorder aBorder;
-    GetBorderSize( aBorder, rSize );
     if ( GetViewFrame()->GetFrame()->IsInPlace() )
     {
-        Size aViewSize( aNewSize );
-        aViewSize.Width()  -= (aBorder.Left() + aBorder.Right());
-        aViewSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+        SvBorder aBorder;
+           GetBorderSize( aBorder, rSize );
+        SetBorderPixel( aBorder );
+
+        Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
+
+          Size aSize( rSize );
+        aSize.Width() -= (aBorder.Left() + aBorder.Right());
+        aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+
+        if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+        {
+            Size aLogicSize = GetWindow()->PixelToLogic( aSize, MAP_100TH_MM );
+            SfxViewShell::SetZoomFactor( Fraction( aLogicSize.Width(),aObjSize.Width() ),
+                            Fraction( aLogicSize.Height(),aObjSize.Height() ) );
+        }
+
         Point aPos( rOfs );
         aPos.X() += aBorder.Left();
         aPos.Y() += aBorder.Top();
-        GetWindow()->SetPosSizePixel( aPos, aViewSize );
+        GetWindow()->SetPosSizePixel( aPos, aSize );
     }
     else
     {
         SvBorder aBorder;
-        GetBorderSize( aBorder, rSize );
+           GetBorderSize( aBorder, rSize );
         SetBorderPixel( aBorder );
         aNewSize.Width()  += aBorder.Left() + aBorder.Right();
         aNewSize.Height() += aBorder.Top() + aBorder.Bottom();
@@ -1875,6 +1875,9 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
     // #105575#; update only in the first creation of the ViewShell
     pDocSh->SetUpdateEnabled(FALSE);
+
+    if ( GetViewFrame()->GetFrame()->IsInPlace() )
+        UpdateHeaderWidth(); // The implace activation requires headers to be calculated
 
     SvBorder aBorder;
     GetBorderSize( aBorder, Size() );
