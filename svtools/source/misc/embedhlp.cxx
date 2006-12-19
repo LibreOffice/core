@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:27:58 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,6 +379,10 @@ void EmbeddedObjectRef::Clear()
                 {
                     // there's still someone who needs the object!
                 }
+                catch ( uno::Exception& )
+                {
+                    OSL_ENSURE( sal_False, "Error on switching of the object to loaded state and closing!\n" );
+                }
             }
         }
 
@@ -392,6 +396,13 @@ void EmbeddedObjectRef::Clear()
         mxObj = 0;
         mpImp->bNeedUpdate = sal_False;
     }
+
+    mpImp->pContainer = 0;
+    mpImp->pGraphic = 0;
+    mpImp->pHCGraphic = 0;
+    mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
+    mpImp->bIsLocked = FALSE;
+    mpImp->bNeedUpdate = sal_False;
 }
 
 void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const ::rtl::OUString& rPersistName )
