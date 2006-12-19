@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:42:49 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1977,6 +1977,29 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             }
             break;
         }
+
+        // #i68101#
+        case OWN_ATTR_MISC_OBJ_TITLE:
+        {
+            OUString aTitle;
+            if( rVal >>= aTitle )
+            {
+                mpObj->SetTitle( aTitle );
+                return;
+            }
+            break;
+        }
+        case OWN_ATTR_MISC_OBJ_DESCRIPTION:
+        {
+            OUString aDescription;
+            if( rVal >>= aDescription )
+            {
+                mpObj->SetDescription( aDescription );
+                return;
+            }
+            break;
+        }
+
         case SDRATTR_OBJPRINTABLE:
         {
             sal_Bool bPrintable = sal_Bool();
@@ -2662,6 +2685,21 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 aAny <<= aName;
                 break;
             }
+
+            // #i68101#
+            case OWN_ATTR_MISC_OBJ_TITLE:
+            {
+                OUString aTitle( mpObj->GetTitle() );
+                aAny <<= aTitle;
+                break;
+            }
+            case OWN_ATTR_MISC_OBJ_DESCRIPTION:
+            {
+                OUString aDescription( mpObj->GetDescription() );
+                aAny <<= aDescription;
+                break;
+            }
+
             case SDRATTR_OBJPRINTABLE:
                 aAny = uno::makeAny( (sal_Bool) mpObj->IsPrintable() );
                 break;
