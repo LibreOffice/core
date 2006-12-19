@@ -63,6 +63,21 @@ try_to_unpack_languagepack_file()
   UPDATE="yes"
 }
 
+pkg_error()
+{
+  # pkg command failed, check for admin log and report help
+  if [ -f /tmp/.ai.pkg.zone.lock-afdb66cf-1dd1-11b2-a049-000d560ddc3e ]
+  then
+    echo "####################################################################"
+    echo "#     Installation failed due to stale administrative lock         #"
+    echo "####################################################################"
+    printf "\nERROR: please remove the following file first:\n"
+    ls -l /tmp/.ai.pkg.zone.lock-afdb66cf-1dd1-11b2-a049-000d560ddc3e
+  fi
+  rm -f $GETUID_SO
+  exit 1
+}
+
 #
 # this script is for userland not for root
 #
@@ -226,9 +241,9 @@ then
 
   if [ -z "${PKG_LIST}" ]
   then
-    LD_PRELOAD_32=$GETUID_SO /usr/sbin/patchadd -R ${INSTALL_ROOT} -M ${PATCH_PATH} ${PATCH_LIST} 2>&1 | grep -v '/var/sadm/patch'
+    LD_PRELOAD_32=$GETUID_SO /usr/sbin/patchadd -R ${INSTALL_ROOT} -M ${PATCH_PATH} ${PATCH_LIST} 2>&1 | grep -v '/var/sadm/patch' || pkg_error
   else
-    LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} >/dev/null
+    LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} >/dev/null || pkg_error
   fi
 
 else
@@ -260,7 +275,7 @@ else
   echo "Path to the packages       : " $PACKAGE_PATH
   echo "Path to the installation   : " $INSTALL_ROOT
 
-  LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} ${GNOMEPKG} >/dev/null
+  LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} ${GNOMEPKG} >/dev/null || pkg_error
 fi
 
 rm -f $GETUID_SO
