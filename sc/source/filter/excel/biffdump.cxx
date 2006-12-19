@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:47:08 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3478,7 +3478,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x0040, "fZoom" );
                 ADDFLAG( 0x0080, "fShowPlaceHld" );
                 ADDFLAG( 0x0100, "fHideAll" );
-                if( !(__nFlags && 0x0180) )
+                if( !(__nFlags & 0x0180) )
                     ADDTEXT( " fShowAll" );
                 PRINT();
                 LINESTART();
