@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:04:42 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ void ScAccessibleDataPilotControl::AddField(sal_Int32 nNewIndex)
     {
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.Source = uno::Reference< XAccessible >(this);
+        aEvent.Source = uno::Reference< XAccessibleContext >(this);
         aEvent.NewValue <<= getAccessibleChild(nNewIndex);
 
         CommitChange(aEvent); // new child - event
@@ -286,7 +286,7 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
     {
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.Source = uno::Reference< XAccessible >(this);
+        aEvent.Source = uno::Reference< XAccessibleContext >(this);
         aEvent.NewValue <<= xTempAcc;
 
         CommitChange(aEvent); // gone child - event
