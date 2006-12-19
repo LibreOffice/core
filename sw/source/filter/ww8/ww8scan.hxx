@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:42:35 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,10 @@
 
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>       // ASSERT()
+#endif
+
+#ifndef WW_HASH_WRAP_HXX
+#include "hash_wrap.hxx"
 #endif
 
 #ifndef WW_SORTEDARRAY_HXX
@@ -124,10 +128,16 @@ struct SprmInfo
     unsigned int nVari : 2;
 };
 
-//a managed sorted sequence of sprminfos
-typedef ww::SortedArray<SprmInfo> wwSprmSearcher;
-//a managed sorted sequence of sprms
-typedef ww::SortedArray<sal_uInt16> wwSprmSequence;
+struct SprmInfoHash
+{
+    size_t operator()(const SprmInfo &a) const
+        {
+            return a.nId;
+        }
+};
+
+typedef ww::WrappedHash<SprmInfo, SprmInfoHash> wwSprmSearcher;
+typedef ww::WrappedHash<sal_uInt16> wwSprmSequence;
 
 //wwSprmParser knows how to take a sequence of bytes and split it up into
 //sprms and their arguments
