@@ -4,9 +4,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:30:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,9 +235,9 @@ void SvtUserOptions_Impl::InitUserPropertyNames()
         "Data/telephonenumber",         // USER_OPT_TELEPHONEWORK
         "Data/title",                   // USER_OPT_TITLE
         "Data/initials",                // USER_OPT_ID
-        "Data/postalcode"//,             // USER_OPT_ZIP
-//      "Data/fathersname",             //USER_OPT_FATHERSNAME
-//      "Data/apartment"                //USER_OPT_APARTMENT
+        "Data/postalcode",              // USER_OPT_ZIP
+        "Data/fathersname",             // USER_OPT_FATHERSNAME
+        "Data/apartment"                // USER_OPT_APARTMENT
     };
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< rtl::OUString > &rPropertyNames = PropertyNames::get();
