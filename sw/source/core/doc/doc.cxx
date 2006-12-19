@@ -4,9 +4,17 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.51 $
+<<<<<<< doc.cxx
+ *  $Revision: 1.52 $
+=======
+ *  $Revision: 1.52 $
+>>>>>>> 1.49
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:41:31 $
+<<<<<<< doc.cxx
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:54:19 $
+=======
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:54:19 $
+>>>>>>> 1.49
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
