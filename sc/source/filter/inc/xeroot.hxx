@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:55:52 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ struct XclExpRootData : public XclRootData
     bool                mbRelUrl;           /// true = Store URLs relative.
 
     explicit            XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            SotStorageRef xRootStrg, ScDocument& rDoc, CharSet eCharSet );
+                            SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
     virtual             ~XclExpRootData();
 };
 
