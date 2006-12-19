@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:57:02 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3969,6 +3969,18 @@ void WW8RStyle::Set1StyleDefaults()
 {
     if (!bCJKFontChanged)   // Style no CJK Font? set the default
         pIo->SetNewFontAttr(ftcStandardChpCJKStsh, true, RES_CHRATR_CJK_FONT);
+
+    // see i25247
+    const WW8_FFN* pF = pIo->pFonts->GetFont(3);
+    if (pF)
+    {
+        rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(pF->chs);
+        if ((ftcStandardChpCTLStsh == 0) && (eEnc == RTL_TEXTENCODING_MS_1255))
+            ftcStandardChpCTLStsh = 3;
+    }
+
+    if (ftcStandardChpCJKStsh == 0)
+        ftcStandardChpCJKStsh = 2;
 
     if (!bCTLFontChanged)   // Style no CTL Font? set the default
         pIo->SetNewFontAttr(ftcStandardChpCTLStsh, true, RES_CHRATR_CTL_FONT);
