@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:10:42 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -912,6 +912,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
     {
         aStg.Clear(); // Storage vorher freigeben
         delete pStm;
+        pStm = NULL;
     }
     return pStm;
 }
