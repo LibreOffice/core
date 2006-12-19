@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 11:55:08 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 11:26:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ TARGET=mandriva
 # GNOME does not like icon names with more than one '.'
 ICONPREFIX = $(UNIXFILENAME:s/.//g)
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin
+LAUNCHERLIST = writer calc draw impress math base printeradmin extension
 LAUNCHERDEPN = $(foreach,i,$(LAUNCHERLIST) $(UNIXFILENAME)-$i.desktop)
 LAUNCHERDIR  = $(ABSLOCALOUT)$/misc$/$(TARGET)
 
@@ -78,7 +78,8 @@ MIMELIST = \
     oasis-formula \
     oasis-master-document \
     oasis-database \
-    oasis-web-template
+    oasis-web-template \
+    extension
 
 MIMEICONLIST = \
     oasis-text \
@@ -103,7 +104,8 @@ MIMEICONLIST = \
     presentation-template \
     formula \
     master-document \
-    database
+    database \
+    extension
 
 GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys ../mimetypes/openoffice.mime
 KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
@@ -128,6 +130,8 @@ RPMFILE=$(PKGDIR)$/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
 RPMDEPN = \
     $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/soffice \
+    $(MISC)/$(TARGET)/usr/bin/unopkg_gui \
+    $(MISC)/$(TARGET)/usr/bin/unopkg \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
     $(MISC)/$(TARGET)/usr/share/applications/{$(LAUNCHERDEPN)} \
@@ -203,13 +207,14 @@ $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : 
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
-    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
 # --- script ------------------------------------------------------
 
 $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) : ../share/openoffice.sh
     @$(MKDIRHIER) $(@:d)
     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
+
 
 $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.sh
     @$(MKDIRHIER) $(@:d)
@@ -218,6 +223,21 @@ $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.s
 $(MISC)/$(TARGET)/usr/bin/soffice : 
     @$(MKDIRHIER) $(@:d)
     @ln -svf /etc/$(UNIXFILENAME)/program/soffice $@
+
+
+#Create the unopkg wrapper
+$(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui :
+    @$(MKDIRHIER) $(@:d)
+    echo \#\!\/bin\/sh > $@
+    echo exec unopkg gui \$$@  >> $@
+
+$(MISC)/$(TARGET)/usr/bin/unopkg_gui : $(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui
+    @$(MKDIRHIER) $(@:d)
+    @ln -sf /etc/$(UNIXFILENAME)/program/unopkg_gui $@
+            
+$(MISC)/$(TARGET)/usr/bin/unopkg : 
+    @$(MKDIRHIER) $(@:d)
+    @ln -svf /etc/$(UNIXFILENAME)/program/unopkg $@
 
 $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
