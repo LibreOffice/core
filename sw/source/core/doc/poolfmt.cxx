@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:57:47 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:01:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2351,4 +2351,7 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
     // OD 09.10.2003 #i18732# - restore static pool default for item
     // RES_FOLLOW_TEXT_FLOW.
     GetAttrPool().ResetPoolDefaultItem( RES_FOLLOW_TEXT_FLOW );
+
+    //#i16874# AutoKerning as default for new documents
+    GetAttrPool().ResetPoolDefaultItem( RES_CHRATR_AUTOKERN );
 }
