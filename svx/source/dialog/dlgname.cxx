@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgname.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:18:08 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,73 @@ IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, EMPTYARG)
         aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
     return 0;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+// Dialog for editing Object Name
+// plus uniqueness-callback-linkHandler
+
+SvxObjectNameDialog::SvxObjectNameDialog(
+    Window* pWindow,
+    const String& rName)
+:   ModalDialog(pWindow, ResId(RID_SVXDLG_OBJECT_NAME, DIALOG_MGR())),
+    aFtName(this, ResId(NTD_FT_NAME)),
+    aEdtName(this, ResId(NTD_EDT_NAME)),
+    aFlSeparator(this, ResId(FL_SEPARATOR_A)),
+    aBtnHelp(this, ResId(BTN_HELP)),
+    aBtnOK(this, ResId(BTN_OK)),
+    aBtnCancel(this, ResId(BTN_CANCEL))
+{
+    FreeResource();
+
+    // set name
+    aEdtName.SetText(rName);
+
+    // activate name
+    aEdtName.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    ModifyHdl(&aEdtName);
+    aEdtName.SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
+}
+
+IMPL_LINK(SvxObjectNameDialog, ModifyHdl, Edit*, EMPTYARG)
+{
+    if(aCheckNameHdl.IsSet())
+    {
+        aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
+    }
+
+    return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+// Dialog for editing Object Title and Description
+
+SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
+    Window* pWindow,
+    const String& rTitle,
+    const String& rDescription)
+:   ModalDialog(pWindow, ResId(RID_SVXDLG_OBJECT_TITLE_DESC, DIALOG_MGR())),
+    aFtTitle(this, ResId(NTD_FT_TITLE)),
+    aEdtTitle(this, ResId(NTD_EDT_TITLE)),
+    aFtDescription(this, ResId(NTD_FT_DESC)),
+    aEdtDescription(this, ResId(NTD_EDT_DESC)),
+    aFlSeparator(this, ResId(FL_SEPARATOR_B)),
+    aBtnHelp(this, ResId(BTN_HELP)),
+    aBtnOK(this, ResId(BTN_OK)),
+    aBtnCancel(this, ResId(BTN_CANCEL))
+{
+    FreeResource();
+
+    // set title & desc
+    aEdtTitle.SetText(rTitle);
+    aEdtDescription.SetText(rDescription);
+
+    // activate title
+    aEdtTitle.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 /*************************************************************************
 |*
