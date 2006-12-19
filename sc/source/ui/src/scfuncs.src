@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:28:57 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -10575,8 +10575,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             Text [ de ] = "Bestimmt das Anfangsteilwort eines Textes." ;
-            Text [ en-US ] = "Defines the first character or characters in a text string." ;
-            Text [ x-comment ] = " ";
+            Text [ en-US ] = "Returns the first character or characters of a text." ;
         };
         ExtraData =
         {
@@ -10616,8 +10615,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             Text [ de ] = "Bestimmt das Endteilwort eines Textes." ;
-            Text [ en-US ] = "Defines the last character or characters in a text string." ;
-            Text [ x-comment ] = " ";
+            Text [ en-US ] = "Returns the last character or characters of a text." ;
         };
         ExtraData =
         {
