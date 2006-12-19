@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:14:01 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,40 +652,71 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case SID_FRAME_TO_BOTTOM:
             pSh->SelectionToBottom( bBottomParam );
             break;
-        // --> OD 2006-03-09 #i51726# - renamed FN_NAME_GROUP to FN_NAME_SHAPE
+
         case FN_NAME_SHAPE:
-        // <--
         {
             bDone = TRUE;
-            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            DBG_ASSERT(rMarkList.GetMarkCount() == 1, "Exactly one object has to be selected" )
-            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            ULONG nMarkCount = rMarkList.GetMarkCount();
-            String sName;
-            String sDesc(SW_RES( STR_NAME_SHAPE_LABEL ) );
-            // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
-//            DBG_ASSERT(pObj->ISA(SdrObjGroup),
-//                "Object is not a group, graphic or OLE shape")
-            // <--
-            sName = pObj->GetName();
-            //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( NULL, sName, sDesc );
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( NULL, sName, sDesc, ResId(RID_SVXDLG_NAME) );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            pDlg->SetText(SW_RESSTR(STR_NAME_SHAPE_DIALOG));
-            // #100286# -------------
-            pDlg->SetEditHelpId( HID_FORMAT_NAME_OBJECT_NAME );
-            pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
-            if( pDlg->Execute() == RET_OK )
+
+            if(1L == pSdrView->GetMarkedObjectCount())
             {
-                pDlg->GetName( sName );
-                pObj->SetName(sName);
-                pSh->SetModified();
+                // #i68101#
+                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
+                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                String aName(pSelected->GetName());
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, ResId(RID_SVXDLG_OBJECT_NAME));
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
+
+                if(RET_OK == pDlg->Execute())
+                {
+                    pDlg->GetName(aName);
+                    pSelected->SetName(aName);
+                    pSh->SetModified();
+                }
+
+                delete pDlg;
             }
-            delete pDlg;
+
+            break;
         }
-        break;
+
+        // #i68101#
+        case FN_TITLE_DESCRIPTION_SHAPE:
+        {
+            bDone = TRUE;
+
+            if(1L == pSdrView->GetMarkedObjectCount())
+            {
+                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
+                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                String aTitle(pSelected->GetTitle());
+                String aDescription(pSelected->GetDescription());
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, ResId(RID_SVXDLG_OBJECT_TITLE_DESC));
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                if(RET_OK == pDlg->Execute())
+                {
+                    pDlg->GetTitle(aTitle);
+                    pDlg->GetDescription(aDescription);
+
+                    pSelected->SetTitle(aTitle);
+                    pSelected->SetDescription(aDescription);
+
+                    pSh->SetModified();
+                }
+
+                delete pDlg;
+            }
+
+            break;
+        }
 
         default:
             DBG_ASSERT(!this, "falscher Dispatcher");
@@ -821,28 +852,28 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     rSet.Put(aEnumItem);
                 }
                 break;
-            // --> OD 2006-03-09 #i51726# - renamed FN_NAME_GROUP to FN_NAME_SHAPE
+
             case FN_NAME_SHAPE :
-            // <--
-            {
-                // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
-//                BOOL bDisable = TRUE;
-//                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-//                if( rMarkList.GetMarkCount() == 1 )
-//                {
-//                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-//                    if(pObj->ISA(SdrObjGroup))
-//                        bDisable = FALSE;
-//                }
-//                if(bDisable)
-//                    rSet.DisableItem( nWhich );
-                if ( pSdrView->GetMarkedObjectList().GetMarkCount() != 1 )
                 {
-                    rSet.DisableItem( nWhich );
+                    if(1L != pSdrView->GetMarkedObjectCount())
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
                 }
-                // <--
-            }
-            break;
+                break;
+
+            // #i68101#
+            case FN_TITLE_DESCRIPTION_SHAPE:
+                {
+                    SwView& rView = GetView();
+                    const bool bIsWebView(NULL != PTR_CAST(SwWebView, &rView));
+
+                    if(!bIsWebView && 1L != pSdrView->GetMarkedObjectCount())
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
         }
         nWhich = aIter.NextWhich();
     }
