@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:15:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:15:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
