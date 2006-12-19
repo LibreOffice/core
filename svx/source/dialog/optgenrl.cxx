@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgenrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:30:57 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,17 +173,32 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
         aStreetLblRuss.Show();
 
         aFatherName.Show();
-        aFirstName.SetPosSizePixel( LogicToPixel( Point( 88, LINE(1) ), MAP_APPFONT ),
-                                    LogicToPixel( Size( 46, 12 ), MAP_APPFONT ) );
-        aFatherName.SetPosSizePixel( LogicToPixel( Point( 136, LINE(1) ), MAP_APPFONT ),
-                                       LogicToPixel( Size( 46, 12 ), MAP_APPFONT ) );
-        aName.SetPosSizePixel( LogicToPixel( Point( 184, LINE(1) ), MAP_APPFONT ),
-                               LogicToPixel( Size( 46, 12 ), MAP_APPFONT ) );
 
-        aStreetEdit.SetSizePixel( LogicToPixel( Size( 132, 12 ), MAP_APPFONT ) );
+        Point aEditPoint = LogicToPixel( Point( MID, LINE(1) ), MAP_APPFONT );
+        Point aRightPoint = LogicToPixel( Point( RIGHT, LINE(1) ), MAP_APPFONT );
+        Size aEditSize = LogicToPixel( Size( 42, 12 ), MAP_APPFONT );
+        Size a2Size = LogicToPixel( Size( 2, 2 ), MAP_APPFONT );
+        long nDelta = aEditSize.Width() + a2Size.Width();
+        aName.SetPosSizePixel( aEditPoint, aEditSize );
+        aEditPoint.X() = aEditPoint.X() + nDelta;
+        aFirstName.SetPosSizePixel( aEditPoint, aEditSize );
+        aEditPoint.X() = aEditPoint.X() + nDelta;
+        aFatherName.SetPosSizePixel( aEditPoint, aEditSize );
+        aEditPoint.X() = aEditPoint.X() + nDelta;
+        aEditSize.Width() = aRightPoint.X() - aEditPoint.X();
+        aShortName.SetPosSizePixel( aEditPoint, aEditSize );
+
+        Size aStreetSize = aStreetEdit.GetSizePixel();
+        aStreetSize.Width() = aStreetSize.Width() - aEditSize.Width() - a2Size.Width();
+        aStreetEdit.SetSizePixel( aStreetSize );
         aApartmentNrEdit.Show();
-        aApartmentNrEdit.SetPosSizePixel( LogicToPixel( Point( 222, LINE(2) ), MAP_APPFONT ),
-                                          LogicToPixel( Size( 26, 12 ), MAP_APPFONT ) );
+        Point aApartmentPoint = LogicToPixel( Point( MID, LINE(2) ), MAP_APPFONT );
+        aApartmentPoint.X() = aEditPoint.X();
+        aApartmentNrEdit.SetPosSizePixel( aApartmentPoint, aEditSize );
+
+        aName.SetZOrder( &aNameLblRuss, WINDOW_ZORDER_BEHIND );
+        aFirstName.SetZOrder( &aName, WINDOW_ZORDER_BEHIND );
+        aFatherName.SetZOrder( &aFirstName, WINDOW_ZORDER_BEHIND );
     }
     else
     {
