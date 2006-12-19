@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:05:48 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,11 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
+
+#include <com/sun/star/i18n/XOrdinalSuffix.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -150,4 +155,38 @@ void ScGlobal::InitAddIns()
 }
 
 
-
+// static
+String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
+{
+    if (!xOrdinalSuffix.is())
+    {
+        try
+        {
+            Reference< lang::XMultiServiceFactory > xServiceManager =
+                ::comphelper::getProcessServiceFactory();
+            Reference< XInterface > xInterface =
+                xServiceManager->createInstance(
+                    ::rtl::OUString::createFromAscii("com.sun.star.i18n.OrdinalSuffix"));
+            if  (xInterface.is())
+                xOrdinalSuffix = Reference< i18n::XOrdinalSuffix >( xInterface, UNO_QUERY);
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "GetOrdinalSuffix: exception caught during init" );
+        }
+    }
+    DBG_ASSERT( xOrdinalSuffix.is(), "GetOrdinalSuffix: createInstance failed");
+    if (xOrdinalSuffix.is())
+    {
+        try
+        {
+            return xOrdinalSuffix->getOrdinalSuffix( nNumber,
+                    ScGlobal::pLocaleData->getLocale());
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "GetOrdinalSuffix: exception caught during getOrdinalSuffix" );
+        }
+    }
+    return String();
+}
