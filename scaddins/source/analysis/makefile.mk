@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:36:01 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 13:13:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #**************************************************************************
 
 PRJ=..$/..
-PRJNAME=addin
+PRJNAME=scaddins
 
 TARGET=analysis
 
