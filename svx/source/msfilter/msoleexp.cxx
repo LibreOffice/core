@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:23:04 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,6 +310,12 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     catch( embed::NoVisualAreaSizeException& )
                     {
                         OSL_ENSURE( sal_False, "Could not get visual area size!\n" );
+                        aSize.Width = 5000;
+                        aSize.Height = 5000;
+                    }
+                    catch( uno::Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "Unexpected exception while getting visual area size!\n" );
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }
