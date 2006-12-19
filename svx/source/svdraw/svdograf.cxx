@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:30 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,28 +473,6 @@ void SdrGrafObj::SetFilterName(const String& rFilterName)
 
 // -----------------------------------------------------------------------------
 
-FASTBOOL SdrGrafObj::HasSetName() const
-{
-    return TRUE;
-}
-
-// -----------------------------------------------------------------------------
-
-void SdrGrafObj::SetName(const XubString& rStr)
-{
-    aName = rStr;
-    SetChanged();
-}
-
-// -----------------------------------------------------------------------------
-
-XubString SdrGrafObj::GetName() const
-{
-    return aName;
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::ForceSwapIn() const
 {
     if( mbIsPreview )
@@ -924,6 +902,8 @@ void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
         break;
     }
 
+    const String aName(GetName());
+
     if( aName.Len() )
     {
         rName.AppendAscii( " '" );
@@ -961,6 +941,8 @@ void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const
         break;
     }
 
+    const String aName(GetName());
+
     if( aName.Len() )
     {
         rName.AppendAscii( " '" );
@@ -981,7 +963,6 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
     aCropRect = rGraf.aCropRect;
     aFileName = rGraf.aFileName;
     aFilterName = rGraf.aFilterName;
-    aName = rGraf.aName;
     bMirrored = rGraf.bMirrored;
 
     if( rGraf.pGraphicLink != NULL)
