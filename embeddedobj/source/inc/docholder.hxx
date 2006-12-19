@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:20:43 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ private:
     sal_Bool m_bDesktopTerminated;
 
     sal_Int32 m_nNoBorderResizeReact;
+    sal_Int32 m_nNoResizeReact;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
 
