@@ -5838,6 +5838,34 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
     GroupId = GID_ENUMERATION;
 ]
 
+//-#i68101#------------------------------------------------------------------------
+SfxVoidItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem NameGroup FN_NAME_SHAPE
 ()
