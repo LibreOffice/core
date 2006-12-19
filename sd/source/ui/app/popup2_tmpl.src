@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup2_tmpl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 21:52:49 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,10 +69,15 @@
         MN_OBJECT_ALIGN
         MN_DISTRIBUTE
         MNSUB_CONVERT
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
-        SEPARATOR
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
         MN_EFFECT
         MN_ACTION
 #endif
@@ -108,8 +113,13 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -147,8 +157,13 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -183,8 +198,13 @@
         SEPARATOR
         MN_ENTER_GROUP
         MN_3D_WIN
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -218,8 +238,13 @@
         MN_ENTER_GROUP
         MN_LEAVE_GROUP
         MN_3D_WIN
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -252,8 +277,13 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_3D_WIN
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -287,8 +317,13 @@
         MN_DISTRIBUTE
         MNSUB_MIRROR
         MNSUB_CONVERT
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
         SEPARATOR
         MN_UNGROUP
         MN_ENTER_GROUP
@@ -325,8 +360,13 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -364,8 +404,13 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -403,8 +448,13 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -443,8 +493,13 @@
         MN_LEAVE_GROUP
         MN_DISMANTLE
         MN_BREAK
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -556,9 +611,15 @@
         MNSUB_MIRROR
         MNSUB_CONVERT
         MN_BREAK
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
         MN_EFFECT
         MN_ACTION
 #endif
@@ -588,8 +649,13 @@
         MN_OBJECT_ALIGN
         MN_DISTRIBUTE
         MN_BREAK
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
@@ -639,8 +705,13 @@
         MN_OBJECT_ALIGN
         MN_DISTRIBUTE
         MN_BREAK
+
+        //-#i68101#----------------------
         SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
         MN_NAME_GROUP
+        //-#i68101#----------------------
+
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_EFFECT
