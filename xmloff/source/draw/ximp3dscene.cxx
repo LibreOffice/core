@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:15:52 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 #ifndef _XMLOFF_EVENTIMP_HXX
 #include "eventimp.hxx"
 #endif
+#include "descriptionimp.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -215,7 +216,13 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
 {
     SvXMLImportContext* pContext = 0L;
 
-    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
+    // #i68101#
+    if( nPrefix == XML_NAMESPACE_SVG &&
+        (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
+    {
+        pContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+    }
+    else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
