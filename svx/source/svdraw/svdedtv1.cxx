@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:40:55 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -639,7 +639,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL /*bOnlyH
                 if (!bLogicHgtDiff && aSnapRect.GetHeight()!=aLogicRect.GetHeight()) bLogicHgtDiff=TRUE;
             }
         }
-        if (!bObjNameDC && pObj->HasSetName()) {
+        if (!bObjNameDC ) {
             if (!bObjNameSet) {
                 aObjName=pObj->GetName();
             } else {
