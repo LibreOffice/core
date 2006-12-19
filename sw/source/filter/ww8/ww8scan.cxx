@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:52:20 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,21 +115,16 @@ template<class C> bool wwString<C>::TestBeltAndBraces(const SvStream& rStrm)
     return bRet;
 }
 
-bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
+inline bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
 {
     return (rFirst.nId == rSecond.nId);
-}
-
-bool operator<(const SprmInfo &rFirst, const SprmInfo &rSecond)
-{
-    return (rFirst.nId < rSecond.nId);
 }
 
 const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
 {
     //double lock me
     // WW7- Sprms
-    static SprmInfo aSprms[] =
+    static const SprmInfo aSprms[] =
     {
         {  0, 0, L_FIX}, // "Default-sprm",  wird uebersprungen
         {  2, 1, L_FIX}, // "sprmPIstd",  pap.istd (style code)
@@ -281,7 +276,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
 {
     //double lock me
     // WW7- Sprms
-    static SprmInfo aSprms[] =
+    static const SprmInfo aSprms[] =
     {
         {  0, 0, L_FIX}, // "Default-sprm",  wird uebersprungen
         {  2, 2, L_FIX}, // "sprmPIstd",  pap.istd (style code)
@@ -463,7 +458,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
 {
     //double lock me
     //WW8+ Sprms
-    static SprmInfo aSprms[] =
+    static const SprmInfo aSprms[] =
     {
         {     0, 0, L_FIX}, // "Default-sprm"/ wird uebersprungen
         {0x4600, 2, L_FIX}, // "sprmPIstd" pap.istd;istd (style code);short;
