@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:21:52 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
         aEvent.NewValue = uno::makeAny(AccessibleStateType::SELECTED);
     else
         aEvent.OldValue = uno::makeAny(AccessibleStateType::SELECTED);
-    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.Source = uno::Reference< XAccessibleContext >(this);
 
     CommitChange(aEvent);
 }
@@ -183,7 +183,7 @@ void ScAccessibleSpreadsheet::LostFocus()
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.Source = uno::Reference< XAccessibleContext >(this);
     uno::Reference< XAccessible > xOld = mpAccCell;
     aEvent.OldValue <<= xOld;
 
@@ -198,7 +198,7 @@ void ScAccessibleSpreadsheet::GotFocus()
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.Source = uno::Reference< XAccessibleContext >(this);
     uno::Reference< XAccessible > xNew = mpAccCell;
     aEvent.NewValue <<= xNew;
 
@@ -209,7 +209,7 @@ void ScAccessibleSpreadsheet::BoundingBoxChanged()
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.Source = uno::Reference< XAccessibleContext >(this);
 
     CommitChange(aEvent);
 }
@@ -218,7 +218,7 @@ void ScAccessibleSpreadsheet::VisAreaChanged()
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.Source = uno::Reference< XAccessibleContext >(this);
 
     CommitChange(aEvent);
 }
@@ -250,7 +250,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         DELETEZ(mpSortedMarkedCells);
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-                    aEvent.Source = uno::Reference< XAccessible >(this);
+                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
 
                     mbHasSelection = bNewMarked;
 
@@ -261,7 +261,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 {
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-                    aEvent.Source = uno::Reference< XAccessible >(this);
+                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
                     uno::Reference< XAccessible > xOld = mpAccCell;
                     mpAccCell->release();
                     aEvent.OldValue <<= xOld;
@@ -289,7 +289,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.Source = uno::Reference< XAccessibleContext >(this);
 
             CommitChange(aEvent);*/
         // commented out, because to use a ModelChangeEvent is not the right way
@@ -315,7 +315,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
-            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.Source = uno::Reference< XAccessibleContext >(this);
 
             CommitChange(aEvent);
         }*/
@@ -371,7 +371,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-                aEvent.Source = uno::Reference< XAccessible >(this);
+                aEvent.Source = uno::Reference< XAccessibleContext >(this);
                 uno::Reference< XAccessible > xNew = mpAccCell;
                 aEvent.NewValue <<= xNew;
 
@@ -853,7 +853,7 @@ void SAL_CALL ScAccessibleSpreadsheet::addEventListener(const uno::Reference<XAc
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-        aEvent.Source = uno::Reference< XAccessible >(this);
+        aEvent.Source = uno::Reference< XAccessibleContext >(this);
         aEvent.NewValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
 
         CommitChange(aEvent);
