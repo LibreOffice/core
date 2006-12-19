@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:18:12 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1194,15 +1194,7 @@ String STR_SWBG_FOOTER
     Text [ x-comment ] = " ";
 };
  //Ende: Strings fuer Gallery/Hintergrund
-String STR_NAME_SHAPE_LABEL
-{
-    Text [ de ] = "Name";
-    Text [ en-US ] = "Name";
-};
-String STR_NAME_SHAPE_DIALOG
-{
-    Text [ de ] = "Objekt benennen" ;
-    Text [ en-US ] = "Name Object";
-};
 
-
+// #i68101# no longer needed:
+// String STR_NAME_SHAPE_LABEL { Text [ de ] = "Name"; Text [ en-US ] = "Name"; };
+// String STR_NAME_SHAPE_DIALOG { Text [ de ] = "Objekt benennen" ; Text [ en-US ] = "Name Object"; };
