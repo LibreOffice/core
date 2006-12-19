@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:57:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1037,6 +1037,10 @@ XclExpXct::XclExpXct( const String& rTabName, sal_uInt16 nSBTab ) :
 
 void XclExpXct::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange )
 {
+    // #i70418# restrict size of external range to prevent memory overflow
+    if( (rRange.aEnd.Col() - rRange.aStart.Col()) * (rRange.aEnd.Row() - rRange.aStart.Row()) > 1024 )
+        return;
+
     ScDocument& rDoc = rRoot.GetDoc();
     SvNumberFormatter& rFormatter = rRoot.GetFormatter();
     SCTAB nScTab = rRange.aStart.Tab();
@@ -1141,7 +1145,7 @@ void XclExpExternSheet::Save( XclExpStream& rStrm )
 void XclExpExternSheet::Init( const String& rEncUrl )
 {
     DBG_ASSERT_BIFF( GetBiff() <= EXC_BIFF5 );
-    maTabName.AssignByte( rEncUrl, GetCharSet(), EXC_STR_8BITLENGTH );
+    maTabName.AssignByte( rEncUrl, GetTextEncoding(), EXC_STR_8BITLENGTH );
     SetRecSize( maTabName.GetSize() );
 }
 
