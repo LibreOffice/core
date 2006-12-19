@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:03:49 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -943,7 +943,7 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
     DBG_ASSERT( maData.maName.Len() < 256, "XclExpFont::WriteBody - font name too long" );
     XclExpString aFontName;
     if( GetBiff() <= EXC_BIFF5 )
-        aFontName.AssignByte( maData.maName, GetCharSet(), EXC_STR_8BITLENGTH );
+        aFontName.AssignByte( maData.maName, GetTextEncoding(), EXC_STR_8BITLENGTH );
     else
         aFontName.Assign( maData.maName, EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH );
 
@@ -1156,7 +1156,7 @@ void XclExpFontBuffer::InitDefaultFonts()
     XclExpFontData aFontData;
     aFontData.maName.AssignAscii( "Arial" );
     aFontData.SetScFamily( FAMILY_DONTKNOW );
-    aFontData.SetScCharSet( ScfTools::GetSystemCharSet() );
+    aFontData.SetFontEncoding( ScfTools::GetSystemTextEncoding() );
     aFontData.SetScHeight( 200 );   // 200 twips = 10 pt
     aFontData.SetScWeight( WEIGHT_NORMAL );
 
@@ -1277,7 +1277,7 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXcl
 {
     XclExpString aExpStr;
     if( GetBiff() <= EXC_BIFF5 )
-        aExpStr.AssignByte( rFormatStr, GetCharSet(), EXC_STR_8BITLENGTH );
+        aExpStr.AssignByte( rFormatStr, GetTextEncoding(), EXC_STR_8BITLENGTH );
     else
         aExpStr.Assign( rFormatStr );
 
@@ -2016,7 +2016,7 @@ void XclExpStyle::WriteBody( XclExpStream& rStrm )
         if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
             aNameEx.Assign( maName );
         else
-            aNameEx.AssignByte( maName, rStrm.GetRoot().GetCharSet(), EXC_STR_8BITLENGTH );
+            aNameEx.AssignByte( maName, rStrm.GetRoot().GetTextEncoding(), EXC_STR_8BITLENGTH );
         rStrm << aNameEx;
     }
 }
