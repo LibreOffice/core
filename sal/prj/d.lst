@@ -31,6 +31,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 
 ..\%__SRC%\bin\guistdio.exe %_DEST%\bin%_EXT%\guistdio.com
 ..\%__SRC%\bin\guistdio.exe %_DEST%\bin%_EXT%\crashrep.com
+..\%__SRC%\bin\unopkgio.exe %_DEST%\bin%_EXT%\unopkg.com
 ..\%__SRC%\bin\kill.exe %_DEST%\bin%_EXT%\kill.exe
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
