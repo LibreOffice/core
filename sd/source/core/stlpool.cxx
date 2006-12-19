@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:33:59 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:57:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,8 @@
 #include <svx/emphitem.hxx>
 #endif
 
+#define ITEMID_AUTOKERN EE_CHAR_PAIRKERNING
+#include <svx/akrnitem.hxx>
 
 #include <svx/svdattr.hxx>
 #include "eetext.hxx"
@@ -331,6 +333,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 rSet.Put( SvxColorItem( Color(COL_AUTO)) );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
                 rSet.Put( XFillStyleItem(XFILL_NONE) );
+                // #i16874# enable kerning by default but only for new documents
+                rSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
                 if( nLevel == 1 )
                 {
@@ -399,13 +403,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 1); // Bullets sichtbar
                 pSheet->GetItemSet().Put(aBulletStateItem);
             }
-
-/*
-            // Gliederungsvorlagen haben die naechsthoehere Ebene als Parent
-            if (pParent)
-                pSheet->SetParent(pParent->GetName());
-            pParent = pSheet;
-*/
         }
     }
 
@@ -472,6 +469,9 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         rTitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
+        // #i16874# enable kerning by default but only for new documents
+        rTitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
+
         aBulletFont.SetSize(Size(0,1552));                  // 44 pt
         PutNumBulletItem( pSheet, aBulletFont );
     }
@@ -514,6 +514,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
+        // #i16874# enable kerning by default but only for new documents
+        rSubtitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
         aSvxLRSpaceItem.SetTxtLeft(0);
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
@@ -559,6 +561,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO)) );
         rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600 ) );
+        // #i16874# enable kerning by default but only for new documents
+        rNotesSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
         SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rNotesSet.Get(EE_PARA_NUMBULLET) );
 
@@ -587,6 +591,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rBackgroundObjectsSet.Put(SdrShadowColorItem(String(), Color(COL_GRAY)));
         rBackgroundObjectsSet.Put(SdrShadowXDistItem(300)); // 3 mm Schattendistanz
         rBackgroundObjectsSet.Put(SdrShadowYDistItem(300));
+        // #i16874# enable kerning by default but only for new documents
+        rBackgroundObjectsSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
     }
 
     /**************************************************************************
@@ -605,6 +611,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         SfxItemSet& rBackgroundSet = pSheet->GetItemSet();
         rBackgroundSet.Put(XLineStyleItem(XLINE_NONE));
         rBackgroundSet.Put(XFillStyleItem(XFILL_NONE));
+        // #i16874# enable kerning by default but only for new documents
+        rBackgroundSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
     }
 
     DBG_ASSERT( !bCheck || !bCreated, "missing layout style sheets detected!" );
