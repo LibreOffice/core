@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:00:07 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1172,28 +1172,6 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 
 // -----------------------------------------------------------------------------
 
-FASTBOOL SdrOle2Obj::HasSetName() const
-{
-    return TRUE;
-}
-
-// -----------------------------------------------------------------------------
-
-void SdrOle2Obj::SetName(const XubString& rStr)
-{
-    aName = rStr;
-    SetChanged();
-}
-
-// -----------------------------------------------------------------------------
-
-XubString SdrOle2Obj::GetName() const
-{
-    return aName;
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrOle2Obj::SetPersistName( const String& rPersistName )
 {
     DBG_ASSERT( !mpImpl->aPersistName.Len(), "Persist name changed!");
@@ -1423,6 +1401,8 @@ void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);
 
+    const String aName(GetName());
+
     if( aName.Len() )
     {
         rName.AppendAscii(" '");
@@ -1459,7 +1439,6 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
         // #108867# Manually copying bClosedObj attribute
         SetClosedObj( rObj.IsClosedObj() );
 
-        aName = rOle2Obj.aName;
         mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
         aProgName = rOle2Obj.aProgName;
         bFrame = rOle2Obj.bFrame;
