@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:06:26 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         AccessibleEventObject aEvent;
                         aEvent.EventId = AccessibleEventId::CHILD;
-                        aEvent.Source = uno::Reference< XAccessible >(this);
+                        aEvent.Source = uno::Reference< XAccessibleContext >(this);
                         aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i]));
 
                         CommitChange(aEvent); // child gone - event
@@ -198,7 +198,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         AccessibleEventObject aEvent;
                         aEvent.EventId = AccessibleEventId::CHILD;
-                        aEvent.Source = uno::Reference< XAccessible >(this);
+                        aEvent.Source = uno::Reference< XAccessibleContext >(this);
                         aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(maAreas[i]));
 
                         CommitChange(aEvent); // new child - event
@@ -211,7 +211,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent);
         }
     }
