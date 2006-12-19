@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:34:06 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1154,6 +1154,7 @@ void XMLShapeExport::ImpExportCustomShape(
         }
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DRAW, XML_CUSTOM_SHAPE, bCreateNewline, sal_True );
+        ImpExportDescription( xShape ); // #i68101#
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
