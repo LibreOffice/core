@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:46:06 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,6 +394,7 @@ private:
 
     BYTE                nAsianCompression;
     BYTE                nAsianKerning;
+    BOOL                bSetDrawDefaults;
 
     BOOL                bPastingDrawFromOtherDoc;
 
@@ -445,6 +446,8 @@ public:
 
     void                    GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
     void                    SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
+
+    void                    SetDrawDefaults();
 
     void                        SetConsolidateDlgData( const ScConsolidateParam* pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData; }
@@ -1662,6 +1665,7 @@ private: // CLOOK-Impl-Methoden
 
     void    UpdateDrawPrinter();
     void    UpdateDrawLanguages();
+    void    UpdateDrawDefaults();
     void    InitClipPtrs( ScDocument* pSourceDoc );
 
     void    LoadDdeLinks(SvStream& rStream);
