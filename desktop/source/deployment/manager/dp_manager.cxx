@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:56:57 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #include "com/sun/star/ucb/XContentAccess.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
+#include "com/sun/star/deployment/InstallException.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "boost/bind.hpp"
@@ -598,6 +599,39 @@ bool PackageManagerImpl::checkUpdate(
     }
     return true;
 }
+//______________________________________________________________________________
+// Notify the user when a new extension is to be installed. This is only the case
+//when unopkg gui extension1 is used (used by system integration (double click on .oxt
+// file etc.)). In case there is already this extension then the function returns
+//true.
+bool PackageManagerImpl::checkInstall(
+    OUString const & title, Reference<deployment::XPackage> const & package,
+    Reference<XCommandEnvironment> const & cmdEnv)
+{
+    if ( ! m_activePackagesDB->has( title ))
+    {
+        Any request(
+            deployment::InstallException(
+                OUSTR("Extension ") + title + OUSTR("is about to be installed."),
+                static_cast<OWeakObject *>(this), package));
+        bool approve = false, abort = false;
+        if (! interactContinuation(
+                request, task::XInteractionApprove::static_type(),
+                cmdEnv, &approve, &abort ))
+        {
+            OSL_ASSERT( !approve && !abort );
+            throw deployment::DeploymentException(
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                static_cast<OWeakObject *>(this), request );
+        }
+        if (abort || !approve)
+            throw CommandFailedException(
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                static_cast<OWeakObject *>(this), request );
+
+    }
+    return true;
+}
 
 // XPackageManager
 //______________________________________________________________________________
@@ -624,8 +658,8 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     try {
         ::ucb::Content sourceContent;
         create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
-        const OUString title( sourceContent.getPropertyValue(
-                                  StrTitle::get() ).get<OUString>() );
+        const OUString title(sourceContent.getPropertyValue(
+                             StrTitle::get() ).get<OUString>() );
         const OUString title_enc( ::rtl::Uri::encode(
                                       title, rtl_UriCharClassPchar,
                                       rtl_UriEncodeIgnoreEscapes,
@@ -684,10 +718,11 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 bool install;
                 try
                 {
-                    bool removeExisting;
-                    install = checkUpdate(
-                        title, xPackage, &removeExisting, xCmdEnv_, xCmdEnv ) &&
-                        xPackage->checkPrerequisites(xAbortChannel, xCmdEnv);
+                    bool removeExisting = false;
+                    install = checkInstall(title, xPackage, xCmdEnv)
+                        && checkUpdate(
+                            title, xPackage, &removeExisting, xCmdEnv_, xCmdEnv )
+                        && xPackage->checkPrerequisites(xAbortChannel, xCmdEnv);
                     if ( install && removeExisting )
                         removePackage_(
                             title, xAbortChannel,
@@ -708,11 +743,9 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 {
                     deletePackageFromCache( xPackage, destFolder );
                 }
+                fireModified();
             }
         } // guard
-
-        fireModified();
-
         return xPackage;
     }
     catch (RuntimeException &) {
