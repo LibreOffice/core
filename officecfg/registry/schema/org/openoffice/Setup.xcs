@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:48:33 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,13 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
+			<prop oor:name="ooSetupVersionAboutBox" oor:type="xs:string">
+				<info>
+					<author>PB</author>
+					<desc>Specifies the complete (major.minor.micro) version number of the product that appears only on the about box.</desc>
+				</info>
+				<value/>
+			</prop>
 			<prop oor:name="ooSetupExtension" oor:type="xs:string">
 				<info>
 					<desc>Specifies the version number that appears on the user interface.</desc>
@@ -336,7 +343,7 @@
                     in order to prevent multiple migrations</desc>
 				</info>
 				<value>false</value>
-			</prop>						            
+			</prop>
 			<set oor:name="Factories" oor:node-type="Factory">
 				<info>
 					<author>AS</author>
