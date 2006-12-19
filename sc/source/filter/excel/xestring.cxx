@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:02:11 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,13 +184,13 @@ void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMa
 }
 
 void XclExpString::AssignByte(
-        const String& rString, CharSet eCharSet, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+        const String& rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    ByteString aByteStr( rString, eCharSet );   // length may differ from length of rString
+    ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
     Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
 }
 
-void XclExpString::AssignByte( sal_Unicode cChar, CharSet eCharSet, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+void XclExpString::AssignByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     if( !cChar )
     {
@@ -199,7 +199,7 @@ void XclExpString::AssignByte( sal_Unicode cChar, CharSet eCharSet, XclStrFlags 
     }
     else
     {
-        ByteString aByteStr( &cChar, 1, eCharSet );     // length may be >1
+        ByteString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
         Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
     }
 }
@@ -221,13 +221,13 @@ void XclExpString::Append( sal_Unicode cChar )
     BuildAppend( &cChar, 1 );
 }
 
-void XclExpString::AppendByte( const String& rString, CharSet eCharSet )
+void XclExpString::AppendByte( const String& rString, rtl_TextEncoding eTextEnc )
 {
-    ByteString aByteStr( rString, eCharSet );   // length may differ from length of rString
+    ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
     BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
 }
 
-void XclExpString::AppendByte( sal_Unicode cChar, CharSet eCharSet )
+void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
 {
     if( !cChar )
     {
@@ -236,7 +236,7 @@ void XclExpString::AppendByte( sal_Unicode cChar, CharSet eCharSet )
     }
     else
     {
-        ByteString aByteStr( &cChar, 1, eCharSet );     // length may be >1
+        ByteString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
         BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
     }
 }
