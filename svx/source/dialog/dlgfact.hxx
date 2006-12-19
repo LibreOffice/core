@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:35:00 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,11 @@ class SvxJSearchOptionsDialog;
 class FmFormShell;
 class SvxNewDictionaryDialog;
 class SvxNameDialog;
+
+// #i68101#
+class SvxObjectNameDialog;
+class SvxObjectTitleDescDialog;
+
 class SvxMessDialog;
 class SvxMultiPathDialog;
 class SvxMultiFileDialog;
@@ -430,6 +435,33 @@ private:
 };
 //for SvxNameDialog end
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+
+// predefines
+class SvxObjectNameDialog;
+class SvxObjectTitleDescDialog;
+
+class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
+{
+    DECL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl, SvxObjectNameDialog)
+    virtual void GetName(String& rName) ;
+    virtual void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false);
+
+private:
+    Link aCheckNameHdl;
+    DECL_LINK(CheckNameHdl, Window*);
+};
+
+class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDialog
+{
+    DECL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl, SvxObjectTitleDescDialog)
+    virtual void GetTitle(String& rName);
+    virtual void GetDescription(String& rName);
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 //for SvxMessDialog end
 class SvxMessDialog;
 class AbstractSvxMessDialog_Impl :public AbstractSvxMessDialog
@@ -711,6 +743,11 @@ public:
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( Window* pParent,
                                             const String& rName, const String& rDesc,
                                             const ResId& rResId ); //add for SvxNameDialog
+
+    // #i68101#
+    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(Window* pParent, const String& rName, const ResId& rResId);
+    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(Window* pParent, const String& rTitle, const String& rDescription, const ResId& rResId);
+
     virtual AbstractSvxMessDialog *     CreateSvxMessDialog( Window* pParent, const ResId& rResId,
                                             const String& rText, const String& rDesc,
                                             Image* pImg = NULL ); //add for SvxMessDialog
