@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 11:56:03 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 11:29:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ TARGET=suse
 # GNOME does not like icon names with more than one '.'
 ICONPREFIX = $(UNIXFILENAME:s/.//g)
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin
+LAUNCHERLIST = writer calc draw impress math base printeradmin extension
 LAUNCHERDEPN = $(foreach,i,$(LAUNCHERLIST) $(UNIXFILENAME)-$i.desktop)
 LAUNCHERDIR  = $(ABSLOCALOUT)$/misc$/$(TARGET)
 
@@ -79,6 +79,7 @@ MIMELIST = \
     oasis-master-document \
     oasis-database \
     oasis-web-template \
+    extension
 
 MIMEICONLIST = \
     oasis-text \
@@ -103,7 +104,8 @@ MIMEICONLIST = \
     presentation-template \
     formula \
     master-document \
-    database
+    database \
+    extension
 
 GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys 
 KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
@@ -128,6 +130,9 @@ RPMFILE=$(PKGDIR)/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
 RPMDEPN = \
     $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/soffice \
+    $(MISC)/$(TARGET)/usr/bin/unopkg_gui \
+    $(MISC)/$(TARGET)/usr/bin/unopkg \
+    $(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
     $(MISC)/$(TARGET)/usr/share/applications/{$(LAUNCHERDEPN)} \
@@ -159,7 +164,7 @@ ALLTAR : $(RPMFILE)
 
 %.desktop :
     @$(MKDIRHIER) $(@:d)
-    @ln -sf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
+    ln -sf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
 
 # --- icons --------------------------------------------------------
 
@@ -195,15 +200,15 @@ $(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../productversion.mk ../share/brand.pl ../sh
     @$(MKDIRHIER) $(@:db)
     @echo Creating KDE mimelnk entries ..
     @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(PRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(ICONPREFIX)-" $(KDEMIMEDEPN) $(@:db)
-    @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/documents.ulf
+    $(PERL) ../share/brand.pl -p "$(PRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(ICONPREFIX)-" $(KDEMIMEDEPN) $(@:db)
+    $(PERL) ../share/translate.pl -p "$(PRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/documents.ulf
     @touch $@    
 
 $(MISC)/$(TARGET)/opt/gnome/share/application-registry/$(UNIXFILENAME).applications : ../productversion.mk ../mimetypes/openoffice.applications
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
-    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
 $(MISC)/$(TARGET)/usr/share/mime/packages/openoffice.org.xml : $(COMMONMISC)$/desktopshare/openoffice.org.xml
     @$(MKDIRHIER) $(@:d)
@@ -219,20 +224,35 @@ $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.s
     @$(MKDIRHIER) $(@:d)
     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
 
+
 $(MISC)/$(TARGET)/usr/bin/soffice :
     @$(MKDIRHIER) $(@:d)
     @ln -sf /etc/$(UNIXFILENAME)/program/soffice $@
 
-$(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
+# Create the unopkg wrapper
+$(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui : 
     @$(MKDIRHIER) $(@:d)
-    @touch $@
+    echo \#\!\/bin\/sh > $@
+    echo exec unopkg gui \$$@  >> $@
+
+$(MISC)/$(TARGET)/usr/bin/unopkg_gui : $(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui
+    $(MKDIRHIER) $(@:d)
+    ln -sf /etc/$(UNIXFILENAME)/program/unopkg_gui $@
+
+$(MISC)/$(TARGET)/usr/bin/unopkg : 
+    $(MKDIRHIER) $(@:d)
+    ln -sf /etc/$(UNIXFILENAME)/program/unopkg $@
+
+$(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
+    $(MKDIRHIER) $(@:d)
+    touch $@
 
 # --- packaging ---------------------------------------------------
     
 $(RPMFILE) : $(RPMDEPN) $(MISC)/$(TARGET)-menus.spec
     @-$(MKDIRHIER) $(@:d)
     -$(RM) $(@:d)$/$(PKGNAME)-*.noarch.rpm $(BIN)$/noarch$/$(PKGNAME)-*.noarch.rpm 
-    @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec $(RPMMACROS) \
+    $(RPM) -bb $(MISC)/$(TARGET)-menus.spec $(RPMMACROS) \
         --buildroot $(LAUNCHERDIR) \
         --define "_builddir $(shell cd ../share; pwd)" \
         --define "unixfilename $(UNIXFILENAME)" \
