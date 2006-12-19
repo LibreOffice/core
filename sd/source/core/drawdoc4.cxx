@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:32:15 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #define ITEMID_EMPHASISMARK         EE_CHAR_EMPHASISMARK
 #define ITEMID_CHARRELIEF           EE_CHAR_RELIEF
 #define ITEMID_FRAMEDIR             EE_PARA_WRITINGDIR
+
+#define ITEMID_AUTOKERN EE_CHAR_PAIRKERNING
+#include <svx/akrnitem.hxx>
 
 #include <svx/svxids.hrc>
 #ifndef _SFX_SRCHITEM_HXX
@@ -387,6 +390,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( SdrTextLowerDistItem( 125 ) );
 
     rISet.Put( SvxLineSpacingItem() );
+
+    // #i16874# enable kerning by default but only for new documents
+    rISet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
     // Bullet
     // BulletItem und BulletFont fuer Titel und Gliederung
