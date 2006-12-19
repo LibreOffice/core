@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:59:30 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1731,9 +1731,9 @@ void SvXMLNumFmtExport::Export( sal_Bool bIsAutoStyle )
         {
             LanguageType nLang = aLanguages[nLangPos];
 
-            sal_uInt32 nStandard;
+            sal_uInt32 nDefaultIndex = 0;
             SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
-                                            NUMBERFORMAT_DEFINED, nStandard, nLang );
+                                            NUMBERFORMAT_DEFINED, nDefaultIndex, nLang );
             pFormat = rTable.First();
             while (pFormat)
             {
