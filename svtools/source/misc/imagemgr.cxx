@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:10:38 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,7 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "ppt",   FALSE, STR_DESCRIPTION_POWERPOINT,            IMG_POWERPOINT },
     { "pot",   FALSE, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_POWERPOINTTEMPLATE },
     { "pps",   FALSE, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_POWERPOINT },
+    { "oxt",   FALSE, STR_DESCRIPTION_EXTENSION,             IMG_EXTENSION },
     { 0, FALSE, 0, 0 }
 };
 
