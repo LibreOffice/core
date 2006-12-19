@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:07:30 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "dp_gui_cmdenv.h"
 #include "dp_gui.hrc"
 #include "rtl/ref.hxx"
-#include "osl/thread.h"
+#include "osl/thread.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/dialog.hxx"
@@ -149,7 +149,9 @@ struct DialogImpl :
         css::uno::Reference<css::deployment::XPackage> getPackage(
             SvLBoxEntry * entry ) const;
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
-        getSelectedPackages( bool onlyFirstLevel = false ) const;
+            getSelectedPackages( bool onlyFirstLevel = false ) const;
+        void select(css::uno::Reference<css::deployment::XPackage> const &   xPackage);
+
     };
 
     class SyncPushButton : public PushButton
@@ -200,7 +202,9 @@ struct DialogImpl :
     void clickEnableDisable( USHORT id );
     void clickExport( USHORT id );
 
-    bool m_allowSharedLayerModification;
+    void installExtensions();
+
+
     void updateButtonStates(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv =
         com::sun::star::uno::Reference<
@@ -208,18 +212,15 @@ struct DialogImpl :
 
     void errbox( ::rtl::OUString const & msg );
 
+
+    const css::uno::Sequence< ::rtl::OUString > m_arExtensions;
+    oslThread m_installThread;
+    bool m_bAutoInstallFinished;
+    bool m_allowSharedLayerModification;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPkgMgrFac;
     css::uno::Reference<css::frame::XDesktop> m_xDesktop;
     css::uno::Reference<css::ucb::XContent> m_xTdocRoot;
-
-    Size m_buttonSize;
-    Size m_relatedSpace;
-    Size m_unrelatedSpace;
-    Size m_borderLeftTopSpace;
-    Size m_borderRightBottomSpace;
-    long m_ftFontHeight;
-    long m_descriptionYSpace;
 
     const String m_strAddPackages;
     const String m_strAddingPackages;
@@ -229,6 +230,15 @@ struct DialogImpl :
     const String m_strExportPackage;
     const String m_strExportPackages;
     const String m_strExportingPackages;
+
+    Size m_buttonSize;
+    Size m_relatedSpace;
+    Size m_unrelatedSpace;
+    Size m_borderLeftTopSpace;
+    Size m_borderRightBottomSpace;
+    long m_ftFontHeight;
+    long m_descriptionYSpace;
+
 
     // controls:
     ::std::auto_ptr<FixedText> m_ftPackages;
@@ -247,14 +257,17 @@ struct DialogImpl :
     ::std::auto_ptr<HelpButton> m_helpButton;
 
     DECL_STATIC_LINK( DialogImpl, destroyDialog, void * );
+    DECL_LINK( startInstallExtensions, DialogImpl *);
     static ::rtl::Reference<DialogImpl> s_dialog;
     virtual ~DialogImpl();
     DialogImpl(
         Window * pParent,
+        css::uno::Sequence< ::rtl::OUString > const & arExtensions,
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
     static ::rtl::Reference<DialogImpl> get(
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Reference<css::awt::XWindow> const & xParent = 0,
+        css::uno::Sequence< ::rtl::OUString > const & arExtensions = 0,
         ::rtl::OUString const & view = ::rtl::OUString() );
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
