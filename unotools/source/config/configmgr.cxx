@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:23:21 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@ namespace
         : public rtl::Static< ::rtl::OUString, BrandName > {};
     struct ProductVersion
         : public rtl::Static< ::rtl::OUString, ProductVersion > {};
+    struct AboutBoxProductVersion
+        : public rtl::Static< ::rtl::OUString, AboutBoxProductVersion > {};
     struct ProductExtension
         : public rtl::Static< ::rtl::OUString, ProductExtension > {};
     struct XMLFileFormatName
@@ -452,6 +454,13 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    rtl::OUString &rAboutBoxProductVersion = AboutBoxProductVersion::get();
+    if ( eProp == ABOUTBOXPRODUCTVERSION && rAboutBoxProductVersion.getLength() )
+    {
+        aRet <<= rAboutBoxProductVersion;
+        return aRet;
+    }
+
     rtl::OUString &rProductExtension = ProductExtension::get();
     if ( eProp == PRODUCTEXTENSION && rProductExtension.getLength() )
     {
@@ -497,7 +506,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case PRODUCTEXTENSION:
         case PRODUCTXMLFILEFORMATNAME :
         case PRODUCTXMLFILEFORMATVERSION:
-        case OPENSOURCECONTEXT:             sPath += C2U("Setup/Product"); break;
+        case OPENSOURCECONTEXT:
+        case ABOUTBOXPRODUCTVERSION:        sPath += C2U("Setup/Product"); break;
 
         case DEFAULTCURRENCY:               sPath += C2U("Setup/L10N"); break;
 
@@ -529,6 +539,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case LOCALE:                            sProperty = C2U("ooLocale"); break;
             case PRODUCTNAME:                       sProperty = C2U("ooName"); break;
             case PRODUCTVERSION:                    sProperty = C2U("ooSetupVersion"); break;
+            case ABOUTBOXPRODUCTVERSION:            sProperty = C2U("ooSetupVersionAboutBox"); break;
             case PRODUCTEXTENSION:                  sProperty = C2U("ooSetupExtension"); break;
             case PRODUCTXMLFILEFORMATNAME:          sProperty = C2U("ooXMLFileFormatName"); break;
             case PRODUCTXMLFILEFORMATVERSION:       sProperty = C2U("ooXMLFileFormatVersion"); break;
@@ -567,6 +578,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if ( eProp == PRODUCTVERSION )
         aRet >>= rProductVersion;
+
+    if ( eProp == ABOUTBOXPRODUCTVERSION )
+        aRet >>= rAboutBoxProductVersion;
 
     if ( eProp == PRODUCTEXTENSION )
         aRet >>= rProductExtension;
