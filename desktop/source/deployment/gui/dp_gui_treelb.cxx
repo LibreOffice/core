@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:07:58 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -786,35 +786,84 @@ void DialogImpl::TreeListBoxImpl::DataChanged( DataChangedEvent const & evt )
     }
 }
 
+//Currently only works for extensions installed in user context
+void DialogImpl::TreeListBoxImpl::select(css::uno::Reference<css::deployment::XPackage> const & xPackage)
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    //GetEntryCount includes all child nodes
+    if (GetEntryCount() == 0)
+    {
+        OSL_ASSERT(0);
+        return;
+    }
+
+    SvLBoxEntry* rootEntry = FirstChild(NULL);
+    if (rootEntry)
+    {
+        sal_Int32 count = GetLevelChildCount(rootEntry);
+        for (sal_Int32 pos = 0; pos < count; pos++)
+        {
+            SvLBoxEntry* entry = GetEntry(rootEntry, pos);
+            Reference<css::deployment::XPackage> const & pack = NodeImpl::get(entry)->m_xPackage;
+            if (pack == xPackage)
+            {
+                SelectAll(false); //delete previous selection
+                MakeVisible(entry);
+                SetCursor(entry);
+                break;
+            }
+        }
+    }
+}
+
 //##############################################################################
 
 //______________________________________________________________________________
+
 IMPL_STATIC_LINK_NOINSTANCE( DialogImpl, destroyDialog, void *, EMPTYARG )
 {
-    if (s_dialog.is())
+    //The installThread is started in a IMPL_LINK, that is, by the main thread.
+    //Because this function is also a LINK which is dispatched by the main thread,
+    //there is no danger that the installThread is started after the if statement.
+    //Either the installThread is already running or is not.
+    if (osl_isThreadRunning(s_dialog->m_installThread) == sal_False)
     {
-        ::rtl::Reference<DialogImpl> dialog( s_dialog );
-        s_dialog.clear();
-        try {
-            dialog->disposing( lang::EventObject( dialog->m_xDesktop ) );
+        if (s_dialog.is())
+        {
+            ::rtl::Reference<DialogImpl> dialog( s_dialog );
+            s_dialog.clear();
+            try {
+                dialog->disposing( lang::EventObject( dialog->m_xDesktop ) );
+            }
+            catch (RuntimeException &) {
+                OSL_ASSERT( 0 );
+            }
+            dialog.get()->ModelessDialog::Close();
         }
-        catch (RuntimeException &) {
-            OSL_ASSERT( 0 );
-        }
+        if (! office_is_running())
+            Application::Quit();
     }
-
-    if (! office_is_running())
-        Application::Quit();
-
+    else
+    {   //Repost event instead of blocking the main thread.
+        Application::PostUserEvent(
+            STATIC_LINK( 0, DialogImpl, destroyDialog ), 0 );
+        return 0;
+    }
     return 0;
 }
 
 //______________________________________________________________________________
+//Called when clicking the close button
+//The actual closing of the dialog is done in
+//IMPL_STATIC_LINK( DialogImpl, destroyDialog, void *, EMPTYARG )
+//because we need to guarantee that the main dialog stays open as long as there
+//are other dialogs open.
 BOOL DialogImpl::Close()
 {
+    //todo check if the installation has finished
     Application::PostUserEvent(
         STATIC_LINK( 0, DialogImpl, destroyDialog ), 0 );
-    return ModelessDialog::Close();
+    return FALSE; //ModelessDialog::Close();
 }
 
 // XEventListener
