@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:00:10 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,10 @@ struct XclImpRootData : public XclRootData
     XclImpDocViewSettRef mxDocViewSett;     /// View settings for entire document.
     XclImpTabViewSettRef mxTabViewSett;     /// View settings for current sheet.
 
+    bool                mbHasCodePage;      /// true = CODEPAGE record exists.
+
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            SotStorageRef xRootStrg, ScDocument& rDoc, CharSet eCharSet );
+                            SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
     virtual             ~XclImpRootData();
 };
 
@@ -133,6 +135,11 @@ public:
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclImpRoot& GetRoot() const { return *this; }
+
+    /** Sets a code page read from a CODEPAGE record for byte string import. */
+    void                SetCodePage( sal_uInt16 nCodePage );
+    /** Sets text encoding from the default application font (in case of missing CODEPAGE record). */
+    void                SetAppFontEncoding( rtl_TextEncoding eAppFontEnc );
 
     /** Is called when import filter starts importing a single sheet (all BIFF versions). */
     void                InitializeTable( SCTAB nScTab );
