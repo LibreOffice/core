@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:53:54 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontFamily" ) ) )
                 aFontData.SetApiFamily( nShortVal );
             if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontCharset" ) ) )
-                aFontData.SetApiCharSet( nShortVal );
+                aFontData.SetApiFontEncoding( nShortVal );
             if( aCtrlProp.GetProperty( nShortVal, CREATE_OUSTRING( "FontSlant" ) ) )
                 aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
             if( aCtrlProp.GetProperty( fFloatVal, CREATE_OUSTRING( "FontWeight" ) ) )
@@ -716,7 +716,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     switch( rRoot.GetBiff() )
     {
         case EXC_BIFF5:
-            maNoteText = ByteString( aNoteText, rRoot.GetCharSet() );
+            maNoteText = ByteString( aNoteText, rRoot.GetTextEncoding() );
         break;
 
         case EXC_BIFF8:
