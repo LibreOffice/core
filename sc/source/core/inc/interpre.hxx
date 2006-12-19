@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:21:05 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,6 +269,8 @@ BYTE GetByte() { return cPar; }
 // generiert aus DoubleRef positionsabhaengige SingleRef
 BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDouble();
+double GetDoubleWithDefault(double nDefault);
+BOOL IsMissing();
 BOOL GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
 // pop matrix and obtain one element, upper left or according to jump matrix
