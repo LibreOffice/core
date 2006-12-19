@@ -280,6 +280,7 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:DistributeSelection"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
             <menu:menuitem menu:id=".uno:NameGroup"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FormatGroup"/>
