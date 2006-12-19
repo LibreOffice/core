@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:58:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1108,7 +1108,8 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
     if ( !pImp->bSignatureErrorIsShown
     && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
     {
-        WarningBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
+        WarningBox aBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+        aBox.Execute();
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
         pImp->bSignatureErrorIsShown = sal_True;
     }
@@ -1872,7 +1873,8 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
     {
         // if the signature is broken, show here the warning before
         // the macro warning
-        WarningBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
+        WarningBox aBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+        aBox.Execute();
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
         pImp->bSignatureErrorIsShown = sal_True;
     }
@@ -1887,7 +1889,8 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
         if ( !pImp->bMacroDisabledMessageIsShown )
         {
             String aMessage( SfxResId( STR_MACROS_DISABLED ) );
-            WarningBox( GetDialogParent(), WB_OK, aMessage ).Execute();
+            WarningBox aBox( GetDialogParent(), WB_OK, aMessage );
+            aBox.Execute();
             pImp->bMacroDisabledMessageIsShown = sal_True;
         }
 
@@ -1983,7 +1986,8 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
             {
                 if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 {
-                    WarningBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
+                    WarningBox aBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+                    aBox.Execute();
                     pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
                     return;
                 }
@@ -2038,7 +2042,10 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
           || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
         {
             if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                WarningBox( GetDialogParent(), SfxResId( MSG_WARNING_MACRO_ISDISABLED ) ).Execute();
+            {
+                WarningBox aBox( GetDialogParent(), SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
+                aBox.Execute();
+            }
                pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
             return;
         }
