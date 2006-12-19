@@ -49,6 +49,7 @@ OpenOffice.org desktop integration
 # backing out existing entries to avoid duplicates
 sed '
 /application\/vnd\.oasis\.opendocument/d
+/application\/vnd\.openofficeorg/d
 /application\/vnd\.sun/d
 /application\/vnd\.stardivision/d
 ' /etc/mime.types 2>/dev/null >> /etc/mime.types.tmp$$
@@ -86,6 +87,7 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.stardivision.math smf
 application/vnd.sun.xml.base odb
+application/vnd.openofficeorg.extension oxt
 END
 
 # and replace the original file
@@ -98,6 +100,7 @@ then
   sed '
 /^# OpenOffice.org/d
 /^application\/vnd\.oasis\.opendocument/d
+/^application\/vnd\.openofficeorg/d
 /^application\/vnd\.sun/d
 /^application\/vnd\.stardivision/d
 /^application\/vnd\.ms-word/d
@@ -157,6 +160,7 @@ application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
 application/vnd.oasis.opendocument.database; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
+application/vnd.openofficeorg.extension; unopkg_gui %s
 END
 
   # and replace the original file
@@ -297,6 +301,8 @@ fi
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
+%attr(0755,root,root) /usr/bin/unopkg_gui
+%attr(0755,root,root) /opt/%unixfilename/program/unopkg_gui
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
@@ -310,6 +316,7 @@ fi
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
+/usr/share/applications/%unixfilename-extension.desktop
 /usr/share/mime-info/*.keys
 /usr/share/mime-info/*.mime
 /usr/share/mimelnk/application/*.desktop
