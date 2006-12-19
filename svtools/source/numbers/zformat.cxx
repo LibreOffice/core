@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:26:23 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -752,8 +752,9 @@ SvNumberformat::SvNumberformat(String& rString,
                         }
                         else
                         {
-                            NumFor[nIndex].SetColor(pSc->GetColor(sStr), sStr);
-                            if (NumFor[nIndex].GetColor() == NULL)
+                            Color* pColor = pSc->GetColor( sStr);
+                            NumFor[nIndex].SetColor( pColor, sStr);
+                            if (pColor == NULL)
                             {                       // error
                                 bCancel = TRUE;     // break for
                                 nCheckPos = nPosOld;
