@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiconfigelementwrapperbase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:54:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
         static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
         sal_Int16                                                                               m_nType;
-        sal_Bool                                                                                m_bPersistent : 1,
+        bool                                                                                    m_bPersistent : 1,
                                                                                                 m_bInitialized : 1,
                                                                                                 m_bConfigListener : 1,
                                                                                                 m_bConfigListening : 1,
