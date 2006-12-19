@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:59:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
     {
         XclExpString aExString;
         if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
-            aExString.AssignByte( maHdrString, rStrm.GetRoot().GetCharSet(), EXC_STR_8BITLENGTH );
+            aExString.AssignByte( maHdrString, rStrm.GetRoot().GetTextEncoding(), EXC_STR_8BITLENGTH );
         else
             aExString.Assign( maHdrString, EXC_STR_DEFAULT, 255 );  // 16-bit length, but max 255 chars
         rStrm << aExString;
