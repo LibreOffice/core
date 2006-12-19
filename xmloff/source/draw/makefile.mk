@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:46:17 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 17:25:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ SLOFILES =	\
         $(SLO)$/ximppage.obj \
         $(SLO)$/ximpcustomshape.obj \
         $(SLO)$/EnhancedCustomShapeToken.obj \
-        $(SLO)$/XMLReplacementImageContext.obj
+        $(SLO)$/XMLReplacementImageContext.obj \
+        $(SLO)$/descriptionimp.obj
 
 # --- Targets --------------------------------------------------------------
 
