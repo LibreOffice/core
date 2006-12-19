@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:33:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,6 +445,13 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if ( bCopy )
     {
         aLocalParam.MoveToDest();
+        if ( !ValidColRow( aLocalParam.nCol2, aLocalParam.nRow2 ) )
+        {
+            if (!bApi)
+                rDocShell.ErrorMessage(STR_PASTE_FULL);
+            return FALSE;
+        }
+
         nTab = rSortParam.nDestTab;
         pDestData = pDoc->GetDBAtCursor( rSortParam.nDestCol, rSortParam.nDestRow,
                                             rSortParam.nDestTab, TRUE );
@@ -678,6 +685,12 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     {
         aLocalParam.MoveToDest();
         nDestTab = rQueryParam.nDestTab;
+        if ( !ValidColRow( aLocalParam.nCol2, aLocalParam.nRow2 ) )
+        {
+            if (!bApi)
+                rDocShell.ErrorMessage(STR_PASTE_FULL);
+            return FALSE;
+        }
 
         ScEditableTester aTester( pDoc, nDestTab, aLocalParam.nCol1,aLocalParam.nRow1,
                                                 aLocalParam.nCol2,aLocalParam.nRow2);
