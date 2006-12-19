@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:24:52 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocNBW,                11,     2,  30, V, { V, R } },
     { ocStDev,              12,     1,  30, V, { R } },
     { ocCurrency,           13,     1,  2,  V, { V } },
-    { ocFixed,              14,     2,  2,  V, { V, V, C, I } },
+    { ocFixed,              14,     1,  2,  V, { V, V, C, I } },
     { ocSin,                15,     1,  1,  V, { V } },
     { ocCos,                16,     1,  1,  V, { V } },
     { ocTan,                17,     1,  1,  V, { V } },
@@ -238,7 +238,7 @@ static const XclFunctionInfo saFuncTable_3[] =
 /** Functions new in BIFF4. Unsupported functions: ASC, DBCS. */
 static const XclFunctionInfo saFuncTable_4[] =
 {
-    { ocFixed,              14,     2,  3,  V, { V } },     // BIFF2-3: 2, BIFF4: 2-3
+    { ocFixed,              14,     1,  3,  V, { V } },     // BIFF2-3: 1-2, BIFF4: 1-3
     { ocNoName,             214,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },    // ASC
     { ocNoName,             215,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },    // DBCS
     { ocRank,               216,    2,  3,  V, { V, R, V } },
