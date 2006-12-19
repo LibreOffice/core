@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:24:05 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ struct XclRootData
     String              maDocUrl;           /// Document URL of imported/exported file.
     String              maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
     String              maPassw;            /// Entered password for stream encryption/decryption.
-    CharSet             meCharSet;          /// Character set to import/export byte strings.
+    rtl_TextEncoding    meTextEnc;          /// Text encoding to import/export byte strings.
     LanguageType        meSysLang;          /// System language.
     LanguageType        meDocLang;          /// Document language (import: from file, export: from system).
     LanguageType        meUILang;           /// UI language (import: from file, export: from system).
@@ -134,7 +134,7 @@ struct XclRootData
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
                             SotStorageRef xRootStrg, ScDocument& rDoc,
-                            CharSet eCharSet, bool bExport );
+                            rtl_TextEncoding eTextEnc, bool bExport );
     virtual             ~XclRootData();
 };
 
@@ -173,8 +173,8 @@ public:
     inline bool         IsImport() const { return !mrData.mbExport; }
     /** Returns true, if currently a document is exported. */
     inline bool         IsExport() const { return mrData.mbExport; }
-    /** Returns the character set to import/export byte strings. */
-    inline CharSet      GetCharSet() const { return mrData.meCharSet; }
+    /** Returns the text encoding to import/export byte strings. */
+    inline rtl_TextEncoding GetTextEncoding() const { return mrData.meTextEnc; }
     /** Returns the system language, i.e. for number formats. */
     inline LanguageType GetSysLanguage() const { return mrData.meSysLang; }
     /** Returns the document language. */
@@ -270,8 +270,8 @@ public:
     inline void         SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
     /** Sets the UI language, i.e. if it has been read from a file. */
     inline void         SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
-    /** Sets the character set to import/export byte strings. */
-    inline void         SetCharSet( CharSet eCharSet ) { mrData.meCharSet = eCharSet; }
+    /** Sets the text encoding to import/export byte strings. */
+    void                SetTextEncoding( rtl_TextEncoding eTextEnc );
     /** Sets the width of the '0' character (default font) for the current printer (twips).
         @param rFontData  The font used for the '0' character. */
     void                SetCharWidth( const XclFontData& rFontData );
