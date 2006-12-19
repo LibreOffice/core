@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:01:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,7 @@ class TokenStack
 
         inline void                 Reset( void );
 
+        inline bool                 HasMoreTokens() const { return nPos > 0; }
         inline const TokenId        Get( void );
 };
 
