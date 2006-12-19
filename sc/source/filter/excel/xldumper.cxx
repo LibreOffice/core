@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:21:51 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,14 @@
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
 #endif
-#ifndef SC_XLTABLE_HXX
-#include "xltable.hxx"
+#ifndef SC_XLNAME_HXX
+#include "xlname.hxx"
 #endif
 #ifndef SC_XLPIVOT_HXX
 #include "xlpivot.hxx"
+#endif
+#ifndef SC_XLTABLE_HXX
+#include "xltable.hxx"
 #endif
 #ifndef SC_XISTRING_HXX
 #include "xistring.hxx"
@@ -329,7 +332,7 @@ RootData::RootData( SfxMedium& rMedium, XclBiff eBiff )
     {
         mxDoc.reset( new ScDocument );
         mxRootData.reset( new XclImpRootData(
-            eBiff, rMedium, SotStorageRef(), *mxDoc, ScfTools::GetSystemCharSet() ) );
+            eBiff, rMedium, SotStorageRef(), *mxDoc, ScfTools::GetSystemTextEncoding() ) );
         mxRoot.reset( new XclImpRoot( *mxRootData ) );
     }
 }
@@ -340,12 +343,12 @@ RootData::~RootData()
 
 rtl_TextEncoding RootData::GetTextEncoding() const
 {
-    return mxRoot->GetCharSet();
+    return mxRoot->GetTextEncoding();
 }
 
 void RootData::SetTextEncoding( rtl_TextEncoding eTextEnc )
 {
-    mxRoot->SetCharSet( eTextEnc );
+    mxRoot->SetTextEncoding( eTextEnc );
 }
 
 bool RootData::ImplIsValid() const
@@ -2047,7 +2050,8 @@ void WorkbookStreamObject::ImplDumpRecord()
         break;
 
         case EXC_ID_CODEPAGE:
-            DumpCodePageRec();
+            Root().SetTextEncoding( DumpCodePage() );
+            mbHasCodePage = true;
         break;
 
         case EXC_ID_COLINFO:
@@ -2131,6 +2135,38 @@ void WorkbookStreamObject::ImplDumpRecord()
         case EXC_ID_LABELSST:
             DumpCellHeader();
             DumpDec< sal_uInt32 >( "sst-idx" );
+        break;
+
+        case EXC_ID_NAME:
+        case EXC_ID34_NAME:
+        {
+            DumpHex< sal_uInt16, sal_uInt8 >( eBiff != EXC_BIFF2, "flags", "NAME-FLAGS" );
+            if( eBiff == EXC_BIFF2 ) DumpDec< sal_uInt8 >( "macro-type", "NAME-MACROTYPE-BIFF2" );
+            DumpHex< sal_uInt8 >( "keyboard-shortcut" );
+            sal_uInt8 nNameLen = DumpDec< sal_uInt8 >( "name-len" );
+            sal_uInt16 nFmlaSize = DumpFormulaSize();
+            if( eBiff >= EXC_BIFF5 )
+            {
+                DumpDec< sal_uInt16 >( "externsheet-idx", "NAME-SHEETIDX" );
+                DumpDec< sal_uInt16 >( "sheet-idx", "NAME-SHEETIDX" );
+                sal_uInt8 nMenuLen = DumpDec< sal_uInt8 >( "menu-text-len" );
+                sal_uInt8 nDescrLen = DumpDec< sal_uInt8 >( "description-text-len" );
+                sal_uInt8 nHelpLen = DumpDec< sal_uInt8 >( "help-text-len" );
+                sal_uInt8 nStatusLen = DumpDec< sal_uInt8 >( "statusbar-text-len" );
+                WriteStringItem( "name", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nNameLen ) : rStrm.ReadByteString( nNameLen ) );
+                DumpNameFormula( 0, nFmlaSize );
+                if( nMenuLen > 0 ) WriteStringItem( "menu-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nMenuLen ) : rStrm.ReadByteString( nMenuLen ) );
+                if( nDescrLen > 0 ) WriteStringItem( "description-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nDescrLen ) : rStrm.ReadByteString( nDescrLen ) );
+                if( nHelpLen > 0 ) WriteStringItem( "help-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nHelpLen ) : rStrm.ReadByteString( nHelpLen ) );
+                if( nStatusLen > 0 ) WriteStringItem( "statusbar-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nStatusLen ) : rStrm.ReadByteString( nStatusLen ) );
+            }
+            else
+            {
+                WriteStringItem( "name", rStrm.ReadByteString( nNameLen ) );
+                DumpNameFormula( 0, nFmlaSize );
+                if( eBiff == EXC_BIFF2 ) DumpFormulaSize();
+            }
+        }
         break;
 
         case EXC_ID2_NUMBER:
@@ -2336,6 +2372,7 @@ void WorkbookStreamObject::ConstructOwn()
         mnPTRowFields = 0;
         mnPTColFields = 0;
         mnPTSxliIdx = 0;
+        mbHasCodePage = false;
     }
 }
 
@@ -2352,7 +2389,7 @@ sal_uInt16 WorkbookStreamObject::GetXfData( sal_uInt16 nXfIdx ) const
 rtl_TextEncoding WorkbookStreamObject::GetFontEncoding( sal_uInt16 nXfIdx ) const
 {
     const XclFontData* pFontData = GetFontData( GetXfData( nXfIdx ) );
-    rtl_TextEncoding eFontEnc = pFontData ? pFontData->GetScCharSet() : Root().GetTextEncoding();
+    rtl_TextEncoding eFontEnc = pFontData ? pFontData->GetFontEncoding() : Root().GetTextEncoding();
     return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? Root().GetTextEncoding() : eFontEnc;
 }
 
@@ -2420,13 +2457,6 @@ void WorkbookStreamObject::DumpBoolErr()
         WriteBooleanItem( "boolean", nValue );
 }
 
-void WorkbookStreamObject::DumpCodePageRec()
-{
-    rtl_TextEncoding eTextEnc = DumpCodePage();
-    if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
-        Root().SetTextEncoding( eTextEnc );
-}
-
 void WorkbookStreamObject::DumpFontRec()
 {
     if( maFontDatas.size() == 4 )
@@ -2459,6 +2489,10 @@ void WorkbookStreamObject::DumpFontRec()
     // append font data to vector
     mxFontNames->SetName( static_cast< sal_Int64 >( maFontDatas.size() ), CreateFontName( aFontData ) );
     maFontDatas.push_back( aFontData );
+
+    // set font encoding as default text encoding in case of missing CODEPAGE record
+    if( !mbHasCodePage && (maFontDatas.size() == 1) )
+        Root().SetTextEncoding( aFontData.GetFontEncoding() );
 }
 
 void WorkbookStreamObject::DumpFormatRec()
@@ -2627,7 +2661,7 @@ VbaProjectStreamObject::VbaProjectStreamObject( const OleStorageObject& rParentS
 
 void VbaProjectStreamObject::ImplDumpBody()
 {
-    DumpTextStream( ScfTools::GetSystemCharSet() );
+    DumpTextStream( ScfTools::GetSystemTextEncoding() );
 }
 
 // ============================================================================
