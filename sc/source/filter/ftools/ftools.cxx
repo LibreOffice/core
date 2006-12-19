@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:25:55 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
 
 // *** common methods *** -----------------------------------------------------
 
-CharSet ScfTools::GetSystemCharSet()
+rtl_TextEncoding ScfTools::GetSystemTextEncoding()
 {
     return gsl_getSystemTextEncoding();
 }
@@ -352,11 +352,11 @@ void ScfTools::AppendCString( SvStream& rStrm, ByteString& rString )
     }
 }
 
-void ScfTools::AppendCString( SvStream& rStrm, String& rString, CharSet eSrc )
+void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
 {
     ByteString aByteString;
     AppendCString( rStrm, aByteString );
-    rString += String( aByteString, eSrc );
+    rString += String( aByteString, eTextEnc );
 }
 
 // *** HTML table names <-> named range names *** -----------------------------
