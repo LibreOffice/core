@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 11:55:50 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 11:29:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,8 @@ MIMELIST = \
     oasis-formula \
     oasis-master-document \
     oasis-web-template \
-    oasis-database
+    oasis-database \
+    extension
 
 GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys 
   
@@ -82,6 +83,7 @@ PKGDEPN = \
     $(MISC)/$(TARGET)/openoffice.mime \
     $(MISC)/$(TARGET)/openoffice.keys \
     $(MISC)/$(TARGET)/printeradmin.sh \
+    $(MISC)/$(TARGET)/etc/$(UNIXFILENAME)/program/unopkg_gui \
     $(MISC)/$(TARGET)/openoffice.sh \
     $(MISC)/$(TARGET)/space \
     $(MISC)/$(TARGET)/depend \
@@ -137,7 +139,17 @@ $(MISC)/$(TARGET)/openoffice.applications : ../productversion.mk ../mimetypes/op
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
-    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+
+# Create the unopkg wrapper
+$(MISC)/$(TARGET)/etc/$(UNIXFILENAME)/program/unopkg_gui :
+    @$(MKDIRHIER) $(@:d)
+    echo \#\!\/bin\/sh > $@
+    echo exec unopkg gui \$$@  >> $@
+
+#$(MISC)/$(TARGET)/usr/bin/unopkg_gui : $(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui
+#	    $(MKDIRHIER) $(@:d)
+#        ln -sf /etc/$(UNIXFILENAME)/program/unopkg_gui $@
 
 # --- pkginfo ----------------------------------------------------
 
