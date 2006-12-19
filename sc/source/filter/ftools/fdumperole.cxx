@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:01 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,7 +523,7 @@ void OlePropertyStreamObject::DumpSection( const String& rGuid, sal_uInt32 nStar
     rOut.EmptyLine();
 
     // code page property
-    meTextEnc = ScfTools::GetSystemCharSet();
+    meTextEnc = ScfTools::GetSystemTextEncoding();
     mbIsUnicode = false;
     PropertyPosMap::iterator aCodePageIt = aPropMap.find( OLEPROP_ID_CODEPAGE );
     if( aCodePageIt != aPropMap.end() )
