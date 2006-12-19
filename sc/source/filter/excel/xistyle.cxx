@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:18:23 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,8 +220,8 @@ rtl_TextEncoding XclImpFont::GetFontEncoding() const
 {
     // #i63105# use text encoding from FONT record
     // #i67768# BIFF2-BIFF4 FONT records do not contain character set
-    rtl_TextEncoding eFontEnc = mbHasCharSet ? maData.GetScCharSet() : GetCharSet();
-    return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? GetCharSet() : eFontEnc;
+    rtl_TextEncoding eFontEnc = mbHasCharSet ? maData.GetFontEncoding() : GetTextEncoding();
+    return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? GetTextEncoding() : eFontEnc;
 }
 
 void XclImpFont::ReadFont( XclImpStream& rStrm )
@@ -307,11 +307,11 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
     bool bDefNoteFont = (eType == EXC_FONTITEM_NOTE) && (maData.maName.EqualsIgnoreCaseAscii( "Tahoma" ));
     if( mbFontNameUsed && !bDefNoteFont )
     {
-        CharSet eFontCharSet = maData.GetScCharSet();
-        CharSet eTempCharSet = (bEE && (eFontCharSet == GetCharSet())) ?
-            ScfTools::GetSystemCharSet() : eFontCharSet;
+        rtl_TextEncoding eFontEnc = maData.GetFontEncoding();
+        rtl_TextEncoding eTempTextEnc = (bEE && (eFontEnc == GetTextEncoding())) ?
+            ScfTools::GetSystemTextEncoding() : eFontEnc;
 
-        SvxFontItem aFontItem( maData.GetScFamily( GetCharSet() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempCharSet );
+        SvxFontItem aFontItem( maData.GetScFamily( GetTextEncoding() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempTextEnc );
         // #91658# set only for valid script types
         if( mbHasWstrn )
             PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
@@ -497,6 +497,8 @@ void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
         maAppFont = pFont->GetFontData();
         // #i3006# Calculate the width of '0' from first font and current printer.
         SetCharWidth( maAppFont );
+        // #i71033# set text encoding from application font, if CODEPAGE is missing
+        SetAppFontEncoding( pFont->GetFontEncoding() );
     }
 }
 
