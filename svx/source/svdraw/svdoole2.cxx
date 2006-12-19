@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:47:14 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1623,10 +1623,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 {
                     if ( pClient )
                     {
-                        pClient->SetSizeScale(aScaleWidth, aScaleHeight);
-
                         Rectangle aScaleRect(aRect.TopLeft(), aObjAreaSize);
-                        pClient->SetObjArea(aScaleRect);
+                        pClient->SetObjAreaAndScale( aScaleRect, aScaleWidth, aScaleHeight);
                     }
                     else
                     {
