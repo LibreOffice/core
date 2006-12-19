@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:09:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@
 #ifndef _SVX_ROTMODIT_HXX //autogen
 #include <svx/rotmodit.hxx>
 #endif
+#include <svx/editobj.hxx>
+#include <svx/editeng.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/escpitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>
@@ -158,6 +162,29 @@ String lcl_ValueString( long nValue, USHORT nMinDigits )
             aStr.Insert( '-', 0 );
         return aStr;
     }
+}
+
+static ScBaseCell * lcl_getSuffixCell( ScDocument* pDocument, sal_Int32 nValue,
+        USHORT nDigits, const String& rSuffix, CellType eCellType,
+        BOOL bIsOrdinalSuffix )
+{
+    String aValue( lcl_ValueString( nValue, nDigits ));
+    if (!bIsOrdinalSuffix)
+        return new ScStringCell( aValue += rSuffix);
+
+    String aOrdinalSuffix( ScGlobal::GetOrdinalSuffix( nValue));
+    if (eCellType != CELLTYPE_EDIT)
+        return new ScStringCell( aValue += aOrdinalSuffix);
+
+    EditEngine aEngine( pDocument->GetEnginePool() );
+    SfxItemSet aAttr = aEngine.GetEmptyItemSet();
+    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT));
+    aEngine.SetText( aValue );
+    aEngine.QuickInsertText( aOrdinalSuffix, ESelection( 0, aValue.Len(), 0,
+                aValue.Len() + aOrdinalSuffix.Len()));
+    aEngine.QuickSetAttribs( aAttr, ESelection( 0, aValue.Len(), 0, aValue.Len() +
+                aOrdinalSuffix.Len()));
+    return new ScEditCell( aEngine.CreateTextObject(), pDocument, NULL );
 }
 
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -715,6 +742,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             String aValue;
             ScBaseCell* pSrcCell;
             CellType eCellType;
+            BOOL bIsOrdinalSuffix = FALSE;
+
 
             rInner = nIStart;
             while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
@@ -745,6 +774,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     nCellDigits = 0;    // look at each source cell individually
                                     nHeadNoneTail = lcl_DecompValueString(
                                         aValue, nStringValue, &nCellDigits );
+
+                                    bIsOrdinalSuffix = aValue.Equals(
+                                            ScGlobal::GetOrdinalSuffix( nStringValue));
                                 }
                             break;
                         }
@@ -769,15 +801,18 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             String aStr;
                             if ( nHeadNoneTail < 0 )
                             {
-                                aStr = lcl_ValueString( nNextValue, nCellDigits );
-                                aStr += aValue;
+                                aCol[nCol].Insert( static_cast<SCROW>(nRow),
+                                        lcl_getSuffixCell( pDocument,
+                                            nNextValue, nCellDigits, aValue,
+                                            eCellType, bIsOrdinalSuffix));
                             }
                             else
                             {
                                 aStr = aValue;
                                 aStr += lcl_ValueString( nNextValue, nCellDigits );
+                                aCol[nCol].Insert( static_cast<SCROW>(nRow),
+                                        new ScStringCell( aStr));
                             }
-                            aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScStringCell( aStr ) );
                         }
                         else
                         {
@@ -965,7 +1000,12 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             USHORT nCellDigits = 0; // look at each source cell individually
                             short nFlag = lcl_DecompValueString( aValue, nVal, &nCellDigits );
                             if ( nFlag < 0 )
+                            {
+                                if (aValue.Equals( ScGlobal::GetOrdinalSuffix( nVal)))
+                                    aValue = ScGlobal::GetOrdinalSuffix( nVal + nDelta);
+
                                 aValue.Insert( lcl_ValueString( nVal + nDelta, nCellDigits ), 0 );
+                            }
                             else if ( nFlag > 0 )
                                 aValue += lcl_ValueString( nVal + nDelta, nCellDigits );
                         }
@@ -992,6 +1032,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
         {
             BOOL bOk;
             double nStart;
+            sal_Int32 nVal;
             short nHeadNoneTail = 0;
             ScBaseCell* pCell = GetCell( nCol1, nRow1 );
             if ( pCell )
@@ -1006,7 +1047,6 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             ((ScStringCell*)pCell)->GetString( aValue );
                         else
                             ((ScEditCell*)pCell)->GetString( aValue );
-                        long nVal;
                         nHeadNoneTail = lcl_DecompValueString( aValue, nVal );
                         if ( nHeadNoneTail )
                             nStart = (double)nVal;
@@ -1050,7 +1090,12 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                 if ( nHeadNoneTail )
                 {
                     if ( nHeadNoneTail < 0 )
+                    {
+                        if (aValue.Equals( ScGlobal::GetOrdinalSuffix( nVal)))
+                            aValue = ScGlobal::GetOrdinalSuffix( (sal_Int32)nStart );
+
                         aValue.Insert( lcl_ValueString( (long)nStart, nMinDigits ), 0 );
+                    }
                     else
                         aValue += lcl_ValueString( (long)nStart, nMinDigits );
                 }
@@ -1394,6 +1439,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     BOOL bError = FALSE;
                     BOOL bOverflow = FALSE;
 
+                    BOOL bIsOrdinalSuffix = aValue.Equals( ScGlobal::GetOrdinalSuffix(
+                                (sal_Int32)nStartVal));
+
                     rInner = nIStart;
                     while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
                     {
@@ -1444,16 +1492,18 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             String aStr;
                             if ( nHeadNoneTail < 0 )
                             {
-                                aStr = lcl_ValueString( nStringValue, nMinDigits );
-                                aStr += aValue;
+                                aCol[nCol].Insert( static_cast<SCROW>(nRow),
+                                        lcl_getSuffixCell( pDocument,
+                                            nStringValue, nMinDigits, aValue,
+                                            eCellType, bIsOrdinalSuffix ));
                             }
                             else
                             {
                                 aStr = aValue;
                                 aStr += lcl_ValueString( nStringValue, nMinDigits );
+                                ScStringCell* pCell = new ScStringCell( aStr );
+                                aCol[nCol].Insert( static_cast<SCROW>(nRow), pCell );
                             }
-                            ScStringCell* pCell = new ScStringCell( aStr );
-                            aCol[nCol].Insert(static_cast<SCROW>(nRow), pCell);
                         }
 
                         if (rInner == nIEnd) break;
