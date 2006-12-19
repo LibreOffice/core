@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:30:21 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,23 @@ public:
     sal_Bool CanDoNotification() { return ( !m_bVerbExecutionInProgress && !m_bWasEverActive && !m_nNotificationLock ); }
     // ... or to change it
     void ObjectIsActive() { m_bWasEverActive = sal_True; }
+};
+
+class VerbExecutionControllerGuard
+{
+    VerbExecutionController& m_rController;
+public:
+
+    VerbExecutionControllerGuard( VerbExecutionController& rController )
+    : m_rController( rController )
+    {
+        m_rController.LockNotification();
+    }
+
+    ~VerbExecutionControllerGuard()
+    {
+        m_rController.UnlockNotification();
+    }
 };
 
 
