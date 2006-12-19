@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:46:42 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,6 +370,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nVisSpellState( 0 ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
+        bSetDrawDefaults( FALSE ),
         bPastingDrawFromOtherDoc( FALSE ),
         nInDdeLinkUpdate( 0 ),
         bInUnoBroadcast( FALSE ),
