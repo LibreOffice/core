@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:15:17 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1250,14 +1250,14 @@ String STR_QUICKSTART_TIP
 };
 String STR_QUICKSTART_FILEOPEN
 {
-    Text [ de ] = "Dokument öffnen" ;
-    Text [ en-US ] = "Open Document" ;
+    Text [ de ] = "Dokument öffnen..." ;
+    Text [ en-US ] = "Open Document..." ;
     Text [ x-comment ] = " " ;
 };
 String STR_QUICKSTART_FROMTEMPLATE
 {
-    Text [ de ] = "Aus Vorlage" ;
-    Text [ en-US ] = "From Template" ;
+    Text [ de ] = "Aus Vorlage..." ;
+    Text [ en-US ] = "From Template..." ;
     Text [ x-comment ] = " " ;
 };
 String STR_QUICKSTART_PRELAUNCH
