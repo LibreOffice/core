@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linksrc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:55:33 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-
 
 #include "linksrc.hxx"
 #include "lnkbase.hxx"
@@ -127,6 +126,7 @@ public:
     SvLinkSource_Entry_Impl* Curr()
                             { return nPos < aArr.Count() ? aArr[ nPos ] : 0; }
     SvLinkSource_Entry_Impl* Next();
+    sal_Bool IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry );
 };
 
 SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
@@ -138,6 +138,11 @@ SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
 SvLinkSource_EntryIter_Impl::~SvLinkSource_EntryIter_Impl()
 {
     aArr.Remove( 0, aArr.Count() );
+}
+
+sal_Bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry )
+{
+    return ( nPos < aArr.Count() && aArr[nPos] == pEntry && USHRT_MAX != rOrigArr.GetPos( pEntry ) );
 }
 
 SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
@@ -249,6 +254,9 @@ void SvLinkSource::SendDataChanged()
             {
                 p->xSink->DataChanged( sDataMimeType, aVal );
 
+                if ( !aIter.IsValidCurrValue( p ) )
+                    continue;
+
                 if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                 {
                     USHORT nFndPos = pImpl->aArr.GetPos( p );
@@ -282,6 +290,9 @@ void SvLinkSource::NotifyDataChanged()
                     GetData( aVal, p->aDataMimeType, TRUE ) )
                 {
                     p->xSink->DataChanged( p->aDataMimeType, aVal );
+
+                    if ( !aIter.IsValidCurrValue( p ) )
+                        continue;
 
                     if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                     {
@@ -319,6 +330,9 @@ void SvLinkSource::DataChanged( const String & rMimeType,
             if( p->bIsDataSink )
             {
                 p->xSink->DataChanged( rMimeType, rVal );
+
+                if ( !aIter.IsValidCurrValue( p ) )
+                    continue;
 
                 if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                 {
