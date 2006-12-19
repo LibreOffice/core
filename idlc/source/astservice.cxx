@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astservice.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:12:46 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:35:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,12 @@ bool AstService::checkLastConstructor() const {
                     sal_Int32 r2;
                     AstDeclaration const * t2 = deconstructAndResolveTypedefs(
                         static_cast< AstMember * >(*i2)->getType(), &r2);
-                    if (r1 == r2 && t1->getScopedName() == t2->getScopedName())
+                    if (r1 != r2 || t1->getScopedName() != t2->getScopedName())
                     {
-                        return true;
+                        return false;
                     }
                 }
+                return true;
             }
         }
     }
