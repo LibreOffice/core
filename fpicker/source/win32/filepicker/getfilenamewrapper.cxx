@@ -4,9 +4,9 @@
  *
  *  $RCSfile: getfilenamewrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:53:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 // includes
 //------------------------------------------------------------------------
 
+#include <stdio.h>
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -59,6 +61,87 @@
 
 namespace /* private */
 {
+
+    //-----------------------------------------------
+    // This class prevents changing of the working
+    // directory.
+    //-----------------------------------------------
+    class CurDirGuard
+    {
+        BOOL m_bValid;
+        wchar_t* m_pBuffer;
+        DWORD m_nBufLen;
+
+    public:
+        CurDirGuard()
+        : m_bValid( FALSE )
+        , m_pBuffer( NULL )
+        , m_nBufLen( 0 )
+        {
+            m_nBufLen = GetCurrentDirectoryW( 0, NULL );
+            if ( m_nBufLen )
+            {
+                m_pBuffer = new wchar_t[m_nBufLen];
+                m_bValid = ( GetCurrentDirectoryW( m_nBufLen, m_pBuffer ) == ( m_nBufLen - 1 ) );
+            }
+        }
+
+        ~CurDirGuard()
+        {
+            BOOL bDirSet = FALSE;
+
+            if ( m_pBuffer )
+            {
+                if ( m_bValid )
+                {
+                    if ( m_nBufLen - 1 > MAX_PATH )
+                    {
+                        if ( (LONG32)GetVersion() < 0 )
+                        {
+                            // this is Win 98/ME branch, such a long path can not be set
+                            // use the system path as fallback later
+                        }
+                        else
+                        {
+                            DWORD nNewLen = m_nBufLen + 8;
+                            wchar_t* pNewBuffer = new wchar_t[nNewLen];
+                            if ( m_nBufLen > 3 && m_pBuffer[0] == (wchar_t)'\\' && m_pBuffer[1] == (wchar_t)'\\' )
+                            {
+                                if ( m_pBuffer[2] == (wchar_t)'?' )
+                                    _snwprintf( pNewBuffer, nNewLen, L"%s", m_pBuffer );
+                                else
+                                    _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\UNC\\%s", m_pBuffer+2 );
+                            }
+                            else
+                                _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\%s", m_pBuffer );
+                            bDirSet = SetCurrentDirectoryW( pNewBuffer );
+
+                            delete [] pNewBuffer;
+                        }
+                    }
+                    else
+                        bDirSet = SetCurrentDirectoryW( m_pBuffer );
+                }
+
+                delete [] m_pBuffer;
+                m_pBuffer = NULL;
+            }
+
+            if ( !bDirSet )
+            {
+                // the fallback solution
+                wchar_t pPath[MAX_PATH+1];
+                if ( GetWindowsDirectoryW( pPath, MAX_PATH+1 ) <= MAX_PATH )
+                {
+                    SetCurrentDirectoryW( pPath );
+                }
+                else
+                {
+                    // the system path is also too long?!!
+                }
+            }
+        }
+    };
 
     //-----------------------------------------------
     //
@@ -85,6 +168,8 @@ namespace /* private */
 
     unsigned __stdcall ThreadProc(void* pParam)
     {
+        CurDirGuard aGuard;
+
         GetFileNameParam* lpgfnp =
             reinterpret_cast<GetFileNameParam*>(pParam);
 
@@ -174,6 +259,8 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
     }
     else
     {
+        CurDirGuard aGuard;
+
         HRESULT hr = OleInitialize( NULL );
 
         bRet = GetOpenFileName(lpofn);
@@ -203,6 +290,8 @@ bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
     }
     else
     {
+        CurDirGuard aGuard;
+
         bRet = GetSaveFileName(lpofn);
         m_ExtendedDialogError = CommDlgExtendedError();
     }
