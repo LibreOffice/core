@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:22:09 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,40 +465,40 @@ struct ConventionOOO_A1 : public Convention_A1
 {
     ConventionOOO_A1() : Convention_A1 (ScAddress::CONV_OOO) { }
     static String MakeTabStr( const ScCompiler& rComp, SCTAB nTab, String& aDoc )
-{
-    String aString;
-        if (!rComp.pDoc->GetName( nTab, aString ))
-        aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
-    else
     {
-        if ( aString.GetChar(0) == '\'' )
-        {   // "'Doc'#Tab"
-            xub_StrLen nPos, nLen = 1;
-            while( (nPos = aString.Search( '\'', nLen )) != STRING_NOTFOUND )
-                nLen = nPos + 1;
-            if ( aString.GetChar(nLen) == SC_COMPILER_FILE_TAB_SEP )
-            {
-                aDoc = aString.Copy( 0, nLen + 1 );
-                aString.Erase( 0, nLen + 1 );
-                aDoc = INetURLObject::decode( aDoc, INET_HEX_ESCAPE,
-                    INetURLObject::DECODE_UNAMBIGUOUS );
+        String aString;
+        if (!rComp.pDoc->GetName( nTab, aString ))
+            aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
+        else
+        {
+            if ( aString.GetChar(0) == '\'' )
+            {   // "'Doc'#Tab"
+                xub_StrLen nPos, nLen = 1;
+                while( (nPos = aString.Search( '\'', nLen )) != STRING_NOTFOUND )
+                    nLen = nPos + 1;
+                if ( aString.GetChar(nLen) == SC_COMPILER_FILE_TAB_SEP )
+                {
+                    aDoc = aString.Copy( 0, nLen + 1 );
+                    aString.Erase( 0, nLen + 1 );
+                    aDoc = INetURLObject::decode( aDoc, INET_HEX_ESCAPE,
+                        INetURLObject::DECODE_UNAMBIGUOUS );
+                }
+                else
+                    aDoc.Erase();
             }
             else
                 aDoc.Erase();
-        }
-        else
-            aDoc.Erase();
             ScCompiler::CheckTabQuotes( aString, ScAddress::CONV_OOO );
+        }
+        aString += '.';
+        return aString;
     }
-    aString += '.';
-    return aString;
-}
 
     void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                      const ScCompiler&      rComp,
                      const ComplRefData& rRef,
                      BOOL bSingleRef ) const
-{
+    {
         ComplRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
@@ -509,23 +509,23 @@ struct ConventionOOO_A1 : public Convention_A1
         if( !bSingleRef )
             aRef.Ref2.CalcAbsIfRel( rComp.aPos );
         if( aRef.Ref1.IsFlag3D() )
-    {
-            if (aRef.Ref1.IsTabDeleted())
         {
+            if (aRef.Ref1.IsTabDeleted())
+            {
                 if (!aRef.Ref1.IsTabRel())
                     rBuffer.append(sal_Unicode('$'));
                 rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
                 rBuffer.append(sal_Unicode('.'));
-    }
+            }
             else
-    {
+            {
                 String aDoc;
                 String aRefStr( MakeTabStr( rComp, aRef.Ref1.nTab, aDoc ) );
                 rBuffer.append(aDoc);
                 if (!aRef.Ref1.IsTabRel()) rBuffer.append(sal_Unicode('$'));
                 rBuffer.append(aRefStr);
-    }
-}
+            }
+        }
         if (!aRef.Ref1.IsColRel())
             rBuffer.append(sal_Unicode('$'));
         if ( aRef.Ref1.IsColDeleted() )
@@ -539,7 +539,7 @@ struct ConventionOOO_A1 : public Convention_A1
         else
             MakeRowStr( rBuffer, aRef.Ref1.nRow );
         if (!bSingleRef)
-{
+        {
             rBuffer.append(sal_Unicode(':'));
             if (aRef.Ref2.IsFlag3D() || aRef.Ref2.nTab != aRef.Ref1.nTab)
             {
@@ -571,7 +571,7 @@ struct ConventionOOO_A1 : public Convention_A1
                 rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
             else
                 MakeRowStr( rBuffer, aRef.Ref2.nRow );
-}
+        }
     }
 };
 
@@ -595,9 +595,9 @@ struct ConventionOOO_A1_XML : public ConventionOOO_A1
 //  AdjustReference( aRef.Ref1 );
 //  if( !bSingleRef )
 //      AdjustReference( aRef.Ref2 );
-            aRef.Ref1.CalcAbsIfRel( rComp.aPos );
+    aRef.Ref1.CalcAbsIfRel( rComp.aPos );
     if( !bSingleRef )
-                aRef.Ref2.CalcAbsIfRel( rComp.aPos );
+        aRef.Ref2.CalcAbsIfRel( rComp.aPos );
     if( aRef.Ref1.IsFlag3D() )
     {
         if (aRef.Ref1.IsTabDeleted())
@@ -610,13 +610,13 @@ struct ConventionOOO_A1_XML : public ConventionOOO_A1
         else
         {
             String aDoc;
-                    String aRefStr( MakeTabStr( rComp, aRef.Ref1.nTab, aDoc ) );
+            String aRefStr( MakeTabStr( rComp, aRef.Ref1.nTab, aDoc ) );
             rBuffer.append(aDoc);
             if (!aRef.Ref1.IsTabRel()) rBuffer.append(sal_Unicode('$'));
             rBuffer.append(aRefStr);
         }
     }
-            else
+    else
         rBuffer.append(sal_Unicode('.'));
     if (!aRef.Ref1.IsColRel())
         rBuffer.append(sal_Unicode('$'));
@@ -645,13 +645,13 @@ struct ConventionOOO_A1_XML : public ConventionOOO_A1
             else
             {
                 String aDoc;
-                        String aRefStr( MakeTabStr( rComp, aRef.Ref2.nTab, aDoc ) );
+                String aRefStr( MakeTabStr( rComp, aRef.Ref2.nTab, aDoc ) );
                 rBuffer.append(aDoc);
                 if (!aRef.Ref2.IsTabRel()) rBuffer.append(sal_Unicode('$'));
                 rBuffer.append(aRefStr);
             }
         }
-                else
+        else
             rBuffer.append(sal_Unicode('.'));
         if (!aRef.Ref2.IsColRel())
             rBuffer.append(sal_Unicode('$'));
@@ -1033,24 +1033,24 @@ void ScCompiler::CheckTabQuotes( String& rString,
     }
     if ( CharClass::isAsciiNumeric( rString ) )
     {
-            bNeedsQuote = true;
+        bNeedsQuote = true;
     }
 
     switch ( eConv ) {
-    default :
-    case ScAddress::CONV_UNSPECIFIED :
-    case ScAddress::CONV_OOO :
-        break;
-    case ScAddress::CONV_XL_A1 :
-    case ScAddress::CONV_XL_R1C1 :
-        if( bNeedsQuote )
-        {
-            static const String one_quote = static_cast<sal_Unicode>( '\'' );
-            static const String two_quote = String::CreateFromAscii( "''" );
-            // escape embedded quotes
-            rString.SearchAndReplaceAll( one_quote, two_quote );
-        }
-        break;
+        default :
+        case ScAddress::CONV_UNSPECIFIED :
+        case ScAddress::CONV_OOO :
+            break;
+        case ScAddress::CONV_XL_A1 :
+        case ScAddress::CONV_XL_R1C1 :
+            if( bNeedsQuote )
+            {
+                static const String one_quote = static_cast<sal_Unicode>( '\'' );
+                static const String two_quote = String::CreateFromAscii( "''" );
+                // escape embedded quotes
+                rString.SearchAndReplaceAll( one_quote, two_quote );
+            }
+            break;
     }
 
     if( bNeedsQuote )
@@ -1069,12 +1069,12 @@ void ScCompiler::SetCompileXML( BOOL bVal )
 void ScCompiler::SetRefConvention( ScAddress::Convention eConv )
 {
     switch ( eConv ) {
-    case ScAddress::CONV_UNSPECIFIED :
-        break;
-    default :
-    case ScAddress::CONV_OOO :      SetRefConvention( pConvOOO_A1 ); break;
-    case ScAddress::CONV_XL_A1 :    SetRefConvention( pConvXL_A1 );  break;
-    case ScAddress::CONV_XL_R1C1 :  SetRefConvention( pConvXL_R1C1 ); break;
+        case ScAddress::CONV_UNSPECIFIED :
+            break;
+        default :
+        case ScAddress::CONV_OOO :      SetRefConvention( pConvOOO_A1 ); break;
+        case ScAddress::CONV_XL_A1 :    SetRefConvention( pConvXL_A1 );  break;
+        case ScAddress::CONV_XL_R1C1 :  SetRefConvention( pConvXL_R1C1 ); break;
     }
 }
 
@@ -2096,6 +2096,10 @@ void ScCompiler::AutoCorrectParsedSymbol()
 BOOL ScCompiler::NextNewToken()
 {
     xub_StrLen nSpaces = NextSymbol();
+
+//  fprintf( stderr, "NextNewToken '%s' (?) ",
+//           rtl::OUStringToOString( cSymbol, RTL_TEXTENCODING_UTF8 ).getStr() );
+
     ScRawToken aToken;
     if( cSymbol[0] )
     {
@@ -2176,6 +2180,8 @@ BOOL ScCompiler::NextNewToken()
 ScTokenArray* ScCompiler::CompileString( const String& rFormula,
                                          ScAddress::Convention eConv )
 {
+//  fprintf( stderr, "CompileString '%s'\n",
+//           rtl::OUStringToOString( rFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
     ScTokenArray aArr;
     pArr = &aArr;
     aFormula = rFormula;
@@ -2225,6 +2231,16 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula,
             }
             else
                 nBrackets--;
+        }
+        if( eLastOp == ocSep && pRawToken->GetOpCode() == ocSep )
+        {
+            // FIXME: should we check for known functions with optional empty
+            // args so the correction dialog can do better?
+            ScMissingToken aMissingToken( ocMissing);
+            if ( !pArr->AddToken( aMissingToken ) )
+            {
+                SetError(errCodeOverflow); break;
+            }
         }
         if( !pArr->Add( pRawToken->CreateToken() ) )
         {
@@ -2796,10 +2812,10 @@ BOOL ScCompiler::CompileTokenArray()
             pArr->nError = nErrorBeforePop;     // once an error, always an error
 
         if( pArr->nError && !bIgnoreErrors )
-    {
+        {
             pArr->DelRPN();
             pArr->SetHyperLink(FALSE);
-    }
+        }
 
         if ( bWasForced )
             pArr->SetRecalcModeForced();
@@ -3108,21 +3124,17 @@ void ScCompiler::Factor()
                     pFacToken->GetJump()[ 0 ] = nJumpCount;
             }
         }
+        else if ( eOp == ocMissing )
+        {
+            PutCode( pToken );
+            eOp = NextToken();
+        }
         else if ( eOp == ocBad )
         {
             SetError( errNoName );
         }
         else if ( eOp == ocClose )
         {
-            SetError( errParameterExpected );
-        }
-        else if ( eOp == ocMissing )
-        {   // #84460# May occur if imported from Xcl.
-            // The real value for missing parameters depends on the function
-            // where it is used, interpreter would have to handle this.
-            // If it does remove this error case here, that could also be the
-            // time to generate ocMissing in between subsequent ocSep.
-            // Xcl import should map missings to values if possible.
             SetError( errParameterExpected );
         }
         else if ( eOp == ocSep )
@@ -4508,7 +4520,7 @@ BOOL ScCompiler::DeQuote( String& rStr )
 }
 
 
-String* GetScCompilerpSymbolTableNative() //CHINA001
+String* GetScCompilerpSymbolTableNative()
 {
     return ScCompiler::pSymbolTableNative;
 }
