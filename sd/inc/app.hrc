@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:22:43 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,10 @@
 #define SID_BEZIER_ELIMINATE_POINTS         (SID_SD_START+30)
 #define SID_MOREFRONT                       (SID_SD_START+31)
 #define SID_MOREBACK                        (SID_SD_START+32)
+
+// #i68101#
+#define SID_OBJECT_TITLE_DESCRIPTION        (SID_SD_START+33)
+
 #define SID_VERTICAL                        (SID_SD_START+34)
 #define SID_HORIZONTAL                      (SID_SD_START+35)
 #define SID_CHANGEBEZIER                    (SID_SD_START+36)
