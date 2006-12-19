@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:59:00 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ TabPage RID_SFXPAGE_GENERAL
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
-        Text [ de ] = "~Vor-/Vaters-/Name/Kürzel" ;
-        Text [ en-US ] = "First name/Father's name/Last name/Initials";
+        Text [ de ] = "~Name/Vorname/Vatersname/Kürzel" ;
+        Text [ en-US ] = "Last Name/First name/Father's name/Initials";
     };
     Edit ED_FATHERNAME
     {
