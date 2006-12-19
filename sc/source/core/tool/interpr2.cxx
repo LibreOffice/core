@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:33:02 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -541,9 +541,14 @@ void ScInterpreter::ScArcTan2()
 
 void ScInterpreter::ScLog()
 {
-    if ( MustHaveParamCount( GetByte(), 2 ) )
+    BYTE nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        double nBase = GetDouble();
+        double nBase;
+        if (nParamCount == 2)
+            nBase = GetDouble();
+        else
+            nBase = 10.0;
         double nVal = GetDouble();
         if (nVal > 0.0 && nBase > 0.0 && nBase != 1.0)
             PushDouble(log(nVal) / log(nBase));
