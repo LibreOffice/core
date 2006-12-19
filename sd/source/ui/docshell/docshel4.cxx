@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:12:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
 #ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
+#endif
+#ifndef _EEITEM_HXX //autogen
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
