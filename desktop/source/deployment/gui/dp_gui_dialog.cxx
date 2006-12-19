@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:39:12 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "dp_gui.h"
 #include "dp_gui_shared.hxx"
 #include "rtl/uri.hxx"
+#include "osl/thread.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "ucbhelper/content.hxx"
@@ -79,16 +80,32 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 
+
+
+
 namespace dp_gui {
 
 const long ITEM_ID_PACKAGE = 1;
 const long ITEM_ID_STATUS = 2;
 
+namespace {
+extern "C" {
+void SAL_CALL InstallThread( void * p )
+{
+    DialogImpl * that =  static_cast<DialogImpl*>(p);
+    that->installExtensions();
+}
+} // extern "C"
+} //anon namespace
 
 //______________________________________________________________________________
 DialogImpl::DialogImpl(
-    Window * pParent, Reference<XComponentContext> const & xContext )
+    Window * pParent, Sequence<OUString> const & arExtensions,
+    Reference<XComponentContext> const & xContext )
     : ModelessDialog( pParent, getResId(RID_DLG_PACKAGE_MANAGER) ),
+      m_arExtensions(arExtensions),
+      m_installThread(0),
+      m_bAutoInstallFinished(false),
       m_allowSharedLayerModification( ! office_is_running() ),
       m_xComponentContext( xContext ),
       m_xPkgMgrFac( deployment::thePackageManagerFactory::get(xContext) ),
@@ -101,6 +118,11 @@ DialogImpl::DialogImpl(
       m_strExportPackages( getResourceString(RID_STR_EXPORT_PACKAGES) ),
       m_strExportingPackages( getResourceString(RID_STR_EXPORTING_PACKAGES) )
 {
+    //If unopkg gui extension1 extension2 ... was used then we install them right away
+    if (m_arExtensions.getLength() > 0)
+        Application::PostUserEvent(
+            LINK( this, DialogImpl, startInstallExtensions ), 0);
+
 }
 
 //______________________________________________________________________________
@@ -115,6 +137,7 @@ DialogImpl::~DialogImpl()
 ::rtl::Reference<DialogImpl> DialogImpl::get(
     Reference<XComponentContext> const & xContext,
     Reference<awt::XWindow> const & xParent,
+    Sequence<OUString> const & arExtensions,
     OUString const & defaultView )
 {
     if (s_dialog.is()) {
@@ -125,7 +148,8 @@ DialogImpl::~DialogImpl()
     Window * pParent = DIALOG_NO_PARENT;
     if (xParent.is())
         pParent = VCLUnoHelper::GetWindow(xParent);
-    ::rtl::Reference<DialogImpl> that( new DialogImpl( pParent, xContext ) );
+    ::rtl::Reference<DialogImpl> that( new DialogImpl( pParent,
+        arExtensions,xContext ) );
 
     // xxx todo: set icon:
 //     that->SetIcon( ICON_PACKAGE_MANAGER );
@@ -293,8 +317,7 @@ DialogImpl::~DialogImpl()
     that->m_treelb->SetUpdateMode(TRUE);
 
     //##################################################
-
-    that->updateButtonStates();
+     that->updateButtonStates();
     that->m_selectionBox->Show();
     that->m_headerBar->Show();
     that->m_treelb->Show();
@@ -423,6 +446,88 @@ IMPL_LINK( DialogImpl, headbar_dragEnd, HeaderBar *, pBar )
     return 1;
 }
 
+//IMPL_STATIC_LINK( DialogImpl, startInstallExtensions, void *, p )
+
+//This event should only be called onse during the lifetime of DialogImpl. It is posted
+//in the constructor of DialogImpl.
+//It is used to install the extension when running unopkg gui extensions1 extension2 ...
+//We use this event to make sure that the extension manager dialog is showing.
+//
+IMPL_LINK( DialogImpl, startInstallExtensions, DialogImpl * , EMPTYARG )
+{
+    if (m_installThread != 0)
+    {
+        OSL_ASSERT(0);
+    }
+    else
+    {
+        m_installThread = osl_createSuspendedThread( InstallThread, this );
+        OSL_ASSERT(m_installThread != 0 );
+        osl_resumeThread(m_installThread );
+    }
+    return 0;
+}
+
+void DialogImpl::installExtensions()
+{
+    OSL_ASSERT(m_arExtensions.getLength() > 0);
+    //Currently unopkg gui ext1 ext2 ... is only supported for user context.
+    OUString context(OUSTR("user"));
+    Reference<deployment::XPackageManager> xPackageManager(
+        m_xPkgMgrFac->getPackageManager( context) );
+    OSL_ASSERT( xPackageManager.is() );
+
+    ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
+        new ProgressCommandEnv( this, m_strAddingPackages, context, true ) );
+    currentCmdEnv->showProgress( m_arExtensions.getLength() );
+    Reference<task::XAbortChannel> xAbortChannel(
+        xPackageManager->createAbortChannel() );
+
+    for ( sal_Int32 pos = 0;
+          !currentCmdEnv->isAborted() && pos < m_arExtensions.getLength(); ++pos )
+    {
+        OUString file;
+        file = m_arExtensions[ pos ];
+        currentCmdEnv->progressSection(
+            ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
+                OUSTR("Title") ).get<OUString>(), xAbortChannel );
+        try
+        {
+            Reference<deployment::XPackage> xPackage(
+                xPackageManager->addPackage(
+                    file, OUString() /* detect media-type */,
+                    xAbortChannel, currentCmdEnv.get() ) );
+            OSL_ASSERT( xPackage.is() );
+            m_treelb->select(xPackage);
+        }
+        catch (Exception &) {
+            //all exception should be handled by the interaction between xPackageManager and
+            //the interaction handler of currentCmdEnv
+            continue;
+        }
+
+        //catch (
+        // todo replace, remove later, currently used to signa name clashes etc.
+        //catch (Exception &) {
+        //  Any exc( ::cppu::getCaughtException() );
+        //  OUString msg;
+        //  deployment::DeploymentException dpExc;
+        //  if ((exc >>= dpExc) &&
+        //      dpExc.Cause.getValueTypeClass() == TypeClass_EXCEPTION) {
+        //      // notify error cause only:
+        //      msg = reinterpret_cast<Exception const *>(
+        //          dpExc.Cause.getValue() )->Message;
+        //  }
+        //  if (msg.getLength() == 0) // fallback for debugging purposes
+        //      msg = ::comphelper::anyToString(exc);
+        //  errbox( msg );
+        //}
+    }
+
+    m_bAutoInstallFinished = true;
+    updateButtonStates();
+}
+
 //______________________________________________________________________________
 void DialogImpl::updateButtonStates(
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -475,17 +580,23 @@ void DialogImpl::updateButtonStates(
             bExport = bEnable = bDisable = bRemove = false;
         }
     }
+    //When unopkg gui ext1 ext2 ... was used then the installation starts automatically.
+    //Untill this installation has finished the user must not interfere.
+    bool bDisableAll = m_arExtensions.getLength() > 0
+        && !m_bAutoInstallFinished;
 
-    bEnable &= (allowModification && nSelectedPackages > 0);
-    bDisable &= (allowModification && nSelectedPackages > 0);
-    bRemove &= (allowModification && nSelectedPackages > 0);
+    bEnable &= (allowModification && nSelectedPackages > 0) && !bDisableAll;
+    bDisable &= (allowModification && nSelectedPackages > 0) && !bDisableAll;
+    bRemove &= (allowModification && nSelectedPackages > 0) && !bDisableAll;
     bExport &= (nSelectedPackages > 0);
 
     m_disableButton->Enable( bDisable );
     m_enableButton->Enable( bEnable );
     m_exportButton->Enable( bExport );
     SvLBoxEntry * currEntry = m_treelb->getCurrentSingleSelectedEntry();
+
     m_addButton->Enable(
+        !bDisableAll &&
         allowModification &&
         (currEntry != 0 &&
          m_treelb->GetParent( currEntry ) == 0 /* top-level */) &&
@@ -927,14 +1038,20 @@ void SAL_CALL ThreadedPushButton_callback( void * p )
         static_cast<DialogImpl::ThreadedPushButton *>(p);
     that->DialogImpl::SyncPushButton::Click();
 }
-} // extern "C"
-} //anon namespace
+}
+}
+
 
 //______________________________________________________________________________
 void DialogImpl::ThreadedPushButton::Click()
 {
     if (m_thread != 0) {
         const ULONG nLockCount = Application::ReleaseSolarMutex();
+        //todo deadlock. When the add button is clicked then the file picker is started which
+        //runs in the main thread. When I click again on Add, then this function is called again
+        //and also from the main thread. That is I join the main thread on itself here. However
+        //I could only achieve this on Windows when I debugged the app. Since the file picker is a modal dialog
+        //one cannot click again on Add as long as the file picker is open.
         osl_joinWithThread( m_thread );
         if (nLockCount > 0)
             Application::AcquireSolarMutex( nLockCount );
