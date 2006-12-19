@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokenarray.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:01:25 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:15:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,14 @@ public:
             void            ReadjustRelative3DReferences(
                                 const ScAddress& rOldPos,
                                 const ScAddress& rNewPos );
+
+    /** Determines if this formula needs any changes to convert it to something
+        previous versions of OOo could consume (Plain Old Formula). */
+            bool            NeedsPofRewrite();
+
+    /** Rewrites to Plain Old Formula, substituting missing parameters. The
+        ScTokenArray* returned is new'ed. */
+            ScTokenArray*   RewriteMissingToPof();
 };
 
 inline OpCode ScTokenArray::GetOuterFuncOpCode()
