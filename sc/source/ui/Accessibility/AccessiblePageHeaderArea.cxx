@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:06:38 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHi
 
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent);
         }
     }
