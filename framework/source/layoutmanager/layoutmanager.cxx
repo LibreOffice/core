@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:20:01 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6692,18 +6692,18 @@ void SAL_CALL LayoutManager::windowShown( const css::lang::EventObject& aEvent )
 
     // Request to set docking area space again.
     Reference< css::awt::XWindow >  xContainerWindow( m_xContainerWindow );
-    sal_Bool                        bParentWindowVisible( m_bParentWindowVisible );
+    bool                        bParentWindowVisible( m_bParentWindowVisible );
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
     if ( xIfac == aEvent.Source )
     {
-        sal_Bool bSetVisible( sal_False );
+        bool bSetVisible = false;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         WriteGuard aWriteLock( m_aLock );
-        m_bParentWindowVisible = sal_True;
+        m_bParentWindowVisible = true;
         bSetVisible = ( m_bParentWindowVisible != bParentWindowVisible );
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -6723,18 +6723,18 @@ void SAL_CALL LayoutManager::windowHidden( const css::lang::EventObject& aEvent 
 
     // Request to set docking area space again.
     Reference< css::awt::XWindow >  xContainerWindow( m_xContainerWindow );
-    sal_Bool                        bParentWindowVisible( m_bParentWindowVisible );
+    bool                        bParentWindowVisible( m_bParentWindowVisible );
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
     if ( xIfac == aEvent.Source )
     {
-        sal_Bool bSetInvisible( sal_False );
+        bool bSetInvisible = false;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         WriteGuard aWriteLock( m_aLock );
-        m_bParentWindowVisible = sal_False;
+        m_bParentWindowVisible = false;
         bSetInvisible = ( m_bParentWindowVisible != bParentWindowVisible );
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
