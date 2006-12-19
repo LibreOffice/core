@@ -55,6 +55,7 @@ for dir in *; do
   ln -sf $iconname-spreadsheet-template.png   gnome-mime-application-vnd.sun.xml.calc.template.png
   ln -sf $iconname-text.png                   gnome-mime-application-vnd.sun.xml.writer.png
   ln -sf $iconname-text-template.png          gnome-mime-application-vnd.sun.xml.writer.template.png
+  ln -sf $iconname-extension.png              gnome-mime-application-vnd.openofficeorg.extension.png
   cd ../..  
 done
 
@@ -104,6 +105,7 @@ fi
 # backing out existing entries to avoid duplicates
 sed '
 /application\/vnd\.oasis\.opendocument/d
+/application\/vnd\.openofficeorg/d
 /application\/vnd\.sun/d
 /application\/vnd\.stardivision/d
 ' /etc/mime.types 2>/dev/null >> /etc/mime.types.tmp$$
@@ -141,6 +143,7 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.stardivision.math smf
 application/vnd.sun.xml.base odb
+application/vnd.openofficeorg.extension oxt
 END
 
 # and replace the original file
@@ -153,6 +156,7 @@ then
   sed '
 /^# OpenOffice.org/d
 /^application\/vnd\.oasis\.opendocument/d
+/^application\/vnd\.openofficeorg/d
 /^application\/vnd\.sun/d
 /^application\/vnd\.stardivision/d
 /^application\/vnd\.ms-word/d
@@ -217,6 +221,7 @@ application/wordperfect5.1; %unixfilename -view %s
 application/x-wordperfect; %unixfilename -view %s
 application/wordperfect; %unixfilename -view %s
 application/wpwin; %unixfilename -view %s
+application/vnd.openofficeorg.extension; unopkg_gui %s
 END
 
   # and replace the original file
@@ -283,6 +288,8 @@ done
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
+%attr(0755,root,root) /usr/bin/unopkg_gui
+%attr(0755,root,root) /opt/%unixfilename/program/unopkg_gui
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
@@ -295,6 +302,7 @@ done
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
+/usr/share/applications/%unixfilename-extension.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-writer.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-calc.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-draw.desktop
@@ -302,6 +310,7 @@ done
 /usr/share/applnk-redhat/Office/%unixfilename-math.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-base.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-printeradmin.desktop
+/usr/share/applnk-redhat/Office/%unixfilename-extension.desktop
 /usr/share/mime-info/*.keys
 /usr/share/mime-info/*.mime
 /usr/share/mimelnk/application/*.desktop
