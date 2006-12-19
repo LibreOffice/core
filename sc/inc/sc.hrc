@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 15:28:00 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,9 @@
 #define HID_SC_DPDATEGROUP_LB   ( HID_SC_OTHER_START + 15 )
 #define HID_SC_DPSHOWDETAIL     ( HID_SC_OTHER_START + 16 )
 
+// #i68101#
+#define HID_SC_TITLE_DESCRIPTION_OBJECT ( HID_SC_OTHER_START + 17 )
+
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
 #define HID_AAI_FUNC_YEARFRAC       ( HID_SC_AAI_FUNCS_START + 1 )
@@ -573,6 +576,9 @@
 
 // additional IDs for list/range validity
 #define FID_VALID_LISTTYPE              (SC_VIEW_START + 93)
+
+// #i68101# ID for changing Title & Descriptopn of an Object
+#define SID_TITLE_DESCRIPTION_OBJECT    (SC_VIEW_START + 94)
 
 // Nachrichten -------------------------------------------------------------
 
