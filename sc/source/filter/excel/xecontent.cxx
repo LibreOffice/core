@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:52:59 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,7 +418,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
             mnFlags |= EXC_HLINK_ABS;
         mnFlags |= EXC_HLINK_BODY;
 
-        ByteString aAsciiLink( aFileName, rRoot.GetCharSet() );
+        ByteString aAsciiLink( aFileName, rRoot.GetTextEncoding() );
         XclExpString aLink( aFileName, EXC_STR_FORCEUNICODE, 255 );
         aXclStrm    << XclTools::maGuidFileMoniker
                     << nLevel
