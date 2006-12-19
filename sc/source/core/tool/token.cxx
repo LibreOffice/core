@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:45:36 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,6 +418,8 @@ BOOL ScToken::IsMatrixFunction() const
         case ocMatrixUnit :
             return TRUE;
         break;
+        default:
+            ; // nothing, prevent conpiler warning
     }
     return FALSE;
 }
@@ -538,6 +540,9 @@ BOOL ScToken::Is3DRef() const
         case svSingleRef :
             if ( GetSingleRef().IsFlag3D() )
                 return TRUE;
+            break;
+        default:
+            ; // nothing, prevent compiler warning
     }
     return FALSE;
 }
@@ -556,6 +561,9 @@ BOOL ScToken::IsRPNReferenceAbsName() const
             case svSingleRef :
                 if ( !GetSingleRef().IsRelName() )
                     return TRUE;
+                break;
+            default:
+                ; // nothing, prevent compiler warning
         }
     }
     return FALSE;
@@ -572,6 +580,7 @@ BYTE ScToken::GetByte() const
 
 void ScToken::SetByte( BYTE n )
 {
+    n = 0;  // prevent compiler warning
     DBG_ERRORFILE( "ScToken::SetByte: virtual dummy called" );
 }
 
@@ -583,6 +592,7 @@ bool ScToken::HasForceArray() const
 
 void ScToken::SetForceArray( bool b )
 {
+    b = 0;  // prevent compiler warning
     DBG_ERRORFILE( "ScToken::SetForceArray: virtual dummy called" );
 }
 
@@ -636,11 +646,13 @@ SingleRefData& ScToken::GetSingleRef2()
 
 void ScToken::CalcAbsIfRel( const ScAddress& rPos )
 {
+    ScAddress x = rPos; // prevent compiler warning
     DBG_ERRORFILE( "ScToken::CalcAbsIfRel: virtual dummy called" );
 }
 
 void ScToken::CalcRelFromAbs( const ScAddress& rPos )
 {
+    ScAddress x = rPos; // prevent compiler warning
     DBG_ERRORFILE( "ScToken::CalcRelFromAbs: virtual dummy called" );
 }
 
@@ -658,6 +670,7 @@ USHORT ScToken::GetIndex() const
 
 void ScToken::SetIndex( USHORT n )
 {
+    n = 0;  // prevent compiler warning
     DBG_ERRORFILE( "ScToken::SetIndex: virtual dummy called" );
 }
 
@@ -840,6 +853,9 @@ ScToken* ScTokenArray::GetNextReference()
             case svSingleRef:
             case svDoubleRef:
                 return t;
+                break;
+            default:
+                ; // nothing, prevent compiler warning
         }
     }
     return NULL;
@@ -866,6 +882,9 @@ ScToken* ScTokenArray::GetNextReferenceRPN()
             case svSingleRef:
             case svDoubleRef:
                 return t;
+                break;
+            default:
+                ; // nothing, prevent compiler warning
         }
     }
     return NULL;
@@ -881,6 +900,9 @@ ScToken* ScTokenArray::GetNextReferenceOrName()
             case svDoubleRef:
             case svIndex:
                 return t;
+                break;
+            default:
+                ; // nothing, prevent compiler warning
         }
     }
     return NULL;
@@ -1224,6 +1246,8 @@ void ScTokenArray::Store( SvStream& rStream, const ScAddress& rPos ) const
                 case svDoubleRef :
                         (*p)->GetDoubleRef().CalcAbsIfRel( rPos );
                     break;
+                default:
+                    ; // nothing, prevent compiler warning
             }
             (*p)->Store( rStream );
         }
@@ -1261,6 +1285,8 @@ void ScTokenArray::Store( SvStream& rStream, const ScAddress& rPos ) const
                     case svDoubleRef :
                             t->GetDoubleRef().CalcAbsIfRel( rPos );
                         break;
+                    default:
+                        ; // nothing, prevent compiler warning
                 }
                 rStream << (BYTE) 0xFF;
                 t->Store( rStream );
@@ -1643,6 +1669,8 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                             }
                         }
                         break;
+                        default:
+                            ; // nothing, prevent compiler warning
                     } // switch
                 } // for
                 return bRet;
@@ -1758,6 +1786,8 @@ BOOL ScTokenArray::HasMatrixDoubleRefOps()
                     }
                 }
                 break;
+                default:
+                    ; // nothing, prevent compiler warning
             }
             if ( eOp == ocPush || lcl_IsReference( eOp, t->GetType() )  )
                 pStack[sp++] = t;
@@ -1812,8 +1842,211 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                     rRef1.CalcRelFromAbs( rNewPos );
                 }
             }
+            break;
+            default:
+                ; // nothing, prevent compiler warning
         }
     }
+}
+
+
+// --- POF (plain old formula) rewrite of a token array ---------------------
+
+/* TODO: When both POF OOoXML and ODFF are to be supported, the
+ * ScMissingContext and ScTokenArray::*Pof* methods should go to a convention
+ * on its own and the ScCompiler ctor be refactored to take that convention
+ * instead of doing conditional stuff in ScFormulaCell and all those single
+ * SetCompileXML() calls and similar bits.
+ */
+
+#if OSL_DEBUG_LEVEL > 0
+static void DumpTokArr( ScTokenArray *pCode )
+{
+    fprintf (stderr, "TokenArr: ");
+    for ( ScToken *pCur = pCode->First(); pCur; pCur = pCode->Next() )
+        fprintf( stderr, "t%d,o%d ",
+                pCur->GetType(), pCur->GetOpCode() );
+    fprintf (stderr, "\n");
+}
+#endif
+
+class ScMissingContext
+{
+    public:
+            const ScToken*  mpFunc;
+            int             mnCurArg;
+
+                    void    Clear() { mpFunc = NULL; mnCurArg = 0; }
+            inline  bool    AddDefaultArg( ScTokenArray* pNewArr, int nArg, double f ) const;
+    static  inline  bool    IsRewriteNeeded( OpCode eOp );
+                    bool    AddMissingExternal( ScTokenArray* pNewArr ) const;
+                    bool    AddMissing( ScTokenArray *pNewArr ) const;
+                    void    AddMoreArgs( ScTokenArray *pNewArr ) const;
+};
+
+inline bool ScMissingContext::AddDefaultArg( ScTokenArray* pNewArr, int nArg, double f ) const
+{
+    if (mnCurArg == nArg)
+    {
+        pNewArr->AddDouble( f );
+        return true;
+    }
+    return false;
+}
+
+inline bool ScMissingContext::IsRewriteNeeded( OpCode eOp )
+{
+    return eOp == ocMissing || eOp == ocLog;
+}
+
+bool ScMissingContext::AddMissingExternal( ScTokenArray *pNewArr ) const
+{
+    const String &rName = mpFunc->GetExternal();
+
+    // initial (fast) check:
+    sal_Unicode nLastChar = rName.GetChar( rName.Len() - 1);
+    if ( nLastChar != 't' && nLastChar != 'm' )
+        return false;
+
+    if (rName.EqualsIgnoreCaseAscii(
+                "com.sun.star.sheet.addin.Analysis.getAccrint" ))
+    {
+        return AddDefaultArg( pNewArr, 4, 1000.0 );
+    }
+    if (rName.EqualsIgnoreCaseAscii(
+                "com.sun.star.sheet.addin.Analysis.getAccrintm" ))
+    {
+        return AddDefaultArg( pNewArr, 3, 1000.0 );
+    }
+/* FIXME: when we implement EUROCONVERT */
+#if 0
+    if (rName.EqualsIgnoreCaseAscii( "EUROCONVERT" ))
+        return AddDefaultArg( pNewArr, 3, 0.0 );
+#endif
+    return false;
+}
+
+bool ScMissingContext::AddMissing( ScTokenArray *pNewArr ) const
+{
+    if ( !mpFunc )
+        return false;
+
+    bool bRet = false;
+    switch ( mpFunc->GetOpCode() )
+    {
+        case ocFixed:
+            return AddDefaultArg( pNewArr, 1, 2.0 );
+            break;
+        case ocBetaDist:
+        case ocBetaInv:
+        case ocRMZ:  // PMT
+            return AddDefaultArg( pNewArr, 3, 0.0 );
+            break;
+        case ocZinsZ: // IPMT
+        case ocKapz:  // PPMT
+            return AddDefaultArg( pNewArr, 4, 0.0 );
+            break;
+        case ocBW: // PV
+        case ocZW: // FV
+            bRet |= AddDefaultArg( pNewArr, 2, 0.0 ); // pmt
+            bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // [fp]v
+            break;
+        case ocZins: // RATE
+            bRet |= AddDefaultArg( pNewArr, 1, 0.0 ); // pmt
+            bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // fv
+            bRet |= AddDefaultArg( pNewArr, 4, 0.0 ); // type
+            break;
+        case ocExternal:
+            return AddMissingExternal( pNewArr );
+            break;
+
+            // --- more complex cases ---
+
+        case ocOffset:
+            // FIXME: rather tough.
+            // if arg 3 (height) ommitted, export arg1 (rows)
+            break;
+        case ocAddress:
+            // FIXME - should we adjust 'ADDRESS_XL(?)' at this point?
+            // (arg 4 -> 'TRUE' ? [ or no arg. 4 ;-] )
+            break;
+        default:
+            break;
+    }
+
+    return bRet;
+}
+
+void ScMissingContext::AddMoreArgs( ScTokenArray *pNewArr ) const
+{
+    if ( !mpFunc )
+        return;
+
+    // Log
+    if ( mpFunc->GetOpCode() == ocLog && mnCurArg < 1 )
+    {
+        pNewArr->AddOpCode( ocSep );
+        pNewArr->AddDouble( 10.0 );
+    }
+}
+
+
+bool ScTokenArray::NeedsPofRewrite()
+{
+    for ( ScToken *pCur = First(); pCur; pCur = Next() )
+    {
+        if (ScMissingContext::IsRewriteNeeded( pCur->GetOpCode()))
+            return true;
+    }
+    return false;
+}
+
+
+ScTokenArray * ScTokenArray::RewriteMissingToPof()
+{
+    const size_t nAlloc = 256;
+    ScMissingContext aCtx[ nAlloc ];
+    USHORT nTokens = GetLen() + 1;
+    ScMissingContext* pCtx = (nAlloc < nTokens ? new ScMissingContext[nTokens] : &aCtx[0]);
+    // Never go below 0, never use 0, mpFunc always NULL.
+    pCtx[0].Clear();
+    int nFn = 0;
+
+    ScTokenArray *pNewArr = new ScTokenArray;
+
+    for ( ScToken *pCur = First(); pCur; pCur = Next() )
+    {
+        bool bAdd = true;
+        switch ( pCur->GetOpCode() )
+        {
+            case ocOpen:
+                ++nFn;      // all following operations on _that_ function
+                pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
+                pCtx[ nFn ].mnCurArg = 0;
+                break;
+            case ocClose:
+                pCtx[ nFn ].AddMoreArgs( pNewArr );
+                DBG_ASSERT( nFn > 0, "ScTokenArray::RewriteMissingToPof: underflow");
+                if (nFn > 0)
+                    --nFn;
+                break;
+            case ocSep:
+                pCtx[ nFn ].mnCurArg++;
+                break;
+            case ocMissing:
+                bAdd = !pCtx[ nFn ].AddMissing( pNewArr );
+                break;
+            default:
+                break;
+        }
+        if ( bAdd )
+            pNewArr->AddToken( *pCur );
+    }
+
+    if (pCtx != &aCtx[0])
+        delete [] pCtx;
+
+    return pNewArr;
 }
 
 
