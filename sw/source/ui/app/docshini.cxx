@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:27:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:01:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #endif
 #ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
+#endif
+#ifndef _SVX_AKRNTEM_HXX
+#include <svx/akrnitem.hxx>
 #endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -480,6 +483,9 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 // --> collapsing borders FME 2005-05-27 #i29550#
     pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, TRUE ) );
 // <-- collapsing
+
+    //#i16874# AutoKerning as default for new documents
+    pDoc->SetDefault( SvxAutoKernItem( sal_True ) );
 
     // --> OD 2005-02-10 #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
