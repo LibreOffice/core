@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:35:26 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,24 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
         *pCurrentUserStream >> aParam.aCurrentUserAtom;
         delete pCurrentUserStream;
     }
+
+    if( pDocument )
+    {
+        // iterate over all styles
+        SdStyleSheetPool* pStyleSheetPool = dynamic_cast< SdStyleSheetPool* >( pDocument->GetStyleSheetPool() );
+
+        ULONG nStyles = pStyleSheetPool ? pStyleSheetPool->GetStyles().Count() : 0;
+        for (ULONG nStyle = 0; nStyle < nStyles; nStyle++)
+        {
+            SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pStyleSheetPool->GetStyles().GetObject(nStyle) );
+            SfxItemSet& rSet = pSheet->GetItemSet();
+
+            // if autokerning is set in style, override it, ppt has no autokerning
+            if( rSet.GetItemState( EE_CHAR_PAIRKERNING, FALSE ) == SFX_ITEM_SET )
+                rSet.ClearItem( EE_CHAR_PAIRKERNING );
+        }
+    }
+
     pFilter = new ImplSdPPTImport( pDocument, rStorage, rMedium, aParam );
 }
 
@@ -2795,3 +2813,4 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     }
     return pObj;
 }
+
