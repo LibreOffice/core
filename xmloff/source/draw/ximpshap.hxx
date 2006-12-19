@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-27 16:35:16 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,10 @@ protected:
     sal_Int32                   mnZOrder;
     rtl::OUString               maShapeId;
     rtl::OUString               maLayerName;
+
+    // #i68101#
+    rtl::OUString               maShapeTitle;
+    rtl::OUString               maShapeDescription;
 
     SdXMLImExTransform2D        mnTransform;
     com::sun::star::awt::Size   maSize;
