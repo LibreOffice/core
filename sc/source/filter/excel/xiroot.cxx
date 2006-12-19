@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:12:52 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,9 @@
 // Global data ================================================================
 
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
-        SotStorageRef xRootStrg, ScDocument& rDoc, CharSet eCharSet ) :
-    XclRootData( eBiff, rMedium, xRootStrg, rDoc, eCharSet, false )
+        SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
+    XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
+    mbHasCodePage( false )
 {
 }
 
@@ -121,6 +122,18 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     mrImpData.mxPageSett.reset( new XclImpPageSettings( GetRoot() ) );
     mrImpData.mxDocViewSett.reset( new XclImpDocViewSettings( GetRoot() ) );
     mrImpData.mxTabViewSett.reset( new XclImpTabViewSettings( GetRoot() ) );
+}
+
+void XclImpRoot::SetCodePage( sal_uInt16 nCodePage )
+{
+    SetTextEncoding( XclTools::GetTextEncoding( nCodePage ) );
+    mrImpData.mbHasCodePage = true;
+}
+
+void XclImpRoot::SetAppFontEncoding( rtl_TextEncoding eAppFontEnc )
+{
+    if( !mrImpData.mbHasCodePage )
+        SetTextEncoding( eAppFontEnc );
 }
 
 void XclImpRoot::InitializeTable( SCTAB nScTab )
