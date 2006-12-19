@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:41 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,11 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         }
     }
     if ( !bCanRename )
+    {
+        // #i68101#
         rSet.DisableItem( SID_RENAME_OBJECT );
+        rSet.DisableItem( SID_TITLE_DESCRIPTION_OBJECT );
+    }
 
     if ( !nMarkCount )                          // nichts selektiert
     {
