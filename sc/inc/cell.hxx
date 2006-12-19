@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:05:34 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,12 @@ private:
                         SCITP_CLOSE_ITERATION_CIRCLE
                     };
     void            InterpretTail( ScInterpretTailParameter );
+
+    /** Get English formula, if bCompileXML==TRUE in Plain Old Formula format,
+        which means missing parameters are substituded. */
+    void            GetEnglishFormulaForPof( rtl::OUStringBuffer &rBuffer,
+                                             const ScAddress &rPos,
+                                             BOOL bCompileXML ) const;
 
 public:
 
