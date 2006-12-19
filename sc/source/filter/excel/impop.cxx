@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:20:51 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ FltError ImportTyp::Read()
 
 
 ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
-    ImportTyp( &rImpData.mrDoc, rImpData.meCharSet ),
+    ImportTyp( &rImpData.mrDoc, rImpData.meTextEnc ),
     XclImpRoot( rImpData ),
     maStrm( rStrm, GetRoot() ),
     aIn( maStrm )
@@ -196,7 +196,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
 
 ImportExcel::~ImportExcel( void )
 {
-    GetDoc().SetSrcCharSet( GetCharSet() );
+    GetDoc().SetSrcCharSet( GetTextEncoding() );
 
     delete pExtNameBuff;
 
@@ -330,11 +330,11 @@ void ImportExcel::ReadLabel()
         XclImpString aString;
 
         // #i63105# use text encoding from FONT record
-        rtl_TextEncoding eOldTextEnc = GetCharSet();
+        rtl_TextEncoding eOldTextEnc = GetTextEncoding();
         if( const XclImpFont* pFont = GetXFBuffer().GetFont( nXFIdx ) )
-            SetCharSet( pFont->GetFontEncoding() );
+            SetTextEncoding( pFont->GetFontEncoding() );
         aString.Read( maStrm, nFlags );
-        SetCharSet( eOldTextEnc );
+        SetTextEncoding( eOldTextEnc );
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIdx ) )
@@ -639,9 +639,7 @@ void ImportExcel::DocProtect( void )
 
 void ImportExcel::Codepage( void )
 {
-    rtl_TextEncoding eEnc = XclTools::GetTextEncoding( maStrm.ReaduInt16() );
-    if( eEnc != RTL_TEXTENCODING_DONTKNOW )
-        SetCharSet( eEnc );
+    SetCodePage( maStrm.ReaduInt16() );
 }
 
 
@@ -900,11 +898,11 @@ void ImportExcel::Rstring( void )
         XclImpString aString;
 
         // #i63105# use text encoding from FONT record
-        rtl_TextEncoding eOldTextEnc = GetCharSet();
+        rtl_TextEncoding eOldTextEnc = GetTextEncoding();
         if( const XclImpFont* pFont = GetXFBuffer().GetFont( nXFIdx ) )
-            SetCharSet( pFont->GetFontEncoding() );
+            SetTextEncoding( pFont->GetFontEncoding() );
         aString.Read( maStrm );
-        SetCharSet( eOldTextEnc );
+        SetTextEncoding( eOldTextEnc );
 
         // character formatting runs
         if( !aString.IsRich() )
