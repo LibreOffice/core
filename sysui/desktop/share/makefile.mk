@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 11:55:36 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 11:28:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,12 @@ ULFFILES= \
     launcher_comment.ulf \
     launcher_name.ulf
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin qstart
+LAUNCHERLIST = writer calc draw impress math base printeradmin qstart extension
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
 MIMEINFO = $(COMMONMISC)/$(TARGET)/openoffice.org.xml
+#UNOPKGWRAPPER = $(COMMONMISC)/$(TARGET)/unopkg_gui
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 SPECFILES = \
@@ -85,7 +86,7 @@ SPECFILES = \
 .INCLUDE :  target.mk
 
 .IF "$(GUI)"=="UNX"
-ALLTAR : $(LAUNCHERFLAGFILE) $(MIMEINFO) $(SPECFILES)
+ALLTAR : $(LAUNCHERFLAGFILE) $(MIMEINFO) $(SPECFILES) $(UNOPKGWRAPPER)
 .ENDIF          # "$(GUI)"=="UNIX"
 
 #
@@ -102,7 +103,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl
 .IF "$(WITH_LIBSN)"=="YES"
     @noop x$(foreach,i,$(LAUNCHERLIST) $(shell +echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
 .ENDIF
-    @mv -f $(@:db).$(INPATH)/* $(@:d)
+    mv -f $(@:db).$(INPATH)/* $(@:d)
     @touch $@
 
 #
@@ -115,6 +116,9 @@ $(MIMEINFO) : $(ULFDIR)$/documents.ulf
     @$(PERL) create_mime_xml.pl $< > $(@).$(INPATH)
     @mv -f $(@).$(INPATH) $@
 
+#$(UNOPKGWRAPPER) : unopkg_gui
+#	@cp -f unopkg_gui $(COMMONMISC)/$(TARGET)/unopkg_gui
+    
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 $(SPECFILES) : add_specfile_triggers.sed symlink_triggers
 $(SPECFILES) : ../$$(@:b:s/-menus//)/$$(@:f)
