@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:54:09 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #endif
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -2296,14 +2300,26 @@ void SAL_CALL OWriteStream::dispose()
 
     if ( !m_bInitOnDemand )
     {
-        if ( !m_bTransacted )
+        try
         {
-            m_pImpl->Commit();
+            if ( !m_bTransacted )
+            {
+                m_pImpl->Commit();
+            }
+            else
+            {
+                // throw away all the changes
+                m_pImpl->Revert();
+            }
         }
-        else
+        catch( uno::Exception& )
         {
-            // throw away all the changes
-            m_pImpl->Revert();
+               uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetRuntimeException(
+                                            ::rtl::OUString::createFromAscii( "Can not commit/revert the storage!\n" ),
+                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
+                                                                                uno::UNO_QUERY ),
+                                            aCaught );
         }
     }
 
