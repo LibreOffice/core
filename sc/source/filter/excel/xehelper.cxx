@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:56:27 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,7 +645,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     if( rRoot.GetBiff() == EXC_BIFF8 )
         xString->Assign( rString, nFlags, nMaxLen );
     else
-        xString->AssignByte( rString, rRoot.GetCharSet(), nFlags, nMaxLen );
+        xString->AssignByte( rString, rRoot.GetTextEncoding(), nFlags, nMaxLen );
     return xString;
 }
 
@@ -662,7 +662,7 @@ void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoo
     if( rRoot.GetBiff() == EXC_BIFF8 )
         rXclString.Append( rString );
     else
-        rXclString.AppendByte( rString, rRoot.GetCharSet() );
+        rXclString.AppendByte( rString, rRoot.GetTextEncoding() );
 }
 
 void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot& rRoot, sal_Unicode cChar )
@@ -670,7 +670,7 @@ void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot&
     if( rRoot.GetBiff() == EXC_BIFF8 )
         rXclString.Append( cChar );
     else
-        rXclString.AppendByte( cChar, rRoot.GetCharSet() );
+        rXclString.AppendByte( cChar, rRoot.GetTextEncoding() );
 }
 
 XclExpStringRef XclExpStringHelper::CreateCellString(
