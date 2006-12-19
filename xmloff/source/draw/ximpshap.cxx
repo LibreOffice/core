@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:16:34 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,8 @@
 #include "eventimp.hxx"
 #endif
 
+#include "descriptionimp.hxx"
+
 #ifndef _XMLOFF_XIMPCUSTOMSHAPE_HXX_
 #include "ximpcustomshape.hxx"
 #endif
@@ -315,7 +317,13 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT p_nPrefix,
 {
     SvXMLImportContext * pContext = NULL;
 
-    if( p_nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
+    // #i68101#
+    if( p_nPrefix == XML_NAMESPACE_SVG &&
+        (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
+    {
+        pContext = new SdXMLDescriptionContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
+    }
+    else if( p_nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         pContext = new SdXMLEventsContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
     }
@@ -944,6 +952,16 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
             // because of #85127# take svg:transform into account and hanle like
             // draw:transform for compatibility
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+        }
+
+        // #i68101#
+        else if( IsXMLToken( rLocalName, XML_TITLE ) )
+        {
+            maShapeTitle = rValue;
+        }
+        else if( IsXMLToken( rLocalName, XML_DESC ) )
+        {
+            maShapeDescription = rValue;
         }
     }
 }
@@ -2013,6 +2031,7 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     {
         SetStyle();
         SetLayer();
+
         uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
         if( xProps.is() )
         {
@@ -2317,6 +2336,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
     {
         SetStyle();
         SetLayer();
+
         uno::Reference< beans::XPropertySet > xPropset(mxShape, uno::UNO_QUERY);
         if(xPropset.is())
         {
@@ -3303,7 +3323,10 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( USHORT nPrefix,
             }
         }
     }
-    else if( (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) ) ||
+    else if(
+            ( nPrefix == XML_NAMESPACE_SVG &&   // #i68101#
+                (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) ) ||
+             (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) ) ||
              (nPrefix == XML_NAMESPACE_DRAW && (IsXMLToken( rLocalName, XML_GLUE_POINT ) ||
                                                 IsXMLToken( rLocalName, XML_THUMBNAIL ) ) ) )
     {
