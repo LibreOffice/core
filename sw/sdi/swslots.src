@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-21 14:43:13 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:39:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1750,8 +1750,14 @@ SfxSlotInfo FN_UPDATE_CHARTS
 };
 SfxSlotInfo FN_NAME_SHAPE
 {
-    Slotname [ de ] = "Objekt benennen";
-    Slotname [ en-US ] = "Name Object";
+    Slotname [ de ] = "Name...";
+    Slotname [ en-US ] = "Name...";
+};
+// #i68101#
+SfxSlotInfo FN_TITLE_DESCRIPTION_SHAPE
+{
+    Slotname [ de ] = "Beschreibung...";
+    Slotname [ en-US ] = "Description...";
 };
 SfxSlotInfo FN_CLOSE_PAGEPREVIEW
 {
