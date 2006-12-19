@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:41:06 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,8 +262,8 @@ public:
 
     /** Reads a 10-byte-long-double and converts it to double. */
     static double       ReadLongDouble( SvStream& rStrm );
-    /** Returns system charset for byte string conversion. */
-    static CharSet      GetSystemCharSet();
+    /** Returns system text encoding for byte string conversion. */
+    static rtl_TextEncoding GetSystemTextEncoding();
     /** Returns a string representing the hexadecimal value of nValue. */
     static String       GetHexStr( sal_uInt16 nValue );
 
@@ -349,19 +349,19 @@ public:
     /** Reads and returns a zero terminted byte string. */
     static ByteString   ReadCString( SvStream& rStrm );
     /** Reads and returns a zero terminted byte string. */
-    inline static String ReadCString( SvStream& rStrm, CharSet eSrc )
-                            { return String( ReadCString( rStrm ), eSrc ); }
+    inline static String ReadCString( SvStream& rStrm, rtl_TextEncoding eTextEnc )
+                            { return String( ReadCString( rStrm ), eTextEnc ); }
 
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
     static ByteString   ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft );
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
-    inline static String ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, CharSet eSrc )
-                            { return String( ReadCString( rStrm, rnBytesLeft ), eSrc ); }
+    inline static String ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc )
+                            { return String( ReadCString( rStrm, rnBytesLeft ), eTextEnc ); }
 
     /** Appends a zero terminted byte string. */
     static void         AppendCString( SvStream& rStrm, ByteString& rString );
     /** Appends a zero terminted byte string. */
-    static void         AppendCString( SvStream& rStrm, String& rString, CharSet eSrc );
+    static void         AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc );
 
 // *** HTML table names <-> named range names *** -----------------------------
 
