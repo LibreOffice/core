@@ -40,6 +40,7 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.stardivision.math smf
 application/vnd.sun.xml.base odb
+application/vnd.openofficeorg.extension oxt
 END
 else
 cat ${PKG_INSTALL_ROOT}/etc/mime.types
