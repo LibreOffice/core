@@ -4,9 +4,9 @@
  *
  *  $RCSfile: verinfo.rc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:51:09 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,3 +196,4 @@ VS_VERSION_INFO rcdata
 37 ICON "icons\\so7-chart-doc.ico"
 38 ICON "icons\\so7-base-doc.ico"
 39 ICON "icons\\so7-math-doc.ico"
+40 ICON "icons\\oxt-extension.ico"
