@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:34:47 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,11 @@ IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl);
+
+// #i68101#
+IMPL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl);
+
 IMPL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl);
@@ -806,6 +811,53 @@ IMPL_LINK( AbstractSvxNameDialog_Impl, CheckNameHdl, Window*, EMPTYARG )
     return 0;
 }
 //for SvxNameDialog end
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+
+void AbstractSvxObjectNameDialog_Impl::GetName(String& rName)
+{
+    pDlg->GetName(rName);
+}
+
+void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link& rLink, bool bCheckImmediately)
+{
+    aCheckNameHdl = rLink;
+
+    if(rLink.IsSet())
+    {
+        pDlg->SetCheckNameHdl(LINK(this, AbstractSvxObjectNameDialog_Impl, CheckNameHdl), bCheckImmediately);
+    }
+    else
+    {
+        pDlg->SetCheckNameHdl(Link(), bCheckImmediately);
+    }
+}
+
+IMPL_LINK(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, Window*, EMPTYARG)
+{
+    if(aCheckNameHdl.IsSet())
+    {
+        return aCheckNameHdl.Call(this);
+    }
+
+    return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+
+void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(String& rTitle)
+{
+    pDlg->GetTitle(rTitle);
+}
+
+void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(String& rDescription)
+{
+    pDlg->GetDescription(rDescription);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 //for SvxMessDialog begin
 void AbstractSvxMessDialog_Impl::SetButtonText( USHORT nBtnId, const String& rNewTxt )
@@ -1746,6 +1798,28 @@ AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( Window*
     return 0;
 }
 //CHINA001  SvxNameDialog end
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+
+AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(Window* pParent, const String& rName, const ResId& rResId)
+{
+    return ((RID_SVXDLG_OBJECT_NAME == rResId.GetId())
+        ? new AbstractSvxObjectNameDialog_Impl(new SvxObjectNameDialog(pParent, rName))
+        : NULL);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+
+AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(Window* pParent, const String& rTitle, const String& rDescription, const ResId& rResId)
+{
+    return ((RID_SVXDLG_OBJECT_TITLE_DESC == rResId.GetId())
+        ? new AbstractSvxObjectTitleDescDialog_Impl(new SvxObjectTitleDescDialog(pParent, rTitle, rDescription))
+        : NULL);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 //CHINA001  SvxMessDialog begin
 AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window* pParent, const ResId& rResId,
