@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:13:18 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -887,7 +887,9 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     Size aVisArea( aSize.Width, aSize.Height );
 
-    BOOL bSetScale100 = TRUE;
+    Fraction aScaleWidth( 1, 1 );
+    Fraction aScaleHeight( 1, 1 );
+
     sal_Bool bUseObjectSize = sal_False;
 
     // solange keine vernuenftige Size vom Object kommt, kann nichts
@@ -943,18 +945,10 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             }
             else
             {
-                const Fraction aScaleWidth ( aObjArea.Width(),  aVisArea.Width() );
-                const Fraction aScaleHeight( aObjArea.Height(), aVisArea.Height());
-                pCli->SetSizeScale( aScaleWidth, aScaleHeight );
-                bSetScale100 = FALSE;
+                aScaleWidth = Fraction( aObjArea.Width(),   aVisArea.Width() );
+                aScaleHeight = Fraction( aObjArea.Height(), aVisArea.Height());
             }
         }
-    }
-
-    if( bSetScale100 )
-    {
-        const Fraction aScale( 1, 1 );
-        pCli->SetSizeScale( aScale, aScale );
     }
 
     //Jetzt ist auch der guenstige Zeitpunkt die ObjArea einzustellen.
@@ -983,7 +977,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         aArea.Height( Fraction( aArea.Height() ) / pCli->GetScaleHeight());
     }
 
-    pCli->SetObjArea( aArea.SVRect() );
+    pCli->SetObjAreaAndScale( aArea.SVRect(), aScaleWidth, aScaleHeight );
 }
 
 
