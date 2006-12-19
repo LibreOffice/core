@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:17:26 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -983,7 +983,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
     else
         SetRefConvention( pConvOOO_A1 );
 
-    nMaxTab = pDoc->GetTableCount() - 1;
+    nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
     pStack = NULL;
     nNumFmt = NUMBERFORMAT_UNDEFINED;
 }
@@ -1003,6 +1003,7 @@ ScCompiler::ScCompiler(ScDocument* pDocument, const ScAddress& rPos )
 {
     if (!nAnzStrings)
         Init();
+    pArr = NULL;
     pDoc = pDocument;
 
     if (NULL != pDoc)
