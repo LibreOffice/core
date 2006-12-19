@@ -235,8 +235,6 @@
                     <menu:menuitem menu:id=".uno:FormatUngroup"/>
                     <menu:menuitem menu:id=".uno:EnterGroup"/>
                     <menu:menuitem menu:id=".uno:LeaveGroup"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:NameGroup"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:ObjectMenu">
@@ -246,6 +244,8 @@
                     <menu:menuitem menu:id=".uno:FormatArea"/>
                     <menu:menuitem menu:id=".uno:TextAttributes"/>
                     <menu:menuitem menu:id=".uno:FontWork"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:NameGroup"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:FrameDialog"/>
