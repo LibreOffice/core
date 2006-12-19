@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:22:33 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <unotools/textsearch.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <tools/solar.h>
+#include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
@@ -1682,7 +1682,8 @@ void ScInterpreter::ScCell()
                         if( pShell && pShell->GetMedium() )
                         {
                             aResult = (sal_Unicode) '\'';
-                            aResult += pShell->GetMedium()->GetName();
+                            const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
+                            aResult += String( rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
                             aResult.AppendAscii( "'#$" );
                             String aTabName;
                             pDok->GetName( nTab, aTabName );
@@ -3752,6 +3753,13 @@ void ScInterpreter::ScCountIf()
                 }
             }
             break;
+            case svMatrix :
+            {
+                ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
+                        rString);
+                bIsString = (nType != SC_MATVAL_VALUE);
+            }
+            break;
             case svString:
                 rString = GetString();
             break;
@@ -5541,11 +5549,11 @@ void ScInterpreter::ScOffset()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
-        long nColNew, nRowNew, nColPlus, nRowPlus;
+        long nColNew = -1, nRowNew = -1, nColPlus, nRowPlus;
         if (nParamCount == 5)
             nColNew = (long) ::rtl::math::approxFloor(GetDouble());
         if (nParamCount >= 4)
-            nRowNew = (long) ::rtl::math::approxFloor(GetDouble());
+            nRowNew = (long) ::rtl::math::approxFloor(GetDoubleWithDefault( -1.0 ));
         nColPlus = (long) ::rtl::math::approxFloor(GetDouble());
         nRowPlus = (long) ::rtl::math::approxFloor(GetDouble());
         SCCOL nCol1;
@@ -5554,8 +5562,7 @@ void ScInterpreter::ScOffset()
         SCCOL nCol2;
         SCROW nRow2;
         SCTAB nTab2;
-        if ( (nParamCount == 5 && nColNew == 0)
-          || (nParamCount >= 4 && nRowNew == 0) )
+        if (nColNew == 0 || nRowNew == 0)
         {
             SetIllegalParameter();
             return;
@@ -5563,7 +5570,7 @@ void ScInterpreter::ScOffset()
         if (GetStackType() == svSingleRef)
         {
             PopSingleRef(nCol1, nRow1, nTab1);
-            if (nParamCount == 3)
+            if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
             {
                 nCol1 = (SCCOL)((long) nCol1 + nColPlus);
                 nRow1 = (SCROW)((long) nRow1 + nRowPlus);
@@ -5574,8 +5581,10 @@ void ScInterpreter::ScOffset()
             }
             else
             {
-                if (nParamCount == 4)
+                if (nColNew < 0)
                     nColNew = 1;
+                if (nRowNew < 0)
+                    nRowNew = 1;
                 nCol1 = (SCCOL)((long)nCol1+nColPlus);      // ! nCol1 wird veraendert!
                 nRow1 = (SCROW)((long)nRow1+nRowPlus);
                 nCol2 = (SCCOL)((long)nCol1+nColNew-1);
@@ -5590,9 +5599,9 @@ void ScInterpreter::ScOffset()
         else if (GetStackType() == svDoubleRef)
         {
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            if (nParamCount < 5)
+            if (nColNew < 0)
                 nColNew = nCol2 - nCol1 + 1;
-            if (nParamCount < 4)
+            if (nRowNew < 0)
                 nRowNew = nRow2 - nRow1 + 1;
             nCol1 = (SCCOL)((long)nCol1+nColPlus);
             nRow1 = (SCROW)((long)nRow1+nRowPlus);
@@ -5938,7 +5947,7 @@ void ScInterpreter::ScFixed()
             bThousand = TRUE;
         if (nParamCount >= 2)
         {
-            fDec = ::rtl::math::approxFloor(GetDouble());
+            fDec = ::rtl::math::approxFloor(GetDoubleWithDefault( 2.0 ));
             if (fDec < -15.0 || fDec > 15.0)
             {
                 SetIllegalArgument();
