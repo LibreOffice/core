@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:18:34 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ public:
 
     virtual double SAL_CALL     getAmordegrc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getAmorlinc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getAccrint( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nFirstInter, sal_Int32 nSettle, double fRate, double fVal, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getAccrint( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nFirstInter, sal_Int32 nSettle, double fRate, const ANY& rVal, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getAccrintm( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const ANY& rVal, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getReceived( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getDisc( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
