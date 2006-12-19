@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:38 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:00:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@ CollatorWrapper* ScGlobal::pCollator = NULL;
 CollatorWrapper* ScGlobal::pCaseCollator = NULL;
 ::utl::TransliterationWrapper* ScGlobal::pTransliteration = NULL;
 ::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = NULL;
+::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = NULL;
 IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
