@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:24:34 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2641,6 +2641,9 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
 
                 GetSaveInData()->SetModified( TRUE );
             }
+
+            // #i68101# Moemory leak (!)
+            delete pNameDialog;
 
             break;
         }
