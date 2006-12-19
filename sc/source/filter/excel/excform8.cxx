@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:48:07 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aIn >> nParamCount >> nXclFunc;
                 nParamCount &= 0x7F;
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
-                    DoMulArgs( pFuncInfo->meOpCode, nParamCount );
+                    DoMulArgs( pFuncInfo->meOpCode, nParamCount, pFuncInfo->mnMinParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
             }
