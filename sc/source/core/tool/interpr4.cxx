@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:22:49 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1313,6 +1313,12 @@ void ScInterpreter::SetNoValue()
 }
 
 
+BOOL ScInterpreter::IsMissing()
+{
+    return sp && pStack[sp - 1]->GetType() == svMissing;
+}
+
+
 StackVar ScInterpreter::GetStackType()
 {
     StackVar eRes;
@@ -1497,6 +1503,10 @@ double ScInterpreter::GetDouble()
             }
         }
         break;
+        case svMissing:
+            Pop();
+            nVal = 0.0;
+        break;
         default:
             Pop();
             SetError(errIllegalParameter);
@@ -1505,6 +1515,16 @@ double ScInterpreter::GetDouble()
     if ( nFuncFmtType == nCurFmtType )
         nFuncFmtIndex = nCurFmtIndex;
     return nVal;
+}
+
+
+double ScInterpreter::GetDoubleWithDefault(double nDefault)
+{
+    bool bMissing = IsMissing();
+    double nResult = GetDouble();
+    if ( bMissing )
+        nResult = nDefault;
+    return nResult;
 }
 
 
@@ -2122,6 +2142,8 @@ void ScInterpreter::ScExternal()
                     break;
 
                 case SC_ADDINARG_VALUE_OR_ARRAY:
+                    if ( IsMissing() )
+                        nStackType = svMissing;
                     switch( nStackType )
                     {
                         case svDouble:
@@ -2158,6 +2180,10 @@ void ScInterpreter::ScExternal()
                         case svMatrix:
                             if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix() ))
                                 SetError(errIllegalParameter);
+                            break;
+                        case svMissing:
+                            Pop();
+                            aParam.clear();
                             break;
                         default:
                             Pop();
