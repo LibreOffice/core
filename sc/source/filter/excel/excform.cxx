@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:24:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,7 +488,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 else
                     aIn >> nXclFunc;
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
-                    DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount );
+                    DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount, pFuncInfo->mnMinParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
             }
@@ -506,7 +506,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 else
                     aIn >> nXclFunc;
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
-                    DoMulArgs( pFuncInfo->meOpCode, nParamCount );
+                    DoMulArgs( pFuncInfo->meOpCode, nParamCount, pFuncInfo->mnMinParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
             }
@@ -1320,21 +1320,22 @@ BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
     return false;
 }
 
-void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
+void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCount )
 {
     TokenId                 eParam[ 256 ];
     INT32                   nLauf;
 
-    if( eId == ocLog && nAnz == 1 )
-        eId = ocLog10;
-    else if( eId == ocCeil || eId == ocFloor )
+    if( eId == ocCeil || eId == ocFloor )
     {
         aStack << aPool.Store( 1.0 );   // default, da in Excel nicht vorhanden
         nAnz++;
     }
 
-    for( nLauf = 0 ; nLauf < nAnz ; nLauf++ )
+    for( nLauf = 0; aStack.HasMoreTokens() && (nLauf < nAnz); nLauf++ )
         aStack >> eParam[ nLauf ];
+    // #i70925# reduce parameter count, if no more tokens available on token stack
+    if( nLauf < nAnz )
+        nAnz = static_cast< sal_uInt8 >( nLauf );
 
     if( nAnz > 0 && eId == ocExternal )
     {
@@ -1389,9 +1390,18 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
             }
         }
 
+        // FIXME: ideally we'd want to import all missing args, but this
+        // conflicts with lots of fn's understanding of nParams - we need
+        // a function table, and pre-call argument normalisation 1st.
+        INT16 nLastRemovable = nLast - nMinParamCount;
+
         // #84453# skip missing parameters at end of parameter list
-        while( (nSkipEnd < nLast) && aPool.IsSingleOp( eParam[ nSkipEnd + 1 ], ocMissing ) )
+        while( nSkipEnd < nLastRemovable &&
+               aPool.IsSingleOp( eParam[ nSkipEnd + 1 ], ocMissing ) )
             nSkipEnd++;
+
+//      fprintf (stderr, "Fn %d nSkipEnd %d nLast %d nMinParamCnt %d %d\n",
+//               eId, nSkipEnd, nLast, nMinParamCount, nLastRemovable);
 
         // [Parameter{;Parameter}]
         if( nLast > nSkipEnd )
