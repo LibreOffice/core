@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:15:11 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,39 +152,29 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_NAME_GROUP:
         {
-            // Jetzt nur noch fuer ein Objekt moeglich (28.10.96)
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-            SdrObject* pObj = NULL;
-            ULONG nMarkCount = rMarkList.GetMarkCount();
-
-            if( nMarkCount == 1 )
+            // only allow for single object selection since the name of an object needs
+            // to be unique
+            if(1L == mpDrawView->GetMarkedObjectCount())
             {
-                String aName;
-                String aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
-                String aDesc( SdResId( STR_DESC_NAMEGROUP ) );
-
-                pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-
-                aName = pObj->GetName();
+                // #i68101#
+                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
+                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                String aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( NULL, aName, aDesc, ResId(RID_SVXDLG_NAME) ) : 0;
-                if( pDlg )
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, ResId(RID_SVXDLG_OBJECT_NAME));
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
+
+                if(RET_OK == pDlg->Execute())
                 {
-                    pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
-
-                    pDlg->SetText( aTitle );
-                    pDlg->SetCheckNameHdl( LINK( this, DrawViewShell, NameObjectHdl ) );
-
-                    if( pDlg->Execute() == RET_OK )
-                    {
-                        pDlg->GetName( aName );
-
-                        pObj->SetName( aName );
-                    }
-
-                    delete pDlg;
+                    pDlg->GetName(aName);
+                    pSelected->SetName(aName);
                 }
+
+                delete pDlg;
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -192,9 +182,44 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
-            rReq.Ignore ();
+            rReq.Ignore();
+            break;
         }
-        break;
+
+        // #i68101#
+        case SID_OBJECT_TITLE_DESCRIPTION:
+        {
+            if(1L == mpDrawView->GetMarkedObjectCount())
+            {
+                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
+                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                String aTitle(pSelected->GetTitle());
+                String aDescription(pSelected->GetDescription());
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, ResId(RID_SVXDLG_OBJECT_TITLE_DESC));
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                if(RET_OK == pDlg->Execute())
+                {
+                    pDlg->GetTitle(aTitle);
+                    pDlg->GetDescription(aDescription);
+                    pSelected->SetTitle(aTitle);
+                    pSelected->SetDescription(aDescription);
+                }
+
+                delete pDlg;
+            }
+
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+            rBindings.Invalidate( SID_CONTEXT );
+
+            Cancel();
+            rReq.Ignore();
+            break;
+        }
 
         case SID_ENTER_GROUP:  // BASIC
         {
