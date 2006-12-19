@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:44 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,11 +334,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
                 bRet = aObj.ImportStream( *xStream, String(), nFormatId );
-#if 1
-            else if (aDataHelper.GetString( nFormatId, aStr ))
-                bRet = aObj.ImportString( aStr, nFormatId );
-#else
-/* #i15509# was temporarily rejected due to QA time constraints. Enable again for OOo2.2 */
             else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
             {
                 // Do CSV dialog if more than one line or a usual delimiter
@@ -390,7 +385,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             }
             else if (nFormatId != FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
                 bRet = aObj.ImportString( aStr, nFormatId );
-#endif
 
             InvalidateAttribs();
             GetViewData()->UpdateInputHandler();
