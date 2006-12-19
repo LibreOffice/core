@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:31:24 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,23 +106,6 @@
 #include <convert.hxx>
 
 using namespace ::com::sun::star;
-
-class VerbExecutionControllerGuard
-{
-    VerbExecutionController& m_rController;
-public:
-
-    VerbExecutionControllerGuard( VerbExecutionController& rController )
-    : m_rController( rController )
-    {
-        m_rController.LockNotification();
-    }
-
-    ~VerbExecutionControllerGuard()
-    {
-        m_rController.UnlockNotification();
-    }
-};
 
 //------------------------------------------------------
 // TODO: probably later those common functions should be moved
