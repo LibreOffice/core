@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:09:21 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:16:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1424,6 +1424,14 @@ BOOL ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 BOOL ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
             SCROW nRow2, BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
+    if ( !ValidColRow( nCol2, nRow2 ) )
+    {
+        DBG_ERRORFILE("IsBlockEditable: invalid column or row");
+        if (pOnlyNotBecauseOfMatrix)
+            *pOnlyNotBecauseOfMatrix = FALSE;
+        return FALSE;
+    }
+
     BOOL bIsEditable = TRUE;
     if ( nLockCount )
         bIsEditable = FALSE;
