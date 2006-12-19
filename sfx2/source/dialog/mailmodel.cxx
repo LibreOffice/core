@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:33:06 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     rtl::OUString& rFileNamePath )
 {
     SaveResult  eRet( SAVE_ERROR );
+    bool        bSendAsPDF = (rType.compareTo(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" ))) == 0);
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
     if (!xSMGR.is())
@@ -484,28 +485,31 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     css::util::URL aURL;
                     css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
 
-                    if ( xURLTransformer.is() )
+                    if( !bSendAsPDF )
                     {
-                        aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrepareMailExport" ));
-                        xURLTransformer->parseStrict( aURL );
-                    }
-
-                    if ( xDispatchProvider.is() )
-                    {
-                        xDispatch = css::uno::Reference< css::frame::XDispatch >(
-                            xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 ));
-                        if ( xDispatch.is() )
+                        if ( xURLTransformer.is() )
                         {
-                            try
+                            aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrepareMailExport" ));
+                            xURLTransformer->parseStrict( aURL );
+                        }
+
+                        if ( xDispatchProvider.is() )
+                        {
+                            xDispatch = css::uno::Reference< css::frame::XDispatch >(
+                                xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 ));
+                            if ( xDispatch.is() )
                             {
-                                xDispatch->dispatch( aURL, aDispatchArgs );
-                            }
-                            catch ( css::uno::RuntimeException& )
-                            {
-                                throw;
-                            }
-                            catch ( css::uno::Exception& )
-                            {
+                                try
+                                {
+                                    xDispatch->dispatch( aURL, aDispatchArgs );
+                                }
+                                catch ( css::uno::RuntimeException& )
+                                {
+                                    throw;
+                                }
+                                catch ( css::uno::Exception& )
+                                {
+                                }
                             }
                         }
                     }
@@ -514,33 +518,35 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     rFileNamePath = aFileURL;
                     eRet = SAVE_SUCCESSFULL;
 
-                    // #i30432# notify that export is finished - the Writer may want to restore removed content
-                    if ( xURLTransformer.is() )
+                    if( !bSendAsPDF )
                     {
-                        aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MailExportFinished" ));
-                        xURLTransformer->parseStrict( aURL );
-                    }
-
-                    if ( xDispatchProvider.is() )
-                    {
-                        xDispatch = css::uno::Reference< css::frame::XDispatch >(
-                            xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 ));
-                        if ( xDispatch.is() )
+                        // #i30432# notify that export is finished - the Writer may want to restore removed content
+                        if ( xURLTransformer.is() )
                         {
-                            try
+                            aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MailExportFinished" ));
+                            xURLTransformer->parseStrict( aURL );
+                        }
+
+                        if ( xDispatchProvider.is() )
+                        {
+                            xDispatch = css::uno::Reference< css::frame::XDispatch >(
+                                xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 ));
+                            if ( xDispatch.is() )
                             {
-                                xDispatch->dispatch( aURL, aDispatchArgs );
-                            }
-                            catch ( css::uno::RuntimeException& )
-                            {
-                                throw;
-                            }
-                            catch ( css::uno::Exception& )
-                            {
+                                try
+                                {
+                                    xDispatch->dispatch( aURL, aDispatchArgs );
+                                }
+                                catch ( css::uno::RuntimeException& )
+                                {
+                                    throw;
+                                }
+                                catch ( css::uno::Exception& )
+                                {
+                                }
                             }
                         }
                     }
-
                     // If the model is not modified, it could be modified by the dispatch calls.
                     // Therefore set back to modified = false. This should not hurt if we call
                     // on a non-modified model.
