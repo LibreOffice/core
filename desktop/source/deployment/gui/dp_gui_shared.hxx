@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_shared.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:03:56 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #define INCLUDED_DP_SHARED_H
 
 #include "unotools/configmgr.hxx"
+#include "rtl/instance.hxx"
+#include "tools/resmgr.hxx"
 
 namespace css = ::com::sun::star;
 
