@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:38:27 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 18:05:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/characterclassification.lib \
         $(SLB)$/collator.lib \
         $(SLB)$/inputchecker.lib \
-        $(SLB)$/textconversion.lib
+        $(SLB)$/textconversion.lib \
+        $(SLB)$/ordinalsuffix.lib
 
 SHL1TARGET= $(TARGET)
 # WNT needs implib name even if there is none
