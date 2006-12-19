@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestring.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:56:28 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ public:
         @param nMaxLen  The maximum number of characters to store in this string. */
     void                AssignByte(
                             const String& rString,
-                            CharSet eCharSet,
+                            rtl_TextEncoding eTextEnc,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns a character, converts this object to a BIFF2-BIFF7 byte string.
@@ -162,7 +162,7 @@ public:
         @param nMaxLen  The maximum number of characters to store in this string (for appending). */
     void                AssignByte(
                             sal_Unicode cChar,
-                            CharSet eCharSet,
+                            rtl_TextEncoding eTextEnc,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
@@ -180,10 +180,10 @@ public:
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
-    void                AppendByte( const String& rString, CharSet eCharSet );
+    void                AppendByte( const String& rString, rtl_TextEncoding eTextEnc );
     /** Appends a character. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
-    void                AppendByte( sal_Unicode cChar, CharSet eCharSet );
+    void                AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc );
 
     // formatting runs --------------------------------------------------------
 
