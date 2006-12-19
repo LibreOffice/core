@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:08:58 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,12 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         css::uno::Reference<css::ucb::XCommandEnvironment> const & origCmdEnv,
         css::uno::Reference<css::ucb::XCommandEnvironment> const &
             wrappedCmdEnv );
+
+    bool PackageManagerImpl::checkInstall(
+        ::rtl::OUString const & title,
+        css::uno::Reference<css::deployment::XPackage> const & package,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
+
 
     void checkAborted(
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel );
