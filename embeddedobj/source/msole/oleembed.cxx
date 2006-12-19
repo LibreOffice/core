@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:22:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,12 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 // and it holds reference to "incomplete" component
                 // If the object is switched to running state later
                 // the component will become "complete"
-                m_pOleComponent->CloseObject();
+
+                {
+                    VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
+                    m_pOleComponent->CloseObject();
+                }
+
                 // GetRidOfComponent();
                 m_nObjectState = nNewState;
                 aGuard.clear();
