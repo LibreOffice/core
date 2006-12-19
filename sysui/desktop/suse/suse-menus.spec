@@ -58,6 +58,7 @@ for dir in *; do
   ln -sf ../../../gnome/$dir/mimetypes/$iconname-spreadsheet-template.png   ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.calc.template.png
   ln -sf ../../../gnome/$dir/mimetypes/$iconname-text.png                   ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.png
   ln -sf ../../../gnome/$dir/mimetypes/$iconname-text-template.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-extension.png              ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.openofficeorg.extension.png
 done
 
 #include<symlink_triggers>
@@ -107,9 +108,11 @@ fi
 # backing out existing entries to avoid duplicates
 sed '
 /application\/vnd\.oasis\.opendocument/d
+/application\/vnd\.openofficeorg/d
 /application\/vnd\.sun/d
 /application\/vnd\.stardivision/d
 ' /etc/mime.types 2>/dev/null >> /etc/mime.types.tmp$$
+
 
 # now append our stuff to the temporary file
 cat >> /etc/mime.types.tmp$$ << END
@@ -144,6 +147,7 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.stardivision.math smf
 application/vnd.sun.xml.base odb
+application/vnd.openofficeorg.extension oxt
 END
 
 # and replace the original file
@@ -156,6 +160,7 @@ then
   sed '
 /^# OpenOffice.org/d
 /^application\/vnd\.oasis\.opendocument/d
+/^application\/vnd\.openofficeorg/d
 /^application\/vnd\.sun/d
 /^application\/vnd\.stardivision/d
 /^application\/vnd\.ms-word/d
@@ -220,6 +225,7 @@ application/wordperfect5.1; %unixfilename -view %s
 application/x-wordperfect; %unixfilename -view %s
 application/wordperfect; %unixfilename -view %s
 application/wpwin; %unixfilename -view %s
+application/vnd.openofficeorg.extension; unopkg_gui %s
 END
 
   # and replace the original file
@@ -249,6 +255,7 @@ EOF
   fi
 fi
 
+ 
 %preun
 # remove from /etc/mailcap only on de-install
 if [ "$1" = 0 ]
@@ -287,6 +294,8 @@ done
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
+%attr(0755,root,root) /usr/bin/unopkg_gui
+%attr(0755,root,root) /opt/%unixfilename/program/unopkg_gui
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
@@ -295,6 +304,7 @@ done
 /usr/share/applications/%unixfilename-writer.desktop
 /usr/share/applications/%unixfilename-calc.desktop
 /usr/share/applications/%unixfilename-draw.desktop
+/usr/share/applications/%unixfilename-extension.desktop
 /usr/share/applications/%unixfilename-impress.desktop
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
