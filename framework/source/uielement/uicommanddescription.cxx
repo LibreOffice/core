@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:26:36 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,14 +206,14 @@ class ConfigurationAccess_UICommand : // interfaces
     protected:
         struct CmdToInfoMap
         {
-            CmdToInfoMap() : bPopup( sal_False ),
-                             bCommandNameCreated( sal_False ),
+            CmdToInfoMap() : bPopup( false ),
+                             bCommandNameCreated( false ),
                              nProperties( 0 ) {}
 
             rtl::OUString       aLabel;
             rtl::OUString       aContextLabel;
             rtl::OUString       aCommandName;
-            sal_Bool            bPopup : 1,
+            bool                bPopup : 1,
                                 bCommandNameCreated : 1;
             sal_Int32           nProperties;
         };
