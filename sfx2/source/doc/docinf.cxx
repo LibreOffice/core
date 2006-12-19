@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mav $ $Date: 2006-11-02 15:22:16 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:28:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,6 +507,43 @@ void SfxOleInt32Property::ImplSave( SvStream& rStrm )
 
 // ============================================================================
 
+/** Property representing a floating-point value. */
+class SfxOleDoubleProperty : public SfxOlePropertyBase
+{
+public:
+    explicit            SfxOleDoubleProperty( sal_Int32 nPropId, double fValue = 0.0 );
+
+    inline double       GetValue() const { return mfValue; }
+    inline void         SetValue( double fValue ) { mfValue = fValue; }
+
+private:
+    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplSave( SvStream& rStrm );
+
+private:
+    double              mfValue;
+};
+
+// ----------------------------------------------------------------------------
+
+SfxOleDoubleProperty::SfxOleDoubleProperty( sal_Int32 nPropId, double fValue ) :
+    SfxOlePropertyBase( nPropId, PROPTYPE_DOUBLE ),
+    mfValue( fValue )
+{
+}
+
+void SfxOleDoubleProperty::ImplLoad( SvStream& rStrm )
+{
+    rStrm >> mfValue;
+}
+
+void SfxOleDoubleProperty::ImplSave( SvStream& rStrm )
+{
+    rStrm << mfValue;
+}
+
+// ============================================================================
+
 /** Property representing a boolean value. */
 class SfxOleBoolProperty : public SfxOlePropertyBase
 {
@@ -900,6 +937,9 @@ public:
     /** Returns the value of a signed int32 property with the passed ID in rnValue.
         @return  true = Property found, rnValue is valid; false = Property not found. */
     bool                GetInt32Value( sal_Int32& rnValue, sal_Int32 nPropId ) const;
+    /** Returns the value of a floating-point property with the passed ID in rfValue.
+        @return  true = Property found, rfValue is valid; false = Property not found. */
+    bool                GetDoubleValue( double& rfValue, sal_Int32 nPropId ) const;
     /** Returns the value of a boolean property with the passed ID in rbValue.
         @return  true = Property found, rbValue is valid; false = Property not found. */
     bool                GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const;
@@ -915,6 +955,8 @@ public:
     void                SetProperty( SfxOlePropertyRef xProp );
     /** Inserts a signed int32 property with the passed value. */
     void                SetInt32Value( sal_Int32 nPropId, sal_Int32 nValue );
+    /** Inserts a foating-point property with the passed value. */
+    void                SetDoubleValue( sal_Int32 nPropId, double fValue );
     /** Inserts a boolean property with the passed value. */
     void                SetBoolValue( sal_Int32 nPropId, bool bValue );
     /** Inserts a string property with the passed value.
@@ -987,6 +1029,16 @@ bool SfxOleSection::GetInt32Value( sal_Int32& rnValue, sal_Int32 nPropId ) const
     return pProp != 0;
 }
 
+bool SfxOleSection::GetDoubleValue( double& rfValue, sal_Int32 nPropId ) const
+{
+    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    const SfxOleDoubleProperty* pProp =
+        dynamic_cast< const SfxOleDoubleProperty* >( xProp.get() );
+    if( pProp )
+        rfValue = pProp->GetValue();
+    return pProp != 0;
+}
+
 bool SfxOleSection::GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const
 {
     SfxOlePropertyRef xProp = GetProperty( nPropId );
@@ -1028,6 +1080,11 @@ void SfxOleSection::SetInt32Value( sal_Int32 nPropId, sal_Int32 nValue )
     SetProperty( SfxOlePropertyRef( new SfxOleInt32Property( nPropId, nValue ) ) );
 }
 
+void SfxOleSection::SetDoubleValue( sal_Int32 nPropId, double fValue )
+{
+    SetProperty( SfxOlePropertyRef( new SfxOleDoubleProperty( nPropId, fValue ) ) );
+}
+
 void SfxOleSection::SetBoolValue( sal_Int32 nPropId, bool bValue )
 {
     SetProperty( SfxOlePropertyRef( new SfxOleBoolProperty( nPropId, bValue ) ) );
@@ -1058,12 +1115,15 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
 {
     Any aValue;
     sal_Int32 nInt32 = 0;
+    double fDouble = 0.0;
     bool bBool = false;
     String aString;
     DateTime aDateTime;
 
     if( GetInt32Value( nInt32, nPropId ) )
         aValue <<= nInt32;
+    else if( GetDoubleValue( fDouble, nPropId ) )
+        aValue <<= fDouble;
     else if( GetBoolValue( bBool, nPropId ) )
         ::comphelper::setBOOL( aValue, bBool ? sal_True : sal_False );
     else if( GetStringValue( aString, nPropId ) )
@@ -1087,13 +1147,16 @@ bool SfxOleSection::SetAnyValue( sal_Int32 nPropId, const Any& rValue )
 {
     bool bInserted = true;
     sal_Int32 nInt32 = 0;
+    double fDouble = 0.0;
     OUString aString;
     ::com::sun::star::util::DateTime aApiDateTime;
 
-    if( rValue >>= nInt32 )
-        SetInt32Value( nPropId, nInt32 );
-    else if( rValue.getValueType() == ::getBooleanCppuType() )
+    if( rValue.getValueType() == ::getBooleanCppuType() )
         SetBoolValue( nPropId, ::comphelper::getBOOL( rValue ) == sal_True );
+    else if( rValue >>= nInt32 )
+        SetInt32Value( nPropId, nInt32 );
+    else if( rValue >>= fDouble )
+        SetDoubleValue( nPropId, fDouble );
     else if( rValue >>= aString )
         bInserted = SetStringValue( nPropId, aString );
     else if( rValue >>= aApiDateTime )
@@ -1220,6 +1283,7 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
         SaveProperty( rStrm, *aIt->second, nPropPosPos );
 
     // write section size (first field in section header)
+    rStrm.Seek( STREAM_SEEK_TO_END );
     sal_uInt32 nSectSize = static_cast< sal_uInt32 >( rStrm.Tell() - mnStartPos );
     rStrm.Seek( mnStartPos );
     rStrm << nSectSize;
@@ -1242,6 +1306,9 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
     {
         case PROPTYPE_INT32:
             xProp.reset( new SfxOleInt32Property( nPropId ) );
+        break;
+        case PROPTYPE_DOUBLE:
+            xProp.reset( new SfxOleDoubleProperty( nPropId ) );
         break;
         case PROPTYPE_BOOL:
             xProp.reset( new SfxOleBoolProperty( nPropId ) );
@@ -2028,6 +2095,9 @@ BOOL SfxDocumentInfo::SavePropertySet( SotStorage* pStorage ) const
     // *** custom properties into stream "005DocumentSummaryInformation" ***
 
     SfxOlePropertySet aDocSet;
+
+    // set builtin properties
+    aDocSet.AddSection( SECTION_BUILTIN );
 
     // set custom properties
     SfxOleSection& rCustomSect = aDocSet.AddSection( SECTION_CUSTOM );
