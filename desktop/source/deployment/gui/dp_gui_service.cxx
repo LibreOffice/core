@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:58:41 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "dp_gui_shared.hxx"
 #include "dp_gui.h"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
@@ -55,8 +56,10 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
 using ::rtl::OUString;
 
+namespace css = ::com::sun::star;
 namespace dp_gui {
 
 //==============================================================================
@@ -95,6 +98,7 @@ class ServiceImpl
     Reference<XComponentContext> const m_xComponentContext;
     boost::optional< Reference<awt::XWindow> > /* const */ m_parent;
     boost::optional<OUString> /* const */ m_view;
+    boost::optional<Sequence<OUString> > m_extensions;
     OUString m_initialTitle;
 
 public:
@@ -118,7 +122,16 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
                           Reference<XComponentContext> const& xComponentContext)
     : m_xComponentContext(xComponentContext)
 {
-    comphelper::unwrapArgs( args, m_parent, m_view );
+    try {
+        comphelper::unwrapArgs( args, m_parent, m_view );
+        return;
+    } catch (css::lang::IllegalArgumentException & ) {
+    }
+    try {
+        comphelper::unwrapArgs( args, m_extensions, m_view );
+    } catch (css::lang::IllegalArgumentException & ) {
+    }
+
 }
 
 // XAsynchronousExecutableDialog
@@ -131,6 +144,7 @@ void ServiceImpl::setDialogTitle( OUString const & title )
         ::dp_gui::DialogImpl::get(
             m_xComponentContext,
             m_parent ? *m_parent : Reference<awt::XWindow>(),
+            m_extensions ? *m_extensions : Sequence<OUString>(),
             m_view ? *m_view : OUString() )->SetText( title );
     }
     else
@@ -179,6 +193,14 @@ void ServiceImpl::startExecuteModal(
             app->SetSettings( as );
         }
     }
+    else
+    {
+        //Currently we do not support the case that if the Extension Manager is
+        //open in an office an unopkg can be executed. This should be fixed in the future.
+        ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,DeploymentGuiResMgr::get() );
+        WarningBox warn(NULL, warnId);
+        warn.Execute();
+    }
 
     {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
@@ -186,6 +208,7 @@ void ServiceImpl::startExecuteModal(
             ::dp_gui::DialogImpl::get(
                 m_xComponentContext,
                 m_parent ? *m_parent : Reference<awt::XWindow>(),
+                m_extensions ? *m_extensions : Sequence<OUString>(),
                 m_view ? *m_view : OUString() ) );
         if (m_initialTitle.getLength() > 0) {
             dialog->SetText( m_initialTitle );
