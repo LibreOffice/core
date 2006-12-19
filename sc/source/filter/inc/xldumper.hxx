@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:23:41 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,7 +538,6 @@ private:
     sal_uInt16          DumpCellHeader( bool bBiff2Style = false );
     void                DumpBoolErr();
 
-    void                DumpCodePageRec();
     void                DumpFontRec();
     void                DumpFormatRec();
     void                DumpXfRec();
@@ -557,6 +556,7 @@ private:
     sal_uInt16          mnPTRowFields;
     sal_uInt16          mnPTColFields;
     sal_uInt16          mnPTSxliIdx;
+    bool                mbHasCodePage;
 };
 
 // ============================================================================
