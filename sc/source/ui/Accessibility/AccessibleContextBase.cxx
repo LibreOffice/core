@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:01:51 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,7 @@ sal_Int16 SAL_CALL
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.Source = uno::Reference< XAccessibleContext >(this);
             aEvent.OldValue <<= msDescription;
             aEvent.NewValue <<= sDescription;
 
@@ -413,7 +413,7 @@ OUString SAL_CALL
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.Source = uno::Reference< XAccessibleContext >(this);
             aEvent.OldValue <<= msName;
             aEvent.NewValue <<= sName;
 
@@ -611,7 +611,7 @@ void ScAccessibleContextBase::ChangeName()
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.OldValue <<= msName;
 
     msName = rtl::OUString(); // reset the name so it will be hold again
@@ -626,7 +626,7 @@ void ScAccessibleContextBase::CommitDefunc() const
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.NewValue <<= AccessibleStateType::DEFUNC;
 
     CommitChange(aEvent);
@@ -636,7 +636,7 @@ void ScAccessibleContextBase::CommitFocusGained() const
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.NewValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
@@ -648,7 +648,7 @@ void ScAccessibleContextBase::CommitFocusLost() const
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.OldValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
