@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:30 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     String aName = GetText();
     // aDatName is empty if invoked during paste from clipboard.
-    if (aDatName.Len())
+    BOOL bClipboard = (aDatName.Len() == 0);
+    if (!bClipboard)
     {
         aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
         aName += aDatName;
@@ -183,9 +184,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     }
     maFieldSeparators = GetSeparators();
 
-    BOOL bPreselectUnicode = FALSE;
+    // Clipboard is always Unicode, else detect.
+    BOOL bPreselectUnicode = bClipboard;
     // Sniff for Unicode / not
-    if( mpDatStream )
+    if( !bPreselectUnicode && mpDatStream )
     {
         Seek( 0 );
         mpDatStream->StartReadingUnicodeText();
