@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:53:32 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1618,9 +1618,14 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             }
         }
     }
+    else if( p_nPrefix == XML_NAMESPACE_SVG &&  // #i68101#
+                (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
+    {
+        pContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
+    }
     else
     {
-        // the child is a drawinh�g shape
+        // the child is a drawing shape
         pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
                                     &m_xImplContext, p_nPrefix, rLocalName, xAttrList );
     }
