@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:20:09 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1776,6 +1776,12 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     }
 
     UpdateDrawLanguages();      // set edit engine defaults in drawing layer pool
+}
+
+void ScDocument::SetDrawDefaults()
+{
+    bSetDrawDefaults = TRUE;
+    UpdateDrawDefaults();
 }
 
 Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow,
