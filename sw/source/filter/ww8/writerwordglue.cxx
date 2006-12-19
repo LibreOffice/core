@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:20:58 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,10 @@ namespace sw
                 dyaHdrBottom = pBox->CalcLineSpace(BOX_LINE_BOTTOM);
             }
             else
+            {
                 dyaHdrTop = dyaHdrBottom = 0;
+                dyaHdrBottom = 0;
+            }
             const SvxULSpaceItem &rUL =
                 ItemGet<SvxULSpaceItem>(rPage, RES_UL_SPACE);
             dyaHdrTop += rUL.GetUpper();
@@ -535,6 +538,8 @@ namespace sw
                 mbHasHeader = true;
                 dyaTop += (CalcHdDist(*(pHd->GetHeaderFmt())));
             }
+            else
+                mbHasHeader = false;
 
             const SwFmtFooter *pFt = HasItem<SwFmtFooter>(rPage, RES_FOOTER);
             if (pFt && pFt->IsActive() && pFt->GetFooterFmt())
@@ -542,6 +547,8 @@ namespace sw
                 mbHasFooter = true;
                 dyaBottom += (CalcFtDist(*(pFt->GetFooterFmt())));
             }
+            else
+                mbHasFooter = false;
         }
 
         bool HdFtDistanceGlue::EqualTopBottom(const HdFtDistanceGlue &rOther)
