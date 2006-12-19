@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:18:58 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ void XclFontData::FillFromFont( const Font& rFont )
     mnColor = EXC_COLOR_FONTAUTO;
     SetScWeight( rFont.GetWeight() );
     SetScFamily( rFont.GetFamily() );
-    SetScCharSet( rFont.GetCharSet() );
+    SetFontEncoding( rFont.GetCharSet() );
     SetScPosture( rFont.GetItalic() );
     SetScStrikeout( rFont.GetStrikeout() );
     mbOutline = rFont.IsOutline();
@@ -252,7 +252,7 @@ void XclFontData::FillFromSvxFont( const SvxFont& rFont )
 
 // *** conversion of VCL/SVX constants *** ------------------------------------
 
-FontFamily XclFontData::GetScFamily( CharSet eDefCharSet ) const
+FontFamily XclFontData::GetScFamily( rtl_TextEncoding eDefTextEnc ) const
 {
     FontFamily eScFamily;
     // ! format differs from Windows documentation: family is in lower nibble, pitch unknown
@@ -265,15 +265,16 @@ FontFamily XclFontData::GetScFamily( CharSet eDefCharSet ) const
         case EXC_FONTFAM_DECORATIVE:    eScFamily = FAMILY_DECORATIVE;  break;
         default:
             eScFamily =
-                ((eDefCharSet == RTL_TEXTENCODING_APPLE_ROMAN) &&
+                ((eDefTextEnc == RTL_TEXTENCODING_APPLE_ROMAN) &&
                 (maName.EqualsIgnoreCaseAscii( "Geneva" ) || maName.EqualsIgnoreCaseAscii( "Chicago" ))) ?
                 FAMILY_SWISS : FAMILY_DONTKNOW;
     }
     return eScFamily;
 }
 
-CharSet XclFontData::GetScCharSet() const
+rtl_TextEncoding XclFontData::GetFontEncoding() const
 {
+    // convert Windows character set to text encoding identifier
     return rtl_getTextEncodingFromWindowsCharset( mnCharSet );
 }
 
@@ -352,9 +353,10 @@ void XclFontData::SetScFamily( FontFamily eScFamily )
     }
 }
 
-void XclFontData::SetScCharSet( CharSet eScCharSet )
+void XclFontData::SetFontEncoding( rtl_TextEncoding eFontEnc )
 {
-    mnCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eScCharSet );
+    // convert text encoding identifier to Windows character set
+    mnCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontEnc );
 }
 
 
@@ -434,9 +436,10 @@ sal_Int16 XclFontData::GetApiFamily() const
     return nApiFamily;
 }
 
-sal_Int16 XclFontData::GetApiCharSet() const
+sal_Int16 XclFontData::GetApiFontEncoding() const
 {
-    return static_cast< sal_Int16 >( GetScCharSet() );
+    // API constants are equal to rtl_TextEncoding constants
+    return static_cast< sal_Int16 >( GetFontEncoding() );
 }
 
 Awt::FontSlant XclFontData::GetApiPosture() const
@@ -497,9 +500,10 @@ void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
     }
 }
 
-void XclFontData::SetApiCharSet( sal_Int16 nApiCharSet )
+void XclFontData::SetApiFontEncoding( sal_Int16 nApiFontEnc )
 {
-    SetScCharSet( static_cast< CharSet >( nApiCharSet ) );
+    // API constants are equal to rtl_TextEncoding constants
+    SetFontEncoding( static_cast< rtl_TextEncoding >( nApiFontEnc ) );
 }
 
 void XclFontData::SetApiPosture( Awt::FontSlant eApiPosture )
@@ -666,7 +670,7 @@ void XclFontPropSetHelper::WriteFontProperties(
             maHlpControl.InitializeWrite();
             maHlpControl    << rFontData.maName
                             << rFontData.GetApiFamily()
-                            << rFontData.GetApiCharSet()
+                            << rFontData.GetApiFontEncoding()
                             << static_cast< sal_Int16 >( rFontData.GetApiHeight() + 0.5 )
                             << rFontData.GetApiPosture()
                             << rFontData.GetApiWeight()
