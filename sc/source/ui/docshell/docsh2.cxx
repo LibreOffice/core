@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:45:32 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
         // hier muss auch der Start angepasst werden
         SetVisAreaOrSize( Rectangle( Point(), aSize ), TRUE );
     }
+
+    aDocument.SetDrawDefaults();        // drawing layer defaults that are set only in InitNew
 
     // InitOptions sets the document languages, must be called before CreateStandardStyles
     InitOptions();
