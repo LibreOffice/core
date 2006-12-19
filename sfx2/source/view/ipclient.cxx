@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 09:52:21 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -828,6 +828,24 @@ void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fractio
         // not to call it here, but maybe it sounds reasonable to do so.
         //Invalidate();
     }
+}
+
+//--------------------------------------------------------------------
+sal_Bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
+{
+    if( rArea != m_pImp->m_aObjArea || m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
+    {
+        m_pImp->m_aObjArea = rArea;
+        m_pImp->m_aScaleWidth = rScaleWidth;
+        m_pImp->m_aScaleHeight = rScaleHeight;
+
+        m_pImp->SizeHasChanged();
+
+        Invalidate();
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
