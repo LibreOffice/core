@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shells.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:16:55 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,8 +101,10 @@
 #define STR_REDLINE_REJECT_ALL      (RC_SHELLS_BEGIN + 55)
 #define STR_REDLINE_EDIT            (RC_SHELLS_BEGIN + 56)
 #define STR_REDLINE_AUTOFMT         (RC_SHELLS_BEGIN + 57)
-#define STR_NAME_SHAPE_LABEL        (RC_SHELLS_BEGIN + 58)
-#define STR_NAME_SHAPE_DIALOG       (RC_SHELLS_BEGIN + 59)
+
+// #i68101# no longer needed
+// #define STR_NAME_SHAPE_LABEL        (RC_SHELLS_BEGIN + 58)
+// #define STR_NAME_SHAPE_DIALOG       (RC_SHELLS_BEGIN + 59)
 
 #define RID_MODULE_TOOLBOX          (RC_SHELLS_BEGIN + 60)
 
