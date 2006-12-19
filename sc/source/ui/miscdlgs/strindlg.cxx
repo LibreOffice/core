@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strindlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:10:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,9 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
 
     DBG_ASSERT( nHelpId == FID_TAB_APPEND || nHelpId == FID_TAB_RENAME ||
                 nHelpId == HID_SC_ADD_AUTOFMT || nHelpId == HID_SC_RENAME_AUTOFMT ||
-                nHelpId == SID_RENAME_OBJECT,
+                nHelpId == SID_RENAME_OBJECT ||
+                // #i68101#
+                nHelpId == SID_TITLE_DESCRIPTION_OBJECT,
                 "unknown ID" );
     if ( nHelpId == FID_TAB_APPEND )
         aEdInput.SetHelpId( HID_SC_APPEND_NAME );
@@ -86,6 +88,9 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
         aEdInput.SetHelpId( HID_SC_REN_AFMT_NAME );
     else if ( nHelpId == SID_RENAME_OBJECT )
         aEdInput.SetHelpId( HID_SC_RENAME_OBJECT );
+    // #i68101#
+    else if ( nHelpId == SID_TITLE_DESCRIPTION_OBJECT )
+        aEdInput.SetHelpId( HID_SC_TITLE_DESCRIPTION_OBJECT );
 
     //-------------
     FreeResource();
