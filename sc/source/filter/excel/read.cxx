@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:21:04 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,7 +596,6 @@ FltError ImportExcel::Read( void )
                     case 0x1E:  rNumFmtBfr.ReadFormat( maStrm );        break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x31:  rFontBfr.ReadFont( maStrm );            break;
-                    case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345]
                     case 0xDE:  Olesize(); break;
@@ -996,7 +995,6 @@ FltError ImportExcel8::Read( void )
                     break;
                     case 0x0E:  Precision(); break;     // PRECISION
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
-                    case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
                     case 0xD3:  ReadBasic(); break;
