@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:55:57 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,13 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
     }
     if (pGluePoints!=NULL) pNeuPlusData->pGluePoints=new SdrGluePointList(*pGluePoints);
     // MtfAnimator wird auch nicht mitkopiert
-    pNeuPlusData->aObjName=aObjName;
+
+    // #i68101#
+    // copy object name, title and description
+    pNeuPlusData->aObjName = aObjName;
+    pNeuPlusData->aObjTitle = aObjTitle;
+    pNeuPlusData->aObjDescription = aObjDescription;
+
     if (pAutoTimer!=NULL) {
         pNeuPlusData->pAutoTimer=new AutoTimer;
         // Handler, etc. nicht mitkopieren!
@@ -754,58 +760,99 @@ SdrObject* SdrObject::GetUpGroup() const
     return pObjList!=NULL ? pObjList->GetOwnerObj() : NULL;
 }
 
-FASTBOOL SdrObject::HasSetName() const
+void SdrObject::SetName(const String& rStr)
 {
-    return TRUE;
-}
-
-void SdrObject::SetName(const XubString& rStr)
-{
-    if(rStr.Len())
+    if(rStr.Len() && !pPlusData)
     {
         ImpForcePlusData();
-        pPlusData->aObjName = rStr;
     }
-    else
+
+    if(pPlusData && pPlusData->aObjName != rStr)
     {
-        if(pPlusData)
-        {
-            pPlusData->aObjName = rStr;
-        }
+        pPlusData->aObjName = rStr;
+        SetChanged();
     }
 }
 
-XubString SdrObject::GetName() const
+String SdrObject::GetName() const
 {
-    SdrObjPlusData* pPlus=pPlusData;
-    if (pPlus!=NULL) {
-        return pPlus->aObjName;
+    if(pPlusData)
+    {
+        return pPlusData->aObjName;
     }
+
     return String();
 }
 
-// support for HTMLName
-void SdrObject::SetHTMLName(const XubString& rStr)
+void SdrObject::SetTitle(const String& rStr)
 {
-    if(rStr.Len())
+    if(rStr.Len() && !pPlusData)
     {
         ImpForcePlusData();
-        pPlusData->aHTMLName = rStr;
     }
-    else
+
+    if(pPlusData && pPlusData->aObjTitle != rStr)
     {
-        if(pPlusData)
-        {
-            pPlusData->aHTMLName.Erase();
-        }
+        pPlusData->aObjTitle = rStr;
+        SetChanged();
     }
 }
 
-// support for HTMLName
-XubString SdrObject::GetHTMLName() const
+String SdrObject::GetTitle() const
 {
     if(pPlusData)
+    {
+        return pPlusData->aObjTitle;
+    }
+
+    return String();
+}
+
+void SdrObject::SetDescription(const String& rStr)
+{
+    if(rStr.Len() && !pPlusData)
+    {
+        ImpForcePlusData();
+    }
+
+    if(pPlusData && pPlusData->aObjDescription != rStr)
+    {
+        pPlusData->aObjDescription = rStr;
+        SetChanged();
+    }
+}
+
+String SdrObject::GetDescription() const
+{
+    if(pPlusData)
+    {
+        return pPlusData->aObjDescription;
+    }
+
+    return String();
+}
+
+void SdrObject::SetHTMLName(const String& rStr)
+{
+    if(rStr.Len() && !pPlusData)
+    {
+        ImpForcePlusData();
+    }
+
+    if(pPlusData && pPlusData->aObjName != rStr)
+    {
+        pPlusData->aHTMLName = rStr;
+        SetChanged();
+    }
+}
+
+String SdrObject::GetHTMLName() const
+{
+    if(pPlusData)
+    {
         return pPlusData->aHTMLName;
+    }
+
     return String();
 }
 
@@ -2658,13 +2705,11 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, FASTBOOL bMerge) const
     if (rLogic.GetHeight()!=rSnap.GetHeight()) {
         lcl_SetItem(rAttr,bMerge,SdrLogicSizeHeightItem(rLogic.GetHeight()-1));
     }
-    if (HasSetName()) {
-        XubString aName(GetName());
+    XubString aName(GetName());
 
-        if(aName.Len())
-        {
-            lcl_SetItem(rAttr, bMerge, SdrObjectNameItem(aName));
-        }
+    if(aName.Len())
+    {
+        lcl_SetItem(rAttr, bMerge, SdrObjectNameItem(aName));
     }
 
     lcl_SetItem(rAttr,bMerge,SdrLayerIdItem(GetLayer()));
