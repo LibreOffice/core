@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.sdi,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:42:48 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,9 @@ interface TableDraw
     SID_HYPERLINK_SETLINK   [ ExecMethod = ExecuteHLink; Export = FALSE; ]
     SID_HYPERLINK_GETLINK   [ StateMethod = GetHLinkState; Export = FALSE; ]
     SID_ENABLE_HYPHENATION  [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+
+    // #i68101#
+    SID_TITLE_DESCRIPTION_OBJECT [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_RENAME_OBJECT       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
 
     SID_FORMATPAINTBRUSH    [ ExecMethod = ExecFormatPaintbrush; StateMethod = StateFormatPaintbrush; ]
