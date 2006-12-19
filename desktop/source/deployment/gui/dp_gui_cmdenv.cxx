@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:53:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
+#include "com/sun/star/deployment/InstallException.hpp"
 #include "com/sun/star/deployment/ui/LicenseDialog.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include "tools/resid.hxx"
@@ -272,6 +273,7 @@ void ProgressCommandEnv::handle(
     deployment::DependencyException depExc;
     deployment::LicenseException licExc;
     deployment::VersionException verExc;
+    deployment::InstallException instExc;
     bool bLicenseException = false;
     // selections:
     bool approve = false;
@@ -413,6 +415,26 @@ void ProgressCommandEnv::handle(
             abort = !approve;
         }
     }
+    else if (request >>= instExc)
+    {
+        //Only if the unopgk was started with gui + extension then we ask the user
+        if (!m_bAskWhenInstalling)
+        {
+            approve = true;
+        }
+        else
+        {
+            vos::OGuard guard(Application::GetSolarMutex());
+            InfoBox box(activeDialog(), ResId(RID_QUERYBOX_INSTALL_EXTENSION, DeploymentGuiResMgr::get()));
+            box.SetText(m_mainDialog->GetText());
+            String s(box.GetMessText());
+            s.SearchAndReplaceAllAscii("%NAME", instExc.New->getDisplayName());
+            box.SetMessText(s);
+            approve = box.Execute() == RET_OK;
+            abort = !approve;
+        }
+    }
+
 
     if (approve == false && abort == false)
     {
