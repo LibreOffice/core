@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:14:35 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -778,14 +778,12 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 {
                     if (pRecord)
                         SetAttributesAtGrfNode(pRecord, pRet, 0);
-                    // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-                    if (pObject->HasSetName())
-                        pRet->SetName(pObject->GetName());
-                    else
-                    {
-                        String aObjectName(pObject->GetName());
-                        maGrfNameGenerator.SetUniqueGraphName(pRet, aObjectName);
-                    }
+
+                    // #i68101#
+                    // removed pObject->HasSetName() usage since always returned true,
+                    // also removed else-part and wrote an informing mail to Henning Brinkmann
+                    // about this to clarify.
+                    pRet->SetName(pObject->GetName());
 
                     // Zeiger auf neues Objekt ermitteln und Z-Order-Liste
                     // entsprechend korrigieren (oder Eintrag loeschen)
