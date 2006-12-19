@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:27:24 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:02:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ class ConfigurationAccess_PopupMenuControllerFactory : // interfaces
             }
         };
 
-        sal_Bool impl_getElementProps( const Any& aElement, rtl::OUString& aCommand, rtl::OUString aModule, rtl::OUString& aServiceSpecifier ) const;
+        sal_Bool impl_getElementProps( const Any& aElement, rtl::OUString& aCommand, rtl::OUString& aModule, rtl::OUString& aServiceSpecifier ) const;
 
         rtl::OUString                     m_aPropCommand;
         rtl::OUString                     m_aPropModule;
@@ -383,7 +383,7 @@ void ConfigurationAccess_PopupMenuControllerFactory::readConfigurationData()
     }
 }
 
-sal_Bool ConfigurationAccess_PopupMenuControllerFactory::impl_getElementProps( const Any& aElement, rtl::OUString& aCommand, rtl::OUString aModule, rtl::OUString& aServiceSpecifier ) const
+sal_Bool ConfigurationAccess_PopupMenuControllerFactory::impl_getElementProps( const Any& aElement, rtl::OUString& aCommand, rtl::OUString& aModule, rtl::OUString& aServiceSpecifier ) const
 {
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
