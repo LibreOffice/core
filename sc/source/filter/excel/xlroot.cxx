@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:22:27 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,12 +132,12 @@ XclDebugObjCounter::~XclDebugObjCounter()
 // ----------------------------------------------------------------------------
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-        SotStorageRef xRootStrg, ScDocument& rDoc, CharSet eCharSet, bool bExport ) :
+        SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
     meBiff( eBiff ),
     mrMedium( rMedium ),
     mxRootStrg( xRootStrg ),
     mrDoc( rDoc ),
-    meCharSet( eCharSet ),
+    meTextEnc( eTextEnc ),
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
@@ -230,14 +230,20 @@ XclRoot& XclRoot::operator=( const XclRoot& rRoot )
     return *this;
 }
 
+void XclRoot::SetTextEncoding( rtl_TextEncoding eTextEnc )
+{
+    if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
+        mrData.meTextEnc = eTextEnc;
+}
+
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
 {
     mrData.mnCharWidth = 0;
     if( SfxPrinter* pPrinter = GetPrinter() )
     {
         Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
-        aFont.SetFamily( rFontData.GetScFamily( GetCharSet() ) );
-        aFont.SetCharSet( rFontData.GetScCharSet() );
+        aFont.SetFamily( rFontData.GetScFamily( GetTextEncoding() ) );
+        aFont.SetCharSet( rFontData.GetFontEncoding() );
         aFont.SetWeight( rFontData.GetScWeight() );
         pPrinter->SetFont( aFont );
         mrData.mnCharWidth = pPrinter->GetTextWidth( String( '0' ) );
