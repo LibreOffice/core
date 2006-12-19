@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_ooo.ulf,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:41:33 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:40:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 [STR_REG_VAL_NEW]
 en-US = "&New"
 de = "&Neu"
+
+[STR_REG_VAL_INSTALL]
+en-US = "&Install"
+de = "&Installiere"
 
 [STR_REG_VAL_SO52_CHART_OOO]
 en-US = "StarOffice 5.0 Chart"
