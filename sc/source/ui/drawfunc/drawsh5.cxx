@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:57 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,71 +535,112 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_RENAME_OBJECT:
             {
-                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-                if ( rMarkList.GetMarkCount() == 1 )
+                if(1L == pView->GetMarkedObjectCount())
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    if ( pObj->GetLayer() != SC_LAYER_INTERN )
+                    // #i68101#
+                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0L);
+                    OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
+
+                    if(SC_LAYER_INTERN != pSelected->GetLayer())
                     {
-                        UINT16 nObjType = pObj->GetObjIdentifier();
+                        String aName(pSelected->GetName());
 
-                        // PersistName is used to identify object in Undo
-                        String aPersistName;
-                        if ( nObjType == OBJ_OLE2 )
-                            aPersistName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
-
-                        String aOldName = pObj->GetName();
-                        String aTitle(ScResId(SCSTR_RENAMEOBJECT));
-                        String aDesc(ScResId(SCSTR_NAME));
-
-                        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( NULL, aOldName, aDesc );
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( NULL, aOldName, aDesc, ResId(RID_SVXDLG_NAME) );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-                        pDlg->SetEditHelpId( HID_SC_DRAW_RENAME );
-                        pDlg->SetText( aTitle );
-                        pDlg->SetCheckNameHdl( LINK( this, ScDrawShell, NameObjectHdl ) );
+                        OSL_ENSURE(pFact, "Dialogdiet fail!");
+                        AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, ResId(RID_SVXDLG_OBJECT_NAME));
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
-                        USHORT nRet = pDlg->Execute();
-                        if ( nRet == RET_OK )
+                        pDlg->SetCheckNameHdl(LINK(this, ScDrawShell, NameObjectHdl));
+
+                        if(RET_OK == pDlg->Execute())
                         {
-                            String aNewName;
-                            pDlg->GetName( aNewName );
-                            if ( aNewName != aOldName )
+                            ScDocShell* pDocSh = pViewData->GetDocShell();
+                            pDlg->GetName(aName);
+
+                            if(aName != pSelected->GetName())
                             {
-                                if ( nObjType == OBJ_GRAF && aNewName.Len() == 0 )
+                                // handle name change
+                                const sal_uInt16 nObjType(pSelected->GetObjIdentifier());
+
+                                if(OBJ_GRAF == nObjType && 0L == aName.Len())
                                 {
                                     //  graphics objects must have names
                                     //  (all graphics are supposed to be in the navigator)
                                     ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
-                                    if ( pModel )
-                                        aNewName = pModel->GetNewGraphicName();
+
+                                    if(pModel)
+                                    {
+                                        aName = pModel->GetNewGraphicName();
+                                    }
                                 }
-
-                                pObj->SetName( aNewName );              // set new name
-
-                                ScDocShell* pDocSh = pViewData->GetDocShell();
 
                                 //  An undo action for renaming is missing in svdraw (99363).
                                 //  For OLE objects (which can be identified using the persist name),
                                 //  ScUndoRenameObject can be used until there is a common action for all objects.
-                                if ( aPersistName.Len() )
+                                if(OBJ_OLE2 == nObjType)
                                 {
-                                    pDocSh->GetUndoManager()->AddUndoAction(
-                                                new ScUndoRenameObject( pDocSh, aPersistName, aOldName, aNewName ) );
+                                    const String aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
+
+                                    if(aPersistName.Len())
+                                    {
+                                        pDocSh->GetUndoManager()->AddUndoAction(
+                                            new ScUndoRenameObject(pDocSh, aPersistName, pSelected->GetName(), aName));
+                                    }
                                 }
 
-                                // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                                pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( TRUE );
-                                pDocSh->SetDrawModified();
+                                // set new name
+                                pSelected->SetName(aName);
                             }
+
+                            // ChartListenerCollectionNeedsUpdate is needed for Navigator update
+                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( TRUE );
+                            pDocSh->SetDrawModified();
                         }
+
                         delete pDlg;
                     }
                 }
+                break;
             }
-            break;
+
+        // #i68101#
+        case SID_TITLE_DESCRIPTION_OBJECT:
+            {
+                if(1L == pView->GetMarkedObjectCount())
+                {
+                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0L);
+                    OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
+
+                    if(SC_LAYER_INTERN != pSelected->GetLayer())
+                    {
+                        String aTitle(pSelected->GetTitle());
+                        String aDescription(pSelected->GetDescription());
+
+                        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                        OSL_ENSURE(pFact, "Dialogdiet fail!");
+                        AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, ResId(RID_SVXDLG_OBJECT_TITLE_DESC));
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                        if(RET_OK == pDlg->Execute())
+                        {
+                            ScDocShell* pDocSh = pViewData->GetDocShell();
+
+                            // handle Title and Description
+                            pDlg->GetTitle(aTitle);
+                            pDlg->GetDescription(aDescription);
+                            pSelected->SetTitle(aTitle);
+                            pSelected->SetDescription(aDescription);
+
+                            // ChartListenerCollectionNeedsUpdate is needed for Navigator update
+                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( TRUE );
+                            pDocSh->SetDrawModified();
+                        }
+
+                        delete pDlg;
+                    }
+                }
+                break;
+            }
 
         case SID_EXTRUSION_TOOGLE:
         case SID_EXTRUSION_TILT_DOWN:
