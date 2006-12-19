@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:11:25 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,6 +669,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_ABSTRACT_STARIMPRESS      (FN_FORMAT2 + 13)  /* Abstract an StarImpress */
 /* OD 2006-03-09 #i51726# - all drawing objects can be named now. */
 #define FN_NAME_SHAPE                (FN_FORMAT2 + 14)  /* Name shapes */
+
+// #i68101#
+#define FN_TITLE_DESCRIPTION_SHAPE   (FN_FORMAT2 + 15)  /* shape title and description */
 
 #define FN_NUMBER_FORMAT                    (FN_FORMAT2 + 120) /* Boxen/NumberFormatter eistellen */
 #define FN_NUMBER_STANDARD                  (FN_FORMAT2 + 121)
