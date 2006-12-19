@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:59:12 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,8 +351,6 @@ SfxObjectShell::~SfxObjectShell()
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage() == pImp->m_xDocStorage )
         pMedium->CanDisposeStorage_Impl( sal_False );
 
-    DELETEX( pMedium );
-
     if ( pImp->mpObjectContainer )
     {
         pImp->mpObjectContainer->CloseEmbeddedObjects();
@@ -361,6 +359,12 @@ SfxObjectShell::~SfxObjectShell()
 
     if ( pImp->bOwnsStorage && pImp->m_xDocStorage.is() )
         pImp->m_xDocStorage->dispose();
+
+    if ( pMedium )
+    {
+        pMedium->CloseAndReleaseStreams_Impl();
+        DELETEX( pMedium );
+    }
 
     // The removing of the temporary file must be done as the latest step in the document destruction
     if ( pImp->aTempName.Len() )
