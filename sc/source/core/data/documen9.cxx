@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:02 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,10 @@
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
+#define ITEMID_AUTOKERN EE_CHAR_PAIRKERNING
 
 #include <sot/exchange.hxx>
+#include <svx/akrnitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/langitem.hxx>
@@ -297,6 +299,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         pDrawLayer->SetDefaultTabulator( GetDocOptions().GetTabDistance() );
 
         UpdateDrawPrinter();
+        UpdateDrawDefaults();
         UpdateDrawLanguages();
         if (bImportingXML)
             pDrawLayer->EnableAdjust(FALSE);
@@ -315,6 +318,17 @@ void ScDocument::UpdateDrawLanguages()
         rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
         rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, EE_CHAR_LANGUAGE_CJK ) );
         rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, EE_CHAR_LANGUAGE_CTL ) );
+    }
+}
+
+void ScDocument::UpdateDrawDefaults()
+{
+    // drawing layer defaults that are set for new documents (if InitNew was called)
+
+    if ( pDrawLayer && bSetDrawDefaults )
+    {
+        SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
+        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
     }
 }
 
