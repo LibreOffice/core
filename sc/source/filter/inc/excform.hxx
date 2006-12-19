@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:50:45 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ protected:
     const XclBiff       meBiff;
 
     // ---------------------------------------------------------------
-    void                DoMulArgs( DefTokenId, BYTE );
+    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
 
     void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData&, const BOOL bName );
 
