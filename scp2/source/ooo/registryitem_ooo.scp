@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_ooo.scp,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:15:38 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:40:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,39 +581,77 @@ End
 
 // "OpenWith" Windows Registry keys for extensions supported by OOo
 
-
 // new oxt file extension for office extension packages
-//RegistryItem gid_Regitem_Oxt
-//    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-//    ModuleID = gid_Module_Root;
-//    Subkey = ".oxt";
-//    Value = "office.Extension.1";
-//End
+RegistryItem gid_Regitem_Oxt
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = ".oxt";
+    Value = "office.Extension.1";
+    Styles = (PATCH);
+End
 
-//RegistryItem gid_Regitem_Office_Extension_Curver
-//    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-//    ModuleID = gid_Module_Root;
-//    Subkey = "office.Extension\CurVer";
-//    Value = "office.Extension.1";
-//End
+RegistryItem gid_Regitem_Oxt_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = ".oxt";
+    Name = "Content Type";
+    Value = "application/vnd.openofficeorg.extension";
+    Styles = (PATCH);
+End
 
-//RegistryItem gid_Regitem_Office_Extension_1
-//    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-//    ModuleID = gid_Module_Root;
-//    Subkey = "office.Extension.1";
-//End
+RegistryItem gid_Regitem_Oxt_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "MIME\Database\Content Type\application/vnd.openofficeorg.extension";
+    Name = "Extension";
+    Value = ".oxt";
+    Styles = (PATCH);
+End
 
-//RegistryItem gid_Regitem_Office_Extension_1_Shell
-//    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-//    ModuleID = gid_Module_Root;
-//    Subkey = "office.Extension.1\shell";
-//    Value = "open";
-//End
+RegistryItem gid_Regitem_Office_Extension_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension\CurVer";
+    Value = "office.Extension.1";
+    Styles = (PATCH);
+End
 
-//RegistryItem gid_Regitem_Office_Extension_1_Shell_Open_Command
-//    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-//    ModuleID = gid_Module_Root;
-//    Subkey = "office.Extension.1\shell\open\command";
-//    Value = "\"<progpath>\program\unopkg\" add \"%1\"";
-//End
+RegistryItem gid_Regitem_Office_Extension_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1";
+    Value = "%PRODUCTNAME Extension";
+    Styles = (PATCH);
+End
 
+RegistryItem gid_Regitem_Office_Extension_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell";
+    Value = "open";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Shell_Open
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell\open";
+    REG_VALUE_LNG(INSTALL)
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell\open\command";
+    Value = "\"<progpath>\program\unopkg.exe\" gui \"%1\"";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,39";
+    Styles = (PATCH);
+End
