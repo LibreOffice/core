@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:20 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_INET_MOZPLUGIN:            fnCreate = &MozPluginTabPage::Create; break;
         //added by jmeng end
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
-            case RID_SVXPAGE_ONLINEUPDATE:                          fnCreate = &SvxOnlineUpdateTabPage::Create; break;
+        case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
@@ -1075,43 +1075,50 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 rColPage.SetColorChgd( (ChangeType*)&nChangeType );
                 rColPage.Construct();
             }
-            SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->nPageId ) );
-            pPageInfo->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
 
-            Point aTreePos(aTreeLB.GetPosPixel());
-            Size aTreeSize(aTreeLB.GetSizePixel());
-            Point aGBPos(aHiddenGB.GetPosPixel());
-            DBG_ASSERT(pPageInfo->pPage, "TabPage nicht gefunden!")
-            Size aPageSize(pPageInfo->pPage->GetSizePixel());
-            Size aGBSize(aHiddenGB.GetSizePixel());
-            Point aPagePos( aGBPos.X() + ( aGBSize.Width() - aPageSize.Width() ) / 2,
-                            aGBPos.Y() + ( aGBSize.Height() - aPageSize.Height() ) / 2 );
-            pPageInfo->pPage->SetPosPixel( aPagePos );
-            if ( RID_SVXPAGE_COLOR == pPageInfo->nPageId )
+            DBG_ASSERT( pPageInfo->pPage, "tabpage could not created")
+            if ( pPageInfo->pPage )
             {
-                pPageInfo->pPage->Reset( *pColorPageItemSet );
-                pPageInfo->pPage->ActivatePage( *pColorPageItemSet );
-            }
-            else
-            {
-                pPageInfo->pPage->Reset( *pGroupInfo->pInItemSet );
+                SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->nPageId ) );
+                pPageInfo->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
+
+                Point aTreePos(aTreeLB.GetPosPixel());
+                Size aTreeSize(aTreeLB.GetSizePixel());
+                Point aGBPos(aHiddenGB.GetPosPixel());
+                Size aPageSize(pPageInfo->pPage->GetSizePixel());
+                Size aGBSize(aHiddenGB.GetSizePixel());
+                Point aPagePos( aGBPos.X() + ( aGBSize.Width() - aPageSize.Width() ) / 2,
+                                aGBPos.Y() + ( aGBSize.Height() - aPageSize.Height() ) / 2 );
+                pPageInfo->pPage->SetPosPixel( aPagePos );
+                if ( RID_SVXPAGE_COLOR == pPageInfo->nPageId )
+                {
+                    pPageInfo->pPage->Reset( *pColorPageItemSet );
+                    pPageInfo->pPage->ActivatePage( *pColorPageItemSet );
+                }
+                else
+                {
+                    pPageInfo->pPage->Reset( *pGroupInfo->pInItemSet );
+                }
             }
         }
-        if(RID_SVXPAGE_COLOR != pPageInfo->nPageId &&
-                            pPageInfo->pPage->HasExchangeSupport())
+        if ( pPageInfo->pPage )
         {
-            pPageInfo->pPage->ActivatePage(*pGroupInfo->pOutItemSet);
+            if ( RID_SVXPAGE_COLOR != pPageInfo->nPageId &&
+                 pPageInfo->pPage->HasExchangeSupport())
+            {
+                pPageInfo->pPage->ActivatePage(*pGroupInfo->pOutItemSet);
+            }
+            pPageInfo->pPage->Show();
+            String sTmpTitle = sTitle;
+            sTmpTitle += String::CreateFromAscii(" - ");
+            sTmpTitle += aTreeLB.GetEntryText(pParent);
+            sTmpTitle += String::CreateFromAscii(" - ");
+            sTmpTitle += aTreeLB.GetEntryText(pEntry);
+            SetText(sTmpTitle);
+            pCurrentPageEntry = pEntry;
+            if(!bForgetSelection)
+                nLastDialogPageId = pPageInfo->nPageId;
         }
-        pPageInfo->pPage->Show();
-        String sTmpTitle = sTitle;
-        sTmpTitle += String::CreateFromAscii(" - ");
-        sTmpTitle += aTreeLB.GetEntryText(pParent);
-        sTmpTitle += String::CreateFromAscii(" - ");
-        sTmpTitle += aTreeLB.GetEntryText(pEntry);
-        SetText(sTmpTitle);
-        pCurrentPageEntry = pEntry;
-        if(!bForgetSelection)
-            nLastDialogPageId = pPageInfo->nPageId;
         pNewPage = pPageInfo->pPage;
     }
     else
