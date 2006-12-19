@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgname.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:00:03 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,17 +51,11 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-/* move to defdlgname.hxx
-// define ----------------------------------------------------------------
 
-#define MESS_BTN_1  ((USHORT)0)
-#define MESS_BTN_2  ((USHORT)1)
-
-// const -----------------------------------------------------------------
-
-const short  RET_BTN_1  = 100;
-const short  RET_BTN_2  = 101;
-*/
+// #i68101#
+#ifndef _SVEDIT_HXX //autogen
+#include <svtools/svmedit.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -111,6 +105,85 @@ public:
 
     void    SetEditHelpId(ULONG nHelpId) {aEdtName.SetHelpId(nHelpId);}
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+// Dialog for editing Object Title and Description
+// plus uniqueness-callback-linkHandler
+
+class SvxObjectNameDialog : public ModalDialog
+{
+private:
+    // name
+    FixedText       aFtName;
+    Edit            aEdtName;
+
+    // separator
+    FixedLine       aFlSeparator;
+
+    // buttons
+    HelpButton      aBtnHelp;
+    OKButton        aBtnOK;
+    CancelButton    aBtnCancel;
+
+    // callback link for name uniqueness
+    Link            aCheckNameHdl;
+#if _SOLAR__PRIVATE
+    DECL_LINK(ModifyHdl, Edit*);
+#endif
+
+public:
+    // constructor
+    SvxObjectNameDialog(Window* pWindow, const String& rName);
+
+    // data access
+    void GetName(String& rName) {rName = aEdtName.GetText(); }
+
+    // set handler
+    void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false)
+    {
+        aCheckNameHdl = rLink;
+
+        if(bCheckImmediately)
+        {
+            aBtnOK.Enable(rLink.Call(this) > 0);
+        }
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// #i68101#
+// Dialog for editing Object Title and Description
+
+class SvxObjectTitleDescDialog : public ModalDialog
+{
+private:
+    // title
+    FixedText       aFtTitle;
+    Edit            aEdtTitle;
+
+    // description
+    FixedText       aFtDescription;
+    MultiLineEdit   aEdtDescription;
+
+    // separator
+    FixedLine       aFlSeparator;
+
+    // buttons
+    HelpButton      aBtnHelp;
+    OKButton        aBtnOK;
+    CancelButton    aBtnCancel;
+
+public:
+    // constructor
+    SvxObjectTitleDescDialog(Window* pWindow, const String& rTitle, const String& rDesc);
+
+    // data access
+    void GetTitle(String& rTitle) {rTitle = aEdtTitle.GetText(); }
+    void GetDescription(String& rDescription) {rDescription = aEdtDescription.GetText(); }
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 /*************************************************************************
 |*
