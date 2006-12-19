@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:39:39 $
+#   last change: $Author: ihi $ $Date: 2006-12-19 18:04:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 PRJ=..$/..
 
 
-PRJNAME=i18n
+PRJNAME=i18npool
 TARGET=indexentry
 
 ENABLE_EXCEPTIONS=TRUE
