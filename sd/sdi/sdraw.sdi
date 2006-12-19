@@ -4516,6 +4516,31 @@ SfxVoidItem NameGroup SID_NAME_GROUP
     GroupId = GID_MODIFY;
 ]
 
+//-#i68101#------------------------------------------------------------------------
+SfxVoidItem ObjectTitleDescription SID_OBJECT_TITLE_DESCRIPTION
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
 //--------------------------------------------------------------------------
 SfxBoolItem NavigatorInit SID_NAVIGATOR_INIT
 
