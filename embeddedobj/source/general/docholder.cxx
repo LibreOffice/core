@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:20:30 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,8 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
   m_bWaitForClose( sal_False ),
   m_bAllowClosing( sal_False ),
   m_bDesktopTerminated( sal_False ),
-  m_nNoBorderResizeReact( 0 )
+  m_nNoBorderResizeReact( 0 ),
+  m_nNoResizeReact( 0 )
 {
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
     uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -386,6 +387,7 @@ void DocumentHolder::PlaceFrame( const awt::Rectangle& aNewRect )
             awt::Rectangle aHatchRect = AddBorderToArea( aNewRect );
 
             ResizeWindows_Impl( aHatchRect );
+
         } while ( aOldWidths.Left != m_aBorderWidths.Left
                || aOldWidths.Top != m_aBorderWidths.Top
                || aOldWidths.Right != m_aBorderWidths.Right
@@ -579,6 +581,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
 
         if ( m_xHatchWindow.is() )
             m_xHatchWindow->setVisible( sal_True );
+
         return sal_True;
     }
 
@@ -1387,7 +1390,8 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
         if ( !Event.EventName.equalsAscii( "OnSave" )
           && !Event.EventName.equalsAscii( "OnSaveDone" )
           && !Event.EventName.equalsAscii( "OnSaveAs" )
-          && !Event.EventName.equalsAscii( "OnSaveAsDone" ) )
+          && !Event.EventName.equalsAscii( "OnSaveAsDone" )
+          && !( Event.EventName.equalsAscii( "OnVisAreaChanged" ) && m_nNoResizeReact ) )
             m_pEmbedObj->PostEvent_Impl( Event.EventName, Event.Source );
     }
 }
@@ -1421,6 +1425,7 @@ void SAL_CALL DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
     {
         // borders should not be counted
         awt::Rectangle aObjRect = CalculateBorderedArea( aRect );
+        IntCounterGuard aGuard( m_nNoResizeReact );
         m_pEmbedObj->requestPositioning( aObjRect );
     }
 }
