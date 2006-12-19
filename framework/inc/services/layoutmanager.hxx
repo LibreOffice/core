@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:42:03 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,7 +568,7 @@ namespace framework
             css::uno::Reference< css::awt::XWindow >                                    m_xDockAreaWindows[DOCKINGAREAS_COUNT];
             sal_Int32                                                                   m_nLockCount;
             UIElementVector                                                             m_aUIElements;
-            sal_Bool                                                                    m_bActive : 1,
+            bool                                                                        m_bActive : 1,
                                                                                         m_bInplaceMenuSet : 1,
                                                                                         m_bDockingInProgress : 1,
                                                                                         m_bMenuVisible : 1,
@@ -576,7 +576,7 @@ namespace framework
                                                                                         m_bDoLayout : 1,
                                                                                         m_bVisible : 1,
                                                                                         m_bParentWindowVisible : 1;
-            sal_Bool                                                                    m_bMustDoLayout : 1,
+            bool                                                                        m_bMustDoLayout : 1,
                                                                                         m_bAutomaticToolbars : 1,
                                                                                         m_bStoreWindowState : 1;
             sal_Bool                                                                    m_bGlobalSettings : 1;
@@ -593,7 +593,7 @@ namespace framework
             com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >          m_xProgressBarBackup;
             css::uno::Reference< ::com::sun::star::frame::XModuleManager >              m_xModuleManager;
             css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >              m_xUIElementFactoryManager;
-            sal_Bool                                                                    m_bMenuBarCloser : 1;
+            bool                                                                        m_bMenuBarCloser : 1;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                             m_pGlobalSettings;
