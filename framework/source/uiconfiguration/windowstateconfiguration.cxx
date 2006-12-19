@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowstateconfiguration.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:21:08 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,7 @@ class ConfigurationAccess_WindowState : // interfaces
                                 nStyle( 0 ),
                                 nMask( 0 ) {}
 
-            sal_Bool                                bLocked : 1,
+            bool                                    bLocked : 1,
                                                     bDocked : 1,
                                                     bVisible : 1,
                                                     bContext : 1,
