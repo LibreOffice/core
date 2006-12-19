@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 17:04:59 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -977,7 +977,7 @@ String XclImpStream::ReadRawByteString( sal_uInt16 nChars )
     sal_Char* pcBuffer = new sal_Char[ nChars + 1 ];
     sal_uInt16 nCharsRead = ReadRawData( pcBuffer, nChars );
     pcBuffer[ nCharsRead ] = '\0';
-    String aRet( pcBuffer, mrRoot.GetCharSet() );
+    String aRet( pcBuffer, mrRoot.GetTextEncoding() );
     delete[] pcBuffer;
     return aRet;
 }
