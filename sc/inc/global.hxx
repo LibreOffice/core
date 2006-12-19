@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:05 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #endif
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 
 #ifndef INCLUDED_SCDLLAPI_H
@@ -508,9 +512,14 @@ class CollatorWrapper;
 class IntlWrapper;
 class OutputDevice;
 
-namespace com { namespace sun { namespace star { namespace lang {
-    struct Locale;
-}}}}
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        struct Locale;
+    }
+    namespace i18n {
+        class XOrdinalSuffix;
+    }
+}}}
 namespace utl {
     class TransliterationWrapper;
 }
@@ -545,6 +554,8 @@ class ScGlobal
 
     static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
 
+    static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> xOrdinalSuffix;
+
 public:
     static ::com::sun::star::lang::Locale*      pLocale;
     static SvtSysLocale*        pSysLocale;
@@ -565,6 +576,7 @@ SC_DLLPUBLIC    static ::utl::TransliterationWrapper* GetpTransliteration(); //C
     static IntlWrapper*         pScIntlWrapper;
     static LanguageType         eLnge;
     static sal_Unicode          cListDelimiter;
+
     static const String&        GetClipDocName();
     static void                 SetClipDocName( const String& rNew );
     static const SvxSearchItem& GetSearchItem();
@@ -678,6 +690,9 @@ SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicod
     /** Adds a language item to the item set, if the number format item contains
         a language that differs from its parent's language. */
     static void             AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter );
+
+    /** Obtain the ordinal suffix for a number according to the system locale */
+    static String           GetOrdinalSuffix( sal_Int32 nNumber);
 };
 #endif
 
