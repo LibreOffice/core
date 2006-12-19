@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:50:53 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,7 +373,7 @@ OStorage_Impl::~OStorage_Impl()
             try {
                 m_pAntiImpl->InternalDispose( sal_False );
             }
-            catch ( uno::RuntimeException& )
+            catch ( uno::Exception& )
             {}
             m_pAntiImpl = NULL;
         }
@@ -400,6 +400,12 @@ OStorage_Impl::~OStorage_Impl()
         delete *pElementIter;
 
     m_aChildrenList.clear();
+
+    for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
+          pDeletedIter != m_aDeletedList.end(); pDeletedIter++ )
+        delete *pDeletedIter;
+
+    m_aDeletedList.clear();
 
     if ( m_nStorageType == OFOPXML_STORAGE && m_pRelStorElement )
     {
