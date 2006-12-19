@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:22:55 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,8 @@
 
 #include <textconversionImpl.hxx>
 #include <textconversion.hxx>
+
+#include <ordinalsuffix.hxx>
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
@@ -293,6 +295,8 @@ IMPL_CREATEINSTANCE( NumToTextHangulCircledJamo_ko )
 IMPL_CREATEINSTANCE( NumToTextHangulCircledSyllable_ko )
 IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
 IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
+
+IMPL_CREATEINSTANCE_MSF( OrdinalSuffix )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -548,6 +552,10 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
+
+    {   "com.sun.star.i18n.OrdinalSuffix",
+        "com.sun.star.i18n.OrdinalSuffix",
+        & OrdinalSuffix_CreateInstance },
 
 // add here new services !!
     { 0, 0, 0 }
