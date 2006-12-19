@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:49:44 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,8 +227,18 @@
     {\
         Identifier = SID_RENAME_OBJECT ; \
         HelpId = SID_RENAME_OBJECT ; \
-        Text [ de ] = "Ob~jekt benennen..." ; \
-        Text [ en-US ] = "~Name Object...";\
+        Text [ de ] = "Name..." ; \
+        Text [ en-US ] = "Name...";\
+    };
+
+// #i68101#
+#define MN_TITLE_DESCRIPTION_OBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_TITLE_DESCRIPTION_OBJECT; \
+        HelpId = SID_TITLE_DESCRIPTION_OBJECT; \
+        Text [ de ] = "Beschreibung..." ; \
+        Text [ en-US ] = "Description...";\
     };
 
 #define MN_MIRRORSUB \
@@ -1258,7 +1268,13 @@ Menu RID_POPUP_DRAW
         MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA };
         MN_DRWTXTATTR // Text...
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1295,6 +1311,16 @@ Menu RID_POPUP_CONTROL
     ItemList =
     {
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
         MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
         MenuItem { ITEM_FORM_PROPERTIES };
          //------------------------------
@@ -1323,7 +1349,13 @@ Menu RID_POPUP_GRAPHIC
         MN_DRWTXTATTR
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1347,7 +1379,13 @@ Menu RID_POPUP_MEDIA
     ItemList =
     {
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1402,7 +1440,13 @@ Menu RID_POPUP_OLE
     {
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1426,7 +1470,13 @@ Menu RID_POPUP_CHART
     {
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
