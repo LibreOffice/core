@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:49:09 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,7 +455,7 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB nTab ) :
 {
     String sTabName = rRootData.pER->GetTabInfo().GetScTabName( nTab );
     DBG_ASSERT( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
-    aName = ByteString( sTabName, rRootData.pER->GetCharSet() );
+    aName = ByteString( sTabName, rRootData.pER->GetTextEncoding() );
 }
 
 
