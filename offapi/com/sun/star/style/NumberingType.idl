@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 09:15:45 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 18:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,66 +257,142 @@ published constants NumberingType
 
     //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet upper case letters as
-        "А, Б, В, Г, ..., Ю, Я, Аа, Аб, Ав, ... Ааа, Ааб".
+        "&#1040;, &#1041;,  &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1074;, &#1040;&#1072;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
 
         @since OOo 2.0.4
      */
+     /*
+        Since IDL comments allow only 7-bit characters, hence the XHTML
+        entities above for the generated documentation, for the
+        developer here the human readable Unicode descriptions:
+
+        CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE ,
+            CYRILLIC CAPITAL LETTER VE , CYRILLIC CAPITAL LETTER GHE , ... ,
+            CYRILLIC CAPITAL LETTER YU , CYRILLIC CAPITAL LETTER YA ,
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER BE ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE
+      */
     const short CHARS_CYRILLIC_UPPER_LETTER_BG = 38;
 
     //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet lower case letters as
-        "а, б, в, г, ..., ю, я, аа, аб, ав, ... ааа, ааб".
+        "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072; &#1072;,  &#1072;&#1073;, &#1072;&#1074;, ...  &#1072; &#1072; &#1072;,  &#1072; &#1072;&#1073;".
 
         @since OOo 2.0.4
      */
+     /*
+        CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER VE , CYRILLIC SMALL LETTER GHE , ... ,
+            CYRILLIC SMALL LETTER YU , CYRILLIC SMALL LETTER YA ,
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE
+      */
     const short CHARS_CYRILLIC_LOWER_LETTER_BG = 39;
 
     //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet upper case letters as
-        "А, Б, ..., Ю, Я, Аа, Бб, Вв, ... Ааа, ...".
+        "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
 
         @since OOo 2.0.4
      */
+     /*
+        CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
+            CYRILLIC CAPITAL LETTER YU , CYRILLIC CAPITAL LETTER YA ,
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER BE CYRILLIC SMALL LETTER BE ,
+            CYRILLIC CAPITAL LETTER VE CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
+      */
     const short CHARS_CYRILLIC_UPPER_LETTER_N_BG = 40;
 
      //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet upper case letters as
-        "а, б, ..., ю, я, аа, бб, вв, ... ааа, ...".
+        "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
 
         @since OOo 2.0.4
      */
+     /*
+        CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
+            CYRILLIC SMALL LETTER YU , CYRILLIC SMALL LETTER YA ,
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER BE CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER VE CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
+      */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_BG = 41;
 
     //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet upper case letters as
-        "А, Б, В, Г, ..., Ю, Я, Аа, Аб, Ав, ... Ааа, Ааб".
+        "&#1040;, &#1041;, &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1040;&#1073;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
 
         @since OOo 2.0.4
      */
+     /*
+        CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE ,
+            CYRILLIC CAPITAL LETTER VE , CYRILLIC CAPITAL LETTER GHE , ... ,
+            CYRILLIC CAPITAL LETTER YU , CYRILLIC CAPITAL LETTER YA ,
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER BE ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE
+      */
     const short CHARS_CYRILLIC_UPPER_LETTER_RU = 42;
 
     //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet lower case letters as
-        "а, б, в, г, ..., ю, я, аа, аб, ав, ... ааа, ааб".
+        "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1072;&#1073;, &#1072;&#1074;, ... &#1072;&#1072;&#1072;, &#1072;&#1072;&#1073;".
 
         @since OOo 2.0.4
      */
+     /*
+        CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER VE , CYRILLIC SMALL LETTER GHE , ... ,
+            CYRILLIC SMALL LETTER YU , CYRILLIC SMALL LETTER YA ,
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE
+      */
     const short CHARS_CYRILLIC_LOWER_LETTER_RU = 43;
 
     //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet upper case letters as
-        "А, Б, ..., Ю, Я, Аа, Бб, Вв, ... Ааа, ...".
+        "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
 
         @since OOo 2.0.4
      */
+     /*
+        CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
+            CYRILLIC CAPITAL LETTER YU , CYRILLIC CAPITAL LETTER YA ,
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER BE CYRILLIC SMALL LETTER BE ,
+            CYRILLIC CAPITAL LETTER VE CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
+      */
     const short CHARS_CYRILLIC_UPPER_LETTER_N_RU = 44;
 
     //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet upper case letters as
-        "а, б, ..., ю, я, аа, бб, вв, ... ааа, ...".
+        "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
 
         @since OOo 2.0.4
      */
+     /*
+        CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
+            CYRILLIC SMALL LETTER YU , CYRILLIC SMALL LETTER YA ,
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER BE CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER VE CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
+      */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
 };
 
