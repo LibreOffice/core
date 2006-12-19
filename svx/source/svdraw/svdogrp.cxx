@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:20 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 17:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,25 +310,6 @@ SdrObjList* SdrObjGroup::GetSubList() const
     return pSub;
 }
 
-FASTBOOL SdrObjGroup::HasSetName() const
-{
-    return TRUE;
-}
-
-
-void SdrObjGroup::SetName(const XubString& rStr)
-{
-    aName = rStr;
-    SetChanged();
-}
-
-
-XubString SdrObjGroup::GetName() const
-{
-    return aName;
-}
-
-
 const Rectangle& SdrObjGroup::GetCurrentBoundRect() const
 {
     if (pSub->GetObjCount()!=0) {
@@ -392,7 +373,6 @@ void SdrObjGroup::operator=(const SdrObject& rObj)
         // copy local paremeters
         nDrehWink  =((SdrObjGroup&)rObj).nDrehWink;
         nShearWink =((SdrObjGroup&)rObj).nShearWink;
-        aName      =((SdrObjGroup&)rObj).aName;
         aRefPoint  =((SdrObjGroup&)rObj).aRefPoint;
         bRefPoint  =((SdrObjGroup&)rObj).bRefPoint;
     }
@@ -409,6 +389,8 @@ void SdrObjGroup::TakeObjNameSingul(XubString& rName) const
     {
         rName = ImpGetResStr(STR_ObjNameSingulGRUP);
     }
+
+    const String aName(GetName());
 
     if(aName.Len())
     {
