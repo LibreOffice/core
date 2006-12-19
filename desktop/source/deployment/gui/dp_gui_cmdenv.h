@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:02:23 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 11:42:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,16 +62,17 @@ class ProgressCommandEnv
 {
     DialogImpl * m_mainDialog;
     ::rtl::OUString m_title;
+    bool m_aborted;
+    // shared or user, may be empty string
+    ::rtl::OUString m_sContext;
+       bool m_bAskWhenInstalling;
+
     css::uno::Reference<css::task::XInteractionHandler> m_xHandler;
     sal_Int32 m_currentInnerProgress;
     sal_Int32 m_currentProgressSection;
     sal_Int32 m_progressSections;
-    void updateProgress( ::rtl::OUString const & text = ::rtl::OUString() );
+   void updateProgress( ::rtl::OUString const & text = ::rtl::OUString() );
     css::uno::Reference<css::task::XAbortChannel> m_xAbortChannel;
-    bool m_aborted;
-    // shared or user, may be empty string
-    ::rtl::OUString m_sContext;
-
     struct ProgressDialog : public Dialog
     {
         struct CancelButtonImpl : public CancelButton
@@ -107,13 +108,17 @@ class ProgressCommandEnv
 
 public:
     virtual ~ProgressCommandEnv();
+    // When param bAskWhenInstalling = true, then the user is asked if he
+    //agrees to install this extension.
     inline ProgressCommandEnv( DialogImpl * mainDialog,
                                ::rtl::OUString const & title,
-                               ::rtl::OUString const & context)
+                               ::rtl::OUString const & context,
+                               bool bAskWhenInstalling = false)
         : m_mainDialog( mainDialog ),
           m_title( title ),
           m_aborted( false ),
-          m_sContext(context)
+          m_sContext(context),
+          m_bAskWhenInstalling(bAskWhenInstalling)
         {}
 
     void showProgress( sal_Int32 progressSections );
