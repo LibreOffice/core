@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:06:03 $
+ *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,7 +515,7 @@ struct ScChildGone
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessible >(mpAccDoc);
+            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccDoc);
             aEvent.OldValue <<= xAccessible;
 
             mpAccDoc->CommitChange(aEvent); // gone child - event
@@ -533,7 +533,7 @@ struct ScChildNew
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessible >(mpAccDoc);
+            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccDoc);
             aEvent.NewValue <<= xAccessible;
 
             mpAccDoc->CommitChange(aEvent); // new child - event
@@ -905,6 +905,7 @@ void ScShapeChilds::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) co
         {
             xAcc = GetAccShape(*aNewItr);
             AccessibleEventObject aEvent;
+            aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.NewValue <<= xAcc;
             mpAccDoc->CommitChange(aEvent);
@@ -914,6 +915,7 @@ void ScShapeChilds::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) co
         {
             xAcc = GetAccShape(*aOldItr);
             AccessibleEventObject aEvent;
+            aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.OldValue <<= xAcc;
             mpAccDoc->CommitChange(aEvent);
@@ -924,6 +926,7 @@ void ScShapeChilds::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) co
     {
         xAcc = GetAccShape(*aOldItr);
         AccessibleEventObject aEvent;
+        aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= xAcc;
         mpAccDoc->CommitChange(aEvent);
@@ -933,6 +936,7 @@ void ScShapeChilds::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) co
     {
         xAcc = GetAccShape(*aNewItr);
         AccessibleEventObject aEvent;
+        aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.NewValue <<= xAcc;
         mpAccDoc->CommitChange(aEvent);
@@ -1334,6 +1338,7 @@ sal_Bool ScShapeChilds::FindShape(ScShapeChildVec& rShapes, const uno::Reference
                 {
                     xAcc = GetAccShape(aShape);
                     AccessibleEventObject aEvent;
+                    aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.NewValue <<= xAcc;
                     mpAccDoc->CommitChange(aEvent);
@@ -1407,6 +1412,7 @@ sal_Bool ScShapeChilds::FindShape(ScShapeChildVec& rShapes, const uno::Reference
         if (bNotify)
         {
             AccessibleEventObject aEvent;
+            aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.OldValue <<= xAcc;
             mpAccDoc->CommitChange(aEvent);
@@ -1576,7 +1582,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                     uno::Reference<XAccessible> xAcc = mpTable;
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessible >(this);
+                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
                     aEvent.OldValue <<= xAcc;
                     CommitChange(aEvent);
                 }
@@ -1612,7 +1618,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                     uno::Reference<XAccessible> xAcc = mpTable;
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessible >(this);
+                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
                     aEvent.NewValue <<= xAcc;
                     CommitChange(aEvent);
                 }
@@ -1636,7 +1642,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
 
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent);
         }
     }
