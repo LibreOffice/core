@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 12:04:12 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 12:26:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,14 +112,6 @@ if (-d "$StartDir") {
         }
     }
     } else {
-    $return++;
-    }
-    print "\n";
-
-    # check file format specification
-    print "check xml format specifiaction: ";
-    if (! -e "$StartDir/docs/common/spec/xml_format/xml_specification.pdf") {
-    print "\nERROR: \"$StartDir/docs/common/spec/xml_format/xml_specification.pdf\" is missing\n";
     $return++;
     }
     print "\n";
