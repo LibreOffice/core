@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:46:54 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,8 +486,6 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 SwMailMergeOutputPage::~SwMailMergeOutputPage()
 {
     USHORT nEntryCount = m_aPrinterLB.GetEntryCount();
-    for ( USHORT i = 0; i < nEntryCount; i++ )
-        delete (QueueInfo*)m_aPrinterLB.GetEntryData( i );
     delete m_pTempPrinter;
     delete m_pDocumentPrinterCopy;
 }
@@ -497,14 +495,13 @@ SwMailMergeOutputPage::~SwMailMergeOutputPage()
 void SwMailMergeOutputPage::ActivatePage()
 {
     //fill printer ListBox
-    USHORT nCount = Printer::GetQueueCount();
+    const std::vector<rtl::OUString>& rPrinters = Printer::GetPrinterQueues();
+    unsigned int nCount = rPrinters.size();
     if ( nCount )
     {
-        for( USHORT i = 0; i < nCount; i++ )
+        for( unsigned int i = 0; i < nCount; i++ )
         {
-            const QueueInfo& rInfo = Printer::GetQueueInfo( i, FALSE );
-            USHORT nPos = m_aPrinterLB.InsertEntry( rInfo.GetPrinterName() );
-            m_aPrinterLB.SetEntryData( nPos, new QueueInfo( rInfo ) );
+            USHORT nPos = m_aPrinterLB.InsertEntry( rPrinters[i] );
         }
 
     }
@@ -932,25 +929,30 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
 {
     if( m_pDocumentPrinterCopy && pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
-        const QueueInfo& rInfo = *((QueueInfo*)(pBox->GetEntryData( pBox->GetSelectEntryPos() )));
+        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), false );
 
-        if ( !m_pTempPrinter )
+        if( pInfo )
         {
-            if( (m_pDocumentPrinterCopy->GetName() == rInfo.GetPrinterName()) &&
-                 (m_pDocumentPrinterCopy->GetDriverName() == rInfo.GetDriver()) )
-                m_pTempPrinter = new Printer( m_pDocumentPrinterCopy->GetJobSetup() );
-            else
-                m_pTempPrinter = new Printer( rInfo );
-        }
-        else
-        {
-            if( (m_pTempPrinter->GetName() != rInfo.GetPrinterName()) ||
-                 (m_pTempPrinter->GetDriverName() != rInfo.GetDriver()) )
+            if ( !m_pTempPrinter )
             {
-                delete m_pTempPrinter;
-                m_pTempPrinter = new Printer( rInfo );
+                if( (m_pDocumentPrinterCopy->GetName() == pInfo->GetPrinterName()) &&
+                     (m_pDocumentPrinterCopy->GetDriverName() == pInfo->GetDriver()) )
+                    m_pTempPrinter = new Printer( m_pDocumentPrinterCopy->GetJobSetup() );
+                else
+                    m_pTempPrinter = new Printer( *pInfo );
+            }
+            else
+            {
+                if( (m_pTempPrinter->GetName() != pInfo->GetPrinterName()) ||
+                     (m_pTempPrinter->GetDriverName() != pInfo->GetDriver()) )
+                {
+                    delete m_pTempPrinter;
+                    m_pTempPrinter = new Printer( *pInfo );
+                }
             }
         }
+        else if( ! m_pTempPrinter )
+            m_pTempPrinter = new Printer();
 
         m_aPrinterSettingsPB.Enable( m_pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
     }
