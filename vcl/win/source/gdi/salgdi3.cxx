@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:41:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1829,9 +1829,7 @@ bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
 #ifdef FR_PRIVATE   // wingdi.h, but only if _WIN32_WINNT >= 0x0500, which is currently not true.
-    OSVERSIONINFO aVersion;
-    aVersion.dwOSVersionInfoSize = sizeof(aVersion);
-    if( ::GetVersionEx( &aVersion ) && (aVersion.dwMajorVersion >= 5) )
+    if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
     {
         nRet = AddFontResourceExW( aUSytemPath.getStr(), FR_PRIVATE, NULL );
     }
