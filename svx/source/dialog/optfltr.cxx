@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:30:28 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,8 +307,10 @@ void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
         pCheckButtonData = new SvLBoxButtonData( &aCheckLB );
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
-    pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
-    pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+    pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
+                                       0, pCheckButtonData ) );
+    pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
+                                       0, pCheckButtonData ) );
     pEntry->AddItem( new SvLBoxString( pEntry, 0, _rTxt ) );
 
     pEntry->SetUserData( (void*)_nType );
