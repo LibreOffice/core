@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-18 09:54:29 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:32:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,9 @@ struct SalShlData
     WIN_BOOL                mbWNT;                  // kein W16/W95/W98 sondern ein NT
     WIN_BOOL                mbW40;                  // Is System-Version >= 4.0
     WIN_BOOL                mbWXP;                  // Windows XP
+    WIN_BOOL                mbWPrinter;             // true: use unicode printer functions
+                                                    // false: use anis compat printer functions
+    OSVERSIONINFO           maVersionInfo;
 };
 
 extern SalShlData aSalShlData;
