@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:45:21 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,7 @@ void PrintDialog::ImplSetImages()
 
 void PrintDialog::ImplSetInfo()
 {
-    const QueueInfo* pInfo = (QueueInfo*)(maLbName.GetEntryData( maLbName.GetSelectEntryPos() ));
+    const QueueInfo* pInfo = Printer::GetQueueInfo( maLbName.GetSelectEntry(), true );
     if ( pInfo )
     {
         maFiType.SetText( pInfo->GetDriver() );
@@ -615,6 +615,8 @@ short PrintDialog::Execute()
         DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
         return FALSE;
     }
+
+    Printer::updatePrinters();
 
     // Controls initialisieren
     ImplFillPrnDlgListBox( mpPrinter, &maLbName, &maBtnProperties );
