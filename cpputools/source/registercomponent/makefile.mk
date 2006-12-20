@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:30:10 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 12:21:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ UNOTYPES=\
              com.sun.star.container.XContentEnumerationAccess \
              com.sun.star.container.XSet \
              com.sun.star.loader.CannotActivateFactoryException \
-            com.sun.star.registry.XImplementationRegistration
+            com.sun.star.registry.XImplementationRegistration2
 
 # --- Files --------------------------------------------------------
 CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
