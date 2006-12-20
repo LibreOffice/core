@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:10:37 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,9 @@ void SvTabListBox::SetTabs()
 }
 
 void SvTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
-    const Image& rColl, const Image& rExp )
+    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind )
 {
-    SvTreeListBox::InitEntry( pEntry, rStr, rColl, rExp);
+    SvTreeListBox::InitEntry( pEntry, rStr, rColl, rExp, eButtonKind );
     XubString aToken;
 
     const xub_Unicode* pCurToken = aCurEntry.GetBuffer();
@@ -221,7 +221,8 @@ void SvTabListBox::SetTab( USHORT nTab,long nValue,MapUnit eMapUnit )
 
 SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
                                         BOOL /*bChildsOnDemand*/,
-                                        ULONG nPos, void* pUserData )
+                                        ULONG nPos, void* pUserData,
+                                        SvLBoxButtonKind )
 {
     return InsertEntryToColumn( rText, pParent, nPos, 0xffff, pUserData );
 }
@@ -231,7 +232,8 @@ SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rText,
                                         const Image& rCollapsedEntryBmp,
                                         SvLBoxEntry* pParent,
                                         BOOL /*bChildsOnDemand*/,
-                                        ULONG nPos, void* pUserData )
+                                        ULONG nPos, void* pUserData,
+                                        SvLBoxButtonKind )
 {
     return InsertEntryToColumn( rText, rExpandedEntryBmp, rCollapsedEntryBmp,
                                 pParent, nPos, 0xffff, pUserData );
