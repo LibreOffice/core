@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:00:52 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 14:06:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -193,8 +193,12 @@ IDLFILES=\
     UnoControlRoadmapModel.idl\
     UnoControlScrollBar.idl\
     UnoControlScrollBarModel.idl\
+    UnoControlSimpleAnimation.idl\
+    UnoControlSimpleAnimationModel.idl\
     UnoControlSpinButton.idl\
     UnoControlSpinButtonModel.idl\
+    UnoControlThrobber.idl\
+    UnoControlThrobberModel.idl\
     UnoControlTimeField.idl\
     UnoControlTimeFieldModel.idl\
     VclContainerEvent.idl\
@@ -274,6 +278,9 @@ IDLFILES=\
     XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
+    XSimpleAnimation.idl\
+    XSimpleTabController.idl\
+    XThrobber.idl\
     XTabController.idl\
     XTabControllerModel.idl\
         XTabListener.idl\
