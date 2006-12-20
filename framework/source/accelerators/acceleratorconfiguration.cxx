@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:40:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,9 +343,16 @@ void SAL_CALL AcceleratorConfiguration::reload()
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
+    css::uno::Reference< css::io::XStream > xStreamNoLang;
+
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // TRUE => open or create!
+    try
+    {
+        xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), sal_True);
+    }
+    catch(const css::io::IOException&) {} // does not have to exist
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -357,7 +364,23 @@ void SAL_CALL AcceleratorConfiguration::reload()
                 ::rtl::OUString::createFromAscii("Could not open accelerator configuration for reading."),
                 static_cast< ::cppu::OWeakObject* >(this));
 
+    // impl_ts_load() does not clear the cache
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+    m_aReadCache = AcceleratorCache();
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+
     impl_ts_load(xIn);
+
+    // Load also the general language independent default accelerators
+    // (ignoring the already defined accelerators)
+    if (xStreamNoLang.is())
+    {
+        xIn = xStreamNoLang->getInputStream();
+        if (xIn.is())
+            impl_ts_load(xIn);
+    }
 }
 
 //-----------------------------------------------
@@ -522,12 +545,15 @@ void AcceleratorConfiguration::impl_ts_load(const css::uno::Reference< css::io::
     if (xSeek.is())
         xSeek->seek(0);
 
+    // add accelerators to the cache (the cache is not cleared)
+    // SAFE -> ----------------------------------
+    aWriteLock.lock();
+
     // create the parser queue
     // Note: Use special filter object between parser and reader
     // to get filtered xml with right namespaces ...
     // Use further a temp cache for reading!
-    AcceleratorCache                                       aCache  ;
-    AcceleratorConfigurationReader*                        pReader = new AcceleratorConfigurationReader(aCache);
+    AcceleratorConfigurationReader*                        pReader = new AcceleratorConfigurationReader(m_aReadCache);
     css::uno::Reference< css::xml::sax::XDocumentHandler > xReader (static_cast< ::cppu::OWeakObject* >(pReader), css::uno::UNO_QUERY_THROW);
     SaxNamespaceFilter*                                    pFilter = new SaxNamespaceFilter(xReader);
     css::uno::Reference< css::xml::sax::XDocumentHandler > xFilter (static_cast< ::cppu::OWeakObject* >(pFilter), css::uno::UNO_QUERY_THROW);
@@ -542,10 +568,6 @@ void AcceleratorConfiguration::impl_ts_load(const css::uno::Reference< css::io::
     // TODO think about error handling
     xParser->parseStream(aSource);
 
-    // take over the filled cache
-    // SAFE -> ----------------------------------
-    aWriteLock.lock();
-    m_aReadCache = aCache;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 }
