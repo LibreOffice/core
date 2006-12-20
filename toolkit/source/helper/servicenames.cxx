@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicenames.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:22:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,3 +103,8 @@ const sal_Char __FAR_DATA szServiceName_UnoControlRoadmap[] = "stardiv.vcl.contr
 const sal_Char __FAR_DATA szServiceName_UnoControlRoadmapModel[] = "stardiv.vcl.controlmodel.Roadmap", szServiceName2_UnoControlRoadmapModel[] = "com.sun.star.awt.UnoControlRoadmapModel";
 const sal_Char __FAR_DATA szServiceName_UnoSpinButtonControl[] = "com.sun.star.awt.UnoControlSpinButton";
 const sal_Char __FAR_DATA szServiceName_UnoSpinButtonModel[] = "com.sun.star.awt.UnoControlSpinButtonModel";
+const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel";
+const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl";
+const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel";
+const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl";
+
