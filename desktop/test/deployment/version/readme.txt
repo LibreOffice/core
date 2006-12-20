@@ -4,9 +4,9 @@
  *
  *  $RCSfile: readme.txt,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:57:17 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ The different versions are:
 A  version_none contains no version element (treated as version "0").
 B  version_badelement contains a bad <version val="1"/> (not allowed by the
    specification, but treated by the current implementation as version "0").
-C  version_badvalue contains a bad <version val="1.a"/> (not allowed by the
+C  version_badvalue contains a bad <version value="1.a"/> (not allowed by the
    specification, but treated by the current implementation as version "1").
 D  version_0.0 contains <version value="0.0"/> (same as version "0").
 E  version_1.2.3 contains <version value="1.2.3"/>.
