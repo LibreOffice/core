@@ -77,7 +77,14 @@ EMPTYSTRING=
 PATH_SEPARATOR=;
 
 # use this for release version
-CC_FLAGS=-c -GX -MT -Zm500 -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR
+CC_FLAGS=-c -MT -Zm500 -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR
+ifeq "$(CPP_VC8)" "true"
+CC_FLAGS+=-EHa -Zc:wchar_t-
+LINK_MANIFEST_VC8_ONLY=mt -manifest $@.manifest -outputresource:$@;2
+else
+CC_FLAGS+=-GX
+LINK_MANIFEST_VC8_ONLY=
+endif
 ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-Zi
 endif
