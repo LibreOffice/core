@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-06 14:55:20 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 14:29:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,18 @@ PRJ = ..$/..$/..
 
 PRJNAME = desktop
 TARGET = deployment_misc
+USE_DEFFILE = TRUE
 ENABLE_EXCEPTIONS = TRUE
-LIBTARGET = NO
 
 .INCLUDE : settings.mk
+
+# Reduction of exported symbols:
+CDEFS += -DDESKTOP_DEPLOYMENTMISC_DLLIMPLEMENTATION
+.IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGS += -fvisibility=hidden
+.ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
+CFLAGS += -xldscope=hidden
+.ENDIF
 
 .IF "$(SYSTEM_DB)" == "YES"
 CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
@@ -50,22 +58,29 @@ SRS1NAME = $(TARGET)
 SRC1FILES = \
     dp_misc.src
 
-LIB1TARGET = $(SLB)$/$(TARGET).lib
-LIB1OBJFILES = \
+SHL1TARGET = deploymentmisc$(UPD)$(DLLPOSTFIX)
+SHL1OBJS = \
         $(SLO)$/dp_misc.obj \
         $(SLO)$/dp_resource.obj \
         $(SLO)$/dp_interact.obj \
         $(SLO)$/dp_ucb.obj \
-        $(SLO)$/dp_xml.obj \
-        $(SLO)$/dp_log.obj \
-        $(SLO)$/dp_persmap.obj \
-        $(SLO)$/dp_services.obj       \
         $(SLO)$/db.obj \
-        $(SLO)$/dp_version.obj
+        $(SLO)$/dp_version.obj \
+        $(SLO)$/dp_descriptioninfoset.obj \
+        $(SLO)$/dp_dependencies.obj
+SHL1STDLIBS = \
+    $(BERKELEYLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB) \
+    $(TOOLSLIB) \
+    $(UCBHELPERLIB) \
+    $(UNOTOOLSLIB) \
+    $(XMLSCRIPTLIB)
+SHL1IMPLIB = i$(SHL1TARGET)
+DEF1NAME = $(SHL1TARGET)
 
-SLOFILES = $(LIB1OBJFILES)
-
-OBJFILES = $(OBJ)$/dp_version.obj
+SLOFILES = $(SHL1OBJS)
 
 .INCLUDE : ..$/target.pmk
 .INCLUDE : target.mk
