@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:10:44 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include "tools/inetmime.hxx"
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
+#include "com/sun/star/deployment/XPackageManager.hpp"
 #include <memory>
 #include <hash_map>
 #include "dp_registry.hrc"
@@ -174,7 +175,8 @@ public:
 
     virtual ::sal_Bool SAL_CALL checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+        sal_Bool bInstalled, ::rtl::OUString const & aContextName)
         throw (css::deployment::DeploymentException,
             css::ucb::CommandFailedException,
             css::ucb::CommandAbortedException,
@@ -208,6 +210,8 @@ public:
                css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getName()
         throw (css::uno::RuntimeException);
+    virtual css::beans::Optional< ::rtl::OUString > SAL_CALL getIdentifier()
+        throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getVersion()
         throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getURL()
@@ -216,6 +220,8 @@ public:
         throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getDescription()
         throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
+    getUpdateInformationURLs() throw (css::uno::RuntimeException);
     virtual css::uno::Reference<css::deployment::XPackageTypeInfo> SAL_CALL
     getPackageType() throw (css::uno::RuntimeException);
     virtual void SAL_CALL exportTo(
