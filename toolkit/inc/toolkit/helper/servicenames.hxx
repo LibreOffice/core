@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicenames.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:57:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@ extern const sal_Char __FAR_DATA szServiceName_UnoControlRoadmap[], szServiceNam
 extern const sal_Char __FAR_DATA szServiceName_UnoControlRoadmapModel[], szServiceName2_UnoControlRoadmapModel[];
 
 extern const sal_Char __FAR_DATA szServiceName_UnoSpinButtonControl[], szServiceName_UnoSpinButtonModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[], szServiceName_UnoSimpleAnimationControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceName_UnoThrobberControlModel[];
 
 // ExtUnoWrapper:
 extern const char __FAR_DATA szServiceName_ImageProducer[], szServiceName2_ImageProducer[];
