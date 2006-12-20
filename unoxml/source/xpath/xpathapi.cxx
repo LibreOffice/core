@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpathapi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:49:52 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:18:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,7 @@ namespace XPath
         /* Create xpath evaluation context */
         xpathCtx = xmlXPathNewContext(pDoc);
         if (xpathCtx == NULL)throw RuntimeException();
+        xpathCtx->node = pNode;
         _registerNamespaces(xpathCtx, m_nsmap);
 
         OString o1 = OUStringToOString(str, RTL_TEXTENCODING_UTF8);
