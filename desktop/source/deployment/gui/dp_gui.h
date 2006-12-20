@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:41:32 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 
 #include "dp_misc.h"
 #include "dp_gui_cmdenv.h"
+#include "dp_gui_modifiablecontext.hxx"
+#include "dp_gui_updatability.hxx"
 #include "dp_gui.hrc"
 #include "rtl/ref.hxx"
 #include "osl/thread.hxx"
@@ -46,6 +48,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 #include "svtools/svtabbx.hxx"
 #include "svtools/headbar.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -57,23 +60,20 @@
 #include <list>
 #include <memory>
 
-
-namespace css = ::com::sun::star;
-
 namespace dp_gui {
 
 enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
 PackageState getPackageState(
-    css::uno::Reference<css::deployment::XPackage> const & xPackage,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv =
-    css::uno::Reference<css::ucb::XCommandEnvironment>() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const & xPackage,
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv =
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment>() );
 
 //==============================================================================
 struct DialogImpl :
         public ModelessDialog,
-        public ::cppu::WeakImplHelper2< css::frame::XTerminateListener,
-                                        css::ucb::XContentEventListener >
+        public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XTerminateListener,
+                                        ::com::sun::star::ucb::XContentEventListener >
 {
     static ResId getResId( USHORT id );
     static String getResourceString( USHORT id );
@@ -93,22 +93,23 @@ struct DialogImpl :
     struct TreeListBoxImpl : public SvHeaderTabListBox
     {
         typedef ::std::list<
-            css::uno::Reference<css::uno::XInterface> > t_nodeList;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > t_nodeList;
         t_nodeList m_nodes;
         SvLBoxEntry * addNode(
             SvLBoxEntry * parentNode,
             String const & displayName,
             ::rtl::OUString const & factoryURL,
-            css::uno::Reference<css::deployment::XPackageManager>
+            ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager>
             const & xPackageManager,
-            css::uno::Reference<css::deployment::XPackage> const & xPackage,
-            css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+            ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const & xPackage,
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv,
             bool sortIn = true );
         SvLBoxEntry * addPackageNode(
             SvLBoxEntry * parentNode,
-            css::uno::Reference<css::deployment::XPackage> const & xPackage,
-            css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+            ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const & xPackage,
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_context;
         DialogImpl * m_dialog;
         SvLBoxEntry * m_currentSelectedEntry;
         bool m_hiContrastMode;
@@ -122,6 +123,7 @@ struct DialogImpl :
         String m_strCtxEnable;
         String m_strCtxDisable;
         String m_strCtxExport;
+        String m_strCtxCheckUpdate;
 
         Image m_defaultPackage;
         Image m_defaultPackage_hc;
@@ -141,17 +143,21 @@ struct DialogImpl :
         virtual void ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
 
         virtual ~TreeListBoxImpl();
-        TreeListBoxImpl( Window * pParent, DialogImpl * dialog );
+        TreeListBoxImpl(
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & context,
+            Window * pParent, DialogImpl * dialog );
 
         SvLBoxEntry * getCurrentSingleSelectedEntry() const;
         bool isFirstLevelChild( SvLBoxEntry * entry ) const;
         ::rtl::OUString getContext( SvLBoxEntry * entry ) const;
-        css::uno::Reference<css::deployment::XPackage> getPackage(
+        ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> getPackage(
             SvLBoxEntry * entry ) const;
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
-            getSelectedPackages( bool onlyFirstLevel = false ) const;
-        void select(css::uno::Reference<css::deployment::XPackage> const &   xPackage);
+        void select(::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const &   xPackage);
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> getPackageManager(
+            SvLBoxEntry * entry ) const;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> >
+        getSelectedPackages( bool onlyFirstLevel = false ) const;
     };
 
     class SyncPushButton : public PushButton
@@ -187,11 +193,11 @@ struct DialogImpl :
     DECL_LINK( headbar_dragEnd, HeaderBar * );
 
     // solar thread functions, because of gtk file/folder picker:
-    css::uno::Sequence<rtl::OUString> solarthread_raiseAddPicker(
-        css::uno::Reference<css::deployment::XPackageManager>
+    ::com::sun::star::uno::Sequence<rtl::OUString> solarthread_raiseAddPicker(
+        ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager>
         const & xPackageManager );
     bool solarthread_raiseExportPickers(
-        css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> >
         const & selection,
         rtl::OUString & rDestFolder, rtl::OUString & rNewTitle,
         sal_Int32 & rNameClashAction );
@@ -201,26 +207,29 @@ struct DialogImpl :
     void clickRemove( USHORT id );
     void clickEnableDisable( USHORT id );
     void clickExport( USHORT id );
-
+    void clickCheckUpdates( USHORT id );
     void installExtensions();
 
-
     void updateButtonStates(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv =
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv =
         com::sun::star::uno::Reference<
         com::sun::star::ucb::XCommandEnvironment>() );
 
     void errbox( ::rtl::OUString const & msg );
 
+    void checkUpdates(bool selected);
 
+    ::rtl::Reference<ModifiableContext> m_modifiableContext;
     const css::uno::Sequence< ::rtl::OUString > m_arExtensions;
     oslThread m_installThread;
     bool m_bAutoInstallFinished;
-    bool m_allowSharedLayerModification;
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
-    css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPkgMgrFac;
-    css::uno::Reference<css::frame::XDesktop> m_xDesktop;
-    css::uno::Reference<css::ucb::XContent> m_xTdocRoot;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xComponentContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManagerFactory> m_xPkgMgrFac;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> >
+        m_packageManagers;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> m_xDesktop;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> m_xTdocRoot;
 
     const String m_strAddPackages;
     const String m_strAddingPackages;
@@ -251,10 +260,13 @@ struct DialogImpl :
     ::std::auto_ptr<ThreadedPushButton> m_enableButton;
     ::std::auto_ptr<ThreadedPushButton> m_disableButton;
     ::std::auto_ptr<ThreadedPushButton> m_exportButton;
+    ::std::auto_ptr<SyncPushButton> m_checkUpdatesButton;
     ::std::auto_ptr<FixedLine> m_bottomLine;
 
     ::std::auto_ptr<OKButton> m_closeButton;
     ::std::auto_ptr<HelpButton> m_helpButton;
+
+    ::std::auto_ptr<Updatability> m_updatability;
 
     DECL_STATIC_LINK( DialogImpl, destroyDialog, void * );
     DECL_LINK( startInstallExtensions, DialogImpl *);
@@ -262,25 +274,45 @@ struct DialogImpl :
     virtual ~DialogImpl();
     DialogImpl(
         Window * pParent,
-        css::uno::Sequence< ::rtl::OUString > const & arExtensions,
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > const & arExtensions,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext );
     static ::rtl::Reference<DialogImpl> get(
-        css::uno::Reference<css::uno::XComponentContext> const & xContext,
-        css::uno::Reference<css::awt::XWindow> const & xParent = 0,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xContext,
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> const & xParent = 0,
         css::uno::Sequence< ::rtl::OUString > const & arExtensions = 0,
         ::rtl::OUString const & view = ::rtl::OUString() );
     // XEventListener
-    virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
-        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
+        throw (::com::sun::star::uno::RuntimeException);
     // XContentEventListener
-    virtual void SAL_CALL contentEvent( css::ucb::ContentEvent const & evt )
-        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL contentEvent( ::com::sun::star::ucb::ContentEvent const & evt )
+        throw (::com::sun::star::uno::RuntimeException);
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( css::lang::EventObject const & evt )
-        throw (css::frame::TerminationVetoException,
-               css::uno::RuntimeException);
+    virtual void SAL_CALL queryTermination( ::com::sun::star::lang::EventObject const & evt )
+        throw (::com::sun::star::frame::TerminationVetoException,
+               ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL notifyTermination(
-        css::lang::EventObject const & evt ) throw (css::uno::RuntimeException);
+        ::com::sun::star::lang::EventObject const & evt ) throw (::com::sun::star::uno::RuntimeException);
+};
+
+class SelectedPackageIterator: public salhelper::SimpleReferenceObject {
+public:
+    SelectedPackageIterator(DialogImpl::TreeListBoxImpl & list);
+
+    virtual ~SelectedPackageIterator();
+
+    void next(
+        ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> * package,
+        ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> * packageManager);
+        // must only be called with Application::GetSolarMutex() locked and
+        // while the DialogImpl::TreeListBoxImpl is still alive
+
+private:
+    SelectedPackageIterator(SelectedPackageIterator &); // not defined
+    void operator =(SelectedPackageIterator &); // not defined
+
+    DialogImpl::TreeListBoxImpl & m_list;
+    SvLBoxEntry * m_entry;
 };
 
 } // namespace dp_gui
