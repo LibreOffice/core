@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_description.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:55:46 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,7 @@
 
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/xml/dom/XElement.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
+#include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
 #include "cppuhelper/implbase2.hxx"
 
@@ -67,6 +66,9 @@ public:
         or any other error occured. Therefore it shoult only be used with
         new extensions.
 
+        Throws com::sun::star::uno::RuntimeException,
+        com::sun::star::deployment::DeploymentException,
+        dp_registry::backend::bundle::NoDescriptionException.
      */
     ExtensionDescription(
         const css::uno::Reference<css::uno::XComponentContext>& xContext,
@@ -75,14 +77,11 @@ public:
 
     ~ExtensionDescription();
 
-    css::uno::Reference<css::xml::dom::XElement> getRootElement() const
+    css::uno::Reference<css::xml::dom::XNode> getRootElement() const
     {
         return m_xRoot;
     }
-    css::uno::Reference<css::xml::xpath::XXPathAPI> getXPathAPI() const
-    {
-        return m_xXPath;
-    }
+
     ::rtl::OUString getExtensionRootUrl() const
     {
         return m_sExtensionRootUrl;
@@ -90,11 +89,7 @@ public:
 
 
 private:
-    ExtensionDescription(const ExtensionDescription& );
-    ExtensionDescription& operator = (const ExtensionDescription& );
-
-    css::uno::Reference<css::xml::dom::XElement> m_xRoot;
-    css::uno::Reference<css::xml::xpath::XXPathAPI> m_xXPath;
+    css::uno::Reference<css::xml::dom::XNode> m_xRoot;
     ::rtl::OUString m_sExtensionRootUrl;
 };
 
