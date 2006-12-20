@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:42:24 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,33 +46,33 @@
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include <memory>
 
-
-namespace css = ::com::sun::star;
-
 namespace dp_gui
 {
 
 struct DialogImpl;
 
 //==============================================================================
-class ProgressCommandEnv
-    : public ::cppu::WeakImplHelper3< css::ucb::XCommandEnvironment,
-                                      css::task::XInteractionHandler,
-                                      css::ucb::XProgressHandler >
-{
-    DialogImpl * m_mainDialog;
-    ::rtl::OUString m_title;
-    bool m_aborted;
-    // shared or user, may be empty string
-    ::rtl::OUString m_sContext;
-       bool m_bAskWhenInstalling;
+//Only if the class is consructed with the DialogImpl then the ProgressDialog can be
+//displayed. Otherwise this class can still be used to forward an interaction. This
+//is done by the interaction handler of the "Download and Installation" dialog.
 
-    css::uno::Reference<css::task::XInteractionHandler> m_xHandler;
+class ProgressCommandEnv
+    : public ::cppu::WeakImplHelper3< ::com::sun::star::ucb::XCommandEnvironment,
+                                      ::com::sun::star::task::XInteractionHandler,
+                                      ::com::sun::star::ucb::XProgressHandler >
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler> m_xHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    Dialog * m_dialog;
+    ::rtl::OUString m_title;
+       bool m_bAskWhenInstalling;
     sal_Int32 m_currentInnerProgress;
     sal_Int32 m_currentProgressSection;
-    sal_Int32 m_progressSections;
-   void updateProgress( ::rtl::OUString const & text = ::rtl::OUString() );
-    css::uno::Reference<css::task::XAbortChannel> m_xAbortChannel;
+    sal_Int32 m_progressSections
+    void updateProgress( ::rtl::OUString const & text = ::rtl::OUString() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel> m_xAbortChannel;
+    bool m_aborted;
+
     struct ProgressDialog : public Dialog
     {
         struct CancelButtonImpl : public CancelButton
@@ -99,51 +99,53 @@ class ProgressCommandEnv
     ::std::auto_ptr<ProgressDialog> m_progressDialog;
     DECL_LINK( executeDialog, ::osl::Condition * );
 
-    void update_( css::uno::Any const & Status )
-        throw (css::uno::RuntimeException);
+    void update_( ::com::sun::star::uno::Any const & Status )
+        throw (::com::sun::star::uno::RuntimeException);
 
     void solarthread_dtor();
 
-    Dialog * activeDialog(); // either m_progressDialog or m_mainDialog
+    Dialog * activeDialog(); // either m_progressDialog or m_dialog
 
 public:
     virtual ~ProgressCommandEnv();
+
     // When param bAskWhenInstalling = true, then the user is asked if he
     //agrees to install this extension.
-    inline ProgressCommandEnv( DialogImpl * mainDialog,
-                               ::rtl::OUString const & title,
-                               ::rtl::OUString const & context,
-                               bool bAskWhenInstalling = false)
-        : m_mainDialog( mainDialog ),
-          m_title( title ),
-          m_aborted( false ),
-          m_sContext(context),
-          m_bAskWhenInstalling(bAskWhenInstalling)
+    inline ProgressCommandEnv(
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > ctx,
+        Dialog * dialog,
+        ::rtl::OUString const & title,
+        bool bAskWhenInstalling = false):
+        m_xContext(ctx),
+        m_dialog( dialog ),
+        m_title( title ),
+        m_bAskWhenInstalling(bAskWhenInstalling),
+        m_aborted( false )
         {}
 
     void showProgress( sal_Int32 progressSections );
     void progressSection(
         String const & text,
-        css::uno::Reference< css::task::XAbortChannel > const & xAbortChannel = 0 );
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > const & xAbortChannel = 0 );
     inline bool isAborted() const { return m_aborted; }
 
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL
+    getInteractionHandler() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler >
+    SAL_CALL getProgressHandler() throw (::com::sun::star::uno::RuntimeException);
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException);
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const & xRequest )
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XProgressHandler
-    virtual void SAL_CALL push( css::uno::Any const & Status )
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL update( css::uno::Any const & Status )
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL pop() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL push( ::com::sun::star::uno::Any const & Status )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL update( ::com::sun::star::uno::Any const & Status )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL pop() throw (::com::sun::star::uno::RuntimeException);
 };
 
 }
