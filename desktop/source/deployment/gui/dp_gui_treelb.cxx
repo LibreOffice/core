@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:27 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:23:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/deployment/UpdateInformationProvider.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/ucb/ContentAction.hpp"
 #include "com/sun/star/frame/XModuleManager.hpp"
 #include <hash_set>
@@ -106,10 +108,12 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
     const OUString m_factoryURL;
     Reference<deployment::XPackageManager> m_xPackageManager;
     Reference<deployment::XPackage> m_xPackage;
+    Reference<css::uno::XComponentContext> m_xComponentContext;
 
     virtual ~NodeImpl();
 
-    inline NodeImpl( DialogImpl::TreeListBoxImpl * treelb,
+    inline NodeImpl( Reference<css::uno::XComponentContext> xComponentContext,
+                     DialogImpl::TreeListBoxImpl * treelb,
                      OUString const & factoryURL,
                      Reference<deployment::XPackageManager> const &
                      xPackageManager,
@@ -119,7 +123,8 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
           m_it( treelb->m_nodes.end() ),
           m_factoryURL( factoryURL ),
           m_xPackageManager( xPackageManager ),
-          m_xPackage( xPackage )
+          m_xPackage( xPackage ),
+          m_xComponentContext(xComponentContext)
         {}
 
     Image getIcon() const;
@@ -279,16 +284,16 @@ void NodeImpl::modified( Reference<XCommandEnvironment> const & xCmdEnv )
         switch (getPackageState( m_xPackage, xCmdEnv ))
         {
         case REGISTERED:
-            m_treelb->SetEntryText( m_treelb->m_strEnabled, m_lbEntry, 1 );
+            m_treelb->SetEntryText( m_treelb->m_strEnabled, m_lbEntry, 2 );
             break;
         case NOT_REGISTERED:
-            m_treelb->SetEntryText( m_treelb->m_strDisabled, m_lbEntry, 1 );
+            m_treelb->SetEntryText( m_treelb->m_strDisabled, m_lbEntry, 2 );
             break;
         case AMBIGUOUS:
-            m_treelb->SetEntryText( m_treelb->m_strUnknown, m_lbEntry, 1 );
+            m_treelb->SetEntryText( m_treelb->m_strUnknown, m_lbEntry, 2 );
             break;
         case NOT_AVAILABLE:
-            m_treelb->SetEntryText( String(), m_lbEntry, 1 );
+            m_treelb->SetEntryText( String(), m_lbEntry, 2 );
             break;
         }
 
@@ -330,7 +335,7 @@ void NodeImpl::modified( lang::EventObject const & )
 {
     try {
         const Reference<XCommandEnvironment> xCmdEnv(
-           new ProgressCommandEnv( m_treelb->m_dialog, String(), OUString() ) );
+           new ProgressCommandEnv( m_xComponentContext, m_treelb->m_dialog, String() ) );
         modified( xCmdEnv );
     }
     catch (RuntimeException &) {
@@ -378,13 +383,15 @@ long DialogImpl::SelectionBoxControl::Notify( NotifyEvent & rEvt )
 
 //______________________________________________________________________________
 DialogImpl::TreeListBoxImpl::TreeListBoxImpl(
-    Window * pParent, DialogImpl * dialog )
+    Reference<XComponentContext> const & context, Window * pParent,
+    DialogImpl * dialog )
     : SvHeaderTabListBox( pParent,
                           WB_CLIPCHILDREN | WB_TABSTOP |
                           WB_HASBUTTONS | WB_HASLINES |
                           /* WB_BORDER | */ WB_HASLINESATROOT |
                           WB_HASBUTTONSATROOT | WB_HIDESELECTION |
                           WB_HSCROLL ),
+      m_context( context ),
       m_dialog( dialog ),
       m_currentSelectedEntry( 0 ),
       m_hiContrastMode( GetDisplayBackground().GetColor().IsDark() ),
@@ -396,6 +403,7 @@ DialogImpl::TreeListBoxImpl::TreeListBoxImpl(
       m_strCtxEnable( getResourceString(RID_CTX_ITEM_ENABLE) ),
       m_strCtxDisable( getResourceString(RID_CTX_ITEM_DISABLE) ),
       m_strCtxExport( getResourceString(RID_CTX_ITEM_EXPORT) ),
+      m_strCtxCheckUpdate( getResourceString(RID_CTX_ITEM_CHECK_UPDATE) ),
       m_defaultPackage( getResId(RID_IMG_DEF_PACKAGE) ),
       m_defaultPackage_hc( getResId(RID_IMG_DEF_PACKAGE_HC) ),
       m_defaultPackageBundle( getResId(RID_IMG_DEF_PACKAGE_BUNDLE) ),
@@ -429,7 +437,7 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
     bool sortIn )
 {
     NodeImpl * node = new NodeImpl(
-        this, factoryURL, xPackageManager, xPackage );
+        m_context, this, factoryURL, xPackageManager, xPackage );
     Reference<util::XModifyListener> xListener( node );
     m_nodes.push_front( xListener );
     node->m_it = m_nodes.begin();
@@ -463,9 +471,10 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
     else
     {
         String name( displayName );
-        name.AppendAscii( RTL_CONSTASCII_STRINGPARAM("\t") );
+        name.AppendAscii( RTL_CONSTASCII_STRINGPARAM("\t\t") );
         node->m_lbEntry = InsertEntryToColumn(
             name, imgIcon, imgIcon, parentNode, pos, 0xffff, node );
+        SetEntryText( xPackage->getVersion(), node->m_lbEntry, 1 );
         // update status:
         node->modified( xCmdEnv );
         node->m_xPackage->addModifyListener( xListener );
@@ -540,6 +549,16 @@ DialogImpl::TreeListBoxImpl::getPackage( SvLBoxEntry * entry ) const
 }
 
 //______________________________________________________________________________
+Reference<deployment::XPackageManager>
+DialogImpl::TreeListBoxImpl::getPackageManager( SvLBoxEntry * entry ) const
+{
+    if (entry == 0)
+        return Reference<deployment::XPackageManager>();
+    else
+        return NodeImpl::get(entry)->m_xPackageManager;
+}
+
+//______________________________________________________________________________
 PopupMenu * DialogImpl::TreeListBoxImpl::CreateContextMenu(void)
 {
     if (m_dialog == 0)
@@ -551,23 +570,44 @@ PopupMenu * DialogImpl::TreeListBoxImpl::CreateContextMenu(void)
         menu->InsertItem( RID_BTN_ADD, m_strCtxAdd );
     if (m_dialog->m_removeButton->IsEnabled())
         menu->InsertItem( RID_BTN_REMOVE, m_strCtxRemove );
-    if ((m_dialog->m_addButton->IsEnabled() ||
-         m_dialog->m_removeButton->IsEnabled()) &&
-        (m_dialog->m_enableButton->IsEnabled()||
-         m_dialog->m_disableButton->IsEnabled()))
-        menu->InsertSeparator();
 
+    if ((m_dialog->m_enableButton->IsEnabled()
+         || m_dialog->m_disableButton->IsEnabled())
+        && menu->GetItemCount() != 0)
+        menu->InsertSeparator();
     if (m_dialog->m_enableButton->IsEnabled())
         menu->InsertItem( RID_BTN_ENABLE, m_strCtxEnable );
     if (m_dialog->m_disableButton->IsEnabled())
         menu->InsertItem( RID_BTN_DISABLE, m_strCtxDisable );
-    if (m_dialog->m_exportButton->IsEnabled() &&
-        (m_dialog->m_addButton->IsEnabled() ||
-         m_dialog->m_removeButton->IsEnabled()))
-        menu->InsertSeparator();
 
     if (m_dialog->m_exportButton->IsEnabled())
+    {
+        if (menu->GetItemCount() != 0)
+            menu->InsertSeparator();
         menu->InsertItem( RID_BTN_EXPORT, m_strCtxExport );
+    }
+
+    bool updateUrl = deployment::UpdateInformationProvider::create(m_context)->
+        hasPredeterminedUpdateURL();
+    for (SvLBoxEntry * e = FirstSelected(); e != NULL; e = NextSelected(e))
+    {
+        if (isFirstLevelChild(e))
+        {
+            updateUrl = updateUrl ||
+                getPackage(e)->getUpdateInformationURLs().getLength() != 0;
+        }
+        else
+        {
+            updateUrl = false;
+            break;
+        }
+    }
+    if (updateUrl)
+    {
+        if (menu->GetItemCount() != 0)
+            menu->InsertSeparator();
+        menu->InsertItem( RID_BTN_CHECK_UPDATES, m_strCtxCheckUpdate );
+    }
 
     return menu.release();
 }
@@ -596,6 +636,9 @@ void DialogImpl::TreeListBoxImpl::ExcecuteContextMenuAction(
         break;
     case RID_BTN_EXPORT:
         m_dialog->m_exportButton->Click();
+        break;
+    case RID_BTN_CHECK_UPDATES:
+        m_dialog->checkUpdates(true);
         break;
     default:
         OSL_ENSURE( 0, "### forgot button entry?!" );
@@ -703,7 +746,7 @@ void DialogImpl::TreeListBoxImpl::RequestingChilds( SvLBoxEntry * pParent )
         NodeImpl * parentNode = NodeImpl::get(pParent);
 
         const Reference<XCommandEnvironment> xCmdEnv(
-            new ProgressCommandEnv( m_dialog, String(), OUString() ) );
+            new ProgressCommandEnv(m_context, m_dialog, String()) );
         if (parentNode->m_xPackage.is()) {
             packages = parentNode->m_xPackage->getBundle(
                 Reference<task::XAbortChannel>(), xCmdEnv );
