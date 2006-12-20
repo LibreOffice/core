@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-03 15:12:25 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 12:27:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,6 @@ $(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk
 .ELSE
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 .ENDIF
-
-$(DESTDIRCOMMONDOCU)$/spec$/xml_format$/xml_specification.pdf : xml_specification.pdf
-    +-rm -f $@ >& $(NULLDEV)
-    $(GNUCOPY) xml_specification.pdf $@
 
 $(DESTDIRXML)$/module-description.dtd : $(XMLOUT)$/module-description.dtd
     +-rm -f $@ >& $(NULLDEV)
