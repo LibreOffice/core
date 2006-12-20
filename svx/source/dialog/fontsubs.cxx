@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:20:03 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,8 +204,12 @@ SvLBoxEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
 
-    pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
-    pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+    pEntry->AddItem( new SvLBoxButton( pEntry,
+                                           SvLBoxButtonKind_enabledCheckbox, 0,
+                                           pCheckButtonData ) );
+    pEntry->AddItem( new SvLBoxButton( pEntry,
+                                           SvLBoxButtonKind_enabledCheckbox, 0,
+                                           pCheckButtonData ) );
 
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rFont1 ) );
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rFont2 ) );
