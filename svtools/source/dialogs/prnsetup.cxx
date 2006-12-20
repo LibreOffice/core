@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnsetup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:45:34 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,17 +57,12 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
 {
     ImplFreePrnDlgListBox( pBox );
 
-    USHORT nCount = Printer::GetQueueCount();
+    const std::vector<rtl::OUString>& rPrinters = Printer::GetPrinterQueues();
+    unsigned int nCount = rPrinters.size();
     if ( nCount )
     {
-        for( USHORT i = 0; i < nCount; i++ )
-        {
-            const QueueInfo& rInfo = Printer::GetQueueInfo( i, FALSE );
-            USHORT nPos = pBox->InsertEntry( rInfo.GetPrinterName() );
-            if ( nPos != LISTBOX_ERROR )
-                pBox->SetEntryData( nPos, new QueueInfo( rInfo ) );
-        }
-
+        for( unsigned int i = 0; i < nCount; i++ )
+            pBox->InsertEntry( rPrinters[i] );
         pBox->SelectEntry( pPrinter->GetName() );
     }
 
@@ -79,10 +74,6 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
 
 void ImplFreePrnDlgListBox( ListBox* pBox, BOOL bClear )
 {
-    USHORT nEntryCount = pBox->GetEntryCount();
-    for ( USHORT i = 0; i < nEntryCount; i++ )
-        delete (QueueInfo*)pBox->GetEntryData( i );
-
     if ( bClear )
         pBox->Clear();
 }
@@ -94,27 +85,31 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
 {
     if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
-        const QueueInfo& rInfo = *((QueueInfo*)(pBox->GetEntryData( pBox->GetSelectEntryPos() )));
-
-        if ( !pTempPrinter )
+        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), true );
+        if( pInfo)
         {
-            if ( (pPrinter->GetName() == rInfo.GetPrinterName()) &&
-                 (pPrinter->GetDriverName() == rInfo.GetDriver()) )
-                pTempPrinter = new Printer( pPrinter->GetJobSetup() );
+            if ( !pTempPrinter )
+            {
+                if ( (pPrinter->GetName() == pInfo->GetPrinterName()) &&
+                     (pPrinter->GetDriverName() == pInfo->GetDriver()) )
+                    pTempPrinter = new Printer( pPrinter->GetJobSetup() );
+                else
+                    pTempPrinter = new Printer( *pInfo );
+            }
             else
-                pTempPrinter = new Printer( rInfo );
+            {
+                if ( (pTempPrinter->GetName() != pInfo->GetPrinterName()) ||
+                     (pTempPrinter->GetDriverName() != pInfo->GetDriver()) )
+                {
+                    delete pTempPrinter;
+                    pTempPrinter = new Printer( *pInfo );
+                }
+            }
+
+            pPropBtn->Enable( pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
         }
         else
-        {
-            if ( (pTempPrinter->GetName() != rInfo.GetPrinterName()) ||
-                 (pTempPrinter->GetDriverName() != rInfo.GetDriver()) )
-            {
-                delete pTempPrinter;
-                pTempPrinter = new Printer( rInfo );
-            }
-        }
-
-        pPropBtn->Enable( pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
+            pPropBtn->Disable();
     }
     else
         pPropBtn->Disable();
@@ -132,18 +127,7 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
     else
         aPrnName = pPrinter->GetName();
 
-    BOOL    bFound = FALSE;
-    USHORT  nCount = Printer::GetQueueCount();
-    for( USHORT i = 0; i < nCount; i++ )
-    {
-        if ( aPrnName == Printer::GetQueueInfo( i, FALSE ).GetPrinterName() )
-        {
-            bFound = TRUE;
-            break;
-        }
-    }
-
-    if ( !bFound )
+    if ( ! Printer::GetQueueInfo( aPrnName, false ) )
     {
         if ( pTempPrinter )
             delete pTempPrinter;
@@ -159,19 +143,9 @@ void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
 {
     if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
-        rInfo = *((QueueInfo*)(pBox->GetEntryData( pBox->GetSelectEntryPos() )));
-
-        USHORT nCount = Printer::GetQueueCount();
-        for( USHORT i = 0; i < nCount; i++ )
-        {
-            const QueueInfo& rTempInfo = Printer::GetQueueInfo( i, FALSE );
-            if ( (rInfo.GetPrinterName() == rTempInfo.GetPrinterName()) &&
-                 (rInfo.GetDriver() == rTempInfo.GetDriver()) )
-            {
-                rInfo = Printer::GetQueueInfo( i );
-                break;
-            }
-        }
+        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), true );
+        if( pInfo )
+            rInfo = *pInfo;
     }
 }
 
@@ -314,7 +288,7 @@ PrinterSetupDialog::~PrinterSetupDialog()
 
 void PrinterSetupDialog::ImplSetInfo()
 {
-    const QueueInfo* pInfo = (QueueInfo*)(maLbName.GetEntryData( maLbName.GetSelectEntryPos() ));
+    const QueueInfo* pInfo = Printer::GetQueueInfo(maLbName.GetSelectEntry(), true);
     if ( pInfo )
     {
         maFiType.SetText( pInfo->GetDriver() );
@@ -402,6 +376,8 @@ short PrinterSetupDialog::Execute()
         DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
         return FALSE;
     }
+
+    Printer::updatePrinters();
 
     ImplFillPrnDlgListBox( mpPrinter, &maLbName, &maBtnProperties );
     ImplSetInfo();
