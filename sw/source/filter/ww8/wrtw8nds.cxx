@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:56:00 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 12:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1810,6 +1810,15 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             }
         }
 
+        BOOL bParaRTL = FALSE;
+        const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
+            pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
+        if ( aAttrIter.IsParaRTL())
+            bParaRTL = TRUE;
+
+        if( !pTmpSet )
+            pTmpSet = pNd->GetpSwAttrSet();
+
         if( pNd->IsNumbered())
         {
             const SwNumRule* pRule = pNd->GetNumRule();
@@ -1826,7 +1835,13 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             if( pNd->IsNumbered() && pNd->IsCounted() )
             {
-                aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
+                if (bParaRTL)
+                {
+                            aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt) + pFmt->GetAbsLSpace());
+                }
+                else
+                        aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
+
                 if (SFX_ITEM_SET !=
                     pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
                 {
@@ -1857,7 +1872,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         cannot export that, its its ltr then that's ok as thats word's
         default. Otherwise we must add a RTL attribute to our export list
         */
-        const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
+        pItem = (const SvxFrameDirectionItem*)
             pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
         if (
             (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT) &&
@@ -1869,7 +1884,6 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
         }
-
         // --> OD 2005-10-18 #126238# - move code for handling of numbered,
         // but not counted paragraphs to this place. Otherwise, the paragraph
         // isn't exported as numbered, but not counted, if no other attribute
