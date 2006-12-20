@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:58:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ class SfxAccCfgTabListBox_Impl : public SvTabListBox
     void                        KeyInput( const KeyEvent &rKEvt );
 
 protected:
-    virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
+    virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
 
 public:
                                 SfxAccCfgTabListBox_Impl(
