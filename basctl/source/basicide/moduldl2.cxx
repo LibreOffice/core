@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:23:26 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,9 +343,9 @@ BOOL BasicCheckBox::IsChecked( ULONG nPos ) const
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2 )
+void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
 {
-    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2 );
+    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
 
     if ( nMode == LIBMODE_MANAGER )
     {
