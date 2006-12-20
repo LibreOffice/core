@@ -4,9 +4,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,7 @@ namespace configmgr
         Result handle(GroupNodeAccess const & _aNode);
         Result handle(SetNodeAccess const & _aNode);
 
-        Address makeTemplateData(Address _aSourceTemplate);
+        Address makeTemplateData(Accessor const & _aSourceAccessor, Address _aSourceTemplate);
     };
 //-----------------------------------------------------------------------------
 
@@ -799,7 +799,7 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(SetNodeAccess const & _aNode)
 
     sharable::Name aNodeName = allocName( aSrc.info.getName());
     Flags::Field aFlags = aSrc.info.flags;
-    Address aTemplate = this->makeTemplateData(aSrc.elementType);
+    Address aTemplate = this->makeTemplateData(_aNode.accessor(), aSrc.elementType);
 
     this->builder().addSet(aNodeName,aFlags,aTemplate);
 
@@ -812,9 +812,12 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(SetNodeAccess const & _aNode)
 }
 //-----------------------------------------------------------------------------
 
-Address CopyingDataTreeBuilder::makeTemplateData(Address _aSourceTemplate)
+Address CopyingDataTreeBuilder::makeTemplateData(Accessor const & _aSourceAccessor, Address _aSourceTemplate)
 {
-    return SetNode::copyTemplateData(allocator(), _aSourceTemplate);
+    rtl::OUString aTemplateName      = SetNode::getTemplateDataName(_aSourceAccessor,_aSourceTemplate);
+    rtl::OUString aTemplateModule    = SetNode::getTemplateDataModule(_aSourceAccessor,_aSourceTemplate);
+
+    return SetNode::allocTemplateData(allocator(), aTemplateName, aTemplateModule );
 }
 //-----------------------------------------------------------------------------
 
