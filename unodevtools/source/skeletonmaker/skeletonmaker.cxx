@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletonmaker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:43:46 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 12:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,10 @@ static const char usageText[] =
 "                using the implementation name as the file and class name. A \n"
 "                service type is necessary, referencing an interface which defines\n"
 "                the new add-in functions.\n"
-// "    add-on      generates a language specific code skeleton for an add-on compnent\n"
-// "                using the implementation name as the file and class name. The protocol\n"
-// "                name(s) and the corresponding command(s) have to be specified with the\n"
-// "                '-p' option.\n"
+"    add-on      generates a language specific code skeleton for an add-on compnent\n"
+"                using the implementation name as the file and class name. The protocol\n"
+"                name(s) and the corresponding command(s) have to be specified with the\n"
+"                '-p' option.\n"
 "\n options:\n"
 "    -env:INIFILENAME=<url> url specifies a URL to an UNO ini|rc file of an\n"
 "                           existing UNO environment (URE, office installation).\n"
@@ -118,9 +118,9 @@ static const char usageText[] =
 "                           return values are dumped.\n"
 "    -t <name>              specifies an UNOIDL type name, e.g.\n"
 "                           com.sun.star.text.XText (can be used more than once)\n"
-// "    -p <protocol:cmd(s)>   specifies an add-on protocol name and the corresponding\n"
-// "                           command names, where the commands are a ',' separated list\n"
-// "                           of unique commands. This option is only valid for add-ons.\n"
+"    -p <protocol:cmd(s)>   specifies an add-on protocol name and the corresponding\n"
+"                           command names, where the commands are a ',' separated list\n"
+"                           of unique commands. This option is only valid for add-ons.\n"
 "    -V, --version          print version number and exit\n"
 "    -h, --help             print this help and exit\n\n"
 " Sun Microsystems (R) ";
@@ -130,19 +130,16 @@ void printUsageAndExit(const char* programname, const char* version)
     std::cerr
         << "\n using: " << programname
         << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
-        << "                          dump [<options>] -t <type> ...\n"
+        << "            dump [<options>] -t <type> ...\n"
         << "        " << programname
         << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
-        << "                          component [<options>] -n <name> -t "
-        << "<type> ...\n"
+        << "            component [<options>] -n <name> -t <type> ...\n"
         << "        " << programname
         << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
-        << "                          calc-add-in [<options>] -n <name> -t "
-        << "<add-in_service>\n"
-//         << "        " << programname
-//         << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
-//         << "                          add-on [<options>] -n <name> -p"
-//         << "<protocol_name:command,...>\n"
+        << "            calc-add-in [<options>] -n <name> -t <add-in_service>\n"
+        << "        " << programname
+        << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
+        << "            add-on [<options>] -n <name> -p <protocol_name:command,...>\n"
         << "        " << programname << " -V, --version\n"
         << "        " << programname << " -h, --help\n"
         << usageText
