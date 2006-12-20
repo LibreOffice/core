@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presethandler.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:30:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,11 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::embed::XStorage > m_xWorkingStorageShare;
 
         //---------------------------------------
+        /** @short  global language-independent storage
+         */
+        css::uno::Reference< css::embed::XStorage > m_xWorkingStorageNoLang;
+
+        //---------------------------------------
         /** @short  holds the folder storage of the user layer alive,
                     where the current configuration set exists.
 
@@ -259,6 +264,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         //---------------------------------------
         /** @short  knows the relative path from the root. */
         ::rtl::OUString m_sRelPathShare;
+        ::rtl::OUString m_sRelPathNoLang;
         ::rtl::OUString m_sRelPathUser;
 
     //-------------------------------------------
@@ -451,9 +457,13 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
             @param  sPreset
                     the ALIAS name of an existing preset.
 
+            @param  bNoLangGlobal
+                    access the global language-independent storage instead of the preset storage
+
             @return The opened preset stream ... or NULL if the preset does not exists.
          */
-        css::uno::Reference< css::io::XStream > openPreset(const ::rtl::OUString& sPreset);
+        css::uno::Reference< css::io::XStream > openPreset(const ::rtl::OUString& sPreset,
+                                                           sal_Bool bUseNoLangGlobal = sal_False);
 
         //---------------------------------------
         /** @short  open the specified target as stream object
