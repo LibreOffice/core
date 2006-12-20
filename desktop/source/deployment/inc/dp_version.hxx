@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_version.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:54:42 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 #include "com/sun/star/uno/Reference.hxx"
 #endif
 
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
+#include "dp_misc_api.hxx"
+#endif
+
 namespace com { namespace sun { namespace star { namespace deployment {
     class XPackage;
 } } } }
@@ -53,10 +57,10 @@ namespace dp_misc {
 
 enum Order { LESS, EQUAL, GREATER };
 
-Order compareVersions(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Order compareVersions(
     ::rtl::OUString const & version1, ::rtl::OUString const & version2);
 
-Order comparePackageVersions(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Order comparePackageVersions(
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
         const & package1,
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
