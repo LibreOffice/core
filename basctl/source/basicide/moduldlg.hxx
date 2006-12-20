@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:23:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ public:
     void            CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
     BOOL            IsChecked( ULONG nPos ) const;
 
-    virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
+    virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
     virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
