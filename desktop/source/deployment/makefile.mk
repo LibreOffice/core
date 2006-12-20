@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 17:01:35 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 14:21:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,25 +42,29 @@ ENABLE_EXCEPTIONS = TRUE
 NO_BSYMBOLIC = TRUE
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
+
+INCPRE += inc
+
 DLLPRE =
-
-LIB1TARGET = $(SLB)$/$(TARGET).lib
-
-LIB1FILES = \
-        $(SLB)$/deployment_registry_configuration.lib \
-        $(SLB)$/deployment_registry_component.lib \
-        $(SLB)$/deployment_registry_script.lib \
-        $(SLB)$/deployment_registry_sfwk.lib \
-        $(SLB)$/deployment_registry_package.lib \
-        $(SLB)$/deployment_registry.lib \
-        $(SLB)$/deployment_manager.lib \
-        $(SLB)$/deployment_migration.lib \
-        $(SLB)$/deployment_misc.lib
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = $(TARGET).map
 
-SHL1LIBS = $(LIB1TARGET)
+SHL1LIBS = \
+    $(SLB)$/deployment_manager.lib \
+    $(SLB)$/deployment_migration.lib \
+    $(SLB)$/deployment_registry.lib \
+    $(SLB)$/deployment_registry_component.lib \
+    $(SLB)$/deployment_registry_configuration.lib \
+    $(SLB)$/deployment_registry_package.lib \
+    $(SLB)$/deployment_registry_script.lib \
+    $(SLB)$/deployment_registry_sfwk.lib
+SHL1OBJS = \
+    $(SLO)$/dp_log.obj \
+    $(SLO)$/dp_persmap.obj \
+    $(SLO)$/dp_services.obj \
+    $(SLO)$/dp_xml.obj
 
 SHL1STDLIBS = \
         $(SALLIB) \
@@ -69,20 +73,17 @@ SHL1STDLIBS = \
         $(UCBHELPERLIB) \
         $(COMPHELPERLIB) \
         $(TOOLSLIB) \
-        $(UNOTOOLSLIB) \
         $(XMLSCRIPTLIB) \
-        $(BERKELEYLIB) \
-        $(SVLLIB)
-#        $(BERKELEYCPPLIB) \
-
+        $(SVLLIB) \
+        $(DEPLOYMENTMISCLIB)
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME = $(SHL1TARGET)
-#DEFLIB1NAME = $(TARGET)
-#DEF1DEPN =
+
+SLOFILES = $(LIB1OBJFILES)
 
 RESLIB1NAME = $(TARGET)
 
