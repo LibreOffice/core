@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:09:13 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,10 @@
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
 #include <toolkit/awt/vclxtoolkit.hxx>
+
+#include <toolkit/awt/xsimpleanimation.hxx>
+#include <toolkit/awt/xthrobber.hxx>
+
 #ifndef _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
 #include <toolkit/awt/vclxtopwindow.hxx>
 #endif
@@ -120,6 +124,7 @@
 #include <toolkit/helper/unowrapper.hxx>
 #endif
 #include <toolkit/helper/servicenames.hxx>
+
 
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
@@ -388,8 +393,10 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "radiobutton",        WINDOW_RADIOBUTTON },
     { "scrollbar",          WINDOW_SCROLLBAR },
     { "scrollbarbox",       WINDOW_SCROLLBARBOX },
+    { "simpleanimation",    WINDOW_CONTROL },
     { "spinbutton",         WINDOW_SPINBUTTON },
     { "spinfield",          WINDOW_SPINFIELD },
+    { "throbber",           WINDOW_CONTROL },
     { "splitter",           WINDOW_SPLITTER },
     { "splitwindow",        WINDOW_SPLITWINDOW },
     { "statusbar",          WINDOW_STATUSBAR },
@@ -1023,6 +1030,22 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     else
                         pNewWindow = new Window( pParent, nWinBits );
                     *ppNewComp = new VCLXWindow;
+                }
+            break;
+            case WINDOW_CONTROL:
+                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("simpleanimation") ) )
+                {
+                    nWinBits |= WB_SCALE;
+                    pNewWindow = new FixedImage( pParent, nWinBits );
+                    *ppNewComp = new ::toolkit::XSimpleAnimation;
+                }
+                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("throbber") ) )
+                {
+                    nWinBits |= WB_SCALE;
+                    pNewWindow = new FixedImage( pParent, nWinBits );
+                    *ppNewComp = new ::toolkit::XThrobber;
                 }
             break;
             default:    DBG_ERROR( "UNO3!" );
