@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:42:15 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,12 +179,14 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     m_sModule               = rCopy.m_sModule;
     m_aSharedStorages       = rCopy.m_aSharedStorages;
     m_xWorkingStorageShare  = rCopy.m_xWorkingStorageShare;
+    m_xWorkingStorageNoLang = rCopy.m_xWorkingStorageNoLang;
     m_xWorkingStorageUser   = rCopy.m_xWorkingStorageUser;
     m_lPresets              = rCopy.m_lPresets;
     m_lTargets              = rCopy.m_lTargets;
     m_aLocale               = rCopy.m_aLocale;
     m_lDocumentStorages     = rCopy.m_lDocumentStorages;
     m_sRelPathShare         = rCopy.m_sRelPathShare;
+    m_sRelPathNoLang        = rCopy.m_sRelPathNoLang;
     m_sRelPathUser          = rCopy.m_sRelPathUser;
 }
 
@@ -192,6 +194,7 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
 PresetHandler::~PresetHandler()
 {
     m_xWorkingStorageShare.clear();
+    m_xWorkingStorageNoLang.clear();
     m_xWorkingStorageUser.clear();
 
     /* #i46497#
@@ -223,6 +226,7 @@ void PresetHandler::forgetCachedStorages()
     if (m_eConfigType == E_DOCUMENT)
     {
         m_xWorkingStorageShare.clear();
+        m_xWorkingStorageNoLang.clear();
         m_xWorkingStorageUser.clear();
     }
 
@@ -383,6 +387,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::embed::XStorage > xShare;
+    css::uno::Reference< css::embed::XStorage > xNoLang;
     css::uno::Reference< css::embed::XStorage > xUser;
 
     // special case for documents
@@ -412,6 +417,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     ::rtl::OUStringBuffer sRelPathBuf(1024);
     ::rtl::OUString       sRelPathShare;
+    ::rtl::OUString       sRelPathNoLang;
     ::rtl::OUString       sRelPathUser;
     switch(eConfigType)
     {
@@ -465,6 +471,10 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         }
         break;
     }
+
+    // Non-localized global share
+    xNoLang = xShare;
+    sRelPathNoLang = sRelPathShare;
 
     if (
         (aLocale     != ::comphelper::Locale::X_NOTRANSLATE()) && // localized level?
@@ -539,10 +549,12 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     aWriteLock.lock();
 
     m_xWorkingStorageShare = xShare  ;
+    m_xWorkingStorageNoLang= xNoLang;
     m_xWorkingStorageUser  = xUser   ;
     m_lPresets             = lPresets;
     m_lTargets             = lTargets;
     m_sRelPathShare        = sRelPathShare;
+    m_sRelPathNoLang       = sRelPathNoLang;
     m_sRelPathUser         = sRelPathUser;
 
     aWriteLock.unlock();
@@ -595,6 +607,7 @@ void PresetHandler::copyPresetToTarget(const ::rtl::OUString& sPreset,
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorkingShare = m_xWorkingStorageShare;
+    css::uno::Reference< css::embed::XStorage > xWorkingNoLang= m_xWorkingStorageNoLang;
     css::uno::Reference< css::embed::XStorage > xWorkingUser  = m_xWorkingStorageUser ;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -628,11 +641,12 @@ void PresetHandler::copyPresetToTarget(const ::rtl::OUString& sPreset,
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const ::rtl::OUString& sPreset)
+css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const ::rtl::OUString& sPreset,
+                                                                  sal_Bool bUseNoLangGlobal)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xFolder = m_xWorkingStorageShare;
+    css::uno::Reference< css::embed::XStorage > xFolder = bUseNoLangGlobal? m_xWorkingStorageNoLang: m_xWorkingStorageShare;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
