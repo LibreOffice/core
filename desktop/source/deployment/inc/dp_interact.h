@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_interact.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:18:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
 
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
+#include "dp_misc_api.hxx"
+#endif
 
 namespace css = ::com::sun::star;
 
@@ -112,7 +115,7 @@ inline void ProgressLevel::update( css::uno::Any const & status ) const
 
 /** @return true if ia handler is present and any selection has been chosen
  */
-bool interactContinuation(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool interactContinuation(
     css::uno::Any const & request,
     css::uno::Type const & continuation,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
@@ -121,7 +124,8 @@ bool interactContinuation(
 //##############################################################################
 
 //==============================================================================
-class AbortChannel : public ::cppu::WeakImplHelper1<css::task::XAbortChannel>
+class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC AbortChannel :
+    public ::cppu::WeakImplHelper1<css::task::XAbortChannel>
 {
     bool m_aborted;
     css::uno::Reference<css::task::XAbortChannel> m_xNext;
@@ -137,7 +141,7 @@ public:
     // XAbortChannel
     virtual void SAL_CALL sendAbort() throw (css::uno::RuntimeException);
 
-    class Chain
+    class SAL_DLLPRIVATE Chain
     {
         const ::rtl::Reference<AbortChannel> m_abortChannel;
     public:
