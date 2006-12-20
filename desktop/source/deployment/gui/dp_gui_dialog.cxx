@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:42:37 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #include "svtools/controldims.hrc"
 #include "dp_gui.h"
 #include "dp_gui_shared.hxx"
+#include "dp_gui_updatedialog.hxx"
+#include "dp_gui_updateinstalldialog.hxx"
+#include "dp_gui_updatedata.hxx"
 #include "rtl/uri.hxx"
 #include "osl/thread.hxx"
 #include "cppuhelper/exc_hlp.hxx"
@@ -73,11 +76,13 @@
 #include <vector>
 #include <algorithm>
 
-
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+
+namespace css = ::com::sun::star;
 using ::rtl::OUString;
 
 
@@ -86,7 +91,8 @@ using ::rtl::OUString;
 namespace dp_gui {
 
 const long ITEM_ID_PACKAGE = 1;
-const long ITEM_ID_STATUS = 2;
+const long ITEM_ID_VERSION = 2;
+const long ITEM_ID_STATUS = 3;
 
 namespace {
 extern "C" {
@@ -98,15 +104,16 @@ void SAL_CALL InstallThread( void * p )
 } // extern "C"
 } //anon namespace
 
+
 //______________________________________________________________________________
 DialogImpl::DialogImpl(
     Window * pParent, Sequence<OUString> const & arExtensions,
     Reference<XComponentContext> const & xContext )
     : ModelessDialog( pParent, getResId(RID_DLG_PACKAGE_MANAGER) ),
+      m_modifiableContext( new ModifiableContext ),
       m_arExtensions(arExtensions),
       m_installThread(0),
       m_bAutoInstallFinished(false),
-      m_allowSharedLayerModification( ! office_is_running() ),
       m_xComponentContext( xContext ),
       m_xPkgMgrFac( deployment::thePackageManagerFactory::get(xContext) ),
       m_strAddPackages( getResourceString(RID_STR_ADD_PACKAGES) ),
@@ -128,6 +135,8 @@ DialogImpl::DialogImpl(
 //______________________________________________________________________________
 DialogImpl::~DialogImpl()
 {
+    if (m_updatability.get() != NULL)
+        m_updatability->stop();
 }
 
 //------------------------------------------------------------------------------
@@ -161,7 +170,8 @@ DialogImpl::~DialogImpl()
     // selection box: header bar + treelistbox:
     that->m_selectionBox.reset( new SelectionBoxControl( that.get() ) );
     that->m_treelb.reset(
-        new TreeListBoxImpl( that->m_selectionBox.get(), that.get() ) );
+        new TreeListBoxImpl(
+            xContext, that->m_selectionBox.get(), that.get() ) );
     that->m_headerBar.reset(
         new HeaderBar( that->m_selectionBox.get() ) );
     that->m_headerBar->SetEndDragHdl(
@@ -185,6 +195,9 @@ DialogImpl::~DialogImpl()
     that->m_exportButton.reset(
         new ThreadedPushButton( that.get(),
                                 &DialogImpl::clickExport, RID_BTN_EXPORT ) );
+    that->m_checkUpdatesButton.reset(
+        new SyncPushButton( that.get(), &DialogImpl::clickCheckUpdates,
+                            RID_BTN_CHECK_UPDATES ) );
 
     that->m_bottomLine.reset( new FixedLine( that.get() ) );
     that->m_closeButton.reset(
@@ -196,6 +209,18 @@ DialogImpl::~DialogImpl()
 
     // free local resources (RID < 256):
     that->FreeResource();
+
+    css::uno::Reference<css::deployment::XPackageManager> xUserContext(
+        that->m_xPkgMgrFac->getPackageManager( OUSTR("user") ) );
+    css::uno::Reference<css::deployment::XPackageManager> xSharedContext(
+        that->m_xPkgMgrFac->getPackageManager( OUSTR("shared") ) );
+    that->m_packageManagers.realloc(2);
+    that->m_packageManagers[0] = xUserContext;
+    that->m_packageManagers[1] = xSharedContext;
+
+    that->m_updatability.reset(
+        new Updatability(
+            xContext, that->m_packageManagers, *that->m_checkUpdatesButton ) );
 
     // sizes, spacing, position:
     that->m_buttonSize = that->LogicToPixel(
@@ -255,13 +280,15 @@ DialogImpl::~DialogImpl()
 
     that->m_headerBar->InsertItem(
         ITEM_ID_PACKAGE, getResourceString(RID_STR_PACKAGE),
-        selWidth - statusWidth - vscrollWidth );
+        selWidth - statusWidth - statusWidth - vscrollWidth );
+    that->m_headerBar->InsertItem( ITEM_ID_VERSION, getResourceString(RID_STR_EXTENSION_VERSION), statusWidth);
     that->m_headerBar->InsertItem( ITEM_ID_STATUS, strStatus, statusWidth );
 
-    long tabs[ 3 ];
-    tabs[ 0 ] = 2; // two tabs
-    tabs[ 1 ] = statusWidth;
-    tabs[ 2 ] = selWidth - statusWidth - vscrollWidth;
+    long tabs[ 4 ];
+    tabs[ 0 ] = 3; // two tabs
+    tabs[ 1 ] = 0;
+    tabs[ 2 ] = selWidth - statusWidth -statusWidth - vscrollWidth;
+    tabs[ 3 ] = selWidth - statusWidth - vscrollWidth;
     that->m_treelb->SetTabs( tabs, MAP_PIXEL );
     that->m_treelb->InitHeaderBar( that->m_headerBar.get() );
 
@@ -273,7 +300,7 @@ DialogImpl::~DialogImpl()
         0 /* no parent */,
         getResourceString(RID_STR_USER_INSTALLATION),
         OUString() /* no factory URL */,
-        that->m_xPkgMgrFac->getPackageManager( OUSTR("user") ),
+        xUserContext,
         Reference<deployment::XPackage>(),
         Reference<XCommandEnvironment>(),
         false /* no sort in */ );
@@ -281,7 +308,7 @@ DialogImpl::~DialogImpl()
         0 /* no parent */,
         getResourceString(RID_STR_SHARED_INSTALLATION),
         OUString() /* no factory URL */,
-        that->m_xPkgMgrFac->getPackageManager( OUSTR("shared") ),
+        xSharedContext,
         Reference<deployment::XPackage>(),
         Reference<XCommandEnvironment>(),
         false /* no sort in */ );
@@ -398,6 +425,10 @@ void DialogImpl::Resize()
         buttonX,
         buttonY + (4 * (m_buttonSize.getHeight() + m_relatedSpace.getHeight())),
         m_buttonSize.getWidth(), m_buttonSize.getHeight() );
+    m_checkUpdatesButton->SetPosSizePixel(
+        buttonX,
+        buttonY + (5 * (m_buttonSize.getHeight() + m_relatedSpace.getHeight())),
+        m_buttonSize.getWidth(), m_buttonSize.getHeight() );
 
     long bottomY =
         totalSize.getHeight() -
@@ -478,7 +509,7 @@ void DialogImpl::installExtensions()
     OSL_ASSERT( xPackageManager.is() );
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, m_strAddingPackages, context, true ) );
+        new ProgressCommandEnv( context, this, m_strAddingPackages, true) );
     currentCmdEnv->showProgress( m_arExtensions.getLength() );
     Reference<task::XAbortChannel> xAbortChannel(
         xPackageManager->createAbortChannel() );
@@ -532,6 +563,8 @@ void DialogImpl::installExtensions()
 void DialogImpl::updateButtonStates(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
+    m_updatability->start();
+
     bool allowModification = true;
     bool bEnable = true;
     bool bDisable = true;
@@ -542,11 +575,8 @@ void DialogImpl::updateButtonStates(
     for ( SvLBoxEntry * entry = m_treelb->FirstSelected();
           entry != 0; entry = m_treelb->NextSelected(entry) )
     {
-        if (!m_allowSharedLayerModification && allowModification) {
-            allowModification &=
-                !m_treelb->getContext( entry ).equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("shared") );
-        }
+        allowModification = allowModification &&
+            m_modifiableContext->isModifiable( m_treelb->getContext( entry ) );
 
         Reference<deployment::XPackage> xPackage(
             m_treelb->getPackage(entry) );
@@ -723,7 +753,7 @@ void DialogImpl::clickAdd( USHORT )
         return;
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, m_strAddingPackages, context ) );
+        new ProgressCommandEnv( m_xComponentContext, this, m_strAddingPackages ) );
     currentCmdEnv->showProgress( files.getLength() );
     Reference<task::XAbortChannel> xAbortChannel(
         xPackageManager->createAbortChannel() );
@@ -745,6 +775,13 @@ void DialogImpl::clickAdd( USHORT )
                     file, OUString() /* detect media-type */,
                     xAbortChannel, currentCmdEnv.get() ) );
             OSL_ASSERT( xPackage.is() );
+        }
+        catch (css::ucb::CommandFailedException & )
+        {
+            //For exampl, we want to add many extensions, and one of them
+            //is already installed. Then we'll get a dialog asking if we want to overwrite. If we then press
+            //cancel the exception is thrown. This should not prevent us from installing all other
+            //extensions.
         }
         catch (CommandAbortedException &) {
             break;
@@ -777,7 +814,7 @@ void DialogImpl::clickRemove( USHORT )
     }
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, m_strRemovingPackages, ::rtl::OUString() ) );
+        new ProgressCommandEnv( m_xComponentContext, this, m_strRemovingPackages) );
     currentCmdEnv->showProgress( to_be_removed.size() );
     for ( ::std::size_t pos = 0;
           !currentCmdEnv->isAborted() && pos < to_be_removed.size(); ++pos )
@@ -804,9 +841,9 @@ void DialogImpl::clickEnableDisable( USHORT id )
     OSL_ASSERT( selection.getLength() > 0 );
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, id == RID_BTN_ENABLE
+        new ProgressCommandEnv( m_xComponentContext, this, id == RID_BTN_ENABLE
                                 ? m_strEnablingPackages
-                                : m_strDisablingPackages, ::rtl::OUString() ) );
+                                : m_strDisablingPackages ) );
     currentCmdEnv->showProgress( selection.getLength() );
     for ( sal_Int32 pos = 0;
           !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
@@ -869,7 +906,7 @@ bool DialogImpl::solarthread_raiseExportPickers(
             0, Any(true));
 
         ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-            new ProgressCommandEnv( this, m_strExportPackage, ::rtl::OUString()) );
+            new ProgressCommandEnv( m_xComponentContext, this, m_strExportPackage) );
         OSL_ASSERT( selection.getLength() == 1 );
         Reference<deployment::XPackage> const & xPackage = selection[ 0 ];
 
@@ -980,7 +1017,7 @@ void DialogImpl::clickExport( USHORT )
         return;
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( this, m_strExportingPackages, ::rtl::OUString() ) );
+        new ProgressCommandEnv( m_xComponentContext, this, m_strExportingPackages ) );
     currentCmdEnv->showProgress( selection.getLength() );
     for ( sal_Int32 pos = 0;
           !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
@@ -994,12 +1031,37 @@ void DialogImpl::clickExport( USHORT )
 }
 
 //______________________________________________________________________________
+void DialogImpl::clickCheckUpdates( USHORT )
+{
+    checkUpdates(false);
+}
+
+//______________________________________________________________________________
 void DialogImpl::errbox( OUString const & msg )
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
     ::std::auto_ptr<ErrorBox> box( new ErrorBox( this, WB_OK, msg ) );
     box->SetText( GetText() );
     box->Execute();
+}
+
+//______________________________________________________________________________
+void DialogImpl::checkUpdates(bool selected)
+{
+    std::vector<UpdateData> data;
+    if (UpdateDialog(
+            m_xComponentContext, this, m_modifiableContext,
+            (selected
+             ? new SelectedPackageIterator(*m_treelb.get())
+             : rtl::Reference<SelectedPackageIterator>()),
+            (selected
+             ? Sequence<Reference<deployment::XPackageManager> >()
+             : m_packageManagers),
+            &data).Execute() == RET_OK
+        && !data.empty())
+    {
+        UpdateInstallDialog(this, data, m_xComponentContext).Execute();
+    }
 }
 
 //##############################################################################
@@ -1093,6 +1155,35 @@ String DialogImpl::getResourceString( USHORT id )
         ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
     }
     return ret;
+}
+
+SelectedPackageIterator::SelectedPackageIterator(
+    DialogImpl::TreeListBoxImpl & list):
+    m_list(list),
+    m_entry(NULL)
+{}
+
+SelectedPackageIterator::~SelectedPackageIterator() {}
+
+void SelectedPackageIterator::next(
+    Reference<deployment::XPackage> * package,
+    Reference<deployment::XPackageManager> * packageManager)
+{
+    OSL_ASSERT(package != NULL && packageManager != NULL);
+    for (;;) {
+        m_entry = m_entry == NULL
+            ? m_list.FirstSelected() : m_list.NextSelected(m_entry);
+        if (m_entry == NULL) {
+            package->clear();
+            packageManager->clear();
+            break;
+        }
+        if (m_list.isFirstLevelChild(m_entry)) {
+            *package = m_list.getPackage(m_entry);
+            *packageManager = m_list.getPackageManager(m_entry);
+            break;
+        }
+    }
 }
 
 }
