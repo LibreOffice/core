@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:28:48 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1408,10 +1408,11 @@ IMPL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*, EMPTYARG)
  *
  * --------------------------------------------------*/
 void SwGlobalTree::InitEntry(SvLBoxEntry* pEntry,
-        const XubString& rStr ,const Image& rImg1,const Image& rImg2)
+        const XubString& rStr ,const Image& rImg1,const Image& rImg2,
+        SvLBoxButtonKind eButtonKind)
 {
     USHORT nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
-    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
+    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     SwLBoxString* pStr = new SwLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
