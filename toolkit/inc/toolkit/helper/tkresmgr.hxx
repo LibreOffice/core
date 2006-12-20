@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkresmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:58:48 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,18 @@
 #ifndef _TOOLKIT_HELPER_TKRESMGR_HXX_
 #define _TOOLKIT_HELPER_TKRESMGR_HXX_
 
-#ifndef _RTL_USTRING_HXX_
+#ifndef  _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef   _SV_IMAGE_HXX
+#include <vcl/image.hxx>
 #endif
 
 class SimpleResMgr;
+class ResMgr;
 
-#define TK_RES_STRING(id) TkResMgr::loadString(id)
+#define TK_RES_STRING(id)   TkResMgr::loadString(id)
+#define TK_RES_IMAGE(id)    TkResMgr::loadImage(id)
 
 // -----------------------------------------------------------------------------
 // TkResMgr
@@ -50,7 +55,8 @@ class SimpleResMgr;
 
 class TkResMgr
 {
-    static SimpleResMgr* m_pImpl;
+    static SimpleResMgr* m_pSimpleResMgr;
+    static ResMgr* m_pResMgr;
 
 private:
     // no instantiation allowed
@@ -58,7 +64,7 @@ private:
     ~TkResMgr() { }
 
     // we'll instantiate one static member of the following class,
-    // which in it's dtor ensures that m_pImpl will be deleted
+    // which in it's dtor ensures that m_pSimpleResMgr will be deleted
     class EnsureDelete
     {
     public:
@@ -73,6 +79,9 @@ protected:
 public:
     // loads the string with the specified resource id
     static ::rtl::OUString loadString( sal_uInt16 nResId );
+
+    // loads the image with the specified resource id
+    static Image loadImage( sal_uInt16 nResId );
 };
 
 
