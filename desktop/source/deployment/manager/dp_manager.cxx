@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:39 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -566,12 +566,15 @@ void PackageManagerImpl::insertToActivationLayerDB(
 }
 
 //______________________________________________________________________________
+/* The function returns true if there is an extension with the same id already
+    installed which needs to be uninstalled, before the new extension can be installed.
+*/
 bool PackageManagerImpl::checkUpdate(
     OUString const & title, Reference<deployment::XPackage> const & package,
-    bool * removeExisting, Reference<XCommandEnvironment> const & origCmdEnv,
+    Reference<XCommandEnvironment> const & origCmdEnv,
     Reference<XCommandEnvironment> const & wrappedCmdEnv )
 {
-    *removeExisting = false;
+    bool removeExisting = false;
     if (m_activePackagesDB->has( title ))
     {
         // package already deployed, interact --force:
@@ -595,15 +598,16 @@ bool PackageManagerImpl::checkUpdate(
                 static_cast<OWeakObject *>(this), request );
 
         // remove clashing package before registering new version:
-        *removeExisting = true;
+        removeExisting = true;
     }
-    return true;
+    return removeExisting;
 }
 //______________________________________________________________________________
 // Notify the user when a new extension is to be installed. This is only the case
 //when unopkg gui extension1 is used (used by system integration (double click on .oxt
 // file etc.)). In case there is already this extension then the function returns
 //true.
+//ToDo: Function always returns true or throws an exception
 bool PackageManagerImpl::checkInstall(
     OUString const & title, Reference<deployment::XPackage> const & package,
     Reference<XCommandEnvironment> const & cmdEnv)
@@ -715,27 +719,34 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             OSL_ASSERT( xPackage.is() );
             if (xPackage.is())
             {
-                bool install;
+                bool install = false;
                 try
                 {
-                    bool removeExisting = false;
-                    install = checkInstall(title, xPackage, xCmdEnv)
-                        && checkUpdate(
-                            title, xPackage, &removeExisting, xCmdEnv_, xCmdEnv )
-                        && xPackage->checkPrerequisites(xAbortChannel, xCmdEnv);
-                    if ( install && removeExisting )
-                        removePackage_(
-                            title, xAbortChannel,
-                            xCmdEnv_ /* unwrapped cmd env */ );
+                    //checkInstall throws an exception if the user denies the installation
+                    checkInstall(title, xPackage, xCmdEnv);
+                    //checkUpdate throws an exception if the user cancels the interaction.
+                    //For example, he may be asked if he wants to replace the older version
+                    //with the new version.
+                    //checkUpdates must be called before checkPrerequisites
+                    bool removeExisting = checkUpdate(
+                        title, xPackage, xCmdEnv_, xCmdEnv );
+
+                    if (xPackage->checkPrerequisites(xAbortChannel, xCmdEnv, removeExisting, m_context))
+                    {
+                        if (removeExisting)
+                            // remove extension which is already installed
+                            removePackage_(title, xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
+                        install = true;
+                    }
                 }
                 catch (...)
                 {
                     deletePackageFromCache( xPackage, destFolder );
                     throw;
                 }
-
                 if (install)
                 {
+                    //install new version of extension
                     insertToActivationLayerDB( title, dbData );
                     xPackage->registerPackage( xAbortChannel, xCmdEnv );
                 }
