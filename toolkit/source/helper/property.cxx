@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:15:45 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,6 +287,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "CurrentItemID",          CURRENTITEMID,          sal_Int16,      BOUND, MAYBEDEFAULT ),
 
             DECL_PROP_2     ( "WheelWithoutFocus",      WHEELWITHOUTFOCUS,      sal_Bool,       BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "StepTime",               STEP_TIME,              sal_Int32,      BOUND, MAYBEDEFAULT ),
 
             };
             pPropertyInfos = aImplPropertyInfos;
