@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:26:12 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 12:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -43,8 +43,8 @@
 
 // this define has to be set to split the names into different dll's or so's
 // every dll has his own set of property names
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _MAP_
 #include <map>
