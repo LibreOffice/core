@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:41:19 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,10 +619,10 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     if (pListItem && pListItem->GetValue())
     {
         SvStringsDtor aFaxList;
-        const USHORT nCount = Printer::GetQueueCount();
-        for (USHORT i = 0; i < nCount; ++i)
+        const std::vector<rtl::OUString>& rPrinters = Printer::GetPrinterQueues();
+        for (unsigned int i = 0; i < rPrinters.size(); ++i)
         {
-            String* pString = new String( Printer::GetQueueInfo( i ).GetPrinterName());
+            String* pString = new String( rPrinters[i] );
             String* &rpString = pString;
             aFaxList.Insert(rpString, 0);
         }
