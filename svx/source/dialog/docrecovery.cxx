@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:11:11 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1074,8 +1074,9 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     , m_aCancelBtn          ( this           , ResId  ( BTN_RECOV_CANCEL               ) )
     , m_aNextStr            (                  ResId  ( STR_RECOVERY_NEXT              ) )
     , m_aTitleRecoveryInProgress(              ResId  ( STR_RECOVERY_INPROGRESS        ) )
-    , m_aRecoveryOnlyDescr  (                  ResId  ( STR_RECOVERYONLY_DESCR         ) )
+    , m_aTitleRecoveryReport(                  ResId  ( STR_RECOVERY_REPORT            ) )
     , m_aRecoveryOnlyFinish (                  ResId  ( STR_RECOVERYONLY_FINISH        ) )
+    , m_aRecoveryOnlyFinishDescr(              ResId  ( STR_RECOVERYONLY_FINISH_DESCR  ) )
     , m_pDefButton          ( NULL                                                       )
     , m_pCore               ( pCore                                                      )
     , m_eRecoveryState      (RecoveryDialog::E_RECOVERY_PREPARED)
@@ -1122,9 +1123,6 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     m_aNextBtn.Enable(TRUE);
     m_aNextBtn.SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
     m_aCancelBtn.SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
-
-    if ( m_bRecoveryOnly )
-        m_aDescrFT.SetText( m_aRecoveryOnlyDescr );
 
     // fill list box first time
     TURLList*                pURLList = m_pCore->getURLListAccess();
@@ -1204,12 +1202,14 @@ short RecoveryDialog::execute()
                  // let the user decide the next step.
                  if ( m_bRecoveryOnly )
                  {
+                     m_aDescrFT.SetText(m_aRecoveryOnlyFinishDescr);
                      m_aNextBtn.SetText(m_aRecoveryOnlyFinish);
                      m_aNextBtn.Enable(TRUE);
                      m_aCancelBtn.Enable(FALSE);
                  }
                  else
                  {
+                    m_aDescrFT.SetText(m_aTitleRecoveryReport);
                     m_aNextBtn.SetText(m_aNextStr);
                     m_aNextBtn.Enable(TRUE);
                     m_aCancelBtn.Enable(TRUE);
