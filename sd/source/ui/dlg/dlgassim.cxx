@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:01:07 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,8 @@ SvLBoxEntry* SdPageListControl::InsertPage( const String& rPageName )
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
 
-    pEntry->AddItem( new SvLBoxButton( pEntry, 0, m_pCheckButton));
+    pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
+                                       0, m_pCheckButton));
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rPageName ) );
 
