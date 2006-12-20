@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:10:20 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 12:22:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ IDLFILES=\
     RegistryValueType.idl\
     SimpleRegistry.idl\
     XImplementationRegistration.idl\
+    XImplementationRegistration2.idl\
     XRegistryKey.idl\
     XSimpleRegistry.idl\
 
