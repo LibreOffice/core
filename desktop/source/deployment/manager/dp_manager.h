@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:51 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     bool checkUpdate(
         ::rtl::OUString const & title,
         css::uno::Reference<css::deployment::XPackage> const & package,
-        bool * removeExisting,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & origCmdEnv,
         css::uno::Reference<css::ucb::XCommandEnvironment> const &
             wrappedCmdEnv );
