@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:06:40 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ public:
     sal_Bool        isWildcardChecked(SvLBoxEntry* _pEntry) const;
 
 protected:
-    virtual void InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap);
+    virtual void InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind);
 
     virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
 
