@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:04:38 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,7 +670,8 @@ class RecovDocList : public SvxSimpleTable
         virtual void InitEntry(      SvLBoxEntry* pEntry ,
                                const XubString&   sText  ,
                                const Image&       aImage1,
-                               const Image&       aImage2);
+                               const Image&       aImage2,
+                                     SvLBoxButtonKind eButtonKind);
 };
 
 //===============================================
