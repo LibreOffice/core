@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxprinter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:31:24 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,15 +435,12 @@ IMPL_XTYPEPROVIDER_END
 // ::com::sun::star::awt::XPrinterServer
 ::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXPrinterServer::getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    sal_uInt16 nPrinters = Printer::GetQueueCount();
+    const std::vector<rtl::OUString>& rQueues = Printer::GetPrinterQueues();
+    sal_uInt32 nPrinters = rQueues.size();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aNames( nPrinters );
-
-    for ( sal_uInt16 n = 0; n < nPrinters; n++ )
-    {
-        const QueueInfo& rInfo = Printer::GetQueueInfo( n );
-        aNames.getArray()[n] = rInfo.GetPrinterName();
-    }
+    for ( sal_uInt32 n = 0; n < nPrinters; n++ )
+        aNames.getArray()[n] = rQueues[n];
 
     return aNames;
 }
