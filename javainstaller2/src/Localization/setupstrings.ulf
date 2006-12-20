@@ -1,0 +1,523 @@
+[STRING_PREVIOUS]
+en-US = "Back"
+de = "Zurück"
+
+[STRING_NEXT]
+en-US = "Next"
+de = "\ Weiter"
+
+[STRING_CANCEL]
+en-US = "Cancel"
+de = "Abbrechen"
+
+[STRING_FINISH]
+en-US = "Finish"
+de = "Beenden"
+
+[STRING_DECLINE]
+en-US = "Decline"
+de = "Ablehnen"
+
+[STRING_INSTALL]
+en-US = "Install now"
+de = "Installation beginnen"
+
+[STRING_UNINSTALL]
+en-US = "Remove Now"
+de = "Komponenten entfernen"
+
+[STRING_HELP]
+en-US = "Help"
+de = "Hilfe"
+
+[STRING_OK]
+en-US = "OK"
+de = "OK"
+
+[STRING_ERROR]
+en-US = "Error"
+de = "Fehler"
+
+[STRING_FILE_NOT_FOUND]
+en-US = "Error: File not found"
+de = "Fehler: Datei nicht gefunden"
+
+[STRING_APPLICATIONTITLE]
+en-US = "${PRODUCT_FULLNAME} Installation Wizard"
+de = "${PRODUCT_FULLNAME} Installationsassistent"
+
+[STRING_APPLICATIONTITLEUNINSTALLATION]
+en-US = "${PRODUCT_FULLNAME} Uninstallation Wizard"
+de = "${PRODUCT_FULLNAME} Deinstallationsassistent"
+
+[STRING_CANCEL_DIALOG_TITLE]
+en-US = "Exit"
+de = "Beenden"
+
+[STRING_CANCEL_DIALOG]
+en-US = "Do you really want to exit the Installation Wizard?"
+de = "Möchten Sie den Installationsassistenten wirklich beenden?"
+
+[STRING_CANCEL_DIALOG_UNINSTALLATION]
+en-US = "Do you really want to exit the Uninstallation Wizard?"
+de = "Möchten Sie den Deinstallationsassistenten wirklich beenden?"
+
+[STRING_STOP_DIALOG]
+en-US = "Do you really want to abort the installation process?"
+de = "Möchten Sie den Installationsassistenten wirklich beenden?"
+
+[STRING_STOP_DIALOG_TITLE]
+en-US = "Abort installation?"
+de = "Installation abbrrechen?"
+
+[STRING_STOP_DIALOG_UNINSTALLATION]
+en-US = "Do you really want to abort the uninstallation process?"
+de = "Möchten Sie den Deinstallationsassistenten wirklich beenden?"
+
+[STRING_STOP_DIALOG_TITLE_UNINSTALLATION]
+en-US = "Abort uninstallation?"
+de = "Deinstallation abbrechen?"
+
+[STRING_ACCEPTLICENSE]
+en-US = "Accept License"
+de = "Lizenz akzeptieren"
+
+[STRING_ACCEPTLICENSE1]
+en-US = "Software License Agreement"
+de = "Lizenzvereinbarung"
+
+[STRING_ACCEPTLICENSE2]
+en-US = "Please read the following license agreement carefully."
+de = "Bitte lesen Sie die nachfolgende Lizenzvereinbarung sorgfältig durch."
+
+[STRING_ACCEPTLICENSE3]
+en-US = "If you have read and accept all the terms of the entire Software License Agreement, click 'Accept License' to continue with the installation."
+de = "Klicken Sie auf 'Lizenz akzeptieren', um zu bestätigen, dass Sie den gesamten Inhalt der Lizenzvereinbarung gelesen und akzeptiert haben. Danach können Sie mit der Installation fortfahren."
+
+[STRING_CHOOSEDIRECTORY1]
+en-US = "Select Installation Directory"
+de = "Wählen Sie das Installationsverzeichnis"
+
+[STRING_CHOOSEDIRECTORY1_UPDATE]
+en-US = "Update the Installed Version"
+de = "Aktualisieren der installierten Version"
+
+[STRING_CHOOSEDIRECTORY1_MAINTAIN]
+en-US = "Adding Components to the Installed Version"
+de = "Komponenten zur installierten Version hinzufügen."
+
+[STRING_CHOOSEDIRECTORY2]
+en-US = "Install ${PRODUCT_FULLNAME} in this directory"
+de = "${PRODUCT_FULLNAME} installieren nach"
+
+[STRING_CHOOSEDIRECTORY3]
+en-US = "Browse..."
+de = "Durchsuchen..."
+
+[STRING_CHOOSEDIRECTORY4_QUESTION_TITLE]
+en-US = "Create New Directory"
+de = "Neues Verzeichnis anlegen"
+
+[STRING_CHOOSEDIRECTORY5_QUESTION_MESSAGE]
+en-US = "The directory "${DIR}" does not exist.\nDo you want to create it now?"
+de = "Das Verzeichnis "${DIR}" existiert nicht.\nSoll das Verzeichnis jetzt angelegt werden?"
+
+[STRING_CHOOSEDIRECTORY5_QUESTION_MESSAGE2]
+en-US = "The directory "${DIR}" does not exist.\nDo you want to create it now or choose another directory?"
+de = "Das Verzeichnis "${DIR}" existiert nicht.\nSoll das Verzeichnis jetzt angelegt werden, oder möchten Sie ein anderes Verzeichnis wählen?"
+
+[STRING_CHOOSEDIRECTORY6]
+en-US = "Select root directory"
+de = "Wählen Sie das Root-Verzeichnis aus"
+
+[STRING_CHOOSEDIRECTORY_NO_WRITE_ACCESS]
+en-US = "You do not have write access in the directory"
+de = "Sie haben keinen Schreibzugriff auf das Verzeichnis"
+
+[STRING_CHOOSEDIRECTORY_NOT_ALLOWED]
+en-US = "You are not allowed to create the directory"
+de = "Sie haben nicht die Rechte, das Verzeichnis anzulegen"
+
+[STRING_CHOOSEDIRECTORY_NO_SUCCESS]
+en-US = "Failed to create the directory"
+de = "Das Verzeichnis konnte nicht angelegt werden"
+
+[STRING_CHOOSECOMPONENTS1]
+en-US = "Select Components"
+de = "Wählen Sie die Komponenten"
+
+[STRING_CHOOSECOMPONENTS1_MAINTAIN]
+en-US = "Select Additional Components"
+de = "Wählen Sie zusätzliche Komponenten"
+
+[STRING_CHOOSECOMPONENTS2]
+en-US = "Marked components will be installed. Please mark them accordingly"
+de = "Die markierten Komponenten werden installiert. Bitte markieren Sie die Komponenten entsprechend."
+
+[STRING_CHOOSECOMPONENTS3]
+en-US = "Feature Description"
+de = "Modulbeschreibung"
+
+[STRING_CHOOSECOMPONENTS4]
+en-US = "Size (kB):"
+de = "Größe (kB):"
+
+[STRING_CHOOSEINSTALLATIONTYPE1]
+en-US = "Select the Type of Installation"
+de = "Wählen Sie den Installationstyp"
+
+[STRING_CHOOSEINSTALLATIONTYPE2]
+en-US = "Select the type of installation that best suits your needs:"
+de = "Wählen Sie den Installationstyp, der Ihren Erfordernissen am besten entspricht:"
+
+[STRING_CHOOSEINSTALLATIONTYPE3]
+en-US = "Select the Type of Installation"
+de = "Wählen Sie den Installationstyp"
+
+[STRING_CHOOSEINSTALLATIONTYPE4]
+en-US = "The main components will be installed. Recommended for most users."
+de = "Die wichtigsten Komponenten werden installiert. Empfohlen für die meisten Anwender."
+
+[STRING_CHOOSEINSTALLATIONTYPE5]
+en-US = "You choose the components you want to install and where they are stored. Recommended for advanced users."
+de = "Wählen Sie aus, welche Komponenten installiert werden sollen und wo diese gespeichert werden sollen. Empfohlen für erfahrene Anwender."
+
+[STRING_CHOOSEINSTALLATIONTYPE6]
+en-US = "Typical"
+de = "Standard"
+
+[STRING_CHOOSEINSTALLATIONTYPE7]
+en-US = "Custom"
+de = "Angepasst"
+
+[STRING_INSTALLATIONIMMINENT1]
+en-US = "Ready to Install"
+de = "Bereit zum Installieren"
+
+[STRING_INSTALLATIONIMMINENT1_UPDATE]
+en-US = "Ready to Update"
+de = "Bereit zum Aktualisieren"
+
+[STRING_INSTALLATIONIMMINENT2]
+en-US = "The following ${PRODUCT_FULLNAME} components will be installed:"
+de = "Die folgenden ${PRODUCT_FULLNAME} Komponenten werden installiert: "
+
+[STRING_INSTALLATIONONGOING1]
+en-US = "Installing..."
+de = "Installieren..."
+
+[STRING_INSTALLATIONONGOING3]
+en-US = "Stop"
+de = "Stopp"
+
+[STRING_INSTALLATIONONGOING_PACKAGEPATH_NOT_FOUND]
+en-US = "ERROR: Path with installation packages not found!" 
+de = "Fehler: Pfad mit Installationspaketen nicht gefunden!" 
+
+[STRING_PROLOGUE1]
+en-US = "Welcome"
+de = "Willkommen"
+
+[STRING_PROLOGUE2]
+en-US = "This Installation Wizard will install ${PRODUCT_FULLNAME} on your computer."
+de = "Der Installationsassistent wird ${PRODUCT_FULLNAME} auf Ihrem Computer installieren."
+
+[STRING_PROLOGUE3]
+en-US = "To continue, click 'Next'."
+de = "Klicken Sie auf 'Weiter', um fortzufahren."
+
+[STRING_INSTALLATIONCOMPLETED1]
+en-US = "Installation Completed"
+de = "Installation abgeschlossen"
+
+[STRING_INSTALLATIONCOMPLETED1_ABORT]
+en-US = "Installation Aborted"
+de = "Installation abgebrochen"
+
+[STRING_INSTALLATIONCOMPLETED1_ERROR]
+en-US = "Installation Failed"
+de = "Installation fehlerhaft"
+
+[STRING_INSTALLATIONCOMPLETED2]
+en-US = "The Installation Wizard has successfully installed ${PRODUCT_FULLNAME} on your computer."
+de = "Der Installationsassistent hat ${PRODUCT_FULLNAME} erfolgreich auf Ihrem Computer installiert."
+
+[STRING_INSTALLATIONCOMPLETED2_ABORT]
+en-US = "The Installation Wizard was aborted. ${PRODUCT_NAME} is not installed on your computer."
+de = "Der Installationsassistent wurde beendet. ${PRODUCT_NAME} wurde auf Ihrem Computer nicht installiert."
+
+[STRING_INSTALLATIONCOMPLETED2_ERROR]
+en-US = "An error has occured. Thus the Installation Wizard could not install ${PRODUCT_NAME} on your computer successfully. Click 'Details...' for more information."
+de = "Ein Fehler ist aufgetreten. Daher konnte der Installationsassistent ${PRODUCT_NAME} nicht erfolgreich auf Ihrem Computer installieren. Klicken Sie 'Details..' für nähere Informationen."
+
+[STRING_INSTALLATIONCOMPLETED3]
+en-US = "Click 'Finish' to exit the Wizard."
+de = "Klicken Sie auf 'Beenden' um den Installationsassistenten zu verlassen."
+
+[STRING_INSTALLATIONCOMPLETED_BUTTON]
+en-US = "Details..."
+de = "Details..."
+
+[STRING_UNINSTALLATIONPROLOGUE2]
+en-US = "The ${PRODUCT_FULLNAME} Uninstallation Wizard will remove ${PRODUCT_FULLNAME} from your computer."
+de = "Der Deinstallationsassistent wird ${PRODUCT_FULLNAME} von Ihrem Computer entfernen."
+
+[STRING_UNINSTALLATION_PROLOGUE_WRONG_PRIVILEGES_CURRENT_ROOT]
+en-US= "Sorry, wrong privileges. Installation was done with User privilges, but you have Root privileges."
+de = "Es wurden die falschen Rechte benutzt. Die Installation wurde mit User-Rechten gestartet, aber Sie haben Root-Rechte."
+
+[STRING_UNINSTALLATION_PROLOGUE_WRONG_PRIVILEGES_CURRENT_USER]
+en-US= "Sorry, wrong privileges. Installation was done with Root privilges, but you have User privileges."
+de = "Es wurden die falschen Rechte benutzt. Die Installation wurde mit Root-Rechten gestartet, aber Sie haben User-Rechte."
+
+[STRING_CHOOSEUNINSTALLATIONTYPE1]
+en-US = "Select the Type of Uninstallation"
+de = "Wählen Sie den Deinstallationstyp"
+
+[STRING_CHOOSEUNINSTALLATIONTYPE2]
+en-US = "Select the type of uninstallation that best suits your needs:"
+de = "Wählen Sie den Deinstallationstyp, der Ihren Erfordernissen am besten entspricht:"
+
+[STRING_CHOOSEUNINSTALLATIONTYPE3]
+en-US = "Partial"
+de = "Teilweise"
+
+[STRING_CHOOSEUNINSTALLATIONTYPE4]
+en-US = "Completely removes ${PRODUCT_FULLNAME} and all its components from your system."
+de = "Diese Option entfernt ${PRODUCT_FULLNAME} mit all seinen Komponenten von Ihrem System."
+
+[STRING_CHOOSEUNINSTALLATIONTYPE5]
+en-US = "You choose the program features you want to remove."
+de = "Sie wählen die Komponenten, die entfernt werden sollen."
+
+[STRING_CHOOSEUNINSTALLATIONTYPE6]
+en-US = "Complete"
+de = "Vollständig"
+
+[STRING_CHOOSEUNINSTALLATIONCOMPONENTS2]
+en-US = "Components marked with an X will be removed. Mark the components you want to remove."
+de = "Komponenten gekennzeichnet durch ein X werden entfernt. Markieren Sie die Komponenten, die Sie entfernen möchten."
+
+[STRING_UNINSTALLATIONIMMINENT1]
+en-US = "Ready to Remove"
+de = "Bereit zum Entfernen"
+
+[STRING_UNINSTALLATIONIMMINENT2]
+en-US = "The following ${PRODUCT_FULLNAME} components will be removed: "
+de = "Die folgenden ${PRODUCT_FULLNAME} Komponenten werden von Ihrem System entfernt: "
+
+[STRING_UNINSTALLATIONONGOING1]
+en-US = "Uninstalling..."
+de = "Entfernen..."
+
+[STRING_UNINSTALLATIONCOMPLETED1]
+en-US = "Uninstallation Completed"
+de = "Deinstallation abgeschlossen"
+
+[STRING_UNINSTALLATIONCOMPLETED1_ABORT]
+en-US = "Uninstallation Aborted"
+de = "Deinstallation abgebrochen"
+
+[STRING_UNINSTALLATIONCOMPLETED1_ERROR]
+en-US = "Uninstallation Failed"
+de = "Deinstallation fehlerhaft"
+
+[STRING_UNINSTALLATIONCOMPLETED2]
+en-US = "The Uninstallation Wizard has successfully removed ${PRODUCT_FULLNAME} from your computer."
+de = "Der Deinstallationsassistent hat ${PRODUCT_FULLNAME} erfolgreich von Ihrem Computer entfernt."
+
+[STRING_UNINSTALLATIONCOMPLETED2_PARTIAL]
+en-US = "The Uninstallation Wizard has successfully removed the selected components of ${PRODUCT_NAME} from your computer."
+de = "Der Deinstallationsassistent hat die ausgewählten Komponenten von ${PRODUCT_FULLNAME} erfolgreich von Ihrem Computer entfernt."
+
+[STRING_UNINSTALLATIONCOMPLETED2_ABORT]
+en-US = "The Uninstallation Wizard was aborted before completely removing ${PRODUCT_NAME} from your computer."
+de = "Der Deinstallationsassistent wurde beendet, bevor ${PRODUCT_NAME} vollständig von Ihrem Computer entfernt wurde."
+
+[STRING_UNINSTALLATIONCOMPLETED2_ERROR]
+en-US = "An error has occured. Thus the Uninstallation Wizard could not remove ${PRODUCT_NAME} from your computer successfully. Click 'Details...' for more information."
+de = "Ein Fehler ist aufgetreten. Daher konnte der Deinstallationsassistent ${PRODUCT_NAME} nicht erfolgreich von Ihrem Computer entfernen. Klicken Sie 'Details..' für nähere Informationen."
+
+[STRING_INSTALLERFACTORY_OS_NOT_SUPPORTED]
+en-US = "Sorry, this Operating System is not supported yet."
+de = "Entschuldigung, dieses Betriebssystem wird noch nicht unterstützt."
+
+[STRING_NEWER_VERSION_INSTALLED_FOUND]
+en-US = "A newer version of ${PRODUCT_NAME} was found on your system in:"
+de = "Auf Ihrem System wurde eine neuere Version von ${PRODUCT_NAME} gefunden. Sie befindet sich in dem Ordner:"
+
+[STRING_NEWER_VERSION_INSTALLED_REMOVE]
+en-US = "You have to remove the newer version of ${PRODUCT_NAME} before you can install the older one.\nTo remove the newer version start the "setup" program in ${DIR}"
+de = "Bevor Sie eine ältere Version von ${PRODUCT_NAME} installieren können, müssen Sie zuerst die neuere Version entfernen.\nStarten Sie dazu das Programm "setup" in dem Verzeichnis ${DIR}"
+	
+[STRING_NEWER_VERSION_DATABASE]
+en-US = "Database"
+de = "Datenbank"
+
+[STRING_NEWER_VERSION_TIP]
+en-US = "Please choose another installation directory."
+de = "Bitte wählen Sie ein anderes Installationsverzeichnis."
+
+[STRING_ROOT_PRIVILEGES_REQUIRED_1]
+en-US = "The user you are logged in as cannot run the Installation Wizard."
+de = "Sie sind unter einem Benutzernamen angemeldet, der nicht die nötigen Rechte hat, um den Installationsassistenten auszuführen."
+
+[STRING_ROOT_PRIVILEGES_REQUIRED_2]
+en-US = "Please log out and log back in as a user with system administrator rights."
+de = "Bitte melden Sie sich ab, dann melden Sie sich als Benutzer mit Administratorrechten wieder an."
+
+[STRING_DISCSPACE_INSUFFICIENT]
+en-US = "Not enough discspace available for installation."
+de = "Nicht genügend Speicherplatz f�r die Installation vorhanden."
+
+[STRING_DISCSPACE_REQUIRED]
+en-US = "Required disc space"
+de = "Erforderlicher Speicherplatz"
+
+[STRING_DISCSPACE_AVAILABLE]
+en-US = "Available disc space"
+de = "Verfügbarer Speicherplatz"
+
+[STRING_DISCSPACE_TIP]
+en-US = "Please use another directory for installation or change your module selection."
+de = "Bitte wählen Sie ein anderes Installationsverzeichnis oder ändern Sie die Modulauswahl."
+
+[STRING_ANALYZING_DATABASE1]
+en-US = "Analyzing ..."
+de = "Analysiere ..."
+
+[STRING_ANALYZING_DATABASE2]
+en-US = "Analyzing database\nPlease wait a moment ..."
+de = "Analysiere die Datenbank\nBitte warten Sie einen Moment ..."
+
+[STRING_PROLOGUE_1]
+en-US = "Welcome to the Installation Wizard.<p>This wizard asks you to supply configuration settings.<p>At the bottom of each page are navigation buttons that let you move through the Installation Wizard:"
+de = "Willkommen beim Installationsassistenten.<p>Auf jeder Seite befinden sich im unteren Teil Navigationschaltflächen, die Sie durch den Assistenten führen:"
+
+[STRING_PROLOGUE_2]
+en-US = "'Back' returns you to the previous page."
+de = "'Zurück' führt Sie zu der vorigen Seite."
+
+[STRING_PROLOGUE_3]
+en-US = "'Next' takes you to the next page. "
+de = "'Weiter' führt Sie zu der nächsten Seite."
+
+[STRING_PROLOGUE_4]
+en-US = "'Cancel' ends the Installation Wizard without installing this software."
+de = "'Abbrechen' bricht den Installionsassistenten ab ohne diese Software zu installieren."
+
+[STRING_PROLOGUE_5]
+en-US = "'Help' displays the Help with further information about the page currently displayed."
+de = "'Hilfe' zeigt die Hilfeseite mit weiteren Informationen zu der aktuellen Seite."
+
+[STRING_PROLOGUE_6]
+en-US = "'OK' exits the Help page and returns you to the Installation Wizard."
+de = "'OK' schließt die Hilfeseite und führt Sie zum Installionsassistent zurück."
+
+[STRING_UNINSTALLATIONPROLOGUE_1]
+en-US = "Welcome to the Uninstallation Wizard.<p>This wizard asks you to supply configuration settings.<p>At the bottom of each page are navigation buttons that let you move through the Uninstallation Wizard:"
+de = "Willkommen beim Deinstallationsassistenten.<p>Auf jeder Seite befinden sich im unteren Teil Navigationschaltflächen, die Sie durch den Assistenten führen:"
+
+[STRING_UNINSTALLATIONPROLOGUE_2]
+en-US = "'Back' returns you to the previous page."
+de = "'Zurück' führt Sie zu der vorigen Seite."
+
+[STRING_UNINSTALLATIONPROLOGUE_3]
+en-US = "'Next' takes you to the next page. "
+de = "'Weiter' führt Sie zu der nächsten Seite."
+
+[STRING_UNINSTALLATIONPROLOGUE_4]
+en-US = "'Cancel' ends the Uninstallation Wizard without removing this software."
+de = "'Abbrechen' bricht den Deinstallionsassistenten ab ohne diese Software zu entfernen."
+
+[STRING_UNINSTALLATIONPROLOGUE_5]
+en-US = "'Help' displays the Help with further information about the page currently displayed."
+de = "'Hilfe' zeigt die Hilfeseite mit weiteren Informationen zu der aktuellen Seite."
+
+[STRING_UNINSTALLATIONPROLOGUE_6]
+en-US = "'OK' exits the Help page and returns you to the Uninstallation Wizard."
+de = "'OK' schließt die Hilfeseite und führt Sie zum Deinstallionsassistenten zurück."
+
+[STRING_ACCEPTLICENSE_1]
+en-US = "Before you install this product, you must read and accept the entire Software License Agreement under which this software is licensed for your use."
+de = "Bevor Sie dieses Produkt installieren, müssen Sie die gesamte Lizenzvereinbarung lesen und akzeptieren."
+
+[STRING_ACCEPTLICENSE_2]
+en-US = "If you have read and accept all the terms of the entire Software License Agreement, click 'Accept License' to continue with the installation."
+de = "Klicken Sie 'Lizenz akzeptieren', um zu bestätigen, dass Sie den gesamten Inhalt der Lizenzvereinbarung gelesen und akzeptiert haben. Danach können Sie mit der Installation fortfahren."
+
+[STRING_ACCEPTLICENSE_3]
+en-US = "If you do not accept all the terms of the Software License Agreement, click 'Decline' to end the Installation Wizard without installing this product."
+de = "Falls Sie die Lizenzvereinbarung nicht akzeptieren, klicken Sie auf 'Ablehnen'. Die Installation dieses Produktes wird in diesem Fall beendet."
+
+[STRING_CHOOSEINSTALLATIONTYPE_1]
+en-US = "Select the type of product installation to perform from the following choices. This will determine how much information you need to provide for product configuration."
+de = "Wählen Sie aus den folgenden Optionen den Installationstyp, der Ihren Erfordernissen am Besten entspricht."
+
+[STRING_CHOOSEDIRECTORY_1]
+en-US = "It is recommended that you install this product in the directory suggested by this Installation Wizard. <p>To choose a different location, click 'Browse...' or specify the full path of the directory to use in the text box below. <p>If this product is already installed, you cannot change the destination directory."
+de = "Es wird empfohlen, dass Sie dieses Produkt in dem von diesem Installationsassistenten vorgeschlagenen Verzeichnis, installieren. Um ein anderes Installationsverzeichnis anzugeben klicken Sie auf 'Durchsuchen...'. <p>Wenn dieses Produkt bereits installiert ist, können Sie das Zielverzeichnis nicht verändern."
+
+[STRING_CHOOSECOMPONENTS_1]
+en-US = "Components marked in color will be installed. Click the icon of a component to mark or unmark the component.<p>All already installed components cannot be selected for installation."
+de = "Farblich markierte Komponenten werden installiert. Klicken Sie auf das Symbol einer Komponente, um die Markierung zu setzen oder zu entfernen.<p>Alle bereits installierten Komponenten können nicht für die Installation ausgewählt werden."
+
+[STRING_INSTALLATIONIMMINENT_1]
+en-US = "The listed components are ready for installation based on your configuration settings. <p>If you are satisfied with your selection, click 'Install Now' to begin. <p>To check or modify your settings on the previous pages, click 'Back'."
+de = "Die aufgelisteten Komponenten werden, basierend auf Ihren Konfigurationseinstellungen installiert. <p>Klicken Sie auf 'Installation beginnen', um mit der Installation zu beginnen. <p>Wenn Sie Änderungen an der Auswahl der zu installierenden Komponenten vornehmen möchten, klicken Sie auf 'Zurück'."
+
+[STRING_UNINSTALLATIONIMMINENT_1]
+en-US = "The listed components are ready for uninstallation based on your configuration settings. <p>If you are satisfied with your selection, click 'Remove Now' to begin. <p>To check or modify your settings on the previous pages, click 'Back'."
+de = "Die aufgelisteten Komponenten werden, basierend auf Ihren Konfigurationseinstellungen, entfernt. <p>Klicken Sie auf 'Komponenten entfernen', um mit der Deinstallation zu beginnen. <p>Klicken Sie auf 'Zurück', wenn Sie Ihre Einstellungen überprüfen oder ändern möchten."
+
+[STRING_INSTALLATIONONGOING_1]
+en-US = "This page indicates the progress of the installation with the aid of a progress bar. To abort the installation process, click 'Stop'."
+de = "Diese Seite informiert Sie über den Fortschritt der Installation. Um die Installation abzubrechen, klicken Sie auf 'Stopp'."
+
+[STRING_UNINSTALLATIONONGOING_1]
+en-US = "This page indicates the progress of the uninstallation with the aid of a progress bar. To abort the uninstallation, click 'Stop'."
+de = "Diese Seite informiert Sie über den Fortschritt der Deinstallation. Um die Deinstallation abzubrechen, klicken Sie auf 'Stopp'."
+
+[STRING_CHOOSEUNINSTALLATIONTYPE_1]
+en-US = "Complete: This will remove all installed components of your version.<p>Partial: This removes only the components you will choose out of the components list."
+de = "Vollständig: Alle Komponenten werden entfernt. <p>Teilweise: Die in der Komponentenliste ausgewählten Komponenten werden vom System entfernt."
+
+[STRING_CHOOSEUNINSTALLATIONCOMPONENTS_1]
+en-US = "Components marked with an X will be removed. Click next to a component to mark or unmark it with an X."
+de = "Die mit einem X markierten Komponenten werden entfernt. Klicken Sie auf das Symbol einer Komponente, um die X-Markierung zu setzen oder zu entfernen."
+
+[STRING_PACKAGEFORMAT_NOT_SUPPORTED]
+en-US = "This package format is currently not supported for your operating system!"
+de = "Dieses Paketformat wird momentan für Ihr Betriebssystem nicht unterstützt!"
+
+[STRING_OPERATING_SYSTEM]
+en-US = "Operating system"
+de = "Betriebssystem"
+
+[STRING_PACKAGEFORMAT]
+en-US = "Package format"
+de = "Paketformat"
+
+[STRING_NOTHING_TO_INSTALL]
+en-US = "Nothing to install"
+de = "Nichts wird installiert"
+
+[STRING_NO_COMPONENTS_SELECTED_1]
+en-US = "No components have been selected for installation."
+de = "Es wurden keine Komponenten für die Installation ausgewählt."
+
+[STRING_NO_COMPONENTS_SELECTED_2]
+en-US = "Click 'OK' to select one or more components for installation or to exit the Installation Wizard."
+de = "Klicken Sie auf 'OK', um eine oder mehrere Komponenten f�r die Installation auszuwählen oder den Installationsassistenten zu beenden."
+
+[STRING_NOTHING_TO_UNINSTALL]
+en-US = "Nothing to uninstall"
+de = "Nichts wird entfernt"
+
+[STRING_NO_UNINSTALLCOMPONENTS_SELECTED_1]
+en-US = "No components have been selected for uninstallation."
+de = "Es wurden keine Komponenten zum entfernen ausgewählt."
+
+[STRING_NO_UNINSTALLCOMPONENTS_SELECTED_2]
+en-US = "Click 'OK' to select one or more components for uninstallation or to exit the Uninstallation Wizard."
+de = "Klicken Sie auf 'OK', um eine oder mehrere Komponenten f�r die Deinstallation auszuwählen oder den Deinstallationsassistenten zu beenden."

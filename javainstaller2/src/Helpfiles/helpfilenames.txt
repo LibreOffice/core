@@ -1,0 +1,16 @@
+# List of all required html files:
+# -> ChooseDirectory.html, ChooseDirectory_de.html, ...
+Prologue
+AcceptLicense
+ChooseDirectory
+ChooseInstallationType
+ChooseComponents
+InstallationImminent
+InstallationOngoing
+# InstallationCompleted
+UninstallationPrologue
+ChooseUninstallationType
+ChooseUninstallationComponents
+UninstallationImminent
+UninstallationOngoing
+# UninstallationCompleted
