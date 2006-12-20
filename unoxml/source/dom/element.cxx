@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 16:57:28 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@ namespace DOM
     }
 
     /**
-    Retrieves an attribute value by name.
+        Retrieves an attribute value by name.
+        return empty string if attribute is not set
     */
     OUString CElement::getAttribute(const OUString& name)
         throw (RuntimeException)
@@ -60,8 +61,10 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr());
-            aValue = OUString((sal_Char*)xName, strlen((char*)xName), RTL_TEXTENCODING_UTF8);
+            xmlChar *xValue = xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr());
+            if (xValue != NULL) {
+                aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
+            }
         }
         return aValue;
     }
@@ -105,6 +108,7 @@ namespace DOM
 
     /**
     Retrieves an attribute value by local name and namespace URI.
+    return empty string if attribute is not set
     */
     OUString CElement::getAttributeNS(const OUString& namespaceURI, const OUString& localName)
         throw (RuntimeException)
@@ -118,7 +122,9 @@ namespace DOM
             OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
             xmlChar *xNS = (xmlChar*)o2.getStr();
             xmlChar *xValue = (xmlChar*)xmlGetNsProp(m_aNodePtr, xName, xNS);
-            aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
+            if (xValue != NULL) {
+                aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
+            }
         }
         return aValue;
     }
