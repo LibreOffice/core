@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:58:54 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_LICENSE_DIALOG_HXX
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_LICENSE_DIALOG_HXX
 
 #include "dp_gui.h"
 #include "cppuhelper/implbase1.hxx"
@@ -71,3 +73,4 @@ public:
     //    throw (RuntimeException);
 };
 }
+#endif
