@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:08:15 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <salsys.hxx>
 #include <salframe.h>
 #include <salinst.h>
+#include <saldata.hxx>
 #include <tools/debug.hxx>
 #include <svdata.hxx>
 #include <window.hxx>
@@ -124,20 +125,15 @@ bool WinSalSystem::initMonitors()
     bool winVerOk = true;
 
     // multi monitor calls not available on Win95/NT
-    OSVERSIONINFO aVerInfo;
-    aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
-    if ( GetVersionEx( &aVerInfo ) )
+    if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
     {
-        if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
-        {
-            if ( aVerInfo.dwMajorVersion <= 4 )
-                winVerOk = false;   // NT
-        }
-        else if( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
-        {
-            if ( aVerInfo.dwMajorVersion == 4 && aVerInfo.dwMinorVersion == 0 )
-                winVerOk = false;   // Win95
-        }
+        if ( aSalShlData.maVersionInfo.dwMajorVersion <= 4 )
+            winVerOk = false;   // NT
+    }
+    else if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
+    {
+        if ( aSalShlData.maVersionInfo.dwMajorVersion == 4 && aSalShlData.maVersionInfo.dwMinorVersion == 0 )
+            winVerOk = false;   // Win95
     }
     if( winVerOk )
     {
