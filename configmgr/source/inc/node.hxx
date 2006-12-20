@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:48:08 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,13 @@ namespace configmgr
                                      Address _aTemplateData);
             static
             void releaseTemplateData(memory::Allocator const & _anAllocator, Address _aTemplateData);
+
+            static
+            rtl::OUString getTemplateDataName(memory::Accessor const & _anAccessor,
+                                              Address _aTemplateData);
+            static
+            rtl::OUString getTemplateDataModule(memory::Accessor const & _anAccessor,
+                                                Address _aTemplateData);
         };
     //-----------------------------------------------------------------------------
         struct ValueNode
