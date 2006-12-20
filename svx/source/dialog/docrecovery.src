@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 14:51:28 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,18 +278,23 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     };
     String STR_RECOVERY_INPROGRESS
     {
-        Text[ de ] = "%PRODUCTNAME %PRODUCTVERSION beginnt jetzt mit der Wiederherstellung Ihrer Dokumente. Dieses kann abhängig von der Größe der Dokumente einige Zeit in Anspruch nehmen.\n\nEs wurde ein Fehlerbericht erstellt, der uns bei der Identifizierung des Problems in %PRODUCTNAME hilft. Betätigen Sie die 'Weiter' Schaltfläche, um zum Fehlerbericht-Programm zu gelangen oder 'Abbrechen' um diesen Schritt zu überspringen";
-        Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION starts now to recover your documents. Depending on the size of the documents this process can take some time.\n\nA report of the crash was created helping us to identify the cause why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
+        Text[ de ] = "%PRODUCTNAME %PRODUCTVERSION beginnt jetzt mit der Wiederherstellung Ihrer Dokumente. Dieses kann abhängig von der Größe der Dokumente einige Zeit in Anspruch nehmen.";
+        Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION starts now to recover your documents. Depending on the size of the documents this process can take some time." ;
     };
-    String STR_RECOVERYONLY_DESCR
+    String STR_RECOVERY_REPORT
     {
-        Text[ de ] = "Klicken Sie auf 'Wiederherstellung starten', um mit dem Wiederherstellungsprozess der weiter unten aufgelisteten Dokumente zu beginnen.";
-        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.";
+        Text[ de ] = "Es wurde ein Fehlerbericht erstellt, der uns bei der Identifizierung des Problems in %PRODUCTNAME hilft. Betätigen Sie die Schaltfläche 'Weiter', um zum Fehlerbericht zu gelangen oder 'Abbrechen', um diesen Schritt zu überspringen.";
+        Text[ en-US ] = "A report of the crash was created helping us to identify the cause why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
+    };
+    String STR_RECOVERYONLY_FINISH_DESCR
+    {
+        Text[ de ] = "Die Wiederherstellung Ihrer Dokumente wurde abgeschlossen.\nBetätigen Sie die Schaltfläche 'Fertig', um zu den wiederhergestellten Dokumenten zu gelangen.";
+        Text[ en-US ] = "Recovery of your documents was finished.\nClick 'Finish' to see your documents.";
     };
     String STR_RECOVERYONLY_FINISH
     {
         Text[ de ] = "~Fertig";
-        Text[ en-US ] = "Finish";
+        Text[ en-US ] = "~Finish";
     };
 };
 
