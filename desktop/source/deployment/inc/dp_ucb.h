@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_ucb.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:19:41 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include "rtl/instance.hxx"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
+#include "dp_misc_api.hxx"
+#endif
 
 namespace ucb
 {
@@ -50,12 +53,14 @@ namespace css = ::com::sun::star;
 
 namespace dp_misc {
 
-struct StrTitle : public rtl::StaticWithInit<const rtl::OUString, StrTitle> {
+struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle :
+    public rtl::StaticWithInit<const rtl::OUString, StrTitle>
+{
     const rtl::OUString operator () ();
 };
 
 //==============================================================================
-bool create_ucb_content(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
     ::ucb::Content * ucb_content,
     ::rtl::OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
@@ -64,22 +69,24 @@ bool create_ucb_content(
 //==============================================================================
 /** @return true if previously non-existing folder has been created
  */
-bool create_folder(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_folder(
     ::ucb::Content * ucb_content,
     ::rtl::OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 //==============================================================================
-bool erase_path(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool erase_path(
     ::rtl::OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::ByteSequence readFile( ::ucb::Content & ucb_content );
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 bool readLine( ::rtl::OUString * res, ::rtl::OUString const & startingWith,
                ::ucb::Content & ucb_content, rtl_TextEncoding textenc );
 
