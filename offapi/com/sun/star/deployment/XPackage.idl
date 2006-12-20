@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPackage.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:52:17 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,13 @@ interface XPackage
 
         @param xCmdEnv
                command environment for error handling and other interaction.
+        @installed
+            signalls if an extension with the same identifyer is already installed.
+
+        @aContextName
+            the name of the context of  XPackageManager implementation that is to be used
+            to install the extension. Currently we use the names "user"
+            and "shared".
 
         @return
             true - the package can be installed
@@ -91,7 +98,9 @@ interface XPackage
      */
     boolean checkPrerequisites(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
-        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv,
+        [in] boolean installed,
+        [in] string aContextName)
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
@@ -179,10 +188,23 @@ interface XPackage
     /** returns the name of the package, i.e. the unique name of the package
         correspondiung to its deployment context (user, shared, ...).
 
+        <p>This will be removed soon, replaced by <code>getIdentifier</code> and
+        <code>getDisplayName</code>.</p>
+
         @return
                 name of the package
     */
     string getName();
+
+    /** returns the unique extension identifier.
+
+        @return
+                the extension identifier (a
+        <code>"org.openoffice.legacy."</code> one if the extension does not
+        explicitly specify one), or an empty <code>Optional</code> if this
+        package does not represent an extension
+    */
+    com::sun::star::beans::Optional<string> getIdentifier();
 
     /** returns the textual version representation of the package.
 
@@ -217,6 +239,17 @@ interface XPackage
                 description
     */
     string getDescription();
+
+    /** returns a sequence of update information URLs.
+
+        The sequence may be empty in case no update information is available.
+        If the sequence contains more than one URL, the extra URLs must mirror
+        the information available at the first URL.
+
+        @return
+                update information URLs
+    */
+    sequence<string> getUpdateInformationURLs();
 
     /** returns the <type>XPackageTypeInfo</type>, e.g. media-type etc.
 
