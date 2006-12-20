@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:43:23 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,23 +518,26 @@ SalInstance* CreateSalInstance()
     SalData* pSalData = GetSalData();
 
     // determine the windows version
-    aSalShlData.mbWNT = 0;
-    aSalShlData.mbWXP = 0;
+    aSalShlData.mbWNT        = 0;
+    aSalShlData.mbWXP        = 0;
+    aSalShlData.mbWPrinter   = 0;
     WORD nVer = (WORD)GetVersion();
     aSalShlData.mnVersion = (((WORD)LOBYTE(nVer)) * 100) + HIBYTE(nVer);
     if ( aSalShlData.mnVersion >= 400 )
         aSalShlData.mbW40 = 1;
-    OSVERSIONINFO aVerInfo;
-    aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
-    if ( GetVersionEx( &aVerInfo ) )
+    rtl_zeroMemory( &aSalShlData.maVersionInfo, sizeof(aSalShlData.maVersionInfo) );
+    aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
+    if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
     {
-        if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
+        if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
         {
             aSalShlData.mbWNT = 1;
             // Windows XP ?
-            if ( aVerInfo.dwMajorVersion > 5 ||
-               ( aVerInfo.dwMajorVersion == 5 && aVerInfo.dwMinorVersion >= 1 ) )
+            if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
+               ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
                 aSalShlData.mbWXP = 1;
+            if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
+                aSalShlData.mbWPrinter = 1;
         }
     }
 
