@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:46:08 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,16 @@
 #include "rtl/uri.hxx"
 #include "osl/thread.h"
 #include "osl/process.h"
+#include "osl/conditn.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/anytostring.hxx"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/deployment/ui/PackageManagerDialog.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 #include "boost/scoped_array.hpp"
+#include "com/sun/star/ui/dialogs/XDialogClosedListener.hpp"
+
 #include <stdio.h>
 #include <vector>
 
@@ -106,6 +110,40 @@ const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("deployment-context"), '\0', true },
     { 0, 0, '\0', false }
 };
+
+class DialogClosedListenerImpl :
+    public ::cppu::WeakImplHelper1< ui::dialogs::XDialogClosedListener >
+{
+    osl::Condition & m_rDialogClosedCondition;
+
+public:
+    DialogClosedListenerImpl( osl::Condition & rDialogClosedCondition )
+        : m_rDialogClosedCondition( rDialogClosedCondition ) {}
+
+    // XEventListener (base of XDialogClosedListener)
+    virtual void SAL_CALL disposing( lang::EventObject const & Source )
+        throw (RuntimeException);
+
+    // XDialogClosedListener
+    virtual void SAL_CALL dialogClosed(
+        ui::dialogs::DialogClosedEvent const & aEvent )
+        throw (RuntimeException);
+};
+
+// XEventListener (base of XDialogClosedListener)
+void DialogClosedListenerImpl::disposing( lang::EventObject const & )
+    throw (RuntimeException)
+{
+    // nothing to do
+}
+
+// XDialogClosedListener
+void DialogClosedListenerImpl::dialogClosed(
+    ui::dialogs::DialogClosedEvent const & )
+    throw (RuntimeException)
+{
+    m_rDialogClosedCondition.set();
+}
 
 } // anon namespace
 
@@ -237,7 +275,7 @@ SAL_IMPLEMENT_MAIN()
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose, option_shared ) );
+                          option_force, option_verbose) );
 
         if (subcmd_add ||
             subCommand.equalsAsciiL(
@@ -290,9 +328,7 @@ SAL_IMPLEMENT_MAIN()
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gui") ))
         {
-            //Reference<ui::dialogs::XExecutableDialog> xDialog(
-            //    deployment::ui::PackageManagerDialog::createDefault(
-            //        xComponentContext ) );
+
             ::std::size_t cUrls = cmdPackages.size();
             ::boost::scoped_array<OUString> sarUrls(new OUString[cUrls]);
             OUString * arString = sarUrls.get();
@@ -305,7 +341,14 @@ SAL_IMPLEMENT_MAIN()
                 deployment::ui::PackageManagerDialog::createAndInstall(
                     xComponentContext, Sequence<OUString>(arString, cUrls), deploymentContext) );
 
-            xDialog->startExecuteModal(Reference< ui::dialogs::XDialogClosedListener >());
+            osl::Condition dialogEnded;
+            dialogEnded.reset();
+
+            Reference< ui::dialogs::XDialogClosedListener > xListener(
+                new DialogClosedListenerImpl( dialogEnded ) );
+
+            xDialog->startExecuteModal(xListener);
+            dialogEnded.wait();
         }
         else
         {

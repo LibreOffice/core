@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_cmdenv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:46:18 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:15:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/i18n/XCollator.hpp"
 #include "com/sun/star/i18n/CollatorOptions.hpp"
+#include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
 #include <stdio.h>
 #include "deployment.hrc"
 #include "dp_version.hxx"
@@ -100,7 +101,6 @@ class CommandEnvironmentImpl
     sal_Int32 m_logLevel;
     bool m_option_force_overwrite;
     bool m_option_verbose;
-    bool m_option_shared;
     Reference< XComponentContext > m_xComponentContext;
     Reference< XProgressHandler > m_xLogFile;
 
@@ -143,7 +143,6 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     : m_logLevel(0),
       m_option_force_overwrite( option_force_overwrite ),
       m_option_verbose( option_verbose ),
-      m_option_shared(option_shared),
       m_xComponentContext(xComponentContext)
 {
     if (log_file.getLength() > 0) {
@@ -271,6 +270,8 @@ void CommandEnvironmentImpl::handle(
     lang::WrappedTargetException wtExc;
     deployment::LicenseException licExc;
     deployment::InstallException instExc;
+    deployment::LicenseIndividualAgreementException licAgreementExc;
+
     bool bLicenseException = false;
     if (request >>= wtExc) {
         // ignore intermediate errors of legacy packages, i.e.
@@ -301,24 +302,17 @@ void CommandEnvironmentImpl::handle(
             update_( wtExc.TargetException );
         }
     }
+    else if (request >>= licAgreementExc)
+    {
+        String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, DeploymentResMgr::get() ) );
+        sResMsg.SearchAndReplaceAllAscii( "%NAME", licExc.ExtensionName );
+        ::rtl::OString oMsg = ::rtl::OUStringToOString(sResMsg, osl_getThreadTextEncoding());
+        fprintf(stdout, "\n%s\n\n", oMsg.getStr());
+        abort = true;
+    }
     else if (request >>= licExc)
     {
-        bLicenseException = true;
-        //check if we run with shared switched and if every user must accept the license,
-        //which is an invalid case
-        if (m_option_shared == true && licExc.IndividualAgreement == sal_True)
-        {
-            String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, DeploymentResMgr::get() ) );
-            sResMsg.SearchAndReplaceAllAscii( "%NAME", licExc.ExtensionName );
-            ::rtl::OString oMsg = ::rtl::OUStringToOString(sResMsg, osl_getThreadTextEncoding());
-            fprintf(stdout, "\n%s\n\n", oMsg.getStr());
-            fflush(stdout);
-            abort = true;
-        }
-        else
-        {
-            printLicense(licExc.Text, approve, abort);
-        }
+        printLicense(licExc.Text, approve, abort);
     }
        else if (request >>= instExc)
     {
@@ -454,10 +448,10 @@ Reference< XCommandEnvironment > createCmdEnv(
     Reference< XComponentContext > const & xContext,
     OUString const & logFile,
     bool option_force_overwrite,
-    bool option_verbose, bool option_shared )
+    bool option_verbose)
 {
     return new CommandEnvironmentImpl(
-        xContext, logFile, option_force_overwrite, option_verbose, option_shared );
+        xContext, logFile, option_force_overwrite, option_verbose);
 }
 
 } // unopkg
