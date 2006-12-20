@@ -6,6 +6,7 @@
   <dlg:button dlg:id="CommandButton1" dlg:tab-index="1" dlg:left="180" dlg:top="35" dlg:width="14" dlg:height="14" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ToolkitControls.FileDialog.OpenFileDialog" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:text dlg:id="Label1" dlg:tab-index="2" dlg:left="6" dlg:top="20" dlg:width="80" dlg:height="10" dlg:value="Enter File Path"/>
- </dlg:bulletinboard>
+   <dlg:text dlg:id="Label1" dlg:tab-index="2" dlg:left="6" dlg:top="20" dlg:width="80" dlg:height="10" dlg:value="Enter File Path"/>
+   <dlg:button dlg:id="CommandButton2" dlg:tab-index="3" dlg:left="8" dlg:top="116" dlg:width="44" dlg:height="16" dlg:value="Cancel" dlg:button-type="cancel"/>
+  </dlg:bulletinboard>
 </dlg:window>
