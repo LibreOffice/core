@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:59:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 
 // WNT3
 #define SAL_DRIVERDATA_SYSSIGN              ((ULONG)0x574E5433)
-#define SAL_DRIVERDATA_VERSION              1
-#define SAL_DEVMODE( pSetupData )           ((LPDEVMODE)((pSetupData->mpDriverData) + (((SalDriverData*)(pSetupData->mpDriverData))->mnDriverOffset)))
+#define SAL_DRIVERDATA_VERSION_A            1
+#define SAL_DRIVERDATA_VERSION_W            2
 
 #pragma pack( 1 )
 
@@ -64,21 +64,6 @@ struct SalDriverData
 };
 
 #pragma pack()
-
-// -------------------
-// - SalSysQueueData -
-// -------------------
-
-struct SalSysQueueData
-{
-    XubString               maDriverName;           // printer driver name
-    XubString               maDeviceName;           // printer device name
-    XubString               maPortName;             // printer port name
-    ByteString              maDriverNameA;          // printer driver name
-    ByteString              maDeviceNameA;          // printer device name
-    ByteString              maPortNameA;            // printer port name
-    BOOL                    mbAnsi;                 // TRUE - use A functions
-};
 
 // ---------------------
 // - WinSalInfoPrinter -
@@ -93,12 +78,8 @@ public:
     XubString               maDriverName;           // printer driver name
     XubString               maDeviceName;           // printer device name
     XubString               maPortName;             // printer port name
-    ByteString              maDriverNameA;          // printer driver name
-    ByteString              maDeviceNameA;          // printer device name
-    ByteString              maPortNameA;            // printer port name
     HDC                     mhDC;                   // printer hdc
     BOOL                    mbGraphics;             // is Graphics used
-    BOOL                    mbAnsi;
 
 public:
     WinSalInfoPrinter();
