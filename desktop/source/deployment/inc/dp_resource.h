@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:16:27 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include "dp_misc.h"
 #include <memory>
 
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
+#include "dp_misc_api.hxx"
+#endif
 
 namespace dp_misc {
 
@@ -50,7 +53,7 @@ namespace dp_misc {
 ResId getResId( USHORT id );
 
 //==============================================================================
-String getResourceString( USHORT id );
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( USHORT id );
 
 template <typename Unique, USHORT id>
 struct StaticResourceString :
@@ -59,9 +62,11 @@ struct StaticResourceString :
 };
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang );
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::com::sun::star::lang::Locale const & getOfficeLocale();
 
 }
