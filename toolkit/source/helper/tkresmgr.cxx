@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkresmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:23:01 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
 #include <tools/simplerm.hxx>
 #endif
+#ifndef  _TOOLS_RESMGR_HXX_
+#include <tools/resmgr.hxx>
+#endif
+
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -53,20 +57,22 @@
 // TkResMgr
 // -----------------------------------------------------------------------------
 
-SimpleResMgr* TkResMgr::m_pImpl = NULL;
+SimpleResMgr*   TkResMgr::m_pSimpleResMgr = NULL;
+ResMgr*         TkResMgr::m_pResMgr = NULL;
 
 // -----------------------------------------------------------------------------
 
 TkResMgr::EnsureDelete::~EnsureDelete()
 {
-    delete TkResMgr::m_pImpl;
+    delete TkResMgr::m_pSimpleResMgr;
+//    delete TkResMgr::m_pResMgr;
 }
 
 // -----------------------------------------------------------------------------
 
 void TkResMgr::ensureImplExists()
 {
-    if (m_pImpl)
+    if (m_pSimpleResMgr)
         return;
 
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
@@ -74,9 +80,10 @@ void TkResMgr::ensureImplExists()
     ByteString sResMgrName( "tk" );
     sResMgrName += ByteString::CreateFromInt32( (sal_Int32)SUPD );
 
-    m_pImpl = SimpleResMgr::Create( sResMgrName.GetBuffer(), aLocale );
+    m_pSimpleResMgr = SimpleResMgr::Create( sResMgrName.GetBuffer(), aLocale );
+    m_pResMgr = ResMgr::CreateResMgr( sResMgrName.GetBuffer() );
 
-    if (m_pImpl)
+    if (m_pSimpleResMgr)
     {
         // now that we have a impl class, make sure it's deleted on unloading the library
         static TkResMgr::EnsureDelete s_aDeleteTheImplClass;
@@ -84,16 +91,27 @@ void TkResMgr::ensureImplExists()
 }
 
 // -----------------------------------------------------------------------------
-
 ::rtl::OUString TkResMgr::loadString( sal_uInt16 nResId )
 {
     ::rtl::OUString sReturn;
 
     ensureImplExists();
-    if ( m_pImpl )
-        sReturn = m_pImpl->ReadString( nResId );
+    if ( m_pSimpleResMgr )
+        sReturn = m_pSimpleResMgr->ReadString( nResId );
 
     return sReturn;
+}
+
+// -----------------------------------------------------------------------------
+Image TkResMgr::loadImage( sal_uInt16 nResId )
+{
+    Image aReturn;
+
+    ensureImplExists();
+    if ( m_pResMgr )
+        aReturn = Image( ResId( nResId, m_pResMgr ) );
+
+    return aReturn;
 }
 
 // -----------------------------------------------------------------------------
