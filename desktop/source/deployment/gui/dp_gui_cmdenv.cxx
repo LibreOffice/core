@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:42:12 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include "dp_gui_cmdenv.h"
 #include "dp_gui_shared.hxx"
 #include "dp_gui_dependencydialog.hxx"
+#include "dp_dependencies.hxx"
 #include "dp_version.hxx"
 #include "comphelper/anytostring.hxx"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
@@ -49,6 +50,7 @@
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
+#include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/deployment/InstallException.hpp"
 #include "com/sun/star/deployment/ui/LicenseDialog.hpp"
@@ -108,7 +110,7 @@ void ProgressCommandEnv::solarthread_dtor()
 
 Dialog * ProgressCommandEnv::activeDialog() {
     Dialog * p = m_progressDialog.get();
-    return p == NULL ? m_mainDialog : p;
+    return p == NULL ? m_dialog : p;
 }
 
 //______________________________________________________________________________
@@ -121,7 +123,7 @@ ProgressCommandEnv::~ProgressCommandEnv()
 //______________________________________________________________________________
 ProgressCommandEnv::ProgressDialog::ProgressDialog(
     ProgressCommandEnv * cmdEnv )
-    : Dialog( cmdEnv->m_mainDialog, WB_STDMODAL ),
+    : Dialog( cmdEnv->m_dialog, WB_STDMODAL ),
       m_cmdEnv( cmdEnv )
 {
     SetModalInputMode( TRUE );
@@ -131,6 +133,12 @@ ProgressCommandEnv::ProgressDialog::ProgressDialog(
 IMPL_LINK( ProgressCommandEnv, executeDialog, ::osl::Condition *, pCond )
 {
     {
+        DialogImpl *mainDialog = dynamic_cast<dp_gui::DialogImpl*>(m_dialog);
+        if (mainDialog == NULL)
+        {
+            OSL_ASSERT(0);
+            return 0;
+        }
         ::std::auto_ptr<ProgressDialog> that( new ProgressDialog( this ) );
         that->SetHelpId( HID_PACKAGE_MANAGER_PROGRESS );
 
@@ -140,37 +148,37 @@ IMPL_LINK( ProgressCommandEnv, executeDialog, ::osl::Condition *, pCond )
         long totalWidth = that->LogicToPixel(
             Size( 250, 0 ), MapMode( MAP_APPFONT ) ).getWidth();
         long barWidth = totalWidth -
-            (2 * m_mainDialog->m_borderLeftTopSpace.getWidth());
-        long posY = m_mainDialog->m_borderLeftTopSpace.getHeight();
+            (2 * mainDialog->m_borderLeftTopSpace.getWidth());
+        long posY = mainDialog->m_borderLeftTopSpace.getHeight();
 
         that->m_ftCurrentAction.reset( new FixedText( that.get() ) );
         that->m_ftCurrentAction->SetPosSizePixel(
-            m_mainDialog->m_borderLeftTopSpace.getWidth(), posY,
-            barWidth, m_mainDialog->m_ftFontHeight );
-        posY += (m_mainDialog->m_ftFontHeight +
-                 m_mainDialog->m_descriptionYSpace);
+            mainDialog->m_borderLeftTopSpace.getWidth(), posY,
+            barWidth, mainDialog->m_ftFontHeight );
+        posY += (mainDialog->m_ftFontHeight +
+                 mainDialog->m_descriptionYSpace);
 
         that->m_statusBar.reset(
             new StatusBar( that.get(), WB_LEFT | WB_3DLOOK ) );
         that->m_statusBar->SetPosSizePixel(
-            m_mainDialog->m_borderLeftTopSpace.getWidth(), posY,
-            barWidth, m_mainDialog->m_ftFontHeight + 4 );
-        posY += (m_mainDialog->m_ftFontHeight + 4 +
-                 m_mainDialog->m_unrelatedSpace.getHeight());
+            mainDialog->m_borderLeftTopSpace.getWidth(), posY,
+            barWidth, mainDialog->m_ftFontHeight + 4 );
+        posY += (mainDialog->m_ftFontHeight + 4 +
+                 mainDialog->m_unrelatedSpace.getHeight());
 
         that->m_cancelButton.reset(
             new ProgressDialog::CancelButtonImpl( that.get() ) );
         that->m_cancelButton->SetHelpId( HID_PACKAGE_MANAGER_PROGRESS_CANCEL );
         that->m_cancelButton->SetPosSizePixel(
-            (totalWidth - m_mainDialog->m_buttonSize.getWidth()) / 2,
+            (totalWidth - mainDialog->m_buttonSize.getWidth()) / 2,
             posY,
-            m_mainDialog->m_buttonSize.getWidth(),
-            m_mainDialog->m_buttonSize.getHeight() );
-        posY += m_mainDialog->m_buttonSize.getHeight();
+            mainDialog->m_buttonSize.getWidth(),
+            mainDialog->m_buttonSize.getHeight() );
+        posY += mainDialog->m_buttonSize.getHeight();
 
         that->SetSizePixel(
             Size( totalWidth,
-                  posY + m_mainDialog->m_borderRightBottomSpace.getHeight() ) );
+                  posY + mainDialog->m_borderRightBottomSpace.getHeight() ) );
 
         that->m_ftCurrentAction->Show();
         that->m_statusBar->Show();
@@ -272,9 +280,10 @@ void ProgressCommandEnv::handle(
     lang::WrappedTargetException wtExc;
     deployment::DependencyException depExc;
     deployment::LicenseException licExc;
+    deployment::LicenseIndividualAgreementException licAgreementExc;
     deployment::VersionException verExc;
     deployment::InstallException instExc;
-    bool bLicenseException = false;
+
     // selections:
     bool approve = false;
     bool abort = false;
@@ -320,22 +329,8 @@ void ProgressCommandEnv::handle(
         for (sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength();
              ++i)
         {
-            rtl::OUString name;
-            if (depExc.UnsatisfiedDependencies[i]->hasAttributeNS(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "http://openoffice.org/extensions/description/"
-                            "2006")),
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name"))))
-            {
-                name = depExc.UnsatisfiedDependencies[i]->getAttributeNS(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "http://openoffice.org/extensions/description/"
-                            "2006")),
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")));
-            }
-            deps.push_back(name);
+            deps.push_back(
+                dp_misc::Dependencies::name(depExc.UnsatisfiedDependencies[i]));
         }
         {
             vos::OGuard guard(Application::GetSolarMutex());
@@ -346,45 +341,32 @@ void ProgressCommandEnv::handle(
                 || n == RET_CANCEL && !Application::IsDialogCancelEnabled();
         }
     }
+    else if (request >>= licAgreementExc)
+    {
+        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ResId warnId(WARNINGBOX_NOSHAREDALLOWED, DeploymentGuiResMgr::get());
+        WarningBox warn(activeDialog(), warnId);
+        String msgText = warn.GetMessText();
+        msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+        msgText.SearchAndReplaceAllAscii("%NAME", licExc.ExtensionName);
+        warn.SetMessText(msgText);
+        warn.Execute();
+        abort = true;
+    }
     else if (request >>= licExc)
     {
-        bLicenseException = true;
-        //check if we run with shared switched and if every user must accept the license,
-        //which is an invalid case
-        OSL_ASSERT(m_sContext.equals(OUSTR("shared")) || m_sContext.equals(OUSTR("user")));
-        if (m_sContext.equals(OUSTR("shared"))
-        && licExc.IndividualAgreement == sal_True)
-        {
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-            ResId warnId(WARNINGBOX_NOSHAREDALLOWED, DeploymentGuiResMgr::get());
-            WarningBox warn(m_mainDialog, warnId);
-            warn.SetText(m_mainDialog->GetText());
-            String msgText = warn.GetMessText();
-            //if (msgText.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
-            msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
-            //}
-            msgText.SearchAndReplaceAllAscii("%NAME", licExc.ExtensionName);
-            warn.SetMessText(msgText);
-            warn.Execute();
+        Reference<ui::dialogs::XExecutableDialog> xDialog(
+            css::deployment::ui::LicenseDialog::create(
+            m_xContext, VCLUnoHelper::GetInterface(activeDialog()), licExc.Text ) );
+        sal_Int16 res = xDialog->execute();
+        if (res == css::ui::dialogs::ExecutableDialogResults::CANCEL)
             abort = true;
-        }
+        else if (res == css::ui::dialogs::ExecutableDialogResults::OK)
+            approve = true;
         else
-        {   OSL_ASSERT(m_mainDialog);
-            Reference<ui::dialogs::XExecutableDialog> xDialog(
-                css::deployment::ui::LicenseDialog::create(
-                m_mainDialog->m_xComponentContext, VCLUnoHelper::GetInterface(activeDialog()), licExc.Text ) );
-            sal_Int16 res = xDialog->execute();
-            if (res == css::ui::dialogs::ExecutableDialogResults::CANCEL)
-                abort = true;
-            else if (res == css::ui::dialogs::ExecutableDialogResults::OK)
-                approve = true;
-            else
-            {
-                OSL_ASSERT(0);
-            }
-
+        {
+            OSL_ASSERT(0);
         }
-
     }
     else if (request >>= verExc)
     {
@@ -445,12 +427,10 @@ void ProgressCommandEnv::handle(
             handlerArgs[ 0 ] <<= beans::PropertyValue(
                 OUSTR("Context"), -1, Any(m_title),
                 beans::PropertyState_DIRECT_VALUE );
-            Reference<XComponentContext> const & xContext =
-                m_mainDialog->m_xComponentContext;
-            m_xHandler.set( xContext->getServiceManager()
+             m_xHandler.set( m_xContext->getServiceManager()
                             ->createInstanceWithArgumentsAndContext(
                                 OUSTR("com.sun.star.uui.InteractionHandler"),
-                                handlerArgs, xContext ), UNO_QUERY_THROW );
+                                handlerArgs, m_xContext ), UNO_QUERY_THROW );
         }
         m_xHandler->handle( xRequest );
     }
@@ -498,13 +478,16 @@ void ProgressCommandEnv::push( Any const & Status )
 void ProgressCommandEnv::update_( Any const & Status )
     throw (RuntimeException)
 {
+    DialogImpl *mainDialog = dynamic_cast<dp_gui::DialogImpl*>(m_dialog);
+    if (mainDialog == NULL)
+        return;
     OUString text;
     if (Status.hasValue() && !(Status >>= text)) {
         if (Status.getValueTypeClass() == TypeClass_EXCEPTION)
             text = static_cast<Exception const *>(Status.getValue())->Message;
         if (text.getLength() == 0)
             text = ::comphelper::anyToString(Status); // fallback
-        m_mainDialog->errbox( text );
+        mainDialog->errbox( text );
     }
     updateProgress( text );
     ++m_currentInnerProgress;
