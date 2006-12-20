@@ -7,9 +7,14 @@ var regKeyOfficeLocaleMachine = "HKEY_LOCAL_MACHINE\\Software\\OpenOffice.org\\U
 var regKeyDotNetInstallRoot = "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\.NETFramework\\InstallRoot";
 var regKeyDotNet1_1 = "HKLM\\Software\\Microsoft\\.NETFramework\\policy\\v1.1\\4322";
 var sDirDotNet1_1 = "v1.1.4322";
+var regKeyDotNet2_0 = "HKLM\\Software\\Microsoft\\.NETFramework\\Policy\\v2.0\\50727";
+var sDirDotNet2_0 = "v2.0.50727";
+
 var regKeyJDK = "HKLM\\Software\\JavaSoft\\Java Development Kit\\";
 var regKeyVC70 = "HKLM\\SOFTWARE\\Microsoft\\VisualStudio\\7.0\\Setup\\VC\\ProductDir";
 var regKeyVC71 = "HKLM\\SOFTWARE\\Microsoft\\VisualStudio\\7.1\\Setup\\VC\\ProductDir";
+
+var regKeyVCExpress80 = "HKLM\\SOFTWARE\\Microsoft\\VCExpress\\8.0\\Setup\\VC\\ProductDir";
 
 var WshShell = WScript.CreateObject("WScript.Shell");
 var WshSysEnv = WshShell.Environment("process");
@@ -36,6 +41,7 @@ if (office_or_ure == "office") {
 }
 var oo_sdk_make_home = getMakeHome();
 var oo_sdk_zip_home = getZipHome();
+var oo_sdk_vc8_used;
 var oo_sdk_cpp_home = getCppHome();
 var oo_sdk_cli_home = getCliHome();
 var oo_sdk_java_home = getJavaHome();
@@ -45,7 +51,6 @@ if (office_or_ure == "office") {
     sdk_auto_deployment = getAutoDeployment();
 }
 
-//writeBatFile(oo_sdk_home + "\\setsdkenv_windows.bat");
 writeBatFile(oo_user_sdk_dir, oo_user_sdk_env_script);
 
 stdout.Write(
@@ -60,6 +65,7 @@ stdout.Write(
 
 // done -------------------------------------------------------------------------
 
+
 function skipChoice(msg)
 {
 	stdout.Write("\n Do you want to skip the choice of " + msg + " (YES/NO) [YES]:");
@@ -67,7 +73,7 @@ function skipChoice(msg)
     if (sChoice == "" || sChoice.toLowerCase() == "yes")
 	   return true;
 
-	return false
+	return false;
 }
 
 function getSdkHome()
@@ -324,14 +330,22 @@ function getCppHome()
     if (sSuggestedHome.length == 0)
     {       
         var sVC="";
+		var sVC8="";
         try {
-            sVC = WshShell.RegRead(regKeyVC71);                            
+            sVC = WshShell.RegRead(regKeyVCExpress80);
+			sVC8="true";
         }catch (exc) {}
-        
+
+        if (sVC.length == 0)
+        {
+	        try {
+				sVC = WshShell.RegRead(regKeyVC71);
+			}catch (exc) {}
+		}        
         if (sVC.length == 0)
         {
             try {
-                sVC = WshShell.RegRead(regKeyVC70);             
+                sVC = WshShell.RegRead(regKeyVC70);
             } catch (exc) {}
         }
         if (sVC.length > 0)
@@ -397,6 +411,8 @@ function getCppHome()
 		   }
 		}
         
+		if (sVC8.length > 0)
+		   oo_sdk_vc8_used=sVC8;
         return sHome;
     }   
 }
@@ -408,15 +424,27 @@ function getCliHome()
     if (sSuggestedHome.length == 0)
     {
         try {
-            var ver1_1 = WshShell.RegRead(regKeyDotNet1_1);
-            if (ver1_1.length > 0)
+            var _ver = WshShell.RegRead(regKeyDotNet2_0);
+            if (_ver.length > 0)
             {
                 sSuggestedHome = WshShell.RegRead(regKeyDotNetInstallRoot);
-                sSuggestedHome += sDirDotNet1_1;
+                sSuggestedHome += sDirDotNet2_0;
                 if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
                     sSuggestedHome = "";
             }
-        } catch (exc) {}
+
+			if (sSuggestedHome.length == 0) 
+			{
+				_ver = WshShell.RegRead(regKeyDotNet1_1);
+				if (_ver.length > 0)
+				{
+					sSuggestedHome = WshShell.RegRead(regKeyDotNetInstallRoot);
+					sSuggestedHome += sDirDotNet1_1;
+					if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
+					   sSuggestedHome = "";
+				}
+			}				
+		} catch (exc) {}
     }
     
     var bSkip = false;       
@@ -709,13 +737,14 @@ function writeBatFile(fdir, file)
         "REM Example: set OO_SDK_MAKE_HOME=D:\\NextGenerationMake\\make\n" + 
         "set OO_SDK_MAKE_HOME=" + oo_sdk_make_home + 
         "\n\n" +
-	"REM Directory of the zip tool.\n" +
-	"REM Example: set OO_SDK_ZIP_HOME=D:\\infozip\\bin\n" +
-	"set OO_SDK_ZIP_HOME=" + oo_sdk_zip_home + 
+		"REM Directory of the zip tool.\n" +
+		"REM Example: set OO_SDK_ZIP_HOME=D:\\infozip\\bin\n" +
+		"set OO_SDK_ZIP_HOME=" + oo_sdk_zip_home + 
         "\n\n" +
         "REM Directory of the C++ compiler.\n" + 
         "REM Example:set OO_SDK_CPP_HOME=C:\\Programme\\Microsoft Visual Studio\\VC98\\bin\n" + 
         "set OO_SDK_CPP_HOME=" + oo_sdk_cpp_home + 
+		"\nset CPP_VC8=" + oo_sdk_vc8_used +
         "\n\n" + 
         "REM Directory of the C# and VB.NET compilers.\n" + 
         "REM Example:set OO_SDK_CLI_HOME=C:\\WINXP\\Microsoft.NET\\Framework\\v1.0.3705\n" +
@@ -761,7 +790,7 @@ function writeBatFile(fdir, file)
         " )\n" +
         "\n" +
         "REM Set library path. \n" + 
-        "set LIB=%OO_SDK_HOME%\\windows\\lib;%OO_SDK_HOME%\\WINexample.out\\lib;%LIB%\n" +
+        "set LIB=%OO_SDK_HOME%\\windows\\lib;%LIB%\n" +
         "\n" +
         "REM Set office program path.\n" +
         "if defined OFFICE_HOME (\n" +
