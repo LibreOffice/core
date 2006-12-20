@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optHeaderTabListbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:38:33 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:11:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ namespace svx
     public:
         OptHeaderTabListBox( Window* pParent, WinBits nBits );
 
-        virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
+        virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
     };
 } // svx
 #endif // SVX_OPTHEADERTABLISTBOX_HXX
