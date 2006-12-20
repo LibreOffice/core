@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppcompskeleton.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:23:54 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 12:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,8 +317,7 @@ void generateXPropertyAccessBodies(std::ostream& o,
       << propertyhelper << " >::setPropertyValues(aProps);\n}\n\n";
 }
 
-void generateXLocalizable(std::ostream& o,
-                          const OString & classname)
+void generateXLocalizable(std::ostream& o, const OString & classname)
 {
     o << "// ::com::sun::star::lang::XLocalizable:\n"
         "void SAL_CALL " << classname << "setLocale(const css::lang::"
@@ -328,8 +327,7 @@ void generateXLocalizable(std::ostream& o,
         "throw (css::uno::RuntimeException)\n{\n    return m_locale;\n}\n\n";
 }
 
-void generateXAddInBodies(std::ostream& o,
-                          const OString & classname)
+void generateXAddInBodies(std::ostream& o, const OString & classname)
 {
     o << "// ::com::sun::star::sheet::XAddIn:\n";
 
@@ -384,8 +382,7 @@ void generateXAddInBodies(std::ostream& o,
         "sCATEGORYDISPLAYNAME);\n}\n\n";
 }
 
-void generateXCompatibilityNamesBodies(std::ostream& o,
-                                       const OString & classname)
+void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classname)
 {
     o << "// ::com::sun::star::sheet::XCompatibilityNames:\n"
         "css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL " << classname
@@ -424,6 +421,103 @@ void generateXCompatibilityNamesBodies(std::ostream& o,
         "    return seqLocalizedNames;\n}\n\n";
 }
 
+void generateXInitialization(std::ostream& o, const OString & classname)
+{
+    o << "// ::com::sun::star::lang::XInitialization:\n"
+        "void SAL_CALL " << classname << "initialize( const css::uno::Sequence< "
+        "css::uno::Any >& aArguments ) "
+        "throw (css::uno::Exception, css::uno::RuntimeException)\n{\n"
+        "    css::uno::Reference < css::frame::XFrame > xFrame;\n"
+        "    if ( aArguments.getLength() ) {\n        aArguments[0] >>= xFrame;\n"
+        "        m_xFrame = xFrame;\n    }\n}\n\n";
+}
+
+void generateXDispatch(std::ostream& o,
+                       const OString & classname,
+                       const ProtocolCmdMap & protocolCmdMap)
+{
+    // com.sun.star.frame.XDispatch
+    // dispatch
+    o << "// ::com::sun::star::frame::XDispatch:\n"
+        "void SAL_CALL " << classname << "dispatch( const css::util::URL& aURL, const "
+        "css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw"
+        "(css::uno::RuntimeException)\n{\n";
+
+    ProtocolCmdMap::const_iterator iter = protocolCmdMap.begin();
+    while (iter != protocolCmdMap.end()) {
+        o << "    if ( aURL.Protocol.equalsAscii(\"" << (*iter).first
+          << "\") == 0 )\n    {\n";
+
+        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
+             i != (*iter).second.end(); ++i) {
+            o << "        if ( aURL.Path.equalsAscii(\"" << (*i) << "\") )\n"
+                "        {\n                // add your own code here\n"
+                "                return;\n        }\n";
+        }
+
+        o << "    }\n";
+        iter++;
+    }
+    o << "}\n\n";
+
+    // addStatusListener
+    o << "void SAL_CALL " << classname << "addStatusListener( const css::uno::Reference< "
+        "css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) "
+        "throw (css::uno::RuntimeException)\n{\n"
+        "    // add your own code here\n}\n\n";
+
+    // removeStatusListener
+    o << "void SAL_CALL " << classname << "removeStatusListener( const css::uno::Reference"
+        "< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) "
+        "throw (css::uno::RuntimeException)\n{\n"
+        "    // add your own code here\n}\n\n";
+}
+
+void generateXDispatchProvider(std::ostream& o,
+                               const OString & classname,
+                               const ProtocolCmdMap & protocolCmdMap)
+{
+
+    // com.sun.star.frame.XDispatchProvider
+    // queryDispatch
+    o << "// ::com::sun::star::frame::XDispatchProvider:\n"
+        "css::uno::Reference< css::frame::XDispatch > SAL_CALL " << classname
+      << "queryDispatch( const css::util::URL& aURL,"
+        " const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags ) "
+        "throw(css::uno::RuntimeException)\n{\n    css::uno::Reference< "
+        "css::frame::XDispatch > xRet;\n"
+        "    if ( !m_xFrame.is() )\n        return 0;\n\n";
+
+    ProtocolCmdMap::const_iterator iter = protocolCmdMap.begin();
+    while (iter != protocolCmdMap.end()) {
+        o << "    if ( aURL.Protocol.equalsAscii(\"" << (*iter).first
+          << "\") == 0 )\n    {\n";
+
+        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
+             i != (*iter).second.end(); ++i) {
+            o << "        if ( aURL.Path.equalsAscii(\"" << (*i) << "\") == 0 )\n"
+                "            xRet = this;\n";
+        }
+
+        o << "    }\n";
+        iter++;
+    }
+    o << "    return xRet;\n}\n\n";
+
+    // queryDispatches
+    o << "css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL "
+      << classname << "queryDispatches( const css::uno::Sequence< "
+        "css::frame::DispatchDescriptor >& seqDescripts ) throw("
+        "css::uno::RuntimeException)\n{\n"
+        "    sal_Int32 nCount = seqDescripts.getLength();\n"
+        "    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > "
+        "lDispatcher(nCount);\n\n"
+        "    for( sal_Int32 i=0; i<nCount; ++i ) {\n"
+        "        lDispatcher[i] = queryDispatch( seqDescripts[i].FeatureURL,\n"
+        "                                        seqDescripts[i].FrameName,\n"
+        "                                        seqDescripts[i].SearchFlags );\n"
+        "    }\n\n    return lDispatcher;\n}\n\n";
+}
 
 void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
@@ -665,9 +759,14 @@ OString generateClassDefinition(std::ostream& o,
     }
 
     // members
-    o << "    css::uno::Reference< css::uno::XComponentContext >  m_xContext;\n";
+    o << "    css::uno::Reference< css::uno::XComponentContext > m_xContext;\n";
     if (!supportxcomponent && !attributes.empty())
         o << "   mutable ::osl::Mutex m_aMutex;\n";
+
+    // additional member for add-ons
+    if (options.componenttype == 3) {
+        o << "    css::uno::Reference< css::frame::XFrame > m_xFrame;\n";
+    }
 
     if (options.componenttype == 2) {
         if (options.backwardcompatible) {
@@ -783,7 +882,7 @@ void generateXServiceInfoBodies(std::ostream& o,
                                 OString const & comphelpernamespace)
 {
     o << "// com.sun.star.uno.XServiceInfo:\n"
-      << "::rtl::OUString  SAL_CALL " << classname << "getImplementationName() "
+      << "::rtl::OUString SAL_CALL " << classname << "getImplementationName() "
       << "throw (css::uno::RuntimeException)\n{\n    "
       << "return " << comphelpernamespace << "::_getImplementationName();\n}\n\n";
 
@@ -796,7 +895,7 @@ void generateXServiceInfoBodies(std::ostream& o,
       << "    if (serviceNames[i] == serviceName)\n            return sal_True;\n"
       << "    }\n    return sal_False;\n}\n\n";
 
-    o << "css::uno::Sequence< ::rtl::OUString >  SAL_CALL " << classname
+    o << "css::uno::Sequence< ::rtl::OUString > SAL_CALL " << classname
       << "getSupportedServiceNames() throw (css::uno::RuntimeException)\n{\n    "
       << "return " << comphelpernamespace
       << "::_getSupportedServiceNames();\n}\n\n";
@@ -903,6 +1002,17 @@ void generateSkeleton(ProgramOptions const & options,
         iter++;
     }
 
+    if (options.componenttype == 3) {
+        // the Protocolhandler service is mandatory for an protocol handler add-on,
+        // so it is defaulted. The XDispatchProvider provides Dispatch objects for
+        // certain functions and the generated impl object implements XDispatch
+        // directly for simplicity reasons.
+        checkType(manager, "com.sun.star.frame.ProtocolHandler",
+                  interfaces, services, properties);
+        checkType(manager, "com.sun.star.frame.XDispatch",
+                  interfaces, services, properties);
+    }
+
     // check if service object or simple UNO object
     if (!services.empty())
         serviceobject = true;
@@ -933,6 +1043,11 @@ void generateSkeleton(ProgramOptions const & options,
 
         generateIncludes(*pofs, interfaces, properties, propertyhelper,
                          serviceobject, supportxcomponent);
+
+        if (options.componenttype == 3) {
+            *pofs << "#include \"com/sun/star/frame/XFrame.hpp\"\n";
+        }
+
         // namespace
         OString nmspace;
         short nm = 0;
@@ -1021,15 +1136,17 @@ void generateCalcAddin(ProgramOptions const & options,
         iter++;
     }
 
+    OString sAddinService;
     if (services.size() != 1) {
         throw CannotDumpException(
             "for calc add-in components one and only one service type is necessary!"
             " Please reference a valid type with the '-t' option.");
     }
 
+
     // get the one and only add-in service for later use
     std::hash_set< OString, OStringHash >::const_iterator iter2 = services.begin();
-    OString sAddinService = (*iter2).replace('/', '.');
+    sAddinService = (*iter2).replace('/', '.');
     if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
         sAddinService = (*(++iter2)).replace('/', '.');
     }

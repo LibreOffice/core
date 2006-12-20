@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpptypemaker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:09 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 12:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,14 +365,21 @@ void generateXPropertyAccessBodies(std::ostream& o,
                                    const OString & classname,
                                    const OString & interfaceName);
 
-void generateXAddInBodies(std::ostream& o,
-                          const OString & classname);
+void generateXAddInBodies(std::ostream& o, const OString & classname);
 
-void generateXLocalizable(std::ostream& o,
-                          const OString & classname);
+void generateXLocalizable(std::ostream& o, const OString & classname);
 
-void generateXCompatibilityNamesBodies(std::ostream& o,
-                                       const OString & classname);
+void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classname);
+
+void generateXInitialization(std::ostream& o, const OString & classname);
+
+void generateXDispatch(std::ostream& o,
+                       const OString & classname,
+                       const ProtocolCmdMap & protocolCmdMap);
+
+void generateXDispatchProvider(std::ostream& o,
+                               const OString & classname,
+                               const ProtocolCmdMap & protocolCmdMap);
 
 
 void printMethods(std::ostream & o,
@@ -440,6 +447,22 @@ void printMethods(std::ostream & o,
             return;
         } else if (type.equals("com/sun/star/sheet/XCompatibilityNames")) {
             generateXCompatibilityNamesBodies(o, classname);
+            generated.add(type);
+            return;
+        }
+    }
+
+    if (body && options.componenttype == 3) {
+        if (type.equals("com/sun/star/lang/XInitialization")) {
+            generateXInitialization(o, classname);
+            generated.add(type);
+            return;
+        } else if (type.equals("com/sun/star/frame/XDispatch")) {
+            generateXDispatch(o, classname, options.protocolCmdMap);
+            generated.add(type);
+            return;
+        } else if (type.equals("com/sun/star/frame/XDispatchProvider")) {
+            generateXDispatchProvider(o, classname, options.protocolCmdMap);
             generated.add(type);
             return;
         }
