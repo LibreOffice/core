@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:04:51 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,7 @@ protected:
     virtual void KeyInput( const KeyEvent& rKEvt );
     virtual void Command( const CommandEvent& rEvt );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void InitEntry(SvLBoxEntry* pEntry, const XubString& rStr, const Image& rImg1, const Image& rImg2);
+    virtual void InitEntry(SvLBoxEntry* pEntry, const XubString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
     virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
     virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection );
     virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
