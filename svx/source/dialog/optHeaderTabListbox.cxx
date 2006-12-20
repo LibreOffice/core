@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optHeaderTabListbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:29:04 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,10 @@ OptHeaderTabListBox::OptHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
-                                     const Image& rImg1, const Image& rImg2 )
+                                     const Image& rImg1, const Image& rImg2,
+                                     SvLBoxButtonKind eButtonKind )
 {
-    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2 );
+    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
     USHORT _nTabCount = TabCount();
 
     for ( USHORT nCol = 1; nCol < _nTabCount; ++nCol )
