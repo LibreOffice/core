@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:09:59 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,8 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 
 ::sal_Bool Package::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& )
+        const css::uno::Reference< css::ucb::XCommandEnvironment >&,
+        sal_Bool, ::rtl::OUString const &)
         throw (css::deployment::DeploymentException,
             css::ucb::CommandFailedException,
             css::ucb::CommandAbortedException,
@@ -327,6 +328,11 @@ Sequence< Reference<deployment::XPackage> > Package::getBundle(
 OUString Package::getName() throw (RuntimeException)
 {
     return m_name;
+}
+
+beans::Optional<OUString> Package::getIdentifier() throw (RuntimeException)
+{
+    return beans::Optional<OUString>();
 }
 
 //______________________________________________________________________________
@@ -354,6 +360,12 @@ OUString Package::getDescription() throw (RuntimeException)
         return m_xPackageType->getDescription();
     else
         return OUString();
+}
+
+//______________________________________________________________________________
+Sequence<OUString> Package::getUpdateInformationURLs() throw (RuntimeException)
+{
+    return Sequence<OUString>();
 }
 
 //______________________________________________________________________________
