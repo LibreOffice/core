@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:54:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,20 +289,15 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         winVerOk = 1;
 
         // multi monitor calls not available on Win95/NT
-        OSVERSIONINFO aVerInfo;
-        aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
-        if ( GetVersionEx( &aVerInfo ) )
+        if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
         {
-            if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
-            {
-                if ( aVerInfo.dwMajorVersion <= 4 )
-                    winVerOk = 0;   // NT
-            }
-            else if( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
-            {
-                if ( aVerInfo.dwMajorVersion == 4 && aVerInfo.dwMinorVersion == 0 )
-                    winVerOk = 0;   // Win95
-            }
+            if ( aSalShlData.maVersionInfo.dwMajorVersion <= 4 )
+                winVerOk = 0;   // NT
+        }
+        else if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
+        {
+            if ( aSalShlData.maVersionInfo.dwMajorVersion == 4 && aSalShlData.maVersionInfo.dwMinorVersion == 0 )
+                winVerOk = 0;   // Win95
         }
     }
 
@@ -399,28 +394,25 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     if( bLayeredAPI == -1 )
     {
         bLayeredAPI = 0;
-        OSVERSIONINFO aVerInfo;
-        aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
-        if ( GetVersionEx( &aVerInfo ) )
-            // check for W2k and XP
-            if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aVerInfo.dwMajorVersion >= 5 )
+        // check for W2k and XP
+        if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
+        {
+            OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
+            oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+            void *pFunc = NULL;
+            if( pLib )
             {
-                OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
-                oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-                void *pFunc = NULL;
-                if( pLib )
-                {
-                    OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "SetLayeredWindowAttributes" ) );
-                    pFunc = osl_getSymbol( pLib, queryFuncName.pData );
-                }
-
-                lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T ) pFunc;
-
-                if ( pFunc )
-                    bLayeredAPI = 1;
-                else
-                    bLayeredAPI = 0;
+                OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "SetLayeredWindowAttributes" ) );
+                pFunc = osl_getSymbol( pLib, queryFuncName.pData );
             }
+
+            lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T ) pFunc;
+
+            if ( pFunc )
+                bLayeredAPI = 1;
+            else
+                bLayeredAPI = 0;
+        }
     }
     static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
 
@@ -853,13 +845,8 @@ static UINT ImplSalGetWheelScrollChars()
     {
         // Depending on Windows version, use proper default or 1 (when
         // driver emulates hscroll)
-        OSVERSIONINFO aOSVersion;
-        rtl_zeroMemory( &aOSVersion, sizeof(OSVERSIONINFO) );
-        aOSVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-        GetVersionEx( &aOSVersion );
-
-        if( VER_PLATFORM_WIN32_NT == aOSVersion.dwPlatformId &&
-            aOSVersion.dwMajorVersion < 6 )
+        if( VER_PLATFORM_WIN32_NT == aSalShlData.maVersionInfo.dwPlatformId &&
+            aSalShlData.maVersionInfo.dwMajorVersion < 6 )
         {
             // Windows 2000 & WinXP : emulating driver, use step size
             // of 1
