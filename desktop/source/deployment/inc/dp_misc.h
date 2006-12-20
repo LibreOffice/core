@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:18:39 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,12 @@
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
+#include "dp_misc_api.hxx"
+#endif
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) (sizeof (x) / sizeof *(x))
-
-
-namespace css = ::com::sun::star;
 
 namespace dp_misc {
 
@@ -66,9 +67,9 @@ protected:
 };
 
 //==============================================================================
-inline void try_dispose( css::uno::Reference<css::uno::XInterface> const & x )
+inline void try_dispose( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> const & x )
 {
-    css::uno::Reference<css::lang::XComponent> xComp( x, css::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComp( x, ::com::sun::star::uno::UNO_QUERY );
     if (xComp.is())
         xComp->dispose();
 }
@@ -76,37 +77,42 @@ inline void try_dispose( css::uno::Reference<css::uno::XInterface> const & x )
 //##############################################################################
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcTerm( ::rtl::OUString const & term );
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcUrl( ::rtl::OUString const & url );
 
 //==============================================================================
-::rtl::OUString const & getPlatformString();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString const & getPlatformString();
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 bool platform_fits( ::rtl::OUString const & platform_string );
 
 //==============================================================================
-::rtl::OUString makeURL(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURL(
     ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
 
 //==============================================================================
-::rtl::OUString generateRandomPipeId();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString generateRandomPipeId();
 
 class AbortChannel;
 //==============================================================================
-css::uno::Reference<css::uno::XInterface> resolveUnoURL(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> resolveUnoURL(
     ::rtl::OUString const & connectString,
-    css::uno::Reference<css::uno::XComponentContext> const & xLocalContext,
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xLocalContext,
     AbortChannel * abortChannel = 0 );
 
 //==============================================================================
-bool office_is_running();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();
 
 //==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 oslProcess raiseProcess( ::rtl::OUString const & appURL,
-                         css::uno::Sequence< ::rtl::OUString > const & args );
+                         ::com::sun::star::uno::Sequence< ::rtl::OUString > const & args );
 
 }
 
