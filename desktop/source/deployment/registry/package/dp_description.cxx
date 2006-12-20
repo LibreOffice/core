@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_description.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:55:32 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,10 @@
 
 #include "dp_description.hxx"
 
+#include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
+#include "com/sun/star/deployment/DeploymentException.hpp"
 #include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/ucb/CommandFailedException.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
@@ -63,86 +64,84 @@ ExtensionDescription::ExtensionDescription(
     const ::rtl::OUString& installDir,
     const cssu::Reference< css::ucb::XCommandEnvironment >& xCmdEnv)
 {
-    m_sExtensionRootUrl = installDir;
-    //may throw ::com::sun::star::ucb::ContentCreationException
-    //If there is no description.xml then ucb will start an interaction which
-    //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
-    //and filter the respective exception out.
-    ::rtl::OUString sDescriptionUri(installDir + OUSTR("/description.xml"));
-    cssu::Reference<css::ucb::XCommandEnvironment> xFilter =
-        static_cast<css::ucb::XCommandEnvironment*>(
-        new FileDoesNotExistFilter(xCmdEnv));
-    ::ucb::Content descContent(sDescriptionUri, xFilter);
+    try {
+        m_sExtensionRootUrl = installDir;
+        //may throw ::com::sun::star::ucb::ContentCreationException
+        //If there is no description.xml then ucb will start an interaction which
+        //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
+        //and filter the respective exception out.
+        ::rtl::OUString sDescriptionUri(installDir + OUSTR("/description.xml"));
+        cssu::Reference<css::ucb::XCommandEnvironment> xFilter =
+            static_cast<css::ucb::XCommandEnvironment*>(
+                new FileDoesNotExistFilter(xCmdEnv));
+        ::ucb::Content descContent(sDescriptionUri, xFilter);
 
-    //throws an com::sun::star::uno::Exception if the file is not available
-    cssu::Reference<css::io::XInputStream> xIn;
-    try
-    {   //throws com.sun.star.ucb.InteractiveAugmentedIOException
-        xIn = descContent.openStream();
-    }
-    catch (cssu::Exception& )
-    {
-        if ( ! static_cast<FileDoesNotExistFilter*>(xFilter.get())->exist())
-            throw NoDescriptionException();
+        //throws an com::sun::star::uno::Exception if the file is not available
+        cssu::Reference<css::io::XInputStream> xIn;
+        try
+        {   //throws com.sun.star.ucb.InteractiveAugmentedIOException
+            xIn = descContent.openStream();
+        }
+        catch (cssu::Exception& )
+        {
+            if ( ! static_cast<FileDoesNotExistFilter*>(xFilter.get())->exist())
+                throw NoDescriptionException();
+            throw;
+        }
+        if (!xIn.is())
+        {
+            throw cssu::Exception(
+                OUSTR("Could not get XInputStream for description.xml of extension ") +
+                sDescriptionUri, 0);
+        }
+
+        //get root node of description.xml
+        cssu::Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
+            xContext->getServiceManager()->createInstanceWithContext(
+                OUSTR("com.sun.star.xml.dom.DocumentBuilder"),
+                xContext ), cssu::UNO_QUERY);
+        if (!xDocBuilder.is())
+            throw css::uno::Exception(OUSTR(" Could not create service com.sun.star.xml.dom.DocumentBuilder"), 0);
+
+        if (xDocBuilder->isNamespaceAware() == sal_False)
+        {
+            throw cssu::Exception(
+                OUSTR("Service com.sun.star.xml.dom.DocumentBuilder is not namespace aware."), 0);
+        }
+
+        cssu::Reference<css::xml::dom::XDocument> xDoc = xDocBuilder->parse(xIn);
+        if (!xDoc.is())
+        {
+            throw cssu::Exception(sDescriptionUri + OUSTR(" contains data which cannot be parsed. "), 0);
+        }
+
+        //check for proper root element and namespace
+        cssu::Reference<css::xml::dom::XElement> xRoot = xDoc->getDocumentElement();
+        if (!xRoot.is())
+        {
+            throw cssu::Exception(
+                sDescriptionUri + OUSTR(" contains no root element."), 0);
+        }
+        m_xRoot = cssu::Reference<css::xml::dom::XNode>(
+            xRoot, cssu::UNO_QUERY_THROW);
+        ::rtl::OUString nsDescription = xRoot->getNamespaceURI();
+
+        //check if this namespace is supported
+        if ( ! nsDescription.equals(OUSTR("http://openoffice.org/extensions/description/2006")))
+        {
+            throw cssu::Exception(sDescriptionUri + OUSTR(" contains a root element with an unsupported namespace. "), 0);
+        }
+    } catch (css::uno::RuntimeException &) {
         throw;
+    } catch (css::deployment::DeploymentException &) {
+        throw;
+    } catch (css::uno::Exception & e) {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::deployment::DeploymentException(
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DeploymentException: "))
+             + e.Message),
+            css::uno::Reference< css::uno::XInterface >(), a);
     }
-    if (!xIn.is())
-    {
-        throw cssu::Exception(
-            OUSTR("Could not get XInputStream for description.xml of extension ") +
-            sDescriptionUri, 0);
-    }
-
-    //get root node of description.xml
-    cssu::Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
-        xContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.xml.dom.DocumentBuilder"),
-            xContext ), cssu::UNO_QUERY);
-    if (!xDocBuilder.is())
-        throw css::uno::Exception(OUSTR(" Could not create service com.sun.star.xml.dom.DocumentBuilder"), 0);
-
-    if (xDocBuilder->isNamespaceAware() == sal_False)
-    {
-        throw cssu::Exception(
-            OUSTR("Service com.sun.star.xml.dom.DocumentBuilder is not namespace aware."), 0);
-    }
-
-    cssu::Reference<css::xml::dom::XDocument> xDoc = xDocBuilder->parse(xIn);
-    if (!xDoc.is())
-    {
-        throw cssu::Exception(sDescriptionUri + OUSTR(" contains data which cannot be parsed. "), 0);
-      }
-
-    //check for proper root element and namespace
-    cssu::Reference<css::xml::dom::XElement> xRoot = xDoc->getDocumentElement();
-    if (!xRoot.is())
-    {
-        throw cssu::Exception(
-            sDescriptionUri + OUSTR(" contains no root element."), 0);
-    }
-    m_xRoot = xRoot;
-    if ( ! m_xRoot->getTagName().equals(OUSTR("description")))
-    {
-        throw cssu::Exception(
-            sDescriptionUri + OUSTR(" does not contain the root element <description>."), 0);
-    }
-    ::rtl::OUString nsDescription = xRoot->getNamespaceURI();
-
-    //check if this namespace is supported
-    if ( ! nsDescription.equals(OUSTR("http://openoffice.org/extensions/description/2006")))
-    {
-        throw cssu::Exception(sDescriptionUri + OUSTR(" contains a root element with an unsupported namespace. "), 0);
-    }
-
-
-    cssu::Reference<css::xml::xpath::XXPathAPI> xxPathAPI(
-        xContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.xml.xpath.XPathAPI"),
-            xContext), cssu::UNO_QUERY);
-
-    if (!xxPathAPI.is())
-        throw css::uno::Exception(OUSTR(" Could not create service com.sun.star.xml.xpath.XPathAPI."), 0);
-    m_xXPath = xxPathAPI;
 }
 
 ExtensionDescription::~ExtensionDescription()
