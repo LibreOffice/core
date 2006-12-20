@@ -47,8 +47,7 @@
               <td class="content3"><img src="images/arrow-1.gif"></td>
               <td><a href="#pkgchk"  title="link to the pkgchk tool description">pkgchk</a></td>
               <td class="content87">The old UNO package deployment tool. It also comes 
-			  with the office installation and it is 
-			  <b<i>deprecated</i></b>.</td>
+			  with the office installation but it is <b><i>deprecated</i></b>.</td>
             </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"></td>
@@ -693,6 +692,7 @@ types the specified types depend on.</p>
 			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url>) dump [&lt;options>] -t &lt;type&gt; ...<br>
 			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url&gt;) component [&lt;options&gt;] -n &lt;name&gt; -t &lt;type&gt; ...<br>
 			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url&gt;) calc-add-in [&lt;options&gt;] -n &lt;name&gt; -t &lt;add-in_service&gt;<br>
+			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url&gt;) add-on [&lt;options&gt;] -n &lt;name&gt; -p &lt;protocol_name:command,...&gt;
 			uno-skeletonmaker -V, --version<br>
 			uno-skeletonmaker -h, --help<br>
 		  </code></b>
@@ -702,16 +702,20 @@ types the specified types depend on.</p>
 		  <table class="table4">
 		  <tr>
 		    <td class="cell15"><code>dump</code></td>
-			<td class="cell85">dump declarations on stdout (e.g. constructors, methods, type mapping for properties) or complete method bodies with method forwarding.</td>
+		    <td class="cell85">dump declarations on stdout (e.g. constructors, methods, type mapping for properties) or complete method bodies with method forwarding.</td>
 		  </tr>
-			<tr>
-			<td class="cell15"><code>component</code></td>
-			<td class="cell85">generates language specific code skeleton files using the implementation name as the file and class name</td>
-          </tr>
 		  <tr>
-            <td class="cell15"><code>calc-add-in</code></td>
-			<td class="cell85">generates a language specific code skeleton for a Calc Add-Ins using the implementation name as the file and class name. A service type is necessary, referencing an interface which defines the new add-in functions.</td>
-          </tr>
+                    <td class="cell15"><code>component</code></td>
+		    <td class="cell85">generates language specific code skeleton files using the implementation name as the file and class name</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>calc-add-in</code></td>
+		    <td class="cell85">generates a language specific code skeleton for a Calc Add-Ins using the implementation name as the file and class name. A service type is necessary, referencing an interface which defines the new add-in functions.</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>add-on</code></td>
+		    <td class="cell85">generates a language specific code skeleton for an add-on compnent using the implementation name as the file and class name. The protocol name(s) and the corresponding command(s) have to be specified with the '-p' option.</td>
+		  </tr>
 		  </table>
 		  </p>
 		  <p class="head2">Options:</p>
@@ -771,6 +775,10 @@ types the specified types depend on.</p>
           <tr>
             <td class="cell15"><code>-t &lt;name&gt;</code></td>
 			<td class="cell85">specifies an UNOIDL type name, e.g. com.sun.star.text.XText (can be used more than once).</td>
+          </tr>
+          <tr>
+            <td class="cell15"><code>-p &lt;protocol:cmd(s)&gt;</code></td>
+			<td class="cell85">specifies an add-on protocol name and the corresponding command names, where the commands are a ',' separated list of unique commands. This option is only valid for add-ons.</td>
           </tr>
           <tr>
             <td class="cell15"><code>-V, --version</code></td>
