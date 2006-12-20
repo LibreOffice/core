@@ -1,4 +1,4 @@
-dt      desktop :       sfx2 stoc uui BERKELEYDB:berkeleydb sysui SO:sysui_so NULL
+dt      desktop :       sfx2 stoc uui BERKELEYDB:berkeleydb sysui SO:sysui_so boost svx NULL
 dt	desktop									usr1	-	all	dt_mkout NULL
 dt	desktop\inc								nmake	-	all	dt_inc NULL
 dt	desktop\prj								get		-	all	dt_prj NULL
@@ -20,16 +20,16 @@ dt	desktop\source\pkgchk					nmake	-	all	dt_pkgchk dt_unopkg dt_dp_misc dt_app d
 dt	desktop\source\pkgchk\msi				nmake	-	w	dt_pkgchk_msi dt_pkgchk dt_inc NULL
 dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_script dt_dp_registry_sfwk dt_dp_registry_component dt_dp_registry_configuration dt_dp_migration dt_dp_unopkg dt_inc NULL
 dt	desktop\source\deployment\misc				nmake	-	all	dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\unopkg			nmake	-	all	dt_dp_unopkg dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\migration			nmake	-	all	dt_dp_migration dt_dp_misc dt_inc NULL
+dt	desktop\source\deployment\unopkg			nmake	-	all	dt_dp_unopkg dt_inc NULL
+dt	desktop\source\deployment\migration			nmake	-	all	dt_dp_migration dt_inc NULL
 dt	desktop\source\deployment\gui				nmake	-	all	dt_dp_gui dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\manager			nmake	-	all	dt_dp_manager dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\registry			nmake	-	all	dt_dp_registry dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\registry\package		nmake	-	all	dt_dp_registry_package dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\registry\script		nmake	-	all	dt_dp_registry_script dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\registry\sfwk		nmake	-	all	dt_dp_registry_sfwk dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\registry\component		nmake	-	all	dt_dp_registry_component dt_dp_misc dt_inc NULL
-dt	desktop\source\deployment\registry\configuration	nmake	-	all	dt_dp_registry_configuration dt_dp_misc dt_inc NULL
+dt	desktop\source\deployment\manager			nmake	-	all	dt_dp_manager dt_inc NULL
+dt	desktop\source\deployment\registry			nmake	-	all	dt_dp_registry dt_inc NULL
+dt	desktop\source\deployment\registry\package		nmake	-	all	dt_dp_registry_package dt_inc NULL
+dt	desktop\source\deployment\registry\script		nmake	-	all	dt_dp_registry_script dt_inc NULL
+dt	desktop\source\deployment\registry\sfwk		nmake	-	all	dt_dp_registry_sfwk dt_inc NULL
+dt	desktop\source\deployment\registry\component		nmake	-	all	dt_dp_registry_component dt_inc NULL
+dt	desktop\source\deployment\registry\configuration	nmake	-	all	dt_dp_registry_configuration dt_inc NULL
 dt	desktop\scripts 						nmake	-	u	dt_scripts dt_inc NULL
 dt	desktop\macosx\source					nmake	-	u	dt_macosx_bundle	dt_inc NULL
 dt	desktop\macosx\source\misc				nmake	-	u	dt_misc_macosxrc	dt_inc NULL
