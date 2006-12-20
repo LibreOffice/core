@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:22:25 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,12 @@
 #endif
 #ifndef TOOLKIT_CONTROLS_TKSPINBUTTON_HXX
 #include "toolkit/controls/tkspinbutton.hxx"
+#endif
+#ifndef   TOOLKIT_CONTROLS_TKSIMPLEANIMATION_HXX
+#include <toolkit/controls/tksimpleanimation.hxx>
+#endif
+#ifndef   TOOLKIT_CONTROLS_TKTHROBBER_HXX
+#include <toolkit/controls/tkthrobber.hxx>
 #endif
 #ifndef TOOLKIT_DIALOG_CONTROL_HXX
 #include <toolkit/controls/dialogcontrol.hxx>
@@ -248,6 +254,10 @@ IMPL_CREATEINSTANCE( VCLXPopupMenu )
 IMPL_CREATEINSTANCE( VCLXPrinterServer )
 IMPL_CREATEINSTANCE( UnoRoadmapControl )
 IMPL_CREATEINSTANCE( UnoControlRoadmapModel )
+IMPL_CREATEINSTANCE( UnoSimpleAnimationControl )
+IMPL_CREATEINSTANCE( UnoSimpleAnimationControlModel )
+IMPL_CREATEINSTANCE( UnoThrobberControl )
+IMPL_CREATEINSTANCE( UnoThrobberControlModel )
 
 
 extern "C"
@@ -320,6 +330,10 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* /*_pServiceManage
         registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
         registerServices( xRegistryKey, "UnoRoadmapControl", szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap );
         registerServices( xRegistryKey, "UnoControlRoadmapModel", szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel );
+        registerServices( xRegistryKey, "UnoSimpleAnimationControlModel", szServiceName_UnoSimpleAnimationControlModel );
+        registerServices( xRegistryKey, "UnoSimpleAnimationControl", szServiceName_UnoSimpleAnimationControl );
+        registerServices( xRegistryKey, "UnoThrobberControlModel", szServiceName_UnoThrobberControlModel );
+        registerServices( xRegistryKey, "UnoThrobberControl", szServiceName_UnoThrobberControl );
 
         return sal_True;
     }
@@ -390,6 +404,10 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( UnoControlRoadmapModel, szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel )
         CHECKANDCREATEFACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
         CHECKANDCREATEFACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
+        CHECKANDCREATEFACTORY( UnoSimpleAnimationControlModel, szServiceName_UnoSimpleAnimationControlModel, NULL )
+        CHECKANDCREATEFACTORY( UnoSimpleAnimationControl, szServiceName_UnoSimpleAnimationControl, NULL )
+        CHECKANDCREATEFACTORY( UnoThrobberControlModel, szServiceName_UnoThrobberControlModel, NULL )
+        CHECKANDCREATEFACTORY( UnoThrobberControl, szServiceName_UnoThrobberControl, NULL )
     }
     return pRet;
 }
