@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:50:21 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,6 +281,20 @@ void SetNode::releaseTemplateData(memory::Allocator const & _anAllocator, Addres
     freeName(pData->module);
 
     _anAllocator.deallocate(_aTemplateData);
+}
+
+rtl::OUString SetNode::getTemplateDataName(memory::Accessor const & _anAccessor,
+                                           Address _aTemplateData)
+{
+    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,_aTemplateData);
+    return pData->name;
+}
+
+rtl::OUString SetNode::getTemplateDataModule(memory::Accessor const & _anAccessor,
+                                             Address _aTemplateData)
+{
+    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,_aTemplateData);
+    return pData->module;
 }
 
 //-----------------------------------------------------------------------------
