@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-04 16:53:47 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 14:25:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ ENABLE_EXCEPTIONS = TRUE
 NO_BSYMBOLIC = TRUE
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 DLLPRE =
 
 SLOFILES = \
@@ -49,22 +50,25 @@ SLOFILES = \
         $(SLO)$/dp_gui_dialog.obj \
         $(SLO)$/dp_gui_treelb.obj \
         $(SLO)$/dp_gui_cmdenv.obj \
-        $(SLO)$/license_dialog.obj \
-        $(SLO)$/dp_gui_dependencydialog.obj
-
-SHL1OBJS = \
-        $(SLO)$/dp_misc.obj \
-        $(SLO)$/dp_version.obj
-
+    $(SLO)$/license_dialog.obj \
+        $(SLO)$/dp_gui_dependencydialog.obj \
+        $(SLO)$/dp_gui_thread.obj \
+        $(SLO)$/dp_gui_updatability.obj \
+        $(SLO)$/dp_gui_updatedialog.obj \
+        $(SLO)$/dp_gui_updateinstalldialog.obj \
+        $(SLO)$/dp_gui_autoscrolledit.obj \
+        $(SLO)$/dp_gui_modifiablecontext.obj
+        
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = ..$/deployment.map
 
+
 SHL1STDLIBS = \
         $(SALLIB) \
+        $(SALHELPERLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB) \
         $(UCBHELPERLIB) \
-        $(VOSLIB) \
         $(COMPHELPERLIB) \
         $(UNOTOOLSLIB) \
         $(TOOLSLIB) \
@@ -72,7 +76,9 @@ SHL1STDLIBS = \
         $(TKLIB) \
         $(VCLLIB) \
         $(SVTOOLLIB)	\
-        $(SVLLIB)			
+        $(SVLLIB)		\
+        $(SVXLIB) \
+        $(DEPLOYMENTMISCLIB)
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
@@ -88,7 +94,9 @@ SRC1FILES = \
         dp_gui_dialog.src \
         dp_gui_backend.src \
         dp_gui_dependencydialog.src \
-        dp_gui_versionboxes.src
+        dp_gui_updatedialog.src \
+        dp_gui_versionboxes.src \
+        dp_gui_updateinstalldialog.src
 
 RESLIB1NAME = $(TARGET)
 RESLIB1SRSFILES = $(SRS)$/$(TARGET).srs
