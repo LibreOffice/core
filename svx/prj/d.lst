@@ -649,6 +649,7 @@ hedabu: ..\inc\svx\sdr\animation\ainfoscrolltext.hxx %_DEST%\inc%_EXT%\svx\sdr\a
 ..\xml\AccessibleControlShape.xml %_DEST%\xml%_EXT%\AccessibleControlShape.xml
 ..\xml\AccessibleEditableTextPara.xml %_DEST%\xml%_EXT%\AccessibleEditableTextPara.xml
 
+..\uiconfig\accelerator\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\*.xml
 ..\uiconfig\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US\*.xml
 ..\uiconfig\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es\*.xml
 
