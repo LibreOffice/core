@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:56:21 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,9 +446,10 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
 void SfxAccCfgTabListBox_Impl::InitEntry(      SvLBoxEntry* pEntry ,
                                          const XubString&   sText  ,
                                          const Image&       aImage1,
-                                         const Image&       aImage2)
+                                         const Image&       aImage2,
+                                               SvLBoxButtonKind eButtonKind)
 {
-    SvTabListBox::InitEntry(pEntry, sText, aImage1, aImage2);
+    SvTabListBox::InitEntry(pEntry, sText, aImage1, aImage2, eButtonKind);
 }
 
 //-----------------------------------------------
