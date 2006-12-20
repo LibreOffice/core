@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:35 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 17:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,8 +694,9 @@ class RecoveryDialog : public IExtendedTabPage
         CancelButton    m_aCancelBtn;
         String          m_aNextStr;
         String          m_aTitleRecoveryInProgress;
-        String          m_aRecoveryOnlyDescr;
+        String          m_aTitleRecoveryReport;
         String          m_aRecoveryOnlyFinish;
+        String          m_aRecoveryOnlyFinishDescr;
 
         PushButton*     m_pDefButton;
         RecoveryCore*   m_pCore;
