@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:42:12 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1520,9 +1520,10 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
                                   const XubString& rStr,
                                   const Image& rImg1,
-                                  const Image& rImg2)
+                                  const Image& rImg2,
+                                                                  SvLBoxButtonKind eButtonKind)
 {
-    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
+    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pString = NULL;
 
     if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
