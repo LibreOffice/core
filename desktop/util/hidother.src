@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:11:37 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,3 +48,6 @@ hidspecial HID_FIRSTSTART_FINISH { HelpId = HID_FIRSTSTART_FINISH;};
 hidspecial UID_FIRSTSTART_HELP { HelpId = UID_FIRSTSTART_HELP;};
 
 hidspecial UID_BTN_LICENSE_ACCEPT { HelpId = UID_BTN_LICENSE_ACCEPT;};
+
+hidspecial HID_DEPLOYMENT_GUI_UPDATE { HelpId = HID_DEPLOYMENT_GUI_UPDATE;};
+hidspecial HID_DEPLOYMENT_GUI_UPDATE { HelpId = HID_DEPLOYMENT_GUI_UPDATEINSTALL;};
