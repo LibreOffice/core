@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:08:28 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -591,7 +591,7 @@ SvLBoxEntry* SvxRedlinTable::CreateEntry() const
 }
 
 void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
-    const Image& rColl, const Image& rExp )
+    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind )
 {
     SvLBoxButton* pButton;
     SvLBoxString* pString;
@@ -599,7 +599,7 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
 
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
-        pButton= new SvLBoxButton( pEntry,0,pCheckButtonData );
+        pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
         pEntry->AddItem( pButton );
     }
 
