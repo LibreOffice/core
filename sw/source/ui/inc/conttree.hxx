@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:26:20 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ class SwContentTree : public SvTreeListBox
 protected:
 //  virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
+    virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     SwNavigationPI* GetParentWindow(){return
@@ -277,7 +277,7 @@ protected:
     virtual void    GetFocus();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
-    virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
+    virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
 
     void            Clear();
 
