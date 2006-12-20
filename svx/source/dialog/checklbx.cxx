@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checklbx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:07:24 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,19 @@ SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
+SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId,
+                                  const Image& rNormalStaticImage,
+                                  const Image& /*TODO#i72485# rHighContrastStaticImage*/ ) :
+
+    SvTreeListBox( pParent, rResId )
+
+{
+    Init_Impl();
+    pCheckButton->aBmps[SV_BMP_STATICIMAGE] = rNormalStaticImage;
+}
+
+// -----------------------------------------------------------------------
+
 SvxCheckListBox::~SvxCheckListBox()
 {
     delete pCheckButton;
@@ -87,9 +100,12 @@ void SvxCheckListBox::Init_Impl()
 
 // -----------------------------------------------------------------------
 
-void SvxCheckListBox::InsertEntry( const String& rStr, USHORT nPos )
+void SvxCheckListBox::InsertEntry( const String& rStr, USHORT nPos,
+                                   void* pUserData,
+                                   SvLBoxButtonKind eButtonKind )
 {
-    SvTreeListBox::InsertEntry( rStr, NULL, FALSE, nPos );
+    SvTreeListBox::InsertEntry( rStr, NULL, FALSE, nPos, pUserData,
+                                eButtonKind );
 }
 
 // -----------------------------------------------------------------------
@@ -259,14 +275,8 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-SvLBoxEntry* SvxCheckListBox::InsertEntry( const XubString& rText, SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
+SvLBoxEntry* SvxCheckListBox::InsertEntry( const XubString& rText, SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData, SvLBoxButtonKind eButtonKind )
 {
-    return SvTreeListBox::InsertEntry( rText, pParent, bChildsOnDemand, nPos, pUserData );
+    return SvTreeListBox::InsertEntry( rText, pParent, bChildsOnDemand, nPos, pUserData, eButtonKind );
 }
 
-// -----------------------------------------------------------------------
-
-SvLBoxEntry* SvxCheckListBox::InsertEntry( const XubString& rText, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
-{
-    return SvTreeListBox::InsertEntry( rText, rExpandedEntryBmp, rCollapsedEntryBmp, pParent, bChildsOnDemand, nPos, pUserData );
-}
