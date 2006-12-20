@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:00:46 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:13:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1977,7 +1977,7 @@ SvLBoxEntry* SvxLinguTabPage::CreateEntry( String& rTxt, USHORT nCol )
 
     String sEmpty;
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
@@ -2116,7 +2116,7 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
 
     String sEmpty;
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
