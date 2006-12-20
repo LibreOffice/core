@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:55:47 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 12:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,14 @@
 
 #include "sal/main.h"
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/shlib.hxx>
 
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/registry/XImplementationRegistration2.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -156,6 +157,8 @@ static void usingRegisterImpl()
                     "        com.sun.star.loader.SharedLibrary\n"
                     "  -s\n"
                     "        silent, regcomp prints messages only on error.\n"
+                    "  -wop\n"
+                    "        register the component name only without path\n"
                     "  -classpath path\n"
                     "        sets the java classpath to path (overwriting the\n"
                     "        current classpath environment variable). Note that\n"
@@ -181,11 +184,13 @@ struct Options
         : bRegister(sal_False)
         , bRevoke(sal_False)
         , bSilent( sal_False )
+        , bStripPath( sal_False )
         {}
 
     sal_Bool bRegister;
     sal_Bool bRevoke;
     sal_Bool bSilent;
+    sal_Bool bStripPath;
     OUString sProgramName;
     OUString sBootRegName;
     OUString sBootRegName2;
@@ -381,6 +386,14 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         break;
                     }
                 }
+                case 'w':
+                {
+                    if (strcmp(av[i], "-wop") == 0)
+                    {
+                        rOptions.bStripPath = sal_True;
+                        break;
+                    }
+                }
                 default:
                 {
                     OString tmp( "unknown option " );
@@ -492,21 +505,23 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
 
 struct DoIt
 {
-    sal_Bool                               _bRegister;
-    sal_Bool                               _bRevoke;
-    sal_Bool                               _bSilent;
-    OString                                _sRegName;
-    OUString                               _sLoaderName;
-    Reference<XImplementationRegistration> _xImplRegistration;
-    Reference<XSimpleRegistry>             _xReg;
-    sal_uInt32                           * _exitCode;
+    sal_Bool                                _bRegister;
+    sal_Bool                                _bRevoke;
+    sal_Bool                                _bSilent;
+    sal_Bool                                _bStripPath;
+    OString                                 _sRegName;
+    OUString                                _sLoaderName;
+    Reference<XImplementationRegistration2> _xImplRegistration;
+    Reference<XSimpleRegistry>              _xReg;
+    sal_uInt32                            * _exitCode;
 
     DoIt(sal_Bool bRegister,
          sal_Bool bRevoke,
          sal_Bool bSilent,
+         sal_Bool bStripPath,
          const Reference<XSimpleRegistry> & xReg,
          const OString & sRegName,
-         const Reference<XImplementationRegistration> & xImplRegistration,
+         const Reference<XImplementationRegistration2> & xImplRegistration,
          const OUString & sLoaderName,
          sal_uInt32 * exitCode)
         throw();
@@ -517,14 +532,16 @@ struct DoIt
 DoIt::DoIt(sal_Bool bRegister,
            sal_Bool bRevoke,
            sal_Bool bSilent,
+           sal_Bool bStripPath,
            const Reference<XSimpleRegistry> & xReg,
            const OString & sRegName,
-           const Reference<XImplementationRegistration> & xImplRegistration,
+           const Reference<XImplementationRegistration2> & xImplRegistration,
            const OUString & sLoaderName,
            sal_uInt32 * exitCode) throw()
     : _bRegister(bRegister),
       _bRevoke(bRevoke),
       _bSilent( bSilent ),
+      _bStripPath( bStripPath ),
       _sRegName(sRegName),
       _sLoaderName(sLoaderName),
       _xImplRegistration(xImplRegistration),
@@ -540,12 +557,19 @@ void DoIt::operator() (const OUString & url) throw()
     {
         try
         {
-            _xImplRegistration->registerImplementation(_sLoaderName, url, _xReg);
+            Reference<XImplementationRegistration2> _xImplRegistration2(_xImplRegistration, UNO_QUERY);
+            if ( _bStripPath ) {
+                _xImplRegistration->registerImplementationWithStrippedPath(
+                    _sLoaderName, url, _xReg);
+            } else {
+                _xImplRegistration->registerImplementation(_sLoaderName, url, _xReg);
+            }
 
             if ( ! _bSilent )
             {
                 fprintf(stderr, "register component '%s' in registry '%s' succesful!\n", sUrl.getStr(), _sRegName.getStr());
             }
+
         }
         catch(CannotRegisterImplementationException & cannotRegisterImplementationException) {
             OString aMessage(OUStringToOString(cannotRegisterImplementationException.Message, RTL_TEXTENCODING_ASCII_US));
@@ -761,7 +785,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(1);
     }
 
-    Reference<XImplementationRegistration> xImplRegistration(
+    Reference<XImplementationRegistration2> xImplRegistration(
         xSMgr->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM(
                          "com.sun.star.registry.ImplementationRegistration"))),
@@ -822,7 +846,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             for_each(urls.begin(), urls.end(),
                      DoIt(aOptions.bRegister, aOptions.bRevoke, aOptions.bSilent,
-                          xReg, sRegName, xImplRegistration, aOptions.sLoaderName, &exitCode));
+                          aOptions.bStripPath, xReg, sRegName, xImplRegistration,
+                          aOptions.sLoaderName, &exitCode));
         }
         else
         {
