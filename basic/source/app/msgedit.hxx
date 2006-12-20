@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:36:33 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 13:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,8 @@ protected:
 //  virtual void    Command( const CommandEvent& rCEvt );
 //  USHORT          nDeselectParent;
     BasicFrame      *pBasicFrame;
-    void            InitEntry( SvLBoxEntry*, const String&, const Image&, const Image& );
+    void            InitEntry( SvLBoxEntry*, const String&, const Image&,
+                               const Image&, SvLBoxButtonKind eButtonKind );
     AppError        *pAppError;
 
     BOOL JumpToSourcecode( SvLBoxEntry *pThisEntry );
