@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-03 15:11:44 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 12:26:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -208,8 +208,7 @@ DIR_FILE_LIST=\
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
     $(DESTINCLUDELIST) \
-    $(DESTCLASSESLIST) \
-    $(DESTDIRDOCU)$/common$/spec$/xml_format$/xml_specification.pdf
+    $(DESTCLASSESLIST)
 
 .IF "$(SOLAR_JAVA)" != ""
 DIR_FILE_LIST += $(DESTDIRJAR)$/win$/unowinreg.dll
