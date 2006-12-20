@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:03:19 $
+#   last change: $Author: ihi $ $Date: 2006-12-20 13:52:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,13 +92,16 @@ SLOFILES=   \
             $(SLO)$/vclxtoolkit.obj 					\
             $(SLO)$/vclxtopwindow.obj 					\
             $(SLO)$/vclxwindow.obj 						\
-            $(SLO)$/vclxwindow1.obj 						\
+            $(SLO)$/vclxwindow1.obj 					\
             $(SLO)$/vclxwindows.obj                     \
-            $(SLO)$/vclxspinbutton.obj
+            $(SLO)$/vclxspinbutton.obj                  \
+            $(SLO)$/xsimpleanimation.obj                \
+            $(SLO)$/xthrobber.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
-            accessiblestrings.src
+            accessiblestrings.src        \
+            xthrobber.src
 
 # --- Targets ------------------------------------------------------
 
