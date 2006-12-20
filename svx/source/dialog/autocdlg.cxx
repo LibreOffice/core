@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:04:44 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,12 +571,12 @@ SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, USHORT nCol)
     if (nCol == CBCOL_SECOND)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
     else
-        pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
 
     if (nCol == CBCOL_FIRST)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
     else
-        pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     pEntry->AddItem( new OfaImpBrwString( pEntry, 0, rTxt ) );
 
     return pEntry;

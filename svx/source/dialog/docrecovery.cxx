@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:12:01 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1036,9 +1036,10 @@ RecovDocList::~RecovDocList()
 void RecovDocList::InitEntry(      SvLBoxEntry* pEntry ,
                              const XubString&   sText  ,
                              const Image&       aImage1,
-                             const Image&       aImage2)
+                             const Image&       aImage2,
+                                   SvLBoxButtonKind eButtonKind)
 {
-    SvTabListBox::InitEntry(pEntry, sText, aImage1, aImage2);
+    SvTabListBox::InitEntry(pEntry, sText, aImage1, aImage2, eButtonKind);
     DBG_ASSERT( TabCount() == 2, "*RecovDocList::InitEntry(): structure missmatch" );
 
     SvLBoxString*       pCol = (SvLBoxString*)pEntry->GetItem(2);
