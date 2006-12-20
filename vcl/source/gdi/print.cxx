@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:09:37 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,15 +231,15 @@ QueueInfo::~QueueInfo()
 
 // -----------------------------------------------------------------------
 
-const QueueInfo& QueueInfo::operator==( const QueueInfo& rInfo )
+bool QueueInfo::operator==( const QueueInfo& rInfo ) const
 {
-    maPrinterName   = rInfo.maPrinterName;
-    maDriver        = rInfo.maDriver;
-    maLocation      = rInfo.maLocation;
-    maComment       = rInfo.maComment;
-    mnStatus        = rInfo.mnStatus;
-    mnJobs          = rInfo.mnJobs;
-    return *this;
+    return
+        maPrinterName   == rInfo.maPrinterName  &&
+        maDriver        == rInfo.maDriver       &&
+        maLocation      == rInfo.maLocation     &&
+        maComment       == rInfo.maComment      &&
+        mnStatus        == rInfo.mnStatus       &&
+        mnJobs          == rInfo.mnJobs;
 }
 
 // -----------------------------------------------------------------------
@@ -291,12 +291,50 @@ SalPrinterQueueInfo::~SalPrinterQueueInfo()
 
 // -----------------------------------------------------------------------
 
+ImplPrnQueueList::~ImplPrnQueueList()
+{
+    ImplSVData*         pSVData = ImplGetSVData();
+    for( unsigned int i = 0; i < m_aQueueInfos.size(); i++ )
+    {
+        delete m_aQueueInfos[i].mpQueueInfo;
+        pSVData->mpDefInst->DeletePrinterQueueInfo( m_aQueueInfos[i].mpSalQueueInfo );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
-    ImplPrnQueueData* pInfo = new ImplPrnQueueData;
-    pInfo->mpQueueInfo      = NULL;
-    pInfo->mpSalQueueInfo   = pData;
-    List::Insert( (void*)pInfo, LIST_APPEND );
+    std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash >::iterator it =
+        m_aNameToIndex.find( pData->maPrinterName );
+    if( it == m_aNameToIndex.end() )
+    {
+        m_aNameToIndex[ pData->maPrinterName ] = m_aQueueInfos.size();
+        m_aQueueInfos.push_back( ImplPrnQueueData() );
+        m_aQueueInfos.back().mpQueueInfo = NULL;
+        m_aQueueInfos.back().mpSalQueueInfo = pData;
+        m_aPrinterList.push_back( pData->maPrinterName );
+    }
+    else // this should not happen, but ...
+    {
+        ImplPrnQueueData& rData = m_aQueueInfos[ it->second ];
+        delete rData.mpQueueInfo;
+        rData.mpQueueInfo = NULL;
+        ImplGetSVData()->mpDefInst->DeletePrinterQueueInfo( rData.mpSalQueueInfo );
+        rData.mpSalQueueInfo = pData;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+ImplPrnQueueData* ImplPrnQueueList::Get( const rtl::OUString& rPrinter )
+{
+    ImplPrnQueueData* pData = NULL;
+    std::hash_map<rtl::OUString,sal_Int32,rtl::OUStringHash>::iterator it =
+        m_aNameToIndex.find( rPrinter );
+    if( it != m_aNameToIndex.end() )
+        pData = &m_aQueueInfos[it->second];
+    return pData;
 }
 
 // =======================================================================
@@ -319,18 +357,6 @@ void ImplDeletePrnQueueList()
 
     if ( pPrnList )
     {
-        ImplPrnQueueData* pInfo = pPrnList->First();
-        while ( pInfo )
-        {
-            if ( pInfo->mpQueueInfo )
-                delete pInfo->mpQueueInfo;
-
-            pSVData->mpDefInst->DeletePrinterQueueInfo( pInfo->mpSalQueueInfo );
-
-            delete pInfo;
-            pInfo = pPrnList->Next();
-        }
-
         delete pPrnList;
         pSVData->maGDIData.mpPrinterQueueList = NULL;
     }
@@ -338,50 +364,40 @@ void ImplDeletePrnQueueList()
 
 // -----------------------------------------------------------------------
 
-USHORT Printer::GetQueueCount()
+const std::vector<rtl::OUString>& Printer::GetPrinterQueues()
+{
+    ImplSVData*         pSVData = ImplGetSVData();
+    if ( !pSVData->maGDIData.mpPrinterQueueList )
+        ImplInitPrnQueueList();
+    return pSVData->maGDIData.mpPrinterQueueList->m_aPrinterList;
+}
+
+// -----------------------------------------------------------------------
+const QueueInfo* Printer::GetQueueInfo( const String& rPrinterName, bool bStatusUpdate )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( !pSVData->maGDIData.mpPrinterQueueList )
         ImplInitPrnQueueList();
 
-    return (USHORT)(pSVData->maGDIData.mpPrinterQueueList->Count());
-}
+    ImplPrnQueueData* pInfo = pSVData->maGDIData.mpPrinterQueueList->Get( rPrinterName );
+    if( pInfo )
+    {
+        if( !pInfo->mpQueueInfo || bStatusUpdate )
+            pSVData->mpDefInst->GetPrinterQueueState( pInfo->mpSalQueueInfo );
 
-// -----------------------------------------------------------------------
+        if ( !pInfo->mpQueueInfo )
+            pInfo->mpQueueInfo = new QueueInfo;
 
-const QueueInfo& Printer::GetQueueInfo( USHORT nQueue )
-{
-    return GetQueueInfo( nQueue, TRUE );
-}
-
-// -----------------------------------------------------------------------
-
-const QueueInfo& Printer::GetQueueInfo( USHORT nQueue, BOOL bStatus )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( !pSVData->maGDIData.mpPrinterQueueList )
-        ImplInitPrnQueueList();
-
-    DBG_ASSERT( nQueue < pSVData->maGDIData.mpPrinterQueueList->Count(),
-                "Printer::GetQueueInfo() - nQueue > QueueCount" );
-
-    ImplPrnQueueData* pInfo = pSVData->maGDIData.mpPrinterQueueList->Get( nQueue );
-
-    if ( bStatus )
-        pSVData->mpDefInst->GetPrinterQueueState( pInfo->mpSalQueueInfo );
-
-    if ( !pInfo->mpQueueInfo )
-        pInfo->mpQueueInfo = new QueueInfo;
-
-    pInfo->mpQueueInfo->maPrinterName   = pInfo->mpSalQueueInfo->maPrinterName;
-    pInfo->mpQueueInfo->maDriver        = pInfo->mpSalQueueInfo->maDriver;
-    pInfo->mpQueueInfo->maLocation      = pInfo->mpSalQueueInfo->maLocation;
-    pInfo->mpQueueInfo->maComment       = pInfo->mpSalQueueInfo->maComment;
-    pInfo->mpQueueInfo->mnStatus        = pInfo->mpSalQueueInfo->mnStatus;
-    pInfo->mpQueueInfo->mnJobs          = pInfo->mpSalQueueInfo->mnJobs;
-    return *pInfo->mpQueueInfo;
+        pInfo->mpQueueInfo->maPrinterName   = pInfo->mpSalQueueInfo->maPrinterName;
+        pInfo->mpQueueInfo->maDriver        = pInfo->mpSalQueueInfo->maDriver;
+        pInfo->mpQueueInfo->maLocation      = pInfo->mpSalQueueInfo->maLocation;
+        pInfo->mpQueueInfo->maComment       = pInfo->mpSalQueueInfo->maComment;
+        pInfo->mpQueueInfo->mnStatus        = pInfo->mpSalQueueInfo->mnStatus;
+        pInfo->mpQueueInfo->mnJobs          = pInfo->mpSalQueueInfo->mnJobs;
+        return pInfo->mpQueueInfo;
+    }
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -515,76 +531,37 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const XubString& rPrinterName,
         ImplInitPrnQueueList();
 
     ImplPrnQueueList* pPrnList = pSVData->maGDIData.mpPrinterQueueList;
-    if ( pPrnList && pPrnList->Count() )
+    if ( pPrnList && pPrnList->m_aQueueInfos.size() )
     {
-        // Zuerst suchen wir nach dem Printer-Namen
-        ImplPrnQueueData* pBestInfo = NULL;
-        ImplPrnQueueData* pInfo = pPrnList->First();
-        while ( pInfo )
+        // first search for the printer name driectly
+        ImplPrnQueueData* pInfo = pPrnList->Get( rPrinterName );
+        if( pInfo )
+            return pInfo->mpSalQueueInfo;
+
+        // then search case insensitive
+        for( unsigned int i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
         {
-            if ( pInfo->mpSalQueueInfo->maPrinterName == rPrinterName )
-            {
-                pBestInfo = pInfo;
-                if ( !pDriver || (pInfo->mpSalQueueInfo->maDriver == *pDriver) )
-                    return pInfo->mpSalQueueInfo;
-            }
-            pInfo = pPrnList->Next();
+            if( pPrnList->m_aQueueInfos[i].mpSalQueueInfo->maPrinterName.EqualsIgnoreCaseAscii( rPrinterName ) )
+                return pPrnList->m_aQueueInfos[i].mpSalQueueInfo;
         }
 
-        // Wenn wir einen PrinterNamen gefunden haben und nur der Treiber
-        // nicht passt, nehmen wir diesen
-        if ( pBestInfo )
-            return pBestInfo->mpSalQueueInfo;
-
-        // Dann suchen wir caseinsensitiv
-        pInfo = pPrnList->First();
-        while ( pInfo )
-        {
-            if ( pInfo->mpSalQueueInfo->maPrinterName.EqualsIgnoreCaseAscii( rPrinterName ) )
-            {
-                pBestInfo = pInfo;
-                if ( !pDriver || pInfo->mpSalQueueInfo->maDriver.EqualsIgnoreCaseAscii( *pDriver ) )
-                    return pInfo->mpSalQueueInfo;
-            }
-            pInfo = pPrnList->Next();
-        }
-
-        // Wenn wir einen PrinterNamen gefunden haben und nur der Treiber
-        // nicht passt, nehmen wir diesen
-        if ( pBestInfo )
-            return pBestInfo->mpSalQueueInfo;
-
-        // Und wenn wir immer noch keinen gefunden haben, suchen wir
-        // noch nach einem passenden Treiber
+        // then search for driver name
         if ( pDriver )
         {
-            pInfo = pPrnList->First();
-            while ( pInfo )
+            for( unsigned int i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
             {
-                if ( pInfo->mpSalQueueInfo->maDriver == *pDriver )
-                    return pInfo->mpSalQueueInfo;
-                pInfo = pPrnList->Next();
+                if( pPrnList->m_aQueueInfos[i].mpSalQueueInfo->maDriver == *pDriver )
+                    return pPrnList->m_aQueueInfos[i].mpSalQueueInfo;
             }
         }
 
-        // Und wenn wir immer noch keinen gefunden, dann wir der
-        // Default-Drucker genommen
-        XubString aPrinterName = GetDefaultPrinterName();
-        pInfo = pPrnList->First();
-        while ( pInfo )
-        {
-            if ( pInfo->mpSalQueueInfo->maPrinterName == aPrinterName )
-                return pInfo->mpSalQueueInfo;
-            pInfo = pPrnList->Next();
-        }
-
-        // Und wenn wir diesen auch nicht finden, nehmen wir den ersten
-        // in der Liste, denn einige Installationen zerstoeren den
-        // Namen und andere Programme weichen dann normalerweise noch
-        // auf irgendeinen Drucker aus
-        pInfo = pPrnList->First();
-        if ( pInfo )
+        // then the default printer
+        pInfo = pPrnList->Get( GetDefaultPrinterName() );
+        if( pInfo )
             return pInfo->mpSalQueueInfo;
+
+        // last chance: the first available printer
+        return pPrnList->m_aQueueInfos[0].mpSalQueueInfo;
     }
 
     return NULL;
@@ -1700,4 +1677,45 @@ BOOL Printer::EndPage()
     }
 
     return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+void Printer::updatePrinters()
+{
+    ImplSVData*         pSVData = ImplGetSVData();
+    ImplPrnQueueList*   pPrnList = pSVData->maGDIData.mpPrinterQueueList;
+
+    if ( pPrnList )
+    {
+        ImplPrnQueueList* pNewList = new ImplPrnQueueList;
+        pSVData->mpDefInst->GetPrinterQueueInfo( pNewList );
+
+        bool bChanged = pPrnList->m_aQueueInfos.size() != pNewList->m_aQueueInfos.size();
+        for( unsigned int i = 0; ! bChanged && i < pPrnList->m_aQueueInfos.size(); i++ )
+        {
+            ImplPrnQueueData& rInfo     = pPrnList->m_aQueueInfos[i];
+            ImplPrnQueueData& rNewInfo  = pNewList->m_aQueueInfos[i];
+            if( ! rInfo.mpSalQueueInfo || ! rNewInfo.mpSalQueueInfo || // sanity check
+                rInfo.mpSalQueueInfo->maPrinterName != rNewInfo.mpSalQueueInfo->maPrinterName )
+            {
+                bChanged = true;
+            }
+        }
+        if( bChanged )
+        {
+            ImplDeletePrnQueueList();
+            pSVData->maGDIData.mpPrinterQueueList = pNewList;
+
+            Application* pApp = GetpApp();
+            if( pApp )
+            {
+                DataChangedEvent aDCEvt( DATACHANGED_PRINTER );
+                pApp->DataChanged( aDCEvt );
+                pApp->NotifyAllWindows( aDCEvt );
+            }
+        }
+        else
+            delete pNewList;
+    }
 }
