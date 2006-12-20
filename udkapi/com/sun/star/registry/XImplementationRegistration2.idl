@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XImplementationRegistration2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2006-12-20 12:21:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_registry_XImplementationRegistration2_idl__
+#define __com_sun_star_registry_XImplementationRegistration2_idl__
+
+#ifndef __com_sun_star_registry_XImplementationRegistration_idl__
+#include <com/sun/star/registry/XImplementationRegistration.idl>
+#endif
+//=============================================================================
+
+ module com {  module sun {  module star {  module registry {
+
+//=============================================================================
+
+/** extends the functionality of <type scope="com::sun::star::registry">XImplementationRegistration</type>. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
+
+    @since OOo 2.2
+ */
+interface XImplementationRegistration2: com::sun::star::registry::XImplementationRegistration
+{
+    //-------------------------------------------------------------------------
+
+    /** registers a component which provides one or more implementations.
+        The path portion of the URL is stripped of and only the component
+        name is registered.
+
+        @param aLocation
+            specifies the location of the component with the URL.
+
+        @param xReg
+            specifies the registry where the component should be installed.
+            If it is a NULL interface, then the component will be installed
+            in the system registry (if this feature is supported).
+     */
+    void registerImplementationWithStrippedPath( [in] string aImplementationLoader,
+             [in] string aLocation,
+             [in] com::sun::star::registry::XSimpleRegistry xReg )
+            raises( com::sun::star::registry::CannotRegisterImplementationException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
