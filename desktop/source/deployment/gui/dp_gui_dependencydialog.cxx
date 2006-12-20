@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dependencydialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:38:58 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,16 +70,14 @@ DependencyDialog::DependencyDialog(
         GetOutputSizePixel().Width() - m_list.GetSizePixel().Width(),
         GetOutputSizePixel().Height() - m_list.GetSizePixel().Height())
 {
+    FreeResource();
     SetMinOutputSizePixel(GetOutputSizePixel());
     m_list.SetReadOnly();
     for (std::vector< rtl::OUString >::const_iterator i(dependencies.begin());
          i != dependencies.end(); ++i)
     {
-        m_list.InsertEntry(
-            i->getLength() == 0
-            ? String(ResId(RID_DLG_DEPENDENCIES_UNKNOWN)) : String(*i));
+        m_list.InsertEntry(*i);
     }
-    FreeResource();
 }
 
 DependencyDialog::~DependencyDialog() {}
