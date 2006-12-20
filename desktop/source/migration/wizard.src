@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:40:25 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 18:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,8 +323,8 @@ TabPage TP_UPDATE_CHECK
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
         WordBreak = TRUE;
-        Text [ en-US ] = "%PRODUCTNAME searches automatically at regular intervals for new versions.\nIn doing so online update does not transfer personal data.\nAs soon as a new version is available, you will be notified.\n\nYou can configure this feature at Tools / Options... / Online Update.";
-        Text [ de ]    = "%PRODUCTNAME sucht automatisch in regelmäßigen Abständen nach neuen Versionen.\nHierbei werden keine persönlichen Daten übertragen.\nSobald eine neue Version verfügbar ist, werden Sie benachrichtigt.\n\nSie können dieses Feature unter Extras / Optionen... / Online Update konfigurieren.";
+        Text [ en-US ] = "%PRODUCTNAME searches automatically at regular intervals for new versions.\nIn doing so online update does not transfer personal data.\nAs soon as a new version is available, you will be notified.\n\nYou can configure this feature at Tools / Options... / %PRODUCTNAME / Online Update.";
+        Text [ de ]    = "%PRODUCTNAME sucht automatisch in regelmäßigen Abständen nach neuen Versionen.\nHierbei werden keine persönlichen Daten übertragen.\nSobald eine neue Version verfügbar ist, werden Sie benachrichtigt.\n\nSie können dieses Feature unter Extras / Optionen... / %PRODUCTNAME / Online Update konfigurieren.";
 
     };
 
