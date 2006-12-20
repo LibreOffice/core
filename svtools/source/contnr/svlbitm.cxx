@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:34:22 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #endif
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
+#endif
+#ifndef _SV_SOUND_HXX
+#include <vcl/sound.hxx>
 #endif
 
 #define TABOFFS_NOT_VALID -2000000
@@ -353,10 +356,12 @@ void SvLBoxBmp::Clone( SvLBoxItem* pSource )
 
 DBG_NAME(SvLBoxButton);
 
-SvLBoxButton::SvLBoxButton( SvLBoxEntry* pEntry,USHORT nFlags,SvLBoxButtonData* pBData)
+SvLBoxButton::SvLBoxButton( SvLBoxEntry* pEntry, SvLBoxButtonKind eTheKind,
+                            USHORT nFlags, SvLBoxButtonData* pBData )
     : SvLBoxItem( pEntry, nFlags )
 {
     DBG_CTOR(SvLBoxButton,0);
+    eKind = eTheKind;
     nBaseOffs = 0;
     nItemFlags = 0;
     SetStateUnchecked();
@@ -366,6 +371,7 @@ SvLBoxButton::SvLBoxButton( SvLBoxEntry* pEntry,USHORT nFlags,SvLBoxButtonData* 
 SvLBoxButton::SvLBoxButton() : SvLBoxItem()
 {
     DBG_CTOR(SvLBoxButton,0);
+    eKind = SvLBoxButtonKind_enabledCheckbox;
     nItemFlags = 0;
     SetStateUnchecked();
 }
@@ -396,12 +402,15 @@ void SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, BOOL bOn)
 BOOL SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
-    if ( IsStateChecked() )
-        SetStateUnchecked();
-    else
-        SetStateChecked();
-    pData->StoreButtonState( pEntry, nItemFlags );
-    pData->CallLink();
+    if ( CheckModification() )
+    {
+        if ( IsStateChecked() )
+            SetStateUnchecked();
+        else
+            SetStateChecked();
+        pData->StoreButtonState( pEntry, nItemFlags );
+        pData->CallLink();
+    }
     return FALSE;
 }
 
@@ -409,8 +418,10 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
                             SvLBoxEntry* )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
-    USHORT nIndex = pData->GetIndex( nItemFlags );
-    USHORT nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    USHORT nIndex = eKind == SvLBoxButtonKind_staticImage
+        ? SV_BMP_STATICIMAGE : pData->GetIndex( nItemFlags );
+    USHORT nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
+        rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] ,nStyle);
 }
 
@@ -435,7 +446,12 @@ void SvLBoxButton::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     pViewData->aSize = Size( pData->Width(), pData->Height() );
 }
 
-
+bool SvLBoxButton::CheckModification() const
+{
+    if( eKind == SvLBoxButtonKind_disabledCheckbox )
+        Sound::Beep();
+    return eKind == SvLBoxButtonKind_enabledCheckbox;
+}
 
 // ***************************************************************
 // class SvLBoxContextBmp
