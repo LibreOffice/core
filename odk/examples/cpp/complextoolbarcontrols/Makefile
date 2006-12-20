@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: ihi $ $Date: 2006-08-01 09:42:03 $
+#  last change: $Author: ihi $ $Date: 2006-12-20 12:25:26 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -99,6 +99,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
 	/MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
+	$(LINK_MANIFEST_VC8_ONLY)
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
