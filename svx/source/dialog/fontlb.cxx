@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontlb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:19:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:11:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,17 +155,20 @@ XubString SvxFontListBox::GetSelectEntry() const
 
 void SvxFontListBox::InitEntry(
         SvLBoxEntry* pEntry, const XubString& rEntryText,
-        const Image& rCollImg, const Image& rExpImg )
+        const Image& rCollImg, const Image& rExpImg,
+        SvLBoxButtonKind eButtonKind )
 {
     if( mbUseFont )
     {
         if( nTreeFlags & TREEFLAG_CHKBTN )
-            pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+            pEntry->AddItem( new SvLBoxButton( pEntry, eButtonKind, 0,
+                                               pCheckButtonData ) );
         pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, rCollImg, rExpImg, SVLISTENTRYFLAG_EXPANDED ) );
         pEntry->AddItem( new SvLBoxFontString( pEntry, 0, rEntryText, maEntryFont, mpEntryColor ) );
     }
     else
-        SvTreeListBox::InitEntry( pEntry, rEntryText, rCollImg, rExpImg );
+        SvTreeListBox::InitEntry( pEntry, rEntryText, rCollImg, rExpImg,
+                                  eButtonKind );
 }
 
 
