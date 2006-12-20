@@ -1,0 +1,226 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: dp_gui_updatedialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:24:58 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2006 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "svtools/controldims.hrc"
+
+#include "dp_gui.hrc"
+
+#define LOCAL_WIDTH (60 * RSC_BS_CHARWIDTH)
+#define LOCAL_LIST_HEIGHT (5 * RSC_BS_CHARHEIGHT)
+#define LOCAL_BUTTON_WIDTH 80
+
+ModalDialog RID_DLG_UPDATE {
+    HelpID = HID_DEPLOYMENT_GUI_UPDATE;
+    Size = MAP_APPFONT(
+        (RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH +
+         RSC_SP_DLG_INNERBORDER_RIGHT),
+        (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+         RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
+         RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT +
+         RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y +
+         RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y +
+         RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_DLG_INNERBORDER_BOTTOM));
+    Text[de] = "Extension Update";
+    Text[en-US] = "Extension Update";
+    Moveable = TRUE;
+    Closeable = TRUE;
+    FixedText RID_DLG_UPDATE_CHECKING {
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH * 2 / 3,
+            RSC_SP_DLG_INNERBORDER_TOP);
+        Size = MAP_APPFONT(
+            (LOCAL_WIDTH - LOCAL_WIDTH * 2 / 3 - RSC_SP_CTRL_DESC_X -
+             RSC_CD_FIXEDTEXT_HEIGHT),
+            RSC_CD_FIXEDTEXT_HEIGHT);
+        Text[de] = "Suche läuft...";
+        Text[en-US] = "Checking...";
+        Right = TRUE;
+        NoLabel = TRUE;
+    };
+    Control RID_DLG_UPDATE_THROBBER {
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - RSC_CD_FIXEDTEXT_HEIGHT,
+            RSC_SP_DLG_INNERBORDER_TOP);
+        Size = MAP_APPFONT(RSC_CD_FIXEDTEXT_HEIGHT, RSC_CD_FIXEDTEXT_HEIGHT);
+    };
+    FixedText RID_DLG_UPDATE_UPDATE {
+        Disable = TRUE;
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP);
+        Size = MAP_APPFONT(
+            LOCAL_WIDTH * 2 / 3 - RSC_SP_CTRL_GROUP_X, RSC_CD_FIXEDTEXT_HEIGHT);
+        Text[de] = "~Verfügbare Extension-Updates";
+        Text[en-US] = "~Available extension updates";
+    };
+    Control RID_DLG_UPDATE_UPDATES {
+        Disable = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT,
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y));
+        Size = MAP_APPFONT(LOCAL_WIDTH, LOCAL_LIST_HEIGHT);
+        TabStop = TRUE;
+    };
+    CheckBox RID_DLG_UPDATE_ALL {
+        Disable = TRUE;
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT,
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y));
+        Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_CHECKBOX_HEIGHT);
+        Text[de] = "~Zeige alle Updates";
+        Text[en-US] = "~Show all updates";
+    };
+    FixedText RID_DLG_UPDATE_DESCRIPTION {
+        Disable = TRUE;
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT,
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
+             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y));
+        Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT);
+        Text[de] = "~Beschreibung";
+        Text[en-US] = "D~escription";
+    };
+    MultiLineEdit RID_DLG_UPDATE_DESCRIPTIONS {
+        Disable = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT,
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
+             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y));
+        Size = MAP_APPFONT(LOCAL_WIDTH, LOCAL_LIST_HEIGHT);
+        ReadOnly = TRUE;
+        VScroll = TRUE;
+    };
+    FixedLine RID_DLG_UPDATE_LINE {
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT,
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
+             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y));
+        Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_FIXEDLINE_HEIGHT);
+    };
+    HelpButton RID_DLG_UPDATE_HELP {
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT,
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
+             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y +
+             RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y));
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
+    };
+    PushButton RID_DLG_UPDATE_OK {
+        Disable = TRUE;
+        Pos = MAP_APPFONT(
+            (RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - LOCAL_BUTTON_WIDTH -
+             RSC_SP_CTRL_GROUP_X - RSC_CD_PUSHBUTTON_WIDTH),
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
+             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y +
+             RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y));
+        Size = MAP_APPFONT(LOCAL_BUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
+        Text[de] = "Herunter~laden und Installieren";
+        Text[en-US] = "~Download and Install";
+        DefButton = TRUE;
+    };
+    CancelButton RID_DLG_UPDATE_CANCEL {
+        Pos = MAP_APPFONT(
+            RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - RSC_CD_PUSHBUTTON_WIDTH,
+            (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
+             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT +
+             RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y +
+             RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y));
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
+    };
+
+    Image RID_DLG_UPDATE_NORMALALERT {
+        ImageBitmap = Bitmap {
+            File = "caution_12.png";
+        };
+    };
+    Image RID_DLG_UPDATE_HIGHCONTRASTALERT {
+        ImageBitmap = Bitmap {
+            File = "caution_12_h.png";
+        };
+    };
+    String RID_DLG_UPDATE_ERROR {
+        Text[de] = "Fehler";
+        Text[en-US] = "Error";
+    };
+    String RID_DLG_UPDATE_NONE {
+        Text[de] = "Es sind keine neuen Updates verfügbar.";
+        Text[en-US] = "No new updates are available.";
+    };
+    String RID_DLG_UPDATE_NOINSTALLABLE {
+        Text[de] = "Es sind keine installierbaren Updates verfügbar. Um alle Updates angezeigt zu bekommen, wählen Sie 'Zeige alle Updates'.";
+        Text[en-US] = "No installable updates are available. To see all updates, mark the check box 'Show all updates'.";
+    };
+    String RID_DLG_UPDATE_FAILURE {
+        Text[de] = "Es ist ein Fehler aufgetreten:";
+        Text[en-US] = "An error occurred:";
+    };
+    String RID_DLG_UPDATE_UNKNOWNERROR {
+        Text[de] = "Unbekannter Fehler.";
+        Text[en-US] = "Unknown error.";
+    };
+    String RID_DLG_UPDATE_NODESCRIPTION {
+        Text[de] = "Es ist keine Beschreibung für diese Extension verfügbar.";
+        Text[en-US] = "No descriptions available for this extension.";
+    };
+    String RID_DLG_UPDATE_NOINSTALL {
+        Text[de] = "Die Extension kann nicht installiert werden wegen:";
+        Text[en-US] = "The extension cannot be installed because:";
+    };
+    String RID_DLG_UPDATE_NODEPENDENCY {
+        Text[de] = "Inkompatibilität:";
+        Text[en-US] = "Incompatibility:";
+    };
+    String RID_DLG_UPDATE_NOPERMISSION {
+        Text[de] = "Keine Schreibrechte (Shared Extension).";
+        Text[en-US] = "No write permission (shared extension).";
+    };
+    String RID_DLG_UPDATE_NOUPDATE {
+        Text[de] = "Das Update muss manuell von der Webseite %URL heruntergeladen werden. Anschließend können Sie es im Extension Manager hinzufügen.";
+        Text[en-US] = "The update must be downloaded from the website %URL. Then you can add the extension in the Extension Manager.";
+    };
+};
