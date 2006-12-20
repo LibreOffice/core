@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:15:20 $
+ *  last change: $Author: ihi $ $Date: 2006-12-20 14:14:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,9 +426,9 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
     SetSelectionMode( SINGLE_SELECTION );
 }
 //------------------------------------------------------------------------
-void OColumnTreeBox::InitEntry(SvLBoxEntry* pEntry, const String& rStr, const Image& rImg1, const Image& rImg2)
+void OColumnTreeBox::InitEntry(SvLBoxEntry* pEntry, const String& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {
-    DBTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
+    DBTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pString = new OColumnString(pEntry, 0, rStr,sal_False);
     if (pString)
         pEntry->ReplaceItem( pString, pEntry->ItemCount() - 1 );
