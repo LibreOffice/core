@@ -4,9 +4,9 @@
  *
  *  $RCSfile: throbberimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:41 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 16:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
+#include "precompiled_toolkit.hxx"
 #ifndef  _TOOLKIT_HELPER_THROBBERIMPL_HXX_
 #include <toolkit/helper/throbberimpl.hxx>
 #endif

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenermultiplexer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:53:48 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 16:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 //#include "precompiled_toolkit.hxx"
-
+#include "precompiled_toolkit.hxx"
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
