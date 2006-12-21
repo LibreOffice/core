@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:09:31 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@
 
 // =======================================================================
 
-int GetVerticalFlags( sal_Unicode nChar )
+int GetVerticalFlags( sal_UCS4 nChar )
 {
     if( (nChar >= 0x1100 && nChar <= 0x11f9)    // Hangul Jamo
      || (nChar == 0x2030 || nChar == 0x2031)    // per mille sign
@@ -113,7 +113,7 @@ int GetVerticalFlags( sal_Unicode nChar )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode GetVerticalChar( sal_Unicode )
+sal_UCS4 GetVerticalChar( sal_UCS4 )
 {
     return 0; // #i14788# input method is responsible vertical char changes
 
@@ -162,16 +162,16 @@ sal_Unicode GetVerticalChar( sal_Unicode )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode GetMirroredChar( sal_Unicode nChar )
+sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 {
-    nChar = (sal_Unicode)u_charMirror( nChar );
+    nChar = u_charMirror( nChar );
     return nChar;
 }
 
 // -----------------------------------------------------------------------
 
 // Get simple approximations for unicodes
-const char* GetAutofallback( sal_Unicode nChar )
+const char* GetAutofallback( sal_UCS4 nChar )
 {
     const char* pStr = NULL;
     switch( nChar )
@@ -255,13 +255,13 @@ const char* GetAutofallback( sal_Unicode nChar )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
+sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 {
     // currently only conversion from ASCII digits is interesting
     if( (nChar < '0') || ('9' < nChar) )
         return nChar;
 
-    sal_Unicode nOffset;
+    int nOffset;
     switch( eLang )
     {
         default:
@@ -357,13 +357,13 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
 #endif
     }
 
-    nChar = sal::static_int_cast<sal_Unicode>(nChar + nOffset);
+    nChar += nOffset;
     return nChar;
 }
 
 // -----------------------------------------------------------------------
 
-inline bool IsControlChar( sal_Unicode cChar )
+inline bool IsControlChar( sal_UCS4 cChar )
 {
     // C0 control characters
     if( (0x0001 <= cChar) && (cChar <= 0x001F) )
@@ -781,7 +781,7 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 // If the range doesn't match in 0x3000 and 0x30FB, please change
 // also ImplCalcKerning.
 
-int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
+int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool bVertical )
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
     static signed char nTable[0x30] =
