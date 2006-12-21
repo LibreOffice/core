@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:46 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ X11GlyphPeer::X11GlyphPeer()
 {
     maRawBitmap.mnAllocated = 0;
     maRawBitmap.mpBits = NULL;
-    if( mpDisplay != NULL )
+    if( !mpDisplay )
         return;
 
     SalDisplay& rSalDisplay = *GetX11SalData()->GetDisplay();
@@ -134,8 +134,9 @@ void X11GlyphPeer::InitAntialiasing()
     if( (nEnvAntiAlias & 1) != 0 )
         return;
 
-    // disable client side antialiasing for screen visuals that are not suitable
-    mnForcedAA = ~mnUsingXRender;
+    // enable client side antialiasing for screen visuals that are suitable
+    // mnForcedAA is a bitmask of screens enabled for client side antialiasing
+    mnForcedAA = (~(~0U << mnMaxScreens)) ^ mnUsingXRender;
     SalDisplay& rSalDisplay = *GetX11SalData()->GetDisplay();
     for( int nScreen = 0; nScreen < mnMaxScreens; ++nScreen)
     {
