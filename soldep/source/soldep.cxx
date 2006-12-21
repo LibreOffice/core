@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldep.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-24 11:18:48 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ void SolDep::Init( ByteString &rVersion, GenericInformationList *pVersionList )
         mpStandLst = aParser.Execute( sStandLst );
     }
     if ( mpStandLst ) {
-        msVersion = rVersion;
+        msVersionMajor = ByteString( rVersion );
         ReadSource(TRUE); //call from build server set UPDATER to TRUE
     }
 }
@@ -275,6 +275,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
             break;
         case TID_SOLDEP_BACK:
             maToolBox.HideItem(TID_SOLDEP_BACK);
+            maToolBox.ShowItem(TID_SOLDEP_SELECT_WORKSPACE);  //disabled for prj view (doubleclick ObjWin)
             maToolBox.ShowItem(TID_SOLDEP_HIDE_INDEPENDEND);  //disabled for prj view (doubleclick ObjWin)
             maToolBox.ShowItem(TID_SOLDEP_FIND);              //disabled for prj view (doubleclick ObjWin)
             maToolBox.Resize();
@@ -300,7 +301,8 @@ BOOL SolDep::GetVersion()
 {
     SolSelectVersionDlg aVersionDlg( GetDepWin(), mpStandLst );
     if ( aVersionDlg.Execute() == RET_OK ) {
-        msVersion = aVersionDlg.GetVersion();
+        msVersionMajor = aVersionDlg.GetVersionMajor();
+        msVersionMinor = aVersionDlg.GetVersionMinor();
         return TRUE;
     }
     return FALSE;
@@ -523,7 +525,7 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
     mpSolIdMapper = new SolIdMapper( 63997 );
     if (mpStandLst && bUpdater)
     {
-        mpStarWriter = new StarWriter( mpXmlBuildList, mpStandLst, msVersion, TRUE );
+        mpStarWriter = new StarWriter( mpXmlBuildList, mpStandLst, msVersionMajor, msVersionMinor, TRUE );
     } else
     {
         SolarFileList* pSolarFileList;
@@ -734,7 +736,7 @@ BOOL SolDep::InitPrj( ByteString& rListName )
     ByteString *pFlagName;
     Prj* pPrj;
     ObjectWin *pStartWin, *pEndWin;
-
+    maToolBox.HideItem(TID_SOLDEP_SELECT_WORKSPACE);
     maToolBox.HideItem(TID_SOLDEP_HIDE_INDEPENDEND);
     maToolBox.HideItem(TID_SOLDEP_FIND);
     maToolBox.ShowItem(TID_SOLDEP_BACK);
