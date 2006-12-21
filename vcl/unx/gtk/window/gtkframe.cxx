@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:29:38 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3088,7 +3088,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         GSList *attr_list = NULL;
         GSList *tmp_list = NULL;
         gint start, end;
-        guint sal_attr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+        guint sal_attr = 0;
 
         pango_attr_iterator_range (iter, &start, &end);
         if (end == G_MAXINT)
@@ -3107,10 +3107,10 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             switch (pango_attr->klass->type)
             {
                 case PANGO_ATTR_BACKGROUND:
-                sal_attr |= (SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT | SAL_EXTTEXTINPUT_CURSOR_INVISIBLE);
+                    sal_attr |= (SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT | SAL_EXTTEXTINPUT_CURSOR_INVISIBLE);
                     break;
                 case PANGO_ATTR_UNDERLINE:
-                sal_attr |= SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+                    sal_attr |= SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
                     break;
                 case PANGO_ATTR_STRIKETHROUGH:
                     sal_attr |= SAL_EXTTEXTINPUT_ATTR_REDTEXT;
@@ -3121,6 +3121,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             pango_attribute_destroy (pango_attr);
             tmp_list = tmp_list->next;
         }
+        if (sal_attr == 0)
+            sal_attr |= SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
         g_slist_free (attr_list);
 
         // Set the sal attributes on our text
