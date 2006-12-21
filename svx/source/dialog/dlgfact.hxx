@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:45:26 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,8 @@ class AbstractSvxCharacterMap_Impl :public AbstractSvxCharacterMap
     virtual void            SetCharFont( const Font& rFont );
     virtual void            SetFont( const Font& rFont ) ;
 
-    virtual void            SetChar( sal_Unicode c );
+    // TODO: change to UCS4
+    virtual void            SetChar( sal_Unicode );
     virtual sal_Unicode     GetChar() const;
 
     virtual String          GetCharacters() const;
