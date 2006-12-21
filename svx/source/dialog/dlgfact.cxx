@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:45:13 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,7 +652,9 @@ void AbstractSvxCharacterMap_Impl::SetChar( sal_Unicode c )
 
 sal_Unicode AbstractSvxCharacterMap_Impl::GetChar() const
 {
-    return pDlg->GetChar();
+    sal_UCS4 cUCS4 = pDlg->GetChar();
+    // TODO: change return value to UCS4
+    return static_cast<sal_Unicode>(cUCS4);
 }
 
 String AbstractSvxCharacterMap_Impl::GetCharacters() const
