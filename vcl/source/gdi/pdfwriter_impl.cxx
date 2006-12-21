@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:36:11 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:03:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1887,9 +1887,11 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
     bool bRightToLeft;
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
+        // TODO: handle unicode surrogates
+    // on the other hand builtin fonts don't support them anyway
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
-            cChar = GetMirroredChar( cChar );
+            cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
 
         if( cChar & 0xff00 )
         {
@@ -3169,6 +3171,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
             aContents.append( '<' );
             appendHex( (sal_Int8)pEncoding[n], aContents );
             aContents.append( "> <" );
+        // TODO: handle unicodes>U+FFFF
             appendHex( (sal_Int8)(pUnicodes[n] / 256), aContents );
             appendHex( (sal_Int8)(pUnicodes[n] & 255), aContents );
             aContents.append( ">\n" );
