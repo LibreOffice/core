@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:32:42 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1870,10 +1870,10 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
     g_return_val_if_fail( data != NULL, FALSE );
     g_return_val_if_fail( filter_info != NULL, FALSE );
 
-    if( !filter_info->filename )
+    if( !filter_info->uri )
         return FALSE;
 
-    const char *pExtn = strrchr( filter_info->filename, '.' );
+    const char *pExtn = strrchr( filter_info->uri, '.' );
     if( !pExtn )
         return FALSE;
     pExtn++;
@@ -1883,7 +1883,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 
 #ifdef DEBUG
     fprintf( stderr, "'%s' match extn '%s' vs '%s' yeilds %d\n",
-        filter_info->filename, pExtn, pFilter, bRetval );
+        filter_info->uri, pExtn, pFilter, bRetval );
 #endif
 
     return bRetval;
@@ -1918,7 +1918,7 @@ int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rT
                 if (aTokens.getLength())
                     aTokens += OUString::createFromAscii(",");
                 aTokens = aTokens += aToken;
-                gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
+                gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,
                     g_strdup( rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ) ),
                     (GDestroyNotify) g_free );
