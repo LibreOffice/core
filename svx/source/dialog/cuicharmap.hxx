@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuicharmap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:49:45 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ public:
     void            SetCharFont( const Font& rFont );
     void            SetFont( const Font& rFont ) { SetCharFont( rFont ); } //! irgendwann entfernen
 
-    void            SetChar( sal_Unicode c );
-    sal_Unicode     GetChar() const;
+    void            SetChar( sal_UCS4 );
+    sal_UCS4        GetChar() const;
 
     String          GetCharacters() const;
 };
