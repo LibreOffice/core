@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.225 $
+ *  $Revision: 1.226 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:59:24 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5970,9 +5970,11 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
             if( (*pStr >= '0') && (*pStr <= '9') )
             {
                 // translate characters to local preference
-                sal_Unicode cChar = GetLocalizedChar( *pStr, meTextLanguage );
+                sal_UCS4 cChar = GetLocalizedChar( *pStr, meTextLanguage );
                 if( cChar != *pStr )
-                    rStr.SetChar( sal::static_int_cast<USHORT>(pStr - pBase), cChar );
+                    // TODO: are the localized digit surrogates?
+                    rStr.SetChar( static_cast<USHORT>(pStr - pBase),
+                                 static_cast<sal_Unicode>(cChar) );
             }
         }
     }
