@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:05:36 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,7 +590,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             sal_uInt32 cMaxChar = GetUInt( pGroup + 4 );
             int nGlyphId = GetUInt( pGroup + 8 );
             pGroup += 12;
-#if 1       // TODO: remove unicode baseplane clipping for UCS-4 support
+#if 0       // TODO: remove unicode baseplane clipping for UCS-4 support
             if( cMinChar > 0xFFFF )
                 continue;
             if( cMaxChar > 0xFFFF )
