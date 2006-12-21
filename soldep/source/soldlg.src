@@ -5,9 +5,9 @@
  *
  *  $RCSfile: soldlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-26 12:22:25 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,17 @@ ModalDialog DLG_VERSIONSELECT {
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
         };
+    GroupBox DLG_MINORSELECT_GROUP {
+            Pos = MAP_APPFONT( 110, 4 );
+            Size = MAP_APPFONT( 47, 30 );
+            Text = "Minor";
+        };
+    Edit    DLG_MINORSELECT_EDIT {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 115, 16 );
+            Size = MAP_APPFONT( 36, 12 );
+            TabStop = TRUE;
+        };
 };
 
 ModelessDialog DLG_AUTOARRANGE {
@@ -275,7 +286,7 @@ ToolBox TID_SOLDEP_MAIN
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
                         {
-                                File = "dt_open.png";
+                                File = "sx03190.png";
                         };
                 };
                 ToolBoxItem
@@ -288,7 +299,7 @@ ToolBox TID_SOLDEP_MAIN
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
                         {
-                                File = "dt_save.png";
+                                File = "sc05505.png";
                         };
                 };
                 ToolBoxItem
@@ -305,7 +316,7 @@ ToolBox TID_SOLDEP_MAIN
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
                         {
-                                File = "dt_verwin.png";
+                                File = "selectupd_16.png";
                         };
                 };
                 ToolBoxItem
@@ -318,7 +329,7 @@ ToolBox TID_SOLDEP_MAIN
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
                         {
-                                File = "dt_find.png";
+                                File = "sc05961.png";
                         };
                 };
                 ToolBoxItem
@@ -331,7 +342,7 @@ ToolBox TID_SOLDEP_MAIN
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
                         {
-                                File = "dt_back.png";
+                                File = "arrowup_16.png";
                         };
                 };
                 ToolBoxItem
@@ -344,7 +355,7 @@ ToolBox TID_SOLDEP_MAIN
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
                         {
-                                File = "dt_hidedep.png";
+                                File = "hidedependency_16.png";
                         };
                 };
         };
@@ -354,13 +365,12 @@ ToolBox TID_SOLDEP_MAIN
 Bitmap TID_SMALL_PIN_PINED
 /*****************************************************************************/
 {
-    File = "dt_pined.png";
+    File = "ballgreen_7.png";
 };
 
 /*****************************************************************************/
 Bitmap TID_SMALL_PIN_UNPINED
 /*****************************************************************************/
 {
-    File = "dt_unpined.png";
+    File = "ballred_7.png";
 };
-
