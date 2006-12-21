@@ -46,9 +46,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:34:18 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:54:43 $
  *
  ************************************************************************/
 
@@ -292,7 +292,7 @@ static char *token( FileInputStream* stream, int& rLen )
     }
 
     if (ch == -1 && idx < 1) return ((char *)NULL);
-    if (idx >= 1 && ch != ':' ) stream->ungetChar();
+    if (idx >= 1 && ch != ':' && ch != -1) stream->ungetChar();
     if (idx < 1 ) ident[idx++] = ch;    /* single-character token */
     ident[idx] = 0;
     rLen = idx;
