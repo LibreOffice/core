@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
+ *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,7 @@ public:
 private:
     DomainMapper&                                                                   m_rDMapper;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       m_xTextDocument;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDocumentSettings;
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > m_xTextFactory;
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >     m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xPageStyles;
@@ -161,6 +162,7 @@ private:
     ::rtl::OUString                                                                 m_sHyperlinkURL;
     bool                                                                            m_bFieldMode;
     bool                                                                            m_bSetUserFieldContent;
+    bool                                                                            m_bIsFirstSection;
 
     TableManager_t m_TableManager;
 
@@ -188,6 +190,7 @@ private:
                                     FindOrCreateFieldMaster( const sal_Char* pFieldMasterService,
                                                             const ::rtl::OUString& rFieldMasterName )
                                                                 throw(::com::sun::star::uno::Exception);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       GetDocumentSettings();
 
 public:
     DomainMapper_Impl(
@@ -208,9 +211,15 @@ public:
     {
         return m_xTextDocument;
     }
+    void SetDocumentSettingsProperty( const ::rtl::OUString& rPropName, const uno::Any& rValue );
+
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > );
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
+                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
+
+//    void appendTextSection();
 
     FIB&    GetFIB() {return m_aFIB;}
     // push the new properties onto the stack and make it the 'current' property map

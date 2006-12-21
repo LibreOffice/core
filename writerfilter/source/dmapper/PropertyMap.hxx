@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
+ *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,19 +60,24 @@ namespace com{namespace sun{namespace star{
     namespace beans{
     struct PropertyValue;
     }
-    namespace lang{
-        class XMultiServiceFactory;
-    }
-    namespace table{
-        struct BorderLine;
-    }
     namespace container{
         class XNameAccess;
         class XNameContainer;
     }
+    namespace lang{
+        class XMultiServiceFactory;
+    }
+    namespace text{
+        class XTextRange;
+        class XTextColumns;
+    };
+    namespace table{
+        struct BorderLine;
+    }
 }}}
 
 namespace dmapper{
+class DomainMapper_Impl;
 enum BorderPosition
 {
     BORDER_LEFT,
@@ -110,8 +115,15 @@ typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
   -----------------------------------------------------------------------*/
 class SectionPropertyMap : public PropertyMap
 {
+    //--> debug
+    sal_Int32 nSectionNumber;
+    //<-- debug
     //'temporarily' the section page settings are imported as page styles
     // empty strings mark page settings as not yet imported
+
+    bool                                                                        m_bIsFirstSection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xStartingRange;
+
     ::rtl::OUString                                                             m_sFirstPageStyleName;
     ::rtl::OUString                                                             m_sFollowPageStyleName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFirstPageStyle;
@@ -130,16 +142,35 @@ class SectionPropertyMap : public PropertyMap
     bool                                    m_bEvenlySpaced;
     bool                                    m_bIsLandscape;
 
+    bool                                    m_bPageNoRestart;
     sal_Int32                               m_nPageNumber;
     sal_Int32                               m_nBreakType;
     sal_Int32                               m_nPaperBin;
     sal_Int32                               m_nFirstPaperBin;
 
+    sal_Int32                               m_nLeftMargin;
+    sal_Int32                               m_nRightMargin;
+    sal_Int32                               m_nTopMargin;
+    sal_Int32                               m_nBottomMargin;
+    sal_Int32                               m_nHeaderTop;
+    sal_Int32                               m_nHeaderBottom;
+
+    sal_Int32                               m_nDzaGutter;
+    bool                                    m_bGutterRTL;
+    bool                                    m_bSFBiDi;
+
+    sal_Int32                               m_nGridLinePitch;
+    sal_Int32                               m_nDxtCharSpace;
 
     void _ApplyProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle );
+    ::com::sun::star::uno::Reference< com::sun::star::text::XTextColumns > ApplyColumnProperties(
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xFollowPageStyle );
+    void PrepareHeaderFooterProperties( bool bFirstPage );
+    bool HasHeader( bool bFirstPage ) const;
+    bool HasFooter( bool bFirstPage ) const;
 
 public:
-        SectionPropertyMap();
+        explicit SectionPropertyMap(bool bIsFirstSection);
         ~SectionPropertyMap();
 
     enum PageType
@@ -148,6 +179,11 @@ public:
         PAGE_LEFT,
         PAGE_RIGHT
     };
+
+    void SetStart( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange )
+    {
+        m_xStartingRange = xRange;
+    }
 
     const ::rtl::OUString&  GetPageStyleName( bool bFirst );
     void                    SetPageStyleName( bool bFirst, const ::rtl::OUString& rName);
@@ -168,20 +204,32 @@ public:
     void SetSeparatorLine( bool bSet ) { m_bSeparatorLineIsOn = bSet; }
     void SetEvenlySpaced( bool bSet ) {    m_bEvenlySpaced = bSet; }
     void SetLandscape( bool bSet ) { m_bIsLandscape = bSet; }
+    void SetPageNoRestart( bool bSet ) { m_bPageNoRestart = bSet; }
     void SetPageNumber( sal_Int32 nSet ) { m_nPageNumber = nSet; }
     void SetBreakType( sal_Int32 nSet ) { m_nBreakType = nSet; }
     void SetPaperBin( sal_Int32 nSet );
     void SetFirstPaperBin( sal_Int32 nSet );
 
+    void SetLeftMargin(    sal_Int32 nSet ) { m_nLeftMargin = nSet; }
+    void SetRightMargin( sal_Int32 nSet ) { m_nRightMargin = nSet; }
+    void SetTopMargin(    sal_Int32 nSet ) { m_nTopMargin = nSet; }
+    void SetBottomMargin( sal_Int32 nSet ) { m_nBottomMargin = nSet; }
+    void SetHeaderTop(    sal_Int32 nSet ) { m_nHeaderTop = nSet; }
+    void SetHeaderBottom( sal_Int32 nSet ) { m_nHeaderBottom = nSet; }
+
+    void SetGutterRTL( bool bSet ) { m_bGutterRTL = bSet;}
+    void SetDzaGutter( sal_Int32 nSet ) {m_nDzaGutter = nSet; }
+    void SetSFBiDi( bool bSet ) { m_bSFBiDi = bSet;}
+
+    void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }
+    void SetDxtCharSpace( sal_Int32 nSet ) { m_nDxtCharSpace = nSet; }
     //determine which style gets the borders
     void ApplyBorderToPageStyles(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
             const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
             sal_Int32 nValue );
 
-    void ApplyPropertiesToPageStyles(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory);
+    void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
 };
 
 } //namespace dmapper

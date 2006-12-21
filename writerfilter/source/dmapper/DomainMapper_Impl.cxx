@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
+ *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,15 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
 #include <com/sun/star/style/NumberingType.hpp>
+#endif
+//#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTINSERT_HPP_
+//#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTREMOVE_HPP_
+//#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_TEXT_XPARAGRAPHCURSOR_HPP_
+#include <com/sun/star/text/XParagraphCursor.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
 #include <com/sun/star/text/XTextField.hpp>
@@ -377,6 +386,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xComponentContext( xContext ),
         m_bFieldMode( false ),
         m_bSetUserFieldContent( false ),
+        m_bIsFirstSection( true ),
         m_nCurrentTabStopIndex( 0 ),
         m_nCurrentParaStyleId( -1 ),
         m_bInStyleSheetImport( false )
@@ -421,12 +431,58 @@ uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
     }
     return m_xBodyText;
 }
+/*-- 21.12.2006 12:09:30---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
+{
+    if( !m_xDocumentSettings.is() )
+    {
+        m_xDocumentSettings = uno::Reference< beans::XPropertySet >(
+            m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings"))), uno::UNO_QUERY );
+    }
+    return m_xDocumentSettings;
+}
+/*-- 21.12.2006 12:16:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::SetDocumentSettingsProperty( const ::rtl::OUString& rPropName, const uno::Any& rValue )
+{
+    uno::Reference< beans::XPropertySet > xSettings = GetDocumentSettings();
+    if( xSettings.is() )
+    {
+        try
+        {
+            xSettings->setPropertyValue( rPropName, rValue );
+        }
+        catch( const uno::Exception& )
+        {
+        }
+    }
+}
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {
-    PropertyMapPtr pInsert(eId == CONTEXT_SECTION ? new SectionPropertyMap : new PropertyMap);
+    SectionPropertyMap* pSectionContext = 0;
+    PropertyMapPtr pInsert(eId == CONTEXT_SECTION ?
+        (pSectionContext = new SectionPropertyMap( m_bIsFirstSection )) :
+        new PropertyMap);
+    if(eId == CONTEXT_SECTION)
+    {
+        if( m_bIsFirstSection )
+            m_bIsFirstSection = false;
+        else
+        {
+            // beginning with the second section group a section has to be inserted
+            // into the document
+            SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pInsert.get() );
+            uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+            if(xTextAppendAndConvert.is())
+                pSectionContext->SetStart( xTextAppendAndConvert->getEnd() );
+        }
+    }
     m_aPropertyStacks[eId].push( pInsert );
     m_aContextStack.push(eId);
 
@@ -668,7 +724,79 @@ void DomainMapper_Impl::appendTextContent( const uno::Reference< text::XTextCont
         }
     }
 }
+/*-- 14.12.2006 12:26:00---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
+                                    uno::Reference< text::XTextRange >& xBefore )
+{
+    uno::Reference< beans::XPropertySet > xRet;
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    if(xTextAppendAndConvert.is())
+    {
+        try
+        {
+            uno::Reference< text::XParagraphCursor > xCursor(
+                xTextAppendAndConvert->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
+            //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
+            xCursor->gotoStartOfParagraph( false );
+            xCursor->gotoEnd( true );
+            //the paragraph after this new section is already inserted
+            xCursor->goLeft(1, true);
+            static const rtl::OUString sSectionService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextSection"));
+            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sSectionService), uno::UNO_QUERY_THROW );
+            xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
+            xRet = uno::Reference< beans::XPropertySet > (xSection, uno::UNO_QUERY );
+        }
+        catch(const uno::Exception& )
+        {
+        }
+
+    }
+
+    return xRet;
+}
+
+
+/*-- 14.12.2006 11:03:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+/*void DomainMapper_Impl::appendTextSection()
+{
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    if(xTextAppendAndConvert.is())
+    {
+        try
+        {
+            uno::Reference< text::XTextRange >  xRange = xTextAppendAndConvert->getEnd();
+            uno::Reference< beans::XPropertySet > xRangePropSet( xRange, uno::UNO_QUERY_THROW );
+            static const rtl::OUString sSectionProperty(RTL_CONSTASCII_USTRINGPARAM("TextSection"));
+            uno::Reference< text::XTextContent > xPrevSection;
+            xRangePropSet->getPropertyValue(sSectionProperty) >>= xPrevSection;
+            //close previous section by appending a new paragraph behind the current section
+            if(xPrevSection.is())
+            {
+                uno::Reference< text::XRelativeTextContentInsert > xRelativeInsert( xTextAppendAndConvert, uno::UNO_QUERY_THROW );
+                static const rtl::OUString sParagraphService(
+                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph"));
+                uno::Reference< text::XTextContent > xParagraph( m_xTextFactory->createInstance(sParagraphService), uno::UNO_QUERY_THROW );
+                xRelativeInsert->insertTextContentAfter( xParagraph, xPrevSection );
+            }
+            static const rtl::OUString sSectionService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextSection"));
+            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sSectionService), uno::UNO_QUERY_THROW );
+            xSection->attach( xRange );
+            //remove the appended paragraph behind the new section
+            uno::Reference< text::XRelativeTextContentRemove > xRemove( xTextAppendAndConvert, uno::UNO_QUERY_THROW );
+            xRemove->removeTextContentAfter( xSection );
+        }
+        catch(const uno::Exception& )
+        {
+        }
+    }
+} */
+/*-- 02.11.2006 12:08:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 {
     //get the section context

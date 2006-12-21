@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2006-12-13 14:51:19 $
+ *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_TEXTGRIDMODE_HPP_
+#include <com/sun/star/text/TextGridMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
 #include <com/sun/star/style/NumberingType.hpp>
@@ -2088,8 +2094,15 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         {
             //multiples of half points (12pt == 24)
             double fVal = double(nIntValue) / 2.;
-            rContext->Insert(
-                             0x4A61 == nId ? PROP_CHAR_HEIGHT_COMPLEX : PROP_CHAR_HEIGHT, uno::makeAny( fVal ) );
+            uno::Any aVal = uno::makeAny( fVal );
+            if( 0x4A61 == nId )
+                rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
+            else
+            {
+                //Asian get the same value as Western
+                rContext->Insert( PROP_CHAR_HEIGHT, aVal );
+                rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
+            }
         }
         break;
     case 0x2A44:
@@ -2130,8 +2143,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xCA4A:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCHpsInc1
-    case 0x71 : //"sprmCDxaSpace"
-    case 0x96 : //"sprmCDxaSpace"
+    case 71 : //"sprmCDxaSpace"
+    case 96 : //"sprmCDxaSpace"
     case 0x8840:  // sprmCDxaSpace
         /* WRITERFILTERSTATUS: done: 50, planned: 2, spent: 0 */
         //Kerning half point values
@@ -2324,9 +2337,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         if(pSectionContext)
             pSectionContext->SetEvenlySpaced( nIntValue > 0 );
     break;  // sprmSFEvenlySpaced
-    case 0x3006:
+    case 0x3006: // sprmSFProtected
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSFProtected
+        //todo: missing feature - unlocked sections in protected documents
+        break;
     case 0x5007: // sprmSDmBinFirst
         /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
@@ -2403,9 +2417,15 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xB010:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSDxaPgn
-    case 0x3011:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSFPgnRestart
+    case 150:
+    case 0x3011: // sprmSFPgnRestart
+    {
+        /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetPageNoRestart( nIntValue > 0 );
+    }
+    break;
     case 0x3012:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSFEndnote
@@ -2414,7 +2434,15 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmSLnc
     case 0x3014:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSGprfIhdt
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        //flags about header/footer sharing and footnotes?
+        /* ww8scan.hxx:
+         * WW8_HEADER_EVEN = 0x01, WW8_HEADER_ODD = 0x02, WW8_FOOTER_EVEN = 0x04,
+         * WW8_FOOTER_ODD = 0x08, WW8_HEADER_FIRST = 0x10, WW8_FOOTER_FIRST = 0x20
+         */
+
+//        if(pSectionContext)
+    break;  // sprmSGprfIhdt
     case 0x5015:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSNLnnMod
@@ -2424,11 +2452,17 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xB017: // sprmSDyaHdrTop
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         // default 720 twip
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetHeaderTop( ConversionHelper::convertToMM100( nIntValue ));
+    break;
     case 0xB018: // sprmSDyaHdrBottom
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         // default 720 twip
-        OSL_ASSERT("TODO: not handled yet"); //header top/bottom distance 0x2c5 == 0,5in
-        break;
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetHeaderBottom( ConversionHelper::convertToMM100( nIntValue ) );
+    break;
     case 158:
     case 0x3019: // sprmSLBetween
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
@@ -2444,7 +2478,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmSLnnMin
     case 161:
     case 0x501C: // sprmSPgnStart
-        /* WRITERFILTERSTATUS: done: 0.5, planned: 0.5, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
         //page number
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
@@ -2482,32 +2516,63 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     break;
     case 166:
     case 0xB021:  // sprmSDxaLeft
+    {
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
         //left page margin default 0x708 twip
          rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ) );
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetLeftMargin( ConversionHelper::convertToMM100( nIntValue ) );
+    }
     break;
     case 167:
     case 0xB022: // sprmSDxaRight
+    {
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
         //right page margin default 0x708 twip
-        rContext->Insert( PROP_LEFT_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ) );
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetRightMargin( ConversionHelper::convertToMM100( nIntValue ) );
+    }
     break;
     case 168:
     case 0x9023: // sprmSDyaTop
+    {
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
         //top page margin default 1440 twip
-        rContext->Insert( PROP_TOP_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ) );
+        //todo: check cast of SVBT16
+        sal_Int32 nConverted = ConversionHelper::convertToMM100( static_cast< sal_Int16 >( nIntValue ) );
+        rContext->Insert( PROP_TOP_MARGIN, uno::makeAny( nConverted ) );
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetTopMargin( nConverted );
+    }
     break;
     case 169:
     case 0x9024: // sprmSDyaBottom
+    {
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
         //bottom page margin default 1440 twip
-        rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ) );
+        //todo: check cast of SVBT16
+        sal_Int32 nConverted = ConversionHelper::convertToMM100( static_cast< sal_Int16 >( nIntValue ) );
+        rContext->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( nConverted) );
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetBottomMargin( nConverted );
+    }
     break;
+    case 170:
     case 0xB025:   // sprmSDzaGutter
+    {
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-        OSL_ASSERT("TODO: not handled yet"); // gutter is added to one of the margins of a section depending on RTL, can be placed on top either
-        break;
+        // gutter is added to one of the margins of a section depending on RTL, can be placed on top either
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+        {
+            pSectionContext->SetDzaGutter( ConversionHelper::convertToMM100( nIntValue  ) );
+        }
+    }
+    break;
     case 0x5026:   // sprmSDmPaperReq
         /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         //paper code - no handled in old filter
@@ -2515,15 +2580,25 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xD227:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSPropRMark
-    case 0x3228:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSFBiDi
+    case 0x3228:// sprmSFBiDi
+    {
+        /* WRITERFILTERSTATUS: done: 0.5, planned: 2, spent: 0 */
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetSFBiDi( nIntValue > 0 );
+    }
+    break;
     case 0x3229:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSFFacingCol
-    case 0x322A:
+    case 0x322A: // sprmSFRTLGutter
+    {
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSFRTLGutter
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+            pSectionContext->SetGutterRTL( nIntValue > 0 );
+    }
+    break;
     case 0x702B:   // sprmSBrcTop
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
     case 0x702C:   // sprmSBrcLeft
@@ -2560,40 +2635,84 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         }
         break;
     case 0x7030:
+    {
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSDxtCharSpace
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+        {
+            pSectionContext->SetDxtCharSpace( nIntValue );
+        }
+    }
+    break;  // sprmSDxtCharSpace
     case 0x9031:   // sprmSDyaLinePitch
+    {
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-        OSL_ASSERT("TODO: not handled yet"); //line pitch of grid
         //see SwWW8ImplReader::SetDocumentGrid
-//            OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-//        if(pSectionContext)
-//        {
-//            pSectionContext->..TextGrid... ( m_pImpl->GetPageStyles(), nIntValue );
-//        }
-
-//all elements off the SwTextGridItem:
-//  { SW_PROP_NMID(UNO_NAME_GRID_COLOR), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32),
-//  { SW_PROP_NMID(UNO_NAME_GRID_LINES), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT16),
-//  { SW_PROP_NMID(UNO_NAME_GRID_BASE_HEIGHT), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32),
-//  { SW_PROP_NMID(UNO_NAME_GRID_RUBY_HEIGHT), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32),
-//  { SW_PROP_NMID(UNO_NAME_GRID_MODE), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT16),
-//  { SW_PROP_NMID(UNO_NAME_GRID_RUBY_BELOW), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN),
-//  { SW_PROP_NMID(UNO_NAME_GRID_PRINT), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN),
-//  { SW_PROP_NMID(UNO_NAME_GRID_DISPLAY), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN),
-
-
-        break;
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+        {
+            pSectionContext->SetGridLinePitch( ConversionHelper::convertToMM100( nIntValue ) );
+        }
+    }
+    break;
     case 0x703a: //undocumented, grid related?
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         OSL_ASSERT("TODO: not handled yet"); //nIntValue like 0x008a2373 ?
         break;
     case 0x5032:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSClm
+    {
+        /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
+        sal_Int16 nGridType = text::TextGridMode::NONE;
+        switch( nIntValue )
+        {
+            case 0:
+                nGridType = text::TextGridMode::NONE;
+            break;
+            case 3:
+                //Text snaps to char grid, this doesn't make a lot of sense to
+                //me. This is closer than LINES_CHARS
+                nGridType = text::TextGridMode::LINES;
+            break;
+            case 1:
+                nGridType = text::TextGridMode::LINES_AND_CHARS;
+            break;
+            case 2:
+                nGridType = text::TextGridMode::LINES;
+            break;
+            default:;
+        }
+        rContext->Insert( PROP_GRID_MODE, uno::makeAny( nGridType ) );
+
+    //Seems to force this behaviour in word ?
+    if(nGridType != text::TextGridMode::NONE)
+        m_pImpl->SetDocumentSettingsProperty(
+            PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ADD_EXTERNAL_LEADING ),
+            uno::makeAny( true ) );
+    }
+    break;  // sprmSClm
     case 0x5033:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSTextFlow
+    {
+        /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
+        /* 0 HoriLR 1 Vert TR 2 Vert TR 3 Vert TT 4 HoriLT
+            only 0 and 1 can be imported correctly
+          */
+        sal_Int16 nDirection = text::WritingMode_LR_TB;
+        switch( nIntValue )
+        {
+            case 0:
+            case 4:
+                nDirection = text::WritingMode_LR_TB;
+            break;
+            case 1:
+            case 2:
+            case 3:
+                nDirection = text::WritingMode_TB_RL;
+            break;
+            default:;
+        }
+        rContext->Insert(PROP_WRITING_MODE, uno::makeAny( nDirection ) );
+    }
+    break;  // sprmSTextFlow
     case 0x5400:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmTJc
@@ -2763,7 +2882,7 @@ void DomainMapper::endSectionGroup()
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
     if(pSectionContext)
-        pSectionContext->ApplyPropertiesToPageStyles( m_pImpl->GetPageStyles(), m_pImpl->GetTextFactory() );
+        pSectionContext->CloseSectionGroup( *m_pImpl );
     m_pImpl->PopProperties(CONTEXT_SECTION);
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -2813,13 +2932,14 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
             bContinue = false;
             switch(*data_)
             {
-            case 0x07:
-            case 0x0d:
-                m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)); break;
-            case 0x13: m_pImpl->SetFieldMode( true );break;
-            case 0x14: /* delimiter not necessarily available */
-            case 0x15: /* end of field */
-                m_pImpl->SetFieldMode( false );
+                case 0x0c: break; //page break
+                case 0x07:
+                case 0x0d:
+                    m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)); break;
+                case 0x13: m_pImpl->SetFieldMode( true );break;
+                case 0x14: /* delimiter not necessarily available */
+                case 0x15: /* end of field */
+                    m_pImpl->SetFieldMode( false );
                 break;
             default: bContinue = true;
             }

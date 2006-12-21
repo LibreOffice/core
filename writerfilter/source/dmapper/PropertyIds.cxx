@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
+ *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_CHAR_FONT_CHAR_SET:            sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontCharSet")); break;
             case PROP_CHAR_FONT_PITCH:               sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontPitch")); break;
             case PROP_CHAR_FONT_NAME_ASIAN     :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontNameAsian")); break;
+            case PROP_CHAR_HEIGHT_ASIAN        :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHeightAsian")); break;
             case PROP_CHAR_FONT_STYLE_ASIAN    :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontStyleAsian")); break;
             case PROP_CHAR_FONT_FAMILY_ASIAN   :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontFamilyAsian")); break;
             case PROP_CHAR_FONT_CHAR_SET_ASIAN :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontCharSetAsian")); break;
@@ -235,6 +236,30 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_AUTOMATIC_DISTANCE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance")); break;
             case PROP_IS_LANDSCAPE         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsLandscape")); break;
             case PROP_PRINTER_PAPER_TRAY_INDEX:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrinterPaperTrayIndex")); break;
+            case PROP_FIRST_PAGE       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("First Page")); break;
+            case PROP_DEFAULT          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default")); break;
+            case PROP_PAGE_DESC_NAME   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageDescName")); break;
+            case PROP_PAGE_NUMBER_OFFSET:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageNumberOffset")); break;
+            case PROP_BREAK_TYPE       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BreakType")); break;
+            case PROP_FOOTER_IS_DYNAMIC_HEIGHT:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsDynamicHeight")); break;
+            case PROP_FOOTER_DYNAMIC_SPACING:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterDynamicSpacing")); break;
+            case PROP_FOOTER_HEIGHT         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterHeight")); break;
+            case PROP_FOOTER_BODY_DISTANCE  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBodyDistance")); break;
+            case PROP_HEADER_IS_DYNAMIC_HEIGHT:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderIsDynamicHeight")); break;
+            case PROP_HEADER_DYNAMIC_SPACING:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderDynamicSpacing")); break;
+            case PROP_HEADER_HEIGHT         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderHeight")); break;
+            case PROP_HEADER_BODY_DISTANCE  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBodyDistance")); break;
+            case PROP_WRITING_MODE          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritingMode")); break;
+            case PROP_GRID_MODE             :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridMode")); break;
+            case PROP_GRID_DISPLAY          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridDisplay")); break;
+            case PROP_GRID_PRINT            :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridPrint")); break;
+            case PROP_ADD_EXTERNAL_LEADING  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddExternalLeading")); break;
+            case PROP_GRID_LINES            :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridLines")); break;
+            case PROP_GRID_BASE_HEIGHT      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridBaseHeight")); break;
+            case PROP_GRID_RUBY_HEIGHT      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridRubyHeight")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
