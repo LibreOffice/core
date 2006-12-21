@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuicharmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:13:54 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,14 +125,14 @@ const Font& SvxCharacterMap::GetCharFont() const
 
 // -----------------------------------------------------------------------
 
-void SvxCharacterMap::SetChar( sal_Unicode c )
+void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
     mpCharMapData->aShowSet.SelectCharacter( c );
 }
 
 // -----------------------------------------------------------------------
 
-sal_Unicode SvxCharacterMap::GetChar() const
+sal_UCS4 SvxCharacterMap::GetChar() const
 {
     return mpCharMapData->aShowSet.GetSelectCharacter();
 }
@@ -156,3 +156,4 @@ void SvxCharacterMap::SetCharFont( const Font& rFont )
 {
     mpCharMapData->SetCharFont( rFont );
 }
+
