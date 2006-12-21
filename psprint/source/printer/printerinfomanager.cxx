@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:33:36 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,8 @@ PrinterInfoManager& PrinterInfoManager::get()
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
         m_pQueueInfo( NULL ),
-        m_eType( eType )
+        m_eType( eType ),
+        m_bUseIncludeFeature( false )
 {
     if( eType == Default )
         m_pQueueInfo = new SystemQueueInfo();
@@ -184,6 +185,7 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 
 void PrinterInfoManager::initialize()
 {
+    m_bUseIncludeFeature = false;
     rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
     m_aPrinters.clear();
     m_aWatchFiles.clear();
