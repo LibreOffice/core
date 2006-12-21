@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@
 #define POS(nX, nY) \
         LogicToLogic(Point(nX,nY),MapMode(MAP_APPFONT),GetMapMode())
 #endif
+
+
 //
 // class SolNewProjectDlg
 //
@@ -164,11 +166,12 @@ SolSelectVersionDlg::SolSelectVersionDlg(
                 : ModalDialog( pParent, DtSodResId( DLG_VERSIONSELECT )),
                 maVersionListBox( this, DtSodResId( DLG_VERSIONSELECT_LISTBOX )),
                 maVersionGroupBox( this, DtSodResId( DLG_VERSIONSELECT_GROUP )),
+                maMinorEditBox( this, DtSodResId( DLG_MINORSELECT_EDIT )),
+                maMinorGroupBox( this, DtSodResId( DLG_MINORSELECT_GROUP )),
                 maOKButton( this, DtSodResId( DLG_VERSIONSELECT_OK  )),
                 maCancelButton( this, DtSodResId( DLG_VERSIONSELECT_CANCEL ))
 {
     FreeResource();
-
     //Fill the ListBox with MWS versions (e.g. SRC680) from "stand.lst"
     for ( ULONG i = 0; i < pStandLst->Count(); i++ ) {
         String sVersion( *pStandLst->GetObject( i ), RTL_TEXTENCODING_ASCII_US );
@@ -180,17 +183,33 @@ SolSelectVersionDlg::SolSelectVersionDlg(
 
     maVersionListBox.SetDoubleClickHdl(
         LINK( this, SolSelectVersionDlg, DoubleClickHdl ));
+
 }
 
 /*****************************************************************************/
-ByteString SolSelectVersionDlg::GetVersion()
+ByteString SolSelectVersionDlg::GetVersionMajor()
 /*****************************************************************************/
 {
     //Returns the selected version
-    ByteString sReturn(
-        maVersionListBox.GetSelectEntry(), RTL_TEXTENCODING_ASCII_US );
+    return ByteString(maVersionListBox.GetSelectEntry(), RTL_TEXTENCODING_ASCII_US );
+}
 
-    return sReturn;
+/*****************************************************************************/
+ByteString SolSelectVersionDlg::GetVersionMinor()
+/*****************************************************************************/
+{
+    //Returns the minor
+    ByteString minor = ByteString(maMinorEditBox.GetText(), RTL_TEXTENCODING_ASCII_US );
+    //check for correctness (format: "m1234")
+    //"m123s8" is unsupported because 'steps' aren't used anymore
+    minor.EraseLeadingAndTrailingChars();
+    int check = minor.SearchChar("m");
+    if (check == 0)
+    {
+        ByteString check2 = minor.Copy(1,(minor.Len()-1));
+        if (check2.IsNumericAscii()) return minor;
+    }
+    return ByteString("");
 }
 
 /*****************************************************************************/
