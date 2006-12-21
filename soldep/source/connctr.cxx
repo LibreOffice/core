@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,12 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
+#ifdef _MSC_VER
+#pragma warning(disable:4100)
+#endif
 #include "connctr.hxx"
 #include "objwin.hxx"
 #include "depwin.hxx"
-//#include "depapp.hxx"
 #include "math.h"
 
 BOOL Connector::msbHideMode = FALSE;
@@ -274,7 +275,7 @@ ULONG Connector::GetLen()
     dx = mStart.X() - mEnd.X();
     dy = mStart.Y() - mEnd.Y();
 
-    return sqrt( dx * dx + dy * dy );
+    return (ULONG) sqrt( dx * dx + dy * dy );
 }
 
 BOOL Connector::IsStart( ObjectWin* pWin )
