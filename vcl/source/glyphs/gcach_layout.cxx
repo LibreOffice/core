@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:09:49 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
 bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
 {
-    FreetypeServerFont& rFont = reinterpret_cast<FreetypeServerFont&>(rLayout.GetServerFont());
+    FreetypeServerFont& rFont = static_cast<FreetypeServerFont&>(rLayout.GetServerFont());
 
     Point aNewPos( 0, 0 );
     int nOldGlyphId = -1;
@@ -127,13 +127,24 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
     bool bRightToLeft;
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
-        sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+        sal_UCS4 cChar = rArgs.mpStr[ nCharPos ];
+        if( (cChar >= 0xD800) && (cChar <= 0xDFFF) )
+        {
+            if( cChar >= 0xDC00 ) // this part of a surrogate pair was already processed
+                continue;
+            cChar = 0x10000 + ((cChar - 0xD800) << 10)
+                  + (rArgs.mpStr[ nCharPos+1 ] - 0xDC00);
+        }
+
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
         int nGlyphIndex = rFont.GetGlyphIndex( cChar );
         // when glyph fallback is needed update LayoutArgs
-        if( !nGlyphIndex )
+        if( !nGlyphIndex ) {
             rArgs.NeedFallback( nCharPos, bRightToLeft );
+        if( cChar >= 0x10000 ) // handle surrogate pairs
+                rArgs.NeedFallback( nCharPos+1, bRightToLeft );
+    }
 
         // apply pair kerning to prev glyph if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
@@ -519,7 +530,18 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             // apply vertical flags, etc.
             if( nCharPos >= 0 )
             {
-                sal_Unicode aChar = rArgs.mpStr[ nCharPos ];
+                sal_UCS4 aChar = rArgs.mpStr[ nCharPos ];
+#if 0 // TODO: enable if some unicodes>0xFFFF should need glyph flags!=0
+                if( (aChar >= 0xD800) && (aChar <= 0xDFFF) )
+                {
+                    if( cChar >= 0xDC00 ) // this part of a surrogate pair was already processed
+                        continue;
+                    // calculate unicode scalar value of surrogate pair
+                    aChar = 0x10000 + ((aChar - 0xD800) << 10);
+                    sal_UCS4 aLow = rArgs.mpStr[ nCharPos+1 ];
+                    aChar += aLow & 0x03FF;
+                }
+#endif
                 nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
             }
 
