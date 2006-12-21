@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:32:39 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2269,7 +2269,7 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFil
 
 /*****************************************************************************/
 StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
+    ByteString &rMinor, BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
                 : Star (pXmlBuildListObj)
 {
@@ -2343,7 +2343,13 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
 #else
                                     sAddPath.SearchAndReplaceAll( "/", "\\" );
 #endif
+                                     //If Minor has been set add it to path
+                                    if (rMinor.Len()>0) {
+                                        sAddPath += ".";
+                                        sAddPath += rMinor;
+                                    }
                                     String ssAddPath( sAddPath, RTL_TEXTENCODING_ASCII_US );
+
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
