@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:29:29 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,7 @@ protected:
     SystemQueueInfo*                    m_pQueueInfo;
 
     Type                                m_eType;
+    bool                                m_bUseIncludeFeature;
 
     PrinterInfoManager( Type eType = Default );
     virtual ~PrinterInfoManager();
@@ -221,6 +222,8 @@ public:
 
     // for spadmin: whether adding or removing a printer is possible
     virtual bool addOrRemovePossible() const;
+
+    bool getUseIncludeFeature() const { return m_bUseIncludeFeature; }
 };
 
 } // namespace
