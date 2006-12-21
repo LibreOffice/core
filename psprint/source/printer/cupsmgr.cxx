@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:35:31 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:55:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ class CUPSWrapper
     void            (*m_pcupsSetPasswordCB)(const char*(cb)(const char*));
     const char*     (*m_pcupsUser)();
     void            (*m_pcupsSetUser)(const char*);
+    const char*     (*m_pcupsGetOption)(const char*,int,cups_option_t*);
 
     oslGenericFunction loadSymbol( const char* );
 public:
@@ -137,6 +138,9 @@ public:
 
     void cupsSetUser(const char *user)
     { m_pcupsSetUser( user ); }
+
+    const char* cupsGetOption(const char* name, int num_options, cups_option_t* options)
+    { return m_pcupsGetOption( name, num_options, options ); }
 
 };
 }
@@ -209,6 +213,8 @@ CUPSWrapper::CUPSWrapper()
         loadSymbol( "cupsSetPasswordCB" );
     m_pcupsSetUser          = (void(*)(const char*))
         loadSymbol( "cupsSetUser" );
+    m_pcupsGetOption        = (const char*(*)(const char*,int,cups_option_t*))
+        loadSymbol( "cupsGetOption" );
 
     if( ! (
            m_pcupsPrintFile                 &&
@@ -224,7 +230,8 @@ CUPSWrapper::CUPSWrapper()
            m_pcupsSetUser                   &&
            m_pcupsFreeOptions               &&
            m_pppdOpenFile                   &&
-           m_pppdClose
+           m_pppdClose                      &&
+           m_pcupsGetOption
            ) )
     {
         osl_unloadModule( m_pLib );
@@ -472,6 +479,18 @@ void CUPSManager::initialize()
     if( ! (m_nDests && m_pDests ) )
         return;
 
+    // check for CUPS server(?) > 1.2
+    // since there is no API to query, check for options that were
+    // introduced in dests with 1.2
+    // this is needed to check for %%IncludeFeature support
+    // (#i65684#, #i65491#)
+    cups_dest_t* pDest = ((cups_dest_t*)m_pDests);
+    const char* pOpt = m_pCUPSWrapper->cupsGetOption( "printer-info",
+                                                      pDest->num_options,
+                                                      pDest->options );
+    if( pOpt )
+        m_bUseIncludeFeature = true;
+
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;
 
@@ -483,7 +502,7 @@ void CUPSManager::initialize()
     // with the same name as a CUPS printer, overwrite it
     while( nPrinter-- )
     {
-        cups_dest_t* pDest = ((cups_dest_t*)m_pDests)+nPrinter;
+        pDest = ((cups_dest_t*)m_pDests)+nPrinter;
         OUString aPrinterName = OStringToOUString( pDest->name, aEncoding );
         if( pDest->instance && *pDest->instance )
         {
