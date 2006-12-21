@@ -461,3 +461,5 @@ _real@41f0000000000000
 ?DbgGetData@@YAPAUDbgData@@XZ
 ?DbgIsAssert@@YAKXZ
 ?DbgIsErrorOut@@YAKXZ
+?GetVersionMajor@SolSelectVersionDlg@@QAE?AVByteString@@XZ
+?GetVersionMinor@SolSelectVersionDlg@@QAE?AVByteString@@XZ
