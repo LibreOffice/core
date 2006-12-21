@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 15:50:40 $
+#   last change: $Author: ihi $ $Date: 2006-12-21 12:11:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@ PRJNAME = connectivity
 PACKAGE = com$/sun$/star$/sdbcx$/comp$/hsqldb
 TARGET  = sdbc_hsqldb 
 
+SECONDARY_PACKAGE = org$/hsqldb$/lib
+
 # --- Settings ----------------------------------------------------- 
 .INCLUDE: settings.mk  
 
@@ -49,20 +51,28 @@ XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(HSQLDB_JAR)
 .ELSE
 JARFILES+= hsqldb.jar
 .ENDIF
-JAVAFILES =\
+
+PRIMARY_JAVAFILES =\
     NativeInputStreamHelper.java\
     NativeOutputStreamHelper.java\
     NativeStorageAccess.java\
     StorageAccess.java\
     StorageFileAccess.java\
     StorageNativeInputStream.java\
-    StorageNativeOutputStream.java\
+    StorageNativeOutputStream.java
+
+SECONDARY_JAVAFILES =\
     FileSystemRuntimeException.java
+
+JAVAFILES =\
+    $(PRIMARY_JAVAFILES)\
+    $(SECONDARY_JAVAFILES)
     
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES  = $(foreach,i,$(PRIMARY_JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES += $(foreach,i,$(SECONDARY_JAVAFILES) $(CLASSDIR)$/$(SECONDARY_PACKAGE)$/$(i:b).class)
 
 JARCOMPRESS	= TRUE
-JARCLASSDIRS = $(PACKAGE)
+JARCLASSDIRS = $(PACKAGE) $(SECONDARY_PACKAGE)
 JARTARGET	= $(TARGET).jar
 
 # --- Targets ------------------------------------------------------  
