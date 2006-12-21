@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:33:50 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -735,22 +735,31 @@ struct less_ppd_key : public ::std::binary_function<double, double, bool>
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
 
-static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* pValue )
+static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* pValue, bool bUseIncluseFeature )
 {
     if( ! pKey || ! pValue )
         return true;
 
-    String aFeature( RTL_CONSTASCII_USTRINGPARAM( "[{\n%%BeginFeature: *" ) );
-    aFeature += pKey->getKey();
-    aFeature += ' ';
-    aFeature += pValue->m_aOption;
-    aFeature += '\n';
-    aFeature += pValue->m_aValue;
-    aFeature.AppendAscii( "\n%%EndFeature\n} stopped cleartomark\n" );
-    ByteString aPSFeature( aFeature, RTL_TEXTENCODING_ASCII_US );
+    OStringBuffer aFeature(256);
+    aFeature.append( "[{\n" );
+    if( bUseIncluseFeature )
+        aFeature.append( "%%IncludeFeature:" );
+    else
+        aFeature.append( "%%BeginFeature:" );
+    aFeature.append( " *" );
+    aFeature.append( OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US ) );
+    aFeature.append( ' ' );
+    aFeature.append( OUStringToOString( pValue->m_aOption, RTL_TEXTENCODING_ASCII_US ) );
+    if( !bUseIncluseFeature )
+    {
+        aFeature.append( '\n' );
+        aFeature.append( OUStringToOString( pValue->m_aValue, RTL_TEXTENCODING_ASCII_US ) );
+        aFeature.append( "\n%%EndFeature" );
+    }
+    aFeature.append( "\n} stopped cleartomark\n" );
     sal_uInt64 nWritten = 0;
-    return pFile->write( aPSFeature.GetBuffer(), aPSFeature.Len(), nWritten )
-        || nWritten != aPSFeature.Len() ? false : true;
+    return pFile->write( aFeature.getStr(), aFeature.getLength(), nWritten )
+        || nWritten != (sal_uInt64)aFeature.getLength() ? false : true;
 }
 
 bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool bDocumentSetup )
@@ -810,7 +819,7 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
                         if( bHavePS2 )
                             continue;
                     }
-                    bSuccess = writeFeature( pFile, pKey, pValue );
+                    bSuccess = writeFeature( pFile, pKey, pValue, PrinterInfoManager::get().getUseIncludeFeature() );
                 }
             }
         }
@@ -903,7 +912,7 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     {
         // note: this discards patch files not adhering to the "int" scheme
         // as there won't be a value for them
-        writeFeature( pFile, pKey, pKey->getValue( OUString::valueOf( patch_order.front() ) ) );
+        writeFeature( pFile, pKey, pKey->getValue( OUString::valueOf( patch_order.front() ) ), false );
         patch_order.pop_front();
     }
 }
