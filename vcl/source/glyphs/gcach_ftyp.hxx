@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:32:37 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,9 @@ private:
     // cache unicode->glyphid mapping because looking it up is expensive
     // TODO: change to hash_multimap when a use case requires a m:n mapping
     typedef ::std::hash_map<int,int> Int2IntMap;
-    mutable Int2IntMap maChar2Glyph;
-    mutable Int2IntMap maGlyph2Char;
+    mutable Int2IntMap* mpChar2Glyph;
+    mutable Int2IntMap* mpGlyph2Char;
+    void InitHashes() const;
 
     const ExtraKernInfo* mpExtraKernInfo;
 };
@@ -132,16 +133,20 @@ private:
 
 inline int FtFontInfo::GetGlyphIndex( sal_UCS4 cChar ) const
 {
-    Int2IntMap::const_iterator it = maChar2Glyph.find( cChar );
-    if( it == maChar2Glyph.end() )
+    if( !mpChar2Glyph )
+        return -1;
+    Int2IntMap::const_iterator it = mpChar2Glyph->find( cChar );
+    if( it == mpChar2Glyph->end() )
         return -1;
     return it->second;
 }
 
 inline void FtFontInfo::CacheGlyphIndex( sal_UCS4 cChar, int nIndex ) const
 {
-    maChar2Glyph[ cChar ] = nIndex;
-    maGlyph2Char[ nIndex ] = cChar;
+    if( !mpChar2Glyph )
+        InitHashes();
+    (*mpChar2Glyph)[ cChar ] = nIndex;
+    (*mpGlyph2Char)[ nIndex ] = cChar;
 }
 
 // -----------------------------------------------------------------------
