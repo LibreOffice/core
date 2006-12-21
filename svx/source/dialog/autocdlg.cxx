@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:10:27 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -865,7 +865,24 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, EditHdl, PushButton*, EMPTYARG)
         {
             Font aFont(pMapDlg->GetCharFont());
             *pUserData->pFont = aFont;
-            *pUserData->pString = pMapDlg->GetChar();
+            sal_UCS4 aChar = pMapDlg->GetChar();
+            // TODO: replace code below once the String gets an UCS4 constructor
+            sal_Unicode cUTF16[2];
+            xub_StrLen nLen;
+            if( aChar <= 0xFFFF )
+            {
+                cUTF16[0] = static_cast<sal_Unicode>(aChar);
+                nLen = 1;
+            }
+            else
+            {
+                aChar -= 0x10000;
+                cUTF16[0] = static_cast<sal_Unicode>(0xD800+(aChar>>10));
+                cUTF16[1] = static_cast<sal_Unicode>(0xDC00+(aChar&0x3FF));
+                nLen = 2;
+
+            }
+            *pUserData->pString = String( cUTF16, nLen);
         }
         delete pMapDlg;
     }
@@ -2112,22 +2129,26 @@ BOOL OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
     if(cStartQuote != pAutoCorrect->GetStartDoubleQuote())
     {
         bReturn = TRUE;
-        pAutoCorrect->SetStartDoubleQuote(cStartQuote);
+        sal_Unicode cUCS2 = static_cast<sal_Unicode>(cStartQuote); //TODO
+        pAutoCorrect->SetStartDoubleQuote(cUCS2);
     }
     if(cEndQuote != pAutoCorrect->GetEndDoubleQuote())
     {
         bReturn = TRUE;
-        pAutoCorrect->SetEndDoubleQuote(cEndQuote);
+        sal_Unicode cUCS2 = static_cast<sal_Unicode>(cEndQuote); //TODO
+        pAutoCorrect->SetEndDoubleQuote(cUCS2);
     }
     if(cSglStartQuote != pAutoCorrect->GetStartSingleQuote())
     {
         bReturn = TRUE;
-        pAutoCorrect->SetStartSingleQuote(cSglStartQuote);
+        sal_Unicode cUCS2 = static_cast<sal_Unicode>(cSglStartQuote); //TODO
+        pAutoCorrect->SetStartSingleQuote(cUCS2);
     }
     if(cSglEndQuote != pAutoCorrect->GetEndSingleQuote())
     {
         bReturn = TRUE;
-        pAutoCorrect->SetEndSingleQuote(cSglEndQuote);
+        sal_Unicode cUCS2 = static_cast<sal_Unicode>(cSglEndQuote); //TODO
+        pAutoCorrect->SetEndSingleQuote(cUCS2);
     }
 
     if(bReturn )
@@ -2193,7 +2214,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? sStartQuoteDlg  :  sEndQuoteDlg );
-    sal_Unicode cDlg;
+    sal_UCS4 cDlg;
     //The two lines below are added by BerryJia for Bug95846 Time:2002-8-13 15:50
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguage();
@@ -2229,7 +2250,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     pMap->DisableFontSelection();
     if(pMap->Execute() == RET_OK)
     {
-        sal_Unicode cNewChar = pMap->GetChar();
+        sal_UCS4 cNewChar = pMap->GetChar();
         switch( nMode )
         {
             case SGL_START:
@@ -2283,21 +2304,39 @@ IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
 --------------------------------------------------*/
 
 
-String OfaQuoteTabPage::ChangeStringExt_Impl( sal_Unicode cChar )
+String OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 {
     if( cChar )
     {
-        String sExt = cChar;
-        sExt += String::CreateFromAscii(" ( ");
+        // TODO: replace code below once the String gets an UCS4 constructor
+        sal_Unicode cUTF16[2];
+        xub_StrLen nLen;
+        if( cChar <= 0xFFFF )
+        {
+            cUTF16[0] = static_cast<sal_Unicode>(cChar);
+            nLen = 1;
+        }
+        else
+        {
+            cChar -= 0x10000;
+            cUTF16[0] = static_cast<sal_Unicode>(0xD800+(cChar>>10));
+            cUTF16[1] = static_cast<sal_Unicode>(0xDC00+(cChar&0x3FF));
+            nLen = 2;
+        }
+        String sExt( cUTF16, nLen );
+        sExt += String::CreateFromAscii(" ( 0x");
 
         //convert value to hex display
-        String sHex = String::CreateFromAscii("0x0000");
-        for(USHORT i = 0; i < 4; i++)
+        xub_StrLen nHexLen = 4;
+           while( cChar >= (1U << (4*nHexLen)) )
+            ++nHexLen;
+        String sHex = String( nHexLen );
+        for( xub_StrLen i = 0; i < nLen; ++i )
         {
-            sal_Unicode cValue = cChar & 0x0f;
+            sal_Unicode cValue = static_cast<sal_Unicode>(cChar & 0x0f);
             cChar >>= 4;
             sal_Unicode cResult = cValue > 9 ? ('A' + cValue - 10) : ('0' + cValue);
-            sHex.SetChar(sHex.Len() - i - 1, cResult);
+            sHex.SetChar( nHexLen - i - 1, cResult);
         }
         sExt += sHex;
         sExt += String::CreateFromAscii(" )");
