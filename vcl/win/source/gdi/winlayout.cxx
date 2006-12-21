@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:41:41 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:05:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,7 +367,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             {
                 // get the next leftmost character in this run
                 int nCharPos = bIsRTL ? --j : i++;
-                sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+                sal_UCS4 cChar = rArgs.mpStr[ nCharPos ];
 
                 // in the RTL case mirror the character and remember its RTL status
                 if( bIsRTL )
@@ -379,14 +379,15 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 // for vertical writing use vertical alternatives
                 if( bVertical )
                 {
-                    sal_Unicode cVert = ::GetVerticalChar( cChar );
+                    sal_UCS4 cVert = ::GetVerticalChar( cChar );
                     if( cVert )
                         cChar = cVert;
                 }
 
                 // rewrite the original string
                 // update the mappings between original and rewritten string
-                pRewrittenStr[ mnGlyphCount ] = cChar;
+               // TODO: support surrogates in rewritten strings
+                pRewrittenStr[ mnGlyphCount ] = static_cast<sal_Unicode>(cChar);
                 mpGlyphs2Chars[ mnGlyphCount ] = nCharPos;
                 mpChars2Glyphs[ nCharPos - rArgs.mnMinCharPos ] = mnGlyphCount;
                 ++mnGlyphCount;
