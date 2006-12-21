@@ -311,8 +311,8 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mnSynthetic( nSynthetic ),
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
-    maChar2Glyph( 0 ),
-    maGlyph2Char( 0 ),
+    mpChar2Glyph( NULL ),
+    mpGlyph2Char( NULL ),
     mpExtraKernInfo( pExtraKernInfo )
 {
     // prefer font with low ID
@@ -329,6 +329,15 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 FtFontInfo::~FtFontInfo()
 {
     delete mpExtraKernInfo;
+    delete mpChar2Glyph;
+    delete mpGlyph2Char;
+}
+
+void FtFontInfo::InitHashes() const
+{
+    // TODO: avoid pointers when empty stl::hash_* objects become cheap
+    mpChar2Glyph = new Int2IntMap();
+    mpGlyph2Char = new Int2IntMap();
 }
 
 // -----------------------------------------------------------------------
@@ -390,8 +399,8 @@ int FtFontInfo::GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const
 {
     if( !mpExtraKernInfo )
         return 0;
-    sal_Unicode cLeftChar   = maGlyph2Char[ nLeftGlyph ];
-    sal_Unicode cRightChar  = maGlyph2Char[ nRightGlyph ];
+    sal_Unicode cLeftChar   = (*mpGlyph2Char)[ nLeftGlyph ];
+    sal_Unicode cRightChar  = (*mpGlyph2Char)[ nRightGlyph ];
     return mpExtraKernInfo->GetUnscaledKernValue( cLeftChar, cRightChar );
 }
 
@@ -1118,8 +1127,10 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
         sal_uInt32 nCvtInfo;
 
         // assume that modern UCS4 fonts have unicode CMAPs
+    // => no encoding remapping to unicode is needed
         if( aChar > 0xFFFF )
             return 0;
+
         sal_Unicode aUCS2Char = static_cast<sal_Unicode>(aChar);
         rtl_UnicodeToTextContext aContext = rtl_createUnicodeToTextContext( maRecodeConverter );
         int nChars = rtl_convertUnicodeToText( maRecodeConverter, aContext,
