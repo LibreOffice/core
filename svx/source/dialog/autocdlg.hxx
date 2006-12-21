@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:04:57 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 11:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@
 #endif
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
+#endif
+#ifndef _SV_METRIC_HXX //autogen
+#include <vcl/metric.hxx>
 #endif
 #ifndef _SVX_LANGBOX_HXX
 #include "langbox.hxx"
@@ -393,16 +396,16 @@ private:
     String      sStandard;
 
 
-    sal_Unicode cSglStartQuote;
-    sal_Unicode cSglEndQuote;
+    sal_UCS4    cSglStartQuote;
+    sal_UCS4    cSglEndQuote;
 
-    sal_Unicode cStartQuote;
-    sal_Unicode cEndQuote;
+    sal_UCS4    cStartQuote;
+    sal_UCS4    cEndQuote;
 
     DECL_LINK( QuoteHdl, PushButton* );
     DECL_LINK( StdQuoteHdl, PushButton* );
 
-    String              ChangeStringExt_Impl( sal_Unicode cChar );
+    String              ChangeStringExt_Impl( sal_UCS4 );
 
                         OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet );
 public:
