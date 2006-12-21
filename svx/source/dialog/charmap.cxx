@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:07:03 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,70 +98,6 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
-//CHINA001 // class SvxShowText =====================================================
-//CHINA001
-//CHINA001 class SvxShowText : public Control
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 SvxShowText( Window* pParent,
-//CHINA001 const ResId& rResId,
-//CHINA001 BOOL bCenter = FALSE );
-//CHINA001 ~SvxShowText();
-//CHINA001
-//CHINA001 void            SetFont( const Font& rFont );
-//CHINA001 void            SetText( const String& rText );
-//CHINA001
-//CHINA001 protected:
-//CHINA001 virtual void    Paint( const Rectangle& );
-//CHINA001
-//CHINA001 private:
-//CHINA001 long            mnY;
-//CHINA001 BOOL            mbCenter;
-//CHINA001
-//CHINA001 };
-
-// class SvxCharMapData ==================================================
-
-//CHINA001 class SvxCharMapData
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 SvxCharMapData( class SfxModalDialog* pDialog, BOOL bOne_ );
-//CHINA001
-//CHINA001 void            SetCharFont( const Font& rFont );
-//CHINA001
-//CHINA001 private:
-//CHINA001 friend class SvxCharacterMap;
-//CHINA001 SfxModalDialog* mpDialog;
-//CHINA001
-//CHINA001 SvxShowCharSet  aShowSet;
-//CHINA001 //    Edit            aShowText;
-//CHINA001 SvxShowText     aShowText;
-//CHINA001 OKButton        aOKBtn;
-//CHINA001 CancelButton    aCancelBtn;
-//CHINA001 HelpButton      aHelpBtn;
-//CHINA001 PushButton      aDeleteBtn;
-//CHINA001 FixedText       aFontText;
-//CHINA001 ListBox         aFontLB;
-//CHINA001 FixedText       aSubsetText;
-//CHINA001 ListBox         aSubsetLB;
-//CHINA001 FixedText       aSymbolText;
-//CHINA001 SvxShowText     aShowChar;
-//CHINA001 FixedText       aCharCodeText;
-//CHINA001
-//CHINA001 Font            aFont;
-//CHINA001 BOOL            bOne;
-//CHINA001 const SubsetMap* pSubsetMap;
-//CHINA001
-//CHINA001 DECL_LINK( OKHdl, OKButton* );
-//CHINA001 DECL_LINK( FontSelectHdl, ListBox* );
-//CHINA001 DECL_LINK( SubsetSelectHdl, ListBox* );
-//CHINA001 DECL_LINK( CharDoubleClickHdl, Control* pControl );
-//CHINA001 DECL_LINK( CharSelectHdl, Control* pControl );
-//CHINA001 DECL_LINK( CharHighlightHdl, Control* pControl );
-//CHINA001 DECL_LINK( CharPreSelectHdl, Control* pControl );
-//CHINA001 DECL_LINK( DeleteHdl, PushButton* pBtn );
-//CHINA001 };
-
 
 // -----------------------------------------------------------------------
 sal_uInt32& getSelectedChar()
@@ -401,8 +337,8 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             break;
         default:
             {
-                sal_Unicode cChar = rKEvt.GetCharCode();
-                sal_uInt32 cNext = maFontCharMap.GetNextChar( cChar - 1 );
+                sal_UCS4 cChar = rKEvt.GetCharCode();
+                sal_UCS4 cNext = maFontCharMap.GetNextChar( cChar - 1 );
                 tmpSelected = maFontCharMap.GetIndexFromChar( cNext );
                 if( tmpSelected < 0 || (cChar != cNext) )
                 {
@@ -572,11 +508,11 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode SvxShowCharSet::GetSelectCharacter() const
+sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 {
     if( nSelectedIndex >= 0 )
         getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
-    return sal::static_int_cast< sal_Unicode >(getSelectedChar());
+    return getSelectedChar();
 }
 
 // -----------------------------------------------------------------------
@@ -713,10 +649,10 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 
 // -----------------------------------------------------------------------
 
-void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
+void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, BOOL bFocus )
 {
     // get next available char of current font
-    sal_uInt32 cNext = maFontCharMap.GetNextChar( cNew - 1 );
+    sal_UCS4 cNext = maFontCharMap.GetNextChar( cNew - 1 );
 
     int nMapIndex = maFontCharMap.GetIndexFromChar( cNext );
     SelectIndex( nMapIndex, bFocus );
@@ -900,51 +836,7 @@ void SvxShowText::SetText( const String& rText )
 SvxShowText::~SvxShowText()
 {}
 
-//CHINA001 // class SvxCharacterMap =================================================
-//CHINA001
-//CHINA001 SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
-//CHINA001 SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_CHARMAP ) ),
-//CHINA001 mpCharMapData( new SvxCharMapData( this, bOne ) )
-//CHINA001 {
-//CHINA001 FreeResource();
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 SvxCharacterMap::~SvxCharacterMap()
-//CHINA001 {
-//CHINA001 delete mpCharMapData;
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 const Font& SvxCharacterMap::GetCharFont() const
-//CHINA001 {
-//CHINA001 return mpCharMapData->aFont;
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 void SvxCharacterMap::SetChar( sal_Unicode c )
-//CHINA001 {
-//CHINA001 mpCharMapData->aShowSet.SelectCharacter( c );
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 sal_Unicode SvxCharacterMap::GetChar() const
-//CHINA001 {
-//CHINA001 return mpCharMapData->aShowSet.GetSelectCharacter();
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 String SvxCharacterMap::GetCharacters() const
-//CHINA001 {
-//CHINA001 return mpCharMapData->aShowText.GetText();
-//CHINA001 }
-//CHINA001
-// =======================================================================
+// class SvxCharacterMap =================================================
 
 SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
 :   mpDialog( pDialog ),
@@ -1035,14 +927,6 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
     aShowText.SetPosPixel( Point( nLeftEdge+4, aShowText.GetPosPixel().Y() ) );
 }
 
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 void SvxCharacterMap::DisableFontSelection()
-//CHINA001 {
-//CHINA001 mpCharMapData->aFontText.Disable();
-//CHINA001 mpCharMapData->aFontLB.Disable();
-//CHINA001 }
-//CHINA001
 // -----------------------------------------------------------------------
 
 void SvxCharMapData::SetCharFont( const Font& rFont )
@@ -1064,21 +948,24 @@ void SvxCharMapData::SetCharFont( const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-//CHINA001 void SvxCharacterMap::SetCharFont( const Font& rFont )
-//CHINA001 {
-//CHINA001 mpCharMapData->SetCharFont( rFont );
-//CHINA001 }
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK( SvxCharMapData, OKHdl, OKButton *, EMPTYARG )
 {
     String aStr = aShowText.GetText();
 
     if ( !aStr.Len() )
     {
-        if ( aShowSet.GetSelectCharacter() > 0 )
-            aStr = aShowSet.GetSelectCharacter();
+        sal_UCS4 cChar = aShowSet.GetSelectCharacter();
+        if( cChar >= 0x10000 )
+        {
+            // TODO: replace once there is a String(sal_UCS4) constructor
+            sal_Unicode cU16[2];
+            cChar -= 0x10000;
+            cU16[0] = static_cast<sal_Unicode>(0xD800 + (cChar >> 10));
+            cU16[1] = static_cast<sal_Unicode>(0xDC00 + (cChar & 0x3FF));
+            aStr = String( cU16, 2);
+        }
+        else if( cChar > 0 )
+            aStr = static_cast<sal_Unicode>(cChar);
         aShowText.SetText( aStr );
     }
     mpDialog->EndDialog( TRUE );
@@ -1150,7 +1037,7 @@ IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
     const Subset* pSubset = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
     if( pSubset )
     {
-        sal_Unicode cFirst = pSubset->GetRangeMin();
+        sal_UCS4 cFirst = pSubset->GetRangeMin();
         aShowSet.SelectCharacter( cFirst );
     }
     aSubsetLB.SelectEntryPos( nPos );
@@ -1177,8 +1064,18 @@ IMPL_LINK( SvxCharMapData, CharSelectHdl, Control *, EMPTYARG )
             Sound::Beep( SOUND_WARNING );
         else
         {
-            if ( aShowSet.GetSelectCharacter() > 0 )
-                aText += aShowSet.GetSelectCharacter();
+            sal_UCS4 cChar = aShowSet.GetSelectCharacter();
+            if( cChar >= 0x10000 )
+            {
+                // TODO: replace once there is a String(sal_UCS4) constructor
+                sal_Unicode cU16[2];
+                cChar -= 0x10000;
+                cU16[0] = static_cast<sal_Unicode>(0xD800 + (cChar >> 10));
+                cU16[1] = static_cast<sal_Unicode>(0xDC00 + (cChar & 0x3FF));
+                aText += String( cU16, 2 );
+            }
+            else if( cChar > 0 )
+                aText += static_cast<sal_Unicode>(cChar);
             aShowText.SetText( aText );
         }
 
@@ -1191,38 +1088,47 @@ IMPL_LINK( SvxCharMapData, CharSelectHdl, Control *, EMPTYARG )
 
 IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
 {
-    String aTemp;
-    sal_Unicode c = aShowSet.GetSelectCharacter();
-    sal_Bool bSelect = ( c > 0 );
+    String aText;
+    sal_UCS4 cChar = aShowSet.GetSelectCharacter();
+    sal_Bool bSelect = (cChar > 0);
+
+    // show char sample
     if ( bSelect )
     {
-        aTemp = c;
+        if( cChar >= 0x10000 )
+        {
+            // TODO: replace once there is a String(sal_UCS4) constructor
+            sal_Unicode cU16[2];
+            unsigned n = cChar - 0x10000;
+            cU16[0] = static_cast<sal_Unicode>(0xD800 + (n >> 10));
+            cU16[1] = static_cast<sal_Unicode>(0xDC00 + (n & 0x3FF));
+            aText = String( cU16, 2);
+        }
+        else if( cChar > 0 )
+            aText = static_cast<sal_Unicode>(cChar);
+
         const Subset* pSubset = NULL;
         if( pSubsetMap )
-            pSubset = pSubsetMap->GetSubsetByUnicode( c );
+            pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
             aSubsetLB.SelectEntry( pSubset->GetName() );
         else
             aSubsetLB.SetNoSelection();
     }
-    aShowChar.SetText( aTemp );
+    aShowChar.SetText( aText );
     aShowChar.Update();
+
+    // show char code
     if ( bSelect )
     {
-        // no sprintf or hex-formatter around :-(
-        char buf[16] = "U+0000";
-        sal_Unicode c_Shifted = c;
-        for( int i = 0; i < 4; ++i )
-        {
-            char h = sal::static_int_cast< char >(c_Shifted & 0x0F);
-            buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
-            c_Shifted >>= 4;
-        }
-        if( c < 256 )
-            snprintf( buf+6, 10, " (%d)", c );
-        aTemp = String::CreateFromAscii( buf );
+        char aBuf[32];
+        snprintf( aBuf, sizeof(aBuf), "U+%04X", static_cast<unsigned>(cChar) );
+        if( cChar < 0x0100 )
+            snprintf( aBuf+6, sizeof(aBuf)-6, " (%u)", static_cast<unsigned>(cChar) );
+        aText = String::CreateFromAscii( aBuf );
     }
-    aCharCodeText.SetText( aTemp );
+    aCharCodeText.SetText( aText );
+
     return 0;
 }
 
@@ -1233,7 +1139,7 @@ IMPL_LINK( SvxCharMapData, CharPreSelectHdl, Control *, EMPTYARG )
     // adjust subset selection
     if( pSubsetMap )
     {
-        sal_Unicode cChar = aShowSet.GetSelectCharacter();
+        sal_UCS4 cChar = aShowSet.GetSelectCharacter();
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
             aSubsetLB.SelectEntry( pSubset->GetName() );
@@ -1274,7 +1180,7 @@ const Subset* SubsetMap::GetNextSubset( bool bFirst ) const
     return s;
 }
 
-const Subset* SubsetMap::GetSubsetByUnicode( sal_Unicode cChar ) const
+const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
 {
     // TODO: is it worth to avoid a linear search?
     for( const Subset* s = GetNextSubset( true ); s; s = GetNextSubset( false ) )
@@ -1283,7 +1189,7 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_Unicode cChar ) const
     return NULL;
 }
 
-inline Subset::Subset( sal_Unicode nMin, sal_Unicode nMax, int resId)
+inline Subset::Subset( sal_UCS4 nMin, sal_UCS4 nMax, int resId)
 :   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName( ResId(resId) )
 {}
 
