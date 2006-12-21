@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:40:11 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,7 +711,7 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     for( nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
-        sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+        sal_UCS4 cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
         int nGlyphIndex = cChar | GF_ISCHAR;
