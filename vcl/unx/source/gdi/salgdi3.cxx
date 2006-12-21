@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:39:44 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 12:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -770,7 +770,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     XDrawPoint( pDisplay, rEntry.m_aPixmap, tmpGC, 0, 0 );
 
     XRenderColor aRenderColor = { 0, 0, 0, 0xffff };
-    rRenderPeer.FillRectangle( PictOpAdd, rEntry.m_aPixmap, &aRenderColor, 0, 0, 1, 1 );
+    rRenderPeer.FillRectangle( PictOpAdd, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     XFreeGC( pDisplay, tmpGC );
 
