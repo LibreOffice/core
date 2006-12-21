@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shortcut_ooo.scp,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:18:23 $
+ *  last change: $Author: ihi $ $Date: 2006-12-21 14:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,60 +169,32 @@ End
 #ifdef UNX
 #ifndef SYSTEM_ICU
 
-Shortcut gid_Shortcut_Lib_Icudata_0
-    FileID = gid_File_Lib_Icudata;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libicudata,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
-
-Shortcut gid_Shortcut_Lib_Icudata_1
+Shortcut gid_Shortcut_Lib_Icudata
     FileID = gid_File_Lib_Icudata;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
 End
 
-Shortcut gid_Shortcut_Lib_Icui18n_0
-    FileID = gid_File_Lib_Icui18n;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libicui18n,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
-
-Shortcut gid_Shortcut_Lib_Icui18n_1
+Shortcut gid_Shortcut_Lib_Icui18n
     FileID = gid_File_Lib_Icui18n;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
 End
 
-Shortcut gid_Shortcut_Lib_Icule_0
-    FileID = gid_File_Lib_Icule;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libicule,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
-
-Shortcut gid_Shortcut_Lib_Icule_1
+Shortcut gid_Shortcut_Lib_Icule
     FileID = gid_File_Lib_Icule;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
 End
 
-Shortcut gid_Shortcut_Lib_Icuuc_0
-    FileID = gid_File_Lib_Icuuc;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libicuuc,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
-
-Shortcut gid_Shortcut_Lib_Icuuc_1
+Shortcut gid_Shortcut_Lib_Icuuc
     FileID = gid_File_Lib_Icuuc;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 #endif
