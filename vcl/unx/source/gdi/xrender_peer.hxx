@@ -72,9 +72,9 @@ class XRenderPeer
 {
 public:
     static XRenderPeer& GetInstance();
-    int         GetVersion() const;
+    int                 GetVersion() const;
 
-    bool                InitRenderText( int nMaxDepth );
+    sal_uInt32          InitRenderText( int nMaxDepth );
 
 protected:
                         XRenderPeer();
@@ -128,7 +128,8 @@ private:
     void        (*mpXRenderFreeGlyphs)(Display*,GlyphSet,Glyph*,int);
     void        (*mpXRenderCompositeString32)(Display*,int,Picture,Picture,
                     XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int);
-    void        (*mpXRenderFillRectangle)(Display*,int,Picture,const XRenderColor*,int,int,unsigned int,unsigned int);
+    void        (*mpXRenderFillRectangle)(Display*,int,Picture,
+                    const XRenderColor*,int,int,unsigned int,unsigned int);
 };
 
 //=====================================================================
@@ -148,7 +149,6 @@ private: // prevent copy and assignmet
            ScopedPic( const ScopedPic& );
     void   operator=( const ScopedPic& );
 };
-
 
 //=====================================================================
 
@@ -316,4 +316,3 @@ inline Picture& ScopedPic::Get()
 //=====================================================================
 
 #endif // _SV_XRENDER_PEER_HXX
-

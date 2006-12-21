@@ -219,24 +219,26 @@ void XRenderPeer::InitRenderLib()
 
 // ---------------------------------------------------------------------------
 
-bool XRenderPeer::InitRenderText( int nMaxDepth )
+// return mask of screens capable of XRENDER text
+sal_uInt32 XRenderPeer::InitRenderText( int nMaxDepth )
 {
     if( mnRenderVersion < 0x01 )
-        return false;
+        return 0;
 
     // #93033# disable XRENDER for old RENDER versions if XINERAMA is present
     int nDummy;
     if( XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
         if( mnRenderVersion < 0x02 )
-            return false;
+            return 0;
 
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
     mpGlyphFormat = FindPictureFormat( PictFormatAlphaMask|PictFormatDepth, aPictFormat );
     if( !mpGlyphFormat )
-        return false;
+        return 0;
 
     // and the visual must be supported too on at least one screen
+    sal_uInt32 nRetMask = 0;
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     const int nScreenCount = pSalDisp->GetScreenCount();
     XRenderPictFormat* pVisualFormat = NULL;
@@ -245,18 +247,15 @@ bool XRenderPeer::InitRenderText( int nMaxDepth )
         Visual* pXVisual = pSalDisp->GetVisual( nScreen ).GetVisual();
         pVisualFormat = FindVisualFormat( pXVisual );
         if( pVisualFormat != NULL )
-            break;
+            nRetMask |= 1U << nScreen;
     }
-    if( !pVisualFormat )
-        return false;
 
     // #97763# disable XRENDER on <15bit displays for XFree<=4.2.0
     if( mnRenderVersion <= 0x02 )
         if( nMaxDepth < 15 )
-            return false;
+            return 0;
 
-    return true;
+    return nRetMask;
 }
 
 // ---------------------------------------------------------------------------
-
