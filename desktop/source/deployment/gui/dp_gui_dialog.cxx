@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 17:58:35 $
+ *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,7 +509,7 @@ void DialogImpl::installExtensions()
     OSL_ASSERT( xPackageManager.is() );
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv( context, this, m_strAddingPackages, true) );
+        new ProgressCommandEnv(m_xComponentContext, this, m_strAddingPackages, true) );
     currentCmdEnv->showProgress( m_arExtensions.getLength() );
     Reference<task::XAbortChannel> xAbortChannel(
         xPackageManager->createAbortChannel() );

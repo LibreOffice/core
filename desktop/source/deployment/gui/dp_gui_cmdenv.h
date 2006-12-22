@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 17:57:51 $
+ *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ class ProgressCommandEnv
        bool m_bAskWhenInstalling;
     sal_Int32 m_currentInnerProgress;
     sal_Int32 m_currentProgressSection;
-    sal_Int32 m_progressSections
+    sal_Int32 m_progressSections;
     void updateProgress( ::rtl::OUString const & text = ::rtl::OUString() );
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel> m_xAbortChannel;
     bool m_aborted;

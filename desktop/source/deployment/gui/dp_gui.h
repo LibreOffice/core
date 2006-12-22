@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 17:47:57 $
+ *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ struct DialogImpl :
     void checkUpdates(bool selected);
 
     ::rtl::Reference<ModifiableContext> m_modifiableContext;
-    const css::uno::Sequence< ::rtl::OUString > m_arExtensions;
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString > m_arExtensions;
     oslThread m_installThread;
     bool m_bAutoInstallFinished;
 
@@ -279,7 +279,7 @@ struct DialogImpl :
     static ::rtl::Reference<DialogImpl> get(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xContext,
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> const & xParent = 0,
-        css::uno::Sequence< ::rtl::OUString > const & arExtensions = 0,
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > const & arExtensions = 0,
         ::rtl::OUString const & view = ::rtl::OUString() );
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )

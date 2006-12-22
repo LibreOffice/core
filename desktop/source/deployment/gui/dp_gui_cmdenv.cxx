@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 17:57:01 $
+ *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,6 @@ void ProgressCommandEnv::handle(
         {
             vos::OGuard guard(Application::GetSolarMutex());
             InfoBox box(activeDialog(), ResId(RID_QUERYBOX_INSTALL_EXTENSION, DeploymentGuiResMgr::get()));
-            box.SetText(m_mainDialog->GetText());
             String s(box.GetMessText());
             s.SearchAndReplaceAllAscii("%NAME", instExc.New->getDisplayName());
             box.SetMessText(s);
@@ -425,6 +424,7 @@ void ProgressCommandEnv::handle(
             // late init:
             Sequence<Any> handlerArgs( 1 );
             handlerArgs[ 0 ] <<= beans::PropertyValue(
+
                 OUSTR("Context"), -1, Any(m_title),
                 beans::PropertyState_DIRECT_VALUE );
              m_xHandler.set( m_xContext->getServiceManager()
