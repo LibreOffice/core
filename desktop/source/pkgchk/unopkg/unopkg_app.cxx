@@ -1,12 +1,13 @@
 /*************************************************************************
  *
+ *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:15:59 $
+ *  last change: $Author: jl $ $Date: 2006-12-22 09:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +151,6 @@ void DialogClosedListenerImpl::dialogClosed(
 //##############################################################################
 SAL_IMPLEMENT_MAIN()
 {
-    (void) argv;
-    (void) argc;
     DisposeGuard disposeGuard;
     rtl_TextEncoding textenc = osl_getThreadTextEncoding();
 

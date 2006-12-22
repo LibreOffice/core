@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 11:45:40 $
+#   last change: $Author: jl $ $Date: 2006-12-22 09:03:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ LIBTARGET=NO
 
 PRJINC += ..$/..$/deployment
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
 .IF "$(SYSTEM_DB)" == "YES"
 CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
@@ -62,9 +63,8 @@ MYAPP1OBJS = \
 APP1NOSAL = TRUE        
 APP1OBJS = \
         $(MYAPP1OBJS) \
-        $(OBJ)$/lockfile.obj \
-        $(OBJ)$/dp_version.obj \
-        $(SLO)$/dp_misc.obj
+        $(OBJ)$/lockfile.obj
+
 
 APP1STDLIBS = \
         $(SALLIB) \
@@ -74,7 +74,8 @@ APP1STDLIBS = \
         $(UCBHELPERLIB) \
         $(UNOTOOLSLIB) \
         $(TOOLSLIB) \
-        $(VCLLIB)
+        $(VCLLIB) \
+        $(DEPLOYMENTMISCLIB)
 
 APP1TARGET = so$/unopkg
 
@@ -95,9 +96,8 @@ APP2LINKRES=$(MISC)$/$(TARGET)1.res
 .ENDIF # WNT
 
 DEPOBJFILES = $(MYAPP1OBJS) \
-        $(OBJ)$/lockfile.obj \
-        $(OBJ)$/dp_version.obj \
-        $(SLO)$/dp_misc.obj
+        $(OBJ)$/lockfile.obj
+
 
 .IF "$(debug)" != ""
 

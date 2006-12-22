@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_cmdenv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:15:49 $
+ *  last change: $Author: jl $ $Date: 2006-12-22 09:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,7 @@ public:
         Reference<XComponentContext> const & xComponentContext,
         OUString const & log_file,
         bool option_force_overwrite,
-        bool option_verbose,
-        bool option_shared);
+        bool option_verbose);
 
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
@@ -138,8 +137,7 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & log_file,
     bool option_force_overwrite,
-    bool option_verbose,
-    bool option_shared)
+    bool option_verbose)
     : m_logLevel(0),
       m_option_force_overwrite( option_force_overwrite ),
       m_option_verbose( option_verbose ),
