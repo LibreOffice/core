@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 12:53:56 $
+ *  last change: $Author: ihi $ $Date: 2006-12-22 14:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1817,7 +1817,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             bParaRTL = TRUE;
 
         if( !pTmpSet )
-            pTmpSet = pNd->GetpSwAttrSet();
+            pTmpSet = (SfxItemSet*)&pNd->GetSwAttrSet();
 
         if( pNd->IsNumbered())
         {
