@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-21 12:11:15 $
+#   last change: $Author: rt $ $Date: 2006-12-22 10:40:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ JAVAFILES =\
     $(SECONDARY_JAVAFILES)
     
 JAVACLASSFILES  = $(foreach,i,$(PRIMARY_JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-JAVACLASSFILES += $(foreach,i,$(SECONDARY_JAVAFILES) $(CLASSDIR)$/$(SECONDARY_PACKAGE)$/$(i:b).class)
+JAVACLASSFILES += $(foreach,i,$(SECONDARY_JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARCOMPRESS	= TRUE
 JARCLASSDIRS = $(PACKAGE) $(SECONDARY_PACKAGE)
