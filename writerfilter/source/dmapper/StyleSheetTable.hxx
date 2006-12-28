@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:25 $
+ *  last change: $Author: os $ $Date: 2006-12-28 09:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@ class WRITERFILTER_DLLPRIVATE StyleSheetTable :
         public doctok::Table
 {
     StyleSheetTable_Impl   *m_pImpl;
+    ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ );
 
 public:
     StyleSheetTable( DomainMapper& rDMapper );

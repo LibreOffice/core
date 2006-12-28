@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:25 $
+ *  last change: $Author: os $ $Date: 2006-12-28 09:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,29 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#include <hash_map>
 
 using namespace ::com::sun::star;
 namespace dmapper
 {
 using namespace writerfilter;
+
+struct OUStringHash
+{
+    unsigned long operator()(const ::rtl::OUString& rString) const
+    {
+        return static_cast<unsigned long>(rString.hashCode());
+    }
+};
+
+struct OUStringEq
+{
+    bool operator() (const ::rtl::OUString& rA, const ::rtl::OUString& rB) const
+    {
+        return rA == rB;
+    }
+};
+typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, OUStringHash, OUStringEq> StringPairMap_t;
 
 /*-- 21.06.2006 07:34:44---------------------------------------------------
 
@@ -93,6 +111,7 @@ struct StyleSheetTable_Impl
     DomainMapper&                           m_rDMapper;
     std::vector< StyleSheetEntry >          m_aStyleSheetEntries;
     StyleSheetEntry*                        m_pCurrentEntry;
+    StringPairMap_t                         m_aStyleNameMap;
     StyleSheetTable_Impl(DomainMapper& rDMapper) :
             m_rDMapper( rDMapper ),
             m_pCurrentEntry(0){}
@@ -672,8 +691,9 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                 bool bInsert = false;
                 uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
                 uno::Reference< style::XStyle > xStyle;
-                if(xStyles->hasByName( aIt->sStyleName ))
-                    xStyles->getByName( aIt->sStyleName ) >>= xStyle;
+                ::rtl::OUString sConvertedStyleName = ConvertStyleName( aIt->sStyleName/*, bParaStyle*/ );
+                if(xStyles->hasByName( sConvertedStyleName ))
+                    xStyles->getByName( sConvertedStyleName ) >>= xStyle;
                 else
                 {
                     bInsert = true;
@@ -691,7 +711,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     for( ; aBaseStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aBaseStyleIt )
                         if(aBaseStyleIt->nStyleIdentifierD == aIt->nBaseStyleIdentifier)
                         {
-                            xStyle->setParentStyle(aBaseStyleIt->sStyleName);
+                            xStyle->setParentStyle(ConvertStyleName( aBaseStyleIt->sStyleName/*, bParaStyle*/ ));
                             break;
                         }
                 }
@@ -729,7 +749,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                         for( ; aNextStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aNextStyleIt )
                             if(aNextStyleIt->nStyleIdentifierD == aIt->nNextStyleIdentifier)
                             {
-                                aNew.Value = uno::makeAny(aNextStyleIt->sStyleName);
+                                aNew.Value = uno::makeAny(ConvertStyleName( aNextStyleIt->sStyleName/*, bParaStyle*/ ));
                                 break;
                             }
                         aSortedPropVals.Insert( aNew );
@@ -743,7 +763,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                 }
                 if(bInsert)
-                    xStyles->insertByName( aIt->sStyleName, uno::makeAny( xStyle) );
+                    xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
 
 
 /*
@@ -807,6 +827,121 @@ const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyl
         }
     }
     return pRet;
+}
+/*-- 21.12.2006 15:58:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString StyleSheetTable::ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ )
+{
+    ::rtl::OUString sRet;
+    if(!m_pImpl->m_aStyleNameMap.size())
+    {
+        static const sal_Char *aStyleNamePairs[] =
+        {
+          "Normal",                     "Standard",               //0
+          "Heading 1",                  "Heading 1",              //1
+          "Heading 2",                  "Heading 2",              //2
+          "Heading 3",                  "Heading 3",              //3
+          "Heading 4",                  "Heading 4",              //4
+          "Heading 5",                  "Heading 5",              //5
+          "Heading 6",                  "Heading 6",              //6
+          "Heading 7",                  "Heading 7",              //7
+          "Heading 8",                  "Heading 8",              //8
+          "Heading 9",                  "Heading 9",              //9
+           "Index 1",                   "Index 1",               //10
+           "Index 2",                   "Index 2",               //11
+           "Index 3",                   "Index 3",               //12
+           "Index 4",                   0,                       //13
+           "Index 5",                   0,                       //14
+           "Index 6",                   0,                       //15
+           "Index 7",                   0,                       //16
+           "Index 8",                   0,                       //17
+           "Index 9",                   0,                       //18
+           "TOC 1",                     "Contents 1",            //19
+           "TOC 2",                     "Contents 2",            //20
+           "TOC 3",                     "Contents 3",            //21
+           "TOC 4",                     "Contents 4",            //22
+           "TOC 5",                     "Contents 5",            //23
+           "TOC 6",                     "Contents 6",            //24
+           "TOC 7",                     "Contents 7",            //25
+           "TOC 8",                     "Contents 8",            //26
+           "TOC 9",                     "Contents 9",            //27
+           "Normal Indent",             0,                        //28
+           "Footnote Text",             "Footnote",              //29
+           "Annotation Text",           0,                       //30
+           "Header",                    "Header"                 //31
+           "Footer",                    "Footer"                 //32
+           "Index Heading",             "Index Heading"          //33
+           "Caption",                   0,                       //34
+           "Table of Figures",          0,                       //35
+           "Envelope Address",          "Addressee",             //36
+           "Envelope Return",           "Sender",                //37
+           "Footnote Reference",        "Footnote anchor",      //38
+           "Annotation Reference",      0,                    //39
+           "Line Number",               "Line numbering",         //40
+           "Page Number",               "Page Number",            //41
+           "Endnote Reference",         "Endnote anchor"         //42
+           "Endnote Text",              "Endnote Symbol",        //43
+           "Table of Authorities",      0,                    //44
+           "Macro Text",                0,                      //45
+           "TOA Heading",               0,                      //46
+           "List",                      "List",                   //47
+           "List 2",                    0,                        //48
+           "List 3",                    0,                        //49
+           "List 4",                    0,                        //50
+           "List 5",                    0,                        //51
+           "List Bullet",               0,                        //52
+           "List Bullet 2",             0,                        //53
+           "List Bullet 3",             0,                        //54
+           "List Bullet 4",             0,                        //55
+           "List Bullet 5",             0,                        //56
+           "List Number",               0,                        //57
+           "List Number 2",             0,                        //58
+           "List Number 3",             0,                        //59
+           "List Number 4",             0,                        //60
+           "List Number 5",             0,                        //61
+           "Title",                     "Title",                  //62
+           "Closing",                   0,                        //63
+           "Signature",                 "Signature",      //64
+           "Default Paragraph Font",    0,                //65
+           "Body Text",                 "Text body",      //66
+           "Body Text Indent",          "Text body indent",//67
+           "List Continue",             0,                //68
+           "List Continue 2",           0,                //69
+           "List Continue 3",           0,                //70
+           "List Continue 4",           0,                //71
+           "List Continue 5",           0,                //72
+           "Message Header",            0,                //73
+           "Subtitle",                  "Subtitle",       //74
+           "Salutation",                0,                //75
+           "Date",                      0,                //76
+           "Body Text First Indent",    "Body Text Indent",//77
+           "Body Text First Indent 2",  0,                //78
+           "Note Heading",              0,                //79
+           "Body Text 2",               0,                //80
+           "Body Text 3",               0,                //81
+           "Body Text Indent 2",        0,                //82
+           "Body Text Indent 3",        0,                //83
+           "Block Text",                0,                //84
+           "Hyperlink",                 "Internet link",   //85
+           "Followed Hyperlink",        "Visited Internet Link//86",
+           "Strong",                    "Strong Emphasis",    //87
+           "Emphasis",                  "Emphasis",           //88
+           "Document Map",              0,                //89
+           "Plain Text",                0                 //90
+        };
+        for( sal_Int32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
+        {
+            //::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
+                m_pImpl->m_aStyleNameMap.insert( StringPairMap_t::value_type(
+                    ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * nPair]),
+                    ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]) ));
+        }
+    }
+    StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( rWWName );
+    if(aIt != m_pImpl->m_aStyleNameMap.end())
+        sRet = aIt->second;
+    return sRet;
 }
 
 }//namespace dmapper
