@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
+ *  last change: $Author: os $ $Date: 2006-12-28 09:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,8 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     static sal_Int32 nNumber = 0;
     nSectionNumber = nNumber++;
     memset(&m_pBorderLines, 0x00, sizeof(m_pBorderLines));
-    memset(&m_nBorderDistances, 0x00, sizeof(m_nBorderDistances));
+    for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
+        m_nBorderDistances[ nBorder ] = -1;
     //todo: set defaults in ApplyPropertiesToPageStyles
     //initialize defaults
     //page height, todo: rounded to default values, default: 0x3dc0 (15808) twip  27883 1/100 mm
@@ -339,8 +340,8 @@ void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance
 
   -----------------------------------------------------------------------*/
 void SectionPropertyMap::ApplyBorderToPageStyles(
-            const uno::Reference< container::XNameContainer >& /*xStyles*/,
-            const uno::Reference < lang::XMultiServiceFactory >& /*xTextFactory*/,
+            const uno::Reference< container::XNameContainer >& xPageStyles,
+            const uno::Reference < lang::XMultiServiceFactory >& xTextFactory,
         sal_Int32 nValue )
 {
             /*
@@ -356,14 +357,62 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
             0 offset from text
             1 offset from edge of page
             */
+    uno::Reference< beans::XPropertySet >  xFirst;
+    uno::Reference< beans::XPropertySet >  xSecond;
     switch( nValue & 0x07)
     {
-        case 0: /*all styles*/ break;
-        case 1: /*first page*/ break;
-        case 2: /*left and right*/ break;
-        case 3: //whole document?
+        case 0: /*all styles*/
+            xFirst = GetPageStyle( xPageStyles, xTextFactory, false );
+            xSecond = GetPageStyle( xPageStyles, xTextFactory, true );
         break;
+        case 1: /*first page*/
+            xFirst = GetPageStyle( xPageStyles, xTextFactory, true );
+        break;
+        case 2: /*left and right*/
+            xFirst  = GetPageStyle( xPageStyles, xTextFactory, false );
+        break;
+        case 3: //whole document?
+            //todo: how to apply a border to the whole document - find all sections or access all page styles?
+        default:
+            return;
     }
+    //has to be sorted like enum BorderPosition: l-r-t-b
+    static const PropertyIds aBorderIds[4] =
+    {
+        PROP_LEFT_BORDER,
+        PROP_RIGHT_BORDER,
+        PROP_TOP_BORDER,
+        PROP_BOTTOM_BORDER
+    };
+    static const PropertyIds aBorderDistanceIds[4] =
+    {
+        PROP_LEFT_BORDER_DISTANCE,
+        PROP_RIGHT_BORDER_DISTANCE,
+        PROP_TOP_BORDER_DISTANCE,
+        PROP_BOTTOM_BORDER_DISTANCE,
+    };
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder)
+    {
+        if( m_pBorderLines[nBorder] )
+        {
+            const ::rtl::OUString sBorderName = rPropNameSupplier.GetName( aBorderIds[nBorder] );
+            xFirst->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
+            if(xSecond.is())
+                xSecond->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
+        }
+        if( m_nBorderDistances[4] >= 0 )
+        {
+            const ::rtl::OUString sBorderDistanceName = rPropNameSupplier.GetName( aBorderDistanceIds[nBorder] );
+            xFirst->setPropertyValue( sBorderDistanceName, uno::makeAny( m_nBorderDistances[nBorder] ));
+            if(xSecond.is())
+                xSecond->setPropertyValue( sBorderDistanceName, uno::makeAny( m_nBorderDistances[nBorder] ));
+        }
+    }
+
+//                rContext->Insert( aBorderIds[nId - 0x702B], uno::makeAny( aBorderLine ));
+//                rContext->Insert( aBorderDistanceIds[nId - 0x702B], uno::makeAny( nLineDistance) );
+
 //    uno::Reference< beans::XPropertySet > xStyle = GetPageStyle( ePageType );
 
 }
