@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
+ *  last change: $Author: os $ $Date: 2006-12-28 09:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 namespace dmapper{
 
-struct OUStringHash
+struct PropertyIdHash
 {
     unsigned long operator()(const PropertyIds& eId) const
     {
@@ -48,7 +48,7 @@ struct OUStringHash
     }
 };
 
-struct OUStringEq
+struct PropertyIdEq
 {
     bool operator() (const PropertyIds& rA, const PropertyIds& rB) const
     {
@@ -56,7 +56,7 @@ struct OUStringEq
     }
 };
 
-typedef ::std::hash_map< PropertyIds, ::rtl::OUString, OUStringHash, OUStringEq> PropertyNameMap_t;
+typedef ::std::hash_map< PropertyIds, ::rtl::OUString, PropertyIdHash, PropertyIdEq> PropertyNameMap_t;
 
 
 //typedef std::map< PropertyIds, ::rtl::OUString > PropertyNameMap_t;
@@ -131,8 +131,9 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_CHAR_FONT_FAMILY_COMPLEX:      sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontFamilyComplex")); break;
             case PROP_CHAR_FONT_CHAR_SET_COMPLEX:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontCharSetComplex")); break;
             case PROP_CHAR_FONT_PITCH_COMPLEX:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontPitchComplex")); break;
-            case PROP_CHAR_HIDDEN:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHidden")); break;
-
+            case PROP_CHAR_HIDDEN           :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHidden")); break;
+            case PROP_CHAR_WEIGHT_ASIAN     :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharWeightAsian")); break;
+            case PROP_CHAR_POSTURE_ASIAN    :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPostureAsian")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
@@ -151,8 +152,8 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_PARA_IS_HANGING_PUNCTUATION: sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaIsHangingPunctuation")); break;
             case PROP_PARA_LINE_SPACING:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLineSpacing")); break;
             case PROP_PARA_TAB_STOPS:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaTabStops")); break;
-//            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
-//            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
+            case PROP_PARA_WIDOWS:          sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaWidows")); break;
+            case PROP_PARA_ORPHANS:         sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaOrphans")); break;
 //            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
 //            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
 //            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;

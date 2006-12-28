@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
+ *  last change: $Author: os $ $Date: 2006-12-28 09:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1782,8 +1782,13 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmPFLocked
     case 0x2431:
+    {
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmPFWidowControl
+        uno::Any aVal( uno::makeAny( sal_Int32(nIntValue ? 2 : 0 )));
+        rContext->Insert( PROP_PARA_WIDOWS, aVal );
+        rContext->Insert( PROP_PARA_ORPHANS, aVal );
+    }
+    break;  // sprmPFWidowControl
     case 0xC632:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmPRuler
@@ -1914,6 +1919,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x085D:// sprmCFItalicBi  (offset 0x27 to normal italic)
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
     case 0x835: //sprmCFBold
+    case 61: /*sprmCFItalic*/
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
     case 0x836: //sprmCFItalic
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
@@ -1940,6 +1946,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             case 0x835: /*sprmCFBold*/
                 ePropertyId = nId != 0x085C ? PROP_CHAR_WEIGHT : PROP_CHAR_WEIGHT_COMPLEX;
                 break;
+            case 61: /*sprmCFItalic*/
             case 0x085D: // sprmCFItalicBi
             case 0x836: /*sprmCFItalic*/
                 ePropertyId = nId == 0x836 ? PROP_CHAR_POSTURE : PROP_CHAR_POSTURE_COMPLEX;
@@ -2000,41 +2007,49 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                 sal_uInt16 nPropertyNameId = 0;
                 switch( nId )
                 {
-                case 060:/*sprmCFBold*/
-                case 0x085C: // sprmCFBoldBi
-                case 0x835: /*sprmCFBold*/
-                    rContext->Insert(ePropertyId,
-                                     uno::makeAny( nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
+                    case 060:/*sprmCFBold*/
+                    case 0x835: /*sprmCFBold*/
+                    case 0x085C: // sprmCFBoldBi
+                    {
+                        uno::Any aBold( uno::makeAny( nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
+                        rContext->Insert(ePropertyId, aBold );
+                        if( nId != 0x085c ) // sprmCFBoldBi
+                            rContext->Insert(PROP_CHAR_WEIGHT_ASIAN, aBold );
+                    }
                     break;
-                case 0x085D: // sprmCFItalicBi
-                case 0x836: /*sprmCFItalic*/
-                    rContext->Insert(ePropertyId,
-                                     uno::makeAny( nIntValue ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
+                    case 61: /*sprmCFItalic*/
+                    case 0x836: /*sprmCFItalic*/
+                    case 0x085D: // sprmCFItalicBi
+                    {
+                        uno::Any aPosture( uno::makeAny( nIntValue ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
+                        rContext->Insert( ePropertyId, aPosture );
+                        if( nId != 0x085D ) // sprmCFItalicBi
+                            rContext->Insert(PROP_CHAR_POSTURE_ASIAN, aPosture );
+                    }
                     break;
-                case 0x837: /*sprmCFStrike*/
-                    rContext->Insert(ePropertyId,
-                                     uno::makeAny( nIntValue ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
+                    case 0x837: /*sprmCFStrike*/
+                        rContext->Insert(ePropertyId,
+                                         uno::makeAny( nIntValue ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
                     break;
-                case 0x2A53 : /*sprmCFDStrike double strike through*/
-                    rContext->Insert(ePropertyId,
-                                     uno::makeAny( awt::FontStrikeout::DOUBLE ) );
+                    case 0x2A53 : /*sprmCFDStrike double strike through*/
+                        rContext->Insert(ePropertyId,
+                                         uno::makeAny( awt::FontStrikeout::DOUBLE ) );
                     break;
-                case 0x838: /*sprmCFOutline*/
-                    nPropertyNameId = static_cast<sal_uInt16>( ePropertyId );
+                    case 0x838: /*sprmCFOutline*/
+                        nPropertyNameId = static_cast<sal_uInt16>( ePropertyId );
                     break;
-                case 0x83a: /*sprmCFSmallCaps*/
-                    rContext->Insert(ePropertyId,
-                                     uno::makeAny( nIntValue ? style::CaseMap::SMALLCAPS : style::CaseMap::NONE));
+                    case 0x83a: /*sprmCFSmallCaps*/
+                        rContext->Insert(ePropertyId,
+                                         uno::makeAny( nIntValue ? style::CaseMap::SMALLCAPS : style::CaseMap::NONE));
                     break;
-                case 0x83b: /*sprmCFCaps*/
-                    rContext->Insert(ePropertyId,
-                                     uno::makeAny( nIntValue ? style::CaseMap::UPPERCASE : style::CaseMap::NONE));
+                    case 0x83b: /*sprmCFCaps*/
+                        rContext->Insert(ePropertyId,
+                                         uno::makeAny( nIntValue ? style::CaseMap::UPPERCASE : style::CaseMap::NONE));
                     break;
-                case 0x83c: /*sprmCFVanish*/
-                    break;
-                case 0x0858: /*sprmCFEmboss*/
-                    rContext->Insert(ePropertyId,
-                                     uno::makeAny( nIntValue ? awt::FontRelief::EMBOSSED : awt::FontRelief::NONE ));
+                    case 0x83c: /*sprmCFVanish*/ break;
+                    case 0x0858: /*sprmCFEmboss*/
+                        rContext->Insert(ePropertyId,
+                                         uno::makeAny( nIntValue ? awt::FontRelief::EMBOSSED : awt::FontRelief::NONE ));
                     break;
 
                 }
