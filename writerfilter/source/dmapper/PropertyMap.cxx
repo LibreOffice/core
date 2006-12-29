@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2006-12-28 09:18:48 $
+ *  last change: $Author: os $ $Date: 2006-12-29 07:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,10 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_bSFBiDi( false )
     ,m_nGridLinePitch( 1 )
     ,m_nDxtCharSpace( 0 )
+    ,m_nLnnMod( 0 )
+    ,m_nLnc( 0 )
+    ,m_ndxaLnn( 0 )
+    ,m_nLnnMin( 0 )
 {
     static sal_Int32 nNumber = 0;
     nSectionNumber = nNumber++;
@@ -359,6 +363,24 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
             */
     uno::Reference< beans::XPropertySet >  xFirst;
     uno::Reference< beans::XPropertySet >  xSecond;
+    sal_Int32 nOffsetFrom = (nValue & 0x00E0) >> 5;
+    //sal_Int32 bPageDepth = (nValue & 0x0018) >> 3; //unused infromation: 0 - in front 1 - in back
+    //todo: negative spacing (from ww8par6.cxx)
+    if( nOffsetFrom == 1 )
+    {
+//        USHORT nDist;
+//        if (aBox.GetLeft())
+//        {
+//            nDist = aBox.GetDistance(BOX_LINE_LEFT);
+//    lcl_MakeSafeNegativeSpacing( ) sets the distance to 0 if  > SHRT_MAX
+//
+//            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<USHORT>(aLR.GetLeft() - nDist)), BOX_LINE_LEFT);
+//            aSizeArray[WW8_LEFT] =
+//                aSizeArray[WW8_LEFT] - nDist + aBox.GetDistance(BOX_LINE_LEFT);
+//        }
+        //the same for right, top, bottom
+
+    }
     switch( nValue & 0x07)
     {
         case 0: /*all styles*/
@@ -592,6 +614,34 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
   -----------------------------------------------------------------------*/
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    if( m_nLnnMod )
+    {
+        bool bFirst = rDM_Impl.IsLineNumberingSet();
+        rDM_Impl.SetLineNumbering( m_nLnnMod, m_nLnc, m_ndxaLnn );
+        if( m_nLnnMin > 0 || (bFirst && m_nLnc == 1))
+        {
+            //set the starting value at the beginning of the section
+            try
+            {
+                uno::Reference< beans::XPropertySet > xRangeProperties;
+                if( m_xStartingRange.is() )
+                {
+                    xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
+                }
+                else
+                {
+                    //set the start value at the beginning of the document
+                    xRangeProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
+                }
+                xRangeProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_PARA_LINE_NUMBER_START_VALUE ), uno::makeAny( m_nLnnMin + 1 ));
+            }
+            catch( const uno::Exception& )
+            {
+            }
+        }
+    }
+
     //depending on the break type no page styles should be created
     if(m_nBreakType == 0)
     {
@@ -607,7 +657,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
     else
     {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         //get the properties and create appropriate page styles
         uno::Reference< beans::XPropertySet > xFollowPageStyle = GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
 
@@ -639,13 +688,20 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             xColumns = ApplyColumnProperties( xFollowPageStyle );
 
         //prepare text grid properties
-
         sal_Int32 nHeight = 1;
-        operator[]( rPropNameSupplier.GetName( PROP_HEIGHT )) >>= nHeight;
+        PropertyMap::iterator aElement = find(rPropNameSupplier.GetName( PROP_HEIGHT ));
+        if( aElement != end())
+            aElement->second >>= nHeight;
+
         sal_Int32 nWidth = 1;
-        operator[]( rPropNameSupplier.GetName( PROP_WIDTH )) >>= nWidth;
+        aElement = find(rPropNameSupplier.GetName( PROP_WIDTH ));
+        if( aElement != end())
+            aElement->second >>= nWidth;
+
         text::WritingMode eWritingMode = text::WritingMode_LR_TB;
-        operator[]( rPropNameSupplier.GetName( PROP_WRITING_MODE )) >>= eWritingMode;
+        aElement = find(rPropNameSupplier.GetName( PROP_WRITING_MODE ));
+        if( aElement != end())
+            aElement->second >>= eWritingMode;
 
 
 

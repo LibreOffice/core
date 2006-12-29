@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
+ *  last change: $Author: os $ $Date: 2006-12-29 07:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,12 @@ class SectionPropertyMap : public PropertyMap
     sal_Int32                               m_nGridLinePitch;
     sal_Int32                               m_nDxtCharSpace;
 
+    //line numbering
+    sal_Int32                               m_nLnnMod;
+    sal_Int32                               m_nLnc;
+    sal_Int32                               m_ndxaLnn;
+    sal_Int32                               m_nLnnMin;
+
     void _ApplyProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle );
     ::com::sun::star::uno::Reference< com::sun::star::text::XTextColumns > ApplyColumnProperties(
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xFollowPageStyle );
@@ -223,6 +229,12 @@ public:
 
     void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }
     void SetDxtCharSpace( sal_Int32 nSet ) { m_nDxtCharSpace = nSet; }
+
+    void SetLnnMod( sal_Int32 nValue ) { m_nLnnMod = nValue; }
+    void SetLnc(    sal_Int32 nValue ) { m_nLnc    = nValue; }
+    void SetdxaLnn( sal_Int32 nValue ) { m_ndxaLnn  = nValue; }
+    void SetLnnMin( sal_Int32 nValue ) { m_nLnnMin = nValue; }
+
     //determine which style gets the borders
     void ApplyBorderToPageStyles(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,

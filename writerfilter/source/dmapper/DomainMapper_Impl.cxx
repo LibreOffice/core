@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
+ *  last change: $Author: os $ $Date: 2006-12-29 07:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,75 +32,31 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_DMAPPER_DOMAINMAPPER_IMPL_HXX
 #include <DomainMapper_Impl.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
-#endif
-#ifndef INCLUDED_DOMAIN_MAPPER_TABLE_HANDLER_HXX
 #include <DomainMapperTableHandler.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#endif
-//#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTINSERT_HPP_
 //#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTREMOVE_HPP_
 //#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
-//#endif
-#ifndef _COM_SUN_STAR_TEXT_XPARAGRAPHCURSOR_HPP_
 #include <com/sun/star/text/XParagraphCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
 #include <com/sun/star/text/XTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDEPENDENTTEXTFIELD_HPP_
 #include <com/sun/star/text/XDependentTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_PAGENUMBERTYPE_HPP_
 #include <com/sun/star/text/PageNumberType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FILENAMEDISPLAYFORMAT_HPP_
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_USERDATAPART_HPP_
 #include <com/sun/star/text/UserDataPart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
 #include <com/sun/star/text/SetVariableType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _RTL_STRING_H_
 #include <rtl/string.h>
-#endif
 
 
 #include <hash_map>
@@ -389,7 +345,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_nCurrentTabStopIndex( 0 ),
         m_nCurrentParaStyleId( -1 ),
-        m_bInStyleSheetImport( false )
+        m_bInStyleSheetImport( false ),
+        m_bLineNumberingSet( false )
 {
     GetBodyText();
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert = uno::Reference< text::XTextAppendAndConvert >( m_xBodyText, uno::UNO_QUERY );
@@ -1703,6 +1660,51 @@ void  DomainMapper_Impl::ImportGraphic(doctok::Reference< doctok::Properties >::
     //insert it into the document at the current cursor position
     appendTextContent( m_pGraphicImport->GetGraphicObject() );
     m_pGraphicImport.reset();
+}
+
+/*-- 28.12.2006 14:00:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn )
+{
+    if( !m_bLineNumberingSet )
+    {
+        const PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+        try
+        {
+            uno::Reference< text::XLineNumberingProperties > xLineProperties( m_xTextDocument, uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xProperties = xLineProperties->getLineNumberingProperties();
+            uno::Any aTrue( uno::makeAny( true ));
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_IS_ON                  ), aTrue);
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_COUNT_EMPTY_LINES      ), aTrue );
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_COUNT_LINES_IN_FRAMES  ), uno::makeAny( false ) );
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_INTERVAL               ), uno::makeAny( static_cast< sal_Int16 >( nLnnMod )));
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_DISTANCE               ), uno::makeAny( ConversionHelper::convertToMM100(ndxaLnn) ));
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_NUMBER_POSITION        ), uno::makeAny( style::LineNumberPosition::LEFT));
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_NUMBERING_TYPE         ), uno::makeAny( style::NumberingType::ARABIC));
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_RESTART_AT_EACH_PAGE   ), uno::makeAny( nLnc == 0 ));
+        }
+        catch( const uno::Exception& )
+        {}
+
+
+
+/*
+        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME
+        { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES
+        { SW_PROP_NAME(UNO_NAME_COUNT_LINES_IN_FRAMES
+        { SW_PROP_NAME(UNO_NAME_DISTANCE
+        { SW_PROP_NAME(UNO_NAME_IS_ON
+        { SW_PROP_NAME(UNO_NAME_INTERVAL
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT
+        { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE
+        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL
+*/
+    }
+    m_bLineNumberingSet = true;
 }
 
 

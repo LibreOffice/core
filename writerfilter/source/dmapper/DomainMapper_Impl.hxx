@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2006-12-21 14:52:34 $
+ *  last change: $Author: os $ $Date: 2006-12-29 07:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,8 @@ private:
     sal_Int32                       m_nCurrentParaStyleId;
     bool                            m_bInStyleSheetImport;
 
+    bool                            m_bLineNumberingSet;
+
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropertySet );
@@ -279,6 +281,10 @@ public:
     bool IsFieldAvailable() const;
 
     TableManager_t & getTableManager() { return m_TableManager; }
+
+    void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
+    bool IsLineNumberingSet() const {return m_bLineNumberingSet;}
+
 };
 } //namespace dmapper
 #endif

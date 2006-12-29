@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2006-12-28 09:18:19 $
+ *  last change: $Author: os $ $Date: 2006-12-29 07:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ PropertyNameSupplier::~PropertyNameSupplier()
 /*-- 14.06.2006 11:01:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
+const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
 {
     PropertyNameMap_t::iterator aIt = m_pImpl->aNameMap.find(eId);
     if(aIt == m_pImpl->aNameMap.end())
@@ -154,6 +154,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_PARA_TAB_STOPS:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaTabStops")); break;
             case PROP_PARA_WIDOWS:          sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaWidows")); break;
             case PROP_PARA_ORPHANS:         sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaOrphans")); break;
+            case PROP_PARA_LINE_NUMBER_START_VALUE:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLineNumberStartValue")); break;
 //            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
 //            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
 //            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
@@ -258,9 +259,13 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId )
             case PROP_GRID_LINES            :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridLines")); break;
             case PROP_GRID_BASE_HEIGHT      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridBaseHeight")); break;
             case PROP_GRID_RUBY_HEIGHT      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridRubyHeight")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_IS_ON                  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsOn")); break;
+            case PROP_RESTART_AT_EACH_PAGE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage")); break;
+            case PROP_COUNT_EMPTY_LINES      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CountEmptyLines")); break;
+            case PROP_COUNT_LINES_IN_FRAMES  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CountLinesInFrames")); break;
+            case PROP_INTERVAL               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Interval")); break;
+            case PROP_DISTANCE               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Distance")); break;
+            case PROP_NUMBER_POSITION        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberPosition")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

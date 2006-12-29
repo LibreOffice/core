@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2006-12-28 09:17:15 $
+ *  last change: $Author: os $ $Date: 2006-12-29 07:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2444,9 +2444,35 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x3012:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSFEndnote
-    case 0x3013:
+    case 154:
+    case 0x5015:// sprmSNLnnMod
+        /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if( pSectionContext )
+            pSectionContext->SetLnnMod( nIntValue );
+    break;
+    case 155:
+    case 0x9016: // sprmSDxaLnn
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSLnc
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if( pSectionContext )
+            pSectionContext->SetdxaLnn( nIntValue );
+    break;
+    case 152:
+    case 0x3013:// sprmSLnc
+        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if( pSectionContext )
+            pSectionContext->SetLnc( nIntValue );
+    break;
+    case 160:
+    case 0x501B: // sprmSLnnMin
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if( pSectionContext )
+            pSectionContext->SetLnnMin( nIntValue );
+    break;
+
     case 0x3014:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
@@ -2458,12 +2484,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
 //        if(pSectionContext)
     break;  // sprmSGprfIhdt
-    case 0x5015:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSNLnnMod
-    case 0x9016:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSDxaLnn
     case 0xB017: // sprmSDyaHdrTop
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         // default 720 twip
@@ -2488,9 +2508,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x301A:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         break;  // sprmSVjc
-    case 0x501B:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-        break;  // sprmSLnnMin
     case 161:
     case 0x501C: // sprmSPgnStart
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
