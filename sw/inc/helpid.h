@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:44:19 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,6 +433,7 @@
 #define HID_DLG_PASSWD_SECTION      (HID_BASE + 672)
 #define HID_MD_COPY_TO_CLIPBOARD    (HID_BASE + 673)
 #define HID_MD_GLOS_IMPORT          (HID_BASE + 674)
+#define HID_SMARTTAG_MAIN           (HID_BASE + 675)    // SMARTTAGS
 
 // Weiter Help-IDs **********************************************************
 
