@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:10 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #endif
 
 #ifndef _COMPHELPER_TYPES_HXX_
@@ -245,6 +248,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "ReadOnly",               READONLY,           bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Repeat",                 REPEAT,             bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "RepeatDelay",            REPEAT_DELAY,       sal_Int32,          BOUND, MAYBEDEFAULT ),
+//            DECL_PROP_3     ( "ResourceResolver",       RESOURCERESOLVER,   Reference< ::com::sun::star::resource::XStringResourceResolver >, BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "ScaleImage",             SCALEIMAGE,         bool,               BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_3 ( "ScrollValue",            SCROLLVALUE,        sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "ScrollValueMax",         SCROLLVALUE_MAX,    sal_Int32,          BOUND, MAYBEDEFAULT ),
