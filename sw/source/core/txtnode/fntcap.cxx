@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:45:58 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,7 @@ xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
     aInfo.SetPos( aPos );
     aInfo.SetSpace( 0 );
     aInfo.SetWrong( NULL );
+    aInfo.SetSmartTags( NULL ); // SMARTTAGS
     aInfo.SetDrawSpace( FALSE );
     aInfo.SetKern( CheckKerning() );
     aInfo.SetKanaComp( pScript ? 0 : 100 );
