@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_math.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:18:46 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,11 +507,29 @@ RegistryItem gid_Regitem__Mml
     Value = "soffice.StarMathDocument.6";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxm
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sxm";
+    Value = "soffice.StarMathDocument.6";
+    Styles = (PATCH);
+End
+
 RegistryItem gid_Regitem__Smf
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = ".smf";
     Value = "soffice.StarMathDocument.5";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_smf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".smf";
+    Value = "soffice.StarMathDocument.5";
+    Styles = (PATCH);
 End
 
 // new odf file extension
@@ -565,6 +583,24 @@ RegistryItem gid_Regitem__Odf
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = ".odf";
     Value = "opendocument.MathDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".odf";
+    Value = "opendocument.MathDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Root;
+    Name = "application/vnd.oasis.opendocument.formula";
+    Value = "opendocument.MathDocument.1";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_Curver
@@ -709,3 +745,11 @@ RegistryItem gid_Regitem_OpenOffice_MML_OpenWith_Math
     Value = " ";
 End
 
+// RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Mml
+//     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+//     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+//     ModuleID = gid_Module_Root;
+//     Name = ".mml";
+//     Value = "opendocument.MathDocument.1";
+//     Styles = (PATCH);
+// End

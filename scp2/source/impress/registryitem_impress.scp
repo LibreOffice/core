@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_impress.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:18:33 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:15:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,6 +637,15 @@ RegistryItem gid_Regitem__Sdd
     Value = "soffice.StarImpressDocument.5";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdd
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sdd";
+    Value = "soffice.StarImpressDocument.5";
+    Styles = (PATCH);
+End
+
 RegistryItem gid_Regitem__Sdp
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
@@ -644,11 +653,30 @@ RegistryItem gid_Regitem__Sdp
     Value = "soffice.StarStorageDocument.5";
 End
 
+// .sdp no longer supported
+// RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdp
+//     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+//     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+//     ModuleID = gid_Module_Root;
+//     Name = ".sdp";
+//     Value = "soffice.StarStorageDocument.5";
+//     Styles = (PATCH);
+// End
+
 RegistryItem gid_Regitem__Sxi
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".sxi";
     Value = "soffice.StarImpressDocument.6";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxi
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sxi";
+    Value = "soffice.StarImpressDocument.6";
+    Styles = (PATCH);
 End
 
 // new odp file extension
@@ -687,6 +715,25 @@ RegistryItem gid_Regitem__Odp
     Subkey = ".odp";
     Value = "opendocument.ImpressDocument.1";
 End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".odp";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Root;
+    Name = "application/vnd.oasis.opendocument.presentation";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
 
 RegistryItem gid_Regitem_Odp_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1050,3 +1097,48 @@ RegistryItem gid_Regitem_OpenOffice_ODG_OpenWith_Impress
     Value = " ";
 End
 
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Otp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".otp";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Sti
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sti";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Ppt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".ppt";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Pps
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".pps";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Pot
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".pot";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
