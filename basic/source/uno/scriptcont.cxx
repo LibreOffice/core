@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-09 10:57:41 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,15 +209,18 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer
 }
 
 // Methods to get library instances of the correct type
-SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( void )
+SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName )
 {
+    (void)aName;    // Only needed for SfxDialogLibrary
     SfxLibrary* pRet = (SfxLibrary*) new SfxScriptLibrary( mxMSF, mxSFI );
     return pRet;
 }
 
 SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink
-    ( const OUString& aLibInfoFileURL, const OUString& StorageURL, sal_Bool ReadOnly )
+    ( const OUString& aName, const OUString& aLibInfoFileURL,
+      const OUString& StorageURL, sal_Bool ReadOnly )
 {
+    (void)aName;    // Only needed for SfxDialogLibrary
     SfxLibrary* pRet =
         (SfxLibrary*) new SfxScriptLibrary
             ( mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly );
@@ -1088,6 +1091,10 @@ void SAL_CALL SfxScriptLibraryContainer::initialize( const Sequence< Any >& aArg
     init( aInitialisationParam, aScriptLanguage );
 }
 
+void SfxScriptLibraryContainer::implSetStorage( const Reference< embed::XStorage >& xStorage )
+{
+    (void)xStorage;
+}
 
 //============================================================================
 // Service
@@ -1169,6 +1176,38 @@ SfxScriptLibrary::SfxScriptLibrary( Reference< XMultiServiceFactory > xMSF,
     , mbLoadedSource( sal_False )
     , mbLoadedBinary( sal_False )
 {
+}
+
+// Provide modify state including resources
+sal_Bool SfxScriptLibrary::isModified( void )
+{
+    return implIsModified();    // No resources
+}
+
+void SfxScriptLibrary::storeResources( void )
+{
+    // No resources
+}
+
+void SfxScriptLibrary::storeResourcesToURL( const ::rtl::OUString& URL,
+    const Reference< task::XInteractionHandler >& Handler )
+{
+    (void)URL;
+    (void)Handler;
+}
+
+void SfxScriptLibrary::storeResourcesAsURL
+    ( const ::rtl::OUString& URL, const ::rtl::OUString& NewName )
+{
+    (void)URL;
+    (void)NewName;
+}
+
+void SfxScriptLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Reference
+    < ::com::sun::star::embed::XStorage >& xStorage )
+{
+    // No resources
+    (void)xStorage;
 }
 
 //============================================================================
