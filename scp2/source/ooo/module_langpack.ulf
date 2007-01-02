@@ -1,0 +1,555 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: module_langpack.ulf,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:30:45 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+ 
+[STR_NAME_MODULE_ROOT_LANGPACK]
+en-US = "Additional language packs"
+de = "Zusätzliche Sprachpakete"
+
+[STR_DESC_MODULE_ROOT_LANGPACK]
+en-US = "Additional language packs"
+de = "Zusätzliche Sprachpakete"
+
+[STR_NAME_MODULE_LANGPACK_EN_US]
+en-US = "English"
+de = "Englisch"
+
+[STR_DESC_MODULE_LANGPACK_EN_US]
+en-US = "Installs English support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Englisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_DE]
+en-US = "German"
+de = "Deutsch"
+
+[STR_DESC_MODULE_LANGPACK_DE]
+en-US = "Installs German support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Deutsch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_FR]
+en-US = "French"
+de = "Französisch"
+
+[STR_DESC_MODULE_LANGPACK_FR]
+en-US = "Installs French support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Französisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_IT]
+en-US = "Italian"
+de = "Italienisch"
+
+[STR_DESC_MODULE_LANGPACK_IT]
+en-US = "Installs Italian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Italienisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ES]
+en-US = "Spanish"
+de = "Spanisch"
+
+[STR_DESC_MODULE_LANGPACK_ES]
+en-US = "Installs Spanish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Spanisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_SV]
+en-US = "Swedish"
+de = "Schwedisch"
+
+[STR_DESC_MODULE_LANGPACK_SV]
+en-US = "Installs Swedish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Schwedisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_PT]
+en-US = "Portuguese"
+de = "Portugiesisch"
+
+[STR_DESC_MODULE_LANGPACK_PT]
+en-US = "Installs Portuguese support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Portugiesisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_PT_BR]
+en-US = "Portuguese (Brazil)"
+de = "Portugiesisch (Brasilien)"
+
+[STR_DESC_MODULE_LANGPACK_PT_BR]
+en-US = "Installs Portuguese support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Portugiesisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_JA]
+en-US = "Japanese"
+de = "Japanisch"
+
+[STR_DESC_MODULE_LANGPACK_JA]
+en-US = "Installs Japanese support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Japanisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_KO]
+en-US = "Korean"
+de = "Koreanisch"
+
+[STR_DESC_MODULE_LANGPACK_KO]
+en-US = "Installs Korean support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Koreanisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ZH_CN]
+en-US = "Chinese (simplified)"
+de = "Chinesisch (vereinfacht)"
+
+[STR_DESC_MODULE_LANGPACK_ZH_CN]
+en-US = "Installs Chinese (simplified) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Chinesisch (vereinfacht) in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ZH_TW]
+en-US = "Chinese (tradional)"
+de = "Chinesisch (traditionell)"
+
+[STR_DESC_MODULE_LANGPACK_ZH_TW]
+en-US = "Installs Chinese (traditional) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Chinesisch (traditionell) in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_NL]
+en-US = "Dutch"
+de = "Holländisch"
+
+[STR_DESC_MODULE_LANGPACK_NL]
+en-US = "Installs Dutch support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Holländisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_HU]
+en-US = "Hungarian"
+de = "Ungarisch"
+
+[STR_DESC_MODULE_LANGPACK_HU]
+en-US = "Installs Hungarian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Ungarisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_PL]
+en-US = "Polish"
+de = "Polnisch"
+
+[STR_DESC_MODULE_LANGPACK_PL]
+en-US = "Installs Polish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Polnisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_RU]
+en-US = "Russian"
+de = "Russisch"
+
+[STR_DESC_MODULE_LANGPACK_RU]
+en-US = "Installs Russian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Russisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_TR]
+en-US = "Turkish"
+de = "Türkisch"
+
+[STR_DESC_MODULE_LANGPACK_TR]
+en-US = "Installs Turkish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Türkisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_EL]
+en-US = "Greek"
+de = "Griechisch"
+
+[STR_DESC_MODULE_LANGPACK_EL]
+en-US = "Installs Greek support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Griechisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_TH]
+en-US = "Thai"
+de = "Thailändisch"
+
+[STR_DESC_MODULE_LANGPACK_TH]
+en-US = "Installs Thai support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Thailändisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_CS]
+en-US = "Czech"
+de = "Tschechisch"
+
+[STR_DESC_MODULE_LANGPACK_CS]
+en-US = "Installs Czech support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Tschechisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_SK]
+en-US = "Slovak"
+de = "Slowakisch"
+
+[STR_DESC_MODULE_LANGPACK_SK]
+en-US = "Installs Slovak support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Slowakisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_HR]
+en-US = "Croatian"
+de = "Kroatisch"
+
+[STR_DESC_MODULE_LANGPACK_HR]
+en-US = "Installs Croatian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Kroatisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ET]
+en-US = "Estonian"
+de = "Estnisch"
+
+[STR_DESC_MODULE_LANGPACK_ET]
+en-US = "Installs Estonian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Estnisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_VI]
+en-US = "Vietnamese"
+de = "Vietnamesisch"
+
+[STR_DESC_MODULE_LANGPACK_VI]
+en-US = "Installs Vietnamese support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Vietnamesisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_BG]
+en-US = "Bulgarian"
+de = "Bulgarisch"
+
+[STR_DESC_MODULE_LANGPACK_BG]
+en-US = "Installs Bulgarian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Bulgarisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_KM]
+en-US = "Khmer"
+de = "Khmer"
+
+[STR_DESC_MODULE_LANGPACK_KM]
+en-US = "Installs Khmer support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Khmer in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_PA_IN]
+en-US = "Punjabi"
+de = "Punjabi"
+
+[STR_DESC_MODULE_LANGPACK_PA_IN]
+en-US = "Installs Punjabi support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Punjabi in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_GU_IN]
+en-US = "Gujarati"
+de = "Gujarati"
+
+[STR_DESC_MODULE_LANGPACK_GU_IN]
+en-US = "Installs Gujarati support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Gujarati in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_TA]
+en-US = "Tamil"
+de = "Tamil"
+
+[STR_DESC_MODULE_LANGPACK_TA]
+en-US = "Installs Tamil support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Tamil in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_TA_IN]
+en-US = "Tamil"
+de = "Tamil"
+
+[STR_DESC_MODULE_LANGPACK_TA_IN]
+en-US = "Installs Tamil support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Tamil in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_HI]
+en-US = "Hindi"
+de = "Hindi"
+
+[STR_DESC_MODULE_LANGPACK_HI]
+en-US = "Installs Hindi support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Hindi in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_HI_IN]
+en-US = "Hindi"
+de = "Hindi"
+
+[STR_DESC_MODULE_LANGPACK_HI_IN]
+en-US = "Installs Hindi support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Hindi in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ST]
+en-US = "Southern Sotho (Sutu)"
+de = "Southern Sotho (Sutu)"
+
+[STR_DESC_MODULE_LANGPACK_ST]
+en-US = "Installs Southern Sotho (Sutu) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Southern Sotho (Sutu) in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_TN]
+en-US = "Tswana"
+de = "Tswana"
+
+[STR_DESC_MODULE_LANGPACK_TN]
+en-US = "Installs Tswana support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Tswana in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_XH]
+en-US = "Xhosa"
+de = "Xhosa"
+
+[STR_DESC_MODULE_LANGPACK_XH]
+en-US = "Installs Xhosa support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Xhosa in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ZU]
+en-US = "Zulu"
+de = "Zulu"
+
+[STR_DESC_MODULE_LANGPACK_ZU]
+en-US = "Installs Zulu support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Zulu in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_AF]
+en-US = "Afrikaans"
+de = "Afrikaans"
+
+[STR_DESC_MODULE_LANGPACK_AF]
+en-US = "Installs Afrikaans support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Afrikaans in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_SW]
+en-US = "Swahili"
+de = "Swahili"
+
+[STR_DESC_MODULE_LANGPACK_SW]
+en-US = "Installs Swahili support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Swahili in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_SW_TZ]
+en-US = "Swahili"
+de = "Swahili"
+
+[STR_DESC_MODULE_LANGPACK_SW_TZ]
+en-US = "Installs Swahili support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Swahili in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_LO]
+en-US = "Lao"
+de = "Lao"
+
+[STR_DESC_MODULE_LANGPACK_LO]
+en-US = "Installs Lao support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Lao in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_NS]
+en-US = "Northern Sotho"
+de = "Northern Sotho"
+
+[STR_DESC_MODULE_LANGPACK_NS]
+en-US = "Installs Northern Sotho support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Northern Sotho in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_BN]
+en-US = "Bengali"
+de = "Bengali"
+
+[STR_DESC_MODULE_LANGPACK_BN]
+en-US = "Installs Bengali support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Bengali in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_BN_BD]
+en-US = "Bengali (Bangladesh)"
+de = "Bengali (Bangladesh)"
+
+[STR_DESC_MODULE_LANGPACK_BN_BD]
+en-US = "Installs Bengali (Bangladesh) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Bengali (Bangladesh) in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_BN_IN]
+en-US = "Bengali (India)"
+de = "Bengali (India)"
+
+[STR_DESC_MODULE_LANGPACK_BN_IN]
+en-US = "Installs Bengali (India) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Bengali (India) in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_OR]
+en-US = "Oriya"
+de = "Oriya"
+
+[STR_DESC_MODULE_LANGPACK_OR]
+en-US = "Installs Oriya support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Oriya in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_OR_IN]
+en-US = "Oriya"
+de = "Oriya"
+
+[STR_DESC_MODULE_LANGPACK_OR_IN]
+en-US = "Installs Oriya support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Oriya in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_MR]
+en-US = "Marathi"
+de = "Marathi"
+
+[STR_DESC_MODULE_LANGPACK_MR]
+en-US = "Installs Marathi support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Marathi in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_MR_IN]
+en-US = "Marathi"
+de = "Marathi"
+
+[STR_DESC_MODULE_LANGPACK_MR_IN]
+en-US = "Installs Marathi support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Marathi in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_NE]
+en-US = "Nepali"
+de = "Nepali"
+
+[STR_DESC_MODULE_LANGPACK_NE]
+en-US = "Installs Nepali support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Nepali in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_AR]
+en-US = "Arabic"
+de = "Arabic"
+
+[STR_DESC_MODULE_LANGPACK_AR]
+en-US = "Installs Arabic support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Arabic in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_AR_SA]
+en-US = "Arabic"
+de = "Arabic"
+
+[STR_DESC_MODULE_LANGPACK_AR_SA]
+en-US = "Installs Arabic support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Arabic in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_CA]
+en-US = "Catalan"
+de = "Catalan"
+
+[STR_DESC_MODULE_LANGPACK_CA]
+en-US = "Installs Catalan support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Catalan in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_DA]
+en-US = "Danish"
+de = "Danish"
+
+[STR_DESC_MODULE_LANGPACK_DA]
+en-US = "Installs Danish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Danish in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_FI]
+en-US = "Finnish"
+de = "Finnisch"
+
+[STR_DESC_MODULE_LANGPACK_FI]
+en-US = "Installs Finnish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Finnisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_HE]
+en-US = "Hebrew"
+de = "Hebräisch"
+
+[STR_DESC_MODULE_LANGPACK_HE]
+en-US = "Installs Hebrew support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Hebräisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_IS]
+en-US = "Icelandic"
+de = "Isländisch"
+
+[STR_DESC_MODULE_LANGPACK_IS]
+en-US = "Installs Icelandic support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Isländisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_NB]
+en-US = "Norwegian (Bokmal)"
+de = "Norwegisch (Bokmal)"
+
+[STR_DESC_MODULE_LANGPACK_NB]
+en-US = "Installs Norwegian (Bokmal) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Norwegisch (Bokmal) in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_NN]
+en-US = "Norwegian (Nynorsk)"
+de = "Norwegisch (Nynorsk)"
+
+[STR_DESC_MODULE_LANGPACK_NN]
+en-US = "Installs Norwegian (Nynorsk) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Norwegisch (Nynorsk) in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_RM]
+en-US = "Raeto-Romance"
+de = "Rethoromanisch"
+
+[STR_DESC_MODULE_LANGPACK_RM]
+en-US = "Installs Raeto-Romance support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Rethoromanisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_RO]
+en-US = "Romanian"
+de = "Rumänisch"
+
+[STR_DESC_MODULE_LANGPACK_RO]
+en-US = "Installs Romanian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Rumänisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_SQ]
+en-US = "Albanian"
+de = "Albanisch"
+
+[STR_DESC_MODULE_LANGPACK_SQ]
+en-US = "Installs Albanian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Albanisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_UR]
+en-US = "Urdu"
+de = "Urdu"
+
+[STR_DESC_MODULE_LANGPACK_UR]
+en-US = "Installs Urdu support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Urdu in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ID]
+en-US = "Indonesian"
+de = "Indonesisch"
+
+[STR_DESC_MODULE_LANGPACK_ID]
+en-US = "Installs Indonesian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Indonesisch in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_UK]
+en-US = "Ukrainian"
+de = "Ukrainisch"
+
+[STR_DESC_MODULE_LANGPACK_UK]
+en-US = "Installs Ukrainian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Installiert Unterstützung für Ukrainisch in %PRODUCTNAME %PRODUCTVERSION"
+
