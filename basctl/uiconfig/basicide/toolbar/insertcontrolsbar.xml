@@ -37,5 +37,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertPatternField" toolbar:helpid="helpid:10941"  toolbar:style="radio" />
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFileControl" toolbar:helpid="helpid:10942"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ManageLanguage" toolbar:helpid="helpid:30820" />
  <toolbar:toolbarbreak/>
 </toolbar:toolbar>
