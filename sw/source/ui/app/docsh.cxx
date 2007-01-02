@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:27:35 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1478,6 +1478,12 @@ void SwDocShell::UpdateLinks()
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
     GetDoc()->GetFtnIdxs().UpdateFtn( aTmp );
     // <--
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+                                SwDocShell::GetController()
+{
+    return GetView()->GetController();
 }
 
 /* -----------------------------12.02.01 12:08--------------------------------
