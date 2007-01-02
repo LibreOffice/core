@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:08:13 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,11 +298,11 @@ Sequence< OUString > lcl_MergeSeq(
 INT16 SvxLinguConfigUpdate::nNeedUpdating = -1;
 INT32 SvxLinguConfigUpdate::nCurrentDataFilesChangedCheckValue = -1;
 
-void SvxLinguConfigUpdate::UpdateAll()
+void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 {
     RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll" );
 
-    if (IsNeedUpdateAll())
+    if (IsNeedUpdateAll( bForceCheck ))
     {
         typedef OUString OUstring_t;
         typedef Sequence< OUString > Sequence_OUString_t;
@@ -453,7 +453,9 @@ void SvxLinguConfigUpdate::UpdateAll()
                     BOOL bRes = aCfg.ReplaceSetProperties( aSubNodeName, aNewValues );
                     if (!bRes)
                     {
+#if OSL_DEBUG_LEVEL > 1
                         DBG_ERROR( "failed to set new configuration values" );
+#endif
                     }
                 }
             }
@@ -522,13 +524,20 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
     // list of directories to scan for changed/new/deleted files
     // 0: regular SO dictionary path
     // 1: regular OOo dictionary path
-    String aDirectories[2];
+    // 2: user-dictionary path (where OOo linguistic by bad choice places downloaded dictionaries
+    //    when the permissions for the share tree are missing. E.g. in user installations.)
+    const USHORT nDirectories = 3;
+    String aDirectories[ 3 /*nDirectories*/ ];
     aDirectories[0] = linguistic::GetFileURL( SvtPathOptions::PATH_LINGUISTIC, String::CreateFromAscii( "x" ) );
     aDirectories[1] = linguistic::GetFileURL( SvtPathOptions::PATH_LINGUISTIC, String::CreateFromAscii( "ooo" ) );
-    aDirectories[0].Erase( aDirectories[0].Len() - 2, 2 );
+    //!! warning: see bUseFile below when changing this index !!
+    aDirectories[2] = linguistic::GetFileURL( SvtPathOptions::PATH_USERDICTIONARY, String::CreateFromAscii( "x" ) );
+    //
+    aDirectories[0].Erase( aDirectories[0].Len() - 2, 2 );  // erase /x from URL
+    aDirectories[2].Erase( aDirectories[2].Len() - 2, 2 );  // erase /x from URL
 
     INT32 nHashVal = 0;
-    for (int i = 0;  i < 2;  ++i )
+    for (int i = 0;  i < nDirectories;  ++i )
     {
         const String rURL = aDirectories[i];
 
@@ -589,27 +598,41 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
                 {
                     while (xResultSet->next())
                     {
-                        String   aTitle     = xRow->getString(1);
-                        sal_Int64 nSize     = xRow->getLong(2);
-                        util::DateTime aDT  = xRow->getTimestamp(3);
+                        //!! needed to work-around the bad directory choice for OOo downloadable
+                        //!! dictionaries in restricted installations.
+                        //!! This is required because that directory holds the user-dictionaries as well
+                        //!! and changing those should not trigger updating the configuration.
+                        //!! Especially bad is that both of those different types of dictionaries
+                        //!! (downloaded dictionaries and user-dictionaries) have the same extension
+                        //!! thus we try to evaluate the need of updating the configuration in this
+                        //!! directory by only looking at the dictionary.lst file(s).
+                        sal_Bool bUseFile = (i != 2) || /* always use the regular directories */
+                                            xRow->getString(1).matchAsciiL( "dictionary.lst", 14, 0 );
 
-                        String aDateTime( String::CreateFromInt32( aDT.Day ) );
-                        aDateTime.Append( (sal_Unicode) '.' );
-                        aDateTime += String::CreateFromInt32( aDT.Month );
-                        aDateTime.Append( (sal_Unicode) '.' );
-                        aDateTime += String::CreateFromInt32( aDT.Year );
-                        aDateTime.Append( (sal_Unicode) ' ' );
-                        aDateTime += String::CreateFromInt32( aDT.Hours );
-                        aDateTime.Append( (sal_Unicode) ':' );
-                        aDateTime += String::CreateFromInt32( aDT.Minutes );
-                        aDateTime.Append( (sal_Unicode) '_' );
-                        aDateTime += String::CreateFromInt32( aDT.Seconds );
+                        if (bUseFile)
+                        {
+                            String   aTitle     = xRow->getString(1);
+                            sal_Int64 nSize     = xRow->getLong(2);
+                            util::DateTime aDT  = xRow->getTimestamp(3);
 
-                        String aSize( String::CreateFromInt64( nSize ) );
+                            String aDateTime( String::CreateFromInt32( aDT.Day ) );
+                            aDateTime.Append( (sal_Unicode) '.' );
+                            aDateTime += String::CreateFromInt32( aDT.Month );
+                            aDateTime.Append( (sal_Unicode) '.' );
+                            aDateTime += String::CreateFromInt32( aDT.Year );
+                            aDateTime.Append( (sal_Unicode) ' ' );
+                            aDateTime += String::CreateFromInt32( aDT.Hours );
+                            aDateTime.Append( (sal_Unicode) ':' );
+                            aDateTime += String::CreateFromInt32( aDT.Minutes );
+                            aDateTime.Append( (sal_Unicode) '_' );
+                            aDateTime += String::CreateFromInt32( aDT.Seconds );
 
-                        StringUpdateHashValue( nHashVal, aTitle );
-                        StringUpdateHashValue( nHashVal, aSize );
-                        StringUpdateHashValue( nHashVal, aDateTime );
+                            String aSize( String::CreateFromInt64( nSize ) );
+
+                            StringUpdateHashValue( nHashVal, aTitle );
+                            StringUpdateHashValue( nHashVal, aSize );
+                            StringUpdateHashValue( nHashVal, aDateTime );
+                        }
                     }
                 }
                 catch( uno::Exception& )
@@ -627,10 +650,10 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
 }
 
 
-BOOL SvxLinguConfigUpdate::IsNeedUpdateAll()
+BOOL SvxLinguConfigUpdate::IsNeedUpdateAll( sal_Bool bForceCheck )
 {
     RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::IsNeedUpdateAll" );
-    if (nNeedUpdating == -1)    // need to check if updating is necessary
+    if (nNeedUpdating == -1 || bForceCheck )    // need to check if updating is necessary
     {
         // calculate hash value for current data files
         nCurrentDataFilesChangedCheckValue = CalcDataFilesChangedCheckValue();
