@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:41:55 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,24 +39,23 @@
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_VCLWINDOWPEERATTRIBUTE_HPP_
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LAN_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #endif
 
 #ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
@@ -145,6 +144,22 @@ using namespace ::com::sun::star::util;
 
 using ::com::sun::star::accessibility::XAccessibleContext;
 using ::com::sun::star::accessibility::XAccessible;
+
+struct LanguageDependentProp
+{
+    const char* pPropName;
+    sal_Int32   nPropNameLength;
+};
+
+static LanguageDependentProp aLanguageDependentProp[] =
+{
+    { "Text",            4 },
+    { "Label",           5 },
+    { "Title",           5 },
+    { "HelpText",        8 },
+    { "CurrencySymbol", 14 },
+    { 0, 0                 }
+};
 
 WorkWindow* lcl_GetDefaultWindow()
 {
@@ -291,14 +306,74 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
     return xCompatiblePeer;
 }
 
+bool UnoControl::ImplMapPlaceHolder( ::rtl::OUString& rPlaceHolder )
+{
+    rtl::OUString aMappedValue;
+
+    Reference< XPropertySet > xPropSet( mxModel, UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        Any a;
+        Reference< resource::XStringResourceResolver > xStringResourceResolver;
+        a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" )));
+        if ( a >>= xStringResourceResolver )
+        {
+            if ( xStringResourceResolver.is() )
+            {
+                try
+                {
+                    rPlaceHolder = xStringResourceResolver->resolveString( rPlaceHolder );
+                    return true;
+                }
+                catch ( resource::MissingResourceException& )
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal )
 {
+    // since a change made in propertiesChange, we can't be sure that this is called with an valid getPeer(),
+    // this assumption may be false in some (seldom) multi-threading scenarios (cause propertiesChange
+    // releases our mutex before calling here in)
+    // That's why this additional check
+
     if ( mxVclWindowPeer.is() )
-        // since a change made in propertiesChange, we can't be sure that this is called with an valid getPeer(),
-        // this assumption may be false in some (seldom) multi-threading scenarios (cause propertiesChange
-        // releases our mutex before calling here in)
-        // That's why this additional check
-        mxVclWindowPeer->setProperty( rPropName, rVal );
+    {
+        Any aVal( rVal );
+
+        // We now support a mapping for language dependent properties. This is the
+        // central method to implement it.
+        if (( rPropName.equalsAsciiL( "Text",            4 )) ||
+            ( rPropName.equalsAsciiL( "Label",           5 )) ||
+            ( rPropName.equalsAsciiL( "Title",           5 )) ||
+            ( rPropName.equalsAsciiL( "HelpText",        8 )) ||
+            ( rPropName.equalsAsciiL( "CurrencySymbol", 14 )) )
+        {
+            rtl::OUString aValue;
+
+            if ( aVal >>= aValue )
+            {
+                if (( aValue.getLength() > 0 ) &&
+                    ( aValue.compareToAscii( "&", 1 ) == 0 ))
+                {
+                    // Magic symbol '&' found at first place. Interpret as a place
+                    // holder identifier. Now try to map it to the real value. The
+                    // magic symbol must be removed.
+                    rtl::OUString aKeyValue( aValue.copy( 1 ));
+                    if ( ImplMapPlaceHolder( aKeyValue ))
+                        aVal <<= aKeyValue;
+                }
+            }
+        }
+
+        mxVclWindowPeer->setProperty( rPropName, aVal );
+    }
 }
 
 void UnoControl::PrepareWindowDescriptor( WindowDescriptor& )
@@ -444,6 +519,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         DECLARE_STL_VECTOR( PropertyValue, PropertyValueVector);
         PropertyValueVector     aPeerPropertiesToSet;
         sal_Int32               nIndependentPos = 0;
+        bool                    bResourceResolverSet( false );
             // position where to insert the independent properties into aPeerPropertiesToSet,
             // dependent ones are inserted at the end of the vector
 
@@ -464,6 +540,15 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             sal_Bool bOwnModel = xModel.get() == xOwnModel.get();
             if ( bOwnModel )
             {
+                // Detect changes on our resource resolver which invalidates
+                // automatically some language dependent properties.
+                if ( pEvents->PropertyName.equalsAsciiL( "ResourceResolver", 16 ))
+                {
+                    Reference< resource::XStringResourceResolver > xStrResolver;
+                    if ( pEvents->NewValue >>= xStrResolver )
+                        bResourceResolverSet = xStrResolver.is();
+                }
+
                 sal_uInt16 nPType = GetPropertyId( pEvents->PropertyName );
                 if ( mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
                     {
@@ -495,7 +580,17 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 }
                 else
                 {
-                    if ( nPType == BASEPROPERTY_NATIVE_WIDGET_LOOK )
+                    if ( bResourceResolverSet )
+                    {
+                        // The resource resolver property change should be one of the first ones.
+                        // All language dependent properties are dependent on this property.
+                        // As BASEPROPERTY_NATIVE_WIDGET_LOOK is not dependent on resource
+                        // resolver. We don't need to handle a special order for these two props.
+                        aPeerPropertiesToSet.insert(
+                            aPeerPropertiesToSet.begin(),
+                            PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
+                    }
+                    else if ( nPType == BASEPROPERTY_NATIVE_WIDGET_LOOK )
                     {
                         // since *a lot* of other properties might be overruled by this one, we need
                         // a special handling:
@@ -525,7 +620,49 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 
         DBG_ASSERT( !bNeedNewPeer || xParent.is(), "Need new peer, but don't have a parent!" );
 
+        // Check if we have to update language dependent properties
+        if ( !bNeedNewPeer && bResourceResolverSet )
+        {
+            // Add language dependent properties into the peer property set.
+            // Our resource resolver has been changed and we must be sure
+            // that language dependent props use the new resolver.
+            LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
+            while ( pLangDepProp->pPropName != 0 )
+            {
+                bool bMustBeInserted( true );
+                for ( sal_uInt32 i = 0; i < aPeerPropertiesToSet.size(); i++ )
+                {
+                    if ( aPeerPropertiesToSet[i].Name.equalsAsciiL(
+                            pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))
+                    {
+                        bMustBeInserted = false;
+                        break;
+                    }
+                }
+
+                if ( bMustBeInserted )
+                {
+                    // Add language dependent props at the end
+                    rtl::OUString             aPropName( rtl::OUString::createFromAscii( pLangDepProp->pPropName ));
+                    Reference< XPropertySet > xPS( xOwnModel, UNO_QUERY );
+
+                    try
+                    {
+                        // Retrieve value to be set again. May be we don't have the property,
+                        // therefore we need to handle NoSuchPropertyException here.
+                        Any aAny = xPS->getPropertyValue( aPropName );
+                        aPeerPropertiesToSet.push_back( PropertyValue( aPropName, 0, aAny, PropertyState_DIRECT_VALUE ));
+                    }
+                    catch ( UnknownPropertyException& )
+                    {
+                    }
+                }
+
+                ++pLangDepProp;
+            }
+        }
         aGuard.clear();
+
         // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
         // #82300# - 2000-12-21 - fs@openoffice.org
         if (bNeedNewPeer && xParent.is())
