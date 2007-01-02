@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listviewbuilder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:45:29 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 list_view_builder_ptr create_list_view_builder(
     HWND hwnd_lv, const std::wstring& col1, const std::wstring& col2)
 {
-    if (is_windows_xp())
+    if (is_windows_xp_or_above())
         return list_view_builder_ptr(new winxp_list_view_builder(hwnd_lv, col1, col2));
     else
         return list_view_builder_ptr(new list_view_builder(hwnd_lv, col1, col2));
