@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:25:42 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,8 @@
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <sbxitem.hxx>
+#include <managelang.hxx>
+#include <localizationmgr.hxx>
 #include <helpid.hrc>
 
 #include <svtools/texteng.hxx>
@@ -825,6 +827,14 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             rReq.Done();
         }
         break;
+
+        case SID_BASICIDE_MANAGE_LANG:
+        {
+            ManageLanguageDialog aDlg( GetCurWindow(), GetCurLocalizationMgr() );
+            aDlg.Execute();
+            rReq.Done();
+        }
+        break;
     }
 }
 
@@ -1052,6 +1062,48 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
                 if ( GetViewFrame()->KnowsChildWindow( nWh ) )
                     rSet.Put( SfxBoolItem( nWh, GetViewFrame()->HasChildWindow( nWh ) ) );
                 else
+                    rSet.DisableItem( nWh );
+            }
+            break;
+
+            case SID_BASICIDE_CURRENT_LANG:
+            {
+                if( (pCurWin && pCurWin->IsReadOnly()) || GetCurLibName().Len() == 0 )
+                    rSet.DisableItem( nWh );
+                else
+                {
+                    String aItemStr;
+                    LocalizationMgr* pCurMgr = GetCurLocalizationMgr();
+                    if ( pCurMgr->isLibraryLocalized() )
+                    {
+                        Sequence< lang::Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
+                        const lang::Locale* pLocale = aLocaleSeq.getConstArray();
+                        INT32 i, nCount = aLocaleSeq.getLength();
+
+                        // Force different results for any combination of locales and default locale
+                        ::rtl::OUString aLangStr;
+                        for ( i = 0;  i <= nCount;  ++i )
+                        {
+                            lang::Locale aLocale;
+                            if( i < nCount )
+                                aLocale = pLocale[i];
+                            else
+                                aLocale = pCurMgr->getStringResourceManager()->getDefaultLocale();
+
+                            aLangStr += aLocale.Language;
+                            aLangStr += aLocale.Country;
+                            aLangStr += aLocale.Variant;
+                        }
+                        aItemStr = aLangStr;
+                    }
+                    rSet.Put( SfxStringItem( nWh, aItemStr ) );
+                }
+            }
+            break;
+
+            case SID_BASICIDE_MANAGE_LANG:
+            {
+                if( (pCurWin && pCurWin->IsReadOnly()) || GetCurLibName().Len() == 0 )
                     rSet.DisableItem( nWh );
             }
             break;
