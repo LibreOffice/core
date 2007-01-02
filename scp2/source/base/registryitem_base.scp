@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_base.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:17:52 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,3 +126,11 @@ RegistryItem gid_Regitem_OpenOffice_ODB_OpenWith_Database
     Value = " ";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Odb
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".odb";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
