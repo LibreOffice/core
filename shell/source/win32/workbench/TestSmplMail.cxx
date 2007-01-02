@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestSmplMail.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:49:32 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@
 #include <cppuhelper/servicefactory.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -112,7 +112,9 @@ Reference< XMultiServiceFactory >   g_xFactory;
 //--------------------------------------------------------------
 
 
-int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
+// int SAL_CALL main(int nArgc, char* Argv[], char* pEnv[]  )
+// make Warning free, leave out typename
+int SAL_CALL main(int , char*, char* )
 {
     //-------------------------------------------------
     // get the global service-manager

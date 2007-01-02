@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestSysShExec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:49:45 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,8 @@
 #include <cppuhelper/servicefactory.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -121,7 +121,8 @@ Reference< XMultiServiceFactory >   g_xFactory;
 //--------------------------------------------------------------
 
 
-int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
+// int SAL_CALL main(int nArgc, char* Argv[], char* Env[]   )
+int SAL_CALL main(int nArgc, char* Argv[], char*    )
 {
     //-------------------------------------------------
     // get the global service-manager
@@ -164,11 +165,11 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     {
         xSysShExec->execute( cmd, param, atoi( Argv[3] ) );
     }
-    catch( SystemShellExecuteException& ex )
+    catch( SystemShellExecuteException&  )
     {
         OSL_ENSURE( sal_False, "Error executing system command" );
     }
-    catch( IllegalArgumentException& ex)
+    catch( IllegalArgumentException& )
     {
         OSL_ENSURE( sal_False, "Invalid parameter" );
     }
