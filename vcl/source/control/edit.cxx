@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:52:11 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:47:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2414,11 +2414,11 @@ void Edit::SetMaxTextLen( xub_StrLen nMaxLen )
     mnMaxTextLen = nMaxLen ? nMaxLen : EDIT_NOLIMIT;
 
     if ( mpSubEdit )
-        mpSubEdit->SetMaxTextLen( nMaxLen );
+        mpSubEdit->SetMaxTextLen( mnMaxTextLen );
     else
     {
-        if ( maText.Len() > nMaxLen )
-            ImplDelete( Selection( nMaxLen, maText.Len() ), EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
+        if ( maText.Len() > mnMaxTextLen )
+            ImplDelete( Selection( mnMaxTextLen, maText.Len() ), EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
     }
 }
 
