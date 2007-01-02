@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:57:02 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,9 @@
 #ifndef _COM_SUN_STAR_INSPECTION_PROPERTYLINEELEMENT_HPP_
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEMANAGER_HPP_
+#include <com/sun/star/resource/XStringResourceManager.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
@@ -308,13 +311,97 @@ namespace pcr
         return aSupported;
     }
 
+    //============================================
+    // TODO: -> export from toolkit
+    struct LanguageDependentProp
+    {
+        const char* pPropName;
+        sal_Int32   nPropNameLength;
+    };
+
+    static LanguageDependentProp aLanguageDependentProp[] =
+    {
+        { "Text",            4 },
+        { "Label",           5 },
+        { "Title",           5 },
+        { "HelpText",        8 },
+        { "CurrencySymbol", 14 },
+        { 0, 0                 }
+    };
+
+    namespace
+    {
+        bool lcl_isLanguageDependentProperty( ::rtl::OUString aName )
+        {
+            bool bRet = false;
+
+            LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
+            while( pLangDepProp->pPropName != 0 )
+            {
+                if( aName.equalsAsciiL( pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))
+                {
+                    bRet = true;
+                    break;
+                }
+                pLangDepProp++;
+            }
+            return bRet;
+        }
+
+        Reference< resource::XStringResourceResolver > lcl_getStringResourceResolverForProperty
+            ( Reference< XPropertySet > _xComponent, const ::rtl::OUString& _rPropertyName,
+              const Any& _rPropertyValue )
+        {
+            static ::rtl::OUString aResourceResolverPropName
+                = ::rtl::OUString::createFromAscii( "ResourceResolver" );
+
+            Reference< resource::XStringResourceResolver > xStringResourceResolver;
+            try
+            {
+                Any aResourceAny( _xComponent->getPropertyValue( aResourceResolverPropName ) );
+                aResourceAny >>= xStringResourceResolver;
+            }
+            catch(UnknownPropertyException&)
+            {}
+
+            Reference< resource::XStringResourceResolver > xRet;
+            if( xStringResourceResolver.is() &&
+                xStringResourceResolver->getLocales().getLength() > 0 &&
+                _rPropertyValue.getValueType().getTypeClass() == TypeClass_STRING &&
+                lcl_isLanguageDependentProperty( _rPropertyName ) )
+            {
+                xRet = xStringResourceResolver;
+            }
+
+            return xRet;
+        }
+    }
+
     //--------------------------------------------------------------------
     Any FormComponentPropertyHandler::impl_getPropertyValue_throw( const ::rtl::OUString& _rPropertyName ) const
     {
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
         Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
-        impl_normalizePropertyValue_nothrow( aPropertyValue, nPropId );
+
+        Reference< resource::XStringResourceResolver > xStringResourceResolver
+            = lcl_getStringResourceResolverForProperty( m_xComponent, _rPropertyName, aPropertyValue );
+        if( xStringResourceResolver.is() )
+        {
+            ::rtl::OUString aPropStr;
+            aPropertyValue >>= aPropStr;
+            if( aPropStr.getLength() > 1 )
+            {
+                ::rtl::OUString aPureIdStr = aPropStr.copy( 1 );
+                if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
+                {
+                    ::rtl::OUString aResourceStr = xStringResourceResolver->resolveString( aPureIdStr );
+                    aPropertyValue <<= aResourceStr;
+                }
+            }
+        }
+        else
+            impl_normalizePropertyValue_nothrow( aPropertyValue, nPropId );
 
         return aPropertyValue;
     }
@@ -343,7 +430,33 @@ namespace pcr
                 m_xComponent->setPropertyValue( fontPropertyValue->Name, fontPropertyValue->Value );
         }
         else
-            m_xComponent->setPropertyValue( _rPropertyName, _rValue );
+        {
+            Any aValue = _rValue;
+
+            Reference< resource::XStringResourceResolver > xStringResourceResolver
+                = lcl_getStringResourceResolverForProperty( m_xComponent, _rPropertyName, _rValue );
+            if( xStringResourceResolver.is() )
+            {
+                Reference< resource::XStringResourceManager >
+                    xStringResourceManager( xStringResourceResolver, UNO_QUERY );
+                if( xStringResourceManager.is() )
+                {
+                    Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
+                    ::rtl::OUString aPropStr;
+                    aPropertyValue >>= aPropStr;
+                    if( aPropStr.getLength() > 1 )
+                    {
+                        ::rtl::OUString aPureIdStr = aPropStr.copy( 1 );
+                        ::rtl::OUString aValueStr;
+                        _rValue >>= aValueStr;
+                        xStringResourceManager->setString( aPureIdStr, aValueStr );
+                        aValue = aPropertyValue;    // set value to force modified
+                    }
+                }
+            }
+
+            m_xComponent->setPropertyValue( _rPropertyName, aValue );
+        }
     }
 
     //--------------------------------------------------------------------
