@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XStringResourceSupplier.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:44:17 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_resource_XStringResourceSupplier_idl__
+#define __com_sun_star_resource_XStringResourceSupplier_idl__
+
+#ifndef __com_sun_star_resource_XStringResourceResolver_idl__
+#include <com/sun/star/resource/XStringResourceResolver.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module resource {
+
+//=============================================================================
+
+/**
+    Provides access to a string resource represented by a
+    <type scope="com::sun::star::resource">XStringResourceResolver</type>.
+ */
+interface XStringResourceSupplier: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /**
+        Provides access to a string resource.
+        Depending on the context the returned object may also support
+        <type scope="com::sun::star::resource">XStringResourceManager</type> or
+        <type scope="com::sun::star::resource">XStringResourcePersistance</type> or
+        <type scope="com::sun::star::resource">XStringResourceWithStorage</type>
+
+        @returns an interface
+        <type scope="com::sun::star::resource">XStringResourceResolver</type>
+     */
+    com::sun::star::resource::XStringResourceResolver getStringResource();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
