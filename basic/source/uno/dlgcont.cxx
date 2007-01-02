@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:53:48 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #endif
@@ -65,6 +68,12 @@
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEWITHSTORAGE_HPP_
+#include "com/sun/star/resource/XStringResourceWithStorage.hpp"
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEWITHLOCATION_HPP_
+#include "com/sun/star/resource/XStringResourceWithLocation.hpp"
 #endif
 
 #ifndef BASIC_DIALOGCONTAINER_HXX
@@ -84,6 +93,8 @@
 #include <osl/mutex.hxx>
 #endif
 
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/pathoptions.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <cppuhelper/factory.hxx>
@@ -108,8 +119,8 @@ using namespace osl;
 //============================================================================
 // Implementation class SfxDialogLibraryContainer
 
-sal_Bool SfxDialogLibraryContainer::init
-    ( const ::rtl::OUString& aInitialisationParam, const uno::Reference< embed::XStorage >& xStorage )
+sal_Bool SfxDialogLibraryContainer::init( const OUString& aInitialisationParam,
+    const uno::Reference< embed::XStorage >& xStorage )
 {
     return SfxLibraryContainer::init(
           aInitialisationParam,
@@ -134,18 +145,19 @@ SfxDialogLibraryContainer::SfxDialogLibraryContainer( const uno::Reference< embe
 }
 
 // Methods to get library instances of the correct type
-SfxLibrary* SfxDialogLibraryContainer::implCreateLibrary( void )
+SfxLibrary* SfxDialogLibraryContainer::implCreateLibrary( const ::rtl::OUString& aName )
 {
-    SfxLibrary* pRet = (SfxLibrary*) new SfxDialogLibrary( mxMSF, mxSFI );
+    SfxLibrary* pRet = (SfxLibrary*) new SfxDialogLibrary( aName, mxMSF, mxSFI, this );
     return pRet;
 }
 
 SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
-    ( const OUString& aLibInfoFileURL, const OUString& StorageURL, sal_Bool ReadOnly )
+    ( const ::rtl::OUString& aName, const OUString& aLibInfoFileURL,
+      const OUString& StorageURL, sal_Bool ReadOnly )
 {
     SfxLibrary* pRet =
         (SfxLibrary*) new SfxDialogLibrary
-            ( mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly );
+            ( aName, mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
     return pRet;
 }
 
@@ -303,14 +315,14 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     Any aRetAny;
 
     // TODO: Member because later it will be a component
-    Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
-    if( !xMSF.is() )
-    {
-        OSL_ENSURE( 0, "### couln't get ProcessServiceFactory\n" );
-        return aRetAny;
-    }
+    //Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
+    //if( !xMSF.is() )
+    //{
+    //  OSL_ENSURE( 0, "### couln't get ProcessServiceFactory\n" );
+    //  return aRetAny;
+    //}
 
-    Reference< XParser > xParser( xMSF->createInstance(
+    Reference< XParser > xParser( mxMSF->createInstance(
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
@@ -318,7 +330,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         return aRetAny;
     }
 
-    Reference< XNameContainer > xDialogModel( xMSF->createInstance
+    Reference< XNameContainer > xDialogModel( mxMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
     if( !xDialogModel.is() )
     {
@@ -351,9 +363,9 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         return aRetAny;
 
     Reference< XComponentContext > xContext;
-    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+    Reference< beans::XPropertySet > xProps( mxMSF, UNO_QUERY );
     OSL_ASSERT( xProps.is() );
-    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
 
     InputSource source;
     source.aInputStream = xInput;
@@ -370,7 +382,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     return aRetAny;
 }
 
-void SAL_CALL SfxDialogLibraryContainer::importFromOldStorage( const ::rtl::OUString& )
+void SAL_CALL SfxDialogLibraryContainer::importFromOldStorage( const OUString& )
 {
     // Nothing to do here, old dialogs cannot be imported
 }
@@ -400,6 +412,140 @@ void SAL_CALL SfxDialogLibraryContainer::initialize( const Sequence< Any >& aArg
     }
 
     init( aInitialisationParam );
+}
+
+static OUString aResourceFileNameBase = OUString::createFromAscii( "DialogStrings" );
+static OUString aResourceFileCommentBase = OUString::createFromAscii( "# Strings for Dialog Library " );
+
+// Resource handling
+Reference< ::com::sun::star::resource::XStringResourcePersistance >
+    SfxDialogLibraryContainer::implCreateStringResource( SfxDialogLibrary* pDialogLibrary )
+{
+    Reference< resource::XStringResourcePersistance > xRet;
+    OUString aLibName = pDialogLibrary->getName();
+    bool bReadOnly = pDialogLibrary->mbReadOnly;
+
+    // get ui locale
+    ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+
+    OUString aComment = aResourceFileCommentBase;
+    aComment += aLibName;
+
+    sal_Bool bStorage = mxStorage.is();
+    if( bStorage )
+    {
+        Sequence<Any> aArgs( 5 );
+        aArgs[1] <<= bReadOnly;
+        aArgs[2] <<= aLocale;
+        aArgs[3] <<= aResourceFileNameBase;
+        aArgs[4] <<= aComment;
+
+        // TODO: Ctor
+        xRet = Reference< resource::XStringResourcePersistance >( mxMSF->createInstance
+            ( OUString::createFromAscii( "com.sun.star.resource.StringResourceWithStorage" ) ), UNO_QUERY );
+
+        uno::Reference< embed::XStorage > xLibrariesStor;
+        uno::Reference< embed::XStorage > xLibraryStor;
+        try {
+            xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
+                // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
+            if ( !xLibrariesStor.is() )
+                throw uno::RuntimeException();
+
+            xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READ );
+                // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
+            if ( !xLibraryStor.is() )
+                throw uno::RuntimeException();
+
+            aArgs[0] <<= xLibraryStor;
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: Error handling?
+            return xRet;
+        }
+
+        // TODO: Ctor
+        if( xRet.is() )
+        {
+            Reference< XInitialization > xInit( xRet, UNO_QUERY );
+            if( xInit.is() )
+                xInit->initialize( aArgs );
+        }
+    }
+    else
+    {
+        Sequence<Any> aArgs( 6 );
+
+        OUString aLocation = createAppLibraryFolder( pDialogLibrary, aLibName );
+        aArgs[0] <<= aLocation;
+        aArgs[1] <<= bReadOnly;
+        aArgs[2] <<= aLocale;
+        aArgs[3] <<= aResourceFileNameBase;
+        aArgs[4] <<= aComment;
+
+        // TODO: Real handler?
+        Reference< task::XInteractionHandler > xDummyHandler;
+        aArgs[5] <<= xDummyHandler;
+
+        // TODO: Ctor
+        xRet = Reference< resource::XStringResourcePersistance >( mxMSF->createInstance
+            ( OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ) ), UNO_QUERY );
+
+        // TODO: Ctor
+        if( xRet.is() )
+        {
+            Reference< XInitialization > xInit( xRet, UNO_QUERY );
+            if( xInit.is() )
+                xInit->initialize( aArgs );
+        }
+    }
+
+    return xRet;
+}
+
+void SfxDialogLibraryContainer::implSetStorage( const Reference< embed::XStorage >& xStorage )
+{
+    (void)xStorage;
+
+    // the library container is not modified, go through the libraries and check whether they are modified
+    Sequence< OUString > aNames = maNameContainer.getElementNames();
+    const OUString* pNames = aNames.getConstArray();
+    sal_Int32 nNameCount = aNames.getLength();
+
+    for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+    {
+        OUString aName = pNames[ i ];
+        SfxDialogLibrary* pDialogLibrary = static_cast<SfxDialogLibrary*>( getImplLib( aName ) );
+
+        Reference< resource::XStringResourcePersistance > xStringResourcePersistance =
+            pDialogLibrary->getStringResourcePersistance();
+
+        if( xStringResourcePersistance.is() )
+        {
+            Reference< embed::XStorage > xLibrariesStor;
+            Reference< embed::XStorage > xLibraryStor;
+            try {
+                xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE );
+                if ( !xLibrariesStor.is() )
+                    throw uno::RuntimeException();
+
+                OUString aLibName = pDialogLibrary->getName();
+                xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READWRITE );
+                if ( !xLibraryStor.is() )
+                    throw uno::RuntimeException();
+
+                Reference< resource::XStringResourceWithStorage >
+                    xStringResourceWithStorage( xStringResourcePersistance, UNO_QUERY );
+                if( xStringResourceWithStorage.is() )
+                    xStringResourceWithStorage->setStorage( xLibraryStor );
+            }
+            catch( uno::Exception& )
+            {
+                // TODO: Error handling?
+            }
+        }
+    }
 }
 
 
@@ -452,20 +598,102 @@ Reference< XInterface > SAL_CALL SfxDialogLibraryContainer::Create( const Refere
 // Implementation class SfxDialogLibrary
 
 // Ctor
-SfxDialogLibrary::SfxDialogLibrary( Reference< XMultiServiceFactory > xMSF,
-                                    Reference< XSimpleFileAccess > xSFI )
-    : SfxLibrary( getCppuType( (const Reference< XInputStreamProvider > *)0 ), xMSF, xSFI )
+SfxDialogLibrary::SfxDialogLibrary( const ::rtl::OUString& aName,
+                                    Reference< XMultiServiceFactory > xMSF,
+                                    Reference< XSimpleFileAccess > xSFI,
+                                    SfxDialogLibraryContainer* pParent )
+    : SfxDialogLibrary_BASE( getCppuType( (const Reference< XInputStreamProvider > *)0 ), xMSF, xSFI )
+    , m_pParent( pParent )
+    , m_aName( aName )
 {
 }
 
-SfxDialogLibrary::SfxDialogLibrary( Reference< XMultiServiceFactory > xMSF,
+SfxDialogLibrary::SfxDialogLibrary( const ::rtl::OUString& aName,
+                                    Reference< XMultiServiceFactory > xMSF,
                                     Reference< XSimpleFileAccess > xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
-                                    sal_Bool ReadOnly )
-    : SfxLibrary( getCppuType( (const Reference< XInputStreamProvider > *)0 ),
+                                    sal_Bool ReadOnly,
+                                    SfxDialogLibraryContainer* pParent )
+    : SfxDialogLibrary_BASE( getCppuType( (const Reference< XInputStreamProvider > *)0 ),
                        xMSF, xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
+    , m_pParent( pParent )
+    , m_aName( aName )
 {
+}
+
+// Provide modify state including resources
+sal_Bool SfxDialogLibrary::isModified( void )
+{
+    sal_Bool bRet = implIsModified();
+
+    if( !bRet && m_xStringResourcePersistance.is() )
+        bRet = m_xStringResourcePersistance->isModified();
+    // else: Resources not accessed so far -> not modified
+
+    return bRet;
+}
+
+void SfxDialogLibrary::storeResources( void )
+{
+    if( m_xStringResourcePersistance.is() )
+        m_xStringResourcePersistance->store();
+}
+
+void SfxDialogLibrary::storeResourcesAsURL
+    ( const ::rtl::OUString& URL, const ::rtl::OUString& NewName )
+{
+    OUString aComment = aResourceFileCommentBase;
+    m_aName = NewName;
+    aComment += m_aName;
+
+    if( m_xStringResourcePersistance.is() )
+    {
+        m_xStringResourcePersistance->setComment( aComment );
+
+        Reference< resource::XStringResourceWithLocation >
+            xStringResourceWithLocation( m_xStringResourcePersistance, UNO_QUERY );
+        if( xStringResourceWithLocation.is() )
+            xStringResourceWithLocation->storeAsURL( URL );
+    }
+}
+
+void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
+    const Reference< task::XInteractionHandler >& xHandler )
+{
+    OUString aComment = aResourceFileCommentBase;
+    aComment += m_aName;
+
+    if( m_xStringResourcePersistance.is() )
+    {
+        m_xStringResourcePersistance->storeToURL
+            ( URL, aResourceFileNameBase, aComment, xHandler );
+    }
+}
+
+void SfxDialogLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Reference
+    < ::com::sun::star::embed::XStorage >& xStorage )
+{
+    OUString aComment = aResourceFileCommentBase;
+    aComment += m_aName;
+
+    if( m_xStringResourcePersistance.is() )
+    {
+        m_xStringResourcePersistance->storeToStorage
+            ( xStorage, aResourceFileNameBase, aComment );
+    }
+}
+
+
+// XStringResourceSupplier
+Reference< resource::XStringResourceResolver >
+    SAL_CALL SfxDialogLibrary::getStringResource(  ) throw (RuntimeException)
+{
+    if( !m_xStringResourcePersistance.is() )
+        m_xStringResourcePersistance = m_pParent->implCreateStringResource( this );
+
+    Reference< resource::XStringResourceResolver > xRet( m_xStringResourcePersistance, UNO_QUERY );
+    return xRet;
 }
 
 }
