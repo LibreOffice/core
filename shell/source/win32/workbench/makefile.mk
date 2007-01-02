@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:05:36 $
+#   last change: $Author: hr $ $Date: 2007-01-02 16:14:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ PRJNAME=		sysshell
 TARGET=			testsyssh
 TARGET1=		testsmplmail
 TARGET2=		testprx
+TARGET4=        testfopen
 LIBTARGET=		NO
 TARGETTYPE=		CUI
 
@@ -54,6 +55,7 @@ CFLAGS+=/GX
 OBJFILES1=$(OBJ)$/TestSysShExec.obj
 OBJFILES2=$(OBJ)$/TestSmplMail.obj
 OBJFILES3=$(OBJ)$/TestProxySet.obj
+OBJFILES4=$(OBJ)$/Testfopen.obj
 
 OBJFILES=$(OBJFILES1)\
          $(OBJFILES2)
@@ -65,7 +67,7 @@ APP1STDLIBS+=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(SALLIB) 	 		\
                 user32.lib
-                
+
 APP1DEF=		$(MISC)$/$(APP1TARGET).def
 
 
@@ -78,7 +80,7 @@ APP2STDLIBS+=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(SALLIB) 	 		\
                 user32.lib
-                
+
 APP2DEF=		$(MISC)$/$(APP2TARGET).def
 
 # --- TestProxy ---
@@ -91,6 +93,15 @@ APP3STDLIBS+=	$(CPPULIB)			\
                 $(SALLIB)
 
 APP3DEF=		$(MISC)$/$(APP3TARGET).def
+
+# --- Testfopen ---
+
+APP4TARGET=$(TARGET4)
+APP4OBJS=$(OBJFILES4)
+
+APP4STDLIBS+=	$(SALLIB)
+
+APP4DEF=		$(MISC)$/$(APP4TARGET).def
 
 # --- Targets ------------------------------------------------------
 
