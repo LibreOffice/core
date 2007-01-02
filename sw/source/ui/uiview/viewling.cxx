@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:25:42 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,10 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/bootstrap.hxx>
+
+#ifndef _STMENU_HXX
+#include "stmenu.hxx"              // PopupMenu for smarttags
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -827,5 +831,55 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
         }
     }
     return bRet;
+}
+
+// SMARTTAGS
+
+/** Function: IsOverSmartTag
+
+   This function returns true in given point lies over
+   a smarttag word.
+*/
+sal_Bool SwView::IsOverSmartTag(const Point& rPt)
+{
+        return pWrtShell->IsOverSmartTag(&rPt);
+}
+
+/** Function: ExecSmartTagPopup
+
+   This function shows the popup menu for smarttag
+   actions.
+*/
+
+sal_Bool SwView::ExecSmartTagPopup(const Point& rPt)
+{
+   sal_Bool bRet = sal_False;
+   const sal_Bool bOldViewLock = pWrtShell->IsViewLocked();
+   pWrtShell->LockView( sal_True );
+   pWrtShell->Push();
+
+   SwRect aToFill;
+   // get word that was clicked on
+   Reference<XTextRange> xRange = pWrtShell->GetSmartTagTerm(&rPt, aToFill);
+   if ( xRange.is() ) {
+     // get references to smarttags which provide actions for
+     // this word
+     SmartTagMgr& rSmartTagMgr = SmartTagMgr::getSmartTagMgr();
+     std::vector <ActionReference> aRefs;
+     aRefs = rSmartTagMgr.getActionRefsByWord(xRange->getString());
+
+     // if the word is actionable open popup menu
+     if (aRefs.size() > 0) {
+       bRet = sal_True;
+       pWrtShell->SttSelect();
+       SwSmartTagPopup aPopup(this, aRefs, xRange);
+       aPopup.Execute(pEditWin, aToFill.SVRect());
+     }
+   }
+
+   pWrtShell->Pop( sal_False );
+   pWrtShell->LockView( bOldViewLock );
+
+   return bRet;
 }
 
