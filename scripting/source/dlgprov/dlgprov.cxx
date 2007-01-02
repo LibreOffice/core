@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:34:55 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,15 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCESUPPLIER_HPP_
+#include <com/sun/star/resource/XStringResourceSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEMANAGER_HPP_
+#include <com/sun/star/resource/XStringResourceManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _SFXAPP_HXX
@@ -170,9 +179,29 @@ namespace dlgprov
 
     // -----------------------------------------------------------------------------
 
+    Reference< resource::XStringResourceManager > getStringResourceFromDialogLibrary
+        ( Reference< container::XNameContainer > xDialogLib )
+    {
+        Reference< resource::XStringResourceManager > xStringResourceManager;
+        if( xDialogLib.is() )
+        {
+            Reference< resource::XStringResourceSupplier > xStringResourceSupplier( xDialogLib, UNO_QUERY );
+            if( xStringResourceSupplier.is() )
+            {
+                Reference< resource::XStringResourceResolver >
+                    xStringResourceResolver = xStringResourceSupplier->getStringResource();
+
+                xStringResourceManager =
+                    Reference< resource::XStringResourceManager >( xStringResourceResolver, UNO_QUERY );
+            }
+        }
+        return xStringResourceManager;
+    }
 
     Reference< XControlModel > DialogProviderImpl::createDialogModel( const ::rtl::OUString& sURL )
     {
+        static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
+
         // parse URL
         // TODO: use URL parsing class
         // TODO: decoding of location
@@ -278,7 +307,7 @@ namespace dlgprov
 
         // get input stream provider
         Reference< io::XInputStreamProvider > xISP;
-
+        Reference< container::XNameContainer > xDialogLib;
         if ( xLibContainer.is() )
         {
             // load dialog library
@@ -286,19 +315,18 @@ namespace dlgprov
                 xLibContainer->loadLibrary( sLibName );
 
             // get dialog library
-            Reference< container::XNameContainer > xLib;
             if ( xLibContainer->hasByName( sLibName ) )
             {
                 Any aElement = xLibContainer->getByName( sLibName );
-                aElement >>= xLib;
+                aElement >>= xDialogLib;
             }
 
-            if ( xLib.is() )
+            if ( xDialogLib.is() )
             {
                 // get input stream provider
-                if ( xLib->hasByName( sDlgName ) )
+                if ( xDialogLib->hasByName( sDlgName ) )
                 {
-                    Any aElement = xLib->getByName( sDlgName );
+                    Any aElement = xDialogLib->getByName( sDlgName );
                     aElement >>= xISP;
                 }
 
@@ -340,6 +368,17 @@ namespace dlgprov
                     {
                         ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
                         xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
+
+                        // Set resource property
+                        Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
+                        if( xStringResourceManager.is() )
+                        {
+
+                            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+                            Any aStringResourceManagerAny;
+                            aStringResourceManagerAny <<= xStringResourceManager;
+                            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+                        }
                     }
                 }
             }
