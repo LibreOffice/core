@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:47:57 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ CFileOpenDialog::CFileOpenDialog(
                    OFN_FILEMUSTEXIST |
                    OFN_OVERWRITEPROMPT |
                    OFN_ENABLESIZING |
-                   0x02000000; // 0x02000000 -> OFN_DONTADDTORECENT only available with new platform sdk
+                   OFN_DONTADDTORECENT; // 0x02000000 -> OFN_DONTADDTORECENT only available with new platform sdk
 
     // it is a little hack but how else could
     // we get a parent window (using a vcl window?)
@@ -154,6 +154,7 @@ CFileOpenDialog::CFileOpenDialog(
     m_ofn.lpfnHook = CFileOpenDialog::ofnHookProc;
 
     // set a custom template
+
     if (dwTemplateId)
     {
         OSL_ASSERT(hInstance);
@@ -191,6 +192,9 @@ void SAL_CALL CFileOpenDialog::setTitle(const rtl::OUString& aTitle)
 
 void CFileOpenDialog::setFilter(const rtl::OUString& aFilter)
 {
+    // Format is like
+    // "*.TXT" or multiple separate by ';' like "*.TXT;*.DOC;*.SXW"
+    // Do not include spaces in the pattern string
     m_filterBuffer.ensureCapacity(aFilter.getLength());
     m_filterBuffer.setLength(0);
     m_filterBuffer.append(aFilter);
