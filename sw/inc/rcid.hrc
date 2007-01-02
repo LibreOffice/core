@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rcid.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:05:59 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@
 #define RC_ACCESS                   (RC_BASE + 3550)
 #define STR_POOLPARSTYLE            (RC_BASE + 3650)
 #define RC_UNDO                     (RC_BASE + 3750)
+#define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
 
 /*--------------------------------------------------------------------
     Beschreibung:   Bereiche ausspannen
@@ -261,5 +262,11 @@
 // Undos
 #define RC_UNDO_BEGIN               RC_UNDO
 #define RC_UNDO_END                 (RC_UNDO + 199)
+
+// SMARTTAGS
+// Smarttags
+#define RC_SMARTTAG_BEGIN                      RC_SMARTTAG
+#define RC_SMARTTAG_END                    (RC_SMARTTAG + 99)
+
 
 #endif
