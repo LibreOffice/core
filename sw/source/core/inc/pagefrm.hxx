@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:21:17 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:48:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@ class SwPageFrm: public SwFtnBossFrm
     BOOL bEmptyPage         :1; //Dies ist eine explizite Leerseite
     BOOL bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
     BOOL bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
+    BOOL bInvalidSmartTags :1;  //checking for smarttags is needed  // SMARTTAGS
     BOOL bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
     BOOL bInvalidWordCount  :1;
     BOOL bHasGrid           :1; // Grid for Asian layout
@@ -278,6 +279,7 @@ public:
     inline void InvalidateLayout() const;
     inline void InvalidateCntnt() const;
     inline void InvalidateSpelling() const;
+    inline void InvalidateSmartTags() const;
     inline void InvalidateAutoCompleteWords() const;
     inline void InvalidateWordCount() const;
     inline void ValidateFlyLayout() const;
@@ -286,6 +288,7 @@ public:
     inline void ValidateLayout() const;
     inline void ValidateCntnt() const;
     inline void ValidateSpelling()  const;
+    inline void ValidateSmartTags() const;        // SMARTTAGS
     inline void ValidateAutoCompleteWords() const;
     inline void ValidateWordCount() const;
     inline BOOL IsInvalid() const;
@@ -296,6 +299,7 @@ public:
     BOOL IsInvalidLayout() const { return bInvalidLayout; }
     BOOL IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
     BOOL IsInvalidSpelling() const { return bInvalidSpelling; }
+    BOOL IsInvalidSmartTags() const { return bInvalidSmartTags; }   // SMARTTAGS
     BOOL IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
     BOOL IsInvalidWordCount() const { return bInvalidWordCount; }
 
@@ -435,6 +439,11 @@ inline void SwPageFrm::InvalidateSpelling() const
 {
     ((SwPageFrm*)this)->bInvalidSpelling = TRUE;
 }
+// SMARTTAGS
+inline void    SwPageFrm::InvalidateSmartTags() const
+{
+   ((SwPageFrm*)this)->bInvalidSmartTags = TRUE;
+}
 inline void SwPageFrm::InvalidateAutoCompleteWords() const
 {
     ((SwPageFrm*)this)->bInvalidAutoCmplWrds = TRUE;
@@ -466,6 +475,11 @@ inline void SwPageFrm::ValidateCntnt() const
 inline void SwPageFrm::ValidateSpelling() const
 {
     ((SwPageFrm*)this)->bInvalidSpelling = FALSE;
+}
+// SMARTTAGS
+inline void    SwPageFrm::ValidateSmartTags() const
+{
+   ((SwPageFrm*)this)->bInvalidSmartTags = FALSE;
 }
 inline void SwPageFrm::ValidateAutoCompleteWords() const
 {
