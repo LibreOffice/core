@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-13 16:50:18 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5989,6 +5989,21 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Markierung für rechts-nach-links Schreibrichtung</value>
                     <value xml:lang="en-US">~Right-to-left mark</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ManageLanguage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Sprache verwalten</value>
+                    <value xml:lang="en-US">Manage Language</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CurrentLanguage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Aktuelle Sprache</value>
+                    <value xml:lang="en-US">Current Language</value>
                 </prop>
             </node>
         </node>
