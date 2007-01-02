@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hr $ $Date: 2006-10-24 15:35:28 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:32:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@ SCP1FILES  = installation_ooo.par          \
              shortcut_ooo.par              \
              module_ooo.par                \
              module_hidden_ooo.par         \
+             module_langpack.par           \
+             module_java.par               \
              profile_ooo.par               \
              profileitem_ooo.par           \
              module_writer.par             \
@@ -77,6 +79,7 @@ SCP1FILES  = installation_ooo.par          \
              canvascommons.par             \
              module_math.par               \
              file_math.par                 \
+             module_systemint.par          \
              module_graphicfilter.par      \
              file_graphicfilter.par        \
              module_testtool.par           \
@@ -185,6 +188,8 @@ SCP2FILES  = installation_ooo.par          \
              shortcut_ooo.par              \
              module_ooo.par                \
              module_hidden_ooo.par         \
+             module_langpack.par           \
+             module_java.par               \
              profile_ooo.par               \
              profileitem_ooo.par           \
              module_writer.par             \
@@ -200,6 +205,7 @@ SCP2FILES  = installation_ooo.par          \
              canvascommons.par             \
              module_math.par               \
              file_math.par                 \
+             module_systemint.par          \
              module_graphicfilter.par      \
              file_graphicfilter.par        \
              module_testtool.par           \
