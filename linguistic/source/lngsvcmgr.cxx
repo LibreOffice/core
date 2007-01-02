@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:54:38 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:04:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,6 +720,9 @@ void LngSvcMgr::Notify( const Sequence< OUString > &rPropertyNames )
         DBG_ASSERT( aKeyText.getLength() != 0, "unexpected key (Locale) string" );
         if (0 == rName.compareTo( aSpellCheckerList, aSpellCheckerList.getLength() ))
         {
+            // delete old cached data, needs to be acquired new on demand
+            delete pAvailSpellSvcs;     pAvailSpellSvcs = 0;
+
             OUString aNode( aSpellCheckerList );
             if (lcl_SeqHasString( aSpellCheckerListEntries, aKeyText ))
             {
@@ -742,6 +745,9 @@ void LngSvcMgr::Notify( const Sequence< OUString > &rPropertyNames )
         }
         else if (0 == rName.compareTo( aHyphenatorList, aHyphenatorList.getLength() ))
         {
+            // delete old cached data, needs to be acquired new on demand
+            delete pAvailHyphSvcs;      pAvailHyphSvcs = 0;
+
             OUString aNode( aHyphenatorList );
             if (lcl_SeqHasString( aHyphenatorListEntries, aKeyText ))
             {
@@ -764,6 +770,9 @@ void LngSvcMgr::Notify( const Sequence< OUString > &rPropertyNames )
         }
         else if (0 == rName.compareTo( aThesaurusList, aThesaurusList.getLength() ))
         {
+            // delete old cached data, needs to be acquired new on demand
+            delete pAvailThesSvcs;      pAvailThesSvcs = 0;
+
             OUString aNode( aThesaurusList );
             if (lcl_SeqHasString( aThesaurusListEntries, aKeyText ))
             {
@@ -1253,20 +1262,29 @@ Sequence< OUString > SAL_CALL
 
     if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
     {
-        if (!pAvailSpellSvcs)
-            GetAvailableSpellSvcs_Impl();
+        // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
+        // already found without the need to restart the office
+        delete pAvailSpellSvcs;  pAvailSpellSvcs = 0;
+//      if (!pAvailSpellSvcs)
+        GetAvailableSpellSvcs_Impl();
         pInfoArray = pAvailSpellSvcs;
     }
     else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
     {
-        if (!pAvailHyphSvcs)
-            GetAvailableHyphSvcs_Impl();
+        // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
+        // already found without the need to restart the office
+        delete pAvailHyphSvcs;  pAvailHyphSvcs = 0;
+//      if (!pAvailHyphSvcs)
+        GetAvailableHyphSvcs_Impl();
         pInfoArray = pAvailHyphSvcs;
     }
     else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
     {
-        if (!pAvailThesSvcs)
-            GetAvailableThesSvcs_Impl();
+        // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
+        // already found without the need to restart the office
+        delete pAvailThesSvcs;  pAvailThesSvcs = 0;
+//      if (!pAvailThesSvcs)
+        GetAvailableThesSvcs_Impl();
         pInfoArray = pAvailThesSvcs;
     }
 
@@ -1290,7 +1308,7 @@ Sequence< OUString > SAL_CALL
         }
 
         // resize to actual number of entries
-        if (nCnt && nCnt != nMaxCnt)
+        if (nCnt != nMaxCnt)
             aRes.realloc( nCnt );
     }
 
@@ -1325,14 +1343,17 @@ Sequence< Locale > SAL_CALL
         pHasAvailLocales    = &bHasAvailThesLocales;
     }
 
-    if (pAvailLocales  &&  pHasAvailLocales)
+    // about pHasAvailLocales: nowadays (with OOo lingu in SO) we want to know immediately about
+    // new downloaded dictionaries and have them ready right away if the Tools/Options...
+    // is used to activate them. Thus we can not rely anymore on buffered data.
+    if (pAvailLocales  /*&&  pHasAvailLocales */)
     {
-        if (!*pHasAvailLocales)
-        {
+//      if (!*pHasAvailLocales)
+//      {
             *pAvailLocales = GetAvailLocales(
                     getAvailableServices( rServiceName, Locale() ) );
-            *pHasAvailLocales = TRUE;
-        }
+//          *pHasAvailLocales = TRUE;
+//      }
         aRes = *pAvailLocales;
     }
 
