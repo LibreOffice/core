@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:04:02 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:24:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -545,6 +545,25 @@ sub copy_array_from_references
     }
 
     return \@newarray;
+}
+
+###########################################################
+# Copying a reference hash
+###########################################################
+
+sub copy_hash_from_references
+{
+    my ($hashref) = @_;
+
+    my %newhash = ();
+    my $key;
+
+    foreach $key (keys %{$hashref})
+    {
+        $newhash{$key} = $hashref->{$key};
+    }
+
+    return \%newhash;
 }
 
 ###########################################################
@@ -2067,7 +2086,14 @@ sub put_scpactions_into_installset
         my $destdir = $installdir;
         $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
         if ( $subdir ) { $destdir = $destdir . $installer::globals::separator . $subdir; }
-        installer::systemactions::create_directory($destdir);
+        if (( $subdir =~ /\// ) || ( $subdir =~ /\\/ ))
+        {
+            installer::systemactions::create_directory_structure($destdir);
+        }
+        else
+        {
+            installer::systemactions::create_directory($destdir);
+        }
 
         my $sourcefile = $onescpaction->{'sourcepath'};
         my $destfile = $destdir . $installer::globals::separator . $onescpaction->{'DestinationName'};
