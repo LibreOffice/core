@@ -4,9 +4,9 @@
  *
  *  $RCSfile: supplang.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:56:03 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,6 +240,12 @@ String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim  )
         case SvtPathOptions::PATH_LINGUISTIC :
         {
             String aTmp( aPathOpt.GetLinguisticPath() );
+            LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
+            break;
+        }
+        case SvtPathOptions::PATH_USERDICTIONARY :
+        {
+            String aTmp( aPathOpt.GetUserDictionaryPath() );
             LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
             break;
         }
