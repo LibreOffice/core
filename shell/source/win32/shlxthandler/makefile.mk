@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:58:57 $
+#   last change: $Author: hr $ $Date: 2007-01-02 16:12:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ SLOFILES=$(SLO)$/classfactory.obj\
     $(SLO)$/listviewbuilder.obj\
     $(SLO)$/document_statistic.obj\
     $(SLO)$/thumbviewer.obj
-       
+
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS=uwinapi.lib\
@@ -70,13 +70,13 @@ SHL1STDLIBS=uwinapi.lib\
     kernel32.lib\
     gdi32.lib\
     gdiplus.lib
-    
+
 SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
     $(SOLARLIBDIR)$/expat_xmltok.lib\
     $(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
-    
+
 SHL1DEPN=
 
 SHL1OBJS=$(SLOFILES) 
@@ -91,4 +91,4 @@ DEF1EXPORTFILE=exports.dxp
 
 .INCLUDE :	target.mk
 
-    
+
