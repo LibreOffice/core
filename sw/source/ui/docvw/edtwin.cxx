@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:58:50 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,6 +328,8 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+
+#include <SmartTagMgr.hxx>
 
 //JP 11.10.2001: enable test code for bug fix 91313
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
@@ -672,15 +674,24 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
     {
         if( !rSh.IsPageAtPos( rLPt ) || pAnchorMarker )
             eStyle = POINTER_ARROW;
-        else if( bCntAtPos && bExecHyperlinks )
+        else
         {
-            // sollten wir ueber einem InternetAttr/ClickFeld/Fussnote stehen?
-            SwContentAtPos aSwContentAtPos(
-                SwContentAtPos::SW_CLICKFIELD|
-                SwContentAtPos::SW_INETATTR|
-                SwContentAtPos::SW_FTN );
-            if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
+            if( bCntAtPos && bExecHyperlinks )
+            {
+                // sollten wir ueber einem InternetAttr/ClickFeld/Fussnote stehen?
+                SwContentAtPos aSwContentAtPos(
+                    SwContentAtPos::SW_CLICKFIELD|
+                    SwContentAtPos::SW_INETATTR|
+                    SwContentAtPos::SW_FTN );
+                if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
+                    eStyle = POINTER_REFHAND;
+            }
+
+            // SMARTTAGS
+            if ( bCntAtPos && (nModifier == KEY_MOD1) && rView.IsOverSmartTag( rLPt ) )
+            {
                 eStyle = POINTER_REFHAND;
+            }
         }
 
         // which kind of text pointer have we to show - horz / vert - ?
@@ -2833,8 +2844,22 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         switch ( rMEvt.GetModifier() + rMEvt.GetButtons() )
         {
-            case MOUSE_LEFT:
             case MOUSE_LEFT + KEY_MOD1:
+
+                // SMARTTAGS
+                if ( SmartTagMgr::getSmartTagMgr().HasRecognizers() )
+                {
+                    // execute smarttag menu
+                    if( SelectMenuPosition(rSh, rMEvt.GetPosPixel()) )
+                        rView.StopShellTimer();
+
+                    if ( rView.ExecSmartTagPopup( aDocPos ) )
+                        return;
+                }
+                /* no break */
+                // <--
+
+            case MOUSE_LEFT:
             case MOUSE_LEFT + KEY_MOD2:
                 switch ( nNumberOfClicks )
                 {
