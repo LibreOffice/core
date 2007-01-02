@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSmartTagRecognizer.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:56:33 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    Initial Contributer was Fabalabs Software GmbH, Jakob Lechner
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_smarttags_XSmartTagRecognizer_idl__
+#define __com_sun_star_smarttags_XSmartTagRecognizer_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_uno_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+#ifndef __com_sun_star_text_XTextRange_idl__
+#include <com/sun/star/text/XTextRange.idl>
+#endif
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
+
+
+module com {  module sun {  module star {  module smarttags {
+
+
+  interface XSmartTagRecognizer: com::sun::star::uno::XInterface
+  {
+    /**
+       Function: getName
+
+       @return Name of the smarttag recognizer
+    */
+    string getName();
+
+    /**
+       Function: getDescription
+
+       @return Description of the smarttag recognizer
+    */
+    string getDescription();
+
+    /**
+       Function: getSmartTagCount
+
+       @return Number of available smarttags of this recognizer
+    */
+    long getSmartTagCount();
+
+    /**
+       Function: getSmartTagName
+
+       @param sal_Int32 nSmartTagIndex
+       Index of the wanted smarttag. Value needs to
+       be between 0 and the number of smarttags available (exclusively).
+
+       @return Returns the name of one specific smarttag in this
+       recognizer. This name is needed to associate the recognizer part of a smarttag
+       with the action part.
+    */
+    string getSmartTagName([in] long nSmartTagIndex);
+
+    /**
+       Function: getSmartTagCaption
+
+       @param sal_Int32 nSmartTagIndex
+       Index of the wanted smarttag. Value needs to
+       be between 0 and the number of smarttags available (exclusively).
+
+       @return Returns the caption of one specific smarttag in this
+       recognizer.
+    */
+    string getSmartTagCaption([in] long nSmartTagIndex,
+                  [in] com::sun::star::frame::XController xController);
+
+    /**
+       Function: Recognize
+
+       @param OUString aWord
+       Word that shall be checked by smarttag.
+
+       @param sal_Int32 nSmartTagIndex
+       Index of the wanted smarttag. Value needs to
+       be between 0 and the number of smarttags available (exclusively).
+
+       @return Returns true if the specified word is recognized by smarttag.
+    */
+    boolean Recognize([in] string aWord, [in] long nSmartTagIndex,
+              [in] com::sun::star::frame::XController xController);
+
+    /** initializes the object.
+
+    <p>It should be called directly after the object is created.
+    */
+    void initialize( [in] sequence<any> aArguments );
+
+  };
+
+  service SmartTagRecognizer
+  {
+    // exported interfaces:
+    interface XSmartTagRecognizer;
+  };
+
+
+}; }; }; };
+
+#endif
