@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:19:41 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,11 @@ class SwFntObj : public SwCacheObj
     static long nPixWidth;
     static MapMode *pPixMap;
     static OutputDevice *pPixOut;
+
+    // SMARTTAGS
+    void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, xub_StrLen nStart,
+       xub_StrLen nWrLen, xub_StrLen nCnt, const BOOL bSwitchH2V, const BOOL bSwitchL2R,
+       long nHalfSpace, long* pKernArray, const BOOL bBidiPor);
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
