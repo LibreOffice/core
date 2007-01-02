@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:46:02 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -880,11 +880,12 @@ void SwTxtFrm::CalcLineSpace()
 //
 // SET_WRONG( nPos, nCnt, fnFunc )
 //
-
 #define SET_WRONG( nPos, nCnt, fnFunc ) \
 { \
     if ( !IsFollow() && GetTxtNode()->GetWrong() ) \
         GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt ); \
+    if ( !IsFollow() && GetTxtNode()->GetSmartTags() ) \
+        GetTxtNode()->GetSmartTags()->fnFunc( nPos, nCnt ); \
     lcl_SetWrong( *this, nPos, nCnt ); \
 }
 
@@ -898,9 +899,17 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
             pTxtNode->SetWrong( new SwWrongList() );
             pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
+        if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
+        {
+            // SMARTTAGS
+            pTxtNode->SetSmartTags( new SwWrongList() );
+            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+        }
         pTxtNode->SetWrongDirty( true );
         pTxtNode->SetWordCountDirty( true );
         pTxtNode->SetAutoCompleteWordDirty( true );
+        // SMARTTAGS
+        pTxtNode->SetSmartTagDirty( true );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();
@@ -909,6 +918,7 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
         pPage->InvalidateSpelling();
         pPage->InvalidateAutoCompleteWords();
         pPage->InvalidateWordCount();
+        pPage->InvalidateSmartTags();
     }
 }
 
