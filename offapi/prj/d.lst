@@ -74,6 +74,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbc
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbcx
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\setup
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sheet
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\smarttags
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\style
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\system
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\svg
@@ -177,6 +178,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\sdbcx\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbcx
 ..\com\sun\star\setup\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\setup
 ..\com\sun\star\sheet\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sheet
+..\com\sun\star\smarttags\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\smarttags
 ..\com\sun\star\style\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\style
 ..\com\sun\star\svg\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\svg
 ..\com\sun\star\sync\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sync
