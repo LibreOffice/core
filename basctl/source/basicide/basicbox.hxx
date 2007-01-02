@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:02:19 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,10 @@ private:
 
     void            ReleaseFocus();
     void            InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocation );
-    void            DeleteEntryData();
+
+    void            FillBox( BOOL bSelect = TRUE );
+    void            ClearBox();
+    void            NotifyIDE();
 
 protected:
     virtual void    Select();
@@ -92,12 +95,47 @@ public:
                                  const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                     ~BasicLibBox();
 
-    void            FillBox( BOOL bSelect = TRUE );
     void            Update( const SfxStringItem* pItem );
-    void            NotifyIDE();
-    void            Clear();
 };
 
+class LanguageBoxControl: public SfxToolBoxControl
+{
+public:
+                        SFX_DECL_TOOLBOX_CONTROL();
+
+                        LanguageBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        ~LanguageBoxControl();
+
+    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual Window*     CreateItemWindow( Window *pParent );
+};
+
+class BasicLanguageBox : public ListBox, public SfxListener
+{
+private:
+    String          m_sNotLocalizedStr;
+    String          m_sDefaultLanguageStr;
+    String          m_sCurrentText;
+
+    bool            m_bIgnoreSelect;
+
+    void            FillBox();
+    void            ClearBox();
+    void            SetLanguage();
+
+protected:
+    virtual void    Select();
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+
+    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                                const SfxHint& rHint, const TypeId& rHintType );
+
+public:
+    BasicLanguageBox( Window* pParent );
+    ~BasicLanguageBox();
+
+    void            Update( const SfxStringItem* pItem );
+};
 
 #endif  // _BASICBOX_HXX
 
