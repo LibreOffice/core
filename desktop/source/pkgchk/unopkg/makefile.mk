@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2006-12-22 09:03:34 $
+#   last change: $Author: ihi $ $Date: 2007-01-02 12:55:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ APP2TARGET = unopkg
 
 .IF "$(GUI)" == "WNT"
 APP2ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-APP2LINKRES=$(MISC)$/$(TARGET)1.res
+APP2LINKRES=$(MISC)$/$(TARGET)2.res
 .ENDIF # WNT
 
 DEPOBJFILES = $(MYAPP1OBJS) \
