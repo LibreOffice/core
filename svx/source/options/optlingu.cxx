@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:13:01 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:05:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1222,7 +1222,9 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
 
     FreeResource();
 
-    SvxLinguConfigUpdate::UpdateAll();
+    // force recalculation of hash value used for checking the need of updating
+    // because new dictionaries might be installed / downloaded
+    SvxLinguConfigUpdate::UpdateAll( sal_True );
 }
 
 // -----------------------------------------------------------------------
