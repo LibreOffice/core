@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:53:37 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,9 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     BasicManager* mpBasMgr;
 
     // Methods to distinguish between deffirent library types
-    virtual SfxLibrary* SAL_CALL implCreateLibrary( void );
+    virtual SfxLibrary* SAL_CALL implCreateLibrary( const ::rtl::OUString& aName );
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
-        ( const ::rtl::OUString& aLibInfoFileURL,
+        ( const ::rtl::OUString& aName, const ::rtl::OUString& aLibInfoFileURL,
           const ::rtl::OUString& StorageURL, sal_Bool ReadOnly );
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void );
     virtual sal_Bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement );
@@ -94,6 +94,10 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
         sal_Bool bVerifyPasswordOnly=false )
             throw(::com::sun::star::lang::WrappedTargetException,
                   ::com::sun::star::uno::RuntimeException);
+
+    virtual void implSetStorage( const ::com::sun::star::uno::Reference
+        < ::com::sun::star::embed::XStorage >& xStorage );
+
 
     // OldBasicPassword interface
     virtual void setLibraryPassword( const String& rLibraryName, const String& rPassword );
@@ -163,6 +167,15 @@ class SfxScriptLibrary : public SfxLibrary
 
     sal_Bool mbLoadedSource;
     sal_Bool mbLoadedBinary;
+
+    // Provide modify state including resources
+    virtual sal_Bool isModified( void );
+    virtual void storeResources( void );
+    virtual void storeResourcesAsURL( const ::rtl::OUString& URL, const ::rtl::OUString& NewName );
+    virtual void storeResourcesToURL( const ::rtl::OUString& URL,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+    virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
+        < ::com::sun::star::embed::XStorage >& xStorage );
 
 public:
     SfxScriptLibrary
