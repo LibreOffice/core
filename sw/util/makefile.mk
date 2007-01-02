@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 15:21:59 $
+#   last change: $Author: hr $ $Date: 2007-01-02 16:55:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@ sw_res_files= \
     $(SRS)$/misc.srs         \
     $(SRS)$/ribbar.srs       \
     $(SRS)$/shells.srs       \
+    $(SRS)$/smartmenu.srs    \
     $(SRS)$/table.srs        \
     $(SRS)$/uiview.srs       \
     $(SRS)$/undo.srs        \
@@ -129,7 +130,8 @@ SHL1STDLIBS+= \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
     $(I18NUTILLIB)	\
-    $(AVMEDIALIB)
+        $(AVMEDIALIB) \
+        $(XML2LIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libraries at end for OS X
@@ -168,7 +170,7 @@ SHL2STDLIBS= \
 
 SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/swdet2.obj \
-        $(SLO)$/detreg.obj  
+        $(SLO)$/detreg.obj
 
 .IF "$(product)"==""
 SHL2OBJS+=  \
