@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:00:42 $
+#   last change: $Author: hr $ $Date: 2007-01-02 16:12:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,11 @@ CDEFS+=-D_WIN32_IE=0x501
 #UWINAPILIB=
 
 SLOFILES=$(SLO)$/ooofilt.obj\
-        $(SLO)$/utilities.obj\
-        $(SLO)$/dbgmacros.obj\
         $(SLO)$/propspec.obj
-        
+
+#       $(SLO)$/utilities.obj
+#        $(SLO)$/dbgmacros.obj
+
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=ole32.lib\
      advapi32.lib\
@@ -65,21 +66,21 @@ SHL1STDLIBS=ole32.lib\
      shell32.lib\
      kernel32.lib\
      OldNames.Lib
-     
+
 SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
     $(SOLARLIBDIR)$/expat_xmltok.lib\
     $(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
-    
+
 SHL1DEPN=
 SHL1OBJS=$(SLOFILES) 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
-     
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-    
+
