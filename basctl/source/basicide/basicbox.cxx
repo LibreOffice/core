@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:24:20 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,20 @@
 #include "basdoc.hxx"
 #endif
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+#include "localizationmgr.hxx"
+#include "managelang.hxx"
+#include "dlgresid.hrc"
 
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_LANGTAB_HXX
+#include <svx/langtab.hxx>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 SFX_IMPL_TOOLBOX_CONTROL( LibBoxControl, SfxStringItem );
 
@@ -74,7 +85,7 @@ LibBoxControl::~LibBoxControl()
 
 
 
-void LibBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void LibBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 {
     BasicLibBox* pBox = (BasicLibBox*) GetToolBox().GetItemWindow( GetId() );
 
@@ -102,10 +113,6 @@ Window* LibBoxControl::CreateItemWindow( Window *pParent )
     return new BasicLibBox( pParent, m_xFrame );
 }
 
-
-
-
-
 BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
     ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
     m_xFrame( rFrame )
@@ -124,7 +131,7 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
 
 __EXPORT BasicLibBox::~BasicLibBox()
 {
-    DeleteEntryData();
+    ClearBox();
 }
 
 void __EXPORT BasicLibBox::Update( const SfxStringItem* pItem )
@@ -161,7 +168,7 @@ void __EXPORT BasicLibBox::ReleaseFocus()
 
 
 
-void __EXPORT BasicLibBox::SFX_NOTIFY(  SfxBroadcaster& rBC, const TypeId&,
+void __EXPORT BasicLibBox::SFX_NOTIFY(  SfxBroadcaster&, const TypeId&,
                                         const SfxHint& rHint, const TypeId& )
 {
     if ( rHint.IsA( TYPE( SfxEventHint ) ) )
@@ -197,7 +204,7 @@ void BasicLibBox::FillBox( BOOL bSelect )
     aCurText = GetSelectEntry();
 
     SelectEntryPos( 0 );
-    Clear();
+    ClearBox();
 
     // create list box entries
     USHORT nPos = InsertEntry( String( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
@@ -245,16 +252,6 @@ void BasicLibBox::InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocati
             USHORT nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
             SetEntryData( nPos, new BasicLibEntry( pShell, eLocation, aLibName ) );
         }
-    }
-}
-
-void BasicLibBox::DeleteEntryData()
-{
-    USHORT nCount = GetEntryCount();
-    for ( USHORT i = 0; i < nCount; ++i )
-    {
-        BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( i );
-        delete pEntry;
     }
 }
 
@@ -336,8 +333,218 @@ void BasicLibBox::NotifyIDE()
     ReleaseFocus();
 }
 
-void BasicLibBox::Clear()
+void BasicLibBox::ClearBox()
 {
-    DeleteEntryData();
+    USHORT nCount = GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+    {
+        BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( i );
+        delete pEntry;
+    }
     ListBox::Clear();
 }
+
+// class LanguageBoxControl ----------------------------------------------
+
+SFX_IMPL_TOOLBOX_CONTROL( LanguageBoxControl, SfxStringItem );
+
+LanguageBoxControl::LanguageBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+    : SfxToolBoxControl( nSlotId, nId, rTbx )
+{
+}
+
+LanguageBoxControl::~LanguageBoxControl()
+{
+}
+
+void LanguageBoxControl::StateChanged( USHORT _nID, SfxItemState _eState, const SfxPoolItem* _pItem )
+{
+    BasicLanguageBox* pBox = (BasicLanguageBox*)( GetToolBox().GetItemWindow( GetId() ) );
+
+    if ( pBox )
+    {
+        if ( _eState != SFX_ITEM_AVAILABLE )
+            pBox->Disable();
+        else
+        {
+            pBox->Enable();
+            if ( _pItem->ISA(SfxStringItem) )
+                pBox->Update( (const SfxStringItem*)_pItem );
+            else
+                pBox->Update( NULL );
+        }
+    }
+}
+
+Window* LanguageBoxControl::CreateItemWindow( Window *pParent )
+{
+    return new BasicLanguageBox( pParent );
+}
+
+// class BasicLanguageBox ------------------------------------------------
+
+BasicLanguageBox::BasicLanguageBox( Window* pParent ) :
+
+    ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
+
+    m_sNotLocalizedStr( IDEResId( RID_STR_TRANSLATION_NOTLOCALIZED ) ),
+    m_sDefaultLanguageStr( IDEResId( RID_STR_TRANSLATION_DEFAULT ) ),
+
+    m_bIgnoreSelect( false )
+
+{
+    SetSizePixel( Size( 210, 200 ) );
+
+    FillBox();
+    StartListening( *SFX_APP(), TRUE /* Nur einmal anmelden */ );
+}
+
+BasicLanguageBox::~BasicLanguageBox()
+{
+    ClearBox();
+}
+
+void BasicLanguageBox::FillBox()
+{
+    SetUpdateMode( FALSE );
+    m_bIgnoreSelect = true;
+    m_sCurrentText = GetSelectEntry();
+    ClearBox();
+
+    LocalizationMgr* pCurMgr = IDE_DLL()->GetShell()->GetCurLocalizationMgr();
+    if ( pCurMgr->isLibraryLocalized() )
+    {
+        Enable();
+        SvxLanguageTable aLangTable;
+        Locale aDefaultLocale = pCurMgr->getStringResourceManager()->getDefaultLocale();
+        Locale aCurrentLocale = pCurMgr->getStringResourceManager()->getCurrentLocale();
+        Sequence< Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
+        const Locale* pLocale = aLocaleSeq.getConstArray();
+        INT32 i, nCount = aLocaleSeq.getLength();
+        USHORT nSelPos = LISTBOX_ENTRY_NOTFOUND;
+        for ( i = 0;  i < nCount;  ++i )
+        {
+            bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
+            bool bIsCurrent = localesAreEqual( aCurrentLocale, pLocale[i] );
+            LanguageType eLangType = SvxLocaleToLanguage( pLocale[i] );
+            String sLanguage = aLangTable.GetString( eLangType );
+            if ( bIsDefault )
+            {
+                sLanguage += ' ';
+                sLanguage += m_sDefaultLanguageStr;
+            }
+            USHORT nPos = InsertEntry( sLanguage );
+            SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
+
+            if ( bIsCurrent )
+                nSelPos = nPos;
+        }
+
+        if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
+        {
+            SelectEntryPos( nSelPos );
+            m_sCurrentText = GetSelectEntry();
+        }
+    }
+    else
+    {
+        InsertEntry( m_sNotLocalizedStr );
+        SelectEntryPos(0);
+        Disable();
+    }
+
+    SetUpdateMode( TRUE );
+    m_bIgnoreSelect = false;
+}
+
+void BasicLanguageBox::ClearBox()
+{
+    USHORT nCount = GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+    {
+        LanguageEntry* pEntry = (LanguageEntry*)GetEntryData(i);
+        delete pEntry;
+    }
+    ListBox::Clear();
+}
+
+void BasicLanguageBox::SetLanguage()
+{
+    LanguageEntry* pEntry = (LanguageEntry*)GetEntryData( GetSelectEntryPos() );
+    if ( pEntry )
+        IDE_DLL()->GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
+}
+
+void BasicLanguageBox::Select()
+{
+    if ( !m_bIgnoreSelect )
+        SetLanguage();
+    else
+        SelectEntry( m_sCurrentText );  // Select after Escape
+}
+
+long BasicLanguageBox::PreNotify( NotifyEvent& rNEvt )
+{
+    long nDone = 0;
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        USHORT nKeyCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        switch( nKeyCode )
+        {
+            case KEY_RETURN:
+            {
+                SetLanguage();
+                nDone = 1;
+            }
+            break;
+
+            case KEY_ESCAPE:
+            {
+                SelectEntry( m_sCurrentText );
+                nDone = 1;
+            }
+            break;
+        }
+    }
+    else if( rNEvt.GetType() == EVENT_GETFOCUS )
+    {
+    }
+    else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    {
+    }
+
+    return nDone ? nDone : ListBox::PreNotify( rNEvt );
+}
+
+void BasicLanguageBox::SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& )
+{
+    if ( rHint.IsA( TYPE( SfxEventHint ) ) )
+    {
+        USHORT nEventId = ( (SfxEventHint&)rHint ).GetEventId();
+        switch ( nEventId )
+        {
+            case SFX_EVENT_CREATEDOC:
+            case SFX_EVENT_OPENDOC:
+            case SFX_EVENT_SAVEASDOC:
+            case SFX_EVENT_CLOSEDOC:
+            {
+                if ( nEventId != SFX_EVENT_CLOSEDOC || SFX_APP()->IsInBasicCall() )
+                    FillBox();
+            }
+            break;
+        }
+    }
+}
+
+void BasicLanguageBox::Update( const SfxStringItem* pItem )
+{
+    FillBox();
+
+    if ( pItem && pItem->GetValue().Len() > 0 )
+    {
+        m_sCurrentText = pItem->GetValue();
+        if ( GetSelectEntry() != m_sCurrentText )
+            SelectEntry( m_sCurrentText );
+    }
+}
+
