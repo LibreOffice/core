@@ -1,0 +1,325 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XStringResourceManager.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:43:28 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_resource_XStringResourceManager_idl__
+#define __com_sun_star_resource_XStringResourceManager_idl__
+
+#ifndef __com_sun_star_resource_MissingResourceException_idl__
+#include <com/sun/star/resource/MissingResourceException.idl>
+#endif
+
+#ifndef __com_sun_star_resource_XStringResourceResolver_idl__
+#include <com/sun/star/resource/XStringResourceResolver.idl>
+#endif
+
+#ifndef __com_sun_star_container_ElementExistException_idl__
+#include <com/sun/star/container/ElementExistException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module resource {
+
+//=============================================================================
+/**
+    Interface to manage a resource string table containing a set of
+    strings for different locales.
+
+    The interface is derived from
+    <type scope="com::sun::star::resource">XStringResourceResolver</type>
+    that allows to access the string table but not to modify it. This
+    interface also allows to modify the string table.
+
+    It's designed to be used in the context of creating a string table,
+    e.g. from a string table editor or from a Dialog Editor designing
+    localized dialogs.
+
+*/
+interface XStringResourceManager: com::sun::star::resource::XStringResourceResolver
+{
+    /**
+        Returns the resource's read only state
+
+        @return  <TRUE/> if the resource is read only, otherwise <FALSE/>
+    */
+    boolean isReadOnly();
+
+
+    /** Sets the locale to be used
+
+        @param aLocale
+            Specifies the current locale to be used.
+
+        @param FindClosestMatch
+            <p>If true: If the exact locale that should be set is not available
+            the method tries to find the closest match. E.g. if en_US is re-
+            quired but not available, en would be the next choice. Finally
+            the default locale will be used <TRUE/>.
+
+            <p>If false: If the exact locale that should be set is not available
+            a <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            is thrown.
+
+            <p>If false: If the exact locale that should be set is not available
+            a <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            is thrown.
+    */
+    void setCurrentLocale
+    (
+        [in] com::sun::star::lang::Locale locale,
+        [in] boolean FindClosestMatch
+    )
+    raises( com::sun::star::lang::IllegalArgumentException );
+
+
+    /** Sets the default locale to be used
+
+        @param aLocale
+            Specifies the default locale to be used.
+            If this locale is not available a
+            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            is thrown.
+
+        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+            if the resource is read only, see <member>isReadOnly</member>
+    */
+    void setDefaultLocale( [in] com::sun::star::lang::Locale locale )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NoSupportException );
+
+
+    /**
+        Associates a String to a Resource ID for the current locale.
+        If an entry for the Resource ID already exists, the string
+        associated with it will be overwritten, otherwise a new
+        entry will be created.
+
+        @param ResourceID
+            ID to address the string inside the resource for the current locale.
+
+        @param Str
+            String to be associated with the Resource ID.
+
+        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+            if the resource is read only, see <member>isReadOnly</member>
+    */
+    void setString
+    (
+        [in] string ResourceID,
+        [in] string Str
+    )
+    raises( com::sun::star::lang::NoSupportException );
+
+
+    /**
+        Associates a String to a Resource ID for a specific locale.
+        If an entry for the Resource ID already exists, the string
+        associated with it will be overwritten, otherwise a new
+        entry will be created.
+
+        It's not recommended to use this method to get the best
+        performance as the implementation may be optimized for
+        the use of the current locale.
+
+        @param ResourceID
+            ID to address the string inside the resource.
+
+        @param Str
+            String to be associated with the Resource ID.
+
+        @param locale
+            The locale the string should be set for.
+            The locale has to match exactly with one of the locales provided by
+            <member>getLocales</member>. A closest match search is not supported.
+
+        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+            if the resource is read only, see <member>isReadOnly</member>
+    */
+    void setStringForLocale
+    (
+        [in] string ResourceID,
+        [in] string Str,
+        [in] com::sun::star::lang::Locale locale
+    )
+    raises( com::sun::star::lang::NoSupportException );
+
+
+    /**
+        Removes a Resource ID including the corresponding string for
+        the current locale.
+
+        @param ResourceID
+            The Resource ID to be removed for the current locale.
+
+        @throws
+        <type scope="com::sun::star::resource">MissingResourceException</type>
+        if the Resource ID is not valid.
+
+        @throws
+        <type scope="com::sun::star::lang">NoSupportException</type>
+        if the resource is read only, see <member>isReadOnly</member>
+    */
+    void removeId( [in] string ResourceID )
+        raises( com::sun::star::resource::MissingResourceException,
+                com::sun::star::lang::NoSupportException );
+
+
+    /**
+        Removes a Resource ID including the corresponding string for
+        s specific locale.
+
+        @param ResourceID
+            The Resource ID to be removed.
+
+        @param locale
+            The locale the Resource ID should be removed for.
+            The locale has to match exactly with one of the locales provided by
+            <member>getLocales</member>. A closest match search is not supported.
+
+        @throws
+        <type scope="com::sun::star::resource">MissingResourceException</type>
+        if the Resource ID is not valid.
+
+        @throws
+        <type scope="com::sun::star::lang">NoSupportException</type>
+        if the resource is read only, see <member>isReadOnly</member>
+    */
+    void removeIdForLocale( [in] string ResourceID, [in] com::sun::star::lang::Locale locale )
+        raises( com::sun::star::resource::MissingResourceException,
+                com::sun::star::lang::NoSupportException );
+
+
+    /**
+        Creates a new locale.
+
+        <p>For each existing ResourceID an empty string
+        will be created. The first locale created will
+        automatically be the first default locale.
+        Otherwise strings for all already created IDs
+        will be copied from the default locale.</p>
+
+        @throws
+        <type scope="com::sun::star::container">ElementExistException</type>
+        if the Locale already has been created.
+
+        @throws
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        if the Locale is not valid.
+
+        @throws
+        <type scope="com::sun::star::lang">NoSupportException</type>
+        if the resource is read only, see <member>isReadOnly</member>
+    */
+    void newLocale( [in] com::sun::star::lang::Locale locale )
+        raises( com::sun::star::container::ElementExistException,
+                com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NoSupportException );
+
+
+    /**
+        Removes a locale completely including the corresponding
+        strings for each locale.
+
+        @throws
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        if the Locale to be removed is not supported.
+
+        @throws
+        <type scope="com::sun::star::lang">NoSupportException</type>
+        if the resource is read only, see <member>isReadOnly</member>
+    */
+    void removeLocale( [in] com::sun::star::lang::Locale locale )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NoSupportException );
+
+
+    /**
+        Provides a numeric id that is unique within all Resource IDs
+        used in the string table.
+
+        This method takes into account all Resource IDs starting with
+        a decimal number and only evaluates the ID until the first non
+        digit character is reached. This allows to extend unique IDs
+        with individual identifiers without breaking the mechanism of
+        this method.
+
+        Examples:
+        ID "42" -> numeric id 42
+        ID "0foo" -> numeric id 0
+        ID "111.MyId.Something.Else" -> numeric id 111
+        ID "No Digits" -> not considered for numeric id
+
+        The id returned will be 0 for an empty string table and it will
+        be reset to 0 if all locales are removed. In all other cases
+        this method returns the maximum numeric id used so far at the
+        beginning of a Resource ID incremented by 1. When calling this
+        method more than once always the same number will be returned
+        until this number is really used at the beginning of a new
+        Resource ID passed to <member>setString</member> or
+        <member>setStringForLocale</member>.
+
+        As the numeric id is guaranteed to be unique for the complete
+        string table all locales are taken into account. So using this
+        methods will force the implementation to load all locale data
+        that may not have been loaded so far.
+
+        @throws
+        <type scope="com::sun::star::lang">NoSupportException</type>
+        if the next available id exceeds the range of type long.
+        So it's not recommended to use own Resource IDs starting
+        with a decimal number near to the maximum long value if
+        this methods should be used.
+    */
+    long getUniqueNumericId()
+        raises( com::sun::star::lang::NoSupportException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
