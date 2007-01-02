@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:06:46 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:50:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,10 +77,11 @@ SLOFILES =  \
             $(SLO)$/moduldlg.obj	\
             $(SLO)$/moduldl2.obj	\
             $(SLO)$/objdlg.obj	\
-                $(SLO)$/unomodel.obj	\
-                $(SLO)$/register.obj	\
+            $(SLO)$/unomodel.obj	\
+            $(SLO)$/register.obj	\
             $(SLO)$/tbxctl.obj	\
-            $(SLO)$/basidectrlr.obj
+            $(SLO)$/basidectrlr.obj	\
+            $(SLO)$/localizationmgr.obj
 
 EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/basides1.obj	\
@@ -100,7 +101,8 @@ EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/unomodel.obj	\
                 $(SLO)$/register.obj	\
                 $(SLO)$/tbxctl.obj		\
-                $(SLO)$/basidectrlr.obj
+                $(SLO)$/basidectrlr.obj	\
+                $(SLO)$/localizationmgr.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
