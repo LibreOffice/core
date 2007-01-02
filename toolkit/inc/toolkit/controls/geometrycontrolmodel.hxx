@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:30:06 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
+#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
@@ -108,6 +111,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         sal_Int16       m_nTabIndex;
         sal_Int32       m_nStep;
         ::rtl::OUString m_aTag;
+        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > m_xStrResolver;
         // </properties>
 
         sal_Bool        m_bCloneable;
