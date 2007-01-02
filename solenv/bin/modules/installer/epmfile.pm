@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 15:49:24 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:22:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2065,13 +2065,129 @@ sub create_new_directory_structure
 }
 
 ######################################################
+# Collect modules with product specific styles.
+######################################################
+
+sub collect_modules_with_style
+{
+    my ($style, $modulesarrayref) = @_;
+
+    my @allmodules = ();
+
+    for ( my $i = 0; $i <= $#{$modulesarrayref}; $i++ )
+    {
+        my $onemodule = ${$modulesarrayref}[$i];
+        my $styles = "";
+        if ( $onemodule->{'Styles'} ) { $styles = $onemodule->{'Styles'}; }
+        if ( $styles =~ /\b\Q$style\E\b/ )
+        {
+            push(@allmodules, $onemodule);
+        }
+    }
+
+    return \@allmodules;
+}
+
+######################################################
+# Remove modules without packagecontent.
+######################################################
+
+sub remove_modules_without_package
+{
+    my ($allmodules) = @_;
+
+    my @allmodules = ();
+
+    for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
+    {
+        my $onemodule = ${$allmodules}[$i];
+        my $packagename = "";
+        if ( $onemodule->{'PackageName'} ) { $packagename = $onemodule->{'PackageName'}; }
+        if ( $packagename ne "" )
+        {
+            push(@allmodules, $onemodule);
+        }
+    }
+
+    return \@allmodules;
+}
+
+######################################################
+# Unpacking tar.gz file and setting new packagename.
+######################################################
+
+sub unpack_tar_gz_file
+{
+    my ($packagename, $destdir) = @_;
+
+    my $newpackagename = "";
+
+    if ( $packagename =~ /\.tar\.gz\s*$/ )
+    {
+        # Collecting all packages in directory "packages"
+        my $oldcontent = installer::systemactions::read_directory($destdir);
+
+        # unpacking gunzip
+        my $systemcall = "cd $destdir; cat $packagename | gunzip | tar -xf -";
+        make_systemcall($systemcall);
+
+        # deleting the tar.gz files
+        $systemcall = "cd $destdir; rm -f $packagename";
+        make_systemcall($systemcall);
+
+        # Finding new content -> that is the package name
+        my ($newcontent, $allcontent ) = installer::systemactions::find_new_content_in_directory($destdir, $oldcontent);
+        $newpackagename = ${$newcontent}[0];
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$newpackagename);
+    }
+
+    if ( $newpackagename ne "" ) { $packagename = $newpackagename; }
+
+    return $packagename;
+}
+
+######################################################
+# Copying files of child projects.
+######################################################
+
+sub copy_childproject_files
+{
+    my ($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, $subdir) = @_;
+
+    for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
+    {
+        my $onemodule = ${$allmodules}[$i];
+        my $packagename = $onemodule->{'PackageName'};
+        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . $subdir . $installer::globals::separator . $packagename;
+        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile !", "put_childprojects_into_installset"); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
+        # Solaris: unpacking tar.gz files and setting new packagename
+        if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $destdir); }
+        if ( $allvariables->{'XPDINSTALLER'} ) { installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $destdir, $packagename, $allvariableshashref, $modulesarrayref); }
+    }
+
+}
+
+######################################################
+# Copying files for system integration.
+######################################################
+
+sub copy_and_unpack_tar_gz_files
+{
+    my ($sourcefile, $destdir) = @_;
+
+    my $systemcall = "cd $destdir; cat $sourcefile | gunzip | tar -xf -";
+    make_systemcall($systemcall);
+}
+
+######################################################
 # Including child packages into the
 # installation set.
 ######################################################
 
 sub put_childprojects_into_installset
 {
-    my ($newdir, $allvariables) = @_;
+    my ($newdir, $allvariables, $modulesarrayref) = @_;
 
     my $infoline = "";
 
@@ -2085,40 +2201,28 @@ sub put_childprojects_into_installset
 
     my $sourcefile = "";
 
+    # Finding the modules defined in scp (with flag JAVAMODULE, ADAMODULE, ...)
+    # Getting name of package from scp-Module
+    # Copy file into installation set
+    # Create xpd file and put it into xpd directory
+    # xpd file has to be created completely from module and package itself (-> no packagelist!)
+
     if ( $allvariables->{'JAVAPRODUCT'} )
     {
-        if ( $installer::globals::javafilename ne "" )
-        {
-            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename;
-            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
-            installer::systemactions::copy_one_file($sourcefile, $destdir);
-        }
-
-        if ( $installer::globals::javafilename2 ne "" )
-        {
-            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename2;
-            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
-            installer::systemactions::copy_one_file($sourcefile, $destdir);
-        }
-
-        if ( $installer::globals::javafilename3 ne "" )
-        {
-            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename3;
-            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
-            installer::systemactions::copy_one_file($sourcefile, $destdir);
-        }
+        # Collect all modules with flag "JAVAMODULE"
+        my $allmodules = collect_modules_with_style("JAVAMODULE", $modulesarrayref);
+        $allmodules = remove_modules_without_package($allmodules);
+        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "jre");
     }
 
     # adding Ada
 
     if ( $allvariables->{'ADAPRODUCT'} )
     {
-        if ( $installer::globals::adafilename ne "" )
-        {
-            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
-            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Ada file not found: $sourcefile !", "put_childprojects_into_installset"); }
-            installer::systemactions::copy_one_file($sourcefile, $destdir);
-        }
+        # Collect all modules with flag "ADAMODULE"
+        my $allmodules = collect_modules_with_style("ADAMODULE", $modulesarrayref);
+        $allmodules = remove_modules_without_package($allmodules);
+        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "adabas");
     }
 
     # Adding additional required packages (freetype).
@@ -2126,34 +2230,48 @@ sub put_childprojects_into_installset
 
     if ( $allvariables->{'ADDREQUIREDPACKAGES'} )
     {
-        for ( my $i = 0; $i <= $#installer::globals::requiredpackages; $i++ )
-        {
-            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "requiredpackages" . $installer::globals::separator . $installer::globals::requiredpackages[$i];
-            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Required package file not found: $sourcefile !", "put_childprojects_into_installset"); }
-            installer::systemactions::copy_one_file($sourcefile, $destdir);
-        }
+        # Collect all modules with flag "REQUIREDPACKAGEMODULE"
+        my $allmodules = collect_modules_with_style("REQUIREDPACKAGEMODULE", $modulesarrayref);
+        $allmodules = remove_modules_without_package($allmodules);
+        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "requiredpackages");
     }
 
-    # unpacking and removing the ada tar.gz file
+}
 
-    if ( $installer::globals::issolarispkgbuild )
+######################################################
+# Checking whether the new content is a directory and
+# not a package. If it is a directory, the complete
+# content of the directory has to be added to the
+# array newcontent.
+######################################################
+
+sub control_subdirectories
+{
+    my ($content, $subdir) = @_;
+
+    my @newcontent = ();
+
+    for ( my $i = 0; $i <= $#{$content}; $i++ )
     {
-        # determining the tar.gz files in directory $destdir
-        my $fileextension = "gz";
-        my $targzfiles = installer::systemactions::find_file_with_file_extension($fileextension, $destdir);
-
-        for ( my $i = 0; $i <= $#{$targzfiles}; $i++ )
+        if ( -d ${$content}[$i] )
         {
-            # unpacking
-            my $systemcall = "cd $destdir; cat ${$targzfiles}[$i] | gunzip | tar -xf -";
-            make_systemcall($systemcall);
-
-            # deleting the tar.gz files
-            $systemcall = "cd $destdir; rm -f ${$targzfiles}[$i]";
-            make_systemcall($systemcall);
+            $subdir = ${$content}[$i];
+            installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$subdir);
+            my $allpackages = installer::systemactions::read_directory(${$content}[$i]);
+            for ( my $j = 0; $j <= $#{$allpackages}; $j++ )
+            {
+                # Currently only Linux rpm is supported, debian packages cannot be installed via xpd installer
+                if (( $installer::globals::islinuxbuild ) && ( ! ( ${$allpackages}[$j] =~ /\.rpm\s*$/ ))) { next; }
+                push(@newcontent, ${$allpackages}[$j]);
+            }
+        }
+        else
+        {
+            push(@newcontent, ${$content}[$i]);
         }
     }
 
+    return (\@newcontent, $subdir);
 }
 
 ######################################################
@@ -2163,16 +2281,51 @@ sub put_childprojects_into_installset
 
 sub put_systemintegration_into_installset
 {
-    my ($newdir, $includepatharrayref, $variables) = @_;
+    my ($newdir, $includepatharrayref, $allvariables, $modulesarrayref) = @_;
 
-    my $tarball = $variables->{'UNIXPRODUCTNAME'} . "-desktop-integration.tar.gz";
+    my $destdir = $newdir;
 
-    my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$tarball, $includepatharrayref, 1);
-    if ( $$sourcepathref ) {
-        my $systemcall = "cd $newdir; cat $$sourcepathref | gunzip | tar -xf -";
-        make_systemcall($systemcall);
-    } else {
-        installer::exiter::exit_program("ERROR: Source path not found for '$tarball'!", "put_systemintegration_into_installset");
+    # adding System integration files
+
+    my $sourcefile = "";
+
+    # Finding the modules defined in scp (with flag SYSTEMMODULE)
+    # Getting name of package from scp-Module
+    # Search package in list off all include files
+    # Copy file into installation set and unpack it (always tar.gz)
+    # Create xpd file and put it into xpd directory
+    # tar.gz can contain a different number of packages -> automatically create hidden sub modules
+    # xpd file has to be created completely from module and package itself (-> no packagelist!)
+
+    # Collect all modules with flag "SYSTEMMODULE"
+    my $allmodules = collect_modules_with_style("SYSTEMMODULE", $modulesarrayref);
+    $allmodules = remove_modules_without_package($allmodules);
+
+    for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
+    {
+        my $onemodule = ${$allmodules}[$i];
+        my $packagetarfilename = $onemodule->{'PackageName'};
+
+        my $infoline = "Including into installation set: $packagetarfilename\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packagetarfilename, $includepatharrayref, 1);
+        if ( $$sourcepathref eq "" ) { installer::exiter::exit_program("ERROR: Source path not found for $packagetarfilename!", "copy_systemintegration_files"); }
+
+        # Collecting all packages in directory "packages" or "RPMS"
+        my $oldcontent = installer::systemactions::read_directory($destdir);
+
+        copy_and_unpack_tar_gz_files($$sourcepathref, $destdir);
+
+        # Finding new content -> that is the package name
+        my ($newcontent, $allcontent ) = installer::systemactions::find_new_content_in_directory($destdir, $oldcontent);
+
+        # special handling, if new content is a directory
+        my $subdir = "";
+        if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
+
+        if ( $allvariables->{'XPDINSTALLER'} ) { installer::xpdinstaller::create_xpd_file_for_systemintegration($onemodule, $newcontent, $modulesarrayref, $subdir); }
+
     }
 }
 
