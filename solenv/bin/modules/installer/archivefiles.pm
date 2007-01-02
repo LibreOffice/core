@@ -4,9 +4,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:47:37 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:02:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,26 @@ sub resolving_archive_flag
             my $rename_to_language = 0;
             if ( $styles =~ /\bRENAME_TO_LANGUAGE\b/ ) { $rename_to_language = 1; } # special handling for renamed files (scriptitems.pm)
 
+            # mechanism to select files from an archive files
+            my $select_files = 0;
+            my $selectlistfiles = "";
+            my @keptfiles = ();
+            if ( $onefile->{'Selectfiles'} )
+            {
+                $select_files = 1;
+                $selectlistfiles = get_patch_file_list( $onefile->{'Selectfiles'} );
+                $infoline = "Selected file list defined at file: $onefile->{'Name'} :\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                for ( my $k = 0; $k <= $#{$selectlistfiles}; $k++ )
+                {
+                    $infoline = "\"${$selectlistfiles}[$k]\"\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+            }
+
+            if ( $onefile->{'Selectfiles'} ) { $onefile->{'Selectfiles'} = ""; } # Selected files list no longer required
+
+            # mechanism to define patch files inside an archive files
             my $select_patch_files = 0;
             my $patchlistfiles = "";
             my @keptpatchflags = ();
@@ -155,6 +175,7 @@ sub resolving_archive_flag
                     push( @installer::globals::logfileinfo, $infoline);
                 }
             }
+
             if ( $onefile->{'Patchfiles'} ) { $onefile->{'Patchfiles'} = ""; } # Patch file list no longer required
 
             # creating directories
@@ -306,6 +327,22 @@ sub resolving_archive_flag
                                 push( @installer::globals::logfileinfo, $infoline);
                             }
 
+                            if ( $select_files )
+                            {
+                                if ( ! installer::existence::exists_in_array($zipname,$selectlistfiles) )
+                                {
+                                    $infoline = "Removing from ARCHIVE file $onefilename: $zipname\n";
+                                    push( @installer::globals::logfileinfo, $infoline);
+                                    next; # ignoring files, that are not included in $selectlistfiles
+                                }
+                                else
+                                {
+                                    $infoline = "Keeping from ARCHIVE file $onefilename: $zipname\n";
+                                    push( @installer::globals::logfileinfo, $infoline);
+                                    push( @keptfiles, $zipname); # collecting all kept files
+                                }
+                            }
+
                             if ( $select_patch_files )
                             {
                                 # Is this file listed in the Patchfile list?
@@ -357,6 +394,44 @@ sub resolving_archive_flag
                             if ( ! $repeat_unzip ) { push(@newallfilesarray, \%newfile); }
                         }
                     }
+                }
+
+                # Comparing the content of @keptfiles and $selectlistfiles
+                # Do all files from the list of selected files are stored in @keptfiles ?
+                # @keptfiles contains only files included in $selectlistfiles. But are all
+                # files from $selectlistfiles included in @keptfiles?
+
+                if ( $select_files )
+                {
+                    my $number = $#{$selectlistfiles} + 1;
+                    $infoline = "SELECTLIST: Number of files in file selection list: $number\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $number = $#keptfiles + 1;
+                    $infoline = "SELECTLIST: Number of kept files: $number\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    for ( my $k = 0; $k <= $#keptfiles; $k++ )
+                    {
+                        $infoline = "KEPT FILES: $keptfiles[$k]\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+
+                    my @warningfiles = ();
+
+                    for ( my $k = 0; $k <= $#{$selectlistfiles}; $k++ )
+                    {
+                        if ( ! installer::existence::exists_in_array(${$selectlistfiles}[$k],\@keptfiles) )
+                        {
+                            push(@warningfiles, ${$selectlistfiles}[$k]);
+                        }
+                    }
+
+                    for ( my $k = 0; $k <= $#warningfiles; $k++ )
+                    {
+                        $infoline = "WARNING: $warningfiles[$k] not included in install set (does not exist in zip file)!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+
                 }
 
                 # Comparing the content of @keptpatchflags and $patchlistfiles
