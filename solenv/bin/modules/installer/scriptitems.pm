@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 15:06:05 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:23:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1378,6 +1378,44 @@ sub change_keys_of_scpactions
             }
         }
     }
+}
+
+############################################################################
+# Removing all xpd only items from installation set (scpactions with
+# the style XPD_ONLY), except an xpd installation set is created
+############################################################################
+
+sub remove_Xpdonly_Scpactions
+{
+    my ($itemsarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Xpdonly_Scpactions : $#{$itemsarrayref}"); }
+
+    my $infoline;
+
+    my @newitemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if ( $styles =~ /\bXPD_ONLY\b/ )
+        {
+            $infoline = "Removing \"xpd only\" scp action $oneitem->{'gid'} from the installation set.\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+
+            next;
+        }
+
+        push(@newitemsarray, $oneitem);
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    return \@newitemsarray;
 }
 
 ############################################################################
