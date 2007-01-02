@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 18:33:42 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:22:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ use installer::setupscript;
 use installer::simplepackage;
 use installer::sorter;
 use installer::strip;
-use installer::worker;
 use installer::systemactions;
 use installer::windows::assembly;
 use installer::windows::binary;
@@ -93,6 +92,8 @@ use installer::windows::registry;
 use installer::windows::selfreg;
 use installer::windows::shortcut;
 use installer::windows::upgrade;
+use installer::worker;
+use installer::xpdinstaller;
 use installer::ziplist;
 
 #################################################
@@ -133,7 +134,6 @@ if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 1a: The
 installer::parameter::control_fundamental_parameter();
 installer::parameter::setglobalvariables();
 installer::parameter::control_required_parameter();
-installer::parameter::set_childproductnames();
 
 if (!($installer::globals::languages_defined_in_productlist)) { installer::languages::analyze_languagelist(); }
 installer::parameter::outputparameter();
@@ -330,6 +330,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 installer::setupscript::add_lowercase_productname_setupscriptvariable($allscriptvariablesref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscriptvariables2.log" ,$allscriptvariablesref); }
 
+installer::setupscript::resolve_lowercase_productname_setupscriptvariable($allscriptvariablesref);
+if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscriptvariables3.log" ,$allscriptvariablesref); }
+
 installer::setupscript::replace_all_setupscriptvariables_in_script($setupscriptref, $allscriptvariablesref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript2.log" ,$setupscriptref); }
 
@@ -385,6 +388,12 @@ installer::logger::print_message( "... analyzing scpactions ... \n" );
 
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1.log", $scpactionsinproductarrayref); }
+
+if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || (( ! $installer::globals::islinuxrpmbuild) && ( ! $installer::globals::issolarispkgbuild )))
+{
+    $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Scpactions($scpactionsinproductarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1a.log", $scpactionsinproductarrayref); }
+}
 
 # $scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
 # if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2.log", $scpactionsinproductarrayref); }
@@ -506,6 +515,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             @installer::globals::logfileinfo = ();  # new logfile array and new logfile name
             installer::logger::copy_globalinfo_into_logfile();
             $isfirstrun = 1;
+            $installer::globals::defaultlanguage = $$languagestringref;
         }
         else    # switching from office installation to language pack
         {
@@ -1158,6 +1168,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             }
 
             my $linkaddon = "";
+            my $linkpackage = 0;
             $installer::globals::add_required_package = "";
             $installer::globals::linuxlinkrpmprocess = 0;
 
@@ -1171,6 +1182,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 push(@installer::globals::linkrpms, $savestring);
                 $linkaddon = "_links";
                 $installer::globals::linuxlinkrpmprocess = 1;
+                $linkpackage = 1;
             }
 
             ###########################################
@@ -1461,11 +1473,24 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 chdir($currentdir); # changing back into start directory
 
+                ###########################################
+                # xpd installation mechanism
+                ###########################################
+
+                # creating the xpd file for the package
+                if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild))
+                {
+                    if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
+                    {
+                        installer::xpdinstaller::create_xpd_file($onepackage, $packages, $languagestringref, $allvariableshashref, $modulesinproductarrayref, $installdir, $installer::globals::subdir, $linkpackage);
+                    }
+                }
+
             }  # end of "if (! $installer::globals::simple)"
 
             if ( $installer::globals::makelinuxlinkrpm ) { $k--; }  # decreasing the counter to create the link rpm!
 
-        }   # end of "for ( my $k = 0; $k <= $#{$allpackages}; $k++ )"
+        }   # end of "for ( my $k = 0; $k <= $#{$packages}; $k++ )"
 
         ##############################################################
         # Post epm functionality, after the last package is packed
@@ -1478,14 +1503,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             chdir($installdir);
 
             # Copying the cde, kde and gnome packages into the installation set
-            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($installer::globals::subdir, $includepatharrayref, $allvariableshashref); }
+            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($installer::globals::subdir, $includepatharrayref, $allvariableshashref, $modulesinproductarrayref); }
 
             # Adding license and readme into installation set
             # if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($installer::globals::subdir); }
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Adding child projects to installation dynamically
-            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref); }
+            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref, $modulesinproductarrayref); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
             if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
@@ -1493,6 +1518,16 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Finalizing patch installation sets
             if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::subdir, $allvariableshashref); }
             if (( $installer::globals::patch ) && ( $installer::globals::islinuxrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::subdir, $allvariableshashref, $includepatharrayref); }
+
+            # Copying the xpd installer into the installation set
+            if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild))
+            {
+                if ( $allvariableshashref->{'XPDINSTALLER'} )
+                {
+                    installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref);
+                    $installer::globals::addjavainstaller = 0;  # only one java installer possible
+                }
+            }
 
             # Copying the java installer into the installation set
             chdir($currentdir); # changing back into start directory
@@ -1509,7 +1544,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my $newepmdir = installer::epmfile::determine_installdir_ooo();
 
             # Copying the cde, kde and gnome packages into the installation set
-            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref); }
+            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref, $modulesinproductarrayref); }
 
             # Adding license and readme into installation set
             # if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($newepmdir); }
