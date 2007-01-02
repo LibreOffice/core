@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XStringResourceWithLocation.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:44:27 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_resource_XStringResourceWithLocation_idl__
+#define __com_sun_star_resource_XStringResourceWithLocation_idl__
+
+#ifndef __com_sun_star_resource_XStringResourcePersistance_idl__
+#include <com/sun/star/resource/XStringResourcePersistance.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module resource {
+
+//=============================================================================
+/**
+    Extends <type>XStringResourcePersistance</type> by methods to handle an
+    associated location.
+
+    @see <type>XStringResourcePersistance</type>.
+*/
+interface XStringResourceWithLocation: com::sun::star::resource::XStringResourcePersistance
+{
+    /**
+        Stores all string table data to a location and associates this location
+        to this instance as if <member>setLocation</member> was called with this
+        location. The modified state will be unmodified after the call.
+
+        @param URL
+            the location the string table data should be stored to.
+    */
+    void storeAsURL( [in] string URL )
+        raises( com::sun::star::uno::Exception );
+
+
+    /**
+        Associates a location to the StringResourceWithStorage instance
+        which is used on subsequent calls of <member>store</member>.
+
+        @param URL
+            the location to be associated to the StringResourceManager
+
+        <p>
+        This call has to be used carefully as it removes the location
+        previously connected to the StringResourceWithStorage. It may
+        force the implementation to reload data from the previous
+        location before releasing it. The StringResourceManager will
+        be modified after calling this method as the data isn't stored
+        to the new location yet. <member>storeAsURL</member> should
+        be prefered as it directly stores the data to the new location
+        and afterwards this location is in sync with the resource data.
+        </p>
+
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            if an empty string is passed as URL
+    */
+    void setURL( [in] string URL )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
