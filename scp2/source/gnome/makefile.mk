@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:27:09 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:28:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@ SCP_PRODUCT_TYPE=osl
 PARFILES =                   \
         module_gnome.par     \
         file_gnome.par
+
+ULFFILES= \
+        module_gnome.ulf
+
 .ENDIF
 
 # --- File ---------------------------------------------------------
