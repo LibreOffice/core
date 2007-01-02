@@ -4,9 +4,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:35:54 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:22:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -334,6 +334,25 @@ sub copy_array_from_references
     }
 
     return \@newarray;
+}
+
+###########################################################
+# Copying a hash
+###########################################################
+
+sub copy_hash_from_references
+{
+    my ($hashref) = @_;
+
+    my %newhash = ();
+    my $key;
+
+    foreach $key (keys %{$hashref})
+    {
+        $newhash{$key} = $hashref->{$key};
+    }
+
+    return \%newhash;
 }
 
 #################################################################
