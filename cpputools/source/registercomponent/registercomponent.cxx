@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 12:21:36 $
+ *  last change: $Author: jsc $ $Date: 2007-01-02 14:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -793,53 +793,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (xImplRegistration.is())
     {
-        const OUString bSlash(OUString(RTL_CONSTASCII_USTRINGPARAM("\\")));
-        const OUString tuedle(OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
-        const OUString semikolon(OUString(RTL_CONSTASCII_USTRINGPARAM(";")));
-        const OUString emptyString(OUString(RTL_CONSTASCII_USTRINGPARAM("")));
-        const OUString space(OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
-
         sal_Int32 index = 0;
-        sal_Bool  quote = sal_False;
-        sal_Bool  inString = sal_False;
-
-        const sal_Unicode * raw_urls = aOptions.sComponentUrls.getStr();
-
-        OUString tmp_url;
-
         vector<OUString> urls;
 
-        // go over the string and parse it, chars can be quoted in strings or with back slash
-        while(index < aOptions.sComponentUrls.getLength())
-        {
-            if((raw_urls[index] == semikolon.getStr()[0] ||
-                raw_urls[index] == space.getStr()[0]) && !quote && !inString) // a semikolon or space?
-            {
-                tmp_url = tmp_url.trim();
-                if(tmp_url.getLength())
-                    urls.push_back(tmp_url);
+        OUString urlListWithSemikolon = aOptions.sComponentUrls;
+        do {
+            OUString aToken = urlListWithSemikolon.getToken( 0, ';', index);
+            fprintf(stderr, "%s\n", OUStringToOString(aToken, osl_getThreadTextEncoding()).getStr());
+            urls.push_back(aToken);
+        } while ( index >= 0 );
 
-                tmp_url = emptyString;
-            }
-            else if(raw_urls[index] == bSlash.getStr()[0] && !quote) // a back slash?
-            {
-                quote = sal_True;
-            }
-            else if(raw_urls[index] == tuedle.getStr()[0] && !quote) // begin or end of string?
-                inString = !inString;
-
-            else // no special handling
-            {
-                tmp_url += OUString(raw_urls + index, 1);
-                quote = sal_False;
-            }
-
-            ++ index;
-        }
-
-        tmp_url = tmp_url.trim();
-        if(tmp_url.getLength())
-            urls.push_back(tmp_url);
 
         OString sRegName = OUStringToOString( aOptions.sRegName, osl_getThreadTextEncoding() );
         if(aOptions.bRegister || aOptions.bRevoke)
