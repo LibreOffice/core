@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:45:44 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #endif
 #ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
+#endif
+#ifndef _SV_LINEINFO_HXX    // SMARTTAGS
+#include <vcl/lineinfo.hxx>
 #endif
 #ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
@@ -256,6 +259,79 @@ bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
            OUTDEV_WINDOW != rRefDev.GetOutDevType() &&
            ( OUTDEV_PRINTER != rRefDev.GetOutDevType() ||
              OUTDEV_PRINTER != rOutDev.GetOutDevType() );
+}
+
+/** Function: lcl_calcLinePos
+
+   Computes the start and end position of an underline. This function is called
+   from the DrawText-method (for underlining misspelled words or smarttag terms).
+
+   @param Point& aStart
+       Start-coordinate for line
+   @param Point& aEnd
+       End-coordinate for line
+*/
+
+void lcl_calcLinePos( SwDrawTextInfo& rInf, Font& rFont, Point& rStart, Point& rEnd, xub_StrLen nStart,
+                      xub_StrLen nWrLen, xub_StrLen nCnt, const BOOL bSwitchH2V, const BOOL bSwitchL2R,
+                      long nHalfSpace, long* pKernArray, const BOOL bBidiPor)
+{
+   rStart = Point( rInf.GetPos() );
+   long nBlank = 0;
+   const xub_StrLen nEnd = nStart + nWrLen;
+   const long nTmpSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+
+   if( nEnd < nCnt
+       && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nEnd ) )
+   {
+       if( nEnd + 1 == nCnt )
+           nBlank -= nTmpSpaceAdd;
+       else
+           nBlank -= nHalfSpace;
+   }
+
+   // determine start, end and length of wave line
+   long nKernStart = nStart ? pKernArray[ USHORT( nStart - 1 ) ] : 0;
+   long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
+
+   USHORT nDir = bBidiPor ? 1800 :
+       UnMapDirection( rFont.GetOrientation(), bSwitchH2V );
+
+   switch ( nDir )
+   {
+   case 0 :
+       rStart.X() += nKernStart;
+       rEnd.X() = nBlank + rInf.GetPos().X() + nKernEnd;
+       rEnd.Y() = rInf.GetPos().Y();
+       break;
+   case 900 :
+       rStart.Y() -= nKernStart;
+       rEnd.X() = rInf.GetPos().X();
+       rEnd.Y() = nBlank + rInf.GetPos().Y() - nKernEnd;
+       break;
+   case 1800 :
+       rStart.X() -= nKernStart;
+       rEnd.X() = rInf.GetPos().X() - nKernEnd - nBlank;
+       rEnd.Y() = rInf.GetPos().Y();
+       break;
+   case 2700 :
+       rStart.Y() += nKernStart;
+       rEnd.X() = rInf.GetPos().X();
+       rEnd.Y() = nBlank + rInf.GetPos().Y() + nKernEnd;
+       break;
+   }
+
+   if ( bSwitchL2R )
+   {
+       rInf.GetFrm()->SwitchLTRtoRTL( rStart );
+       rInf.GetFrm()->SwitchLTRtoRTL( rEnd );
+   }
+
+   if ( bSwitchH2V )
+   {
+       rInf.GetFrm()->SwitchHorizontalToVertical( rStart );
+       rInf.GetFrm()->SwitchHorizontalToVertical( rEnd );
+   }
 }
 
 /*************************************************************************
@@ -854,6 +930,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                           !rInf.GetBullet() &&
                            ( rInf.GetSpace() || !rInf.GetKern() ) &&
                           !rInf.GetWrong() &&
+                          !rInf.GetSmartTags() &&
                           !rInf.GetGreyWave() );
 
     // bDirectPrint indicates that we can enter the branch which calls
@@ -1651,102 +1728,51 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     }
                 }
             }
-            else if( rInf.GetWrong() && !bSymbol )
+            else if( !bSymbol && rInf.GetLen() )
             {
-                if( rInf.GetLen() )
+                // draw wave line for misspelled words
+                if (rInf.GetWrong())
                 {
                     xub_StrLen nStart = rInf.GetIdx();
                     xub_StrLen nWrLen = rInf.GetLen();
                     if( rInf.GetWrong()->Check( nStart, nWrLen ) )
                     {
-                        long nHght = rInf.GetOut().LogicToPixel(
-                                         pPrtFont->GetSize() ).Height();
+                        long nHght = rInf.GetOut().LogicToPixel( pPrtFont->GetSize() ).Height();
                         if( WRONG_SHOW_MIN < nHght )
                         {
                             if ( rInf.GetOut().GetConnectMetaFile() )
-                                    rInf.GetOut().Push();
+                                rInf.GetOut().Push();
 
                             USHORT nWave =
-                                    WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
-                                    ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
-                                    WAVE_FLAT );
+                                WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
+                                ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
+                                WAVE_FLAT );
 
-                            Color aCol( rInf.GetOut().GetLineColor() );
-                            BOOL bColSave = aCol != SwViewOption::GetSpellColor();
+                            const Color aCol( rInf.GetOut().GetLineColor() );
+                            const Color lineColor = SwViewOption::GetSpellColor();
+                            BOOL bColSave = aCol != lineColor;
                             if ( bColSave )
-                                rInf.GetOut().SetLineColor( SwViewOption::GetSpellColor() );
+                                rInf.GetOut().SetLineColor( lineColor );
 
-                            const long nTmpSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
-
+                            // --> SMARTTAGS NEW
                             do
                             {
                                 nStart -= rInf.GetIdx();
-                                Point aStart( rInf.GetPos() );
-                                Point aEnd;
-                                long nBlank = 0;
+
+                                //determine line pos
+                                Point aStart, aEnd;
                                 const xub_StrLen nEnd = nStart + nWrLen;
+                                lcl_calcLinePos(rInf, *GetFont(), aStart, aEnd, nStart, nWrLen,
+                                                nCnt, bSwitchH2V, bSwitchL2R,
+                                                nHalfSpace, pKernArray, bBidiPor);
 
-                                if( nEnd < nCnt
-                                    && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nEnd ) )
-                                {
-                                    if( nEnd + 1 == nCnt )
-                                        nBlank -= nTmpSpaceAdd;
-                                    else
-                                        nBlank -= nHalfSpace;
-                                }
-
-                                // determine start, end and length of wave line
-                                long nKernStart = nStart ?
-                                                  pKernArray[ USHORT( nStart - 1 ) ] :
-                                                  0;
-                                long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
-
-                                USHORT nDir = bBidiPor ?
-                                              1800 :
-                                              UnMapDirection(
-                                                GetFont()->GetOrientation(),
-                                                bSwitchH2V );
-
-                                switch ( nDir )
-                                {
-                                case 0 :
-                                    aStart.X() += nKernStart;
-                                    aEnd.X() = nBlank + rInf.GetPos().X() + nKernEnd;
-                                    aEnd.Y() = rInf.GetPos().Y();
-                                    break;
-                                case 900 :
-                                    aStart.Y() -= nKernStart;
-                                    aEnd.X() = rInf.GetPos().X();
-                                    aEnd.Y() = nBlank + rInf.GetPos().Y() - nKernEnd;
-                                    break;
-                                case 1800 :
-                                    aStart.X() -= nKernStart;
-                                    aEnd.X() = rInf.GetPos().X() - nKernEnd - nBlank;
-                                    aEnd.Y() = rInf.GetPos().Y();
-                                    break;
-                                case 2700 :
-                                    aStart.Y() += nKernStart;
-                                    aEnd.X() = rInf.GetPos().X();
-                                    aEnd.Y() = nBlank + rInf.GetPos().Y() + nKernEnd;
-                                    break;
-                                }
-
-                                if ( bSwitchL2R )
-                                {
-                                    rInf.GetFrm()->SwitchLTRtoRTL( aStart );
-                                    rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
-                                }
-
-                                if ( bSwitchH2V )
-                                {
-                                    rInf.GetFrm()->SwitchHorizontalToVertical( aStart );
-                                    rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
-                                }
                                 rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
                                 nStart = nEnd + rInf.GetIdx();
                                 nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
                             }
                             while( nWrLen && rInf.GetWrong()->Check( nStart, nWrLen ) );
+                            // <--
+
                             if ( bColSave )
                                 rInf.GetOut().SetLineColor( aCol );
 
@@ -1755,7 +1781,59 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         }
                     }
                 }
+
+                if (rInf.GetSmartTags())
+                {
+                    Color lineColor = Color( RGB_COLORDATA(150, 50, 255) );
+                    xub_StrLen nStart = rInf.GetIdx();
+                    xub_StrLen nWrLen = rInf.GetLen();
+                    // check if a smarttag word is available in the current text range
+                    if( rInf.GetSmartTags()->Check( nStart, nWrLen ) )
+                    {
+                        if ( rInf.GetOut().GetConnectMetaFile() )
+                            rInf.GetOut().Push();
+
+                        Color aCol( rInf.GetOut().GetLineColor() );
+                        BOOL bColSave = aCol != lineColor;
+                        if ( bColSave )
+                            rInf.GetOut().SetLineColor( lineColor );
+
+                        // iterate over all ranges stored in the smarttag list
+                        do
+                        {
+                            nStart -= rInf.GetIdx();
+
+                            //determine line pos
+                            Point aStart, aEnd;
+                            const xub_StrLen nEnd = nStart + nWrLen;
+                            lcl_calcLinePos(rInf, *GetFont(), aStart, aEnd, nStart, nWrLen,
+                                            nCnt, bSwitchH2V, bSwitchL2R,
+                                            nHalfSpace, pKernArray, bBidiPor);
+
+                            aStart.Y() +=25;
+                            aEnd.Y() +=25;
+
+                            LineInfo aInfo = LineInfo(LINE_DASH);
+                            aInfo.SetDistance( 25 );
+                            aInfo.SetDashLen( 5 );
+                            aInfo.SetDashCount(1);
+
+                            // draw line
+                            rInf.GetOut().DrawLine( aStart, aEnd, aInfo );
+                            nStart = nEnd + rInf.GetIdx();
+                            nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
+                        }
+                        while( nWrLen && rInf.GetSmartTags()->Check( nStart, nWrLen ) );
+
+                        if ( bColSave )
+                            rInf.GetOut().SetLineColor( aCol );
+
+                        if ( rInf.GetOut().GetConnectMetaFile() )
+                            rInf.GetOut().Pop();
+                    }
+                }
             }
+
             xub_StrLen nOffs = 0;
             xub_StrLen nLen = rInf.GetLen();
 #ifdef COMING_SOON
