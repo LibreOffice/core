@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:55:49 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,17 +54,23 @@
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESLISTENER_HPP_
 #include <com/sun/star/util/XChangesListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
 #include <com/sun/star/awt/XDialog.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 #include <toolkit/helper/listenermultiplexer.hxx>
@@ -81,6 +87,9 @@
 #endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
+#endif
+#ifndef _CPPUHELPER_BASEMUTEX_HXX_
+#include <cppuhelper/basemutex.hxx>
 #endif
 #include <list>
 
@@ -219,11 +228,40 @@ protected:
 //  ----------------------------------------------------
 //  class UnoDialogControl
 //  ----------------------------------------------------
-typedef ::cppu::ImplHelper4 <   ::com::sun::star::container::XContainerListener
+typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
                             ,   ::com::sun::star::awt::XTopWindow
                             ,   ::com::sun::star::awt::XDialog
                             ,   ::com::sun::star::util::XChangesListener
+                            ,   ::com::sun::star::util::XModifyListener
                             >   UnoDialogControl_IBase;
+
+class ResourceListener  :public ::com::sun::star::util::XModifyListener,
+                         public ::cppu::OWeakObject,
+                         public ::cppu::BaseMutex
+{
+    public:
+        ResourceListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& xListener );
+        virtual ~ResourceListener();
+
+        void startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver  >& rResource );
+        void stopListening();
+
+        // XInterface
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw ();
+        virtual void SAL_CALL release() throw ();
+
+        // XModifyListener
+        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > m_xResource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >             m_xListener;
+        bool                                                                                    m_bListening;
+};
 
 class UnoDialogControl  :public UnoControlContainer
                         ,public UnoDialogControl_IBase
@@ -231,13 +269,16 @@ class UnoDialogControl  :public UnoControlContainer
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >         mxMenuBar;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >   mxTabController;
-    TopWindowListenerMultiplexer    maTopWindowListeners;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > mxListener;
+    TopWindowListenerMultiplexer                                                maTopWindowListeners;
 
 protected:
 
     void        ImplInsertControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel, const ::rtl::OUString& rName );
     void        ImplRemoveControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel );
     void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
+    void        ImplUpdateResourceResolver();
+    void        ImplStartListingForResourceEvents();
 
 public:
 
@@ -250,7 +291,7 @@ public:
     void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlContainer::disposing( Source ); }
+    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XTopWindow
@@ -281,6 +322,9 @@ public:
 
     // XChangesListener
     virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XModifyListener
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoDialogControl, szServiceName2_UnoControlDialog )
