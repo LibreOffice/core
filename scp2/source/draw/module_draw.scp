@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_draw.scp,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:12:52 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 Module gid_Module_Prg_Draw
     MOD_NAME_DESC ( MODULE_PRG_DRAW );
     ParentID = gid_Module_Prg;
+    Sortkey = "400";
 End
 
 Module gid_Module_Prg_Draw_Bin
