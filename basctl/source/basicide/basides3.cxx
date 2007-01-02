@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:26:12 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:49:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #include <basidesh.hxx>
 #include <baside3.hxx>
 #include <basobj.hxx>
+#include <localizationmgr.hxx>
 
 #ifndef _BASCTL_DLGEDVIEW_HXX
 #include <dlgedview.hxx>
@@ -121,6 +122,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( SfxObjectShell* pShell, const String&
                 OSL_ASSERT( xProps.is() );
                 OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
                 ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+                LocalizationMgr::setStringResourceAtDialog( pShell, rLibName, aDlgName, xDialogModel );
 
                 // new dialog window
                 pWin = new DialogWindow( &GetViewFrame()->GetWindow(), pShell, aLibName, aDlgName, xDialogModel );
