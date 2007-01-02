@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:11:07 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@
 #include <objectformatter.hxx>
 #endif
 // <--
-
+#include <SmartTagMgr.hxx>
 //#pragma optimize("ity",on)
 
 /*************************************************************************
@@ -2546,6 +2546,8 @@ BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
             bProcess = pTxtNode->IsAutoCompleteWordDirty(); break;
         case WORD_COUNT :
             bProcess = pTxtNode->IsWordCountDirty(); break;
+        case SMART_TAGS :   // SMARTTAGS
+            bProcess = pTxtNode->IsSmartTagDirty(); break;
     }
 
     if( bProcess )
@@ -2585,12 +2587,26 @@ BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     return TRUE;
                 break;
             case WORD_COUNT :
+            {
                 const xub_StrLen nEnd = pTxtNode->GetTxt().Len();
                 SwDocStat aStat;
                 pTxtNode->CountWords( aStat, 0, nEnd );
                 if ( Application::AnyInput( INPUT_ANY ) )
                     return TRUE;
                 break;
+            }
+            case SMART_TAGS : // SMARTTAGS
+            {
+                const SwRect aRepaint( ((SwTxtFrm*)pCnt)->SmartTagScan( pCntntNode, nTxtPos ) );
+                bPageValid = bPageValid && !pTxtNode->IsSmartTagDirty();
+                if( !bPageValid )
+                    bAllValid = FALSE;
+                if ( aRepaint.HasArea() )
+                    pImp->GetShell()->InvalidateWindows( aRepaint );
+                if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
+                    return TRUE;
+                break;
+            }
         }
     }
 
@@ -2640,6 +2656,10 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
             break;
         case WORD_COUNT :
             if ( !pImp->GetShell()->getIDocumentStatistics()->GetDocStat().bModified )
+                return FALSE;
+            break;
+        case SMART_TAGS :
+            if ( !SmartTagMgr::getSmartTagMgr().HasRecognizers() )
                 return FALSE;
             break;
         default: ASSERT( false, "Unknown idle job type" )
@@ -2694,6 +2714,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
                 case ONLINE_SPELLING : pPage->ValidateSpelling(); break;
                 case AUTOCOMPLETE_WORDS : pPage->ValidateAutoCompleteWords(); break;
                 case WORD_COUNT : pPage->ValidateWordCount(); break;
+                case SMART_TAGS : pPage->ValidateSmartTags(); break; // SMARTTAGS
             }
         }
 
@@ -2770,7 +2791,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     //Zuerst den Sichtbaren Bereich Spellchecken, nur wenn dort nichts
     //zu tun war wird das IdleFormat angestossen.
     if ( !DoIdleJob( ONLINE_SPELLING, TRUE ) &&
-         !DoIdleJob( AUTOCOMPLETE_WORDS, TRUE ) )
+         !DoIdleJob( AUTOCOMPLETE_WORDS, TRUE ) &&
+         !DoIdleJob( SMART_TAGS, TRUE ) ) // SMARTTAGS
     {
         //Formatieren und ggf. Repaint-Rechtecke an der ViewShell vormerken.
         //Dabei muessen kuenstliche Actions laufen, damit es z.B. bei
@@ -2895,14 +2917,17 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         {
             if ( !DoIdleJob( WORD_COUNT, FALSE ) )
                 if ( !DoIdleJob( ONLINE_SPELLING, FALSE ) )
-                    DoIdleJob( AUTOCOMPLETE_WORDS, FALSE );
+                    if ( !DoIdleJob( AUTOCOMPLETE_WORDS, FALSE ) )
+                        DoIdleJob( SMART_TAGS, FALSE ); // SMARTTAGS
         }
 
         bool bInValid = false;
         const SwViewOption& rVOpt = *pImp->GetShell()->GetViewOptions();
+        // See conditions in DoIdleJob()
         const BOOL bSpell = rVOpt.IsOnlineSpell();
         const BOOL bACmplWrd = rVOpt.IsAutoCompleteWords();
         const BOOL bWordCount = pImp->GetShell()->getIDocumentStatistics()->GetDocStat().bModified;
+        const BOOL bSmartTags = SmartTagMgr::getSmartTagMgr().HasRecognizers(); // SMARTTAGS
 
         SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
         do
@@ -2912,7 +2937,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                        pPg->IsInvalidFlyInCnt() ||
                        (bSpell && pPg->IsInvalidSpelling()) ||
                        (bACmplWrd && pPg->IsInvalidAutoCompleteWords()) ||
-                       (bWordCount && pPg->IsInvalidWordCount());
+                       (bWordCount && pPg->IsInvalidWordCount()) ||
+                       (bSmartTags && pPg->IsInvalidSmartTags()); // SMARTTAGS
 
             pPg = (SwPageFrm*)pPg->GetNext();
 
