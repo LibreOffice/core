@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_writer.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:19:00 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -792,6 +792,15 @@ RegistryItem gid_Regitem__Sdw
     Value = "soffice.StarWriterDocument.5";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdw
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sdw";
+    Value = "soffice.StarWriterDocument.5";
+    Styles = (PATCH);
+End
+
 RegistryItem gid_Regitem__Sgl
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sgl";
@@ -799,12 +808,32 @@ RegistryItem gid_Regitem__Sgl
     Value = "soffice.StarWriterGlobalDocument.5";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sgl
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sgl";
+    Value = "soffice.StarWriterGlobalDocument.5";
+    Styles = (PATCH);
+End
+
+
 RegistryItem gid_Regitem__Sxw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".sxw";
     Value = "soffice.StarWriterDocument.6";
 End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxw
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sxw";
+    Value = "soffice.StarWriterDocument.6";
+    Styles = (PATCH);
+End
+
 
 // new odt file extension 
 
@@ -842,6 +871,25 @@ RegistryItem gid_Regitem__Odt
     Subkey = ".odt";
     Value = "opendocument.WriterDocument.1";
 End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".odt";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Root;
+    Name = "application/vnd.oasis.opendocument.text";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
 
 RegistryItem gid_Regitem_Odt_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1504,3 +1552,155 @@ RegistryItem gid_Regitem_OpenOffice_SGL_OpenWith_Writer
     Value = " ";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Ott
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".ott";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Stw
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".stw";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Doc
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".doc";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Dot
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".dot";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Rtf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".rtf";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Txt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".txt";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Htm
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".htm";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Html
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".html";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Xml
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".xml";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wpd
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".wpd";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wps
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".Wps";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Jtd
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".jtd";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Jtt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".jtt";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Hwp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".hwp";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Oth
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".oth";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Odm
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".odm";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Sxg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sxg";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
