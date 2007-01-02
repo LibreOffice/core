@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:17:58 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:29:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,9 @@ PARFILES=                          \
         shortcut_ooo.par           \
         module_ooo.par             \
         module_hidden_ooo.par      \
+        module_langpack.par        \
+        module_java.par            \
+        module_systemint.par       \
         profile_ooo.par            \
         profileitem_ooo.par
 
@@ -238,7 +241,10 @@ ULFFILES=                          \
         directory_ooo.ulf          \
         folderitem_ooo.ulf         \
         module_ooo.ulf             \
-        registryitem_ooo.ulf
+        module_langpack.ulf        \
+        module_java.ulf            \
+        registryitem_ooo.ulf       \
+        module_systemint.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
