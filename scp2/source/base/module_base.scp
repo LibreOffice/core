@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:45:39 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 Module gid_Module_Prg_Base
     MOD_NAME_DESC(MODULE_PRG_BASE);
     ParentID = gid_Module_Prg;
+    Sortkey = "600";
 End
 
 Module gid_Module_Prg_Base_Bin
