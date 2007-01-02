@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_calc.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:18:08 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,12 +605,32 @@ RegistryItem gid_Regitem__Sdc
     Value = "soffice.StarCalcDocument.5";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdc
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sdc";
+    Value = "soffice.StarCalcDocument.5";
+    Styles = (PATCH);
+End
+
+
 RegistryItem gid_Regitem__Sxc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".sxc";
     Value = "soffice.StarCalcDocument.6";
 End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxc
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sxc";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = (PATCH);
+End
+
 
 // new ods file extension 
 
@@ -647,6 +667,24 @@ RegistryItem gid_Regitem__Ods
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".ods";
     Value = "opendocument.CalcDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_ods
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".ods";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_ods
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Root;
+    Name = "application/vnd.oasis.opendocument.spreadsheet";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Ods_Contenttype
@@ -1069,3 +1107,101 @@ RegistryItem gid_Regitem_OpenOffice_XML_OpenWith_Calc
     Value = " ";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Stc
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".stc";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Dif
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".dif";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Dbf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".dbf";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Xls
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".xls";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Xlw
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".xlw";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Xlt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".xlt";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Slk
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".slk";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Csv
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".csv";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wk1
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".wk1";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wks
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".wks";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_123
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".123";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
