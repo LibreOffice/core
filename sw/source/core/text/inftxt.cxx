@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:18:40 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,6 +580,8 @@ void SwTxtPaintInfo::CtorInit( SwTxtFrm *pFrame, const SwRect &rPaint )
     nSpaceIdx = 0;
     pSpaceAdd = NULL;
     pWrongList = NULL;
+    pSmartTags = NULL;  // SMARTTAGS
+
 #ifdef PRODUCT
     pBrushItem = 0;
 #else
@@ -595,6 +597,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const XubString &rTx
       nSpaceIdx( rInf.GetSpaceIdx() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pWrongList( rInf.GetpWrongList() ),
+      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
       pBrushItem( rInf.GetBrushItem() )
 { }
 
@@ -606,6 +609,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
       nSpaceIdx( rInf.GetSpaceIdx() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pWrongList( rInf.GetpWrongList() ),
+      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
       pBrushItem( rInf.GetBrushItem() )
 { }
 
@@ -657,8 +661,9 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
  *************************************************************************/
 
 void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPor,
-                            const xub_StrLen nStart, const xub_StrLen nLen,
-                            const sal_Bool bKern, const sal_Bool bWrong )
+                                const xub_StrLen nStart, const xub_StrLen nLen,
+                                const sal_Bool bKern, const sal_Bool bWrong,
+                                const sal_Bool bSmartTag )  // SMARTTAGS
 {
     if( !nLen )
         return;
@@ -708,8 +713,10 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         nComp = GetKanaComp();
 
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
-    sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell()
-                             && !GetOpt().IsHideSpell();
+    const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell() &&
+                               !GetOpt().IsHideSpell();
+    const sal_Bool bTmpSmart = bSmartTag && OnWin(); // SMARTTAGS
+
     SwParaPortion* pPara = GetParaPortion();
     ASSERT( pPara, "No paragraph!");
     SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLen,
@@ -758,6 +765,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         aDrawInf.SetAscent( rPor.GetAscent() );
         aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
         aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
+        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );     // SMARTTAGS
         GetTxtFly()->DrawTextOpaque( aDrawInf );
     }
     else
@@ -768,6 +776,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         else
         {
             aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
+            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );  // SMARTTAGS
             pFnt->_DrawText( aDrawInf );
         }
     }
