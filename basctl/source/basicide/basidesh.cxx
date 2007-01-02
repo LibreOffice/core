@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:26:24 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #include <tbxctl.hxx>
 #include <iderdll2.hxx>
 #include <basidectrlr.hxx>
+#include <localizationmgr.hxx>
 
 #define BasicIDEShell
 #define SFX_TYPEMAP
@@ -93,7 +94,7 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
 #include <svx/xmlsecctrl.hxx>
@@ -188,6 +189,7 @@ void BasicIDEShell::Init()
     SFX_APP()->EnterBasicCall();
 
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
+    LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
 
     CreateModulWindowLayout();
 
@@ -199,6 +201,8 @@ void BasicIDEShell::Init()
     m_pCurShell = 0;
     pObjectCatalog = 0;
     bCreatingWindow = FALSE;
+
+    m_pCurLocalizationMgr = NULL;
 
     // MT 08/00: BasicToolBar not longer in other ViewShells.
 //  SFX_APP()->GetAppDispatcher().Push(*this);
@@ -659,6 +663,12 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                         // falls durch einen Programmierfehler das Update abgeschaltet ist.
                         BasicIDE::BasicStopped();
                         UpdateModulWindowLayout( true );    // Leer machen...
+                        if( m_pCurLocalizationMgr )
+                            m_pCurLocalizationMgr->handleBasicStopped();
+                    }
+                    else if( m_pCurLocalizationMgr )
+                    {
+                        m_pCurLocalizationMgr->handleBasicStarted();
                     }
 
                     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -1002,10 +1012,34 @@ void BasicIDEShell::SetCurLib( SfxObjectShell* pShell, String aLibName, bool bUp
 
         SetMDITitle();
 
+        SetCurLibForLocalization( pShell, aLibName );
+
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if ( pBindings )
+        {
             pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
+            pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
+            pBindings->Invalidate( SID_BASICIDE_MANAGE_LANG );
+        }
     }
+}
+
+void BasicIDEShell::SetCurLibForLocalization( SfxObjectShell* pShell, String aLibName )
+{
+    // Create LocalizationMgr
+    delete m_pCurLocalizationMgr;
+    Reference< resource::XStringResourceManager > xStringResourceManager;
+    if( aLibName.Len() )
+    {
+        Reference< container::XNameContainer > xDialogLib =
+            BasicIDE::GetDialogLibrary( pShell, aLibName, TRUE );
+
+        xStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
+    }
+    m_pCurLocalizationMgr = new LocalizationMgr
+        ( this, pShell, aLibName, xStringResourceManager );
+
+    m_pCurLocalizationMgr->handleTranslationbar();
 }
 
 void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
