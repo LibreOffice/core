@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:56:08 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ const sal_Unicode   AMPERSAND_SIGN = L'&';
 // Windows NT 4.0   VER_PLATFORM_WIN32_NT       4       0
 // Windows 2000     VER_PLATFORM_WIN32_NT       5       0
 // Windows XP       VER_PLATFORM_WIN32_NT       5       1
+// Windows Vista    VER_PLATFORM_WIN32_NT       6       0
 // Windows 95       VER_PLATFORM_WIN32_WINDOWS  4       0
 // Windows 98       VER_PLATFORM_WIN32_WINDOWS  4       10
 // Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
@@ -154,7 +155,19 @@ bool SAL_CALL IsWindowsME()
 
 bool SAL_CALL IsWindows2000Platform()
 {
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5);
+    // POST: return true if we are at least on Windows 2000
+
+    // WRONG!: return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5);
+
+    OSVERSIONINFO osvi;
+    ZeroMemory(&osvi, sizeof(osvi));
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+    GetVersionEx(&osvi);
+    if ( osvi.dwMajorVersion >= 5 )
+    {
+        return true;
+    }
+    return false;
 }
 
 //------------------------------------------------------------
