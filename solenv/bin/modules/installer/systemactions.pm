@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:04:40 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:24:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -992,6 +992,75 @@ sub get_all_files_from_one_directory
     closedir(DIR);
 
     return \@allfiles;
+}
+
+##############################################################
+# Collecting all files and directories inside one directory
+##############################################################
+
+sub read_directory
+{
+    my ($basedir) = @_;
+
+    my @allcontent = ();
+    my $direntry;
+
+    $basedir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    opendir(DIR, $basedir);
+
+    foreach $direntry (readdir (DIR))
+    {
+        next if $direntry eq ".";
+        next if $direntry eq "..";
+
+        my $completeentry = $basedir . $installer::globals::separator . $direntry;
+
+        if (( -f $completeentry ) || ( -d $completeentry )) { push(@allcontent, $completeentry); }
+    }
+
+    closedir(DIR);
+
+    return \@allcontent;
+}
+
+##############################################################
+# Finding the new content in a directory
+##############################################################
+
+sub find_new_content_in_directory
+{
+    my ( $basedir, $oldcontent ) = @_;
+
+    my @newcontent = ();
+    my @allcontent = ();
+
+    my $direntry;
+
+    $basedir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    opendir(DIR, $basedir);
+
+    foreach $direntry (readdir (DIR))
+    {
+        next if $direntry eq ".";
+        next if $direntry eq "..";
+
+        my $completeentry = $basedir . $installer::globals::separator . $direntry;
+
+        if (( -f $completeentry ) || ( -d $completeentry ))
+        {
+            push(@allcontent, $completeentry);
+            if (! installer::existence::exists_in_array($completeentry, $oldcontent))
+            {
+                push(@newcontent, $completeentry);
+            }
+        }
+    }
+
+    closedir(DIR);
+
+    return (\@newcontent, \@allcontent);
 }
 
 ##############################################################
