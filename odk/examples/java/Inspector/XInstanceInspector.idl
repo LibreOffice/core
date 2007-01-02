@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceInspector.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 17:12:29 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -55,7 +55,7 @@ module org {  module openoffice {
          * www.openoffice.org for the current instance will be displayed in a
          * new window.
          */
-        void inspect( [in] any aInstance );
+        void inspect( [in] any aInstance, [in] string sTitle );
     };
 
 }; };
