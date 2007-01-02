@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utilities.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:47:18 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,13 +117,20 @@ std::wstring GetResString(int ResId)
 //---------------------------------
 /**
 */
-bool is_windows_xp()
+bool is_windows_xp_or_above()
 {
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionEx(&osvi);
-    return (5 == osvi.dwMajorVersion && 1 == osvi.dwMinorVersion);
+
+    // LLA: check for windows xp or above (Vista)
+    if (osvi.dwMajorVersion > 5 ||
+        (5 == osvi.dwMajorVersion && osvi.dwMinorVersion >= 1))
+    {
+        return true;
+    }
+    return false;
 }
 
 //---------------------------------
