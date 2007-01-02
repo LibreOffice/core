@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-27 12:10:01 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:26:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ TARGET=install
 UNIXTEXT= \
     $(BIN)$/langpackscript.sh \
     $(BIN)$/linuxpatchscript.sh \
+    $(BIN)$/javaloader.sh \
     $(BIN)$/register_extensions \
     $(BIN)$/deregister_extensions \
     $(BIN)$/downloadscript.sh
