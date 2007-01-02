@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgresid.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:21:23 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,8 @@
 #define RID_STR_CLASS_FORMATTEDFIELD        ( RID_DLG_START +  18 )
 #define RID_STR_CLASS_PATTERNFIELD          ( RID_DLG_START +  19 )
 #define RID_STR_CLASS_FILECONTROL           ( RID_DLG_START +  20 )
-
+#define RID_STR_TRANSLATION_NOTLOCALIZED    ( RID_DLG_START +  21 )
+#define RID_STR_TRANSLATION_DEFAULT         ( RID_DLG_START +  22 )
 
 // Property Browser Headline Id's -----------------------------------------------------------
 
@@ -71,6 +72,14 @@
 #define RID_STR_BRWTITLE_NO_PROPERTIES      ( RID_DLG_START +  61 )
 #define RID_STR_BRWTITLE_MULTISELECT        ( RID_DLG_START +  62 )
 
+// Manage Language Dialogs
+
+#define RID_DLG_MANAGE_LANGUAGE             ( RID_DLG_START +  70 )
+#define RID_QRYBOX_LANGUAGE                 ( RID_DLG_START +  71 )
+#define RID_DLG_SETDEF_LANGUAGE             ( RID_DLG_START +  72 )
+#define RID_DLG_ADD_LANGUAGE                ( RID_DLG_START +  73 )
+
 // -----------------------------------------------------------------------
 
 #endif          // _BASCTL_DLGRESID_HRC
+
