@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:13:49 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 Module gid_Module_Prg_Wrt
     MOD_NAME_DESC(MODULE_PRG_WRT);
     ParentID = gid_Module_Prg;
+    Sortkey = "100";
 End
 
 Module gid_Module_Prg_Wrt_Bin
