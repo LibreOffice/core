@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:26 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,10 @@
 
 #ifndef _BASCTL_PROPBRW_HXX
 #include "propbrw.hxx"
+#endif
+
+#ifndef _LOCALIZATIONMGR_HXX
+#include <localizationmgr.hxx>
 #endif
 
 #include <basidesh.hxx>
@@ -198,6 +202,24 @@ void DlgEditor::ShowDialog()
     uno::Reference< util::XCloneable > xC( m_xUnoControlDialogModel, uno::UNO_QUERY );
     uno::Reference< util::XCloneable > xNew = xC->createClone();
     uno::Reference< awt::XControlModel > xDlgMod( xNew, uno::UNO_QUERY );
+
+    uno::Reference< beans::XPropertySet > xSrcDlgModPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xNewDlgModPropSet( xDlgMod, uno::UNO_QUERY );
+    if( xSrcDlgModPropSet.is() && xNewDlgModPropSet.is() )
+    {
+        static ::rtl::OUString aResourceResolverPropName =
+            ::rtl::OUString::createFromAscii( "ResourceResolver" );
+
+        try
+        {
+            Any aResourceResolver = xSrcDlgModPropSet->getPropertyValue( aResourceResolverPropName );
+            xNewDlgModPropSet->setPropertyValue( aResourceResolverPropName, aResourceResolver );
+        }
+        catch( UnknownPropertyException& )
+        {
+            DBG_ERROR( "DlgEditor::ShowDialog(): No ResourceResolver property" );
+        }
+    }
 
     // set the model
     xDlg->setModel( xDlgMod );
@@ -1002,6 +1024,11 @@ void DlgEditor::Delete()
                 Reference< ::com::sun::star::container::XNameContainer > xCont(xNameAcc, UNO_QUERY );
                 if ( xCont.is() )
                 {
+                    if( xCont->hasByName( aName ) )
+                    {
+                        Any aAny = xCont->getByName( aName );
+                        LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( this, aAny, aName );
+                    }
                     xCont->removeByName( aName );
                 }
             }
