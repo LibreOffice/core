@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:19:09 $
+#   last change: $Author: hr $ $Date: 2007-01-02 16:17:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -244,6 +244,7 @@ $(APP1TARGETN) : $(BIN)$/so
 
 .IF "$(GUI)" == "WNT"
 ALLTAR: $(MISC)$/$(TARGET).exe.manifest
+ALLTAR: $(MISC)$/$(TARGET).bin.manifest
 ALLTAR: $(BIN)$/$(TARGET).bin
 ALLTAR: $(BIN)$/so$/$(TARGET).bin
 .ENDIF # WNT
@@ -262,6 +263,11 @@ ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
 # create a manifest file with the same name as the
 # office executable file soffice.exe.manifest
 $(MISC)$/$(TARGET).exe.manifest: template.manifest
+   +$(COPY) $< $@
+
+# create a manifest file with the same name as the
+# office executable file soffice.bin.manifest 
+$(MISC)$/$(TARGET).bin.manifest: template.manifest
    +$(COPY) $< $@
 
 $(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
