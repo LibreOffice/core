@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:52 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@
 
 #ifndef _IDERID_HXX
 #include <iderid.hxx>
+#endif
+
+#ifndef _LOCALIZATIONMGR_HXX
+#include <localizationmgr.hxx>
 #endif
 
 #ifndef _BASCTL_DLGRESID_HRC
@@ -1176,6 +1180,13 @@ void DlgEdObj::SetDefaults()
                 Any aAny;
                 aAny <<= xCtrl;
                 xCont->insertByName( aOUniqueName , aAny );
+
+                DlgEditor* pEditor;
+                if ( ISA(DlgEdForm) )
+                    pEditor = ((DlgEdForm*)this)->GetDlgEditor();
+                else
+                    pEditor = GetDlgEdForm()->GetDlgEditor();
+                LocalizationMgr::setControlResourceIDsForNewEditorObject( pEditor, aAny, aOUniqueName );
 
                 // #110559#
                 pDlgEdForm->UpdateTabOrderAndGroups();
