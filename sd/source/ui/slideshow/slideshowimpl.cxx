@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 17:46:35 $
+ *  last change: $Author: ihi $ $Date: 2007-01-02 12:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,12 @@
  *
  ************************************************************************/
 
-#ifdef WNT
-#pragma warning (disable:4505)
-#endif
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+#ifdef WNT
+#pragma warning (disable:4505)
+#endif
 
 #include <boost/scoped_ptr.hpp>
 
