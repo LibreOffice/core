@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:29:01 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,17 @@ void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, cons
         {
             ::rtl::OUString sText;
             rVal >>= sText;
+            if (( sText.getLength() > 0 ) &&
+                ( sText.compareToAscii( "&", 1 ) == 0 ))
+            {
+                // Magic symbol '&' found at first place. Interpret as a place
+                // holder identifier. Now try to map it to the real value. The
+                // magic symbol must be removed.
+                rtl::OUString aKeyValue( sText.copy( 1 ));
+                if ( UnoControl::ImplMapPlaceHolder( aKeyValue ))
+                   sText = aKeyValue;
+            }
+
             xTextComponent->setText( sText );
             bDone = sal_True;
         }
