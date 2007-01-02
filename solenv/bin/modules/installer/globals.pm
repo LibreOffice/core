@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 18:06:26 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:23:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -175,8 +175,16 @@ BEGIN
     $created_new_component_guid = 0;
     @allddffiles = ();
     $infodirectory = "";
+    $currentcontent = "";
 
     $addjavainstaller = 0;
+    $createdxpddefaultlang = 0;
+    $xpddir = "";
+    $productxpdfile = "setup.xpd";
+    $defaultlanguage = "";
+    # @emptyxpdparents = ();
+    @createdxpdfiles = ();
+    @allxpdfiles = ();
     $javalanguagepath = "";
     $javasettozero = 0;
     $addlicensefile = 1;
