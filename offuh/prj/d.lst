@@ -63,6 +63,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbcx
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\scanner
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\script
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sheet
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\smarttags
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\style
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\svg
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sync2
@@ -241,6 +242,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\script\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\script\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\sheet\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sheet\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\sheet\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\sheet\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\smarttags\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\smarttags\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\smarttags\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\smarttags\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\svg\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\svg\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\svg\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\svg\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\style\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\style\*.hdl
