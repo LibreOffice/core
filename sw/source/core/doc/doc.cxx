@@ -5,15 +5,15 @@
  *  $RCSfile: doc.cxx,v $
  *
 <<<<<<< doc.cxx
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
 =======
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
 >>>>>>> 1.49
  *
 <<<<<<< doc.cxx
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:54:19 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:46:34 $
 =======
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:54:19 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:46:34 $
 >>>>>>> 1.49
  *
  *  The Contents of this file are made available subject to
@@ -1388,11 +1388,11 @@ BOOL lcl_SpellAgain( const SwNodePtr& rpNd, void* pArgs )
         {
             if( pTxtNode->GetWrong() &&
                 pTxtNode->GetWrong()->InvalidateWrong() )
-                pTxtNode->SetWrongDirty( TRUE );
+                pTxtNode->SetWrongDirty( true );
         }
         else
         {
-            pTxtNode->SetWrongDirty( TRUE );
+            pTxtNode->SetWrongDirty( true );
             if( pTxtNode->GetWrong() )
                 pTxtNode->GetWrong()->SetInvalid( 0, STRING_LEN );
         }
