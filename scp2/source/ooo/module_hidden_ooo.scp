@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:06:58 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@ Module gid_Module_Root_Files_2
 	Name = "gid_Module_Root_Files_2";
 	Description = "gid_Module_Root_Files_2";
 	Default = YES;
-	Styles = (HIDDEN_ROOT);
+	Styles = (HIDDEN_ROOT,ISUPDATEPACKAGE);
 	Files = (gid_File_Bin_Cde_Open_Url,
 	gid_File_Bin_Configimport,
 	gid_File_Bin_Crashreport,
