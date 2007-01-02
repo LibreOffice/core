@@ -1,13 +1,13 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <!--***********************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: BasicIDEWindowState.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:55:55 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,24 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Macro</value>
                     <value xml:lang="de">Makro</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/translationbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>1,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Language</value>
+                    <value xml:lang="de">Sprache</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
