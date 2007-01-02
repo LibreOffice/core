@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>stringresource</module-name>
+
+    <component-description>
+        <author>Andreas Bregas</author>
+        <name>com.sun.star.comp.scripting.StringResource</name>
+        <description>string resource</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="drafts"/>
+        <supported-service>com.sun.star.resource.StringResource</supported-service>
+        <supported-service>com.sun.star.resource.StringResourceWithLocation</supported-service>
+        <supported-service>com.sun.star.resource.StringResourceWithStorage</supported-service>
+        <type>com.sun.star.resource.XStringResourceWithStorage</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.XInitialization</type>
+        <type>com.sun.star.lang.XMultiComponentFactory</type>
+        <type>com.sun.star.lang.XServiceInfo</type>
+        <type>com.sun.star.uno.XComponentContext</type>
+        <type>com.sun.star.ucb.XSimpleFileAccess3</type>
+        <type>com.sun.star.io.XInputStream</type>
+    </component-description>
+
+    <project-build-dependency>cppuhelper</project-build-dependency>
+    <project-build-dependency>cppu</project-build-dependency>
+    <project-build-dependency>sal</project-build-dependency>
+
+    <runtime-module-dependency>cppuhelper3$(COM)</runtime-module-dependency>
+    <runtime-module-dependency>cppu3</runtime-module-dependency>
+    <runtime-module-dependency>sal3</runtime-module-dependency>
+    <runtime-module-dependency>ucb</runtime-module-dependency>
+
+</module-description>
