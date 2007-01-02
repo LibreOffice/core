@@ -4,9 +4,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:37:12 $
+#   last change: $Author: hr $ $Date: 2007-01-02 16:11:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -152,11 +152,13 @@ sub get_registry_key
 
 sub get_registry_name
 {
-    my ($registry) = @_;
+    my ($registry, $allvariableshashref) = @_;
 
     my $name = "";
 
     if ( $registry->{'Name'} ) { $name = $registry->{'Name'}; }
+
+    if ( $name =~ /\%/ ) { $name = installer::worker::replace_variables_in_string($name, $allvariableshashref); }
 
     return $name;
 }
@@ -167,7 +169,7 @@ sub get_registry_name
 
 sub get_registry_value
 {
-    my ($registry) = @_;
+    my ($registry, $allvariableshashref) = @_;
 
     my $value = "";
 
@@ -176,6 +178,8 @@ sub get_registry_value
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
     $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
     $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
+
+    if ( $value =~ /\%/ ) { $value = installer::worker::replace_variables_in_string($value, $allvariableshashref); }
 
     return $value;
 }
@@ -233,8 +237,8 @@ sub create_registry_table
             $registry{'Registry'} = get_registry_identifier($oneregistry);
             $registry{'Root'} = get_registry_root($oneregistry);
             $registry{'Key'} = get_registry_key($oneregistry, $allvariableshashref);
-            $registry{'Name'} = get_registry_name($oneregistry);
-            $registry{'Value'} = get_registry_value($oneregistry);
+            $registry{'Name'} = get_registry_name($oneregistry, $allvariableshashref);
+            $registry{'Value'} = get_registry_value($oneregistry, $allvariableshashref);
             $registry{'Component_'} = get_registry_component($oneregistry);
 
             # Collecting all components
