@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_draw.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:18:21 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,11 +607,29 @@ RegistryItem gid_Regitem__Sda
     Value = "soffice.StarDrawDocument.5";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sda
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sda";
+    Value = "soffice.StarDrawDocument.5";
+    Styles = (PATCH);
+End
+
 RegistryItem gid_Regitem__Sxd
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = ".sxd";
     Value = "soffice.StarDrawDocument.6";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxd
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sxd";
+    Value = "soffice.StarDrawDocument.6";
+    Styles = (PATCH);
 End
 
 // new odg file extension 
@@ -665,6 +683,24 @@ RegistryItem gid_Regitem__Odg
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = ".odg";
     Value = "opendocument.DrawDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".odg";
+    Value = "opendocument.DrawDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Root;
+    Name = "application/vnd.oasis.opendocument.graphics";
+    Value = "opendocument.DrawDocument.1";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Odg_Openoffice_Drawdocument_1_Shellnew
@@ -945,3 +981,20 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Draw
     Value = " ";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Otg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".otg";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Std
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".std";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
