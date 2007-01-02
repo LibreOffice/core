@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:27:41 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,6 +483,11 @@ public:
 
     DECL_LINK( SpellError, void * );
     BOOL            ExecSpellPopup( const Point& rPt );
+
+    // SMARTTAGS
+    BOOL            ExecSmartTagPopup( const Point& rPt );
+    BOOL            IsOverSmartTag( const Point& rPt );
+
     BOOL            ExecDrwTxtSpellPopup(const Point& rPt);
 
     void            SetTabColFromDocPos( const Point &rPt ) { aTabColFromDocPos = rPt; }
