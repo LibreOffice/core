@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:00 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
     void                                                                        updateFromModel();
     void                                                                        peerCreated();
+    bool                                                                        ImplMapPlaceHolder( ::rtl::OUString& rPlaceHolder );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
     virtual void                                                                ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
