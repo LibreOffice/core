@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:17:34 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,23 +74,25 @@
 #endif
 
 
-#define GCM_PROPERTY_ID_POS_X       1
-#define GCM_PROPERTY_ID_POS_Y       2
-#define GCM_PROPERTY_ID_WIDTH       3
-#define GCM_PROPERTY_ID_HEIGHT      4
-#define GCM_PROPERTY_ID_NAME        5
-#define GCM_PROPERTY_ID_TABINDEX    6
-#define GCM_PROPERTY_ID_STEP        7
-#define GCM_PROPERTY_ID_TAG         8
+#define GCM_PROPERTY_ID_POS_X               1
+#define GCM_PROPERTY_ID_POS_Y               2
+#define GCM_PROPERTY_ID_WIDTH               3
+#define GCM_PROPERTY_ID_HEIGHT              4
+#define GCM_PROPERTY_ID_NAME                5
+#define GCM_PROPERTY_ID_TABINDEX            6
+#define GCM_PROPERTY_ID_STEP                7
+#define GCM_PROPERTY_ID_TAG                 8
+#define GCM_PROPERTY_ID_RESOURCERESOLVER    9
 
-#define GCM_PROPERTY_POS_X      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
-#define GCM_PROPERTY_POS_Y      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
-#define GCM_PROPERTY_WIDTH      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))
-#define GCM_PROPERTY_HEIGHT     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
-#define GCM_PROPERTY_NAME       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
-#define GCM_PROPERTY_TABINDEX   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
-#define GCM_PROPERTY_STEP       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"))
-#define GCM_PROPERTY_TAG        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag"))
+#define GCM_PROPERTY_POS_X              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
+#define GCM_PROPERTY_POS_Y              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
+#define GCM_PROPERTY_WIDTH              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))
+#define GCM_PROPERTY_HEIGHT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
+#define GCM_PROPERTY_NAME               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
+#define GCM_PROPERTY_TABINDEX           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
+#define GCM_PROPERTY_STEP               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"))
+#define GCM_PROPERTY_TAG                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag"))
+#define GCM_PROPERTY_RESOURCERESOLVER   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"))
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -99,6 +101,7 @@
 // {
 //........................................................................
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -219,6 +222,7 @@
         registerProperty(GCM_PROPERTY_TABINDEX, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, ::getCppuType(&m_nTabIndex));
         registerProperty(GCM_PROPERTY_STEP,     GCM_PROPERTY_ID_STEP,       DEFAULT_ATTRIBS(), &m_nStep, ::getCppuType(&m_nStep));
         registerProperty(GCM_PROPERTY_TAG,      GCM_PROPERTY_ID_TAG,        DEFAULT_ATTRIBS(), &m_aTag, ::getCppuType(&m_aTag));
+        registerProperty(GCM_PROPERTY_RESOURCERESOLVER, GCM_PROPERTY_ID_RESOURCERESOLVER, DEFAULT_ATTRIBS(), &m_xStrResolver, ::getCppuType(&m_xStrResolver));
     }
 
     //--------------------------------------------------------------------
@@ -228,14 +232,15 @@
 
         switch ( nHandle )
         {
-            case GCM_PROPERTY_ID_POS_X:         aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_POS_Y:         aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_WIDTH:         aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_HEIGHT:        aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_NAME:          aDefault <<= ::rtl::OUString(); break;
-            case GCM_PROPERTY_ID_TABINDEX:      aDefault <<= (sal_Int16) -1; break;
-            case GCM_PROPERTY_ID_STEP:          aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_TAG:           aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_POS_X:             aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_POS_Y:             aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_WIDTH:             aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_HEIGHT:            aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_NAME:              aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_TABINDEX:          aDefault <<= (sal_Int16) -1; break;
+            case GCM_PROPERTY_ID_STEP:              aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_TAG:               aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_RESOURCERESOLVER:  aDefault <<= Reference< resource::XStringResourceResolver >(); break;
             default:                            DBG_ERROR( "ImplGetDefaultValueByHandle - unknown Property" );
         }
 
@@ -257,6 +262,7 @@
             case GCM_PROPERTY_ID_TABINDEX:      aValue <<= m_nTabIndex; break;
             case GCM_PROPERTY_ID_STEP:          aValue <<= m_nStep; break;
             case GCM_PROPERTY_ID_TAG:           aValue <<= m_aTag; break;
+            case GCM_PROPERTY_ID_RESOURCERESOLVER: aValue <<= m_xStrResolver; break;
             default:                            DBG_ERROR( "ImplGetPropertyValueByHandle - unknown Property" );
         }
 
@@ -276,6 +282,7 @@
             case GCM_PROPERTY_ID_TABINDEX:      aValue >>= m_nTabIndex; break;
             case GCM_PROPERTY_ID_STEP:          aValue >>= m_nStep; break;
             case GCM_PROPERTY_ID_TAG:           aValue >>= m_aTag; break;
+            case GCM_PROPERTY_ID_RESOURCERESOLVER: aValue >>= m_xStrResolver; break;
             default:                            DBG_ERROR( "ImplSetPropertyValueByHandle - unknown Property" );
         }
     }
