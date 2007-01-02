@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utilities.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:14:19 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ std::wstring GetResString(int ResId);
 /** Returns whether we are running
     on Windows XP or not
 */
-bool is_windows_xp();
+bool is_windows_xp_or_above();
 
 //---------------------------------
 /** helper function to judge if the string is only has spaces.
