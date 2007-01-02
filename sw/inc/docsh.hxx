@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:23:22 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 #ifndef _SWDOCSH_HXX
 #define _SWDOCSH_HXX
+
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
 
 #ifndef _TIMER_HXX //autogen
 #include <vcl/timer.hxx>
@@ -300,6 +304,9 @@ public:
     // <--
 
     SW_DLLPRIVATE void  CalcAndSetScaleOfOLEObj( SwOLEObj& rOLEObject );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+                                GetController();
 };
 
 #endif
