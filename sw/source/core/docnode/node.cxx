@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:42:23 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1539,6 +1539,10 @@ void SwCntntNode::DelFrms()
     {
         ((SwTxtNode*)this)->SetWrong( NULL );
         ((SwTxtNode*)this)->SetWrongDirty( true );
+        // SMARTTAGS
+        ((SwTxtNode*)this)->SetSmartTags( NULL );
+        ((SwTxtNode*)this)->SetSmartTagDirty( true );
+
         ((SwTxtNode*)this)->SetWordCountDirty( true );
         ((SwTxtNode*)this)->SetAutoCompleteWordDirty( true );
     }
