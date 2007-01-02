@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:27:06 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include <baside2.hxx>
 #include <baside3.hxx>
 #include <basicmod.hxx>
+#include <localizationmgr.hxx>
 
 #ifndef _BASCTL_DLGED_HXX
 #include "dlged.hxx"
@@ -572,6 +573,17 @@ void BasicIDE::RemoveDialog( SfxObjectShell* pShell, const String& rLibName, con
 {
     // get library
     Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    if ( pIDEShell )
+    {
+        DialogWindow* pDlgWin = pIDEShell->FindDlgWin( pShell, rLibName, rDlgName, FALSE );
+        if( pDlgWin )
+        {
+            Reference< container::XNameContainer > xDialogModel = pDlgWin->GetDialog();
+            LocalizationMgr::removeResourceForDialog( pShell, rLibName, rDlgName, xDialogModel );
+        }
+    }
 
     // remove dialog
     ::rtl::OUString aOUDlgName( rDlgName );
