@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:19:14 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:47:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ class SwDrawTextInfo
     const Point* pPos;
     const XubString* pText;
     const SwWrongList* pWrong;
+    const SwWrongList* pSmartTags; // SMARTTAGS
     const Size* pSize;
     SwFont *pFnt;
     SwUnderlineFont* pUnderFnt;
@@ -142,6 +143,7 @@ public:
         // be accessed by their Get-function:
         pPos = 0;
         pWrong = 0;
+        pSmartTags = 0;
         pSize = 0;
         pFnt = 0;
         pHyphPos = 0;
@@ -215,6 +217,11 @@ public:
     {
         ASSERT( bWrong, "DrawTextInfo: Undefined WrongList" );
         return pWrong;
+    }
+
+    const SwWrongList* GetSmartTags() const
+    {
+        return pSmartTags;
     }
 
     const Size &GetSize() const
@@ -391,6 +398,11 @@ public:
 #ifndef PRODUCT
         bWrong = TRUE;
 #endif
+    }
+
+    void SetSmartTags( const SwWrongList* pNew )
+    {
+        pSmartTags = pNew;
     }
 
     void SetSize( const Size &rNew )
