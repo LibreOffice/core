@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_ooo.scp,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:40:13 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,11 +517,29 @@ RegistryItem gid_Regitem__Sds
     Value = "soffice.StarChartDocument.5";
 End
 
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sds
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".sds";
+    Value = "soffice.StarChartDocument.5";
+    Styles = (PATCH);
+End
+
 RegistryItem gid_Regitem__Vor
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor";
     ModuleID = gid_Module_Root;
     Value = "soffice.StarOfficeTemplate.5";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_vor
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".vor";
+    Value = "soffice.StarOfficeTemplate.5";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath
@@ -545,7 +563,9 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
+// Better?: "OpenOffice.org Format Filter"
     Value = "opendocument.org Filter";
+//	Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32
@@ -567,7 +587,9 @@ RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+//? Better: "OpenOffice.org Persistent Handler"
     Value = "opendocument.org Persistent Handler";
+// Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered
@@ -654,4 +676,44 @@ RegistryItem gid_Regitem_Office_Extension_1_Defaulticon
     Subkey = "office.Extension.1\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,39";
     Styles = (PATCH);
+End
+// ----- Vista Default Programs ----------------------------------------
+// Find more information here:
+// URL:
+// ---------------------------------------------------------------------
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_ApplicationDescription
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+	ModuleID = gid_Module_Root;
+	Name = "ApplicationDescription";
+//        Value = "";
+        REG_VALUE_LNG(APPCAPABILITY_DESCRIPTION_OOO)
+	Styles = (PATCH);
+End
+
+// RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_ApplicationName
+// 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+// 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+// 	ModuleID = gid_Module_Root;
+// 	Name = "ApplicationName";
+//      Value = "%PRODUCTNAME%PRODUCTADDON %PRODUCTVERSION";
+// 	Styles = (PATCH);
+// End
+
+// RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_Description
+// 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+// 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+// 	ModuleID = gid_Module_Root;
+// 	Name = "Description";
+//         Value = "blah fasel";
+// 	Styles = (PATCH);
+// End
+
+RegistryItem gid_Regitem_Software_RegisteredApplications
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\RegisteredApplications";
+	ModuleID = gid_Module_Root;
+	Name = "%PRODUCTNAME %PRODUCTVERSION";
+    Value = "SOFTWARE\%MANUFACTURER\%PRODUCTNAME\%PRODUCTVERSION\Capabilities";
+	Styles = (PATCH);
 End
