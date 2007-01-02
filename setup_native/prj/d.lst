@@ -9,6 +9,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\bin\langpackscript.sh %_DEST%\bin%_EXT%\langpackscript.sh
 ..\%__SRC%\bin\linuxpatchscript.sh %_DEST%\bin%_EXT%\linuxpatchscript.sh
 ..\%__SRC%\bin\downloadscript.sh %_DEST%\bin%_EXT%\downloadscript.sh
+..\%__SRC%\bin\javaloader.sh %_DEST%\bin%_EXT%\javaloader.sh
 ..\%__SRC%\bin\register_extensions %_DEST%\bin%_EXT%\register_extensions
 ..\%__SRC%\bin\deregister_extensions %_DEST%\bin%_EXT%\deregister_extensions
 ..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
@@ -16,6 +17,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\win32\nsis\downloadtemplate.nsi %_DEST%\bin%_EXT%\downloadtemplate.nsi
 ..\source\win32\nsis\*.ico %_DEST%\bin%_EXT%\*.ico
 ..\source\win32\nsis\*.bmp %_DEST%\bin%_EXT%\*.bmp
+..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
 
