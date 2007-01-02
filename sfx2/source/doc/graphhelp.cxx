@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphhelp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:54:56 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:14:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,8 @@
 #include "doc.hrc"
 
 using namespace ::com::sun::star;
+
+#define THUMBNAIL_RESOLUTION 256
 
 //---------------------------------------------------------------
 // static
@@ -444,7 +446,7 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
             pSignatureBitmap = new BitmapEx( SfxResId( BMP_SIGNATURE ) );
 
         bResult = createThumb_Impl( *pMetaFile,
-                                       160,
+                                       THUMBNAIL_RESOLUTION,
                                        aResultBitmap,
                                     pSignatureBitmap );
         if ( bResult )
