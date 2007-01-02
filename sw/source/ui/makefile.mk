@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-16 13:54:09 $
+#   last change: $Author: hr $ $Date: 2007-01-02 16:52:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,8 @@ SUBLIBS2= \
         $(SLB)$/misc.lib     \
         $(SLB)$/ribbar.lib   \
         $(SLB)$/shells.lib   \
-        $(SLB)$/table.lib    \
+                $(SLB)$/smartmenu.lib \
+                $(SLB)$/table.lib    \
         $(SLB)$/unoidl.lib   \
         $(SLB)$/utlui.lib    \
         $(SLB)$/web.lib   \
