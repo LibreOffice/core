@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-09 10:51:38 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ sal_Bool SfxLibraryContainer::isContainerModified()
     {
         OUString aName = pNames[ i ];
         SfxLibrary* pImplLib = getImplLib( aName );
-        if( pImplLib->mbModified )
+        if( pImplLib->isModified() )
         {
             if ( aName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") ) ) )
             {
@@ -421,6 +421,13 @@ sal_Bool SfxLibraryContainer::isContainerModified()
 void SfxLibraryContainer::setContainerModified( sal_Bool bModified )
 {
     mbModified = bModified;
+}
+
+void SfxLibraryContainer::setStorage( const Reference< embed::XStorage >& xStorage )
+{
+    mxStorage = xStorage;
+
+    implSetStorage( xStorage );
 }
 
 
@@ -523,7 +530,6 @@ sal_Bool SfxLibraryContainer::init(
                 {
                     // TODO: error handling
                 }
-//REMOVE                    xStorage = new SotStorage( sal_True, aInitFileName );
             }
         }
     }
@@ -568,7 +574,6 @@ sal_Bool SfxLibraryContainer::init(
             {
                 uno::Reference< io::XStream > xStream;
                 xLibrariesStor = xStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
-//REMOVE                xLibrariesStor = xStorage->OpenSotStorage( maLibrariesDir, STREAM_READ | STREAM_NOCREATE );
                 //if ( !xLibrariesStor.is() )
                     // TODO: the method must either return a storage or throw an exception
                     //throw uno::RuntimeException();
@@ -1126,6 +1131,7 @@ throw(WrappedTargetException, RuntimeException)
 }
 
 
+
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -1161,13 +1167,15 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 {
     OUString aDummyLocation;
     Reference< XSimpleFileAccess > xDummySFA;
-    implStoreLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA );
+    Reference< XInteractionHandler > xDummyHandler;
+    implStoreLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xDummyHandler );
 }
 
 // New variant for library export
 void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
     const OUString& aName, const uno::Reference< embed::XStorage >& xStorage,
-    const ::rtl::OUString& aTargetURL, Reference< XSimpleFileAccess > xToUseSFI )
+    const ::rtl::OUString& aTargetURL, Reference< XSimpleFileAccess > xToUseSFI,
+    const Reference< XInteractionHandler >& xHandler )
 {
     sal_Bool bLink = pLib->mbLink;
     sal_Bool bStorage = xStorage.is() && !bLink;
@@ -1225,6 +1233,8 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 }
             }
         }
+
+        pLib->storeResourcesToStorage( xStorage );
     }
     else
     {
@@ -1245,10 +1255,13 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if( !xSFI->isFolder( aLibDirPath ) )
                     xSFI->createFolder( aLibDirPath );
+
+                pLib->storeResourcesToURL( aLibDirPath, xHandler );
             }
             else
             {
                 aLibDirPath = createAppLibraryFolder( pLib, aName );
+                pLib->storeResources();
             }
 
             for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
@@ -1607,7 +1620,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
 
     int iArray = 0;
-    for( i = 0 ; i < nNameCount ; i++ )
+            for( i = 0 ; i < nNameCount ; i++ )
     {
         SfxLibrary* pImplLib = getImplLib( pNames[ i ] );
         if( pImplLib->mbSharedIndexFile )
@@ -1836,7 +1849,7 @@ sal_Bool SfxLibraryContainer::hasByName( const OUString& aName )
 Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const OUString& Name )
         throw(IllegalArgumentException, ElementExistException, RuntimeException)
 {
-    SfxLibrary* pNewLib = implCreateLibrary();
+    SfxLibrary* pNewLib = implCreateLibrary( Name );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
 
     createVariableURL( pNewLib->maUnexpandedStorageURL, Name, maInfoFileName, true );
@@ -1865,7 +1878,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     checkStorageURL( StorageURL, aLibInfoFileURL, aLibDirURL, aUnexpandedStorageURL );
 
 
-    SfxLibrary* pNewLib = implCreateLibraryLink( aLibInfoFileURL, aLibDirURL, ReadOnly );
+    SfxLibrary* pNewLib = implCreateLibraryLink( Name, aLibInfoFileURL, aLibDirURL, ReadOnly );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
     pNewLib->maUnexpandedStorageURL = aUnexpandedStorageURL;
 
@@ -2208,6 +2221,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                     {
                     }
                 }
+                pImplLib->storeResourcesAsURL( aDestDirPath, NewName );
 
                 // Delete folder if empty
                 Sequence< OUString > aContentSeq = mxSFI->getFolderContents( aLibDirPath, true );
@@ -2302,7 +2316,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     if( pImplLib->mbPasswordProtected )
         implStorePasswordLibrary( pImplLib, Name, xDummyStor, URL, xToUseSFI );
     else
-        implStoreLibrary( pImplLib, Name, xDummyStor, URL, xToUseSFI );
+        implStoreLibrary( pImplLib, Name, xDummyStor, URL, xToUseSFI, Handler );
 
     ::xmlscript::LibDescriptor aLibDesc;
     aLibDesc.aName = Name;
@@ -2378,48 +2392,48 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
 
 // Ctor
 SfxLibrary::SfxLibrary( Type aType,
-                                  Reference< XMultiServiceFactory > xMSF,
-                                  Reference< XSimpleFileAccess > xSFI )
-    : OComponentHelper( m_aMutex )
-    , mxMSF( xMSF )
-    , mxSFI( xSFI )
-    , maNameContainer( aType )
-    , mbLoaded( sal_True )
-    , mbModified( sal_True )
-    , mbInitialised( sal_False )
-    , mbLink( sal_False )
-    , mbReadOnly( sal_False )
-    , mbReadOnlyLink( sal_False )
-    , mbPreload( sal_False )
-    , mbPasswordProtected( sal_False )
-    , mbPasswordVerified( sal_False )
-    , mbDoc50Password( sal_False )
-    , mbSharedIndexFile( sal_False )
+    Reference< XMultiServiceFactory > xMSF,
+    Reference< XSimpleFileAccess > xSFI )
+        : OComponentHelper( m_aMutex )
+        , mxMSF( xMSF )
+        , mxSFI( xSFI )
+        , maNameContainer( aType )
+        , mbLoaded( sal_True )
+        , mbModified( sal_True )
+        , mbInitialised( sal_False )
+        , mbLink( sal_False )
+        , mbReadOnly( sal_False )
+        , mbReadOnlyLink( sal_False )
+        , mbPreload( sal_False )
+        , mbPasswordProtected( sal_False )
+        , mbPasswordVerified( sal_False )
+        , mbDoc50Password( sal_False )
+        , mbSharedIndexFile( sal_False )
 {
 }
 
 SfxLibrary::SfxLibrary( Type aType,
-                                  Reference< XMultiServiceFactory > xMSF,
-                                  Reference< XSimpleFileAccess > xSFI ,
-                                  const OUString& aLibInfoFileURL,
-                                  const OUString& aStorageURL, sal_Bool ReadOnly )
-    : OComponentHelper( m_aMutex )
-    , mxMSF( xMSF )
-    , mxSFI( xSFI )
-    , maNameContainer( aType )
-    , mbLoaded( sal_False )
-    , mbModified( sal_True )
-    , mbInitialised( sal_False )
-    , maLibInfoFileURL( aLibInfoFileURL )
-    , maStorageURL( aStorageURL )
-    , mbLink( sal_True )
-    , mbReadOnly( sal_False )
-    , mbReadOnlyLink( ReadOnly )
-    , mbPreload( sal_False )
-    , mbPasswordProtected( sal_False )
-    , mbPasswordVerified( sal_False )
-    , mbDoc50Password( sal_False )
-    , mbSharedIndexFile( sal_False )
+    Reference< XMultiServiceFactory > xMSF,
+    Reference< XSimpleFileAccess > xSFI ,
+    const OUString& aLibInfoFileURL,
+    const OUString& aStorageURL, sal_Bool ReadOnly )
+        : OComponentHelper( m_aMutex )
+        , mxMSF( xMSF )
+        , mxSFI( xSFI )
+        , maNameContainer( aType )
+        , mbLoaded( sal_False )
+        , mbModified( sal_True )
+        , mbInitialised( sal_False )
+        , maLibInfoFileURL( aLibInfoFileURL )
+        , maStorageURL( aStorageURL )
+        , mbLink( sal_True )
+        , mbReadOnly( sal_False )
+        , mbReadOnlyLink( ReadOnly )
+        , mbPreload( sal_False )
+        , mbPasswordProtected( sal_False )
+        , mbPasswordVerified( sal_False )
+        , mbDoc50Password( sal_False )
+        , mbSharedIndexFile( sal_False )
 {
 }
 
