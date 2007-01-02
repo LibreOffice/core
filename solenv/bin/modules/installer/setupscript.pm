@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-30 13:18:08 $
+#   last change: $Author: hr $ $Date: 2007-01-02 15:24:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -171,8 +171,53 @@ sub add_lowercase_productname_setupscriptvariable
                 $newline = "\%WITHOUTDOTUNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
             }
+            elsif  ( $key eq "PRODUCTEXTENSION" )
+            {
+                my $newline = "\%LCPRODUCTEXTENSION " . lc($value) . "\n";
+                push(@{$variablesref} ,$newline);
+            }
+
         }
     }
+}
+
+######################################################################
+# Resolving the new introduced lowercase script variables
+######################################################################
+
+sub resolve_lowercase_productname_setupscriptvariable
+{
+    my ( $variablesref ) = @_;
+
+    my %variables = ();
+
+    # First step: Collecting variables
+
+    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+    {
+        my $variableline = ${$variablesref}[$j];
+
+        my ($key, $value);
+
+        if ( $variableline =~ /^\s*\%(\w+?)\s+(.*?)\s*$/ )
+        {
+            $key = $1;
+            $value = $2;
+            $variables{$key} = $value;
+        }
+    }
+
+    # Second step: Resolving variables
+
+    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+    {
+        if ( ${$variablesref}[$j] =~ /\$\{(.*?)\}/ )
+        {
+            my $key = $1;
+            ${$variablesref}[$j] =~ s/\$\{\Q$key\E\}/$variables{$key}/g;
+        }
+    }
+
 }
 
 ######################################################################
