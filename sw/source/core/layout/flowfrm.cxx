@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:25:31 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2083,6 +2083,7 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                         pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher erledigt!
 
                     pNewPage->InvalidateSpelling();
+                    pNewPage->InvalidateSmartTags();    // SMARTTAGS
                     pNewPage->InvalidateAutoCompleteWords();
                     pNewPage->InvalidateWordCount();
                 }
@@ -2601,6 +2602,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher eledigt!
 
             pNewPage->InvalidateSpelling();
+            pNewPage->InvalidateSmartTags();    // SMARTTAGS
             pNewPage->InvalidateAutoCompleteWords();
             pNewPage->InvalidateWordCount();
 
