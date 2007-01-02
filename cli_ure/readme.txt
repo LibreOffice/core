@@ -4,9 +4,9 @@
  *
  *  $RCSfile: readme.txt,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:08:31 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 14:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,7 @@ CLI_TYPES_POLICY_ASSEMBLY=policy.2.0.cli_types
 
 Automatic incrementation of the version 
 =======================================
+Currently switched off! See cli_ure/version/makefile.mk
 The automatic incrementation of the version this is done when new published types have been 
 introduce between two releases.In cli_ure/version/makefile.mk the script 
 cli_ure/source/scripts/increment_version.pl
