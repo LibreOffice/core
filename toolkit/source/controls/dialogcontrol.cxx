@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:03:11 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
+#endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -92,6 +95,7 @@
 #include <algorithm>
 #include <functional>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -99,6 +103,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace toolkit;
+
+#define PROPERTY_RESOURCERESOLVER rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ))
 
 // ----------------------------------------------------------------------------
 // functor for disposing a control model
@@ -266,14 +272,18 @@ Sequence< Type > UnoControlDialogModel::getTypes() throw(RuntimeException)
 
 Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    Any aAny;
+
+    switch ( nPropId )
     {
-        Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog );
-        return aAny;
+        case BASEPROPERTY_DEFAULTCONTROL:
+            aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog );
+            break;
+        default:
+            aAny = UnoControlModel::ImplGetDefaultValue( nPropId );
     }
 
-    return UnoControlModel::ImplGetDefaultValue( nPropId );
+    return aAny;
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlDialogModel::getInfoHelper()
@@ -583,6 +593,16 @@ void UnoControlDialogModel::removeByName( const ::rtl::OUString& aName ) throw(N
     stopControlListening( aElementPos->first );
     maModels.erase( aElementPos );
     mbGroupsUpToDate = sal_False;
+
+    Reference< XPropertySet > xPS( aElementPos->first, UNO_QUERY );
+    if ( xPS.is() )
+    {
+        // Remove dialog resource resolver from control
+        Reference< resource::XStringResourceResolver > xResourceResolver;
+        Any a;
+        a <<= xResourceResolver;
+        xPS->setPropertyValue( PROPERTY_RESOURCERESOLVER, a );
+    }
 
     // our "tab controller model" has potentially changed -> notify this
     implNotifyTabModelChange( aName );
@@ -950,9 +970,8 @@ void SAL_CALL UnoControlDialogModel::propertyChange( const PropertyChangeEvent& 
 }
 
 // ----------------------------------------------------------------------------
-void SAL_CALL UnoControlDialogModel::disposing( const EventObject& /*evt*/ ) throw (RuntimeException)
+void SAL_CALL UnoControlDialogModel::disposing( const EventObject& /*rEvent*/ ) throw (RuntimeException)
 {
-    // TODO
 }
 
 // ----------------------------------------------------------------------------
@@ -980,12 +999,238 @@ void UnoControlDialogModel::stopControlListening( const Reference< XControlModel
 }
 
 // ============================================================================
+// = class ResourceListener
+// ============================================================================
+
+ResourceListener::ResourceListener(
+    const Reference< util::XModifyListener >& rListener ) :
+    OWeakObject(),
+    m_xListener( rListener ),
+    m_bListening( false )
+{
+}
+
+ResourceListener::~ResourceListener()
+{
+}
+
+// XInterface
+Any SAL_CALL ResourceListener::queryInterface( const Type& rType )
+throw ( RuntimeException )
+{
+    Any a = ::cppu::queryInterface(
+                rType ,
+                static_cast< XModifyListener* >( this ),
+                static_cast< XEventListener* >( this ));
+
+    if ( a.hasValue() )
+        return a;
+
+    return OWeakObject::queryInterface( rType );
+}
+
+void SAL_CALL ResourceListener::acquire() throw ()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL ResourceListener::release() throw ()
+{
+    OWeakObject::release();
+}
+
+void ResourceListener::startListening(
+    const Reference< resource::XStringResourceResolver  >& rResource )
+{
+    Reference< util::XModifyBroadcaster > xModifyBroadcaster( rResource, UNO_QUERY );
+
+    {
+        // --- SAFE ---
+        ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+        bool bListening( m_bListening );
+        bool bResourceSet( m_xResource.is() );
+        aGuard.clear();
+        // --- SAFE ---
+
+        if ( bListening && bResourceSet )
+            stopListening();
+
+        // --- SAFE ---
+        aGuard.reset();
+        m_xResource = rResource;
+        aGuard.clear();
+        // --- SAFE ---
+    }
+
+    Reference< util::XModifyListener > xThis( static_cast<OWeakObject*>( this ), UNO_QUERY );
+    if ( xModifyBroadcaster.is() )
+    {
+        try
+        {
+            xModifyBroadcaster->addModifyListener( xThis );
+
+            // --- SAFE ---
+            ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+            m_bListening = true;
+            // --- SAFE ---
+        }
+        catch ( RuntimeException& )
+        {
+            throw;
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+}
+
+void ResourceListener::stopListening()
+{
+    Reference< util::XModifyBroadcaster > xModifyBroadcaster;
+
+    // --- SAFE ---
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+    if ( m_bListening && m_xResource.is() )
+        xModifyBroadcaster = Reference< util::XModifyBroadcaster >( m_xResource, UNO_QUERY );
+    aGuard.clear();
+    // --- SAFE ---
+
+    Reference< util::XModifyListener > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    if ( xModifyBroadcaster.is() )
+    {
+        try
+        {
+            // --- SAFE ---
+            aGuard.reset();
+            m_bListening = false;
+            m_xResource.clear();
+            aGuard.clear();
+            // --- SAFE ---
+
+            xModifyBroadcaster->removeModifyListener( xThis );
+        }
+        catch ( RuntimeException& )
+        {
+            throw;
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+}
+
+// XModifyListener
+void SAL_CALL ResourceListener::modified(
+    const lang::EventObject& aEvent )
+throw ( RuntimeException )
+{
+    Reference< util::XModifyListener > xListener;
+
+    // --- SAFE ---
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+    xListener = m_xListener;
+    aGuard.clear();
+    // --- SAFE ---
+
+    if ( xListener.is() )
+    {
+        try
+        {
+            xListener->modified( aEvent );
+        }
+        catch ( RuntimeException& )
+        {
+            throw;
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+}
+
+// XEventListener
+void SAL_CALL ResourceListener::disposing(
+    const EventObject& Source )
+throw ( RuntimeException )
+{
+    Reference< lang::XEventListener > xListener;
+    Reference< resource::XStringResourceResolver > xResource;
+
+    // --- SAFE ---
+    ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+    Reference< XInterface > xIfacRes( m_xResource, UNO_QUERY );
+    Reference< XInterface > xIfacList( m_xListener, UNO_QUERY );
+    aGuard.clear();
+    // --- SAFE ---
+
+    if ( Source.Source == xIfacRes )
+    {
+        // --- SAFE ---
+        aGuard.reset();
+        m_bListening = false;
+        xResource = m_xResource;
+        xListener = Reference< lang::XEventListener >( m_xListener, UNO_QUERY );
+        m_xResource.clear();
+        aGuard.clear();
+        // --- SAFE ---
+
+        if ( xListener.is() )
+        {
+            try
+            {
+                xListener->disposing( Source );
+            }
+            catch ( RuntimeException& )
+            {
+                throw;
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+    }
+    else if ( Source.Source == xIfacList )
+    {
+        // --- SAFE ---
+        aGuard.reset();
+        m_bListening = false;
+        xListener = Reference< lang::XEventListener >( m_xListener, UNO_QUERY );
+        xResource = m_xResource;
+        m_xResource.clear();
+        m_xListener.clear();
+        aGuard.clear();
+        // --- SAFE ---
+
+        // Remove ourself as listener from resource resolver
+        Reference< util::XModifyBroadcaster > xModifyBroadcaster( xResource, UNO_QUERY );
+        Reference< util::XModifyListener > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+        if ( xModifyBroadcaster.is() )
+        {
+            try
+            {
+                xModifyBroadcaster->removeModifyListener( xThis );
+            }
+            catch ( RuntimeException& )
+            {
+                throw;
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+    }
+}
+
+// ============================================================================
 // = class UnoDialogControl
 // ============================================================================
+
 UnoDialogControl::UnoDialogControl() : maTopWindowListeners( *this )
 {
     maComponentInfos.nWidth = 300;
     maComponentInfos.nHeight = 450;
+    mxListener = new ResourceListener( Reference< util::XModifyListener >(
+                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
 }
 
 ::rtl::OUString UnoDialogControl::GetComponentServiceName()
@@ -1016,6 +1261,17 @@ void UnoDialogControl::ImplInsertControl( Reference< XControlModel >& rxModel, c
 
     ::rtl::OUString aDefCtrl;
     xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
+
+    // Add our own resource resolver to a newly created control
+    Reference< resource::XStringResourceResolver > xStringResourceResolver;
+    rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
+
+    Any aAny;
+    ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
+
+    aAny <<= xStringResourceResolver;
+    xP->setPropertyValue( aPropName, aAny );
+
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference < XControl > xCtrl( xMSF->createInstance( aDefCtrl ), UNO_QUERY );
 
@@ -1106,7 +1362,42 @@ void UnoDialogControl::dispose() throw(RuntimeException)
     aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
     maTopWindowListeners.disposeAndClear( aEvt );
 
+    // Notify our listener helper about dispose
+    // --- SAFE ---
+    ::osl::ResettableGuard< ::osl::Mutex > aGuard( GetMutex() );
+    Reference< XEventListener > xListener( mxListener, UNO_QUERY );
+    mxListener.clear();
+    aGuard.clear();
+    // --- SAFE ---
+
+    if ( xListener.is() )
+        xListener->disposing( aEvt );
+
     UnoControlContainer::dispose();
+}
+
+void SAL_CALL UnoDialogControl::disposing(
+    const EventObject& Source )
+throw(RuntimeException)
+{
+    rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
+    Reference< resource::XStringResourceResolver > xStringResourceResolver;
+
+    ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
+    Reference< XInterface > xIfac( xStringResourceResolver, UNO_QUERY );
+
+    if ( Source.Source == xIfac )
+    {
+        Any aAny;
+
+        // Reset resource resolver reference
+        ImplSetPropertyValue( aPropName, aAny, sal_True );
+        ImplUpdateResourceResolver();
+    }
+    else
+    {
+        UnoControlContainer::disposing( Source );
+    }
 }
 
 sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel ) throw(RuntimeException)
@@ -1176,6 +1467,7 @@ sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
         mxTabController->setModel( xTabbing );
         addTabController( mxTabController );
     }
+    ImplStartListingForResourceEvents();
 
     return bRet;
 }
@@ -1307,7 +1599,10 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
             const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
             Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
             sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
-            if ( ( rEvt.PropertyName == s1 ) || ( rEvt.PropertyName == s2 ) || ( rEvt.PropertyName == s3 ) || ( rEvt.PropertyName == s4 ) )
+            if ( ( rEvt.PropertyName == s1 ) ||
+                 ( rEvt.PropertyName == s2 ) ||
+                 ( rEvt.PropertyName == s3 ) ||
+                 ( rEvt.PropertyName == s4 ) )
             {
                 if ( bOwnModel )
                 {
@@ -1322,11 +1617,83 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
                 }
                 break;
             }
-
+            else if ( bOwnModel && rEvt.PropertyName.equalsAsciiL( "ResourceResolver", 16 ))
+            {
+                ImplStartListingForResourceEvents();
+            }
         }
     }
 
     UnoControlContainer::ImplModelPropertiesChanged( rEvents );
+}
+
+void UnoDialogControl::ImplStartListingForResourceEvents()
+{
+    Reference< resource::XStringResourceResolver > xStringResourceResolver;
+
+    ImplGetPropertyValue( PROPERTY_RESOURCERESOLVER ) >>= xStringResourceResolver;
+
+    // Add our helper as listener to retrieve notifications about changes
+    Reference< util::XModifyListener > rListener( mxListener );
+    ResourceListener* pResourceListener = static_cast< ResourceListener* >( rListener.get() );
+
+    // resource listener will stop listening if resolver reference is empty
+    if ( pResourceListener )
+        pResourceListener->startListening( xStringResourceResolver );
+    ImplUpdateResourceResolver();
+}
+
+void UnoDialogControl::ImplUpdateResourceResolver()
+{
+    rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
+    Reference< resource::XStringResourceResolver > xStringResourceResolver;
+
+    ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
+
+    if ( xStringResourceResolver.is() )
+    {
+        Any a;
+
+        a <<= xStringResourceResolver;
+
+        Sequence< rtl::OUString > aPropNames(1);
+        aPropNames[0] = aPropName;
+
+        const Sequence< Reference< awt::XControl > > aSeq = getControls();
+        for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+        {
+            Reference< XControl > xControl( aSeq[i] );
+            Reference< XPropertySet > xPropertySet;
+
+            if ( xControl.is() )
+                xPropertySet = Reference< XPropertySet >( xControl->getModel(), UNO_QUERY );
+
+            if ( xPropertySet.is() )
+            {
+                try
+                {
+                    Reference< resource::XStringResourceResolver > xCurrStringResourceResolver;
+                    Any aOldValue = xPropertySet->getPropertyValue( aPropName );
+                    if ( aOldValue >>= xCurrStringResourceResolver )
+                    {
+                        if ( xStringResourceResolver == xCurrStringResourceResolver )
+                        {
+                            Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
+                            Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
+                            xMultiPropSet->firePropertiesChangeEvent( aPropNames, xListener );
+                        }
+                        else
+                            xPropertySet->setPropertyValue( aPropName, a );
+                    }
+                    else
+                        xPropertySet->setPropertyValue( aPropName, a );
+                }
+                catch ( NoSuchElementException& )
+                {
+                }
+            }
+        }
+    }
 }
 
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)
@@ -1412,4 +1779,12 @@ void SAL_CALL UnoDialogControl::changesOccurred( const ChangesEvent& ) throw (Ru
     // about tab index changes
     if ( mxTabController.is() && !mbDesignMode )
         mxTabController->activateTabOrder();
+}
+
+// XModifyListener
+void SAL_CALL UnoDialogControl::modified(
+    const lang::EventObject& /*rEvent*/ )
+throw (RuntimeException)
+{
+    ImplUpdateResourceResolver();
 }
