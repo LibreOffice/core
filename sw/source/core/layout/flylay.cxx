@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:18:44 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -674,6 +674,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
                 pNew->GetVirtDrawObj()->GetReferencedObj().GetOrdNumDirect() );
 
     InvalidateSpelling();
+    InvalidateSmartTags();  // SMARTTAGS
     InvalidateAutoCompleteWords();
     InvalidateWordCount();
 
@@ -820,6 +821,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     }
 
     pDest->InvalidateSpelling();
+    pDest->InvalidateSmartTags();   // SMARTTAGS
     pDest->InvalidateAutoCompleteWords();
     pDest->InvalidateWordCount();
 
