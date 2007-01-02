@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:23:46 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,6 +234,8 @@ public:
 
     // Wird von FormatSpelling( ) gerufen
     SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, USHORT );
+    // is called from the FormatSpelling( ) method
+    SwRect SmartTagScan( SwCntntNode* , USHORT );
     // Wird vom CollectAutoCmplWords gerufen
     void CollectAutoCmplWrds( SwCntntNode* , USHORT );
 
