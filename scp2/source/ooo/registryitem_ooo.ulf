@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_ooo.ulf,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:40:27 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 16:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,3 +53,6 @@ de = "%PRODUCTNAME %SXWFORMATVERSION Konfigurationsdatei"
 en-US = "StarOffice 5.0 Template"
 de = "StarOffice 5.0 Vorlage"
 
+[STR_REG_VAL_APPCAPABILITY_DESCRIPTION_OOO]
+en-US = "OpenOffice.org"
+de = "OpenOffice.org"
