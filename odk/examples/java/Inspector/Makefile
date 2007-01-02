@@ -2,13 +2,13 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.19 $
+#  $Revision: 1.20 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:16:39 $
+#  last change: $Author: hr $ $Date: 2007-01-02 14:59:20 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
-#  
+#
 #  Copyright (c) 2003 by Sun Microsystems, Inc.
 #  All rights reserved.
 #
@@ -35,7 +35,7 @@
 #  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 #  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 #  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#     
+#
 #**************************************************************************
 
 # Builds the Java InstanceInspector component example of the SDK.
@@ -49,7 +49,7 @@ include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 
-# we use the sample directory name dor separating this example 
+# we use the sample directory name dor separating this example
 # from others in the output directory
 SAMPLE_NAME=InstanceInspector
 SAMPLE_CLASS_OUT=$(OUT_CLASS)/$(SAMPLE_NAME)
@@ -69,22 +69,14 @@ COMP_JAR_MANIFEST=$(COMP_GEN_OUT)/$(COMP_NAME).uno.Manifest
 COMP_UNOPKG_MANIFEST = $(COMP_GEN_OUT)/META-INF/manifest.xml
 COMP_REGISTERFLAG=$(COMP_GEN_OUT)$(PS)java_$(COMP_NAME)_register_component.flag
 
-# some special macro names for separating the example jar stuff
-APP1_NAME=TestInspector
-APP1_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(APP1_NAME)
-APP1_GEN_OUT=$(SAMPLE_GEN_OUT)/$(APP1_NAME)
-APP1_JAR=$(SAMPLE_CLASS_OUT)/$(APP1_NAME).jar
-APP1_JAR_MANIFEST=$(APP1_GEN_OUT)/$(APP1_NAME).mf
-
-
 IDLFILES = InstanceInspector.idl \
 	XInstanceInspector.idl
 
-# normally the idl file should be stored in a directory tree fitting the 
+# normally the idl file should be stored in a directory tree fitting the
 # module structure, for the example we know the module structure
 PACKAGE = org/openoffice
 
-COMP_JAVAFILES = Inspector.java
+COMP_JAVAFILES = XDialogProvider.java XTreeControlProvider.java XTreePathProvider.java MethodParametersDialog.java HideableMutableTreeNode.java HideableTreeModel.java Introspector.java UnoNode.java UnoMethodNode.java UnoPropertyNode.java UnoInterfaceNode.java UnoServiceNode.java UnoObjectNode.java UnoFacetteNode.java TDocSupplier.java UnoTreeRenderer.java InspectorAddon.java XLanguageSourceCodeGenerator.java SourceCodeGenerator.java InspectorPane.java SwingDialogProvider.java SwingTreeControlProvider.java SwingTreePathProvider.java Inspector.java
 COMP_CLASSFILES = $(patsubst %.java,$(COMP_CLASS_OUT)/%.class,$(COMP_JAVAFILES))
 
 GEN_CLASSFILES = $(patsubst %.idl,$(SAMPLE_CLASS_OUT)/$(PACKAGE)/%.class,$(IDLFILES))
@@ -99,6 +91,12 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLA
 		$(PATH_SEPARATOR)$(COMP_CLASS_OUT)\
 		$(PATH_SEPARATOR)$(APP1_CLASS_OUT))
 
+COMP_IMAGE_FILES= images/containers_16.png \
+		images/content_16.png \
+		images/interfaces_16.png \
+		images/methods_16.png \
+		images/properties_16.png \
+		images/services_16.png
 
 # Targets
 .PHONY: ALL
@@ -131,35 +129,15 @@ $(GEN_CLASSFILES) : $(COMP_RDB)
 # rule for component class files
 $(COMP_CLASS_OUT)/%.class : %.java $(GEN_CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(COMP_CLASS_OUT) $<
-
-# rule for example application class files
-$(APP1_CLASS_OUT)/%.class : %.java $(GEN_CLASSFILES)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP1_CLASS_OUT) $<
-
-# rule for client/example application manifest file
-$(APP1_GEN_OUT)/%.mf :
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
-	$(ECHOLINE)>> $@
-	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
-	@echo Application-Class: $*>> $@
-
-# rule for client/example application jar file
-$(APP1_JAR) : $(APP1_JAR_MANIFEST) $(APP1_CLASS_OUT)/$(APP1_NAME).class $(GEN_CLASSFILES)
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAR) cvfm $@  $< -C $(APP1_CLASS_OUT) .
-	+cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_JAR) uvf $(@F) $(GEN_CLASSFILENAMES)
-	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -sourcepath . -d $(COMP_CLASS_OUT) $<
 
 # rule for component jar file
-$(COMP_JAR) : $(COMP_JAR_MANIFEST) $(COMP_CLASSFILES)
+$(COMP_JAR) : $(COMP_JAR_MANIFEST) $(COMP_CLASSFILES) $(COMP_IMAGE_FILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAR) cvfm $@  $< -C $(COMP_CLASS_OUT) .
 	+cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_JAR) uvf $(@F) $(GEN_CLASSFILENAMES)
+	+$(SDK_JAR) uvf $@ $(COMP_IMAGE_FILES)
 
 # rule for component package manifest
 $(COMP_GEN_OUT)/%/manifest.xml :
@@ -167,6 +145,10 @@ $(COMP_GEN_OUT)/%/manifest.xml :
 	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
 	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Addons.xcu$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)ProtocolHandler.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_GEN_OUT)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
@@ -174,12 +156,13 @@ $(COMP_GEN_OUT)/%/manifest.xml :
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) Addons.xcu ProtocolHandler.xcu $(COMP_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) ../../../bin/$(@F) $(COMP_RDB_NAME)
 
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_JAR_NAME)
+	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
@@ -191,26 +174,19 @@ ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 else
 	@echo --------------------------------------------------------------------------------
 	@echo  If you want to install your component automatically, please set the environment
-	@echo  variable SDK_AUTO_DEPLOYMENT = YES. But note that auto deployment is only 
-	@echo  possible if no office instance is running. 
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. But note that auto deployment is only
+	@echo  possible if no office instance is running.
 	@echo --------------------------------------------------------------------------------
 endif
 
-JavaInspectorExample : $(COMP_REGISTERFLAG) $(APP1_JAR)
+JavaInspectorExample : $(COMP_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo Please use the following command to execute the example!
-	@echo -
-	@echo $(MAKE) $(APP1_NAME).run
-	@echo ------
 	@echo The InstanceInspector component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo document.
 	@echo -
 	@echo $(MAKE) InstanceInspectorTest.odt.load
 	@echo --------------------------------------------------------------------------------
-
-%.run: $(SAMPLE_CLASS_OUT)/%.jar
-	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 InstanceInspectorTest.odt.load : $(COMP_REGISTERFLAG)
 	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
