@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolbase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:19:33 $
+ *  last change: $Author: hr $ $Date: 2007-01-02 15:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,10 @@ void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName,
 ::com::sun::star::uno::Any UnoControlBase::ImplGetPropertyValue( const ::rtl::OUString& aPropertyName )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
-    return xPSet->getPropertyValue( aPropertyName );
+    if ( xPSet.is() )
+        return xPSet->getPropertyValue( aPropertyName );
+    else
+        return ::com::sun::star::uno::Any();
 }
 
 sal_Bool UnoControlBase::ImplGetPropertyValue_BOOL( sal_uInt16 nProp )
