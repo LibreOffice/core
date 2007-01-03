@@ -4,9 +4,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 11:06:28 $
+#   last change: $Author: hr $ $Date: 2007-01-03 10:14:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 .ENDIF
 
 # copy files in COMPONENT_RUNTIMELIST
-    +$(foreach,file,$(COMPONENT_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$(file)$(DLLPOST) \
+        +$(foreach,file,$(COMPONENT_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$(file)$(DLLPOST) \
     $(RUNTIME_DIR)$/components$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 
@@ -247,8 +247,8 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     +$(COPY) /QSZ $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ELSE
 .IF "$(OS)"!="SOLARIS"
-    +$(GNUCOPY) -prL $(INCLUDE_PATH)* $(INCLUDE_DIR)
-    +$(GNUCOPY) -prL $(PUBLIC_PATH)* $(INCLUDE_DIR)
+    +$(GNUCOPY) -pRL $(INCLUDE_PATH)* $(INCLUDE_DIR)
+    +$(GNUCOPY) -pRL $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ELSE			# "$(OS)"!="SOLARIS"
     +$(COPY) -pr $(INCLUDE_PATH)* $(INCLUDE_DIR)
     +$(COPY) -pr $(PUBLIC_PATH)* $(INCLUDE_DIR)
