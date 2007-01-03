@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:40:46 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,6 +264,12 @@ static rtl_Locale * _parse_locale( const char * locale )
 
 #if defined(SOLARIS)
 
+/* The values in the below list can be obtained with a script like
+ *  #!/bin/sh
+ *  for i in `locale -a`; do
+ *    LC_ALL=$i locale -k code_set_name
+ *  done
+ */
 const _pair _nl_language_list[] = {
     { "5601",           RTL_TEXTENCODING_EUC_KR         }, /* ko_KR.EUC */
     { "646",            RTL_TEXTENCODING_ISO_8859_1     }, /* fake: ASCII_US */
