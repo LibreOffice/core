@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 14:04:00 $
+#   last change: $Author: hr $ $Date: 2007-01-03 11:32:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.106 $$"
+LIBSMKREV!:="$$Revision: 1.107 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
@@ -288,7 +288,7 @@ ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
-.IF "$(GPC)"!="NO"
+.IF "$(WITH_GPC)"!="NO"
 GPC3RDLIB=gpc.lib
 .ENDIF
 SALHELPERLIB=isalhelper.lib
