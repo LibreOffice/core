@@ -243,6 +243,12 @@ UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
 endif
 
+ifeq "$(PROCTYPE)" "sparc"
+PACKAGE_LIB_DIR=linux_sparc.plt
+UNOPKG_PLATFORM=Linux_SPARC
+JAVA_PROC_TYPE=sparc
+endif
+
 OS=LINUX
 PS=/
 CC=gcc
