@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:55:46 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:32:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,39 +305,39 @@ private:
 class WW8PLCF                       // Iterator fuer PLCFs
 {
 private:
-    INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    BYTE* pPLCF_Contents;       // Pointer auf Inhalts-Array-Teil des Pos-Array
-    long nIMax;                         // Anzahl der Elemente
-    long nIdx;
-    long nStru;
+    WW8_CP* pPLCF_PosArray; // Pointer auf Pos-Array und auf ganze Struktur
+    BYTE* pPLCF_Contents;   // Pointer auf Inhalts-Array-Teil des Pos-Array
+    INT32 nIMax;            // Anzahl der Elemente
+    INT32 nIdx;
+    int nStru;
 
-    void ReadPLCF( SvStream* pSt, long nFilePos, long nPLCF );
+    void ReadPLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF );
 
     /*
         Falls im Dok ein PLC fehlt und die FKPs solo dastehen,
         machen wir uns hiermit einen PLC:
     */
-    void GeneratePLCF( SvStream* pSt, long nPN, long ncpN );
+    void GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN );
 public:
-    WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
-        long nStartPos = -1 );
+    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
+        WW8_CP nStartPos = -1 );
 
     /*
         folgender Ctor generiert ggfs. einen PLC aus nPN und ncpN
     */
-    WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
-        long nStartPos, long nPN, long ncpN );
+    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
+        WW8_CP nStartPos, INT32 nPN, INT32 ncpN );
 
     ~WW8PLCF(){ delete[] pPLCF_PosArray; }
-    long GetIdx() const { return nIdx; }
-    void SetIdx( long nI ) { nIdx = nI; }
-    long GetIMax() const { return nIMax; }
-    bool SeekPos(long nPos);
-    INT32 Where() const;
+    INT32 GetIdx() const { return nIdx; }
+    void SetIdx( INT32 nI ) { nIdx = nI; }
+    INT32 GetIMax() const { return nIMax; }
+    bool SeekPos(WW8_CP nPos);
+    WW8_CP Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
     WW8PLCF& operator ++( int ) { if( nIdx < nIMax ) nIdx++; return *this; }
 
-    const void* GetData( long nInIdx ) const
+    const void* GetData( INT32 nInIdx ) const
     {
         return ( nInIdx >= nIMax ) ? 0 :
             (const void*)&pPLCF_Contents[nInIdx * nStru];
