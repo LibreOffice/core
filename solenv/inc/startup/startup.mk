@@ -103,3 +103,5 @@ $(NULLPRQ) .PHONY :;
 
 .MAKEFILES :- makefile.mk MAKEFILE.MK $(CONFIG_PROJECT)$/makefile.rc $(SOLARENV)$/inc$/found_no.mk
 
+LANG=C
+.EXPORT : LANG
