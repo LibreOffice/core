@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-13 10:37:05 $
+#   last change: $Author: hr $ $Date: 2007-01-03 10:13:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,10 @@ MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 
-ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
+ADDDEPS=$(NOLOGOSPLASH)
+.IF "$(OS)" == "WNT"
+ADDDEPS+=hack_msitemplates
+.ENDIF
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
 
@@ -200,8 +203,8 @@ openoffice_% :
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))_inprogress$/ -simple staging
     +$(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/gid_*
     +-$(MKDIR) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.background
-    +$(GNUCOPY) -u $(PRJ)$/res/osxdndinstall.png $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.background$/background.png
-    +$(GNUCOPY) -u $(PRJ)$/res/DS_Store $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.DS_Store
+    +$(COPY) $(PRJ)$/res/osxdndinstall.png $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.background$/background.png
+    +$(COPY) $(PRJ)$/res/DS_Store $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.DS_Store
     +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
     -hfs-volume-name OpenOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
     -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell sed -n '/^OpenOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
