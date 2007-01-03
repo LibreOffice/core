@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.128 $
-# Date:        $Date: 2006-12-12 16:05:54 $
+# Version:     $Revision: 1.129 $
+# Date:        $Date: 2007-01-03 10:13:32 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1222,13 +1222,10 @@ elsif ($platform =~ m/darwin/)
 
   # Append old PATH
   $PATH             .= $ps.$oldPATH;
-                        
-  # PATHEXTRA variable for Macosx.
-  $PATHEXTRA         = $USR_BIN.
-                        $ps.$BIN.
-                        $ps.$USR.$ds."sbin".
-                        $ps.$ds."sbin".
-                        $ps.'$SOLARENV'.$BIN;
+
+  # append PATHEXTRA
+  $PATHEXTRA         = "@PATHEXTRA@";                      
+  $PATH             .= $PATHEXTRA;
 }
 else
 {  AddWarning( "set_soenv", "$platform not configured for general environment paths" );
