@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-01-03 10:13:17 $
+dnl * Date: $Date: 2007-01-03 11:33:33 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.191 $ )
+AC_REVISION( $Revision: 1.192 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -30,11 +30,11 @@ AC_ARG_WITH(gpc,
                           the external GPC polygon clipping library.
 ],,if test ! -e ../external/gpc/gpc.c && test ! -e ../external/gpc/gpc.h; then without_gpc=yes; fi)
 AC_ARG_ENABLE(ldap,
-[  --disable-ldap       Disables the use of LDAP backend via Netscape/Mozilla or
-                          OpenLDAP LDAP SDK
+[  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
+                          or OpenLDAP LDAP SDK
 ],,)
 AC_ARG_WITH(openldap,
-[  --with-openldap       Enables the use of the OpenLDAP LDAP SDK instead
+[  --with-openldap         Enables the use of the OpenLDAP LDAP SDK instead
                           of the Netscape/Mozilla one
 ],,)
 AC_ARG_ENABLE(lockdown,
@@ -69,7 +69,8 @@ AC_ARG_WITH(ppds,
 [  --without-ppds          Removes Postscript Printer definition files from
                           openoffice.org installation set, for people building
                           for specific distributions where PPDs are known to be
-                          already available (every recent distro with CUPS backend)
+                          already available (every recent distro with CUPS
+                          backend)
 ],,)
 AC_ARG_WITH(afms,
 [  --without-afms          Removes bitmap font files from openoffice.org
@@ -102,11 +103,12 @@ AC_ARG_ENABLE(fontooo,
 ],,enable_fontooo="yes")
 AC_ARG_ENABLE(mathmldtd,
 [  --disable-mathmldtd     disable mathmldtd
-                          (useful for distributions that want to avoid packaging it)
+                          (useful for distributions that want to avoid packaging
+                          it)
 ],,enable_mathmldtd="yes")
 AC_ARG_ENABLE(evolution2,
-[  --enable-evolution2     Allows the built-in evolution 2 addressbook connectivity
-			  build to be enabled.
+[  --enable-evolution2     Allows the built-in evolution 2 addressbook
+                          connectivity build to be enabled.
 ],,)
 AC_ARG_WITH(system-stdlibs,
 [  --with-system-stdlibs   use libstdc++/libgcc_s already on system
@@ -122,8 +124,9 @@ AC_ARG_ENABLE(fontconfig,
 ],,enable_fontconfig=yes)
 AC_ARG_ENABLE(directx,
 [  --disable-directx       Remove DirectX implementation for the new XCanvas
-                          interface. The DirectX support requires more stuff installed on
-                          Windows to compile.  (DirectX SDK, GDI+ libs)
+                          interface. The DirectX support requires more stuff
+                          installed on Windows to compile.
+                          (DirectX SDK, GDI+ libs)
 ],,enable_directx=yes)
 AC_ARG_ENABLE(activex,
 [  --disable-activex       Disable the use of ActiveX for windows build.
@@ -149,25 +152,27 @@ AC_ARG_ENABLE(strip-solver,
                           This switch allows to override this setting.
 ],,)
 AC_ARG_ENABLE(werror,
-[  --enable-werror         Turn warnings to errors. (Has no effect in modules where
-                          the treating of warnings as errors is disabled explicitely)
+[  --enable-werror         Turn warnings to errors. (Has no effect in modules
+                          where the treating of warnings as errors is disabled
+                          explicitely)
 ],,)
 AC_ARG_ENABLE(debug,
-[  --enable-debug:         Include debugging symbols from --enable-symbols
+[  --enable-debug          Include debugging symbols from --enable-symbols
                           plus extra debugging code.  Extra large build!
                           (enables -g compiler flag and dmake debug=true)
 ],,)
 AC_ARG_ENABLE(dbgutil,
-[  --enable-dbgutil:       Include additional debugging utilities, such as
+[  --enable-dbgutil        Include additional debugging utilities, such as
                           assertions, object counting, etc. Larger build.
                           Independent from --enable-debug
 ],,)
 AC_ARG_ENABLE(xsltproc,
-[  --enable-xsltproc:      Use xsltproc at buildtime, even when java is available
+[  --enable-xsltproc       Use xsltproc at buildtime, even when java is available
 ],,)
 AC_ARG_ENABLE(crashdump,
 [[  --enable-crashdump[=yes|TRUE|STATIC|no]
-                          Enable (disable) the crashdump feature code. [default=no]
+                          Enable (disable) the crashdump feature code.
+                          [default=no]
 ]],,enable_crashdump=no)
 AC_ARG_ENABLE(cl-standard,
 [  --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
@@ -180,24 +185,25 @@ AC_ARG_ENABLE(gtk,
                           where Gtk+ is available.
 ],,enable_gtk=yes)
 AC_ARG_ENABLE(systray,
-[  --disable-systray      Determines whether to build the systray quickstarter.
+[  --disable-systray       Determines whether to build the systray quickstarter.
 ],,enable_systray=yes)
 AC_ARG_ENABLE(cairo,
-[  --enable-cairo         Determines whether to use Cairo canvas backend on platforms
-                          where Cairo is available.
+[  --enable-cairo          Determines whether to use Cairo canvas backend on
+                          platforms where Cairo is available.
 ],,enable_cairo=no)
 AC_ARG_ENABLE(gnome-vfs,
 [  --disable-gnome-vfs     Determines whether to use the Gnome Virtual Filing
                           System on platforms where that VFS is available
 ],,enable_gnome_vfs=yes)
 AC_ARG_ENABLE(static-gtk,
-[  --enable-static-gtk:    Modules that are linked against gtk libraries use
+[  --enable-static-gtk     Modules that are linked against gtk libraries use
                           the static libraries instead of the dynamic ones. 
                           (enables -Bstatic linker flag for gtk libraries)
 ],,)
 AC_ARG_ENABLE(build-mozilla,
-[  --disable-build-mozilla  Use this option if you do not want to build the mozilla
-                          components from the mozilla source code but take precompiled zips
+[  --disable-build-mozilla Use this option if you do not want to build the
+                          mozilla components from the mozilla source code but
+                          take precompiled zips
 ],,)
 AC_ARG_WITH(mozilla-version,
 [  --with-mozilla-version  Choose which version of mozilla to use while building
@@ -216,10 +222,10 @@ AC_ARG_ENABLE(kdeab,
 [  --disable-kdeab         Disable the KDE address book support
 ],,if test "$enable_kde" = "yes"; then enable_kdeab=yes; fi)
 AC_ARG_ENABLE(binfilter,
-[  --disable-binfilter:    Disable legacy binary file formats filters
+[  --disable-binfilter     Disable legacy binary file formats filters
 ],,if ! test -d ../binfilter; then enable_binfilter=no; fi)
 AC_ARG_ENABLE(rpath,
-[  --disable-rpath:        Disable the use of relative paths in shared libraries
+[  --disable-rpath         Disable the use of relative paths in shared libraries
 ],,)
 AC_ARG_ENABLE(pasf,
 [  --disable-pasf          disable support for sound using portaudio/sndfile
@@ -231,8 +237,9 @@ AC_ARG_ENABLE(pam-link,
 [  --enable-pam-link       link with libpam instead of dynamically open it
 ],,)
 AC_ARG_ENABLE(crypt-link,
-[  --disable-crypt-link    disable linking with libcrypt instead of dynamically open it
-                          (needed for ancient GNU/Linux distributions without crypt()/libcrypt)
+[  --disable-crypt-link    disable linking with libcrypt instead of dynamically
+                          open it (needed for ancient GNU/Linux distributions
+                          without crypt()/libcrypt)
 ],,enable_crypt_link=yes)
 AC_ARG_ENABLE(xrender-link,
 [  --enable-xrender-link   link with libXrender instead of dynamically open it
@@ -244,7 +251,7 @@ AC_ARG_WITH(myspell-dicts,
                           installed from other sources
 ],,)
 AC_ARG_WITH(nas,
-[  --without-nas           Removes nas support
+[  --without-nas           Build without nas support
 ],,)
 AC_ARG_WITH(system-libs,
 [  --with-system-libs      Use libs already on system -- enables all
@@ -252,10 +259,11 @@ AC_ARG_WITH(system-libs,
                           odbc/sane/xrender-header(s)
 ],,)
 AC_ARG_WITH(system-jars,
-[  --without-system-jars   When building with --with-system-libs, also the needed jars
-                          are used. Use this to disable that. 
-                          (except for the db case where --with-system-db *has to* imply
-                          using the db.jar from  there, too)
+[  --without-system-jars   When building with --with-system-libs, also the
+                          needed jars are expected on the system. Use this to
+                          disable that. 
+                          (except for the db case where --with-system-db
+                          *has to* imply using the db.jar from there, too)
 ],,)
 AC_ARG_WITH(system-zlib,
 [  --with-system-zlib      Use zlib already on system
@@ -358,16 +366,14 @@ AC_ARG_ENABLE(neon,
 [  --disable-neon          Disable neon and the compilation of webdav binding
 ],,)
 AC_ARG_ENABLE(Xaw,
-[  --disable-Xaw           Disables the use of Xaw for the Netscape/Mozilla plugin
+[  --disable-Xaw           Disables the use of Xaw for the Netscape/Mozilla
+                           plugin
 ],,)
 AC_ARG_WITH(system-neon,
 [  --with-system-neon      Use neon already on system
 ],,)
 AC_ARG_WITH(system-agg,
 [  --with-system-agg       Use AGG already on system
-],,)
-AC_ARG_WITH(system-myspell,
-[  --with-system-myspell   Use myspell already on system
 ],,)
 AC_ARG_WITH(system-hunspell,
 [  --with-system-hunspell   Use libhunspell already on system
@@ -395,12 +401,12 @@ AC_ARG_WITH(stlport4,
                           gcc >= 3.3.3, but will break ABI compatability
 ], WITH_STLPORT=$withval , WITH_STLPORT=yes)
 AC_ARG_WITH(jdk-home,
-[  --with-jdk-home         if you have installed JDK 1.3, on your system,
+[  --with-jdk-home         if you have installed JDK 1.3 or later on your system
                           please supply the path here.
                           Note that this is not the location of the Java binary
                           but the location of the entire distribution.
  
-                          Usage: --with-jdk-home=<absolute path to JDK 1.3 home>
+                          Usage: --with-jdk-home=<absolute path to JDK home>
 ],,)
 AC_ARG_WITH(gxx_include_path,
 [  --with-gxx-include-path if you want to override the autodetected g++ include
@@ -416,12 +422,10 @@ AC_ARG_WITH(java,
                           as java/javac replacements
 ], if test "$withval" = "yes"; then WITH_JAVA=java; else WITH_JAVA=$withval; fi, WITH_JAVA=java)
 AC_ARG_ENABLE(gcjaot,
-[  --enable-gcjaot        Build with[[out]] using Ahead of Time java compilation support. 
-                          If you have gcj installed then --enable-gcjaot will enable gcj ahead of time
-                          support for a (hopefully) faster build. This is an additional step taken 
-                          to compile to native binaries the java helper programs used during 
-                          buildtime which have already been built to bytecode from the compiler 
-                          used in --with-java. --enable-gcjaot is only known to work with bytecode
+[  --enable-gcjaot         Build with[[out]] using Ahead of Time java compilation
+                          support to speed up buildsi by compiling the jars also
+                          to native code..
+                          --enable-gcjaot is only known to work with bytecode
                           created with gcj or ecj
 ],,)
 AC_ARG_WITH(ant-home,
@@ -468,8 +472,8 @@ AC_ARG_WITH(csc-path,
 ],,)
 AC_ARG_WITH(nsis-path,
 [  --with-nsis-path        For Windows users, please supply the path to the
-                          "Nullsoft Scriptable Install System" (NSIS). If NSIS is
-                          found in the path or this option is supplied a self
+                          "Nullsoft Scriptable Install System" (NSIS). If NSIS
+                          is found in the path or this option is supplied a self
                           contained executable installer for OpenOffice.org will
                           be created.
 
@@ -528,11 +532,12 @@ AC_ARG_WITH(lang,
                           Usage: --with-lang="es sw tu cs sk"
 ],,)
 AC_ARG_WITH(poor-help-localizations,
-[  --with-poor-help-localizations Use this option to specify which languages
-                          have unusable help localizations. Separate 
-                          multiple languages with space.
+[  --with-poor-help-localizations
+                           Use this option to specify which languages have
+                          unusable help localizations. Separate multiple
+                          languages with space.
 
-                          Usage: --with-poor-help-localizations="af ar be-BY ca cy fi"
+                          Usage: --with-poor-help-localizations="af ar be-BY ca"
 ],,)
 AC_ARG_WITH(dict,
 [  --with-dict             Use this option to build OpenOffice.org with
@@ -569,8 +574,9 @@ AC_ARG_WITH(mingwin,
 
                           Usage: --with-mingwin=yes
 
-                           For !Windows use, use the mingw32 C++ compiler to (re-)
-                           build unowinreg.dll
+                          For !Windows use, use the mingw32 C++ compiler to
+                          (re-) build unowinreg.dll. Specify the MinGW C++
+                          Compilers name.
 
                           Usage: --with-mingwin=i586-mingw32msvc-g++
 ],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
@@ -598,8 +604,8 @@ AC_ARG_ENABLE(sgistl,
                           Usage: --enable-sgistl=yes
 ],,)
 AC_ARG_WITH(alloc,
-[  --with-alloc       Define which allocator to build with
-			  choices are oo, system, tcmalloc 
+[  --with-alloc            Define which allocator to build with
+			                 (choices are oo, system, tcmalloc)
 ],,)
 
 AC_ARG_ENABLE(jam-build,
@@ -2052,14 +2058,6 @@ if test "$_os" = "Linux" && test "$build_cpu" = "powerpc"; then
    export JITC_PROCESSOR_TYPE
 fi
 
-LANG=""
-if test "$_os" = "Linux" && echo $build_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
-   # avoid IBM JRE bailout when runnig in UTF-8 shells
-   LANG="en_US"
-   export LANG
-fi
-AC_SUBST(LANG)
-
 if test -z "$with_jdk_home" && test "$_os" = "WINNT"; then
     _jdk_home=`./oowintool --jdk-home`
     if test -d "$_jdk_home"; then
@@ -2098,7 +2096,7 @@ dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
    _gij_longver=0
    AC_MSG_CHECKING([the installed JDK])
-   if test "$JAVAINTERPRETER"; then
+   if test -n "$JAVAINTERPRETER"; then
       dnl java -version sends output to stderr!
       if test `$JAVAINTERPRETER -version 2>&1 | grep -c "Kaffe"` -gt 0; then
         
@@ -2947,10 +2945,15 @@ else
    SYSTEM_PYTHON=NO
    BUILD_TYPE="$BUILD_TYPE PYTHON"
    AC_MSG_RESULT([internal])
+   # Embedded python dies without Home set
+   if test "z$HOME" = "z"; then
+      export HOME="";
+   fi
 fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
+AC_SUBST(HOME)
 
 dnl ===================================================================
 dnl Check for system berkley db
@@ -3590,6 +3593,15 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    if test -z "$SYSTEM_GENCCODE"; then
       AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode"\])
    fi
+   AC_MSG_CHECKING([ICU version])
+      AC_TRY_RUN([
+#include <unicode/uversion.h>
+
+int main(int argc, char **argv) {
+      if(U_ICU_VERSION_MAJOR_NUM == 3 && U_ICU_VERSION_MINOR_NUM == 6) return 0;
+      else return 1;
+}
+      ], [AC_MSG_RESULT(OK)], [AC_MSG_RESULT([not suitable, only 3.6 supported currently])])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -3916,33 +3928,6 @@ else
   AC_SUBST(SYSTEM_AGG)
   AC_SUBST(AGG_VERSION)
 fi
-
-dnl ===================================================================
-dnl Check for system myspell
-dnl ===================================================================
-AC_MSG_CHECKING([which myspell to use])
-if test -n "$with_system_myspell" && test "$with_system_myspell" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_MYSPELL=YES
-    PKG_CHECK_MODULES( MYSPELL, myspell,
-      [ MYSPELL_PKGCONFIG=YES ],
-      [
-         AC_CHECK_HEADER(myspell/myspell.hxx, [],
-            [AC_MSG_ERROR(myspell headers not found.)], [])
-         MYSPELL_CFLAGS=-I/usr/include/myspell
-         AC_CHECK_LIB(myspell, main, [],
-           [ AC_MSG_ERROR(myspell library not found.) ], [])
-         MYSPELL_LIBS=-lmyspell
-      ]
-    )
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_MYSPELL=NO
-    MYSPELL_LIBS=-lmyspell
-fi
-AC_SUBST(SYSTEM_MYSPELL)
-AC_SUBST(MYSPELL_CFLAGS)
-AC_SUBST(MYSPELL_LIBS)
 
 dnl ===================================================================
 dnl Check for system hunspell
