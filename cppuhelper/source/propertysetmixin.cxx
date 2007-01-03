@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetmixin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:41:50 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,10 @@ struct Data: public salhelper::SimpleReferenceObject {
 
     PropertyMap properties;
 
+    PropertyMap::const_iterator get(
+        css::uno::Reference< css::uno::XInterface > const & object,
+        rtl::OUString const & name) const;
+
 protected:
     void initProperties(
         css::uno::Reference< css::reflection::XTypeDescription > const & type,
@@ -166,6 +170,17 @@ private:
     resolveTypedefs(
         css::uno::Reference< css::reflection::XTypeDescription > const & type);
 };
+
+Data::PropertyMap::const_iterator Data::get(
+    css::uno::Reference< css::uno::XInterface > const & object,
+    rtl::OUString const & name) const
+{
+    PropertyMap::const_iterator i(properties.find(name));
+    if (i == properties.end() || !i->second.present) {
+        throw css::beans::UnknownPropertyException(name, object);
+    }
+    return i;
+}
 
 void Data::initProperties(
     css::uno::Reference< css::reflection::XTypeDescription > const & type,
@@ -376,12 +391,8 @@ css::uno::Sequence< css::beans::Property > Info::getProperties()
 css::beans::Property Info::getPropertyByName(rtl::OUString const & name)
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
-    Data::PropertyMap::iterator i(m_data->properties.find(name));
-    if (i == m_data->properties.end() || !i->second.present) {
-        throw css::beans::UnknownPropertyException(
-            name, static_cast< cppu::OWeakObject * >(this));
-    }
-    return i->second.property;
+    return m_data->get(static_cast< cppu::OWeakObject * >(this), name)->
+        second.property;
 }
 
 sal_Bool Info::hasPropertyByName(rtl::OUString const & name)
@@ -1019,6 +1030,13 @@ PropertySetMixinImpl::~PropertySetMixinImpl() {
     m_impl->release();
 }
 
+void PropertySetMixinImpl::checkUnknown(rtl::OUString const & propertyName) {
+    if (propertyName.getLength() != 0) {
+        m_impl->get(
+            static_cast< css::beans::XPropertySet * >(this), propertyName);
+    }
+}
+
 void PropertySetMixinImpl::prepareSet(
     rtl::OUString const & propertyName, css::uno::Any const & oldValue,
     css::uno::Any const & newValue, BoundListeners * boundListeners)
@@ -1206,6 +1224,7 @@ void PropertySetMixinImpl::addPropertyChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(listener.is());
+    checkUnknown(propertyName);
     try {
         bool disposed;
         {
@@ -1235,6 +1254,7 @@ void PropertySetMixinImpl::removePropertyChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(listener.is());
+    checkUnknown(propertyName);
     try {
         osl::MutexGuard g(m_impl->mutex);
         Impl::BoundListenerMap::iterator i(
@@ -1260,6 +1280,7 @@ void PropertySetMixinImpl::addVetoableChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(listener.is());
+    checkUnknown(propertyName);
     try {
         bool disposed;
         {
@@ -1289,6 +1310,7 @@ void PropertySetMixinImpl::removeVetoableChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(listener.is());
+    checkUnknown(propertyName);
     try {
         osl::MutexGuard g(m_impl->mutex);
         Impl::VetoListenerMap::iterator i(
