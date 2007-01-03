@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetmixin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:31:13 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:36:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,14 +329,6 @@ protected:
        @short Adds a
        <code>com::sun::star::beans::XPropertyChangeListener</code>.
 
-       @descr If the given property name is neither empty nor the name of a
-       bound property, the listener is registered nonetheless: it can be removed
-       again with a call to <code>removePropertyChangeListener</code>, and it is
-       notified when this object is disposed, but it will never be notified
-       about a property change event.  Since this function does not check
-       whether the given property name is valid, it never throws
-       <code>com::sun::star::beans::UnknownPropertyException</code>.
-
        @descr If a listener is added more than once, it will receive all
        relevant notifications multiple times.
 
@@ -364,14 +356,6 @@ protected:
     /**
        @short Adds a
        <code>com::sun::star::beans::XVetoableChangeListener</code>.
-
-       @descr If the given property name is neither empty nor the name of a
-       constrained property, the listener is registered nonetheless: it can be
-       removed again with a call to <code>removeVetoableChangeListener</code>,
-       and it is notified when this object is disposed, but it will never be
-       notified about a property change event.  Since this function does not
-       check whether the given property name is valid, it never throws
-       <code>com::sun::star::beans::UnknownPropertyException</code>.
 
        @descr If a listener is added more than once, it will receive all
        relevant notifications multiple times.
@@ -449,6 +433,8 @@ private:
     template< typename T > friend class PropertySetMixin;
 
     ~PropertySetMixinImpl();
+
+    void checkUnknown(rtl::OUString const & propertyName);
 };
 
 /**
@@ -481,14 +467,19 @@ protected:
 
        @param absentOptional  a list of optional properties that are not
        present, and should thus not be visible via
-       <code>com::sun::star::beans::XPropertySet::getPropertySetInfo</code>.
-       For consistency reasons, the given <code>absentOptional</code> should
-       only contain the names of attributes that represent optional properties
-       that are not present (that is, the attribute getters and setters always
-       throw a <code>com::sun::star::beans::UnknownPropertyException</code>),
-       and should contain each such name only once.  If an optional property is
-       not present (that is, the corresponding attribute getter and setter
-       always throw a
+       <code>com::sun::star::beans::XPropertySet::getPropertySetInfo</code>,
+       <code>com::sun::star::beans::XPropertySet::addPropertyChangeListener<!--
+       --></code>, <code>com::sun::star::beans::XPropertySet::<!--
+       -->removePropertyChangeListener</code>,
+       <code>com::sun::star::beans::XPropertySet::addVetoableChangeListener<!--
+       --></code>, and <code>com::sun::star::beans::XPropertySet::<!--
+       -->removeVetoableChangeListener</code>.  For consistency reasons, the
+       given <code>absentOptional</code> should only contain the names of
+       attributes that represent optional properties that are not present (that
+       is, the attribute getters and setters always throw a
+       <code>com::sun::star::beans::UnknownPropertyException</code>), and should
+       contain each such name only once.  If an optional property is not present
+       (that is, the corresponding attribute getter and setter always throw a
        <code>com::sun::star::beans::UnknownPropertyException</code>) but is not
        contained in the given <code>absentOptional</code>, then it will be
        visible via
