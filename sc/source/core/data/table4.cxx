@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:01:02 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 12:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ extern USHORT nScFillModeMouseModifier;     // global.cxx
 
 // -----------------------------------------------------------------------
 
-short lcl_DecompValueString( String& aValue, long& nVal, USHORT* pMinDigits = NULL )
+short lcl_DecompValueString( String& aValue, sal_Int32& nVal, USHORT* pMinDigits = NULL )
 {
     if ( !aValue.Len() )
     {
@@ -144,7 +144,7 @@ short lcl_DecompValueString( String& aValue, long& nVal, USHORT* pMinDigits = NU
     return 0;
 }
 
-String lcl_ValueString( long nValue, USHORT nMinDigits )
+String lcl_ValueString( sal_Int32 nValue, USHORT nMinDigits )
 {
     if ( nMinDigits <= 1 )
         return String::CreateFromInt32( nValue );           // simple case...
@@ -356,11 +356,11 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             //  pass rMinDigits to all DecompValueString calls
             //  -> longest number defines rMinDigits
 
-            long nVal1;
+            sal_Int32 nVal1;
             short nFlag1 = lcl_DecompValueString( aStr, nVal1, &rMinDigits );
             if ( nFlag1 )
             {
-                long nVal2;
+                sal_Int32 nVal2;
                 GetString( nCol+nAddX, nRow+nAddY, aStr );
                 short nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                 if ( nFlag1 == nFlag2 )
@@ -401,7 +401,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         else
         {
             //  call DecompValueString to set rMinDigits
-            long nDummy;
+            sal_Int32 nDummy;
             lcl_DecompValueString( aStr, nDummy, &rMinDigits );
         }
     }
@@ -738,7 +738,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             BOOL bGetCell = TRUE;
             USHORT nCellDigits = 0;
             short nHeadNoneTail = 0;
-            long nStringValue;
+            sal_Int32 nStringValue;
             String aValue;
             ScBaseCell* pSrcCell;
             CellType eCellType;
@@ -796,7 +796,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             // #i48009# with the "nStringValue+(long)nDelta" expression within the
                             // lcl_ValueString calls, gcc 3.4.1 makes wrong optimizations (ok in 3.4.3),
                             // so nNextValue is now calculated ahead.
-                            long nNextValue = nStringValue+(long)nDelta;
+                            sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
 
                             String aStr;
                             if ( nHeadNoneTail < 0 )
@@ -978,7 +978,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
             ScBaseCell* pCell = GetCell( nSrcX, nSrcY );
             if ( pCell )
             {
-                long nDelta;
+                sal_Int32 nDelta;
                 if (nIndex >= 0)
                     nDelta = nIndex / nSrcCount;
                 else
@@ -996,7 +996,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             ((ScEditCell*)pCell)->GetString( aValue );
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
-                            long nVal;
+                            sal_Int32 nVal;
                             USHORT nCellDigits = 0; // look at each source cell individually
                             short nFlag = lcl_DecompValueString( aValue, nVal, &nCellDigits );
                             if ( nFlag < 0 )
@@ -1094,10 +1094,10 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                         if (aValue.Equals( ScGlobal::GetOrdinalSuffix( nVal)))
                             aValue = ScGlobal::GetOrdinalSuffix( (sal_Int32)nStart );
 
-                        aValue.Insert( lcl_ValueString( (long)nStart, nMinDigits ), 0 );
+                        aValue.Insert( lcl_ValueString( (sal_Int32)nStart, nMinDigits ), 0 );
                     }
                     else
-                        aValue += lcl_ValueString( (long)nStart, nMinDigits );
+                        aValue += lcl_ValueString( (sal_Int32)nStart, nMinDigits );
                 }
                 else
                 {
@@ -1428,7 +1428,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     ((ScStringCell*)pSrcCell)->GetString( aValue );
                 else
                     ((ScEditCell*)pSrcCell)->GetString( aValue );
-                long nStringValue;
+                sal_Int32 nStringValue;
                 USHORT nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
                 if ( nHeadNoneTail )
@@ -1488,7 +1488,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             aCol[nCol].SetError(static_cast<SCROW>(nRow), errNoValue);
                         else if (!bOverflow)
                         {
-                            nStringValue = (long)nVal;
+                            nStringValue = (sal_Int32)nVal;
                             String aStr;
                             if ( nHeadNoneTail < 0 )
                             {
