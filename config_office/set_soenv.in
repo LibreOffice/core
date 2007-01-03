@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.129 $
-# Date:        $Date: 2007-01-03 10:13:32 $
+# Version:     $Revision: 1.130 $
+# Date:        $Date: 2007-01-03 11:33:57 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -210,10 +210,10 @@ if ( $platform =~ m/solaris/ )
    if ($platform =~ m/^i[3456]86/)
    {  
       if ( $CC =~ "gcc") {
-         $outfile        = "SolarisIntelGccEnv.Set";
+         $outfile        = "SolarisX86GccEnv.Set";
          $OUTPATH        = "unxsogi";
       } else {
-         $outfile        = "SolarisIntelEnv.Set";
+         $outfile        = "SolarisX86Env.Set";
          $OUTPATH        = "unxsoli4";
       }
       $CPU            = "I";
@@ -262,8 +262,8 @@ elsif ( $platform =~ m/netbsd/ )
 {
 #Set platform specific values: 
    if ($platform =~ m/^i[3456]86/)
-   {  print "Setting NetBSD Intel specific values... ";
-      $outfile        = "NetBSDIntelEnv.Set"; 
+   {  print "Setting NetBSD x86 specific values... ";
+      $outfile        = "NetBSDX86Env.Set"; 
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxbsdi";
@@ -348,8 +348,8 @@ elsif ( $platform =~ m/freebsd/ )
       }
    }
    elsif ($platform =~ m/^i386/)
-   {  print "Setting FreeBSD Intel specific values... ";
-      $outfile        = "FreeBSDIntelEnv.Set";
+   {  print "Setting FreeBSD x86 specific values... ";
+      $outfile        = "FreeBSDX86Env.Set";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxfbsdi";
@@ -386,8 +386,8 @@ elsif ( $platform =~ m/linux-gnu/ )
 
 #Set platform specific values: 
    if ($platform =~ m/^i[3456]86/)
-   {  print "Setting Linux Intel specific values... ";
-      $outfile        = "LinuxIntelEnv.Set"; 
+   {  print "Setting Linux x86 specific values... ";
+      $outfile        = "LinuxX86Env.Set"; 
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       
@@ -647,8 +647,8 @@ elsif ( $platform =~ m/darwin/ )
       $COMPATH        = '@COMPATH@'; 
       if ($platform =~ m/^i[3456]86/)
       {
-          print "Setting values for Mac OS X/Darwin on Intel... ";
-          $outfile        = "MacOSXIntelEnv.Set"; 
+          print "Setting values for Mac OS X/Darwin on x86... ";
+          $outfile        = "MacOSXX86Env.Set"; 
           $CPU            = "I";
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
@@ -1530,9 +1530,6 @@ ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 if ($platform =~ m/linux-gnu/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
-if (($JDK =~ m/^[Ii][Bb][Mm]/ || $JDK =~ m/^[Ii][Bb][Mm]/) && $platform =~ m/linux-gnu/ && $platform =~ m/^i[3456]86/) {
-ToFile( "LANG", "@LANG@", "e");
-}
 ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
 ToFile( "ENABLE_GTK",        "@ENABLE_GTK@",       "e" );
 ToFile( "GTK_CFLAGS",        "@GTK_CFLAGS@",       "e" );
@@ -1785,6 +1782,9 @@ ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
 ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
+if ($SYSTEM_PYTHON eq "NO") {
+ToFile( "HOME",              "@HOME@",             "e" );
+}
 ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
 ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
 ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
@@ -1847,9 +1847,6 @@ ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "ENABLE_JAM",        "@ENABLE_JAM@",       "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
-ToFile( "SYSTEM_MYSPELL",    "@SYSTEM_MYSPELL@",   "e" );
-ToFile( "MYSPELL_CFLAGS",    "@MYSPELL_CFLAGS@",   "e" );
-ToFile( "MYSPELL_LIBS",      "@MYSPELL_LIBS@",     "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
