@@ -265,3 +265,4 @@ privateSnippetExecutorClass:
     .uleb128 5
     .align 4
 .LEFDEc:
+    .section .note.GNU-stack,"",@progbits
