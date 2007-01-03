@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:18:45 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:38:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1171,7 +1171,7 @@ void osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
         char* tmp=0;
         char prstatbuf[512];
         memset(prstatbuf,0,512);
-        read(fd,prstatbuf,512);
+        read(fd,prstatbuf,511);
 
         close(fd);
         /*printf("%s\n\n",prstatbuf);*/
@@ -1219,7 +1219,7 @@ void osl_getProcStatm(pid_t pid, struct osl_procStat* procstat)
     {
         char prstatmbuf[512];
         memset(prstatmbuf,0,512);
-        read(fd,prstatmbuf,512);
+        read(fd,prstatmbuf,511);
 
         close(fd);
 
@@ -1248,7 +1248,7 @@ void osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
         char* tmp=0;
         char prstatusbuf[512];
         memset(prstatusbuf,0,512);
-        read(fd,prstatusbuf,512);
+        read(fd,prstatusbuf,511);
 
         close(fd);
 
