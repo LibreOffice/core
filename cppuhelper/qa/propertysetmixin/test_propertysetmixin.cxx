@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_propertysetmixin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:38:52 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:37:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -585,6 +585,82 @@ void Test::testFull(
         static_cast< sal_Int32 >(100), full->getSecond().Value.Value.Value);
     CPPUNIT_ASSERT(!full->getSecond().Value.IsDefaulted);
     CPPUNIT_ASSERT(full->getSecond().IsAmbiguous);
+    css::uno::Reference< css::beans::XPropertyChangeListener > boundListener(
+        new BoundListener);
+    fullp->addPropertyChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("First")), boundListener);
+    fullp->removePropertyChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("First")), boundListener);
+    fullp->addPropertyChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second")), boundListener);
+    fullp->removePropertyChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second")), boundListener);
+    try {
+        fullp->addPropertyChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Third")),
+            boundListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
+    try {
+        fullp->removePropertyChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Third")),
+            boundListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
+    fullp->addPropertyChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fourth")), boundListener);
+    fullp->removePropertyChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fourth")), boundListener);
+    try {
+        fullp->addPropertyChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fifth")),
+            boundListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
+    try {
+        fullp->removePropertyChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fifth")),
+            boundListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
+    css::uno::Reference< css::beans::XVetoableChangeListener > vetoListener(
+        new VetoListener);
+    fullp->addVetoableChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("First")), vetoListener);
+    fullp->removeVetoableChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("First")), vetoListener);
+    fullp->addVetoableChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second")), vetoListener);
+    fullp->removeVetoableChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second")), vetoListener);
+    try {
+        fullp->addVetoableChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Third")),
+            vetoListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
+    try {
+        fullp->removeVetoableChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Third")),
+            vetoListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
+    fullp->addVetoableChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fourth")), vetoListener);
+    fullp->removeVetoableChangeListener(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fourth")), vetoListener);
+    try {
+        fullp->addVetoableChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fifth")),
+            vetoListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
+    try {
+        fullp->removeVetoableChangeListener(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fifth")),
+            vetoListener);
+        CPPUNIT_FAIL("exception expected");
+    } catch (css::beans::UnknownPropertyException &) {}
 }
 
 css::uno::Reference< css::uno::XComponentContext > Test::m_context;
