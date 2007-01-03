@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySetMixin.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:54:16 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:37:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,12 +107,18 @@ public final class PropertySetMixin {
 
        @param absentOptional a list of optional properties that are not present,
        and should thus not be visible via
-       <code>com.sun.star.beans.XPropertySet.getPropertySetInfo</code>; null is
-       treated the same as an empty list; if non-null, the given array must not
-       be modified after it is passed to this constructor.  For consistency
-       reasons, the given <code>absentOptional</code> should only contain the
-       names of attributes that represent optional properties that are not
-       present (that is, the attribute getters and setters always throw a
+       <code>com.sun.star.beans.XPropertySet.getPropertySetInfo</code>,
+       <code>com.sun.star.beans.XPropertySet.addPropertyChangeListener</code>,
+       <code>com.sun.star.beans.XPropertySet.removePropertyChangeListener<!--
+       --></code>,
+       <code>com.sun.star.beans.XPropertySet.addVetoableChangeListener</code>,
+       and <code>com.sun.star.beans.XPropertySet.<!--
+       -->removeVetoableChangeListener</code>; null is treated the same as an
+       empty list; if non-null, the given array must not be modified after it is
+       passed to this constructor.  For consistency reasons, the given
+       <code>absentOptional</code> should only contain the names of attributes
+       that represent optional properties that are not present (that is, the
+       attribute getters and setters always throw a
        <code>com.sun.star.beans.UnknownPropertyException</code>), and should
        contain each such name only once.  If an optional property is not present
        (that is, the corresponding attribute getter and setter always throw a
@@ -366,14 +372,6 @@ public final class PropertySetMixin {
        Implements
        <code>com.sun.star.beans.XPropertySet.addPropertyChangeListener</code>.
 
-       <p>If the given property name is neither empty nor the name of a bound
-       property, the listener is registered nonetheless: it can be removed again
-       with a call to {@link #removePropertyChangeListener}, and it is notified
-       when this object is disposed, but it will never be notified about a
-       property change event.  Since this method does not check whether the
-       given property name is valid, it never throws
-       <code>com.sun.star.beans.UnknownPropertyException</code>.</p>
-
        <p>If a listener is added more than once, it will receive all relevant
        notifications multiple times.</p>
     */
@@ -382,6 +380,7 @@ public final class PropertySetMixin {
         throws UnknownPropertyException, WrappedTargetException
     {
         // assert listener != null;
+        checkUnknown(propertyName);
         boolean disp;
         synchronized (this) {
             disp = disposed;
@@ -408,6 +407,7 @@ public final class PropertySetMixin {
         throws UnknownPropertyException, WrappedTargetException
     {
         // assert listener != null;
+        checkUnknown(propertyName);
         synchronized (this) {
             if (boundListeners != null) {
                 Vector v = (Vector) boundListeners.get(propertyName);
@@ -422,14 +422,6 @@ public final class PropertySetMixin {
        Implements
        <code>com.sun.star.beans.XPropertySet.addVetoableChangeListener</code>.
 
-       <p>If the given property name is neither empty nor the name of a
-       constrained property, the listener is registered nonetheless: it can be
-       removed again with a call to {@link #removeVetoableChangeListener}, and
-       it is notified when this object is disposed, but it will never be
-       notified about a property change event.  Since this method does not check
-       whether the given property name is valid, it never throws
-       <code>com.sun.star.beans.UnknownPropertyException</code>.</p>
-
        <p>If a listener is added more than once, it will receive all relevant
        notifications multiple times.</p>
     */
@@ -438,6 +430,7 @@ public final class PropertySetMixin {
         throws UnknownPropertyException, WrappedTargetException
     {
         // assert listener != null;
+        checkUnknown(propertyName);
         boolean disp;
         synchronized (this) {
             disp = disposed;
@@ -464,6 +457,7 @@ public final class PropertySetMixin {
         throws UnknownPropertyException, WrappedTargetException
     {
         // assert listener != null;
+        checkUnknown(propertyName);
         synchronized (this) {
             if (vetoListeners != null) {
                 Vector v = (Vector) vetoListeners.get(propertyName);
@@ -1034,6 +1028,24 @@ public final class PropertySetMixin {
         return type;
     }
 
+    private PropertyData get(Object object, String propertyName)
+        throws UnknownPropertyException
+    {
+        PropertyData p = (PropertyData) properties.get(propertyName);
+        if (p == null || !p.present) {
+            throw new UnknownPropertyException(propertyName, object);
+        }
+        return p;
+    }
+
+    private void checkUnknown(String propertyName)
+        throws UnknownPropertyException
+    {
+        if (!propertyName.equals("")) {
+            get(this, propertyName);
+        }
+    }
+
     private static final class PropertyData {
         public PropertyData(Property property, boolean present) {
             this.property = property;
@@ -1044,7 +1056,7 @@ public final class PropertySetMixin {
         public final boolean present;
     }
 
-    private static final class Info extends WeakBase implements XPropertySetInfo
+    private final class Info extends WeakBase implements XPropertySetInfo
     {
         public Info(Map properties) {
             this.properties = properties;
@@ -1064,11 +1076,7 @@ public final class PropertySetMixin {
         public Property getPropertyByName(String name)
             throws UnknownPropertyException
         {
-            PropertyData p = (PropertyData) properties.get(name);
-            if (p == null || !p.present) {
-                throw new UnknownPropertyException(name, this);
-            }
-            return p.property;
+            return get(this, name).property;
         }
 
         public boolean hasPropertyByName(String name) {
