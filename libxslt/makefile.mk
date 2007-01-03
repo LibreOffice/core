@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: cmc $ $Date: 2006-10-09 12:27:36 $
+#   last change: $Author: cmc $ $Date: 2007-01-03 13:06:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ OUT2BIN+=xsltproc$/.libs$/xsltproc
 .ELIF "$(OS)"=="WNT"
 OUT2LIB+=libxslt$/win32$/bin.msvc$/*.lib
 OUT2BIN+=libxslt$/win32$/bin.msvc$/*.dll
-OUT2BIN+=xsltproc$/win32$/bin.msvc$/*.exe
+OUT2BIN+=xsltproc$/win32$/bin.msvc$/*.exe*
 .ELSE
 OUT2LIB+=libxslt$/.libs$/libxslt.so*
 OUT2BIN+=xsltproc$/.libs$/xsltproc
