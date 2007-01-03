@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uuid.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:10 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,24 +68,19 @@
 extern "C" {
 #endif
 
-/** Generates a new UUID (Universally Unique IDentifier).
-    If available, the ethernetaddress of a networkcard is used, otherwise
-    a 6 Byte random number is generated( for which rtlRandomPool is used ).
+/** Generates a new Version 4 (random number based) UUID (Universally Unique
+    IDentifier).
 
     @param pTargetUUID          pointer to at least 16 bytes of memory. After the call it contains
                                 the newly generated uuid in network byte order.
     @param pPredecessorUUID     pointer to the previously generated uuid in network byte
-                                order. The generator reuses the 6-Byte random value
-                                and the two byte context value and ensures,
-                                that pTargetUUID is generated with a later timestamp.
+                                order. The generator uses this value to seed the
+                                random number generator and thus makes it highly
+                                unlikely that consecutive calls produce equal
+                                results.
                                 Set pPredecessorUUID to 0 if no predecessor is available.
-                                The caller is responsible for making the value persistent
-                                (if desired).
-    @param bUseEthernetAddress  if <code>sal_True</code>, the generator uses the ethernet
-                                address of a network card (if available).
-                                if <code>sal_False</code>, the generator generates a new
-                                6-Byte random
-                                value each time it is called with pPredecessorUUID = 0.
+    @param bUseEthernetAddress  ignored (was used when this function returned
+                                Version 1 instead of Version 4 UUIDs).
  */
 void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
                               const sal_uInt8 *pPredecessorUUID,
