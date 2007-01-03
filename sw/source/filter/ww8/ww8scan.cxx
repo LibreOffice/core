@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:55:32 $
+ *  last change: $Author: hr $ $Date: 2007-01-03 11:32:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -810,7 +810,7 @@ wwSprmParser::wwSprmParser(ww::WordVersion eVersion) : meVersion(eVersion)
 SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
 {
     // Find sprm
-    SprmInfo aSrch={0};
+    SprmInfo aSrch={0,0,0};
     aSrch.nId = nId;
     const SprmInfo* pFound = mpKnownSprms->search(aSrch);
     if (pFound == 0)
@@ -2229,8 +2229,8 @@ bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
 
 // Ctor fuer *andere* als Fkps
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
-    long nStartPos ) :nIdx( 0 ), nStru( nStruct )
+WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
+    WW8_CP nStartPos ) : pPLCF_PosArray(0), nIdx(0), nStru(nStruct)
 {
     ASSERT( nPLCF, "WW8PLCF: nPLCF ist Null!" );
 
@@ -2247,12 +2247,13 @@ WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
 // != 0, dann wird ein unvollstaendiger PLCF vervollstaendigt.  Das ist bei
 // WW6 bei Resourcenmangel und bei WordPad (W95) immer noetig.  Bei nStartPos
 // < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
-    long nStartPos, long nPN, long ncpN ) :nIdx( 0 ), nStru( nStruct )
+WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
+    WW8_CP nStartPos, INT32 nPN, INT32 ncpN ) : pPLCF_PosArray(0), nIdx(0),
+    nStru(nStruct)
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 
-    if( nIMax >= (long) ncpN )
+    if( nIMax >= ncpN )
         ReadPLCF( pSt, nFilePos, nPLCF );
     else
         GeneratePLCF( pSt, nPN, ncpN );
@@ -2261,12 +2262,12 @@ WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
         SeekPos( nStartPos );
 }
 
-void WW8PLCF::ReadPLCF( SvStream* pSt, long nFilePos, long nPLCF )
+void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF )
 {
     // Pointer auf Pos-Array
-    pPLCF_PosArray = new INT32[ ( nPLCF + 3 ) / 4 ];
+    pPLCF_PosArray = new WW8_CP[ ( nPLCF + 3 ) / 4 ];
 
-    long nOldPos = pSt->Tell();
+    sal_Size nOldPos = pSt->Tell();
 
     pSt->Seek( nFilePos );
     pSt->Read( pPLCF_PosArray, nPLCF );
@@ -2281,47 +2282,78 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, long nFilePos, long nPLCF )
     pSt->Seek( nOldPos );
 }
 
-void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN, long ncpN )
+void WW8PLCF::GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN )
 {
-    ASSERT(!this, "Not a bug, but I (cmc) want to see this .doc as an example");
-    ASSERT( nIMax < (long)ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
+    ASSERT( nIMax < ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
+
+    bool failure = false;
     nIMax = ncpN;
-    long nSiz = 6 * nIMax + 4;
-    pPLCF_PosArray = new INT32[ ( nSiz + 3 ) / 4 ]; // Pointer auf Pos-Array
-    memset( pPLCF_PosArray, 0, (size_t)nSiz );
 
-    INT32 nFc;
-    USHORT i;
+    if ((nIMax < 1) || (nIMax > (WW8_CP_MAX - 4)/6) || ((nPN + ncpN) > USHRT_MAX))
+        failure = true;
 
-    for (i = 0; i < ncpN; ++i)
+    if (!failure)
     {
-        // Baue FC-Eintraege
-        pSt->Seek( ( nPN + i ) << 9 );  // erster FC-Eintrag jedes Fkp
-        *pSt >> nFc;
-        pPLCF_PosArray[i] = nFc;
+        size_t nSiz = 6 * nIMax + 4;
+        size_t nElems = ( nSiz + 3 ) / 4;
+        pPLCF_PosArray = new INT32[ nElems ]; // Pointer auf Pos-Array
+
+        for (INT32 i = 0; i < ncpN && !pSt->GetError(); ++i)
+        {
+            // Baue FC-Eintraege
+            pSt->Seek( ( nPN + i ) << 9 );  // erster FC-Eintrag jedes Fkp
+            WW8_CP nFc;
+            *pSt >> nFc;
+            pPLCF_PosArray[i] = nFc;
+        }
+
+        failure = pSt->GetError();
     }
-    ULONG nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
-    pSt->Seek( nLastFkpPos + 511 );     // Anz. Fkp-Eintraege des letzten Fkp
-    BYTE nb;
-    *pSt >> nb;
-    pSt->Seek( nLastFkpPos + nb * 4 );  // letzer FC-Eintrag des letzten Fkp
-    *pSt >> nFc;
-    pPLCF_PosArray[nIMax] = nFc;        // Ende des letzten Fkp
 
-    // Pointer auf Inhalts-Array
-    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
-    BYTE* p = pPLCF_Contents;
-
-    for (i = 0; i < ncpN; ++i)         // Baue PNs
+    if (!failure)
     {
-        ShortToSVBT16(static_cast<sal_uInt16>(nPN + i), p);
-        p+=2;
+        sal_Size nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
+        pSt->Seek( nLastFkpPos + 511 );     // Anz. Fkp-Eintraege des letzten Fkp
+
+        BYTE nb;
+        *pSt >> nb;
+        pSt->Seek( nLastFkpPos + nb * 4 );  // letzer FC-Eintrag des letzten Fkp
+
+        WW8_CP nFc;
+        *pSt >> nFc;
+        pPLCF_PosArray[nIMax] = nFc;        // Ende des letzten Fkp
+
+        failure = pSt->GetError();
+    }
+
+    if (!failure)
+    {
+        // Pointer auf Inhalts-Array
+        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
+        BYTE* p = pPLCF_Contents;
+
+        for (INT32 i = 0; i < ncpN; ++i)         // Baue PNs
+        {
+            ShortToSVBT16(static_cast<sal_uInt16>(nPN + i), p);
+            p+=2;
+        }
+    }
+
+    ASSERT( !failure, "Document has corrupt PLCF, ignoring it" );
+
+    if (failure)
+    {
+        nIMax = 0;
+        delete[] pPLCF_PosArray;
+        pPLCF_PosArray = new INT32[2];
+        pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
+        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
     }
 }
 
-bool WW8PLCF::SeekPos(long nPos)
+bool WW8PLCF::SeekPos(WW8_CP nPos)
 {
-    long nP = nPos;
+    WW8_CP nP = nPos;
 
     if( nP < pPLCF_PosArray[0] )
     {
@@ -2334,8 +2366,8 @@ bool WW8PLCF::SeekPos(long nPos)
     if( (1 > nIdx) || (nP < pPLCF_PosArray[ nIdx-1 ]) )
         nIdx = 1;
 
-    long nI   = nIdx ? nIdx : 1;
-    long nEnd = nIMax;
+    INT32 nI   = nIdx ? nIdx : 1;
+    INT32 nEnd = nIMax;
 
     for(int n = (1==nIdx ? 1 : 2); n; --n )
     {
@@ -2368,10 +2400,10 @@ bool WW8PLCF::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
     return true;
 }
 
-INT32 WW8PLCF::Where() const
+WW8_CP WW8PLCF::Where() const
 {
     if ( nIdx >= nIMax )
-        return SAL_MAX_INT32;
+        return WW8_CP_MAX;
 
     return pPLCF_PosArray[nIdx];
 }
@@ -3837,13 +3869,12 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
                 {
                     ww::bytes extraData;
                     sal_uInt8 iTmp;
-                    for(int i =0;i < nExtraLen;i++)
+                    for(int j = 0; j < nExtraLen; ++j)
                     {
                         rStrm >> iTmp;
                         extraData.push_back(iTmp);
                     }
                     pExtraArray->push_back(extraData);
-                    int kSize = extraData.size();
                 }
                 else
                     rStrm.SeekRel( nExtraLen );
