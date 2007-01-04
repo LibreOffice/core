@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:51:18 $
+ *  last change: $Author: hr $ $Date: 2007-01-04 10:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
 
 void lcl_calcLinePos( SwDrawTextInfo& rInf, Font& rFont, Point& rStart, Point& rEnd, xub_StrLen nStart,
                       xub_StrLen nWrLen, xub_StrLen nCnt, const BOOL bSwitchH2V, const BOOL bSwitchL2R,
-                      long nHalfSpace, long* pKernArray, const BOOL bBidiPor)
+                      long nHalfSpace, sal_Int32* pKernArray, const BOOL bBidiPor)
 {
    rStart = Point( rInf.GetPos() );
    long nBlank = 0;
@@ -291,8 +291,8 @@ void lcl_calcLinePos( SwDrawTextInfo& rInf, Font& rFont, Point& rStart, Point& r
    }
 
    // determine start, end and length of wave line
-   long nKernStart = nStart ? pKernArray[ USHORT( nStart - 1 ) ] : 0;
-   long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
+   sal_Int32 nKernStart = nStart ? pKernArray[ USHORT( nStart - 1 ) ] : 0;
+   sal_Int32 nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
 
    USHORT nDir = bBidiPor ? 1800 :
        UnMapDirection( rFont.GetOrientation(), bSwitchH2V );
