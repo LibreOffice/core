@@ -4,9 +4,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:06:54 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,16 +506,21 @@ Text [ en-US ] = "Greek Drachma";
 
 String CURRENCIES + 12
 {
-Text [ de ] = "Die für das Dokument eingestellte Währung ist keine Euro-Währung!";
-Text [ en-US ] = "The currency set for the document is not a European currency!";
+Text [ de ] = "Slovenischer Tolar";
+Text [ en-US ] = "Slovenian Tolar";
 };
 
 String CURRENCIES + 13
 {
+Text [ de ] = "Die für das Dokument eingestellte Währung ist keine Euro-Währung!";
+Text [ en-US ] = "The currency set for the document is not a European currency!";
+};
+
+String CURRENCIES + 14
+{
 Text [ de ] = "Die für Ihr Betriebssystem eingestellte Sprache ist keine Sprache der Europäischen Währungsunion!";
 Text [ en-US ] = "The language set for your operating system is not a language of the European Monetary Union.";
 };
-
 
 String STEP_LASTPAGE
 {
