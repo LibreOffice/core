@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:21:26 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:29:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         mpDoc->SetPageNumType(((const SvxPageItem*) pPoolItem)->GetNumType());
 
         eOrientation = (((const SvxPageItem*) pPoolItem)->IsLandscape() == ORIENTATION_LANDSCAPE) ?
-            ORIENTATION_LANDSCAPE : eOrientation = ORIENTATION_PORTRAIT;
+            ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
 
         if( mpPage->GetOrientation() != eOrientation )
             bSetPageSizeAndBorder = TRUE;
