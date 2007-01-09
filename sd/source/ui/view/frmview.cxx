@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:17:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,9 +704,9 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
     {
         const bool bImpress = dynamic_cast< SdDrawDocument* >(GetModel())->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
-        sal_Bool bBool;
-        sal_Int32 nInt32;
-        sal_Int16 nInt16;
+        sal_Bool bBool = sal_False;
+        sal_Int32 nInt32 = 0;
+        sal_Int16 nInt16 = 0;
         rtl::OUString aString;
 
         sal_Int32 aSnapGridWidthXNum = GetSnapGridWidthX().GetNumerator();
@@ -885,7 +885,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaTop ) ) )
             {
-                sal_Int32 nTop;
+                sal_Int32 nTop = 0;
                 if( pValue->Value >>= nTop )
                 {
                     Rectangle aVisArea( GetVisArea() );
@@ -896,7 +896,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaLeft ) ) )
             {
-                sal_Int32 nLeft;
+                sal_Int32 nLeft = 0;
                 if( pValue->Value >>= nLeft )
                 {
                     Rectangle aVisArea( GetVisArea() );
@@ -907,7 +907,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaWidth ) ) )
             {
-                sal_Int32 nWidth;
+                sal_Int32 nWidth = 0;
                 if( pValue->Value >>= nWidth )
                 {
                     Rectangle aVisArea( GetVisArea() );
@@ -917,7 +917,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaHeight ) ) )
             {
-                sal_Int32 nHeight;
+                sal_Int32 nHeight = 0;
                 if( pValue->Value >>= nHeight )
                 {
                     Rectangle aVisArea( GetVisArea() );
