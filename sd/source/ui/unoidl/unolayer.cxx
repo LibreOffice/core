@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:59:55 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     {
     case WID_LAYER_LOCKED:
     {
-        sal_Bool bValue;
+        sal_Bool bValue = sal_False;
         if(!sd::any2bool( aValue, bValue ))
             throw lang::IllegalArgumentException();
         set( LOCKED, bValue );
@@ -257,7 +257,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     }
     case WID_LAYER_PRINTABLE:
     {
-        sal_Bool bValue;
+        sal_Bool bValue = sal_False;
         if(!sd::any2bool( aValue, bValue ))
             throw lang::IllegalArgumentException();
         set( PRINTABLE, bValue );
@@ -265,7 +265,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     }
     case WID_LAYER_VISIBLE:
     {
-        sal_Bool bValue;
+        sal_Bool bValue = sal_False;
         if(!sd::any2bool( aValue, bValue ))
             throw lang::IllegalArgumentException();
         set( VISIBLE, bValue );
