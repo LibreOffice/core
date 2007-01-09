@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:41:48 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,7 +524,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
             // gif for animated pixel
             // png for non animated pixel
             // svm for vector format
-            sal_Int8 nGraphicType;
+            sal_Int8 nGraphicType = 0;
             xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicType" ) ) ) >>= nGraphicType;
             switch( nGraphicType )
             {
@@ -534,7 +534,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
             case ::com::sun::star::graphic::GraphicType::PIXEL:
                 {
-                    sal_Bool bAnimated;
+                    sal_Bool bAnimated = sal_False;
                     xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Animated" ) ) ) >>= bAnimated;
 
                     if( bAnimated )
