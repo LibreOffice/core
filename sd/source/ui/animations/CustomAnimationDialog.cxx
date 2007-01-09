@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:50:55 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,7 +335,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
         bKillTable = TRUE;
     }
 
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
     rValue >>= nColor;
 
     for ( long i = 0; i < pColorTable->Count(); i++ )
@@ -363,7 +363,7 @@ void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
 {
     if( mpControl )
     {
-        sal_Int32 nColor;
+        sal_Int32 nColor = 0;
         rValue >>= nColor;
 
         mpControl->SetNoSelection();
@@ -625,7 +625,7 @@ void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
 {
     if( mpMetric )
     {
-        double fValue;
+        double fValue = 0.0;
         rValue >>= fValue;
         mpMetric->SetValue( (long)(fValue * 100.0) );
     }
@@ -745,7 +745,7 @@ void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
 {
     if( mpMetric )
     {
-        double fValue;
+        double fValue = 0.0;
         rValue >>= fValue;
         long nValue = (long)(fValue * 100);
         mpMetric->SetValue( nValue );
@@ -886,7 +886,7 @@ void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
 {
     if( mpMetric )
     {
-        double fValue;
+        double fValue = 0.0;
         rValue >>= fValue;
         long nValue = (long)(fValue);
         mpMetric->SetValue( nValue );
@@ -1390,7 +1390,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
         if( pSet->getPropertyState( nHandleProperty1Type ) != STLPropertyState_AMBIGUOUS )
         {
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             pSet->getPropertyValue( nHandleProperty1Type ) >>= nType;
 
             if( nType != nPropertyTypeNone )
@@ -1433,7 +1433,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
             nOffsetY += mpCBSmoothStart->GetSizePixel().Height() + aSpace.Height();
 
-            double fTemp;
+            double fTemp = 0.0;
             pSet->getPropertyValue( nHandleAccelerate ) >>= fTemp;
             mpCBSmoothStart->Check( fTemp > 0.0 );
 
@@ -1486,7 +1486,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         (pSet->getPropertyState( nHandleAfterEffectOnNextEffect ) != STLPropertyState_AMBIGUOUS) &&
         (pSet->getPropertyState( nHandleDimColor ) != STLPropertyState_AMBIGUOUS))
     {
-        sal_Bool bHasAfterEffect;
+        sal_Bool bHasAfterEffect = sal_False;
         pSet->getPropertyValue( nHandleHasAfterEffect ) >>= bHasAfterEffect;
 
         USHORT nPos = 0;
@@ -1494,13 +1494,13 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         {
             nPos++;
 
-            sal_Bool bAfterEffectOnNextClick;
+            sal_Bool bAfterEffectOnNextClick = sal_False;
             pSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextClick;
             Any aDimColor( pSet->getPropertyValue( nHandleDimColor ) );
 
             if( aDimColor.hasValue() )
             {
-                sal_Int32 nColor;
+                sal_Int32 nColor = 0;
                 aDimColor >>= nColor;
                 Color aColor( nColor );
                 USHORT nColorPos = mpCLBDimColor->GetEntryPos( aColor );
@@ -1530,7 +1530,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         {
             USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
 
-            sal_Int32 nIterateType;
+            sal_Int32 nIterateType = 0;
             pSet->getPropertyValue( nHandleIterateType ) >>= nIterateType;
             switch( nIterateType )
             {
@@ -1544,7 +1544,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
         if( pSet->getPropertyState( nHandleIterateInterval ) )
         {
-            double fIterateInterval;
+            double fIterateInterval = 0.0;
             pSet->getPropertyValue( nHandleIterateInterval ) >>= fIterateInterval;
             mpMFTextDelay->SetValue( (long)(fIterateInterval*10) );
         }
@@ -1716,7 +1716,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
 
         double fTemp = mpCBSmoothStart->IsChecked() ? 0.5 : 0.0;
 
-        double fOldTemp;
+        double fOldTemp = 0.0;
         if(mpSet->getPropertyState( nHandleAccelerate ) != STLPropertyState_AMBIGUOUS)
             mpSet->getPropertyValue( nHandleAccelerate ) >>= fOldTemp;
         else
@@ -1742,7 +1742,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
     {
         sal_Bool bAfterEffect = nPos != 0;
 
-        sal_Bool bOldAfterEffect;
+        sal_Bool bOldAfterEffect = sal_False;
 
         if(mpSet->getPropertyState( nHandleHasAfterEffect ) != STLPropertyState_AMBIGUOUS)
             mpSet->getPropertyValue( nHandleHasAfterEffect ) >>= bOldAfterEffect;
@@ -2035,7 +2035,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
 
     if( pSet->getPropertyState( nHandleStart ) != STLPropertyState_AMBIGUOUS )
     {
-        sal_Int16 nStart;
+        sal_Int16 nStart = 0;
         pSet->getPropertyValue( nHandleStart ) >>= nStart;
         USHORT nPos = 0;
         switch( nStart )
@@ -2048,14 +2048,14 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
 
     if( pSet->getPropertyState( nHandleBegin ) != STLPropertyState_AMBIGUOUS )
     {
-        double fBegin;
+        double fBegin = 0.0;
         pSet->getPropertyValue( nHandleBegin ) >>= fBegin;
         mpMFStartDelay->SetValue( (long)(fBegin*10) );
     }
 
     if( pSet->getPropertyState( nHandleDuration ) != STLPropertyState_AMBIGUOUS )
     {
-        double fDuration;
+        double fDuration = 0.0;
         pSet->getPropertyValue( nHandleDuration ) >>= fDuration;
 
         if( fDuration == 0.001 )
@@ -2129,7 +2129,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
 
     if( pSet->getPropertyState( nHandleRewind ) != STLPropertyState_AMBIGUOUS )
     {
-        sal_Int16 nFill;
+        sal_Int16 nFill = 0;
         if( pSet->getPropertyValue( nHandleRewind ) >>= nFill )
         {
             mpCBXRewind->Check( (nFill == AnimationFill::REMOVE) ? TRUE : FALSE );
@@ -2318,7 +2318,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 
         if( mpSet->getPropertyState( nHandleRewind ) != STLPropertyState_AMBIGUOUS )
         {
-            sal_Int16 nOldFill;
+            sal_Int16 nOldFill = 0;
             mpSet->getPropertyValue( nHandleRewind ) >>= nOldFill;
             bSet = nFill != nOldFill;
         }
@@ -2395,14 +2395,14 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
 
     if( pSet->getPropertyState( nHandleTextGrouping ) != STLPropertyState_AMBIGUOUS )
     {
-        sal_Int32 nTextGrouping;
+        sal_Int32 nTextGrouping = 0;
         if( pSet->getPropertyValue( nHandleTextGrouping ) >>= nTextGrouping )
             maLBGroupText.SelectEntryPos( (USHORT)(nTextGrouping + 1) );
     }
 
     if( pSet->getPropertyState( nHandleTextGroupingAuto ) != STLPropertyState_AMBIGUOUS )
     {
-        double fTextGroupingAuto;
+        double fTextGroupingAuto = 0.0;
         if( pSet->getPropertyValue( nHandleTextGroupingAuto ) >>= fTextGroupingAuto )
         {
             maCBXGroupAuto.Check( fTextGroupingAuto >= 0.0 );
@@ -2418,7 +2418,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     maCBXAnimateForm.SetState( STATE_DONTKNOW );
     if( pSet->getPropertyState( nHandleAnimateForm ) != STLPropertyState_AMBIGUOUS )
     {
-        sal_Bool bAnimateForm;
+        sal_Bool bAnimateForm = sal_False;
         if( pSet->getPropertyValue( nHandleAnimateForm ) >>= bAnimateForm )
         {
             maCBXAnimateForm.Check( bAnimateForm );
@@ -2432,7 +2432,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     maCBXReverse.SetState( STATE_DONTKNOW );
     if( pSet->getPropertyState( nHandleTextReverse ) != STLPropertyState_AMBIGUOUS )
     {
-        sal_Bool bTextReverse;
+        sal_Bool bTextReverse = sal_False;
         if( pSet->getPropertyValue( nHandleTextReverse ) >>= bTextReverse )
         {
             maCBXReverse.Check( bTextReverse );
@@ -2441,7 +2441,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
 
     if( pSet->getPropertyState( nHandleMaxParaDepth ) == STLPropertyState_DIRECT )
     {
-        sal_Int32 nMaxParaDepth;
+        sal_Int32 nMaxParaDepth = 0;
         pSet->getPropertyValue( nHandleMaxParaDepth ) >>= nMaxParaDepth;
         nMaxParaDepth += 1;
 
@@ -2484,7 +2484,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
         if( nPos > 1 )
         {
-            double fTextGroupingAuto = maCBXGroupAuto.IsChecked() ? fTextGroupingAuto = maMFGroupAuto.GetValue() / 10.0 : -1.0;
+            double fTextGroupingAuto = maCBXGroupAuto.IsChecked() ? maMFGroupAuto.GetValue() / 10.0 : -1.0;
             double fOldTextGroupingAuto = -2.0;
 
             if(mpSet->getPropertyState( nHandleTextGroupingAuto ) != STLPropertyState_AMBIGUOUS)
