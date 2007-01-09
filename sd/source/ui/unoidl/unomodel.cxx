@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:00:44 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1357,7 +1357,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         }
         case WID_MODEL_TABSTOP:
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if(!(aValue >>= nValue) || nValue < 0 )
                 throw lang::IllegalArgumentException();
 
@@ -1379,7 +1379,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             break;
         case WID_MODEL_CONTFOCUS:
             {
-                sal_Bool bFocus;
+                sal_Bool bFocus = sal_False;
                 if( !(aValue >>= bFocus ) )
                     throw lang::IllegalArgumentException();
                 mpDoc->SetAutoControlFocus( bFocus );
@@ -1387,7 +1387,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             break;
         case WID_MODEL_DSGNMODE:
             {
-                sal_Bool bMode;
+                sal_Bool bMode = sal_False;
                 if( !(aValue >>= bMode ) )
                     throw lang::IllegalArgumentException();
                 mpDoc->SetOpenInDesignMode( bMode );
@@ -1969,7 +1969,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     // exporting object interactions to pdf
 
                                     // if necessary, the master page interactions will be exported first
-                                    sal_Bool bIsBackgroundObjectsVisible;   // SJ: #i39428# IsBackgroundObjectsVisible not available for Draw
+                                    sal_Bool bIsBackgroundObjectsVisible = sal_False;   // SJ: #i39428# IsBackgroundObjectsVisible not available for Draw
                                     const rtl::OUString sIsBackgroundObjectsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) );
                                     if ( mbImpressDoc && ( xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible ) >>= bIsBackgroundObjectsVisible ) && bIsBackgroundObjectsVisible )
                                     {
