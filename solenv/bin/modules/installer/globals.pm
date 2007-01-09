@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:23:10 $
+#   last change: $Author: vg $ $Date: 2007-01-09 11:18:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ BEGIN
     $msilanguage = "";  # hash reference for msi languages LCID
     $sofficeiconadded = 0;
     $temppath = "";
+    $cyg_temppath = "";
     $temppathdefined = 0;
     $packageversion = 1;
     $packagerevision = 1;
