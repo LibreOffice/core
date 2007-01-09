@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-01-02 12:57:20 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,7 +650,7 @@ bool SlideshowImpl::startPreview(
         Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
         mpSlideController.reset( new AnimationSlideController( xSlides, AnimationSlideController::PREVIEW ) );
 
-        sal_Int32 nSlideNumber;
+        sal_Int32 nSlideNumber = 0;
         Reference< XPropertySet > xSet( mxPreviewDrawPage, UNO_QUERY_THROW );
         xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nSlideNumber;
         mpSlideController->insertSlideNumber( nSlideNumber-1 );
