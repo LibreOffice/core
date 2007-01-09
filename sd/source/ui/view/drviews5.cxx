@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:12:35 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,7 +637,7 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
     {
         if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_ZoomOnPage ) ) )
         {
-            sal_Bool bZoomPage;
+            sal_Bool bZoomPage = sal_False;
             if( pValue->Value >>= bZoomPage )
             {
                 mbZoomOnPage = bZoomPage;
