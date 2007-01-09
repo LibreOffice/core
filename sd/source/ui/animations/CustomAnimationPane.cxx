@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:51:39 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1071,7 +1071,7 @@ static sal_Int32 calcMaxParaDepth( Reference< XShape > xTargetShape )
                 xEnumeration->nextElement() >>= xParaSet;
                 if( xParaSet.is() )
                 {
-                    sal_Int32 nParaDepth;
+                    sal_Int32 nParaDepth = 0;
                     xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
 
                     if( nParaDepth > nMaxParaDepth )
@@ -1352,7 +1352,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
         if( !pEffect->getEffectSequence() )
             continue;
 
-        double fDuration; // we might need this for iterate-interval
+        double fDuration = 0.0; // we might need this for iterate-interval
         if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState_DIRECT )
         {
             pResultSet->getPropertyValue( nHandleDuration ) >>= fDuration;
@@ -1364,7 +1364,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleIterateType ) == STLPropertyState_DIRECT )
         {
-            sal_Int16 nIterateType;
+            sal_Int16 nIterateType = 0;
             pResultSet->getPropertyValue( nHandleIterateType ) >>= nIterateType;
             if( pEffect->getIterateType() != nIterateType )
             {
@@ -1377,7 +1377,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
         {
             if( pResultSet->getPropertyState( nHandleIterateInterval ) == STLPropertyState_DIRECT )
             {
-                double fIterateInterval;
+                double fIterateInterval = 0.0;
                 pResultSet->getPropertyValue( nHandleIterateInterval ) >>= fIterateInterval;
                 if( pEffect->getIterateInterval() != fIterateInterval )
                 {
@@ -1390,7 +1390,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleBegin ) == STLPropertyState_DIRECT )
         {
-            double fBegin;
+            double fBegin = 0.0;
             pResultSet->getPropertyValue( nHandleBegin ) >>= fBegin;
             if( pEffect->getBegin() != fBegin )
             {
@@ -1410,7 +1410,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleStart ) == STLPropertyState_DIRECT )
         {
-            sal_Int16 nNodeType;
+            sal_Int16 nNodeType = 0;
             pResultSet->getPropertyValue( nHandleStart ) >>= nNodeType;
             if( pEffect->getNodeType() != nNodeType )
             {
@@ -1441,7 +1441,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleRewind ) == STLPropertyState_DIRECT )
         {
-            sal_Int16 nFill;
+            sal_Int16 nFill = 0;
             pResultSet->getPropertyValue( nHandleRewind ) >>= nFill;
             if( pEffect->getFill() != nFill )
             {
@@ -1452,7 +1452,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleHasAfterEffect ) == STLPropertyState_DIRECT )
         {
-            sal_Bool bHasAfterEffect;
+            sal_Bool bHasAfterEffect = sal_False;
             if( pResultSet->getPropertyValue( nHandleHasAfterEffect )  >>= bHasAfterEffect )
             {
                 if( pEffect->hasAfterEffect() != bHasAfterEffect )
@@ -1465,7 +1465,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleAfterEffectOnNextEffect ) == STLPropertyState_DIRECT )
         {
-            sal_Bool bAfterEffectOnNextEffect;
+            sal_Bool bAfterEffectOnNextEffect = sal_False;
             if( (pResultSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextEffect) && ((pEffect->IsAfterEffectOnNext() ? sal_True : sal_False) != bAfterEffectOnNextEffect) )
             {
                 pEffect->setAfterEffectOnNext( bAfterEffectOnNextEffect );
@@ -1485,7 +1485,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleAccelerate ) == STLPropertyState_DIRECT )
         {
-            double fAccelerate;
+            double fAccelerate = 0.0;
             pResultSet->getPropertyValue( nHandleAccelerate ) >>= fAccelerate;
             if( pEffect->getAcceleration() != fAccelerate )
             {
@@ -1496,7 +1496,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleDecelerate ) == STLPropertyState_DIRECT )
         {
-            double fDecelerate;
+            double fDecelerate = 0.0;
             pResultSet->getPropertyValue( nHandleDecelerate ) >>= fDecelerate;
             if( pEffect->getDecelerate() != fDecelerate )
             {
@@ -1507,7 +1507,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleAutoReverse ) == STLPropertyState_DIRECT )
         {
-            sal_Bool bAutoReverse;
+            sal_Bool bAutoReverse = sal_False;
             pResultSet->getPropertyValue( nHandleAutoReverse ) >>= bAutoReverse;
             if( pEffect->getAutoReverse() != bAutoReverse )
             {
@@ -1518,7 +1518,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
         if( pResultSet->getPropertyState( nHandleProperty1Value ) == STLPropertyState_DIRECT )
         {
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             pOldSet->getPropertyValue( nHandleProperty1Type ) >>= nType;
 
             bChanged |= setProperty1Value( nType, pEffect, pResultSet->getPropertyValue( nHandleProperty1Value ) );
