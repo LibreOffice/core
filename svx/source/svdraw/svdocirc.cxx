@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1089,7 +1089,7 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     }
     else
     {
-        basegfx::B2DPolygon aNew(XPolygon(ImpCalcXPolyCirc(pU->aR,pU->nStart,pU->nEnd)).getB2DPolygon());
+        basegfx::B2DPolygon aNew = basegfx::B2DPolygon(XPolygon(ImpCalcXPolyCirc(pU->aR,pU->nStart,pU->nEnd)).getB2DPolygon());
 
         if(!mbPolygonIsLine)
         {
