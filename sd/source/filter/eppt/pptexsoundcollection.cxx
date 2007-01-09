@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexsoundcollection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:41:05 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ ExSoundEntry::ExSoundEntry( const String& rString )
     {
         ::ucb::Content aCnt( aSoundURL,
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-        sal_Int64 nVal;
+        sal_Int64 nVal = 0;
         ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
         nFileSize = (sal_uInt32)nVal;
     }
