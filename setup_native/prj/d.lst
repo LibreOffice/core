@@ -1,3 +1,4 @@
+mkdir: %_DEST%\bin%_EXT%\osl
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 
