@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 16:22:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1455,7 +1455,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                             *pInArgs, aRet, aOutArgsIndex, aOutArgs);
 
                         // Check the return value from the script
-                        BOOL bTmp;
+                        BOOL bTmp = sal_False;
                         if ( eErr == ERRCODE_NONE &&
                              aRet.getValueType() == getCppuBooleanType() &&
                              sal_True == ( aRet >>= bTmp ) &&
