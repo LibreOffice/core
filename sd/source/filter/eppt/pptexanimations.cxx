@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:40:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -944,7 +944,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
                 {
                     if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
                     {
-                        sal_Int16 nType;
+                        sal_Int16 nType = 0;
                         if ( p->Value >>= nType )
                         {
                             switch( nType )
@@ -1162,14 +1162,14 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     if ( pAny[ DFF_ANIM_AFTEREFFECT ] )
     {
-        sal_Bool bAfterEffect;
+        sal_Bool bAfterEffect = sal_False;
         if ( *pAny[ DFF_ANIM_AFTEREFFECT ] >>= bAfterEffect )
             exportAnimPropertyByte( rStrm, DFF_ANIM_AFTEREFFECT, bAfterEffect, TRANSLATE_NONE );
     }
 
     if ( pAny[ DFF_ANIM_RUNTIMECONTEXT ] )
     {
-        sal_Int32 nRunTimeContext;
+        sal_Int32 nRunTimeContext = 0;
         if ( *pAny[ DFF_ANIM_RUNTIMECONTEXT ] >>= nRunTimeContext )
             exportAnimPropertyuInt32( rStrm, DFF_ANIM_RUNTIMECONTEXT, nRunTimeContext, TRANSLATE_NONE );
     }
@@ -1193,14 +1193,14 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     if ( pAny[ DFF_ANIM_OVERRIDE ] )
     {
-        sal_Int32 nOverride;
+        sal_Int32 nOverride = 0;
         if ( *pAny[ DFF_ANIM_OVERRIDE ] >>= nOverride )
             exportAnimPropertyuInt32( rStrm, DFF_ANIM_OVERRIDE, nOverride, TRANSLATE_NONE );
     }
 
     if ( pAny[ DFF_ANIM_MASTERREL ] )
     {
-        sal_Int32 nMasterRel;
+        sal_Int32 nMasterRel = 0;
         if ( *pAny[ DFF_ANIM_MASTERREL ] >>= nMasterRel )
             exportAnimPropertyuInt32( rStrm, DFF_ANIM_MASTERREL, nMasterRel, TRANSLATE_NONE );
     }
@@ -1242,7 +1242,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
             case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG :
             case ::com::sun::star::uno::TypeClass_LONG :
             {
-                sal_Int32 nVal;
+                sal_Int32 nVal = 0;
                 if ( rAny >>= nVal )
                 {
                     exportAnimPropertyuInt32( rStrm, nPropertyId, nVal, eTranslateMode );
@@ -1253,7 +1253,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
 
             case ::com::sun::star::uno::TypeClass_DOUBLE :
             {
-                double fVal;
+                double fVal = 0.0;
                 if ( rAny >>= fVal )
                 {
                     exportAnimPropertyFloat( rStrm, nPropertyId, fVal, eTranslateMode );
@@ -1263,7 +1263,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
             break;
             case ::com::sun::star::uno::TypeClass_FLOAT :
             {
-                float fVal;
+                float fVal = 0.0;
                 if ( rAny >>= fVal )
                 {
                     if ( eTranslateMode & TRANSLATE_NUMBER_TO_STRING )
@@ -1351,7 +1351,7 @@ void AnimationExporter::exportAnimAction( SvStream& rStrm, const Reference< XAni
     sal_Int32 nU4 = 0;
     sal_Int32 nU5 = 3;
 
-    sal_Int16 nAnimationEndSync;
+    sal_Int16 nAnimationEndSync = 0;
     if ( xNode->getEndSync() >>= nAnimationEndSync )
     {
         if ( nAnimationEndSync == AnimationEndSync::ALL )
@@ -1422,7 +1422,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                 else
                     aAny = xNode->getEnd();
 
-                double fTiming;
+                double fTiming = 0.0;
                 if ( aAny >>= aEvent )
                 {
                     bCreateEvent = sal_True;
@@ -1526,7 +1526,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
             || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharHeight" ) )
         )
     {
-        double fNumber;
+        double fNumber = 0.0;
         if ( rSourceValue >>= fNumber )
             aDest += rtl::OUString::valueOf( fNumber );
     }
@@ -1536,7 +1536,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
             || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharColor" ) )
         )
     {
-        sal_Int32 nColor;
+        sal_Int32 nColor = 0;
         Sequence< double > aHSL( 3 );
         rtl::OUString aP( RTL_CONSTASCII_USTRINGPARAM( "," ) );
         if ( rSourceValue >>= aHSL )
@@ -1584,7 +1584,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
     }
     else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharWeight" ) ) )
     {
-        float fFontWeight;
+        float fFontWeight = 0.0;
         if ( rSourceValue >>= fFontWeight )
         {
             if ( fFontWeight == com::sun::star::awt::FontWeight::BOLD )
@@ -1595,7 +1595,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
     }
     else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharUnderline" ) ) )
     {
-        sal_Int16 nFontUnderline;
+        sal_Int16 nFontUnderline = 0;
         if ( rSourceValue >>= nFontUnderline )
         {
             if ( nFontUnderline == com::sun::star::awt::FontUnderline::NONE )
@@ -1945,7 +1945,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
 {
     Any aAny;
     // repeat count (0)
-    double fRepeat;
+    double fRepeat = 0.0;
     float fRepeatCount = 0.0;
     com::sun::star::animations::Timing eTiming;
     aAny = xNode->getRepeatCount();
@@ -2074,7 +2074,7 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
                 float fToX = 100.0;
                 float fToY = 100.0;
 
-                double fX, fY;
+                double fX = 0.0, fY = 0.0;
                 ValuePair aPair;
                 if ( xTransform->getBy() >>= aPair )
                 {
@@ -2123,7 +2123,7 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
                 float fFrom = 0.0;
                 float fTo = 360.0;
 
-                double fVal;
+                double fVal = 0.0;
                 if ( xTransform->getBy() >>= fVal )
                 {
                     nBits |= 1;
@@ -2154,7 +2154,7 @@ sal_Bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColor
     if ( nColorSpace == AnimationColorSpace::HSL )
         rMode = 1;
 
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
     Sequence< double > aHSL( 3 );
     if ( rAny >>= nColor )      // RGB color
     {
