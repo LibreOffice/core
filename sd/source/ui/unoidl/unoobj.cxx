@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:01:17 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,7 +576,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 */
                 case WID_VERB:
                 {
-                    sal_Int32 nVerb;
+                    sal_Int32 nVerb = 0;
                     if(!(aValue >>= nVerb))
                         throw lang::IllegalArgumentException();
 
@@ -585,7 +585,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 }
                 case WID_DIMCOLOR:
                 {
-                    sal_Int32 nColor;
+                    sal_Int32 nColor = 0;
 
                     if( !(aValue >>= nColor) )
                         throw lang::IllegalArgumentException();
@@ -595,7 +595,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 }
                 case WID_DIMHIDE:
                 {
-                    sal_Bool bDimHide;
+                    sal_Bool bDimHide = sal_False;
                     if( !(aValue >>= bDimHide) )
                         lang::IllegalArgumentException();
 
@@ -604,7 +604,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 }
                 case WID_DIMPREV:
                 {
-                    sal_Bool bDimPrevious;
+                    sal_Bool bDimPrevious = sal_False;
                     if( !(aValue >>= bDimPrevious) )
                         lang::IllegalArgumentException();
 
@@ -613,7 +613,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 }
                 case WID_PRESORDER:
                 {
-                    sal_Int32 nNewPos;
+                    sal_Int32 nNewPos = 0;
                     if( !(aValue >>= nNewPos) )
                         lang::IllegalArgumentException();
 
