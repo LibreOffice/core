@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:29:01 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,7 +599,7 @@ bool CustomAnimationEffect::checkForText()
                         xEnumeration->nextElement() >>= xParaSet;
                         if( xParaSet.is() )
                         {
-                            sal_Int32 nParaDepth;
+                            sal_Int32 nParaDepth = 0;
                             const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
                             xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
                             bChange |= nParaDepth != mnParaDepth;
@@ -2099,7 +2099,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                         if( xChild.is() )
                         {
                             Any aBegin( xChild->getBegin() );
-                            double fBegin;
+                            double fBegin = 0.0;
                             if( (aBegin >>= fBegin) && (fBegin >= 0.0))
                                 rNode.mxNode->setBegin( aBegin );
                         }
