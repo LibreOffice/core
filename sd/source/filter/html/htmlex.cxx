@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:42:32 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,7 +557,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     {
         if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PublishMode" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             meMode = (HtmlPublishMode)temp;
         }
@@ -568,7 +568,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Format" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             meFormat = (PublishingFormat)temp;
         }
@@ -586,13 +586,13 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             mnWidthPixel = (sal_uInt16)temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseButtonSet" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             mnButtonThema = (sal_Int16)temp;
         }
@@ -600,14 +600,14 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         {
             if( mbImpress )
             {
-                sal_Bool temp;
+                sal_Bool temp = sal_False;
                 pParams->Value >>= temp;
                 mbNotes = temp;
             }
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsExportContentsPage" ) ) )
         {
-            sal_Bool temp;
+            sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbContentsPage = temp;
         }
@@ -633,61 +633,61 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EnableDownload" ) ) )
         {
-            sal_Bool temp;
+            sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbDownload = temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BackColor" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maBackColor = temp;
             mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TextColor" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maTextColor = temp;
             mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LinkColor" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maLinkColor = temp;
             mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VLinkColor" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maVLinkColor = temp;
             mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ALinkColor" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = 0;
             pParams->Value >>= temp;
             maALinkColor = temp;
             mbUserAttr = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsUseDocumentColors" ) ) )
         {
-            sal_Bool temp;
+            sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbDocColors = temp;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskSlideDuration" ) ) )
         {
-            sal_Int32 temp;
+            sal_Int32 temp = sal_False;
             pParams->Value >>= temp;
             mnSlideDuration = temp;
             mbAutoSlide = true;
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskEndless" ) ) )
         {
-            sal_Bool temp;
+            sal_Bool temp = sal_False;
             pParams->Value >>= temp;
             mbEndless = temp;
         }
