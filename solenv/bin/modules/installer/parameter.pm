@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:23:35 $
+#   last change: $Author: vg $ $Date: 2007-01-09 11:18:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -420,6 +420,12 @@ sub setglobalvariables
         push(@installer::globals::removedirs, $installer::globals::temppath);
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
         installer::systemactions::create_directory($installer::globals::temppath);
+        if ( $^O =~ /cygwin/i )
+        {
+            $installer::globals::cyg_temppath = $installer::globals::temppath;
+            $installer::globals::cyg_temppath =~ s/\\/\\\\/g;
+            chomp( $installer::globals::cyg_temppath = qx{cygpath -w "$installer::globals::cyg_temppath"} );
+        }
         $installer::globals::temppathdefined = 1;
     }
     else
