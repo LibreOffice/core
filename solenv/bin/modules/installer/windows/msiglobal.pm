@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 09:19:02 $
+#   last change: $Author: vg $ $Date: 2007-01-09 11:19:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package installer::windows::msiglobal;
 
 use Cwd;
+use File::Temp qw(tmpnam);
 use installer::converter;
 use installer::exiter;
 use installer::files;
@@ -129,8 +130,7 @@ sub make_relative_ddf_path
 
     if ( $^O =~ /cygwin/i )
     {
-        $windowstemppath =~ s/\\/\\\\/g;
-        chomp( $windowstemppath = qx{cygpath -w "$windowstemppath"} );
+        $windowstemppath = $installer::globals::cyg_temppath;
     }
 
     $sourcepath =~ s/\Q$windowstemppath\E//;
@@ -157,11 +157,33 @@ sub generate_cab_file_list
 
     if (( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files ))
     {
+        if ( $^O =~ /cygwin/i )
+        {
+            my ($tmpfilehandle, $tmpfilename) = tmpnam();
+            my $onefile;
+            open SOURCEPATHLIST, ">$tmpfilename" or die "oops...\n";
+            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+            {
+                $onefile = ${$filesref}[$i];
+                print SOURCEPATHLIST "$onefile->{'sourcepath'}\n";
+            }
+            close SOURCEPATHLIST;
+            my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
+            chomp @cyg_sourcepathlist;
+            unlink "$tmpfilename" or die "oops\n";
+            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+            {
+                my $onefile = ${$filesref}[$i];
+                $onefile->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
+            }
+        }
+
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
             my $onefile = ${$filesref}[$i];
             my $cabinetfile = $onefile->{'cabinet'};
             my $sourcepath =  $onefile->{'sourcepath'};
+            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
             my $uniquename =  $onefile->{'uniquename'};
 
             my $styles = "";
@@ -169,7 +191,6 @@ sub generate_cab_file_list
             if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
             if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
 
-            if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
 
             # to avoid lines with more than 256 characters, it can be useful to use relative pathes
             if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
@@ -191,7 +212,7 @@ sub generate_cab_file_list
             while ( $nextcabinetfile eq $cabinetfile )
             {
                 $sourcepath =  $nextfile->{'sourcepath'};
-                if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
+                if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
                 # to avoid lines with more than 256 characters, it can be useful to use relative pathes
                 if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
                 $uniquename =  $nextfile->{'uniquename'};
@@ -237,12 +258,32 @@ sub generate_cab_file_list
 
         my $cabinetfile = "";
 
+        if ( $^O =~ /cygwin/i )
+        {
+            my ($tmpfilehandle, $tmpfilename) = tmpnam();
+            my $onefile;
+            open SOURCEPATHLIST, ">$tmpfilename" or die "oops...\n";
+            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+            {
+                $onefile = ${$filesref}[$i];
+                print SOURCEPATHLIST "$onefile->{'sourcepath'}\n";
+            }
+            close SOURCEPATHLIST;
+            my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
+            chomp @cyg_sourcepathlist;
+            unlink "$tmpfilename" or die "oops\n";
+            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+            {
+                my $onefile = ${$filesref}[$i];
+                $onefile->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
+            }
+        }
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
             my $onefile = ${$filesref}[$i];
             $cabinetfile = $onefile->{'cabinet'};
             my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
+            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
             my $uniquename =  $onefile->{'uniquename'};
 
             # to avoid lines with more than 256 characters, it can be useful to use relative pathes
