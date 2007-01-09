@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:38:12 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
         }
 
         const Color aColorSolid = ((const XFillColorItem&) (rFillItemSet.Get(XATTR_FILLCOLOR))).GetColorValue();
-        SvtGraphicFill aFill( PolyPolygon(aPolyPoly),
+        SvtGraphicFill aFill = SvtGraphicFill( PolyPolygon(aPolyPoly),
                               aColorSolid,
                               ITEMVALUE( rFillItemSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
                               SvtGraphicFill::fillEvenOdd,
