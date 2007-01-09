@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proptypehlp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:04:32 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,12 +118,12 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::st
         a >>= i;
     }
     else if( ::com::sun::star::uno::TypeClass_UNSIGNED_HYPER == tc ) {
-        sal_uInt64 i64;
+        sal_uInt64 i64 = 0;
         a >>= i64;
         i = ( sal_Int64 ) i64;
     }
     else if( ::com::sun::star::uno::TypeClass_LONG == tc ) {
-        sal_Int32 i32;
+        sal_Int32 i32 = 0;
         a >>= i32;
         i = ( sal_Int64 )i32;
     }
@@ -133,7 +133,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::st
         i = ( sal_Int64 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
-        sal_Int16 i16;
+        sal_Int16 i16 = 0;
         a >>= i16;
         i = ( sal_Int64 ) i16;
     }
@@ -143,17 +143,17 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::st
         i = ( sal_Int64 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
-        sal_Int8 i8;
+        sal_Int8 i8 = 0;
         a >>= i8;
         i = ( sal_Int64 ) i8;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT == tc ) {
-        sal_uInt16 i16;
+        sal_uInt16 i16 = 0;
         a >>= i16;
         i = ( sal_Int64 ) i16;
     }
     else if ( ::com::sun::star::uno::TypeClass_UNSIGNED_LONG == tc ) {
-        sal_uInt32 i32;
+        sal_uInt32 i32 = 0;
         a >>= i32;
         i = ( sal_Int64 ) i32;
     }
