@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptinanimations.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:46:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,7 +460,7 @@ static bool is_random( const AnimationNode& rNode, const PropertySet& rSet, sal_
     if( !(rSet.getProperty( DFF_ANIM_PRESET_ID ) >>= nPresetId) || (nPresetId != 24) )
         return false;
 
-    sal_Int32 nPresetClass;
+    sal_Int32 nPresetClass = 0;
     if( !(rSet.getProperty( DFF_ANIM_PRESET_CLASS ) >>= nPresetClass) )
         return false;
 
@@ -578,7 +578,7 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
 
                 if( aSet.hasProperty( DFF_ANIM_NODE_TYPE ) )
                 {
-                    sal_Int32 nPPTNodeType;
+                    sal_Int32 nPPTNodeType = 0;
                     if( aSet.getProperty( DFF_ANIM_NODE_TYPE ) >>= nPPTNodeType )
                     {
                         switch(nPPTNodeType)
@@ -724,7 +724,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
                         {
                             if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
                             {
-                                sal_Int16 nNodeType;
+                                sal_Int16 nNodeType = 0;
                                 p->Value >>= nNodeType;
                                 if( nNodeType != ::com::sun::star::presentation::EffectNodeType::ON_CLICK )
                                 {
@@ -1014,7 +1014,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         }
         else if( rValue.getValueType() == ::getCppuType((const double*)0) )
         {
-            double fValue;
+            double fValue = 0.0;
             rValue >>= fValue;
             rValue <<= (sal_Int16)fValue;
             bRet = true;
@@ -1278,7 +1278,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     // attribute Type
     if( rSet.hasProperty( DFF_ANIM_NODE_TYPE ) )
     {
-        sal_Int32 nPPTNodeType;
+        sal_Int32 nPPTNodeType = 0;
         if( rSet.getProperty( DFF_ANIM_NODE_TYPE ) >>= nPPTNodeType )
         {
             sal_Int16 nNodeType = ::com::sun::star::presentation::EffectNodeType::DEFAULT;
@@ -1316,7 +1316,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
 
     if( rSet.hasProperty( DFF_ANIM_PRESET_CLASS ) )
     {
-        sal_Int32 nPresetClass;
+        sal_Int32 nPresetClass = 0;
         if ( rSet.getProperty( DFF_ANIM_PRESET_CLASS ) >>= nPresetClass )
         {
             switch( nPresetClass )
@@ -1373,7 +1373,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
 
     if( rSet.hasProperty( DFF_ANIM_PRESET_SUB_TYPE ) )
     {
-        sal_Int32 nPresetSubType ;
+        sal_Int32 nPresetSubType = 0;
         if( (rSet.getProperty( DFF_ANIM_PRESET_SUB_TYPE ) >>= nPresetSubType) )
         {
             if( nPresetSubType )
