@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:37:26 $
+#   last change: $Author: vg $ $Date: 2007-01-09 17:19:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -927,7 +927,9 @@ sub view {
 
         if ( $line =~ /Locally\sAdded/o ) {
             @field = split /\s+/, $line;
-            print "$field[1]: locally added\n";
+            my $info_string = "$field[1]: locally added\n";
+            print $info_string;
+            push (@view_info, $info_string);
             next;
         }
 
