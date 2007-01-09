@@ -7,9 +7,9 @@
 #
 #   $RCSfile: cwsview.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:06:05 $
+#   last change: $Author: vg $ $Date: 2007-01-09 17:19:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,15 @@ use lib ("$ENV{SOLARENV}/bin/modules");
 
 use Cwd;
 use Cws;
+use Cvs;
 use CvsModule;
+use File::Find;
+use Cwd 'chdir';
 
 #### script id #####
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.4 $ ';
+    $id_str = ' $Revision: 1.5 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -75,6 +78,9 @@ if ( !$id ) {
 }
 my @modules = get_options();
 @modules = get_checked_modules(\@modules);
+
+my $wanted_file = '';
+my @wanted_files;
 
 do_cvs_view(\@modules);
 print_resume();
@@ -103,6 +109,51 @@ sub print_resume {
     print "\n";
 };
 
+#
+# Pocedure checks if in $modules_view_info there are "locally added" files, if yes - expands
+# their name to their paths
+#
+sub prove_view_info {
+    foreach my $module (keys %modules_view_info) {
+        my $module_info_text = $modules_view_info{$module};
+        foreach (@$module_info_text) {
+            if (/(:\slocally\sadded)$/) {
+                my $full_file_path = find_file_in_module($module, $`);
+                $_ = $full_file_path . $1 . "\n";
+            };
+        };
+    };
+};
+
+
+sub wanted {
+    if ($_ eq $wanted_file) {
+        push(@wanted_files, $File::Find::name);
+    }
+}
+
+sub find_file_in_module{
+    my $module = shift;
+    $wanted_file = shift;
+    @wanted_files = ();
+    my @found_files;
+    my $path = $ENV{SRC_ROOT} . '/' . $module;
+    find(\&wanted, $path);
+    if ((scalar @wanted_files) == 1) {
+        return substr($wanted_files[0], length($ENV{SRC_ROOT}) + 1);
+    };
+    chdir($path);
+    cwd();
+    foreach (@wanted_files) {
+        my $candidat = substr($_, length($path) + 1);
+        my $archive = Cvs->new();
+        $archive->name($candidat);
+        if (!defined $archive->get_head()) {
+            return $module . '/' . $candidat;
+        };
+    };
+};
+
 sub do_cvs_view {
     my $modules_ref = shift;
     my $cvs_module = CvsModule->new();
@@ -113,6 +164,7 @@ sub do_cvs_view {
         my $path = $ENV{SRC_ROOT} . '/' . $module;
         $modules_view_info{$module} = $cvs_module->view($path);
     };
+    prove_view_info();
 };
 
 sub usage {
