@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UpdateLockManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:08:05 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,7 +352,7 @@ void SAL_CALL UpdateLockManager::Implementation::layoutEvent (
 
         case frame::LayoutManagerEvents::UNLOCK:
         {
-            sal_Int32 nLockCount;
+            sal_Int32 nLockCount = 0;
             rInfo >>= nLockCount;
             if (nLockCount == 1)
             {
