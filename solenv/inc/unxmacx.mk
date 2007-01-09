@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 13:52:19 $
+#   last change: $Author: vg $ $Date: 2007-01-09 11:19:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,6 @@ MODULES_WITH_WARNINGS := \
     r_tools \
     sal \
     sc \
-    sd \
     starmath \
     svtools \
     sw \
