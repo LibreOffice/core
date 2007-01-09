@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xthrobber.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:51:06 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ namespace toolkit
     {
     private:
         Throbber_Impl   *mpThrobber;
-        void SAL_CALL XThrobber::InitImageList() throw(::com::sun::star::uno::RuntimeException);
+        void SAL_CALL InitImageList() throw(::com::sun::star::uno::RuntimeException);
 
     public:
         XThrobber();
