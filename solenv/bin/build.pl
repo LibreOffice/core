@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.151 $
+#   $Revision: 1.152 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-27 09:38:48 $
+#   last change: $Author: vg $ $Date: 2007-01-09 17:18:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,12 @@
         unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
         require CopyPrj; import CopyPrj;
     };
-    my $log = undef;
     if (defined $ENV{CWS_WORK_STAMP}) {
         require Cws; import Cws;
         require CwsConfig; import CwsConfig;
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
-        eval { require Logging; import Logging; };
-        $log = Logging->new() if (!$@);
     };
     my $enable_multiprocessing = 1;
     my $cygwin = 0;
@@ -79,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.151 $ ';
+    $id_str = ' $Revision: 1.152 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -186,6 +183,7 @@
 #    %weight_stored = ();
     $grab_output = 1;
     $enable_jam = $ENV{ENABLE_JAM} eq "TRUE";
+    %pid_distribution = (); # hash containing unique number for a dmake's pid a the moment
 
 ### main ###
 
@@ -209,7 +207,7 @@
     };
 
     $StandDir = get_stand_dir();   # This also sets $CurrentPrj
-    provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($log));
+    provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
     $deliver_commando = $ENV{DELIVER};
     $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
@@ -280,7 +278,6 @@
         print STDERR "\nERROR: please check these directories and build the corresponding module(s) anew!!\n\n";
         do_exit(1);
     };
-    finish_logging();
     do_exit(0);
 
 
@@ -456,31 +453,30 @@ sub dmake_dir {
         $error_code = do_post_job($`, $BuildDir) if ($' eq $post_job);
         RemoveFromDependencies($BuildDir, \%LocalDepsHash);
         html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir, $error_code);
-        return;
-    };
-    html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir);
-    print_error("$BuildDir not found!!\n") if (!-d $BuildDir);
-    if (!-d $BuildDir) {
-        $new_BuildDir = $BuildDir;
-        $new_BuildDir =~ s/_simple//g;
-        if ((-d $new_BuildDir)) {
-            print("\nTrying $new_BuildDir, $BuildDir not found!!\n");
-            $BuildDir = $new_BuildDir;
-        } else {
-            print_error("\n$BuildDir not found!!\n");
-        }
-    }
-    if ($cmd_file) {
-        print "cd $BuildDir\n";
-        print $check_error_string;
-        print $echo.$BuildDir."\n";
-        print "$dmake\n";
-        print $check_error_string;
     } else {
-        print "$BuildDir\n";
-    };
-    RemoveFromDependencies($BuildDir, \%LocalDepsHash) if (!$child);
-    if (!$cmd_file && !$show) {
+        html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir);
+        print_error("$BuildDir not found!!\n") if (!-d $BuildDir);
+        if (!-d $BuildDir) {
+            $new_BuildDir = $BuildDir;
+            $new_BuildDir =~ s/_simple//g;
+            if ((-d $new_BuildDir)) {
+                print("\nTrying $new_BuildDir, $BuildDir not found!!\n");
+                $BuildDir = $new_BuildDir;
+            } else {
+                print_error("\n$BuildDir not found!!\n");
+            }
+        }
+        if ($cmd_file) {
+            print "cd $BuildDir\n";
+            print $check_error_string;
+            print $echo.$BuildDir."\n";
+            print "$dmake\n";
+            print $check_error_string;
+        } else {
+            print "$BuildDir\n";
+        };
+        RemoveFromDependencies($BuildDir, \%LocalDepsHash) if (!$child);
+        return if ($cmd_file || $show);
         chdir $BuildDir;
         cwd();
         if ($html) {
@@ -493,23 +489,14 @@ sub dmake_dir {
             if (!$grab_output && -f $log_file) {
                 system("cat $log_file");
             };
-#            open(DMAKE_OUTPUT, "$dmake 2>&1 |");
-#            open(DMAKE_OUTPUT_FILE, ">$log_file");
-#            while (<DMAKE_OUTPUT>) {
-#                print $_ if (!$grab_output);
-#                print DMAKE_OUTPUT_FILE $_;
-#            };
-#            close DMAKE_OUTPUT;
-#            close DMAKE_OUTPUT_FILE;
-#            $error_code = $?;
         } else {
             $error_code = system ("$dmake");
         };
         html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir, $error_code) if (!$child);
-        if ($error_code && $ignore) {
-            push(@ignored_errors, $BuildDir);
-            $error_code = 0;
-        };
+    };
+    if ($error_code && $ignore) {
+        push(@ignored_errors, $BuildDir);
+        $error_code = 0;
     };
     if ($child) {
         my $oldfh = select STDERR;
@@ -826,7 +813,7 @@ sub check_dmake {
         return;
     };
     my $error_message = 'dmake: Command not found.';
-    $error_message .= ' Please rerun bootstrap' if (!defined $log);
+    $error_message .= ' Please rerun bootstrap' if (!defined $ENV{COMMON_ENV_TOOLS});
     print_error($error_message);
 };
 
@@ -1137,21 +1124,12 @@ sub GetDirectoryList {
     return @DirectoryList;
 };
 
-sub finish_logging {
-    return if ($show || (!defined $log));
-    my $message = shift;
-    $message = 'SUCCESS.'  if (!$message);
-    $message .= " Built $modules_number modules.";
-    $log->end_log_extended($script_name,$vcsid,$message);
-};
-
 sub print_error {
     my $message = shift;
     my $force = shift;
     rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
     $modules_number -= scalar keys %global_deps_hash;
     $modules_number -= 1;
-    finish_logging("FAILURE: " . $message);
     print STDERR "\nERROR: $message\n";
     $ENV{mk_tmp} = '';
     close CMD_FILE if ($cmd_file);
@@ -1192,24 +1170,11 @@ sub usage {
     print STDERR "Keys that are not listed above would be passed to dmake\n";
 };
 
-sub init_logging {
-    return if ($show || (!defined $log));
-    my $parameter_list = '';
-    foreach (@ARGV) {$parameter_list .= "$_\;"};
-    $parameter_list = $` if ($parameter_list =~ /;$/o);
-
-    my $childws  = $ENV{CWS_WORK_STAMP};
-    my $masterws = $ENV{WORK_STAMP};
-    return if (!defined( $childws ) || !defined( $masterws ));
-    $log->start_log_extended($script_name, $parameter_list, $masterws, $childws);
-};
-
 #
 # Get all options passed
 #
 sub get_options {
     my ($arg, $dont_grab_output);
-    init_logging();
     while ($arg = shift @ARGV) {
         $arg =~ /^-P$/            and $QuantityToBuild = shift @ARGV     and next;
         $arg =~ /^-P(\d+)$/            and $QuantityToBuild = $1 and next;
@@ -1295,6 +1260,10 @@ sub get_options {
         if (!$enable_multiprocessing) {
             print_error("Cannot load Win32::Process module for multiprocessing build");
         };
+        # initialize pid_distribution hash
+        for (1 .. $QuantityToBuild) {
+            $pid_distribution{$_} = 0;
+        };
     };
 #    $ignore++ if ($html);
     if ($only_platform) {
@@ -1340,7 +1309,6 @@ sub get_switch_options {
 #
 sub cancel_build {
     $modules_number -= scalar keys %global_deps_hash;
-    my $log_string = 'FAILURE. Build is broken in modules: ';
     my $broken_modules_number = scalar @broken_modules_names;
     if ($broken_modules_number) {
         $modules_number -= $broken_modules_number;
@@ -1349,17 +1317,14 @@ sub cancel_build {
         print " module(s): ";
         foreach (@broken_modules_names) {
             print "\n\t$_";
-            $log_string .= " $_";
 #            RemoveFromDependencies($_, \%global_deps_hash);
         };
-        finish_logging($log_string);
         print "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
         foreach (keys %broken_build) {
             print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
         print "\nAttention: if you build and deliver the above module(s) you may prolongue your the build issuing command \"build --from @broken_modules_names\"\n";
     } else {
-        finish_logging($log_string . $CurrentPrj);
 #        if ($ENV{GUI} eq 'WNT') {
             while (children_number()) {
                 handle_dead_children();
@@ -1503,7 +1468,18 @@ sub start_child {
         do_pre_job($`) if ($' eq $pre_job);
         $error_code = do_post_job($`, $child_nick) if ($' eq $post_job);
         html_store_dmake_dir_info($dependencies_hash, $child_nick, $error_code);
-        RemoveFromDependencies($child_nick, $dependencies_hash);
+        if ($error_code) {
+            # give windows (4nt) one more chance
+            if ($ENV{GUI} eq 'WNT' && !$cygwin) {
+                $error_code = do_post_job($`, $child_nick);
+            };
+            if ($error_code) {
+                $broken_modules_hashes{$dependencies_hash}++;
+                $broken_build{$child_nick} = $error_code;
+            }
+        } else {
+            RemoveFromDependencies($child_nick, $dependencies_hash);
+        };
         return;
     };
     html_store_dmake_dir_info($dependencies_hash, $child_nick);
@@ -1529,6 +1505,7 @@ sub start_child {
         if ($pid = fork) { # parent
         } elsif (defined $pid) { # child
             select $oldfh;
+#            foreach (keys %pid_distribution)
             $child = 1;
             dmake_dir($child_nick);
             do_exit(1);
@@ -1730,7 +1707,7 @@ sub checkout_module {
 # Procedure unpacks output trees after checkout
 #
 sub copy_output_trees {
-    return if (!defined $log);
+    return if (!defined $ENV{COMMON_ENV_TOOLS});
     return if (!scalar keys %platforms_to_copy);
     my $module_name = shift;
     my $src_dest = shift;
@@ -1958,11 +1935,16 @@ sub clear_module {
     foreach (@dir_content) {
         next if (/^\.+$/);
         my $dir = CorrectPath($StandDir.$Prj.'/'.$_);
-        if ((!-d $dir.'/CVS') && &is_output_tree($dir)) {
+        if ((!-d $dir.'/CVS') && is_output_tree($dir)) {
             #print "I would delete $dir\n";
             rmtree("$dir", 0, 1);
             if (defined $SIG{__WARN__} && -d $dir) {
-                print_error("Cannot delete $dir");
+                system("rm -rf $dir");
+                if (-d $dir) {
+                    print_error("Cannot delete $dir");
+                } else {
+                    print STDERR (">>> Removed $dir by force\n");
+                };
             };
         };
     };
@@ -2211,6 +2193,7 @@ sub get_incomp_projects {
     };
 };
 
+
 sub get_platforms {
     my $platforms_ref = shift;
     if ($only_platform) {
@@ -2220,22 +2203,36 @@ sub get_platforms {
         $platforms_ref = \%platforms_to_copy;
     };
 
-    my $solver = $ENV{SOLARVERSION};
-    my ($iserverbin, @platforms_conf);
-    $iserverbin = "i_server -d ";
-    $iserverbin .= $ENV{SOLAR_ENV_ROOT} . '/b_server/config/stand.lst -i ';
-    my $workstamp = $ENV{WORK_STAMP};
-    @platforms_conf = `$iserverbin $workstamp/Environments -l`;
-    if ( $platforms_conf[0]  =~ /Environments/ ) {
-        shift @platforms_conf;
+    my $workspace_lst = get_workspace_lst();
+    my $workspace_db = GenInfoParser->new();
+    my $success = $workspace_db->load_list($workspace_lst);
+    if ( !$success ) {
+        print_error("Can't load workspace list '$workspace_lst'.", 4);
     }
-
-    foreach (@platforms_conf) {
-        s/\s//g;
+    my $access_path = $ENV{WORK_STAMP} . '/Environments';
+    my @platforms_available = $workspace_db->get_keys($access_path);
+    my $solver = $ENV{SOLARVERSION};
+    foreach (@platforms_available) {
         my $s_path = $solver . '/' .  $_;
-        $$platforms_ref{$_}++ if (-e $s_path);
+        $$platforms_ref{$_}++ if (-d $s_path);
     };
+
+#    my ($iserverbin, @platforms_conf);
+#    $iserverbin = "i_server -d ";
+#    $iserverbin .= $ENV{SOLAR_ENV_ROOT} . '/b_server/config/stand.lst -i ';
+#    my $workstamp = $ENV{WORK_STAMP};
+#    @platforms_conf = `$iserverbin $workstamp/Environments -l`;
+#    if ( $platforms_conf[0]  =~ /Environments/ ) {
+#        shift @platforms_conf;
+#    }
+
+#    foreach (@platforms_conf) {
+#        s/\s//g;
+#        my $s_path = $solver . '/' .  $_;
+#        $$platforms_ref{$_}++ if (-e $s_path);
+#    };
 #    delete $platforms_to_copy{$_} foreach (split(',', $only_platform));
+
     if (!scalar keys %platforms) {
         # An Auses wish - fallback to INPATH for new platforms
         if (defined $ENV{INPATH}) {
@@ -2442,11 +2439,6 @@ sub do_exit {
     $build_finished++;
     generate_html_file(1);
     rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
-#    if ($exit_code) {
-#        finish_logging("error occured");
-#    } else {
-#        finish_logging;
-#    };
     exit($exit_code);
 };
 
@@ -2531,10 +2523,12 @@ sub generate_html_file {
     my @modules_order = sort_modules_appearance();
     my ($successes_percent, $errors_percent) = get_progress_percentage(scalar keys %html_info, scalar keys %build_is_finished, scalar keys %modules_with_errors);
     my $build_duration = get_time_line(time - $build_time);
-    my ($temp_html_file) = tmpnam();
+    my ($temp_html_file) = scalar tmpnam();
+    my $title = $ENV{CWS_WORK_STAMP} . ': ' if (defined $ENV{CWS_WORK_STAMP});
+    $title .= $ENV{INPATH};
     die("Cannot open $temp_html_file") if (!open(HTML, ">$temp_html_file"));
     print HTML '<html><head>';
-    print HTML '<TITLE>' . $ENV{INPATH} . '</TITLE>';
+    print HTML '<TITLE id=MainTitle>' . $title . '</TITLE>';
     print HTML '<script type="text/javascript">' . "\n";
     print HTML 'initFrames();' . "\n";
     print HTML 'var IntervalID;' . "\n";
@@ -2578,6 +2572,7 @@ sub generate_html_file {
     print HTML 'document.write("    </tr>");' . "\n";
 
     foreach (@modules_order) {
+        next if ($modules_types{$_} eq 'lnk');
         my ($errors_info_line, $dirs_info_line, $errors_number, $successes_percent, $errors_percent, $time) = get_html_info($_);
 #<one module>
         print HTML 'document.write("<tr><td width=*>");' . "\n";
@@ -2655,7 +2650,8 @@ sub generate_html_file {
     print HTML '    document.write("Click on the project of interest");' . "\n";
     print HTML '    document.close();' . "\n";
     print HTML '}    function getStatusInnerHTML(Status) {        var StatusInnerHtml;' . "\n";
-    print HTML '    if (Status == "success") {            StatusInnerHtml = "<em style=color:green>";' . "\n";
+    print HTML '    if (Status == "success") {' . "\n";
+    print HTML '        StatusInnerHtml = "<em style=color:green>";' . "\n";
     print HTML '    } else if (Status == "building") {' . "\n";
     print HTML '        StatusInnerHtml = "<em style=color:blue>";' . "\n";
     print HTML '    } else if (Status == "error") {' . "\n";
@@ -2775,7 +2771,7 @@ sub generate_html_file {
     print HTML 'function initFrames() {' . "\n";
     print HTML '    var urlquery = location.href.split("?");' . "\n";
     print HTML '    if (urlquery.length == 1) {' . "\n";
-    print HTML '        document.write("<html><head><TITLE id=MainFrameset>unxsols4.pro</TITLE>");' . "\n";
+    print HTML '        document.write("<html><head><TITLE id=MainTitle>unxsols4.pro</TITLE>");' . "\n";
     print HTML '        document.write("    <frameset rows=\"12%,88%\">");' . "\n";
     print HTML '        document.write("        <frame name=\"topFrame\" src=\"" + urlquery + "?initTop\"/>");' . "\n";
     print HTML '        document.write("        <frame name=\"innerFrame\" src=\"" + urlquery + "?initInnerPage\"/>");' . "\n";
@@ -2838,7 +2834,9 @@ sub generate_html_file {
 
     if(-e $temp_html_file) {
         rename($temp_html_file, $html_file) or system("mv", $temp_html_file, $html_file);
-        unlink $temp_html_file if (-e $temp_html_file);
+        if (-e $temp_html_file) {
+            system("rm -rf $temp_html_file") if (!unlink $temp_html_file);
+        };
     };
 };
 
@@ -2859,15 +2857,20 @@ sub get_dirs_info_line {
     my $job = shift;
     my $dirs_info_line = $jobs_hash{$job}->{STATUS} . '<br>';
     my @time_array;
+    my $log_path_string;
     $dirs_info_line .= $jobs_hash{$job}->{SHORT_NAME} . '<br>';
     $dirs_info_line .= get_local_time_line($jobs_hash{$job}->{START_TIME}) . '<br>';
     $dirs_info_line .= get_local_time_line($jobs_hash{$job}->{FINISH_TIME}) . '<br>';
     if ($jobs_hash{$job}->{STATUS} eq 'waiting' || (!-f $jobs_hash{$job}->{LONG_LOG_PATH})) {
         $dirs_info_line .= '@';
-    } elsif (defined $html_path) {
-        $dirs_info_line .= $jobs_hash{$job}->{LONG_LOG_PATH};
     } else {
-        $dirs_info_line .= $jobs_hash{$job}->{LOG_PATH};
+        if (defined $html_path) {
+            $log_path_string = $jobs_hash{$job}->{LONG_LOG_PATH};
+        } else {
+            $log_path_string = $jobs_hash{$job}->{LOG_PATH};
+        };
+        $log_path_string =~ s/\\/\//g;
+        $dirs_info_line .= $log_path_string;
     };
     $dirs_info_line .= '<br>';
     return $dirs_info_line;
