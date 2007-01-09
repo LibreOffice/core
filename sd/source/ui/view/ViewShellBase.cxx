@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:08:43 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1080,7 +1080,7 @@ ViewShell::ShellType ViewShellBase::GetInitialViewShellType (void)
             const beans::PropertyValue& rProperty (aProperties[n]);
             if (rProperty.Name.compareToAscii(sUNO_View_PageKind) == COMPARE_EQUAL)
             {
-                sal_Int16 nPageKind;
+                sal_Int16 nPageKind = 0;
                 rProperty.Value >>= nPageKind;
                 switch ((PageKind)nPageKind)
                 {
