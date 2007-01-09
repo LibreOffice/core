@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:50:19 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ inline sal_Bool any2bool( const ::com::sun::star::uno::Any& rAny, sal_Bool& rBoo
     }
     else
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         if(!(rAny >>= nValue))
             return sal_False;
         rBool = nValue != 0;
