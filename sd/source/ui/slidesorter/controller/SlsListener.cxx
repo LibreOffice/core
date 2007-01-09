@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:26:35 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,7 +482,7 @@ void SAL_CALL Listener::propertyChange (
             {
                 Any aPageNumber = xPageSet->getPropertyValue (
                     String(RTL_CONSTASCII_USTRINGPARAM("Number")));
-                sal_Int32 nCurrentPage;
+                sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
                 mrController.GetPageSelector().UpdateAllPages ();
                 // The selection is already set but we call SelectPage()
@@ -501,7 +501,7 @@ void SAL_CALL Listener::propertyChange (
     }
     else if (rEvent.PropertyName.equals (sEditModePropertyName))
     {
-        sal_Bool bIsMasterPageMode;
+        sal_Bool bIsMasterPageMode = sal_False;
         rEvent.NewValue >>= bIsMasterPageMode;
         mrController.ChangeEditMode (
             bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
