@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:01:36 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,7 +580,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_DURATION:
         case WID_PAGE_CHANGE:
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if(!(aValue >>= nValue))
                 throw lang::IllegalArgumentException();
 
@@ -612,7 +612,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_WIDTH:
         {
-            sal_Int32 nWidth;
+            sal_Int32 nWidth = 0;
             if(!(aValue >>= nWidth))
                 throw lang::IllegalArgumentException();
 
@@ -621,7 +621,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_HEIGHT:
         {
-            sal_Int32 nHeight;
+            sal_Int32 nHeight = 0;
             if(!(aValue >>= nHeight))
                 throw lang::IllegalArgumentException();
 
@@ -630,7 +630,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_ORIENT:
         {
-            sal_Int32 nEnum;
+            sal_Int32 nEnum = 0;
             if(!::cppu::enum2int( nEnum, aValue ))
                 throw lang::IllegalArgumentException();
 
@@ -660,7 +660,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_EFFECT:
         {
-            sal_Int32 nEnum;
+            sal_Int32 nEnum = 0;
             if(!::cppu::enum2int( nEnum, aValue ))
                 throw lang::IllegalArgumentException();
 
@@ -672,7 +672,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             break;
         case WID_PAGE_SPEED:
         {
-            sal_Int32 nEnum;
+            sal_Int32 nEnum = 0;
             if(!::cppu::enum2int( nEnum, aValue ))
                 throw lang::IllegalArgumentException();
 
@@ -681,7 +681,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_VISIBLE :
         {
-            sal_Bool    bVisible;
+            sal_Bool    bVisible = sal_False;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
             GetPage()->SetExcluded( bVisible == FALSE );
@@ -699,7 +699,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_BACKFULL:
         {
-            sal_Bool    bFullSize;
+            sal_Bool    bFullSize = sal_False;
             if( ! ( aValue >>= bFullSize ) )
                 throw lang::IllegalArgumentException();
             GetPage()->SetBackgroundFullSize( bFullSize );
@@ -707,7 +707,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_BACKVIS:
         {
-            sal_Bool bVisible;
+            sal_Bool bVisible = sal_False;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
 
@@ -727,7 +727,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_PAGE_BACKOBJVIS:
         {
-            sal_Bool bVisible;
+            sal_Bool bVisible = sal_False;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
 
@@ -778,7 +778,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             {
             case WID_PAGE_HEADERVISIBLE:
             {
-                sal_Bool bVisible;
+                sal_Bool bVisible = sal_False;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -796,7 +796,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_FOOTERVISIBLE:
             {
-                sal_Bool bVisible;
+                sal_Bool bVisible = sal_False;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -814,7 +814,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_PAGENUMBERVISIBLE:
             {
-                sal_Bool bVisible;
+                sal_Bool bVisible = sal_False;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -823,7 +823,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_DATETIMEVISIBLE:
             {
-                sal_Bool bVisible;
+                sal_Bool bVisible = sal_False;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -832,7 +832,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_DATETIMEFIXED:
             {
-                sal_Bool bVisible;
+                sal_Bool bVisible = sal_False;
                 if( ! ( aValue >>= bVisible ) )
                     throw lang::IllegalArgumentException();
 
@@ -850,7 +850,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             case WID_PAGE_DATETIMEFORMAT:
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 if( ! ( aValue >>= nValue ) )
                     throw lang::IllegalArgumentException();
 
@@ -873,7 +873,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
         case WID_TRANSITION_TYPE:
         {
-            sal_Int16 nValue;
+            sal_Int16 nValue = 0;
             if( ! ( aValue >>= nValue ) )
                 throw lang::IllegalArgumentException();
 
@@ -883,7 +883,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
         case WID_TRANSITION_SUBTYPE:
         {
-            sal_Int16 nValue;
+            sal_Int16 nValue = 0;
             if( ! ( aValue >>= nValue ) )
                 throw lang::IllegalArgumentException();
 
@@ -893,7 +893,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
         case WID_TRANSITION_DIRECTION:
         {
-            sal_Bool bValue;
+            sal_Bool bValue = sal_False;
             if( ! ( aValue >>= bValue ) )
                 throw lang::IllegalArgumentException();
 
@@ -903,7 +903,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
         case WID_TRANSITION_FADE_COLOR:
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if( ! ( aValue >>= nValue ) )
                 throw lang::IllegalArgumentException();
 
@@ -913,7 +913,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
         case WID_TRANSITION_DURATION:
         {
-            double fValue;
+            double fValue = 0.0;
             if( ! ( aValue >>= fValue ) )
                 throw lang::IllegalArgumentException();
 
