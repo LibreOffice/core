@@ -79,7 +79,7 @@ tt    1251  1092   # Tatar
 ts       0  1073   # Tsonga
 uk    1251  1058   # Ukrainian
 ur    1256  1056   # Urdu
-vi       0  1066   # Vietnamese
+vi    1258  1066   # Vietnamese
 xh       0  1076   # Xhosa
 ns       0  1132   # Northern Sotho (Sepedi)
 yi       0  1085   # Yiddish
@@ -110,4 +110,5 @@ kn       0  1099   # Kannada
 ms       0  1086   # Malay (Malaysian)
 tg       0  1064   # Tajik
 ka       0  1079   # Georgian
-eo       0  1553   
+eo       0  1553   # Esperanto
+dz       0  2129   # Dzongkha
