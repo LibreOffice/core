@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:54:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,7 +505,7 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
 
         case DrawController::PROPERTY_MASTERPAGEMODE:
             {
-                sal_Bool bValue;
+                sal_Bool bValue = sal_False;
                 rValue >>= bValue;
                 setMasterPageMode( bValue );
             }
@@ -513,7 +513,7 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
 
         case DrawController::PROPERTY_LAYERMODE:
             {
-                sal_Bool bValue;
+                sal_Bool bValue = sal_False;
                 rValue >>= bValue;
                 setLayerMode( bValue );
             }
@@ -527,14 +527,14 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
             break;
         case DrawController::PROPERTY_ZOOMVALUE:
             {
-                sal_Int16 nZoom;
+                sal_Int16 nZoom = 0;
                 rValue >>= nZoom;
                 SetZoom( nZoom );
             }
             break;
         case DrawController::PROPERTY_ZOOMTYPE:
             {
-                sal_Int16 nType;
+                sal_Int16 nType = 0;
                 rValue >>= nType;
                 SetZoomType( nType );
             }
