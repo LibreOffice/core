@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:38:42 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -675,7 +675,7 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
 {
     if ( rXPagePropSet.is() )
     {
-        sal_Bool bVal;
+        sal_Bool bVal = sal_False;
         sal_uInt32 nVal = 0;
         ::com::sun::star::uno::Any aAny;
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsHeaderVisible" ) ), sal_True ) )
@@ -1022,7 +1022,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
 //              }
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ) ) )
                 {
-                    sal_Bool bBool;
+                    sal_Bool bBool = sal_False;
                     mAny >>= bBool;
                     if ( !bBool )
                         nFlags |= 1;
@@ -1030,14 +1030,14 @@ sal_Bool PPTWriter::ImplCreateDocument()
 
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) ) // muesste eigendlich heissen IsNotEndless !=)"§()&
                 {
-                    sal_Bool bBool;
+                    sal_Bool bBool = sal_False;
                     mAny >>= bBool;
                     if ( bBool )
                         nFlags |= 0x80;
                 }
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ) ) )
                 {
-                    sal_Bool bBool;
+                    sal_Bool bBool = sal_False;
                     mAny >>= bBool;
                     if ( !bBool )
                         nFlags |= 0x11;
@@ -1489,7 +1489,7 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
 */
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) ) ) )
     {
-        sal_Bool bBackgroundObjectsVisible;
+        sal_Bool bBackgroundObjectsVisible = sal_False;
         if ( aAny >>= bBackgroundObjectsVisible )
         {
             if ( !bBackgroundObjectsVisible )
