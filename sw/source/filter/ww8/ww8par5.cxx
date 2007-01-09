@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:24:44 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 15:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,6 +791,11 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
         case 68:
         case 79:
         case 88:
+        // --> OD 2007-01-02 #b6504125#
+        // Accept AutoTextList field as nested field.
+        // Thus, the field result is imported as plain text.
+        case 89:
+        // <--
             return true;
         default:
             return false;
