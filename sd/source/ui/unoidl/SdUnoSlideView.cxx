@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:55:35 $
+ *  last change: $Author: vg $ $Date: 2007-01-09 11:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
             {
                 Any aNumber = xSet->getPropertyValue(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number")));
-                sal_Int32 nPageNumber;
+                sal_Int32 nPageNumber = 0;
                 aNumber >>= nPageNumber;
                 nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
                 rSelector.SelectPage(nPageNumber);
