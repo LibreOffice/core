@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 10:13:13 $
+#   last change: $Author: vg $ $Date: 2007-01-09 17:19:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -296,6 +296,18 @@ sub get_master_tag {
     $master = $self->master() if (!defined $master);
     $milestone = $self->milestone() if (!defined $milestone);
     return uc($master) . '_' . lc($milestone);
+};
+
+sub get_mws {
+    my $self = shift;
+    my $eis = Cws::eis();
+    my $masters;
+    my $child  = Eis::to_string($self->child());
+    eval { $masters = $eis->getMastersForCWS($child) };
+    if ( $@ ) {
+        carp("ERROR: get_eis_id(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $$masters[0];
 };
 
 # Returns the branch and root tags for child workspace.
