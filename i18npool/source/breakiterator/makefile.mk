@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:14:36 $
+#   last change: $Author: vg $ $Date: 2007-01-10 11:27:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,17 +76,29 @@ APP1STDLIBS = $(SALLIB)
 
 .INCLUDE :	target.mk
 
+.IF "$(SYSTEM_ICU)" == "YES"
+GENCMN:=$(SYSTEM_GENCMN)
+GENBRK:=$(SYSTEM_GENBRK)
+GENCCODE:=$(SYSTEM_GENCCODE)
+.ELSE
+GENCMN:=$(SOLARBINDIR)$/gencmn
+GENBRK:=$(SOLARBINDIR)$/genbrk
+GENCCODE:=$(SOLARBINDIR)$/genccode
+.ENDIF
+
 # 'gencmn', 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
 # so the output (OpenOffice_icu_dat.c) is changed here to include a pragma to disable the warnings.
 # Output of gencmn is redirected to OpenOffice_icu_tmp.c with the -t switch.
 $(MISC)$/OpenOffice_dat.c :  $(MY_BRK_BRKFILES) makefile.mk
-    +$(WRAPCMD) $(SOLARBINDIR)$/gencmn -n OpenOffice -t tmp -S -d $(MISC) O $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
+    +$(WRAPCMD) $(GENCMN) -n OpenOffice -t tmp -S -d $(MISC) O $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
     +echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
     +echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@
     +echo $(USQ)#endif$(USQ) >> $@
     +$(TYPE) $(@:s/_dat/_tmp/) >> $@
+
 $(MISC)$/%.brk : data/%.txt
-    +$(WRAPCMD) $(SOLARBINDIR)$/genbrk -r $< -o $(MISC)$/$*.brk
+    +$(WRAPCMD) $(GENBRK) -r $< -o $(MISC)$/$*.brk
+
 $(MISC)$/%_brk.c : $(MISC)$/%.brk
-    +$(WRAPCMD) $(SOLARBINDIR)$/genccode -n OpenOffice -d $(MISC)$ $(MISC)$/$*.brk
+    +$(WRAPCMD) $(GENCCODE) -n OpenOffice -d $(MISC)$ $(MISC)$/$*.brk
