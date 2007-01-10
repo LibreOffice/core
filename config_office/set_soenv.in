@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.130 $
-# Date:        $Date: 2007-01-03 11:33:57 $
+# Version:     $Revision: 1.131 $
+# Date:        $Date: 2007-01-10 11:27:32 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1788,6 +1788,7 @@ ToFile( "HOME",              "@HOME@",             "e" );
 ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
 ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
 ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
+ToFile( "SYSTEM_GENCMN",     "@SYSTEM_GENCMN@",    "e" );
 ToFile( "SYSTEM_JPEG",       "@SYSTEM_JPEG@",      "e" );
 ToFile( "SYSTEM_FREETYPE",   "@SYSTEM_FREETYPE@",  "e" );
 ToFile( "FREETYPE_CFLAGS",   "@FREETYPE_CFLAGS@",  "e" );
