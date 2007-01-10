@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-01-03 11:33:33 $
+dnl * Date: $Date: 2007-01-10 11:27:18 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.192 $ )
+AC_REVISION( $Revision: 1.193 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3593,6 +3593,10 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    if test -z "$SYSTEM_GENCCODE"; then
       AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode"\])
    fi
+   AC_PATH_PROG(SYSTEM_GENCMN, gencmn)
+   if test -z "$SYSTEM_GENCMN"; then
+      AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn"\])
+   fi
    AC_MSG_CHECKING([ICU version])
       AC_TRY_RUN([
 #include <unicode/uversion.h>
@@ -3610,6 +3614,7 @@ fi
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
+AC_SUBST(SYSTEM_GENCMN)
 
 dnl ===================================================================
 dnl Checks for libraries.
