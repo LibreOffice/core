@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rene $ $Date: 2006-12-06 14:22:38 $
+#   last change: $Author: rene $ $Date: 2007-01-11 17:18:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ TARGET=afms
 
 TARFILE_NAME=Adobe-Core35_AFMs-314
 TARFILE_ROOTDIR=Adobe-Core35_AFMs-314
+TAR_EXCLUDES=*/*Helvetica-Narrow*
 
 # --- Targets ------------------------------------------------------
 
