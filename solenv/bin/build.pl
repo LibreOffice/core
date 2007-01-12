@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.152 $
+#   $Revision: 1.153 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-09 17:18:46 $
+#   last change: $Author: vg $ $Date: 2007-01-12 11:34:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.152 $ ';
+    $id_str = ' $Revision: 1.153 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -2524,7 +2524,8 @@ sub generate_html_file {
     my ($successes_percent, $errors_percent) = get_progress_percentage(scalar keys %html_info, scalar keys %build_is_finished, scalar keys %modules_with_errors);
     my $build_duration = get_time_line(time - $build_time);
     my ($temp_html_file) = scalar tmpnam();
-    my $title = $ENV{CWS_WORK_STAMP} . ': ' if (defined $ENV{CWS_WORK_STAMP});
+    my $title;
+    $title = $ENV{CWS_WORK_STAMP} . ': ' if (defined $ENV{CWS_WORK_STAMP});
     $title .= $ENV{INPATH};
     die("Cannot open $temp_html_file") if (!open(HTML, ">$temp_html_file"));
     print HTML '<html><head>';
