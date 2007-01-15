@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:02:17 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ namespace dbtools
         sal_uInt16  nHour   = 0,
                     nMinute = 0,
                     nSecond = 0,
-                    nNano   = 0;
+                    nHundredthSeconds   = 0;
         nHour   = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
         if(nIndex != -1)
         {
@@ -495,10 +495,16 @@ namespace dbtools
                 nIndex = 0;
                 ::rtl::OUString sNano(_sSQLString.getToken(1,'.',nIndex));
                 if ( sNano.getLength() )
-                    nNano = (sal_uInt16)sNano.toInt32();
+                {
+                    // our time struct only supports hundredth seconds
+                    sNano = sNano.copy(0,::std::min<sal_Int32>(sNano.getLength(),2));
+                    const static ::rtl::OUString s_Zeros(RTL_CONSTASCII_USTRINGPARAM("00"));
+                    sNano += s_Zeros.copy(0,s_Zeros.getLength() - sNano.getLength());
+                    nHundredthSeconds = static_cast<sal_uInt16>(sNano.toInt32());
+                }
             }
         }
-        return Time(nNano,nSecond,nMinute,nHour);
+        return Time(nHundredthSeconds,nSecond,nMinute,nHour);
     }
 
 //.........................................................................
