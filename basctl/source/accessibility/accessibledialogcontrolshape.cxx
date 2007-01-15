@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibledialogcontrolshape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:00 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ Window* AccessibleDialogControlShape::GetWindow() const
     Window* pWindow = NULL;
     if ( m_pDlgEdObj )
     {
-        Reference< awt::XControl > xControl( m_pDlgEdObj->GetUnoControl(m_pDialogWindow), UNO_QUERY );
+        Reference< awt::XControl > xControl( m_pDlgEdObj->GetControl(), UNO_QUERY );
         if ( xControl.is() )
             pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
     }
