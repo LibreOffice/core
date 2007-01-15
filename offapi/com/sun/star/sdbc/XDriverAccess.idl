@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDriverAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:50:08 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:08:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XDriverAccess
 /** provides the access of sdbc driver components
     @see com::sun::star::sdbc::XDriverManager
     @see com::sun::star::sdbc::XDriver
@@ -53,7 +52,6 @@
 published interface XDriverAccess: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriverAccess::getDriverByURL
     /** get a driver which accepts a given url.@see com::sun::star::sdbc::XDriver::acceptsURL
         @param url
             a database url of the form sdbc:subprotocol:subname

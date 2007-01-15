@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XGeneratedResultSet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:50:36 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 
  published interface XResultSet;
 
-// DocMerge from xml: interface com::sun::star::sdbc::XGeneratedResultSet
 /** provides a result set which gives access to automatically generated values after a new row was inserted.
 
     The relative order of columns in the result set returned by getGeneratedValues must be the same as the relative order

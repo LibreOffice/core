@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDriverManager.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:50:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
  published interface XDriver;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XDriverManager
 /** is the basic interface for managing a set of SDBC drivers.
 
 
@@ -73,7 +72,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriverManager::getConnection
     /** attempts to establish a connection to the given database URL.
         The DriverManager attempts to select an appropriate driver from
         the set of registered JDBC/SDBC drivers.
@@ -88,7 +86,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriverManager::getConnectionWithInfo
     /** attempts to establish a connection to the given database URL.
         The DriverManager attempts to select an appropriate driver from
         the set of registered JDBC/SDBC drivers.
@@ -108,7 +105,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriverManager::setLoginTimeout
     /** sets the maximum time in seconds that a driver will wait
         while attempting to connect to a database.
         @param seconds
@@ -120,7 +116,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
     void setLoginTimeout([in]long seconds);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriverManager::getLoginTimeout
     /** gets the maximum time in seconds that a driver can wait
         when attempting to login to a database.
         @returns
