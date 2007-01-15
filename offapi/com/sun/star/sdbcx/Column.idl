@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Column.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:56:58 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:13:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,13 +44,11 @@
  published interface XDataDescriptorFactory;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::Column
 /** describes the common properties of a database column.
  */
 published service Column
 {
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Column: interface com::sun::star::sdbcx::XDataDescriptorFactory
     /** optional, could be used to copy a database column.
      */
     [optional] interface XDataDescriptorFactory;
@@ -59,13 +57,11 @@ published service Column
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::Name
     /** is the name of the column.
      */
     [readonly, property] string Name;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::Type
     /** is the
         <type scope="com::sun::star::sdbc">DataType</type>
         of the column.
@@ -73,7 +69,6 @@ published service Column
     [readonly, property] long Type;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::TypeName
     /** is the type name used by the database. If the column type is
         a user-defined type, then a fully-qualified type name is returned.
         <b>
@@ -84,53 +79,45 @@ published service Column
     [readonly, property] string TypeName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::Precision
     /** gets a column's number of decimal digits.
      */
     [readonly, property] long Precision;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::Scale
     /** gets a column's number of digits to right of the decimal point.
      */
     [readonly, property] long Scale;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::IsNullable
     /** indicates the nullability of values in the designated column.
         @see com::sun::star::sdbc::ColumnValue
      */
     [readonly, property] long IsNullable;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::IsAutoIncrement
     /** indicates whether the column is automatically numbered, thus read-only.
         @see com::sun::star::sdbc::ColumnValue
      */
     [readonly, property] boolean IsAutoIncrement;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::IsCurrency
     /** indicates whether the column is a cash value.
      */
     [readonly, property] boolean IsCurrency;
 
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::IsRowVersion
     /** indicates that the column contains some kind of time or date stamp
         used to track updates.
      */
     [optional, readonly, property] boolean IsRowVersion;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::Description
     /** keeps a description of the object.
      */
     [optional, readonly, property] string Description;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Column::DefaultValue
     /** keeps a default value for a column, is provided as string.
      */
     [optional, readonly, property] string DefaultValue;

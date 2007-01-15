@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Container.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:57:43 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
  published interface XDrop;
 
 
-// DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container
 /** describes every container which is used for data definition. Each
     container must support access to its elements by the element's name or
     by the element's position.
@@ -82,23 +81,19 @@ published service Container
     interface com::sun::star::container::XEnumerationAccess;
 
 
-    // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container: interface com::sun::star::util::XRefreshable
     /** is optional for implementation. Used to reflect changes.
      */
     [optional] interface com::sun::star::util::XRefreshable;
 
-    // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container: interface com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::XDataDescriptorFactory
     /** optional for implementation. Allows to create descriptor elements which then could be used to append new elements.
      */
     [optional] interface XDataDescriptorFactory;
 
-    // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container: interface com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::XAppend
     /** optional for implementation, provides the possibility of adding
                 a new element to the container.
      */
     [optional] interface XAppend;
 
-    // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container: interface com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::XDrop
     /** optional for implementation, provides the possibility of dropping
                 an element from the container.
      */

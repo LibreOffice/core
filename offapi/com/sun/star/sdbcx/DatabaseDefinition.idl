@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseDefinition.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:57:58 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
  published interface XGroupsSupplier;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition
 /** could be used as an extension for performing data definition tasks on
     databases, and to control the access rights on database objects.
 
@@ -67,17 +66,14 @@ published service DatabaseDefinition
     // gives access to the tables.
     interface XTablesSupplier;
 
-    // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition: interface com::sun::star::sdbcx::XViewsSupplier
     /** The implementation is optional.
      */
     [optional] interface XViewsSupplier;
 
-    // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition: interface com::sun::star::sdbcx::XUsersSupplier
     /** The implementation is optional.
      */
     [optional] interface XUsersSupplier;
 
-    // DocMerge from xml: service com::sun::star::sdbcx::DatabaseDefinition: interface com::sun::star::sdbcx::XGroupsSupplier
     /** The implementation is optional.
      */
     [optional] interface XGroupsSupplier;
