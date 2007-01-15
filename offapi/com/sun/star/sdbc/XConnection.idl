@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:49:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
  published interface XDatabaseMetaData;
 
 
-// DocMerge from xml: interface com::sun::star::container::com::sun::star::sdbc::XConnection
 /** represents a connection (session) with a specific
     database. Within the context of a Connection, SQL statements are
     executed and results are returned.
@@ -80,7 +79,6 @@
 published interface XConnection: com::sun::star::sdbc::XCloseable
 {
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::createStatement
     /** creates a new
         <type scope="com::sun::star::sdbc">Statement</type>
         object for sending SQL statements to the database.
@@ -109,7 +107,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     XStatement createStatement() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::prepareStatement
     /** creates a
         <type scope="com::sun::star::sdbc">PreparedStatement</type>
         object for sending parameterized SQL statements to the database.
@@ -157,7 +154,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     XPreparedStatement prepareStatement([in]string sql) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::prepareCall
     /** creates a
         <type scope="com::sun::star::sdbc">CallableStatement</type>
         object for calling
@@ -195,7 +191,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     XPreparedStatement prepareCall([in]string sql) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::nativeSQL
     /** converts the given SQL statement into the system's native SQL grammar.
         A driver may convert the JDBC SQL grammar into its system's
         native SQL grammar prior to sending it; this method returns the
@@ -211,7 +206,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     string nativeSQL([in]string sql) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setAutoCommit
     /** sets this connection's auto-commit mode.
 
 
@@ -246,7 +240,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     void setAutoCommit([in] boolean autoCommit) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getAutoCommit
     /** gets the current auto-commit state.
 
         @returns
@@ -259,7 +252,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     boolean getAutoCommit() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::commit
     /** makes all changes made since the previous commit/rollback
         permanent and releases any database locks currently held
         by the Connection. This method should be
@@ -273,7 +265,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     void commit() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::rollback
     /** drops all changes made since the previous
         commit/rollback and releases any database locks currently held
         by this Connection. This method should be used only when auto-commit has been disabled.
@@ -286,7 +277,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     void rollback() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::isClosed
     /** tests to see if a connection is closed.
 
 
@@ -306,7 +296,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     boolean isClosed() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getMetaData
     /** gets the metadata regarding this connection's database.
 
 
@@ -326,7 +315,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     XDatabaseMetaData getMetaData() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setReadOnly
     /** puts this connection in read-only mode as a hint to enable
         database optimizations.
 
@@ -350,7 +338,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     void setReadOnly([in]boolean readOnly) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::isReadOnly
     /** tests to see if the connection is in read-only mode.
         @returns
             <TRUE/> if connection is read-only and <FALSE/> otherwise.
@@ -360,7 +347,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     boolean isReadOnly() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setCatalog
     /** sets a catalog name in order to select
         a subspace of this Connection's database in which to work.
         If the driver does not support catalogs, it will
@@ -373,7 +359,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     void setCatalog([in]string catalog) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getCatalog
     /** returns the Connection's current catalog name.
         @returns
             the current catalog name or an empty string.
@@ -383,7 +368,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     string getCatalog() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setTransactionIsolation
     /** attempts to change the transaction isolation level to the one given.
 
 
@@ -409,7 +393,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     void setTransactionIsolation([in]long level) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getTransactionIsolation
     /** gets this Connection's current transaction isolation level.
         @returns
             the current TransactionIsolation mode value.
@@ -419,7 +402,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     long getTransactionIsolation() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getTypeMap
     /** gets the type map object associated with this connection. Only drivers
         which implement the custom type mapping facility will return an object otherwise
         NULL could be returned.
@@ -437,7 +419,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     com::sun::star::container::XNameAccess getTypeMap() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setTypeMap
     /** installs the given type map as the type map for this connection.
         The type map will be used for the custom mapping of SQL structured types
         and distinct types.
