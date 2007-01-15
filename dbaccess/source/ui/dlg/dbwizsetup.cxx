@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:58 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,14 +114,16 @@
 #ifndef DBAUI_ASYNCRONOUSLINK_HXX
 #include "AsyncronousLink.hxx"
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _FILEDLGHELPER_HXX
-#include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -137,9 +139,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
-#include "linkeddocuments.hxx"
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -164,6 +163,17 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
 #include <com/sun/star/io/IOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+/** === end UNO includes === **/
+
+#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
+#include "linkeddocuments.hxx"
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
@@ -1185,37 +1195,98 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     namespace
     {
         // .............................................................................
-        class AsyncLoader
+        typedef ::cppu::WeakImplHelper1 <   XTerminateListener
+                                        >   AsyncLoader_Base;
+        class AsyncLoader : public AsyncLoader_Base
         {
         private:
             Reference< XComponentLoader >   m_xFrameLoader;
+            Reference< XDesktop >           m_xDesktop;
             ::rtl::OUString                 m_sURL;
             OAsyncronousLink                m_aAsyncCaller;
 
         public:
-            AsyncLoader( const Reference< XComponentLoader >& _rxLoader, const ::rtl::OUString& _rURL )
-                :m_xFrameLoader( _rxLoader )
-                ,m_sURL( _rURL )
-                ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
-            {
-            }
+            AsyncLoader( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rURL );
 
-            void doLoadAsync()
-            {
-                m_aAsyncCaller.Call( NULL );
-            }
+            void doLoadAsync();
+
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException);
+            virtual void SAL_CALL notifyTermination( const EventObject& Event ) throw (RuntimeException);
+            // XEventListener
+            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
         private:
             DECL_LINK( OnOpenDocument, void* );
         };
 
         // .............................................................................
+        AsyncLoader::AsyncLoader( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rURL )
+            :m_sURL( _rURL )
+            ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
+        {
+            try
+            {
+                m_xDesktop.set( _rxORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+                m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+
+        // .............................................................................
+        void AsyncLoader::doLoadAsync()
+        {
+            OSL_ENSURE( !m_aAsyncCaller.IsRunning(), "AsyncLoader:doLoadAsync: already running!" );
+
+            acquire();
+            try
+            {
+                if ( m_xDesktop.is() )
+                    m_xDesktop->addTerminateListener( this );
+            }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+
+            m_aAsyncCaller.Call( NULL );
+        }
+
+        // .............................................................................
         IMPL_LINK( AsyncLoader, OnOpenDocument, void*, /*_pEmptyArg*/ )
         {
-            m_xFrameLoader->loadComponentFromURL( m_sURL,
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), FrameSearchFlag::ALL, Sequence<PropertyValue >() );
-            delete this;
+            try
+            {
+                if ( m_xFrameLoader.is() )
+                    m_xFrameLoader->loadComponentFromURL( m_sURL,
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), FrameSearchFlag::ALL, Sequence<PropertyValue >() );
+            }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+
+            try
+            {
+                if ( m_xDesktop.is() )
+                    m_xDesktop->removeTerminateListener( this );
+            }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+
+            release();
             return 0L;
+        }
+
+        // .............................................................................
+        void SAL_CALL AsyncLoader::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
+        {
+            throw TerminationVetoException();
+        }
+
+        // .............................................................................
+        void SAL_CALL AsyncLoader::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
+        {
+        }
+        // .............................................................................
+        void SAL_CALL AsyncLoader::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+        {
         }
     }
 
@@ -1234,15 +1305,14 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             Reference< XComponentLoader > xFrameLoader;
             try
             {
-                xFrameLoader = Reference< XComponentLoader >( getORB()->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+                AsyncLoader* pAsyncLoader = new AsyncLoader( getORB(), m_pGeneralPage->GetSelectedDocument().sURL );
+                ::rtl::Reference< AsyncLoader > xKeepAlive( pAsyncLoader );
+                pAsyncLoader->doLoadAsync();
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-
-            AsyncLoader* pAsyncLoader = new AsyncLoader( xFrameLoader, m_pGeneralPage->GetSelectedDocument().sURL );
-            pAsyncLoader->doLoadAsync();
 
             return sal_True;
         }
