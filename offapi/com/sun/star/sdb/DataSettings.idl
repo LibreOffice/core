@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSettings.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:14:36 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::DataSettings
 /** extends the
     <type scope="com::sun::star::sdbcx">Table</type>
     with additional display information, sorting and filtering criterias.
@@ -59,38 +58,32 @@
 published service DataSettings
 {
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSettings::Filter
     /** additional filter for the data object.
      */
     [property] string Filter;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSettings::ApplyFilter
     /** indicates whether the filter should be applied or not,
         default is <FALSE/>.
      */
     [property] boolean ApplyFilter;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSettings::Order
     /** is an additional sort order definition.
      */
     [property] string Order;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSettings::FontDescriptor
     /** specifies the font attributes for data displaying.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSettings::RowHeight
     /** specifies the height of a data row.
      */
     [property] long RowHeight;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataSettings::TextColor
     /** specifies the text color (RGB) for displaying text.
      */
     [property] com::sun::star::util::Color TextColor;
