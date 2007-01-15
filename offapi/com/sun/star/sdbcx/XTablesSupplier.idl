@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTablesSupplier.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:07:52 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,12 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XTablesSupplier
 /** provides for access to a container of tables, typically used for a database
     definition object.
  */
 published interface XTablesSupplier: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XTablesSupplier::getTables
     /** returns the container of tables.
         @returns
             the tables

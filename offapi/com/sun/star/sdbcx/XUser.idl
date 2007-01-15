@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XUser.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:08:14 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:23:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,11 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XUser
 /** allows for changing a users password.
  */
 published interface XUser: XAuthorizable
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XUser::changePassword
     /** allows modifying a user password.
         @param oldPassword
             the old password to be reset
