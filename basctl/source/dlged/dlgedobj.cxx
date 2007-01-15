@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:51:06 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,7 @@ DBG_NAME(DlgEdObj);
 DlgEdObj::DlgEdObj()
           :SdrUnoObj(String(), sal_False)
           ,bIsListening(sal_False)
+          ,pDlgEdForm( NULL )
 {
     DBG_CTOR(DlgEdObj, NULL);
 }
@@ -153,6 +154,7 @@ DlgEdObj::DlgEdObj()
 DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName)
           :SdrUnoObj(rModelName, sal_False)
           ,bIsListening(sal_False)
+          ,pDlgEdForm( NULL )
 {
     DBG_CTOR(DlgEdObj, NULL);
 }
@@ -163,6 +165,7 @@ DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName,
                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
           :SdrUnoObj(rModelName, rxSFac, sal_False)
           ,bIsListening(sal_False)
+          ,pDlgEdForm( NULL )
 {
     DBG_CTOR(DlgEdObj, NULL);
 }
@@ -223,7 +226,7 @@ awt::DeviceInfo DlgEdObj::getFormDeviceInfo( const DlgEdForm& _rForm )
 
     // obtain an XControl (might be a temporary one)
     bool bIsTemporaryControl = false;
-    Reference< awt::XControl > xDialogControl( _rForm.GetUnoControl( pWindow ) );
+    Reference< awt::XControl > xDialogControl( _rForm.GetControl() );
     if ( !xDialogControl.is() )
     {
         Reference< awt::XControlContainer > xEditorControlContainer( pEditor->GetWindowControlContainer() );
@@ -241,6 +244,23 @@ awt::DeviceInfo DlgEdObj::getFormDeviceInfo( const DlgEdForm& _rForm )
     if ( bIsTemporaryControl )
         ::comphelper::disposeComponent( xDialogControl );
     return aDeviceInfo;
+}
+
+//----------------------------------------------------------------------------
+
+uno::Reference< awt::XControl > DlgEdObj::GetControl() const
+{
+    const DlgEdForm* pForm = GetDlgEdForm();
+    const DlgEditor* pEditor = pForm ? pForm->GetDlgEditor() : NULL;
+    SdrView* pView = pEditor ? pEditor->GetView() : NULL;
+    Window* pWindow = pEditor ? pEditor->GetWindow() : NULL;
+    OSL_ENSURE( ( pView && pWindow ) || !pForm, "DlgEdObj::GetControl: no view or no window!" );
+
+    uno::Reference< awt::XControl > xControl;
+    if ( pView && pWindow )
+        xControl = GetUnoControl( *pView, *pWindow );
+
+    return xControl;
 }
 
 //----------------------------------------------------------------------------
@@ -1777,18 +1797,14 @@ void DlgEdForm::UpdateTabOrder()
     // in design mode. When the dialog editor has reordered all
     // tabindices, this method allows to activate the taborder afterwards.
 
-    Window* pWindow = GetDlgEditor() ? GetDlgEditor()->GetWindow() : NULL;
-    if ( pWindow )
+    Reference< awt::XUnoControlContainer > xCont( GetControl(), UNO_QUERY );
+    if ( xCont.is() )
     {
-        Reference< awt::XUnoControlContainer > xCont( GetUnoControl( pWindow ), UNO_QUERY );
-        if ( xCont.is() )
-        {
-            Sequence< Reference< awt::XTabController > > aSeqTabCtrls = xCont->getTabControllers();
-            const Reference< awt::XTabController >* pTabCtrls = aSeqTabCtrls.getConstArray();
-            sal_Int32 nCount = aSeqTabCtrls.getLength();
-            for ( sal_Int32 i = 0; i < nCount; ++i )
-                pTabCtrls[i]->activateTabOrder();
-        }
+        Sequence< Reference< awt::XTabController > > aSeqTabCtrls = xCont->getTabControllers();
+        const Reference< awt::XTabController >* pTabCtrls = aSeqTabCtrls.getConstArray();
+        sal_Int32 nCount = aSeqTabCtrls.getLength();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+            pTabCtrls[i]->activateTabOrder();
     }
 }
 
@@ -1808,57 +1824,53 @@ void DlgEdForm::UpdateGroups()
     Reference< awt::XTabControllerModel > xTabModel( GetUnoControlModel() , UNO_QUERY );
     if ( xTabModel.is() )
     {
-        Window* pWindow = GetDlgEditor() ? GetDlgEditor()->GetWindow() : NULL;
-        if ( pWindow )
+        // create a global list of controls that belong to the dialog
+        ::std::vector<DlgEdObj*> aChildList = GetChilds();
+        sal_uInt32 nSize = aChildList.size();
+        Sequence< Reference< awt::XControl > > aSeqControls( nSize );
+        for ( sal_uInt32 i = 0; i < nSize; ++i )
+            aSeqControls.getArray()[i] = Reference< awt::XControl >( aChildList[i]->GetControl(), UNO_QUERY );
+
+        sal_Int32 nGroupCount = xTabModel->getGroupCount();
+        for ( sal_Int32 nGroup = 0; nGroup < nGroupCount; ++nGroup )
         {
-            // create a global list of controls that belong to the dialog
-            ::std::vector<DlgEdObj*> aChildList = GetChilds();
-            sal_uInt32 nSize = aChildList.size();
-            Sequence< Reference< awt::XControl > > aSeqControls( nSize );
-            for ( sal_uInt32 i = 0; i < nSize; ++i )
-                aSeqControls.getArray()[i] = Reference< awt::XControl >( aChildList[i]->GetUnoControl( pWindow ), UNO_QUERY );
+            // get a list of control models that belong to this group
+            ::rtl::OUString aName;
+            Sequence< Reference< awt::XControlModel > > aSeqModels;
+            xTabModel->getGroup( nGroup, aSeqModels, aName );
+            const Reference< awt::XControlModel >* pModels = aSeqModels.getConstArray();
+            sal_Int32 nModelCount = aSeqModels.getLength();
 
-            sal_Int32 nGroupCount = xTabModel->getGroupCount();
-            for ( sal_Int32 nGroup = 0; nGroup < nGroupCount; ++nGroup )
+            // create a list of peers that belong to this group
+            Sequence< Reference< awt::XWindow > > aSeqPeers( nModelCount );
+            for ( sal_Int32 nModel = 0; nModel < nModelCount; ++nModel )
             {
-                // get a list of control models that belong to this group
-                ::rtl::OUString aName;
-                Sequence< Reference< awt::XControlModel > > aSeqModels;
-                xTabModel->getGroup( nGroup, aSeqModels, aName );
-                const Reference< awt::XControlModel >* pModels = aSeqModels.getConstArray();
-                sal_Int32 nModelCount = aSeqModels.getLength();
-
-                // create a list of peers that belong to this group
-                Sequence< Reference< awt::XWindow > > aSeqPeers( nModelCount );
-                for ( sal_Int32 nModel = 0; nModel < nModelCount; ++nModel )
+                // for each control model find the corresponding control in the global list
+                const Reference< awt::XControl >* pControls = aSeqControls.getConstArray();
+                sal_Int32 nControlCount = aSeqControls.getLength();
+                for ( sal_Int32 nControl = 0; nControl < nControlCount; ++nControl )
                 {
-                    // for each control model find the corresponding control in the global list
-                    const Reference< awt::XControl >* pControls = aSeqControls.getConstArray();
-                    sal_Int32 nControlCount = aSeqControls.getLength();
-                    for ( sal_Int32 nControl = 0; nControl < nControlCount; ++nControl )
+                    const Reference< awt::XControl > xCtrl( pControls[nControl] );
+                    if ( xCtrl.is() )
                     {
-                        const Reference< awt::XControl > xCtrl( pControls[nControl] );
-                        if ( xCtrl.is() )
+                        Reference< awt::XControlModel > xCtrlModel( xCtrl->getModel() );
+                        if ( (awt::XControlModel*)xCtrlModel.get() == (awt::XControlModel*)pModels[nModel].get() )
                         {
-                            Reference< awt::XControlModel > xCtrlModel( xCtrl->getModel() );
-                            if ( (awt::XControlModel*)xCtrlModel.get() == (awt::XControlModel*)pModels[nModel].get() )
-                            {
-                                // get the control peer and insert into the list of peers
-                                aSeqPeers.getArray()[ nModel ] = Reference< awt::XWindow >( xCtrl->getPeer(), UNO_QUERY );
-                                break;
-                            }
+                            // get the control peer and insert into the list of peers
+                            aSeqPeers.getArray()[ nModel ] = Reference< awt::XWindow >( xCtrl->getPeer(), UNO_QUERY );
+                            break;
                         }
                     }
                 }
+            }
 
-                // set the group at the dialog peer
-                Reference< awt::XControl > xDlg( GetUnoControl( pWindow ), UNO_QUERY );
-                if ( xDlg.is() )
-                {
-                    Reference< awt::XVclContainerPeer > xDlgPeer( xDlg->getPeer(), UNO_QUERY );
-                    if ( xDlgPeer.is() )
-                        xDlgPeer->setGroup( aSeqPeers );
-                }
+            // set the group at the dialog peer
+            Reference< awt::XControl > xDlg( GetControl(), UNO_QUERY );
+            if ( xDlg.is() )
+            {
+                Reference< awt::XVclContainerPeer > xDlgPeer( xDlg->getPeer(), UNO_QUERY );
+                if ( xDlgPeer.is() )
+                    xDlgPeer->setGroup( aSeqPeers );
             }
         }
     }
