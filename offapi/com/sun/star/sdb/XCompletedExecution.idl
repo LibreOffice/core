@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XCompletedExecution.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:27:20 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:55:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,12 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::sdb::XCompletedExecution
 /** is used for execution where information for execution may be required from
     the user.
  */
 published interface XCompletedExecution: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdb::XCompletedExecution::executeWithCompletion
     /** completes necessary information before execution, for example parameter values.
         @param handler
             will be asked when more information is needed
