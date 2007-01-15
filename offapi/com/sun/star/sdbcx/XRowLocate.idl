@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRowLocate.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:07:37 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XRowLocate
 /** is used to identify rows within a result set and to find rows by a bookmark.
 
 
@@ -60,7 +59,6 @@
 published interface XRowLocate: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::getBookmark
     /** returns the bookmark of the current row of a result set.
         @returns
             the current bookmark
@@ -70,7 +68,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
     any getBookmark() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::moveToBookmark
     /** moves the cursor to the row identified by an valid bookmark.
 
         <p>
@@ -90,7 +87,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
     boolean moveToBookmark([in]any bookmark) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::moveRelativeToBookmark
     /** moves the cursor a relative number of rows, either positive or negative
         starting at a given bookmark position.
 
@@ -115,7 +111,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
         raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::compareBookmarks
     /** compares two bookmarks and returns an indication of their relative values.
 
         <p>
@@ -141,7 +136,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
         raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::hasOrderedBookmarks
     /** determines whether the bookmarks of a result set are ordered or not.
         @returns
             <TRUE/> if so
@@ -152,7 +146,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
     boolean hasOrderedBookmarks() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::hashBookmark
     /** returns the hash value for a specified bookmark.
         @param bookmark
             the bookmark to hash
