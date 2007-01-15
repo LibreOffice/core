@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDataSource.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:49:25 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
  published interface XConnection;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XDataSource
 /** is used for establishing connections via a factory which is identified
     by its name. A DataSource object is typically registered by a naming service
     provider.
@@ -57,7 +56,6 @@ published interface XDataSource: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDataSource::getConnection
     /** attempts to establish a database connection.
         @param user
             the user name
@@ -72,7 +70,6 @@ published interface XDataSource: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDataSource::setLoginTimeout
     /** sets the maximum time in seconds that this data source will wait
         while attempting to connect to a database.
 
@@ -91,7 +88,6 @@ published interface XDataSource: com::sun::star::uno::XInterface
          raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDataSource::getLoginTimeout
     /** gets the maximum time in seconds that this data source can wait
         while attempting to connect to a database.
 
