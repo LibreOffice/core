@@ -3,7 +3,6 @@ mkdir: %_DEST%\inc%_EXT%\external\glibc
 mkdir: %_DEST%\inc%_EXT%\external\gpc
 mkdir: %_DEST%\pck%_EXT%
 
-..\jars\xt.jar %_DEST%\bin%_EXT%\xt.jar
 ..\jars\parser.jar %_DEST%\bin%_EXT%\parser.jar
 ..\jars\jaxp.jar %_DEST%\bin%_EXT%\jaxp.jar
 
