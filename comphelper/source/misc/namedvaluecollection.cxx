@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:32:40 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,13 @@
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 /** === end UNO includes === **/
 
-#ifndef _OSL_DIAGNOSE_H_
+#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#endif
 
 #include <hash_map>
 
@@ -66,6 +68,7 @@ namespace comphelper
     using ::com::sun::star::uno::cpp_acquire;
     using ::com::sun::star::uno::cpp_release;
     using ::com::sun::star::uno::cpp_queryInterface;
+    using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::NamedValue;
     /** === end UNO using === **/
 
@@ -167,20 +170,34 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    bool NamedValueCollection::getIfExists_ensureType( const ::rtl::OUString& _rValueName, void* _pValueLocation, const Type& _rExpectedValueType ) const
+    bool NamedValueCollection::get_ensureType( const ::rtl::OUString& _rValueName, void* _pValueLocation, const Type& _rExpectedValueType ) const
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
         if ( pos != m_pImpl->aValues.end() )
         {
-            return uno_type_assignData(
-                _pValueLocation, _rExpectedValueType.getTypeLibType(),
-                const_cast< void* >( pos->second.getValue() ), pos->second.getValueType().getTypeLibType(),
-                reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
-                reinterpret_cast< uno_AcquireFunc >( cpp_acquire ),
-                reinterpret_cast< uno_ReleaseFunc >( cpp_release )
-            );
+            if ( uno_type_assignData(
+                    _pValueLocation, _rExpectedValueType.getTypeLibType(),
+                    const_cast< void* >( pos->second.getValue() ), pos->second.getValueType().getTypeLibType(),
+                    reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
+                    reinterpret_cast< uno_AcquireFunc >( cpp_acquire ),
+                    reinterpret_cast< uno_ReleaseFunc >( cpp_release )
+                ) )
+                // argument exists, and could be extracted
+                return true;
+
+            // argument exists, but is of wrong type
+            ::rtl::OUStringBuffer aBuffer;
+            aBuffer.appendAscii( "Invalid value type for '" );
+            aBuffer.append     ( _rValueName );
+            aBuffer.appendAscii( "'.\nExpected: " );
+            aBuffer.append     ( _rExpectedValueType.getTypeName() );
+            aBuffer.appendAscii( "\nFound: " );
+            aBuffer.append     ( pos->second.getValueType().getTypeName() );
+            throw IllegalArgumentException( aBuffer.makeStringAndClear(), NULL, 0 );
         }
-        return true;
+
+        // argument does not exist
+        return false;
     }
 
     //--------------------------------------------------------------------
@@ -192,6 +209,13 @@ namespace comphelper
 
         static Any aEmptyDefault;
         return aEmptyDefault;
+    }
+
+    //--------------------------------------------------------------------
+    bool NamedValueCollection::impl_has( const ::rtl::OUString& _rValueName ) const
+    {
+        NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
+        return ( pos != m_pImpl->aValues.end() );
     }
 
 //........................................................................
