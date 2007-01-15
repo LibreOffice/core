@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:45:01 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,15 +272,11 @@ namespace connectivity
                 {
                     xOrig = xDriver->connect( sConnectURL, aConvertedProperties );
                 }
-                catch(SQLException e)
+                catch(const Exception& e)
                 {
                     StorageContainer::revokeStorage(sKey,NULL);
-                    throw e;
-                }
-                catch(Exception e)
-                {
-                    StorageContainer::revokeStorage(sKey,NULL);
-                    throw e;
+                    (void)e;
+                    throw;
                 }
 
                 // if the storage is completely empty, then we just created a new HSQLDB
