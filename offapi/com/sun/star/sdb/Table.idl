@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Table.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:25:11 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,24 +46,20 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::Table
 /** extends the service
     <type scope="com::sun::star::sdbcx">Table</type>
     with additional display information, sorting, and filtering criterias.
  */
 published service Table
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbcx::Table;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::Table: service com::sun::star::sdb::DataSettings
     /** is used for customization of data appearance.
      */
     service com::sun::star::sdb::DataSettings;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::Table::Privileges
     /** indicates the privileges for the table.
         @see com::sun::star::sdbcx::Privilege
      */
