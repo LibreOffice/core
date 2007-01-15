@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:37:23 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,15 +144,13 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
                                        ,const TContentPtr& _pImpl
                                        ,sal_Bool _bTable)
     :OContentHelper(_xORB,_rxContainer,_pImpl)
-    ,ODataSettings(m_aBHelper)
+    ,ODataSettings(m_aBHelper,!_bTable)
     ,m_bTable(_bTable)
 {
     DBG_CTOR(OComponentDefinition, NULL);
-
     registerProperties();
 
     m_pImpl->m_aProps.aTitle = _rElementName;
-
     DBG_ASSERT(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
