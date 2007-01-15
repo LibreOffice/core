@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Statement.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:47:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
  published interface XCloseable;
 
 
-// DocMerge from xml: service com::sun::star::sdbc::Statement
 /** is used for executing a static SQL statement and obtaining the results
     produced by it.
 
@@ -71,14 +70,12 @@
 published service Statement
 {
 
-    // DocMerge from xml: service com::sun::star::sdbc::Statement: interface com::sun::star::lang::XComponent
     /** optional for implementation, controls the releasing of resources
              and the notification of registered listeners.
      */
     [optional] interface com::sun::star::lang::XComponent;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::Statement: interface com::sun::star::sdbc::XCloseable
     /** freeing all resources of a statement. A related resultset will be
              freed as well.
      */
@@ -87,20 +84,17 @@ published service Statement
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
-    // DocMerge from xml: service com::sun::star::sdbc::Statement: interface com::sun::star::util::XCancellable
     /** could be used for cancelling the execution of SQL statements if both
              the DBMS and the driver support aborting an SQL statement.
              The implementation is optional.
      */
     [optional] interface com::sun::star::util::XCancellable;
 
-    // DocMerge from xml: service com::sun::star::sdbc::Statement: interface com::sun::star::sdbc::XStatement
     /** is the interface for executing SQL commands.
      */
     interface XStatement;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::Statement: interface com::sun::star::sdbc::XBatchExecution
     /** provides the ability of batch execution. This interface is optional
              for execution.
              <p>
@@ -113,7 +107,6 @@ published service Statement
     [optional] interface XBatchExecution;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::Statement: interface com::sun::star::sdbc::XWarningsSupplier
     /** controls the chaining of warnings, which may occur on every call
              to the connected database. Chained warnings from previous calls will be
              cleared before processing a new call.
@@ -121,14 +114,12 @@ published service Statement
     interface XWarningsSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::Statement: interface com::sun::star::sdbc::XMultipleResults
     /** covers the handling of multiple results after executing an SQL command.
                 The implementation is optional.
      */
     [optional] interface XMultipleResults;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::QueryTimeOut
     /** retrieves the number of seconds the driver will wait for a Statement
         to execute. If the limit is exceeded, a SQLException is thrown.
         There is no limitation, if set to zero.
@@ -136,7 +127,6 @@ published service Statement
     [property] long QueryTimeOut;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::MaxFieldSize
     /**  returns the maximum number of bytes allowed for any column value.
 
         <p>
@@ -163,7 +153,6 @@ published service Statement
     [property] long MaxFieldSize;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::MaxRows
     /** retrieves the maximum number of rows that a ResultSet can contain.
         If the limit is exceeded, the excess rows are silently dropped.
         <br/>
@@ -172,7 +161,6 @@ published service Statement
     [property] long MaxRows;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::CursorName
     /** defines the SQL cursor name that will be used by subsequent Statement
         <code>execute</code>
         methods.
@@ -199,7 +187,6 @@ published service Statement
     [property] string CursorName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::ResultSetConcurrency
     /** retrieves the result set concurrency.
 
         @see com::sun::star::sdbc::ResultSetConcurrency
@@ -207,7 +194,6 @@ published service Statement
     [property] long ResultSetConcurrency;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::ResultSetType
     /** determine the result set type.
 
         @see com::sun::star::sdbc::ResultSetType
@@ -215,7 +201,6 @@ published service Statement
     [property] long ResultSetType;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::FetchDirection
     /** retrieves the direction for fetching rows from database tables
         that is the default for result sets generated from this
         <code>Statement</code>
@@ -229,7 +214,6 @@ published service Statement
     [property] long FetchDirection;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::FetchSize
     /** retrieves the number of result set rows that is the default fetch size
         for result sets generated from this
         <code>Statement</code>
@@ -243,7 +227,6 @@ published service Statement
     [property] long FetchSize;
 
 
-    // DocMerge from xml: property com::sun::star::sdbc::Statement::EscapeProcessing
     /** returns if escape processing is on or off.
         If escape scanning is on (the default), the driver will do
         escape substitution before sending the SQL to the database.
