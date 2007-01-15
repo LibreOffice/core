@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 12:15:40 $
+#   last change: $Author: vg $ $Date: 2007-01-15 12:18:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@ use Getopt::Long;
 #   Globale Variablen   #
 #                       #
 #########################
-$is_debug = 0;
-$is_command_infos = 0;
+$is_debug = 0;           # run without executing commands
+$is_command_infos = 0;   # print command details before exec
 $is_protocol_test = 0;
 $is_remove_on_error = 0;
 $is_remove_at_end = 1;
@@ -117,7 +117,7 @@ elsif ($gui eq "UNX") {
     $dos = "";
     $PERL = "$ENV{PERL}";
     $REMOVE_DIR = "rm -rf";
-    $REMOVE_FILE = "rm";
+    $REMOVE_FILE = "rm -f";
     $LIST_DIR = "ls";
     $COPY_FILE = "cp -f";
     $COPY_DIR = "cp -rf";
@@ -137,7 +137,7 @@ elsif ($gui eq $cygwin) {
     $dos = "";
     $PERL = "$ENV{PERL}";
     $REMOVE_DIR = "rm -rf";
-    $REMOVE_FILE = "rm";
+    $REMOVE_FILE = "rm -f";
     $LIST_DIR = "ls";
     $COPY_FILE = "cp -f";
     $COPY_DIR = "cp -rf";
@@ -168,10 +168,10 @@ else {
 }
 
 @error_messages = ( '',
-            '',
+            'log flag for pkgadd still exist. Installation not possible!',
             'Error during installation!',
             'Error: patching configuration failed!',
-            'Error: starting office failed!',
+            'Error: starting office failed or office crashed!',
             'Error during testing',
             'can not copy extension',
             'Error in setup log',
@@ -185,6 +185,7 @@ else {
 my $show_NoMessage = 0;
 my $show_Message = 1;
 
+my $error_logflag = 1;
 my $error_setup = 2;
 my $error_patchConfig = 3;
 my $error_startOffice = 4;
@@ -255,7 +256,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.21 $ ';
+$id_str = ' $Revision: 1.22 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -565,7 +566,31 @@ sub doInstall {
         chomp $system;
         $mach = `uname -m`;
         chomp $mach;
-        if ( (defined($system)) && ($system eq "Linux") ) {
+        if (defined ($ENV{EPM}) && ($ENV{EPM} eq 'NO')) { # do the install ourselves ...
+# FIXME - this tool should work nicely without such hacks
+# cut/paste from ooo-build/bin/ooinstall
+            my $instoo_dir = "$ENV{SOLARROOT}/instsetoo_native";
+
+            if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
+            $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
+            }
+            $ENV{'PYTHONPATH'} = "$ENV{SOLARROOT}/instsetoo_native/$ENV{INPATH}/bin:$ENV{SOLARVER}/$ENV{UPD}/$ENV{INPATH}/lib";
+            $ENV{OUT} = "../$ENV{INPATH}";
+            $ENV{LOCAL_OUT} = "../$ENV{INPATH}";
+            $ENV{LOCAL_COMMON_OUT} = "../$ENV{INPATH}";
+            my $sane_destdir = $dest_installdir;
+            $sane_destdir .= "oootest";
+            createPath ($sane_destdir, $error_setup);
+            $Command = "cd $instoo_dir/util ; perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+            "-f openoffice.lst -l en-US -p OpenOffice " .
+            "-packagelist ../inc_openoffice/unix/packagelist.txt " .
+            "-addpackagelist ../inc_openoffice/unix/packagelist_language.txt " .
+            "-buildid \"smoketestoo\" -simple $sane_destdir";
+# FIXME - this tool should work nicely without such evil
+            execute_Command ($Command, $error_setup, $show_Message, $command_normal);
+            return "$sane_destdir/"
+
+        } elsif ( (defined($system)) && ($system eq "Linux") ) {
             $installsetpath .= "RPMS$PathSeparator";
             $optdir = "$dest_installdir" . "opt" . $PathSeparator;
             $rpmdir = "$dest_installdir" . "rpm" . $PathSeparator;
@@ -597,6 +622,15 @@ sub doInstall {
             }
         }
         elsif ( (defined($system)) && ($system eq "SunOS") ) {
+            @DirArray = ();
+                $mask = "^.ai.pkg.zone.lock";
+                        getSubFiles ("/tmp", \@DirArray, $mask);
+            if ($#DirArray >= 0) {
+                foreach $file (@DirArray) {
+                                $Command = "$REMOVE_FILE /tmp/$file";
+                    execute_Command ($Command, $error_logflag, $show_Message, $command_withoutOutput);
+                            }
+            }
             if ($mach eq sun4u) {
                 $solarisdata = $DATA . "solaris$PathSeparator" . "sparc$PathSeparator";
             }
@@ -607,6 +641,7 @@ sub doInstall {
             $optdir = "$dest_installdir" . "opt" . $PathSeparator;
             createPath ($optdir, $error_setup);
             createPath ($dest_installdir . "usr$PathSeparator" . "bin", $error_setup);
+            @DirArray = ();
             getSubDirs ("$installsetpath", \@DirArray);
             my $ld_preload = $ENV{LD_PRELOAD};
             $ENV{LD_PRELOAD} = $solarisdata . "getuid.so";
@@ -676,6 +711,11 @@ sub langsort {
 sub getInstset {
     my ($INSTSET, $NEWINSTSET);
     my (@DirArray, $InstDir, $RootDir, $TestDir1, $TestDir2);
+
+    if (defined ($ENV{EPM}) && ($ENV{EPM} eq 'NO')) { # we do the install ourselves ...
+        return ();
+    }
+
     print "get Instset\n" if $is_debug;
     $NEWINSTSET = "";
     if (defined($smoketest_install)) {
@@ -685,7 +725,7 @@ sub getInstset {
         ($NEWINSTSET, $INSTSET, $sufix) = fileparse ($smoketest_install);
         return ($NEWINSTSET, $INSTSET);
     }
-    if (defined ($ENV{UPDATER}) and ($ENV{UPDATER} eq "YES") and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
+    if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
         ($NEWINSTSET, $INSTSET) = getSetFromServer();
     }
     else {
@@ -721,6 +761,19 @@ sub getInstset {
         print_error ("no installationset found\n",2);
     }
     return ($NEWINSTSET, $INSTSET);
+}
+
+sub isLocalEnv {
+    my $returnvalue = 0;
+    if (defined ($ENV{SOL_TMP}) && defined ($ENV{SOLARVERSION})) {
+        my $mask = $ENV{SOL_TMP};
+        $mask =~ s/\\/\\\\/;
+        print "Mask: $mask\n" if $is_debug;
+        if ($ENV{SOLARVERSION}=~ /$mask/) {
+            $returnvalue = 1;
+        }
+    }
+    return $returnvalue;
 }
 
 sub get_milestoneAndBuildID {
