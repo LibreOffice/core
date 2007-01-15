@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Table.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:02:44 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
  published interface XAlterTable;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::Table
 /** used to specify a table in a database. A table is described by its
     name and one or more columns.
 
@@ -74,37 +73,31 @@
 published service Table
 {
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XDataDescriptorFactory
     /** optional, could be used to copy an table.
      */
     [optional] interface XDataDescriptorFactory;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XColumnsSupplier
     /** access to the contained table columns.
      */
     interface XColumnsSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XIndexesSupplier
     /** optional, provides the access of the table indexes.
      */
     [optional] interface XIndexesSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XKeysSupplier
     /** optional, provides the access to the table keys.
      */
     [optional] interface XKeysSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XRename
     /** optional, allows the renaming of tables.
      */
     [optional] interface XRename;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XAlterTable
     /** optional, allows the altering of columns.
      */
     [optional] interface XAlterTable;
@@ -113,32 +106,27 @@ published service Table
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Table::Name
     /** is the name of the table.
      */
     [readonly, property] string Name;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Table::CatalogName
     /** is the name of the table catalog.
      */
     [readonly, property] string CatalogName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Table::SchemaName
     /** is the name of the table schema.
      */
     [readonly, property] string SchemaName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Table::Description
     /** supplies a comment on the table. Could be empty, if not supported by
         the driver.
      */
     [readonly, property] string Description;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Table::Type
     /** indicates the type of the table like (TABLE, VIEW, SYSTEM TABLE).
         Could be empty, if not supported by the driver.
      */
