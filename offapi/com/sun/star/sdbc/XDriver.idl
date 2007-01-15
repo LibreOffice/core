@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDriver.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:49:55 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
  published interface XDriverManager;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XDriver
 /** is the interface that every driver class must implement.
 
 
@@ -84,7 +83,6 @@
 published interface XDriver: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriver::connect
     /** attempts to make a database connection to the given URL.
         The driver should return
         <NULL/>
@@ -129,7 +127,6 @@ published interface XDriver: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriver::acceptsURL
     /** returns <TRUE/> if the driver thinks that it can open a connection
         to the given URL.  Typically drivers will return <TRUE/> if they
         understand the subprotocol specified in the URL and <FALSE/> if
@@ -145,7 +142,6 @@ published interface XDriver: com::sun::star::uno::XInterface
     boolean acceptsURL([in]string url) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::sdbc::XDriver::getPropertyInfo
     /** gets information about the possible properties for this driver.
              <p>The getPropertyInfo method is intended to allow a generic GUI tool to
              discover what properties it should prompt a human for in order to get
@@ -170,7 +166,6 @@ published interface XDriver: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMajorVersion
     /** gets the driver's major version number. Initially this should be 1.
         @returns
             this driver's major version number
@@ -178,7 +173,6 @@ published interface XDriver: com::sun::star::uno::XInterface
     long getMajorVersion();
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMinorVersion
     /** gets the driver's minor version number. Initially this should be 0.
         @returns
             this driver's minor version number.
