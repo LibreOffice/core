@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:50:42 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,6 +364,7 @@ DBG_NAME(OCommonBehaviourTabPage)
         if ( !m_pDSFixedLine )
             m_pDSFixedLine = new FixedLine(this, ResId(FL_DATAHANDLING));
     }
+
     // -----------------------------------------------------------------------
     void OCommonBehaviourTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
