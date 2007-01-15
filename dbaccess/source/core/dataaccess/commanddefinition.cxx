@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:38:46 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,6 @@ OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContai
     :OComponentDefinition(_rxContainer,_rElementName,_xORB,_pImpl,sal_False)
 {
     DBG_CTOR(OCommandDefinition, NULL);
-
     registerProperties();
 }
 
