@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BestRowScope.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:33:05 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::BestRowScope
 /** determines how long a row identifier is valid.
  */
 published constants BestRowScope
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::BestRowScope::TEMPORARY
     /** indicates that the scope of the best row identifier is
              very temporary, lasting only while the row is being used.
              A possible value for the column
@@ -59,7 +57,6 @@ published constants BestRowScope
     const long TEMPORARY   = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::BestRowScope::TRANSACTION
     /** indicates that the scope of the best row identifier is
              the remainder of the current transaction.
              A possible value for the column
@@ -74,7 +71,6 @@ published constants BestRowScope
     const long TRANSACTION = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::BestRowScope::SESSION
     /** indicates that the scope of the best row identifier is
              the remainder of the current session.
              A possible value for the column

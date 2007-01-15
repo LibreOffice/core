@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BestRowType.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:33:18 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:59:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::BestRowType
 /** determines the type of the best row identifier.
  */
 published constants BestRowType
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::BestRowType::UNKNOWN
     /** indicates that the best row identifier may or may not be a pseudo-column.
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
@@ -58,7 +56,6 @@ published constants BestRowType
     const long UNKNOWN  = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::BestRowType::NOT_PSEUDO
     /** indicates that the best row identifier is NOT a pseudo-column.
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
@@ -72,7 +69,6 @@ published constants BestRowType
     const long NOT_PSEUDO   = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::BestRowType::PSEUDO
     /** indicates that the best row identifier is a pseudo-column.
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
