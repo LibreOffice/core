@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultColumn.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:22:13 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,71 +46,59 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::ResultColumn
 /** describes a column of a result set.
  */
 published service ResultColumn
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbcx::Column;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::ResultColumn: service com::sun::star::sdb::ColumnSettings
     /** [optional], access to layout settings for a column.
      */
     service com::sun::star::sdb::ColumnSettings;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::IsSearchable
     /** indicates whether the column can be used in a Where clause.
      */
     [readonly, property] boolean IsSearchable;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::IsSigned
     /** indicates whether values in the column are signed numbers.
      */
     [readonly, property] boolean IsSigned;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::IsCaseSensitive
     /** indicates that a column is case sensitive.
      */
     [readonly, property] boolean IsCaseSensitive;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::DisplaySize
     /** indicates the column's normal max width in chars..
      */
     [readonly, property] long DisplaySize;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::Label
     /** gets the suggested column title for use in printouts and
         displays.
      */
     [readonly, property] string Label;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::IsReadOnly
     /** indicates whether a column is definitely, not writable.
      */
     [readonly, property] boolean IsReadOnly;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::IsWritable
     /** indicates whether it is possible for a write on the column to succeed.
      */
     [readonly, property] boolean IsWritable;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::IsDefinitelyWritable
     /** indicates whether a write on the column will definitely succeed.
      */
     [readonly, property] boolean IsDefinitelyWritable;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::ServiceName
     /** returns the fully-qualified name of the service whose instances
         are manufactured if the method
         <method scope="com::sun::star::sdbc">XRow::getObject)=</method>
@@ -119,19 +107,16 @@ published service ResultColumn
     [readonly, property] string ServiceName;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::TableName
     /** gets a column's table name.
      */
     [readonly, property] string TableName;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::SchemaName
     /** gets a column's schema name.
      */
     [readonly, property] string SchemaName;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ResultColumn::CatalogName
     /** gets a column's table's catalog name.
      */
     [readonly, property] string CatalogName;

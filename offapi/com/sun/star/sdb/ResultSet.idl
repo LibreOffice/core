@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:22:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::ResultSet
 /** extends the
     <type scope="com::sun::star::sdbcx">ResultSet</type>
     by a more sophisticated access to the result sets
@@ -54,11 +53,9 @@
  */
 published service ResultSet
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbcx::ResultSet;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::ResultSet: interface com::sun::star::sdbcx::XColumnsSupplier
     /** access to the description and data.
      */
     interface com::sun::star::sdbcx::XColumnsSupplier;
