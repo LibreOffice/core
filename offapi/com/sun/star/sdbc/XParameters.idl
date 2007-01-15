@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XParameters.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:51:32 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@
  published interface XClob;
 
 
-// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XParameters
 /** is used for parameter setting, commonly implemented in conjunction with
     PreparedStatements.
 
@@ -100,14 +99,12 @@
 published interface XParameters: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setNull
     /** sets the designated parameter to SQL NULL.
      */
     void setNull([in]long parameterIndex,
                  [in]long sqlType) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setObjectNull
     /** sets the designated parameter to SQL NULL.  This version of setNull should
         be used for user-named types and REF type parameters.  Examples
         of user-named types include: STRUCT, DISTINCT, OBJECT, and
@@ -142,7 +139,6 @@ published interface XParameters: com::sun::star::uno::XInterface
                         [in]string typeName) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBoolean
     /** sets the designated parameter to a boolean value.  The driver converts this
         to a SQL BIT value when it sends it to the database.
         @param parameterIndex
@@ -156,7 +152,6 @@ published interface XParameters: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setByte
     /** sets the designated parameter to a byte value.  The driver converts this
         to a SQL TINYINT value when it sends it to the database.
         @param parameterIndex
@@ -169,7 +164,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setByte([in]long parameterIndex, [in]byte x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setShort
     /** sets the designated parameter to a short value.  The driver converts this
         to a SQL SMALLINT value when it sends it to the database.
         @param parameterIndex
@@ -182,7 +176,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setShort([in]long parameterIndex, [in]short x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setInt
     /** sets the designated parameter to a long value.  The driver converts this
         to a SQL INTEGER value when it sends it to the database.
         @param parameterIndex
@@ -195,7 +188,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setInt([in]long parameterIndex, [in]long x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setLong
     /** sets the designated parameter to a hyper value.  The driver converts this
         to a SQL BIGINT value when it sends it to the database.
         @param parameterIndex
@@ -208,7 +200,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setLong([in]long parameterIndex, [in]hyper x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setFloat
     /** sets the designated parameter to a float value. The driver converts this
         to a SQL FLOAT value when it sends it to the database.
         @param parameterIndex
@@ -221,7 +212,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setFloat([in]long parameterIndex, [in]float x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setDouble
     /** sets the designated parameter to a double value.  The driver converts this
         to a SQL DOUBLE value when it sends it to the database.
         @param parameterIndex
@@ -234,7 +224,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setDouble([in]long parameterIndex, [in]double x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setString
     /** sets the designated parameter to a string value. The driver converts this
         to a SQL VARCHAR or LONGVARCHAR value (depending on the argument's
         size relative to the driver's limits on VARCHARs) when it sends
@@ -249,7 +238,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setString([in]long parameterIndex, [in]string x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBytes
     /** sets the designated parameter to a sequence of bytes.  The driver converts
         this to a SQL VARBINARY or LONGVARBINARY (depending on the
         argument's size relative to the driver's limits on VARBINARYs)
@@ -265,7 +253,6 @@ published interface XParameters: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setDate
     /** sets the designated parameter to a date value. The driver converts this
         to a SQL DATE value when it sends it to the database.
         @param parameterIndex
@@ -279,7 +266,6 @@ published interface XParameters: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setTime
     /** sets the designated parameter to a time value. The driver converts this
         to a SQL TIME value when it sends it to the database.
         @param parameterIndex
@@ -293,7 +279,6 @@ published interface XParameters: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setTimestamp
     /** sets the designated parameter to a datetime value.  The driver
         converts this to a SQL TIMESTAMP value when it sends it to the
         database.
@@ -308,7 +293,6 @@ published interface XParameters: com::sun::star::uno::XInterface
                       [in]com::sun::star::util::DateTime x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBinaryStream
     /** sets the designated parameter to the given input stream, which will have
         the specified number of bytes.
         When a very large binary value is input to a LONGVARBINARY or LONGVARCHAR
@@ -329,7 +313,6 @@ published interface XParameters: com::sun::star::uno::XInterface
                              [in]long length) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setCharacterStream
     /** sets the designated parameter to the given input stream, which will have
         the specified number of bytes.
         When a very large binary value is input to a LONGVARCHAR
@@ -350,7 +333,6 @@ published interface XParameters: com::sun::star::uno::XInterface
                              [in]long length) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setObject
     /** sets the value of a parameter using an any.
 
 
@@ -377,7 +359,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setObjectWithInfo
     /** set a value from the Datatype ANY for a parameter.
 
 
@@ -416,7 +397,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setRef
     /** sets a REF(&amp;lt;structured-type&amp;gt;) parameter.
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
@@ -428,7 +408,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setRef ([in]long parameterIndex, [in]XRef x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBlob
     /** sets a BLOB parameter.
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
@@ -440,7 +419,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setBlob ([in]long parameterIndex, [in]XBlob x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setClob
     /** sets a CLOB parameter.
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
@@ -452,7 +430,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setClob ([in]long parameterIndex, [in]XClob x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setArray
     /** sets an Array parameter.
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
@@ -465,7 +442,6 @@ published interface XParameters: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::clearParameters
     /** clears the current parameter values immediately.
 
 

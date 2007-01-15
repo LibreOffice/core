@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMultipleResults.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:51:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
  published interface XResultSet;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XMultipleResults
 /** is used for inspecting multiple results produced by the execution of a
     SQL statement.
 
@@ -73,7 +72,6 @@
 published interface XMultipleResults: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XMultipleResults::getResultSet
     /** returns the current result as a
         <type scope="com::sun::star::sdbc">ResultSet</type>
         object.
@@ -86,7 +84,6 @@ published interface XMultipleResults: com::sun::star::uno::XInterface
     XResultSet getResultSet() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XMultipleResults::getUpdateCount
     /** returns the current result as an update count.
 
 
@@ -102,7 +99,6 @@ published interface XMultipleResults: com::sun::star::uno::XInterface
     long getUpdateCount() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XMultipleResults::getMoreResults
     /** moves to a Statement's next result. It returns <TRUE/> if
         this result is a ResultSet.  This method also implicitly
         closes any current ResultSet obtained with getResultSet.
