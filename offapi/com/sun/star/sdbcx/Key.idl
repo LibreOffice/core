@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Key.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:00:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,19 +45,16 @@
  published interface XDataDescriptorFactory;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::Key
 /** is used to define a new key for a table.
  */
 published service Key
 {
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Key: interface com::sun::star::sdbcx::XDataDescriptorFactory
     /** optional, could be used to copy a key.
      */
     [optional] interface XDataDescriptorFactory;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Key: interface com::sun::star::sdbcx::XColumnsSupplier
     /** access to the contained key columns.
      */
     interface XColumnsSupplier;
@@ -66,34 +63,29 @@ published service Key
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from idl: property com::sun::star::sdbcx::Key::Name
     /** is the name of the key
      */
     [readonly, property] string Name;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Key::Type
     /** indicates the type of the key.
         @see com::sun::star::sdbcx::KeyType
      */
     [readonly, property] long Type;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Key::ReferencedTable
     /** is the name of the referenced table, only used for foreign
         keys.
      */
     [readonly, property] string ReferencedTable;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Key::UpdateRule
     /** is the rule which is applied for updates; only used for foreign keys.
         @see com::sun::star::sdbc::KeyRule
      */
     [readonly, property] long UpdateRule;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Key::DeleteRule
     /** is the rule which is applied for deletions; only used for foreign keys.
         @see com::sun::star::sdbc::KeyRule
      */
