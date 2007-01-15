@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CompareBookmark.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:57:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,37 +38,31 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from idl: constants com::sun::star::sdbcx::CompareBookmark
 /** describes the result of a comparision of two bookmarks.
  */
 published constants CompareBookmark
 {
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CompareBookmark::LESS
     /** the first bookmark is before the second.
      */
     const long LESS = -1;
 
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CompareBookmark::EQUAL
     /** the first bookmark is equal to the second.
      */
     const long EQUAL = 0;
 
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CompareBookmark::GREATER
     /** the first bookmark is after the second one.
      */
     const long GREATER = 1;
 
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CompareBookmark::NOT_EQUAL
     /** the first bookmark is not the same as the second one.
      */
     const long NOT_EQUAL = 2;
 
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CompareBookmark::NOT_COMPARABLE
     /** the two bookmarks are not comparable.
      */
     const long NOT_COMPARABLE = 3;
