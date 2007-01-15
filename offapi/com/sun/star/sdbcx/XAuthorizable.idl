@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAuthorizable.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:35:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XAuthorizable
 /** is used for accessing and setting the permissions of a user for a database
     object.
     @see com::sun::star::sdbcx::PrivilegeObject
@@ -53,7 +52,6 @@
 published interface XAuthorizable: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XAuthorizable::getPrivileges
     /** retrieves the permissions for a specific object.
         @param objName
             the name of the object
@@ -69,7 +67,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
                         (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XAuthorizable::getGrantablePrivileges
     /** retrieves the permissions for a specific object, which could be granted
         to other users and groups.
         @param objName
@@ -86,7 +83,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
                         (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XAuthorizable::grantPrivileges
     /** adds additional permissions for a specific object.
         @param objName
             the name of the object
@@ -100,7 +96,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XAuthorizable::revokePrivileges
     /** removes permissions for a specific object from a group or user.
         @param objName
             the name of the object
