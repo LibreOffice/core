@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseEnvironment.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:16:54 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:51:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
  published interface XDatabaseEnvironment;
 
 
-// DocMerge from xml: service com::sun::star::sdb::DatabaseEnvironment
 /** @deprecated
     is the top level service for accessing database components.
 
@@ -61,14 +60,11 @@
  */
 published service DatabaseEnvironment
 {
-    // DocMerge: empty anyway
     interface XDatabaseEnvironment;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DatabaseEnvironment::NumberFormatsSupplier
     /** provides an object for formatting numbers.
      */
     [readonly, property] com::sun::star::util::XNumberFormatsSupplier
