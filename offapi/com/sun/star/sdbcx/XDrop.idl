@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDrop.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:06:06 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,12 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XDrop
 /** provides methods to remove an element of its container and to drop it from
     the related database.
  */
 published interface XDrop: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XDrop::dropByName
     /** drops an object of the related container identified by its name.
         @param elementName
             the name of the element to be dropped
@@ -72,7 +70,6 @@ published interface XDrop: com::sun::star::uno::XInterface
         com::sun::star::container::NoSuchElementException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XDrop::dropByIndex
     /** drops an object of the related container identified by its position.
         @param index
             the position of the element to be dropped
