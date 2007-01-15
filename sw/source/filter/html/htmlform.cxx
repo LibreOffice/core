@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:26 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -867,9 +867,13 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
     ASSERT( pObj, "SdrObject nicht gefunden" );
     ASSERT( FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
 
+    const SdrView* pDrawView = pVSh->GetDrawView();
+    ASSERT( pDrawView, "DrawView not found" );
+
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
-    Reference< awt::XControl > xControl =
-        pFormObj->GetUnoControl( pVSh->GetWin() );
+    Reference< awt::XControl > xControl;
+    if ( pDrawView && pVSh->GetWin() )
+        xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );
 
     awt::Size aSz( rShape->getSize() );
     awt::Size aNewSz( 0, 0 );
