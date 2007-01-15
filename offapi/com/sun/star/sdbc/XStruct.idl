@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStruct.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:55:53 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::container::com::sun::star::sdbc::XStruct
 /** is used for the standard mapping for a SQL structured type.
 
 
@@ -68,7 +67,6 @@
 published interface XStruct: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XStruct::getSQLTypeName
     /** retrieves the SQL type name of the SQL structured type
         that this
         <code>Struct</code>
@@ -82,7 +80,6 @@ published interface XStruct: com::sun::star::uno::XInterface
 
       //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::container::com::sun::star::sdbc::XStruct::getAttributes
     /** produces the ordered values of the attributes of the SQL
              structured type that this
              <code>Struct</code>

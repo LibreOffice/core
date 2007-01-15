@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSQLData.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:54:47 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
  published interface XSQLOutput;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XSQLData
 /** is used for the custom mapping of SQL user-defined types.
 
 
@@ -64,7 +63,6 @@
 published interface XSQLData: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XSQLData::getSQLTypeName
     /** returns the fully-qualified name of the SQL user-defined type
         that this object represents.
 
@@ -82,7 +80,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
 
      //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XSQLData::readSQL
     /** populates this object with data read from the database.
 
 
@@ -124,7 +121,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XSQLData::writeSQL
     /** writes this object to the given SQL data stream.
 
 
