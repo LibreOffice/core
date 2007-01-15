@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:30:23 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3033,35 +3033,16 @@ void SbaTableQueryBrowser::impl_initialize()
 
     const NamedValueCollection& rArguments( getInitParams() );
 
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_DATASOURCENAME, sInitialDataSourceName ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for DataSourceName.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_COMMANDTYPE, nInitialDisplayCommandType ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CommandType.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_COMMAND, sInitialCommand ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for Command.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xForeignConnection ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_UPDATE_CATALOGNAME, aCatalogName ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateCatalogName.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_UPDATE_SCHEMANAME, aSchemaName ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateSchemaName.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, aTableName ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for UpdateTableName.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_USE_ESCAPE_PROCESSING, bEsacpeProcessing ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for EscapeProcessing.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( "Frame", xFrame ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for Frame.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_SHOWMENU, m_bShowMenu ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ShowMenu.")),*this);
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_DATASOURCENAME, sInitialDataSourceName );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMANDTYPE, nInitialDisplayCommandType );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMAND, sInitialCommand );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xForeignConnection );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_CATALOGNAME, aCatalogName );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_SCHEMANAME, aSchemaName );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, aTableName );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_USE_ESCAPE_PROCESSING, bEsacpeProcessing );
+    rArguments.get_ensureType( "Frame", xFrame );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_SHOWMENU, m_bShowMenu );
 
     sal_Bool bShowTreeView = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEW, sal_True );
     m_bEnableBrowser = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEWBUTTON, sal_True );
