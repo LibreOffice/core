@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnValue.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:40:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:00:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,23 +38,19 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::ColumnValue
 /** determines whether a column allows SQL NULL values or not.
  */
 published constants ColumnValue
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::ColumnValue::NO_NULLS
     /** indicates that a column does not allow NULL values.
      */
     const long NO_NULLS         =  0;
 
-    // DocMerge from idl: value com::sun::star::sdbc::ColumnValue::NULLABLE
     /** indicates that a column does allow NULL values.
      */
     const long NULLABLE         =  1;
 
-    // DocMerge from idl: value com::sun::star::sdbc::ColumnValue::NULLABLE_UNKNOWN
     /** indicates that the nullability of the column is unknown.
      */
     const long NULLABLE_UNKNOWN =  2;
