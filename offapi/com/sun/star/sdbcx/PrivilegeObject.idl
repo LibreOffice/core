@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrivilegeObject.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:01:42 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,26 +38,22 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from idl: constants com::sun::star::sdbcx::PrivilegeObject
 /** defines the list of objects for which a user may have accessrights or not.
         This list may grow in the future.
  */
 published constants PrivilegeObject
 {
 
-    // DocMerge from idl: value com::sun::star::sdbcx::PrivilegeObject::TABLE
     /** indicates a table.
      */
     const long TABLE    = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::PrivilegeObject::VIEW
     /** indicates a view.
      */
     const long VIEW     = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::PrivilegeObject::COLUMN
     /** indicates a column of a table.
      */
     const long COLUMN   = 2;
