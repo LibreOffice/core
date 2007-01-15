@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:18:14 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -957,6 +957,10 @@ protected:
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& getField() const
     {
         return m_xField;
+    }
+    inline bool hasField() const
+    {
+        return m_xField.is();
     }
 
     // OPropertySetAggregationHelper
