@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CheckOption.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:56:39 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,27 +38,23 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from idl: constants com::sun::star::sdbcx::CheckOption
 /** determines the check option for a view.
  */
 published constants CheckOption
 {
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CheckOption::NONE
     /** indicates that no value checking is applied during updates of
              view data.
      */
     const long NONE = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CheckOption::CASCADE
     /** indicates that the value checking is applied for the view and all base
              views.
      */
     const long CASCADE = 2;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::CheckOption::LOCAL
     /** indicates that the value checking is applied only for the view.
      */
     const long LOCAL = 3;
