@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:57:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,29 +768,6 @@ String RID_SVXITEMS_ADJUST_BLOCKLINE
 {
     Text [ de ] = "Blockausrichtung" ;
     Text [ en-US ] = "Justify" ;
-    Text [ x-comment ] = " ";
-};
- // DB-Server-Connect --------------------------------------------------------
-String RID_SVXITEMS_DBTYPE_ODBC
-{
-    Text = "ODBC" ;
-};
-String RID_SVXITEMS_DBTYPE_WATCOM
-{
-    Text = "Watcom SQL" ;
-};
-String RID_SVXITEMS_DBTYPE_DB2
-{
-    Text = "DB2" ;
-};
-String RID_SVXITEMS_DBTYPE_DBF
-{
-    Text = "dBase" ;
-};
-String RID_SVXITEMS_DBTYPE_FLAT
-{
-    Text [ de ] = "Text" ;
-    Text [ en-US ] = "Text" ;
     Text [ x-comment ] = " ";
 };
  // enum SvxTabAdjust --------------------------------------------------------
