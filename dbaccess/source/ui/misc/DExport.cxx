@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:31:38 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,36 +413,32 @@ void ODatabaseExport::insertValueIntoColumn()
                         else
                         {
                             Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
-
-                            try
-                            {
-                                nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::DATETIME,m_aLocale),m_sTextToken);
-                            }
-                            catch(Exception&)
+                            sal_Int16 nFormats[] = { NumberFormat::DATETIME
+                                ,NumberFormat::DATETIME
+                                ,NumberFormat::DATE
+                                ,NumberFormat::TIME
+                                ,NumberFormat::NUMBER
+                                ,NumberFormat::LOGICAL
+                            };
+                            for (size_t i = 0; i < sizeof(nFormats)/sizeof(nFormats[0]); ++i)
                             {
                                 try
                                 {
-                                    nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::DATE,m_aLocale),m_sTextToken);
+                                    nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(nFormats[i],m_aLocale),m_sTextToken);
+                                    break;
                                 }
                                 catch(Exception&)
                                 {
-                                    try
-                                    {
-                                        nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::TIME,m_aLocale),m_sTextToken);
-                                    }
-                                    catch(Exception&)
-                                    {
-                                        try
-                                        {
-                                            nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::NUMBER,m_aLocale),m_sTextToken);
-                                        }
-                                        catch(Exception&)
-                                        {
-                                        }
-                                    }
                                 }
                             }
-                            fOutNumber = m_xFormatter->convertStringToNumber(nNumberFormat,m_sTextToken);
+                            try
+                            {
+                                fOutNumber = m_xFormatter->convertStringToNumber(nNumberFormat,m_sTextToken);
+                            }
+                            catch(Exception&)
+                            {
+                                OSL_ENSURE(0,"Could not convert to number!");
+                            }
                         }
                         try
                         {
