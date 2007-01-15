@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formattedcontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:48:35 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:40:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,7 @@
 #include <toolkit/helper/servicenames.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_XSPINFIELD_HPP_
-#include <com/sun/star/awt/XSpinField.hpp>
-#endif
+#include <com/sun/star/util/XNumberFormatter.hpp>
 
 //........................................................................
 namespace toolkit
@@ -63,6 +61,10 @@ namespace toolkit
     protected:
         ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        ::com::sun::star::uno::Any      m_aCachedFormat;
+        bool                            m_bRevokedAsClient;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
+                                        m_xCachedFormatter;
 
     protected:
         sal_Bool SAL_CALL convertFastPropertyValue(
@@ -71,6 +73,11 @@ namespace toolkit
                     sal_Int32 nPropId,
                     const ::com::sun::star::uno::Any& rValue
                 ) throw (::com::sun::star::lang::IllegalArgumentException);
+
+        void SAL_CALL setFastPropertyValue_NoBroadcast(
+                    sal_Int32 nHandle,
+                    const ::com::sun::star::uno::Any& rValue
+                ) throw (::com::sun::star::uno::Exception);
 
     public:
                             UnoControlFormattedFieldModel();
@@ -87,6 +94,17 @@ namespace toolkit
 
         // ::com::sun::star::lang::XServiceInfo
         DECLIMPL_SERVICEINFO_DERIVED( UnoControlFormattedFieldModel, UnoControlModel, szServiceName2_UnoControlFormattedFieldModel )
+
+    protected:
+        ~UnoControlFormattedFieldModel();
+
+        // XComponent
+        void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    private:
+        void    impl_updateTextFromValue_nothrow();
+        void    impl_updateCachedFormatter_nothrow();
+        void    impl_updateCachedFormatKey_nothrow();
     };
 
     // ===================================================================
