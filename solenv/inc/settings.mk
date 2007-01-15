@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.205 $
+#   $Revision: 1.206 $
 #
-#   last change: $Author: hjs $ $Date: 2006-12-01 16:49:23 $
+#   last change: $Author: vg $ $Date: 2007-01-15 12:15:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -413,6 +413,10 @@ common_build*=$(COMMON_BUILD)
 
 .IF "$(USE_SHL_VERSIONS)"!=""
 use_shl_versions*=$(USE_SHL_VERSIONS)
+.ENDIF
+
+.IF "$(noremove)"!=""
+NOREMOVE*=$(noremove)
 .ENDIF
 
 # --- env flags not case sensitive --------------------------------
