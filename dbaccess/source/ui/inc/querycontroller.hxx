@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:33:14 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,12 @@
 #ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
+#include <comphelper/propertycontainer.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
+#endif
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include <connectivity/sqliterator.hxx>
 #endif
@@ -92,7 +98,12 @@ namespace dbaui
     class OTableFieldDesc;
     class OQueryTableWindow;
 
-    class OQueryController : public OJoinController
+    class OQueryController;
+    typedef ::comphelper::OPropertyContainer                            OQueryController_PBase;
+    typedef ::comphelper::OPropertyArrayUsageHelper< OQueryController > OQueryController_PABase;
+    class OQueryController  :public OJoinController
+                            ,public OQueryController_PBase
+                            ,public OQueryController_PABase
     {
         OTableFields                            m_vTableFieldDesc;
         OTableFields                            m_vUnUsedFieldsDesc; // contains fields which aren't visible and don't have any criteria
@@ -189,6 +200,9 @@ namespace dbaui
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();
 
+        DECLARE_XINTERFACE();
+        DECLARE_XTYPEPROVIDER();
+
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
@@ -197,6 +211,10 @@ namespace dbaui
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+
+        // XPropertySet
+        virtual com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException);
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     protected:
         virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
@@ -216,6 +234,9 @@ namespace dbaui
         // OJoinController overridables
         virtual bool allowViews() const;
         virtual bool allowQueries() const;
+
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     private:
         DECL_LINK( OnExecuteAddTable, void* );
