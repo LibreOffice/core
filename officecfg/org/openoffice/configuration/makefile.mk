@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-16 11:13:38 $
+#   last change: $Author: vg $ $Date: 2007-01-15 12:35:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,13 @@ PACKAGE=org$/openoffice$/configuration
 
 .INCLUDE :  settings.mk
 
-JARFILES = xml-apis.jar xercesImpl.jar xt.jar
+JARFILES = xml-apis.jar xercesImpl.jar
+
+.IF "$(SYSTEM_XT)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XT_JAR)
+.ELSE
+JARFILES += xt.jar
+.ENDIF
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/XMLDefaultGenerator.class \
