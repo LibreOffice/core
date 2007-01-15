@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XResultSetUpdate.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:53:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XResultSetUpdate
 /** provides the possiblity to write changes made on a result set back to
     database.
  */
@@ -54,7 +53,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetUpdate::insertRow
     /** inserts the contents of the insert row into the result set and
         the database. Must be on the insert row when this method is called.
         @throws SQLException
@@ -63,7 +61,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
     void insertRow() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetUpdate::updateRow
     /** updates the underlying database with the new contents of the
         current row. Cannot be called when on the insert row.
         @throws SQLException
@@ -72,7 +69,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
     void updateRow() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetUpdate::deleteRow
     /** deletes the current row from the result set and the underlying
         database. Cannot be called when on the insert row.
         @throws SQLException
@@ -81,7 +77,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
     void deleteRow() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetUpdate::cancelRowUpdates
     /** cancels the updates made to a row.
 
 
@@ -101,7 +96,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
     void cancelRowUpdates() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetUpdate::moveToInsertRow
     /** moves the cursor to the insert row.  The current cursor position is
         remembered while the cursor is positioned on the insert row.
 
@@ -139,7 +133,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
     void moveToInsertRow() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetUpdate::moveToCurrentRow
     /** moves the cursor to the remembered cursor position, usually the
         current row. This method has no effect if the cursor is not on the insert
         row.

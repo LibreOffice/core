@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRowSet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:53:58 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
  published interface XConnection;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XRowSet
 /** enhances the functionality of a result set. It allows implementation of
     a special behavior for a result set and notifies an application on
     certain row set events such as a change in its value.
@@ -62,7 +61,6 @@ published interface XRowSet: XResultSet
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XRowSet::execute
     /** populates a row set with data. The description of the data source and
         other important information for filling the row set with data.
 
@@ -72,7 +70,6 @@ published interface XRowSet: XResultSet
     void execute() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XRowSet::addRowSetListener
     /** adds the specified listener to receive the events "cursorMoved",
         "rowChanged", and "rowSetChanged".
         @param listener
@@ -81,7 +78,6 @@ published interface XRowSet: XResultSet
     [oneway] void addRowSetListener([in]XRowSetListener listener );
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XRowSet::removeRowSetListener
     /** removes the specified listener.
         @param listener
             the listener which should be registered

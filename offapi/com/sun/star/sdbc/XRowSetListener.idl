@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRowSetListener.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:54:14 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,12 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XRowSetListener
 /** is used for receiving "cursorMoved", "rowChanged", and "rowSetChanged" events
     posted by, for example, a rowset.
  */
 published interface XRowSetListener: com::sun::star::lang::XEventListener
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XRowSetListener::cursorMoved
     /** is called when a rowset's cursor is moved.
         @param event
             contains information about the event
@@ -57,7 +55,6 @@ published interface XRowSetListener: com::sun::star::lang::XEventListener
     [oneway] void cursorMoved([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XRowSetListener::rowChanged
     /** is called when a row is inserted, updated, or deleted.
         @param event
             contains information about the event
@@ -65,7 +62,6 @@ published interface XRowSetListener: com::sun::star::lang::XEventListener
     [oneway] void rowChanged([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XRowSetListener::rowSetChanged
     /** is called when the row set has changed, or in other words, when the row set has
         been reexecuted.
         @param event
