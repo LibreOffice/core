@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDropCatalog.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:06:21 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XDropCatalog
 /** may be implemented to hide the complexity of dropping a database catalog. Could
     normally be used only in offline mode, no connection on the database. This
     should be checked by the driver.
@@ -62,7 +61,6 @@
 published interface XDropCatalog: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XDropCatalog::dropCatalog
     /** drops a catalog identified by its name.
         @param catalogName
             the catalog name
