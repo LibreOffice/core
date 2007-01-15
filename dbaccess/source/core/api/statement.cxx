@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:36:27 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,12 +65,15 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
 
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-//using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -188,9 +191,6 @@ void OStatementBase::disposing()
         try
         {
             Reference< XCloseable > (m_xAggregateAsSet, UNO_QUERY)->close();
-        }
-        catch(DisposedException& )
-        {// don't care for anymore
         }
         catch(RuntimeException& )
         {// don't care for anymore
@@ -448,57 +448,17 @@ Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (S
 //************************************************************
 //  OStatement
 //************************************************************
-// com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
-Sequence< Type > OStatement::getTypes() throw (RuntimeException)
+//------------------------------------------------------------------------------
+OStatement::OStatement( const Reference< XConnection >& _xConn, const Reference< XInterface > & _xStatement )
+    :OStatementBase( _xConn, _xStatement )
+    ,m_bAttemptedComposerCreation( false )
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XServiceInfo > *)0 ),
-                           ::getCppuType( (const Reference< XStatement > *)0 ),
-                            OStatementBase::getTypes() );
-
-    return aTypes.getTypes();
+    m_xAggregateStatement.set( _xStatement, UNO_QUERY_THROW );
 }
 
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > OStatement::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-// com::sun::star::uno::XInterface
-//--------------------------------------------------------------------------
-Any OStatement::queryInterface( const Type & rType ) throw (RuntimeException)
-{
-    Any aIface = OStatementBase::queryInterface( rType );
-    if (!aIface.hasValue())
-        aIface = ::cppu::queryInterface(
-                    rType,
-                    static_cast< XServiceInfo * >( this ),
-                    static_cast< XStatement * >( this ));
-    return aIface;
-}
-
-//--------------------------------------------------------------------------
-void OStatement::acquire() throw ()
-{
-    OStatementBase::acquire();
-}
-
-//--------------------------------------------------------------------------
-void OStatement::release() throw ()
-{
-    OStatementBase::release();
-}
+//------------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OStatementBase, OStatement_IFACE );
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE );
 
 // XServiceInfo
 //------------------------------------------------------------------------------
@@ -516,61 +476,130 @@ sal_Bool OStatement::supportsService( const ::rtl::OUString& _rServiceName ) thr
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS.getArray()[0] = SERVICE_SDBC_STATEMENT;
-    aSNS.getArray()[1] = SERVICE_SDB_STATEMENT;
     return aSNS;
 }
 
 // XStatement
 //------------------------------------------------------------------------------
-Reference< XResultSet > OStatement::executeQuery(const rtl::OUString& sql) throw( SQLException, RuntimeException )
+Reference< XResultSet > OStatement::executeQuery( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
-
     Reference< XResultSet > xResultSet;
-    Reference< XResultSet > xDrvResultSet = Reference< XStatement >(m_xAggregateAsSet, UNO_QUERY)->executeQuery(sql);
-    if (xDrvResultSet.is())
+
+    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+
+    Reference< XResultSet > xInnerResultSet = m_xAggregateStatement->executeQuery( sSQL );
+    Reference< XConnection > xConnection( m_xParent, UNO_QUERY_THROW );
+
+    if ( xInnerResultSet.is() )
     {
-        Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+        Reference< XDatabaseMetaData > xMeta = xConnection->getMetaData();
         sal_Bool bCaseSensitive = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
-        xResultSet = new OResultSet(xDrvResultSet, *this, bCaseSensitive);
+        xResultSet = new OResultSet( xInnerResultSet, *this, bCaseSensitive );
 
         // keep the resultset weak
         m_aResultSet = xResultSet;
     }
+
     return xResultSet;
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 OStatement::executeUpdate(const rtl::OUString& sql) throw( SQLException, RuntimeException )
+sal_Int32 OStatement::executeUpdate( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
 
-    return Reference< XStatement >(m_xAggregateAsSet, UNO_QUERY)->executeUpdate(sql);
+    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+    return m_xAggregateStatement->executeUpdate( sSQL );
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OStatement::execute(const rtl::OUString& sql) throw( SQLException, RuntimeException )
+sal_Bool OStatement::execute( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     disposeResultSet();
-    return Reference< XStatement >(m_xAggregateAsSet, UNO_QUERY)->execute(sql);
+
+    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+    return m_xAggregateStatement->execute( sSQL );
 }
 
 //------------------------------------------------------------------------------
 Reference< XConnection > OStatement::getConnection(void) throw( SQLException, RuntimeException )
 {
-    return Reference< XConnection > (m_xParent, UNO_QUERY);
+    return Reference< XConnection >( m_xParent, UNO_QUERY );
 }
+
 // -----------------------------------------------------------------------------
+void SAL_CALL OStatement::disposing()
+{
+    OStatementBase::disposing();
+    m_xComposer.clear();
+    m_xAggregateStatement.clear();
+}
 
+// -----------------------------------------------------------------------------
+::rtl::OUString OStatement::impl_doEscapeProcessing_nothrow( const ::rtl::OUString& _rSQL ) const
+{
+    try
+    {
+        bool bEscapeProcessing = false;
+        OSL_VERIFY( m_xAggregateAsSet->getPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
+        if ( !bEscapeProcessing )
+            return _rSQL;
 
+        if ( !impl_ensureComposer_nothrow() )
+            return _rSQL;
+
+        bool bParseable = false;
+        try { m_xComposer->setQuery( _rSQL ); bParseable = true; }
+        catch( const SQLException& ) { }
+
+        if ( !bParseable )
+            // if we cannot parse it, silently accept this. The driver is probably able to cope with it then
+            return _rSQL;
+
+        ::rtl::OUString sLowLevelSQL = m_xComposer->getQueryWithSubstitution();
+        if ( sLowLevelSQL == m_xComposer->getQuery() )
+            // if the low level SQL is the same as the high level SQL, then simply
+            // return the original SQL statement, without tampering with it at all.
+            return _rSQL;
+
+        return sLowLevelSQL;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return _rSQL;
+}
+
+// -----------------------------------------------------------------------------
+bool OStatement::impl_ensureComposer_nothrow() const
+{
+    if ( m_bAttemptedComposerCreation )
+        return m_xComposer.is();
+
+    const_cast< OStatement* >( this )->m_bAttemptedComposerCreation = true;
+    try
+    {
+        Reference< XMultiServiceFactory > xFactory( m_xParent, UNO_QUERY_THROW );
+        const_cast< OStatement* >( this )->m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return m_xComposer.is();
+}
