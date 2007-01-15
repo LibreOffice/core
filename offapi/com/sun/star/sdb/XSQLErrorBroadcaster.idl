@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSQLErrorBroadcaster.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:50:18 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:58:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::sdb::XSQLErrorBroadcaster
 /** interface for notifying potential listeners
     of
     <type scope="com::sun::star::sdbc">SQLException</type>
@@ -55,7 +54,6 @@
 published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdb::XSQLErrorBroadcaster::addSQLErrorListener
     /** adds the specified listener to receive the event "errorOccured"
         @param com::sun::star::sdb::XSQLErrorListener
      */
@@ -63,7 +61,6 @@ published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
             [in]XSQLErrorListener Listener );
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XSQLErrorBroadcaster::removeSQLErrorListener
     /** removes the specified listener.
         @param com::sun::star::sdb::XSQLErrorListener
      */
