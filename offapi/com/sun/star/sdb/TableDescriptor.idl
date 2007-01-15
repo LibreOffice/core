@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDescriptor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:25:24 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,18 +46,15 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::TableDescriptor
 /** extends the service
     <type scope="com::sun::star::sdbcx">TableDescriptor</type>
     with additional display informations, sorting, and filtering criteria.
  */
 published service TableDescriptor
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbcx::TableDescriptor;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::TableDescriptor: service com::sun::star::sdb::DataSettings
     /** is used for customization of data appearance.
      */
     service com::sun::star::sdb::DataSettings;
