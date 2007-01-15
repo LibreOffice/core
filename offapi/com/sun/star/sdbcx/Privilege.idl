@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Privilege.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:01:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from idl: constants com::sun::star::sdbcx::Privilege
 /** defines a list of flags (bitmaps) which determines the accessrights of a
      user or a user group. This list may grow in the future.
  */
@@ -46,55 +45,46 @@ published constants Privilege
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::SELECT
     /** indicates that a user is allowed to read the data.
      */
     const long SELECT       = 0x00000001;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::INSERT
     /** indicates that a user is allowed to insert new data.
      */
     const long INSERT       = 0x00000002;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::UPDATE
     /** indicates that a user is allowed to update data.
      */
     const long UPDATE       = 0x00000004;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::DELETE
     /** indicates that a user is allowed to delete data.
      */
     const long DELETE       = 0x00000008;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::READ
     /** indicates that a user is allowed to read the structure of a definition object.
      */
     const long READ         = 0x00000010;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::CREATE
     /** indicates that a user is allowed to create a definition object.
      */
     const long CREATE       = 0x00000020;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::ALTER
     /** indicates that a user is allowed to alter an existing object.
      */
     const long ALTER        = 0x00000040;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::REFERENCE
     /** indicates that a user is allowed to set foreign keys for a table.
      */
     const long REFERENCE    = 0x00000080;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbcx::Privilege::DROP
     /** indicates that a user is allowed to drop a definition object.
      */
     const long DROP         = 0x00000100;
