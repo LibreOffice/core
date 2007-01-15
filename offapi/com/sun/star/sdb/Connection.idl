@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Connection.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:55:14 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,12 @@ module com {  module sun {  module star {  module lang {
 
  module application { interface XTableUIProvider; };
 
-// DocMerge from xml: service com::sun::star::sdb::Connection
 /** extends the
     <type scope="com::sun::star::sdbc">Connection</type>
     of SDBC by providing the data definitions of a connected database.
  */
 published service Connection
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbc::Connection;
 
     /** access to the owning data source.
