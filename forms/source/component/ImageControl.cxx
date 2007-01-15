@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:17:13 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,7 +571,7 @@ void OImageControlModel::disposing()
 //------------------------------------------------------------------------------
 void OImageControlModel::resetNoBroadcast()
 {
-    if ( getField().is() )          // only reset when we are connected to a column
+    if ( hasField() )          // only reset when we are connected to a column
         OBoundControlModel::resetNoBroadcast( );
 }
 
