@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:54:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:46:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,9 +122,8 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
@@ -2387,12 +2386,21 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
     Reference<XForm>  xParentForm(getParent(), UNO_QUERY);
     if (xParentForm.is())
     {
-        Reference<XRowSetApproveBroadcaster>  xParentApprBroadcast(xParentForm, UNO_QUERY);
-        if (xParentApprBroadcast.is())
-            xParentApprBroadcast->removeRowSetApproveListener(this);
-        Reference<XLoadable>  xParentLoadable(xParentForm, UNO_QUERY);
-        if (xParentLoadable.is())
-            xParentLoadable->removeLoadListener(this);
+        try
+        {
+            Reference< XRowSetApproveBroadcaster > xParentApprBroadcast( xParentForm, UNO_QUERY_THROW );
+            xParentApprBroadcast->removeRowSetApproveListener( this );
+
+            Reference< XLoadable > xParentLoadable( xParentForm, UNO_QUERY_THROW );
+            xParentLoadable->removeLoadListener( this );
+
+            Reference< XPropertySet > xParentProperties( xParentForm, UNO_QUERY_THROW );
+            xParentProperties->removePropertyChangeListener( PROPERTY_ISNEW, this );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     OFormComponents::setParent(Parent);
@@ -2400,12 +2408,21 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
     xParentForm.set(getParent(), UNO_QUERY);
     if ( xParentForm.is() )
     {
-        Reference<XRowSetApproveBroadcaster>  xParentApprBroadcast(xParentForm, UNO_QUERY);
-        if (xParentApprBroadcast.is())
-            xParentApprBroadcast->addRowSetApproveListener(this);
-        Reference<XLoadable>  xParentLoadable(xParentForm, UNO_QUERY);
-        if (xParentLoadable.is())
-            xParentLoadable->addLoadListener(this);
+        try
+        {
+            Reference< XRowSetApproveBroadcaster > xParentApprBroadcast( xParentForm, UNO_QUERY_THROW );
+            xParentApprBroadcast->addRowSetApproveListener( this );
+
+            Reference< XLoadable > xParentLoadable( xParentForm, UNO_QUERY_THROW );
+            xParentLoadable->addLoadListener( this );
+
+            Reference< XPropertySet > xParentProperties( xParentForm, UNO_QUERY_THROW );
+            xParentProperties->addPropertyChangeListener( PROPERTY_ISNEW, this );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     Reference< XConnection > xOuterConnection;
@@ -3670,6 +3687,23 @@ void SAL_CALL ODatabaseForm::setArray(sal_Int32 parameterIndex, const Reference<
 void SAL_CALL ODatabaseForm::clearParameters() throw( SQLException, RuntimeException )
 {
     m_aParameterManager.clearParameters();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
+{
+    if ( evt.Source == m_xParent )
+    {
+        if ( evt.PropertyName == PROPERTY_ISNEW )
+        {
+            sal_Bool bCurrentIsNew( sal_False );
+            OSL_VERIFY( evt.NewValue >>= bCurrentIsNew );
+            if ( !bCurrentIsNew )
+                reload_impl( sal_True );
+        }
+        return;
+    }
+    OFormComponents::propertyChange( evt );
 }
 
 // com::sun::star::lang::XServiceInfo
