@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SQLContext.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:23:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: exception com::sun::star::sdb::SQLContext
 /** provides special information about the context where a
     <type scope="com::sun::star::sdbc">SQLException</type>
     occurred. As usual
@@ -55,7 +54,6 @@
  */
 published exception SQLContext: com::sun::star::sdbc::SQLWarning
 {
-    // DocMerge from xml: field com::sun::star::sdb::SQLContext::Details
     /** provides special info about the details where a
         <type scope="com::sun::star::sdbc">SQLException</type>
         occured.
