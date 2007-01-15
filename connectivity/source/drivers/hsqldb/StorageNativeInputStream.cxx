@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageNativeInputStream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:43:17 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
         }
         catch(Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : available();");
+           OSL_ENSURE(0,"Exception caught! : available();");
             StorageContainer::throwJavaException(e,env);
         }
     }
