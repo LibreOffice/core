@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SQLErrorEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:23:54 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,14 +43,12 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: struct com::sun::star::sdb::SQLErrorEvent
 /** is invoked in case of fired database exception triggered by
     a database object.
  */
 published struct SQLErrorEvent: com::sun::star::lang::EventObject
 {
 
-    // DocMerge from xml: field com::sun::star::sdb::SQLErrorEvent::Reason
     /** contains the exception that is going to be fired.
      */
     any Reason;
