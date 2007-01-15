@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:30:51 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "java/sql/ResultSet.hxx"
 #endif
 #ifndef _CONNECTIVITY_JAVA_SQL_STATEMENT_HXX_
-#include "java/sql/Statement.hxx"
+#include "java/sql/JStatement.hxx"
 #endif
 #ifndef _CONNECTIVITY_JAVA_SQL_SQLWARNING_HXX_
 #include "java/sql/SQLWarning.hxx"
