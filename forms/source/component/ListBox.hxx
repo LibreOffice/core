@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:57:27 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,12 +72,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HDL_
-#include <com/sun/star/form/binding/XListEntrySink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYLISTENER_HDL_
-#include <com/sun/star/form/binding/XListEntryListener.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
