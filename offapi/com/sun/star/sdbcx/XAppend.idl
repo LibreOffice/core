@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAppend.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:04:24 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:20:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,11 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-// DocMerge from xml: interface com::sun::star::beans::com::sun::star::sdbcx::XAppend
 /** is used for creating and appending new objects to a specific container.
  */
 published interface XAppend: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XAppend::appendByDescriptor
     /** creates a new object using the given descriptor and appends it
         to the related container.
         <b>

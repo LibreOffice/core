@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:03:42 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
  published interface XRename;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::View
 /** is used to specify views on data. A view object is only used for creation and
     deletion. Inspecting the command of a view is normally not supported.
 
@@ -61,7 +60,6 @@
 published service View
 {
 
-    // DocMerge from xml: service com::sun::star::sdbcx::View: interface com::sun::star::sdbcx::XRename
     /** is optional for implementation.
      */
     [optional] interface XRename;
@@ -70,25 +68,21 @@ published service View
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::View::Name
     /** is the name of the view.
      */
     [readonly, property] string Name;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::View::CatalogName
     /** is the name of the views catalog, may be empty.
      */
     [readonly, property] string CatalogName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::View::SchemaName
     /** is the name of the view's schema, may be empty.
      */
     [readonly, property] string SchemaName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::View::Command
     /** is the command for creating the view. After appending a view to its
         container, the command may be empty. This is typically a
         SQL Select-Statement.
@@ -96,7 +90,6 @@ published service View
     [readonly, property] string Command;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::View::CheckOption
     /** indicates if a check option should be used for the view.
         @see com::sun::star::sdbcx::CheckOption
      */
