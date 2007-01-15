@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:50 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,13 +211,15 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
-
-#ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
+#ifndef _SDRPAGEWINDOW_HXX
+#include "sdrpagewindow.hxx"
+#endif
 #ifndef _SDRPAINTWINDOW_HXX
-#include <sdrpaintwindow.hxx>
+#include "sdrpaintwindow.hxx"
 #endif
 
 #include <algorithm>
@@ -399,7 +401,7 @@ Reference< XFormController >  getControllerSearchChilds( const Reference< XIndex
 
 // Search the according controller
 //------------------------------------------------------------------------
-Reference< XFormController >  FmXPageViewWinRec::getController( const Reference< XForm > & xForm )
+Reference< XFormController >  FmXPageViewWinRec::getController( const Reference< XForm > & xForm ) const
 {
     Reference< XTabControllerModel >  xModel(xForm, UNO_QUERY);
     for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
@@ -880,6 +882,39 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
 }
 
 // -----------------------------------------------------------------------------
+namespace
+{
+    // .........................................................................
+    void lcl_ensureControlsOfFormExist_nothrow( const SdrPage& _rPage, const SdrView& _rView, const Window& _rWindow, const Reference< XForm >& _rxForm )
+    {
+        try
+        {
+            Reference< XInterface > xNormalizedForm( _rxForm, UNO_QUERY_THROW );
+
+            SdrObjListIter aSdrObjectLoop( _rPage, IM_DEEPNOGROUPS );
+            while ( aSdrObjectLoop.IsMore() )
+            {
+                const SdrUnoObj* pUnoObject = dynamic_cast< const SdrUnoObj* >( aSdrObjectLoop.Next() );
+                if ( !pUnoObject )
+                    continue;
+
+                Reference< XChild > xModel( pUnoObject->GetUnoControlModel(), UNO_QUERY_THROW );
+                Reference< XInterface > xModelParent( xModel->getParent(), UNO_QUERY_THROW );
+
+                if ( xNormalizedForm.get() != xModelParent.get() )
+                    continue;
+
+                pUnoObject->GetUnoControl( _rView, _rWindow );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 {
     m_nAutoFocusEvent = 0;
@@ -887,49 +922,72 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
     // go to the first form of our page, examine it's TabController, go to it's first (in terms of the tab order)
     // control, give it the focus
 
-    // get the forms collection of the page we belong to
-    FmFormPage* pPage = m_pView ? PTR_CAST(FmFormPage, m_pView->GetSdrPageView()->GetPage()) : NULL;
-    Reference< XIndexAccess > xForms;
-    if (pPage)
-        xForms = Reference< XIndexAccess >(pPage->GetForms(), UNO_QUERY);
-    FmXPageViewWinRec* pViewWinRec = m_aWinList.size() ? m_aWinList[0] : NULL;
-    if (pViewWinRec)
+    do
     {
-        try
+
+    // get the forms collection of the page we belong to
+    FmFormPage* pPage = m_pView ? PTR_CAST( FmFormPage, m_pView->GetSdrPageView()->GetPage() ) : NULL;
+    Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
+
+    const FmXPageViewWinRec* pViewWinRec = m_aWinList.size() ? m_aWinList[0] : NULL;
+    const Window* pWindow = pViewWinRec ? pViewWinRec->getWindow() : NULL;
+
+    OSL_ENSURE( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!" );
+    if ( !xForms.is() || !pWindow )
+        return 0L;
+
+    try
+    {
+        // go for the tab controller of the first form
+        if ( !xForms->getCount() )
+            break;
+        Reference< XForm > xForm( xForms->getByIndex( 0 ), UNO_QUERY_THROW );
+        Reference< XTabController > xTabController( pViewWinRec->getController( xForm ), UNO_QUERY_THROW );
+
+        // go for the first control of the controller
+        Sequence< Reference< XControl > > aControls( xTabController->getControls() );
+        if ( aControls.getLength() == 0 )
         {
-            // go for the tab controller of the first form
-            sal_Int32 nObjects = xForms->getCount();
-            Reference< XForm > xForm;
-            if (nObjects)
-                ::cppu::extractInterface(xForm, xForms->getByIndex(0));
-
-            Reference< XTabController > xTabControllerModel(pViewWinRec->getController( xForm ), UNO_QUERY);
-            // go for the first control of the controller
-            Sequence< Reference< XControl > > aControls;
-            if (xTabControllerModel.is())
-                aControls = xTabControllerModel->getControls();
-
-            // set the focus to this first control
-            Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
-            if (xControlWindow.is())
-                xControlWindow->setFocus();
-
-            // ensure that the control is visible
-            // 80210 - 12/07/00 - FS
-            if (xControlWindow.is() && m_pView->GetActualOutDev() && (OUTDEV_WINDOW == m_pView->GetActualOutDev()->GetOutDevType()))
+            Reference< XElementAccess > xFormElementAccess( xForm, UNO_QUERY_THROW );
+            if ( xFormElementAccess->hasElements() )
             {
-                const Window* pWindow = static_cast<const Window*>(m_pView->GetActualOutDev());
-                awt::Rectangle aRect = xControlWindow->getPosSize();
-                ::Rectangle aNonUnoRect(aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height);
-                m_pView->MakeVisible(pWindow->PixelToLogic(aNonUnoRect), *const_cast<Window*>(pWindow));
+                // there are control models in the form, but no controls, yet.
+                // Well, since some time controls are created on demand only. In particular,
+                // they're normally created when they're first painted.
+                // Unfortunately, the FormController does not have any way to
+                // trigger the creation itself, so we must hack this ...
+                lcl_ensureControlsOfFormExist_nothrow( *pPage, *m_pView, *pWindow, xForm );
+                aControls = xTabController->getControls();
+                OSL_ENSURE( aControls.getLength(), "FmXFormView::OnAutoFocus: no controls at all!" );
             }
         }
-        catch(Exception&)
+
+        // set the focus to this first control
+        Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
+        if ( !xControlWindow.is() )
+            break;
+
+        xControlWindow->setFocus();
+
+        // ensure that the control is visible
+        // 80210 - 12/07/00 - FS
+        const Window* pCurrentWindow = dynamic_cast< const Window* >( m_pView->GetActualOutDev() );
+        if ( pCurrentWindow )
         {
-            DBG_ERROR("FmXFormView::OnAutoFocus: could not activate the first control!");
+            awt::Rectangle aRect = xControlWindow->getPosSize();
+            ::Rectangle aNonUnoRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
+            m_pView->MakeVisible( pCurrentWindow->PixelToLogic( aNonUnoRect ), *const_cast< Window* >( pCurrentWindow ) );
         }
     }
-    return 0L;
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    }   // do
+    while ( false );
+
+    return 1L;
 }
 
 // -----------------------------------------------------------------------------
