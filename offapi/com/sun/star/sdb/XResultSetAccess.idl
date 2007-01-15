@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XResultSetAccess.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:30:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:57:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::com::sun::star::sdb::XResultSetAccess
 /** is the interface to create a
     <type scope="com::sun::star::sdbc">ResultSet</type>
     based on the object providing the interface.
@@ -61,7 +60,6 @@
 published interface XResultSetAccess: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::com::sun::star::sdb::XResultSetAccess::createResultSet
     /** returns a new
         <type scope="com::sun::star::sdbc">ResultSet</type>
         based on the object.

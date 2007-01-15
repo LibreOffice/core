@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDatabaseEnvironment.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:28:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::sdb::XDatabaseEnvironment
 /** specifies the root of the data access beans. It provides the possiblity
     to open a data access bean, which contains tables, queries, forms, and
     report documents, or to open a connection to a database.
@@ -70,7 +69,6 @@ published interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XDatabaseEnvironment::getDatabaseAccess
     /** returns an existing DatabaseAccess bean specified by it's URL.
 
 
@@ -86,7 +84,6 @@ published interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
         raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XDatabaseEnvironment::createDatabaseAccess
     /** creates a new DatabaseAccess bean specified by it's URL.
         @param URL
             a database url of the form sdbc:subprotocol:subname

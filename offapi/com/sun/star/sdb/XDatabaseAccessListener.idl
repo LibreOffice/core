@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDatabaseAccessListener.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:27:50 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::sdb::XDatabaseAccessListener
 /** is used for receiving "connectionChanged", "approveConnectionClose", and
     "connectionClosing" events posted by a database access bean.
 
@@ -58,7 +57,6 @@
 published interface XDatabaseAccessListener: com::sun::star::lang::XEventListener
 {
 
-    // DocMerge from xml: method com::sun::star::sdb::XDatabaseAccessListener::connectionChanged
     /** indicates that a new connection for the bean has been established.
         @param evenet
             the event happend
@@ -66,7 +64,6 @@ published interface XDatabaseAccessListener: com::sun::star::lang::XEventListene
     [oneway] void connectionChanged([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XDatabaseAccessListener::approveConnectionClosing
     /** indicates that the connection of the bean will be closed. If there are pending
         actions on the connection of the bean, "approveConnectionClosing" should return
         <FALSE/>.
@@ -79,7 +76,6 @@ published interface XDatabaseAccessListener: com::sun::star::lang::XEventListene
     boolean approveConnectionClosing([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XDatabaseAccessListener::connectionClosing
     /** indicates that the connection will definitely be closed.
         @param evenet
             the event happend
