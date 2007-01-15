@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:34:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1976,16 +1976,21 @@ namespace xmloff
         SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     {
         OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
+        const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
 
         sal_Int16 nLength = (_xElement.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
             ::rtl::OUString sLocalName;
             ::rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
-            ::rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName, &sLocalName );
 
-            if ( sLocalName.equalsAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)) )
+            if  (   ( nPrefix == OAttributeMetaData::getCommonControlAttributeNamespace( CCA_TARGET_LOCATION ) )
+                &&  ( sLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION ) ) )
+                )
             {
+                ::rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+
                 INetURLObject aURL(sValue);
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
                     _xElement->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(sValue));
