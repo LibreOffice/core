@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:29:42 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,8 @@ public:
     virtual void SetDefaults();
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > GetControl() const;
 
     virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
     virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
