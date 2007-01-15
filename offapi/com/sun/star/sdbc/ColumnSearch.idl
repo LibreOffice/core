@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnSearch.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:34:11 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:00:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,12 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::ColumnSearch
 /** indicates in which way a column can be used in the WHERE search.
  */
 published constants ColumnSearch
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ColumnSearch::NONE
     /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
              object returned by the method
@@ -60,7 +58,6 @@ published constants ColumnSearch
     const long NONE = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ColumnSearch::CHAR
     /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
              object returned by the method
@@ -77,7 +74,6 @@ published constants ColumnSearch
     const long CHAR = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ColumnSearch::BASIC
     /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
              object returned by the method
@@ -94,7 +90,6 @@ published constants ColumnSearch
     const long BASIC = 2;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ColumnSearch::FULL
     /** A possible value for column
             <code>SEARCHABLE</code>
             in the

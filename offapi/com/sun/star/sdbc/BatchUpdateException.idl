@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BatchUpdateException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:32:52 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: exception com::sun::star::sdbc::BatchUpdateException
 /** is thrown when an error occurs during a batch update operation.
 
 
@@ -59,7 +58,6 @@
 published exception BatchUpdateException: SQLException
 {
 
-    // DocMerge from idl: field com::sun::star::sdbc::BatchUpdateException::UpdateCounts
     /** is an array of
         <code>long</code>
         , with each element
