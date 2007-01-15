@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:55:02 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,7 @@ DBG_NAME(OQueryController);
 // -----------------------------------------------------------------------------
 OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
     :OJoinController(_rM)
+    ,OQueryController_PBase( getBroadcastHelper() )
     ,m_pParseContext( new svxform::OSystemParseContext )
     ,m_aSqlParser( _rM, m_pParseContext )
     ,m_pSqlIterator(NULL)
@@ -421,6 +422,31 @@ OQueryController::~OQueryController()
         dispose();
     }
 }
+
+IMPLEMENT_FORWARD_XINTERFACE2( OQueryController, OJoinController, OQueryController_PBase )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( OQueryController, OJoinController, OQueryController_PBase )
+
+//-------------------------------------------------------------------------
+Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() throw(RuntimeException)
+{
+    Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+//-------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& OQueryController::getInfoHelper()
+{
+    return *const_cast< OQueryController* >( this )->getArrayHelper();
+}
+
+//--------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OQueryController::createArrayHelper( ) const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+
 // -----------------------------------------------------------------------------
 void OQueryController::deleteIterator()
 {
@@ -444,6 +470,7 @@ void OQueryController::disposing()
 
     ::comphelper::disposeComponent(m_xComposer);
     OJoinController::disposing();
+    OQueryController_PBase::disposing();
 }
 // -----------------------------------------------------------------------------
 void OQueryController::clearFields()
@@ -767,19 +794,12 @@ void OQueryController::impl_initialize()
     if ( xConnection.is() )
         initializeConnection( xConnection );
 
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_CURRENTQUERY, m_sName ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CurrentQuery.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_QUERYDESIGNVIEW, m_bDesign ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for QueryDesignView.")),*this);
-
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_CREATEVIEW, m_bCreateView ) )
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CreateView.")),*this);
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_CURRENTQUERY, m_sName );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_QUERYDESIGNVIEW, m_bDesign );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_CREATEVIEW, m_bCreateView );
 
     ::rtl::OUString sIndependentSQLCommand;
-    if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PARAM_INDEPENDENT_SQL_COMMAND, sIndependentSQLCommand ) )
-        throw Exception( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for IndependentSQLCommand." ) ),*this);
-    if ( sIndependentSQLCommand.getLength() )
+    if ( rArguments.get_ensureType( (::rtl::OUString)PARAM_INDEPENDENT_SQL_COMMAND, sIndependentSQLCommand ) )
     {
         m_bIndependent = sal_True;
         m_bEsacpeProcessing = sal_True;
@@ -937,7 +957,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
 
     m_pView = new OQueryContainerWindow(pParent,this,m_xMultiServiceFacatory);
 
-    return OSingleDocumentController::Construct(pParent);
+    return OJoinController::Construct(pParent);
 }
 
 // -----------------------------------------------------------------------------
