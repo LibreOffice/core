@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:32:12 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,12 @@
 #include <toolkit/helper/property.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#ifndef _OSL_DIAGNOSE_H_
+#include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
-#endif
 
 //........................................................................
 namespace toolkit
@@ -63,12 +62,78 @@ namespace toolkit
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::util;
+
+    // -------------------------------------------------------------------
+    namespace
+    {
+        // ...............................................................
+        ::osl::Mutex& getDefaultFormatsMutex()
+        {
+            static ::osl::Mutex s_aDefaultFormatsMutex;
+            return s_aDefaultFormatsMutex;
+        }
+
+        // ...............................................................
+        Reference< XNumberFormatsSupplier >& lcl_getDefaultFormatsAccess_nothrow()
+        {
+            static Reference< XNumberFormatsSupplier > s_xDefaultFormats;
+            return s_xDefaultFormats;
+        }
+
+        // ...............................................................
+        const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
+        {
+            ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
+            static bool s_bTriedCreation = false;
+
+            Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
+            if ( !rDefaultFormats.is() && !s_bTriedCreation )
+            {
+                s_bTriedCreation = true;
+                rDefaultFormats = Reference< XNumberFormatsSupplier >(
+                    ::comphelper::createProcessComponent(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatsSupplier" ) ) ),
+                    UNO_QUERY_THROW
+                );
+            }
+            if ( !rDefaultFormats.is() )
+                throw RuntimeException();
+
+            return rDefaultFormats;
+        }
+
+        // ...............................................................
+        static oslInterlockedCount  s_refCount(0);
+
+        // ...............................................................
+        void    lcl_registerDefaultFormatsClient()
+        {
+            osl_incrementInterlockedCount( &s_refCount );
+        }
+
+        // ...............................................................
+        void    lcl_revokeDefaultFormatsClient()
+        {
+            ::osl::ClearableMutexGuard aGuard( getDefaultFormatsMutex() );
+            if ( 0 == osl_decrementInterlockedCount( &s_refCount ) )
+            {
+                Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
+                Reference< XNumberFormatsSupplier > xReleasePotentialLastReference( rDefaultFormats );
+                rDefaultFormats.clear();
+
+                aGuard.clear();
+                xReleasePotentialLastReference.clear();
+            }
+        }
+    }
 
     // ===================================================================
     // = UnoControlFormattedFieldModel
     // ===================================================================
     // -------------------------------------------------------------------
     UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
+        :m_bRevokedAsClient( false )
     {
         ImplRegisterProperty( BASEPROPERTY_ALIGN );
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -101,12 +166,122 @@ namespace toolkit
         Any aTreatAsNumber;
         aTreatAsNumber <<= (sal_Bool) sal_True;
         ImplRegisterProperty( BASEPROPERTY_TREATASNUMBER, aTreatAsNumber );
+
+        lcl_registerDefaultFormatsClient();
+    }
+
+    // -------------------------------------------------------------------
+    UnoControlFormattedFieldModel::~UnoControlFormattedFieldModel()
+    {
     }
 
     // -------------------------------------------------------------------
     ::rtl::OUString UnoControlFormattedFieldModel::getServiceName() throw(RuntimeException)
     {
         return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
+    }
+
+    // -------------------------------------------------------------------
+    void SAL_CALL UnoControlFormattedFieldModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+    {
+        UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+
+        switch ( nHandle )
+        {
+        case BASEPROPERTY_EFFECTIVE_VALUE:
+            impl_updateTextFromValue_nothrow();
+            break;
+        case BASEPROPERTY_FORMATSSUPPLIER:
+            impl_updateCachedFormatter_nothrow();
+            impl_updateTextFromValue_nothrow();
+            break;
+        case BASEPROPERTY_FORMATKEY:
+            impl_updateCachedFormatKey_nothrow();
+            impl_updateTextFromValue_nothrow();
+            break;
+        }
+    }
+
+    // -------------------------------------------------------------------
+    void UnoControlFormattedFieldModel::impl_updateTextFromValue_nothrow()
+    {
+        if ( !m_xCachedFormatter.is() )
+            impl_updateCachedFormatter_nothrow();
+        if ( !m_xCachedFormatter.is() )
+            return;
+
+        try
+        {
+            Any aEffectiveValue;
+            getFastPropertyValue( aEffectiveValue, BASEPROPERTY_EFFECTIVE_VALUE );
+
+            ::rtl::OUString sStringValue;
+            if ( !( aEffectiveValue >>= sStringValue ) )
+            {
+                double nDoubleValue(0);
+                if ( aEffectiveValue >>= nDoubleValue )
+                {
+                    sal_Int32 nFormatKey( 0 );
+                    if ( m_aCachedFormat.hasValue() )
+                        m_aCachedFormat >>= nFormatKey;
+                    sStringValue = m_xCachedFormatter->convertNumberToString( nFormatKey, nDoubleValue );
+                }
+            }
+
+            Reference< XPropertySet > xThis( *this, UNO_QUERY );
+            xThis->setPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), makeAny( sStringValue ) );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    // -------------------------------------------------------------------
+    void UnoControlFormattedFieldModel::impl_updateCachedFormatter_nothrow()
+    {
+        Any aFormatsSupplier;
+        getFastPropertyValue( aFormatsSupplier, BASEPROPERTY_FORMATSSUPPLIER );
+        try
+        {
+            Reference< XNumberFormatsSupplier > xSupplier( aFormatsSupplier, UNO_QUERY );
+            if ( !xSupplier.is() )
+                xSupplier = lcl_getDefaultFormats_throw();
+
+            if ( !m_xCachedFormatter.is() )
+            {
+                m_xCachedFormatter = Reference< XNumberFormatter >(
+                    ::comphelper::createProcessComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" ) ) ),
+                    UNO_QUERY_THROW
+                );
+            }
+            m_xCachedFormatter->attachNumberFormatsSupplier( xSupplier );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    // -------------------------------------------------------------------
+    void UnoControlFormattedFieldModel::impl_updateCachedFormatKey_nothrow()
+    {
+        Any aFormatKey;
+        getFastPropertyValue( aFormatKey, BASEPROPERTY_FORMATKEY );
+        m_aCachedFormat = m_aCachedFormat;
+    }
+
+    // -------------------------------------------------------------------
+    void UnoControlFormattedFieldModel::dispose(  ) throw(RuntimeException)
+    {
+        UnoControlModel::dispose();
+
+        ::osl::MutexGuard aGuard( GetMutex() );
+        if ( !m_bRevokedAsClient )
+        {
+            lcl_revokeDefaultFormatsClient();
+            m_bRevokedAsClient = true;
+        }
     }
 
     // -------------------------------------------------------------------
