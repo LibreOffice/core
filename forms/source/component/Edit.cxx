@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:40:37 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -750,7 +750,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 void OEditModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
-    if (getField().is())
+    if (hasField())
     {
         if ( m_bMaxTextLenModified )
         {
