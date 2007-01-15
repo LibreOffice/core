@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statement.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:47:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XGENERATEDRESULTSET_HPP_
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
@@ -74,6 +77,10 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+
 //************************************************************
 //  OStatementBase
 //************************************************************
@@ -168,23 +175,23 @@ protected:
 //************************************************************
 //  OStatement
 //************************************************************
-class OStatement : public OStatementBase,
-                   public ::com::sun::star::sdbc::XStatement,
-                   public ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::sdbc::XStatement
+                            ,   ::com::sun::star::lang::XServiceInfo
+                            >   OStatement_IFACE;
+class OStatement    :public OStatementBase
+                    ,public OStatement_IFACE
 {
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >                  m_xAggregateStatement;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xComposer;
+    bool                                                                                    m_bAttemptedComposerCreation;
+
 public:
     OStatement(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _xConn,
-               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & _xStatement)
-        :OStatementBase(_xConn, _xStatement) {}
+               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & _xStatement);
 
-// ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
+    DECLARE_XINTERFACE();
+    DECLARE_XTYPEPROVIDER();
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -196,6 +203,16 @@ public:
     virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
+private:
+    /** does escape processing for the given SQL command, if the our EscapeProcessing
+        property allows so.
+    */
+    ::rtl::OUString impl_doEscapeProcessing_nothrow( const ::rtl::OUString& _rSQL ) const;
+    bool            impl_ensureComposer_nothrow() const;
 };
 
 #endif // _DBA_COREAPI_STATEMENT_HXX_
