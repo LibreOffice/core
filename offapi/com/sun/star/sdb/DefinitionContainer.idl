@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DefinitionContainer.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:17:24 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdb::DefinitionContainer
 /** describes a container which provides access to database related definitions like
     commands, forms, and reports.
 
@@ -83,7 +82,6 @@ published service DefinitionContainer
     interface com::sun::star::container::XEnumerationAccess;
 
 
-    // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdb::DefinitionContainer: interface com::sun::star::util::XRefreshable
     /** is used to refresh the container, to reflect changes in the underlying database.
      */
     [optional] interface com::sun::star::util::XRefreshable;
