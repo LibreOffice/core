@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uuid.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-03 11:37:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 16:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,21 +47,15 @@
    <p>
    A UUID is an identifier that is unique across both space and time,
    with respect to the space of all UUIDs. To be precise, the UUID
-   consists of a finite bit space. Thus the time value used for
-   constructing a UUID is limited and will roll over in the future
-   (approximately at A.D. 3400, based on the specified algorithm). A
-   UUID can be used for multiple purposes, from tagging objects with an
-   extremely short lifetime, to reliably identifying very persistent
+   consists of a finite bit space. Thus, collision cannot be avoided in
+   principle. A UUID can be used for multiple purposes, from tagging objects
+   with an extremely short lifetime, to reliably identifying very persistent
    objects across a network.
 
    <p>
     The generation of UUIDs does not require that a registration
-    authority be contacted for each identifier. Instead, it requires a
-    unique value over space for each UUID generator. This spatially
-    unique value is specified as an IEEE 802 address, which is usually
-    already available to network-connected systems. This 48-bit address
-    can be assigned based on an address block obtained through the IEEE
-    registration authority.
+    authority be contacted for each identifier. Instead, Version 4 UUIDs are
+    generated from (pseudo unique) sequences of (pseudo) random bits.
  */
 
 #ifdef __cplusplus
@@ -73,12 +67,8 @@ extern "C" {
 
     @param pTargetUUID          pointer to at least 16 bytes of memory. After the call it contains
                                 the newly generated uuid in network byte order.
-    @param pPredecessorUUID     pointer to the previously generated uuid in network byte
-                                order. The generator uses this value to seed the
-                                random number generator and thus makes it highly
-                                unlikely that consecutive calls produce equal
-                                results.
-                                Set pPredecessorUUID to 0 if no predecessor is available.
+    @param pPredecessorUUID     ignored (was used when this function returned
+                                Version 1 instead of Version 4 UUIDs).
     @param bUseEthernetAddress  ignored (was used when this function returned
                                 Version 1 instead of Version 4 UUIDs).
  */
