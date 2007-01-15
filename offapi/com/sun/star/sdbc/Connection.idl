@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Connection.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:40:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
  published interface XWarningsSupplier;
 
 
-// DocMerge from xml: service com::sun::star::sdbc::Connection
 /** represents a connection (session) with a specific
     database. Within the context of a Connection, SQL statements are
     executed and results are returned.
@@ -75,19 +74,16 @@
 published service Connection
 {
 
-    // DocMerge from xml: service com::sun::star::sdbc::Connection: interface com::sun::star::lang::XComponent
     /** controls the closing of a connection.
      */
     interface com::sun::star::lang::XComponent;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::Connection: interface com::sun::star::sdbc::XConnection
     /** the main interface for interaction with a connection to a database.
      */
     interface XConnection;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::Connection: interface com::sun::star::sdbc::XWarningsSupplier
     /** controls the chaining of warnings, which may occur on every call
              to the connected database. Chained warnings from previous calls will be
              cleared before processing a new call.
