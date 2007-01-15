@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:16:04 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 12:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -853,7 +853,6 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_Xt, xt )
 #ifndef SYSTEM_XALAN
 STD_JAR_FILE_PATCH( gid_File_Jar_Xalan, xalan )
 STD_JAR_FILE_PATCH( gid_File_Jar_Serializer, serializer )
