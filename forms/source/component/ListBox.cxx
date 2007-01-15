@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:52:08 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ namespace frm
 
             if (m_eListSourceType == ListSourceType_VALUELIST)
                 m_aValueSeq = m_aListSourceSeq;
-            else if ( m_xCursor.is() && !getField().is() && !hasExternalListSource() )
+            else if ( m_xCursor.is() && !hasField() && !hasExternalListSource() )
                 // listbox is already connected to a database, and no external list source
                 // data source changed -> refresh
                 loadData();
@@ -857,7 +857,7 @@ namespace frm
         vector< ::rtl::OUString >   aValueList, aStringList;
         aValueList.reserve(16);
         aStringList.reserve(16);
-        sal_Bool bUseNULL = getField().is() && !isRequired();
+        sal_Bool bUseNULL = hasField() && !isRequired();
         try
         {
             switch (m_eListSourceType)
@@ -1033,7 +1033,7 @@ namespace frm
 
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
-            if ( getField().is() )
+            if ( hasField() )
                 m_aValueSeq = StringSequence();
 
             if ( m_xCursor.is() )
@@ -1046,7 +1046,7 @@ namespace frm
     {
         // list boxes which are bound to a db column don't have multi selection
         // - this would be unable to reflect in the db column
-        if ( getField().is() )
+        if ( hasField() )
         {
             setFastPropertyValue( PROPERTY_ID_MULTISELECTION, ::cppu::bool2any( ( sal_False ) ) );
         }
@@ -1512,7 +1512,15 @@ namespace frm
                 transferExternalValueToControl( );
             else
             {
-                // TODO: update the selection in case we're bound to a database column
+                if ( hasField() )
+                {
+                    // TODO: update the selection in case we're bound to a database column
+                }
+                else
+                {
+                    if ( m_aDefaultSelectSeq.getLength() )
+                        setControlValue( makeAny( m_aDefaultSelectSeq ), eOther );
+                }
             }
         }
     }
