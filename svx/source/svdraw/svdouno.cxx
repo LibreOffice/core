@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:07 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -646,13 +646,21 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
 }
 
 //------------------------------------------------------------------------
-uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const OutputDevice* _pDevice) const
+uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const
 {
     uno::Reference< awt::XControl > xControl;
 
-    ViewContactOfUnoControl* pVC = NULL;
-    if ( impl_getViewContact( pVC ) )
-        xControl = pVC->getUnoControlForDevice( _pDevice, ViewContactOfUnoControl::SdrUnoObjAccessControl() );
+    SdrPageView* pPageView = _rView.GetSdrPageView();
+    SdrPageWindow* pPageWindow = pPageView ? pPageView->FindPageWindow( _rOut ) : NULL;
+    OSL_ENSURE( pPageWindow, "SdrUnoObj::GetUnoControl: did not find my SdrPageWindow!" );
+    if ( !pPageWindow )
+        return NULL;
+
+    ViewObjectContact& rViewObjectContact( GetViewContact().GetViewObjectContact( pPageWindow->GetObjectContact() ) );
+    ViewObjectContactOfUnoControl* pUnoContact = dynamic_cast< ViewObjectContactOfUnoControl* >( &rViewObjectContact );
+    OSL_ENSURE( pUnoContact, "SdrUnoObj::GetUnoControl: wrong contact type!" );
+    if ( pUnoContact )
+        xControl = pUnoContact->getControl();
 
     return xControl;
 }
