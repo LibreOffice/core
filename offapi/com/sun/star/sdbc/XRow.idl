@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRow.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:53:43 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@
  published interface XClob;
 
 
-// DocMerge from xml: interface com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow
 /** is used to access data which is collected in a row.
     All methods raise a
     <type scope="com::sun::star::sdbc">SQLException</type>
@@ -81,7 +80,6 @@ published interface XRow: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::wasNull
     /** reports whether the last column read had a value of SQL NULL.
         Note that you must first call getXXX on a column to try to read
         its value and then call wasNull() to see if the value read was
@@ -95,7 +93,6 @@ published interface XRow: com::sun::star::uno::XInterface
     boolean wasNull() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getString
     /** gets the value of a column in the current row as a string.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -107,7 +104,6 @@ published interface XRow: com::sun::star::uno::XInterface
     string getString([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBoolean
     /** gets the value of a column in the current row as boolean.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -119,7 +115,6 @@ published interface XRow: com::sun::star::uno::XInterface
     boolean getBoolean([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getByte
     /** get the value of a column in the current row as a byte.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -131,7 +126,6 @@ published interface XRow: com::sun::star::uno::XInterface
     byte getByte([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getShort
     /** gets the value of a column in the current row as a short.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -143,7 +137,6 @@ published interface XRow: com::sun::star::uno::XInterface
     short getShort([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getInt
     /** get the value of a column in the current row as an integer.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -155,7 +148,6 @@ published interface XRow: com::sun::star::uno::XInterface
     long getInt([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getLong
     /** get the value of a column in the current row as a long.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -167,7 +159,6 @@ published interface XRow: com::sun::star::uno::XInterface
     hyper getLong([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getFloat
     /** gets the value of a column in the current row as a float.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -179,7 +170,6 @@ published interface XRow: com::sun::star::uno::XInterface
     float getFloat([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getDouble
     /** gets the value of a column in the current row as a double.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -191,7 +181,6 @@ published interface XRow: com::sun::star::uno::XInterface
     double getDouble([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBytes
     /** gets the value of a column in the current row as a byte array.
              The bytes represent the raw values returned by the driver.
              @param columnIndex
@@ -204,7 +193,6 @@ published interface XRow: com::sun::star::uno::XInterface
     sequence<byte> getBytes([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getDate
     /** gets the value of a column in the current row as a date object.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -217,7 +205,6 @@ published interface XRow: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getTime
     /** gets the value of a column in the current row as a time object.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -230,7 +217,6 @@ published interface XRow: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getTimestamp
     /** gets the value of a column in the current row as a datetime object.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -243,7 +229,6 @@ published interface XRow: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBinaryStream
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
         stream. This method is particularly suitable for retrieving large
@@ -270,7 +255,6 @@ published interface XRow: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getCharacterStream
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
         stream. This method is particularly suitable for retrieving large
@@ -297,7 +281,6 @@ published interface XRow: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getObject
     /** returns the value of a column in the current row as an object.
         This method uses the given
         <code>Map</code>
@@ -317,7 +300,6 @@ published interface XRow: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getRef
     /** gets a REF(&amp;lt;structured-type&amp;gt;) column value from the current row.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -329,7 +311,6 @@ published interface XRow: com::sun::star::uno::XInterface
     XRef getRef([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBlob
     /** gets a BLOB value in the current row.
         @param columnIndex
             the first column is 1, the second is 2,
@@ -341,7 +322,6 @@ published interface XRow: com::sun::star::uno::XInterface
     XBlob getBlob([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getClob
     /** gets a CLOB value in the current row of this
         <code>ResultSet</code>
         object.
@@ -355,7 +335,6 @@ published interface XRow: com::sun::star::uno::XInterface
     XClob getClob([in]long columnIndex) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getArray
     /** gets a SQL ARRAY value from the current row of this
         <code>ResultSet</code>
         object.
