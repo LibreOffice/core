@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDefinition.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:20:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::QueryDefinition
 /** is a stored definition of a SQL "Select statement".
 
     <p>
@@ -52,44 +51,37 @@
 published service QueryDefinition
 {
 
-    // DocMerge from xml: service com::sun::star::sdb::QueryDefinition: interface com::sun::star::beans::XPropertySet
     /** access to the owning database definition object.
      */
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::Name
     /** is the name of the definition.
      */
     [readonly, property] string Name;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::Command
     /** is the command of the query, this is typically a select statement.
      */
     [property] string Command;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::EscapeProcessing
     /** should we use escape processing for the query.
      */
     [property] boolean EscapeProcessing;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::UpdateTableName
     /** is the name of the table which should be updated. This is usually used
         for queries which relate on more than one table.
      */
     [property] string UpdateTableName;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::UpdateCatalogName
     /** is the name of the update table catalog.
      */
     [property] string UpdateCatalogName;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::UpdateSchemaName
     /** is the name of the update table schema.
      */
     [property] string UpdateSchemaName;

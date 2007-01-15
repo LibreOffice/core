@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Query.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:20:43 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query
 /** is a stored definition of a SQL query.
 
     <p>
@@ -68,19 +67,16 @@
 published service Query
 {
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query: service com::sun::star::sdb::QueryDefinition
     /** defines the command of the query.
      */
     service com::sun::star::sdb::QueryDefinition;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query: service com::sun::star::sdb::DataSettings
     /** is used for customization of data appearance.
      */
     service com::sun::star::sdb::DataSettings;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query: interface com::sun::star::sdbcx::XDataDescriptorFactory
     /** is provided for creation of a new query descriptor based on the current information.
      */
     interface com::sun::star::sdbcx::XDataDescriptorFactory;
@@ -89,7 +85,6 @@ published service Query
     interface com::sun::star::sdbcx::XRename;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query: interface com::sun::star::sdbcx::XColumnsSupplier
     /** access to the columns of the results sets query.
      */
     interface com::sun::star::sdbcx::XColumnsSupplier;
