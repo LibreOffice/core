@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:12:25 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,13 +261,14 @@ void AccessibleControlShape::Init()
         // get the control which belongs to our model (relative to our view)
         const Window* pViewWindow = maShapeTreeInfo.GetWindow();
         SdrUnoObj* pUnoObjectImpl = PTR_CAST( SdrUnoObj, getSdrObject() );
-        OSL_ENSURE( pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no SdrUnoObj!" );
+        SdrView* pView = maShapeTreeInfo.GetSdrView();
+        OSL_ENSURE( pView && pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no view window, no SdrUnoObj!" );
 
-        if ( pViewWindow && pUnoObjectImpl )
+        if ( pView && pViewWindow && pUnoObjectImpl )
         {
             // .................................................................
             // get the context of the control - it will be our "inner" context
-            m_xUnoControl = pUnoObjectImpl->GetUnoControl( pViewWindow );
+            m_xUnoControl = pUnoObjectImpl->GetUnoControl( *pView, *pViewWindow );
 
             if ( !m_xUnoControl.is() )
             {
