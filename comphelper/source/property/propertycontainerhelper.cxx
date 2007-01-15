@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycontainerhelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:18:50 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,7 +281,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
     PropertiesIterator aPos = searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ASSERT("OPropertyContainerHelper::convertFastPropertyValue: unknown handle !");
+        OSL_ENSURE( false, "OPropertyContainerHelper::convertFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return bModified;
@@ -425,7 +425,7 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
     PropertiesIterator aPos = searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ASSERT("OPropertyContainerHelper::setFastPropertyValue: unknown handle !");
+        OSL_ENSURE( false, "OPropertyContainerHelper::setFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return;
@@ -467,7 +467,7 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
     PropertiesIterator aPos = const_cast<OPropertyContainerHelper*>(this)->searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ASSERT("OPropertyContainerHelper::getFastPropertyValue: unknown handle !");
+        OSL_ENSURE( false, "OPropertyContainerHelper::getFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return;
@@ -527,7 +527,7 @@ void OPropertyContainerHelper::modifyAttributes(sal_Int32 _nHandle, sal_Int32 _n
     PropertiesIterator aPos = searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ASSERT("OPropertyContainerHelper::modifyAttributes: invalid handle !");
+        OSL_ENSURE( false, "OPropertyContainerHelper::modifyAttributes: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return;
