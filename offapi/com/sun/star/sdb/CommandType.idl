@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandType.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:13:21 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,27 +38,23 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from idl: constants com::sun::star::sdb::CommandType
 /** indicates the type of a command.
  */
 published constants CommandType
 {
 
-    // DocMerge from idl: value com::sun::star::sdb::CommandType::TABLE
     /** indicates that a command contains a table name, which can be used to
              process a command like "select * from tablename".
      */
     const long TABLE    = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdb::CommandType::QUERY
     /** indicates that a command contains a name of a query component, which
              contains a certain statement.
      */
     const long QUERY    = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdb::CommandType::COMMAND
     /** indicates that the command is an SQL-Statement.
      */
     const long COMMAND  = 2;
