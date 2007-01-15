@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAlterTable.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:04:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,13 +57,11 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-// DocMerge from xml: interface com::sun::star::beans::com::sun::star::sdbcx::XAlterTable
 /** is used for creating and appending new objects to a specific container.
  */
 published interface XAlterTable: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XAlterTable::alterColumnByName
     /** is intended to alter an existing column identified by its name.
         This operation must be atomar. Atomar means that the operation must be done inone step.
         <b>
@@ -83,7 +81,6 @@ published interface XAlterTable: com::sun::star::uno::XInterface
                 com::sun::star::container::NoSuchElementException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XAlterTable::alterColumnByIndex
     /** is intended to alter an existing column identified by its position.
         This operation must be atomar.
         @param index
