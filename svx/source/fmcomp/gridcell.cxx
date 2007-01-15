@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:41:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1747,7 +1747,6 @@ XubString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, co
 
 //==============================================================================
 //= DbPatternField
-//==============================================================================
 //------------------------------------------------------------------------------
 DbPatternField::DbPatternField( DbGridColumn& _rColumn )
     :DbCellControl( _rColumn )
@@ -1772,10 +1771,10 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         _rxModel->getPropertyValue( FM_PROP_EDITMASK ) >>= aEditMask;
         _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) >>= bStrict;
 
-        ByteString aAsciiListMask( (const sal_Unicode*)aLitMask, RTL_TEXTENCODING_ASCII_US );
+        ByteString aAsciiEditMask( aEditMask.getStr(), RTL_TEXTENCODING_ASCII_US );
 
-        static_cast< PatternField* >( m_pWindow )->SetMask( aAsciiListMask, aEditMask );
-        static_cast< PatternField* >( m_pPainter )->SetMask( aAsciiListMask, aEditMask );
+        static_cast< PatternField* >( m_pWindow )->SetMask( aAsciiEditMask, aLitMask );
+        static_cast< PatternField* >( m_pPainter )->SetMask( aAsciiEditMask, aLitMask );
         static_cast< PatternField* >( m_pWindow )->SetStrictFormat( bStrict );
         static_cast< PatternField* >( m_pPainter )->SetStrictFormat( bStrict );
     }
@@ -1798,27 +1797,28 @@ void DbPatternField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
 //------------------------------------------------------------------------------
 CellControllerRef DbPatternField::CreateController() const
 {
-    return new SpinCellController((PatternField*)m_pWindow);
+    return new SpinCellController( static_cast< PatternField* >( m_pWindow ) );
+}
+
+//------------------------------------------------------------------------------
+String DbPatternField::impl_formatText( const String& _rText )
+{
+    m_pPainter->SetText( _rText );
+    static_cast< PatternField* >( m_pPainter )->ReformatAll();
+    return m_pPainter->GetText();
 }
 
 //------------------------------------------------------------------------------
 String DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
-    ::rtl::OUString aString;
-    if (_rxField.is())
+    String aPureText;
+    if ( _rxField.is() )
     {
-        try
-        {
-            aString = _rxField->getString();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+        try { aPureText = _rxField->getString(); }
+        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
     }
 
-    m_pPainter->SetText(aString);
-    return m_pPainter->GetText();
+    return impl_formatText( aPureText );
 }
 
 //------------------------------------------------------------------------------
@@ -1837,7 +1837,7 @@ void DbPatternField::updateFromModel( Reference< XPropertySet > _rxModel )
     ::rtl::OUString sText;
     _rxModel->getPropertyValue( FM_PROP_TEXT ) >>= sText;
 
-    static_cast< Edit* >( m_pWindow )->SetText( sText );
+    static_cast< Edit* >( m_pWindow )->SetText( impl_formatText( sText ) );
     static_cast< Edit* >( m_pWindow )->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
 }
 
