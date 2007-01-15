@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 15:00:10 $
+#   last change: $Author: vg $ $Date: 2007-01-15 14:29:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,23 @@ JARCLASSDIRS    = $(PACKAGE)
 JARTARGET       = $(TARGET).jar
 JARCOMPRESS 	= TRUE
 
+# --- Runner Settings ----------------------------------------------
+
+# create connection string for OOoRunner
+.IF "$(RUNNER_CONNECTION_STRING)" == ""
+    .IF "$(OOO_RUNNER_PORT)" == ""
+        OOO_RUNNER_PORT=8100
+    .ENDIF
+    .IF "$(OOO_RUNNER_HOST)" == ""
+        OOO_RUNNER_HOST=localhost
+    .ENDIF
+    RUNNER_CONNECTION_STRING=socket,host=$(OOO_RUNNER_HOST),port=$(OOO_RUNNER_PORT)
+.ENDIF
+
+# classpath and argument list
+RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar
+RUNNER_ARGS = $(RUNNER_CLASSPATH) org.openoffice.Runner -TestBase java_complex -cs $(RUNNER_CONNECTION_STRING)
+
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
@@ -68,7 +85,7 @@ ALL: 	ALLDEP
 
 
 run: $(CLASSDIR)$/$(JARTARGET)
-    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -sce dbaccess.sce
+    java $(RUNNER_ARGS) -sce dbaccess.sce
 
 run_%: $(CLASSDIR)$/$(JARTARGET)
-    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -o complex.dbaccess.$(@:s/run_//)
+    java $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
