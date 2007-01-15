@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-22 10:40:58 $
+#   last change: $Author: vg $ $Date: 2007-01-15 13:31:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,24 +52,17 @@ XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(HSQLDB_JAR)
 JARFILES+= hsqldb.jar
 .ENDIF
 
-PRIMARY_JAVAFILES =\
+JAVAFILES =\
     NativeInputStreamHelper.java\
     NativeOutputStreamHelper.java\
     NativeStorageAccess.java\
     StorageAccess.java\
     StorageFileAccess.java\
     StorageNativeInputStream.java\
-    StorageNativeOutputStream.java
-
-SECONDARY_JAVAFILES =\
+    StorageNativeOutputStream.java\
     FileSystemRuntimeException.java
-
-JAVAFILES =\
-    $(PRIMARY_JAVAFILES)\
-    $(SECONDARY_JAVAFILES)
     
-JAVACLASSFILES  = $(foreach,i,$(PRIMARY_JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-JAVACLASSFILES += $(foreach,i,$(SECONDARY_JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARCOMPRESS	= TRUE
 JARCLASSDIRS = $(PACKAGE) $(SECONDARY_PACKAGE)
