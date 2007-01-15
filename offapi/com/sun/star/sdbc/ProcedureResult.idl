@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProcedureResult.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:45:24 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::ProcedureResult
 /** determines whether a procedure returns a result or not.
  */
 published constants ProcedureResult
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureResult::UNKNOWN
     /** A possible value for column
              <code>PROCEDURE_TYPE</code>
              in the
@@ -60,7 +58,6 @@ published constants ProcedureResult
     const long UNKNOWN  = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureResult::NONE
     /** A possible value for column
             <code>PROCEDURE_TYPE</code>
              in the
@@ -76,7 +73,6 @@ published constants ProcedureResult
     const long NONE     = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureResult::RETURN
     /** A possible value for column
             <code>PROCEDURE_TYPE</code>
              in the
