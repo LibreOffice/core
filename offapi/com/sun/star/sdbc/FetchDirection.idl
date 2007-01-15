@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FetchDirection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:43:48 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::FetchDirection
 /** indicates in which direction a resultset should fetch next, just for
      optimization.
  */
@@ -46,19 +45,16 @@ published constants FetchDirection
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::FetchDirection::FORWARD
     /** The rows in a result set will be processed in a forward direction; first-to-last.
      */
     const long FORWARD = 1000;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::FetchDirection::REVERSE
     /** The rows in a result set will be processed in a reverse direction; last-to-first.
      */
     const long REVERSE = 1001;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::FetchDirection::UNKNOWN
     /** The order in which rows in a result set will be processed is unknown:
      */
     const long UNKNOWN = 1002;
