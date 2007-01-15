@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XWarningsSupplier.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:56:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XWarningsSupplier
 /** should be implemented of objects which may report warnings or non critical
     errors.
     @see com::sun::star::sdbc::SQLWarning
@@ -55,7 +54,6 @@ published interface XWarningsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XWarningsSupplier::getWarnings
     /** returns the first warning reported by calls on an object that supports
         the usage of warnings.
 
@@ -73,7 +71,6 @@ published interface XWarningsSupplier: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XWarningsSupplier::clearWarnings
     /** clears all warnings reported for the object implementing the interface.
         After a call to this method, the method
         <member scope="com::sun::star::sdbc">XWarningsSupplier::getWarnings()</member>

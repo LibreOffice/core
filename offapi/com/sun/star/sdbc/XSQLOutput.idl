@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSQLOutput.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:55:18 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@
  published interface XSQLData;
 
 
-// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XSQLOutput
 /** is used as an output stream for writing the attributes of a user-defined
     type back to the database.  This interface, used only for custom mapping,
     is used by the driver, and its methods are never directly invoked
@@ -100,7 +99,6 @@
 published interface XSQLOutput: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeString
     /** writes the next attribute to the stream as a string.
         @param x
             the value to pass to the database.
@@ -110,7 +108,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeString([in]string x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBoolean
     /** writes the next attribute to the stream as boolean.
         @param x
             the value to pass to the database.
@@ -120,7 +117,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeBoolean([in]boolean x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeByte
     /** writes the next attribute to the stream as byte.
         @param x
             the value to pass to the database.
@@ -130,7 +126,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeByte([in]byte x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeShort
     /** writes the next attribute to the stream as short.
         @param x
             the value to pass to the database.
@@ -140,7 +135,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeShort([in]short x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeInt
     /** writes the next attribute to the stream as long.
         @param x
             the value to pass to the database.
@@ -150,7 +144,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeInt([in]long x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeLong
     /** writes the next attribute to the stream as hyper.
         @param x
             the value to pass to the database.
@@ -160,7 +153,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeLong([in]hyper x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeFloat
     /** writes the next attribute to the stream as float.
         @param x
             the value to pass to the database.
@@ -170,7 +162,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeFloat([in]float x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeDouble
     /** writes the next attribute to the stream as double.
         @param x
             the value to pass to the database.
@@ -180,7 +171,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeDouble([in]double x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBytes
     /** writes the next attribute to the stream as byte sequence.
         @param x
             the value to pass to the database.
@@ -190,7 +180,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeBytes([in]sequence<byte> x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeDate
     /** writes the next attribute to the stream as a date.
         @param x
             the value to pass to the database.
@@ -200,7 +189,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeDate([in]com::sun::star::util::Date x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeTime
     /** writes the next attribute to the stream as a time.
         @param x
             the value to pass to the database.
@@ -210,7 +198,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeTime([in]com::sun::star::util::Time x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeTimestamp
     /** writes the next attribute to the stream as a datetime.
         @param x
             the value to pass to the database.
@@ -221,7 +208,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
         raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBinaryStream
     /** writes the next attribute to the stream as a stream of uninterpreted
         bytes.
         @param x
@@ -233,7 +219,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
         raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeCharacterStream
     /** writes the next attribute to the stream as a stream of unicode string.
         @param x
             the value to pass to the database.
@@ -244,7 +229,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeObject
     /** writes to the stream the data contained in the given
         <code>XSQLData</code> object.
 
@@ -280,7 +264,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeObject([in]XSQLData x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeRef
     /** writes a REF(&amp;lt;structured-type&amp;gt;) to the stream.
         @param x
             the value to pass to the database.
@@ -290,7 +273,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeRef([in]XRef x) raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBlob
     /** writes a BLOB to the stream.
         @param x
             the value to pass to the database.
@@ -300,7 +282,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeBlob([in]XBlob x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeClob
     /** writes a CLOB to the stream.
         @param x
             the value to pass to the database.
@@ -310,7 +291,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeClob([in]XClob x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeStruct
     /** writes a structured-type to the stream.
         @param x
             the value to pass to the database.
@@ -320,7 +300,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeStruct([in]XStruct x) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeArray
     /** writes an array to the stream.
         @param x
             the value to pass to the database.

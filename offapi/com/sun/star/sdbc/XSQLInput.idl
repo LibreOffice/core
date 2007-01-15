@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSQLInput.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:55:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@
  published interface XClob;
 
 
-// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XSQLInput
 /** represents an input stream that contains a stream of values representing an
     instance of a SQL structured or distinct type.
 
@@ -100,7 +99,6 @@
 published interface XSQLInput: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readString
     /** reads the next attribute in the stream as string.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -110,7 +108,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     string readString() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBoolean
     /** reads the next attribute in the stream as boolean.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -120,7 +117,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     boolean readBoolean() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readByte
     /** reads the next attribute in the stream as byte.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -130,7 +126,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     byte readByte() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readShort
     /** reads the next attribute in the stream as short.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -140,7 +135,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     short readShort() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readInt
     /** reads the next attribute in the stream as long.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -150,7 +144,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     long readInt() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readLong
     /** reads the next attribute in the stream as hyper.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -160,7 +153,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     hyper readLong() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readFloat
     /** reads the next attribute in the stream as float.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -170,7 +162,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     float readFloat() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readDouble
     /** reads the next attribute in the stream as double.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -180,7 +171,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     double readDouble() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBytes
     /** reads the next attribute in the stream as sequence of bytes.
                  @returns
             the attribute; if the value is SQL NULL, return null.
@@ -190,7 +180,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     sequence<byte> readBytes() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readDate
     /** reads the next attribute in the stream as date.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -200,7 +189,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     com::sun::star::util::Date readDate() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readTime
     /** reads the next attribute in the stream as time.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -210,7 +198,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     com::sun::star::util::Time readTime() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readTimestamp
     /** reads the next attribute in the stream as datetime.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -220,7 +207,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     com::sun::star::util::DateTime readTimestamp() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBinaryStream
     /** reads the next attribute in the stream as sequence of bytes.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -230,7 +216,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     com::sun::star::io::XInputStream readBinaryStream() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readCharacterStream
     /** reads the next attribute in the stream as a unicode string.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -240,7 +225,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     com::sun::star::io::XInputStream readCharacterStream() raises (SQLException);
        //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readObject
     /** returns the datum at the head of the stream as an any.
 
 
@@ -270,7 +254,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     any readObject() raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readRef
     /** reads a REF(&amp;lt;structured-type&amp;gt;) from the stream.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -280,7 +263,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     XRef readRef() raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBlob
     /** reads a BLOB from the stream.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -290,7 +272,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     XBlob readBlob() raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readClob
     /** reads a CLOB from the stream.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -300,7 +281,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     XClob readClob() raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readArray
     /** reads an array from the stream.
         @returns
             the attribute; if the value is SQL NULL, return null.
@@ -310,7 +290,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     XArray readArray() raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::wasNull
     /** determines whether the last value read was null.
         @returns
             <TRUE/> if the most recently gotten SQL value was null; otherwise, <FALSE/>
