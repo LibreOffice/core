@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:41:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2320,6 +2320,26 @@ sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com:
     return ::com::sun::star::awt::Size( aSz.Width(), aSz.Height() );
 }
 
+namespace
+{
+    class FlagGuard
+    {
+    private:
+        sal_Bool&   m_rFlag;
+
+    public:
+        FlagGuard( sal_Bool& _rFlag )
+            :m_rFlag( _rFlag )
+        {
+            m_rFlag = sal_True;
+        }
+        ~FlagGuard()
+        {
+            m_rFlag = sal_False;
+        }
+    };
+}
+
 void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2343,7 +2363,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
             if ( !mbDrawingOntoParent )
             {
-                mbDrawingOntoParent = true;
+                FlagGuard aDrawingflagGuard( mbDrawingOntoParent );
 
                 BOOL bWasVisible = pWindow->IsVisible();
                 Point aOldPos( pWindow->GetPosPixel() );
@@ -2371,8 +2391,6 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
                 pWindow->SetPosPixel( aOldPos );
                 if ( bWasVisible )
                     pWindow->Show( TRUE );
-
-                mbDrawingOntoParent = false;
             }
         }
         else if ( pDev )
