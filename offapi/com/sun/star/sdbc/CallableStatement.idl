@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallableStatement.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:33:32 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:00:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
  published interface XOutParameters;
 
 
-// DocMerge from xml: service com::sun::star::sdbc::CallableStatement
 /** is used to execute SQL stored procedures.
 
 
@@ -97,17 +96,14 @@
 */
 published service CallableStatement
 {
-    // DocMerge: empty anyway
     service PreparedStatement;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::CallableStatement: interface com::sun::star::sdbc::XRow
     /** is used for retrieve the values of OUT parameters.
      */
     interface XRow;
 
 
-    // DocMerge from xml: service com::sun::star::sdbc::CallableStatement: interface com::sun::star::sdbc::XOutParameters
     /** is used to declare parameters as OUT parameters.
      */
     interface XOutParameters;
