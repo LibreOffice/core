@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallableStatement.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:12:00 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:49:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::CallableStatement
 /** represents a procedure call. The service differs only in the access
     of the columns and parameters to the service
     <type scope="com::sun::star::sdbc">CallableStatement</type>
@@ -54,10 +53,8 @@
 */
 published service CallableStatement
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbc::CallableStatement;
 
-    // DocMerge: empty anyway
     service com::sun::star::sdb::PreparedStatement;
 };
 
