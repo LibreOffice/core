@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:34:20 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,7 @@ void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
     {
         registerProperty(PROPERTY_HAVING_CLAUSE, PROPERTY_ID_HAVING_CLAUSE, PropertyAttribute::BOUND,
                     &_pItem->m_sHavingClause, ::getCppuType(&_pItem->m_sHavingClause));
+
         registerProperty(PROPERTY_GROUP_BY, PROPERTY_ID_GROUP_BY, PropertyAttribute::BOUND,
                     &_pItem->m_sGroupBy, ::getCppuType(&_pItem->m_sGroupBy));
     }
@@ -269,6 +270,8 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
     static ::com::sun::star::awt::FontDescriptor aFD = ::comphelper::getDefaultFont();
     switch( _nHandle )
     {
+        case PROPERTY_ID_HAVING_CLAUSE:
+        case PROPERTY_ID_GROUP_BY:
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
             _rDefault <<= ::rtl::OUString();
