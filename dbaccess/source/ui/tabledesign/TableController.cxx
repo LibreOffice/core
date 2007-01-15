@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:17:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:37:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -621,8 +621,7 @@ void OTableController::impl_initialize()
         if ( xConnection.is() )
             initializeConnection( xConnection );
 
-        if ( !rArguments.getIfExists_ensureType( (::rtl::OUString)PROPERTY_CURRENTTABLE, m_sName ) )
-            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CurrentTable.")),*this);
+        rArguments.get_ensureType( (::rtl::OUString)PROPERTY_CURRENTTABLE, m_sName );
 
         // read autoincrement value set in the datasource
         ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);
