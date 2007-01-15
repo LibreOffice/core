@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:47:34 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             // die ListSource hat sich geaendert -> neu laden
             if (ListSourceType_VALUELIST != m_eListSourceType)
             {
-                if ( m_xCursor.is() && !getField().is() && !hasExternalListSource() )
+                if ( m_xCursor.is() && !hasField() && !hasExternalListSource() )
                     // combo box is already connected to a database, and no external list source
                     // data source changed -> refresh
                     loadData();
@@ -814,7 +814,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
 //------------------------------------------------------------------------------
 void OComboBoxModel::onDisconnectedDbColumn()
 {
-    if (getField().is())
+    if (hasField())
     {
         m_xFormatter = 0;
         m_nFieldType = DataType::OTHER;
