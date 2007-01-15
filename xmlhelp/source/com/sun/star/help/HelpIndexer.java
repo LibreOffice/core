@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpIndexer.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 11:17:04 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 12:37:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,8 +521,8 @@ public class HelpIndexer {
     // This is a configurable class, which capsulates the parser initialization stuff and all this things
 
     public static final class ParseStuff {
-        private final XSLProcessor _processor;
-        private final OutputMethodHandlerImpl _output;
+        private XSLProcessor _processor;
+        private OutputMethodHandlerImpl _output;
 
         private ParseStuff() {
             _processor = new XSLProcessorImpl();
