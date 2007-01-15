@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:18:38 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,137 +102,21 @@ namespace dbaui
     using namespace ::com::sun::star::frame;
 
     //====================================================================
-    //= OConnectionChangeBroadcaster
-    //====================================================================
-    class OConnectionChangeBroadcaster
-    {
-    private:
-        OSingleDocumentController*  m_pController;
-        Reference< XConnection >    m_xOldConnection;
-
-    public:
-        OConnectionChangeBroadcaster( OSingleDocumentController* _pController );
-        ~OConnectionChangeBroadcaster();
-    };
-
-    DBG_NAME(OConnectionChangeBroadcaster)
-    //--------------------------------------------------------------------
-    OConnectionChangeBroadcaster::OConnectionChangeBroadcaster( OSingleDocumentController* _pController )
-        :m_pController( _pController )
-    {
-        DBG_CTOR(OConnectionChangeBroadcaster,NULL);
-        DBG_ASSERT( m_pController, "OConnectionChangeBroadcaster::OConnectionChangeBroadcaster: invalid controller!" );
-        if ( m_pController )
-            m_xOldConnection = m_pController->getConnection();
-    }
-
-    //--------------------------------------------------------------------
-    OConnectionChangeBroadcaster::~OConnectionChangeBroadcaster()
-    {
-        DBG_DTOR(OConnectionChangeBroadcaster,NULL);
-        if ( m_pController )
-        {
-            // has the connection change while we were constructed?
-            Reference< XConnection > xNewConnection = m_pController->getConnection();
-            if ( m_xOldConnection.get() != xNewConnection.get() )
-            {
-                // yes -> fire the property change
-                sal_Int32 mHandle = PROPERTY_ID_ACTIVECONNECTION;
-                Any aNewValue = makeAny( xNewConnection );
-                Any aOldValue = makeAny( m_xOldConnection );
-                m_pController->fire( &mHandle, &aNewValue, &aOldValue, 1, sal_False );
-            }
-        }
-    }
-
-    //====================================================================
     //= OSingleDocumentController
     //====================================================================
     //--------------------------------------------------------------------
     OSingleDocumentController::OSingleDocumentController(const Reference< XMultiServiceFactory >& _rxORB)
         :OSingleDocumentController_CBASE( _rxORB )
-        ,OSingleDocumentController_PBASE( getBroadcastHelper() )
         ,m_bSuspended( sal_False )
         ,m_bEditable(sal_True)
         ,m_bModified(sal_False)
 
     {
-//      registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
-//          &m_xConnection, ::getCppuType( &m_xConnection ) );
-        //  TODO: is this still needed?
     }
 
-    //--------------------------------------------------------------------
-    Any SAL_CALL OSingleDocumentController::queryInterface( const Type& _rType ) throw (RuntimeException)
-    {
-        Any aReturn = OSingleDocumentController_CBASE::queryInterface( _rType );
-        if ( !aReturn.hasValue() )
-            aReturn = OSingleDocumentController_PBASE::queryInterface( _rType );
-        return aReturn;
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL OSingleDocumentController::acquire(  ) throw ()
-    {
-        OSingleDocumentController_CBASE::acquire();
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL OSingleDocumentController::release(  ) throw ()
-    {
-        OSingleDocumentController_CBASE::release();
-    }
-
-    //--------------------------------------------------------------------
-    Sequence<sal_Int8> SAL_CALL OSingleDocumentController::getImplementationId(  ) throw(RuntimeException)
-    {
-        static ::cppu::OImplementationId * pId = 0;
-        if (! pId)
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if (! pId)
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
-    }
-
-    //--------------------------------------------------------------------
-    Sequence< Type > SAL_CALL OSingleDocumentController::getTypes(  ) throw (RuntimeException)
-    {
-        return ::comphelper::concatSequences(
-            OSingleDocumentController_CBASE::getTypes(),
-            OSingleDocumentController_PBASE::getTypes()
-        );
-    }
-
-    //-------------------------------------------------------------------------
-    Reference<XPropertySetInfo>  SAL_CALL OSingleDocumentController::getPropertySetInfo() throw(RuntimeException)
-    {
-        Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-        return xInfo;
-    }
-
-    //-------------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper& OSingleDocumentController::getInfoHelper()
-    {
-        return *const_cast<OSingleDocumentController*>(this)->getArrayHelper();
-    }
-
-    //--------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper* OSingleDocumentController::createArrayHelper( ) const
-    {
-        Sequence< Property > aProps;
-        describeProperties(aProps);
-        return new ::cppu::OPropertyArrayHelper(aProps);
-    }
     //--------------------------------------------------------------------
     void OSingleDocumentController::initializeConnection( const Reference< XConnection >& _rxForeignConn )
     {
-        OConnectionChangeBroadcaster( this );
-
         DBG_ASSERT( !isConnected(), "OSingleDocumentController::initializeConnection: not to be called when already connected!" );
             // usually this gets called from within initialize of derived classes ...
         if ( isConnected() )
@@ -273,7 +157,6 @@ namespace dbaui
     void OSingleDocumentController::reconnect( sal_Bool _bUI )
     {
         OSL_ENSURE(!m_bSuspended, "Cannot reconnect while suspended!");
-        OConnectionChangeBroadcaster( this );
 
         stopConnectionListening( m_xConnection );
         m_aSdbMetaData.reset( NULL );
@@ -301,8 +184,6 @@ namespace dbaui
     //--------------------------------------------------------------------
     void OSingleDocumentController::disconnect()
     {
-        OConnectionChangeBroadcaster( this );
-
         stopConnectionListening(m_xConnection);
         m_aSdbMetaData.reset( NULL );
         m_xConnection.clear();
@@ -321,7 +202,6 @@ namespace dbaui
     void SAL_CALL OSingleDocumentController::disposing()
     {
         OSingleDocumentController_CBASE::disposing();
-        OSingleDocumentController_PBASE::disposing();
         m_aUndoManager.Clear();
 
         disconnect();
