@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-01-10 11:27:18 $
+dnl * Date: $Date: 2007-01-15 12:36:20 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.193 $ )
+AC_REVISION( $Revision: 1.194 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -334,6 +334,13 @@ AC_ARG_WITH(xalan-jar,
 AC_ARG_WITH(serializer-jar,
 [  --with-serializer-jar=JARFILE   Specify path to jarfile manually ],
 [ SERIALIZER_JAR="$withval"
+])
+AC_ARG_WITH(system-xt,
+[  --with-system-xt        Use xt already on system
+],,)
+AC_ARG_WITH(xt-jar,
+[  --with-xt-jar=JARFILE   Specify path to jarfile manually ],
+[ XT_JAR="$withval"
 ])
 AC_ARG_WITH(system-sablot,
 [  --with-system-sablot    Use sablot already on system
@@ -3196,6 +3203,34 @@ if test -n "$NEED_XALAN"; then
    BUILD_TYPE="$BUILD_TYPE XALAN"
 fi
 
+
+dnl ===================================================================
+dnl Check for system xt
+dnl ===================================================================
+AC_MSG_CHECKING([which xt to use])
+if test -n "$with_system_xt" -o -n "$with_system_libs" && \
+        test "$with_system_xt" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_XT=YES
+        if test -z $XT_JAR; then
+          AC_CHECK_FILE(/usr/share/java/xt.jar, 
+            [ XT_JAR=/usr/share/java/xt.jar ],
+            [ AC_CHECK_FILE(/usr/share/java/xt-0.20050823.jar, 
+              [ XT_JAR=/usr/share/java/xt-0.20050823.jar ],
+                  [ AC_MSG_ERROR(xt.jar replacement not found)]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($XT_JAR, [],
+               [ AC_MSG_ERROR(xt.jar replacement not found.)], [])
+        fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_XT=NO
+fi
+AC_SUBST(SYSTEM_XT)
+AC_SUBST(XT_JAR)
 
 dnl ===================================================================
 dnl Check for system sablot
