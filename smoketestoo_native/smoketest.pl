@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-18 15:46:55 $
+#   last change: $Author: vg $ $Date: 2007-01-15 12:15:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.20 $ ';
+$id_str = ' $Revision: 1.21 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -455,7 +455,7 @@ sub doTest {
 
     # start office (error 4)
 
-    print "Starting Testtool ($INSTSETNAME)\n";
+    print "starting office ($INSTSETNAME)\n";
 
     if ($gui eq "UNX") {
         delete $ENV{LD_LIBRARY_PATH};
