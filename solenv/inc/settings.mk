@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.206 $
+#   $Revision: 1.207 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 12:15:12 $
+#   last change: $Author: vg $ $Date: 2007-01-15 12:34:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1360,6 +1360,7 @@ $(COMP9TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP9TYP
 .ENDIF
 
 # some place to define these jars for SO environment
+XT_JAR*=$(SOLARBINDIR)$/xt.jar
 XML_APIS_JAR*=$(SOLARBINDIR)$/xml-apis.jar
 XERCES_JAR*=$(SOLARBINDIR)$/xercesImpl.jar
 
