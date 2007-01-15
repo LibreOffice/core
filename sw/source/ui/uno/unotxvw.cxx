@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:33 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,8 @@ sal_Bool lcl_FindObjInGroup(
     uno::Reference< awt::XControl > & xRet,
     SdrObjGroup* pGroup,
     const uno::Reference< awt::XControlModel > & xModel,
-    Window* pWin,
+    SdrView& rView,
+    Window& rWin,
     SdrObject*& rpFound)
 {
     SdrObjList* pList = pGroup->GetSubList();
@@ -232,14 +233,14 @@ sal_Bool lcl_FindObjInGroup(
             uno::Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
             if( xCM.is() && xModel == xCM )
             {
-                xRet = pFormObj->GetUnoControl( pWin );
+                xRet = pFormObj->GetUnoControl( rView, rWin );
                 rpFound = pObj;
                 break;
             }
         }
         else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pObj )))
         {
-            if(lcl_FindObjInGroup(xRet, pGroup, xModel, pWin, rpFound))
+            if(lcl_FindObjInGroup(xRet, pGroup, xModel, rView, rWin, rpFound))
                 break;
         }
     }
@@ -803,38 +804,49 @@ SdrObject* SwXTextView::GetControl(
         uno::Reference< ::com::sun::star::awt::XControl >& xToFill  )
 {
     SdrObject* pRet = 0;
-    ViewShell *pVSh = 0;
-    SwView* pView = ((SwXTextView*)this)->GetView();
-    if(pView)
+    do
     {
+        SwView* pView = ((SwXTextView*)this)->GetView();
+        if (!pView)
+            break;
+
+        SdrView* pDrawView = pView->GetDrawView();
+        if (!pDrawView)
+            break;
+
         SdrModel* pModel = pView->GetDocShell()->GetDoc()->GetDrawModel();
-        if(pModel)
+        if (!pModel)
+            break;
+
+        SdrPage* pPage = pModel->GetPage( 0 );
+        Window *pWin = pView->GetWrtShell().GetWin();
+        if (!pWin)
+            break;
+
+        sal_uInt32 nCount = pPage->GetObjCount();
+        for( sal_uInt32 i=0; i< nCount; i++ )
         {
-            SdrPage* pPage = pModel->GetPage( 0 );
-            Window *pWin = pView->GetWrtShell().GetWin();
-            sal_uInt32 nCount = pPage->GetObjCount();
-            for( sal_uInt32 i=0; i< nCount; i++ )
+            pRet = pPage->GetObj(i);
+            SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pRet );
+            SdrObjGroup* pGroup;
+            if( pFormObj )
             {
-                pRet = pPage->GetObj(i);
-                SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pRet );
-                SdrObjGroup* pGroup;
-                if( pFormObj )
+                uno::Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
+                if( xCM.is() && xModel == xCM )
                 {
-                    uno::Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
-                    if( xCM.is() && xModel == xCM )
-                    {
-                        xToFill = pFormObj->GetUnoControl( pWin );
-                        break;
-                    }
+                    xToFill = pFormObj->GetUnoControl( *pDrawView, *pWin );
+                    break;
                 }
-                else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pRet )))
-                {
-                    if(lcl_FindObjInGroup(xToFill, pGroup, xModel, pWin, pRet))
-                        break;
-                }
+            }
+            else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pRet )))
+            {
+                if(lcl_FindObjInGroup(xToFill, pGroup, xModel, *pDrawView, *pWin, pRet))
+                    break;
             }
         }
     }
+    while (false);
+
     return pRet;
 }
 /*-- 17.12.98 09:34:27---------------------------------------------------
