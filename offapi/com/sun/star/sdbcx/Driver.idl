@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Driver.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:58:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  published interface XDropCatalog;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::Driver
 /** extends the service
     <type scope="com::sun::star::sdbc">Driver</type>
     by beans for data definition.
@@ -63,7 +62,6 @@
  */
 published service Driver
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbc::Driver;
 
     /** used to get access to the catalog.
@@ -72,12 +70,10 @@ published service Driver
     interface XDataDefinitionSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Driver: interface com::sun::star::sdbcx::XCreateCatalog
     /** is optional for implementation.
      */
     [optional] interface XCreateCatalog;
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Driver: interface com::sun::star::sdbcx::XDropCatalog
     /** is optional for implementation.
      */
     [optional] interface XDropCatalog;
