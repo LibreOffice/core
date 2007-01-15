@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XOutParameters.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:51:18 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XOutParameters
 /** is used to register Out-Parameters for stored procedures.
 
 
@@ -62,7 +61,6 @@
 published interface XOutParameters: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XOutParameters::registerOutParameter
     /** registers the designated output parameter.  This version of
         the method
         <member scope="com::sun::star::sdbc">XOutParameters::registerOutParameter()</member>
@@ -112,7 +110,6 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XOutParameters::registerNumericOutParameter
     /** registers the OUT parameter in ordinal position
         <code>parameterIndex</code>
         to the SDBC type

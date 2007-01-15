@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRef.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:52:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XRef
 /** is the reference to a SQL structured type value in the database.  A
     Ref can be saved to persistent storage.  A Ref is dereferenced by
     passing it as a parameter to a SQL statement and executing the
@@ -56,7 +55,6 @@ published interface XRef: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XRef::getBaseTypeName
     /** gets the fully-qualified SQL structured type name of the referenced item.
         @returns
             the base type name
