@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:18:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,18 @@
 #include <osl/diagnose.h>
 #endif
 
+#if OSL_DEBUG_LEVEL > 0
+    #ifndef _RTL_STRBUF_HXX_
+    #include <rtl/strbuf.hxx>
+    #endif
+    #ifndef _CPPUHELPER_EXC_HLP_HXX_
+    #include <cppuhelper/exc_hlp.hxx>
+    #endif
+    #ifndef _OSL_THREAD_H_
+    #include <osl/thread.h>
+    #endif
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -66,23 +78,36 @@
 namespace comphelper
 {
 
-    namespace starlang = ::com::sun::star::lang;
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::beans::Property;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::cpp_queryInterface;
+    using ::com::sun::star::uno::cpp_acquire;
+    using ::com::sun::star::uno::cpp_release;
+    /** === end UNO using === **/
+    namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
 //------------------------------------------------------------------
-void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource,
-                    const staruno::Reference<starbeans::XPropertySet>& _rxDest)
+void copyProperties(const Reference<XPropertySet>& _rxSource,
+                    const Reference<XPropertySet>& _rxDest)
 {
     if (!_rxSource.is() || !_rxDest.is())
     {
-        OSL_ENSURE(sal_False, "copyProperties : invalid arguments !");
+        OSL_ENSURE(sal_False, "copyProperties: invalid arguments !");
     }
 
-    staruno::Reference< starbeans::XPropertySetInfo > xSourceProps = _rxSource->getPropertySetInfo();
-    staruno::Reference< starbeans::XPropertySetInfo > xDestProps = _rxDest->getPropertySetInfo();
+    Reference< XPropertySetInfo > xSourceProps = _rxSource->getPropertySetInfo();
+    Reference< XPropertySetInfo > xDestProps = _rxDest->getPropertySetInfo();
 
-    staruno::Sequence< starbeans::Property > aSourceProps = xSourceProps->getProperties();
-    const starbeans::Property* pSourceProps = aSourceProps.getConstArray();
-    starbeans::Property aDestProp;
+    Sequence< Property > aSourceProps = xSourceProps->getProperties();
+    const Property* pSourceProps = aSourceProps.getConstArray();
+    Property aDestProp;
     for (sal_Int32 i=0; i<aSourceProps.getLength(); ++i, ++pSourceProps)
     {
         if ( xDestProps->hasPropertyByName(pSourceProps->Name) )
@@ -90,19 +115,41 @@ void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource
             try
             {
                 aDestProp = xDestProps->getPropertyByName(pSourceProps->Name);
-                if (0 == (aDestProp.Attributes & starbeans::PropertyAttribute::READONLY))
+                if (0 == (aDestProp.Attributes & PropertyAttribute::READONLY))
                     _rxDest->setPropertyValue(pSourceProps->Name, _rxSource->getPropertyValue(pSourceProps->Name));
             }
-            catch (staruno::Exception&)
+            catch (Exception&)
             {
-                OSL_ENSURE(sal_False, "copyProperties : could not transfer at least one of the properties !");
+#if OSL_DEBUG_LEVEL > 0
+                ::rtl::OStringBuffer aBuffer;
+                aBuffer.append( "::comphelper::copyProperties: could not copy property '" );
+                aBuffer.append( ::rtl::OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US ) );
+                aBuffer.append( "' to the destination set.\n" );
+
+                Any aException( ::cppu::getCaughtException() );
+                aBuffer.append( "Caught an exception of type '" );
+                ::rtl::OUString sExceptionType( aException.getValueTypeName() );
+                aBuffer.append( ::rtl::OString( sExceptionType.getStr(), sExceptionType.getLength(), RTL_TEXTENCODING_ASCII_US ) );
+                aBuffer.append( "'" );
+
+                Exception aBaseException;
+                if ( ( aException >>= aBaseException ) && aBaseException.Message.getLength() )
+                {
+                    aBuffer.append( ", saying '" );
+                    aBuffer.append( ::rtl::OString( aBaseException.Message.getStr(), aBaseException.Message.getLength(), osl_getThreadTextEncoding() ) );
+                    aBuffer.append( "'" );
+                }
+                aBuffer.append( "." );
+
+                OSL_ENSURE( sal_False, aBuffer.getStr() );
+#endif
             }
         }
     }
 }
 
 //------------------------------------------------------------------
-sal_Bool hasProperty(const rtl::OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet)
+sal_Bool hasProperty(const rtl::OUString& _rName, const Reference<XPropertySet>& _rxSet)
 {
     if (_rxSet.is())
     {
@@ -113,13 +160,13 @@ sal_Bool hasProperty(const rtl::OUString& _rName, const staruno::Reference<starb
 }
 
 //------------------------------------------------------------------
-void RemoveProperty(staruno::Sequence<starbeans::Property>& _rProps, const rtl::OUString& _rPropName)
+void RemoveProperty(Sequence<Property>& _rProps, const rtl::OUString& _rPropName)
 {
     sal_Int32 nLen = _rProps.getLength();
 
     // binaere Suche
-    const starbeans::Property* pProperties = _rProps.getConstArray();
-    const starbeans::Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, _rPropName,PropertyStringLessFunctor());
+    const Property* pProperties = _rProps.getConstArray();
+    const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, _rPropName,PropertyStringLessFunctor());
 
     // gefunden ?
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == _rPropName) )
@@ -130,13 +177,13 @@ void RemoveProperty(staruno::Sequence<starbeans::Property>& _rProps, const rtl::
 }
 
 //------------------------------------------------------------------
-void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& seqProps, const ::rtl::OUString& sPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
+void ModifyPropertyAttributes(Sequence<Property>& seqProps, const ::rtl::OUString& sPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
 {
     sal_Int32 nLen = seqProps.getLength();
 
     // binaere Suche
-    starbeans::Property* pProperties = seqProps.getArray();
-    starbeans::Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen,sPropName, PropertyStringLessFunctor());
+    Property* pProperties = seqProps.getArray();
+    Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen,sPropName, PropertyStringLessFunctor());
 
     // gefunden ?
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == sPropName) )
@@ -147,22 +194,22 @@ void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& seqProps, 
 }
 
 //------------------------------------------------------------------
-sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType)
+sal_Bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValueToSet, Any& _rCurrentValue, const Type& _rExpectedType)
 {
     sal_Bool bModified(sal_False);
     if (_rCurrentValue.getValue() != _rValueToSet.getValue())
     {
         if ( _rValueToSet.hasValue() && ( !_rExpectedType.equals( _rValueToSet.getValueType() ) ) )
         {
-            _rConvertedValue = staruno::Any( NULL, _rExpectedType.getTypeLibType() );
+            _rConvertedValue = Any( NULL, _rExpectedType.getTypeLibType() );
 
             if  ( !uno_type_assignData(
                     const_cast< void* >( _rConvertedValue.getValue() ), _rConvertedValue.getValueType().getTypeLibType(),
                     const_cast< void* >( _rValueToSet.getValue() ), _rValueToSet.getValueType().getTypeLibType(),
                     reinterpret_cast< uno_QueryInterfaceFunc >(
-                        staruno::cpp_queryInterface),
-                    reinterpret_cast< uno_AcquireFunc >(staruno::cpp_acquire),
-                    reinterpret_cast< uno_ReleaseFunc >(staruno::cpp_release)
+                        cpp_queryInterface),
+                    reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+                    reinterpret_cast< uno_ReleaseFunc >(cpp_release)
                   )
                 )
                 throw starlang::IllegalArgumentException();
