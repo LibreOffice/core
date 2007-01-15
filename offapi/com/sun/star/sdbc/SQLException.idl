@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SQLException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:46:34 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: exception com::sun::star::sdbc::SQLException
 /** is an exception that provides information on a database access error.
 
     <p>
@@ -62,13 +61,11 @@
  */
 published exception SQLException: com::sun::star::uno::Exception
 {
-    // DocMerge from xml: field com::sun::star::sdbc::SQLException::SQLState
     /** returns a string, which uses the XOPEN SQLState conventions.
         The values of the SQLState string are described in the XOPEN SQL spec.
      */
     string          SQLState;
 
-    // DocMerge from xml: field com::sun::star::sdbc::SQLException::ErrorCode
     /** returns an integer error code that is specific to each vendor.  Normally this will
         be the actual error code returned by the underlying database.
         A chain to the next Exception.  This can be used to provide additional
@@ -76,7 +73,6 @@ published exception SQLException: com::sun::star::uno::Exception
      */
     long            ErrorCode;
 
-    // DocMerge from xml: field com::sun::star::sdbc::SQLException::NextException
     /** returns a chain to the next Exception.
         This can be used to provide additional
         error information.

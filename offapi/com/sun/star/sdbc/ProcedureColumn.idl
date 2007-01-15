@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProcedureColumn.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:45:11 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::ProcedureColumn
 /** indicates the type of a procedure column.
  */
 published constants ProcedureColumn
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureColumn::UNKNOWN
     /** indicates that the type of the column is unknown. A possible value for
              the column
              <code>COLUMN_TYPE</code>
@@ -57,7 +55,6 @@ published constants ProcedureColumn
     const long UNKNOWN          = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureColumn::IN
     /** indicates that the column stores IN parameters.
              A possible value for the column
              <code>COLUMN_TYPE</code>
@@ -70,7 +67,6 @@ published constants ProcedureColumn
     const long IN               = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureColumn::INOUT
     /** indicates that the column stores INOUT parameters.
              A possible value for the column
              <code>COLUMN_TYPE</code>
@@ -83,7 +79,6 @@ published constants ProcedureColumn
     const long INOUT            = 2;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureColumn::RESULT
     /** indicates that the column stores results.
              A possible value for the column
              <code>COLUMN_TYPE</code>
@@ -96,7 +91,6 @@ published constants ProcedureColumn
     const long RESULT           = 3;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureColumn::OUT
     /** indicates that the column stores OUT parameters.
              A possible value for the column
              <code>COLUMN_TYPE</code>
@@ -109,7 +103,6 @@ published constants ProcedureColumn
     const long OUT              = 4;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::ProcedureColumn::RETURN
     /** Indicates that the column stores return values.
              A possible value for the column
              <code>COLUMN_TYPE</code>
