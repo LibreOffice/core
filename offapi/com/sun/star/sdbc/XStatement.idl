@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStatement.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:55:34 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
  published interface XResultSet;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XStatement
 /** is used for executing a static SQL statement and obtaining the results
     produced by it.
 
@@ -68,7 +67,6 @@
 published interface XStatement: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XStatement::executeQuery
     /** executes a SQL statement that returns a single ResultSet.
         @param sql
             the SQL statement which should be executed
@@ -80,7 +78,6 @@ published interface XStatement: com::sun::star::uno::XInterface
     XResultSet executeQuery([in]string sql) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XStatement::executeUpdate
     /** executes an SQL INSERT, UPDATE, or DELETE statement. In addition,
         SQL statements that return nothing, such as SQL DDL statements,
         can be executed.
@@ -95,7 +92,6 @@ published interface XStatement: com::sun::star::uno::XInterface
     long executeUpdate([in]string sql) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XStatement::execute
     /** executes a SQL statement that may return multiple results.
 
 
@@ -130,7 +126,6 @@ published interface XStatement: com::sun::star::uno::XInterface
     boolean execute([in]string sql) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XStatement::getConnection
     /** returns the
         <type scope="com::sun::star::sdbc">Connection</type>
         object
