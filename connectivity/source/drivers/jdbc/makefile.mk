@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 16:19:11 $
+#   last change: $Author: vg $ $Date: 2007-01-15 13:36:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ SLOFILES=\
         $(SLO)$/InputStream.obj						\
         $(SLO)$/JConnection.obj                     \
         $(SLO)$/JDriver.obj							\
+        $(SLO)$/JStatement.obj                      \
         $(SLO)$/Object.obj							\
         $(SLO)$/PreparedStatement.obj				\
         $(SLO)$/Reader.obj							\
@@ -76,7 +77,6 @@ SLOFILES=\
         $(SLO)$/ResultSetMetaData.obj				\
         $(SLO)$/SQLException.obj					\
         $(SLO)$/SQLWarning.obj						\
-        $(SLO)$/Statement.obj						\
         $(SLO)$/String.obj							\
         $(SLO)$/Throwable.obj						\
         $(SLO)$/Timestamp.obj						\
