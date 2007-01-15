@@ -74,7 +74,7 @@ public:
     sal_Int32 i,i2;
     for( i = 0 ; i < TEST_UUID ; i ++ )
     {
-        rtl_createUuid( aNode[i], i == 0 ? 0 : aNode[i - 1], sal_False );
+        rtl_createUuid( aNode[i], 0, sal_False );
     }
     sal_Bool bRes = sal_True;
     for( i = 0 ; i < TEST_UUID ; i ++ )
