@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataType.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:42:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::DataType
 /** These constants are used to specify database data types which are used
         to identify the generic SQL types. The definition is based on JDBC 3.0.
 
@@ -52,68 +51,47 @@
  */
 published constants DataType
 {
-    // DocMerge: empty anyway
     const long BIT          =  -7;
 
-    // DocMerge: empty anyway
     const long TINYINT      =  -6;
 
-    // DocMerge: empty anyway
     const long SMALLINT     =   5;
 
-    // DocMerge: empty anyway
     const long INTEGER      =   4;
 
-    // DocMerge: empty anyway
     const long BIGINT       =  -5;
 
-    // DocMerge: empty anyway
     const long FLOAT        =   6;
 
-    // DocMerge: empty anyway
     const long REAL         =   7;
 
-    // DocMerge: empty anyway
     const long DOUBLE       =   8;
 
-    // DocMerge: empty anyway
     const long NUMERIC      =   2;
 
-    // DocMerge: empty anyway
     const long DECIMAL      =   3;
 
-    // DocMerge: empty anyway
     const long CHAR         =   1;
 
-    // DocMerge: empty anyway
     const long VARCHAR      =  12;
 
-    // DocMerge: empty anyway
     const long LONGVARCHAR  =  -1;
 
-    // DocMerge: empty anyway
     const long DATE         =  91;
 
-    // DocMerge: empty anyway
     const long TIME         =  92;
 
-    // DocMerge: empty anyway
     const long TIMESTAMP    =  93;
 
-    // DocMerge: empty anyway
     const long BINARY       =  -2;
 
-    // DocMerge: empty anyway
     const long VARBINARY    =  -3;
 
-    // DocMerge: empty anyway
     const long LONGVARBINARY =  -4;
 
-    // DocMerge: empty anyway
     const long SQLNULL      =   0;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::OTHER
     /** indicates that the SQL type is database-specific and
              gets mapped to an object that can be accessed via
              the method
@@ -123,46 +101,39 @@ published constants DataType
     const long OTHER        = 1111;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::OBJECT
     /** indicates a type which is represented by an object which implements
              this type.
      */
     const long OBJECT        = 2000;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::DISTINCT
     /** describes a type based on a built-in type.
                  It is a user-defined data type (UDT).
      */
     const long DISTINCT     = 2001;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::STRUCT
     /** indicates a type consisting of attributes that may be any type.
                  It is a user-defined data type (UDT).
      */
     const long STRUCT       = 2002;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::ARRAY
     /** indicates a type representing an SQL ARRAY.
      */
     const long ARRAY        = 2003;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::BLOB
     /** indicates a type representing an SQL Binary Large Object.
      */
     const long BLOB         = 2004;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::CLOB
     /** indicates a type representing an SQL Character Large Object.
      */
     const long CLOB         = 2005;
 
 
-    // DocMerge from idl: value com::sun::star::sdbc::DataType::REF
     /** indicates a type representing an SQL REF, a referencing type.
      */
     const long REF          = 2006;
