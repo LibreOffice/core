@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formoperations.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 15:26:35 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -760,8 +760,7 @@ namespace frm
             sal_Int32 nPosition = -1;
 
             ::comphelper::NamedValueCollection aArguments( _rArguments );
-            if ( !aArguments.getIfExists_ensureType( "Position", nPosition ) )
-                throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
+            aArguments.get_ensureType( "Position", nPosition );
 
             if ( nPosition < 1 )
                 nPosition = 1;
@@ -798,7 +797,7 @@ namespace frm
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL FormOperations::commitCurrentRecord( ::sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        MethodGuard aGuard( *this );
         _out_rRecordInserted = sal_False;
 
         return impl_commitCurrentRecord_throw( &_out_rRecordInserted );
