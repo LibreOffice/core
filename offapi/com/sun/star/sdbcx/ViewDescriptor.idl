@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:03:56 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,29 +42,24 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::ViewDescriptor
 /** is used to define a new view for a database.
     @see com::sun::star::sdbcx::View
  */
 published service ViewDescriptor
 {
-    // DocMerge: empty anyway
     service Descriptor;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::ViewDescriptor::CatalogName
     /** is the name of the views catalog, may be empty.
      */
     [property] string CatalogName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::ViewDescriptor::SchemaName
     /** is the name of the views schema, may be empty.
      */
     [property] string SchemaName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::ViewDescriptor::Command
     /** is the command for creating the view. After appending a view to it's
         container, the command may be empty. This is typically a
         SQL Select-Statement.
@@ -72,7 +67,6 @@ published service ViewDescriptor
     [property] string Command;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::ViewDescriptor::CheckOption
     /** indicates if a check option should be used for the view.
         @see com::sun::star::sdbcx::CheckOption
      */
