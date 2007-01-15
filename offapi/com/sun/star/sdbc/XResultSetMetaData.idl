@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XResultSetMetaData.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:52:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,12 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XResultSetMetaData
 /** can be used to find out about the types and properties
     of the columns in a ResultSet.
  */
 published interface XResultSetMetaData: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnCount
     /** returns the number of columns in this ResultSet.
         @returns
             the column count
@@ -63,7 +61,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     long getColumnCount() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isAutoIncrement
     /** indicates whether the column is automatically numbered, thus read-only.
         @param column
             the first column is 1, the second is 2,
@@ -75,7 +72,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isAutoIncrement([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isCaseSensitive
     /** indicates whether a column's case matters.
         @param column
             the first column is 1, the second is 2,
@@ -87,7 +83,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isCaseSensitive([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isSearchable
     /** indicates whether the column can be used in a where clause.
         @param column
             the first column is 1, the second is 2,
@@ -99,7 +94,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isSearchable([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isCurrency
     /** indicates whether the column is a cash value.
         @param column
             the first column is 1, the second is 2,
@@ -111,7 +105,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isCurrency([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isNullable
     /** indicates the nullability of values in the designated column.@see com::sun::star::sdbc::ColumnValue
         @param column
             the first column is 1, the second is 2,
@@ -123,7 +116,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     long isNullable([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isSigned
     /** indicates whether values in the column are signed numbers.
         @param column
             the first column is 1, the second is 2,
@@ -135,7 +127,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isSigned([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnDisplaySize
     /** indicates the column's normal max width in chars.
         @param column
             the first column is 1, the second is 2,
@@ -147,7 +138,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     long getColumnDisplaySize([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnLabel
     /** gets the suggested column title for use in printouts and
         displays.
         @param column
@@ -160,7 +150,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     string getColumnLabel([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnName
     /** gets a column's name.
         @param column
             the first column is 1, the second is 2,
@@ -172,7 +161,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     string getColumnName([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getSchemaName
     /** gets a column's table's schema.
         @param column
             the first column is 1, the second is 2,
@@ -184,7 +172,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     string getSchemaName([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getPrecision
     /** gets a column's number of decimal digits.
         @param column
             the first column is 1, the second is 2,
@@ -196,7 +183,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     long getPrecision([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getScale
     /** gets a column's number of digits to right of the decimal point.
         @param column
             the first column is 1, the second is 2,
@@ -208,7 +194,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     long getScale([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getTableName
     /** gets a column's table name.
         @param column
             the first column is 1, the second is 2,
@@ -220,7 +205,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     string getTableName([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getCatalogName
     /** gets a column's table's catalog name.
         @param column
             the first column is 1, the second is 2,
@@ -232,7 +216,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     string getCatalogName([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnType
     /** retrieves a column's SQL type.
         @param column
             the first column is 1, the second is 2,
@@ -244,7 +227,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     long getColumnType([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnTypeName
     /** retrieves a column's database-specific type name.
         @param column
             the first column is 1, the second is 2,
@@ -256,7 +238,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     string getColumnTypeName([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isReadOnly
     /** indicates whether a column is definitely not writable.
         @param column
             the first column is 1, the second is 2,
@@ -268,7 +249,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isReadOnly([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isWritable
     /** indicates whether it is possible for a write on the column to succeed.
         @param column
             the first column is 1, the second is 2,
@@ -280,7 +260,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isWritable([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isDefinitelyWritable
     /** indicates whether a write on the column will definitely succeed.
         @param column
             the first column is 1, the second is 2,
@@ -292,7 +271,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     boolean isDefinitelyWritable([in]long column) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnServiceName
     /** returns the fully-qualified name of the service whose instances
         are manufactured if the method
         <member scope="com::sun::star::sdbc">XResultSet::.getObject()</member>
