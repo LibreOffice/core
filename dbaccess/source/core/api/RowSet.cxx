@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:15:36 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2376,8 +2376,6 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
             m_xComposer->setFilter(m_aFilter);
         if ( m_aHavingClause.getLength() )
             m_xComposer->setHavingClause(m_aHavingClause);
-        if ( m_aGroupBy.getLength() )
-            m_xComposer->setGroup(m_aGroupBy);
     }
 
     if ( m_bIgnoreResult )
@@ -2391,6 +2389,8 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
 
     if ( m_aOrder.getLength() )
         m_xComposer->setOrder( m_aOrder );
+    if ( m_aGroupBy.getLength() )
+        m_xComposer->setGroup( m_aGroupBy );
 
     if ( !m_xColumns.is() )
     {
