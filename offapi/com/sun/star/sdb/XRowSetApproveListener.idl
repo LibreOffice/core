@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRowSetApproveListener.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:30:44 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,11 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::sdb::XRowSetApproveListener
 /** is used for approving the moving and changing of rowset actions.
  */
 published interface XRowSetApproveListener: com::sun::star::lang::XEventListener
 {
 
-    // DocMerge from xml: method com::sun::star::sdb::XRowSetApproveListener::approveCursorMove
     /** is called before a rowset's cursor is moved.
         @param event
             the event which happend
@@ -61,7 +59,6 @@ published interface XRowSetApproveListener: com::sun::star::lang::XEventListener
     boolean approveCursorMove([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XRowSetApproveListener::approveRowChange
     /** is called before a row is inserted, updated, or deleted.
         @param event
             the event which happend
@@ -70,7 +67,6 @@ published interface XRowSetApproveListener: com::sun::star::lang::XEventListener
     boolean approveRowChange([in]RowChangeEvent event);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XRowSetApproveListener::approveRowSetChange
     /** is called before a rowset is changed, or in other words
         before a rowset is reexecuted.
         @param event
