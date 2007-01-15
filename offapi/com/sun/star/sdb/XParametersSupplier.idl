@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XParametersSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:29:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:56:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,12 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::sdb::XParametersSupplier
 /** provides the access to a container of parameters, typically used for a prepared
     statement.
  */
 published interface XParametersSupplier: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdb::XParametersSupplier::getParameters
     /** returns the container of parameters.
         @returns
             the parameters
