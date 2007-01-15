@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:13:24 $
+#   last change: $Author: vg $ $Date: 2007-01-15 12:38:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,14 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 	= xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
+JARFILES 	= xt-xmlsearch.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar
 EXTRAJARFILES 	= 
+
+.IF "$(SYSTEM_XT)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(XT_JAR)
+.ELSE
+JARFILES += xt.jar
+.ENDIF
 
 .IF "$(SYSTEM_XML_APIS)" == "YES"
 .IF "$(XCLASSPATH)" != ""
