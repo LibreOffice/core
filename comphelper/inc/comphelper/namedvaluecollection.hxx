@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:32:25 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,22 +122,24 @@ namespace comphelper
                 value is present, then this parameter will not be touched.
 
             @return
-                <TRUE/> if there either is no value with the given name, or there is
-                such a value which could be successfully extraced. In the latter case,
-                <arg>_out_rValue</arg> will contain the requested value.<br/>
-                If there is a value with the given name, but of wrong type, <FALSE/> will
-                be returned.
+                <TRUE/> if there is a value with the given name, which could successfully
+                be extraced. In this case, <arg>_out_rValue</arg> will contain the requested
+                value.<br/>
+                <FALSE/>, if there is no value with the given name.
+            @throws IllegalArgumentException
+                in case there is a value with the given name, but it cannot legally assigned to
+                _out_rValue.
         */
         template < typename VALUE_TYPE >
-        bool    getIfExists_ensureType( const sal_Char* _pAsciiValueName, VALUE_TYPE& _out_rValue ) const
+        bool get_ensureType( const sal_Char* _pAsciiValueName, VALUE_TYPE& _out_rValue ) const
         {
-            return getIfExists_ensureType( ::rtl::OUString::createFromAscii( _pAsciiValueName ), &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
+            return get_ensureType( ::rtl::OUString::createFromAscii( _pAsciiValueName ), &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
         }
 
         template < typename VALUE_TYPE >
-        bool    getIfExists_ensureType( const ::rtl::OUString& _rValueName, VALUE_TYPE& _out_rValue ) const
+        bool    get_ensureType( const ::rtl::OUString& _rValueName, VALUE_TYPE& _out_rValue ) const
         {
-            return getIfExists_ensureType( _rValueName, &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
+            return get_ensureType( _rValueName, &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
         }
 
         /** retrieves a value with a given name, or defaults it to a given value, if its not present
@@ -153,7 +155,7 @@ namespace comphelper
         VALUE_TYPE  getOrDefault( const ::rtl::OUString& _rValueName, const VALUE_TYPE& _rDefault ) const
         {
             VALUE_TYPE retVal( _rDefault );
-            getIfExists_ensureType( _rValueName, retVal );
+            get_ensureType( _rValueName, retVal );
             return retVal;
         }
 
@@ -172,12 +174,24 @@ namespace comphelper
             return impl_get( _rValueName );
         }
 
+        /// determines whether a value with a given name is present in the collection
+        inline bool has( const sal_Char* _pAsciiValueName ) const
+        {
+            return impl_has( ::rtl::OUString::createFromAscii( _pAsciiValueName ) );
+        }
+
+        /// determines whether a value with a given name is present in the collection
+        inline bool has( const ::rtl::OUString& _rValueName ) const
+        {
+            return impl_has( _rValueName );
+        }
+
     private:
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments );
 
-        bool    getIfExists_ensureType(
+        bool    get_ensureType(
                     const ::rtl::OUString& _rValueName,
                     void* _pValueLocation,
                     const ::com::sun::star::uno::Type& _rExpectedValueType
@@ -185,6 +199,8 @@ namespace comphelper
 
         const ::com::sun::star::uno::Any&
                 impl_get( const ::rtl::OUString& _rValueName ) const;
+
+        bool    impl_has( const ::rtl::OUString& _rValueName ) const;
     };
 
 //........................................................................
