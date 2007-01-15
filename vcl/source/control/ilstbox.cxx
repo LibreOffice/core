@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:53:34 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:38:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1577,7 +1577,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                     else if( nSelect >= (mnTop + mnMaxVisibleEntries) )
                         SetTopEntry( nSelect - mnMaxVisibleEntries + 1 );
 
-                    if ( nSelect == mnCurrentPos )
+                    if ( mpEntryList->IsEntryPosSelected( nSelect ) )
                         nSelect = LISTBOX_ENTRY_NOTFOUND;
 
                     maSearchTimeout.Start();
@@ -1589,10 +1589,13 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if ( (nSelect != LISTBOX_ENTRY_NOTFOUND) &&
-         ((nSelect != mnCurrentPos ) || ( eLET == LET_KEYSPACE)) )
+    if  (   ( nSelect != LISTBOX_ENTRY_NOTFOUND )
+        &&  (   ( !mpEntryList->IsEntryPosSelected( nSelect ) )
+            ||  ( eLET == LET_KEYSPACE )
+            )
+        )
     {
-        DBG_ASSERT( (nSelect != mnCurrentPos) || mbMulti, "ImplListBox: Selecting same Entry" );
+        DBG_ASSERT( !mpEntryList->IsEntryPosSelected( nSelect ) || mbMulti, "ImplListBox: Selecting same Entry" );
         if( nSelect >= mpEntryList->GetEntryCount() )
             nSelect = mpEntryList->GetEntryCount()-1;
         mnCurrentPos = nSelect;
