@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Deferrability.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:42:23 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::Deferrability
 /** indicates the Deferrability of key constraints.
  */
 published constants Deferrability
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::Deferrability::INITIALLY_DEFERRED
     /** A possible value for the column <code>DEFERRABILITY</code>
              in the
              <code>XResultSet</code> objects returned by the methods
@@ -58,7 +56,6 @@ published constants Deferrability
     const long INITIALLY_DEFERRED  = 5;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::Deferrability::INITIALLY_IMMEDIATE
     /** A possible value for the column <code>DEFERRABILITY</code>
              in the
              <code>XResultSet</code> objects returned by the methods
@@ -69,7 +66,6 @@ published constants Deferrability
     const long INITIALLY_IMMEDIATE  = 6;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::Deferrability::NONE
     /** A possible value for the column <code>DEFERRABILITY</code>
              in the
              <code>XResultSet</code> objects returned by the methods

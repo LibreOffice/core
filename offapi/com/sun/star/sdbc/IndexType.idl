@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IndexType.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:44:01 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::IndexType
 /** indicates the type of index.
  */
 published constants IndexType
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::IndexType::STATISTIC
     /** A possible value for column
             <code>TYPE</code>
             in the
@@ -60,7 +58,6 @@ published constants IndexType
     const short STATISTIC = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::IndexType::CLUSTERED
     /** A possible value for column
             <code>TYPE</code>
             in the
@@ -75,7 +72,6 @@ published constants IndexType
     const short CLUSTERED = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::IndexType::HASHED
     /** A possible value for column
             <code>TYPE</code>
             in the
@@ -90,7 +86,6 @@ published constants IndexType
     const short HASHED    = 2;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::IndexType::OTHER
     /** A possible value for column
             <code>TYPE</code>
             in the
