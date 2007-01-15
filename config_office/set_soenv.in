@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.131 $
-# Date:        $Date: 2007-01-10 11:27:32 $
+# Version:     $Revision: 1.132 $
+# Date:        $Date: 2007-01-15 12:36:34 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1819,6 +1819,8 @@ ToFile( "XERCES_JAR",        "@XERCES_JAR@",       "e" );
 ToFile( "SYSTEM_XALAN",      "@SYSTEM_XALAN@",     "e" );
 ToFile( "XALAN_JAR",         "@XALAN_JAR@",        "e" );
 ToFile( "SERIALIZER_JAR",    "@SERIALIZER_JAR@",   "e" );
+ToFile( "SYSTEM_XT",         "@SYSTEM_XT@",        "e" );
+ToFile( "XT_JAR",            "@XT_JAR@",           "e" );
 ToFile( "SYSTEM_SABLOT",     "@SYSTEM_SABLOT@",    "e" );
 ToFile( "SABLOT_LIBS",       "@SABLOT_LIBS@",      "e" );
 ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
