@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TIndexes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:00:00 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
         Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
         Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
         Reference< XPropertySet > xColProp;
-        sal_Bool bAddIndexAppendix = ::dbtools::isDataSourcePropertyEnabled(m_pTable->getConnection(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddIndexAppendix")),sal_True);
+        sal_Bool bAddIndexAppendix = ::dbtools::getBooleanDataSourceSetting( m_pTable->getConnection(), "AddIndexAppendix" );
         sal_Int32 nCount = xColumns->getCount();
         for(sal_Int32 i = 0 ; i < nCount; ++i)
         {
