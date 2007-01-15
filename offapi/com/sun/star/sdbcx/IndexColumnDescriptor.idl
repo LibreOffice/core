@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IndexColumnDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:59:37 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,17 +42,14 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::IndexColumnDescriptor
 /** adds a property to determine the sort order of the column values within the
     index. Some database drivers may ignore this property.
  */
 published service IndexColumnDescriptor
 {
-    // DocMerge: empty anyway
     service Descriptor;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::IndexColumnDescriptor::IsAscending
     /** is the column sorted in ascending order.
      */
     [property] boolean IsAscending;
