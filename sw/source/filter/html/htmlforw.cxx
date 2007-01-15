@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:10:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,8 +809,11 @@ static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
         return;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObj );
-    Reference< awt::XControl >  xControl =
-            pFormObj->GetUnoControl( pVSh->GetWin() );
+    Reference< awt::XControl >  xControl;
+    SdrView* pDrawView = pVSh->GetDrawView();
+    ASSERT( pDrawView && pVSh->GetWin(), "no DrawView or window!" );
+    if ( pDrawView && pVSh->GetWin() )
+        xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );
     Reference< awt::XTextLayoutConstrains > xLC( xControl, UNO_QUERY );
     ASSERT( xLC.is(), "kein XTextLayoutConstrains" );
     if( !xLC.is() )
