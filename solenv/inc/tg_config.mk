@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:03:43 $
+#   last change: $Author: vg $ $Date: 2007-01-15 12:34:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,9 @@ $(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
 .IF "$(NO_INSPECTION)"==""
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
 .ENDIF			# "$(NO_INSPECTION)"==""
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/schema_val.xsl $(@:d)$*.val componentName=$(PACKAGE).$*
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/sanity.xsl $(@:d)$*.san 
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/schema_trim.xsl $(@:d)$*.tmp
+    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/schema_val.xsl $(@:d)$*.val componentName=$(PACKAGE).$*
+    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/sanity.xsl $(@:d)$*.san 
+    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/schema_trim.xsl $(@:d)$*.tmp
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
 # xsltproc already validates against the dtd.  For additional validation,
@@ -101,7 +101,7 @@ $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(
     @echo -------------+ creating locale dependent resource bundles
     -$(MKDIRHIER) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/resource.xsl $@ locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}
+    $(JAVAI) $(JAVACPS) $(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/resource.xsl $@ locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}
 .ELSE
     $(XSLTPROC) -o $@ \
                 --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))} \
@@ -131,8 +131,8 @@ $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
 .IF "$(NO_INSPECTION)"==""
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
 .ENDIF			# "$(NO_INSPECTION)"==""
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/data_val.xsl $(@:d)$*.val xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema
+    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/data_val.xsl $(@:d)$*.val xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema
+    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
 # xsltproc already validates against the dtd.  For additional validation,
@@ -174,7 +174,7 @@ $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
     @echo ------------- creating locale dependent entries
     -$(MKDIRHIER) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}	
+    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}	
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
     $(XSLTPROC) -o $(@:d)$*.tmp \
@@ -210,7 +210,7 @@ $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/%.xcu :| $$(@:b:s/-/./:b).xcu
     @echo -------------+ creating a module file
     -$(MKDIRHIER) $(@:d) 
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(XCSROOT)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
+    $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XT_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(XCSROOT)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(@:f:s/.xcu/.tmp/) $@
 .ELSE
     $(XSLTPROC) -o $(@:d)$(@:f:s/.xcu/.tmp/) \
