@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Index.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:59:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
  published interface XDataDescriptorFactory;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::Index
 /** is used to specify the index for a database table. It refers to one or
     more columns of a table.
     <p>
@@ -59,13 +58,11 @@
 published service Index
 {
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Index: interface com::sun::star::sdbcx::XDataDescriptorFactory
     /** optional, could be used to copy an index.
      */
     [optional] interface XDataDescriptorFactory;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::Index: interface com::sun::star::sdbcx::XColumnsSupplier
     /** access to the contained index columns.
      */
     interface XColumnsSupplier;
@@ -74,31 +71,26 @@ published service Index
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Index::Name
     /** is the name of the index.
      */
     [readonly, property] string Name;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Index::Catalog
     /** is the name of the index catalog, may be empty.
      */
     [readonly, property] string Catalog;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Index::IsUnique
     /** indicates that the index allow only unique values.
      */
     [readonly, property] boolean IsUnique;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Index::IsPrimaryKeyIndex
     /** indicates that the index is used for the primary key.
      */
     [readonly, property] boolean IsPrimaryKeyIndex;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Index::IsClustered
     /** indicates that the index is clustered.
      */
     [readonly, property] boolean IsClustered;
