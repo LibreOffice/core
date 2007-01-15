@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataColumn.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:14:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,29 +45,24 @@
  published interface XColumnUpdate;
 
 
-// DocMerge from xml: service com::sun::star::sdb::DataColumn
 /** defines a column used for a result set which contains the data definition
     and the data of the column of the current row of a result set.
  */
 published service DataColumn
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdb::ResultColumn;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::DataColumn: interface com::sun::star::sdb::XColumn
     /** is used to retrieve the columns value.
      */
     interface XColumn;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::DataColumn: interface com::sun::star::sdb::XColumnUpdate
     /** is used to update the columns value.
      */
     interface XColumnUpdate;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataColumn::Value
     /** contains the column's value. This could be a constraint property, to
         veto modifications, if a new value does not fit into rules
         defined for the column.
@@ -75,7 +70,6 @@ published service DataColumn
     [optional, property] any Value;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::DataColumn::OriginalValue
     /** contains the original value of the column.
      */
     [optional, readonly, property] any OriginalValue;
