@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDescriptor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:21:15 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor
 /** is a stored definition of a SQL "Select statement".
 
     <p>
@@ -62,54 +61,45 @@
  */
 published service QueryDescriptor
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbcx::Descriptor;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor: interface com::sun::star::sdbcx::XDataDescriptorFactory
     /** is provided for creation of a new query descriptor based on the current information.
      */
     interface com::sun::star::sdbcx::XDataDescriptorFactory;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor: service com::sun::star::sdb::DataSettings
     /** is used for customization of data appearance.
      */
     service com::sun::star::sdb::DataSettings;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor: interface com::sun::star::sdbcx::XColumnsSupplier
     /** access to the columns of the results sets query.
      */
     interface com::sun::star::sdbcx::XColumnsSupplier;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor::Command
     /** is the command of the query, this is typically a select statement.
      */
     [property] string Command;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor::EscapeProcessing
     /** should we use escape processing for the query.
      */
     [property] boolean EscapeProcessing;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor::UpdateTableName
     /** is the name of the table which should be updated. This is usually used
         for queries which relate on more than one table.
      */
     [property] string UpdateTableName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor::UpdateCatalogName
     /** is the name of the update table catalog.
      */
     [property] string UpdateCatalogName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::com::sun::star::sdb::QueryDescriptor::UpdateSchemaName
     /** is the name of the update table schema.
      */
     [property] string UpdateSchemaName;
