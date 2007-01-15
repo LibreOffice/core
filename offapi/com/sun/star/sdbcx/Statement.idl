@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Statement.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:02:30 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::Statement
 /** extends the definition of the service
     <type scope="com::sun::star::sdbc">Statement</type>
     with a flag for the usage of bookmarks.
@@ -51,11 +50,9 @@
  */
 published service Statement
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbc::Statement;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::Statement::UseBookmarks
     /** returns
         <TRUE/>
         if a resultset should allow navigation with bookmarks or not.

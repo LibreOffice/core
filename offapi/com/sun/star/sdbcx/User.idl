@@ -4,9 +4,9 @@
  *
  *  $RCSfile: User.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:03:13 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
  published interface XUser;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::User
 /** represents a user of the database, who has certain access rights
     for the objects of the database.
  */
@@ -54,7 +53,6 @@ published service User
     // used to change the password.
     interface XUser;
 
-    // DocMerge from xml: service com::sun::star::sdbcx::User: interface com::sun::star::sdbcx::XGroupsSupplier
     /** optional for implementation, if the database does not know the concept
              of user groups. Provides for access to the groups to which a user belongs.
      */
@@ -64,7 +62,6 @@ published service User
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::User::Name
     /** is the name of the user.
      */
     [readonly, property] string Name;

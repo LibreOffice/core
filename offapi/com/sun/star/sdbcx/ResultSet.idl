@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:02:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,17 +45,14 @@
  published interface XDeleteRows;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::ResultSet
 /** extends the SDBC ResultSet by the possibility of bookmark positioning, cancelling
     the positioning, and updating of rows.
  */
 published service ResultSet
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbc::ResultSet;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::ResultSet: interface com::sun::star::util::XCancellable
     /** could be used for cancelling the execution of SQL statements if both
  the DBMS and the driver support aborting of navigation commands.
  The implementation is optional.
@@ -63,26 +60,22 @@ published service ResultSet
     [optional] interface com::sun::star::util::XCancellable;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::ResultSet: interface com::sun::star::sdbcx::XRowLocate
     /** is the interface for navigating on the result set by unique bookmarks.
      */
     interface XRowLocate;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::ResultSet: interface com::sun::star::sdbcx::XDeleteRows
     /** is the interface for deleting more than one row, identified by it's bookmark.
               The implementation is optional.
      */
     [optional] interface XDeleteRows;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::ResultSet::IsBookmarkable
     /** returns if the resultset supports bookmark navigation.
      */
     [readonly, property] boolean IsBookmarkable;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::ResultSet::CanUpdateInsertedRows
     /** returns whether the resultset supports updating of newly inserted rows.
         This may not work, as the result set may contain automatic generated data
         which is used as key information.

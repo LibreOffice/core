@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDescriptor.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:02:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:18:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
  published interface XKeysSupplier;
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::TableDescriptor
 /** is used to define a table of a database. A table is described by its
     name and one or more columns and the keys for semantic rules.
 
@@ -61,33 +60,27 @@
 published service TableDescriptor
 {
 
-    // DocMerge from xml: service com::sun::star::sdbcx::TableDescriptor: interface com::sun::star::sdbcx::XColumnsSupplier
     /** access to the contained table columns.
      */
     interface XColumnsSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::sdbcx::TableDescriptor: interface com::sun::star::sdbcx::XKeysSupplier
     /** optional, provides the access to the table keys.
      */
     [optional] interface XKeysSupplier;
 
-    // DocMerge: empty anyway
     service Descriptor;
 
-    // DocMerge from xml: property com::sun::star::sdbcx::TableDescriptor::CatalogName
     /** is the name of the table catalog.
      */
     [property] string CatalogName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::TableDescriptor::SchemaName
     /** is the name of the table schema.
      */
     [property] string SchemaName;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::TableDescriptor::Description
     /** supplies a comment on the table, Could be emtpy if not supported by
         the driver.
      */
