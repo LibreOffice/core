@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryInQuery.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:59:08 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@ import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlTableDescriptor;
 import connectivity.tools.RowSet;
+import com.sun.star.sdbc.XStatement;
+import com.sun.star.sdbc.XResultSet;
 
 public class QueryInQuery extends complexlib.ComplexTestCase
 {
@@ -58,7 +60,8 @@ public class QueryInQuery extends complexlib.ComplexTestCase
             "executeSimpleSelect",
             "executeAliasedSelect",
             "checkNameCollisions",
-            "checkCyclicReferences"
+            "checkCyclicReferences",
+            "checkStatementQiQSupport"
         };
     }
 
@@ -192,6 +195,7 @@ public class QueryInQuery extends complexlib.ComplexTestCase
             caughtExpected );
     }
 
+    // --------------------------------------------------------------------------------------------------------
     public void checkCyclicReferences() throws ElementExistException, WrappedTargetException, IllegalArgumentException
     {
         // some queries which create a cycle in the sub query tree
@@ -207,5 +211,19 @@ public class QueryInQuery extends complexlib.ComplexTestCase
         catch ( SQLException e ) { caughtExpected = e.SQLState.equals( "OB001" ); }
 
         assure( "executing a query with cyclic nested sub queries should fail!", caughtExpected );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public void checkStatementQiQSupport()
+    {
+        try
+        {
+            XStatement statement = m_database.getConnection().createStatement();
+            XResultSet resultSet = statement.executeQuery( "SELECT * FROM \"query products\"" );
+        }
+        catch( SQLException e )
+        {
+            assure( "SDB level statements do not allow for queries in queries", false );
+        }
     }
 }
