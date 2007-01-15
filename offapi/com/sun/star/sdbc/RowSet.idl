@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:22:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
  published interface XParameters;
 
 
-// DocMerge from xml: service com::sun::star::container::com::sun::star::sdbc::RowSet
 /** is a client side ResultSet, which combines the characteristics of a
     <type scope="com::sun::star::sdbc">Statement</type>
     and a
@@ -93,39 +92,33 @@ published service RowSet
     */
     interface XColumnLocate;
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::DataSourceName
     /** is the name of a named datasource to use.@see com::sun::star::sdbc:XDataSource
      */
     [property] string DataSourceName;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::URL
     /** is the connection URL. Could be used instead of the DataSourceName.
      */
     [property] string URL;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::Command
     /** is the command which should be executed.
      */
     [property] string Command;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::TransactionIsolation
     /** indicates the transaction isolation level, which should be used for the
         connection.@see com::sun::star::sdbc::TransactionIsolation
      */
     [property] long TransactionIsolation;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::TypeMap
     /** is the type map that will be used for the custom mapping of SQL structured types
         and distinct types.
      */
     [property] com::sun::star::container::XNameAccess TypeMap;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::EscapeProcessing
     /** returns if escape processing is on or off.
         If escape scanning is on (the default), the driver will do
         escape substitution before sending the SQL to the database.
@@ -134,7 +127,6 @@ published service RowSet
     [property] boolean EscapeProcessing;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::QueryTimeOut
     /** retrieves the number of seconds the driver will wait for a Statement
         to execute. If the limit is exceeded, a
         <type scope="com::sun::star::sdbc">SQLException</type>
@@ -144,7 +136,6 @@ published service RowSet
     [property] long QueryTimeOut;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::MaxFieldSize
     /** returns the maximum number of bytes allowed for any column value.
 
         <p>
@@ -171,7 +162,6 @@ published service RowSet
     [property] long MaxFieldSize;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::MaxRows
     /** retrieves the maximum number of rows that a ResultSet can contain.
         If the limit is exceeded, the excess rows are silently dropped.
         <br/>
@@ -180,19 +170,16 @@ published service RowSet
     [property] long MaxRows;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::User
     /** determines the user for whom to open the connection.
      */
     [property] string User;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::Password
     /** determines the user for whom to open the connection.
      */
     [property] string Password;
 
 
-    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::ResultSetType
     /** determine the result set type.
 
         @see com::sun::star::sdbc::ResultSetType
