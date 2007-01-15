@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:38 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -179,13 +182,14 @@
 #include "fmglob.hxx"
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include "sdrpagewindow.hxx"
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
-#include <sdrpaintwindow.hxx>
+#include "sdrpaintwindow.hxx"
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -247,18 +251,10 @@ void FmFormView::Init()
         const SfxPoolItem *pItem=0;
         if ( pObjShell->GetMedium()->GetItemSet()->GetItemState( SID_COMPONENTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
         {
-            Sequence< PropertyValue> aSeq;
+            Sequence< PropertyValue > aSeq;
             ( ((SfxUnoAnyItem*)pItem)->GetValue() ) >>= aSeq;
-            const PropertyValue* pIter  = aSeq.getConstArray();
-            const PropertyValue* pEnd   = pIter + aSeq.getLength();
-            for( ; pIter != pEnd ; ++pIter)
-            {
-                if ( pIter->Name.equalsAscii("ApplyFormDesignMode") )
-                {
-                    pIter->Value >>= bInitDesignMode;
-                    break;
-                }
-            }
+            ::comphelper::NamedValueCollection aComponentData( aSeq );
+            bInitDesignMode = aComponentData.getOrDefault( "ApplyFormDesignMode", bInitDesignMode );
         }
     }
 
@@ -718,7 +714,7 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
             FmFormObj* pObj = getMarkedGrid();
             if ( pObj )
             {
-                Reference< ::com::sun::star::awt::XWindow> xWindow(pObj->GetUnoControl( pWin ),UNO_QUERY);
+                Reference< awt::XWindow > xWindow( pObj->GetUnoControl( *this, *pWin ), UNO_QUERY );
                 if ( xWindow.is() )
                 {
                     pImpl->m_pMarkedGrid = pObj;
