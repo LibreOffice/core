@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:44:42 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -769,6 +769,9 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         try
         {
             xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
+            Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
+            try { xStatementProps->setPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
+            catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xStatement->executeQuery( sSql ), UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
