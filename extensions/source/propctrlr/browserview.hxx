@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:56:48 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ namespace pcr
     protected:
         virtual void Resize();
         virtual void GetFocus();
+        virtual long Notify( NotifyEvent& _rNEvt );
 
     public:
         OPropertyBrowserView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
