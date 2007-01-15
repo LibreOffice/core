@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceColumn.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:01:56 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,17 +43,14 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: service com::sun::star::sdbcx::ReferenceColumn
 /** adds a property to specify the referenced column. This is used to specify
     foreign keys.
  */
 published service ReferenceColumn
 {
-    // DocMerge: empty anyway
     service Column;
 
 
-    // DocMerge from xml: property com::sun::star::sdbcx::ReferenceColumn::ReferencedColumn
     /** is the name of a reference column out of the referenced table.
      */
     [readonly, property] string ReferencedColumn;
