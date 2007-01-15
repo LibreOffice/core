@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Column.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:12:13 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,16 +46,13 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::Column
 /** describes the common properties of a database column.
  */
 published service Column
 {
-    // DocMerge: empty anyway
     service com::sun::star::sdbcx::Column;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::Column: service com::sun::star::sdb::ColumnSettings
     /** is used for customization of data appearance.
      */
     service com::sun::star::sdb::ColumnSettings;
