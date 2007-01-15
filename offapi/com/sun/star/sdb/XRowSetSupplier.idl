@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRowSetSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:30:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,12 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::sdb::XRowSetSupplier
 /** uses a row set as datasource.
  */
 published interface XRowSetSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XRowSetSupplier::getRowSet
     /** provides access to the data source.
         @returns
             the RowSet object
@@ -63,7 +61,6 @@ published interface XRowSetSupplier: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdb::XRowSetSupplier::setRowSet
     /** sets the data source.
         @param xDataSource
             the RowSet object to set
