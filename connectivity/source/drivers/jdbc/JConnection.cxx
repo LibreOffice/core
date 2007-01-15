@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:18:43 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:35:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include "java/sql/DatabaseMetaData.hxx"
 #endif
 #ifndef _CONNECTIVITY_JAVA_SQL_STATEMENT_HXX_
-#include "java/sql/Statement.hxx"
+#include "java/sql/JStatement.hxx"
 #endif
 #ifndef _CONNECTIVITY_JAVA_SQL_DRIVER_HXX_
 #include "java/sql/Driver.hxx"
