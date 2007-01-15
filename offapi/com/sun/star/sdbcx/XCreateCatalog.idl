@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XCreateCatalog.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:05:07 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,13 +54,11 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XCreateCatalog
 /** may be implemented to hide the complexity of creating a database catalog.
  */
 published interface XCreateCatalog: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XCreateCatalog::createCatalog
     /** creates the catolog by using a sequence of property values. The kind
         of properties depends on the provider.
 

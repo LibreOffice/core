@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XColumnsSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:04:52 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,12 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-// DocMerge from xml: interface com::sun::star::sdbcx::XColumnsSupplier
 /** provides the access to a container of columns, typically used for tables and
     indexes.
  */
 published interface XColumnsSupplier: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbcx::XColumnsSupplier::getColumns
     /** returns the container of columns.
         @rerurns
             the columns

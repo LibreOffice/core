@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDataDefinitionSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:05:19 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,11 @@
  published interface XTablesSupplier;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::com::sun::star::sdbcx::XDataDefinitionSupplier
 /** provides the access to data definition beans from a connected database.
  */
 published interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::com::sun::star::sdbcx::XDataDefinitionSupplier::getDataDefinitionByConnection
     /** returns at least the container of tables related to the given connection.
         @param connection
             the related connection
@@ -76,7 +74,6 @@ published interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
         raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::com::sun::star::sdbcx::XDataDefinitionSupplier::getDataDefinitionByURL
     /** returns at least the container of tables related to the given Database URL.
         @param url
             a database url of the form  sdbc:subprotocol:subname
