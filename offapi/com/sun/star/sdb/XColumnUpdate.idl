@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XColumnUpdate.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:26:37 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,13 +62,11 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdb::XColumnUpdate
 /** is used to update data which is collected in a row.
  */
 published interface XColumnUpdate: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateNull
     /** gives a nullable column a null value.
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
@@ -76,7 +74,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateNull() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateBoolean
     /** updates a column with a boolean value.
         @param x
             the new column value
@@ -86,7 +83,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateBoolean([in]boolean x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateByte
     /** updates a column with a byte value.
         @param x
             the new column value
@@ -96,7 +92,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateByte([in]byte x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateShort
     /** updates a column with a short value.
         @param x
             the new column value
@@ -106,7 +101,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateShort([in]short x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateInt
     /** updates a column with a long value.
         @param x
             the new column value
@@ -116,7 +110,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateInt([in]long x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateLong
     /** updates a column with a hyper value.
         @param x
             the new column value
@@ -126,7 +119,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateLong([in]hyper x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateFloat
     /** updates a column with a float value.
         @param x
             the new column value
@@ -136,7 +128,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateFloat([in]float x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateDouble
     /** updates a column with a double value.
         @param x
             the new column value
@@ -146,7 +137,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateDouble([in]double x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateString
     /** updates a column with a string value.
         @param x
             the new column value
@@ -156,7 +146,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateString([in]string x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateBytes
     /** updates a column with a byte array value.
         @param x
             the new column value
@@ -166,7 +155,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     void updateBytes([in]sequence<byte> x) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateDate
     /** updates a column with a Date value.
         @param x
             the new column value
@@ -177,7 +165,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
         raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateTime
     /** updates a column with a Time value.
         @param x
             the new column value
@@ -188,7 +175,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
         raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateTimestamp
     /** updates a column with a Timestamp value.
         @param x
             the new column value
@@ -199,7 +185,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
       raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateBinaryStream
     /** updates a column with a stream value.
         @param x
             the new column value
@@ -210,7 +195,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
                              [in]long length) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateCharacterStream
     /** updates a column with a stream value.
         @param x
             the new column value
@@ -223,7 +207,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
                                  [in]long length) raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateObject
     /** updates a column with an Object value.
         @param x
             the new column value
@@ -234,7 +217,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
       raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdb::XColumnUpdate::updateNumericObject
     /** updates a column with an Object value.
         @param x
             the new column value

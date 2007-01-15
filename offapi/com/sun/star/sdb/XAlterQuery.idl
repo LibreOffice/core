@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAlterQuery.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:25:57 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,11 @@
 
  module com {  module sun {  module star {  module sdb {
 
-// DocMerge from xml: interface com::sun::star::sdb::XAlterQuery
 /** is used to alter the command of a query.
  */
 published interface XAlterQuery: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdb::XAlterQuery::alterCommand
     /** is intended to alter the command of a query object.
         @param command
             the SQL statement
