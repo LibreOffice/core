@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseContext.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:16:24 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
 
  module com {  module sun {  module star {  module sdb {
 
-// DocMerge from xml: service com::sun::star::sdb::DatabaseContext
 /** is the context for accessing datasource.
 
     <p>
@@ -72,13 +71,11 @@
 published service DatabaseContext
 {
 
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseContext: interface com::sun::star::container::XEnumerationAccess
     /** Enumeration on all registered data sources.
      */
     interface com::sun::star::container::XEnumerationAccess;
 
 
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseContext: interface com::sun::star::container::XNameAccess
     /** NameAccess on all registered data sources.
         <p>One exception is the <method "com.sun.star.container.XNameAccess">getByName</method>, this method also allows to ask
         for a <member "DataAccessDescriptor">DatabaseLocation</member>.
@@ -86,7 +83,6 @@ published service DatabaseContext
      */
     interface com::sun::star::container::XNameAccess;
 
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseContext: interface com::sun::star::uno::XNamingService
     /** Interface for registering new datasources.
      */
     interface com::sun::star::uno::XNamingService;
