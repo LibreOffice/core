@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:04:08 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@
 #include "connectivity/CommonTools.hxx"
 #endif
 #ifndef _CONNECTIVITY_JAVA_SQL_STATEMENT_HXX_
-#include "java/sql/Statement.hxx"
+#include "java/sql/JStatement.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
