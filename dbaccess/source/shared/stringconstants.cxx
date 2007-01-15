@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:45:53 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,6 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_DATABASECONTEXT, "com.sun.star.sdb.Data
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_DATASOURCE, "com.sun.star.sdb.DataSource");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_RESULTSET, "com.sun.star.sdb.ResultSet");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_ROWSET, "com.sun.star.sdb.RowSet");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_STATEMENT, "com.sun.star.sdb.Statement");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_PREPAREDSTATMENT, "com.sun.star.sdb.PreparedStatement");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_CALLABLESTATEMENT, "com.sun.star.sdbc.CallableStatement");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_SQLQUERYCOMPOSER, "com.sun.star.sdb.SQLQueryComposer");
