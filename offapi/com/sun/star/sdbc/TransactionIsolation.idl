@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransactionIsolation.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:47:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:05:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,18 +38,15 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::TransactionIsolation
 /** distinguishes different possible transaction isolation levels.
  */
 published constants TransactionIsolation
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::TransactionIsolation::NONE
     /** indicates that transactions are not supported.
      */
     const long NONE                 =  0;
 
-    // DocMerge from idl: value com::sun::star::sdbc::TransactionIsolation::READ_UNCOMMITTED
     /** Dirty reads, non-repeatable reads and phantom reads can occur.
              This level allows a row changed by one transaction to be read
              by another transaction before any changes in that row have been
@@ -58,14 +55,12 @@ published constants TransactionIsolation
      */
     const long READ_UNCOMMITTED     =  1;
 
-    // DocMerge from idl: value com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED
     /** Dirty reads are prevented; non-repeatable reads and phantom
              reads can occur.  This level only prohibits a transaction
              from reading a row with uncommitted changes in it.
      */
     const long READ_COMMITTED       =  2;
 
-    // DocMerge from idl: value com::sun::star::sdbc::TransactionIsolation::REPEATABLE_READ
     /** Dirty reads and non-repeatable reads are prevented; phantom
              reads can occur.  This level prohibits a transaction from
              reading a row with uncommitted changes in it, and it also
@@ -76,7 +71,6 @@ published constants TransactionIsolation
      */
     const long REPEATABLE_READ      =  4;
 
-    // DocMerge from idl: value com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE
     /** Dirty reads, non-repeatable reads and phantom reads are prevented.
              This level includes the prohibitions in
              <code>REPEATABLE_READ</code>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBlob.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:48:08 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XBlob
 /** is the representation (mapping) of an SQL
     <i>
     BLOB
@@ -121,7 +120,6 @@ published interface XBlob: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XBlob::length
     /** returns the number of bytes in the
         <i>
         BLOB
@@ -139,7 +137,6 @@ published interface XBlob: com::sun::star::uno::XInterface
 
       //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::io::com::sun::star::sdbc::XBlob::getBytes
     /** returns as an array of bytes part or all of the
             <i>
             BLOB
@@ -186,7 +183,6 @@ published interface XBlob: com::sun::star::uno::XInterface
 
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XBlob::getBinaryStream
     /** retrieves the
         <i>
         BLOB
@@ -203,7 +199,6 @@ published interface XBlob: com::sun::star::uno::XInterface
         raises (SQLException);
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XBlob::position
     /** determines the byte position at which the specified byte
         <code>pattern</code>
         begins within the
@@ -230,7 +225,6 @@ published interface XBlob: com::sun::star::uno::XInterface
 
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XBlob::positionOfBlob
     /** determines the byte position in the
         <i>
         BLOB

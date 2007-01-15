@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XClob.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:48:23 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:06:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XClob
 /** is the mapping for the SQL
     <code>CLOB</code>
     type.
@@ -113,7 +112,6 @@ published interface XClob: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::length
     /** returns the number of characters in the
         <code>CLOB</code>
         value
@@ -129,7 +127,6 @@ published interface XClob: com::sun::star::uno::XInterface
 
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::getSubString
     /** returns a copy of the specified substring in the
         <code>Clob</code>
         value
@@ -157,7 +154,6 @@ published interface XClob: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::getCharacterStream
     /** gets the
         <code>Clob</code>
         contents as a stream.
@@ -170,7 +166,6 @@ published interface XClob: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::position
     /** determines the character position at which the specified substring
         <code>searchstr</code>
         appears in the
@@ -192,7 +187,6 @@ published interface XClob: com::sun::star::uno::XInterface
 
       //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::positionOfClob
     /** determines the position at which the specified
         <code>Clob</code>
         object

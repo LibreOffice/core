@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBatchExecution.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:47:54 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,11 @@
  published interface XResultSet;
 
 
-// DocMerge from xml: interface com::sun::star::sdbc::XBatchExecution
 /** is used for collecting and executing a set of SQL statements.
  */
 published interface XBatchExecution: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::sdbc::XBatchExecution::addBatch
     /** adds a SQL command to the current batch of commmands for the statement
         object.
         @param sql
@@ -66,7 +64,6 @@ published interface XBatchExecution: com::sun::star::uno::XInterface
     void addBatch([in]string sql ) raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::sdbc::XBatchExecution::clearBatch
     /** makes the set of commands in the current batch empty.
         @throws SQLException
             if a database access error occurs.
@@ -74,7 +71,6 @@ published interface XBatchExecution: com::sun::star::uno::XInterface
     void clearBatch() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::sdbc::XBatchExecution::executeBatch
     /** submits a batch of commands to the database for execution.
              @returns
                 an array of update counts containing one element for each
