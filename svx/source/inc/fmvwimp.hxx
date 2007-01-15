@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:27:49 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ public:
     const vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >& GetList() {return m_aControllerList;}
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm );
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm ) const;
     void setController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
                         FmXFormController* pParent = NULL);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
