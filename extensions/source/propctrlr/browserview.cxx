@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:56:36 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,22 @@ namespace pcr
             m_pPropBox->GrabFocus();
         else
             Window::GetFocus();
+    }
+
+    //------------------------------------------------------------------------
+    long OPropertyBrowserView::Notify( NotifyEvent& _rNEvt )
+    {
+        if ( EVENT_KEYINPUT == _rNEvt.GetType() )
+        {
+            sal_uInt16 nKey = _rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+
+            if ( ( KEY_DELETE == nKey ) || ( KEY_BACKSPACE == nKey ) )
+                // silence this, we don't want to propagate this outside the property
+                // browser, as it will probably do harm there
+                // #i63285# / 2006-12-06 / frank.schoenheit@sun.com
+                return 1;
+        }
+        return Window::Notify( _rNEvt );
     }
 
     //------------------------------------------------------------------------
