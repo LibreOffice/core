@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-22 14:52:02 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 16:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1815,9 +1815,6 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
         if ( aAttrIter.IsParaRTL())
             bParaRTL = TRUE;
-
-        if( !pTmpSet )
-            pTmpSet = (SfxItemSet*)&pNd->GetSwAttrSet();
 
         if( pNd->IsNumbered())
         {
