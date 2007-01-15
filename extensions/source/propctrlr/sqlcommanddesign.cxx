@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:23:28 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_ENSURE( sal_False, "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: caught an exception!" );
+            m_xDesigner.clear();
         }
     }
 
