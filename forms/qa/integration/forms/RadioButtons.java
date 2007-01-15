@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RadioButtons.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:47:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 13:45:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
         XAccessibleValue xValue = (XAccessibleValue)UnoRuntime.queryInterface(
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
-        xValue.setCurrentValue( new Boolean( true ) );
+        xValue.setCurrentValue( new Short( (short)1 ) );
     }
 
     /* ------------------------------------------------------------------ */
