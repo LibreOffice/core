@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:55:55 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 12:40:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Scriptproviderforbeanshell,
 	gid_File_Jar_Scriptproviderforjava,
 	gid_File_Jar_Scriptproviderforjavascript,
-	gid_File_Jar_Xt,
 	gid_File_Jar_Xml_Apis,
 	gid_File_Jar_Bsh,
 	gid_File_Jar_Classes,
