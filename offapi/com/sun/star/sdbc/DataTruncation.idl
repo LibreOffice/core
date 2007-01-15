@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataTruncation.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:41:54 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: exception com::sun::star::sdbc::DataTruncation
 /** reports a DataTruncation warning, on reads, or is thrown as a DataTruncation exception,
     on writes, when a data value is unexpectedly truncated.
 
@@ -57,13 +56,11 @@
 published exception DataTruncation: SQLWarning
 {
 
-    // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::Index
     /** is the index of the parameter or column value.
      */
     long Index;
 
 
-    // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::IsParameter
     /** is
         <TRUE/>
         if a parameter value is truncated.
@@ -71,7 +68,6 @@ published exception DataTruncation: SQLWarning
     boolean IsParameter;
 
 
-    // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::DuringRead
     /** is
         <TRUE/>
         if a read was truncated.
@@ -79,7 +75,6 @@ published exception DataTruncation: SQLWarning
     boolean DuringRead;
 
 
-    // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::DataSize
     /** contains the number of bytes of data that should have been transferred.
         This number may be approximate if data conversions were being
         performed. The value may be
@@ -89,7 +84,6 @@ published exception DataTruncation: SQLWarning
     long DataSize;
 
 
-    // DocMerge from xml: field com::sun::star::sdbc::DataTruncation::TransferSize
     /** contains the number of bytes of data actually transferred.
         The value may be
         <code>-1</code>
