@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverPropertyInfo.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:43:04 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from xml: struct com::sun::star::sdbc::DriverPropertyInfo
 /** describes the driver properties for making a connection.
 
 
@@ -50,19 +49,16 @@
  */
 published struct DriverPropertyInfo
 {
-    // DocMerge from xml: field com::sun::star::sdbc::DriverPropertyInfo::Name
     /** is the name of the property.
      */
     string Name;
 
 
-    // DocMerge from xml: field com::sun::star::sdbc::DriverPropertyInfo::Description
     /** is a brief description of the property, which may be null.
      */
     string Description;
 
 
-    // DocMerge from xml: field com::sun::star::sdbc::DriverPropertyInfo::IsRequired
     /** is
         <TRUE/>
         if a value must be supplied for this property
@@ -75,7 +71,6 @@ published struct DriverPropertyInfo
     boolean IsRequired;
 
 
-    // DocMerge from xml: field com::sun::star::sdbc::DriverPropertyInfo::Value
     /** specifies the current value of the property,
         based on the driver-supplied default values.  This field
         may be empty if no value is known.
@@ -83,7 +78,6 @@ published struct DriverPropertyInfo
     string Value;
 
 
-    // DocMerge from idl: field com::sun::star::sdbc::DriverPropertyInfo::Choices
     /** contains a sequence of possible values if the value for the field
             <code>DriverPropertyInfo.value</code>
             may be selected

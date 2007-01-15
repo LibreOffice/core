@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeyRule.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:44:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-// DocMerge from idl: constants com::sun::star::sdbc::KeyRule
 /** determines the rules for foreign key constraints.
  */
 published constants KeyRule
 {
 
-    // DocMerge from idl: value com::sun::star::sdbc::KeyRule::CASCADE
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
             and
@@ -79,7 +77,6 @@ published constants KeyRule
     const long CASCADE  = 0;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::KeyRule::RESTRICT
     /** a possible value for the column's
              <code>UPDATE_RULE</code>
              and
@@ -112,7 +109,6 @@ published constants KeyRule
     const long RESTRICT = 1;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::KeyRule::SET_NULL
     /** a possible value for the column's
              <code>UPDATE_RULE</code>
              and
@@ -141,7 +137,6 @@ published constants KeyRule
     const long SET_NULL  = 2;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::KeyRule::NO_ACTION
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
              and
@@ -168,7 +163,6 @@ published constants KeyRule
     const long NO_ACTION = 3;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::sdbc::KeyRule::SET_DEFAULT
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
              and

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverManager.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:42:50 $
+ *  last change: $Author: vg $ $Date: 2007-01-15 14:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
  published interface XDriverManager;
 
 
-// DocMerge from xml: service com::sun::star::sdbc::DriverManager
 /** is the basic service for managing a set of SDBC drivers.
 
 
@@ -67,12 +66,10 @@
 published service DriverManager
 {
 
-    // DocMerge from xml: service com::sun::star::sdbc::DriverManager: interface com::sun::star::sdbc::XDriverManager
     /** is the basic interface for establishing database connections.
      */
     interface XDriverManager;
 
-    // DocMerge from xml: service com::sun::star::sdbc::DriverManager: interface com::sun::star::container::XEnumerationAccess
     /** creates an enumeration on all installed / registered drivers.
      */
     interface com::sun::star::container::XEnumerationAccess;
