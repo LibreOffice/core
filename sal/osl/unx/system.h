@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:39:50 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 15:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,6 @@ extern unsigned int nanosleep(unsigned int);
 #   include <sys/un.h>
 #   include <sys/stropts.h>
 #   include <netinet/tcp.h>
-#   include <procfs/procfs.h>
 #   include <sys/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
 #   undef _BIG_ENDIAN
@@ -312,7 +311,6 @@ extern char *strdup(const char *);
 
 #ifdef SOLARIS
 #   include <shadow.h>
-#   include <sys/procfs.h>
 #   include <sys/un.h>
 #   include <stropts.h>
 #   include <pthread.h>
