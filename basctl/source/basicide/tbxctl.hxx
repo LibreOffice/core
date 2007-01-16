@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:11:57 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ public:
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 
+    using                       SfxToolBoxControl::Select;
     void                        Select( USHORT nModifier );
 };
 
