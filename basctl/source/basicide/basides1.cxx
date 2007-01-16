@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:49:14 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                             while ( pWin )
                             {
                                 if ( !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
-                                    nFound += ((ModulWindow*)pWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
+                                    nFound = nFound + ((ModulWindow*)pWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
                                 pWin = aIDEWindowTable.Next();
                             }
                         }
@@ -335,11 +335,11 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     {
                         // get statusindicator
                         uno::Reference< task::XStatusIndicator > xStatusIndicator;
-                        SfxViewFrame *pFrame = GetFrame();
-                        if ( pFrame && pFrame->GetFrame() )
+                        SfxViewFrame *pFrame_ = GetFrame();
+                        if ( pFrame_ && pFrame_->GetFrame() )
                         {
                             uno::Reference< task::XStatusIndicatorFactory > xStatFactory(
-                                                                        pFrame->GetFrame()->GetFrameInterface(),
+                                                                        pFrame_->GetFrame()->GetFrameInterface(),
                                                                         uno::UNO_QUERY );
                             if( xStatFactory.is() )
                                 xStatusIndicator = xStatFactory->createStatusIndicator();
@@ -639,7 +639,6 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_SBXRENAMED:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
         }
         break;
         case SID_BASICIDE_SBXINSERTED:
@@ -814,9 +813,9 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                                         TextSelection aSel( TextPaM( nLine, nCol1 ), TextPaM( nLine, nCol2 ) );
                                         pTextView->SetSelection( aSel );
                                         pTextView->ShowCursor();
-                                        Window* pWindow = pTextView->GetWindow();
-                                        if ( pWindow )
-                                            pWindow->GrabFocus();
+                                        Window* pWindow_ = pTextView->GetWindow();
+                                        if ( pWindow_ )
+                                            pWindow_->GrabFocus();
                                     }
                                 }
                             }
