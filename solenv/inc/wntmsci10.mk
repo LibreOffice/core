@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:20:18 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:26:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,6 @@ CFLAGSWERRCC=-WX
 # settings.mk):
 MODULES_WITH_WARNINGS := \
     b_server \
-    basctl \
     chart2 \
     devtools \
     extensions \
