@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:32:47 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,14 +154,14 @@ SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
 
 //----------------------------------------------------------------------------
 
-PropBrwMgr::PropBrwMgr( Window *pParent, sal_uInt16 nId,
+PropBrwMgr::PropBrwMgr( Window *pParent_, sal_uInt16 nId,
                         SfxBindings *pBindings, SfxChildWinInfo* pInfo)
-              :SfxChildWindow(pParent, nId)
+              :SfxChildWindow(pParent_, nId)
 {
     // my UNO representation
-    m_xUnoRepresentation = VCLUnoHelper::CreateControlContainer(pParent);
+    m_xUnoRepresentation = VCLUnoHelper::CreateControlContainer(pParent_);
 
-    pWindow = new PropBrw(::comphelper::getProcessServiceFactory(),pBindings, this, pParent);
+    pWindow = new PropBrw(::comphelper::getProcessServiceFactory(),pBindings, this, pParent_);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ((SfxFloatingWindow*)pWindow)->Initialize( pInfo );
 
@@ -213,11 +213,11 @@ DBG_NAME(PropBrw);
 //----------------------------------------------------------------------------
 
 PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,
-                 SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent)
-          :SfxFloatingWindow(pBindings, pMgr, pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
-          ,pView( NULL )
+                 SfxBindings *pBindings_, SfxChildWindow *pMgr, Window* pParent)
+          :SfxFloatingWindow(pBindings_, pMgr, pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
           ,m_bInitialStateChange(sal_True)
           ,m_xORB(_xORB)
+          ,pView( NULL )
 {
     DBG_CTOR(PropBrw,NULL);
 
@@ -538,8 +538,8 @@ void PropBrw::Resize()
     SfxFloatingWindow::Resize();
 
     // adjust size
-    Size  aSize = GetOutputSizePixel();
-    Size aPropWinSize( aSize );
+    Size aSize_ = GetOutputSizePixel();
+    Size aPropWinSize( aSize_ );
     aPropWinSize.Width() -= (2*WIN_BORDER);
     aPropWinSize.Height() -= (2*WIN_BORDER);
 
