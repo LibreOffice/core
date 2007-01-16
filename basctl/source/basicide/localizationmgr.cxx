@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:50:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,9 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
                 Sequence< ::rtl::OUString > aNames = xDialog->getElementNames();
                 const ::rtl::OUString* pNames = aNames.getConstArray();
                 sal_Int32 nCtrls = aNames.getLength();
-                for( sal_Int32 i = 0 ; i < nCtrls ; ++i )
+                for( sal_Int32 j = 0 ; j < nCtrls ; ++j )
                 {
-                    ::rtl::OUString aCtrlName( pNames[i] );
+                    ::rtl::OUString aCtrlName( pNames[j] );
                     Any aCtrl = xDialog->getByName( aCtrlName );
                     implHandleControlResourceProperties( aCtrl, aDlgName,
                         aCtrlName, m_xStringResourceManager, eMode );
