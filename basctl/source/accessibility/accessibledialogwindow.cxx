@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibledialogwindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:12 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,7 +596,7 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
 // SfxListener
 // -----------------------------------------------------------------------------
 
-void AccessibleDialogWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SdrHint ) )
     {
@@ -623,6 +623,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     RemoveChild( ChildDescriptor( pDlgEdObj ) );
             }
             break;
+            default: ;
         }
     }
     else if ( rHint.ISA( DlgEdHint ) )
@@ -654,6 +655,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 UpdateSelected();
             }
             break;
+            default: ;
         }
     }
 }
