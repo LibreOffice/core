@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:39:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,9 @@ protected:
 
     DECL_LINK(OnCreate, void* );
 
+    using SfxListener::StartListening;
     void StartListening();
+    using SfxListener::EndListening;
     void EndListening(sal_Bool bRemoveListener = sal_True);
     sal_Bool    isListening() const { return bIsListening; }
 
