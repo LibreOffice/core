@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:24:07 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,11 +80,11 @@ __EXPORT BasicDocShell::~BasicDocShell()
     delete pPrinter;
 }
 
-void __EXPORT BasicDocShell::Execute( SfxRequest& rReq )
+void __EXPORT BasicDocShell::Execute( SfxRequest& )
 {
 }
 
-void __EXPORT BasicDocShell::GetState(SfxItemSet &rSet)
+void __EXPORT BasicDocShell::GetState( SfxItemSet& )
 {
 }
 
@@ -141,15 +141,9 @@ void BasicDocShell::FillStatusBar( StatusBar& rStatusBar )
 
 }
 
-void BasicDocShell::FillClass( SvGlobalName * pClassName,
-                               sal_uInt32 * pFormat,
-                               String * pAppName,
-                               String * pFullTypeName,
-                               String * pShortTypeName,
-                               sal_Int32 nVersion ) const
+void BasicDocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32) const
 {}
 
-void BasicDocShell::Draw( OutputDevice *, const JobSetup & rSetup,
-                          USHORT nAspect )
+void BasicDocShell::Draw( OutputDevice *, const JobSetup &, USHORT )
 {}
 
