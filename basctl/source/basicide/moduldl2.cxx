@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:15:28 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,9 +208,9 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
     ,m_pShell( 0 )
 {
     nMode = LIBMODE_MANAGER;
-    long aTabs[] = { 1, 12 };   // Mindestens einen braucht die TabPos...
+    long aTabs_[] = { 1, 12 };  // Mindestens einen braucht die TabPos...
                                 // 12 wegen der Checkbox
-    SetTabs( aTabs );
+    SetTabs( aTabs_ );
     Init();
 }
 
@@ -257,7 +257,7 @@ void BasicCheckBox::SetMode( USHORT n )
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* BasicCheckBox::InsertEntry( const String& rStr, ULONG nPos )
+SvLBoxEntry* BasicCheckBox::DoInsertEntry( const String& rStr, ULONG nPos )
 {
     return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
 }
@@ -706,6 +706,7 @@ IMPL_LINK_INLINE_END( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 
 IMPL_LINK_INLINE_START( LibPage, BasicSelectHdl, ListBox *, pBox )
 {
+    (void)pBox;
     SetCurLib();
     CheckButtons();
     return 0;
@@ -985,7 +986,7 @@ void LibPage::InsertLib()
                 if ( !( ( xModLibContImport.is() && xModLibContImport->hasByName( aOULibName ) && xModLibContImport->isLibraryLink( aOULibName ) ) ||
                         ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aOULibName ) && xDlgLibContImport->isLibraryLink( aOULibName ) ) ) )
                 {
-                    SvLBoxEntry* pEntry = pLibDlg->GetLibBox().InsertEntry( aLibName );
+                    SvLBoxEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
                     USHORT nPos = (USHORT) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
                     pLibDlg->GetLibBox().CheckEntryPos( nPos, TRUE);
                 }
@@ -1088,9 +1089,9 @@ void LibPage::InsertLib()
                             if ( bRemove )
                             {
                                 // remove listbox entry
-                                SvLBoxEntry* pEntry = aLibBox.FindEntry( aLibName );
-                                if ( pEntry )
-                                    aLibBox.SvTreeListBox::GetModel()->Remove( pEntry );
+                                SvLBoxEntry* pEntry_ = aLibBox.FindEntry( aLibName );
+                                if ( pEntry_ )
+                                    aLibBox.SvTreeListBox::GetModel()->Remove( pEntry_ );
 
                                 // remove module library
                                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
@@ -1145,8 +1146,8 @@ void LibPage::InsertLib()
                                             for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
                                             {
                                                 ::rtl::OUString aOUModName( pModNames[ i ] );
-                                                Any aElement = xModLibImport->getByName( aOUModName );
-                                                xModLib->insertByName( aOUModName, aElement );
+                                                Any aElement_ = xModLibImport->getByName( aOUModName );
+                                                xModLib->insertByName( aOUModName, aElement_ );
                                             }
 
                                             // set password
@@ -1214,8 +1215,8 @@ void LibPage::InsertLib()
                                             for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
                                             {
                                                 ::rtl::OUString aOUDlgName( pDlgNames[ i ] );
-                                                Any aElement = xDlgLibImport->getByName( aOUDlgName );
-                                                xDlgLib->insertByName( aOUDlgName, aElement );
+                                                Any aElement_ = xDlgLibImport->getByName( aOUDlgName );
+                                                xDlgLib->insertByName( aOUDlgName, aElement_ );
                                             }
                                         }
                                     }
@@ -1281,7 +1282,7 @@ void LibPage::Export( void )
             else
                 ExportAsBasic( aLibName );
         }
-        catch( util::VetoException& ve ) // user cancled operation
+        catch( util::VetoException& ) // user cancled operation
         {
         }
     }
@@ -1626,10 +1627,10 @@ void LibPage::SetCurLib()
                     ImpInsertLibEntry( aLibName, i );
             }
 
-            SvLBoxEntry* pEntry = aLibBox.FindEntry( String::CreateFromAscii( "Standard" ) );
-            if ( !pEntry )
-                pEntry = aLibBox.GetEntry( 0 );
-            aLibBox.SetCurEntry( pEntry );
+            SvLBoxEntry* pEntry_ = aLibBox.FindEntry( String::CreateFromAscii( "Standard" ) );
+            if ( !pEntry_ )
+                pEntry_ = aLibBox.GetEntry( 0 );
+            aLibBox.SetCurEntry( pEntry_ );
         }
     }
 }
@@ -1651,7 +1652,7 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
         }
     }
 
-    SvLBoxEntry* pNewEntry = aLibBox.InsertEntry( rLibName, nPos );
+    SvLBoxEntry* pNewEntry = aLibBox.DoInsertEntry( rLibName, nPos );
     pNewEntry->SetUserData( new BasicLibUserData( m_pCurShell ) );
 
     if (bProtected)
@@ -1729,7 +1730,7 @@ void createLibImpl( Window* pWin, SfxObjectShell* pShell,
 
                 if( pLibBox )
                 {
-                    SvLBoxEntry* pEntry = pLibBox->InsertEntry( aLibName );
+                    SvLBoxEntry* pEntry = pLibBox->DoInsertEntry( aLibName );
                     pEntry->SetUserData( new BasicLibUserData( pShell ) );
                     pLibBox->SetCurEntry( pEntry );
                 }
@@ -1771,14 +1772,14 @@ void createLibImpl( Window* pWin, SfxObjectShell* pShell,
 
                     if( pNewLibEntry )
                     {
-                        SvLBoxEntry* pEntry = pBasicBox->AddEntry(
+                        SvLBoxEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
                             Image( IDEResId( RID_IMG_MODULE_HC ) ),
                             pNewLibEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
-                        DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
-                        pBasicBox->SetCurEntry( pEntry );
+                        DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );
+                        pBasicBox->SetCurEntry( pEntry_ );
                         pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!
                     }
                 }
