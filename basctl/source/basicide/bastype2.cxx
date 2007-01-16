@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:27:20 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ bool BasicEntryDescriptor::operator==( const BasicEntryDescriptor& rDesc ) const
 }
 
 BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
-    SvTreeListBox( pParent, IDEResId( rRes.GetId() ) )
+    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<USHORT>( rRes.GetId() ) ) )
 {
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
@@ -380,7 +380,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
     }
 }
 
-void __EXPORT BasicTreeListBox::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&, const SfxHint& rHint, const TypeId& )
+void __EXPORT BasicTreeListBox::SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& )
 {
     if ( rHint.IsA( TYPE( SfxEventHint ) ) )
     {
