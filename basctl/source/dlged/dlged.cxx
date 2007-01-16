@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:50:54 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,13 +342,13 @@ Reference< awt::XControlContainer > DlgEditor::GetWindowControlContainer()
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::SetWindow( Window* pWindow )
+void DlgEditor::SetWindow( Window* pWindow_ )
 {
-    DlgEditor::pWindow = pWindow;
-    pWindow->SetMapMode( MapMode( MAP_100TH_MM ) );
-    pDlgEdPage->SetSize( pWindow->PixelToLogic( Size( DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN ) ) );
+    DlgEditor::pWindow = pWindow_;
+    pWindow_->SetMapMode( MapMode( MAP_100TH_MM ) );
+    pDlgEdPage->SetSize( pWindow_->PixelToLogic( Size( DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN ) ) );
 
-    pDlgEdView = new DlgEdView( pDlgEdModel, pWindow, this );
+    pDlgEdView = new DlgEdView( pDlgEdModel, pWindow_, this );
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
     pDlgEdView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
     pDlgEdView->SetMoveSnapOnlyTopLeft( TRUE );
@@ -403,7 +403,7 @@ void DlgEditor::InitScrollBars()
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::DoScroll( ScrollBar* pActScroll )
+void DlgEditor::DoScroll( ScrollBar* )
 {
     if( !pHScroll || !pVScroll )
         return;
@@ -616,9 +616,9 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
                 Size   aSize = pWindow->PixelToLogic( Size( 400, 300 ) );
 
                 // align with grid
-                Size  aGridSize(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
-                aSize.Width()  -= aSize.Width()  % aGridSize.Width();
-                aSize.Height() -= aSize.Height() % aGridSize.Height();
+                Size aGridSize_(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
+                aSize.Width()  -= aSize.Width()  % aGridSize_.Width();
+                aSize.Height() -= aSize.Height() % aGridSize_.Height();
 
                 Point  aPos;
                 Size   aOutSize = pWindow->GetOutputSize();
@@ -626,16 +626,16 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
                 aPos.Y() = (aOutSize.Height()>>1) -  (aSize.Height()>>1);
 
                 // align with grid
-                aPos.X() -= aPos.X() % aGridSize.Width();
-                aPos.Y() -= aPos.Y() % aGridSize.Height();
+                aPos.X() -= aPos.X() % aGridSize_.Width();
+                aPos.Y() -= aPos.Y() % aGridSize_.Height();
 
                 // don't put in the corner
                 Point aMinPos = pWindow->PixelToLogic( Point( 30, 20 ) );
                 if( (aPos.X() < aMinPos.X()) || (aPos.Y() < aMinPos.Y()) )
                 {
                     aPos = aMinPos;
-                    aPos.X() -= aPos.X() % aGridSize.Width();
-                    aPos.Y() -= aPos.Y() % aGridSize.Height();
+                    aPos.X() -= aPos.X() % aGridSize_.Width();
+                    aPos.Y() -= aPos.Y() % aGridSize_.Height();
                 }
 
                 // set dialog position and size
@@ -954,9 +954,9 @@ void DlgEditor::Paste()
 
                         // set tabindex
                         Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
-                           Sequence< OUString > aNames = xNA->getElementNames();
+                           Sequence< OUString > aNames_ = xNA->getElementNames();
                         Any aTabIndex;
-                        aTabIndex <<= (sal_Int16) aNames.getLength();
+                        aTabIndex <<= (sal_Int16) aNames_.getLength();
                         xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
 
                         // insert control model in editor dialog model
