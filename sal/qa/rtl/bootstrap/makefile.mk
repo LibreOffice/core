@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:42:37 $
+#   last change: $Author: vg $ $Date: 2007-01-16 15:58:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@ BOOTSTRAPINI=testshl2rc
 MY_SCRIPTCAT=tr -d "\015" <
 .ENDIF
 
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl 
