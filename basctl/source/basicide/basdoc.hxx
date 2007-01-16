@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basdoc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:30 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,9 @@ protected:
 public:
                         TYPEINFO();
 
+                        using SotObject::GetInterface;
                         SFX_DECL_OBJECTFACTORY();
-                        SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH );
+                        SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH )
                         BasicDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
                         ~BasicDocShell();
 
