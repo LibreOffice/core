@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:28:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-DECLARE_LIST( MacroList, SbMethod* );
+DECLARE_LIST( MacroList, SbMethod* )
 
 MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
         SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
@@ -617,6 +617,8 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
 IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 {
+    (void)pEdit;
+
     // Das Modul, in dem bei Neu das Macro landet, selektieren,
     // wenn BasicManager oder Lib selektiert.
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
