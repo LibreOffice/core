@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:24:33 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ BOOL ModulWindow::BasicExecute()
         {
             DBG_ASSERT( xModule.Is(), "Kein Modul!" );
             AddStatus( BASWIN_RUNNINGBASIC );
-            USHORT nStart, nEnd, nCurMethodStart;
+            USHORT nStart, nEnd, nCurMethodStart = 0;
             SbMethod* pMethod = 0;
             // erstes Macro, sonst blind "Main" (ExtSearch?)
             for ( USHORT nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
@@ -753,6 +753,9 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     // das Programm!
 //  GoOnTop();
 
+    // #i69280 Required in Window despite normal usage in next command!
+    (void)pBasic;
+
     // ReturnWert: USHORT => siehe SB-Debug-Flags
     USHORT nErrorLine = pBasic->GetLine();
 
@@ -819,7 +822,9 @@ void ModulWindow::BasicAddWatch()
         if ( aWord.Len() )
         {
             TextSelection aSel( aWordStart );
-            aSel.GetEnd().GetIndex() += aWord.Len();
+            USHORT& rIndex = aSel.GetEnd().GetIndex();
+            rIndex = rIndex + aWord.Len();
+            // aSel.GetEnd().GetIndex() += sal::static_int_cast<int>( aWord.Len() );
             GetEditView()->SetSelection( aSel );
             bAdd = TRUE;
         }
@@ -981,7 +986,6 @@ void __EXPORT ModulWindow::PrintData( Printer* pPrinter )
 
     USHORT nPages = (USHORT) (nParas/nLinespPage+1 );
     USHORT nCurPage = 1;
-    USHORT nCurLine = 0;
 
     pPrinter->StartJob( aTitle );
     pPrinter->StartPage();
@@ -1511,7 +1515,7 @@ void __EXPORT ModulWindowLayout::Resize()
 //  Invalidate();
 }
 
-void __EXPORT ModulWindowLayout::Paint( const Rectangle& rRect )
+void __EXPORT ModulWindowLayout::Paint( const Rectangle& )
 {
     DrawText( Point(), String( IDEResId( RID_STR_NOMODULE ) ) );
 }
@@ -1697,6 +1701,8 @@ void ModulWindowLayout::DataChanged(DataChangedEvent const & rDCEvt)
 // virtual
 void ModulWindowLayout::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
 {
+    (void)rBc;
+
     if (rHint.ISA(SfxSimpleHint)
         && (static_cast< SfxSimpleHint const & >(rHint).GetId()
             == SFX_HINT_COLORS_CHANGED))
