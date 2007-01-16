@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:25:02 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:29:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,6 +281,8 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 
 IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
+    (void)pUndoAction;
+
     // not working yet for unocontrols
     /*
     if (pUndoAction)
@@ -638,7 +640,6 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 pBindings->Invalidate( SID_DIALOG_TESTMODE );
             return;
         }
-        break;
     }
 
     rReq.Done();
