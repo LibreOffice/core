@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:28:27 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ void BasicIDEDLL::Init()
         return;
 
     SfxObjectFactory* pFact = &BasicDocShell::Factory();
+    (void)pFact;
 
     ByteString aResMgrName( "basctl" );
     aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
@@ -252,7 +253,6 @@ IMPL_LINK( BasicIDEData, ExecuteMacroEvent, void *, pData )
         SbMethod* pMethod = (SbMethod*)pData;
 
         // Ist es eine StarScript-Methode? Am Parent erkennen
-        SbModule* pModule = pMethod->GetModule();
         DBG_ASSERT( pMethod->GetParent()->GetFlags() & SBX_EXTSEARCH, "Kein EXTSEARCH!" );
         BasicIDE::RunMethod( pMethod );
         pMethod->ReleaseRef();  // muss vorher inkrementiert worden sein!

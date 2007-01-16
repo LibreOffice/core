@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:27:33 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 );
+SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 )
 
 SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
 
@@ -411,6 +411,7 @@ USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
             nType = BASICIDE_TYPE_METHOD;
         }
         break;
+        default: ;
     }
 
     return nType;
@@ -457,6 +458,7 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
             bIsValid = BasicIDE::HasMethod( pShell, aLibName, aName, aMethodName );
         }
         break;
+        default: ;
     }
 
     return bIsValid;
