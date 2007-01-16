@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:29:58 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,12 +65,15 @@ void SAL_CALL component_getImplementationEnvironment(
         const  sal_Char**   ppEnvironmentTypeName,
         uno_Environment**   ppEnvironment           )
 {
+    (void)ppEnvironment;
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
                                         void*   pRegistryKey    )
 {
+    (void)pServiceManager;
+
     Reference< ::registry::XRegistryKey >
             xKey( reinterpret_cast< ::registry::XRegistryKey* >( pRegistryKey ) ) ;
 
@@ -91,6 +94,8 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
                                      void* pServiceManager,
                                      void* pRegistryKey )
 {
+    (void)pRegistryKey;
+
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
 
