@@ -4,9 +4,9 @@
  *
  *  $RCSfile: managelang.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:51:44 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:36:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,9 +313,9 @@ void SetDefaultLanguageDialog::FillLanguageBox()
     // fill checklistbox if not in default mode
     if ( m_pLocalizationMgr->isLibraryLocalized() )
     {
-        USHORT i, nCount = m_aLanguageLB.GetEntryCount();
-        for ( i = 0;  i < nCount;  ++i )
-            m_aCheckLangLB.InsertEntry( m_aLanguageLB.GetEntry(i) );
+        USHORT j, nCount_ = m_aLanguageLB.GetEntryCount();
+        for ( j = 0;  j < nCount_;  ++j )
+            m_aCheckLangLB.InsertEntry( m_aLanguageLB.GetEntry(j) );
     }
     else
         // preselect current UI language
