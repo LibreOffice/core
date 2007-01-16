@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:35:40 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:05:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@ PRJNAME = sal
 TARGET = textenc
 
 .INCLUDE: settings.mk
+
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
 
 SLOFILES = \
     $(SLO)$/context.obj \
