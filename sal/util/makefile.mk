@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 08:07:35 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:05:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ UNIXVERSIONNAMES=UDK
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
 
 .IF "$(depend)" == ""
 
