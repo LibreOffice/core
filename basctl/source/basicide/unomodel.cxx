@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:30:25 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType ) throw(uno:
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // OWeakObject interfaces
-                                    reinterpret_cast< XInterface* > ( this ),
+                                    static_cast< XInterface* >( static_cast< OWeakObject* >( this ) ),
                                     static_cast< XWeak* > ( this ),
                                     static_cast< XServiceInfo*  > ( this ) );
     if (!aRet.hasValue())
@@ -131,7 +131,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static(void)
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+                const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     BasicIDEDLL::Init();
