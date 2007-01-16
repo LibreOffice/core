@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:37:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ class SvxSearchItem;
 #include <sfx2/progress.hxx>
 
 
-DBG_NAMEEX( ModulWindow );
+DBG_NAMEEX( ModulWindow )
 
 #define MARKER_NOMARKER 0xFFFF
 
@@ -154,6 +154,7 @@ private:
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
+    using           Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            ImpDoHighlight( ULONG nLineOff );
@@ -242,7 +243,7 @@ public:
 
     void            SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
 
-    void            Scroll( long nHorzScroll, long nVertScroll );
+    void            DoScroll( long nHorzScroll, long nVertScroll );
     long&           GetCurYOffset()         { return nCurYOffset; }
     BreakPointList& GetBreakPoints()        { return aBreakPointList; }
 };
@@ -276,6 +277,7 @@ public:
     void            RequestingChilds( SvLBoxEntry * pParent );
     void            UpdateWatches( bool bBasicStopped = false );
 
+    using           SvTabListBox::SetTabs;
     virtual void    SetTabs();
 };
 
@@ -489,6 +491,7 @@ private:
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
+    using Window::Notify;
     virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
 
     void updateSyntaxHighlighting();
