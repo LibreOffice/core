@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:15:39 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ public:
                     BasicCheckBox( Window* pParent, const ResId& rResId );
                     ~BasicCheckBox();
 
-    SvLBoxEntry*    InsertEntry( const String& rStr, ULONG nPos = LISTBOX_APPEND );
+    SvLBoxEntry*    DoInsertEntry( const String& rStr, ULONG nPos = LISTBOX_APPEND );
     void            RemoveEntry( ULONG nPos );
     SvLBoxEntry*    FindEntry( const String& rName );
 
