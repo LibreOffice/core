@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:27:47 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ IMPL_LINK_INLINE_END( IDEBaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 
 
 
-void __EXPORT IDEBaseWindow::ExecuteCommand( SfxRequest& rReq )
+void __EXPORT IDEBaseWindow::ExecuteCommand( SfxRequest& )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
@@ -189,7 +189,7 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
 }
 
 
-void __EXPORT IDEBaseWindow::DoScroll( ScrollBar* pCurScrollBar )
+void __EXPORT IDEBaseWindow::DoScroll( ScrollBar* )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
@@ -217,7 +217,7 @@ void __EXPORT IDEBaseWindow::UpdateData()
 
 
 
-void __EXPORT IDEBaseWindow::PrintData( Printer* pPrinter )
+void __EXPORT IDEBaseWindow::PrintData( Printer* )
 {
 }
 
@@ -287,7 +287,7 @@ BreakPointList::BreakPointList()
 {}
 
 BreakPointList::BreakPointList(BreakPointList const & rList):
-    BreakPL(rList.Count())
+    BreakPL( sal::static_int_cast<USHORT>( rList.Count() ))
 {
     for (ULONG i = 0; i < rList.Count(); ++i)
         Insert(new BreakPoint(*rList.GetObject(i)), i);
@@ -576,7 +576,7 @@ struct TabBarDDInfo
     ULONG   npTabBar;
     USHORT  nPage;
 
-    TabBarDDInfo() { npTabBar = 0; nPage, 0; }
+    TabBarDDInfo() { npTabBar = 0; nPage = 0; }
     TabBarDDInfo( ULONG _npTabBar, USHORT _nPage ) { npTabBar = _npTabBar; nPage = _nPage; }
 };
 
@@ -722,8 +722,8 @@ void BasicIDETabBar::Sort()
         ::std::sort( aDialogList.begin() , aDialogList.end() );
 
 
-        USHORT nModules = aModuleList.size();
-        USHORT nDialogs = aDialogList.size();
+        USHORT nModules = sal::static_int_cast<USHORT>( aModuleList.size() );
+        USHORT nDialogs = sal::static_int_cast<USHORT>( aDialogList.size() );
 
         // move module pages to new positions
         for (i = 0; i < nModules; i++)
@@ -929,8 +929,8 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     return pItem;
 }
 
-SbxItem::SbxItem(USHORT nWhich, SfxObjectShell* pShell, const String& aLibName, const String& aName, USHORT nType )
-    :SfxPoolItem( nWhich )
+SbxItem::SbxItem(USHORT nWhich_, SfxObjectShell* pShell, const String& aLibName, const String& aName, USHORT nType )
+    :SfxPoolItem( nWhich_ )
     ,m_pShell(pShell)
     ,m_aLibName(aLibName)
     ,m_aName(aName)
@@ -938,8 +938,8 @@ SbxItem::SbxItem(USHORT nWhich, SfxObjectShell* pShell, const String& aLibName, 
 {
 }
 
-SbxItem::SbxItem(USHORT nWhich, SfxObjectShell* pShell, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType )
-    :SfxPoolItem( nWhich )
+SbxItem::SbxItem(USHORT nWhich_, SfxObjectShell* pShell, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType )
+    :SfxPoolItem( nWhich_ )
     ,m_pShell(pShell)
     ,m_aLibName(aLibName)
     ,m_aName(aName)
