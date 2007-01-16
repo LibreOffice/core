@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibledialogcontrolshape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:39:02 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:26:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ void AccessibleDialogControlShape::disposing()
 // XEventListener
 // -----------------------------------------------------------------------------
 
-void AccessibleDialogControlShape::disposing( const lang::EventObject& rSource ) throw (RuntimeException)
+void AccessibleDialogControlShape::disposing( const lang::EventObject& ) throw (RuntimeException)
 {
     if ( m_xControlModel.is() )
         m_xControlModel->removePropertyChangeListener( ::rtl::OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
@@ -547,7 +547,7 @@ Locale AccessibleDialogControlShape::getLocale(  ) throw (IllegalAccessibleCompo
 // XAccessibleComponent
 // -----------------------------------------------------------------------------
 
-Reference< XAccessible > AccessibleDialogControlShape::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
+Reference< XAccessible > AccessibleDialogControlShape::getAccessibleAtPoint( const awt::Point& ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
