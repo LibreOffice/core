@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:45:56 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:04:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@ USE_DEFFILE=	TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
