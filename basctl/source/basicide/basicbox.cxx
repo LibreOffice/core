@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:48:49 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:27:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,6 +359,8 @@ LanguageBoxControl::~LanguageBoxControl()
 
 void LanguageBoxControl::StateChanged( USHORT _nID, SfxItemState _eState, const SfxPoolItem* _pItem )
 {
+    (void)_nID;
+
     BasicLanguageBox* pBox = (BasicLanguageBox*)( GetToolBox().GetItemWindow( GetId() ) );
 
     if ( pBox )
