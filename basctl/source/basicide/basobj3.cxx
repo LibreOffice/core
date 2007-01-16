@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:50:19 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -703,6 +703,7 @@ String BasicIDE::GetTitle( SfxObjectShell* pShell, LibraryLocation eLocation, US
                 aTitle = pShell->GetTitle( nSFXTitleType );
         }
         break;
+        default: ;
     }
 
     return aTitle;
