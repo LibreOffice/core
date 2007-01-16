@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:05:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,6 @@ void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
     if ( !pWin->IsFloatingMode() )
     {
         Size aSz = pWin->GetOutputSizePixel();
-        long nY = nVirtToolBoxHeight - 1;
         const Color aOldLineColor( pWin->GetLineColor() );
         pWin->SetLineColor( Color( COL_WHITE ) );
         // oben eine weisse..
@@ -519,6 +518,8 @@ void __EXPORT EditorWindow::LoseFocus()
 
 BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
 {
+    (void)bQuiet;
+
     BOOL bChanged = FALSE;
     if ( pEditEngine && pEditEngine->IsModified()
         && !GetEditView()->IsReadOnly() )   // Added because of #i60626, otherwise
@@ -529,7 +530,9 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
             ::rtl::OUString aModule = getTextEngineText( pEditEngine );
 
             // update module in basic
+#ifdef DBG_UTIL
             SbModule* pModule = pModulWindow->GetSbModule();
+#endif
             DBG_ASSERT(pModule, "EditorWindow::SetSourceInBasic: No Module found!");
 
             // update module in module window
@@ -694,7 +697,8 @@ void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if ( pModulWindow->GetHScrollBar() )
                 pModulWindow->GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
             pModulWindow->GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
-            pModulWindow->GetBreakPointWindow().Scroll( 0, pModulWindow->GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+            pModulWindow->GetBreakPointWindow().DoScroll
+                ( 0, pModulWindow->GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
@@ -1020,7 +1024,7 @@ void __EXPORT BreakPointWindow::Paint( const Rectangle& )
 
 
 
-void BreakPointWindow::Scroll( long nHorzScroll, long nVertScroll )
+void BreakPointWindow::DoScroll( long nHorzScroll, long nVertScroll )
 {
     nCurYOffset -= nVertScroll;
     Window::Scroll( nHorzScroll, nVertScroll );
@@ -1200,12 +1204,12 @@ const USHORT ITEM_ID_TYPE = 3;
 
 WatchWindow::WatchWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
+    aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
+    aXEdit( this, IDEResId( RID_EDT_WATCHEDIT ) ),
+    aRemoveWatchButton( this, IDEResId( RID_IMGBTN_REMOVEWATCH ) ),
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
                                   | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
-    aHeaderBar( this, WB_BUTTONSTYLE | WB_BORDER ),
-    aXEdit( this, IDEResId( RID_EDT_WATCHEDIT ) ),
-    aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
-    aRemoveWatchButton( this, IDEResId( RID_IMGBTN_REMOVEWATCH ) )
+    aHeaderBar( this, WB_BUTTONSTYLE | WB_BORDER )
 {
     nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
     nHeaderBarHeight = 16;
@@ -1411,9 +1415,9 @@ void WatchWindow::AddWatch( const String& rVName )
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
     pWatchItem->maName = aVar;
 
-    String aWatchStr( aVar );
-    aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "\t\t" ) );
-    SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr, 0, TRUE, LIST_APPEND );
+    String aWatchStr_( aVar );
+    aWatchStr_ += String( RTL_CONSTASCII_USTRINGPARAM( "\t\t" ) );
+    SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, TRUE, LIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
     aTreeListBox.Select( pNewEntry, TRUE );
@@ -1472,6 +1476,8 @@ IMPL_LINK_INLINE_END( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
 
 IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
 {
+    (void)pBar;
+
     const sal_Int32 TAB_WIDTH_MIN = 10;
     sal_Int32 nMaxWidth =
         aHeaderBar.GetSizePixel().getWidth() - 2 * TAB_WIDTH_MIN;
@@ -1539,8 +1545,8 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 
 StackWindow::StackWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
-    aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
+    aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
     aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
@@ -1689,9 +1695,9 @@ void __EXPORT StackWindow::UpdateCalls()
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     Window( pParent, WB_3DLOOK | WB_CLIPCHILDREN ),
-    aEWVScrollBar( this, WB_VSCROLL | WB_DRAG ),
     aBrkWindow( this ),
-    aEdtWindow( this )
+    aEdtWindow( this ),
+    aEWVScrollBar( this, WB_VSCROLL | WB_DRAG )
 {
     aEdtWindow.SetModulWindow( pParent );
     aBrkWindow.SetModulWindow( pParent );
@@ -1736,7 +1742,7 @@ IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
         DBG_ASSERT( pCurScrollBar == &aEWVScrollBar, "Wer scrollt hier ?" );
         long nDiff = aEdtWindow.GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
         aEdtWindow.GetEditView()->Scroll( 0, nDiff );
-        aBrkWindow.Scroll( 0, nDiff );
+        aBrkWindow.DoScroll( 0, nDiff );
         aEdtWindow.GetEditView()->ShowCursor( FALSE, TRUE );
         pCurScrollBar->SetThumbPos( aEdtWindow.GetEditView()->GetStartDocPos().Y() );
     }
@@ -1797,8 +1803,8 @@ WatchTreeListBox::~WatchTreeListBox()
 void WatchTreeListBox::SetTabs()
 {
     SvHeaderTabListBox::SetTabs();
-    int nTabCount = aTabs.Count();
-    for( int i = 0 ; i < nTabCount ; i++ )
+    USHORT nTabCount_ = aTabs.Count();
+    for( USHORT i = 0 ; i < nTabCount_ ; i++ )
     {
         SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(i);
         if( i == 2 )
@@ -1859,9 +1865,9 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
         // Loop through indices of current level
         int nParentLevel = bArrayIsRootArray ? pItem->nDimLevel : 0;
         int nThisLevel = nParentLevel + 1;
-        short nMin, nMax;
-        pArray->GetDim( nThisLevel, nMin, nMax );
-        for( USHORT i = nMin ; i <= nMax ; i++ )
+        INT32 nMin, nMax;
+        pArray->GetDim32( nThisLevel, nMin, nMax );
+        for( INT32 i = nMin ; i <= nMax ; i++ )
         {
             WatchItem* pChildItem = new WatchItem();
 
@@ -1882,7 +1888,7 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
                 aIndexStr += String::CreateFromInt32( n );
                 aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             }
-            pChildItem->pIndices[ nParentLevel ] = i;
+            pChildItem->pIndices[ nParentLevel ] = sal::static_int_cast<short>( i );
             aIndexStr += String::CreateFromInt32( i );
             aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
 
@@ -1953,7 +1959,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
     return pSBX;
 }
 
-BOOL __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& rSel )
+BOOL __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
@@ -1991,7 +1997,7 @@ BOOL __EXPORT WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& 
     aResult.EraseLeadingChars();
     aResult.EraseTrailingChars();
 
-    int nResultLen = aResult.Len();
+    USHORT nResultLen = aResult.Len();
     sal_Unicode cFirst = aResult.GetChar( 0 );
     sal_Unicode cLast  = aResult.GetChar( nResultLen - 1 );
     if( cFirst == '\"' && cLast == '\"' )
@@ -2106,7 +2112,7 @@ static String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eTy
             for( int i = nDimLevel ; i < nDims ; i++ )
             {
                 short nMin, nMax;
-                pArray->GetDim( i+1, nMin, nMax );
+                pArray->GetDim( sal::static_int_cast<short>( i+1 ), nMin, nMax );
                 aRetStr += String::CreateFromInt32( nMin );
                 aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( " to " ) );
                 aRetStr += String::CreateFromInt32( nMax );
@@ -2140,7 +2146,6 @@ void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
 void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 {
     SbMethod* pCurMethod = StarBASIC::GetActiveMethod();
-    SbModule* pModule = pCurMethod ? pCurMethod->GetModule() : 0;
 
     SbxError eOld = SbxBase::GetError();
     setBasicWatchMode( true );
@@ -2201,8 +2206,8 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                                     short nOldMin, nOldMax;
                                     short nNewMin, nNewMax;
 
-                                    pOldArray->GetDim( i+1, nOldMin, nOldMax );
-                                    pNewArray->GetDim( i+1, nNewMin, nNewMax );
+                                    pOldArray->GetDim( sal::static_int_cast<short>( i+1 ), nOldMin, nOldMax );
+                                    pNewArray->GetDim( sal::static_int_cast<short>( i+1 ), nNewMin, nNewMax );
                                     if( nOldMin != nNewMin || nOldMax != nNewMax )
                                     {
                                         bArrayChanged = true;
@@ -2256,8 +2261,8 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             USHORT nPropCount = pProps->Count();
                             for( USHORT i = 0 ; i < nPropCount - 3 ; i++ )
                             {
-                                SbxVariable* pVar = pProps->Get( i );
-                                String aName( pVar->GetName() );
+                                SbxVariable* pVar_ = pProps->Get( i );
+                                String aName( pVar_->GetName() );
                                 if( pItem->maMemberList.mpMemberNames[i] != aName )
                                 {
                                     bObjChanged = true;
