@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:50:39 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:06:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@ TESTAPP=test_osl_getVolInfo
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
