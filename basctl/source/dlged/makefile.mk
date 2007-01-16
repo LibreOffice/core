@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:51:33 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:36:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ SLOFILES=	$(SLO)$/dlged.obj		\
 
 EXCEPTIONSFILES=$(SLO)$/dlged.obj	\
                 $(SLO)$/dlgedfac.obj	\
+                $(SLO)$/dlgedobj.obj	\
                 $(SLO)$/dlgedlist.obj	\
                 $(SLO)$/dlgedclip.obj	\
                 $(SLO)$/propbrw.obj
