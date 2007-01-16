@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 14:21:24 $
+#   last change: $Author: vg $ $Date: 2007-01-16 10:46:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@ NO_BSYMBOLIC = TRUE
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
+.IF "$(SYSTEM_DB)" == "YES"
+CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
+.ENDIF
+ 
 INCPRE += inc
 
 DLLPRE =
