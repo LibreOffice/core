@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:49:02 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@ protected:
     virtual void    Select();
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
+    using           Control::Notify;
     virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             const SfxHint& rHint, const TypeId& rHintType );
 
@@ -95,6 +96,7 @@ public:
                                  const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                     ~BasicLibBox();
 
+    using           Window::Update;
     void            Update( const SfxStringItem* pItem );
 };
 
@@ -127,6 +129,7 @@ protected:
     virtual void    Select();
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
+    using           Control::Notify;
     virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 const SfxHint& rHint, const TypeId& rHintType );
 
@@ -134,6 +137,7 @@ public:
     BasicLanguageBox( Window* pParent );
     ~BasicLanguageBox();
 
+    using           Window::Update;
     void            Update( const SfxStringItem* pItem );
 };
 
