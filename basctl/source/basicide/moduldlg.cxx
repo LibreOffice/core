@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:29:09 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,16 +159,16 @@ BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const Strin
 }
 
 
-DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry )
+DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
 {
-    DragDropMode nMode = SV_DRAGDROP_NONE;
+    DragDropMode nMode_ = SV_DRAGDROP_NONE;
 
     if ( pEntry )
     {
         USHORT nDepth = GetModel()->GetDepth( pEntry );
         if ( nDepth == 2 )
         {
-            nMode = SV_DRAGDROP_CTRL_COPY;
+            nMode_ = SV_DRAGDROP_CTRL_COPY;
             BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
             SfxObjectShell* pShell( aDesc.GetShell() );
             ::rtl::OUString aOULibName( aDesc.GetLibName() );
@@ -178,12 +178,12 @@ DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContaine
                     ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) ) )
             {
                 // allow MOVE mode only for libraries, which are not readonly
-                nMode |= SV_DRAGDROP_CTRL_MOVE;
+                nMode_ |= SV_DRAGDROP_CTRL_MOVE;
             }
         }
     }
 
-    return nMode;
+    return nMode_;
 }
 
 
@@ -273,6 +273,7 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEn
 BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos, BOOL bMove )
 {
+    (void)pEntry;
     DBG_ASSERT( pEntry, "Kein Eintrag?" );  // Hier ASS ok, sollte nicht mit
     DBG_ASSERT( pTarget, "Kein Ziel?" );    // NULL (ganz vorne) erreicht werden
     USHORT nDepth = GetModel()->GetDepth( pTarget );
@@ -289,8 +290,6 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
         rpNewParent = GetParent( pTarget );
         rNewChildPos = GetModel()->GetRelPos( pTarget ) + 1;
     }
-
-    USHORT nDestPos = (USHORT)rNewChildPos; // evtl. anpassen...
 
     // get target shell and target library name
     BasicEntryDescriptor aDestDesc( GetEntryDescriptor( rpNewParent ) );
