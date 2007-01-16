@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-03 11:38:22 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 15:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,13 @@
  *      - cleanup of resource transfer
  */
 
+#if defined(SOLARIS)
+  // The procfs may only be used without LFS in 32bits.
+# ifdef _FILE_OFFSET_BITS
+#   undef   _FILE_OFFSET_BITS
+# endif
+#endif
+
 
 #ifdef LINUX
 #include <asm/param.h>
@@ -51,6 +58,9 @@
 #endif
 
 #include "system.h"
+#if defined(SOLARIS) || defined(IRIX)
+# include <sys/procfs.h>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
