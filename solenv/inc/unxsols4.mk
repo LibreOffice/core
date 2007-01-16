@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:19:50 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:25:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,6 @@ CFLAGSWERRCXX=-xwe
 # settings.mk):
 MODULES_WITH_WARNINGS := \
     b_server \
-    basctl \
     chart2 \
     devtools \
     extensions \
