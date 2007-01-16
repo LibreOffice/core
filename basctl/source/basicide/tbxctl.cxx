@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:30:11 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,7 @@ SfxPopupWindowType TbxControls::GetPopupWindowType() const
 
 IMPL_STATIC_LINK( TbxControls, StateChangedHdl_Impl, StateChangedInfo*, pStateChangedInfo )
 {
+    (void)pThis;
     try
     {
         if ( pStateChangedInfo )
@@ -241,6 +242,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
 
 void TbxControls::Select( USHORT nModifier )
 {
+    (void)nModifier;
     SfxAllEnumItem aItem( SID_CHOOSE_CONTROLS, nLastSlot );
     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
     DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
