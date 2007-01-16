@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:25:55 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( BOOL bCreate )
 
 USHORT __EXPORT BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags )
 {
+    (void)nDiffFlags;
     BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
     DBG_ASSERT( pDocShell, "DocShell ?!" );
     pDocShell->SetPrinter( pNewPrinter );
