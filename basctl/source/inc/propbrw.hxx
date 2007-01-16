@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:22:04 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@ public:
     PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
             SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent);
     virtual ~PropBrw();
+    using Window::Update;
     void    Update( SdrView* pView );
     SdrView*        GetCurView() const { return pView; }
 };
