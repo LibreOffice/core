@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedmod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:31:47 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ DlgEdModel::~DlgEdModel()
 //----------------------------------------------------------------------------
 
 DlgEdModel::DlgEdModel( const DlgEdModel& )
+    : SdrModel()
 {
     DBG_ERROR("DlgEdModel: CopyCtor not implemented");
 }
@@ -107,14 +108,6 @@ DlgEdModel::DlgEdModel( const DlgEdModel& )
 void DlgEdModel::operator=(const DlgEdModel& )
 {
     DBG_ERROR("DlgEdModel: operator= not implemented");
-}
-
-//----------------------------------------------------------------------------
-
-FASTBOOL DlgEdModel::operator==(const DlgEdModel&) const
-{
-    DBG_ERROR("DlgEdModel: operator== not implemented");
-    return FALSE;
 }
 
 //----------------------------------------------------------------------------
@@ -129,7 +122,7 @@ SdrPage* DlgEdModel::AllocPage(FASTBOOL bMasterPage)
 
 void DlgEdModel::DlgEdModelChanged( FASTBOOL bChanged )
 {
-    SetChanged( bChanged );
+    SetChanged( static_cast< sal_Bool > ( bChanged ) );
 }
 
 //----------------------------------------------------------------------------
