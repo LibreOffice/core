@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-01-15 12:36:20 $
+dnl * Date: $Date: 2007-01-16 16:08:42 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.194 $ )
+AC_REVISION( $Revision: 1.195 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -988,6 +988,15 @@ else
    fi
 fi
 AC_SUBST(DISABLE_STRIP)
+
+AC_SYS_LARGEFILE
+if test -n "$ac_cv_sys_file_offset_bits"; then
+   LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+fi
+if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
+   LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
+fi
+AC_SUBST(LFS_CFLAGS)
 
 dnl ===================================================================
 dnl Build options
