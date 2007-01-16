@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:39:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,11 +481,11 @@ void DlgEdObj::SetRectFromProps()
 void DlgEdObj::SetPropsFromRect()
 {
     // get control position and size from rectangle
-    Rectangle aRect = GetSnapRect();
-    sal_Int32 nXIn = aRect.Left();
-    sal_Int32 nYIn = aRect.Top();
-    sal_Int32 nWidthIn = aRect.GetWidth();
-    sal_Int32 nHeightIn = aRect.GetHeight();
+    Rectangle aRect_ = GetSnapRect();
+    sal_Int32 nXIn = aRect_.Left();
+    sal_Int32 nYIn = aRect_.Top();
+    sal_Int32 nWidthIn = aRect_.GetWidth();
+    sal_Int32 nHeightIn = aRect_.GetHeight();
 
     // transform coordinates
     sal_Int32 nXOut, nYOut, nWidthOut, nHeightOut;
@@ -512,19 +512,19 @@ void DlgEdObj::SetPropsFromRect()
 
 void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 {
-    DlgEdPage* pPage = 0;
+    DlgEdPage* pPage_ = 0;
     if ( pDlgEdForm )
     {
         DlgEditor* pEditor = pDlgEdForm->GetDlgEditor();
         if ( pEditor )
-            pPage = pEditor->GetPage();
+            pPage_ = pEditor->GetPage();
     }
-    DBG_ASSERT( pPage, "DlgEdObj::PositionAndSizeChange: no page!" );
-    if ( pPage )
+    DBG_ASSERT( pPage_, "DlgEdObj::PositionAndSizeChange: no page!" );
+    if ( pPage_ )
     {
         sal_Int32 nPageXIn = 0;
         sal_Int32 nPageYIn = 0;
-        Size aPageSize = pPage->GetSize();
+        Size aPageSize = pPage_->GetSize();
         sal_Int32 nPageWidthIn = aPageSize.Width();
         sal_Int32 nPageHeightIn = aPageSize.Height();
         sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
@@ -636,7 +636,7 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
 sal_Int32 DlgEdObj::GetStep() const
 {
     // get step property
-    sal_Int32 nStep;
+    sal_Int32 nStep = 0;
     uno::Reference< beans::XPropertySet >  xPSet( GetUnoControlModel(), uno::UNO_QUERY );
     if (xPSet.is())
     {
@@ -732,7 +732,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             if ( nNewTabIndex < 0 )
                 nNewTabIndex = 0;
             else if ( nNewTabIndex > nCtrls - 1 )
-                nNewTabIndex = nCtrls - 1;
+                nNewTabIndex = sal::static_int_cast<sal_Int16>( nCtrls - 1 );
 
             // reorder helper list
             ::rtl::OUString aCtrlName = aNameList[nOldTabIndex];
@@ -1122,7 +1122,7 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
 
 FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     SetDefaults();
     StartListening();
@@ -1222,6 +1222,7 @@ void DlgEdObj::SetDefaults()
 
 IMPL_LINK(DlgEdObj, OnCreate, void*, EMPTYTAG)
 {
+    (void)EMPTYTAG;
     /*
     if (pTempView)
         pTempView->ObjectCreated(this);
@@ -1352,7 +1353,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
 
 //----------------------------------------------------------------------------
 
-void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (isListening())
     {
@@ -1370,7 +1371,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::Cont
 
 //----------------------------------------------------------------------------
 
-void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (isListening())
     {
@@ -1388,7 +1389,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::Cont
 
 //----------------------------------------------------------------------------
 
-void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (isListening())
     {
@@ -1425,15 +1426,15 @@ SdrObject* DlgEdObj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* p
 {
     // #109994# fixed here, because the drawing layer doesn't handle objects
     // with a width or height of 0 in a proper way
-    Rectangle aRect( aOutRect );
-    if ( aRect.IsEmpty() )
+    Rectangle aRect_( aOutRect );
+    if ( aRect_.IsEmpty() )
     {
-        aRect.Left() -= nTol;
-        aRect.Top() -= nTol;
-        aRect.Right() = ( aRect.Right() == RECT_EMPTY ? aOutRect.Left() + nTol : aRect.Right() + nTol );
-        aRect.Bottom() = ( aRect.Bottom() == RECT_EMPTY ? aOutRect.Top() + nTol : aRect.Bottom() + nTol );
+        aRect_.Left() -= nTol;
+        aRect_.Top() -= nTol;
+        aRect_.Right() = ( aRect_.Right() == RECT_EMPTY ? aOutRect.Left() + nTol : aRect_.Right() + nTol );
+        aRect_.Bottom() = ( aRect_.Bottom() == RECT_EMPTY ? aOutRect.Top() + nTol : aRect_.Bottom() + nTol );
 
-        if ( aRect.IsInside( rPnt ) )
+        if ( aRect_.IsInside( rPnt ) )
             return (SdrObject*)this;
         else
             return 0;
@@ -1535,11 +1536,11 @@ void DlgEdForm::SetRectFromProps()
 void DlgEdForm::SetPropsFromRect()
 {
     // get form position and size from rectangle
-    Rectangle aRect = GetSnapRect();
-    sal_Int32 nXIn = aRect.Left();
-    sal_Int32 nYIn = aRect.Top();
-    sal_Int32 nWidthIn = aRect.GetWidth();
-    sal_Int32 nHeightIn = aRect.GetHeight();
+    Rectangle aRect_ = GetSnapRect();
+    sal_Int32 nXIn = aRect_.Left();
+    sal_Int32 nYIn = aRect_.Top();
+    sal_Int32 nWidthIn = aRect_.GetWidth();
+    sal_Int32 nHeightIn = aRect_.GetHeight();
 
     // transform coordinates
     sal_Int32 nXOut, nYOut, nWidthOut, nHeightOut;
@@ -1584,13 +1585,13 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     DBG_ASSERT( pEditor, "DlgEdForm::PositionAndSizeChange: no dialog editor!" );
     if ( pEditor )
     {
-        DlgEdPage* pPage = pEditor->GetPage();
-        DBG_ASSERT( pPage, "DlgEdForm::PositionAndSizeChange: no page!" );
-        if ( pPage )
+        DlgEdPage* pPage_ = pEditor->GetPage();
+        DBG_ASSERT( pPage_, "DlgEdForm::PositionAndSizeChange: no page!" );
+        if ( pPage_ )
         {
             sal_Int32 nPageXIn = 0;
             sal_Int32 nPageYIn = 0;
-            Size aPageSize = pPage->GetSize();
+            Size aPageSize = pPage_->GetSize();
             sal_Int32 nPageWidthIn = aPageSize.Width();
             sal_Int32 nPageHeightIn = aPageSize.Height();
             sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
@@ -1643,7 +1644,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
             if ( bAdjustedPageSize )
             {
                 pEditor->InitScrollBars();
-                aPageSize = pPage->GetSize();
+                aPageSize = pPage_->GetSize();
                 nPageWidthIn = aPageSize.Width();
                 nPageHeightIn = aPageSize.Height();
                 if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
@@ -1886,8 +1887,7 @@ void DlgEdForm::UpdateTabOrderAndGroups()
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdForm::CheckHit( const Point& rPnt, USHORT nTol,
-    const SetOfByte*  pSet ) const
+SdrObject* DlgEdForm::CheckHit( const Point& rPnt, USHORT nTol, const SetOfByte* ) const
 {
     Rectangle aROuter = aOutRect;
     aROuter.Left()   -= nTol;
@@ -1963,7 +1963,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
 
 FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     // stop listening
     EndListening(sal_False);
