@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:39 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:35:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 
 IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 {
+    (void)pTimer;
     Window* pWindow = pParent->GetWindow();
     Point aPos = pWindow->ScreenToOutputPixel( pWindow->GetPointerPosPixel() );
     aPos = pWindow->PixelToLogic( aPos );
@@ -119,9 +120,9 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 
 //----------------------------------------------------------------------------
 
-DlgEdFunc::DlgEdFunc( DlgEditor* pParent )
+DlgEdFunc::DlgEdFunc( DlgEditor* pParent_ )
 {
-    DlgEdFunc::pParent = pParent;
+    DlgEdFunc::pParent = pParent_;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
@@ -134,7 +135,7 @@ DlgEdFunc::~DlgEdFunc()
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
 #ifdef MAC
     pParent->GetWindow()->GrabFocus();
@@ -144,7 +145,7 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFunc::MouseButtonUp( const MouseEvent& rMEvt )
+BOOL DlgEdFunc::MouseButtonUp( const MouseEvent& )
 {
     aScrollTimer.Stop();
     return TRUE;
@@ -152,7 +153,7 @@ BOOL DlgEdFunc::MouseButtonUp( const MouseEvent& rMEvt )
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFunc::MouseMove( const MouseEvent& rMEvt )
+BOOL DlgEdFunc::MouseMove( const MouseEvent& )
 {
     return TRUE;
 }
@@ -389,10 +390,10 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
 //----------------------------------------------------------------------------
 
-DlgEdFuncInsert::DlgEdFuncInsert( DlgEditor* pParent ) :
-    DlgEdFunc( pParent )
+DlgEdFuncInsert::DlgEdFuncInsert( DlgEditor* pParent_ ) :
+    DlgEdFunc( pParent_ )
 {
-    pParent->GetView()->SetCreateMode( TRUE );
+    pParent_->GetView()->SetCreateMode( TRUE );
 }
 
 //----------------------------------------------------------------------------
@@ -456,9 +457,6 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     Window*  pWindow= pParent->GetWindow();
     pView->SetActualWin( pWindow );
 
-    Point   aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
-
     pWindow->ReleaseMouse();
 
     // object creation active?
@@ -466,16 +464,10 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     {
         pView->EndCreateObj(SDRCREATE_FORCEEND);
 
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        if(rMarkList.GetMarkCount() == 1)
-        {
-            SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObj = pMark->GetMarkedSdrObj();
-        }
-
         if ( !pView->AreObjectsMarked() )
         {
             USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
+            Point aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
             pView->MarkObj(aPos, nHitLog);
         }
 
@@ -516,8 +508,8 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 
 //----------------------------------------------------------------------------
 
-DlgEdFuncSelect::DlgEdFuncSelect( DlgEditor* pParent ) :
-    DlgEdFunc( pParent ),
+DlgEdFuncSelect::DlgEdFuncSelect( DlgEditor* pParent_ ) :
+    DlgEdFunc( pParent_ ),
     bMarkAction(FALSE)
 {
 }
@@ -608,8 +600,6 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    ULONG nView = 0;
-
 
     if ( rMEvt.IsLeft() )
     {
@@ -628,9 +618,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-
-    USHORT nClicks = rMEvt.GetClicks();
-
+//  USHORT nClicks = rMEvt.GetClicks();
 //  if (nClicks == 2)
 //  {
 //      if ( pView->AreObjectsMarked() )
@@ -669,10 +657,10 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     if ( pView->IsAction() )
     {
         Point aPix(rMEvt.GetPosPixel());
-        Point aPnt(pWindow->PixelToLogic(aPix));
+        Point aPnt_(pWindow->PixelToLogic(aPix));
 
-        ForceScroll(aPnt);
-        pView->MovAction(aPnt);
+        ForceScroll(aPnt_);
+        pView->MovAction(aPnt_);
     }
 
     pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
