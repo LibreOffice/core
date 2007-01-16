@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:54:55 $
+#   last change: $Author: vg $ $Date: 2007-01-16 16:02:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:FileBase by codegen.pl 
