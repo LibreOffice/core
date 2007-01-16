@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:49:40 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,8 @@ static sal_Int32 GnBasicIDEShellCount;
 sal_Int32 getBasicIDEShellCount( void )
     { return GnBasicIDEShellCount; }
 
-BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, Window * ):
-        SfxViewShell( pFrame, IDE_VIEWSHELL_FLAGS ),
+BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame_, Window * ):
+        SfxViewShell( pFrame_, IDE_VIEWSHELL_FLAGS ),
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
@@ -145,8 +145,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, Window * ):
 }
 
 
-BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, const BasicIDEShell & rView):
-        SfxViewShell( pFrame, IDE_VIEWSHELL_FLAGS ),
+BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame_, const BasicIDEShell& ):
+        SfxViewShell( pFrame_, IDE_VIEWSHELL_FLAGS ),
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
@@ -157,8 +157,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, const BasicIDEShell & rView)
 }
 
 
-BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame, SfxViewShell* /* pOldShell */ ) :
-        SfxViewShell( pFrame, IDE_VIEWSHELL_FLAGS ),
+BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
+        SfxViewShell( pFrame_, IDE_VIEWSHELL_FLAGS ),
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
@@ -211,7 +211,6 @@ void BasicIDEShell::Init()
     pTabBar->SetSplitHdl( LINK( this, BasicIDEShell, TabBarSplitHdl ) );
     bTabBarSplitted = FALSE;
 
-    IDEBaseWindow* pTmpWin = 0;
     nCurKey = 100;
     InitScrollBars();
     InitTabBar();
@@ -298,6 +297,8 @@ void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
 
 USHORT __EXPORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
+    (void)bForBrowsing;
+
     // da es nach Drucken etc. (DocInfo) modifiziert ist, hier resetten
     GetViewFrame()->GetObjectShell()->SetModified(FALSE);
 
@@ -375,6 +376,7 @@ void __EXPORT BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rS
 
 IMPL_LINK_INLINE_START( BasicIDEShell, TabBarSplitHdl, TabBar *, pTBar )
 {
+    (void)pTBar;
     bTabBarSplitted = TRUE;
     ArrangeTabBar();
 
@@ -406,7 +408,7 @@ BOOL BasicIDEShell::NextPage( BOOL bPrev )
     else
         ++nPos;
 
-    if ( nPos >= 0 && nPos < pTabBar->GetPageCount() )
+    if ( nPos < pTabBar->GetPageCount() )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.Get( pTabBar->GetPageId( nPos ) );
         SetCurWindow( pWin, TRUE );
@@ -459,9 +461,9 @@ void BasicIDEShell::ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy )
             {
                 pObjectCatalog->SetCancelHdl( LINK( this, BasicIDEShell, ObjectDialogCancelHdl ) );
                 BasicEntryDescriptor aDesc;
-                IDEBaseWindow* pCurWin = GetCurWindow();
-                if ( pCurWin )
-                    aDesc = pCurWin->CreateEntryDescriptor();
+                IDEBaseWindow* pCurWin_ = GetCurWindow();
+                if ( pCurWin_ )
+                    aDesc = pCurWin_->CreateEntryDescriptor();
                 pObjectCatalog->SetCurrentEntry( aDesc );
             }
         }
@@ -892,13 +894,13 @@ void BasicIDEShell::UpdateWindows()
     }
 }
 
-void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bAllowChangeCurWindow )
+void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, BOOL bDestroy, BOOL bAllowChangeCurWindow )
 {
-    DBG_ASSERT( pWindow, "Kann keinen NULL-Pointer loeschen!" );
-    ULONG nKey = aIDEWindowTable.GetKey( pWindow );
+    DBG_ASSERT( pWindow_, "Kann keinen NULL-Pointer loeschen!" );
+    ULONG nKey = aIDEWindowTable.GetKey( pWindow_ );
     pTabBar->RemovePage( (USHORT)nKey );
     aIDEWindowTable.Remove( nKey );
-    if ( pWindow == pCurWin )
+    if ( pWindow_ == pCurWin )
     {
         if ( bAllowChangeCurWindow )
             SetCurWindow( FindWindow(), TRUE );
@@ -907,26 +909,26 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bA
     }
     if ( bDestroy )
     {
-        if ( !( pWindow->GetStatus() & BASWIN_INRESCHEDULE ) )
+        if ( !( pWindow_->GetStatus() & BASWIN_INRESCHEDULE ) )
         {
-            delete pWindow;
+            delete pWindow_;
         }
         else
         {
-            pWindow->AddStatus( BASWIN_TOBEKILLED );
-            pWindow->Hide();
+            pWindow_->AddStatus( BASWIN_TOBEKILLED );
+            pWindow_->Hide();
             StarBASIC::Stop();
             // Es kommt kein Notify...
-            pWindow->BasicStopped();
-            aIDEWindowTable.Insert( nKey, pWindow );    // wieder einhaegen
+            pWindow_->BasicStopped();
+            aIDEWindowTable.Insert( nKey, pWindow_ );   // wieder einhaegen
         }
     }
     else
     {
-        pWindow->Hide();
-        pWindow->AddStatus( BASWIN_SUSPENDED );
-        pWindow->Deactivating();
-        aIDEWindowTable.Insert( nKey, pWindow );    // wieder einhaegen
+        pWindow_->Hide();
+        pWindow_->AddStatus( BASWIN_SUSPENDED );
+        pWindow_->Deactivating();
+        aIDEWindowTable.Insert( nKey, pWindow_ );   // wieder einhaegen
     }
 
 }
