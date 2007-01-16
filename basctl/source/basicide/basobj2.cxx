@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:26:52 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ SfxMacro* BasicIDE::CreateMacro()
     Application::SetDefDialogParent( pChooser );
     //pChooser->SetMode( MACROCHOOSER_RECORDING );
     short nRetValue = pChooser->Execute();
+    (void)nRetValue;
 
     Application::SetDefDialogParent( pOldModalDialogParent );
     delete pChooser;
@@ -632,6 +633,8 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
 
 ::rtl::OUString BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
+    (void)rMacroDesc;
+
     BasicIDEDLL::Init();
 
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
