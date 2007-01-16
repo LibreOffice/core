@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedlist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:31:34 $
+ *  last change: $Author: vg $ $Date: 2007-01-16 16:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ DlgEdPropListenerImpl::~DlgEdPropListenerImpl()
 // XEventListener
 //----------------------------------------------------------------------------
 
-void SAL_CALL DlgEdPropListenerImpl::disposing( const  ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdPropListenerImpl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
     /*
     // disconnect the listener
@@ -117,7 +117,7 @@ DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl()
 // XEventListener
 //----------------------------------------------------------------------------
 
-void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
     /*
     // disconnect the listener
