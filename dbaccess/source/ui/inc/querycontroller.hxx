@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:35:26 $
+ *  last change: $Author: rt $ $Date: 2007-01-17 14:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,8 +200,8 @@ namespace dbaui
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();
 
-        DECLARE_XINTERFACE();
-        DECLARE_XTYPEPROVIDER();
+        DECLARE_XINTERFACE()
+        DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);

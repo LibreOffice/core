@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statement.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:31:40 $
+ *  last change: $Author: rt $ $Date: 2007-01-17 14:52:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,8 +190,8 @@ public:
     OStatement(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _xConn,
                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & _xStatement);
 
-    DECLARE_XINTERFACE();
-    DECLARE_XTYPEPROVIDER();
+    DECLARE_XINTERFACE()
+    DECLARE_XTYPEPROVIDER()
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
