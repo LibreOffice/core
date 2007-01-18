@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 14:29:51 $
+#   last change: $Author: vg $ $Date: 2007-01-18 14:55:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ SHL1TARGET = deploymentmisc$(UPD)$(DLLPOSTFIX)
 SHL1OBJS = \
         $(SLO)$/dp_misc.obj \
         $(SLO)$/dp_resource.obj \
+        $(SLO)$/dp_identifier.obj \
         $(SLO)$/dp_interact.obj \
         $(SLO)$/dp_ucb.obj \
         $(SLO)$/db.obj \
