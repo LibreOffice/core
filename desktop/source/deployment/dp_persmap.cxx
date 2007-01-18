@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_persmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:20:55 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,16 +152,15 @@ PersistentMap::PersistentMap()
 }
 
 //______________________________________________________________________________
-bool PersistentMap::has( OUString const & key ) const
+bool PersistentMap::has( OString const & key ) const
 {
     return get( 0, key );
 }
 
 //______________________________________________________________________________
-bool PersistentMap::get( OUString * value, OUString const & key_ ) const
+bool PersistentMap::get( OString * value, OString const & key ) const
 {
     try {
-        OString key( OUStringToOString( key_, RTL_TEXTENCODING_UTF8 ) );
         Dbt dbKey( const_cast< sal_Char * >(key.getStr()), key.getLength() );
         Dbt dbData;
         int err = m_db.get( 0, &dbKey, &dbData, 0 );
@@ -169,9 +168,9 @@ bool PersistentMap::get( OUString * value, OUString const & key_ ) const
             return false;
         if (err == 0) {
             if (value != 0) {
-                *value = OUString(
+                *value = OString(
                     static_cast< sal_Char const * >(dbData.get_data()),
-                    dbData.get_size(), RTL_TEXTENCODING_UTF8 );
+                    dbData.get_size() );
             }
             return true;
         }
@@ -184,56 +183,33 @@ bool PersistentMap::get( OUString * value, OUString const & key_ ) const
 }
 
 //______________________________________________________________________________
-bool PersistentMap::put(
-    OUString const & key_, OUString & value_, bool overwrite,
-    bool flush_immediately )
+void PersistentMap::put( OString const & key, OString const & value )
 {
     try {
-        OString key( OUStringToOString( key_, RTL_TEXTENCODING_UTF8 ) );
         Dbt dbKey( const_cast< sal_Char * >(key.getStr()), key.getLength() );
-        OString value( OUStringToOString( value_, RTL_TEXTENCODING_UTF8 ) );
         Dbt dbData( const_cast< sal_Char * >(
                         value.getStr()), value.getLength() );
-        int err = m_db.put(
-            0, &dbKey, &dbData, overwrite ? 0 : DB_NOOVERWRITE );
+        int err = m_db.put( 0, &dbKey, &dbData, 0 );
         if (err == 0) {
 #if OSL_DEBUG_LEVEL > 0
             OUString v;
-            OSL_ASSERT( get( &v, key_ ) );
-            OSL_ASSERT( v.equals( value_ ) );
+            OSL_ASSERT( get( &v, key ) );
+            OSL_ASSERT( v.equals( value ) );
 #endif
-            if (flush_immediately) {
-                err = m_db.sync(0);
-                if (err != 0)
-                    throw_rtexc(err);
-            }
-            return true;
+            err = m_db.sync(0);
         }
-        if (err == DB_KEYEXIST) {
-            OSL_ASSERT( ! overwrite );
-            err = m_db.get( 0, &dbKey, &dbData, 0 );
-            OSL_ASSERT( err == 0 );
-            if (err == 0)
-            {
-                value_ = OUString(
-                    static_cast< sal_Char const * >(dbData.get_data()),
-                    dbData.get_size(), RTL_TEXTENCODING_UTF8 );
-            }
-            return false;
-        }
-        throw_rtexc(err);
+        if (err != 0)
+            throw_rtexc(err);
     }
     catch (DbException & exc) {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
-    return false; // avoiding warning
 }
 
 //______________________________________________________________________________
-bool PersistentMap::erase( OUString const & key_, bool flush_immediately )
+bool PersistentMap::erase( OString const & key, bool flush_immediately )
 {
     try {
-        OString key( OUStringToOString( key_, RTL_TEXTENCODING_UTF8 ) );
         Dbt dbKey( const_cast< sal_Char * >(key.getStr()), key.getLength() );
         int err = m_db.del( &dbKey, 0 );
         if (err == 0) {
@@ -275,14 +251,12 @@ t_string2string_map PersistentMap::getEntries() const
             ::std::pair<t_string2string_map::iterator, bool > insertion(
                 ret.insert( t_string2string_map::value_type(
                                 t_string2string_map::value_type(
-                                    OUString( static_cast< sal_Char const * >(
-                                                  dbKey.get_data()),
-                                              dbKey.get_size(),
-                                              RTL_TEXTENCODING_UTF8 ),
-                                    OUString( static_cast< sal_Char const * >(
-                                                  dbData.get_data()),
-                                              dbData.get_size(),
-                                              RTL_TEXTENCODING_UTF8 ) ) ) ) );
+                                    OString( static_cast< sal_Char const * >(
+                                                 dbKey.get_data()),
+                                             dbKey.get_size() ),
+                                    OString( static_cast< sal_Char const * >(
+                                                 dbData.get_data()),
+                                             dbData.get_size() ) ) ) ) );
             OSL_ASSERT( insertion.second );
         }
         err = pcurs->close();
