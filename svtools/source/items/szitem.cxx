@@ -4,9 +4,9 @@
  *
  *  $RCSfile: szitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:01:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ BOOL SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
 
     BOOL bRet = FALSE;
     com::sun::star::awt::Size aValue;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if ( !nMemberId )
         bRet = ( rVal >>= aValue );
     else
