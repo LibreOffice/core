@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bintitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:02:27 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ SfxFieldUnit SfxBigIntItem::GetUnit() const
 // virtual
 BOOL SfxBigIntItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
-    double aValue;
+    double aValue = 0.0;
     if ( rVal >>= aValue )
     {
         SetValue( aValue );
