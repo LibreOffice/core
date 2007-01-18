@@ -20,9 +20,9 @@
 #
 #   $RCSfile: Makefile.in,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 11:56:33 $
+#   last change: $Author: vg $ $Date: 2007-01-18 09:26:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,11 +73,25 @@ build_triplet = @build@
 LIBOBJDIR =
 bin_PROGRAMS = dmake$(EXEEXT)
 @DBUG_TRUE@am__append_1 = dbug/dbug/dbug.c
+@OSTYPEUNIX_TRUE@am__append_2 = unix/arlib.c unix/dcache.c unix/dirbrk.c unix/rmprq.c\
+@OSTYPEUNIX_TRUE@                 unix/ruletab.c unix/runargv.c unix/tempnam.c
+
+@OSTYPEUNIX_TRUE@am__append_3 = -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@/gnu \
+@OSTYPEUNIX_TRUE@            -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ \
+@OSTYPEUNIX_TRUE@            -I$(top_srcdir)/@OS_TYPE@ 
+
+@OSTYPEWIN32_TRUE@am__append_4 = win95/dchdir.c win95/switchar.c \
+@OSTYPEWIN32_TRUE@                 msdos/dstrlwr.c msdos/arlib.c \
+@OSTYPEWIN32_TRUE@                 msdos/dirbrk.c msdos/runargv.c \
+@OSTYPEWIN32_TRUE@                 msdos/rmprq.c \
+@OSTYPEWIN32_TRUE@                 win95/microsft/ruletab.c
+
+@OSTYPEWIN32_TRUE@am__append_5 = -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@
 DIST_COMMON = $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(srcdir)/dmakeroot.h.in $(top_srcdir)/configure AUTHORS \
-	COPYING ChangeLog INSTALL NEWS config.guess config.sub depcomp \
-	install-sh missing mkinstalldirs
+	COPYING ChangeLog INSTALL NEWS compile config.guess config.sub \
+	depcomp install-sh missing mkinstalldirs
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -95,16 +109,34 @@ PROGRAMS = $(bin_PROGRAMS)
 am__dmake_SOURCES_DIST = infer.c make.c stat.c expand.c dmstring.c \
 	hash.c dag.c dmake.c path.c imacs.c sysintf.c parse.c getinp.c \
 	quit.c state.c dmdump.c macparse.c rulparse.c percent.c \
-	function.c dbug/dbug/dbug.c
-@DBUG_TRUE@am__objects_1 = dbug.$(OBJEXT)
+	function.c dbug/dbug/dbug.c unix/arlib.c unix/dcache.c \
+	unix/dirbrk.c unix/rmprq.c unix/ruletab.c unix/runargv.c \
+	unix/tempnam.c win95/dchdir.c win95/switchar.c msdos/dstrlwr.c \
+	msdos/arlib.c msdos/dirbrk.c msdos/runargv.c msdos/rmprq.c \
+	win95/microsft/ruletab.c
+am__dirstamp = $(am__leading_dot)dirstamp
+@DBUG_TRUE@am__objects_1 = dbug/dbug/dbug.$(OBJEXT)
+@OSTYPEUNIX_TRUE@am__objects_2 = unix/arlib.$(OBJEXT) \
+@OSTYPEUNIX_TRUE@	unix/dcache.$(OBJEXT) unix/dirbrk.$(OBJEXT) \
+@OSTYPEUNIX_TRUE@	unix/rmprq.$(OBJEXT) unix/ruletab.$(OBJEXT) \
+@OSTYPEUNIX_TRUE@	unix/runargv.$(OBJEXT) unix/tempnam.$(OBJEXT)
+@OSTYPEWIN32_TRUE@am__objects_3 = win95/dchdir.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	win95/switchar.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	msdos/dstrlwr.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	msdos/arlib.$(OBJEXT) msdos/dirbrk.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	msdos/runargv.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	msdos/rmprq.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	win95/microsft/ruletab.$(OBJEXT)
 am_dmake_OBJECTS = infer.$(OBJEXT) make.$(OBJEXT) stat.$(OBJEXT) \
 	expand.$(OBJEXT) dmstring.$(OBJEXT) hash.$(OBJEXT) \
 	dag.$(OBJEXT) dmake.$(OBJEXT) path.$(OBJEXT) imacs.$(OBJEXT) \
 	sysintf.$(OBJEXT) parse.$(OBJEXT) getinp.$(OBJEXT) \
 	quit.$(OBJEXT) state.$(OBJEXT) dmdump.$(OBJEXT) \
 	macparse.$(OBJEXT) rulparse.$(OBJEXT) percent.$(OBJEXT) \
-	function.$(OBJEXT) $(am__objects_1)
+	function.$(OBJEXT) $(am__objects_1) $(am__objects_2) \
+	$(am__objects_3)
 dmake_OBJECTS = $(am_dmake_OBJECTS)
+dmake_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I.
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -122,6 +154,7 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -157,6 +190,7 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+GREP = @GREP@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -171,8 +205,10 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 OBJEXT = @OBJEXT@
-OS_LIBRARY = @OS_LIBRARY@
-OS_SUBDIRS = @OS_SUBDIRS@
+OSTYPEUNIX_FALSE = @OSTYPEUNIX_FALSE@
+OSTYPEUNIX_TRUE = @OSTYPEUNIX_TRUE@
+OSTYPEWIN32_FALSE = @OSTYPEWIN32_FALSE@
+OSTYPEWIN32_TRUE = @OSTYPEWIN32_TRUE@
 OS_TYPE = @OS_TYPE@
 OS_VERSION = @OS_VERSION@
 PACKAGE = @PACKAGE@
@@ -188,8 +224,6 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
 ac_ct_CC = @ac_ct_CC@
-ac_ct_RANLIB = @ac_ct_RANLIB@
-ac_ct_STRIP = @ac_ct_STRIP@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__include = @am__include@
@@ -204,41 +238,42 @@ build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
+datarootdir = @datarootdir@
+docdir = @docdir@
+dvidir = @dvidir@
 exec_prefix = @exec_prefix@
 host_alias = @host_alias@
+htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
+localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
+pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
+psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-
-# require "new" automake >= 1.7
-AUTOMAKE_OPTIONS = 1.7 foreign
+AUTOMAKE_OPTIONS = foreign subdir-objects 1.9
 dmake_SOURCES = infer.c make.c stat.c expand.c dmstring.c hash.c dag.c \
 	dmake.c path.c imacs.c sysintf.c parse.c getinp.c quit.c \
 	state.c dmdump.c macparse.c rulparse.c percent.c function.c \
-	$(am__append_1)
-
-#dmake_LDADD   = unix/libunix.a
-#dmake_LDADD   = win95/libwin95.a msdos/libmsdos.a win95/microsft/libmsft.a
-dmake_LDADD = @OS_LIBRARY@
-dmake_DEPENDENCIES = @OS_LIBRARY@
-DIST_SUBDIRS = unix startup win95 msdos tests
-SUBDIRS = $(OS_SUBDIRS) tests
-EXTRA_DIST = NEWS ChangeLog
+	$(am__append_1) $(am__append_2) $(am__append_4)
 
 # set the include path found by configure
-INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@ -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@/gnu 
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
+	-I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ \
+	-I$(top_srcdir)/@OS_TYPE@ $(am__append_3) $(am__append_5)
+SUBDIRS = startup tests
+EXTRA_DIST = NEWS ChangeLog
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -319,18 +354,95 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+dbug/dbug/$(am__dirstamp):
+	@$(mkdir_p) dbug/dbug
+	@: > dbug/dbug/$(am__dirstamp)
+dbug/dbug/$(DEPDIR)/$(am__dirstamp):
+	@$(mkdir_p) dbug/dbug/$(DEPDIR)
+	@: > dbug/dbug/$(DEPDIR)/$(am__dirstamp)
+dbug/dbug/dbug.$(OBJEXT): dbug/dbug/$(am__dirstamp) \
+	dbug/dbug/$(DEPDIR)/$(am__dirstamp)
+unix/$(am__dirstamp):
+	@$(mkdir_p) unix
+	@: > unix/$(am__dirstamp)
+unix/$(DEPDIR)/$(am__dirstamp):
+	@$(mkdir_p) unix/$(DEPDIR)
+	@: > unix/$(DEPDIR)/$(am__dirstamp)
+unix/arlib.$(OBJEXT): unix/$(am__dirstamp) \
+	unix/$(DEPDIR)/$(am__dirstamp)
+unix/dcache.$(OBJEXT): unix/$(am__dirstamp) \
+	unix/$(DEPDIR)/$(am__dirstamp)
+unix/dirbrk.$(OBJEXT): unix/$(am__dirstamp) \
+	unix/$(DEPDIR)/$(am__dirstamp)
+unix/rmprq.$(OBJEXT): unix/$(am__dirstamp) \
+	unix/$(DEPDIR)/$(am__dirstamp)
+unix/ruletab.$(OBJEXT): unix/$(am__dirstamp) \
+	unix/$(DEPDIR)/$(am__dirstamp)
+unix/runargv.$(OBJEXT): unix/$(am__dirstamp) \
+	unix/$(DEPDIR)/$(am__dirstamp)
+unix/tempnam.$(OBJEXT): unix/$(am__dirstamp) \
+	unix/$(DEPDIR)/$(am__dirstamp)
+win95/$(am__dirstamp):
+	@$(mkdir_p) win95
+	@: > win95/$(am__dirstamp)
+win95/$(DEPDIR)/$(am__dirstamp):
+	@$(mkdir_p) win95/$(DEPDIR)
+	@: > win95/$(DEPDIR)/$(am__dirstamp)
+win95/dchdir.$(OBJEXT): win95/$(am__dirstamp) \
+	win95/$(DEPDIR)/$(am__dirstamp)
+win95/switchar.$(OBJEXT): win95/$(am__dirstamp) \
+	win95/$(DEPDIR)/$(am__dirstamp)
+msdos/$(am__dirstamp):
+	@$(mkdir_p) msdos
+	@: > msdos/$(am__dirstamp)
+msdos/$(DEPDIR)/$(am__dirstamp):
+	@$(mkdir_p) msdos/$(DEPDIR)
+	@: > msdos/$(DEPDIR)/$(am__dirstamp)
+msdos/dstrlwr.$(OBJEXT): msdos/$(am__dirstamp) \
+	msdos/$(DEPDIR)/$(am__dirstamp)
+msdos/arlib.$(OBJEXT): msdos/$(am__dirstamp) \
+	msdos/$(DEPDIR)/$(am__dirstamp)
+msdos/dirbrk.$(OBJEXT): msdos/$(am__dirstamp) \
+	msdos/$(DEPDIR)/$(am__dirstamp)
+msdos/runargv.$(OBJEXT): msdos/$(am__dirstamp) \
+	msdos/$(DEPDIR)/$(am__dirstamp)
+msdos/rmprq.$(OBJEXT): msdos/$(am__dirstamp) \
+	msdos/$(DEPDIR)/$(am__dirstamp)
+win95/microsft/$(am__dirstamp):
+	@$(mkdir_p) win95/microsft
+	@: > win95/microsft/$(am__dirstamp)
+win95/microsft/$(DEPDIR)/$(am__dirstamp):
+	@$(mkdir_p) win95/microsft/$(DEPDIR)
+	@: > win95/microsft/$(DEPDIR)/$(am__dirstamp)
+win95/microsft/ruletab.$(OBJEXT): win95/microsft/$(am__dirstamp) \
+	win95/microsft/$(DEPDIR)/$(am__dirstamp)
 dmake$(EXEEXT): $(dmake_OBJECTS) $(dmake_DEPENDENCIES) 
 	@rm -f dmake$(EXEEXT)
 	$(LINK) $(dmake_LDFLAGS) $(dmake_OBJECTS) $(dmake_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f dbug/dbug/dbug.$(OBJEXT)
+	-rm -f msdos/arlib.$(OBJEXT)
+	-rm -f msdos/dirbrk.$(OBJEXT)
+	-rm -f msdos/dstrlwr.$(OBJEXT)
+	-rm -f msdos/rmprq.$(OBJEXT)
+	-rm -f msdos/runargv.$(OBJEXT)
+	-rm -f unix/arlib.$(OBJEXT)
+	-rm -f unix/dcache.$(OBJEXT)
+	-rm -f unix/dirbrk.$(OBJEXT)
+	-rm -f unix/rmprq.$(OBJEXT)
+	-rm -f unix/ruletab.$(OBJEXT)
+	-rm -f unix/runargv.$(OBJEXT)
+	-rm -f unix/tempnam.$(OBJEXT)
+	-rm -f win95/dchdir.$(OBJEXT)
+	-rm -f win95/microsft/ruletab.$(OBJEXT)
+	-rm -f win95/switchar.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dag.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dmake.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dmdump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dmstring.Po@am__quote@
@@ -350,34 +462,38 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/state.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sysintf.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@dbug/dbug/$(DEPDIR)/dbug.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/arlib.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/dirbrk.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/dstrlwr.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/rmprq.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/runargv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/arlib.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/dcache.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/dirbrk.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/rmprq.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/ruletab.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/runargv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/tempnam.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@win95/$(DEPDIR)/dchdir.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@win95/$(DEPDIR)/switchar.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@win95/microsft/$(DEPDIR)/ruletab.Po@am__quote@
 
 .c.o:
-@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`; \
+@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ $<; \
+@am__fastdepCC_TRUE@	then mv -f "$$depbase.Tpo" "$$depbase.Po"; else rm -f "$$depbase.Tpo"; exit 1; fi
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ $<
 
 .c.obj:
-@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`; \
+@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
+@am__fastdepCC_TRUE@	then mv -f "$$depbase.Tpo" "$$depbase.Po"; else rm -f "$$depbase.Tpo"; exit 1; fi
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-dbug.o: dbug/dbug/dbug.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dbug.o -MD -MP -MF "$(DEPDIR)/dbug.Tpo" -c -o dbug.o `test -f 'dbug/dbug/dbug.c' || echo '$(srcdir)/'`dbug/dbug/dbug.c; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/dbug.Tpo" "$(DEPDIR)/dbug.Po"; else rm -f "$(DEPDIR)/dbug.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dbug/dbug/dbug.c' object='dbug.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dbug.o `test -f 'dbug/dbug/dbug.c' || echo '$(srcdir)/'`dbug/dbug/dbug.c
-
-dbug.obj: dbug/dbug/dbug.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dbug.obj -MD -MP -MF "$(DEPDIR)/dbug.Tpo" -c -o dbug.obj `if test -f 'dbug/dbug/dbug.c'; then $(CYGPATH_W) 'dbug/dbug/dbug.c'; else $(CYGPATH_W) '$(srcdir)/dbug/dbug/dbug.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/dbug.Tpo" "$(DEPDIR)/dbug.Po"; else rm -f "$(DEPDIR)/dbug.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dbug/dbug/dbug.c' object='dbug.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dbug.obj `if test -f 'dbug/dbug/dbug.c'; then $(CYGPATH_W) 'dbug/dbug/dbug.c'; else $(CYGPATH_W) '$(srcdir)/dbug/dbug/dbug.c'; fi`
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 uninstall-info-am:
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -682,6 +798,16 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f dbug/dbug/$(DEPDIR)/$(am__dirstamp)
+	-rm -f dbug/dbug/$(am__dirstamp)
+	-rm -f msdos/$(DEPDIR)/$(am__dirstamp)
+	-rm -f msdos/$(am__dirstamp)
+	-rm -f unix/$(DEPDIR)/$(am__dirstamp)
+	-rm -f unix/$(am__dirstamp)
+	-rm -f win95/$(DEPDIR)/$(am__dirstamp)
+	-rm -f win95/$(am__dirstamp)
+	-rm -f win95/microsft/$(DEPDIR)/$(am__dirstamp)
+	-rm -f win95/microsft/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -692,7 +818,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) dbug/dbug/$(DEPDIR) msdos/$(DEPDIR) unix/$(DEPDIR) win95/$(DEPDIR) win95/microsft/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -720,7 +846,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) dbug/dbug/$(DEPDIR) msdos/$(DEPDIR) unix/$(DEPDIR) win95/$(DEPDIR) win95/microsft/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
