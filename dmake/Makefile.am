@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Makefile.am,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 11:56:21 $
+#   last change: $Author: vg $ $Date: 2007-01-18 09:26:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,7 @@
 #
 #*************************************************************************
 
-# require "new" automake >= 1.7
-AUTOMAKE_OPTIONS = 1.7 foreign
-
+AUTOMAKE_OPTIONS = foreign subdir-objects 1.9
 
 
 bin_PROGRAMS = dmake
@@ -43,19 +41,32 @@ dmake_SOURCES = \
 	infer.c make.c stat.c expand.c dmstring.c hash.c dag.c dmake.c\
 	path.c imacs.c sysintf.c parse.c getinp.c quit.c state.c\
 	dmdump.c macparse.c rulparse.c percent.c function.c
+
+# set the include path found by configure
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
+           -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@
+
 if DBUG
 dmake_SOURCES += dbug/dbug/dbug.c
 endif
 
-#dmake_LDADD   = unix/libunix.a
-#dmake_LDADD   = win95/libwin95.a msdos/libmsdos.a win95/microsft/libmsft.a
-dmake_LDADD = @OS_LIBRARY@
-dmake_DEPENDENCIES = @OS_LIBRARY@
+if OSTYPEUNIX
+dmake_SOURCES += unix/arlib.c unix/dcache.c unix/dirbrk.c unix/rmprq.c\
+                 unix/ruletab.c unix/runargv.c unix/tempnam.c
+INCLUDES += -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@/gnu \
+            -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ \
+            -I$(top_srcdir)/@OS_TYPE@ 
+endif
 
-DIST_SUBDIRS = unix startup win95 msdos tests
-SUBDIRS = $(OS_SUBDIRS) tests
+if OSTYPEWIN32
+dmake_SOURCES += win95/dchdir.c win95/switchar.c \
+                 msdos/dstrlwr.c msdos/arlib.c \
+                 msdos/dirbrk.c msdos/runargv.c \
+                 msdos/rmprq.c \
+                 win95/microsft/ruletab.c
+INCLUDES += -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@
+endif
+
+SUBDIRS = startup tests
 
 EXTRA_DIST = NEWS ChangeLog
-
-# set the include path found by configure
-INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@ -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@/gnu 
