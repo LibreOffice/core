@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:25:47 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
         if( mbPresentation )
         {
-            sal_Bool bVisible;
+            sal_Bool bVisible = sal_False;
             xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
             if( !bVisible )
                 continue;
@@ -308,7 +308,7 @@ sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Referenc
 
         if( mbPresentation )
         {
-            sal_Bool bVisible;
+            sal_Bool bVisible = sal_False;
             xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
             if( !bVisible )
                 return sal_False;
@@ -594,7 +594,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
         try
         {
             // skip empty presentation objects
-            sal_Bool bEmpty;
+            sal_Bool bEmpty = sal_False;
             xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ) ) >>= bEmpty;
             if( bEmpty )
                 return;
