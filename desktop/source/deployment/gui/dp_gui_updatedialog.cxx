@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:24:40 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@
 
 #include "dp_dependencies.hxx"
 #include "dp_descriptioninfoset.hxx"
+#include "dp_identifier.hxx"
 #include "dp_version.hxx"
 #include "dp_misc.h"
 
@@ -487,8 +488,7 @@ void UpdateDialog::Thread::handle(
         packageManager,
     Map * map) const
 {
-    OSL_ASSERT(package->getIdentifier().IsPresent);
-    rtl::OUString id(package->getIdentifier().Value);
+    rtl::OUString id(dp_misc::getIdentifier(package));
     css::uno::Sequence< rtl::OUString > urls(
         package->getUpdateInformationURLs());
     if (urls.getLength() == 0) {
