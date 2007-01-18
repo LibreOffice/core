@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:40:01 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             case PROPERTYHANDLE_STRIPE_COLOR_A:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorA\"?" );
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 seqValues[nProperty] >>= nValue;
                 m_bStripeColorA = nValue;
             }
@@ -208,7 +208,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             case PROPERTYHANDLE_STRIPE_COLOR_B:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorB\"?" );
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 seqValues[nProperty] >>= nValue;
                 m_bStripeColorB = nValue;
             }
