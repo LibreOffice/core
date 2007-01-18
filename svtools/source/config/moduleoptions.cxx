@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:35:18 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1083,7 +1083,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
         if( ClassifyFactoryByName( sFactoryName, eFactory ) == sal_True )
         {
             ::rtl::OUString sTemp;
-            sal_Int32       nTemp;
+            sal_Int32       nTemp = 0;
 
             pInfo = &(m_lFactories[eFactory]);
             pInfo->free();
