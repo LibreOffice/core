@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:21:50 $
+#   last change: $Author: vg $ $Date: 2007-01-18 14:55:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ SRC1FILES = \
     dp_manager.src
 
 SLOFILES = \
+        $(SLO)$/dp_activepackages.obj \
         $(SLO)$/dp_manager.obj \
         $(SLO)$/dp_managerfac.obj
 
