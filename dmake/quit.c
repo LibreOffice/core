@@ -1,6 +1,6 @@
 /* $RCSfile: quit.c,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:01:52 $
+-- $Revision: 1.6 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:32:09 $
 --
 -- SYNOPSIS
 --      End the dmake session.
@@ -28,7 +28,8 @@
 #include "extern.h"
 
 static  void    _handle_quit ANSI((char*));
-static  int _dont_quit = 0;
+static  int _quitting = 0; /* Set to 1 once Quit() is called for the
+                * first time. */
 
 
 PUBLIC void
@@ -36,15 +37,34 @@ Quit( sig )/*
 ======== Error or quit */
 int sig;
 {
-   if( _dont_quit ) return;
+   if( sig == SIGINT )
+      fprintf(stderr, "Caught SIGINT. Trying to quit ...\n");
+   else if( sig == SIGQUIT )
+      fprintf(stderr, "Caught SIGQUIT. Trying to quit ...\n");
+   else if( sig == 0 )
+      /* Don't be verbose during regular program termination. */
+      ;
+   else
+      fprintf(stderr, "Caught signal %d. Trying to quit ...\n", sig);
+
+   if( _quitting ) return; /* Guard to only quit once. */
 
    while( Closefile() != NIL( FILE ) );
-   Clean_up_processes();
+
+   /* CTRL-c sends SIGINT and CTRL-\ sends SIGQUIT to the parent and to all
+    * children. No need to kill them. */
+   if( sig != SIGINT && sig != SIGQUIT )
+      /* This should be called Kill_all_processes(). */
+      Clean_up_processes();
+
+   /* Wait until all Processes are done. */
+   while( Wait_for_child(TRUE, -1) != -1 )
+      ;
 
    if( Current_target != NIL(CELL) )
       Unlink_temp_files(Current_target);
 
-   if( _dont_quit == 0 ) _handle_quit( ".ERROR" );
+   if( _quitting == 0 ) _handle_quit( ".ERROR" );
 
    Set_dir( Makedir );      /* No Error message if we can't do it */
    Epilog( ERROR_EXIT_VALUE );
@@ -57,13 +77,13 @@ in_quit( void )/*
    Called to check if we are already quitting.
    (Only used in unix/runargv.c.) */
 {
-    return _dont_quit;
+    return _quitting;
 }
 
 static void
 _handle_quit( err_target )/*
 ============================
-   Called by quit and the others to handle the execution of termination code
+   Called by Quit() to handle the execution of termination code
    from within make */
 char *err_target;
 {
@@ -74,8 +94,13 @@ char *err_target;
       cp = hp->CP_OWNR;
       Glob_attr |= A_IGNORE;
 
-      _dont_quit = 1;
+      _quitting = 1;
       cp->ce_flag |= F_TARGET;
       Make( cp, NIL(CELL) );
+
+      /* Beware! If the ".ERROR" target doesn't finish the following
+       * wait will never return!!! */
+      while( Wait_for_child(FALSE, -1) != -1 );
+
    }
 }
