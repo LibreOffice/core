@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:01:04 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "dp_ucb.h"
 #include "dp_resource.h"
 #include "dp_manager.h"
+#include "dp_identifier.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/uri.hxx"
@@ -92,9 +93,8 @@ struct MatchTempDir
 {
     OUString m_str;
     MatchTempDir( OUString const & str ) : m_str( str ) {}
-    bool operator () ( t_string2string_map::value_type const & v ) const {
-        return v.second.copy( 0, v.second.indexOf(';') ).equalsIgnoreAsciiCase(
-            m_str );
+    bool operator () ( ActivePackages::Entries::value_type const & v ) const {
+        return v.second.temporaryName.equalsIgnoreAsciiCase( m_str );
     }
 };
 
@@ -106,7 +106,7 @@ void PackageManagerImpl::initActivationLayer(
     {
         OSL_ASSERT( m_registryCache.getLength() == 0 );
         // documents temp activation:
-        m_activePackagesDB.reset( new PersistentMap );
+        m_activePackagesDB.reset( new ActivePackages );
         ::ucb::Content ucbContent;
         if (create_ucb_content( &ucbContent, m_context, xCmdEnv,
                                 false /* no throw */ ))
@@ -140,10 +140,14 @@ void PackageManagerImpl::initActivationLayer(
                                                      false /* no throw */) );
                 if (mediaType.getLength() >0)
                 {
-                    OUString dbData;
+                    ActivePackages::Data dbData;
                     insertToActivationLayer(
-                        title, mediaType, sourceContent, &dbData );
+                        mediaType, sourceContent, title, &dbData );
                     insertToActivationLayerDB( title, dbData );
+                        //TODO #i73136#: insertToActivationLayerDB needs id not
+                        // title, but the whole m_activePackages.getLength()==0
+                        // case (i.e., document-relative deployment) currently
+                        // does not work, anyway.
                 }
             }
         }
@@ -155,13 +159,13 @@ void PackageManagerImpl::initActivationLayer(
         m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
         create_folder( 0, m_activePackages_expanded, xCmdEnv, !m_readOnly );
         m_activePackagesDB.reset(
-            new PersistentMap(
+            new ActivePackages(
                 m_activePackages_expanded + OUSTR(".db"), m_readOnly ) );
 
         if (! m_readOnly)
         {
             // clean up activation layer, scan for zombie temp dirs:
-            t_string2string_map title2temp( m_activePackagesDB->getEntries() );
+            ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
             ::ucb::Content tempFolder( m_activePackages_expanded, xCmdEnv );
             Reference<sdbc::XResultSet> xResultSet(
@@ -185,8 +189,8 @@ void PackageManagerImpl::initActivationLayer(
             {
                 OUString const & tempEntry = tempEntries[ pos ];
                 const MatchTempDir match( tempEntry );
-                if (::std::find_if( title2temp.begin(), title2temp.end(),
-                                    match ) == title2temp.end())
+                if (::std::find_if( id2temp.begin(), id2temp.end(), match ) ==
+                    id2temp.end())
                 {
                     // temp entry not needed anymore:
                     const OUString url( makeURL( m_activePackages_expanded,
@@ -496,8 +500,8 @@ OUString PackageManagerImpl::detectMediaType(
 
 //______________________________________________________________________________
 OUString PackageManagerImpl::insertToActivationLayer(
-    OUString const &/* title */, OUString const & mediaType,
-    ::ucb::Content const & sourceContent_, OUString * dbData )
+    OUString const & mediaType, ::ucb::Content const & sourceContent_,
+    OUString const & title, ActivePackages::Data * dbData )
 {
     ::ucb::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
@@ -548,21 +552,17 @@ OUString PackageManagerImpl::insertToActivationLayer(
         throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
 
     // write to DB:
-    ::rtl::OUStringBuffer buf;
-    buf.append( tempEntry );
-    buf.append( static_cast<sal_Unicode>(';') );
-    buf.append( mediaType );
-    *dbData = buf.makeStringAndClear();
+    dbData->temporaryName = tempEntry;
+    dbData->fileName = title;
+    dbData->mediaType = mediaType;
     return destFolder;
 }
 
 //______________________________________________________________________________
 void PackageManagerImpl::insertToActivationLayerDB(
-    OUString const & title, OUString const & dbData )
+    OUString const & id, ActivePackages::Data const & dbData )
 {
-    OUString inserted( dbData );
-    OSL_ASSERT( ! m_activePackagesDB->has( title ) );
-    m_activePackagesDB->put( title, inserted, false /* ! overwrite */ );
+    m_activePackagesDB->put( id, dbData );
 }
 
 //______________________________________________________________________________
@@ -570,31 +570,33 @@ void PackageManagerImpl::insertToActivationLayerDB(
     installed which needs to be uninstalled, before the new extension can be installed.
 */
 bool PackageManagerImpl::checkUpdate(
-    OUString const & title, Reference<deployment::XPackage> const & package,
+    Reference<deployment::XPackage> const & package,
     Reference<XCommandEnvironment> const & origCmdEnv,
     Reference<XCommandEnvironment> const & wrappedCmdEnv )
 {
+    OUString id(dp_misc::getIdentifier(package));
+    OUString fn(package->getName());
     bool removeExisting = false;
-    if (m_activePackagesDB->has( title ))
+    if (m_activePackagesDB->has( id, fn ))
     {
         // package already deployed, interact --force:
         Any request(
             (deployment::VersionException(
-                getResourceString( RID_STR_PACKAGE_ALREADY_ADDED ) + title,
+                getResourceString( RID_STR_PACKAGE_ALREADY_ADDED ) + id,
                 static_cast<OWeakObject *>(this), package,
-                getDeployedPackage_( title, origCmdEnv ) ) ) );
+                getDeployedPackage_( id, fn, origCmdEnv ) ) ) );
         bool replace = false, abort = false;
         if (! interactContinuation(
                 request, task::XInteractionApprove::static_type(),
                 wrappedCmdEnv, &replace, &abort )) {
             OSL_ASSERT( !replace && !abort );
             throw deployment::DeploymentException(
-                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + id,
                 static_cast<OWeakObject *>(this), request );
         }
         if (abort || !replace)
             throw CommandFailedException(
-                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + id,
                 static_cast<OWeakObject *>(this), request );
 
         // remove clashing package before registering new version:
@@ -609,14 +611,15 @@ bool PackageManagerImpl::checkUpdate(
 //true.
 //ToDo: Function always returns true or throws an exception
 bool PackageManagerImpl::checkInstall(
-    OUString const & title, Reference<deployment::XPackage> const & package,
+    Reference<deployment::XPackage> const & package,
     Reference<XCommandEnvironment> const & cmdEnv)
 {
-    if ( ! m_activePackagesDB->has( title ))
+    OUString id(dp_misc::getIdentifier(package));
+    if ( ! m_activePackagesDB->has( id, package->getName() ))
     {
         Any request(
             deployment::InstallException(
-                OUSTR("Extension ") + title + OUSTR("is about to be installed."),
+                OUSTR("Extension ") + id + OUSTR("is about to be installed."),
                 static_cast<OWeakObject *>(this), package));
         bool approve = false, abort = false;
         if (! interactContinuation(
@@ -625,12 +628,12 @@ bool PackageManagerImpl::checkInstall(
         {
             OSL_ASSERT( !approve && !abort );
             throw deployment::DeploymentException(
-                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + id,
                 static_cast<OWeakObject *>(this), request );
         }
         if (abort || !approve)
             throw CommandFailedException(
-                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + id,
                 static_cast<OWeakObject *>(this), request );
 
     }
@@ -695,6 +698,10 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 // set media-type:
                 ::ucb::Content docContent(
                     makeURL( m_context, title_enc ), xCmdEnv );
+                    //TODO #i73136#: using title instead of id can lead to
+                    // clashes, but the whole m_activePackages.getLength()==0
+                    // case (i.e., document-relative deployment) currently does
+                    // not work, anyway.
                 docContent.setPropertyValue(
                     OUSTR("MediaType"), Any(mediaType) );
 
@@ -705,9 +712,9 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 catch (UnsupportedCommandException &) {
                 }
             }
-            OUString dbData;
+            ActivePackages::Data dbData;
             destFolder = insertToActivationLayer(
-                title, mediaType, sourceContent, &dbData );
+                mediaType, sourceContent, title, &dbData );
 
             // xxx todo: fire before bind(), registration?
             // fireModified();
@@ -719,23 +726,24 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             OSL_ASSERT( xPackage.is() );
             if (xPackage.is())
             {
+                OUString id( dp_misc::getIdentifier( xPackage ) );
                 bool install = false;
                 try
                 {
                     //checkInstall throws an exception if the user denies the installation
-                    checkInstall(title, xPackage, xCmdEnv);
+                    checkInstall(xPackage, xCmdEnv);
                     //checkUpdate throws an exception if the user cancels the interaction.
                     //For example, he may be asked if he wants to replace the older version
                     //with the new version.
                     //checkUpdates must be called before checkPrerequisites
                     bool removeExisting = checkUpdate(
-                        title, xPackage, xCmdEnv_, xCmdEnv );
+                        xPackage, xCmdEnv_, xCmdEnv );
 
                     if (xPackage->checkPrerequisites(xAbortChannel, xCmdEnv, removeExisting, m_context))
                     {
                         if (removeExisting)
                             // remove extension which is already installed
-                            removePackage_(title, xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
+                            removePackage_(id, xPackage->getName(), xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
                         install = true;
                     }
                 }
@@ -747,7 +755,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 if (install)
                 {
                     //install new version of extension
-                    insertToActivationLayerDB( title, dbData );
+                    insertToActivationLayerDB( id, dbData );
                     xPackage->registerPackage( xAbortChannel, xCmdEnv );
                 }
                 else
@@ -800,26 +808,25 @@ void PackageManagerImpl::deletePackageFromCache(
 }
 //______________________________________________________________________________
 void PackageManagerImpl::removePackage_(
-    OUString const & name,
+    OUString const & id, OUString const & fileName,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const ::osl::MutexGuard guard( getMutex() );
     Reference<deployment::XPackage> xPackage( getDeployedPackage_(
-                                                  name, xCmdEnv ) );
-    OSL_ASSERT( xPackage->getURL().equals( getDeployPath(name) ) );
+                                                  id, fileName, xCmdEnv ) );
     beans::Optional< beans::Ambiguous<sal_Bool> > option(
         xPackage->isRegistered( Reference<task::XAbortChannel>(),
                                 xCmdEnv ) );
     if (!option.IsPresent || option.Value.IsAmbiguous || option.Value.Value)
         xPackage->revokePackage( xAbortChannel, xCmdEnv );
     try_dispose( xPackage );
-    m_activePackagesDB->erase( name ); // to be removed upon next start
+    m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
 }
 
 //______________________________________________________________________________
 void PackageManagerImpl::removePackage(
-    OUString const & name,
+    OUString const & id, ::rtl::OUString const & fileName,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
     throw (deployment::DeploymentException, CommandFailedException,
@@ -839,7 +846,7 @@ void PackageManagerImpl::removePackage(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        removePackage_( name, xAbortChannel, xCmdEnv );
+        removePackage_( id, fileName, xAbortChannel, xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
@@ -863,63 +870,60 @@ void PackageManagerImpl::removePackage(
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
-            getResourceString(RID_STR_ERROR_WHILE_REMOVING) + name,
+            getResourceString(RID_STR_ERROR_WHILE_REMOVING) + id,
             static_cast<OWeakObject *>(this), exc );
     }
 }
 
 //______________________________________________________________________________
-OUString PackageManagerImpl::getDeployPath( OUString const & name,
-                                            OUString * pMediaType,
-                                            bool ignoreAlienPlatforms )
+OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
 {
-    OUString val;
-    if (m_activePackagesDB->get( &val, name ))
-    {
-        sal_Int32 semi = val.indexOf(';');
-        OSL_ASSERT( semi > 0 );
-        if (pMediaType != 0)
-            *pMediaType = val.copy( semi + 1 );
-        if (ignoreAlienPlatforms)
-        {
-            String type, subType;
-            INetContentTypeParameterList params;
-            if (INetContentTypes::parse(
-                    pMediaType == 0 ? val.copy( semi + 1 ) : *pMediaType,
-                    type, subType, &params ))
-            {
-                INetContentTypeParameter const * param = params.find(
-                    ByteString("platform") );
-                if (param != 0 && !platform_fits( param->m_sValue ))
-                    throw lang::IllegalArgumentException(
-                        getResourceString(RID_STR_NO_SUCH_PACKAGE) + name,
-                        static_cast<OWeakObject *>(this),
-                        static_cast<sal_Int16>(-1) );
-            }
-        }
+    ::rtl::OUStringBuffer buf;
+    buf.append( data.temporaryName );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_/") );
+    buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
+                                    rtl_UriEncodeIgnoreEscapes,
+                                    RTL_TEXTENCODING_UTF8 ) );
+    return makeURL( m_activePackages, buf.makeStringAndClear() );
+}
 
-        ::rtl::OUStringBuffer buf;
-        buf.append( val.copy( 0, semi ) ); // tempEntry
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_/") );
-        buf.append( ::rtl::Uri::encode( name, rtl_UriCharClassPchar,
-                                        rtl_UriEncodeIgnoreEscapes,
-                                        RTL_TEXTENCODING_UTF8 ) );
-        return makeURL( m_activePackages, buf.makeStringAndClear() );
+//______________________________________________________________________________
+Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
+    OUString const & id, OUString const & fileName,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    ActivePackages::Data val;
+    if (m_activePackagesDB->get( &val, id, fileName ))
+    {
+        return getDeployedPackage_( id, val, xCmdEnv, false );
     }
     throw lang::IllegalArgumentException(
-        getResourceString(RID_STR_NO_SUCH_PACKAGE) + name,
+        getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,
         static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
 }
 
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
-    OUString const & name, Reference<XCommandEnvironment> const & xCmdEnv,
-    bool ignoreAlienPlatforms )
+    OUString const & id, ActivePackages::Data const & data,
+    Reference<XCommandEnvironment> const & xCmdEnv, bool ignoreAlienPlatforms )
 {
-    OUString mediaType;
-    OUString deployPath( getDeployPath(
-                             name, &mediaType, ignoreAlienPlatforms ) );
-    return m_xRegistry->bindPackage( deployPath, mediaType, xCmdEnv );
+    if (ignoreAlienPlatforms)
+    {
+        String type, subType;
+        INetContentTypeParameterList params;
+        if (INetContentTypes::parse( data.mediaType, type, subType, &params ))
+        {
+            INetContentTypeParameter const * param = params.find(
+                ByteString("platform") );
+            if (param != 0 && !platform_fits( param->m_sValue ))
+                throw lang::IllegalArgumentException(
+                    getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,
+                    static_cast<OWeakObject *>(this),
+                    static_cast<sal_Int16>(-1) );
+        }
+    }
+    return m_xRegistry->bindPackage(
+        getDeployPath( data ), data.mediaType, xCmdEnv );
 }
 
 //______________________________________________________________________________
@@ -928,15 +932,15 @@ PackageManagerImpl::getDeployedPackages_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     ::std::vector< Reference<deployment::XPackage> > packages;
-    t_string2string_map title2temp( m_activePackagesDB->getEntries() );
-    t_string2string_map::const_iterator iPos( title2temp.begin() );
-    t_string2string_map::const_iterator const iEnd( title2temp.end() );
+    ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
+    ActivePackages::Entries::const_iterator iPos( id2temp.begin() );
+    ActivePackages::Entries::const_iterator const iEnd( id2temp.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
         try {
             packages.push_back(
                 getDeployedPackage_(
-                    iPos->first, xCmdEnv,
+                    iPos->first, iPos->second, xCmdEnv,
                     true /* xxx todo: think of GUI:
                             ignore other platforms than the current one */ ) );
         }
@@ -952,7 +956,8 @@ PackageManagerImpl::getDeployedPackages_(
 
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
-    OUString const & name, Reference<XCommandEnvironment> const & xCmdEnv_ )
+    OUString const & id, ::rtl::OUString const & fileName,
+    Reference<XCommandEnvironment> const & xCmdEnv_ )
     throw (deployment::DeploymentException, CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)
 {
@@ -965,7 +970,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
 
     try {
         const ::osl::MutexGuard guard( getMutex() );
-        return getDeployedPackage_( name, xCmdEnv );
+        return getDeployedPackage_( id, fileName, xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
@@ -987,7 +992,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         logIntern( exc );
         throw deployment::DeploymentException(
             // ought never occur...
-            OUSTR("error while accessing deployed package: ") + name,
+            OUSTR("error while accessing deployed package: ") + id,
             static_cast<OWeakObject *>(this), exc );
     }
 }
