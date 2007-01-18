@@ -1,4 +1,4 @@
-/* RCS  $Id: stat.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: stat.c,v 1.2 2007-01-18 09:32:36 vg Exp $
 --
 -- SYNOPSIS
 --      Bind a target name to a file.
@@ -51,25 +51,38 @@ static  int _check_dir_list ANSI((CELLPTR, CELLPTR, int, int));
 #define DO_STAT(A,B,C,D)  Do_stat(A,B,C,D)
 #endif
 
-static char *_first;    /* local storage of first attempted path */
+static char *_first;    /* If set this variable saves the first pathname that was
+             * used to stat the target in, if subsequently a match is
+             * found it is overridden by the matched path name. */
 
 PUBLIC void
 Stat_target( cp, setfname, force )/*
 ====================================
     Stat a target.  When doing so follow the following rules, suppose
     that cp->CE_NAME points at a target called fred.o:
+    (See also man page: BINDING TARGETS)
 
         0.      If A_SYMBOL attribute set look into the library
             then do the steps 1 thru 4 on the resulting name.
         1.  Try path's obtained by prepending any dirs found as
             prerequisites for .SOURCE.o.
         2.  If not found, do same as 2 but use .SOURCE
+            The predefined '.SOURCE  : .NULL' targets takes care
+            of local/absolute paths.
         3.  If not found and .LIBRARYM attribute for the target is
             set then look for it in the corresponding library.
             4.  If found in step 0 thru 3, then ce_fname points at
             file name associate with target, else ce_fname points
             at a file name built by the first .SOURCE* dir that
-            applied. */
+            applied.
+    If setfname is != 0 this tells _check_dir_list() to set the static
+    _first variable. setfname also controls the use of _first.
+    If it is -1 ce_fname (the file name associated with target) is only
+    set if a matching file was found and statted, if it is 1 ce_fname
+    is set to _first even if target doesn't exist yet.
+
+    If force is TRUE really stat the target. Do not use the directory
+    cache but update the files entry if it's enabled. */
 
 CELLPTR cp;
 int     setfname;
