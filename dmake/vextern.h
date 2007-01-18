@@ -1,4 +1,4 @@
-/* RCS  $Id: vextern.h,v 1.3 2006-06-29 11:25:02 ihi Exp $
+/* RCS  $Id: vextern.h,v 1.4 2007-01-18 09:33:01 vg Exp $
 --
 -- SYNOPSIS
 --      Global variable declarations.
@@ -68,7 +68,6 @@ EXTERN  int     Prep;       /* Value of macro PREP            */
 EXTERN  int Def_targets;    /* TRUE if defining targets - Only used   *
                  * in Def_cell().             */
 EXTERN  int Skip_to_eof;    /* TRUE if asked to skip to eof on input  */
-EXTERN  int     DynamicNestLevel;/* Value of DYNAMICNESTINGLEVEL macro    */
 EXTERN  int     NameMax;        /* The value of NAMEMAX                   */
 
 
@@ -80,6 +79,7 @@ EXTERN  int Wait_for_completion; /* Wait for subprocess to finish     */
 EXTERN  int Is_exec_shell;  /* Indicate shell escape                  */
 EXTERN  CELLPTR Shell_exec_target; /* Keep Current_target for _exec__shell */
 EXTERN  FILE*   stdout_redir;   /* For _exec_shell client redirects       */
+EXTERN  int zerofd;         /* File descriptor for /dev/null          */
 EXTERN  int Doing_bang; /* TRUE if target timestamp needs not to be
                  * updated immediately. */
 EXTERN  int Packed_shell;   /* TRUE if packed args to use a shell     */
