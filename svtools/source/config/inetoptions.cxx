@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:24:47 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ namespace {
 
 template< typename T > inline T takeAny(star::uno::Any const & rAny)
 {
-    T aValue;
+    T aValue = T();
     rAny >>= aValue;
     return aValue;
 }
