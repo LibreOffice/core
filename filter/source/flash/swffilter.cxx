@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swffilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:26:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:09:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,7 @@ OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > 
 template <typename TYPE>
 TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const sal_Char* name, TYPE def)
 {
-    TYPE temp;
+    TYPE temp = TYPE();
 
     sal_Int32 nLength = aPropertySequence.getLength();
     const PropertyValue * pValue = aPropertySequence.getConstArray();
