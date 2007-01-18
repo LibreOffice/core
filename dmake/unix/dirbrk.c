@@ -1,4 +1,4 @@
-/* RCS  $Id: dirbrk.c,v 1.1.1.1 2000-09-22 15:33:33 hr Exp $
+/* RCS  $Id: dirbrk.c,v 1.2 2007-01-18 09:44:04 vg Exp $
 --
 -- SYNOPSIS
 --      Define the directory separator string.
@@ -38,5 +38,9 @@ PUBLIC int
 If_root_path(name)
 char *name;
 {
-   return( strchr(DirBrkStr, *name) != NIL(char) );
+   return( strchr(DirBrkStr, *name) != NIL(char)
+#ifdef HAVE_DRIVE_LETTERS
+       || (*name && name[1] == ':' && isalpha(*name))
+#endif
+       );
 }
