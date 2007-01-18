@@ -1,6 +1,6 @@
 /* $RCSfile: runargv.c,v $
--- $Revision: 1.10 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:47:57 $
+-- $Revision: 1.11 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:44:15 $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -34,37 +34,78 @@ Exec_commands() [make.c] builds the recipes associated to the given target.
 
 Do_cmnd() [sysintf.c] feeds the given command or command group to runargv().
 
-runargv() [unix/runargv] The actual child processes are started in this
-  function, even in non parallel builds (MAXPROCESS==1) child processes are
-  created.
-  If recipes for a target are currently running attach them to the process
-  array entry (_procs[i]) of that target and return.
-  If the maximum number of concurrently running processes is reached
-  Wait_for_child(?, -1) is used to wait for a process array entry to become
+The following flowchart decripes the process flow starting with runargv,
+descriptions for each of the functions are following.
+
+  +--------------------------------+
+  |            runargv             | <+
+  +--------------------------------+  |
+    |               ^                 |
+    |               | returns if      |
+    | calls         | wfc is false    |
+    v               |                 |
+  +--------------------------------+  |
+  |           _add_child           |  |
+  +--------------------------------+  |
+    |               ^                 |
+    | calls if      |                 | if another process
+    | wfc is true   | returns         | is queued:
+    v               |                 | recursive call
+  +--------------------------------+  |
+  |         Wait_for_Child         |  |
+  +--------------------------------+  |
+    |               ^                 |
+    |               | process queue   |
+    | calls         | is empty        |
+    v               |                 |
+  +--------------------------------+  |
+  |        _finished_child         | -+
+  +--------------------------------+
+
+
+
+runargv() [unix/runargv] The runargv function manages up to MAXPROCESS
+  process queues (_procs[i]) for parallel process execution and hands
+  the actual commands down to the operating system.
+  Each of the process queues handles the sequential execution of commands
+  that  belong to that process queue. Usually this means the sequential
+  execution of the recipe lines that belong to one target.
+  Even in non parallel builds (MAXPROCESS==1) child processes are
+  created and handled.
+  If recipes for a target are currently running attach them to the
+  corresponding process queue (_procs[i]) of that target and return.
+  If the maximum number (MAXPROCESS) of concurrently running queues is
+  reached use Wait_for_child(?, -1) to wait for a process queue to become
   available.
   New child processes are started using:
     spawn:       posix_spawnp (POSIX) or spawnvp (cygwin).
-    fork/execvp: Create a client process with fork and run the command with
-                 execvp.
+    fork/execvp: Create a client process with fork and run the command
+                 with execvp.
   The parent calls _add_child() to track the child.
 
-_add_child() [unix/runargv] creates a new process array entry and enters the child
-  parameters.
-  If Wait_for_completion (global variable) is set the function calls
-  Wait_for_child to wait for the new process to be finished.
+_add_child(..., wfc) [unix/runargv] creates (or reuses) a process queue
+  and enters the child's parameters.
+  If wfc (wait for completion) is TRUE the function calls
+  Wait_for_child to wait for the whole process queue to be finished.
 
-Wait_for_child(abort_flg, pid) [unix/runargv] waits for the child processes
-  with pid to finish. All finished processes are handled by calling
-  _finished_child() for each of them.
-  If pid == -1 wait for the next child process to finish.
-  If abort_flg is TRUE no further processes will be added to the process
-  array.
-  If the global variable Wait_for_completion is set then all finished
-  processes are handled until the process with the given pid is reached.
+Wait_for_child(abort_flg, pqid) [unix/runargv] waits either for the current
+  process from process queue pqid to finish or if the W_WFC attribute is
+  set for all entries of that process queue (recursively) to finish.
+  All finished processes are handled by calling _finished_child() for each
+  of them.
+  If pqid == -1 wait for the next process to finish but honor the A_WFC
+  attribute of that process (queue) and wait for the whole queue if needed.
+  If abort_flg is TRUE no further processes will be added to any process
+  queue.
+  If a pqid is given but a process from another process queue finishes
+  first that process is handled and A_WFC is also honored.
+  All finished processes are processed until the process from the given pqid
+  is reached or gone (might have been handled while finishing another process
+  queue).
 
-_finished_child(pid, ?) [unix/runargv] handles the finished child. If there are
-  more commands in this process array entry start the next with runargv()
-  otherwise .
+_finished_child(pid, ?) [unix/runargv] handles the finished child. If there
+  are more commands in the corresponding process queue start the next with
+  runargv().
 */
 
 #include <signal.h>
@@ -97,9 +138,8 @@ _finished_child(pid, ?) [unix/runargv] handles the finished child. If there are
 typedef struct prp {
    char *prp_cmd;
    int   prp_group;
-   int   prp_ignore;
+   t_attr prp_attr;
    int   prp_last;
-   int   prp_shell;
    struct prp *prp_next;
 } RCP, *RCPPTR;
 
@@ -109,18 +149,20 @@ typedef struct pr {
    CELLPTR  pr_target;
    int      pr_ignore;
    int      pr_last;
+   int      pr_wfc;
    RCPPTR   pr_recipe;
    RCPPTR   pr_recipe_end;
    char        *pr_dir;
 } PR;
 
 static PR  *_procs    = NIL(PR); /* Array to hold concurrent processes. */
+static int  _procs_size = 0;     /* Savegard to find MAXPROCESS changes. */
 static int  _proc_cnt = 0;       /* Number of running processes. */
 static int  _abort_flg= FALSE;
 static int  _use_i    = -1;
 
-static  int _add_child ANSI((int, CELLPTR, int, int));
-static  void    _attach_cmd ANSI((char *, int, int, CELLPTR, int, int));
+static  int _add_child ANSI((int, CELLPTR, int, int, int));
+static  void    _attach_cmd ANSI((char *, int, CELLPTR, t_attr, int));
 static  void    _finished_child ANSI((int, int));
 static  int     _running ANSI((CELLPTR));
 
@@ -133,7 +175,7 @@ private_strerror (errnum)
 #ifdef arm32
   extern  const char * const sys_errlist[];
 #else
-#if defined(linux) || defined(__FreeBSD__)
+#if defined(linux) || defined(__FreeBSD__) || defined(__OpenBSD__)
   extern  const char * const sys_errlist[];
 #else
   extern  char *sys_errlist[];
@@ -150,51 +192,59 @@ private_strerror (errnum)
 #endif /* HAVE_STRERROR */
 
 PUBLIC int
-runargv(target, ignore, group, last, shell, cmd)/*
-==================================================
-  Execute the command given by cmd. */
+runargv(target, group, last, cmnd_attr, cmd)/*
+==============================================
+  Execute the command given by cmd.
+
+  Return 0 if the command executed and finished or
+         1 if the command started and is running.
+ */
 CELLPTR target;
-int     ignore;
 int group;
 int last;
-int     shell;
+t_attr  cmnd_attr; /* Attributes for current cmnd. */
 char    *cmd;
 {
+   int  ignore = (cmnd_attr & A_IGNORE)!= 0; /* Ignore errors ('-'). */
+   int  shell  = (cmnd_attr & A_SHELL) != 0; /* Use shell ('+'). */
+   int  mute = (cmnd_attr & A_MUTE) != 0; /* Mute output ('@@'). */
+   int  wfc = (cmnd_attr & A_WFC) != 0; /* Wait for completion. */
+
    int          pid;
    int          st_pq = 0; /* Current _exec_shell target process index */
    char         **argv;
 
-   int old_stdout;   /* For internal echo and spawn. */
+   int old_stdout = -1; /* For shell escapes and */
+   int old_stderr = -1; /* @@-recipe silencing.  */
    int internal = 0; /* Used to indicate internal command. */
 
-   /* Special handling for the shell function macro is required. If the currend
-    * command is called as part of a shell escape in a recipe make sure that all
-    * previous recipe lines of this target have finished. */
+   /* Special handling for the shell function macro is required. If the
+    * currend command is called as part of a shell escape in a recipe make
+    * sure that all previous recipe lines of this target have finished. */
    if( Is_exec_shell ) {
       if( (st_pq = _running(Shell_exec_target)) != -1 ) {
-     Wait_for_child(FALSE, _procs[st_pq].pr_pid);
+     RCPPTR rp;
+     /* Add WFC to _procs[st_pq]. */
+     _procs[st_pq].pr_wfc = TRUE;
+     /* Set also the A_WFC flag in the recipe attributes. */
+     for( rp = _procs[st_pq].pr_recipe ; rp != NIL(RCP); rp = rp->prp_next )
+        rp->prp_attr |= A_WFC;
+
+     Wait_for_child(FALSE, st_pq);
       }
    } else {
       if( _running(target) != -1 /*&& Max_proc != 1*/ ) {
      /* The command will be executed when the previous recipe
       * line completes. */
-     _attach_cmd( cmd, group, ignore, target, last, shell );
+     _attach_cmd( cmd, group, target, cmnd_attr, last );
      return(1);
       }
    }
 
-   /*  Any Fatal call can potentially loop by recursion because we
-    *  are called from the Quit routine that Fatal indirectly calls
-    *  since Fatal should not happen I have left this bug in here */
-   while( _proc_cnt == Max_proc ) { /* This forces sequential execution for Max_proc == 1. */
-      if( Wait_for_child(FALSE, -1) == -1 ) {
-     if( ! in_quit() || errno != ECHILD )
-        Fatal( "Lost a child %d: %s", errno, strerror( errno ) );
-     else  {/* we are quitting and the _proc_cnt was stuffed up by ^C */
-        fprintf(stderr,"_proc_cnt %d, Max_proc %d\n",_proc_cnt,Max_proc);
-        _proc_cnt = 0;
-     }
-      }
+   /* If all process array entries are used wait until we get a free
+    * slot. For Max_proc == 1 this forces sequential execution. */
+   while( _proc_cnt == Max_proc ) {
+      Wait_for_child(FALSE, -1);
    }
 
    /* remove leading whitespace */
@@ -219,23 +269,37 @@ char    *cmd;
      while( iswhite(*cmd) ) ++cmd;
       }
 
+      /* redirect output for _exec_shell / @@-recipes. */
       if( Is_exec_shell ) {
+     /* Add error checking? */
      old_stdout = dup(1);
-     close(1);
-     dup( fileno(stdout_redir) );
+     dup2( fileno(stdout_redir), 1 );
       }
+      if( mute ) {
+     old_stderr = dup(2);
+     dup2( zerofd, 2 );
+
+     if( !Is_exec_shell ) {
+        old_stdout = dup(1);
+        dup2( zerofd, 1 );
+     }
+      }
+
       printf("%s%s", cmd, nl ? "\n" : "");
       fflush(stdout);
-      if( Is_exec_shell ) {
-     close(1);
-     dup(old_stdout);
+
+      /* Restore stdout/stderr if needed. */
+      if( old_stdout != -1 ) {
+     dup2(old_stdout, 1);
+     if( old_stderr != -1 )
+        dup2(old_stderr, 2);
       }
 
       internal = 1;
    }
    if ( internal ) {
       /* Use _add_child() / _finished_child() with internal command. */
-      int cur_proc = _add_child(-1, target, ignore, last);
+      int cur_proc = _add_child(-1, target, ignore, last, FALSE);
       _finished_child(-1, cur_proc);
       return 0;
    }
@@ -248,9 +312,18 @@ char    *cmd;
    /* As no other childs are started while the output is redirected this
     * is save. */
    if( Is_exec_shell ) {
+      /* Add error checking? */
       old_stdout = dup(1);
-      close(1);
-      dup( fileno(stdout_redir) );
+      dup2( fileno(stdout_redir), 1 );
+   }
+   if( mute ) {
+      old_stderr = dup(2);
+      dup2( zerofd, 2 );
+
+      if( !Is_exec_shell ) {
+     old_stdout = dup(1);
+     dup2( zerofd, 1 );
+      }
    }
 #if __CYGWIN__
    pid = spawnvp(_P_NOWAIT, argv[0], (const char**) argv);
@@ -258,17 +331,26 @@ char    *cmd;
    if (posix_spawnp (&pid, argv[0], NULL, NULL, argv, (char *)NULL))
       pid = -1; /* posix_spawn failed */
 #endif  /* __CYGWIN__ */
-   if( Is_exec_shell ) {
-      close(1);
-      dup(old_stdout);
+   if( old_stdout != -1 ) {
+      dup2(old_stdout, 1);
+      if( old_stderr != -1 )
+     dup2(old_stderr, 2);
    }
-   if(pid == -1)
-   {   /* spawn failed */
-       Error("%s: %s", argv[0], strerror(errno));
-       Handle_result(-1, ignore, _abort_flg, target);
-       return(-1);
+   if(pid == -1) {
+      /* spawn failed */
+      int continue_status = Continue;
+      Continue = TRUE;   /* survive error message */
+      Error("%s: %s", argv[0], strerror(errno));
+      Continue = continue_status;
+
+      Handle_result(-1, ignore, _abort_flg, target);
+      /* Handle_result() aborts dmake if we are not told to
+       * ignore errors. If we reach the this point return 0 as
+       * errors are obviously ignored and indicate that the process
+       * finished. */
+      return 0;
    } else {
-       _add_child(pid, target, ignore, last);
+      _add_child(pid, target, ignore, last, wfc);
    }
 #else  /* ENABLE_SPAWN && ... */
 
@@ -276,26 +358,40 @@ char    *cmd;
    switch( pid=fork() ){
 
    case -1: /* fork failed */
-      Error("%s: %s", argv[0], strerror( errno ));
-      Handle_result(-1, ignore, _abort_flg, target);
-      return(-1);
+      Fatal("fork failed: %s: %s", argv[0], strerror( errno ));
 
    case 0:  /* child */
-      /* redirect stdout for _exec_shell */
+      /* redirect output for _exec_shell / @@-recipes. */
       if( Is_exec_shell ) {
-     /* old_stdout = dup(1); */
-         close(1);
-         dup( fileno(stdout_redir) );
+     /* Add error checking? */
+     old_stdout = dup(1);
+     dup2( fileno(stdout_redir), 1 );
+      }
+      if( mute ) {
+     old_stderr = dup(2);
+     dup2( zerofd, 2 );
+
+     if( !Is_exec_shell ) {
+        old_stdout = dup(1);
+        dup2( zerofd, 1 );
+     }
       }
       execvp(argv[0], argv);
-      /* restoring stdout is not needed */
+      /* restoring output to catch potential error output if execvp()
+       * failed. */
+      if( old_stdout != -1 ) {
+     dup2(old_stdout, 1);
+     if( old_stderr != -1 )
+        dup2(old_stderr, 2);
+      }
       Continue = TRUE;   /* survive error message */
       Error("%s: %s", argv[0], strerror( errno ));
       kill(getpid(), SIGTERM);
       /*NOTREACHED*/
+      Fatal("\nInternal Error - kill could't kill child %d.\n", getpid());
 
    default: /* parent */
-      _add_child(pid, target, ignore, last);
+      _add_child(pid, target, ignore, last, wfc);
    }
 
 #endif  /* ENABLE_SPAWN && ... */
@@ -305,23 +401,58 @@ char    *cmd;
 
 
 PUBLIC int
-Wait_for_child( abort_flg, pid )/*
-==================================
-  Wait for the child processes with pid to to finish. All finished processes
-  are handled by calling  _finished_child() for each of them.
-  If pid == -1 wait for the next child process to finish.
-  If abort_flg is TRUE no further processes will be added to the process
-  array.
-  If the global variable Wait_for_completion is set then all finished
-  processes are handled until the process with the given pid is reached.
+Wait_for_child( abort_flg, pqid )/*
+===================================
+  Wait for the next processes from process queue pqid to finish. All finished
+  processes are handled by calling  _finished_child() for each of them.
+  If pqid == -1 wait for the next process to finish.
+  If abort_flg is TRUE no further processes will be added to any process
+  queue. The A_WFC attribute is honored, see the documentation at the top
+  of this file.
+  Return 0 if we successfully waited for a process and -1 if there was nothing
+  to wait for.
 */
 int abort_flg;
-int pid;
+int pqid;
 {
+   int pid;
    int wid;
    int status;
+   /* Never wait for internal commands. */
    int waitchild;
    int is_exec_shell_status = Is_exec_shell;
+
+   if( !_procs ) {
+      /* No process was ever created, i.e. _procs is not yet initialized.
+       * Nothing to wait for. */
+     return -1;
+   }
+
+   if( pqid > Max_proc ) Fatal("Internal Error: pqid > Max_proc !");
+
+   if( pqid == -1 ) {
+      /* Check if there is something to wait for. */
+      int i;
+      for( i=0; i<Max_proc && !_procs[i].pr_valid; i++ )
+     ;
+      if( i == Max_proc )
+     return(-1);
+
+      pid = -1;
+      waitchild = FALSE;
+   }
+   else {
+      /* Check if pqid is active. */
+      if( !_procs[pqid].pr_valid ) {
+     /* Make this an error? */
+     Warning("Internal Warning: pqid is not active!?");
+     return(-1);
+      }
+
+      pid = _procs[pqid].pr_pid;
+      waitchild = _procs[pqid].pr_wfc;
+   }
+
 
    /* It is impossible that processes that were started from _exec_shell
     * have follow-up commands in its process entry. Unset Is_exec_shell
@@ -330,21 +461,80 @@ int pid;
     * leaving this function. */
    Is_exec_shell = FALSE;
 
-   waitchild = (pid == -1)? FALSE : Wait_for_completion;
-
    do {
-      wid = wait(&status);
+      /* Wait for the next process to finish. */
+      if( (pid != -1) && (wid = waitpid(pid, &status, WNOHANG)) ) {
+     /* if wid is 0 this means that pid didn't finish yet. In this case
+      * just handle the next finished process in the following "else". */
+     ;
+      }
+      else {
+     /* Here might be the culprit for the famous OOo build hang. If
+      * cygwin manages to "loose" a process and none else is left the
+      * wait() will wait forever. */
+     wid = wait(&status);
+     /* If we get an error tell the error handling routine below that we
+      * were not waiting for a specific pid. */
+     if( wid  == -1 )
+        pid = -1;
+      }
 
+      /* If ECHILD is set from waitpid/wait then no child was left. */
       if( wid  == -1 ) {
-     Is_exec_shell = is_exec_shell_status;
-     return(-1);
+     if(errno != ECHILD) {
+        /* Wait was interrupted or a child was terminated (SIGCHLD) */
+        if ( in_quit() ) {
+           /* We're already terminating, just continue. */
+           return 0;
+        } else {
+           Fatal( "dmake was interrupted or a child terminated: %d : %s - stopping all childs ...", errno, strerror( errno ) );
+        }
+     } else {
+        if( pid != -1 ) {
+           /* If we know the pid disable the pq entry. */
+           if( _procs[pqid].pr_valid ) {
+          _procs[pqid].pr_valid = 0;
+                  _procs[pqid].pr_recipe = NIL(RCP);
+          _proc_cnt--;
+           }
+        } else {
+           /* otherwise disable all remaining pq's. As we don't know
+        * which pid failed there is no gracefull way to terminate. */
+           int i;
+           for( i=0; i<Max_proc; i++ ) {
+          _procs[i].pr_valid = 0;
+                  _procs[i].pr_recipe = NIL(RCP);
+               }
+           _proc_cnt = 0;
+        }
+        /* The pid we were waiting for or any of the remaining childs
+         * (pid == -1) is missing. This should not happen and means
+         * that the process got lost or was treated elsewhere. */
+        Fatal( "Internal Error: Child is missing but still listed in _procs[x] %d: %s\n"
+           "\nTemporary or .ERRREMOVE targets might not have been removed!\n",
+           errno, strerror( errno ) );
+     }
       }
 
       _abort_flg = abort_flg;
       _finished_child(wid, status);
       _abort_flg = FALSE;
+      if( waitchild ) {
+     /* If pid != wid the process we're waiting for might have been
+      * finished from a "Wait_for_child(FALSE, -1)" call from
+      * _finished_child() -> runargv(). */
+     if( pid != wid ) {
+        if( !_procs[pqid].pr_valid || _procs[pqid].pr_pid != pid ) {
+           /* Someone finished pid, no need to wait further. */
+           waitchild = FALSE;
+        }
+     }
+     else
+        /* We finished pid, no need to wait further. */
+        waitchild = FALSE;
+      }
    }
-   while( waitchild && pid != wid );
+   while( waitchild );
 
    Is_exec_shell = is_exec_shell_status;
    return(0);
@@ -355,35 +545,50 @@ PUBLIC void
 Clean_up_processes()
 {
    register int i;
+   int ret;
 
    if( _procs != NIL(PR) ) {
       for( i=0; i<Max_proc; i++ )
-     if( _procs[i].pr_valid )
-        kill(_procs[i].pr_pid, SIGTERM);
-
-      while( Wait_for_child(TRUE, -1) != -1 );
+     if( _procs[i].pr_valid ) {
+        if( (ret = kill(_procs[i].pr_pid, SIGTERM)) ) {
+           fprintf(stderr, "Killing of pid %d from pq[%d] failed with: %s - %d ret: %d\n",
+               _procs[i].pr_pid, i,
+               strerror(errno), SIGTERM, ret );
+        }
+     }
    }
 }
 
 
 static int
-_add_child( pid, target, ignore, last )/*
-=========================================
-  Creates/amend a process array entry and enters the child parameters.
+_add_child( pid, target, ignore, last, wfc )/*
+==============================================
+  Creates/amend a process queue entry and enters the child parameters.
   The pid == -1 represents an internal command and the function returns
   the used process array index. For non-internal commands the function
   returns -1.
+  If wfc (wait for completion) is TRUE the function calls
+  Wait_for_child to wait for the whole process queue to be finished.
 */
 int pid;
 CELLPTR target;
 int ignore;
 int     last;
+int     wfc;
 {
    register int i;
    register PR *pp;
 
-   if( _procs == NIL(PR) ) {
-      TALLOC( _procs, Max_proc, PR );
+   /* Never change MAXPROCESS after _procs is allocated. */
+   if( _procs_size != Max_proc ) {
+      /* If procs was never initialize this is OK, do it now. */
+      if( _procs == NIL(PR) ) {
+     _procs_size = Max_proc;
+     TALLOC( _procs, Max_proc, PR );
+      }
+      else {
+     Fatal( "MAXPROCESS changed from `%d' to `%d' after a command was executed!", _procs_size, Max_proc );
+      }
    }
 
    if( Measure & M_RECIPE )
@@ -397,8 +602,8 @@ int     last;
         break;
    }
    else {
-      /* If the process index is reused free the pointer before using
-       * it again below. */
+      /* Re-use the process queue number given by _use_i.
+       * Free the pointer before using it again below. */
       FREE( _procs[i].pr_dir );
    }
 
@@ -409,6 +614,7 @@ int     last;
    pp->pr_target = target;
    pp->pr_ignore = ignore;
    pp->pr_last   = last;
+   pp->pr_wfc    = wfc;
    /* Freed above and after the last recipe in _finished child(). */
    pp->pr_dir    = DmStrDup(Get_current_dir());
 
@@ -417,10 +623,10 @@ int     last;
    _proc_cnt++;
 
    if( pid != -1 ) {
-      /* Wait for each recipe to finish if Wait_for_completion is TRUE. This
+      /* Wait for each recipe to finish if wfc is TRUE. This
        * basically forces sequential execution. */
-      if( Wait_for_completion )
-     Wait_for_child( FALSE, pid );
+      if( wfc )
+     Wait_for_child( FALSE, i );
 
       return -1;
    } else
@@ -452,10 +658,16 @@ int status;
 
       /* Some children we didn't make esp true if using /bin/sh to execute a
        * a pipe and feed the output as a makefile into dmake. */
-      if( i == Max_proc ) return;
+      if( i == Max_proc ) {
+     Warning("Internal Warning: finished pid %d is not in pq!?", pid);
+     return;
+      }
    }
 
-   _procs[i].pr_valid = 0; /* Not a running process anymore. */
+   /* Not a running process anymore, the next runargv() will not use
+    * _attach_cmd(). */
+   _procs[i].pr_valid = 0;
+
    if( Measure & M_RECIPE )
       Do_profile_output( "e", M_RECIPE, _procs[i].pr_target );
 
@@ -480,17 +692,24 @@ int status;
       _procs[i].pr_recipe = rp->prp_next;
 
       _use_i = i;
-      /* Run next recipe line. */
-      runargv( _procs[i].pr_target, rp->prp_ignore, rp->prp_group,
-           rp->prp_last, rp->prp_shell, rp->prp_cmd );
+      /* Run next recipe line. The rp->prp_attr propagates a possible
+       * wfc condition. */
+      runargv( _procs[i].pr_target, rp->prp_group,
+           rp->prp_last, rp->prp_attr, rp->prp_cmd );
       _use_i = -1;
 
       FREE( rp->prp_cmd );
       FREE( rp );
 
+      /* If all process queues are used wait for the next process to
+       * finish. Is this really needed here? */
       if( _proc_cnt == Max_proc ) Wait_for_child( FALSE, -1 );
    }
    else {
+      /* empty the queue on abort. */
+      if( _abort_flg )
+     _procs[i].pr_recipe = NIL(RCP);
+
       Unlink_temp_files( _procs[i].pr_target );
       Handle_result(status,_procs[i].pr_ignore,_abort_flg,_procs[i].pr_target);
 
@@ -529,13 +748,14 @@ CELLPTR cp;
 
 
 static void
-_attach_cmd( cmd, group, ignore, cp, last, shell )
+_attach_cmd( cmd, group, cp, cmnd_attr, last )/*
+================================================
+  Attach to an active process queue. Inherit wfc setting. */
 char    *cmd;
 int group;
-int     ignore;
 CELLPTR cp;
+t_attr  cmnd_attr;
 int     last;
-int     shell;
 {
    register int i;
    RCPPTR rp;
@@ -547,10 +767,12 @@ int     shell;
 
    TALLOC( rp, 1, RCP );
    rp->prp_cmd   = DmStrDup(cmd);
+   rp->prp_attr = cmnd_attr;
+   /* Inherit wfc from process queue. */
+   if( _procs[i].pr_wfc )
+      rp->prp_attr |= A_WFC;
    rp->prp_group = group;
-   rp->prp_ignore= ignore;
    rp->prp_last  = last;
-   rp->prp_shell = shell;
 
    if( _procs[i].pr_recipe == NIL(RCP) )
       _procs[i].pr_recipe = _procs[i].pr_recipe_end = rp;
