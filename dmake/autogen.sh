@@ -46,12 +46,14 @@ if test -z "$*"; then
         echo "to pass any to it, please specify them on the $0 command line."
 fi
 
-# After the first run of autoconf a configure file exists.
-# 'configure --enable-maintainer-mode' will start all other needed autotool helpers.
-# autoconf
-
 # needed when autotools version changed
 aclocal
+
+# After the first run of autoconf a configure file exists.
+# 'configure --enable-maintainer-mode' will start all other needed autotool helpers.
+autoconf
+
+#automake -a -c -f
 
 cd $ORIGDIR
 
