@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 14:27:51 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2110,7 +2110,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
             // to a list of names ...
             // But note: because we work directly on a reference to the cache item,
             // its not allowd to change the value here. We must work on a copy!
-            sal_Int32 nFlags;
+            sal_Int32 nFlags = 0;
             pIt = aItem.find(PROPNAME_FLAGS);
             if (pIt != aItem.end())
             {
