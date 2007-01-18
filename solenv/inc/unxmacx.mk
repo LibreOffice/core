@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-09 11:19:25 $
+#   last change: $Author: vg $ $Date: 2007-01-18 14:14:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -149,16 +149,12 @@ MODULES_WITH_WARNINGS := \
     basctl \
     chart2 \
     devtools \
-    dtrans \
     extensions \
-    filter \
-    fpicker \
     lingu \
     r_tools \
     sal \
     sc \
     starmath \
-    svtools \
     sw \
     vcl \
     writerperfect \
