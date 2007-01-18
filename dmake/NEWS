@@ -2,6 +2,37 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.7
+===========
+
+Volker Quetschke (vq@openoffice.org)
+#i71422# Add @@ as a new recipe line property. This new property is a
+stronger version of the already existing @ recipe property.  The recipe
+line and the output (stdout and stderr) of the executed recipe are suppressed
+and *NOT* shown on the terminal.
+Note: Previously the second @ sign was ignored, that means that using this
+new feature doesn't break backwards compatibility but the command output
+is naturally not suppressed in older versions.
+
+Volker Quetschke (vq@openoffice.org)
+#i70210# Dmake now works correctly with empty dynamic prerequisites.
+
+Volker Quetschke (vq@openoffice.org)
+#i70168# Improve dmakes handling of literal $ characters in target and
+prerequisite filenames. This was not working before and is working now
+but the use of literal $ characters in filenames is still strongly
+discouraged. See the man page for details.
+
+Volker Quetschke (vq@openoffice.org)
+#i69742# Normalize the pathnames of targets and prerequisites to the shortest
+(or most natural, see below for the cygwin case) representation.
+Now "./foo", "bar/../foo" and foo are recognized as the same file.
+
+For cygwin this allows the use of target and prerequisite names with DOS
+like pathnames with drive letters (with / and \ as possible path seperators)
+and cygwin POSIX pathnames. As the internal format uses cygwin's natural
+POSIX representation runtime macros will result in POSIX paths.
+
 Version 4.6
 ===========
 
