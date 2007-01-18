@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:29:14 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,7 +448,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
             DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
-                sal_Int32 nTemp;
+                sal_Int32 nTemp = 0;
                 switch ( nProp )
                 {
                     case TIMEINTERVALL :
