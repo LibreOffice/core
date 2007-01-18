@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:24:08 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
             {
                 sal_Bool bTmp = sal_Bool();
                 ::rtl::OUString aTmpStr;
-                sal_Int32 nTmpInt;
+                sal_Int32 nTmpInt = 0;
                 if ( pValues[nProp] >>= bTmp )
                 {
                     switch ( lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) )
