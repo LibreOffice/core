@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.8 2006-09-25 09:41:02 vg Exp $
+/* RCS  $Id: sysintf.c,v 1.9 2007-01-18 09:32:48 vg Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -236,8 +236,8 @@ CELLPTR target;
 
 
 PUBLIC int
-Do_cmnd(cmd, group, do_it, target, ignore, shell, last)/*
-=========================================================
+Do_cmnd(cmd, group, do_it, target, cmnd_attr, last)/*
+=====================================================
   Execute the string passed in as a command and return
   the return code. The command line arguments are
   assumed to be separated by spaces or tabs.  The first
@@ -246,13 +246,17 @@ Do_cmnd(cmd, group, do_it, target, ignore, shell, last)/*
   If group is true then this is a group of commands to be fed to the
   the shell as a single unit.  In this case cmd is of the form
   "file" indicating the file that should be read by the shell
-  in order to execute the command group. */
+  in order to execute the command group.
+
+  If Wait_for_completion is TRUE add the A_WFC attribute to the new
+  process.
+*/
 char   *cmd;
-int     group;  /* if set cmd contains the filename of a (group-)shell script. */
+int     group;  /* if set cmd contains the filename of a (group-)shell
+         * script. */
 int     do_it;  /* Only execute cmd if not set to null. */
 CELLPTR target;
-int     ignore; /* Ignore errors ('-'). */
-int     shell;  /* Use shell when executing cmd. */
+t_attr  cmnd_attr; /* Attributes for current cmnd. */
 int     last;   /* Last recipe line in target. */
 {
    int  i;
@@ -277,18 +281,18 @@ int     last;   /* Last recipe line in target. */
 
    if( Max_proc == 1 ) Wait_for_completion = TRUE;
 
+   /* Tell runargv() to wait if needed. */
+   if( Wait_for_completion ) cmnd_attr |= A_WFC;
+
    /* set shell if shell metas are found */
-   if( shell || group || (*DmStrPbrk(cmd, Shell_metas)!='\0') )
-      shell = TRUE; /* If group is TRUE this doesn't hurt. */
+   if( (cmnd_attr & A_SHELL) || group || (*DmStrPbrk(cmd, Shell_metas)!='\0') )
+      cmnd_attr |= A_SHELL; /* If group is TRUE this doesn't hurt. */
 
-   if( (i = runargv(target, ignore, group, last, shell, cmd)) == -1 )
-      /* runargv() failed. */
-      Quit(0);
+   /* runargv() returns either 0 or 1, 0 ==> command executed, and
+    * we waited for it to return, 1 ==> command started and is still
+    * running. */
+   i = runargv(target, group, last, cmnd_attr, cmd);
 
-   /* NOTE:  runargv must return either 0 or 1, 0 ==> command executed, and
-    * we waited for it to return, 1 ==> command started and is running
-    * concurrently with make process or -1 if something failed. */
-   /* NOTE2: runargv currently always returns 1 (possible speed up) or -1. */
    return(i);
 }
 
@@ -473,6 +477,10 @@ char* argv[];
 #else
    AbsPname = "";
 #endif
+
+   /* DirSepStr is used from Clean_path() in Def_cell(). Set it preliminary
+    * here, it will be redefined later in Create_macro_vars() in imacs.c. */
+   DirSepStr = "/";
 
    Root = Def_cell( ".ROOT" );
    Targets = Def_cell( ".TARGETS" );
@@ -665,8 +673,9 @@ char    **fname;
     * additional temporary file with that suffix. */
    if ( suffix && *suffix ) {
 
-#ifdef NO_DRIVE_LETTERS
-      /* umask without ugo rights doesn't make sense. */
+#ifdef HAVE_MKSTEMP
+      /* Only use umask if we are also using mkstemp - this basically
+       * avoids using the incompatible implementation from MSVC. */
       mode_t mask;
 
       mask = umask(0066);
@@ -679,7 +688,7 @@ char    **fname;
 
       if( (fp2 = fopen(fname_suff, "w" )) == NIL(FILE) )
          Open_temp_error( fname_suff, name );
-#ifdef NO_DRIVE_LETTERS
+#ifdef HAVE_MKSTEMP
       umask(mask);
 #endif
 
