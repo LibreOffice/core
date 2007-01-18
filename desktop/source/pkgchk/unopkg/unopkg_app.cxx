@@ -5,9 +5,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2006-12-22 09:03:35 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include "../unopkg_shared.h"
+#include "unopkg_shared.h"
+#include "dp_identifier.hxx"
 #include "sal/main.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
@@ -70,8 +71,8 @@ namespace {
 const char s_usingText [] =
 "\n"
 "using: " APP_NAME " add <options> extension-path...\n"
-"       " APP_NAME " remove <options> extension-name...\n"
-"       " APP_NAME " list <options> extension-name...\n"
+"       " APP_NAME " remove <options> extension-identifier...\n"
+"       " APP_NAME " list <options> extension-identifier...\n"
 "       " APP_NAME " reinstall <options>\n"
 "       " APP_NAME " gui\n"
 "       " APP_NAME " -V\n"
@@ -79,7 +80,7 @@ const char s_usingText [] =
 "\n"
 "sub-commands:\n"
 " add                     add extension\n"
-" remove                  remove extensions by name\n"
+" remove                  remove extensions by identifier\n"
 " reinstall               expert feature: reinstall all deployed extensions\n"
 " list                    list information about deployed extensions\n"
 " gui                     raise Extension Manager Graphical User Interface (GUI)\n"
@@ -144,6 +145,27 @@ void DialogClosedListenerImpl::dialogClosed(
     throw (RuntimeException)
 {
     m_rDialogClosedCondition.set();
+}
+
+// If a package had been installed with a pre OOo 2.2, it could not normally be
+// found via its identifier; similarly (and for ease of use), a package
+// installed with OOo 2.2 or later could not normally be found via its file
+// name.
+Reference<deployment::XPackage> findPackage(
+    Reference<deployment::XPackageManager> const & manager,
+    Reference<ucb::XCommandEnvironment > const & environment,
+    OUString const & idOrFileName )
+{
+    Sequence< Reference<deployment::XPackage> > ps(
+        manager->getDeployedPackages(
+            Reference<task::XAbortChannel>(), environment ) );
+    for ( sal_Int32 i = 0; i < ps.getLength(); ++i )
+        if ( dp_misc::getIdentifier( ps[i] ) == idOrFileName )
+            return ps[i];
+    for ( sal_Int32 i = 0; i < ps.getLength(); ++i )
+        if ( ps[i]->getName() == idOrFileName )
+            return ps[i];
+    return Reference<deployment::XPackage>();
 }
 
 } // anon namespace
@@ -293,9 +315,23 @@ SAL_IMPLEMENT_MAIN()
                 }
                 else
                 {
-                    xPackageManager->removePackage(
-                        cmdPackage,
-                        Reference<task::XAbortChannel>(), xCmdEnv );
+                    try
+                    {
+                        xPackageManager->removePackage(
+                            cmdPackage, cmdPackage,
+                            Reference<task::XAbortChannel>(), xCmdEnv );
+                    }
+                    catch (lang::IllegalArgumentException &)
+                    {
+                        Reference<deployment::XPackage> p(
+                            findPackage(
+                                xPackageManager, xCmdEnv, cmdPackage ) );
+                        if ( !p.is() )
+                            throw;
+                        xPackageManager->removePackage(
+                            ::dp_misc::getIdentifier(p), p->getName(),
+                            Reference<task::XAbortChannel>(), xCmdEnv );
+                    }
                 }
             }
         }
@@ -320,8 +356,18 @@ SAL_IMPLEMENT_MAIN()
             {
                 packages.realloc( cmdPackages.size() );
                 for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
-                    packages[ pos ] = xPackageManager->getDeployedPackage(
-                        cmdPackages[ pos ], xCmdEnv );
+                    try
+                    {
+                        packages[ pos ] = xPackageManager->getDeployedPackage(
+                            cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
+                    }
+                    catch (lang::IllegalArgumentException &)
+                    {
+                        packages[ pos ] = findPackage(
+                            xPackageManager, xCmdEnv, cmdPackages[ pos ] );
+                        if ( !packages[ pos ].is() )
+                            throw;
+                    }
             }
             printf_packages( packages, xCmdEnv );
         }
