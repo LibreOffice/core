@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.8 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:39:05 $
+-- $Revision: 1.9 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:29:05 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -135,6 +135,11 @@ char **argv;
    int     ex_val;
    int     m_export;
 
+   /* Uncomment the following line to pass commands to the DBUG engine
+    * before the command line switches (-#..) are evaluated. */
+   /*
+   DB_PUSH("d,path");
+    */
    DB_ENTER("main");
 
    /* Initialize Global variables to their default values       */
@@ -173,6 +178,10 @@ char **argv;
    Is_exec_shell = FALSE;
    Shell_exec_target = NIL(CELL);
    stdout_redir = NIL(FILE);
+
+   /* Get fd for for @@-recipe silencing. */
+   if( (zerofd = open(NULLDEV, O_WRONLY)) == -1 )
+      Fatal( "Error opening %s !", NULLDEV );
 
    Verbose     = V_NOFLAG;
    Measure     = M_NOFLAG;
@@ -302,7 +311,9 @@ char **argv;
 
         case 'P':
            if( p[1] ) {
-          Def_macro( "MAXPROCESS", p+1, M_MULTI|M_EXPANDED );
+          /* Only set MAXPROCESS if -S flag is *not* used. */
+          if( !(Glob_attr & A_SEQ) )
+             Def_macro( "MAXPROCESS", p+1, M_MULTI|M_EXPANDED );
           p += strlen(p)-1;
            }
            else
@@ -352,6 +363,7 @@ char **argv;
    Make_rules();        /* potential targets                  */
    _warn = TRUE;
 
+   /* If -r was not given find and parse startup-makefile. */
    if( Rules ) {
       char *fname;
 
@@ -368,6 +380,7 @@ char **argv;
 
    if( Get_env == 'E' ) _do_ReadEnvironment();
 
+   /* Search for and parse user makefile. */
    if( fil_name != NIL(char) )
       mkfil = Openfile( fil_name, FALSE, TRUE );
    else {
@@ -423,11 +436,14 @@ char **argv;
 
    if( Buffer != NIL(char) ) {FREE( Buffer ); Buffer = NIL(char);}
    if( Trace ) Def_macro(".SEQUENTIAL", "y", M_EXPANDED);
-   if( Glob_attr & A_SEQ ) Def_macro( "MAXPROCESS", "1", M_EXPANDED|M_FORCE );
 
    ex_val = Make_targets();
 
    Clear_signals();
+
+   /* Close fd for for @@-recipe silencing. */
+   if( close(zerofd) )
+      Fatal( "Error closing %s !", NULLDEV );
    Epilog(ex_val);      /* Does not return -- EVER */
    return 0;
 }
@@ -889,5 +905,16 @@ Version()
       printf("\t%s\n", *p);
 
    printf("\n");
-printf("Please read the file readme/read1st.txt for the latest release notes.\n");
+
+#if defined(HAVE_SPAWN_H) || defined(__CYGWIN__)
+   /* Only systems that have spawn ar concerned whether spawn or fork/exec
+    * are used. */
+#if ENABLE_SPAWN
+      printf("Subprocesses are executed using: spawn.\n\n");
+#else
+      printf("Subprocesses are executed using: fork/exec.\n\n");
+#endif
+#endif
+
+      printf("Please read the NEWS file for the latest release notes.\n");
 }
