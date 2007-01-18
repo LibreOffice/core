@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:13:03 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -975,7 +975,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                     setFormatKey(0);
                 else
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                         setFormatKey(n);
                 }
@@ -992,7 +992,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                         if (Value.hasValue())
                         {   // but a value
                             // try if it is something converitble
-                            sal_Int32 nValue;
+                            sal_Int32 nValue = 0;
                             if (!(Value >>= nValue))
                                 throw ::com::sun::star::lang::IllegalArgumentException();
                             SetValue(::com::sun::star::uno::makeAny((double)nValue));
@@ -1004,12 +1004,12 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             break;
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
-                double d;
+                double d = 0.0;
                 if ( Value >>= d )
                      pField->SetSpinSize( d );
                 else
                 {
-                    sal_Int32 n;
+                    sal_Int32 n = 0;
                     if ( Value >>= n )
                          pField->SetSpinSize( n );
                 }
@@ -1017,7 +1017,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             break;
             case BASEPROPERTY_DECIMALACCURACY:
             {
-                sal_Int32 n;
+                sal_Int32 n = 0;
                 if ( Value >>= n )
                      pField->SetDecimalDigits( (sal_uInt16)n );
             }
@@ -1184,9 +1184,11 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 
     {
         case ::com::sun::star::uno::TypeClass_DOUBLE:
-            double d;
+        {
+            double d = 0.0;
             rValue >>= d;
             pField->SetMinValue(d);
+        }
             break;
         default:
             DBG_ASSERT(rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID, "SVTXFormattedField::SetMinValue : invalid argument (an exception will be thrown) !");
@@ -1223,9 +1225,11 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 
     {
         case ::com::sun::star::uno::TypeClass_DOUBLE:
-            double d;
+        {
+            double d = 0.0;
             rValue >>= d;
             pField->SetMaxValue(d);
+        }
             break;
         default:
             if (rValue.getValueType().getTypeClass() != ::com::sun::star::uno::TypeClass_VOID)
@@ -1264,7 +1268,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
     {
         case ::com::sun::star::uno::TypeClass_DOUBLE:
         {
-            double d;
+            double d = 0.0;
             aConverted >>= d;
             pField->SetDefaultValue(d);
         }
@@ -1353,7 +1357,7 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
     {
         if (rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE )
         {
-            double d;
+            double d = 0.0;
             rValue >>= d;
             pField->SetValue(d);
         }
@@ -1508,7 +1512,7 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRoadmapItem;
         xRoadmapItem = evt.Source;
-        sal_Int32 nID;
+        sal_Int32 nID = 0;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "ID" ));
         aValue >>= nID;
@@ -1530,7 +1534,7 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         }
         else if  ( sPropertyName.equals(::rtl::OUString::createFromAscii( "ID" ) ) )
         {
-            sal_Int32 nNewID;
+            sal_Int32 nNewID = 0;
             evt.NewValue >>= nNewID;
             evt.OldValue >>= nID;
             pField->ChangeRoadmapItemID( (RoadmapTypes::ItemId)nID, (RoadmapTypes::ItemId)nNewID );
@@ -1576,7 +1580,7 @@ void SVTXRoadmap::elementInserted( const ::com::sun::star::container::ContainerE
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
-        sal_Int32 InsertIndex;
+        sal_Int32 InsertIndex = 0;
         _rEvent.Accessor >>= InsertIndex;
         pField->InsertRoadmapItem( InsertIndex, CurItemData.Label, (RoadmapTypes::ItemId)CurItemData.n_ID, CurItemData.b_Enabled );
     }
@@ -1588,7 +1592,7 @@ void SVTXRoadmap::elementRemoved( const ::com::sun::star::container::ContainerEv
     ::svt::ORoadmap* pField = GetRoadmap();
     if ( pField )
     {
-        sal_Int32 DelIndex;
+        sal_Int32 DelIndex = 0;
         _rEvent.Accessor >>= DelIndex;
         pField->DeleteRoadmapItem(DelIndex);
 //        pField->GetCurrentRoadmapItem()
@@ -1603,7 +1607,7 @@ void SVTXRoadmap::elementReplaced( const ::com::sun::star::container::ContainerE
     if ( pField )
     {
         RMItemData CurItemData = GetRMItemData(  _rEvent );
-        sal_Int32 ReplaceIndex;
+        sal_Int32 ReplaceIndex = 0;
         _rEvent.Accessor >>= ReplaceIndex;
         pField->ReplaceRoadmapItem( ReplaceIndex, CurItemData.Label, (RoadmapTypes::ItemId)CurItemData.n_ID, CurItemData.b_Enabled );
     }
@@ -1640,7 +1644,7 @@ void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
             case BASEPROPERTY_CURRENTITEMID:
             {
-                   sal_Int32 nId;
+                   sal_Int32 nId = 0;
                 Value >>= nId;
                 pField->SelectRoadmapItemByID( (RoadmapTypes::ItemId)nId );
             }
@@ -2281,7 +2285,7 @@ void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::
                     }
                     else
                     {
-                        sal_Int32 nColor;
+                        sal_Int32 nColor = 0;
                         if ( Value >>= nColor )
                         {
                             Color aColor( nColor );
@@ -2361,7 +2365,7 @@ void SAL_CALL SVTXDateField::setProperty( const ::rtl::OUString& PropertyName, c
             pSubEdit->SetTextLineColor();
         else
         {
-            sal_Int32 nColor;
+            sal_Int32 nColor = 0;
             if ( Value >>= nColor )
                 pSubEdit->SetTextLineColor( Color( nColor ) );
         }
