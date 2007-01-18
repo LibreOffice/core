@@ -1,4 +1,4 @@
-/* RCS  $Id: dmstring.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: dmstring.c,v 1.2 2007-01-18 09:29:40 vg Exp $
 --
 -- SYNOPSIS
 --      String handling code
@@ -285,3 +285,16 @@ char *e;
 
    return( s );
 }
+
+
+/* Provide "missing" string function. */
+#ifndef HAVE_STRLWR
+char *
+strlwr(char *s)
+{
+   char *p;
+   for(p=s; *p; p++ )
+      *p = tolower(*p);
+   return s;
+}
+#endif
