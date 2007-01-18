@@ -65,7 +65,7 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
 	nCurrentAction = cEXTUninstall
 	
 	&apos;Remove the package
-	ext_mgr.removePackage(cExtensionFileName, obj_null, cmdEnv)
+	ext_mgr.removePackage(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, obj_null, cmdEnv)
 
 	&apos;Try to create the service which is contained in the now removed extension.
 	oTestExtension = createUnoService(cUnoSmoketestTestExtension)
