@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:30:06 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,7 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
 
             if( xPropSet.is() )
             {
-                sal_Bool bVisible;
+                sal_Bool bVisible = sal_False;
 
                 if( !mbPresentation || bSinglePage ||
                     ( ( xPropSet->getPropertyValue( B2UCONST( "Visible" ) ) >>= bVisible ) && bVisible ) )
@@ -598,7 +598,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     static const ::rtl::OUString aPageNumberString( B2UCONST( "IsPageNumberVisible" ) );
 
                     Any     aProperty;
-                    bool    bValue;
+                    bool    bValue = sal_False;
 
                     if( ( aShapeType.lastIndexOf( B2UCONST( "presentation.HeaderShape" ) ) != -1 ) &&
                         xPagePropSetInfo->hasPropertyByName( aHeaderString ) &&
@@ -970,7 +970,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                      xDefaultPagePropSetInfo->hasPropertyByName( aPageNumberText ) )
             {
                 String     aPageNumValue;
-                sal_Int16  nPageNumber;
+                sal_Int16  nPageNumber = 0;
 
                 xDefaultPagePropertySet->getPropertyValue( aPageNumberText ) >>= nPageNumber;
 
