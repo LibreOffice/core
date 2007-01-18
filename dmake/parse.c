@@ -1,6 +1,6 @@
 /* $RCSfile: parse.c,v $
--- $Revision: 1.6 $
--- last change: $Author: ihi $ $Date: 2006-06-29 11:24:25 $
+-- $Revision: 1.7 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:31:46 $
 --
 -- SYNOPSIS
 --      Parse the input, and perform semantic analysis
@@ -45,14 +45,14 @@ FILE *fil;
    Group = FALSE;                 /* true if scanning a group rcpe  */
    while( TRUE ) {
       if( Get_line( Buffer, fil ) ) {
-     if( fil != NIL( FILE ) )               /* end of parsable input */
-        Closefile();
-
          if( Group )  Fatal( "Incomplete rule recipe group detected" );
 
      /* If we are still in RULE_SCAN mode there might be unbound recipes.  */
      if( State == RULE_SCAN )
         Bind_rules_to_targets( F_DEFAULT );
+
+     if( fil != NIL( FILE ) )               /* end of parsable input */
+        Closefile();
 
      DB_VOID_RETURN;
       }
