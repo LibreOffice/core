@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_configuration.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:10:29 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,8 +486,10 @@ BackendImpl::PackageImpl::isRegistered_(
     BackendImpl * that = getMyBackend();
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
-        beans::Ambiguous<sal_Bool>( that->m_registeredPackages->has( m_url ),
-                                    false /* IsAmbiguous */ ) );
+        beans::Ambiguous<sal_Bool>(
+            that->m_registeredPackages->has(
+                rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) ),
+            false /* IsAmbiguous */ ) );
 }
 
 //______________________________________________________________________________
@@ -506,20 +508,28 @@ void BackendImpl::PackageImpl::processPackage_(
                         "### schema cannot be deployed transiently!" );
             if (! that->transientMode()) {
                 that->xcs_merge_in( m_url, xCmdEnv );
-                OUString insertion = OUSTR("vnd.sun.star.configuration-schema");
-                that->m_registeredPackages->put( m_url, insertion );
+                that->m_registeredPackages->put(
+                    rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8),
+                    rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM(
+                            "vnd.sun.star.configuration-schema" ) ) );
             }
         }
         else
         {
             that->xcu_merge_in( m_url, xCmdEnv );
-            OUString insertion = OUSTR("vnd.sun.star.configuration-data");
-            that->m_registeredPackages->put( m_url, insertion );
+            that->m_registeredPackages->put(
+                rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "vnd.sun.star.configuration-data" ) ) );
         }
     }
     else // revoke
     {
-        OSL_ASSERT( that->m_registeredPackages->has( m_url ) );
+        OSL_ASSERT(
+            that->m_registeredPackages->has(
+                rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) ) );
         t_string2string_map entries( that->m_registeredPackages->getEntries() );
         t_string2string_map::const_iterator iPos( entries.begin() );
         t_string2string_map::const_iterator const iEnd( entries.end() );
@@ -537,11 +547,14 @@ void BackendImpl::PackageImpl::processPackage_(
                     for ( ; iPos != iEnd; ++iPos )
                     {
                         checkAborted( abortChannel );
-                        if (iPos->second.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "vnd.sun.star.configuration-schema") ) &&
-                            !iPos->first.equals( m_url )) {
-                            that->xcs_merge_in( iPos->first, xCmdEnv );
+                        if (iPos->second == "vnd.sun.star.configuration-schema")
+                        {
+                            OUString url(
+                                rtl::OStringToOUString(
+                                    iPos->first, RTL_TEXTENCODING_UTF8 ) );
+                            if (!url.equals( m_url )) {
+                                that->xcs_merge_in( url, xCmdEnv );
+                            }
                         }
                     }
                 }
@@ -553,7 +566,8 @@ void BackendImpl::PackageImpl::processPackage_(
                         StrTitle::get(), Any( OUSTR("schema") ) );
                     throw;
                 }
-                that->m_registeredPackages->erase( m_url );
+                that->m_registeredPackages->erase(
+                    rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) );
                 ucbSaveLayer.executeCommand(
                     OUSTR("delete"), Any( true /* delete physically */ ) );
             }
@@ -571,11 +585,13 @@ void BackendImpl::PackageImpl::processPackage_(
                     for ( ; iPos != iEnd; ++iPos )
                     {
                         checkAborted( abortChannel );
-                        if (iPos->second.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "vnd.sun.star.configuration-data") ) &&
-                            !iPos->first.equals( m_url )) {
-                            that->xcu_merge_in( iPos->first, xCmdEnv );
+                        if (iPos->second == "vnd.sun.star.configuration-data") {
+                            OUString url(
+                                rtl::OStringToOUString(
+                                    iPos->first, RTL_TEXTENCODING_UTF8 ) );
+                            if (!url.equals( m_url )) {
+                                that->xcu_merge_in( url, xCmdEnv );
+                            }
                         }
                     }
                 }
@@ -587,7 +603,8 @@ void BackendImpl::PackageImpl::processPackage_(
                         StrTitle::get(), Any( OUSTR("data") ) );
                     throw;
                 }
-                that->m_registeredPackages->erase( m_url );
+                that->m_registeredPackages->erase(
+                    rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) );
                 ucbSaveLayer.executeCommand(
                     OUSTR("delete"), Any( true /* delete physically */ ) );
             }
