@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:40:15 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 15:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "dp_manager.hrc"
 #include "dp_misc.h"
 #include "dp_interact.h"
-#include "dp_persmap.h"
+#include "dp_activepackages.hxx"
 #include "rtl/ref.hxx"
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
@@ -66,7 +66,7 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
 
     ::rtl::OUString m_activePackages;
     ::rtl::OUString m_activePackages_expanded;
-    ::std::auto_ptr< ::dp_misc::PersistentMap > m_activePackagesDB;
+    ::std::auto_ptr< ActivePackages > m_activePackagesDB;
 
     css::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
     inline void logIntern( css::uno::Any const & status );
@@ -80,24 +80,22 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     ::rtl::OUString detectMediaType(
         ::ucb::Content const & ucbContent, bool throw_exc = true );
     ::rtl::OUString insertToActivationLayer(
-        ::rtl::OUString const & title, ::rtl::OUString const & mediaType,
-        ::ucb::Content const & sourceContent, ::rtl::OUString * dbData );
+        ::rtl::OUString const & mediaType, ::ucb::Content const & sourceContent,
+        ::rtl::OUString const & title, ActivePackages::Data * dbData );
     void insertToActivationLayerDB(
-        ::rtl::OUString const & title, ::rtl::OUString const & dbData );
+        ::rtl::OUString const & id, ActivePackages::Data const & dbData );
 
     void deletePackageFromCache(
         css::uno::Reference<css::deployment::XPackage> const & xPackage,
         ::rtl::OUString const & destFolder );
 
     bool checkUpdate(
-        ::rtl::OUString const & title,
         css::uno::Reference<css::deployment::XPackage> const & package,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & origCmdEnv,
         css::uno::Reference<css::ucb::XCommandEnvironment> const &
             wrappedCmdEnv );
 
     bool checkInstall(
-        ::rtl::OUString const & title,
         css::uno::Reference<css::deployment::XPackage> const & package,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
 
@@ -192,12 +190,12 @@ public:
                css::uno::RuntimeException);
 
     void removePackage_(
-        ::rtl::OUString const & name,
+        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
     virtual void SAL_CALL removePackage(
-        ::rtl::OUString const & name,
+        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -206,16 +204,17 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
-    ::rtl::OUString getDeployPath( ::rtl::OUString const & name,
-                                   ::rtl::OUString * pMediaType = 0,
-                                   bool ignoreAlienPlatforms = false );
+    ::rtl::OUString getDeployPath( ActivePackages::Data const & data );
     css::uno::Reference<css::deployment::XPackage> SAL_CALL getDeployedPackage_(
-        ::rtl::OUString const & name,
+        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+    css::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
+        ::rtl::OUString const & id, ActivePackages::Data const & data,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         bool ignoreAlienPlatforms = false );
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL
     getDeployedPackage(
-        ::rtl::OUString const & name,
+        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
                css::ucb::CommandFailedException,
