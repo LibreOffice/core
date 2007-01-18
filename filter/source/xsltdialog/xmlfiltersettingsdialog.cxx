@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:34:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:10:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1265,7 +1265,7 @@ void XMLFilterSettingsDialog::initFilterList()
                                 else if(pValues2->Name.equalsAscii( "Finalized" ))
                                 {
                                     // both the filter and the type may be finalized
-                                    sal_Bool bTemp;
+                                    sal_Bool bTemp = sal_False;
                                     pValues2->Value >>= bTemp;
                                     pTempFilter->mbReadonly |= bTemp;
                                 }
