@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.h,v 1.5 2006-09-25 09:39:18 vg Exp $
+/* RCS  $Id: dmake.h,v 1.6 2007-01-18 09:29:28 vg Exp $
 --
 -- SYNOPSIS
 --      Global defines for dmake.
@@ -70,7 +70,7 @@
 
 /* Global and target attribute flag definitions.
  * If you change the values of these or re-order them make appropriate changes
- * in dump.c so that the output of dmake -p matches the attribute info for a
+ * in dmdump.c so that the output of dmake -p matches the attribute info for a
  * target. */
 
 #define A_DEFAULT        0x00000        /* default flag value           */
@@ -84,6 +84,9 @@
 #define A_NOINFER        0x00080        /* no trans closure from cell   */
 #define A_UPDATEALL      0x00100        /* all targets of rule modified */
 #define A_SEQ            0x00200        /* sequential make attribute    */
+/* Reuse the sequential flag to signal Wait_for_completion to Do_cmnd()
+ * and related methods of executing a sub process. */
+#define A_WFC              A_SEQ
 #define A_SETDIR         0x00400        /* cd to dir when making target */
 #define A_SHELL          0x00800        /* run the recipe using a shell */
 #define A_SWAP           0x01000        /* swap on exec.                */
@@ -106,6 +109,7 @@
 #define A_ERROR       0x10000000        /* used to halt construction    */
 #define A_FIRST       0x20000000        /* used for .INCLUDE termination*/
 #define A_SHELLESC    0x40000000        /* used for shell escape target */
+#define A_MUTE        0x80000000        /* silence a recipe line        */
 
 
 /* Global and target bit flag definitions */
