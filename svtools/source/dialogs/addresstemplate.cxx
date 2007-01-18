@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:43:24 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,7 @@ public:
     // -------------------------------------------------------------------
     sal_Int32 AssignmentPersistentData::getInt32Property(const sal_Char* _pLocalName) const
     {
-        sal_Int32 nReturn;
+        sal_Int32 nReturn = 0;
         getProperty( _pLocalName ) >>= nReturn;
         return nReturn;
     }
