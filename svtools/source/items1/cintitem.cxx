@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cintitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:02:59 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ BOOL CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 // virtual
 BOOL CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         DBG_ASSERT( nValue <= USHRT_MAX, "Overflow in UInt16 value!");
@@ -382,7 +382,7 @@ BOOL CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 // virtual
 BOOL CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
@@ -516,7 +516,7 @@ BOOL CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 // virtual
 BOOL CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
