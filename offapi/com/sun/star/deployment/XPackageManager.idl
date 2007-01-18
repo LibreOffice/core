@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPackageManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:58:36 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,15 +129,18 @@ interface XPackageManager
 
     /** removes an UNO package.
 
-        @param name
-               package name (not URL)
+        @param identifier
+               package identifier
+        @param fileName
+               package file name
         @param xAbortChannel
                abort channel to asynchronously abort the removing process,
                or null
         @param xCmdEnv
                command environment for error and progress handling
     */
-    void removePackage( [in] string name,
+    void removePackage( [in] string identifier,
+                        [in] string fileName,
                         [in] com::sun::star::task::XAbortChannel xAbortChannel,
                         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
@@ -147,15 +150,18 @@ interface XPackageManager
 
     /** gets a deployed package.
 
-        @param name
-               package name (an URL is NOT allowed!)
+        @param identifier
+               package identifier
+        @param fileName
+               package file name
         @param xCmdEnv
                command environment for error and progress handling
         @return
                <type>XPackage</type> handle
     */
     XPackage getDeployedPackage(
-        [in] string name,
+        [in] string identifier,
+        [in] string fileName,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
