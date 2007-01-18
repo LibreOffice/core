@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cenumitm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:02:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ BOOL SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, BYTE)
 BOOL SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
                                     BYTE)
 {
-    sal_Int32 nTheValue;
+    sal_Int32 nTheValue = 0;
 
     if ( ::cppu::enum2int( nTheValue, rVal ) )
     {
