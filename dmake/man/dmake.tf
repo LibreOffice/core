@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "2006-09-21" "Dmake Version 4.6"
+.TH DMAKE 1  "2006-11-23" "Dmake Version 4.7"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -195,7 +195,7 @@ This  is equivalent to the .SILENT attribute or macro.
 .IP "\fB\-S\fR"
 Force sequential execution of recipes on architectures which support
 concurrent makes.  For backward compatibility with old makefiles that have
-nasty side-effect prerequisite dependencies.
+nasty side-effect prerequisite dependencies. (Implies -P1)
 .IP "\fB\-t\fR"
 Causes \fBdmake\fR to touch the targets and bring them up to date
 without executing any commands.
@@ -223,9 +223,10 @@ Notify of inference algorithm operation only.
 .IP "\fBm\fP"
 Notify of target update operations only.
 .IP "\fBr\fP"
-Force output of recipe lines and warnings. This switch is usefull when
-debugging makefiles that disable the output using the @ sign for recipe
-lines or the .SILENT target/attribute. It also overrides the -s flag.
+Force output of recipe lines, warnings and executed commands. This switch
+is usefull when debugging makefiles that disable the output using the @
+or @@ property for recipe lines or the .SILENT target/attribute.
+It also overrides the -s flag.
 .IP "\fBt\fP"
 Keep any temporary files created; normally they are automatically deleted.
 .IP "\fBw\fP"
@@ -415,7 +416,7 @@ with .INIT and .DONE defined as:
 .sp
 which nicely emulates the behaviour of Sun's make extensions.  The building of
 \&.ROOT's prerequisites is always forced to be sequential.  However, this
-definition is trivially chaned by supplying the definition:
+definition is trivially changed by supplying the definition:
 .sp
 .RS
 \&.ROOT : .TARGETS
@@ -484,13 +485,13 @@ target-definition \(-> targets [attrs] op { \fBPREREQUISITE\fP } [\fB;\fR rcp-li
 \(-> \fB\-\fR
 \(-> \fB|\fR
 .Ip "recipe" "\(-> { \fBTAB\fR rcp-line }"
-\(-> [\fB@\fR][\fB%\fR][\fB\-\fR] \fB[
+\(-> [\fB@\fR[\fB@\fR]][\fB%\fR][\fB\-\fR] \fB[
 .Is "recipe \(-> "
 .Ii " "
    \fR{ \fBLINE\fR }
 .Ii " "
 \fB]\fR
-.Ip "rcp-line" "\(-> [\fB@\fR][\fB%\fR][\fB\-\fR][\fB+\fR] \fBLINE\fR"
+.Ip "rcp-line" "\(-> [\fB@\fR[\fB@\fR]][\fB%\fR][\fB\-\fR][\fB+\fR] \fBLINE\fR"
 .Ip Attribute-Definition "\(-> attrs \fB:\fR targets"
 .Ip attribute "\(-> \fB.EPILOG\fR"
 \(-> \fB.ERRREMOVE\fR
@@ -658,7 +659,8 @@ system prior to the execution of \fBdmake\fP.
 Insert shell prolog code when executing a group recipe associated with
 any target having this attribute set.
 .IP \fB.SEQUENTIAL\fP 1.2i
-Force a sequential make of the associated target's prerequisites.
+Force a sequential make of the associated target's prerequisites. If set
+as a global attribute this implies setting MAXPROCESS=1.
 .IP \fB.SETDIR\fP 1.2i
 Change current working directory to specified directory when making the
 associated target.  You must
@@ -1246,24 +1248,31 @@ The list of recipe lines defining the recipe is terminated by a new target
 definition, a macro definition, or end-of-file.
 Each recipe line
 .B MUST
-begin with a \fB<TAB>\fP character which
-may optionally be followed with one or all
-of the characters
-.IR "'@%+\-'" "."
-The
-.I "'\-'"
+begin with a \fB<TAB>\fP character (or \fBspaces\fP, see \fB.NOTABS\fP)
+which may optionally be followed with one or all the following
+.I recipe property
+characters 
+.IR "'@%+\-'"
+which affect the recipe execution:
+.IP "'\-'"
 indicates that non-zero exit values (ie. errors)
-are to be ignored when this recipe line is executed, the
-.I "'\+'"
-indicates that the current recipe line is to be executed using the shell, the
-.I "'%'"
+are to be ignored when this recipe line is executed.
+.IP "'\+'"
+indicates that the current recipe line is to be executed using the shell. Group recipes implicitely ignore this property.
+.IP "'%'"
 indicates that
 .B dmake
 should swap itself out to secondary storage (MSDOS only) before running the
-recipe and the
-.I "'@'"
+recipe.
+.IP "'@'"
 indicates that the recipe line should NOT be echoed to the terminal prior to
-being executed.  Each switch is off by default
+being executed.
+.IP "'@@'"
+is a stronger version of the previous property. The recipe line and the
+output (stdout and stderr) of the executed recipe are NOT shown on the
+terminal.
+.LP
+Each property is off by default
 (ie. by default, errors are significant, commands are echoed, no swapping is
 done and a shell is
 used only if the recipe line contains a character found in the value of the
@@ -1295,7 +1304,9 @@ In this form each recipe line need not have a leading TAB.  This is
 called a recipe group.  Groups so defined are fed intact as a single
 unit to a shell for execution whenever the corresponding target needs to
 be updated.  If the open group character '[' is preceded
-by one or all of \-, @ or %
+by one or all of the
+.I recipe properties
+(\-, %, @ and @@)
 then they apply to the entire group in the same way that they
 apply to single recipe lines.  You may also specify '+' but it is
 redundant as a shell is already being used to run the recipe.
@@ -1723,6 +1734,9 @@ If set to "yes" enables the directory cache (this is the default).  If set to
 If set to "yes" causes the directory cache, if enabled, to respect
 file case, if set to "no" facilities of the native OS are used to
 match file case.
+By default it is set to "no" for Windows and Mac OS X as the filesystems on
+those operating systems are usually case insensitive and set to "yes" for all
+other operating systems. The default can be overriden, if desired.
 .IP \fBNAMEMAX\fP 1.6i
 Defines the maximum length of a filename component.  The value of the variable
 is initialized at startup to the value of the compiled macro NAME_MAX.  On
@@ -1752,9 +1766,6 @@ path names are constructed.  It is defined with a default value at startup.
 Is defined in the startup file and gives the name that should be returned for
 the diversion file name when used in
 $(mktmp ...) expansions, see the TEXT DIVERSION section for details.
-.IP \fBDYNAMICNESTINGLEVEL\fP 1.6i
-Specifies the maximum number of recursive dynamic macro expansions.  Its
-initial value is 100.
 .IP \fB.KEEP_STATE\fP 1.6i
 Assigning this macro a value tells
 .B dmake
@@ -1802,7 +1813,9 @@ Specify the maximum number of child processes to use when making targets.
 The default value of this macro is "1" and its value cannot exceed the value
 of the macro MAXPROCESSLIMIT.  Setting the value of MAXPROCESS on the command
 line or in the makefile is equivalent to supplying a corresponding value to
-the -P flag on the command line.
+the -P flag on the command line. If the global .SEQUENTIAL attribute is set
+(or the -S command line switch is used) the value of MAXPROCESS is fixed
+to "1" and cannot be changed.
 .IP \fBPREP\fP 1.6i
 This macro defines the number of iterations to be expanded
 automatically when processing % rule definitions of the form:
@@ -2236,16 +2249,23 @@ where the $$(@:b) expands to \fIfred\fP.
 Note the use of $$ instead of $ to indicate the dynamic expansion, this
 is due to the fact that the rule line is expanded when it is initially parsed,
 and $$ then returns $ which later triggers the dynamic prerequisite expansion.
-If you really want a $ to be part of a prerequisite name you must use $$$$.
-Dynamic macro expansion is performed in all user defined rules,
-and the special targets .SOURCE*, and .INCLUDEDIRS.
+Dynamic macro expansion is performed in all user defined rules, and the special
+targets .SOURCE*, and .INCLUDEDIRS.
+.PP
+\fBNOTE:\fP The use of a \fB$\fP as part of a prerequisite or target name is
+\fBstrongly discouraged\fP as the runtime macros (like $@) are expanded when
+used in a recipe line so that the $ is interpreted as a macro identifier and
+not as a character of the filename leading to invalid runtime macros.
+In addition to this no filename normalization is done for prerequisites and
+targets that contain $ characters.
+Nevertheless it is possible to use $ in prerequisites by using $$$$ but this
+is \fBnot recommended\fP and can lead to surprising results.
 .PP
 If dynamic macro expansion results in multiple white space separated tokens
 then these are inserted into the prerequisite list inplace of the dynamic
-prerequisite.  If the new list contains additional dynamic prerequisites they
-will be expanded when they are processed.  The level of recursion in this
-expansion is controlled by the value of the variable \fBDYNAMICNESTINGLEVEL\fP
-and is set to 100 by default.
+prerequisite.  Due to the recursive nature of macro expansion the prerequisite
+list is fully expanded even if the dynamic prerequisite contained other
+runtime macros.
 .SH "BINDING TARGETS"
 This operation takes a target name and binds it to an existing file, if
 possible.
@@ -2316,10 +2336,17 @@ the user may fix the error and make again.  \fBdmake\fP will not remake any
 of the targets whose object files have already been generated as long as
 none of their prerequisite files have been modified as a result of the fix.
 .PP
-When \fBdmake\fP constructs target pathnames './' substrings are removed and
-substrings of the form 'foo/..' are eliminated.  This may result in somewhat
-unexpected values of the macro expansion \fB$@\fP, but is infact the corect
-result.
+When \fBdmake\fP constructs target (and prerequisite) pathnames they are
+normalized  to the shortest (or most natural, see below for the cygwin case)
+representation.  Substrings like './' or of the form 'baz/..' are removed.
+For example "./foo", "bar/../foo" and foo are recognized as the same file.
+This may result in somewhat unexpected values of the macro expansion
+of runtime macros like \fB$@\fP, but is infact the corect result.
+.PP
+\fBNOTE:\fP  A cygwin \fBdmake\fP executable will accept DOS like pathnames
+with drive letters and cygwin POSIX pathnames and normalize them into its
+natural POSIX representation.  This might result in even more surprising
+values of runtime macros.
 .PP
 When defining .SOURCE and .SOURCE.x targets the construct
 .RS
