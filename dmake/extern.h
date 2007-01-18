@@ -1,6 +1,6 @@
 /* $RCSfile: extern.h,v $
--- $Revision: 1.9 $
--- last change: $Author: hr $ $Date: 2006-04-20 11:59:59 $
+-- $Revision: 1.10 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:29:52 $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -91,6 +91,38 @@
  * externally above and turns them into no-ops.  Have to do this after
  * the extern declarations however. */
 #include "posix.h"
+
+
+
+/* Common declarations
+ * ===================
+ * are better made here then in local public.h. So far dmake didn't follow
+ * this strategy but new functions will be added here. */
+
+/* Use our own implementation if no library function is present. */
+#ifndef HAVE_STRLWR
+/* from dmstring.c */
+char *strlwr(char *p);
+#endif
+
+/* from path.c */
+void Clean_path(char *path);
+
+
+
+/* Define some usefull macros. This is done here and not in config.h
+ * to keep this changes usefull even when not using the autotools based
+ * build, i.e. using config.h files that are local to the architecture. */
+#if defined(_WIN32) || defined(__CYGWIN__) || defined(MSDOS) || defined(OS2)
+#  define HAVE_DRIVE_LETTERS 1
+#endif
+
+#if defined(_WIN32) || defined(MSDOS) || defined(OS2) && !defined(__CYGWIN__)
+#  define NULLDEV "NUL"
+#else
+#  define NULLDEV "/dev/null"
+#endif
+
 
 /* Work around some of the functions that may or may not exist */
 #if ! HAVE_TZSET
