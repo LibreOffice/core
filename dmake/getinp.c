@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.7 2006-06-29 11:23:35 ihi Exp $
+/* RCS  $Id: getinp.c,v 1.8 2007-01-18 09:30:18 vg Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -307,7 +307,7 @@ int  keep;
            Current_target = Root;
            Swap_on_exec = TRUE;
            Wait_for_completion = TRUE;
-           Do_cmnd(cmnd, FALSE, TRUE, Current_target, FALSE, FALSE, TRUE);
+           Do_cmnd(cmnd, FALSE, TRUE, Current_target, A_DEFAULT, TRUE);
            Wait_for_completion = FALSE;
         }
 
