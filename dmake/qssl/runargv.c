@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.1.1.1 2000-09-22 15:33:30 hr Exp $
+/* RCS  $Id: runargv.c,v 1.2 2007-01-18 09:37:39 vg Exp $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -58,6 +58,8 @@ static  void    _attach_cmd ANSI((char *, int, int, CELLPTR, int, int));
 static  void    _finished_child ANSI((int, int));
 static  int     _running ANSI((CELLPTR));
 
+/* iz71422 changed the parameters for runargv but it (and the rest of
+ * qssl) got *NOT* fixed. */
 PUBLIC int
 runargv(target, ignore, group, last, shell, cmd)
 CELLPTR target;
