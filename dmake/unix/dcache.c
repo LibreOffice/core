@@ -1,6 +1,6 @@
 /* $RCSfile: dcache.c,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:18:48 $
+-- $Revision: 1.6 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:43:52 $
 --
 -- SYNOPSIS
 --      Directory cache management routines.
@@ -100,20 +100,17 @@ int          force;
    char *dir;
    int  loaded=FALSE;
 
-#ifdef __APPLE__
-   /* On Mac OS X, open, stat, and other system calls are case-insenstive.
-      Since this function keeps a case-sensitive cache, we need to force
-      a stat of the file if there is no match in the cache just to make sure
-      that we don't miss a file when only the case is different */
-   force = TRUE;
-#endif
-
    if (If_root_path(path))
       spath = path;
    else
       spath = Build_path(Pwd,path);
 
    fpath = DmStrDup(spath);
+
+   /* do caching and comparing lower case if told so. */
+   if( !STOBOOL(DcacheRespCase) )
+      strlwr(fpath);
+
    comp  = Basename(fpath);
    dir   = Filedir(fpath);
 
@@ -124,6 +121,7 @@ int          force;
      break;
 
    if (!dp) {
+      /* Not cached yet, doing it now. */
       DIR *dirp;
       struct dirent *direntp;
 
@@ -143,11 +141,11 @@ int          force;
      if((dirp=opendir(".")) != NIL(DIR)) {
         while((direntp=readdir(dirp)) != NULL) {
            TALLOC(ep,1,Entry);
-           ep->name = DmStrDup(direntp->d_name);
+           ep->name = DmStrDup(direntp->d_name); /* basename only */
+           if( !STOBOOL(DcacheRespCase) )
+          strlwr(ep->name);
 
-               /* Perform case mapping of name if appropriate */
-           DMSTRLWR(ep->name, comp);
-               Hash(ep->name, &ep->hkey);
+           Hash(ep->name, &ep->hkey); /* This sets ep->hkey. */
 
            ep->next = dp->entries;
            dp->entries = ep;
@@ -161,8 +159,9 @@ int          force;
       }
    }
 
-   Hash(comp, &hkey);
+   Hash(comp, &hkey); /* Calculate hkey. */
 
+   /* search in dp->entries for comp. */
    if (dp) {
       for(ep=dp->entries; ep; ep=ep->next)
      if(hkey == ep->hkey && strcmp(ep->name,comp) == 0)
@@ -173,6 +172,7 @@ int          force;
 
    if( force && !loaded) {
       if (strlen(comp) > NameMax || DMSTAT(spath,&stbuf) != 0) {
+     /* Either file to long or the stat failed. */
      if (strlen(comp) > NameMax)
         Warning( "File [%s] longer than value of NAMEMAX [%d].\n\
     Assume unix time 0.\n", comp, NameMax );
@@ -183,7 +183,8 @@ int          force;
      if (!ep) {
         TALLOC(ep,1,Entry);
         ep->name = DmStrDup(comp);
-        DMSTRLWR(ep->name, comp);
+        if( !STOBOOL(DcacheRespCase) )
+           strlwr(ep->name);
         Hash(ep->name, &ep->hkey);
         ep->next = dp->entries;
         ep->isdir = (stbuf.st_mode & S_IFDIR);
