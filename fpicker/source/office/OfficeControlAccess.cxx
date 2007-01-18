@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeControlAccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:49:31 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,7 +550,7 @@ namespace svt
 
             case ControlActions::DELETE_ITEM:
             {
-                sal_Int32 nPos;
+                sal_Int32 nPos = 0;
                 if ( _rValue >>= nPos )
                     _pListbox->RemoveEntry( (USHORT) nPos );
             }
@@ -687,7 +687,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
-                sal_Int32 nPos;
+                sal_Int32 nPos = 0;
                 if ( _rValue >>= nPos )
                 {
                     static_cast< ListBox* >( _pControl )->SelectEntryPos( (USHORT) nPos );
