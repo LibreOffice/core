@@ -1,4 +1,4 @@
-/* RCS  $Id: path.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: path.c,v 1.2 2007-01-18 09:31:57 vg Exp $
 --
 -- SYNOPSIS
 --      Pathname manipulation code
@@ -87,21 +87,23 @@ char *path;
 
 
 
-/*
-** Take dir and name, and return a path which has dir as the directory
-** and name afterwards.
-**
-** N.B. Assumes that the dir separator string is in DirSepStr.
-**      Return path is built in a static buffer, if you need to use it
-**      again you must strdup the result returned by Build_path.
-*/
 PUBLIC char *
-Build_path(dir, name)
+Build_path(dir, name)/*
+=======================
+   Return a path that is created by concatenating dir and name. A directory
+   separater is added between them if needed. If dir is empty name is stripped
+   of leading slashes (if there) and returned.
+
+   The returned path is also cleaned from unneeded './' and 'foo/../'
+   elements and also multiple consequtive '/' are removed.
+
+   Note, the returned path is built in a static buffer, if it is to be used
+   later strdup should be used on the result returned by Build_path to create
+   a copy. */
+
 char *dir;
 char *name;
 {
-   register char *p;
-   register char *q;
    static char     *path  = NIL(char);
    static unsigned buflen = 0;
    int  plen = 0;
@@ -110,7 +112,7 @@ char *name;
 
    if( dir  != NIL(char) ) dlen = strlen( dir  );
    if( name != NIL(char) ) plen = strlen( name );
-   len = plen+dlen+strlen(DirSepStr)+1;
+   len = plen+dlen+1+1; /* Reserve space for extra path separator. */
 
    if( len > buflen ) {
       buflen = (len+16) & ~0xf;     /* buf is always multiple of 16 */
@@ -134,28 +136,93 @@ char *name;
       strcat( path, name );
    }
 
-   q=path;
+   DB_PRINT( "path", ("dir: %s  name: %s", dir, name ));
+
+   Clean_path( path );
+
+   return( path );
+}
+
+
+void
+Clean_path(path)/*
+==================
+   Clean the path from irregular directory separators (if more than one are
+   allowed), remove unneeded './' and 'foo/../' elements and also multiple
+   consequtive '/'.
+
+   The resulting string is shorter than the original, therefore this function
+   works on the original string. */
+
+char *path;
+{
+   register char *p;
+   register char *q;
+   char *tpath;
+
+   /* Skip the root part. */
+   tpath=path;
+#ifdef HAVE_DRIVE_LETTERS
+   if( *tpath && tpath[1] == ':' && isalpha(*tpath) )
+     tpath+=2;
+
+   /* Change all occurences from DirBrkStr to *DirSepStr. */
+#if __CYGWIN__
+   for( q = tpath; (q = strchr(q, '\\')) != NIL(char); )
+      *q = *DirSepStr;
+#else
+   for( q = tpath; (q = strchr(q, '/')) != NIL(char); )
+      *q = *DirSepStr;
+#endif
+#endif
+   for( ; *tpath == *DirSepStr ; ++tpath )
+      ;
+   q = tpath;
+
    while( *q ) {
       char *t;
 
-      p=DmStrPbrk(q,DirBrkStr);
-      t=DmStrPbrk(p+1,DirBrkStr);
-      if( !*p || !*t ) break;
+      p=strchr(q, *DirSepStr);
+      if( !p ) break;
 
-      if ( p-q == 1 && *q == '.' ) {
-     strcpy(q,DmStrSpn(p,DirBrkStr));
-     q = path;
+      /* Remove multiple consequtive DirSepStr. */
+      if( p[1] == *DirSepStr ) {
+     t = p++; /* t points to first, p to second DirStrSep. */
+     /* Move p after the second (or possible more) DirSepStr. */
+     do {
+        p++;
+     }
+     while( *p == *DirSepStr);
+     strcpy(t+1,p);
+     continue;
       }
-      else if (
-     !(p-q == 2 && strncmp(q,"..",2) == 0)
-      && (t-p-1 == 2 && strncmp(p+1,"..",2) == 0)
-      ) {
-     strcpy(q,DmStrSpn(t,DirBrkStr));
-     q = path;
+
+      /* Remove './' */
+      if ( p-q == 1 && *q == '.' ) {
+     strcpy(q,p+1);
+     q = tpath;
+     continue;
+      }
+
+      /* If two '/' are in path check/remove 'foo/../' elements. */
+      t=strchr(p+1, *DirSepStr);
+      if( !t ) break;
+
+      if ( !(p-q == 2 && strncmp(q,"..",2) == 0)
+       && (t-p-1 == 2 && strncmp(p+1,"..",2) == 0) ) {
+     /* Skip one (or possible more) DirSepStr. */
+     do {
+        t++;
+     }
+     while( *t == *DirSepStr);
+     /* q points to first letter of the current directory/file. */
+     strcpy(q,t);
+     q = tpath;
       }
       else
      q = p+1;
    }
 
-   return( path );
+   DB_PRINT( "path", ("path: %s", path ));
+   return;
 }
