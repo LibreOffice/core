@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:21:20 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,7 +788,7 @@ namespace slideshow
             uno::Reference< beans::XPropertySet > xPropSet( xShape,
                                                             uno::UNO_QUERY_THROW );
             // read prio
-            sal_Int32 nPrio;
+            sal_Int32 nPrio(0);
             if( !(xPropSet->getPropertyValue(
                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ) ) >>= nPrio) )
             {
