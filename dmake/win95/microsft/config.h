@@ -1,6 +1,6 @@
 /* $RCSfile: config.h,v $
--- $Revision: 1.9 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:52:48 $
+-- $Revision: 1.10 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:50:23 $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -38,7 +38,7 @@
 
 /* Name and version number of this package */
 #define PACKAGE "dmake"
-#define VERSION "4.6"
+#define VERSION "4.7"
 #define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
@@ -85,6 +85,9 @@
 #   define CONST
 #endif
 
+/* Assume case insensitive file system. */
+#define CASE_INSENSITIVE_FS 1
+
 /* MSC has sys/types.h and sys/stat.h (this is tested only with MSVC++ 6.0) */
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_SYS_STAT_H 1
@@ -93,6 +96,7 @@
 #define HAVE_GETCWD 1
 #define HAVE_UTIME_NULL 1
 #define HAVE_TZSET 1
+#define HAVE_STRLWR 1
 
 #define HAVE_ERRNO_H 1
 #define HAVE_STRERROR 1
