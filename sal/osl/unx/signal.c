@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:18:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -681,8 +681,8 @@ static int ReportCrash( int Signal )
 
 static void PrintStack( int sig )
 {
-    void *buffer[MAX_STACK_FRAMES];
 #ifndef MACOSX
+    void *buffer[MAX_STACK_FRAMES];
     int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
 #endif
 
