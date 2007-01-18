@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:29:59 $
+#   last change: $Author: vg $ $Date: 2007-01-18 14:55:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ PRJNAME = desktop
 TARGET = deployment_registry_configuration
 ENABLE_EXCEPTIONS = TRUE
 
+INCPRE += ..$/..$/inc
+
 .INCLUDE : settings.mk
 
 .IF "$(SYSTEM_DB)" == "YES"
@@ -48,8 +50,6 @@ CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 SRS1NAME = $(TARGET)
 SRC1FILES = \
         dp_configuration.src
-
-INCPRE += ..$/..$/inc
 
 SLOFILES = \
         $(SLO)$/dp_configuration.obj
