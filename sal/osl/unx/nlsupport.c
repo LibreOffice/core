@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-03 11:38:10 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -843,6 +843,8 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 }
 
 #ifdef MACOSX
+#include "system.h"
+
 #include <premac.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
@@ -850,13 +852,16 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 /* OS X locale discovery function from dylib */
 int (*pGetOSXLocale)( char *, sal_uInt32 );
+
+oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
+void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName);
 /*****************************************************************************
  return the current process locale
  *****************************************************************************/
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    static const char *locale = NULL;
+    static char *locale = NULL;
 
     /* basic thread safeness */
 //    pthread_mutex_lock( &aLocalMutex );
