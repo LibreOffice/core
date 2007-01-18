@@ -1,6 +1,6 @@
 /* $RCSfile: rulparse.c,v $
--- $Revision: 1.9 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:40:47 $
+-- $Revision: 1.10 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:32:23 $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -145,6 +145,9 @@ int *state;
         /* Do we need cells for attributes? If not move the definition
          * to the target part.  */
         cp = Def_cell( tok );
+        /* A $ character indicates either a literal $ in the pathname (this
+         * was broken before) or a dynamic macro (this is a syntax error).
+         * FIXME: Here would be the place to add a sanity check. */
         DB_PRINT( "par", ("tg_cell [%s]", tok) );
 
         if( (at = _is_attribute(tok)) != 0 ) {
@@ -529,7 +532,8 @@ int flag;
 PUBLIC int
 Set_group_attributes( list )/*
 ==============================
-    Scan list looking for the standard @ and - (as in recipe line defs)
+    Scan list looking for the standard @,-,% and + (as in recipe line
+    defs) (+ is set but ignored for group recipes)
     and set the flags accordingly so that they apply when we bind the
     rules to the appropriate targets.
     Return TRUE if group recipe start '[' was found, otherwise FALSE.  */
