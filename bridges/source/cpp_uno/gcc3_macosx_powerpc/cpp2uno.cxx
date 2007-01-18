@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:51:47 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,7 +471,7 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
 
     volatile long nRegReturn[2];
 
-        sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
+        // sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
 
     typelib_TypeClass aType =
              cpp_mediate( nFunctionIndex, nVtableOffset, (void**)gpreg, (void**)fpreg, ovrflw, (sal_Int64*)nRegReturn );
@@ -677,7 +677,7 @@ void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     void ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
-    sal_Int32 functionCount, sal_Int32 vtableOffset)
+    sal_Int32 /* functionCount */, sal_Int32 vtableOffset)
 {
 
   // fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
