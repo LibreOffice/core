@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_updateinstalldialog.hxx"
 #include "dp_gui_updatedata.hxx"
+#include "dp_identifier.hxx"
 #include "rtl/uri.hxx"
 #include "osl/thread.hxx"
 #include "cppuhelper/exc_hlp.hxx"
@@ -795,7 +796,8 @@ void DialogImpl::clickRemove( USHORT )
     OSL_ASSERT( m_treelb->getSelectedPackages(true).getLength() > 0 );
 
     typedef ::std::pair<
-        Reference<deployment::XPackageManager>, OUString > t_item;
+        Reference<deployment::XPackageManager>,
+        Reference<deployment::XPackage> > t_item;
     ::std::vector<t_item> to_be_removed;
 
     for ( SvLBoxEntry * entry = m_treelb->FirstSelected();
@@ -809,7 +811,7 @@ void DialogImpl::clickRemove( USHORT )
                 continue;
             to_be_removed.push_back(
                 t_item( m_xPkgMgrFac->getPackageManager(context),
-                        m_treelb->getPackage(entry)->getName() ) );
+                        m_treelb->getPackage(entry) ) );
         }
     }
 
@@ -822,10 +824,12 @@ void DialogImpl::clickRemove( USHORT )
         t_item const & item = to_be_removed[ pos ];
         Reference<task::XAbortChannel> xAbortChannel(
             item.first->createAbortChannel() );
-        currentCmdEnv->progressSection( item.second, xAbortChannel );
+        OUString id( dp_misc::getIdentifier( item.second ) );
+        currentCmdEnv->progressSection( id, xAbortChannel );
         try {
             item.first->removePackage(
-                item.second, xAbortChannel, currentCmdEnv.get() );
+                id, item.second->getName(), xAbortChannel,
+                currentCmdEnv.get() );
         }
         catch (CommandAbortedException &) {
             break;
