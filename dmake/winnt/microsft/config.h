@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.4 2006-09-25 09:53:26 vg Exp $
+/* RCS  $Id: config.h,v 1.5 2007-01-18 09:51:47 vg Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -27,7 +27,7 @@
 
 /* Name and version number of this package */
 #define PACKAGE "dmake"
-#define VERSION "4.6"
+#define VERSION "4.7"
 #define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
