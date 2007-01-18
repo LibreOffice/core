@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.4 2006-06-29 11:23:47 ihi Exp $
+/* RCS  $Id: imacs.c,v 1.5 2007-01-18 09:30:31 vg Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -76,6 +76,8 @@ Create_macro_vars()
    swchar[0] = DEF_ESCAPE_CHAR, swchar[1] = '\0';
    _set_string_var(".ESCAPE_PREFIX", swchar, M_FLAG, &Escape_char);
 
+   /* Each one the following attributes corresponds to a bit of
+    * Glob_attr. */
    _set_bit_var(".SILENT",   "", A_SILENT  );
    _set_bit_var(".IGNORE",   "", A_IGNORE  );
    _set_bit_var(".PRECIOUS", "", A_PRECIOUS);
@@ -100,12 +102,18 @@ Create_macro_vars()
    _set_string_var(".KEEP_STATE",  "",  M_DEFAULT, &Keep_state  );
    _set_string_var(".NOTABS",      "",  M_MULTI, &Notabs );
    _set_string_var(".DIRCACHE",    "y", M_DEFAULT, &UseDirCache );
-   _set_string_var(".DIRCACHERESPECTCASE", "", M_DEFAULT, &DcacheRespCase);
+
+#if CASE_INSENSITIVE_FS
+#define DIRCACHERESPCASEDEFAULT ""
+#else
+#define DIRCACHERESPCASEDEFAULT "y"
+#endif
+   _set_string_var(".DIRCACHERESPCASE", DIRCACHERESPCASEDEFAULT, M_DEFAULT, &DcacheRespCase);
 
    _set_string_var("MAKEDIR",Get_current_dir(),M_PRECIOUS|M_NOEXPORT,&Makedir);
    _set_string_var("MAKEVERSION", VERSION, M_DEFAULT|M_PRECIOUS, &version);
    _set_string_var("PWD",  Makedir,  M_DEFAULT|M_NOEXPORT, &Pwd);
-   _set_string_var("TMD",  "",       M_DEFAULT|M_NOEXPORT, &Tmd);
+   _set_string_var("TMD",  ".",      M_DEFAULT|M_NOEXPORT, &Tmd);
 
    Def_macro("NULL", "", M_PRECIOUS|M_NOEXPORT|M_FLAG);
 
@@ -122,8 +130,6 @@ Create_macro_vars()
     * change from command line. */
    _set_int_var( "MAXPROCESSLIMIT", "100", M_DEFAULT|M_NOEXPORT,&Max_proclmt );
    _set_int_var( "MAXPROCESS", "1", M_DEFAULT|M_NOEXPORT, &Max_proc );
-   _set_int_var( "DYNAMICNESTINGLEVEL", "100", M_DEFAULT|M_NOEXPORT,
-         &DynamicNestLevel);
    sprintf(buf,"%d",NAME_MAX);
    _set_int_var( "NAMEMAX", buf, M_DEFAULT|M_NOEXPORT, &NameMax);
 }
@@ -167,9 +173,8 @@ char **var;
 }
 
 
-/*
-** Define a bit variable value, and set up the macro.
-*/
+/* Define a bit variable value, and set up the macro. Each of the bits
+ * corresponds to an attribute bit of Glob_attr. */
 static void
 _set_bit_var(name, val, mask)
 char *name;
