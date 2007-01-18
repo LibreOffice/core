@@ -1,6 +1,6 @@
 /* $RCSfile: dag.c,v $
--- $Revision: 1.7 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:38:52 $
+-- $Revision: 1.8 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:28:42 $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -27,6 +27,9 @@
 */
 
 #include "extern.h"
+
+static char *_normalize_path(char *path);
+
 
 static void
 set_macro_value(hp)/*
@@ -72,6 +75,14 @@ HASHPTR hp;
             if( Max_proc > Max_proclmt )
                Fatal( "Specified # of processes exceeds limit of [%d]",
                       Max_proclmt );
+
+        /* Don't change MAXPROCESS value if .SEQUENTIAL is set. */
+        if( (Glob_attr & A_SEQ) && (Max_proc != 1) ) {
+           Warning( "Macro MAXPROCESS set to 1 because .SEQUENTIAL is set." );
+           Max_proc = 1;
+           if( hp->ht_value != NIL(char) ) FREE(hp->ht_value);
+           hp->ht_value = DmStrDup( "1" );
+        }
          }
       } break;
 
@@ -81,8 +92,12 @@ HASHPTR hp;
 
          if( hp->ht_value == NIL(char) )
             *hp->MV_BVAR &= ~hp->MV_MASK;
-         else
+         else {
             *hp->MV_BVAR |= hp->MV_MASK;
+        /* If we're setting .SEQUENTIAL set MAXPROCESS=1. */
+        if( (hp->MV_MASK & A_SEQ) && (Max_proc != 1) )
+           Def_macro( "MAXPROCESS", "1", M_MULTI|M_EXPANDED);
+     }
          break;
    }
 }
@@ -372,8 +387,10 @@ int     flags;          /* initial ht_flags */
 PUBLIC CELLPTR
 Def_cell( name )/*
 ==================
-   Take a string passed in and define it as a cell
-   If the cell exists then return a pointer to it. */
+   Check if a cell for "name" already exists, if not create a new cell.
+   The value of name is normalized before checking/creating the cell to
+   avoid creating multiple cells for the same target file.
+   The function returns a pointer to the cell. */
 char    *name;
 {
    register HASHPTR  hp;
@@ -415,6 +432,12 @@ char    *name;
       if( !Def_targets ) cp = lib;
    }
    else {
+      /* Normalize the name. */
+      DB_PRINT( "path", ("Normalizing [%s]", name) );
+
+      /* The normalizing function returns a pointer to a static buffer. */
+      name =_normalize_path(name);
+
       hp = Get_name( name, Defs, TRUE );/* get the name from hash table */
 
       if( hp->CP_OWNR == NIL(CELL) )    /* was it previously defined    */
@@ -596,12 +619,12 @@ char *rp;
 {
    t_attr flag = A_DEFAULT;
    int    done = FALSE;
+   int atcount = 0;
 
    while( !done )
       switch( *rp++ )
       {
-     case '@' : if( !(Verbose & V_FORCEECHO) ) flag |= A_SILENT;
-       break;
+     case '@' : ++atcount;        break;
      case '-' : flag |= A_IGNORE; break;
      case '+' : flag |= A_SHELL;  break;
      case '%' : flag |= A_SWAP;   break;
@@ -612,5 +635,57 @@ char *rp;
      default: done = TRUE; break;
       }
 
+   if( !(Verbose & V_FORCEECHO) && atcount-- ) {
+      flag |= A_SILENT;
+      /* hide output if more than one @ are encountered. */
+      if( atcount )
+     flag |= A_MUTE;
+   }
+
    return(flag);
+}
+
+
+static char *
+_normalize_path(path)/*
+=======================
+   Normalize the given path unless it contains a $ indicating a dynamic
+   prerequisite.
+   Special case: For absolute DOSish paths under cygwin a cygwin API
+   function is used to normalize the path optherwise Clean_path() is used.
+
+   Note, the returned path is built in a static buffer, if it is to be used
+   later a copy should be created. */
+
+char *path;
+{
+   static char *cpath = NIL(char);
+
+   if ( !cpath && ( (cpath = MALLOC( PATH_MAX, char)) == NIL(char) ) )
+      No_ram();
+
+   /* If there is a $ in the path this can either mean a '$' character in
+    * a target definition or a dynamic macro expression in a prerequisite
+    * list. As dynamic macro expression must not be normalized and is
+    * indistinguishable from a literal $ characters at this point we skip
+    * the normalization if a $ is found.  */
+   if( strchr(path, '$') ) {
+      return path;
+   }
+
+#if __CYGWIN__
+   /* Use cygwin function to convert a DOS path to a POSIX path. */
+   if( *path && path[1] == ':' && isalpha(*path) ) {
+      cygwin_conv_to_posix_path(path, cpath);
+   }
+   else
+#endif
+   {
+      strcpy( cpath, path );
+      Clean_path( cpath );
+   }
+
+   DB_PRINT( "path", ("normalized: %s", cpath ));
+
+   return cpath;
 }
