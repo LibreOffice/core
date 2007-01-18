@@ -4,9 +4,9 @@
 #
 #   $RCSfile: readme.txt,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 14:31:55 $
+#   last change: $Author: vg $ $Date: 2007-01-18 14:58:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,12 +50,13 @@ OOo 2.1 or later); version21ns.oxt is the same, but with a different way of
 using XML namespaces; version21other.oxt additionally contains an unsatisfied
 dependency (and should thus not install in any OOo version).  version22.oxt
 contains a dependency on OOo 2.2 (and should thus only install in OOo 2.2 or
-later).  version10000.oxt contains a dependency on the hypothetical OOo version
-10000 (and should thus not install in any OOo version).  versionempty.oxt
-contains an empty value attribute and versionnone.oxt lacks the value attribute;
-neither is allowed by the spec, but the current implementation treats both as
-pre OOo 2.1 versions (and the extensions should thus install in OOo 2.1 or
-later).
+later).  version23.oxt contains a dependency on OOo 2.3 (and should thus only
+install in OOo 2.3 or later).  version10000.oxt contains a dependency on the
+hypothetical OOo version 10000 (and should thus not install in any OOo version).
+versionempty.oxt contains an empty value attribute and versionnone.oxt lacks the
+value attribute; neither is allowed by the spec, but the current implementation
+treats both as pre OOo 2.1 versions (and the extensions should thus install in
+OOo 2.1 or later).
 
 All of the following testcases should result in the Unsatisfied Dependencies
 dialog being displayed and the extension not being installed:
