@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:29:41 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:12:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,7 +454,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         // xmlsec05 depricated
         case PROPERTYHANDLE_STAROFFICEBASIC:
         {
-            sal_Int32 nMode;
+            sal_Int32 nMode = 0;
             rValue >>= nMode;
             m_eBasicMode = (EBasicSecurityMode)nMode;
             m_bROBasicMode = bRO;
