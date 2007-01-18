@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:10:53 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #elif defined(MACOSX)
 #include <ufs/ufs/quota.h>
 #include <ctype.h>
-static const sal_Char* MOUNTTAB="/etc/mtab";
+// static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #include <sys/param.h>
 #include <sys/mount.h>
@@ -2423,6 +2423,8 @@ oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
     return osl_File_E_None;
 }
 
+#ifndef MACOSX
+
 /*****************************************
  * osl_newVolumeDeviceHandleImpl
  ****************************************/
@@ -2456,6 +2458,7 @@ static void osl_freeVolumeDeviceHandleImpl (oslVolumeDeviceHandleImpl* pHandle)
     if (pHandle != NULL)
         rtl_freeMemory (pHandle);
 }
+#endif
 
 /******************************************************************************
  *
@@ -3422,19 +3425,19 @@ static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if ( defined(NETBSD) || defined(FREEBSD) )
 static sal_Bool osl_getFloppyMountEntry(const sal_Char* pszPath, oslVolumeDeviceHandleImpl* pItem)
 {
     return sal_False;
 }
-#endif /* MACOSX */
+#endif /* NETBSD || FREEBSD */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if ( defined(NETBSD) || defined(FREEBSD) )
 static sal_Bool osl_isFloppyMounted(oslVolumeDeviceHandleImpl* pDevice)
 {
     return sal_False;
 }
-#endif /* MACOSX */
+#endif /* NETBSD || FREEBSD */
 
 
 #ifdef DEBUG_OSL_FILE
