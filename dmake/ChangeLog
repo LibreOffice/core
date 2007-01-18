@@ -1,3 +1,358 @@
+2007-01-15 21:36  vq
+
+	* msdos/runargv.c:
+
+	#i61856# There is currently no parallel processing for the native W32 dmake.
+	Let Wait_for_child() always return -1 indicating that there is nothing to
+	wait for on this OS.
+
+2006-12-21 23:45  vq
+
+	* NEWS:
+
+	#i69952# Release dmake 4.7
+	(Some extra changes were done in CWS dmake47.)
+
+2006-12-21 23:36  vq
+
+	* unix/runargv.c:
+
+	#i61856# Remove another verbose debugging statement.
+
+2006-12-20 22:16  vq
+
+	* quit.c, sysintf.c, unix/runargv.c:
+
+	#i61856# Child process handling improvements.
+
+2006-12-06 17:09  vq
+
+	* dmake.c:
+
+	#i72337# Make dmake -V tell whether fork/exec or spawn is used.
+
+2006-12-02 14:35  vq
+
+	* tests/Makefile.am:
+
+	#i72210# Missed an autotool bit.
+
+2006-12-02 14:10  vq
+
+	* tests/Makefile.in, tests/recipes-7, unix/runargv.c:
+
+	#i72210# Add missing detail and a testcase.
+
+2006-12-02 13:25  vq
+
+	* unix/runargv.c:
+
+	#i72210# Teach spawn enabled dmake to honor the '-' recipe switch.
+
+2006-11-30 20:16  vq
+
+	* unix/runargv.c:
+
+	#i61856# Fix "Internal Error: Child is missing .." problem.
+
+2006-11-27 17:23  vq
+
+	* unix/runargv.c:
+
+	#i61856# Improve (dmake internal) process handling.
+
+2006-11-23 11:58  vq
+
+	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
+	  man/dmake.tf, win95/microsft/config.h, winnt/microsft/config.h:
+
+	#i69952# Release dmake 4.7.
+
+2006-11-21 06:50  hjs
+
+	* tests/: macros-6, misc-13:
+
+	small cleanup
+
+2006-11-20 20:32  vq
+
+	* tests/misc-13:
+
+	#i71777# Fix testcase - Only test the directory cache for case
+	insensitivity if the FS is also case insensitive.
+
+2006-11-20 12:16  vq
+
+	* tests/: misc-15, recipes-5, recipes-6:
+
+	#i71777# Solaris testcase fixes.
+
+2006-11-20 11:58  vq
+
+	* tests/macros-6:
+
+	#i71777# Fix testcase.
+
+2006-11-20 11:38  vq
+
+	* tests/recipes-6:
+
+	#i71422# Fix testcase.
+
+2006-11-19 16:10  vq
+
+	* man/dmake.nc, man/dmake.tf, tests/Makefile.am, tests/Makefile.in,
+	  tests/misc-17:
+
+	#i71704# Add testcase and documentation.
+
+2006-11-19 00:27  vq
+
+	* dag.c, dmake.c, imacs.c, make.c, unix/runargv.c:
+
+	#i71704# Let the global .SEQUENTIAL attribute implicitely set MAXPROCESS=1
+	and disallow MAXPROCESS to be changed if the global .SEQUENTIAL is set.
+
+2006-11-17 18:09  vq
+
+	* tests/: Makefile.am, Makefile.in, misc-16:
+
+	#i61856# Add testcase.
+
+2006-11-17 16:56  vq
+
+	* dmake.h, sysintf.c, unix/runargv.c:
+
+	#i61856# Implement better way to wait for a process queue to finish
+	without obstructing other process queues during parallel makefile
+	processing.
+
+2006-11-15 14:43  vq
+
+	* configure, configure.in, unix/runargv.c:
+
+	#i71582# Make dmake usable on OpenBSD. (Patch separated from CWS openbsd01)
+
+2006-11-13 15:39  vq
+
+	* tests/: Makefile.am, Makefile.in, recipes-5, recipes-6:
+
+	#i71422# Add testcases.
+
+2006-11-13 14:08  vq
+
+	* NEWS, man/dmake.nc, man/dmake.tf:
+
+	#i71422# Document new @@ recipe property.
+
+2006-11-12 00:25  vq
+
+	* Makefile.in, config.h.in, configure, configure.in,
+	  startup/Makefile.in, startup/unix/Makefile.in,
+	  startup/unix/cygwin/Makefile.in, startup/unix/linux/Makefile.in,
+	  startup/unix/macosx/Makefile.in,
+	  startup/unix/solaris/Makefile.in,
+	  startup/unix/sysvr4/Makefile.in, startup/winnt/Makefile.in,
+	  startup/winnt/mingw/Makefile.in, startup/winnt/msvc6/Makefile.in,
+	  tests/Makefile.in:
+
+	#i71422# Remove unused macro and regenerate autotools files.
+
+2006-11-12 00:06  vq
+
+	* dag.c, dmake.c, dmake.h, extern.h, function.c, getinp.c, make.c,
+	  rulparse.c, sysintf.c, vextern.h, mac/public.h, msdos/runargv.c,
+	  msdos/borland/bcc30/public.h, msdos/borland/bcc40/public.h,
+	  msdos/borland/bcc45/public.h, msdos/borland/bcc50/public.h,
+	  msdos/borland/tcc20/public.h, msdos/microsft/msc51/public.h,
+	  msdos/microsft/msc60/public.h, msdos/zortech/public.h,
+	  os2/ibm/icc/public.h, os2/ibm/icc3/public.h, qssl/public.h,
+	  qssl/runargv.c, tos/public.h, unix/runargv.c,
+	  unix/386ix/public.h, unix/bsd43/public.h, unix/bsd43/uw/public.h,
+	  unix/bsd43/vf/public.h, unix/bsdarm32/public.h,
+	  unix/coherent/ver40/public.h, unix/coherent/ver42/public.h,
+	  unix/cygwin/public.h, unix/linux/gnu/public.h,
+	  unix/macosx/gnu/public.h, unix/solaris/public.h,
+	  unix/solaris/gnu/public.h, unix/sysvr1/public.h,
+	  unix/sysvr3/public.h, unix/sysvr3/gnu/public.h,
+	  unix/sysvr3/pwd/public.h, unix/sysvr4/public.h,
+	  unix/xenix/public.h, unix/xenix/pwd/public.h,
+	  win95/borland/bcc50/public.h, win95/microsft/vpp40/public.h,
+	  winnt/borland/bcc50/public.h, winnt/microsft/vpp40/public.h,
+	  winnt/mingw/public.h, winnt/msvc6/public.h:
+
+	#i71422# Add a new feature: Using @@ as a recipe prefix redirects the
+	output (stdout and stderr) of a recipe to /dev/null (or NUL on W32)
+	completely suppressing the output of that recipe to the terminal.
+	As for the @ prefix this can be disabled using the -v[r] switch.
+
+2006-11-09 22:25  vq
+
+	* tests/: Makefile.am, Makefile.in, misc-15:
+
+	#i69943# Add testcase to check directory caching with DOS style path
+	targets on cygwin dmake.
+
+2006-11-09 17:33  vq
+
+	* make.c, path.c:
+
+	#i69821# Fix/improve $(TMD) handling.
+
+2006-11-09 16:31  vq
+
+	* tests/: Makefile.am, Makefile.in, macros-6:
+
+	#i69821# Add testcase to verify that .SETDIR works (with drive letters
+	on cygwin) and sets TMD correctly.
+
+2006-11-09 13:16  vq
+
+	* make.c:
+
+	#i69821# Add comment where TMD is detecting different drive letters for
+	native W32 dmake versions.
+
+2006-10-08 19:27  vq
+
+	* NEWS, make.c, tests/Makefile.am, tests/Makefile.in,
+	  tests/targets-17:
+
+	#i70210# Fix dmakes handling of empty dynamic prerequisites.
+
+2006-10-08 18:57  vq
+
+	* make.c:
+
+	#i70168# Remove FIXME.
+
+2006-10-08 18:49  vq
+
+	* NEWS, imacs.c, make.c, rulparse.c, vextern.h, man/dmake.nc,
+	  man/dmake.tf, tests/Makefile.am, tests/Makefile.in,
+	  tests/targets-16:
+
+	#i70168# Improve $ handling in targets/prerequisites.
+
+2006-10-07 16:23  vq
+
+	* parse.c, tests/Makefile.am, tests/Makefile.in, tests/misc-14:
+
+	#i70027# Fix diagnostic output and add a testcase.
+
+2006-10-07 15:30  vq
+
+	* NEWS, man/dmake.nc, man/dmake.tf:
+
+	#i69742# Add NEWS file entry and mention normalization in the man page.
+
+2006-10-07 14:34  vq
+
+	* dag.c:
+
+	#i69742# Never normalize cells that contain a $ in the pathname.
+
+2006-10-06 22:28  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-15:
+
+	#i69742# Add testcase.
+
+2006-10-06 00:02  vq
+
+	* dag.c, make.c:
+
+	#i69742# Don't targets with $ in the filepath as dynamic macros. ($$ means
+	a single $ in the filepath.)
+
+2006-10-03 23:17  vq
+
+	* dag.c, sysintf.c:
+
+	#i69742# Enable normalization of targets and non-dynamic prerequisites.
+	(Dynamic prerequisites are prerequisites with not expanded macros.)
+
+2006-10-02 20:46  vq
+
+	* path.c:
+
+	#i69742# Fix problem when removing multiple '/'.
+
+2006-10-01 15:18  vq
+
+	* dmake.c, extern.h, path.c:
+
+	#i69742# Create Clean_path() function.
+
+2006-10-01 12:23  vq
+
+	* path.c, unix/dirbrk.c:
+
+	#i69742# Clean up/speed up Build_path().
+
+2006-09-30 11:01  vq
+
+	* mac/sysintf.h, msdos/sysintf.h, os2/sysintf.h, qssl/sysintf.h,
+	  tos/sysintf.h, unix/sysintf.h, win95/borland/sysintf.h,
+	  win95/microsft/sysintf.h, winnt/borland/sysintf.h,
+	  winnt/microsft/sysintf.h, winnt/mingw/sysintf.h,
+	  winnt/msvc6/sysintf.h:
+
+	#i69814# Remove the unused DMSTRLWR macro.
+
+2006-09-29 17:20  vq
+
+	* Makefile.in, autogen.sh, config.h.in, configure, configure.in,
+	  extern.h, function.c, make.c, sysintf.c:
+
+	#i69953# Remove NO_DRIVE_LETTERS, use HAVE_DRIVE_LETTERS instead.
+
+2006-09-29 14:55  vq
+
+	* tests/macros-5:
+
+	#i69821# Fix testcase.
+
+2006-09-29 14:50  vq
+
+	* dmstring.c, extern.h, imacs.c, make.c, stat.c, man/dmake.nc,
+	  man/dmake.tf, tests/Makefile.am, tests/Makefile.in,
+	  tests/misc-13, unix/dcache.c, win95/microsft/config.h:
+
+	#i69814# Add/fix option to make directory cache case insensitive. (Make
+	this the default for Windows and Mac OS X.) Added testcase.
+
+2006-09-28 17:42  vq
+
+	* imacs.c, make.c, tests/Makefile.am, tests/Makefile.in,
+	  tests/macros-5:
+
+	#i69821# Fix TMD macro and add testcase.
+
+2006-09-28 17:16  vq
+
+	* Makefile.am, Makefile.in, aclocal.m4, autogen.sh, compile,
+	  config.guess, config.h.in, configure, configure.in, depcomp,
+	  install-sh, missing, mkinstalldirs, msdos/Makefile.am,
+	  msdos/Makefile.in, startup/Makefile.in, startup/unix/Makefile.in,
+	  startup/unix/cygwin/Makefile.in, startup/unix/linux/Makefile.in,
+	  startup/unix/macosx/Makefile.in,
+	  startup/unix/solaris/Makefile.in,
+	  startup/unix/sysvr4/Makefile.in, startup/winnt/Makefile.in,
+	  startup/winnt/mingw/Makefile.in, startup/winnt/msvc6/Makefile.in,
+	  tests/Makefile.in, win95/Makefile.am, win95/Makefile.in,
+	  win95/microsft/Makefile.am, win95/microsft/Makefile.in:
+
+	#i69953# Clean up of the autotooling.
+
+2006-09-28 13:33  vq
+
+	* Makefile.in, configure, configure.in, man/dmake.nc, man/dmake.tf,
+	  readme/read1st.txt, win95/microsft/config.h,
+	  winnt/microsft/config.h:
+
+	#i69952#  Bump version to 4.7-cvs.
+
 2006-09-24 19:57  vq
 
 	* tests/targets-12:
