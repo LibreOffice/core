@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-15 12:33:20 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,14 +84,10 @@ static oslDetailedDebugMessageFunc volatile g_pDetailedDebugMessageFunc = 0;
 static void osl_diagnose_backtrace_Impl (
     oslDebugMessageFunc f);
 
-static void osl_diagnose_frame_Impl (
-    oslDebugMessageFunc f,
-    int                 depth,
-    void *              pc);
-
 #define OSL_DIAGNOSE_OUTPUTMESSAGE(f, s) \
 ((f != 0) ? (*(f))((s)) : (void)fprintf(stderr, "%s", (s)))
 
+#if defined (LINUX) || defined (SOLARIS)
 /************************************************************************/
 /* osl_diagnose_frame_Impl */
 /************************************************************************/
@@ -132,6 +128,7 @@ static void osl_diagnose_frame_Impl (
 
     OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 }
+#endif
 
 /************************************************************************/
 /* osl_diagnose_backtrace_Impl */
