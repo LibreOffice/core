@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.h,v 1.3 2006-04-20 12:27:00 hr Exp $
+/* RCS  $Id: sysintf.h,v 1.4 2007-01-18 09:53:01 vg Exp $
 --
 -- SYNOPSIS
 --      Interfaces for sysintf.c
@@ -27,7 +27,6 @@
 #define VOID_LCACHE(l,m)
 #define GETPID _psp
 #define Hook_std_writes(A)
-#define DMSTRLWR(A,B)  dstrlwr((A),(B))
 
 extern char * tempnam();
 extern char * getcwd();
