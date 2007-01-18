@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.3 2006-09-25 09:41:53 vg Exp $
+/* RCS  $Id: runargv.c,v 1.4 2007-01-18 09:34:27 vg Exp $
 --
 -- SYNOPSIS
 --      Run a sub process.
@@ -33,14 +33,16 @@ static void _add_child ANSI((CELLPTR, int));
 static void _finished_child ANSI((int));
 
 PUBLIC int
-runargv(target, ignore, group, last, shell, cmd)
+runargv(target, group, last, cmnd_attr, cmd)
 CELLPTR target;
-int     ignore;
 int group;
 int last;
-int shell;
+t_attr  cmnd_attr; /* Attributes for current cmnd. */
 char    *cmd;
 {
+   int  ignore = (cmnd_attr & A_IGNORE)!= 0; /* Ignore errors ('-'). */
+   int  shell  = (cmnd_attr & A_SHELL) != 0; /* Use shell ('+'). */
+   int  mute = (cmnd_attr & A_MUTE) != 0; /* Mute output ('@@'). */
 #if ! defined(_MSC_VER)
 #if defined(__BORLANDC__) && __BORLANDC__ >= 0x500
    extern char ** _RTLENTRY _EXPDATA environ;
@@ -50,6 +52,8 @@ char    *cmd;
 #endif
    int status;
    char **argv;
+   int old_stdout = -1; /* For redirecting shell escapes */
+   int old_stderr = -1; /* and silencing @@-recipes      */
 
    if( Measure & M_RECIPE )
       Do_profile_output( "s", M_RECIPE, target );
@@ -58,6 +62,22 @@ char    *cmd;
 
    /* remove leading whitespace */
    while( iswhite(*cmd) ) ++cmd;
+
+   /* redirect output for _exec_shell / @@-recipes. */
+   if( Is_exec_shell ) {
+      /* Add error checking? */
+      old_stdout = dup(1);
+      dup2( fileno(stdout_redir), 1 );
+   }
+   if( mute ) {
+      old_stderr = dup(2);
+      dup2( zerofd, 2 );
+
+      if( !Is_exec_shell ) {
+     old_stdout = dup(1);
+     dup2( zerofd, 1 );
+      }
+   }
 
    /* Return immediately for empty line or noop command. */
    if ( !*cmd ||                /* empty line */
@@ -85,7 +105,16 @@ char    *cmd;
       argv = Pack_argv( group, shell, cmd );
       Packed_shell = shell||group;
 
+      /* The last two arguments would need (const char *const *) casts
+       * to silence the warning when building with MinGW. */
       status = spawnvpe(P_WAIT, *argv, argv, environ);
+   }
+
+   /* Restore stdout/stderr if needed. */
+   if( old_stdout != -1 ) {
+      dup2(old_stdout, 1);
+      if( old_stderr != -1 )
+     dup2(old_stderr, 2);
    }
 
    if( status == -1 ) Error("%s: %s", argv[0], strerror(errno));
@@ -113,7 +142,9 @@ Wait_for_child( abort_flg, pid )
 int abort_flg;
 int pid;
 {
-   return(1);
+   /* There is currently no parallel processing for this OS, always
+    * return -1 indicating that there was nothing to wait for. */
+   return(-1);
 }
 
 
