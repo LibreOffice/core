@@ -1,6 +1,6 @@
 /* $RCSfile: make.c,v $
--- $Revision: 1.7 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:40:24 $
+-- $Revision: 1.8 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:30:56 $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -307,6 +307,8 @@ CELLPTR setdirroot;
    for(dp=CeMeToo(cp); dp; dp=dp->cl_next) {
       tcp = dp->cl_prq;
       if( push ) {
+     /* If we changed the directory because of .SETDIR write Pwd into
+      * tcp->ce_dir so that it holds an absolute path. */
      if( !(tcp->ce_attr & A_POOL) && tcp->ce_dir ) FREE( tcp->ce_dir );
      tcp->ce_dir   = _pool_lookup(Pwd);
      tcp->ce_attr |= A_SETDIR|A_POOL;
@@ -320,7 +322,7 @@ CELLPTR setdirroot;
       time_t itime = cp->ce_time;
 
       if (cp->ce_parent && (cp->ce_parent->ce_flag & F_MULTI)) {
-     /* Inherit the stat info from the parent. */
+     /* Inherit the stat info from the F_MULTI parent. */
      cp->ce_time  = cp->ce_parent->ce_time;
      cp->ce_flag |= F_STAT;
      /* Propagate the A_PRECIOUS attribute from the parent. */
@@ -329,7 +331,8 @@ CELLPTR setdirroot;
       else {
      for(dp=CeMeToo(cp); dp; dp=dp->cl_next) {
         tcp = dp->cl_prq;
-        Stat_target( tcp, TRUE, FALSE );
+        /* Check if target already exists. */
+        Stat_target( tcp, 1, FALSE );
 
         if( tcp->ce_time == (time_t)0L ) {
            if( tcp->ce_flag & F_INFER )
@@ -412,7 +415,6 @@ CELLPTR setdirroot;
    /* First round, will be repeated a second time below. */
    for( prev=NULL,dp=cp->ce_prq; dp != NIL(LINK); prev=dp, dp=next ) {
       int seq;
-      int nesting_count;
 
       /* This is the only macro that needs to be reset while building
        * prerequisites since it is set when we make each prerequisite. */
@@ -443,27 +445,30 @@ CELLPTR setdirroot;
         tcp = dp->cl_prq;
       }
 
+      /* If the previous target (prereq) is not yet ready return if
+       * seq is TRUE. */
       if( seq && !made ) goto stop_making_it;
 
-      nesting_count = 0;
-      while ( tcp
-       && strchr(tcp->CE_NAME, '$')
-      ) {
-     if ( nesting_count++ > DynamicNestLevel ) {
-        Fatal( "Dynamic Macro nesting level exceeded [%s]",
-           cp->CE_NAME );
-     }
-     /* Make this prerequisite link point at the real prerequisite we
-      * are after, ie figure out what the dynamic one is and point at it.*/
+      /* Expand dynamic prerequisites. The F_MARK flag is guarging against
+       * possible double expandion of dynamic prerequisites containing more
+       * than one prerequisite. */
+      /* A new A_DYNAMIC attribute could save a lot of strchr( ,'$') calls. */
+      if ( tcp && !(tcp->ce_flag & F_MARK) && strchr(tcp->CE_NAME, '$') ) {
+     /* Replace this dynamic prerequisite with the the real prerequisite,
+      * and add the additional prerequisites if there are more than one.*/
 
      name = Expand( tcp->CE_NAME );
      if( strcmp(name,cp->CE_NAME) == 0 )
         Fatal("Detected circular dynamic dependency; generated '%s'",name);
 
-     /* Call helper for dynamic prerequisite expansion. */
+     /* Call helper for dynamic prerequisite expansion to replace the
+      * prerequisite with the expanded version and add the new
+      * prerequisites, if the macro expanded to more than one, after
+      * the current list element. */
      dp = _expand_dynamic_prq( cp->ce_prq, dp, name );
      FREE( name );
 
+     /* _expand_dynamic_prq() probably changed dp->cl_prq. */
      tcp = dp->cl_prq;
      if ( tcp ) {
         next = dp->cl_next;
@@ -471,8 +476,8 @@ CELLPTR setdirroot;
       }
 
       /* Dynamic expansion results in a NULL cell only when the the new
-       * prerequisite is already in the prerequisite list.  In this case
-       * delete the cell and continue. */
+       * prerequisite is already in the prerequisite list or empty. In this
+       * case delete the cell and continue. */
       if ( tcp == NIL(CELL) ) {
      FREE(dp);
      if ( prev == NIL(LINK) ) {
@@ -485,6 +490,9 @@ CELLPTR setdirroot;
      }
      continue;
       }
+
+      /* Clear F_MARK flag that could have been set by _expand_dynamic_prq(). */
+      tcp->ce_attr &= ~(F_MARK);
 
       if( cp->ce_attr & A_LIBRARY ) {
          tcp->ce_attr |= A_LIBRARYM;
@@ -511,10 +519,13 @@ CELLPTR setdirroot;
       if( cp->ce_attr & A_LIBRARY )
          tcp->ce_attr ^= A_LIBRARYM;
 
+      /* Return on error or if Make() is still running and A_SEQ is set. */
       if( rval == -1 || (seq && (rval==1)) )
      goto stop_making_it;
 
       if( tcp->ce_time > ttime ) ttime = tcp->ce_time;
+
+      /* If tcp is ready, set made = F_MADE. */
       made &= tcp->ce_flag & F_MADE;
    }
 
@@ -712,6 +723,7 @@ CELLPTR setdirroot;
        *        of the target.  */
       if( push ) {
      char *dir   = nsetdirroot ? nsetdirroot->ce_dir : Makedir;
+     /* get relative path from current SETDIR to new SETDIR. */
      char *pref  = _prefix(dir,tcp->ce_dir);
      char *nname = Build_path(pref, tcp->ce_fname);
 
@@ -769,42 +781,104 @@ stop_making_it:
 
 
 static char *
-_prefix( pfx, pat )
+_prefix( pfx, pat )/*
+=====================
+   Return the relative path from pfx to pat. Both paths have to be absolute
+   paths. If the paths are on different resources or drives (if applicable)
+   return pat. */
 char *pfx;
 char *pat;
 {
    char *cmp1=pfx;
    char *cmp2=pat;
-   char *result = DmStrDup("");
+   char *result;
    char *up;
+   int first = 1;
+#ifdef HAVE_DRIVE_LETTERS
+   int pfxdl = 0;
+   int patdl = 0;
+#endif
 
+   /* Micro optimization return immediately if pfx and pat are equal. */
+   if( strcmp(pfx, pat) == 0 )
+      return(DmStrDup(""));
+
+#ifdef HAVE_DRIVE_LETTERS
+   /* remove the drive letters to avoid getting them into the relative
+    * path later. */
+   if( *pfx && pfx[1] == ':' && isalpha(*pfx) ) {
+      pfxdl = 1;
+      cmp1 = DmStrSpn(pfx+2, DirBrkStr);
+   }
+   if( *pat && pat[1] == ':' && isalpha(*pat) ) {
+      patdl = 1;
+      cmp2 = DmStrSpn(pat+2, DirBrkStr);
+   }
+   /* If the drive letters are different use the abs. path. */
+   if( pfxdl && patdl && (tolower(*pfx) != tolower(*pat)) )
+      return(DmStrDup(pat));
+
+   /* If only one has a drive letter also use the abs. path. */
+   if( pfxdl != patdl )
+      return(DmStrDup(pat));
+
+   /* Continue without the drive letters. (Either none was present,
+    * or both were the same. This also solves the problem that the
+    * case of the drive letters sometimes depends on the shell.
+    * (cmd.exe vs. cygwin bash) */
+   pfx = cmp1;
+   pat = cmp2;
+#endif
+
+   /* Cut off equal leading parts of pfx, pat. Both have to be abs. paths. */
    while(*pfx && *pat) {
+      /* skip leading dir. separators. */
       pfx = DmStrSpn(cmp1, DirBrkStr);
       pat = DmStrSpn(cmp2, DirBrkStr);
 
+      /* Only check in the first run of the loop. Leading slashes can only
+       * mean POSIX paths or Windows resources (two) slashes. Drive letters
+       * have no leading slash. In any case, if the number of slashes are
+       * not equal there can be no relative path from one two the other.
+       * In this case return the absolute path. */
+      if( first ) {
+     if( cmp1-pfx != cmp2-pat ) {
+        return(DmStrDup(pat));
+     }
+     first = 0;
+      }
+
+      /* find next dir. separator (or ""). */
       cmp1 = DmStrPbrk(pfx, DirBrkStr);
       cmp2 = DmStrPbrk(pat, DirBrkStr);
 
+      /* if length of directory name is equal compare the strings. If equal
+       * go into next loop. */
       if ( (cmp1-pfx) != (cmp2-pat) || strncmp(pfx,pat,cmp1-pfx) != 0 )
      break;
    }
 
+   result = DmStrDup("");
    up = DmStrJoin("..",DirSepStr,-1,FALSE);
    cmp1 = pfx;
+   /* Add "../" for each directory in pfx */
    while ( *(pfx=DmStrSpn(cmp1,DirBrkStr)) != '\0' ) {
       cmp1 = DmStrPbrk(pfx,DirBrkStr);
       result = DmStrJoin(result,up,-1,TRUE);
    }
 
-   cmp2 = pat;
-   while ( *(pat=DmStrSpn(cmp2,DirBrkStr)) != '\0' ) {
-      char *tmp;
-      char *x;
-      cmp2 = DmStrPbrk(pat, DirBrkStr);
-      tmp = DmStrDup(Build_path(result,x=DmSubStr(pat,cmp2)));
+   pat = DmStrSpn(pat,DirBrkStr);
+   /* Append pat to result. */
+   if( *pat != '\0' ) {
+      cmp2 = DmStrDup(Build_path(result, pat));
       FREE(result);
-      FREE(x);
-      result = tmp;
+      result = cmp2;
+   } else {
+      /* if pat is empty and result exists remove the trailing slash
+       * from the last "../". */
+      if( *result ) {
+     result[strlen(result)-1] = '\0';
+      }
    }
 
    return(result);
@@ -833,23 +907,33 @@ _expand_dynamic_prq( head, lp, name )/*
 =======================================
    The string name can contain one or more target names. Check if these are
    already a prerequisite for the current target. If not add them to the list
-   of prerequisites. If no prerequisites were added set lp->cl_prq to NULL. */
+   of prerequisites. If no prerequisites were added set lp->cl_prq to NULL.
+   Set the F_MARK flag to indicate that the prerequisite was expanded.
+   Use cl_flag instead?? */
 LINKPTR head;
 LINKPTR lp;
 char *name;
 {
    CELLPTR cur = lp->cl_prq;
 
-   /* If condition is true, no space is found. */
-   if ( strchr(name, ' ') == NIL(char) ) {
-      CELLPTR prq = Def_cell(name);
+   if( !(*name) ) {
+      /* If name is empty this leaves lp->cl_prq unchanged -> No prerequisite added. */
+      ;
+   }
+   else if ( strchr(name, ' ') == NIL(char) ) {
+      /* If condition above is true, no space is found. */
+      CELLPTR prq  = Def_cell(name);
       LINKPTR tmp;
 
+      /* Check if prq already exists. */
       for(tmp=head;tmp != NIL(LINK) && tmp->cl_prq != prq;tmp=tmp->cl_next);
 
       /* If tmp is NULL then the prerequisite is new and is added to the list. */
-      if ( !tmp )
+      if ( !tmp ) {
+     /* replace the prerequisite with the expanded version. */
      lp->cl_prq = prq;
+     lp->cl_prq->ce_flag |= F_MARK;
+      }
    }
    else {
       LINKPTR tlp  = lp;
@@ -869,7 +953,8 @@ char *name;
      /* If tmp is not NULL the prerequisite already exists. */
      if ( tmp ) continue;
 
-     /* Add list elements when more then one new prerequisite is found. */
+     /* Add list elements behind the first if more then one new
+      * prerequisite is found. */
      if ( first ) {
         first = FALSE;
      }
@@ -881,6 +966,7 @@ char *name;
      }
 
      tlp->cl_prq = prq;
+     tlp->cl_prq->ce_flag |= F_MARK;
       }
       CLEAR_TOKEN( &token );
    }
@@ -891,6 +977,7 @@ char *name;
       lp->cl_flag = 0;
    }
 
+   /* Is returned unchanged. */
    return(lp);
 }
 
@@ -1145,7 +1232,7 @@ CELLPTR cp;
         /* Print command and remove continuation sequence from cmnd. */
         Print_cmnd(cmnd, !(do_it && (l_attr & A_SILENT)), 0);
      }
-     rval=Do_cmnd(cmnd,FALSE,do_it,cp,(l_attr&A_IGNORE)!=0, shell,
+     rval=Do_cmnd(cmnd,FALSE,do_it,cp,l_attr,
               rp->st_next == NIL(STRING) );
       }
    }
@@ -1167,8 +1254,7 @@ CELLPTR cp;
          chmod(groupfile,0700);
 #endif
     }
-      rval = Do_cmnd(groupfile, TRUE, do_it, cp, (attr & A_IGNORE)!=0,
-             TRUE, TRUE);
+      rval = Do_cmnd(groupfile, TRUE, do_it, cp, attr | A_SHELL, TRUE);
    }
 
    _recipes[ RP_RECIPE ] = orp;
@@ -1327,103 +1413,19 @@ int ignore;
 static void
 _set_tmd()/*
 ============
-   Set the TMD Macro */
+   Set the TMD Macro. This is the path from the present directory (value of
+   $(PWD)) to the directory dmake was started up in (value of $(MAKEDIR)).
+*/
 {
-   char  *m, *p;
-   char  *mend, *pend;
-   char  *mtd, *ptd;
-   int   mleadslash, pleadslash;
    char  *tmd;
-   int   first = 1;
 
-   /* Don't use Get_token because this fails on paths that contain spaces. */
-   m = DmStrSpn(Makedir, DirBrkStr);
-   mleadslash = m - Makedir;
-   p = DmStrSpn(Pwd, DirBrkStr);
-   pleadslash = p - Pwd;
-
-   /* leading slashes can only mean POSIX paths or Windows resources (two)
-    * slashes. In any case if the number of slashes are not equal there
-    * can be no relative path from one two the other. Use the Makedir path. */
-   if(mleadslash != pleadslash) {
-      tmd = Makedir;
-      goto tmd_end;
+   tmd = _prefix(Pwd, Makedir);
+   if( *tmd ) {
+      Def_macro( "TMD", tmd, M_MULTI | M_EXPANDED );
+   } else {
+      Def_macro( "TMD", ".", M_MULTI | M_EXPANDED );
    }
-
-   /* If Makedir and Pwd are identical skip to the end. */
-   for(mend=m, pend=p; *mend && *pend && *mend==*pend; mend++, pend++)
-      ;
-   if( ( ! *mend ) && ( ! *pend ) ) {
-      tmd = DmStrDup( "." );
-      goto tmd_end;
-   }
-
-   /* If Makedir and Pwd are not identical we will construct TMD. */
-   tmd = DmStrDup( "" );
-
-   do {
-
-      /* get the next top directory name */
-      mend = DmStrPbrk( m, DirBrkStr );
-      /* For DOSish filenames the first part might be a drive letter */
-#if !defined(NO_DRIVE_LETTERS)
-      if( first && *mend == ':' )
-     mend++;
-#endif
-
-      mtd = DmSubStr( m, mend ); /* Free later */
-      /* {m|p}end either points to a DirBrkStr member or the end of string. */
-      if(*mend) mend++;
-      m = mend;
-
-      pend = DmStrPbrk( p, DirBrkStr );
-#if !defined(NO_DRIVE_LETTERS)
-      if( first && *pend == ':' )
-     pend++;
-#endif
-
-      ptd = DmSubStr( p, pend ); /* Free later */
-      if(*pend) pend++;
-      p = pend;
-
-      if( strcmp(mtd, ptd) ) {  /* they differ */
-     char *tmp = 0;
-
-     if( first ) {      /* They differ in the first component   */
-        FREE( tmd );
-        FREE( mtd );
-        FREE( ptd );
-        tmd = Makedir;  /* In this case use the full path   */
-        break;
-     }
-
-     if( *ptd ) {
-        /* Build_path puts a DirSepStr behind the first parameter if
-         * its length is greater null, even if the second parameter
-         * is empty. */
-        if(*tmd)
-           tmp = Build_path( "..", tmd );
-        else
-           tmp = "..";
-        FREE( tmd );
-        tmd = DmStrDup( tmp );
-     }
-     if( *mtd ) {
-        tmp = Build_path( tmd, mtd );
-        FREE( tmd );
-        tmd = DmStrDup( tmp );
-     }
-      }
-
-      FREE( mtd );
-      FREE( ptd );
-      first  = 0;
-   } while (*m || *p);
-
-tmd_end:
-
-   Def_macro( "TMD", tmd, M_MULTI | M_EXPANDED );
-   if( tmd != Makedir ) FREE( tmd );
+   FREE( tmd );
 }
 
 
