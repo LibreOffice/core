@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_persmap.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:18:56 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ namespace dp_misc
 {
 
 typedef ::std::hash_map<
-    ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > t_string2string_map;
+    ::rtl::OString, ::rtl::OString, ::rtl::OStringHash > t_string2string_map;
 
 //==============================================================================
 class PersistentMap
@@ -63,12 +63,11 @@ public:
 
     void flush() const;
 
-    bool has( ::rtl::OUString const & key ) const;
-    bool get( ::rtl::OUString * value, ::rtl::OUString const & key ) const;
+    bool has( ::rtl::OString const & key ) const;
+    bool get( ::rtl::OString * value, ::rtl::OString const & key ) const;
     t_string2string_map getEntries() const;
-    bool put( ::rtl::OUString const & key, ::rtl::OUString & value,
-              bool overwrite = true, bool flush_immediately = true );
-    bool erase( ::rtl::OUString const & key, bool flush_immediately = true );
+    void put( ::rtl::OString const & key, ::rtl::OString const & value );
+    bool erase( ::rtl::OString const & key, bool flush_immediately = true );
 };
 
 }
