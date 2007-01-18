@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.h,v 1.1.1.1 2000-09-22 15:33:30 hr Exp $
+/* RCS  $Id: sysintf.h,v 1.2 2007-01-18 09:37:51 vg Exp $
 --
 -- SYNOPSIS
 --      Interfaces for sysintf.c
@@ -27,7 +27,6 @@
 #define VOID_LCACHE(l,m)
 #define Hook_std_writes(A)
 #define GETPID getpid()
-#define DMSTRLWR(A,B)
 
 /*
 ** standard C items
