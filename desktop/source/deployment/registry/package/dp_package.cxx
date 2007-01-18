@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:48 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include "boost/optional.hpp"
 #include "dp_package.hrc"
 #include "dp_backend.h"
 #include "dp_ucb.h"
@@ -44,6 +43,7 @@
 #include "dp_dependencies.hxx"
 #include "dp_description.hxx"
 #include "dp_descriptioninfoset.hxx"
+#include "dp_identifier.hxx"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
@@ -779,17 +779,10 @@ bool BackendImpl::PackageImpl::checkDependencies(
 beans::Optional<OUString> BackendImpl::PackageImpl::getIdentifier()
     throw (RuntimeException)
 {
-    boost::optional<OUString> id(getDescriptionInfoset().getIdentifier());
-    rtl::OUString s;
-    if (id) {
-        s = *id;
-    } else {
-        rtl::OUStringBuffer b;
-        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("org.openoffice.legacy."));
-        b.append(m_name);
-        s = b.makeStringAndClear();
-    }
-    return beans::Optional<OUString>(true, s);
+    return beans::Optional<OUString>(
+        true,
+        dp_misc::generateIdentifier(
+            getDescriptionInfoset().getIdentifier(), m_name));
 }
 
 OUString BackendImpl::PackageImpl::getVersion() throw (RuntimeException)
