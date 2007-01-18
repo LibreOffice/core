@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:52:16 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ static void callVirtualMethod(
     typelib_TypeClass eReturnType,
     char * pPT,
     sal_Int32 * pStackLongs,
-    sal_Int32 nStackLongs)
+    sal_Int32 /* nStackLongs */)
 {
 
   // parameter list is mixed list of * and values
@@ -105,7 +105,7 @@ static void callVirtualMethod(
      // stack frame .
 
 
-     unsigned long param[(2*nStackLongs)];
+     // unsigned long param[(2*nStackLongs)];
 
      /* now begin to load the C++ function arguments into storage */
      n = 0;
@@ -287,6 +287,8 @@ static void callVirtualMethod(
         case typelib_TypeClass_DOUBLE:
             *(double*)pRegisterReturn = dret;
             break;
+        default:
+            break;
     }
 }
 
@@ -400,6 +402,8 @@ static void cpp_call(
             case typelib_TypeClass_UNSIGNED_HYPER:
                 *pPT++ = 'H';
                 pCppStack += sizeof(sal_Int32); // extra long
+            default:
+                break;
             }
 
             // no longer needed
@@ -516,7 +520,7 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
            = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * > (pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+        //  typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
     switch (pMemberDescr->eTypeClass)
     {
