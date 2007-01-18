@@ -1,12 +1,12 @@
 
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.52)
+AC_PREREQ(2.59)
 
 dnl Set the package version
 dnl Don't forget to update the PACKAGE, VERSION and BUILDINFO macros in
 dnl dmake/win95/microsft/config.h to keep the native Microsoft C++
 dnl compiler build happy. 
-AC_INIT(dmake, 4.6)
+AC_INIT(dmake, 4.7)
 AC_CANONICAL_BUILD
 BUILDINFO="$build"
 
@@ -14,6 +14,8 @@ AC_CONFIG_SRCDIR(man/dmake.tf)
 AM_INIT_AUTOMAKE
 
 AM_MAINTAINER_MODE
+dnl Use this instead of AC_PROG_.. version
+AM_PROG_CC_C_O
 
 AC_CONFIG_HEADER(config.h)
 
@@ -27,7 +29,6 @@ AC_ARG_ENABLE(spawn,
                           if it is supported.
 ],,)
 dnl Checks for programs.
-AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -69,19 +70,23 @@ case "$_os" in
 	  ;;
 	"CYGWIN")
 	  OS_VERSION=cygwin
+	  CASE_INSENSITIVE_FS=true
 	  ;;
 	"MINGW")
 	  OS_VERSION=mingw
 	  OS_TYPE=winnt
 	  BUILDINFO="Windows / MinGW"
+	  CASE_INSENSITIVE_FS=true
 	  ;;
 	"MSVC6")
 	  OS_VERSION=msvc6
 	  OS_TYPE=winnt
 	  BUILDINFO="Windows / MS Visual C++"
+	  CASE_INSENSITIVE_FS=true
 	  ;;
 	"Darwin")
 	  OS_VERSION=macosx
+	  CASE_INSENSITIVE_FS=true
 	  ;;
 	"FreeBSD")
 	  OS_VERSION=linux
@@ -104,6 +109,9 @@ case "$_os" in
 	"AIX")
 	  OS_VERSION=sysvr4
 	  ;;
+	"OpenBSD")
+	  OS_VERSION=linux
+	  ;;
    *)
       AC_MSG_ERROR([$_os operating system is not suitable to build dmake!])
       ;;
@@ -112,26 +120,17 @@ esac
 AC_MSG_RESULT([checked ($_os)])
 
 dnl Set OS dependent settings
-if test x$OS_TYPE = xunix; then
-  OS_SUBDIRS=["unix startup"]
-  OS_LIBRARY=unix/libunix.a
-else
-  OS_SUBDIRS=["win95 msdos startup"]
-  OS_LIBRARY=["win95/libwin95.a msdos/libmsdos.a win95/microsft/libmsft.a"]
-fi
+AM_CONDITIONAL(OSTYPEUNIX, test x$OS_TYPE = xunix)
+AM_CONDITIONAL(OSTYPEWIN32, test x$OS_TYPE = xwinnt)
 
 AC_SUBST(OS_TYPE)
 AC_SUBST(OS_VERSION)
 AC_DEFINE_UNQUOTED(BUILDINFO, "$BUILDINFO", [Build info string])
-AC_SUBST(OS_SUBDIRS)
-AC_SUBST(OS_LIBRARY)
 
-if test x$OS_TYPE != xwinnt; then
-dnl See iz53148. Only *nix like builds enable parallel makefile processing
-dnl and use stdout redirection in the child for _exec_shell()
-AC_DEFINE(USE_SANE_EXEC_SHELL_REDIR, 1, [Use sane redirection mechanism for systems that support parallel building, see iz53148.])
-dnl iz61170 needs to know of DOS style file names with drive letters.
-AC_DEFINE(NO_DRIVE_LETTERS, 1, [Do not check for drive letters. Introduced as an optimization for iz61170.])
+if test x$CASE_INSENSITIVE_FS = xtrue; then
+dnl Mac OSX with HFS+ and Windows FS are case insensitive (although case
+dnl preserving).
+AC_DEFINE(CASE_INSENSITIVE_FS, 1, [Assume case insensitive file system.])
 fi
 
 dnl =============================================
@@ -170,14 +169,13 @@ fi
 AC_SUBST(DMAKEROOT_H_LINE1)
 
 dnl List (all possible) *.in files
-AC_CONFIG_FILES(dmakeroot.h Makefile unix/Makefile startup/config.mk \
+AC_CONFIG_FILES(dmakeroot.h Makefile startup/config.mk \
 		startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
 		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
 		startup/unix/cygwin/Makefile \
 		startup/winnt/Makefile startup/winnt/mingw/Makefile \
 		startup/winnt/msvc6/Makefile \
-		msdos/Makefile win95/Makefile win95/microsft/Makefile \
 		tests/Makefile)
 
 dnl Checks for libraries.
@@ -210,8 +208,9 @@ AC_FUNC_MEMCMP
 AC_TYPE_SIGNAL
 AC_FUNC_UTIME_NULL
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(getcwd getwd putenv strcspn strerror strspn strstr setvbuf tzset settz mkstemp tempnam gettimeofday)
-
+AC_CHECK_FUNCS(getcwd getwd strerror setvbuf tzset settz mkstemp tempnam gettimeofday)
+# Usefull, but special to newlib/MSVC
+AC_CHECK_FUNCS(strlwr)
 
 dnl *** output to disk ***
 AC_OUTPUT
