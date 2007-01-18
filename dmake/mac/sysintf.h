@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.h,v 1.1.1.1 2000-09-22 15:33:27 hr Exp $
+/* RCS  $Id: sysintf.h,v 1.2 2007-01-18 09:33:25 vg Exp $
 --
 -- SYNOPSIS
 --      Assorted bits of system interface
@@ -27,7 +27,6 @@
 #define VOID_LCACHE(l,m)
 #define Hook_std_writes(A)
 #define GETPID 1
-#define DMSTRLWR(A,B)
 
 /* for directory cache */
 #define CacheStat(A,B)  really_dostat(A,&buf)
