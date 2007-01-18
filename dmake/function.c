@@ -1,6 +1,6 @@
 /* $RCSfile: function.c,v $
--- $Revision: 1.9 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:39:41 $
+-- $Revision: 1.10 $
+-- last change: $Author: vg $ $Date: 2007-01-18 09:30:04 $
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.
@@ -319,8 +319,9 @@ char *data;
       tmpname = Expand(file);
 
       if( *tmpname ) {
-#ifdef NO_DRIVE_LETTERS
-     /* umask without ugo rights doesn't make sense. */
+#ifdef HAVE_MKSTEMP
+     /* Only use umask if we are also using mkstemp - this basically
+      * avoids using the incompatible implementation from MSVC. */
      mode_t       mask;
 
      /* Create tempfile with 600 permissions. */
@@ -329,7 +330,7 @@ char *data;
 
      if( (tmpfile = fopen(tmpname, "w")) == NIL(FILE) )
         Open_temp_error( tmpname, name );
-#ifdef NO_DRIVE_LETTERS
+#ifdef HAVE_MKSTEMP
      umask(mask);
 #endif
 
@@ -510,9 +511,6 @@ char *mod1;
    char *buffer;
    char *tmpnm;
    FILE *old_stdout_redir = stdout_redir;
-#if !defined(USE_SANE_EXEC_SHELL_REDIR)
-   int old_stdout;
-#endif
 
    int wait     = Wait_for_completion;
    int old_is_exec_shell = Is_exec_shell;
@@ -575,20 +573,9 @@ char *mod1;
    Verbose &= V_LEAVE_TMP;
    Trace   = FALSE;
 
-   /* Only unix type builds define the redirection of stdout in the forked
-    * child process. Other OSs have to do it here, in the parent process.
-    * Note! This is not save for parallel builds, see #iz53148#, but parallel
-    * builds are not supported for non-unix like builds anyway. */
-#if !defined(USE_SANE_EXEC_SHELL_REDIR)
-   old_stdout = dup(1);
-   close(1);
-   dup( fileno(stdout_redir) );
-#endif
+   /* The actual redirection happens in runargv(). */
    Exec_commands( &cell );
-#if !defined(USE_SANE_EXEC_SHELL_REDIR)
-   close(1);
-   dup(old_stdout);
-#endif
+
    Unlink_temp_files( &cell );
 
    Trace   = tflag;
