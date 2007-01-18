@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:46:28 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,8 @@
 #include "precompiled_desktop.hxx"
 
 #include "deployment.hrc"
-#include "../unopkg_shared.h"
+#include "unopkg_shared.h"
+#include "dp_identifier.hxx"
 #include "../../deployment/gui/dp_gui.hrc"
 #include "../../app/lockfile.hxx"
 #include "vcl/svapp.hxx"
@@ -277,7 +278,13 @@ void printf_package(
     Reference<deployment::XPackage> const & xPackage,
     Reference<XCommandEnvironment> const & xCmdEnv, sal_Int32 level )
 {
-    printf_line( OUSTR("Name"), xPackage->getName(), level );
+    beans::Optional< OUString > id(
+        level == 0
+        ? beans::Optional< OUString >(
+            true, dp_misc::getIdentifier( xPackage ) )
+        : xPackage->getIdentifier() );
+    if (id.IsPresent)
+        printf_line( OUSTR("Identifier"), id.Value, level );
     OUString version(xPackage->getVersion());
     if (version.getLength() != 0)
         printf_line( OUSTR("Version"), version, level + 1 );
