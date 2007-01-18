@@ -8,6 +8,7 @@
 #include <sys/errno.h>
 #include <string.h>
 #include <limits.h>
+#undef FD_SETSIZE
 #define FD_SETSIZE OPEN_MAX
 #include <sys/types.h>
 #include <sys/time.h>
