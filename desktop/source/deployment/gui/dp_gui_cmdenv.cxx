@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2006-12-22 09:00:28 $
+ *  last change: $Author: vg $ $Date: 2007-01-18 14:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "dp_gui_shared.hxx"
 #include "dp_gui_dependencydialog.hxx"
 #include "dp_dependencies.hxx"
+#include "dp_identifier.hxx"
 #include "dp_version.hxx"
 #include "comphelper/anytostring.hxx"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
@@ -388,7 +389,8 @@ void ProgressCommandEnv::handle(
             vos::OGuard guard(Application::GetSolarMutex());
             InfoBox box(activeDialog(), ResId(id, DeploymentGuiResMgr::get()));
             String s(box.GetMessText());
-            s.SearchAndReplaceAllAscii("$NAME", verExc.New->getName());
+            s.SearchAndReplaceAllAscii(
+                "$NAME", dp_misc::getIdentifier(verExc.New));
             s.SearchAndReplaceAllAscii("$NEW", getVersion(verExc.New));
             s.SearchAndReplaceAllAscii(
                 "$DEPLOYED", getVersion(verExc.Deployed));
