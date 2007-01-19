@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:31:23 $
+ *  last change: $Author: rt $ $Date: 2007-01-19 08:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-DBG_NAME( IDEBaseWindow );
+DBG_NAME( IDEBaseWindow )
 
 const char* pRegName = "BasicIDETabBar";
 

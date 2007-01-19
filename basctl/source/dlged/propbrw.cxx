@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:36:33 $
+ *  last change: $Author: rt $ $Date: 2007-01-19 08:41:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ using namespace ::comphelper;
 // PropBrw
 //============================================================================
 
-DBG_NAME(PropBrw);
+DBG_NAME(PropBrw)
 
 //----------------------------------------------------------------------------
 

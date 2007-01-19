@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedmod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:35:30 $
+ *  last change: $Author: rt $ $Date: 2007-01-19 08:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #endif
 
 
-DBG_NAME(DlgEdModel);
+DBG_NAME(DlgEdModel)
 
 TYPEINIT1(DlgEdModel,SdrModel);
 

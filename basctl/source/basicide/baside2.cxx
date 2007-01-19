@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:28:29 $
+ *  last change: $Author: rt $ $Date: 2007-01-19 08:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ using namespace utl;
 using namespace comphelper;
 
 
-DBG_NAME( ModulWindow );
+DBG_NAME( ModulWindow )
 
 TYPEINIT1( ModulWindow , IDEBaseWindow );
 
