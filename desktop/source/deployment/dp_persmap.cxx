@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_persmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:52:43 $
+ *  last change: $Author: rt $ $Date: 2007-01-19 09:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ void PersistentMap::put( OString const & key, OString const & value )
         int err = m_db.put( 0, &dbKey, &dbData, 0 );
         if (err == 0) {
 #if OSL_DEBUG_LEVEL > 0
-            OUString v;
+            OString v;
             OSL_ASSERT( get( &v, key ) );
             OSL_ASSERT( v.equals( value ) );
 #endif
