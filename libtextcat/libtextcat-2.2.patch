@@ -1,5 +1,25 @@
+*** misc/libtextcat-2.2/configure	2003-05-22 13:39:55.000000000 +0200
+--- misc/build/libtextcat-2.2/configure	2007-01-18 16:10:35.000000000 +0100
+***************
+*** 5391,5397 ****
+  allow_undefined_flag=
+  no_undefined_flag=
+  need_lib_prefix=unknown
+! need_version=unknown
+  # when you set need_version to no, make sure it does not cause -set_version
+  # flags to be left without arguments
+  archive_cmds=
+--- 5391,5398 ----
+  allow_undefined_flag=
+  no_undefined_flag=
+  need_lib_prefix=unknown
+! #need_version=unknown
+! need_version=no
+  # when you set need_version to no, make sure it does not cause -set_version
+  # flags to be left without arguments
+  archive_cmds=
 *** misc/libtextcat-2.2/src/common.c	2003-05-22 13:32:43.000000000 +0200
---- misc/build/libtextcat-2.2/src/common.c	2007-01-11 13:19:40.000000000 +0100
+--- misc/build/libtextcat-2.2/src/common.c	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 3,25 ****
    *
@@ -356,7 +376,7 @@
   		p++;
   	}
 *** misc/libtextcat-2.2/src/common.h	2003-05-22 15:02:29.000000000 +0200
---- misc/build/libtextcat-2.2/src/common.h	2007-01-11 13:19:40.000000000 +0100
+--- misc/build/libtextcat-2.2/src/common.h	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 1,28 ****
   #ifndef _COMMON_H_
@@ -463,7 +483,7 @@
   #endif
   
 *** misc/libtextcat-2.2/src/constants.h	2003-05-22 13:32:43.000000000 +0200
---- misc/build/libtextcat-2.2/src/constants.h	2007-01-11 13:19:40.000000000 +0100
+--- misc/build/libtextcat-2.2/src/constants.h	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 39,44 ****
 --- 39,46 ----
@@ -524,7 +544,7 @@
 + 
   #endif
 *** misc/libtextcat-2.2/src/fingerprint.c	2003-05-22 13:32:43.000000000 +0200
---- misc/build/libtextcat-2.2/src/fingerprint.c	2007-01-12 12:51:59.000000000 +0100
+--- misc/build/libtextcat-2.2/src/fingerprint.c	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 6,28 ****
    * All rights reserved.
@@ -1211,7 +1231,7 @@
   
   
 *** misc/libtextcat-2.2/src/fingerprint.h	2003-05-19 14:16:31.000000000 +0200
---- misc/build/libtextcat-2.2/src/fingerprint.h	2007-01-11 13:19:40.000000000 +0100
+--- misc/build/libtextcat-2.2/src/fingerprint.h	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 41,47 ****
 --- 41,53 ----
@@ -1229,7 +1249,7 @@
   
   #endif
 *** misc/libtextcat-2.2/src/Makefile.in	2003-05-22 13:39:52.000000000 +0200
---- misc/build/libtextcat-2.2/src/Makefile.in	2007-01-12 12:48:19.181803000 +0100
+--- misc/build/libtextcat-2.2/src/Makefile.in	2007-01-18 16:11:30.000000000 +0100
 ***************
 *** 124,143 ****
   target_vendor = @target_vendor@
@@ -1326,22 +1346,24 @@
   	touch $(srcdir)/config.h.in
   
 ***************
-*** 247,253 ****
+*** 247,254 ****
   	  echo "rm -f \"$${dir}/so_locations\""; \
   	  rm -f "$${dir}/so_locations"; \
   	done
 ! libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES) 
-  	$(LINK) -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
+! 	$(LINK) -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
   binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
   install-binPROGRAMS: $(bin_PROGRAMS)
---- 248,254 ----
+  	@$(NORMAL_INSTALL)
+--- 248,255 ----
   	  echo "rm -f \"$${dir}/so_locations\""; \
   	  rm -f "$${dir}/so_locations"; \
   	done
 ! libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES)
-  	$(LINK) -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
+! 	$(LINK) -avoid-version -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
   binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
   install-binPROGRAMS: $(bin_PROGRAMS)
+  	@$(NORMAL_INSTALL)
 ***************
 *** 285,294 ****
   	  echo " rm -f $$p $$f"; \
@@ -1375,8 +1397,8 @@
   
   distclean-depend:
   	-rm -rf ./$(DEPDIR)
-*** misc/libtextcat-2.2/src/makefile.mk	2007-01-12 12:55:41.709348000 +0100
---- misc/build/libtextcat-2.2/src/makefile.mk	2007-01-12 12:48:19.214530000 +0100
+*** misc/libtextcat-2.2/src/makefile.mk	2007-01-18 16:08:05.000000000 +0100
+--- misc/build/libtextcat-2.2/src/makefile.mk	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 1 ****
 ! dummy
@@ -1385,9 +1407,9 @@
 ! #
 ! #   $RCSfile: libtextcat-2.2.patch,v $
 ! #
-! #   $Revision: 1.1 $
+! #   $Revision: 1.2 $
 ! #
-! #   last change: $Author: tl $ $Date: 2007-01-12 12:34:52 $
+! #   last change: $Author: tl $ $Date: 2007-01-19 08:45:53 $
 ! #
 ! #*  The Contents of this file are made available subject to
 ! #*  the terms of GNU Lesser General Public License Version 2.1.
@@ -1473,7 +1495,7 @@
 !     @echo _real>>$@
 !     @echo unnamed>>$@
 *** misc/libtextcat-2.2/src/textcat.c	2003-05-22 13:32:43.000000000 +0200
---- misc/build/libtextcat-2.2/src/textcat.c	2007-01-12 12:52:41.000000000 +0100
+--- misc/build/libtextcat-2.2/src/textcat.c	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 4,26 ****
    * Copyright (C) 2003 WiseGuys Internet B.V.
@@ -1715,7 +1737,7 @@
   #undef SHOULD_FREE
   #endif
 *** misc/libtextcat-2.2/src/textcat.h	2003-05-19 14:16:31.000000000 +0200
---- misc/build/libtextcat-2.2/src/textcat.h	2007-01-11 13:19:41.000000000 +0100
+--- misc/build/libtextcat-2.2/src/textcat.h	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 40,45 ****
 --- 40,48 ----
@@ -1761,8 +1783,8 @@
 + }
 + #endif
   #endif
-*** misc/libtextcat-2.2/src/utf8misc.c	2007-01-12 12:55:41.584585000 +0100
---- misc/build/libtextcat-2.2/src/utf8misc.c	2007-01-12 12:54:50.000000000 +0100
+*** misc/libtextcat-2.2/src/utf8misc.c	2007-01-18 16:08:04.000000000 +0100
+--- misc/build/libtextcat-2.2/src/utf8misc.c	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 1 ****
 ! dummy
@@ -1899,8 +1921,8 @@
 !     return char_counter;
 ! }
 ! 
-*** misc/libtextcat-2.2/src/utf8misc.h	2007-01-12 12:55:41.547021000 +0100
---- misc/build/libtextcat-2.2/src/utf8misc.h	2007-01-11 13:19:41.000000000 +0100
+*** misc/libtextcat-2.2/src/utf8misc.h	2007-01-18 16:08:04.000000000 +0100
+--- misc/build/libtextcat-2.2/src/utf8misc.h	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 1 ****
 ! dummy
@@ -1993,8 +2015,8 @@
 ! 
 ! #endif
 ! 
-*** misc/libtextcat-2.2/src/win32_config.h	2007-01-12 12:55:41.643465000 +0100
---- misc/build/libtextcat-2.2/src/win32_config.h	2007-01-11 13:19:41.000000000 +0100
+*** misc/libtextcat-2.2/src/win32_config.h	2007-01-18 16:08:04.000000000 +0100
+--- misc/build/libtextcat-2.2/src/win32_config.h	2007-01-18 16:10:35.000000000 +0100
 ***************
 *** 1 ****
 ! dummy
