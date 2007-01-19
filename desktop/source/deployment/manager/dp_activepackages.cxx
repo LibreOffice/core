@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_activepackages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:54:05 $
+ *  last change: $Author: vg $ $Date: 2007-01-19 14:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include "precompiled_desktop.hxx"
 
 #include "sal/config.h"
 
