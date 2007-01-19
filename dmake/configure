@@ -4149,7 +4149,9 @@ case "$_os" in
 	  ;;
 	"Darwin")
 	  OS_VERSION=macosx
-	  CASE_INSENSITIVE_FS=true
+      rm -f Empty empty
+      touch Empty && [ -f empty ] && CASE_INSENSITIVE_FS=true
+      rm -f Empty empty
 	  ;;
 	"FreeBSD")
 	  OS_VERSION=linux
