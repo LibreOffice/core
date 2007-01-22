@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:33:41 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -501,6 +501,7 @@ public:
     // <--
 
     inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
+    inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
 
 private:
     // privater Constructor, weil nie kopiert werden darf !!
