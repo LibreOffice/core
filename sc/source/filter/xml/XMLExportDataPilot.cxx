@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:44:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,19 +543,18 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
 
 void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
 {
-    List aMembers = pDim->GetMembers();
-    sal_Int32 nMemberCount = aMembers.Count();
-    if (nMemberCount > 0)
+    const ScDPSaveDimension::MemberList &rMembers = pDim->GetMembers();
+    if (rMembers.begin() != rMembers.end())
     {
         SvXMLElementExport aElemDPMs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS, sal_True, sal_True);
         rExport.CheckAttrList();
-        for (sal_Int32 nMember = 0; nMember < nMemberCount; nMember++)
+        for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; i++)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rtl::OUString(((ScDPSaveMember*)aMembers.GetObject(nMember))->GetName()));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rtl::OUString((*i)->GetName()));
             rtl::OUStringBuffer sBuffer;
-            SvXMLUnitConverter::convertBool(sBuffer, ((ScDPSaveMember*)aMembers.GetObject(nMember))->GetIsVisible());
+            SvXMLUnitConverter::convertBool(sBuffer, (*i)->GetIsVisible());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
-            SvXMLUnitConverter::convertBool(sBuffer, ((ScDPSaveMember*)aMembers.GetObject(nMember))->GetShowDetails());
+            SvXMLUnitConverter::convertBool(sBuffer, (*i)->GetShowDetails());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_DETAILS, sBuffer.makeStringAndClear());
             SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, sal_True, sal_True);
             rExport.CheckAttrList();
