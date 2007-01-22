@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:57:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 12:06:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,7 +528,14 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     const SwNumRule* pOutlineRule = _rDoc.GetOutlineNumRule();
     for ( BYTE i = 0; i < MAXLEVEL; ++i )
     {
-        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
+        // --> OD 2007-01-11 #i73361#
+        // Do not change assignment of already created default outline style
+        // to a certain outline level.
+//        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
+        if ( !aOutlineLevelAssigned[ i ] &&
+             aCreatedDefaultOutlineStyles[ i ] != 0 &&
+             aCreatedDefaultOutlineStyles[ i ]->GetOutlineLevel() == NO_NUMBERING )
+        // <--
         {
             // apply outline level at created default outline style
             aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
