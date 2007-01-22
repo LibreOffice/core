@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:32:16 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:15:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,14 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
     if( pWindow )
     {
         mpMediaWindow = new SdrMediaWindow( pWindow, *this );
+
+        // #i72701#
+        // To avoid popping up of a window on a non-initialized position, the
+        // window will be invisible now as initial state. It will be made visible
+        // in paint
+        mpMediaWindow->hide();
+
         executeMediaItem( rMediaItem );
-        mpMediaWindow->show();
     }
 }
 
@@ -142,15 +148,19 @@ void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
         }
         else
         {
-            const Rectangle aPaintRectPixel( pOutDev->LogicToPixel( aPaintRect.TopLeft() ),
-                                                pOutDev->LogicToPixel( aPaintRect.GetSize() ) );
+            // #i72701#
+            // Take care of position
+            checkMediaWindowPosition(rDisplayInfo);
 
-            mpMediaWindow->setPosSize( aPaintRectPixel );
+            // make visible and invalidate associated window
+            mpMediaWindow->show();
 
             Window* pWindow = mpMediaWindow->getWindow();
 
-            if( pWindow )
+            if(pWindow)
+            {
                 pWindow->Invalidate();
+            }
 
             bWasPainted = true;
         }
@@ -228,4 +238,38 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
     }
 }
 
-} }
+// ------------------------------------------------------------------------------
+// #i72701#
+
+void ViewObjectContactOfSdrMediaObj::checkMediaWindowPosition(DisplayInfo& rDisplayInfo) const
+{
+    if(mpMediaWindow)
+    {
+        SdrObject* pObj = GetViewContact().TryToGetSdrObject();
+
+        if(pObj)
+        {
+            // get pixel rect
+            OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
+            Rectangle aPaintRectPixel(pOutDev->LogicToPixel(pObj->GetCurrentBoundRect()));
+
+            // shrink by 4 pixel to avoid control overlap
+            aPaintRectPixel.Left() += 4L;
+            aPaintRectPixel.Top() += 4L;
+            aPaintRectPixel.Right() -= 4L;
+            aPaintRectPixel.Bottom() -= 4L;
+
+            // justify rect. Take no special action when the rect is empty
+            aPaintRectPixel.Justify();
+
+            // set size
+            mpMediaWindow->setPosSize(aPaintRectPixel);
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+}} // end of namespace sdr::contact
+
+// eof
