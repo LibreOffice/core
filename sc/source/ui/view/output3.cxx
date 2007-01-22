@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:52 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,33 +74,16 @@
 
 SdrObject* pSkipPaintObj = NULL;
 
-
 //==================================================================
 
-// #109985#
-void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, long nLogStX, long nLogStY )
-//void ScOutputData::DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogStX, long nLogStY )
+// #i72502#
+Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 {
-    // #109985#
-    const sal_uInt16 nPaintModeHideAll(SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW);
-
-    // #109985#
-    //if ( nObjectFlags == SC_OBJECTS_NONE || !pDoc->GetDrawLayer() )
-    if((nPaintModeHideAll == nPaintMode) || (!pDoc->GetDrawLayer()))
-    {
-        return;
-    }
-
-    MapMode aOldMode = pDev->GetMapMode();
-
-                            // Area auch fuer Metafiles
+    Rectangle aRect;
     SCCOL nCol;
     SCROW nRow;
-
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
-
     Point aOffset;
-    Rectangle aRect;
+    long nLayoutSign(bLayoutRTL ? -1 : 1);
 
     for (nCol=0; nCol<nX1; nCol++)
         aOffset.X() -= pDoc->GetColWidth( nCol, nTab ) * nLayoutSign;
@@ -134,22 +117,60 @@ void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaint
     aRect.Right()  = (long) (aRect.Right()  * HMM_PER_TWIPS);
     aRect.Bottom() = (long) (aRect.Bottom() * HMM_PER_TWIPS);
 
-    //  HACK: Ausschnitt genau auf Ausgabe-Pixel anpassen
-//! aRect = Rectangle( aRect.TopLeft(), pDev->PixelToLogic( Size( nScrW,nScrH ) ) );
+    if(pViewShell || pDrawView)
+    {
+        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
 
-    if (!bMetaFile)
-        pDev->SetMapMode( MapMode( MAP_100TH_MM, aMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
+        if(pLocalDrawView)
+        {
+            Region aRectRegion(aRect);
+            pLocalDrawView->BeginDrawLayers(pDev, aRectRegion, false);
+        }
+    }
 
-    //! bMeta: um aMMOffset verschieben ( DrawView ) !!!!!
+    return aMMOffset;
+}
 
-        // Layer zeichnen
+// #i72502#
+void ScOutputData::PostPrintDrawingLayer()
+{
+    if(pViewShell || pDrawView)
+    {
+        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
+
+        if(pLocalDrawView)
+        {
+            pLocalDrawView->EndDrawLayers(pDev);
+        }
+    }
+}
+
+// #i72502#
+void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, const Point& rMMOffset)
+{
+    // #109985#
+    const sal_uInt16 nPaintModeHideAll(SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW);
 
     // #109985#
-    //DrawSelectiveObjects( nLayer, aRect, nObjectFlags );
+    if((nPaintModeHideAll == nPaintMode) || (!pDoc->GetDrawLayer()))
+    {
+        return;
+    }
+
+    MapMode aOldMode = pDev->GetMapMode();
+
+    if (!bMetaFile)
+    {
+        pDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
+    }
+
+    // #109985#
     DrawSelectiveObjects( nLayer, nPaintMode);
 
     if (!bMetaFile)
+    {
         pDev->SetMapMode( aOldMode );
+    }
 }
 
 // #109985#
