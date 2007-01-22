@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:03:16 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,11 +272,11 @@ const sal_uInt16 EXC_CHATTLABEL_SHOWBUBBLE      = 0x0020;
 
 const sal_uInt16 EXC_ID_CHSTRING                = 0x100D;
 
-// (0x1014) CHCHARTGROUP ------------------------------------------------------
+// (0x1014) CHTYPEGROUP -------------------------------------------------------
 
-const sal_uInt16 EXC_ID_CHCHARTGROUP            = 0x1014;
+const sal_uInt16 EXC_ID_CHTYPEGROUP             = 0x1014;
 
-const sal_uInt16 EXC_CHCHARTGROUP_VARIED        = 0x0001;   /// Varied colors for points.
+const sal_uInt16 EXC_CHTYPEGROUP_VARIED         = 0x0001;   /// Varied colors for points.
 
 // (0x1015) CHLEGEND ----------------------------------------------------------
 
@@ -668,7 +668,7 @@ const sal_uInt16 EXC_ID_CHESCHERFORMAT          = 0x1066;
 
 const sal_uInt16 EXC_ID_CHWRAPPEDRECORD         = 0x0851;
 const sal_uInt16 EXC_ID_CHUNITPROPERTIES        = 0x0857;
-const sal_uInt16 EXC_ID_CHEXTRANGE              = 0x1062;
+const sal_uInt16 EXC_ID_CHLABELRANGE2           = 0x1062;
 const sal_uInt16 EXC_ID_CHPLOTGROWTH            = 0x1064;
 const sal_uInt16 EXC_ID_CHUNKNOWN               = 0xFFFF;
 
