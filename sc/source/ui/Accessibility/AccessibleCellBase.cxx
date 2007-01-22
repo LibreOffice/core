@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:26:16 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,10 @@ sal_Int32
     // always us OOO notation
     maCellAddress.Format( sAddress, SCA_VALID, NULL );
     sName.SearchAndReplaceAscii("%1", sAddress);
+    /*  #i65103# ZoomText merges cell address and contents, e.g. if value 2 is
+        contained in cell A1, ZT reads "cell A twelve" instead of "cell A1 - 2".
+        Simple solution: Append a space character to the cell address. */
+    sName.Append( ' ' );
     return rtl::OUString(sName);
 }
 
