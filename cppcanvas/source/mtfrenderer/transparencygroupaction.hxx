@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transparencygroupaction.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:23:12 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,11 @@
 
 #include <memory> // auto_ptr
 
-class Point;
-class Size;
+namespace basegfx {
+    class B2DPoint;
+    class B2DVector;
+}
+
 class GDIMetaFile;
 class Gradient;
 
@@ -97,8 +100,8 @@ namespace cppcanvas
              */
             static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
                                                                   const Renderer::Parameters&   rParms,
-                                                                  const ::Point&                rDstPoint,
-                                                                  const ::Size&                 rDstSize,
+                                                                  const ::basegfx::B2DPoint&    rDstPoint,
+                                                                  const ::basegfx::B2DVector&   rDstSize,
                                                                   double                        nAlpha,
                                                                   const CanvasSharedPtr&        rCanvas,
                                                                   const OutDevState&            rState );
@@ -127,8 +130,8 @@ namespace cppcanvas
             static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
                                                                   GradientAutoPtr&              rAlphaGradient,
                                                                   const Renderer::Parameters&   rParms,
-                                                                  const ::Point&                rDstPoint,
-                                                                  const ::Size&                 rDstSize,
+                                                                  const ::basegfx::B2DPoint&    rDstPoint,
+                                                                  const ::basegfx::B2DVector&   rDstSize,
                                                                   const CanvasSharedPtr&        rCanvas,
                                                                   const OutDevState&            rState );
 
