@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:01:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 12:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,20 +1019,20 @@ ScCompiler::ScCompiler(ScDocument* pDocument, const ScAddress& rPos )
 void ScCompiler::CheckTabQuotes( String& rString,
                                  const ScAddress::Convention eConv )
 {
-    register const sal_Unicode* p = rString.GetBuffer();
-    register const sal_Unicode* const pEnd = p + rString.Len();
+    register const xub_StrLen nLen = rString.Len();
+    register xub_StrLen i;
+
     bool bNeedsQuote = false;
 
-    while ( p < pEnd )
+    for ( i = 0 ; i < nLen ; i++ )
     {
-        if( !IsWordChar( *p ) )
+        if( !IsWordChar( rString, i ) )
         {
             bNeedsQuote = true;
             break;
         }
-        p++;
     }
-    if ( CharClass::isAsciiNumeric( rString ) )
+    if ( !bNeedsQuote && CharClass::isAsciiNumeric( rString ) )
     {
         bNeedsQuote = true;
     }
