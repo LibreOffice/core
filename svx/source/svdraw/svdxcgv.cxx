@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:51:30 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:17:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,11 @@
 // b4967543
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
+#endif
+
+// #i72535#
+#ifndef _SVX_FMOBJ_HXX
+#include "fmobj.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,8 +403,30 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
                 pNeuObj->NbcMove(aSiz);
 
                 const SdrPage* pPg = pDstLst->GetPage();
-                if ( pPg )
-                    pNeuObj->SetLayer( pPg->GetLayerAdmin().GetLayerID(aAktLayer, TRUE) );
+
+                if(pPg)
+                {
+                    // #i72535#
+                    const SdrLayerAdmin& rAd = pPg->GetLayerAdmin();
+                    SdrLayerID nLayer(0);
+
+                    if(pNeuObj->ISA(FmFormObj))
+                    {
+                        // for FormControls, force to form layer
+                        nLayer = rAd.GetLayerID(rAd.GetControlLayerName(), true);
+                    }
+                    else
+                    {
+                        nLayer = rAd.GetLayerID(aAktLayer, TRUE);
+                    }
+
+                    if(SDRLAYER_NOTFOUND == nLayer)
+                    {
+                        nLayer = 0;
+                    }
+
+                    pNeuObj->SetLayer(nLayer);
+                }
 
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pDstLst->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
