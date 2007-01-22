@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:00:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2210,6 +2210,13 @@ ULONG GDIMetaFile::GetChecksum() const
 
                 UInt32ToSVBT32( pAct->GetSrcSize().Height(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
+            }
+            break;
+
+            case META_EPS_ACTION :
+            {
+                MetaEPSAction* pAct = (MetaEPSAction*) pAction;
+                nCrc = rtl_crc32( nCrc, pAct->GetLink().GetData(), pAct->GetLink().GetDataSize() );
             }
             break;
 
