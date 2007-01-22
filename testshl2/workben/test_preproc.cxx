@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_preproc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:48:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,9 @@ using namespace std;
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int /* argc */, char* /* argv */ [] )
 #else
-int _cdecl main( int argc, char* argv[] )
+    int _cdecl main( int /* argc */, char* /* argv */ [] )
 #endif
 {
     cout << "test preprocessor: " << endl;
