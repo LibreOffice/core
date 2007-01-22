@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:35:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 12:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #ifndef INCLUDED_SCDLLAPI_H
 #include "scdllapi.h"
 #endif
+#include <hash_map>
+#include <list>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -119,8 +121,13 @@ private:
     ::com::sun::star::sheet::DataPilotFieldSortInfo*  pSortInfo;            // (level)
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo;     // (level)
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo;         // (level)
-    List        aMemberList;
 
+public:
+    typedef std::hash_map <String, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
+    typedef std::list <ScDPSaveMember*>                                MemberList;
+private:
+    MemberHash maMemberHash;
+    MemberList maMemberList;
 public:
                             ScDPSaveDimension(const String& rName, BOOL bDataLayout);
                             ScDPSaveDimension(const ScDPSaveDimension& r);
@@ -129,8 +136,8 @@ public:
 
     BOOL                    operator== ( const ScDPSaveDimension& r ) const;
 
-    const List&             GetMembers() const { return aMemberList; }
-    void                    AddMember(ScDPSaveMember* pMember) { aMemberList.Insert(pMember, LIST_APPEND); };
+    const MemberList&       GetMembers() const { return maMemberList; }
+    void                    AddMember(ScDPSaveMember* pMember);
 
     void                    SetDupFlag(BOOL bSet)   { bDupFlag = bSet; }
     BOOL                    GetDupFlag() const      { return bDupFlag; }
