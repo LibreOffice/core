@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:44:46 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
@@ -186,7 +189,7 @@ void StringHelper::AppendDec( String& rStr, sal_uInt64 nData, xub_StrLen nWidth,
 
 void StringHelper::AppendDec( String& rStr, sal_Int64 nData, xub_StrLen nWidth, sal_Unicode cFill )
 {
-    AppendString( rStr, String::CreateFromInt64( nData ), nWidth );
+    AppendString( rStr, String::CreateFromInt64( nData ), nWidth, cFill );
 }
 
 void StringHelper::AppendDec( String& rStr, double fData, xub_StrLen nWidth, sal_Unicode cFill )
@@ -685,6 +688,21 @@ void StringHelper::ConvertStringToIntList( ScfInt64Vec& rVec, const String& rDat
     }
 }
 
+// file names -----------------------------------------------------------------
+
+String StringHelper::ConvertFileNameToUrl( const String& rFileName )
+{
+    ::rtl::OUString aOUFileUrl;
+    bool bOk = ::osl::FileBase::getFileURLFromSystemPath( rFileName, aOUFileUrl ) == ::osl::FileBase::E_None;
+    return bOk ? String( aOUFileUrl ) : String::EmptyString();
+}
+
+xub_StrLen StringHelper::GetFileNamePos( const String& rFileUrl )
+{
+    xub_StrLen nSepPos = rFileUrl.SearchBackward( '/' );
+    return (nSepPos == STRING_NOTFOUND) ? 0 : (nSepPos + 1);
+}
+
 // ============================================================================
 // ============================================================================
 
@@ -1168,10 +1186,14 @@ ConfigCoreData::~ConfigCoreData()
 
 void ConfigCoreData::Construct( const String& rFileName )
 {
-    SvFileStream aStrm( rFileName, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
-    mbLoaded = aStrm.IsOpen();
-    if( mbLoaded )
-        ReadConfigBlockContents( aStrm );
+    mbLoaded = false;
+    String aFileUrl = StringHelper::ConvertFileNameToUrl( rFileName );
+    if( aFileUrl.Len() > 0 )
+    {
+        xub_StrLen nNamePos = StringHelper::GetFileNamePos( aFileUrl );
+        maConfigPath = aFileUrl.Copy( 0, nNamePos );
+        mbLoaded = ReadConfigFile( aFileUrl );
+    }
 }
 
 void ConfigCoreData::SetOption( const String& rKey, const String& rData )
@@ -1212,7 +1234,9 @@ bool ConfigCoreData::ImplIsValid() const
 
 void ConfigCoreData::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
 {
-    if( rKey.EqualsAscii( "constlist" ) )
+    if( rKey.EqualsAscii( "include-config-file" ) )
+        ReadConfigFile( String( maConfigPath ).Append( rData ) );
+    else if( rKey.EqualsAscii( "constlist" ) )
         ReadNameList< ConstList >( rStrm, rData );
     else if( rKey.EqualsAscii( "multilist" ) )
         ReadNameList< MultiList >( rStrm, rData );
@@ -1226,6 +1250,15 @@ void ConfigCoreData::ImplProcessConfigItemStr( SvStream& rStrm, const String& rK
         CreateUnitConverter( rData );
     else
         SetOption( rKey, rData );
+}
+
+bool ConfigCoreData::ReadConfigFile( const String& rFileUrl )
+{
+    SvFileStream aStrm( rFileUrl, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
+    bool bLoaded = aStrm.IsOpen();
+    if( bLoaded )
+        ReadConfigBlockContents( aStrm );
+    return bLoaded;
 }
 
 void ConfigCoreData::CreateShortList( const String& rData )
@@ -1272,7 +1305,8 @@ void ConfigCoreData::CreateUnitConverter( const String& rData )
 
 // ============================================================================
 
-Config::Config( const Config& rParent )
+Config::Config( const Config& rParent ) :
+    Base( rParent )
 {
     Construct( rParent );
 }
@@ -1413,7 +1447,7 @@ SvStreamInput::~SvStreamInput()
 {
 }
 
-sal_Size SvStreamInput::Size() const
+sal_Size SvStreamInput::GetSize() const
 {
     sal_Size nSize = 0;
     if( mrStrm.GetErrorCode() == SVSTREAM_OK )
@@ -1868,7 +1902,7 @@ void InputObjectBase::Construct( const ObjectBase& rParent, InputRef xIn )
     mxIn = xIn;
 }
 
-void InputObjectBase::Construct( InputObjectBase& rParent )
+void InputObjectBase::Construct( const InputObjectBase& rParent )
 {
     Construct( rParent, rParent.mxIn );
 }
@@ -1895,7 +1929,7 @@ void InputObjectBase::ReconstructInput()
 
 void InputObjectBase::SkipBlock( sal_Size nSize, bool bShowSize )
 {
-    sal_Size nEndPos = ::std::min( mxIn->Tell() + nSize, mxIn->Size() );
+    sal_Size nEndPos = ::std::min( mxIn->Tell() + nSize, mxIn->GetSize() );
     if( mxIn->Tell() < nEndPos )
     {
         if( bShowSize )
@@ -1916,7 +1950,7 @@ void InputObjectBase::DumpRawBinary( sal_Size nSize, bool bShowOffset, bool bStr
     sal_Size nMaxShowSize = Cfg().GetIntOption< sal_Size >(
         bStream ? "max-binary-stream-size" : "max-binary-data-size", STREAM_SEEK_TO_END );
 
-    sal_Size nEndPos = ::std::min( mxIn->Tell() + nSize, mxIn->Size() );
+    sal_Size nEndPos = ::std::min( mxIn->Tell() + nSize, mxIn->GetSize() );
     sal_Size nDumpEnd = ::std::min( mxIn->Tell() + nMaxShowSize, nEndPos );
 
     while( mxIn->Tell() < nDumpEnd )
@@ -1959,7 +1993,7 @@ void InputObjectBase::DumpBinary( const sal_Char* pcName, sal_Size nSize, bool b
 
 void InputObjectBase::DumpArray( const sal_Char* pcName, sal_Size nSize, sal_Unicode cSep )
 {
-    sal_Size nDumpSize = ::std::min( nSize, mxIn->Size() - mxIn->Tell() );
+    sal_Size nDumpSize = ::std::min( nSize, mxIn->GetSize() - mxIn->Tell() );
     if( nDumpSize > SCF_DUMP_MAXARRAY )
     {
         DumpBinary( pcName, nSize, false );
@@ -1988,7 +2022,7 @@ void InputObjectBase::DumpRemaining( sal_Size nSize )
 void InputObjectBase::DumpBinaryStream( bool bShowOffset )
 {
     mxIn->Seek( STREAM_SEEK_TO_BEGIN );
-    DumpRawBinary( mxIn->Size(), bShowOffset, true );
+    DumpRawBinary( mxIn->GetSize(), bShowOffset, true );
     Out().EmptyLine();
 }
 
@@ -2040,6 +2074,7 @@ void InputObjectBase::DumpItem( const ItemFormat& rItemFmt )
 {
     switch( rItemFmt.meDataType )
     {
+        case DATATYPE_VOID:                                         break;
         case DATATYPE_INT8:    DumpValue< sal_Int8 >( rItemFmt );   break;
         case DATATYPE_UINT8:   DumpValue< sal_uInt8 >( rItemFmt );  break;
         case DATATYPE_INT16:   DumpValue< sal_Int16 >( rItemFmt );  break;
@@ -2184,6 +2219,33 @@ void WrappedStreamObject::Construct( const ObjectBase& rParent, StreamObjectRef 
 bool WrappedStreamObject::ImplIsValid() const
 {
     return IsValid( mxStrmObj ) && StreamObjectBase::ImplIsValid();
+}
+
+// ============================================================================
+// ============================================================================
+
+RecordHeaderBase::~RecordHeaderBase()
+{
+}
+
+void RecordHeaderBase::Construct( const InputObjectBase& rParent, const RecordHeaderConfigInfo& rCfgInfo )
+{
+    InputObjectBase::Construct( rParent );
+    if( InputObjectBase::ImplIsValid() )
+    {
+        const Config& rCfg = Cfg();
+        mxRecNames    = rCfg.GetNameList( rCfgInfo.mpcRecNames );
+        mbShowRecPos  = rCfg.GetBoolOption( rCfgInfo.mpcShowRecPos,  true );
+        mbShowRecSize = rCfg.GetBoolOption( rCfgInfo.mpcShowRecSize, true );
+        mbShowRecId   = rCfg.GetBoolOption( rCfgInfo.mpcShowRecId,   true );
+        mbShowRecName = rCfg.GetBoolOption( rCfgInfo.mpcShowRecName, true );
+        mbShowRecBody = rCfg.GetBoolOption( rCfgInfo.mpcShowRecBody, true );
+    }
+}
+
+bool RecordHeaderBase::ImplIsValid() const
+{
+    return IsValid( mxRecNames ) && InputObjectBase::ImplIsValid();
 }
 
 // ============================================================================
