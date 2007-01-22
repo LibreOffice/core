@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:57:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 12:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,11 +252,12 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
             pSubTotalFuncs[nSub] = r.pSubTotalFuncs[nSub];
     }
 
-    long nCount = r.aMemberList.Count();
-    for (long i=0; i<nCount; i++)
+    for (MemberList::const_iterator i=r.maMemberList.begin(); i != r.maMemberList.end() ; i++)
     {
-        ScDPSaveMember* pNew = new ScDPSaveMember( *(ScDPSaveMember*)r.aMemberList.GetObject(i) );
-        aMemberList.Insert( pNew, LIST_APPEND );
+        const String& rName =  (*i)->GetName();
+        ScDPSaveMember* pNew = new ScDPSaveMember( **i );
+        maMemberHash[rName] = pNew;
+        maMemberList.push_back( pNew );
     }
     if (r.pReferenceValue)
         pReferenceValue = new sheet::DataPilotFieldReference( *(r.pReferenceValue) );
@@ -317,7 +318,8 @@ ScDPSaveDimension::ScDPSaveDimension(SvStream& rStream)
     for (i=0; i<nNewCount; i++)
     {
         ScDPSaveMember* pNew = new ScDPSaveMember( rStream );
-        aMemberList.Insert( pNew, LIST_APPEND );
+        maMemberHash[pNew->GetName()] = pNew;
+        maMemberList.push_back( pNew );
     }
     pReferenceValue = NULL;
     pSortInfo = NULL;
@@ -351,21 +353,16 @@ void ScDPSaveDimension::Store( SvStream& rStream ) const
 
     rStream << (USHORT) 0;  // nExtra
 
-    long nCount = aMemberList.Count();
+    long nCount = maMemberHash.size();
     rStream << nCount;
-    for (i=0; i<nCount; i++)
-    {
-        const ScDPSaveMember* pMember = (const ScDPSaveMember*)aMemberList.GetObject(i);
-        pMember->Store( rStream );
-    }
+    for (MemberList::const_iterator iter=maMemberList.begin(); iter != maMemberList.end() ; iter++)
+        (*iter)->Store( rStream );
 }
 
 ScDPSaveDimension::~ScDPSaveDimension()
 {
-    long nCount = aMemberList.Count();
-    for (long i=0; i<nCount; i++)
-        delete (ScDPSaveMember*)aMemberList.GetObject(i);
-    aMemberList.Clear();
+    for (MemberHash::const_iterator i=maMemberHash.begin(); i != maMemberHash.end() ; i++)
+        delete i->second;
     delete pReferenceValue;
     delete pSortInfo;
     delete pAutoShowInfo;
@@ -396,16 +393,34 @@ BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
         if ( pSubTotalFuncs[i] != r.pSubTotalFuncs[i] )
             return FALSE;
 
-    long nCount = aMemberList.Count();
-    if ( nCount != r.aMemberList.Count() )
+    if (maMemberHash.size() != r.maMemberHash.size() )
         return FALSE;
 
-    for (i=0; i<nCount; i++)
-        if ( !( *(ScDPSaveMember*)aMemberList.GetObject(i) ==
-                *(ScDPSaveMember*)r.aMemberList.GetObject(i) ) )
+    MemberList::const_iterator a=maMemberList.begin();
+    MemberList::const_iterator b=r.maMemberList.begin();
+    for (; a != maMemberList.end() ; ++a, ++b)
+        if (!(**a == **b))
             return FALSE;
 
     return TRUE;
+}
+
+void ScDPSaveDimension::AddMember(ScDPSaveMember* pMember)
+{
+    const String & rName =  pMember->GetName();
+    MemberHash::iterator aExisting = maMemberHash.find( rName );
+    if ( aExisting == maMemberHash.end() )
+    {
+        std::pair< const String, ScDPSaveMember *> key( rName, pMember );
+        maMemberHash.insert ( key );
+    }
+    else
+    {
+        maMemberList.remove( aExisting->second );
+        delete aExisting->second;
+        aExisting->second = pMember;
+    }
+    maMemberList.push_back( pMember );
 }
 
 void ScDPSaveDimension::SetName( const String& rNew )
@@ -550,26 +565,22 @@ const String& ScDPSaveDimension::GetCurrentPage() const
 
 ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const String& rName)
 {
-    long nCount = aMemberList.Count();
-    for (long i=0; i<nCount; i++)
-    {
-        ScDPSaveMember* pMember = (ScDPSaveMember*)aMemberList.GetObject(i);
-        if ( pMember->GetName() == rName )
-            return pMember;
-    }
+    MemberHash::const_iterator res = maMemberHash.find (rName);
+    if (res != maMemberHash.end())
+        return res->second;
     return NULL;
 }
 
 
 ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const String& rName)
 {
-    long nCount = aMemberList.Count();
-    ScDPSaveMember* pMember = GetExistingMemberByName(rName);
-    if (pMember)
-        return pMember;
+    MemberHash::const_iterator res = maMemberHash.find (rName);
+    if (res != maMemberHash.end())
+        return res->second;
 
     ScDPSaveMember* pNew = new ScDPSaveMember( rName );
-    aMemberList.Insert( pNew, LIST_APPEND );
+    maMemberHash[rName] = pNew;
+    maMemberList.push_back( pNew );
     return pNew;
 }
 
@@ -623,10 +634,10 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         }
     }
 
-    //  Level loop outside of aMemberList loop
+    //  Level loop outside of maMemberList loop
     //  because SubTotals have to be set independently of known members
 
-    long nCount = aMemberList.Count();
+    long nCount = maMemberHash.size();
 
     long nHierCount = 0;
     uno::Reference<container::XIndexAccess> xHiers;
@@ -724,15 +735,14 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     uno::Reference<container::XNameAccess> xMembers = xMembSupp->getMembers();
                     if ( xMembers.is() )
                     {
-                        for (long i=0; i<nCount; i++)
+                        for (MemberList::const_iterator i=maMemberList.begin(); i != maMemberList.end() ; i++)
                         {
-                            ScDPSaveMember* pMember = (ScDPSaveMember*)aMemberList.GetObject(i);
-                            rtl::OUString aName = pMember->GetName();
-                            if ( xMembers->hasByName( aName ) )
+                            rtl::OUString aMemberName = (*i)->GetName();
+                            if ( xMembers->hasByName( aMemberName ) )
                             {
                                 uno::Reference<uno::XInterface> xMemberInt = ScUnoHelpFunctions::AnyToInterface(
-                                    xMembers->getByName( aName ) );
-                                pMember->WriteToSource( xMemberInt );
+                                    xMembers->getByName( aMemberName ) );
+                                (*i)->WriteToSource( xMemberInt );
                             }
                             // missing member is no error
                         }
@@ -829,11 +839,11 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
         if ( !pDimensionData || !r.pDimensionData || !( *pDimensionData == *r.pDimensionData ) )
             return FALSE;
 
-    long nCount = aDimList.Count();
+    ULONG nCount = aDimList.Count();
     if ( nCount != r.aDimList.Count() )
         return FALSE;
 
-    for (long i=0; i<nCount; i++)
+    for (ULONG i=0; i<nCount; i++)
         if ( !( *(ScDPSaveDimension*)aDimList.GetObject(i) ==
                 *(ScDPSaveDimension*)r.aDimList.GetObject(i) ) )
             return FALSE;
