@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:26:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:39:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5455,14 +5455,22 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                 {
                     if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_PPT )
                     {
-                        sal_Int16 ls, os, rs, us;
-                        rSt >> os >> ls >> rs >> us; // etwas seltsame Koordinatenreihenfolge ...
-                        sal_Int32 l = ls, o = os, r = rs, u = us;
+                        sal_Int32 l, t, r, b;
+                        if ( aShapeAtom.nRecLen == 16 )
+                        {
+                            rSt >> l >> t >> r >> b;
+                        }
+                        else
+                        {
+                            INT16 ls, ts, rs, bs;
+                            rSt >> ts >> ls >> rs >> bs; // etwas seltsame Koordinatenreihenfolge ...
+                            l = ls, t = ts, r = rs, b = bs;
+                        }
                         Scale( l );
-                        Scale( o );
+                        Scale( t );
                         Scale( r );
-                        Scale( u );
-                        aClientRect = Rectangle( l, o, r, u );
+                        Scale( b );
+                        aClientRect = Rectangle( l, t, r, b );
                     }
                     break;
                 }
