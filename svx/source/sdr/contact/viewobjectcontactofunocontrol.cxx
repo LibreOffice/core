@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:12:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,6 +503,31 @@ namespace sdr { namespace contact {
         */
         bool    getUnoObject( SdrUnoObj*& _out_rpObject ) const;
 
+        /** does initializations for a paint-related method
+
+            @param _rDisplayInfo
+                display info as passed to the paint-related method
+            @param _out_rpObject
+                out-parameter taking our SdrUnoObj upon successfull return
+            @param _out_rxControlView
+                out-parameter taking our control's XView interface upon successfull return
+        */
+        bool initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject,
+            Reference< XView >& _out_rxControlView );
+
+        /** does initializations for a paint-related method
+
+            @param _rDisplayInfo
+                display info as passed to the paint-related method
+            @param _out_rpObject
+                out-parameter taking our SdrUnoObj upon successfull return
+        */
+        bool initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject )
+        {
+            Reference< XView > xUnused;
+            return initPaint( _rDisplayInfo, _out_rpObject, xUnused );
+        }
+
         /** ensures that we have an ->XControl
         */
         bool    ensureControl( const DisplayInfo& _rDisplayInfo );
@@ -530,12 +555,12 @@ namespace sdr { namespace contact {
 
             @return <TRUE/> if and only if the returned control is not <NULL/>
         */
-        template< class INTERFACE_TYPE >
-        bool    getCreateControl( const DisplayInfo& _rDisplayInfo, Reference< INTERFACE_TYPE >& _out_rxControl )
+        bool    getCreateControl( const DisplayInfo& _rDisplayInfo, Reference< XView >& _out_rxControlView )
         {
             ensureControl( _rDisplayInfo );
-            _out_rxControl = _out_rxControl.query( m_xControl );
-            return _out_rxControl.is();
+            _out_rxControlView = _out_rxControlView.query( m_xControl );
+            DBG_ASSERT( _out_rxControlView.is(), "ViewObjectContactOfUnoControl_Impl::getCreateControl: no control!" );
+            return _out_rxControlView.is();
         }
 
         /** positions our XControl according to the geometry settings in the SdrUnoObj,
@@ -887,6 +912,22 @@ namespace sdr { namespace contact {
         }
         return ( _out_rpObject != NULL );
     }
+
+    //--------------------------------------------------------------------
+    bool ViewObjectContactOfUnoControl_Impl::initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject,
+        Reference< XView >& _out_rxControlView )
+    {
+        _out_rpObject = NULL;
+        if ( !getUnoObject( _out_rpObject ) )
+            return false;
+
+        _out_rxControlView.clear();
+        if ( !getCreateControl( _rDisplayInfo, _out_rxControlView ) )
+            return false;
+
+        return true;
+    }
+
 
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl() const
@@ -1587,29 +1628,24 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
+    void ViewObjectContactOfUnoControl::positionControl( DisplayInfo& _rDisplayInfo ) const
+    {
+        VOCGuard aGuard( *m_pImpl );
+
+        SdrUnoObj* pObject( NULL );
+        if ( const_cast< ViewObjectContactOfUnoControl* >( this )->m_pImpl->initPaint( _rDisplayInfo, pObject ) )
+            m_pImpl->positionAndZoomControl();
+    }
+
+    //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl::PaintObject( DisplayInfo& _rDisplayInfo )
     {
         VOCGuard aGuard( *m_pImpl );
 
         SdrUnoObj* pObject( NULL );
-        if ( !m_pImpl->getUnoObject( pObject ) )
-            return;
-
-        Rectangle       aPaintRect( pObject->GetLogicRect() );
-        OutputDevice*   pDevice( _rDisplayInfo.GetOutputDevice() );
-
-        DBG_ASSERT( pDevice, "ViewObjectContactOfUnoControl::PaintObject: no device to paint onto!" );
-        if ( !pDevice )
-            return;
-
         Reference< XView > xControlView;
-        if ( !m_pImpl->getCreateControl( _rDisplayInfo, xControlView ) )
-        {
-            DBG_ERROR( "ViewObjectContactOfUnoControl::PaintObject: no control!" );
+        if ( !m_pImpl->initPaint( _rDisplayInfo, pObject, xControlView ) )
             return;
-        }
-
-        m_pImpl->positionAndZoomControl();
 
         try
         {
