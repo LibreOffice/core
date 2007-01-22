@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:42:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:16:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2237,10 +2237,26 @@ sal_uInt32 SdrPathObj::GetHdlCount() const
     return nRetval;
 }
 
-SdrHdl* SdrPathObj::GetHdl(sal_uInt32 /*nHdlNum*/) const
+SdrHdl* SdrPathObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    DBG_ERROR("SdrPathObj::GetHdl() : Old implementation was wrong anyways, should not be used at all (!)");
-    return 0L;
+    // #i73248#
+    // Warn the user that this is ineffective and show alternatives. Should not be used at all.
+    OSL_ENSURE(false, "SdrPathObj::GetHdl(): ineffective, use AddToHdlList instead (!)");
+
+    // to have an alternative, get single handle using the ineffective way
+    SdrHdl* pRetval = 0;
+    SdrHdlList aLocalList(0);
+    AddToHdlList(aLocalList);
+    const sal_uInt32 nHdlCount(aLocalList.GetHdlCount());
+
+    if(nHdlCount && nHdlNum < nHdlCount)
+    {
+        // remove and remember. The other created handles will be deleted again with the
+        // destruction of the local list
+        pRetval = aLocalList.RemoveHdl(nHdlNum);
+    }
+
+    return pRetval;
 }
 
 void SdrPathObj::AddToHdlList(SdrHdlList& rHdlList) const
