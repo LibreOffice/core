@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_systemint.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:31:19 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,15 @@
 #include "macros.inc"
 
 Module gid_Module_Optional_Systemintegration
+  #ifdef WNT
+    ParentID = gid_Module_Root;
+  #else
     ParentID = gid_Module_Optional;
+  #endif
     Sortkey = "800";
     MOD_NAME_DESC(MODULE_OPTIONAL_SYSTEMINTEGRATION);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT,SYSTEMMODULE);
+    Styles = (HIDDEN_ROOT);
   #else
     Styles = (SYSTEMMODULE,NOTRELOCATABLE,DONTSHOWINUSERINSTALL);
   #endif
