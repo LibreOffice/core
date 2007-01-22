@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpaintwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:11:39 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,8 @@ SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
 :   mrOutputDevice(rOut),
     mrPaintView(rNewPaintView),
     mpOverlayManager(0L),
-    mpPreRenderDevice(0L)
+    mpPreRenderDevice(0L),
+    mbTemporaryTarget(false) // #i72889#
 {
 }
 

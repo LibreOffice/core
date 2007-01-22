@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpagewindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:13:36 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
     aDisplayInfo.SetRedrawArea(rReg);
 
     // no PagePainting for preparations
-    aDisplayInfo.SetPagePainting(sal_False);
+    aDisplayInfo.SetPagePainting(rView.IsPagePaintingAllowed()); // #i72889#
 
     // keep draw hierarchy up-to-date and expand ClipRegion
     GetObjectContact().PreProcessDisplay(aDisplayInfo);
@@ -490,7 +490,7 @@ void SdrPageWindow::RedrawAll(sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectC
         aDisplayInfo.SetRedrawArea(rRegion);
 
         // Draw/Impress
-        aDisplayInfo.SetPagePainting(sal_True);
+        aDisplayInfo.SetPagePainting(rView.IsPagePaintingAllowed()); // #i72889#
 
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);
@@ -571,7 +571,7 @@ void SdrPageWindow::RedrawLayer(
         aDisplayInfo.SetRedrawArea(rRegion);
 
         // Writer or calc, coming from original RedrawOneLayer.
-        aDisplayInfo.SetPagePainting(sal_False);
+        aDisplayInfo.SetPagePainting(sal_False); // #i72889# no page painting for layer painting
 
         // check for valid draw hierarchy
         if(!GetObjectContact().IsDrawHierarchyValid())
