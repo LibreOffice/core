@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:29:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,35 +42,16 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGETARGET_HPP_
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_SYSTEMPOINTER_HPP_
 #include <com/sun/star/awt/SystemPointer.hpp>
-#endif
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
@@ -560,7 +541,6 @@ SlideshowImpl::SlideshowImpl(
 
     mpNewAttr(0),
     mpShowWindow(0),
-    mpSaveOptions( new SvtSaveOptions ),
     mpTimeButton(0),
     mnRestoreSlide(0),
     maPresSize( -1, -1 ),
@@ -572,7 +552,6 @@ SlideshowImpl::SlideshowImpl(
     mbSlideBorderVisible(false),
     mbSetOnlineSpelling(false),
     mbDisposed(false),
-    mbAutoSaveSuppressed(false),
     mbRehearseTimings(false),
     mbDesignMode(false),
     mbIsPaused(false),
@@ -592,16 +571,24 @@ SlideshowImpl::SlideshowImpl(
 
     maInputFreezeTimer.SetTimeoutHdl( LINK( this, SlideshowImpl, ReadyForNextInputHdl ) );
     maInputFreezeTimer.SetTimeout( 20 );
+
+    SvtSaveOptions aOptions;
+
+        // no autosave during show
+    if( aOptions.IsAutoSave() )
+        mbAutoSaveWasOn = true;
 }
 
 SlideshowImpl::~SlideshowImpl()
 {
+    if( mbAutoSaveWasOn )
+        setAutoSaveState( true );
+
     if( mnEndShowEvent )
         Application::RemoveUserEvent( mnEndShowEvent );
 
     stopShow();
 
-    delete mpSaveOptions;
 }
 
 bool SlideshowImpl::startPreview(
@@ -2571,12 +2558,8 @@ void SlideshowImpl::activate()
 
     if( ANIMATIONMODE_SHOW == meAnimationMode )
     {
-        // no autosave during show
-        if( mpSaveOptions->IsAutoSave() )
-        {
-            mpSaveOptions->SetAutoSave( FALSE );
-            mbAutoSaveSuppressed = TRUE;
-        }
+        if( mbAutoSaveWasOn )
+            setAutoSaveState( false );
 
         if( mpShowWindow )
         {
@@ -2612,17 +2595,8 @@ void SlideshowImpl::deactivate()
 
     if( ANIMATIONMODE_SHOW == meAnimationMode )
     {
-        // restore autosave
-        if( mbAutoSaveSuppressed )
-        {
-            SfxAllItemSet   aSet( SFX_APP()->GetPool() );
-            SfxBoolItem     aItem( SID_ATTR_AUTOSAVE, sal_True );
-
-            // set options at SFX_APP() to restart autosave timer
-            aSet.Put( aItem );
-            SFX_APP()->SetOptions( aSet );
-            mbAutoSaveSuppressed = FALSE;
-        }
+        if( mbAutoSaveWasOn )
+            setAutoSaveState( true );
 
         if( mpShowWindow )
         {
@@ -2683,6 +2657,34 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
             }
         }
         break;
+    }
+}
+
+void SlideshowImpl::setAutoSaveState( bool bOn)
+{
+    try
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
+
+        uno::Reference< util::XURLTransformer > xParser(
+            xFac->createInstance( OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ),
+                uno::UNO_QUERY_THROW);
+        util::URL aURL;
+        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/setAutoSaveState");
+        xParser->parseStrict(aURL);
+
+        Sequence< beans::PropertyValue > aArgs(1);
+        aArgs[0].Name = OUString::createFromAscii("AutoSaveState");
+        aArgs[0].Value <<= bOn ? sal_True : sal_False;
+
+        uno::Reference< frame::XDispatch > xAutoSave(
+            xFac->createInstance(OUString::createFromAscii("com.sun.star.frame.AutoRecovery")),
+            uno::UNO_QUERY_THROW);
+        xAutoSave->dispatch(aURL, aArgs);
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("sd::SlideshowImpl::setAutoSaveState(), exception caught!");
     }
 }
 
