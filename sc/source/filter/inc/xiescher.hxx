@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:34:27 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,6 @@ public:
 
     /** If set, the SdrObject will not be created, processed, or inserted into the draw page. */
     inline void         SetInvalid() { mbValid = false; }
-    /** If set, the SdrObject will not be processed, but created and inserted into the draw page. */
-    inline void         SetSkipProcessSdr() { mbProcSdr = false; }
     /** If set, the SdrObject will be created or processed, but not be inserted into the draw page. */
     inline void         SetSkipInsertSdr() { mbInsSdr = false; }
 
@@ -135,8 +133,6 @@ public:
 
     /** Returns true, if the object is valid and will be processed.. */
     inline bool         IsValid() const { return mbValid; }
-    /** Returns true, if the SdrObject will be processed (ProcessSdrObject() will be called). */
-    inline bool         IsProcessSdr() const { return mbProcSdr; }
     /** Returns true, if the SdrObject will be created or processed, but not be inserted into the draw page. */
     inline bool         IsInsertSdr() const { return mbInsSdr; }
     /** Returns true, if Escher object is printable. */
@@ -173,7 +169,6 @@ private:
     sal_uInt32          mnShapeBlipId;  /// The BLIP identifier (meta file).
     bool                mbValid;        /// true = Object is valid, do processing and insertion.
     bool                mbAreaObj;      /// true = Width and height must be greater than 0.
-    bool                mbProcSdr;      /// true = Process the SdrObject.
     bool                mbInsSdr;       /// true = Insert the SdrObject into draw page.
 };
 
@@ -224,18 +219,18 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** Helper to manage controls linked to the sheet. */
-class XclImpCtrlLinkHelper
+/** Helper class for form controils to manage spreadsheet links . */
+class XclImpControlObjHelper
 {
 public:
-    explicit            XclImpCtrlLinkHelper( XclCtrlBindMode eBindMode );
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > XControlModelRef;
 
-    /** Returns the linked cell address, or 0, if not present. */
-    inline const ScAddress* GetCellLink() const { return mxCellLink.get(); }
-    /** Returns the value binding mode for linked cells. */
-    inline XclCtrlBindMode GetBindingMode() const { return meBindMode; }
-    /** Returns the linked source cell range, or 0, if not present. */
-    inline const ScRange* GetSourceRange() const { return mxSrcRange.get(); }
+public:
+    explicit            XclImpControlObjHelper( XclCtrlBindMode eBindMode );
+    virtual             ~XclImpControlObjHelper();
+
+    /** Sets the control model from the created form control object. */
+    inline void         SetControlModel( XControlModelRef xCtrlModel ) { mxCtrlModel = xCtrlModel; }
 
 protected:
     /** Reads the formula for the linked cell from the current position of the stream. */
@@ -243,7 +238,18 @@ protected:
     /** Reads the formula for the source range from the current position of the stream. */
     void                ReadSrcRangeFormula( XclImpStream& rStrm );
 
+    /** Returns true, if a linked cell address is present. */
+    inline bool         HasCellLink() const { return mxCellLink.is(); }
+    /** Returns true, if a linked source cell range is present. */
+    inline bool         HasSourceRange() const { return mxSrcRange.is(); }
+
+    /** Returns the property set of the form control object. */
+    ScfPropertySet      GetControlPropSet() const;
+    /** Tries to set a spreadsheet cell link and source range link at the passed form control. */
+    void                ConvertSheetLinks( const XclImpRoot& rRoot, SdrObject& rSdrObj ) const;
+
 private:
+    XControlModelRef    mxCtrlModel;    /// Model of the created form control object.
     ScfRef< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
     ScfRef< ScRange >   mxSrcRange;     /// Source data range in the Calc document.
     XclCtrlBindMode     meBindMode;     /// Value binding mode.
@@ -252,7 +258,7 @@ private:
 // ----------------------------------------------------------------------------
 
 /** An old form control object (does not use the OLE mechanism, but is a "simple" drawing object). */
-class XclImpTbxControlObj : public XclImpDrawingObj, public XclImpCtrlLinkHelper
+class XclImpTbxControlObj : public XclImpDrawingObj, public XclImpControlObjHelper
 {
 public:
     explicit            XclImpTbxControlObj( const XclImpRoot& rRoot );
@@ -262,13 +268,14 @@ public:
 
     /** Returns the complete component service name for this control. */
     ::rtl::OUString     GetServiceName() const;
-
-    /** Sets form control specific properties. */
-    void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
     /** Tries to fill the passed descriptor with imported macro data.
         @return  true = Control is associated with a macro, rEvent contains valid data. */
     bool                FillMacroDescriptor(
                             ::com::sun::star::script::ScriptEventDescriptor& rEvent ) const;
+
+protected:
+    /** Overloaded to do additional processing on the SdrObject. */
+    virtual void        DoProcessSdrObj( SdrObject& rSdrObj ) const;
 
 private:
     /** Reads the contents of the ftCbls sub structure in an OBJ record. */
@@ -304,7 +311,7 @@ private:
 // ----------------------------------------------------------------------------
 
 /** A common Escher OLE object, or an OLE form control. */
-class XclImpOleObj : public XclImpDrawObjBase, public XclImpCtrlLinkHelper
+class XclImpOleObj : public XclImpDrawObjBase, public XclImpControlObjHelper
 {
 public:
     explicit            XclImpOleObj( const XclImpRoot& rRoot );
@@ -312,23 +319,15 @@ public:
     /** Reads the contents of the specified subrecord of an OBJ record from stream. */
     virtual void        ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
 
+    /** Allows to detect whether the object is iconified. */
+    inline bool         IsIconified() const { return mbAsSymbol; }
     /** Returns true, if this object is a form control, and false, if it is a common OLE object. */
     inline bool         IsControl() const { return mbControl && mbUseCtlsStrm; }
-    /** Sets the internal name for a form control. */
-    inline void         SetControlName( const String& rName ) { maCtrlName = rName; }
 
     /** Returns the OLE storage name used in the Excel document. */
     inline const String& GetStorageName() const { return maStorageName; }
-    /** Returns the internal name for a form control. */
-    inline const String& GetControlName() const { return maCtrlName; }
     /** Returns the position in Ctrl stream for additional form control data. */
     inline sal_Size      GetCtlsStreamPos() const { return mnCtlsStrmPos; }
-    /** Allows to detect whether the object is iconified. */
-    inline sal_Bool      IsIconified() const { return mbAsSymbol; }
-
-
-    /** Sets form control specific properties. */
-    void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
 
 protected:
     /** Overloaded to do additional processing on the SdrObject. */
@@ -342,7 +341,6 @@ private:
 
 private:
     String              maStorageName;  /// Name of the OLE storage for this object.
-    String              maCtrlName;     /// Internal name of a form control.
     sal_Size            mnCtlsStrmPos;  /// Position in 'Ctls' stream for controls.
     bool                mbAsSymbol;     /// true = Show as symbol.
     bool                mbLinked;       /// true = Linked; false = Embedded.
@@ -475,9 +473,6 @@ protected:
     virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 
 private:
-    /** Reads a string property from the passed Escher stream. */
-    String              ReadStringProperty( SvStream& rEscherStrm, sal_uInt32 nPropId ) const;
-
     /** Processes a drawing group container (global drawing data). */
     void                ProcessDggContainer( SvStream& rEscherStrm, const DffRecordHeader& rDggHeader );
     /** Processes a drawing container (all drawing data of a sheet). */
@@ -489,18 +484,15 @@ private:
     /** Processes a shape or shape group container (one top-level shape). */
     void                ProcessShContainer( SvStream& rEscherStrm, const DffRecordHeader& rShHeader );
 
-    /** Returns the OCX converter (OCX form controls converter). */
-    XclImpOcxConverter& GetOcxConverter();
-
     /** Inserts the passed SdrObject into the document. This function takes ownership of pSdrObj! */
     void                InsertSdrObject( const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj );
 
     /** Tries to create a custom SdrObject for specific object types. */
-    SdrObject*          CreateCustomSdrObject( const XclImpDrawObjBase& rDrawObj, const Rectangle& rAnchorRect );
+    SdrObject*          CreateCustomSdrObject( XclImpDrawObjBase& rDrawObj, const Rectangle& rAnchorRect );
     /** Creates the SdrObject for the passed Excel OLE object. */
-    SdrObject*          CreateSdrObject( const XclImpOleObj& rOleObj, const Rectangle& rAnchorRect );
+    SdrObject*          CreateSdrObject( XclImpOleObj& rOleObj, const Rectangle& rAnchorRect );
     /** Creates the SdrObject for the passed Excel textbox control object. */
-    SdrObject*          CreateSdrObject( const XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect );
+    SdrObject*          CreateSdrObject( XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect );
     /** Creates the SdrObject for the passed Excel chart object. */
     SdrObject*          CreateSdrObject( const XclImpChartObj& rChartObj, const Rectangle& rAnchorRect );
 
