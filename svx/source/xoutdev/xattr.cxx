@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:14:45 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2002,7 +2002,11 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
+            {
                 maPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
+                // #i72807# close line start/end polygons hard
+                // maPolyPolygon.setClosed(true);
+            }
         }
     }
 
@@ -2691,7 +2695,11 @@ sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nM
 
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
+            {
                 maPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
+                // #i72807# close line start/end polygons hard
+                // maPolyPolygon.setClosed(true);
+            }
         }
     }
 
