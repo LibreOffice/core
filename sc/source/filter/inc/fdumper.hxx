@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,6 +275,11 @@ public:
 
     static void         ConvertStringToStringList( ScfStringVec& rVec, const String& rData, bool bIgnoreEmpty );
     static void         ConvertStringToIntList( ScfInt64Vec& rVec, const String& rData, bool bIgnoreEmpty );
+
+    // file names -------------------------------------------------------------
+
+    static String       ConvertFileNameToUrl( const String& rFileName );
+    static xub_StrLen   GetFileNamePos( const String& rFileUrl );
 };
 
 // ----------------------------------------------------------------------------
@@ -348,12 +353,18 @@ typedef ScfRef< Base > BaseRef;
     |
     +---->  ObjectBase
             |
-            +---->  InputObjectBase  ---->  StreamObjectBase
-            |                               |
-            |                               +---->  SvStreamObject
-            |                               +---->  OleStreamObject
-            |                               +---->  WrappedStreamObject
+            +---->  InputObjectBase
+            |       |
+            |       +---->  StreamObjectBase
+            |       |       |
+            |       |       +---->  SvStreamObject
+            |       |       +---->  OleStreamObject
+            |       |       +---->  WrappedStreamObject
+            |       |
+            |       +---->  RecordHeaderBase
+            |
             +---->  OleStorageObject
+            +---->  DumperBase
  */
 class Base
 {
@@ -397,15 +408,6 @@ private:
 
 // ============================================================================
 
-template< typename KeyType >
-struct NamedKey
-{
-    KeyType             mnKey;
-    const sal_Char*     mpcName;
-};
-
-// ============================================================================
-
 class ConfigCoreData;
 class Config;
 
@@ -414,7 +416,7 @@ typedef ScfRef< NameListBase > NameListRef;
 
 /** Base class of all classes providing names for specific values (name lists).
 
-    The ides is to provide a unique interfase for all different methods to
+    The idea is to provide a unique interfase for all different methods to
     write specific names for any values. This can be enumerations (dedicated
     names for a subset of values), or names for bits in bit fields. Classes
     derived from this base class implement the specific behaviour for the
@@ -430,9 +432,6 @@ public:
 
     /** Sets a name for the specified key. */
     void                SetName( sal_Int64 nKey, const StringWrapper& rNameWrp );
-    /** Sets names for a list of keys. Must be terminated by an entry with null pointer as name. */
-    template< typename Type >
-    void                SetNames( const NamedKey< Type >* pNames );
     /** Include all names of the passed list. */
     void                IncludeList( NameListRef xList );
 
@@ -486,15 +485,6 @@ private:
     StringMap           maMap;
     const ConfigCoreData& mrCoreData;
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename Type >
-void NameListBase::SetNames( const NamedKey< Type >* pNames )
-{
-    for( const NamedKey< Type >* pName = pNames; pName && pName->mpcName; ++pName )
-        SetName( static_cast< sal_Int64 >( pName->mnKey ), String( pName->mpcName, RTL_TEXTENCODING_UTF8 ) );
-}
 
 // ============================================================================
 
@@ -671,6 +661,7 @@ protected:
 private:
     void                ConstructOwn();
 
+    bool                ReadConfigFile( const String& rFileUrl );
     template< typename ListType >
     void                ReadNameList( SvStream& rStrm, const String& rListName );
     void                CreateShortList( const String& rData );
@@ -682,6 +673,7 @@ private:
 
     ConfigDataMap       maConfigData;
     NameListMap         maNameLists;
+    String              maConfigPath;
     bool                mbLoaded;
 };
 
@@ -816,7 +808,7 @@ typedef ScfRef< CoreData > CoreDataRef;
 class Input : public Base
 {
 public:
-    virtual sal_Size    Size() const = 0;
+    virtual sal_Size    GetSize() const = 0;
     virtual sal_Size    Tell() const = 0;
     virtual void        Seek( sal_Size nPos ) = 0;
     virtual void        SeekRel( sal_sSize nRelPos ) = 0;
@@ -832,7 +824,7 @@ public:
     virtual Input&      operator>>( float& rfData ) = 0;
     virtual Input&      operator>>( double& rfData ) = 0;
 
-    inline bool         IsValidPos() const { return Tell() < Size(); }
+    inline bool         IsValidPos() const { return Tell() < GetSize(); }
     template< typename Type >
     inline Type         ReadValue() { Type nValue; *this >> nValue; return nValue; }
 
@@ -853,7 +845,7 @@ public:
     explicit            SvStreamInput( SvStream& rStrm );
     virtual             ~SvStreamInput();
 
-    virtual sal_Size    Size() const;
+    virtual sal_Size    GetSize() const;
     virtual sal_Size    Tell() const;
     virtual void        Seek( sal_Size nPos );
     virtual void        SeekRel( sal_sSize nRelPos );
@@ -1206,7 +1198,7 @@ public:
 protected:
     inline explicit     InputObjectBase() {}
     void                Construct( const ObjectBase& rParent, InputRef xIn );
-    void                Construct( InputObjectBase& rParent );
+    void                Construct( const InputObjectBase& rParent );
 
     virtual bool        ImplIsValid() const;
     virtual InputRef    ImplReconstructInput();
@@ -1449,6 +1441,48 @@ protected:
 
 private:
     StreamObjectRef     mxStrmObj;
+};
+
+// ============================================================================
+// ============================================================================
+
+struct RecordHeaderConfigInfo
+{
+    const sal_Char*     mpcRecNames;
+    const sal_Char*     mpcShowRecPos;
+    const sal_Char*     mpcShowRecSize;
+    const sal_Char*     mpcShowRecId;
+    const sal_Char*     mpcShowRecName;
+    const sal_Char*     mpcShowRecBody;
+};
+
+// ----------------------------------------------------------------------------
+
+class RecordHeaderBase : public InputObjectBase
+{
+public:
+    virtual             ~RecordHeaderBase();
+
+    inline NameListRef  GetRecNames() const { return mxRecNames; }
+    inline bool         IsShowRecPos() const { return mbShowRecPos; }
+    inline bool         IsShowRecSize() const { return mbShowRecSize; }
+    inline bool         IsShowRecId() const { return mbShowRecId; }
+    inline bool         IsShowRecName() const { return mbShowRecName; }
+    inline bool         IsShowRecBody() const { return mbShowRecBody; }
+
+protected:
+    inline explicit     RecordHeaderBase() {}
+    void                Construct( const InputObjectBase& rParent, const RecordHeaderConfigInfo& rCfgInfo );
+
+    virtual bool        ImplIsValid() const;
+
+private:
+    NameListRef         mxRecNames;
+    bool                mbShowRecPos;
+    bool                mbShowRecSize;
+    bool                mbShowRecId;
+    bool                mbShowRecName;
+    bool                mbShowRecBody;
 };
 
 // ============================================================================
