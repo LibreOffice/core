@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 11:29:01 $
+#   last change: $Author: obo $ $Date: 2007-01-22 14:33:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@ PKGDEPN = \
     $(MISC)/$(TARGET)/mailcap \
     $(MISC)/$(TARGET)/postinstall \
     $(MISC)/$(TARGET)/prototype \
+    $(MISC)/$(TARGET)/copyright \
     $(MISC)/$(TARGET)/checkinstall	
 
 PKGDIR  = $(shell cd $(BIN); pwd)
@@ -175,8 +176,8 @@ $(MISC)/$(TARGET)/{space postinstall mailcap} : $$(@:f) ../productversion.mk
 
 # --- checkinstall -----------------------------------------------
 
-# Copy the checkinstall file to $(MISC) 
-$(MISC)/$(TARGET)/checkinstall : $$(@:f)
+# Copy the checkinstall and copyright file to $(MISC) 
+$(MISC)/$(TARGET)/{checkinstall copyright} : $$(@:f)
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" > $@
 
@@ -189,7 +190,7 @@ $(MISC)/$(TARGET)/{openoffice.sh printeradmin.sh} : ../share/$$(@:f)
 
 # --- packaging ---------------------------------------------------
 
-$(PKGFILE) : $(PKGDEPN) makefile.mk
+$(PKGFILE) : $(PKGDEPN) copyright makefile.mk
     @-$(RM) $(BIN)$/$(PKGNAME).tar.gz
     @$(MKDIRHIER) $(@:d)
     @pkgmk -r . -f $(MISC)/$(TARGET)/prototype -o -d $(BIN) ARCH=$(PKGARCH) VERSION=$(PKGVERSION),REV=$(PKGREV).$(PKGDATESTRING)
