@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:12:42 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,20 @@ namespace sdr { namespace contact {
                 "ViewContactOfUnoControl::invalidateAllContacts: prepare for an infinite loop!" );
 #endif
         }
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool ViewContactOfUnoControl::ShouldPaintObject( DisplayInfo& _rDisplayInfo, const ViewObjectContact& _rAssociatedVOC )
+    {
+        // position the control
+        // That's needed for alive mode, where the control is in fact a visible VCL window. In this
+        // case, if the base classes ShouldPaintObject returns FALSE, there would be artifacts
+        // since the VCL window is not moved to the proper position.
+        // #i72694# / 2006-12-18 / frank.schoenheit@sun.com
+        const ViewObjectContactOfUnoControl& rVOC( dynamic_cast< const ViewObjectContactOfUnoControl& >( _rAssociatedVOC ) );
+        rVOC.positionControl( _rDisplayInfo );
+
+        return ViewContactOfSdrObj::ShouldPaintObject( _rDisplayInfo, _rAssociatedVOC );
     }
 
 //........................................................................
