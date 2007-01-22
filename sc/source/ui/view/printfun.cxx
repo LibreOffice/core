@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:19 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,8 +568,10 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     // #109985#
     // Use a PaintMode which paints all SDRPAINTMODE_SC_ flags
     sal_uInt16 nAllPaintMode(0);
-    aOutputData.DrawingLayer(SC_LAYER_BACK, nAllPaintMode, nLogStX, nLogStY);
-    //aOutputData.DrawingLayer(SC_LAYER_BACK,SC_OBJECTS_ALL,nLogStX,nLogStY);
+
+    // #i72502#
+    const Point aMMOffset(aOutputData.PrePrintDrawingLayer(nLogStX, nLogStY));
+    aOutputData.PrintDrawingLayer(SC_LAYER_BACK, nAllPaintMode, aMMOffset);
 
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(aMode);
@@ -623,12 +625,11 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
         pDev->DrawLine( Point(nScrX,nScrY), Point(nRight,nScrY) );
     }
 
-    // #109985#
+    // #i72502#
     // USe a paint mode which draws all SDRPAINTMODE_SC_ flags
-    aOutputData.DrawingLayer(SC_LAYER_FRONT, nAllPaintMode, nLogStX, nLogStY);
-    aOutputData.DrawingLayer(SC_LAYER_INTERN, nAllPaintMode, nLogStX, nLogStY);
-    //aOutputData.DrawingLayer(SC_LAYER_FRONT,SC_OBJECTS_ALL,nLogStX,nLogStY);
-    //aOutputData.DrawingLayer(SC_LAYER_INTERN,SC_OBJECTS_ALL,nLogStX,nLogStY);
+    aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, nAllPaintMode, aMMOffset);
+    aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, nAllPaintMode, aMMOffset);
+    aOutputData.PostPrintDrawingLayer();
 
     // #114135#
     delete pDrawView;
@@ -1551,7 +1552,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                 long nScrX, long nScrY, BOOL bRepCol, BOOL bRepRow,
                                 ScPreviewLocationData& rLocationData )
 {
-    //  get MapMode for drawing objects (same MapMode as in ScOutputData::DrawingLayer)
+    //  get MapMode for drawing objects (same MapMode as in ScOutputData::PrintDrawingLayer)
 
     Point aLogPos = OutputDevice::LogicToLogic(Point(nScrX,nScrY), aOffsetMode, aLogicMode);
     long nLogStX = aLogPos.X();
@@ -1632,15 +1633,15 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     // test if all paint parts are hidden, then a paint is not necessary at all
     //if (nObjectFlags)
     const sal_uInt16 nPaintModeHideAll(SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW);
+    const Point aMMOffset(aOutputData.PrePrintDrawingLayer(nLogStX, nLogStY));
 
     if(nPaintModeHideAll != (mnPaintMode & nPaintModeHideAll))
     {
         pDev->SetMapMode(aLogicMode);
         //  hier kein Clipping setzen (Mapmode wird verschoben)
 
-        // #109985#
-        //aOutputData.DrawingLayer(SC_LAYER_BACK,nObjectFlags,nLogStX,nLogStY);
-        aOutputData.DrawingLayer(SC_LAYER_BACK, mnPaintMode, nLogStX, nLogStY);
+        // #i72502#
+        aOutputData.PrintDrawingLayer(SC_LAYER_BACK, mnPaintMode, aMMOffset);
     }
 
     pDev->SetMapMode(aOffsetMode);
@@ -1704,17 +1705,17 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     //if (nObjectFlags)
     if(nPaintModeHideAll != (mnPaintMode & nPaintModeHideAll))
     {
-        // #109985#
-        //aOutputData.DrawingLayer(SC_LAYER_FRONT,nObjectFlags,nLogStX,nLogStY);
-        aOutputData.DrawingLayer(SC_LAYER_FRONT, mnPaintMode, nLogStX, nLogStY);
+        // #i72502#
+        aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, mnPaintMode, aMMOffset);
     }
 
     // #109985#
     // Use a PaintMode which paints all SDRPAINTMODE_SC_ flags
     sal_uInt16 nPaintMode(0);
 
-    //aOutputData.DrawingLayer(SC_LAYER_INTERN,SC_OBJECTS_ALL,nLogStX,nLogStY);
-    aOutputData.DrawingLayer(SC_LAYER_INTERN, nPaintMode, nLogStX, nLogStY);
+    // #i72502#
+    aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, nPaintMode, aMMOffset);
+    aOutputData.PostPrintDrawingLayer();
 
     //if ( pDrawView && (nObjectFlags & SC_OBJECTS_DRAWING) )
     // #109985#
