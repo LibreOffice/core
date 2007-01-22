@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:10 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,6 @@ const sal_Int32 OLEPROP_TYPE_STORAGE    = 67;
 const sal_Int32 OLEPROP_TYPE_CLIPFMT    = 71;
 
 const sal_uInt16 CODEPAGE_UNICODE       = 1200;
-
-static const String saGlobalDocPropGuid  = CREATE_STRING( "F29F85E0-4FF9-1068-AB91-08002B27B3D9" );
-static const String saBuiltinDocPropGuid = CREATE_STRING( "D5CDD502-2E9C-101B-9397-08002B2CF9AE" );
-static const String saCustomDocPropGuid  = CREATE_STRING( "D5CDD505-2E9C-101B-9397-08002B2CF9AE" );
 
 } // namespace
 
@@ -384,60 +380,6 @@ void OlePropertyStreamObject::Construct( const OleStorageObject& rParentStrg, co
     OleStreamObject::Construct( rParentStrg, rStrmName );
 }
 
-void OlePropertyStreamObject::InitializeConfig( Config& rCfg )
-{
-    if( rCfg.IsValid() )
-    {
-        rCfg.SetStringOption( saGlobalDocPropGuid,  "GlobalDocProp" );
-        rCfg.SetStringOption( saBuiltinDocPropGuid, "BuiltinDocProp" );
-        rCfg.SetStringOption( saCustomDocPropGuid,  "CustomDocProp" );
-
-        // byte order
-        ScfRef< ConstList > xByteOrder = rCfg.CreateNameList< ConstList >( "BYTE-ORDER" );
-        xByteOrder->SetName( 0xFEFF, "big-endian" );
-        xByteOrder->SetName( 0xFFFE, "little-endian" );
-
-        // OS type
-        ScfRef< MultiList > xOleOsType = rCfg.CreateNameList< MultiList >( "OLEPROP-OSTYPE" );
-        xOleOsType->SetName( 0, "dos,mac,win32,unix" );
-
-        // base property IDs
-        ScfRef< MultiList > xOlePropBaseIds = rCfg.CreateNameList< MultiList >( "OLEPROP-BASEIDS" );
-        xOlePropBaseIds->SetName( 0, "dictionary,codepage" );
-        xOlePropBaseIds->SetDefaultName( "" );
-        xOlePropBaseIds->SetQuoteNames( true );
-
-        // global property IDs
-        ScfRef< MultiList > xOlePropGlobalIds = rCfg.CreateNameList< MultiList >( "OLEPROP-GLOBALIDS" );
-        xOlePropGlobalIds->IncludeList( xOlePropBaseIds );
-        xOlePropGlobalIds->SetName( 2, "title,subject,author,keywords,comments,template,last-author,rev-number" );
-        xOlePropGlobalIds->SetName( 10, "edit-time,last-printed,create-time,last-saved,page-count,word-count,char-count,thumbnail,appname,security" );
-
-        // MSO builtin property IDs
-        ScfRef< MultiList > xOlePropBuiltinIds = rCfg.CreateNameList< MultiList >( "OLEPROP-BUILTINIDS" );
-        xOlePropBuiltinIds->IncludeList( xOlePropBaseIds );
-        xOlePropBuiltinIds->SetName( 2, "category,pres-target,byte-count,line-count,para-count,slide-count,note-count,hidden-slide-count" );
-        xOlePropBuiltinIds->SetName( 10, "clips,scale-crop,heading-pairs,part-titles,manager,company,links-uptodate" );
-
-        // simple property types
-        ScfRef< MultiList > xOlePropTypeSimple = rCfg.CreateNameList< MultiList >( "OLEPROP-TYPE-SIMPLE" );
-        xOlePropTypeSimple->SetName( 0, "empty,null,int16,int32,float,double,fixed,date,string8,dispatch" );
-        xOlePropTypeSimple->SetName( 10, "error,bool,variant,unknown,decimal,int8,uint8,uint16,uint32" );
-        xOlePropTypeSimple->SetName( 20, "int64,uint64,int,uint,void,hresult,ptr,savearray,c-array,userdef" );
-        xOlePropTypeSimple->SetName( 30, "string8,string16" );
-        xOlePropTypeSimple->SetName( 64, "time-stamp,blob,stream,storage,stream-obj,storage-obj" );
-        xOlePropTypeSimple->SetName( 70, "blob-obj,clip-fmt,guid,vers-stream" );
-        xOlePropTypeSimple->SetName( 0x0FFF, "str8-blob" );
-
-        // property types with flags
-        ScfRef< CombiList > xOlePropType = rCfg.CreateNameList< CombiList >( "OLEPROP-TYPE" );
-        xOlePropType->SetName( 0x0FFF, "int32,dec,base-type,OLEPROP-TYPE-SIMPLE" );
-        xOlePropType->SetName( 0x1000, "vector" );
-        xOlePropType->SetName( 0x2000, "array" );
-        xOlePropType->SetName( 0x4000, "byref" );
-    }
-}
-
 void OlePropertyStreamObject::ImplDumpBody()
 {
     Input& rIn = In();
@@ -450,7 +392,7 @@ void OlePropertyStreamObject::ImplDumpBody()
     WriteEmptyItem( "HEADER" );
     {
         IndentGuard aIndGuard( rOut );
-        DumpHex< sal_uInt16 >( "byte-order", "BYTE-ORDER" );
+        DumpHex< sal_uInt16 >( "byte-order", "OLEPROP-BYTE-ORDER" );
         DumpDec< sal_uInt16 >( "version" );
         DumpDec< sal_uInt16 >( "os-minor" );
         DumpDec< sal_uInt16 >( "os-type", "OLEPROP-OSTYPE" );
@@ -484,9 +426,10 @@ void OlePropertyStreamObject::DumpSection( const String& rGuid, sal_uInt32 nStar
 
     // property ID names
     mxPropIds = Cfg().CreateNameList< ConstList >( "OLEPROP-IDS" );
-    if( rGuid == saGlobalDocPropGuid )
+    String aGuidName = Cfg().GetStringOption( rGuid, String::EmptyString() );
+    if( aGuidName.EqualsAscii( "GlobalDocProp" ) )
         mxPropIds->IncludeList( Cfg().GetNameList( "OLEPROP-GLOBALIDS" ) );
-    else if( rGuid == saBuiltinDocPropGuid )
+    else if( aGuidName.EqualsAscii( "BuiltinDocProp" ) )
         mxPropIds->IncludeList( Cfg().GetNameList( "OLEPROP-BUILTINIDS" ) );
     else
         mxPropIds->IncludeList( Cfg().GetNameList( "OLEPROP-BASEIDS" ) );
@@ -710,7 +653,7 @@ DateTime OlePropertyStreamObject::DumpFileTime( const sal_Char* pcName )
 
 bool OlePropertyStreamObject::StartElement( sal_uInt32 nStartPos )
 {
-    bool bPosOk = nStartPos < In().Size();
+    bool bPosOk = nStartPos < In().GetSize();
     if( bPosOk )
         In().Seek( static_cast< sal_Size >( nStartPos ) );
     else
