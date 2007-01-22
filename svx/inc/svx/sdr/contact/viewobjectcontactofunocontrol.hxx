@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:06:21 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@ namespace sdr { namespace contact {
                 return false.
         */
         bool    belongsToDevice( const OutputDevice* _pDevice ) const;
+
+        /** positions the control for subsequent paint operations
+        */
+        void    positionControl( DisplayInfo& _rDisplayInfo ) const;
 
     protected:
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
