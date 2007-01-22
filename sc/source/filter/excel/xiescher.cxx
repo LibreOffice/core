@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:33:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:16:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #include "xiescher.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
 #endif
@@ -56,6 +59,18 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -157,6 +172,12 @@
 #ifndef SC_DETFUNC_HXX
 #include "detfunc.hxx"
 #endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
+#endif
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
 #endif
@@ -203,10 +224,22 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::NamedValue;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::embed::XEmbeddedObject;
 using ::com::sun::star::embed::XEmbedPersist;
+using ::com::sun::star::form::binding::XBindableValue;
+using ::com::sun::star::form::binding::XValueBinding;
+using ::com::sun::star::form::binding::XListEntrySink;
+using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::script::ScriptEventDescriptor;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
 
 typedef ::std::auto_ptr< SdrObject > SdrObjectPtr;
 
@@ -346,8 +379,7 @@ XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
     mnShapeBlipId( 0 ),
     mbAreaObj( false ),
     mbValid( true ),
-    mbInsSdr( true ),
-    mbProcSdr( true )
+    mbInsSdr( true )
 {
 }
 
@@ -471,8 +503,7 @@ sal_Size XclImpDrawObjBase::GetProgressSize() const
 void XclImpDrawObjBase::ProcessSdrObject( SdrObject& rSdrObj ) const
 {
     // call virtual function for object type specific processing
-    if( IsProcessSdr() )
-        DoProcessSdrObj( rSdrObj );
+    DoProcessSdrObj( rSdrObj );
 }
 
 void XclImpDrawObjBase::CreateEscherAnchor( const Rectangle& rAnchorRect )
@@ -578,11 +609,6 @@ void XclImpNoteObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
 
 // ----------------------------------------------------------------------------
 
-XclImpCtrlLinkHelper::XclImpCtrlLinkHelper( XclCtrlBindMode eBindMode ) :
-    meBindMode( eBindMode )
-{
-}
-
 namespace {
 
 void lclReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm )
@@ -596,7 +622,16 @@ void lclReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm )
 
 } // namespace
 
-void XclImpCtrlLinkHelper::ReadCellLinkFormula( XclImpStream& rStrm )
+XclImpControlObjHelper::XclImpControlObjHelper( XclCtrlBindMode eBindMode ) :
+    meBindMode( eBindMode )
+{
+}
+
+XclImpControlObjHelper::~XclImpControlObjHelper()
+{
+}
+
+void XclImpControlObjHelper::ReadCellLinkFormula( XclImpStream& rStrm )
 {
     ScRangeList aScRanges;
     lclReadRangeList( aScRanges, rStrm );
@@ -609,7 +644,7 @@ void XclImpCtrlLinkHelper::ReadCellLinkFormula( XclImpStream& rStrm )
     }
 }
 
-void XclImpCtrlLinkHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
+void XclImpControlObjHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
 {
     ScRangeList aScRanges;
     lclReadRangeList( aScRanges, rStrm );
@@ -618,11 +653,103 @@ void XclImpCtrlLinkHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
         mxSrcRange.reset( aScRanges.Remove( 0UL ) );
 }
 
+ScfPropertySet XclImpControlObjHelper::GetControlPropSet() const
+{
+    return ScfPropertySet( mxCtrlModel );
+}
+
+void XclImpControlObjHelper::ConvertSheetLinks( const XclImpRoot& rRoot, SdrObject& rSdrObj ) const
+{
+    // get service factory from Calc document
+    Reference< XMultiServiceFactory > xFactory;
+    if( SfxObjectShell* pDocShell = rRoot.GetDocShell() )
+        xFactory.set( pDocShell->GetModel(), UNO_QUERY );
+    if( !mxCtrlModel.is() || !xFactory.is() )
+        return;
+
+    // *** cell link *** ------------------------------------------------------
+
+    Reference< XBindableValue > xBindable( mxCtrlModel, UNO_QUERY );
+    if( mxCellLink.is() && xBindable.is() )
+    {
+        // create argument sequence for createInstanceWithArguments()
+        CellAddress aApiAddress;
+        ScUnoConversion::FillApiAddress( aApiAddress, *mxCellLink );
+
+        NamedValue aValue;
+        aValue.Name = CREATE_OUSTRING( SC_UNONAME_BOUNDCELL );
+        aValue.Value <<= aApiAddress;
+
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the CellValueBinding instance
+        Reference< XInterface > xInt;
+        try
+        {
+            switch( meBindMode )
+            {
+                case EXC_CTRL_BINDCONTENT:
+                    xInt = xFactory->createInstanceWithArguments(
+                        CREATE_OUSTRING( SC_SERVICENAME_VALBIND ), aArgs );
+                break;
+                case EXC_CTRL_BINDPOSITION:
+                    xInt = xFactory->createInstanceWithArguments(
+                        CREATE_OUSTRING( SC_SERVICENAME_LISTCELLBIND ), aArgs );
+                break;
+                default:
+                    DBG_ERRORFILE( "XclImpOcxConverter::ConvertSheetLinks - unknown binding mode" );
+            }
+        }
+        catch( const Exception& )
+        {
+        }
+
+        // set the binding at the control
+        Reference< XValueBinding > xBinding( xInt, UNO_QUERY );
+        if( xBinding.is() )
+            xBindable->setValueBinding( xBinding );
+    }
+
+    // *** source range *** ---------------------------------------------------
+
+    Reference< XListEntrySink > xEntrySink( mxCtrlModel, UNO_QUERY );
+    if( mxSrcRange.is() && xEntrySink.is() )
+    {
+        // create argument sequence for createInstanceWithArguments()
+        CellRangeAddress aApiRange;
+        ScUnoConversion::FillApiRange( aApiRange, *mxSrcRange );
+
+        NamedValue aValue;
+        aValue.Name = CREATE_OUSTRING( SC_UNONAME_CELLRANGE );
+        aValue.Value <<= aApiRange;
+
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the CellValueBinding instance
+        Reference< XInterface > xInt;
+        try
+        {
+            xInt = xFactory->createInstanceWithArguments(
+                CREATE_OUSTRING( SC_SERVICENAME_LISTSOURCE ), aArgs );
+        }
+        catch( const Exception& )
+        {
+        }
+
+        // set the binding at the control
+        Reference< XListEntrySource > xEntrySource( xInt, UNO_QUERY );
+        if( xEntrySource.is() )
+            xEntrySink->setListEntrySource( xEntrySource );
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 XclImpTbxControlObj::XclImpTbxControlObj( const XclImpRoot& rRoot ) :
     XclImpDrawingObj( rRoot, true ),
-    XclImpCtrlLinkHelper( xlBindPosition ),
+    XclImpControlObjHelper( EXC_CTRL_BINDPOSITION ),
     mnState( EXC_OBJ_CBLS_STATE_UNCHECK ),
     mnSelEntry( 0 ),
     mnSelType( EXC_OBJ_LBS_SEL_SIMPLE ),
@@ -636,9 +763,6 @@ XclImpTbxControlObj::XclImpTbxControlObj( const XclImpRoot& rRoot ) :
     mbFlatBorder( false ),
     mbScrollHor( false )
 {
-    /*  Do not process the SdrObject (skips setting textbox data and tracing
-        that the object is not printable). */
-    SetSkipProcessSdr();
 }
 
 void XclImpTbxControlObj::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
@@ -671,35 +795,66 @@ void XclImpTbxControlObj::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRec
 
 OUString XclImpTbxControlObj::GetServiceName() const
 {
-    return XclTbxControlHelper::GetServiceName( GetObjType() );
+    return XclControlObjHelper::GetTbxServiceName( GetObjType() );
 }
 
-void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
+bool XclImpTbxControlObj::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) const
 {
-    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), IsPrintable() );
+    if( maMacroName.Len() )
+    {
+        // type of action is dependent on control type
+        rEvent.ListenerType = XclControlObjHelper::GetTbxListenerType( GetObjType() );
+        rEvent.EventMethod = XclControlObjHelper::GetTbxEventMethod( GetObjType() );
+        if( (rEvent.ListenerType.getLength() > 0) && (rEvent.EventMethod.getLength() > 0) )
+        {
+            // set the macro name
+            rEvent.ScriptType = XclControlObjHelper::GetTbxScriptType();
+            rEvent.ScriptCode = XclControlObjHelper::GetScMacroName( maMacroName );
+            return true;
+        }
+    }
+    return false;
+}
+
+void XclImpTbxControlObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
+{
+    // do not call DoProcessSdrObj() from base class to skip text processing
+
+    ScfPropertySet aPropSet = GetControlPropSet();
+    if( !aPropSet.Is() )
+        return;
 
     namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
 
-    // control name -----------------------------------------------------------
+    // control name, printable, sheet links -----------------------------------
 
-    OUString aName = XclTbxControlHelper::GetControlName( GetObjType() );
-    if( aName.getLength() )
-        rPropSet.SetProperty( CREATE_OUSTRING( "Name" ), aName );
+    // control printable?
+    aPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), IsPrintable() );
+
+    // #118053# #i51348# set internal name of the control (use name from SdrObject, if extant)
+    OUString aCtrlName = rSdrObj.GetName();
+    if( aCtrlName.getLength() == 0 )
+        aCtrlName = XclControlObjHelper::GetTbxControlName( GetObjType() );
+    if( aCtrlName.getLength() > 0 )
+        aPropSet.SetProperty( CREATE_OUSTRING( "Name" ), aCtrlName );
+
+    // sheet links
+    ConvertSheetLinks( GetRoot(), rSdrObj );
 
     // control label ----------------------------------------------------------
 
     if( const XclImpString* pString = GetString() )
     {
         // the visible label (caption)
-        rPropSet.SetStringProperty( CREATE_OUSTRING( "Label" ), pString->GetText() );
+        aPropSet.SetStringProperty( CREATE_OUSTRING( "Label" ), pString->GetText() );
 
         // font properties
         const XclFormatRunVec& rFormatRuns = pString->GetFormats();
         if( !rFormatRuns.empty() )
             GetFontBuffer().WriteFontProperties(
-                rPropSet, EXC_FONTPROPSET_CONTROL, rFormatRuns.front().mnFontIdx );
+                aPropSet, EXC_FONTPROPSET_CONTROL, rFormatRuns.front().mnFontIdx );
     }
 
     // special control contents -----------------------------------------------
@@ -721,14 +876,14 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
                 case EXC_OBJ_CBLS_STATE_TRI:        nApiState = bCheckBox ? 2 : 1;  break;
             }
             if( bCheckBox )
-                rPropSet.SetBoolProperty( CREATE_OUSTRING( "TriState" ), nApiState == 2 );
-            rPropSet.SetProperty( CREATE_OUSTRING( "DefaultState" ), nApiState );
+                aPropSet.SetBoolProperty( CREATE_OUSTRING( "TriState" ), nApiState == 2 );
+            aPropSet.SetProperty( CREATE_OUSTRING( "DefaultState" ), nApiState );
 
             sal_Int16 nApiBorder = mbFlatButton ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
-            rPropSet.SetProperty( CREATE_OUSTRING( "VisualEffect" ), nApiBorder );
+            aPropSet.SetProperty( CREATE_OUSTRING( "VisualEffect" ), nApiBorder );
 
             // #i40279# always centered vertically
-            rPropSet.SetProperty( CREATE_OUSTRING( "VerticalAlign" ), VerticalAlignment_MIDDLE );
+            aPropSet.SetProperty( CREATE_OUSTRING( "VerticalAlign" ), VerticalAlignment_MIDDLE );
         }
         break;
 
@@ -738,7 +893,7 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
         case EXC_OBJ_CMO_COMBOBOX:
         {
             sal_Int16 nApiBorder = mbFlatBorder ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
-            rPropSet.SetProperty( CREATE_OUSTRING( "Border" ), nApiBorder );
+            aPropSet.SetProperty( CREATE_OUSTRING( "Border" ), nApiBorder );
 
             Sequence< sal_Int16 > aSelection;
 
@@ -748,7 +903,7 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
                 {
                     // selection type
                     bool bMultiSel = (mnSelType != EXC_OBJ_LBS_SEL_SIMPLE);
-                    rPropSet.SetBoolProperty( CREATE_OUSTRING( "MultiSelection" ), bMultiSel );
+                    aPropSet.SetBoolProperty( CREATE_OUSTRING( "MultiSelection" ), bMultiSel );
 
                     // selection
                     if( bMultiSel )
@@ -770,9 +925,9 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
                 case EXC_OBJ_CMO_COMBOBOX:
                 {
                     // dropdown button
-                    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Dropdown" ), true );
+                    aPropSet.SetBoolProperty( CREATE_OUSTRING( "Dropdown" ), true );
                     // dropdown line count
-                    rPropSet.SetProperty( CREATE_OUSTRING( "LineCount" ), mnLineCount );
+                    aPropSet.SetProperty( CREATE_OUSTRING( "LineCount" ), mnLineCount );
                     // selection
                     if( mnSelEntry > 0 )
                     {
@@ -783,8 +938,8 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
                 break;
             }
 
-            if( !GetCellLink() && aSelection.getLength() )
-                rPropSet.SetProperty( CREATE_OUSTRING( "DefaultSelection" ), aSelection );
+            if( !HasCellLink() && aSelection.getLength() )
+                aPropSet.SetProperty( CREATE_OUSTRING( "DefaultSelection" ), aSelection );
         }
         break;
 
@@ -793,13 +948,13 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
         case EXC_OBJ_CMO_SPIN:
         {
             // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
-            rPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinValueMin" ), mnScrollMin );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinValueMax" ), mnScrollMax );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinIncrement" ), mnScrollStep );
+            aPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinValueMin" ), mnScrollMin );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinValueMax" ), mnScrollMax );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinIncrement" ), mnScrollStep );
             // Excel spin buttons always vertical
-            rPropSet.SetProperty( CREATE_OUSTRING( "Orientation" ), AwtScrollOrient::VERTICAL );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "DefaultSpinValue" ), mnScrollValue );
+            aPropSet.SetProperty( CREATE_OUSTRING( "Orientation" ), AwtScrollOrient::VERTICAL );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "DefaultSpinValue" ), mnScrollValue );
         }
         break;
 
@@ -812,35 +967,17 @@ void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
                 sal::static_int_cast< sal_Int32 >(mnScrollPage), 1 );
 
             // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
-            rPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "ScrollValueMin" ), mnScrollMin );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "ScrollValueMax" ), mnScrollMax );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "LineIncrement" ), mnScrollStep );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "BlockIncrement" ), mnScrollPage );
-            rPropSet.SetProperty( CREATE_OUSTRING( "VisibleSize" ), nVisSize );
-            rPropSet.SetProperty( CREATE_OUSTRING( "Orientation" ), nApiOrient );
-            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "DefaultScrollValue" ), mnScrollValue );
+            aPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "ScrollValueMin" ), mnScrollMin );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "ScrollValueMax" ), mnScrollMax );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "LineIncrement" ), mnScrollStep );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "BlockIncrement" ), mnScrollPage );
+            aPropSet.SetProperty( CREATE_OUSTRING( "VisibleSize" ), nVisSize );
+            aPropSet.SetProperty( CREATE_OUSTRING( "Orientation" ), nApiOrient );
+            aPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "DefaultScrollValue" ), mnScrollValue );
         }
         break;
     }
-}
-
-bool XclImpTbxControlObj::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) const
-{
-    if( maMacroName.Len() )
-    {
-        // type of action is dependent on control type
-        rEvent.ListenerType = XclTbxControlHelper::GetListenerType( GetObjType() );
-        rEvent.EventMethod = XclTbxControlHelper::GetEventMethod( GetObjType() );
-        if( rEvent.ListenerType.getLength() && rEvent.EventMethod.getLength() )
-        {
-            // set the macro name
-            rEvent.ScriptType = XclTbxControlHelper::GetScriptType();
-            rEvent.ScriptCode = XclTbxControlHelper::GetScMacroName( maMacroName );
-            return true;
-        }
-    }
-    return false;
 }
 
 void XclImpTbxControlObj::ReadCbls( XclImpStream& rStrm )
@@ -954,7 +1091,7 @@ void XclImpTbxControlObj::ReadMacro( XclImpStream& rStrm )
 
 XclImpOleObj::XclImpOleObj( const XclImpRoot& rRoot ) :
     XclImpDrawObjBase( rRoot ),
-    XclImpCtrlLinkHelper( xlBindContent ),
+    XclImpControlObjHelper( EXC_CTRL_BINDCONTENT ),
     mnCtlsStrmPos( 0 ),
     mbAsSymbol( false ),
     mbLinked( false ),
@@ -979,21 +1116,25 @@ void XclImpOleObj::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal
     }
 }
 
-void XclImpOleObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
-{
-    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), IsPrintable() );
-    // #118053 set internal name of the control
-    if( maCtrlName.Len() > 0 )
-        rPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), maCtrlName );
-}
-
 void XclImpOleObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
 {
-    if( !IsControl() )
+    if( IsControl() )
     {
-        // controls do have the "Printable" property
-        if( !IsPrintable() )
-            GetTracer().TraceObjectNotPrintable();
+        // do not call XclImpDrawObjBase::DoProcessSdrObj(), it would trace missing "printable" feature
+
+        ScfPropertySet aPropSet = GetControlPropSet();
+        // printable
+        aPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), IsPrintable() );
+        // #118053# #i51348# set name from SdrObject as internal name of the control
+        if( rSdrObj.GetName().Len() > 0 )
+            aPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), rSdrObj.GetName() );
+        // sheet links
+        ConvertSheetLinks( GetRoot(), rSdrObj );
+    }
+    else
+    {
+        // trace missing "printable" feature
+        XclImpDrawObjBase::DoProcessSdrObj( rSdrObj );
 
         SfxObjectShell* pDocShell = GetDocShell();
         SdrOle2Obj* pOleSdrObj = dynamic_cast< SdrOle2Obj* >( &rSdrObj );
@@ -1261,6 +1402,7 @@ XclImpDffManager::XclImpDffManager(
     SvxMSDffManager( rEscherStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
     XclImpRoot( rRoot ),
     mrObjManager( rObjManager ),
+    mxOcxConverter( new XclImpOcxConverter( rRoot ) ),
     mnOleImpFlags( 0 )
 {
     SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL | SVXMSDFF_SETTINGS_IMPORT_IAS );
@@ -1388,18 +1530,21 @@ SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
     if( XclImpDrawingObj* pDrawingObj = dynamic_cast< XclImpDrawingObj* >( xDrawObj.get() ) )
         pDrawingObj->SetTxoData( mrObjManager.FindTxoData( rObjData.rSpHd ) );
 
-    // #118052# import internal name of a control
-    if( XclImpOleObj* pOleObj = dynamic_cast< XclImpOleObj* >( xDrawObj.get() ) )
-    {
-        String aName( ReadStringProperty( rEscherStrm, DFF_Prop_wzName ) );
-        if( aName.Len() )
-            pOleObj->SetControlName( aName );
-    }
-
     // try to create a custom SdrObject that overwrites the passed object
     SdrObjectPtr xNewSdrObj( CreateCustomSdrObject( *xDrawObj, rAnchorRect ) );
     if( xNewSdrObj.get() )
-        xSdrObj = xNewSdrObj;   // transfer ownership to xSdrObj
+    {
+        // copy old shape name to new shape, if it does not have an own name
+        if( xNewSdrObj->GetName().Len() == 0 )
+        {
+            if( xSdrObj.get() )
+                xNewSdrObj->SetName( xSdrObj->GetName() );
+            else
+                xNewSdrObj->SetName( GetPropertyString( DFF_Prop_wzName, rEscherStrm ) );
+        }
+        // transfer ownership to xSdrObj
+        xSdrObj = xNewSdrObj;
+    }
 
     // process the SdrObject
     if( xSdrObj.get() )
@@ -1462,25 +1607,6 @@ FASTBOOL XclImpDffManager::GetColorFromPalette( USHORT nIndex, Color& rColor ) c
 }
 
 // private --------------------------------------------------------------------
-
-String XclImpDffManager::ReadStringProperty( SvStream& rEscherStrm, sal_uInt32 nPropId ) const
-{
-    String aString;
-    sal_uInt32 nBufferSize = GetPropertyValue( nPropId );
-    if( (nBufferSize > 0) && SeekToContent( nPropId, rEscherStrm ) )
-    {
-        for( sal_Int32 nCharIdx = 0, nStrLen = nBufferSize / 2; nCharIdx < nStrLen; ++nCharIdx )
-        {
-            sal_uInt16 nChar = 0;
-            rEscherStrm >> nChar;
-            if( nChar > 0 )
-                aString.Append( static_cast< sal_Unicode >( nChar ) );
-            else
-                break;
-        }
-    }
-    return aString;
-}
 
 void XclImpDffManager::ProcessDggContainer( SvStream& rEscherStrm, const DffRecordHeader& rDggHeader )
 {
@@ -1565,13 +1691,6 @@ void XclImpDffManager::ProcessShContainer( SvStream& rEscherStrm, const DffRecor
     rShHeader.SeekToEndOfRecord( rEscherStrm );
 }
 
-XclImpOcxConverter& XclImpDffManager::GetOcxConverter()
-{
-    if( !mxOcxConverter )
-        mxOcxConverter.reset( new XclImpOcxConverter( GetRoot() ) );
-    return *mxOcxConverter;
-}
-
 void XclImpDffManager::InsertSdrObject( const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj )
 {
     /*  Take ownership of the passed object. If insertion fails (e.g. rDrawObj
@@ -1586,27 +1705,27 @@ void XclImpDffManager::InsertSdrObject( const XclImpDrawObjBase& rDrawObj, SdrOb
         maSolverCont.RemoveSdrObjectInfo( rDrawObj );
 }
 
-SdrObject* XclImpDffManager::CreateCustomSdrObject( const XclImpDrawObjBase& rDrawObj, const Rectangle& rAnchorRect )
+SdrObject* XclImpDffManager::CreateCustomSdrObject( XclImpDrawObjBase& rDrawObj, const Rectangle& rAnchorRect )
 {
     SdrObjectPtr xSdrObj;
-    if( const XclImpOleObj* pOleObj = dynamic_cast< const XclImpOleObj* >( &rDrawObj ) )
+    if( XclImpOleObj* pOleObj = dynamic_cast< XclImpOleObj* >( &rDrawObj ) )
         xSdrObj.reset( CreateSdrObject( *pOleObj, rAnchorRect ) );
-    else if( const XclImpTbxControlObj* pTbxCtrlObj = dynamic_cast< const XclImpTbxControlObj* >( &rDrawObj ) )
+    else if( XclImpTbxControlObj* pTbxCtrlObj = dynamic_cast< XclImpTbxControlObj* >( &rDrawObj ) )
         xSdrObj.reset( CreateSdrObject( *pTbxCtrlObj, rAnchorRect ) );
-    else if( const XclImpChartObj* pChartObj = dynamic_cast< const XclImpChartObj* >( &rDrawObj ) )
+    else if( XclImpChartObj* pChartObj = dynamic_cast< XclImpChartObj* >( &rDrawObj ) )
         xSdrObj.reset( CreateSdrObject( *pChartObj, rAnchorRect ) );
     else
         mxProgress->Progress();
     return xSdrObj.release();
 }
 
-SdrObject* XclImpDffManager::CreateSdrObject( const XclImpOleObj& rOleObj, const Rectangle& rAnchorRect )
+SdrObject* XclImpDffManager::CreateSdrObject( XclImpOleObj& rOleObj, const Rectangle& rAnchorRect )
 {
     SdrObjectPtr xSdrObj;
     if( rOleObj.IsControl() )
     {
         // form control objects are created by the XclImpOcxConverter class
-        xSdrObj.reset( GetOcxConverter().CreateSdrObject( rOleObj, rAnchorRect ) );
+        xSdrObj.reset( mxOcxConverter->CreateSdrObject( rOleObj, rAnchorRect ) );
     }
     else
     {
@@ -1633,9 +1752,9 @@ SdrObject* XclImpDffManager::CreateSdrObject( const XclImpOleObj& rOleObj, const
     return xSdrObj.release();
 }
 
-SdrObject* XclImpDffManager::CreateSdrObject( const XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect )
+SdrObject* XclImpDffManager::CreateSdrObject( XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect )
 {
-    SdrObjectPtr xSdrObj( GetOcxConverter().CreateSdrObject( rTbxCtrlObj, rAnchorRect ) );
+    SdrObjectPtr xSdrObj( mxOcxConverter->CreateSdrObject( rTbxCtrlObj, rAnchorRect ) );
     mxProgress->Progress();
     return xSdrObj.release();
 }
