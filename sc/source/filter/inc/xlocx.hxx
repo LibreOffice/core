@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:03:20 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ protected:
 private:
     /** Returns the current draw page. */
     virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >&
-                            GetDrawPage();
+                        GetDrawPage();
 
 private:
     const XclRoot&      mrRoot;         /// Root data.
@@ -83,7 +83,7 @@ class Rectangle;
 class SdrObject;
 class XclImpOleObj;
 class XclImpTbxControlObj;
-class XclImpCtrlLinkHelper;
+class XclImpControlObjHelper;
 
 /** Converter for import of OXC controls. */
 class XclImpOcxConverter : public XclOcxConverter, protected XclImpRoot
@@ -92,9 +92,9 @@ public:
     explicit            XclImpOcxConverter( const XclImpRoot& rRoot );
 
     /** Reads the control formatting data for the passed object and creates the SdrUnoObj. */
-    SdrObject*          CreateSdrObject( const XclImpOleObj& rOcxCtrlObj, const Rectangle& rAnchorRect );
+    SdrObject*          CreateSdrObject( XclImpOleObj& rOcxCtrlObj, const Rectangle& rAnchorRect );
     /** Creates the SdrUnoObj for the passed TBX form control object. */
-    SdrObject*          CreateSdrObject( const XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect );
+    SdrObject*          CreateSdrObject( XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect );
 
 private:
     /** Inserts the passed control rxFComp into the form. */
@@ -107,21 +107,15 @@ private:
                             BOOL bFloatingCtrl );
 
     /** Returns the SdrObject from the passed shape. Sets the passed anchor rectangle. */
-    SdrObject*          GetSdrObject(
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShape >& rxShape,
+    SdrObject*          FinalizeSdrObject(
+                            XclImpControlObjHelper& rCtrlObj,
+                            ::com::sun::star::uno::Reference<
+                                ::com::sun::star::drawing::XShape > xShape,
                             const Rectangle& rAnchorRect ) const;
-    /** Tries to set a spreadsheet cell link and source range link at the passed form control. */
-    void                ConvertSheetLinks(
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::awt::XControlModel >& rxModel,
-                            const XclImpCtrlLinkHelper& rControl ) const;
     /** Tries to register a Basic macro for the control. */
     void                RegisterTbxMacro( const XclImpTbxControlObj& rTbxCtrlObj );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        mxDocFactory;       /// The MultiServiceFactory of the Calc document.
     SotStorageStreamRef mxStrm;             /// The 'Ctls' stream in the Excel file.
     sal_Int32           mnLastIndex;        /// Last insertion index of a control.
 };
@@ -130,9 +124,9 @@ private:
 
 class SdrObject;
 #if EXC_EXP_OCX_CTRL
-class XclExpObjOcxCtrl;
+class XclExpOcxControlObj;
 #else
-class XclExpObjTbxCtrl;
+class XclExpTbxControlObj;
 #endif
 class XclExpCtrlLinkHelper;
 
@@ -145,32 +139,22 @@ public:
 #if EXC_EXP_OCX_CTRL
     /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
-    XclExpObjOcxCtrl*   CreateCtrlObj( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape >& rxShape );
+    XclExpOcxControlObj* CreateCtrlObj( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape > xShape );
+
+private:
+    SotStorageStreamRef  mxStrm;         /// The 'Ctls' stream.
 #else
     /** Creates a TBX form control OBJ record from the passed form control. */
-    XclExpObjTbxCtrl*   CreateCtrlObj( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape >& rxShape );
-#endif
+    XclExpTbxControlObj* CreateCtrlObj( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape > xShape );
 
 private:
-    /** Tries to get spreadsheet cell link and source range link from the passed model.
-        @param rControl  The Excel form control that stores and exports the links. */
-    void                ConvertSheetLinks(
-                            XclExpCtrlLinkHelper& rControl,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::awt::XControlModel >& rxModel ) const;
-#if !EXC_EXP_OCX_CTRL
     /** Tries to get the name of a Basic macro from a control. */
     void                ConvertTbxMacro(
-                            XclExpObjTbxCtrl& rTbxCtrlObj,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::awt::XControlModel >& rxModel );
-#endif
-
-private:
-#if EXC_EXP_OCX_CTRL
-    SotStorageStreamRef  mxStrm;         /// The 'Ctls' stream.
+                            XclExpTbxControlObj& rTbxCtrlObj,
+                            ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XControlModel > xCtrlModel );
 #endif
 };
 
