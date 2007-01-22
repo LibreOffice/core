@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,9 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocSin,                15,     1,  1,  V, { V } },
     { ocCos,                16,     1,  1,  V, { V } },
     { ocTan,                17,     1,  1,  V, { V } },
+    { ocCot,                17,     1,  1,  V, { V }, EXC_FUNCFLAG_EXPORTONLY },
     { ocArcTan,             18,     1,  1,  V, { V } },
+    { ocArcCot,             18,     1,  1,  V, { V }, EXC_FUNCFLAG_EXPORTONLY },
     { ocPi,                 19,     0,  0,  V },
     { ocSqrt,               20,     1,  1,  V, { V } },
     { ocExp,                21,     1,  1,  V, { V } },
@@ -206,6 +208,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocTrunc,              197,    1,  1,  V, { V, C, I } },
     { ocIsLogical,          198,    1,  1,  V, { V } },
     { ocDBCount2,           199,    3,  3,  V, { R } },
+    { ocCurrency,           204,    1,  2,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },
     { ocRoundUp,            212,    2,  2,  V, { V } },
     { ocRoundDown,          213,    2,  2,  V, { V } },
     { ocExternal,           255,    1,  30, R, { E, R }, EXC_FUNCFLAG_IMPORTONLY }
@@ -228,9 +231,11 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocSinHyp,             229,    1,  1,  V, { V } },
     { ocCosHyp,             230,    1,  1,  V, { V } },
     { ocTanHyp,             231,    1,  1,  V, { V } },
+    { ocCotHyp,             231,    1,  1,  V, { V }, EXC_FUNCFLAG_EXPORTONLY },
     { ocArcSinHyp,          232,    1,  1,  V, { V } },
     { ocArcCosHyp,          233,    1,  1,  V, { V } },
     { ocArcTanHyp,          234,    1,  1,  V, { V } },
+    { ocArcCotHyp,          234,    1,  1,  V, { V }, EXC_FUNCFLAG_EXPORTONLY },
     { ocDBGet,              235,    3,  3,  V, { R } },
     { ocInfo,               244,    1,  1,  V, { V }, EXC_FUNCFLAG_VOLATILE }
 };
