@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:48:46 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:53:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2220,10 +2220,19 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                     // --> OD 2006-07-05 #136538# - another correction of fix for i53139
                     // Beside type check, check also, if proposed new next upper
                     // frame is inside the same frame types.
+                    // --> OD 2007-01-10 #i73194# - and yet another correction
+                    // of fix for i53139:
+                    // Assure that the new next upper layout frame doesn't
+                    // equal the current one.
+                    // E.g.: content is on page 3, on page 2 is only a 'ghost'
+                    // section and on page 1 is normal content. Method <FindPrev(..)>
+                    // will find the last content of page 1, but <GetLeaf(..)>
+                    // returns new upper on page 2.
                     if ( pNewUpper->Lower() )
                     {
                         SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, TRUE );
                         if ( pNewNextUpper &&
+                             pNewNextUpper != rThis.GetUpper() &&
                              pNewNextUpper->GetType() == pNewUpper->GetType() &&
                              pNewNextUpper->IsInDocBody() == pNewUpper->IsInDocBody() &&
                              pNewNextUpper->IsInFtn() == pNewUpper->IsInFtn() &&
@@ -2489,6 +2498,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     // layout loop control for flowing content again and again moving
     // backward under the same layout condition.
     if ( pNewUpper && !IsFollow() &&
+         pNewUpper != rThis.GetUpper() &&
          SwLayouter::MoveBwdSuppressed( *(pOldPage->GetFmt()->GetDoc()),
                                         *this, *pNewUpper ) )
     {
@@ -2497,8 +2507,12 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                                     ? MAKEPAGE_NOSECTION
                                     : MAKEPAGE_NONE,
                                     TRUE );
-        if ( pNextNewUpper == rThis.GetUpper() ||
-             pNextNewUpper->GetType() != rThis.GetUpper()->GetType() )
+        // --> OD 2007-01-10 #i73194# - make code robust
+        ASSERT( pNextNewUpper, "<SwFlowFrm::MoveBwd(..)> - missing next new upper" );
+        if ( pNextNewUpper &&
+             ( pNextNewUpper == rThis.GetUpper() ||
+               pNextNewUpper->GetType() != rThis.GetUpper()->GetType() ) )
+        // <--
         {
             pNewUpper = 0L;
 #if OSL_DEBUG_LEVEL > 1
@@ -2509,6 +2523,8 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     }
     // <--
 
+    ASSERT( pNewUpper != rThis.GetUpper(),
+            "<SwFlowFrm::MoveBwd(..)> - moving backward to the current upper frame!? -> Please inform OD." );
     if ( pNewUpper )
     {
         PROTOCOL_ENTER( &rThis, PROT_MOVE_BWD, 0, 0 );
