@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:47:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 12:11:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     {
         Add( new ExcBof8 );
         Add( new XclCalccount( rDoc ) );
-        Add( new XclRefmode() );
+        Add( new XclRefmode( rDoc ) );
         Add( new XclIteration( rDoc ) );
         Add( new XclDelta( rDoc ) );
         Add( new ExcDummy8_02 );
