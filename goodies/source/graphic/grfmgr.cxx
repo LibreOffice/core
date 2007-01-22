@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:47:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,7 @@ void GraphicObject::ImplAssignGraphicData()
     if( maGraphic.GetType() == GRAPHIC_GDIMETAFILE )
     {
         const GDIMetaFile& rMtf = GetGraphic().GetGDIMetaFile();
-        mbEPS = ( rMtf.GetActionCount() == 1 ) && ( META_EPS_ACTION == rMtf.GetAction( 0 )->GetType() );
+        mbEPS = ( rMtf.GetActionCount() >= 1 ) && ( META_EPS_ACTION == rMtf.GetAction( 0 )->GetType() );
     }
     else
         mbEPS = FALSE;
@@ -452,6 +452,9 @@ void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
 
 ByteString GraphicObject::GetUniqueID() const
 {
+    if ( !IsInSwapIn() && IsEPS() )
+        const_cast<GraphicObject*>(this)->FireSwapInRequest();
+
     ByteString aRet;
 
     if( mpMgr )
