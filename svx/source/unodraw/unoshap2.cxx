@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:14:07 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:17:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1490,6 +1490,10 @@ basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon( const drawi
 
         pInnerSequence++;
         pInnerSequenceFlags++;
+
+        // #i72807# API import uses old line start/end-equal definition for closed,
+        // so we need to correct this to closed state here
+        basegfx::tools::checkClosed(aNewPolygon);
 
         // Neues Teilpolygon einfuegen
         aNewPolyPolygon.append(aNewPolygon);
