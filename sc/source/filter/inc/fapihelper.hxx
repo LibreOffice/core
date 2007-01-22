@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fapihelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:51:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,8 @@ public:
 
     /** Returns true, if the contained XPropertySet interface is valid. */
     inline bool         Is() const { return mxPropSet.is(); }
+    /** Returns the contained XPropertySet interface. */
+    inline XPropertySetRef GetApiPropertySet() const { return mxPropSet; }
 
     // Get properties ---------------------------------------------------------
 
