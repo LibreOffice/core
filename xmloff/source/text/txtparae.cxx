@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:29:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:50:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -416,12 +416,21 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     {
                         Reference < XPropertySet > xNumPropSet( xNumRule,
                                                                 UNO_QUERY );
-                        OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                        const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
                         if( xNumPropSet.is() &&
                             xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( sIsAutomatic ) )
                         {
                             bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                            // --> OD 2007-01-12 #i73361# - check on outline style
+                            const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
+                            if ( bAdd &&
+                                 xNumPropSet->getPropertySetInfo()
+                                           ->hasPropertyByName( sNumberingIsOutline ) )
+                            {
+                                bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
+                            }
+                            // <--
                         }
                         else
                         {
@@ -541,12 +550,21 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     {
                         Reference < XPropertySet > xNumPropSet( xNumRule,
                                                                 UNO_QUERY );
-                        OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                        const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
                         if( xNumPropSet.is() &&
                             xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( sIsAutomatic ) )
                         {
                             bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                            // --> OD 2007-01-12 #i73361# - check on outline style
+                            const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
+                            if ( bAdd &&
+                                 xNumPropSet->getPropertySetInfo()
+                                           ->hasPropertyByName( sNumberingIsOutline ) )
+                            {
+                                bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
+                            }
+                            // <--
                         }
                         else
                         {
@@ -1563,6 +1581,9 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
     {
         Reference< XIndexAccess > xNumberingRules = xNumberingRulesSupp->getNumberingRules();
         nCount = xNumberingRules->getCount();
+        // --> OD 2007-01-12 #i73361#
+        const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
+        // <--
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
             Reference< XIndexReplace > xNumRule( xNumberingRules->getByIndex( i ), UNO_QUERY );
@@ -1577,12 +1598,20 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
                 {
                     Reference < XPropertySet > xNumPropSet( xNumRule,
                                                             UNO_QUERY );
-                    OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                    const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
                     if( xNumPropSet.is() &&
                         xNumPropSet->getPropertySetInfo()
                                    ->hasPropertyByName( sIsAutomatic ) )
                     {
                         bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                        // --> OD 2007-01-12 #i73361# - check on outline style
+                        if ( bAdd &&
+                             xNumPropSet->getPropertySetInfo()
+                                       ->hasPropertyByName( sNumberingIsOutline ) )
+                        {
+                            bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
+                        }
+                        // <--
                     }
                     else
                     {
