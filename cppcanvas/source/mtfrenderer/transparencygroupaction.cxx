@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transparencygroupaction.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:50:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #include <canvas/canvastools.hxx>
 
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -109,8 +111,8 @@ namespace cppcanvas
                 */
                 TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
                                          const Renderer::Parameters&    rParms,
-                                         const ::Point&                 rDstPoint,
-                                         const ::Size&                  rDstSize,
+                                         const ::basegfx::B2DPoint&     rDstPoint,
+                                         const ::basegfx::B2DVector&    rDstSize,
                                          double                         nAlpha,
                                          const CanvasSharedPtr&         rCanvas,
                                          const OutDevState&             rState );
@@ -139,8 +141,8 @@ namespace cppcanvas
                 TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
                                          GradientAutoPtr&               rAlphaGradient,
                                          const Renderer::Parameters&    rParms,
-                                         const ::Point&                 rDstPoint,
-                                         const ::Size&                  rDstSize,
+                                         const ::basegfx::B2DPoint&     rDstPoint,
+                                         const ::basegfx::B2DVector&    rDstSize,
                                          const CanvasSharedPtr&         rCanvas,
                                          const OutDevState&             rState );
 
@@ -160,7 +162,7 @@ namespace cppcanvas
 
                 const Renderer::Parameters                          maParms;
 
-                const ::Size                                        maDstSize;
+                const ::basegfx::B2DSize                            maDstSize;
 
                 mutable uno::Reference< rendering::XBitmap >        mxBufferBitmap; // contains last rendered version
                 mutable ::basegfx::B2DHomMatrix                     maLastTransformation; // contains last active transformation
@@ -179,20 +181,20 @@ namespace cppcanvas
                 given by src and dst size.
             */
             void implSetupTransform( rendering::RenderState&    rRenderState,
-                                     const Point&               rDstPoint   )
+                                     const ::basegfx::B2DPoint& rDstPoint   )
             {
                 ::basegfx::B2DHomMatrix aLocalTransformation;
 
-                aLocalTransformation.translate( rDstPoint.X(),
-                                                rDstPoint.Y() );
+                aLocalTransformation.translate( rDstPoint.getX(),
+                                                rDstPoint.getY() );
                 ::canvas::tools::appendToRenderState( rRenderState,
                                                       aLocalTransformation );
             }
 
             TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
                                                               const Renderer::Parameters&   rParms,
-                                                              const ::Point&                rDstPoint,
-                                                              const ::Size&                 rDstSize,
+                                                              const ::basegfx::B2DPoint&    rDstPoint,
+                                                              const ::basegfx::B2DVector&   rDstSize,
                                                               double                        nAlpha,
                                                               const CanvasSharedPtr&        rCanvas,
                                                               const OutDevState&            rState ) :
@@ -224,8 +226,8 @@ namespace cppcanvas
             TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
                                                               GradientAutoPtr&              rAlphaGradient,
                                                               const Renderer::Parameters&   rParms,
-                                                              const ::Point&                rDstPoint,
-                                                              const ::Size&                 rDstSize,
+                                                              const ::basegfx::B2DPoint&    rDstPoint,
+                                                              const ::basegfx::B2DVector&   rDstSize,
                                                               const CanvasSharedPtr&        rCanvas,
                                                               const OutDevState&            rState ) :
                 mpGroupMtf( rGroupMtf ),
@@ -309,12 +311,12 @@ namespace cppcanvas
                     }
 
                     // output size of metafile
-                    ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.Width() ),
-                                             ::basegfx::fround( aScale.getY() * maDstSize.Height() ) );
+                    ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.getX() ),
+                                             ::basegfx::fround( aScale.getY() * maDstSize.getY() ) );
 
                     // pixel size of cache bitmap: round up to nearest int
-                    ::Size aBitmapSizePixel( static_cast<sal_Int32>( aScale.getX() * maDstSize.Width() )+1,
-                                             static_cast<sal_Int32>( aScale.getY() * maDstSize.Height() )+1 );
+                    ::Size aBitmapSizePixel( static_cast<sal_Int32>( aScale.getX() * maDstSize.getX() )+1,
+                                             static_cast<sal_Int32>( aScale.getY() * maDstSize.getY() )+1 );
 
                     ::Point aEmptyPoint;
 
@@ -459,8 +461,8 @@ namespace cppcanvas
                     ::basegfx::unotools::b2ISizeFromIntegerSize2D( mxBufferBitmap->getSize() ) );
 
                 ::basegfx::B2DHomMatrix aScaleCorrection;
-                aScaleCorrection.scale( (double)maDstSize.Width() / aBmpSize.getX(),
-                                        (double)maDstSize.Height() / aBmpSize.getY() );
+                aScaleCorrection.scale( (double)maDstSize.getX() / aBmpSize.getX(),
+                                        (double)maDstSize.getY() / aBmpSize.getY() );
                 aTransform = aTransform * aScaleCorrection;
 
                 rendering::RenderState aLocalState( maState );
@@ -525,8 +527,8 @@ namespace cppcanvas
 
                 return tools::calcDevicePixelBounds(
                     ::basegfx::B2DRange( 0,0,
-                                         maDstSize.Width(),
-                                         maDstSize.Height() ),
+                                         maDstSize.getX(),
+                                         maDstSize.getY() ),
                     mpCanvas->getViewState(),
                     aLocalState );
             }
@@ -557,8 +559,8 @@ namespace cppcanvas
 
         ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
                                                                                        const Renderer::Parameters&  rParms,
-                                                                                       const ::Point&               rDstPoint,
-                                                                                       const ::Size&                rDstSize,
+                                                                                       const ::basegfx::B2DPoint&   rDstPoint,
+                                                                                       const ::basegfx::B2DVector&  rDstSize,
                                                                                        double                       nAlpha,
                                                                                        const CanvasSharedPtr&       rCanvas,
                                                                                        const OutDevState&           rState )
@@ -575,8 +577,8 @@ namespace cppcanvas
         ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
                                                                                        GradientAutoPtr&             rAlphaGradient,
                                                                                        const Renderer::Parameters&  rParms,
-                                                                                       const ::Point&               rDstPoint,
-                                                                                       const ::Size&                rDstSize,
+                                                                                       const ::basegfx::B2DPoint&   rDstPoint,
+                                                                                       const ::basegfx::B2DVector&  rDstSize,
                                                                                        const CanvasSharedPtr&       rCanvas,
                                                                                        const OutDevState&           rState )
         {

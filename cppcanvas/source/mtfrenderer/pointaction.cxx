@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pointaction.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:49:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <vcl/canvastools.hxx>
 
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 
@@ -65,10 +66,10 @@ namespace cppcanvas
             class PointAction : public Action, private ::boost::noncopyable
             {
             public:
-                PointAction( const ::Point&,
+                PointAction( const ::basegfx::B2DPoint&,
                              const CanvasSharedPtr&,
                              const OutDevState& );
-                PointAction( const ::Point&,
+                PointAction( const ::basegfx::B2DPoint&,
                              const CanvasSharedPtr&,
                              const OutDevState&,
                              const ::Color&     );
@@ -88,14 +89,14 @@ namespace cppcanvas
                 PointAction(const PointAction&);
                 PointAction& operator = ( const PointAction& );
 
-                ::Point                                     maPoint;
+                ::basegfx::B2DPoint                         maPoint;
                 CanvasSharedPtr                             mpCanvas;
                 ::com::sun::star::rendering::RenderState    maState;
             };
 
-            PointAction::PointAction( const ::Point&            rPoint,
-                                      const CanvasSharedPtr&    rCanvas,
-                                      const OutDevState&        rState ) :
+            PointAction::PointAction( const ::basegfx::B2DPoint& rPoint,
+                                      const CanvasSharedPtr&     rCanvas,
+                                      const OutDevState&         rState ) :
                 maPoint( rPoint ),
                 mpCanvas( rCanvas ),
                 maState()
@@ -104,10 +105,10 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            PointAction::PointAction( const ::Point&            rPoint,
-                                      const CanvasSharedPtr&    rCanvas,
-                                      const OutDevState&        rState,
-                                      const ::Color&            rAltColor ) :
+            PointAction::PointAction( const ::basegfx::B2DPoint& rPoint,
+                                      const CanvasSharedPtr&     rCanvas,
+                                      const OutDevState&         rState,
+                                      const ::Color&             rAltColor ) :
                 maPoint( rPoint ),
                 mpCanvas( rCanvas ),
                 maState()
@@ -125,7 +126,7 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                mpCanvas->getUNOCanvas()->drawPoint( ::vcl::unotools::point2DFromPoint(maPoint),
+                mpCanvas->getUNOCanvas()->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
                                                      mpCanvas->getViewState(),
                                                      aLocalState );
 
@@ -149,10 +150,10 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maPoint.X()-1,
-                                                                          maPoint.Y()-1,
-                                                                          maPoint.X()+1,
-                                                                          maPoint.Y()+1 ),
+                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maPoint.getX()-1,
+                                                                          maPoint.getY()-1,
+                                                                          maPoint.getX()+1,
+                                                                          maPoint.getY()+1 ),
                                                      mpCanvas->getViewState(),
                                                      aLocalState );
             }
@@ -175,17 +176,17 @@ namespace cppcanvas
             }
         }
 
-        ActionSharedPtr PointActionFactory::createPointAction( const ::Point&           rPoint,
-                                                               const CanvasSharedPtr&   rCanvas,
-                                                               const OutDevState&       rState )
+        ActionSharedPtr PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
+                                                               const CanvasSharedPtr&     rCanvas,
+                                                               const OutDevState&         rState )
         {
             return ActionSharedPtr( new PointAction( rPoint, rCanvas, rState ) );
         }
 
-        ActionSharedPtr PointActionFactory::createPointAction( const ::Point&           rPoint,
-                                                               const CanvasSharedPtr&   rCanvas,
-                                                               const OutDevState&       rState,
-                                                               const ::Color&           rColor  )
+        ActionSharedPtr PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
+                                                               const CanvasSharedPtr&     rCanvas,
+                                                               const OutDevState&         rState,
+                                                               const ::Color&             rColor    )
         {
             return ActionSharedPtr( new PointAction( rPoint, rCanvas, rState, rColor ) );
         }
