@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:23:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -890,6 +890,29 @@ bool DffPropSet::GetPropertyBool( UINT32 nId, bool bDefault ) const
 
     UINT32 nPropValue = GetPropertyValue( nBaseId, bDefault ? nMask : 0 );
     return (nPropValue & nMask) != 0;
+}
+
+::rtl::OUString DffPropSet::GetPropertyString( UINT32 nId, SvStream& rStrm ) const
+{
+    sal_Size nOldPos = rStrm.Tell();
+    ::rtl::OUStringBuffer aBuffer;
+    sal_uInt32 nBufferSize = GetPropertyValue( nId );
+    if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )
+    {
+        sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufferSize / 2 );
+        aBuffer.ensureCapacity( nStrLen );
+        for( sal_Int32 nCharIdx = 0; nCharIdx < nStrLen; ++nCharIdx )
+        {
+            sal_uInt16 nChar = 0;
+            rStrm >> nChar;
+            if( nChar > 0 )
+                aBuffer.append( static_cast< sal_Unicode >( nChar ) );
+            else
+                break;
+        }
+    }
+    rStrm.Seek( nOldPos );
+    return aBuffer.makeStringAndClear();
 }
 
 void DffPropSet::SetPropertyValue( UINT32 nId, UINT32 nValue ) const
@@ -5390,8 +5413,18 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             }
         }
     }
+
+    // #i51348# #118052# name of the shape
+    if( pRet )
+    {
+        ::rtl::OUString aObjName = GetPropertyString( DFF_Prop_wzName, rSt );
+        if( aObjName.getLength() > 0 )
+            pRet->SetName( aObjName );
+    }
+
     pRet =
         ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
+
     if ( mbTracing )
         mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
                                     ? rtl::OUString::createFromAscii( "GroupShape" )
