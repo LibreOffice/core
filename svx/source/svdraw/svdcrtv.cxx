@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:39:39 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,11 @@
 
 #ifndef _SDRPAINTWINDOW_HXX
 #include <sdrpaintwindow.hxx>
+#endif
+
+// #i72535#
+#ifndef _SVX_FMOBJ_HXX
+#include "fmobj.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -683,9 +688,26 @@ BOOL SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 // sonst Brk, weil alle Punkte gleich sind.
                 SdrObject* pObj=pAktCreate;
                 pAktCreate=NULL;
-                SdrLayerAdmin& rAd=pCreatePV->GetPage()->GetLayerAdmin();
-                SdrLayerID nLayer=rAd.GetLayerID(aAktLayer,TRUE);
-                if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
+
+                const SdrLayerAdmin& rAd = pCreatePV->GetPage()->GetLayerAdmin();
+                SdrLayerID nLayer(0);
+
+                // #i72535#
+                if(pObj->ISA(FmFormObj))
+                {
+                    // for FormControls, force to form layer
+                    nLayer = rAd.GetLayerID(rAd.GetControlLayerName(), true);
+                }
+                else
+                {
+                    nLayer = rAd.GetLayerID(aAktLayer, TRUE);
+                }
+
+                if(SDRLAYER_NOTFOUND == nLayer)
+                {
+                    nLayer=0;
+                }
+
                 pObj->SetLayer(nLayer);
 
                 // #83403# recognize creation of a new 3D object inside a 3D scene
