@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_filter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:47:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ StringList splitNameAtDot(rtl::OString const& _sName)
 {
     StringList aList;
     int nIndex = 0;
-    int nLastIndex = 0;
+    // int nLastIndex = 0;
     while ((nIndex = _sName.indexOf(".")) != -1)
     {
         rtl::OString nValue;
@@ -219,9 +219,9 @@ void test_name_longer_filter()
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int /* argc */ , char* /* argv */ [] )
 #else
-int _cdecl main( int argc, char* argv[] )
+    int _cdecl main( int /* argc */, char* /* argv */ [] )
 #endif
 {
     test_normal_filter();

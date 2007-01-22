@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_autoptr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:47:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:34:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,9 +98,9 @@ void test_autoptr()
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int /* argc */ , char* /* argv */ [] )
 #else
-int _cdecl main( int argc, char* argv[] )
+    int _cdecl main( int /* argc*/ , char* /*argv*/ [] )
 #endif
 {
     test_autoptr();

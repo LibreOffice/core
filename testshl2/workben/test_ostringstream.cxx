@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_ostringstream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:48:08 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ public:
 };
 
 
-void TestFactoryRegistry::checkFunc(char* foo)
+void TestFactoryRegistry::checkFunc(char* /* foo */ )
 {
     static int serialNumber = 1;
 
@@ -64,7 +64,7 @@ void TestFactoryRegistry::checkFunc(char* foo)
     std::cout << ost.str() << std::endl;
 }
 
-void TestFactoryRegistry::checkFunc2(char* foo)
+void TestFactoryRegistry::checkFunc2(char* /* foo */)
 {
     static int serialNumber = 1;
 
@@ -75,7 +75,7 @@ void TestFactoryRegistry::checkFunc2(char* foo)
     std::cout << ost.str() << std::endl;
 }
 
-void TestFactoryRegistry::checkFunc3(char* foo)
+void TestFactoryRegistry::checkFunc3(char* /* foo */)
 {
     static int serialNumber = 1;
 
@@ -93,13 +93,13 @@ static TestFactoryRegistry c;
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int /* argc */ , char* /* argv */ [] )
 #else
-int _cdecl main( int argc, char* argv[] )
+    int _cdecl main( int /* argc */, char* /* argv */ [] )
 #endif
 {
     std::ostringstream ost;
-    sal_Int32 nValue = 1;
+    // sal_Int32 nValue = 1;
 
     // ost << "@Dummy@" << nValue;
     // ost << "dec: " << 15 << std::hex << " hex: " << 15 << std::endl;

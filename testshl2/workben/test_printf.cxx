@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_printf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:48:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,9 @@ void t_print(const char* _pFormatStr, ...)
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int /* argc */ , char* /* argv */ [] )
 #else
-int _cdecl main( int argc, char* argv[] )
+    int _cdecl main( int /* argc */ , char* /* argv */ [] )
 #endif
 {
     std::string sStr("TestString.");
