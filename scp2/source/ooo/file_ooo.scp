@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 12:39:41 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,28 +138,6 @@ File gid_File_Bin_Pagein
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
     Name = "pagein";
-End
-
-#endif
-
-#ifdef UNX
-
-File gid_File_Bin_Register_Extensions
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "register_extensions";
-End
-
-#endif
-
-#ifdef UNX
-
-File gid_File_Bin_Deregister_Extensions
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "deregister_extensions";
 End
 
 #endif
@@ -2584,6 +2562,33 @@ File gid_File_Registry_Spool_Oo_Office_Linguistic_Forcedefaultlanguage_Xcu
     Styles = (PACKED,SCPZIP_REPLACE,SET_OFFICE_LANGUAGE);
 End
 
+#endif
+
+#ifdef LINUX
+File gid_File_Dat_Root3
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "root3.dat";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef LINUX
+File gid_File_Dat_Root4
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "root4.dat";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef LINUX
+File gid_File_Dat_Root5
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "root5.dat";
+    Styles = (PACKED);
+End
 #endif
 
 #ifdef MACOSX
