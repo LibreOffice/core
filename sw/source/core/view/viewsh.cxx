@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:29:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,39 @@ DBG_NAME(LayoutIdle);
 
 TYPEINIT0(ViewShell);
 
+//////////////////////////////////////////////////////////////////////////////
+// #i72754# 2nd set of Pre/PostPaints
+// This time it uses the lock counter mnPrePostPaintCount to allow only one activation
+// and deactivation and mpPrePostOutDev to remember the OutDev from the BeginDrawLayers
+// call. That way, all places where paint take place can be handled the same way, even
+// when calling other paint methods. This is the case at the places where SW paints
+// buffered into VDevs to avoid flicker. Tis is in general problematic and should be
+// solved once using the BufferedOutput functionality of the DrawView.
+
+void ViewShell::DLPrePaint2(const Region& rRegion)
+{
+    if((0L == mnPrePostPaintCount) && (Imp()->GetDrawView()))
+    {
+        mpPrePostOutDev = (GetWin() ? GetWin() : GetOut());
+        Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion, sal_False);
+    }
+
+    mnPrePostPaintCount++;
+}
+
+void ViewShell::DLPostPaint2()
+{
+    OSL_ENSURE(mnPrePostPaintCount > 0L, "ViewShell::DLPostPaint2: Pre/PostPaint encapsulation broken (!)");
+    mnPrePostPaintCount--;
+
+    if((0L == mnPrePostPaintCount) && (Imp()->GetDrawView()))
+    {
+        Imp()->GetDrawView()->EndDrawLayers(mpPrePostOutDev);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 /******************************************************************************
 |*
 |*  ViewShell::ImplEndAction()
@@ -181,42 +214,6 @@ TYPEINIT0(ViewShell);
 |*  Letzte Aenderung    MA 04. Sep. 96
 |*
 ******************************************************************************/
-
-// #i68597# need to tell DrawingLayer about paint start
-void ViewShell::DLPrePaint(const Region& rRegion)
-{
-    if(Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->BeginDrawLayers(GetWin(), rRegion, sal_False);
-    }
-}
-
-// #i68597# need to tell DrawingLayer about paint stop
-void ViewShell::DLPostPaint(const Region& rRegion)
-{
-    if(Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->EndDrawLayers(GetWin());
-    }
-}
-
-// #i68597# tell DrawingLayer about region change start
-void ViewShell::DLPreOutsidePaint(const Region& rRegion)
-{
-    if(Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->BeginDrawLayers(GetWin(), rRegion, sal_False);
-    }
-}
-
-// #i68597# tell DrawingLayer about region change stop
-void ViewShell::DLPostOutsidePaint(const Region& rRegion)
-{
-    if(Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->EndDrawLayers(GetWin());
-    }
-}
 
 void ViewShell::ImplEndAction( const BOOL bIdleEnd )
 {
@@ -365,6 +362,11 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                             aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
                             aMapMode.SetOrigin( aOrigin );
                             pVout->SetMapMode( aMapMode );
+
+                            // #i72754# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
+                            const Region aRepaintRegion(aRect.SVRect());
+                            DLPrePaint2(aRepaintRegion);
+
                             pOut = pVout;
                             if ( bPaintsFromSystem )
                                 PaintDesktop( aRect );
@@ -373,11 +375,18 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                                               aRect.Pos(), aRect.SSize(), *pVout );
                             pOut = pOld;
 
-                            if( !GetViewOptions()->IsReadonly() &&
-                                GetViewOptions()->IsControl() )
+                            // #i72754# Direct ControlLayer painting for current region. Controls
+                            // are already painted into the VDev, but not with the old window hack
+                            // so it will look slightly different. To avoid that, paint them again
+                            // after VDev is out of race
+                            if(!GetViewOptions()->IsReadonly() && GetViewOptions()->IsControl())
                             {
-                                Imp()->PaintLayer( pDoc->GetControlsId(), VisArea() );
+                                // Imp()->PaintLayer( pDoc->GetControlsId(), VisArea() );
+                                Imp()->PaintLayer(pDoc->GetControlsId(), aRect);
                             }
+
+                            // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
+                            DLPostPaint2();
                         }
                     }
                     if ( bPaint )
@@ -481,18 +490,29 @@ void ViewShell::ImplUnlockPaint( BOOL bVirDev )
                 Imp()->UnlockPaint();
                 pVout->SetLineColor( pOut->GetLineColor() );
                 pVout->SetFillColor( pOut->GetFillColor() );
+
+                // #i72754# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
+                const Region aRepaintRegion(VisArea().SVRect());
+                DLPrePaint2(aRepaintRegion);
+
                 OutputDevice *pOld = pOut;
                 pOut = pVout;
                 Paint( VisArea().SVRect() );
                 pOut = pOld;
                 pOut->DrawOutDev( VisArea().Pos(), aSize,
                                   VisArea().Pos(), aSize, *pVout );
+
+                // controll layer is repainted additionally. It will look different when painted in VDev,
+                // so it's a good idea to do so.
                 if( GetViewOptions()->IsControl() )
                 {
                     Imp()->PaintLayer( pDoc->GetControlsId(), VisArea() );
                     GetWin()->Update();//Damit aktive, transparente Controls auch
                                        //gleich durchkommen
                 }
+
+                // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
+                DLPostPaint2();
             }
             else
             {
@@ -1540,17 +1560,9 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
         const Rectangle aRectangle(rRegion[i].SVRect());
 
         // #i68597# inform Drawinglayer about display change
-        if(!IsPaintInProgress())
-        {
-            DLPreOutsidePaint(Region(aRectangle));
-        }
-
+        DLPrePaint2(Region(aRectangle));
         GetOut()->DrawRect(aRectangle);
-
-        if(!IsPaintInProgress())
-        {
-            DLPostOutsidePaint(Region(aRectangle));
-        }
+        DLPostPaint2();
     }
 
     GetOut()->Pop();
@@ -1745,7 +1757,7 @@ void ViewShell::Paint(const Rectangle &rRect)
 
             // #i68597#
             const Region aDLRegion(Region(aRect.SVRect()));
-            DLPrePaint(aDLRegion);
+            DLPrePaint2(aDLRegion);
 
             if ( IsPreView() )
             {
@@ -1784,7 +1796,7 @@ void ViewShell::Paint(const Rectangle &rRect)
             UISizeNotify();
 
             // #i68597#
-            DLPostPaint(aDLRegion);
+            DLPostPaint2();
         }
     }
     else
@@ -1806,12 +1818,19 @@ void ViewShell::Paint(const Rectangle &rRect)
         else if ( SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) &&
                   GetOut() == GetWin() )
         {
+            // #i68597#
+            const Region aDLRegion(rRect);
+            DLPrePaint2(aDLRegion);
+
             // OD 2004-04-23 #116347#
             pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pOut->SetFillColor( Imp()->GetRetoucheColor() );
             pOut->SetLineColor();
             pOut->DrawRect( rRect );
             pOut->Pop();
+
+            // #i68597#
+            DLPostPaint2();
         }
     }
 }
