@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:39:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2018,30 +2018,65 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
         }
     }
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), bGetPropStateValue ) )
+    if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
     {
+        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), bGetPropStateValue ) )
+        {
         float fFloat;
         mAny >>= fFloat;
         if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
             mnCharAttr |= 1;
+        }
     }
+    else
+    {
+        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightComplex" ) ), bGetPropStateValue ) )
+        {
+        float fFloat;
+        mAny >>= fFloat;
+        if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
+            mnCharAttr |= 1;
+        }
+    }
+
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 1;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) ), bGetPropStateValue ) )
+    if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
     {
-        ::com::sun::star::awt::FontSlant aFS;
-        mAny >>= aFS;
-        switch ( aFS )
+        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) ), bGetPropStateValue ) )
         {
-            case ::com::sun::star::awt::FontSlant_OBLIQUE :
-            case ::com::sun::star::awt::FontSlant_ITALIC :
-                mnCharAttr |= 2;
-                break;
-            default:
-                break;
+            ::com::sun::star::awt::FontSlant aFS;
+            mAny >>= aFS;
+            switch ( aFS )
+            {
+                case ::com::sun::star::awt::FontSlant_OBLIQUE :
+                case ::com::sun::star::awt::FontSlant_ITALIC :
+                    mnCharAttr |= 2;
+                    break;
+                default:
+                    break;
+            }
         }
     }
+    else
+    {
+        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureComplex" ) ), bGetPropStateValue ) )
+        {
+            ::com::sun::star::awt::FontSlant aFS;
+            mAny >>= aFS;
+            switch ( aFS )
+            {
+                case ::com::sun::star::awt::FontSlant_OBLIQUE :
+                case ::com::sun::star::awt::FontSlant_ITALIC :
+                    mnCharAttr |= 2;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 2;
 
