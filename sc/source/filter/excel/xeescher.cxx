@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include "xeescher.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
@@ -48,6 +51,18 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -59,6 +74,12 @@
 
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
+#endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
 #endif
 
 #ifndef SC_FAPIHELPER_HXX
@@ -81,41 +102,84 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::form::binding::XBindableValue;
+using ::com::sun::star::form::binding::XValueBinding;
+using ::com::sun::star::form::binding::XListEntrySink;
+using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::script::ScriptEventDescriptor;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
 
 // ============================================================================
 
-XclExpCtrlLinkHelper::XclExpCtrlLinkHelper( const XclExpRoot& rRoot ) :
+XclExpControlObjHelper::XclExpControlObjHelper( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnEntryCount( 0 )
 {
 }
 
-XclExpCtrlLinkHelper::~XclExpCtrlLinkHelper()
+XclExpControlObjHelper::~XclExpControlObjHelper()
 {
 }
 
-void XclExpCtrlLinkHelper::SetCellLink( const ScAddress& rCellLink )
+void XclExpControlObjHelper::ConvertSheetLinks( Reference< XShape > xShape )
 {
-    if( GetTabInfo().IsExportTab( rCellLink.Tab() ) )
-        mxCellLink = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, rCellLink );
-    else
-        mxCellLink.reset();
+    mxCellLink.reset();
+    mxSrcRange.reset();
+    mnEntryCount = 0;
+
+    // get control model
+    Reference< XControlModel > xCtrlModel = XclControlObjHelper::GetModelFromShape( xShape );
+    if( !xCtrlModel.is() )
+        return;
+
+    // *** cell link *** ------------------------------------------------------
+
+    Reference< XBindableValue > xBindable( xCtrlModel, UNO_QUERY );
+    if( xBindable.is() )
+    {
+        Reference< XServiceInfo > xServInfo( xBindable->getValueBinding(), UNO_QUERY );
+        if( xServInfo.is() && xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_VALBIND ) ) )
+        {
+            ScfPropertySet aBindProp( xServInfo );
+            CellAddress aApiAddress;
+            if( aBindProp.GetProperty( aApiAddress, CREATE_OUSTRING( SC_UNONAME_BOUNDCELL ) ) )
+            {
+                ScAddress aCellLink;
+                ScUnoConversion::FillScAddress( aCellLink, aApiAddress );
+                if( GetTabInfo().IsExportTab( aCellLink.Tab() ) )
+                    mxCellLink = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, aCellLink );
+            }
+        }
+    }
+
+    // *** source range *** ---------------------------------------------------
+
+    Reference< XListEntrySink > xEntrySink( xCtrlModel, UNO_QUERY );
+    if( xEntrySink.is() )
+    {
+        Reference< XServiceInfo > xServInfo( xEntrySink->getListEntrySource(), UNO_QUERY );
+        if( xServInfo.is() && xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_LISTSOURCE ) ) )
+        {
+            ScfPropertySet aSinkProp( xServInfo );
+            CellRangeAddress aApiRange;
+            if( aSinkProp.GetProperty( aApiRange, CREATE_OUSTRING( SC_UNONAME_CELLRANGE ) ) )
+            {
+                ScRange aSrcRange;
+                ScUnoConversion::FillScRange( aSrcRange, aApiRange );
+                if( (aSrcRange.aStart.Tab() == aSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( aSrcRange.aStart.Tab() ) )
+                    mxSrcRange = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, aSrcRange );
+                mnEntryCount = static_cast< sal_uInt16 >( aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1 );
+            }
+        }
+    }
 }
 
-void XclExpCtrlLinkHelper::SetSourceRange( const ScRange& rSrcRange )
-{
-    if( (rSrcRange.aStart.Tab() == rSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( rSrcRange.aStart.Tab() ) )
-        mxSrcRange = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, rSrcRange );
-    else
-        mxSrcRange.reset();
-    mnEntryCount = static_cast< sal_uInt16 >( rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1 );
-}
-
-void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr ) const
+void XclExpControlObjHelper::WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr ) const
 {
     sal_uInt16 nFmlaSize = rTokArr.GetSize();
     rStrm << nFmlaSize << sal_uInt32( 0 );
@@ -124,7 +188,7 @@ void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const XclTokenArra
         rStrm << sal_uInt8( 0 );
 }
 
-void XclExpCtrlLinkHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr ) const
+void XclExpControlObjHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclTokenArray& rTokArr ) const
 {
     rStrm.StartRecord( nSubRecId, (rTokArr.GetSize() + 5) & ~1 );
     WriteFormula( rStrm, rTokArr );
@@ -135,26 +199,23 @@ void XclExpCtrlLinkHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 n
 
 #if EXC_EXP_OCX_CTRL
 
-XclExpObjOcxCtrl::XclExpObjOcxCtrl(
-        const XclExpRoot& rRoot,
-        const Reference< XShape >& rxShape,
-        const Reference< XControlModel >& rxCtrlModel,
-        const String& rClassName,
-        sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
+XclExpOcxControlObj::XclExpOcxControlObj( const XclExpRoot& rRoot, Reference< XShape > xShape,
+        const String& rClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rRoot, EXC_OBJ_CMO_PICTURE, true ),
-    XclExpCtrlLinkHelper( rRoot ),
+    XclExpControlObjHelper( rRoot ),
     maClassName( rClassName ),
     mnStrmStart( nStrmStart ),
     mnStrmSize( nStrmSize )
 {
+    ScfPropertySet aCtrlProp( XclControlObjHelper::GetModelFromShape( xShape ) );
+
+    // OBJ record flags
     SetLocked( TRUE );
+    SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
     SetAutoFill( FALSE );
     SetAutoLine( FALSE );
 
-    Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
-    if( xPropSet.is() )
-        SetPrintable( ::getPropBool( xPropSet, CREATE_OUSTRING( "Printable" ) ) );
-
+    // fill DFF property set
     XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
     rEscherEx.OpenContainer( ESCHER_SpContainer );
     rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE );
@@ -164,43 +225,37 @@ XclExpObjOcxCtrl::XclExpObjOcxCtrl(
     aPropOpt.AddOpt( ESCHER_Prop_lineColor,         0x08000040 );
     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash,   0x00080000 );   // bool field
 
-    Reference< XPropertySet > xShapePS( rxShape, UNO_QUERY );
-    if( xShapePS.is() )
-    {
-        // meta file
-        if( aPropOpt.CreateGraphicProperties( xShapePS, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
-        {
-            sal_uInt32 nBlipId;
-            if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )
-                aPropOpt.AddOpt( ESCHER_Prop_pictureId, nBlipId );
-        }
+    // #i51348# name of the control, may overwrite shape name
+    OUString aCtrlName;
+    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && (aCtrlName.getLength() > 0) )
+        aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
-        // name of the control
-        OUString aCtrlName;
-        //! TODO - this does not work - property is empty
-        if( ::getPropValue( aCtrlName, xShapePS, CREATE_OUSTRING( "Name" ) ) && aCtrlName.getLength() )
-        {
-            XclExpString aCtrlNameEx( aCtrlName, EXC_STR_FORCEUNICODE );
-            sal_uInt32 nBufferSize = aCtrlNameEx.GetBufferSize() + 2;   // plus trailing zero
-            sal_uInt8* pBuffer = new sal_uInt8[ nBufferSize ];
-            aCtrlNameEx.WriteBuffer( pBuffer );
-            pBuffer[ nBufferSize - 2 ] = pBuffer[ nBufferSize - 1 ] = 0;
-            // aPropOpt takes ownership of pBuffer
-            aPropOpt.AddOpt( ESCHER_Prop_wzName, TRUE, nBufferSize, pBuffer, nBufferSize );
-        }
+    // meta file
+    //! TODO - needs check
+    Reference< XPropertySet > xShapePS( xShape, UNO_QUERY );
+    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, CREATE_STRING( "MetaFile" ), sal_False ) )
+    {
+        sal_uInt32 nBlipId;
+        if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )
+            aPropOpt.AddOpt( ESCHER_Prop_pictureId, nBlipId );
     }
 
+    // write DFF property set to stream
     aPropOpt.Commit( rEscherEx.GetStream() );
 
-    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
+    // anchor
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
         XclExpEscherAnchor( rRoot, *pSdrObj ).WriteData( rEscherEx );
     rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     rEscherEx.CloseContainer();  // ESCHER_SpContainer
 
     pMsodrawing->UpdateStopPos();
+
+    // spreadsheet links
+    ConvertSheetLinks( xShape );
 }
 
-void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
+void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
 {
     // ftCf - clipboard format
     rStrm.StartRecord( EXC_ID_OBJ_FTCF, 2 );
@@ -218,11 +273,11 @@ void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
     sal_uInt16 nClassNamePad = nClassNameSize & 1;
     sal_uInt16 nFirstPartSize = 12 + nClassNameSize + nClassNamePad;
 
-    const ExcUPN* pCellLink = GetCellLinkTokArr();
-    sal_uInt16 nCellLinkSize = pCellLink ? ((pCellLink->GetLen() + 7) & 0xFFFE) : 0;
+    const XclTokenArray* pCellLink = GetCellLinkTokArr();
+    sal_uInt16 nCellLinkSize = pCellLink ? ((pCellLink->GetSize() + 7) & 0xFFFE) : 0;
 
-    const ExcUPN* pSrcRange = GetSourceRangeTokArr();
-    sal_uInt16 nSrcRangeSize = pSrcRange ? ((pSrcRange->GetLen() + 7) & 0xFFFE) : 0;
+    const XclTokenArray* pSrcRange = GetSourceRangeTokArr();
+    sal_uInt16 nSrcRangeSize = pSrcRange ? ((pSrcRange->GetSize() + 7) & 0xFFFE) : 0;
 
     sal_uInt16 nPictFmlaSize = nFirstPartSize + nCellLinkSize + nSrcRangeSize + 18;
     rStrm.StartRecord( EXC_ID_OBJ_FTPICTFMLA, nPictFmlaSize );
@@ -251,12 +306,9 @@ void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
 
 #else
 
-XclExpObjTbxCtrl::XclExpObjTbxCtrl(
-        const XclExpRoot& rRoot,
-        const Reference< XShape >& rxShape,
-        const Reference< XControlModel >& rxCtrlModel ) :
+XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XShape > xShape ) :
     XclObj( rRoot, EXC_OBJ_CMO_UNKNOWN, true ),
-    XclExpCtrlLinkHelper( rRoot ),
+    XclExpControlObjHelper( rRoot ),
     mnHeight( 0 ),
     mnState( 0 ),
     mnLineCount( 0 ),
@@ -275,11 +327,11 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
 
-    ScfPropertySet aCtrlProp( rxCtrlModel );
-    if( !rxShape.is() || !aCtrlProp.Is() )
+    ScfPropertySet aCtrlProp( XclControlObjHelper::GetModelFromShape( xShape ) );
+    if( !xShape.is() || !aCtrlProp.Is() )
         return;
 
-    mnHeight = rxShape->getSize().Height;
+    mnHeight = xShape->getSize().Height;
     if( mnHeight <= 0 )
         return;
 
@@ -309,7 +361,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     SetAutoFill( FALSE );
     SetAutoLine( FALSE );
 
-    // fill Escher properties
+    // fill DFF property set
     XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
     rEscherEx.OpenContainer( ESCHER_SpContainer );
     rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
@@ -320,10 +372,17 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x001A0008 );      // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00100000 );      // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
+
+    // #i51348# name of the control, may overwrite shape name
+    OUString aCtrlName;
+    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && (aCtrlName.getLength() > 0) )
+        aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
+
+    // write DFF property set to stream
     aPropOpt.Commit( rEscherEx.GetStream() );
 
     // anchor
-    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
         XclExpEscherAnchor( rRoot, *pSdrObj ).WriteData( rEscherEx );
     rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
@@ -332,8 +391,9 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     OUString aString;
     if( aCtrlProp.GetProperty( aString, CREATE_OUSTRING( "Label" ) ) )
     {
-        /*  Be sure to construct the MSODRAWING ClientTextbox record after the
-            base OBJ's MSODRAWING record Escher data is completed. */
+        /*  Be sure to construct the MSODRAWING record containing the
+            ClientTextbox atom after the base OBJ's MSODRAWING record data is
+            completed. */
         pClientTextbox = new XclMsodrawing( GetRoot() );
         pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
         pClientTextbox->UpdateStopPos();
@@ -513,16 +573,19 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         }
         break;
     }
+
+    // spreadsheet links
+    ConvertSheetLinks( xShape );
 }
 
-bool XclExpObjTbxCtrl::SetMacroLink( const ScriptEventDescriptor& rEvent )
+bool XclExpTbxControlObj::SetMacroLink( const ScriptEventDescriptor& rEvent )
 {
-    if( rEvent.ListenerType.getLength() && (rEvent.ListenerType == XclTbxControlHelper::GetListenerType( mnObjType )) &&
-        rEvent.EventMethod.getLength() && (rEvent.EventMethod == XclTbxControlHelper::GetEventMethod( mnObjType )) &&
-        (rEvent.ScriptType == XclTbxControlHelper::GetScriptType()) )
+    if( rEvent.ListenerType.getLength() && (rEvent.ListenerType == XclControlObjHelper::GetTbxListenerType( mnObjType )) &&
+        rEvent.EventMethod.getLength() && (rEvent.EventMethod == XclControlObjHelper::GetTbxEventMethod( mnObjType )) &&
+        (rEvent.ScriptType == XclControlObjHelper::GetTbxScriptType()) )
     {
         // macro name is stored in a NAME record, and referred to by a formula containing a tNameXR token
-        String aMacroName( XclTbxControlHelper::GetXclMacroName( rEvent.ScriptCode ) );
+        String aMacroName( XclControlObjHelper::GetXclMacroName( rEvent.ScriptCode ) );
         if( aMacroName.Len() )
         {
             sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
@@ -534,7 +597,7 @@ bool XclExpObjTbxCtrl::SetMacroLink( const ScriptEventDescriptor& rEvent )
     return false;
 }
 
-void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
+void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
 {
     switch( mnObjType )
     {
@@ -662,19 +725,19 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
     }
 }
 
-void XclExpObjTbxCtrl::WriteMacroSubRec( XclExpStream& rStrm )
+void XclExpTbxControlObj::WriteMacroSubRec( XclExpStream& rStrm )
 {
     if( mxMacroLink.is() )
         WriteFormulaSubRec( rStrm, EXC_ID_OBJ_FTMACRO, *mxMacroLink );
 }
 
-void XclExpObjTbxCtrl::WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId )
+void XclExpTbxControlObj::WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId )
 {
     if( const XclTokenArray* pCellLink = GetCellLinkTokArr() )
         WriteFormulaSubRec( rStrm, nSubRecId, *pCellLink );
 }
 
-void XclExpObjTbxCtrl::WriteSbs( XclExpStream& rStrm )
+void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 {
     sal_uInt16 nOrient = 0;
     ::set_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL, mbScrollHor );
@@ -755,7 +818,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                 (pCaption.get())->SetMergedItemSet(rSet);
             }
 
-            // create the Escher object
+            // create the object record
             if(pObj.get())
                 mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, aRect, *pObj, pCaption.get(), mbVisible ) );
 
