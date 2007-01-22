@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineaction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:18:59 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:50:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
-class Point;
+namespace basegfx {
+    class B2DPoint;
+}
 
 
 /* Definition of internal::LineActionFactory class */
@@ -61,8 +63,8 @@ namespace cppcanvas
         {
         public:
             /// Plain hair line from point 1 to point 2
-            static ActionSharedPtr createLineAction( const ::Point&,
-                                                     const ::Point&,
+            static ActionSharedPtr createLineAction( const ::basegfx::B2DPoint&,
+                                                     const ::basegfx::B2DPoint&,
                                                      const CanvasSharedPtr&,
                                                      const OutDevState& );
 
