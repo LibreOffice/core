@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:22:34 $
+#   last change: $Author: obo $ $Date: 2007-01-22 14:46:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -362,6 +362,8 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 
 $filesinproductarrayref = installer::scriptitems::remove_delete_only_files_from_productlists($filesinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2.log", $filesinproductarrayref); }
+
+if (( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::islinuxrpmbuild )) { installer::control::check_oxtfiles($filesinproductarrayref); }
 
 if ($installer::globals::product =~ /suite/i ) { $filesinproductarrayref = installer::scriptitems::remove_notinsuite_files_from_productlists($filesinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2aa.log", $filesinproductarrayref); }
