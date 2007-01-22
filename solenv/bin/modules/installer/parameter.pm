@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-09 11:18:59 $
+#   last change: $Author: obo $ $Date: 2007-01-22 14:47:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -464,6 +464,9 @@ sub control_required_parameter
         if (!($installer::globals::iswindowsbuild))
         {
             installer::files::check_file($installer::globals::packagelist);
+
+            $installer::globals::absolutepackagelistpath = $installer::globals::packagelist;
+            make_path_absolute(\$installer::globals::absolutepackagelistpath);
 
             # If an additional packagelist is defined (Unix, multilingual installation set), it has to exist.
 
