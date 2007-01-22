@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,11 @@
 #include "xoutbmp.hxx"
 #include "svxids.hrc"
 #include "svdpage.hxx"
+
+// #i72889#
+#ifndef _SDRPAINTWINDOW_HXX
+#include "sdrpaintwindow.hxx"
+#endif
 
 /*************************************************************************
 |*
@@ -237,7 +242,10 @@ void GraphCtrl::InitSdrModel()
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
     pView->SetEditMode( TRUE );
 
+    // #i72889# set neeeded flags
     pView->SetPagePaintingAllowed(false);
+    pView->SetBufferedOutputAllowed(true);
+    pView->SetBufferedOverlayAllowed(true);
 
     // Tell the accessibility object about the changes.
     if (mpAccContext != NULL)
@@ -345,11 +353,36 @@ void GraphCtrl::Resize()
 
 void GraphCtrl::Paint( const Rectangle& rRect )
 {
-    if ( aGraphic.GetType() != GRAPHIC_NONE )
-        aGraphic.Draw( this, Point(), aGraphSize );
+    // #i72889# used splitted repaint to be able to paint an own background
+    // even to the buffered view
+    const bool bGraphicValid(GRAPHIC_NONE != aGraphic.GetType());
 
-    if ( bSdrMode )
-        pView->CompleteRedraw( this , Region( rRect ) );
+    if(bSdrMode)
+    {
+        SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(this);
+
+        if(bGraphicValid)
+        {
+            OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
+
+            rTarget.SetBackground(GetBackground());
+            rTarget.Erase();
+
+            aGraphic.Draw(&rTarget, Point(), aGraphSize);
+        }
+
+        const Region aRepaintRegion(rRect);
+        pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
+        pView->EndCompleteRedraw(*pPaintWindow, aRepaintRegion);
+    }
+    else
+    {
+        // #i73381# in non-SdrMode, paint to local directly
+        if(bGraphicValid)
+        {
+            aGraphic.Draw(this, Point(), aGraphSize);
+        }
+    }
 }
 
 
