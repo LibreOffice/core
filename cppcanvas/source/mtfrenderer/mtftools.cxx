@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtftools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 17:48:05 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,23 @@ namespace cppcanvas
             o_rMatrix.identity();
             o_rMatrix.scale( aSizePixel.Width() / (double)aSizeLogic.Width(),
                              aSizePixel.Height() / (double)aSizeLogic.Height() );
+
+            return o_rMatrix;
+        }
+
+        ::basegfx::B2DHomMatrix& calcLogic2PixelAffineTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,
+                                                                 const VirtualDevice&       rVDev )
+        {
+            // retrieves scale
+            calcLogic2PixelLinearTransform(o_rMatrix, rVDev);
+
+            // translate according to curr map mode/pref map mode offset
+            const ::Point  aEmptyPoint;
+            const ::Point& rTranslatedPoint(
+                rVDev.LogicToPixel( aEmptyPoint ));
+
+            o_rMatrix.translate(rTranslatedPoint.X(),
+                                rTranslatedPoint.Y());
 
             return o_rMatrix;
         }
