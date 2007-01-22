@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1109,6 +1109,7 @@ FltError ImportExcel8::Read( void )
                     case 0x9E:  AutoFilter(); break;    // AUTOFILTER
                     case 0x01BA: Codename( FALSE ); break;
                     case 0x0208: Row34(); break;        // ROW          [  34    ]
+                    case 0x0021:
                     case 0x0221: Array34(); break;      // ARRAY        [  34    ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5   ]
