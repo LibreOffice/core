@@ -1,6 +1,7 @@
 i pkginfo=pkginfo
 i space=space
 i postinstall=postinstall
+i copyright=./copyright
 i checkinstall=./checkinstall
 i depend=depend
 d none etc 0755 root sys
