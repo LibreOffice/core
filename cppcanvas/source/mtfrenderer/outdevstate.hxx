@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdevstate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:20:31 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ namespace cppcanvas
 
                 xFont(),
                 transform(),
+                mapModeTransform(),
                 fontRotation(0.0),
 
                 textEmphasisMarkStyle(EMPHASISMARK_NONE),
@@ -120,7 +121,6 @@ namespace cppcanvas
                 isTextFillColorSet( false ),
                 isTextLineColorSet( false )
             {
-                transform.identity();
             }
 
             ::basegfx::B2DPolyPolygon                                                           clip;
@@ -140,6 +140,7 @@ namespace cppcanvas
              */
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >        xFont;
             ::basegfx::B2DHomMatrix                                                             transform;
+            ::basegfx::B2DHomMatrix                                                             mapModeTransform;
             double                                                                              fontRotation;
 
             sal_uInt16                                                                          textEmphasisMarkStyle;
