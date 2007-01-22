@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:21:16 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1102,16 +1102,10 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     }
 
     // item properties
-    const List& rMemList = rSaveDim.GetMembers();
-    for( ULONG nMemIdx = 0, nMemCount = rMemList.Count(); nMemIdx < nMemCount; ++nMemIdx )
-    {
-        if( const ScDPSaveMember* pSaveMem = static_cast< const ScDPSaveMember* >( rMemList.GetObject( nMemIdx ) ) )
-        {
-
-            if( XclExpPTItem* pItem = GetItemAcc( pSaveMem->GetName() ) )
-                pItem->SetPropertiesFromMember( *pSaveMem );
-        }
-    }
+    const ScDPSaveDimension::MemberList &rMembers = rSaveDim.GetMembers();
+    for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; i++)
+        if( XclExpPTItem* pItem = GetItemAcc( (*i)->GetName() ) )
+            pItem->SetPropertiesFromMember( **i );
 }
 
 void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
