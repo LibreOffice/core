@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:03:50 $
+#   last change: $Author: obo $ $Date: 2007-01-22 14:46:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -674,5 +674,30 @@ sub read_encodinglist
 
 }
 
+#############################################################
+# Only for Windows and Linux (RPM)there is currently
+# a reliable mechanism to register extensions during
+# installation process. Therefore it is for all other
+# platforms forbidden to install oxt files into that
+# directory, in which they are searched for registration.
+#############################################################
+
+sub check_oxtfiles
+{
+    my ( $filesarray ) = @_;
+
+    for ( my $i = 0; $i <= $#{$filesarray}; $i++ )
+    {
+        my $onefile = ${$filesarray}[$i];
+
+        if (( $onefile->{'Name'} ) && ( $onefile->{'Dir'} ))
+        {
+            if (( $onefile->{'Name'} =~ /\.oxt\s*$/ ) && ( $onefile->{'Dir'} eq $installer::globals::extensioninstalldir ))
+            {
+                installer::exiter::exit_program("There is currently only for Linux (RPM) and Windows a reliable mechanism to register extensions during installation.\nPlease remove file \"$onefile->{'gid'}\" from your installation set!\nYou can use \"\#ifdef WNT\" and \"\#ifdef LINUX\" in scp.", "check_oxtfiles");
+            }
+        }
+    }
+}
 
 1;
