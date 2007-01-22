@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97dum.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:53:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,17 +94,6 @@ private:
 public:
     virtual sal_Size        GetLen() const;
     virtual const BYTE*     GetData() const;
-};
-
-
-class XclRefmode : public ExcDummyRec
-{
-private:
-    static const BYTE       pMyData[];
-    static const sal_Size   nMyLen;
-public:
-    virtual sal_Size        GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
 };
 
 
