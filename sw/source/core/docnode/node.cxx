@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:47:03 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,8 @@ void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
                       SwAttrSet& rNewAttrSet )
 {
     const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(mrpAttrSet.get());
+    if( rNode.GetModifyAtAttr() )
+        const_cast<SwAttrSet*>(pAttrSet)->SetModifyAtAttr( 0 );
     IStyleAccess& rSA = pAttrSet->GetPool()->GetDoc()->GetIStyleAccess();
     mrpAttrSet = rSA.getAutomaticStyle( rNewAttrSet, rNode.IsTxtNode() ?
                                                      IStyleAccess::AUTO_STYLE_PARA :
@@ -258,6 +260,8 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    if( rNode.GetModifyAtAttr() )
+        aNewSet.SetModifyAtAttr( &rNode );
     const int nRet = aNewSet.Put_BC( rAttr, pOld, pNew );
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -269,6 +273,8 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    if( rNode.GetModifyAtAttr() )
+        aNewSet.SetModifyAtAttr( &rNode );
     const int nRet = aNewSet.Put_BC( rSet, pOld, pNew );
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -280,6 +286,8 @@ USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    if( rNode.GetModifyAtAttr() )
+        aNewSet.SetModifyAtAttr( &rNode );
     const USHORT nRet = aNewSet.ClearItem_BC( nWhich, pOld, pNew );
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -292,6 +300,8 @@ USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    if( rNode.GetModifyAtAttr() )
+        aNewSet.SetModifyAtAttr( &rNode );
     const USHORT nRet = aNewSet.ClearItem_BC( nWhich1, nWhich2, pOld, pNew );
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -1907,7 +1917,8 @@ USHORT SwCntntNode::ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds 
         nRet += aNewAttrSet.ClearItem( *aIter );
     }
     if ( nRet )
-        mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA );
+        AttrSetHandleHelper::GetNewAutoStyle( mpAttrSet, *this, aNewAttrSet );
+
     return nRet;
 }
 
@@ -1927,7 +1938,9 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( USHORT nWhich,
     //       content node - see file <node.hxx>
     else
     // <--
+    {
         GetSwAttrSet().GetItemState( nWhich, bInParents, &pFnd );
+    }
     return pFnd;
 }
 
@@ -2160,7 +2173,10 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
     if( pPt )
         aPt = *pPt;
 
-    SwFrm* pFrm = GetFrm( &aPt, &rPos );
+    // --> OD 2007-01-10 #i72024#
+    // No format of the frame, because this can cause recursive layout actions
+    SwFrm* pFrm = GetFrm( &aPt, &rPos, FALSE );
+    // <--
 
     if ( pFrm )
     {
