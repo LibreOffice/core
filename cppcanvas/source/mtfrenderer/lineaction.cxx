@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineaction.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:49:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <vcl/canvastools.hxx>
 
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 
@@ -67,8 +68,8 @@ namespace cppcanvas
             class LineAction : public Action, private ::boost::noncopyable
             {
             public:
-                LineAction( const ::Point&,
-                            const ::Point&,
+                LineAction( const ::basegfx::B2DPoint&,
+                            const ::basegfx::B2DPoint&,
                             const CanvasSharedPtr&,
                             const OutDevState& );
 
@@ -83,16 +84,16 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
-                Point                   maStartPoint;
-                Point                   maEndPoint;
+                ::basegfx::B2DPoint     maStartPoint;
+                ::basegfx::B2DPoint     maEndPoint;
                 CanvasSharedPtr         mpCanvas;
                 rendering::RenderState  maState;
             };
 
-            LineAction::LineAction( const ::Point&          rStartPoint,
-                                    const ::Point&          rEndPoint,
-                                    const CanvasSharedPtr&  rCanvas,
-                                    const OutDevState&      rState ) :
+            LineAction::LineAction( const ::basegfx::B2DPoint& rStartPoint,
+                                    const ::basegfx::B2DPoint& rEndPoint,
+                                    const CanvasSharedPtr&     rCanvas,
+                                    const OutDevState&         rState ) :
                 maStartPoint( rStartPoint ),
                 maEndPoint( rEndPoint ),
                 mpCanvas( rCanvas ),
@@ -110,8 +111,8 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                mpCanvas->getUNOCanvas()->drawLine( ::vcl::unotools::point2DFromPoint(maStartPoint),
-                                                    ::vcl::unotools::point2DFromPoint(maEndPoint),
+                mpCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
+                                                    ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
                                                     mpCanvas->getViewState(),
                                                     aLocalState );
 
@@ -135,10 +136,8 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maStartPoint.X(),
-                                                                          maStartPoint.Y(),
-                                                                          maEndPoint.X(),
-                                                                          maEndPoint.Y() ),
+                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maStartPoint,
+                                                                          maEndPoint ),
                                                      mpCanvas->getViewState(),
                                                      aLocalState );
             }
@@ -161,10 +160,10 @@ namespace cppcanvas
             }
         }
 
-        ActionSharedPtr LineActionFactory::createLineAction( const ::Point&         rStartPoint,
-                                                             const ::Point&         rEndPoint,
-                                                             const CanvasSharedPtr& rCanvas,
-                                                             const OutDevState&     rState  )
+        ActionSharedPtr LineActionFactory::createLineAction( const ::basegfx::B2DPoint& rStartPoint,
+                                                             const ::basegfx::B2DPoint& rEndPoint,
+                                                             const CanvasSharedPtr&     rCanvas,
+                                                             const OutDevState&         rState  )
         {
             return ActionSharedPtr( new LineAction( rStartPoint,
                                                     rEndPoint,
