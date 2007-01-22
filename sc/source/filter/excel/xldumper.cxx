@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ public:
     inline explicit     StreamInput( XclImpStream& rStrm ) : mrStrm( rStrm ) {}
     virtual             ~StreamInput();
 
-    virtual sal_Size    Size() const;
+    virtual sal_Size    GetSize() const;
     virtual sal_Size    Tell() const;
     virtual void        Seek( sal_Size nPos );
     virtual void        SeekRel( sal_sSize nRelPos );
@@ -249,7 +249,7 @@ StreamInput::~StreamInput()
 {
 }
 
-sal_Size StreamInput::Size() const
+sal_Size StreamInput::GetSize() const
 {
     return mrStrm.GetRecSize();
 }
@@ -287,6 +287,40 @@ StreamInput& StreamInput::operator>>( sal_Int32& rnData )  { mrStrm >> rnData; r
 StreamInput& StreamInput::operator>>( sal_uInt32& rnData ) { mrStrm >> rnData; return *this; }
 StreamInput& StreamInput::operator>>( float& rfData )      { mrStrm >> rfData; return *this; }
 StreamInput& StreamInput::operator>>( double& rfData )     { mrStrm >> rfData; return *this; }
+
+// ============================================================================
+// ============================================================================
+
+RecordHeaderObject::RecordHeaderObject( const InputObjectBase& rParent )
+{
+    static const RecordHeaderConfigInfo saHeaderCfgInfo =
+    {
+        "RECORD-NAMES",
+        "show-record-pos",
+        "show-record-size",
+        "show-record-id",
+        "show-record-name",
+        "show-record-body",
+    };
+    RecordHeaderBase::Construct( rParent, saHeaderCfgInfo );
+    if( RecordHeaderBase::ImplIsValid() )
+        mbMergeContRec = Cfg().GetBoolOption( "merge-continue-record", true );
+}
+
+void RecordHeaderObject::DumpRecordHeader( XclImpStream& rStrm )
+{
+    MultiItemsGuard aMultiGuard( Out() );
+    WriteEmptyItem( "REC" );
+    if( IsShowRecPos() )  WriteHexItem( "pos", static_cast< sal_uInt32 >( GetCoreStream().Tell() - 4 ) );
+    if( IsShowRecSize() ) WriteHexItem( "size", static_cast< sal_uInt32 >( rStrm.GetRecSize() ) );
+    if( IsShowRecId() )   WriteHexItem( "id", rStrm.GetRecId() );
+    if( IsShowRecName() ) WriteNameItem( "name", rStrm.GetRecId(), GetRecNames() );
+}
+
+bool RecordHeaderObject::ImplIsValid() const
+{
+    return RecordHeaderBase::ImplIsValid();
+}
 
 // ============================================================================
 // ============================================================================
@@ -830,17 +864,24 @@ sal_uInt16 FormulaObject::DumpFormulaSize( const sal_Char* pcName )
     return nSize;
 }
 
-void FormulaObject::DumpFormula( const sal_Char* pcName, sal_uInt16 nSize, bool bNameMode )
+void FormulaObject::DumpCellFormula( const sal_Char* pcName, sal_uInt16 nSize )
 {
-    mpcName = pcName ? pcName : "formula";
-    mnSize = nSize;
-    mbNameMode = bNameMode;
-    Dump();
+    DumpFormula( pcName, nSize, false );
 }
 
-void FormulaObject::DumpFormula( const sal_Char* pcName, bool bNameMode )
+void FormulaObject::DumpCellFormula( const sal_Char* pcName )
 {
-    DumpFormula( pcName, ReadFormulaSize(), bNameMode );
+    DumpFormula( pcName, false );
+}
+
+void FormulaObject::DumpNameFormula( const sal_Char* pcName, sal_uInt16 nSize )
+{
+    DumpFormula( pcName, nSize, true );
+}
+
+void FormulaObject::DumpNameFormula( const sal_Char* pcName )
+{
+    DumpFormula( pcName, true );
 }
 
 void FormulaObject::ImplDumpHeader()
@@ -862,7 +903,7 @@ void FormulaObject::ImplDumpBody()
 
     Input& rIn = In();
     sal_Size nStartPos = rIn.Tell();
-    sal_Size nEndPos = ::std::min( nStartPos + mnSize, rIn.Size() );
+    sal_Size nEndPos = ::std::min( nStartPos + mnSize, rIn.GetSize() );
     while( bValid && (rIn.Tell() < nEndPos) )
     {
         MultiItemsGuard aMultiGuard( Out() );
@@ -953,6 +994,19 @@ void FormulaObject::ImplDumpBody()
 
     mpcName = 0;
     mnSize = 0;
+}
+
+void FormulaObject::DumpFormula( const sal_Char* pcName, sal_uInt16 nSize, bool bNameMode )
+{
+    mpcName = pcName ? pcName : "formula";
+    mnSize = nSize;
+    mbNameMode = bNameMode;
+    Dump();
+}
+
+void FormulaObject::DumpFormula( const sal_Char* pcName, bool bNameMode )
+{
+    DumpFormula( pcName, ReadFormulaSize(), bNameMode );
 }
 
 // private --------------------------------------------------------------------
@@ -1594,7 +1648,7 @@ void RecordStreamObject::Construct( const OleStorageObject& rParentStrg, const S
 
 bool RecordStreamObject::ImplIsValid() const
 {
-    return IsValid( mxFmlaObj ) && RootObjectBase::ImplIsValid();
+    return IsValid( mxHdrObj ) && IsValid( mxFmlaObj ) && IsValid( mxDffObj ) && RootObjectBase::ImplIsValid();
 }
 
 void RecordStreamObject::ImplDumpBody()
@@ -1610,16 +1664,16 @@ void RecordStreamObject::ImplDumpBody()
         aProgress.ProgressAbs( rStrm.GetSvStreamPos() );
 
         // record header
-        rStrm.ResetRecord( mbMergeContRec );
+        rStrm.ResetRecord( mxHdrObj->IsMergeContRec() );
         ImplPreProcessRecord();
-        DumpRecordHeader();
+        mxHdrObj->DumpRecordHeader( rStrm );
 
         // record contents
-        if( mbShowRecBody )
+        if( mxHdrObj->IsShowRecBody() )
         {
             IndentGuard aIndGuard( Out() );
-            if( Cfg().HasName( mxRecNames, rStrm.GetRecId() ) )
-                DumpRecord();
+            if( mxHdrObj->HasRecName( rStrm.GetRecId() ) )
+                DumpRecordBody();
             else
                 DumpRawBinary( rStrm.GetRecSize(), false );
         }
@@ -1646,68 +1700,27 @@ void RecordStreamObject::ImplPostProcessRecord()
 
 void RecordStreamObject::DumpRepeatedRecordId()
 {
-    DumpHex< sal_uInt16 >( "repeated-rec-id", mxRecNames );
+    DumpHex< sal_uInt16 >( "repeated-rec-id", mxHdrObj->GetRecNames() );
     DumpUnused( 2 );
-}
-
-sal_uInt16 RecordStreamObject::DumpFormulaSize( const sal_Char* pcName )
-{
-    return mxFmlaObj->DumpFormulaSize( pcName );
-}
-
-void RecordStreamObject::DumpCellFormula( const sal_Char* pcName, sal_uInt16 nSize )
-{
-    mxFmlaObj->DumpFormula( pcName, nSize, false );
-}
-
-void RecordStreamObject::DumpCellFormula( const sal_Char* pcName )
-{
-    mxFmlaObj->DumpFormula( pcName, false );
-}
-
-void RecordStreamObject::DumpNameFormula( const sal_Char* pcName, sal_uInt16 nSize )
-{
-    mxFmlaObj->DumpFormula( pcName, nSize, true );
-}
-
-void RecordStreamObject::DumpNameFormula( const sal_Char* pcName )
-{
-    mxFmlaObj->DumpFormula( pcName, true );
 }
 
 void RecordStreamObject::ConstructOwn()
 {
     if( RootObjectBase::ImplIsValid() )
+    {
+        mxHdrObj.reset( new RecordHeaderObject( *this ) );
         mxFmlaObj.reset( new FormulaObject( *this ) );
+        mxDffObj.reset( new DffDumpObject( *this ) );
+    }
 
     if( IsValid() )
     {
         maProgressName.AssignAscii( "Dumping stream '" ).Append( GetFullName() ).AppendAscii( "'." );
-
-        const Config& rCfg = Cfg();
-        mxRecNames      = rCfg.GetNameList( "RECORD-NAMES" );
-        mxSimpleRecs    = rCfg.GetNameList( "SIMPLE-RECORDS" );
-        mbShowRecPos    = rCfg.GetBoolOption( "show-record-pos", true );
-        mbShowRecSize   = rCfg.GetBoolOption( "show-record-size", true );
-        mbShowRecId     = rCfg.GetBoolOption( "show-record-id", true );
-        mbShowRecName   = rCfg.GetBoolOption( "show-record-name", true );
-        mbShowRecBody   = rCfg.GetBoolOption( "show-record-body", true );
-        mbMergeContRec  = rCfg.GetBoolOption( "merge-continue-record", true );
+        mxSimpleRecs = Cfg().GetNameList( "SIMPLE-RECORDS" );
     }
 }
 
-void RecordStreamObject::DumpRecordHeader()
-{
-    MultiItemsGuard aMultiGuard( Out() );
-    WriteEmptyItem( "REC" );
-    if( mbShowRecPos )  WriteHexItem( "pos", static_cast< sal_uInt32 >( GetStream().Tell() - 4 ) );
-    XclImpStream& rStrm = GetXclStream();
-    if( mbShowRecSize ) WriteHexItem( "size", static_cast< sal_uInt32 >( rStrm.GetRecSize() ) );
-    if( mbShowRecId )   WriteHexItem( "id", rStrm.GetRecId() );
-    if( mbShowRecName ) WriteNameItem( "name", rStrm.GetRecId(), mxRecNames );
-}
-
-void RecordStreamObject::DumpRecord()
+void RecordStreamObject::DumpRecordBody()
 {
     XclImpStream& rStrm = GetXclStream();
     sal_uInt16 nRecId = rStrm.GetRecId();
@@ -1767,7 +1780,7 @@ void WorkbookStreamObject::ImplPreProcessRecord()
     }
 
     // special CONTINUE handling
-    if( IsMergeContRec() )
+    if( GetRecordHeader().IsMergeContRec() )
     {
         switch( nRecId )
         {
@@ -1825,10 +1838,10 @@ void WorkbookStreamObject::ImplDumpRecord()
         case EXC_ID_CHAREAFORMAT:
             DumpRgbColor( "fg-color-rgb" );
             DumpRgbColor( "bg-color-rgb" );
-            DumpPatternIdx();
+            DumpPatternIdx< sal_uInt16 >();
             DumpHex< sal_uInt16 >( "flags", "CHAREAFORMAT-FLAGS" );
-            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "fg-color-idx" );
-            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "bg-color-idx" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >( "fg-color-idx" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >( "bg-color-idx" );
         break;
 
         case EXC_ID_CHAXESSET:
@@ -1851,22 +1864,22 @@ void WorkbookStreamObject::ImplDumpRecord()
         break;
 
         case EXC_ID_CHCHART:
-            DumpRect< sal_Int32 >( "chart-frame", "CONV-PT-TO-CM", FORMATTYPE_FIX );
+            DumpRect< sal_Int32 >( "chart-frame", "CONV-PT1616-TO-CM", FORMATTYPE_FIX );
         break;
 
         case EXC_ID_CHCHART3D:
             DumpDec< sal_uInt16 >( "rotation-angle", "CONV-DEG" );
             DumpDec< sal_Int16 >( "elevation-angle", "CONV-DEG" );
             DumpDec< sal_uInt16 >( "eye-distance" );
-            DumpDec< sal_uInt16 >( "relative-height" );
-            DumpDec< sal_uInt16 >( "relative-depth" );
-            DumpDec< sal_Int16 >( "gap", "CONV-PERCENT" );
+            DumpDec< sal_uInt16 >( "relative-height", "CONV-PERCENT" );
+            DumpDec< sal_uInt16 >( "relative-depth", "CONV-PERCENT" );
+            DumpDec< sal_uInt16 >( "depth-gap", "CONV-PERCENT" );
             DumpHex< sal_uInt16 >( "flags", "CHCHART3D-FLAGS" );
         break;
 
-        case EXC_ID_CHCHARTGROUP:
+        case EXC_ID_CHTYPEGROUP:
             DumpUnused( 16 );
-            DumpHex< sal_uInt16 >( "flags", "CHCHARTGROUP-FLAGS" );
+            DumpHex< sal_uInt16 >( "flags", "CHTYPEGROUP-FLAGS" );
             if( eBiff >= EXC_BIFF5 ) DumpDec< sal_uInt16 >( "group-idx" );
         break;
 
@@ -1877,16 +1890,8 @@ void WorkbookStreamObject::ImplDumpRecord()
             if( eBiff >= EXC_BIFF5 ) DumpHex< sal_uInt16 >( "flags", "CHDATAFORMAT-FLAGS" );
         break;
 
-        case EXC_ID_CHEXTRANGE:
-            DumpDec< sal_uInt16 >( "minimum-categ" );
-            DumpDec< sal_uInt16 >( "maximum-categ" );
-            DumpDec< sal_uInt16 >( "major-unit-value" );
-            DumpDec< sal_uInt16 >( "major-unit" );
-            DumpDec< sal_uInt16 >( "minor-unit-value" );
-            DumpDec< sal_uInt16 >( "minor-unit" );
-            DumpDec< sal_uInt16 >( "base-unit" );
-            DumpDec< sal_uInt16 >( "axis-crossing-date" );
-            DumpHex< sal_uInt16 >( "flags", "CHEXTRANGE-FLAGS" );
+        case EXC_ID_CHESCHERFORMAT:
+            GetDffDumper().Dump();
         break;
 
         case EXC_ID_CHFRAME:
@@ -1907,6 +1912,18 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpHex< sal_uInt16 >( "flags", "CHLABELRANGE-FLAGS" );
         break;
 
+        case EXC_ID_CHLABELRANGE2:
+            DumpDec< sal_uInt16 >( "minimum-categ" );
+            DumpDec< sal_uInt16 >( "maximum-categ" );
+            DumpDec< sal_uInt16 >( "major-unit-value" );
+            DumpDec< sal_uInt16 >( "major-unit" );
+            DumpDec< sal_uInt16 >( "minor-unit-value" );
+            DumpDec< sal_uInt16 >( "minor-unit" );
+            DumpDec< sal_uInt16 >( "base-unit" );
+            DumpDec< sal_uInt16 >( "axis-crossing-date" );
+            DumpHex< sal_uInt16 >( "flags", "CHLABELRANGE2-FLAGS" );
+        break;
+
         case EXC_ID_CHLEGEND:
             DumpRect< sal_Int32 >( "position", (eBiff <= EXC_BIFF4) ? "CONV-TWIP-TO-CM" : "" );
             DumpDec< sal_uInt8 >( "docked-pos", "CHLEGEND-DOCKPOS" );
@@ -1919,16 +1936,16 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpDec< sal_uInt16 >( "line-type", "CHLINEFORMAT-LINETYPE" );
             DumpDec< sal_Int16 >( "line-weight", "CHLINEFORMAT-LINEWEIGHT" );
             DumpHex< sal_uInt16 >( "flags", "CHLINEFORMAT-FLAGS" );
-            if( eBiff == EXC_BIFF8 ) DumpColorIdx();
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >();
         break;
 
         case EXC_ID_CHMARKERFORMAT:
             DumpRgbColor( "border-color-rgb" );
             DumpRgbColor( "fill-color-rgb" );
             DumpDec< sal_uInt16 >( "marker-type", "CHMARKERFORMAT-TYPE" );
-            DumpDec< sal_uInt16 >( "flags", "CHMARKERFORMAT-FLAGS" );
-            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "border-color-idx" );
-            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "fill-color-idx" );
+            DumpHex< sal_uInt16 >( "flags", "CHMARKERFORMAT-FLAGS" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >( "border-color-idx" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >( "fill-color-idx" );
             if( eBiff == EXC_BIFF8 ) DumpDec< sal_Int32 >( "marker-size", "CONV-TWIP-TO-PT" );
         break;
 
@@ -1936,6 +1953,13 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpDec< sal_uInt16 >( "link-target", "CHOBJECTLINK-TARGET" );
             DumpDec< sal_Int16 >( "series-idx" );
             DumpDec< sal_Int16 >( "point-idx", "CHOBJECTLINK-POINT" );
+        break;
+
+        case EXC_ID_CHPICFORMAT:
+            DumpDec< sal_uInt16 >( "bitmap-mode", "CHPICFORMAT-BITMAP-MODE" );
+            DumpDec< sal_uInt16 >( "image-format", "CHPICFORMAT-IMAGE-FORMAT" );
+            DumpHex< sal_uInt16 >( "flags", "CHPICFORMAT-FLAGS" );
+            DumpDec< double >( "scaling-factor" );
         break;
 
         case EXC_ID_CHPIE:
@@ -1964,7 +1988,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpDec< sal_uInt8 >( "type", "CHSERERRORBAR-TYPE" );
             DumpDec< sal_uInt8 >( "source", "CHSERERRORBAR-SOURCE" );
             DumpBool< sal_uInt8 >( "draw-t-shape" );
-            DumpUnused( 1 );
+            DumpBool< sal_uInt8 >( "draw-line" );
             DumpDec< double >( "value" );
             DumpDec< sal_uInt16 >( "custom-count" );
         break;
@@ -1997,7 +2021,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpDec< sal_uInt8 >( "link-type", "CHSOURCELINK-TYPE" );
             DumpHex< sal_uInt16 >( "flags", "CHSOURCELINK-FLAGS" );
             DumpFormatIdx();
-            DumpNameFormula();
+            GetFormulaDumper().DumpNameFormula();
         break;
 
         case EXC_ID_CHSTRING:
@@ -2012,7 +2036,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpRgbColor();
             DumpRect< sal_Int32 >( "position", (eBiff <= EXC_BIFF4) ? "CONV-TWIP-TO-CM" : "" );
             DumpHex< sal_uInt16 >( "flags", "CHTEXT-FLAGS" );
-            if( eBiff == EXC_BIFF8 ) DumpColorIdx();
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >();
             if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "placement", "CHTEXT-PLACEMENT" );
             if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "rotation", "TEXTROTATION" );
         break;
@@ -2025,7 +2049,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpRgbColor( "label-color-rgb" );
             DumpUnused( 16 );
             DumpHex< sal_uInt16 >( "flags", "CHTICK-FLAGS" );
-            if( eBiff == EXC_BIFF8 ) DumpColorIdx( "label-color-idx" );
+            if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >( "label-color-idx" );
             if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "label-rotation", "TEXTROTATION" );
         break;
 
@@ -2112,7 +2136,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpFormulaResult();
             DumpHex< sal_uInt16, sal_uInt8 >( eBiff != EXC_BIFF2, "flags", "FORMULA-FLAGS" );
             if( eBiff >= EXC_BIFF5 ) DumpUnused( 4 );
-            DumpCellFormula();
+            GetFormulaDumper().DumpCellFormula();
         break;
 
         case EXC_ID2_INTEGER:
@@ -2137,6 +2161,12 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpDec< sal_uInt32 >( "sst-idx" );
         break;
 
+        case EXC_ID_MSODRAWING:
+        case EXC_ID_MSODRAWINGGROUP:
+        case EXC_ID_MSODRAWINGSEL:
+            GetDffDumper().Dump();
+        break;
+
         case EXC_ID_NAME:
         case EXC_ID34_NAME:
         {
@@ -2144,7 +2174,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             if( eBiff == EXC_BIFF2 ) DumpDec< sal_uInt8 >( "macro-type", "NAME-MACROTYPE-BIFF2" );
             DumpHex< sal_uInt8 >( "keyboard-shortcut" );
             sal_uInt8 nNameLen = DumpDec< sal_uInt8 >( "name-len" );
-            sal_uInt16 nFmlaSize = DumpFormulaSize();
+            sal_uInt16 nFmlaSize = GetFormulaDumper().DumpFormulaSize();
             if( eBiff >= EXC_BIFF5 )
             {
                 DumpDec< sal_uInt16 >( "externsheet-idx", "NAME-SHEETIDX" );
@@ -2154,7 +2184,7 @@ void WorkbookStreamObject::ImplDumpRecord()
                 sal_uInt8 nHelpLen = DumpDec< sal_uInt8 >( "help-text-len" );
                 sal_uInt8 nStatusLen = DumpDec< sal_uInt8 >( "statusbar-text-len" );
                 WriteStringItem( "name", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nNameLen ) : rStrm.ReadByteString( nNameLen ) );
-                DumpNameFormula( 0, nFmlaSize );
+                GetFormulaDumper().DumpNameFormula( 0, nFmlaSize );
                 if( nMenuLen > 0 ) WriteStringItem( "menu-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nMenuLen ) : rStrm.ReadByteString( nMenuLen ) );
                 if( nDescrLen > 0 ) WriteStringItem( "description-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nDescrLen ) : rStrm.ReadByteString( nDescrLen ) );
                 if( nHelpLen > 0 ) WriteStringItem( "help-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nHelpLen ) : rStrm.ReadByteString( nHelpLen ) );
@@ -2163,8 +2193,8 @@ void WorkbookStreamObject::ImplDumpRecord()
             else
             {
                 WriteStringItem( "name", rStrm.ReadByteString( nNameLen ) );
-                DumpNameFormula( 0, nFmlaSize );
-                if( eBiff == EXC_BIFF2 ) DumpFormulaSize();
+                GetFormulaDumper().DumpNameFormula( 0, nFmlaSize );
+                if( eBiff == EXC_BIFF2 ) GetFormulaDumper().DumpFormulaSize();
             }
         }
         break;
@@ -2173,6 +2203,10 @@ void WorkbookStreamObject::ImplDumpRecord()
         case EXC_ID3_NUMBER:
             DumpCellHeader( nRecId == EXC_ID2_NUMBER );
             DumpDec< double >( "value" );
+        break;
+
+        case EXC_ID_OBJ:
+            DumpObjRec();
         break;
 
         case EXC_ID_RK:
@@ -2405,16 +2439,6 @@ String WorkbookStreamObject::CreateFontName( const XclFontData& rFontData ) cons
     return aName;
 }
 
-sal_uInt16 WorkbookStreamObject::DumpPatternIdx( const sal_Char* pcName )
-{
-    return DumpDec< sal_uInt16 >( pcName ? pcName : "fill-pattern", mxFillPatterns );
-}
-
-sal_uInt16 WorkbookStreamObject::DumpColorIdx( const sal_Char* pcName )
-{
-    return DumpDec< sal_uInt16 >( pcName ? pcName : "color-idx", mxColors );
-}
-
 sal_uInt16 WorkbookStreamObject::DumpFontIdx( const sal_Char* pcName )
 {
     return DumpDec< sal_uInt16, sal_uInt8 >( GetBiff() >= EXC_BIFF5, pcName ? pcName : "font-idx", "FONTNAMES" );
@@ -2474,7 +2498,7 @@ void WorkbookStreamObject::DumpFontRec()
     aFontData.mnWeight = ::get_flagvalue( nFlags, EXC_FONTATTR_BOLD, EXC_FONTWGHT_BOLD, EXC_FONTWGHT_NORMAL );
     aFontData.mnUnderline = ::get_flagvalue( nFlags, EXC_FONTATTR_UNDERLINE, EXC_FONTUNDERL_SINGLE, EXC_FONTUNDERL_NONE );
     if( GetBiff() >= EXC_BIFF3 )
-        aFontData.mnColor = DumpColorIdx();
+        aFontData.mnColor = DumpColorIdx< sal_uInt16 >();
     if( GetBiff() >= EXC_BIFF5 )
     {
         aFontData.mnWeight = DumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );
@@ -2575,6 +2599,67 @@ void WorkbookStreamObject::DumpXfRec()
         break;
     }
     maXfDatas.push_back( nFontIdx );
+}
+
+void WorkbookStreamObject::DumpObjRec()
+{
+    switch( GetBiff() )
+    {
+        case EXC_BIFF5: DumpObjRec5();  break;
+        case EXC_BIFF8: DumpObjRec8();  break;
+        default:;
+    }
+}
+
+void WorkbookStreamObject::DumpObjRec5()
+{
+    DumpDec< sal_uInt32 >( "obj-count" );
+    sal_uInt16 nObjType = DumpDec< sal_uInt16 >( "obj-type", "OBJ-TYPE" );
+    DumpDec< sal_uInt16 >( "obj-id" );
+    DumpHex< sal_uInt16 >( "flags", "OBJ-FLAGS" );
+    GetDffDumper().DumpDffClientRect();
+    DumpDec< sal_uInt16 >( "macro-len" );
+    DumpUnused( 6 );
+    switch( nObjType )
+    {
+        case EXC_OBJ_CMO_LINE:
+            DumpColorIdx< sal_uInt8 >( "line-color-idx" );
+            DumpDec< sal_uInt8 >( "line-type", "OBJ-LINETYPE" );
+            DumpDec< sal_uInt8 >( "line-weight", "OBJ-LINEWEIGHT" );
+            DumpHex< sal_uInt8 >( "line-flags", "OBJ-FLAGS-AUTO" );
+            DumpHex< sal_uInt16 >( "line-end", "OBJ-LINEENDS" );
+            DumpDec< sal_uInt8 >( "line-direction", "OBJ-LINEDIR" );
+            DumpUnused( 1 );
+        break;
+        case EXC_OBJ_CMO_RECTANGLE:
+            DumpColorIdx< sal_uInt8 >( "back-color-idx" );
+            DumpColorIdx< sal_uInt8 >( "patt-color-idx" );
+            DumpPatternIdx< sal_uInt8 >();
+            DumpHex< sal_uInt8 >( "area-flags", "OBJ-FLAGS-AUTO" );
+            DumpColorIdx< sal_uInt8 >( "line-color-idx" );
+            DumpDec< sal_uInt8 >( "line-type", "OBJ-LINETYPE" );
+            DumpDec< sal_uInt8 >( "line-weight", "OBJ-LINEWEIGHT" );
+            DumpHex< sal_uInt8 >( "line-flags", "OBJ-FLAGS-AUTO" );
+            DumpHex< sal_uInt16 >( "frame-style", "OBJ-FRAMESTYLE-FLAGS" );
+        break;
+        case EXC_OBJ_CMO_CHART:
+            DumpColorIdx< sal_uInt8 >( "back-color-idx" );
+            DumpColorIdx< sal_uInt8 >( "patt-color-idx" );
+            DumpPatternIdx< sal_uInt8 >();
+            DumpHex< sal_uInt8 >( "area-flags", "OBJ-FLAGS-AUTO" );
+            DumpColorIdx< sal_uInt8 >( "line-color-idx" );
+            DumpDec< sal_uInt8 >( "line-type", "OBJ-LINETYPE" );
+            DumpDec< sal_uInt8 >( "line-weight", "OBJ-LINEWEIGHT" );
+            DumpHex< sal_uInt8 >( "line-flags", "OBJ-FLAGS-AUTO" );
+            DumpHex< sal_uInt16 >( "frame-style", "OBJ-FRAMESTYLE-FLAGS" );
+            DumpHex< sal_uInt16 >( "chart-flags", "OBJ-CHART-FLAGS" );
+            DumpUnused( 16 );
+        break;
+    }
+}
+
+void WorkbookStreamObject::DumpObjRec8()
+{
 }
 
 // ============================================================================
@@ -2689,7 +2774,21 @@ VbaProjectStorageObject::VbaProjectStorageObject( const OleStorageObject& rParen
 void VbaProjectStorageObject::ImplDumpBody()
 {
     VbaProjectStreamObject( *this ).Dump();
-    OleStorageObject( *this, EXC_STORAGE_VBA ).Dump();
+    VbaStorageObject( *this ).Dump();
+}
+
+// ============================================================================
+
+VbaStorageObject::VbaStorageObject( const OleStorageObject& rParentStrg )
+{
+    OleStorageObject::Construct( rParentStrg, EXC_STORAGE_VBA );
+}
+
+void VbaStorageObject::ImplDumpBody()
+{
+    OleStreamObject( *this, CREATE_STRING( "dir" ) ).Dump();
+    OleStreamObject( *this, CREATE_STRING( "ThisWorkbook" ) ).Dump();
+    OleStreamObject( *this, CREATE_STRING( "_VBA_PROJECT" ) ).Dump();
 }
 
 // ============================================================================
@@ -2718,7 +2817,6 @@ Dumper::Dumper( SfxMedium& rMedium, SfxObjectShell* pDocShell )
 {
     ConfigRef xCfg( new Config( "XLSDUMPER" ) );
     DumperBase::Construct( xCfg, rMedium, pDocShell );
-    OlePropertyStreamObject::InitializeConfig( *xCfg );
 }
 
 void Dumper::ImplDumpBody()
