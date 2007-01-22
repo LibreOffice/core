@@ -1,28 +1,10 @@
 ﻿
-# Enable entire dumper (default=off). If dumper is disabled, no output into
-# a text file is done. This option does not affect the options 'enable-import'
-# and 'extract-storage-streams'.
-#   0=off, 1=on
-enable-dumper=1
+# dumper settings ============================================================
 
-# Enable import after dumping (default=on). Disabling this option allows
-# to dump a file without loading it. This option is independent from the
-# 'enable-dumper' option.
-#   0=off, 1=on
-enable-import=1
+# Path to base configuration data, relative to this file.
+include-config-file=../ftools/fdumper.dat
 
-# Extract storage streams to file system (default=off). This option is
-# independent from the 'enable-dumper' option.
-#   0=off, 1=on
-extract-storage-streams=0
-
-# Maximum size of binary stream dumps (default=infinite).
-max-binary-stream-size=0x1000
-
-# Maximum size of binary data blocks in content dumps (default=infinite).
-max-binary-data-size=0x0200
-
-# ----------------------------------------------------------------------------
+# BIFF record settings -------------------------------------------------------
 
 # Show total stream position of the record (default=on).
 #   0=off, 1=on
@@ -44,10 +26,6 @@ show-record-name=1
 # Show record contents (default=on).
 #   0=off, 1=on
 show-record-body=1
-
-# Shows unknown records or unknown trailing data as binary dump (default=on).
-#   0=off, 1=on
-show-trailing-unknown=1
 
 # Merge CONTINUE records with leading record (default=on).
 #   0=off - show CONTINUE records separately (hex dump)
@@ -122,22 +100,10 @@ merge-continue-record=1
 
 # common ---------------------------------------------------------------------
 
-unitconverter=CONV-PERCENT,1,%
 unitconverter=CONV-PERCENT-NEG,-1,%
-unitconverter=CONV-DEG,1,°
-unitconverter=CONV-INCH-TO-CM,2.54,cm
-unitconverter=CONV-TWIP-TO-PT,/20,pt
-unitconverter=CONV-PT-TO-CM,/28.346457,cm
-unitconverter=CONV-TWIP-TO-CM,/566.92913,cm
 unitconverter=CONV-COLWIDTH,/256,chars
 
 shortlist=BIFF,0,biff2,biff3,biff4,biff5,biff8
-
-constlist=BOOLEAN
-begin
-  0=FALSE
-  default=TRUE
-end
 
 constlist=ERRORCODES
 begin
@@ -246,82 +212,6 @@ begin
   2=string
   4=boolean
   16=error
-end
-
-constlist=CODEPAGES
-begin
-  367=ascii
-  437=ibm-437-us
-  708=iso-8859-6
-  720=ibm-720-arabic
-  737=ibm-737-greek
-  775=ibm-775-baltic
-  850=ibm-850-latin-1
-  852=ibm-852-latin-2-central-european
-  855=ibm-855-cyrillic
-  857=ibm-857-turkish
-  858=ibm-858-multilingual-latin-1-with-euro
-  860=ibm-860-portuguese
-  861=ibm-861-icelandic
-  862=ibm-862-hebrew
-  863=ibm-863-canadian-french
-  864=ibm-864-arabic
-  865=ibm-865-nordic
-  866=ibm-866-cyrillic-russian
-  869=ibm-869-greek-modern
-  874=win-874-thai
-  932=win-932-japanese-shift-jis
-  936=win-936-chinese-simplified-gbk
-  949=win-949-korean-wansung
-  950=win-950-chinese-traditional-big5
-  1200=utf-16
-  1250=win-1250-latin-2-central-european
-  1251=win-1251-cyrillic
-  1252=win-1252-latin-1
-  1253=win-1253-greek
-  1254=win-1254-turkish
-  1255=win-1255-hebrew
-  1256=win-1256-arabic
-  1257=win-1257-baltic
-  1258=win-1258-vietnamese
-  1361=win-1361-korean-johab
-  10000=apple-roman
-  10001=apple-japanese
-  10002=apple-chinese-traditional
-  10003=apple-korean
-  10004=apple-arabic
-  10005=apple-hebrew
-  10006=apple-greek
-  10007=apple-cyrillic
-  10008=apple-chinese-simplified
-  10010=apple-romanian
-  10017=apple-ukrainian
-  10029=apple-central-european-with-euro
-  10079=apple-icelandic
-  10081=apple-turkish
-  10082=apple-croatian
-  20127=ascii
-  20866=koi8-r
-  21866=koi8-u
-  28591=iso-8859-1
-  28592=iso-8859-2
-  28593=iso-8859-3
-  28594=iso-8859-4
-  28595=iso-8859-5
-  28596=iso-8859-6
-  28597=iso-8859-7
-  28598=iso-8859-8
-  28599=iso-8859-9
-  28605=iso-8859-15
-  32768=apple-romanian
-  32769=win-1252-latin-1
-  50220=iso-2022-jp
-  50225=iso-2022-kr
-  51932=euc-jp
-  51936=euc-cn
-  51949=euc-kr
-  65000=utf-7
-  65001=utf-8
 end
 
 # formulas -------------------------------------------------------------------
@@ -477,16 +367,16 @@ begin
   # worksheet records new in BIFF3, but supported in BIFF2 streams
   0x0200=DIMENSIONS,BLANK,,NUMBER,LABEL,BOOLERR,,
   0x027E=RK
-  # BIFF5 style BOFF
+  # BIFF5 style BOF
   0x0809=BOF
   # chart records
   0x1000=,CHUNITS,CHCHART,CHSERIES,CHSOURCELINK,,CHDATAFORMAT,CHLINEFORMAT
   0x1008=,CHMARKERFORMAT,CHAREAFORMAT,CHPIEFORMAT,CHATTACHEDLABEL,CHSTRING,,
-  0x1010=,,,,CHCHARTGROUP,CHLEGEND,CHSERIESLIST,CHBAR
+  0x1010=,,,,CHTYPEGROUP,CHLEGEND,CHSERIESLIST,CHBAR
   0x1018=CHLINE,CHPIE,CHAREA,CHSCATTER,CHCHARTLINE,CHAXIS,CHTICK,CHVALUERANGE
   0x1020=CHLABELRANGE,CHAXISLINE,CHFORMATLINK,,CHDEFAULTTEXT,CHTEXT,CHFONT,CHOBJECTLINK
   0x1028=,,,,,CHARROW,,CHARROWHEAD
-  0x1030=,,CHFRAME,CHBEGIN,CHEND,CHPLOTAREA,CHCHARTSIZE,CHRELPOSITION
+  0x1030=,,CHFRAME,CHBEGIN,CHEND,CHPLOTFRAME,CHCHARTSIZE,CHRELPOSITION
   0x1038=CHARROWRELPOS,,CHCHART3D,,,,,
 end
 
@@ -587,11 +477,12 @@ begin
   0x01B0=CONDFMT,CF,DVAL,,,DCONBIN,TXO,REFRESHALL
   0x01B8=HLINK,NLRDELNAME,CODENAME,SXFDBTYPE,PROT4REVPASS,,DV,
   0x0800=SCREENTIP,,,WEBQRYSETTINGS,WEBQRYTABLES,,,
-  0x0850=,CHWRAPPEDRECORD,,,,,,CHUNITPROPERTIES
+ 	0x0850=,CHWRAPPEDRECORD,,,,,,CHUNITPROPERTIES
+	0x0858=CHPIVOTREF,,,,,,,
   0x0860=,,SHEETLAYOUT,,,,,SHEETPROTECTION
   # chart records
   0x1058=,,,,,,,CH3DDATAFORMAT
-  0x1060=CHFONTBASE,CHPIEEXT,CHEXTRANGE,CHDATATABLE,CHPLOTGROWTH,CHSERINDEX,CHESCHERFORMAT,CHPIEEXTSETT
+  0x1060=CHFONTBASE,CHPIEEXT,CHLABELRANGE2,CHDATATABLE,CHPLOTGROWTH,CHSERINDEX,CHESCHERFORMAT,CHPIEEXTSETT
 end
 
 # simple records -------------------------------------------------------------
@@ -622,6 +513,7 @@ begin
   0x0045=uint16,dec,font-color-idx,COLORS
   0x0055=uint16,dec,default-col-width
   0x100B=uint16,dec,extrusion,CONV-PERCENT
+  0x100C=uint16,hex,flags,CHATTACHEDLABEL-FLAGS
   0x1018=uint16,hex,flags,CHLINE-FLAGS
   0x101A=uint16,hex,flags,CHAREA-FLAGS
   0x101C=uint16,dec,line-type,CHCHARTLINE-TYPE
@@ -653,6 +545,7 @@ begin
   include=SIMPLE-RECORDS-BIFF3
   0x0099=uint16,dec,standard-col-width,CONV-COLWIDTH
   0x009C=uint16,dec,func-group-count
+  0x103D=uint16,dec,bar-dist
   0x103E=uint16,hex,flags,CHRADAR-FLAGS
   0x103F=uint16,hex,flags,CHSURFACE-FLAGS
 end
@@ -747,6 +640,18 @@ begin
   0x0002=swap-negative
 end
 
+# CHATTACHEDLABEL ------------------------------------------------------------
+
+flagslist=CHATTACHEDLABEL-FLAGS
+begin
+  0x0001=show-value
+  0x0002=show-percent
+  0x0004=show-categ-percent
+  0x0008=smoothed
+  0x0010=show-categ
+  0x0020=show-bubble
+end
+
 # CHAXESSET ------------------------------------------------------------------
 
 shortlist=CHAXESSET-ID,0,primary,secondary
@@ -774,15 +679,15 @@ end
 flagslist=CHCHART3D-FLAGS
 begin
   ignore=0x0010
-  0x0001=perspective
+  0x0001=real3d
   0x0002=clustered
-  0x0004=auto-scaling
+  0x0004=auto-height
   0x0020=2d-plotarea
 end
 
-# CHCHARTGROUP ---------------------------------------------------------------
+# CHTYPEGROUP ----------------------------------------------------------------
 
-flagslist=CHCHARTGROUP-FLAGS
+flagslist=CHTYPEGROUP-FLAGS
 begin
   0x0001=varied-colors
 end
@@ -810,20 +715,6 @@ begin
   0x0001=excel4-colors
 end
 
-# CHEXTRANGE -----------------------------------------------------------------
-
-flagslist=CHEXTRANGE-FLAGS
-begin
-  0x0001=auto-minimum
-  0x0002=auto-maximum
-  0x0004=auto-major
-  0x0008=auto-minor
-  0x0010=date-axis
-  0x0020=auto-base
-  0x0040=auto-axis-cross
-  0x0080=auto-date
-end
-
 # CHFRAME --------------------------------------------------------------------
 
 shortlist=CHFRAME-FORMAT,0,standard,,,,shadow
@@ -844,8 +735,22 @@ shortlist=CHFRAMEPOS-SIZEMODE,1,manual,auto
 flagslist=CHLABELRANGE-FLAGS
 begin
   0x0001=cross-between-categ
-  0x0002=reverse-order
-  0x0004=maximum-axis-cross
+  0x0002=maximum-axis-cross
+  0x0004=reverse-order
+end
+
+# CHLABELRANGE2 --------------------------------------------------------------
+
+flagslist=CHLABELRANGE2-FLAGS
+begin
+  0x0001=auto-minimum
+  0x0002=auto-maximum
+  0x0004=auto-major
+  0x0008=auto-minor
+  0x0010=date-axis
+  0x0020=auto-base
+  0x0040=auto-axis-cross
+  0x0080=auto-date
 end
 
 # CHLEGEND -------------------------------------------------------------------
@@ -903,6 +808,28 @@ begin
   default=''
   -2=unknown
   -1=all-points
+end
+
+# CHPICFORMAT ----------------------------------------------------------------
+
+shortlist=CHPICFORMAT-BITMAP-MODE,1,stretched,stacked,stacked-scaled
+
+constlist=CHPICFORMAT-IMAGE-FORMAT
+begin
+  2=wmf
+  9=bmp
+  19=?emf
+end
+
+shortlist=CHPICFORMAT-ENV,1,windows,apple
+
+combilist=CHPICFORMAT-FLAGS
+begin
+  0x00FF=uint16,dec,environment,CHPICFORMAT-ENV
+  0x0100=format-only
+  0x0200=top-bottom
+  0x0400=front-back
+  0x0800=left-right
 end
 
 # CHPIE ----------------------------------------------------------------------
@@ -1000,8 +927,8 @@ begin
   0x0002=show-symbol
   0x0004=show-value
   0x0008=vertical
-  0x0010=use-stored
-  0x0020=default
+  0x0010=auto-text
+  0x0020=default-format
   0x0040=deleted
   0x0080=auto-fill
 end
@@ -1026,7 +953,11 @@ begin
   0x4000=show-categ
 end
 
-shortlist=CHTEXT-PLACEMENT,0,context,outside,inside,center,axis,above,below,left,right,auto,manual
+multilist=CHTEXT-PLACEMENT
+begin
+  default=''
+  0=context,outside,inside,center,axis,above,below,left,right,auto,manual
+end
 
 # CHTICK ---------------------------------------------------------------------
 
@@ -1173,6 +1104,67 @@ shortlist=FORMULA-RESULTTYPE,0,string,boolean,error,empty
 # HIDEOBJ --------------------------------------------------------------------
 
 shortlist=HIDEOBJ,0,show,placeholder,hide
+
+# OBJ ------------------------------------------------------------------------
+
+multilist=OBJ-TYPE-BIFF5
+begin
+  0=group,line,rect,oval,arc,chart,textbox,button,pic,polygon
+  10=,checkbox,optbutton,edit,label,dialog,spin,scrollbar,listbox,groupbox
+  20=dropdown
+end
+
+multilist=OBJ-TYPE-BIFF8
+begin
+  include=OBJ-TYPE-BIFF5
+  25=note
+  30=drawing
+end
+
+flagslist=OBJ-FLAGS-BIFF5
+begin
+  0x0001=selected
+  0x0002=auto-size
+  0x0004=auto-move
+  0x0010=protected
+  0x0080=grouped
+  0x0100=hidden
+  0x0200=visible
+  0x0400=printable
+end
+
+flagslist=OBJ-FLAGS-AUTO-BIFF5
+begin
+  0x0001=auto
+end
+
+shortlist=OBJ-LINETYPE,0,solid,dash,dot,dash-dot,dash-dot-dot,25%-pattern,50%-pattern,75%-pattern
+shortlist=OBJ-LINEWEIGHT,0,hair,thin,medium,thick
+
+shortlist=OBJ-ARROWHEAD-TYPE-BIFF5,0,none,open,filled,double-end-open,double-end-filled
+shortlist=OBJ-ARROWHEAD-WIDTH-BIFF5,0,narrow,medium,wide
+shortlist=OBJ-ARROWHEAD-LENGTH-BIFF5,0,short,medium,long
+
+combilist=OBJ-LINEENDS-BIFF5
+begin
+  0x000F=uint8,dec,arrowhead-type,OBJ-ARROWHEAD-TYPE
+  0x00F0=uint8,dec,arrowhead-width,OBJ-ARROWHEAD-WIDTH
+  0x0F00=uint8,dec,arrowhead-length,OBJ-ARROWHEAD-LENGTH
+end
+
+shortlist=OBJ-LINEDIR-BIFF5,0,topleft-to-bottomright,topright-to-bottomleft,bottomright-to-topleft,bottomleft-to-topright
+
+combilist=OBJ-FRAMESTYLE-FLAGS-BIFF5
+begin
+  0x0001=rounded
+  0x0002=shadow
+  0x03FC=uint16,dec,rounded-diameter
+end
+
+flagslist=OBJ-CHART-FLAGS-BIFF5
+begin
+  0x0001=linked-to-sheet
+end
 
 # NAME -----------------------------------------------------------------------
 
