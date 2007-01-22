@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapaction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:18:02 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,10 @@
 #include <cppcanvas/canvas.hxx>
 #include <action.hxx>
 
-class Point;
-class Size;
+namespace basegfx {
+    class B2DPoint;
+    class B2DVector;
+}
 class BitmapEx;
 
 /* Definition of internal::BitmapActionFactory class */
@@ -63,14 +65,14 @@ namespace cppcanvas
         public:
             /// Unscaled bitmap action, only references destination point
             static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
-                                                       const ::Point&   rDstPoint,
+                                                       const ::basegfx::B2DPoint& rDstPoint,
                                                        const CanvasSharedPtr&,
                                                        const OutDevState& );
 
             /// Scaled bitmap action, dest point and dest size
             static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
-                                                       const ::Point&   rDstPoint,
-                                                       const ::Size&    rDstSize,
+                                                       const ::basegfx::B2DPoint&  rDstPoint,
+                                                       const ::basegfx::B2DVector& rDstSize,
                                                        const CanvasSharedPtr&,
                                                        const OutDevState& );
 
