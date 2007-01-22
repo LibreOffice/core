@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:13:27 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,12 +633,12 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                     }
                 }
             }
-            sal_uInt16 nSize = (sal_uInt16)aPtAry.size();
+            sal_uInt16 i, nSize = (sal_uInt16)aPtAry.size();
             if ( nSize )
             {
                 Polygon aPoly( nSize );
-                for ( j = 0; j < nSize; j++ )
-                    aPoly[ (sal_uInt16)j ] = aPtAry[ j ];
+                for ( i = 0; i < nSize; i++ )
+                    aPoly[ i ] = aPtAry[ i ];
                 aPolyPoly.Insert( aPoly, POLYPOLY_APPEND );
             }
         }
