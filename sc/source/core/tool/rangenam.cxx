@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:23:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 12:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -540,20 +540,20 @@ void ScRangeData::MakeValidName( String& rName )        // static
     //  ungueltige Zeichen vorne weglassen
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
-    while ( nPos < nLen && !ScCompiler::IsWordChar( rName.GetChar(nPos) ) )
+    while ( nPos < nLen && !ScCompiler::IsWordChar( rName, nPos) )
         ++nPos;
     if ( nPos>0 )
         rName.Erase(0,nPos);
 
     //  wenn vorne ein ungueltiges Anfangszeichen steht, '_' davor
-    if ( rName.Len() && !ScCompiler::IsCharWordChar( rName.GetChar(0) ) )
+    if ( rName.Len() && !ScCompiler::IsCharWordChar( rName, 0 ) )
         rName.Insert('_',0);
 
     //  ungueltige durch '_' ersetzen
     nLen = rName.Len();
     for (nPos=0; nPos<nLen; nPos++)
     {
-        if ( !ScCompiler::IsWordChar( rName.GetChar(nPos) ) )
+        if ( !ScCompiler::IsWordChar( rName, nPos) )
             rName.SetChar( nPos, '_' );
     }
 
@@ -584,11 +584,11 @@ BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
         needs to be changed too. */
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
-    if ( !nLen || !ScCompiler::IsCharWordChar( rName.GetChar(nPos++) ) )
+    if ( !nLen || !ScCompiler::IsCharWordChar( rName, nPos++ ) )
         return FALSE;
     while ( nPos < nLen )
     {
-        if ( !ScCompiler::IsWordChar( rName.GetChar(nPos++) ) )
+        if ( !ScCompiler::IsWordChar( rName, nPos++ ) )
             return FALSE;
     }
     // Parse nicht auf VALID pruefen, es reicht, wenn irgendein Bestandteil
