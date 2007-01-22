@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@ namespace sdr
 
             void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
             void    executeMediaItem( const ::avmedia::MediaItem& rItem );
+
+            // #i72701#
+            void checkMediaWindowPosition(DisplayInfo& rDisplayInfo) const;
 
         protected:
 
