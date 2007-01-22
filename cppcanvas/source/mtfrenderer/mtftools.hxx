@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtftools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:41:15 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,21 @@ namespace cppcanvas
             @return the calculated transformation matrix.
          */
         ::basegfx::B2DHomMatrix& calcLogic2PixelLinearTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,
+                                                                 const VirtualDevice&       rVDev );
+
+        /** Construct a matrix that converts from logical to pixel
+            coordinate system.
+
+            This method calculates a matrix that approximates the
+            VirtualDevice's LogicToPixel conversion.
+
+            @param o_rMatrix
+            This matrix will receive the calculated transform, and is
+            also returned from this method.
+
+            @return the calculated transformation matrix.
+         */
+        ::basegfx::B2DHomMatrix& calcLogic2PixelAffineTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,
                                                                  const VirtualDevice&       rVDev );
 
         /** This method modifies the clip, to cancel the given
