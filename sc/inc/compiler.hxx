@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:16:39 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,21 +393,25 @@ public:
     BOOL HasModifiedRange();
 
     /// If the character is allowed as first character in sheet names or references
-    static inline BOOL IsCharWordChar( sal_Unicode c,
+    static inline BOOL IsCharWordChar( String const & rStr,
+                                       xub_StrLen nPos,
                                        const ScAddress::Convention eConv = ScAddress::CONV_OOO )
         {
+            sal_Unicode c = rStr.GetChar( nPos );
             return c < 128 ?
                 ((pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
-                ScGlobal::pCharClass->isLetterNumeric( c );
+                ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
         }
 
     /// If the character is allowed in sheet names or references
-    static inline BOOL IsWordChar( sal_Unicode c,
+    static inline BOOL IsWordChar( String const & rStr,
+                                   xub_StrLen nPos,
                                    const ScAddress::Convention eConv = ScAddress::CONV_OOO )
         {
+            sal_Unicode c = rStr.GetChar( nPos );
             return c < 128 ?
                 ((pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
-                ScGlobal::pCharClass->isLetterNumeric( c );
+                ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
         }
 
 private:
