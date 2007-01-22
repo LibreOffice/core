@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:06:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,10 @@ namespace basegfx
             return false;
 
         // test for rotation and shear
-        if(fTools::equalZero(get(0, 1)) && fTools::equalZero(get(1, 0)))
+        if(fTools::equalZero(get(0, 1))
+           && fTools::equalZero(get(1, 0))
+           && fTools::moreOrEqual(get(0,0), 0.0)
+           && fTools::moreOrEqual(get(1,1), 0.0))
         {
             // no rotation and shear, direct value extraction
             rRotate = rShearX = 0.0;
