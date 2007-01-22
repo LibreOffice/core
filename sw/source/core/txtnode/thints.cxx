@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:47:02 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,100 +221,95 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
     // This is a special case for RES_TXTATR_INETFMT and
     // RES_TXTATR_CJK_RUBY.
     //
-    if ( !bNoLengthAttribute ) // nothing to do for no length attributes
+    if ( RES_TXTATR_INETFMT == nWhich || RES_TXTATR_CJK_RUBY == nWhich )
     {
-        if ( RES_TXTATR_INETFMT == nWhich || RES_TXTATR_CJK_RUBY == nWhich )
+        for ( USHORT i = 0; i < Count(); ++i )
         {
-            for ( USHORT i = 0; i < Count(); ++i )
+            SwTxtAttr* pOther = GetHt(i);
+
+            if ( nWhich == pOther->Which() )
             {
-                SwTxtAttr* pOther = GetHt(i);
+                xub_StrLen nOtherStart = *pOther->GetStart();
+                const xub_StrLen nOtherEnd = *pOther->GetEnd();
 
-                if ( nWhich == pOther->Which() )
-                    //||
-                    // RES_TXTATR_INETFMT == nWhich && RES_TXTATR_AUTOFMT == pOther->Which() )
+                // Check if start of new attribute overlaps with pOther.
+                // Split pOther if necessary:
+                if ( nOtherStart < nThisStart && nThisStart < nOtherEnd )
                 {
-                    xub_StrLen nOtherStart = *pOther->GetStart();
-                    const xub_StrLen nOtherEnd = *pOther->GetEnd();
+                    SwTxtAttr* pNewAttr = rNode.MakeTxtAttr( pOther->GetAttr(), nOtherStart, nThisStart );
+                    aInsDelHints.push_back( pNewAttr );
 
-                    // Check if start of new attribute overlaps with pOther.
-                    // Split pOther if necessary:
-                    if ( nOtherStart < nThisStart && nThisStart < nOtherEnd )
-                    {
-                        SwTxtAttr* pNewAttr = rNode.MakeTxtAttr( pOther->GetAttr(), nOtherStart, nThisStart );
-                        aInsDelHints.push_back( pNewAttr );
-
-                        if( pHistory ) pHistory->Add( pOther );
-                        *pOther->GetStart() = nThisStart;
-                        if( pHistory ) pHistory->Add( pOther, TRUE );
-                        nOtherStart = nThisStart;
-                    }
-
-                    // Check if end of new attribute overlaps with pOther:
-                    // Split pOther if necessary:
-                    if ( nOtherStart < nThisEnd && nThisEnd < nOtherEnd )
-                    {
-                        SwTxtAttr* pNewAttr = rNode.MakeTxtAttr( pOther->GetAttr(), nOtherStart, nThisEnd );
-                        aInsDelHints.push_back( pNewAttr );
-
-                        if( pHistory ) pHistory->Add( pOther );
-                        *pOther->GetStart() = nThisEnd;
-                        if( pHistory ) pHistory->Add( pOther, TRUE );
-                    }
-                }
-            }
-
-            // Insert the newly created attributes:
-            SwCharFmt* pFmt = rNode.GetDoc()->GetCharFmtFromPool( RES_TXTATR_INETFMT == nWhich ?
-                                                                  RES_POOLCHR_INET_NORMAL :
-                                                                  RES_POOLCHR_RUBYTEXT );
-
-            for ( aIter = aInsDelHints.begin(); aIter != aInsDelHints.end(); ++aIter )
-            {
-                if ( RES_TXTATR_INETFMT == nWhich )
-                {
-                    SwTxtINetFmt* pInetAttr = static_cast<SwTxtINetFmt*>(*aIter);
-                    pInetAttr->ChgTxtNode( &rNode );
-                    pFmt->Add( pInetAttr );
-
+                    if( pHistory ) pHistory->Add( pOther );
+                    *pOther->GetStart() = nThisStart;
+                    if( pHistory ) pHistory->Add( pOther, TRUE );
+                    nOtherStart = nThisStart;
                 }
 
-                else
+                // Check if end of new attribute overlaps with pOther:
+                // Split pOther if necessary:
+                if ( nOtherStart < nThisEnd && nThisEnd < nOtherEnd )
                 {
-                    SwTxtRuby* pRubyAttr = static_cast<SwTxtRuby*>(*aIter);
-                    pRubyAttr->ChgTxtNode( &rNode );
-                    pFmt->Add( pRubyAttr );
+                    SwTxtAttr* pNewAttr = rNode.MakeTxtAttr( pOther->GetAttr(), nOtherStart, nThisEnd );
+                    aInsDelHints.push_back( pNewAttr );
 
-                }
-
-                SwpHintsArr::Insert( *aIter );
-                if ( pHistory ) pHistory->Add( *aIter, TRUE );
-            }
-
-            aInsDelHints.clear();
-
-            // Now delete all attributes of the same type as the new one
-            // which are fully covered by the new attribute:
-            for ( USHORT i = 0; i < Count(); ++i )
-            {
-                SwTxtAttr* pOther = GetHt(i);
-                if ( nWhich == pOther->Which() )
-                {
-                    const xub_StrLen nOtherStart = *pOther->GetStart();
-                    const xub_StrLen nOtherEnd = *pOther->GetEnd();
-
-                    if ( nOtherStart >= nThisStart && nOtherEnd <= nThisEnd )
-                        aInsDelHints.push_back( pOther );
+                    if( pHistory ) pHistory->Add( pOther );
+                    *pOther->GetStart() = nThisEnd;
+                    if( pHistory ) pHistory->Add( pOther, TRUE );
                 }
             }
-            for ( aIter = aInsDelHints.begin(); aIter != aInsDelHints.end(); ++aIter )
-            {
-                Delete( *aIter );
-                rNode.DestroyAttr( *aIter );
-            }
-
-            SwpHintsArr::Insert( &rNewHint );
-            return;
         }
+
+        // Insert the newly created attributes:
+        SwCharFmt* pFmt = rNode.GetDoc()->GetCharFmtFromPool( RES_TXTATR_INETFMT == nWhich ?
+                                                              RES_POOLCHR_INET_NORMAL :
+                                                              RES_POOLCHR_RUBYTEXT );
+
+        for ( aIter = aInsDelHints.begin(); aIter != aInsDelHints.end(); ++aIter )
+        {
+            if ( RES_TXTATR_INETFMT == nWhich )
+            {
+                SwTxtINetFmt* pInetAttr = static_cast<SwTxtINetFmt*>(*aIter);
+                pInetAttr->ChgTxtNode( &rNode );
+                pFmt->Add( pInetAttr );
+
+            }
+
+            else
+            {
+                SwTxtRuby* pRubyAttr = static_cast<SwTxtRuby*>(*aIter);
+                pRubyAttr->ChgTxtNode( &rNode );
+                pFmt->Add( pRubyAttr );
+
+            }
+
+            SwpHintsArr::Insert( *aIter );
+            if ( pHistory ) pHistory->Add( *aIter, TRUE );
+        }
+
+        aInsDelHints.clear();
+
+        // Now delete all attributes of the same type as the new one
+        // which are fully covered by the new attribute:
+        for ( USHORT i = 0; i < Count(); ++i )
+        {
+            SwTxtAttr* pOther = GetHt(i);
+            if ( nWhich == pOther->Which() )
+            {
+                const xub_StrLen nOtherStart = *pOther->GetStart();
+                const xub_StrLen nOtherEnd = *pOther->GetEnd();
+
+                if ( nOtherStart >= nThisStart && nOtherEnd <= nThisEnd )
+                    aInsDelHints.push_back( pOther );
+            }
+        }
+        for ( aIter = aInsDelHints.begin(); aIter != aInsDelHints.end(); ++aIter )
+        {
+            Delete( *aIter );
+            rNode.DestroyAttr( *aIter );
+        }
+
+        SwpHintsArr::Insert( &rNewHint );
+        return;
     }
 
     ASSERT( RES_TXTATR_CHARFMT == rNewHint.Which() ||
@@ -397,8 +392,6 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
-                 //&&
-                 //RES_TXTATR_INETFMT != pOther->Which() )
                 continue;
 
             const xub_StrLen nOtherStart = *pOther->GetStart();
