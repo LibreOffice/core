@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_string.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:48:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:37:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,9 @@ bool isInCurrentEnvironment(std::string const& _sString)
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
-int main( int argc, char* argv[] )
+int main( int /* argc */, char* /* argv */ [] )
 #else
-int _cdecl main( int argc, char* argv[] )
+    int _cdecl main( int /* argc */ , char* /* argv */ [] )
 #endif
 {
     string sLine1 = "osl_Socket.ctor.ctors_001";
@@ -135,4 +135,12 @@ int _cdecl main( int argc, char* argv[] )
     }
 
     // cout << "rest string: " << sRest << endl;
+
+    int nCount = 10;
+    do {
+        cout << nCount << endl;
+        nCount --;
+    }
+    while (nCount >= 0);
+    cout << nCount << endl;
 }
