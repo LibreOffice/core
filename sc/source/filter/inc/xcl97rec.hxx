@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:53:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,6 +553,15 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+};
+
+
+
+
+class XclRefmode : public XclExpBoolRecord
+{
+public:
+                                XclRefmode( const ScDocument& );
 };
 
 
