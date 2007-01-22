@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofunocontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:28 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@ namespace sdr { namespace contact {
 
     protected:
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact );
+
+        // ViewContactOfSdrObj overridables
+        virtual sal_Bool ShouldPaintObject( DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC );
 
     private:
         ViewContactOfUnoControl();                                            // never implemented
