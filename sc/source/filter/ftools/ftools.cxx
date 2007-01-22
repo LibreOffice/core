@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:21 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,10 +198,10 @@ void ScfTools::ConvertToScSheetName( String& rName )
 void ScfTools::ConvertToScDefinedName( String& rName )
 {
     xub_StrLen nLen = rName.Len();
-    if( nLen && !ScCompiler::IsCharWordChar( rName.GetChar( 0 ) ) )
+    if( nLen && !ScCompiler::IsCharWordChar( rName, 0 ) )
         rName.SetChar( 0, '_' );
     for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )
-        if( !ScCompiler::IsWordChar( rName.GetChar( nPos ) ) )
+        if( !ScCompiler::IsWordChar( rName, nPos ) )
             rName.SetChar( nPos, '_' );
 }
 
