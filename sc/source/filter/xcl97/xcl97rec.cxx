@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:34:56 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1386,3 +1386,8 @@ sal_Size XclDelta::GetLen() const
 
 
 
+
+XclRefmode::XclRefmode( const ScDocument& rDoc ) :
+    XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != ScAddress::CONV_XL_R1C1 )
+{
+}
