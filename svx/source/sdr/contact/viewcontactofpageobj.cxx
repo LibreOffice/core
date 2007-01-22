@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:38:19 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:14:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ namespace sdr
                 aDisplayInfo.SetOutputDevice(pOut);
 
                 // make MasterPages visible
-                aDisplayInfo.SetPagePainting(sal_True);
+                aDisplayInfo.SetPagePainting(sal_True); // #i72889#
 
                 // keep draw hierarchy up-to-date
                 PreProcessDisplay(aDisplayInfo);
