@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:11:20 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:15:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,17 @@ namespace sdr
             getOutputDevice().EnableMapMode(sal_False);
             ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(sal_False);
 
+#ifdef DBG_UTIL
+            // #i72754# possible graphical region test only with non-pro
+            static bool bDoPaintForVisualControl(false);
+            if(bDoPaintForVisualControl)
+            {
+                getOutputDevice().SetLineColor(COL_LIGHTGREEN);
+                getOutputDevice().SetFillColor();
+                getOutputDevice().DrawRect(rRegionRectanglePixel);
+            }
+#endif
+
             // restore the area
             const Point aTopLeft(rRegionRectanglePixel.TopLeft());
             const Size aSize(rRegionRectanglePixel.GetSize());
@@ -177,6 +188,10 @@ namespace sdr
                 Window& rWindow = (Window&)rSource;
                 Region aPaintRegionPixel = rWindow.LogicToPixel(rWindow.GetPaintRegion());
                 aRegion.Intersect(aPaintRegionPixel);
+
+                // #i72754# Make sure content is completetly rendered, the window
+                // will be used as source of a DrawOutDev soon
+                rWindow.Flush();
             }
 
             // also limit to buffer size
@@ -204,6 +219,8 @@ namespace sdr
                     aTopLeft, aSize, // source
                     rSource);
 
+#ifdef DBG_UTIL
+                // #i72754# possible graphical region test only with non-pro
                 static bool bDoPaintForVisualControl(false);
                 if(bDoPaintForVisualControl)
                 {
@@ -211,6 +228,7 @@ namespace sdr
                     getOutputDevice().SetFillColor();
                     getOutputDevice().DrawRect(aRegionRectanglePixel);
                 }
+#endif
             }
 
             aRegion.EndEnumRects(aRegionHandle);
