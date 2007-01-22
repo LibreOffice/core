@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:25:02 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1107,8 +1107,12 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             bInRegenerateStrmName = true;
             xub_StrLen nExtPos = _aStrmName.Search( '.' );
             String aExtStr = _aStrmName.Copy( nExtPos );
-            _aStrmName = String( GetGrfObj().GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
-            _aStrmName += aExtStr;
+            Graphic aGraphic( GetGrfObj().GetGraphic() );
+            if ( aGraphic.GetType() != GRAPHIC_NONE )
+            {
+                _aStrmName = String( GetGrfObj().GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
+                _aStrmName += aExtStr;
+            }
             bInRegenerateStrmName = false;
         }
         // <--
