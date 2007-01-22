@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:08:55 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,6 +336,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShow > createSlideShow() const;
 
+    void setAutoSaveState( bool bOn );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShow > mxShow;
     comphelper::ImplementationReference< ::sd::SlideShowView, ::com::sun::star::presentation::XSlideShowView > mxView;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
@@ -350,7 +352,6 @@ private:
 
     SfxItemSet*     mpNewAttr;
     ShowWindow*     mpShowWindow;
-    SvtSaveOptions* mpSaveOptions;
     PushButton*     mpTimeButton;
 
     boost::shared_ptr< AnimationSlideController > mpSlideController;
@@ -374,7 +375,7 @@ private:
     bool            mbSetOnlineSpelling;
     bool            mbDisposed;
     bool            mbMouseIsDrawing;
-    bool            mbAutoSaveSuppressed;
+    bool            mbAutoSaveWasOn;
     bool            mbRehearseTimings;
     bool            mbDesignMode;
     bool            mbIsPaused;
