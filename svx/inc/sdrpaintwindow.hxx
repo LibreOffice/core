@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpaintwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:43:49 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,10 @@ private:
     // The RedrawRegion used for rendering, Maybe expanded by ExpandPaintClipRegion
     Region                                              maRedrawRegion;
 
+    // bitfield
+    // #i72889# flag if this is only a temporary target for repaint, default is false
+    unsigned                                            mbTemporaryTarget : 1;
+
     // helpers
     // create mpOverlayManager member on demand
     void impCreateOverlayManager();
@@ -139,6 +143,13 @@ public:
     // RedrawRegion, maybe expanded by ExpandPaintClipRegion
     const Region& GetRedrawRegion() const;
     void SetRedrawRegion(const Region& rNew);
+
+    // #i72889# read/write access to TempoparyTarget
+    bool getTemporaryTarget() const { return (bool)mbTemporaryTarget; }
+    void setTemporaryTarget(bool bNew) { if(bNew != (bool)mbTemporaryTarget) mbTemporaryTarget = bNew; }
+
+    // #i72889# get target output device, take into account output buffering
+    OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return mrOutputDevice; }
 };
 
 // typedefs for a list of SdrPaintWindows
