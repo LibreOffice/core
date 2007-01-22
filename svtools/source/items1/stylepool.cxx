@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylepool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:22:45 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #endif
 
 #include <vector>
+#include <map>
 
 #include "stylepool.hxx"
 #include "itemiter.hxx"
@@ -146,10 +147,12 @@ namespace {
 
     class Iterator : public IStylePoolIteratorAccess
     {
+        std::map< const SfxItemSet*, Node >& rRoot;
+        std::map< const SfxItemSet*, Node >::iterator pCurrNode;
         Node* pNode;
-        bool bStart;
     public:
-        Iterator( Node& rNode ) : pNode(&rNode), bStart(true) {}
+        Iterator( std::map< const SfxItemSet*, Node >& rR )
+            : rRoot( rR ), pCurrNode( rR.begin() ), pNode(0) {}
         virtual StylePool::SfxItemSet_Pointer_t getNext();
         virtual ::rtl::OUString getName();
     };
@@ -157,17 +160,18 @@ namespace {
     StylePool::SfxItemSet_Pointer_t Iterator::getNext()
     {
         StylePool::SfxItemSet_Pointer_t pReturn;
-        if( pNode )
+        while( pNode || pCurrNode != rRoot.end() )
         {
-            if( bStart )
+            if( !pNode )
             {
-                bStart = false;
+                pNode = &pCurrNode->second;
+                ++pCurrNode;
                 if( pNode->hasItemSet() )
                     return pNode->getItemSet();
             }
             pNode = pNode->nextItemSet( pNode );
             if( pNode )
-                pReturn = pNode->getItemSet();
+                return pNode->getItemSet();
         }
         return pReturn;
     }
@@ -175,7 +179,7 @@ namespace {
     ::rtl::OUString Iterator::getName()
     {
         ::rtl::OUString aString;
-        if( !bStart && pNode )
+        if( pNode )
             aString = StylePool::nameOf( pNode->getItemSet() );
         return aString;
     }
@@ -198,7 +202,7 @@ namespace {
 class StylePoolImpl
 {
 private:
-    Node aRoot;
+    std::map< const SfxItemSet*, Node > aRoot;
     sal_Int32 nCount;
 public:
     StylePoolImpl() : nCount(0) {}
@@ -209,7 +213,7 @@ public:
 
 StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
 {
-    Node* pCurNode = &aRoot;
+    Node* pCurNode = &aRoot[ rSet.GetParent() ];
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
     // Every SfxPoolItem in the SfxItemSet causes a step deeper into the tree,
