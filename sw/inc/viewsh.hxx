@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:10:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,11 +246,15 @@ public:
 
     void InvalidateWindows( const SwRect &rRect );
 
-    // #i68597# paint pre- and post-processing
-    void DLPrePaint(const Region& rRegion);
-    void DLPostPaint(const Region& rRegion);
-    void DLPreOutsidePaint(const Region& rRegion);
-    void DLPostOutsidePaint(const Region& rRegion);
+    //////////////////////////////////////////////////////////////////////////////
+    // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
+protected:
+    sal_uInt32              mnPrePostPaintCount;
+    OutputDevice*           mpPrePostOutDev;
+public:
+    void DLPrePaint2(const Region& rRegion);
+    void DLPostPaint2();
+    //////////////////////////////////////////////////////////////////////////////
 
     virtual void Paint(const Rectangle &rRect);
     sal_Bool IsPaintInProgress() const { return bPaintInProgress; }
