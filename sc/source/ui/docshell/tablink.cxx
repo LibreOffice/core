@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:47:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,9 +299,19 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
             //  kopieren
 
             SCTAB nSrcTab = 0;
-            BOOL bFound = TRUE;         // kein Tab-Name angegeben: immer die erste
-            if ( aTabName.Len() && !bAutoTab )
-                bFound = pSrcDoc->GetTable( aTabName, nSrcTab );
+            bool bFound = false;
+            /*  #i71497# check if external document is loaded successfully,
+                otherwise we may find the empty default sheet "Sheet1" in
+                pSrcDoc, even if the document does not exist. */
+            if( pMed->GetError() == 0 )
+            {
+                // no sheet name -> use first sheet
+                if ( aTabName.Len() && !bAutoTab )
+                    bFound = pSrcDoc->GetTable( aTabName, nSrcTab );
+                else
+                    bFound = true;
+            }
+
             if (bFound)
                 pDoc->TransferTab( pSrcDoc, nSrcTab, nTab, FALSE,       // nicht neu einfuegen
                                         (nMode == SC_LINK_VALUE) );     // nur Werte?
