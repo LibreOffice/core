@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-09 11:18:44 $
+#   last change: $Author: obo $ $Date: 2007-01-22 14:47:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ BEGIN
     $packageformat = "";
     $packagename = "";
     $packagelist = "";
+    $absolutepackagelistpath = "";
     $addpackagelist = "";
     $is_unix_multi = 0;
     $unixmultipath = "";
@@ -258,6 +259,7 @@ BEGIN
     $nsisfilename = "Nsis.mlf";
     $langpackfilename = "Langpack.mlf";
     $linuxlinkrpms = "gid_Module_Root_Files_3,gid_Module_Root_Files_4,gid_Module_Root_Files_5";
+    $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
     @requiredpackages = ();
     %componentconditions = ();
