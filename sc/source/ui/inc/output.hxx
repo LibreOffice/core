@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:54:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,12 +243,12 @@ public:
     void    DrawClear();
     void    DrawPageBorder( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY );
 
-    // #109985#
-    //void  DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogStX, long nLogStY );
-    void    DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, long nLogStX, long nLogStY );
+    // #i72502# printer only command set
+    Point PrePrintDrawingLayer(long nLogStX, long nLogStY );
+    void PostPrintDrawingLayer();
+    void PrintDrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, const Point& rMMOffset);
 
-                                                    // nur Bildschirm:
-
+    // nur Bildschirm:
     // #109985#
     //void  DrawingSingle( USHORT nLayer, USHORT nObjectFlags, USHORT nDummyFlags );
     void    DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode);
