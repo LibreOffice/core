@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:40:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:29:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -844,10 +844,10 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             // Groesse wird eingestellt
             else if( nMode == 2 )
             {
-                Bitmap  aBitmap( rGraphic.GetBitmap() );
-                aBitmap.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
-                aBitmap.SetPrefSize( Size( nLogicalWidth, nLogicalHeight ) );
-                aGraphic = Graphic( aBitmap );
+                BitmapEx aBitmapEx( rGraphic.GetBitmapEx() );
+                aBitmapEx.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+                aBitmapEx.SetPrefSize( Size( nLogicalWidth, nLogicalHeight ) );
+                aGraphic = Graphic( aBitmapEx );
             }
             else
                 aGraphic = rGraphic;
