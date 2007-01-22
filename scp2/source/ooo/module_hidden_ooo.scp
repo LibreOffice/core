@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 12:40:05 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Bin_Crashreport,
 	gid_File_Bin_Crashreport_Script,
 	gid_File_Bin_Crashreport_Com,
-	gid_File_Bin_Deregister_Extensions,
 	gid_File_Bin_Gnome_Open_Url,
 	gid_File_Bin_Gnome_Open_Url_Bin,
 	gid_File_Bin_Javaldx,
@@ -58,7 +57,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Bin_Pluginapp,
 	gid_File_Bin_Senddoc,
 	gid_File_Bin_Gengal,
-	gid_File_Bin_Register_Extensions,
 	gid_File_Script_Gengal,
 	gid_File_Bin_Soffice,
 	gid_File_Bin_Soffice_Bin,
@@ -116,7 +114,8 @@ Module gid_Module_Root_Files_3
 	Description = "gid_Module_Root_Files_3";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Jar_Xalan,
+	Files = (gid_File_Dat_Root3,
+	gid_File_Jar_Xalan,
 	gid_File_Jar_Serializer,
 	gid_File_Jar_Unoil,
 	gid_File_Jar_XercesImpl,
@@ -167,7 +166,8 @@ Module gid_Module_Root_Files_4
 	Description = "gid_Module_Root_Files_4";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Filter_Eme,
+	Files = (gid_File_Dat_Root4,
+	gid_File_Filter_Eme,
 	gid_File_Filter_Emp,
 	gid_File_Filter_Icg,
 	gid_File_Filter_Egi,
@@ -279,7 +279,8 @@ Module gid_Module_Root_Files_5
 	Description = "gid_Module_Root_Files_5";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Lib_Dict_Ja,
+	Files = (gid_File_Dat_Root5,
+	gid_File_Lib_Dict_Ja,
 	gid_File_Lib_Dict_Zh,
     gid_File_Lib_Collator_Data,
     gid_File_Lib_Index_Data,
