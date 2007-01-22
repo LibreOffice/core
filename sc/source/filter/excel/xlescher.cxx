@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:17:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,14 @@
 #include "xlescher.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
+#endif
+
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
+
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
@@ -52,6 +60,11 @@
 #endif
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::drawing::XControlShape;
+using ::com::sun::star::awt::XControlModel;
 
 // Structs and classes ========================================================
 
@@ -299,7 +312,16 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTxoData& rData )
 
 // ----------------------------------------------------------------------------
 
-OUString XclTbxControlHelper::GetServiceName( sal_uInt16 nCtrlType )
+Reference< XControlModel > XclControlObjHelper::GetModelFromShape( Reference< XShape > xShape )
+{
+    Reference< XControlModel > xCtrlModel;
+    Reference< XControlShape > xCtrlShape( xShape, UNO_QUERY );
+    if( xCtrlShape.is() )
+        xCtrlModel = xCtrlShape->getControl();
+    return xCtrlModel;
+}
+
+OUString XclControlObjHelper::GetTbxServiceName( sal_uInt16 nCtrlType )
 {
     OUString aName;
 #define LCL_CREATE_NAME( name ) CREATE_OUSTRING( "com.sun.star.form.component." name )
@@ -314,13 +336,13 @@ OUString XclTbxControlHelper::GetServiceName( sal_uInt16 nCtrlType )
         case EXC_OBJ_CMO_COMBOBOX:      aName = LCL_CREATE_NAME( "ListBox" );       break;  // it's a dropdown listbox
         case EXC_OBJ_CMO_SPIN:          aName = LCL_CREATE_NAME( "SpinButton" );    break;
         case EXC_OBJ_CMO_SCROLLBAR:     aName = LCL_CREATE_NAME( "ScrollBar" );     break;
-        default:    DBG_ERRORFILE( "XclTbxControlHelper::GetServiceName - unknown control type" );
+        default:    DBG_ERRORFILE( "XclControlObjHelper::GetTbxServiceName - unknown control type" );
     }
 #undef LCL_CREATE_NAME
     return aName;
 }
 
-OUString XclTbxControlHelper::GetControlName( sal_uInt16 nCtrlType )
+OUString XclControlObjHelper::GetTbxControlName( sal_uInt16 nCtrlType )
 {
     OUString aName;
     switch( nCtrlType )
@@ -334,12 +356,12 @@ OUString XclTbxControlHelper::GetControlName( sal_uInt16 nCtrlType )
         case EXC_OBJ_CMO_COMBOBOX:      aName = CREATE_OUSTRING( "ComboBox" );      break;
         case EXC_OBJ_CMO_SPIN:          aName = CREATE_OUSTRING( "SpinButton" );    break;
         case EXC_OBJ_CMO_SCROLLBAR:     aName = CREATE_OUSTRING( "ScrollBar" );     break;
-        default:    DBG_ERRORFILE( "XclTbxControlHelper::GetControlName - unknown control type" );
+        default:    DBG_ERRORFILE( "XclControlObjHelper::GetTbxControlName - unknown control type" );
     }
     return aName;
 }
 
-OUString XclTbxControlHelper::GetListenerType( sal_uInt16 nCtrlType )
+OUString XclControlObjHelper::GetTbxListenerType( sal_uInt16 nCtrlType )
 {
     OUString aType;
     switch( nCtrlType )
@@ -362,12 +384,12 @@ OUString XclTbxControlHelper::GetListenerType( sal_uInt16 nCtrlType )
             aType = CREATE_OUSTRING( "XAdjustmentListener" );
         break;
         default:
-            DBG_ERRORFILE( "XclTbxControlHelper::GetListenerType - unknown control type" );
+            DBG_ERRORFILE( "XclControlObjHelper::GetTbxListenerType - unknown control type" );
     }
     return aType;
 }
 
-OUString XclTbxControlHelper::GetEventMethod( sal_uInt16 nCtrlType )
+OUString XclControlObjHelper::GetTbxEventMethod( sal_uInt16 nCtrlType )
 {
     OUString aMethod;
     switch( nCtrlType )
@@ -390,12 +412,12 @@ OUString XclTbxControlHelper::GetEventMethod( sal_uInt16 nCtrlType )
             aMethod = CREATE_OUSTRING( "adjustmentValueChanged" );
         break;
         default:
-            DBG_ERRORFILE( "XclTbxControlHelper::GetEventMethod - unknown control type" );
+            DBG_ERRORFILE( "XclControlObjHelper::GetTbxEventMethod - unknown control type" );
     }
     return aMethod;
 }
 
-OUString XclTbxControlHelper::GetScriptType()
+OUString XclControlObjHelper::GetTbxScriptType()
 {
     return CREATE_OUSTRING( "Script" );
 }
@@ -403,12 +425,12 @@ OUString XclTbxControlHelper::GetScriptType()
 #define EXC_TBX_MACRONAME_PRE "vnd.sun.star.script:Standard."
 #define EXC_TBX_MACRONAME_SUF "?language=Basic&location=document"
 
-OUString XclTbxControlHelper::GetScMacroName( const String& rXclMacroName )
+OUString XclControlObjHelper::GetScMacroName( const String& rXclMacroName )
 {
     return CREATE_OUSTRING( EXC_TBX_MACRONAME_PRE ) + rXclMacroName + CREATE_OUSTRING( EXC_TBX_MACRONAME_SUF );
 }
 
-String XclTbxControlHelper::GetXclMacroName( const OUString& rScMacroName )
+String XclControlObjHelper::GetXclMacroName( const OUString& rScMacroName )
 {
     static const OUString saMacroNamePre = CREATE_OUSTRING( EXC_TBX_MACRONAME_PRE );
     static const OUString saMacroNameSuf = CREATE_OUSTRING( EXC_TBX_MACRONAME_SUF );
