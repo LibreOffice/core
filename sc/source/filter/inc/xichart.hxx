@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:58:48 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -953,7 +953,7 @@ private:
     XclImpChSerErrorBarRef mxXErrorBar;     /// Settings for X error bar (CHSERERRORBAR record).
     XclImpChSerErrorBarRef mxYErrorBar;     /// Settings for Y error bar (CHSERERRORBAR record).
     XclChOrientation    meOrient;           /// Orientation of the series.
-    sal_uInt16          mnGroupIdx;         /// Chart group (CHCHARTGROUP group) this series is assigned to.
+    sal_uInt16          mnGroupIdx;         /// Chart group (CHTYPEGROUP group) this series is assigned to.
     sal_uInt16          mnSeriesIdx;        /// 0-based series index.
     sal_uInt16          mnParentIdx;        /// 0-based index of parent series (trend lines and error bars).
     bool                mbHasValue;         /// true = Has valid series values.
@@ -1072,9 +1072,9 @@ typedef ScfRef< XclImpChDropBar > XclImpChDropBarRef;
 
 // ----------------------------------------------------------------------------
 
-/** Represents the CHCHARTGROUP record group describing formats of an axes set.
+/** Represents the CHTYPEGROUP record group describing formats of an axes set.
 
-    The CHCHARTGROUP group consists of: CHCHARTGROUP, CHBEGIN, a chart type
+    The CHTYPEGROUP group consists of: CHTYPEGROUP, CHBEGIN, a chart type
     record (e.g. CHBAR, CHLINE, CHAREA, CHPIE, ...), CHCHART3D, CHLEGEND group,
     CHDROPBAR groups, CHCHARTLINE groups (CHCHARTLINE with CHLINEFORMAT),
     CHDATAFORMAT group, CHEND.
@@ -1087,9 +1087,9 @@ public:
 public:
     explicit            XclImpChChartGroup( const XclImpChRoot& rRoot );
 
-    /** Reads the CHCHARTGROUP record (called by base class). */
+    /** Reads the CHTYPEGROUP record (called by base class). */
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
-    /** Reads a record from the CHCHARTGROUP group (called by base class). */
+    /** Reads a record from the CHTYPEGROUP group (called by base class). */
     virtual void        ReadSubRecord( XclImpStream& rStrm );
     /** Final processing after reading the entire chart. */
     void                Finalize();
@@ -1121,7 +1121,7 @@ public:
     inline XclImpChLegendRef GetLegend() const { return mxLegend; }
 
     /** Returns true, if points of a series have varying automatic area format (only for a single series in this group). */
-    inline bool         IsVarPointFormat() const { return ::get_flag( maData.mnFlags, EXC_CHCHARTGROUP_VARIED ); }
+    inline bool         IsVarPointFormat() const { return ::get_flag( maData.mnFlags, EXC_CHTYPEGROUP_VARIED ); }
     /** Returns the default series data format. */
     inline XclImpChDataFormatRef GetGroupFormat() const { return mxGroupFmt; }
 
@@ -1146,7 +1146,7 @@ private:
     typedef XclImpChMap< sal_uInt16, XclImpChLineFormat >   XclImpChLineFormatMap;
     typedef ::std::set< sal_uInt16 >                        UInt16Set;
 
-    XclChChartGroup     maData;             /// Contents of the CHCHARTGROUP record.
+    XclChChartGroup     maData;             /// Contents of the CHTYPEGROUP record.
     XclImpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).
     XclImpChChart3dRef  mxChart3d;          /// 3D settings (CHCHART3D record).
     XclImpChLegendRef   mxLegend;           /// Chart legend (CHLEGEND group).
@@ -1315,7 +1315,7 @@ struct XclImpChAxisHelper
 
     The CHAXESSET group consists of: CHAXESSET, CHBEGIN, CHFRAMEPOS, CHAXIS
     groups, CHTEXT groups, CHPLOTFRAME group (CHPLOTFRAME with CHFRAME group),
-    CHCHARTGROUP group, CHEND.
+    CHTYPEGROUP group, CHEND.
  */
 class XclImpChAxesSet : public XclImpChGroupBase, protected XclImpChRoot
 {
@@ -1360,7 +1360,7 @@ private:
     void                ReadChText( XclImpStream& rStrm );
     /** Reads the CHPLOTFRAME record group containing diagram area formatting. */
     void                ReadChPlotFrame( XclImpStream& rStrm );
-    /** Reads a CHCHARTGROUP record group containing chart type and chart settings. */
+    /** Reads a CHTYPEGROUP record group containing chart type and chart settings. */
     void                ReadChChartGroup( XclImpStream& rStrm );
 
     /** Updates text formatting of the passed axis title with global text formatting. */
@@ -1389,7 +1389,7 @@ private:
     XclImpChTextRef     mxYAxisTitle;       /// The Y axis title (CHTEXT group).
     XclImpChTextRef     mxZAxisTitle;       /// The Z axis title (CHTEXT group).
     XclImpChFrameRef    mxPlotFrame;        /// Plot area (CHPLOTFRAME group).
-    XclImpChChartGroupMap maChartGroups;    /// Chart group (chart type) (CHCHARTGROUP group).
+    XclImpChChartGroupMap maChartGroups;    /// Chart group (chart type) (CHTYPEGROUP group).
     bool                mbAlive;            /// true = Axes set exists; false = dummy object.
 };
 
