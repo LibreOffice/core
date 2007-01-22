@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:42:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 14:34:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ using namespace std;
 
 // Prototype for signal handling
 void setSignalFilename(GetOpt & opt);
-
+void removeSignalFile(GetOpt & opt);
 CmdLineBits st_nBits;
 
 void initTPrint(GetOpt & _aOptions)
@@ -262,7 +262,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.21 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.22 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
@@ -353,6 +353,9 @@ int starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper)
         fflush(stderr);
         getchar();
     }
+
+    removeSignalFile(opt);
+
     int nExit = pResult->getExitValue();
     return nExit;
 }
