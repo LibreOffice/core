@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:39:40 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,6 +788,12 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
     // logical size of zero is handled above already
     const Size      aOutTileSize( ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Width() ),
                                   ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Height() ) );
+
+    //#i69780 clip final tile size to a sane max size
+    while (((sal_Int64)rSize.Width() * nTileCacheSize1D) > SAL_MAX_UINT16)
+        nTileCacheSize1D /= 2;
+    while (((sal_Int64)rSize.Height() * nTileCacheSize1D) > SAL_MAX_UINT16)
+        nTileCacheSize1D /= 2;
 
     return ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, pAttr, nFlags, nTileCacheSize1D );
 }
