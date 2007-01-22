@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:37:20 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
             else    // just a metafile
                 pCurrXclObj = new XclObjAny( rRoot );
         }
-        else if( nObjType >= OBJ_FM_CONTROL )
+        else if( nObjType == OBJ_UNO )
         {
             pCurrXclObj = aOcxConverter.CreateCtrlObj( rShape );
             if( !pCurrXclObj )
