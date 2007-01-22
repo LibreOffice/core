@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:03:56 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef _VCL_MAPUNIT_HXX
 #include <vcl/mapunit.hxx>
+#endif
+#ifndef SC_FAPIHELPER_HXX
+#include "fapihelper.hxx"
 #endif
 #ifndef SC_XLADDRESS_HXX
 #include "xladdress.hxx"
@@ -144,8 +147,8 @@ const sal_Int16 EXC_OBJ_SBS_MAXSCROLL       = 30000;
 /** Value binding mode for cells linked to form controls. */
 enum XclCtrlBindMode
 {
-    xlBindContent,      /// Binds cell to content of control.
-    xlBindPosition      /// Binds cell to position in control (e.g. listbox selection index).
+    EXC_CTRL_BINDCONTENT,       /// Binds cell to content of control.
+    EXC_CTRL_BINDPOSITION       /// Binds cell to position in control (e.g. listbox selection index).
 };
 
 // (0x00EB) MSODRAWINGGROUP ---------------------------------------------------
@@ -257,21 +260,32 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTxoData& rData );
 
 // ----------------------------------------------------------------------------
 
-/** Provides static helper functions for textbox (TBX) form controls. */
-class XclTbxControlHelper
+namespace com { namespace sun { namespace star {
+    namespace drawing { class XShape; }
+    namespace awt { class XControlModel; }
+} } }
+
+class SdrObject;
+
+/** Provides static helper functions for form controls. */
+class XclControlObjHelper
 {
 public:
+    /** Returns the API control model from the passed API shape object. */
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+                        GetModelFromShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+
     /** Returns the component service name for the passed control type. */
-    static ::rtl::OUString GetServiceName( sal_uInt16 nCtrlType );
+    static ::rtl::OUString GetTbxServiceName( sal_uInt16 nCtrlType );
     /** Returns a default control name for the passed control type. */
-    static ::rtl::OUString GetControlName( sal_uInt16 nCtrlType );
+    static ::rtl::OUString GetTbxControlName( sal_uInt16 nCtrlType );
 
     /** Returns the listener type (interface name) for macro events for the passed control type. */
-    static ::rtl::OUString GetListenerType( sal_uInt16 nCtrlType );
+    static ::rtl::OUString GetTbxListenerType( sal_uInt16 nCtrlType );
     /** Returns the event method (function name) for macro events for the passed control type. */
-    static ::rtl::OUString GetEventMethod( sal_uInt16 nCtrlType );
+    static ::rtl::OUString GetTbxEventMethod( sal_uInt16 nCtrlType );
     /** Returns the script type string needed for a script event descriptor. */
-    static ::rtl::OUString GetScriptType();
+    static ::rtl::OUString GetTbxScriptType();
 
     /** Returns the Calc macro name from an Excel macro name. */
     static ::rtl::OUString GetScMacroName( const String& rXclMacroName );
