@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:29:13 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,31 +332,77 @@ void SwViewImp::SetFirstVisPage()
 void SwViewImp::MakeDrawView()
 {
     IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
+
+    // the else here is not an error, _MakeDrawModel() calls this method again
+    // after the DrawModel is created to create DrawViews for all shells...
     if( !pIDDMA->GetDrawModel() )
+    {
         pIDDMA->_MakeDrawModel();
+    }
     else
     {
         if ( !pDrawView )
         {
-            pDrawView = new SwDrawView( *this, pIDDMA->GetDrawModel(),
-                                        GetShell()->GetWin() ?
-                                        GetShell()->GetWin() :
-                                        (OutputDevice*)GetShell()->getIDocumentDeviceAccess()->getPrinter( false ) );
+            // #i72809#
+            // Discussed with FME, he also thinks that the getPrinter is old and not correct. When i got
+            // him right, it anyways returns GetOut() when it's a printer, but NULL when not. He suggested
+            // to use GetOut() and check the existing cases.
+            // Check worked well. Took a look at viewing, printing, PDF export and print preview with a test
+            // document which has an empty 2nd page (right page, see bug)
+            OutputDevice* pOutDevForDrawView = GetShell()->GetWin();
+
+            if(!pOutDevForDrawView)
+            {
+                // pOutDevForDrawView = (OutputDevice*)GetShell()->getIDocumentDeviceAccess()->getPrinter( false );
+                pOutDevForDrawView = GetShell()->GetOut();
+            }
+
+            pDrawView = new SwDrawView( *this, pIDDMA->GetDrawModel(), pOutDevForDrawView);
         }
 
-        GetDrawView()->SetActiveLayer( XubString::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Heaven" ) ) );
-        Init( GetShell()->GetViewOptions() );
+        GetDrawView()->SetActiveLayer( XubString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Heaven" ) ) );
+        const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
+        Init(pSwViewOption);
+
+        // #i68597# If document is read-only, we will not profit from overlay,
+        // so switch it off.
+        if(pDrawView && pDrawView->IsBufferedOverlayAllowed())
+        {
+            bool bIsReadOnly(pSwViewOption->IsReadonly());
+
+#ifdef DBG_UTIL
+            // add test possibilities
+            static bool bAlwaysActivateForTest(false);
+            if(bAlwaysActivateForTest && bIsReadOnly)
+            {
+                bIsReadOnly = false;
+            }
+#endif
+
+            if(bIsReadOnly)
+            {
+                pDrawView->SetBufferedOverlayAllowed(false);
+            }
+        }
 
         // #i68597# Init overlay buffer when destination is a window. This is necessary as long
         // as DrawingLayer is created on demand to start fully buffered overlay correctly.
-        if(pDrawView && GetShell() && GetShell()->GetWin())
+        if(pDrawView && pDrawView->IsBufferedOverlayAllowed())
         {
-            const Rectangle aRectLogic(Point(), GetShell()->GetWin()->PixelToLogic(GetShell()->GetWin()->GetOutputSizePixel()));
-            const Region aRegionLogic(aRectLogic);
-            ViewShell &rSh = *GetShell();
-            rSh.DLPreOutsidePaint(aRegionLogic);
-            rSh.DLPostOutsidePaint(aRegionLogic);
+            Window* pWindow = GetShell()->GetWin();
+
+            if(pWindow)
+            {
+                // #i72754# use correct region calculation now
+                const Rectangle aRectPixel(Point(), pWindow->GetOutputSizePixel());
+                const Rectangle aRectLogic(pWindow->PixelToLogic(aRectPixel));
+                const Region aRegionLogic(aRectLogic);
+                ViewShell &rSh = *GetShell();
+
+                // simulate repaint of the whole view once initially
+                rSh.DLPrePaint2(aRegionLogic);
+                rSh.DLPostPaint2();
+            }
         }
     }
 }
