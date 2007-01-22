@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:58:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_PREPARE_EMERGENCY_SAVE    =  32,
             E_SESSION_SAVE              =  64,
             E_SESSION_RESTORE           = 128,
-            E_DISABLE_AUTORECOVERY      = 256
+            E_DISABLE_AUTORECOVERY      = 256,
+            E_SET_AUTOSAVE_STATE        = 512
         };
 
         //---------------------------------------
@@ -639,6 +640,20 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             @threadsafe
           */
         void implts_readConfig();
+
+        //---------------------------------------
+        /** @short  read the underlying configuration...
+
+            @descr  ... but only keys related to the AutoSave mechanism.
+                    Means: State and Timer intervall.
+                    E.g. the recovery list isnt adressed here.
+
+            @throw  [com.sun.star.uno.RuntimeException]
+                    if config could not be opened or readed successfully!
+
+            @threadsafe
+          */
+        void implts_readAutoSaveConfig();
 
         //---------------------------------------
         // TODO document me
