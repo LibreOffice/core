@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:38:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,20 @@ void ViewContactOfSdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaIte
     static_cast< SdrMediaObj& >( GetSdrObject() ).mediaPropertiesChanged( rNewState );
 }
 
-} }
+// ------------------------------------------------------------------------------
+// #i72701#
+sal_Bool ViewContactOfSdrMediaObj::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
+{
+    // set pos/size of associated media window
+    const ViewObjectContactOfSdrMediaObj& rVOC(dynamic_cast< const ViewObjectContactOfSdrMediaObj& >(rAssociatedVOC));
+    rVOC.checkMediaWindowPosition(rDisplayInfo);
+
+    // call parent
+    return ViewContactOfSdrObj::ShouldPaintObject(rDisplayInfo, rAssociatedVOC);
+}
+
+// ------------------------------------------------------------------------------
+
+}} // end of namespace sdr::contact
 
 // eof
