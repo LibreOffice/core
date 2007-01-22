@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:11:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2724,14 +2724,6 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     else
         SwRootFrm::bInPaint = bResetRootPaint = TRUE;
 
-    // #i68597# paint pre-process for DrawingLayer overlay if not in paint
-    const Region aDLRegion(rRect.SVRect());
-
-    if(!pSh->IsPaintInProgress())
-    {
-        pSh->DLPreOutsidePaint(aDLRegion);
-    }
-
     SwSavePaintStatics *pStatics = 0;
     if ( pGlobalShell )
         pStatics = new SwSavePaintStatics();
@@ -2776,6 +2768,9 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     const SwPageFrm *pPage = pSh->Imp()->GetFirstVisPage();
 
+    // #i68597#
+    const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
+
     while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
     {
         if ( !pPage->IsEmptyPage() && aRect.IsOver( pPage->Frm() ) )
@@ -2799,6 +2794,12 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                     (pPage->Frm().*fnRect->fnGetWidth)() );
                 aPaintRect._Intersection( pSh->VisArea() );
             }
+
+            // #i68597#
+            // moved paint pre-process for DrawingLayer overlay here since the above
+            // code dependent from bExtraData may expand the PaintRect
+            const Region aDLRegion(aPaintRect.SVRect());
+            pSh->DLPrePaint2(aDLRegion);
 
             /// OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
             /// 2nd parameter is no longer <const> and will be set to the
@@ -2881,6 +2882,20 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             pVout->Leave();
             if( bControlExtra )
                 pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aPaintRect );
+
+            // #i68597#
+            // needed to move grid painting inside Begin/EndDrawLayer bounds and to change
+            // output rect for it accordingly
+            if(bGridPainting)
+            {
+                SdrPaintView* pPaintView = pSh->Imp()->GetDrawView();
+                SdrPageView* pPageView = pPaintView->GetSdrPageView();
+                pPageView->DrawPageViewGrid(*pSh->GetOut(), aPaintRect.SVRect(), SwViewOption::GetTextGridColor() );
+            }
+
+            // #i68597#
+            // moved paint post-process for DrawingLayer overlay here, see above
+            pSh->DLPostPaint2();
         }
         ASSERT( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
                 "Nachbar von Seite keine Seite." );
@@ -2888,14 +2903,6 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     }
 
     DELETEZ( pLines );
-
-    if ( pSh->GetWin() && pSh->Imp()->HasDrawView() &&
-         pSh->Imp()->GetDrawView()->IsGridVisible() )
-    {
-        SdrPaintView* pPaintView = pSh->Imp()->GetDrawView();
-        SdrPageView* pPageView = pPaintView->GetSdrPageView();
-        pPageView->DrawPageViewGrid(*pSh->GetOut(), rRect.SVRect(), SwViewOption::GetTextGridColor() );
-    }
 
     if ( bResetRootPaint )
         SwRootFrm::bInPaint = FALSE;
@@ -2905,12 +2912,6 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     {
         pProgress = 0;
         pGlobalShell = 0;
-    }
-
-    // #i68597# paint post-process for DrawingLayer overlay if not in paint
-    if(!pSh->IsPaintInProgress())
-    {
-        pSh->DLPostOutsidePaint(aDLRegion);
     }
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
