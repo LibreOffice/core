@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:36:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,10 +104,6 @@ const BYTE ExcDummy8_02::pMyData[] = {
 const sal_Size ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
 
 
-const BYTE  XclRefmode::pMyData[] = { 0x0f, 0x00, 0x02, 0x00, 0x01, 0x00 }; // REFMODE
-const sal_Size  XclRefmode::nMyLen = sizeof( XclRefmode::pMyData );
-
-
 // --- class ExcDummy8_xx --------------------------------------------
 
 sal_Size ExcDummy8_00a::GetLen() const
@@ -172,19 +168,4 @@ const BYTE* ExcDummy8_02::GetData() const
 {
     return pMyData;
 }
-
-
-
-sal_Size XclRefmode::GetLen( void ) const
-{
-    return nMyLen;
-}
-
-
-const BYTE* XclRefmode::GetData( void ) const
-{
-    return pMyData;
-}
-
-
 
