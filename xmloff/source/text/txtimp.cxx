@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-15 12:40:52 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:50:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1272,11 +1272,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 {
                     bOutlineStyleCandidate = false;
                 }
-                else if ( pStyle && /* automatic paragraph style */
-                          pStyle->IsListStyleSet() )
-                {
-                    bOutlineStyleCandidate = false;
-                }
+                // --> OD 2007-01-11 #i73361#
+                // The automatic paragraph style doesn't have to be considered.
+//                else if ( pStyle && /* automatic paragraph style */
+//                          pStyle->IsListStyleSet() )
+//                {
+//                    bOutlineStyleCandidate = false;
+//                }
+                // <--
                 else
                 {
                     bOutlineStyleCandidate = true;
