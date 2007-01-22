@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:53:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,19 +48,19 @@ namespace com { namespace sun { namespace star {
 
 // ============================================================================
 
-/** Helper to manage controls linked to the sheet. */
-class XclExpCtrlLinkHelper : protected XclExpRoot
+/** Helper class for form controils to manage spreadsheet links . */
+class XclExpControlObjHelper : protected XclExpRoot
 {
 public:
-    explicit            XclExpCtrlLinkHelper( const XclExpRoot& rRoot );
-    virtual             ~XclExpCtrlLinkHelper();
-
-    /** Sets the address of the control's linked cell. */
-    void                SetCellLink( const ScAddress& rCellLink );
-    /** Sets the address of the control's linked source cell range. */
-    void                SetSourceRange( const ScRange& rSrcRange );
+    explicit            XclExpControlObjHelper( const XclExpRoot& rRoot );
+    virtual             ~XclExpControlObjHelper();
 
 protected:
+    /** Tries to get spreadsheet cell link and source range link from the passed shape. */
+    void                ConvertSheetLinks(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+
+
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
     inline const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
     /** Returns the Excel token array of the source range, or 0, if no link present. */
@@ -84,15 +84,12 @@ private:
 #if EXC_EXP_OCX_CTRL
 
 /** Represents an OBJ record for an OCX form control. */
-class XclExpObjOcxCtrl : public XclObj, public XclExpCtrlLinkHelper
+class XclExpOcxControlObj : public XclObj, public XclExpControlObjHelper
 {
 public:
-    explicit            XclExpObjOcxCtrl(
+    explicit            XclExpOcxControlObj(
                             const XclExpRoot& rRoot,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
                             const String& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
@@ -108,15 +105,12 @@ private:
 #else
 
 /** Represents an OBJ record for an TBX form control. */
-class XclExpObjTbxCtrl : public XclObj, public XclExpCtrlLinkHelper
+class XclExpTbxControlObj : public XclObj, public XclExpControlObjHelper
 {
 public:
-    explicit            XclExpObjTbxCtrl(
+    explicit            XclExpTbxControlObj(
                             const XclExpRoot& rRoot,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::awt::XControlModel >& rxCtrlModel );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     /** Sets the name of a macro attached to this control.
         @return  true = The passed event descriptor was valid, macro name has been found. */
