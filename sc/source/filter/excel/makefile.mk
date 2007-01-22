@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 13:30:29 $
+#   last change: $Author: obo $ $Date: 2007-01-22 12:11:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xehelper.obj				\
         $(SLO)$/xichart.obj					\
+        $(SLO)$/xiescher.obj				\
         $(SLO)$/xlchart.obj					\
         $(SLO)$/xlocx.obj					\
         $(SLO)$/XclExpCharts.obj
