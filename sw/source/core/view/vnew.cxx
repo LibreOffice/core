@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:03:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mpTmpRef( 0 ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
+    mnPrePostPaintCount(0L), // #i72754#
+    mpPrePostOutDev(0), // #i72754#
     pSfxViewShell( 0 ),
     pImp( new SwViewImp( this ) ),
     aBrowseBorder()
@@ -288,6 +290,8 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pAccOptions( new SwAccessibilityOptions ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
+    mnPrePostPaintCount(0L), // #i72754#
+    mpPrePostOutDev(0), // #i72754#
     pSfxViewShell( 0 ),
     pImp( new SwViewImp( this ) ),
     aBrowseBorder( rShell.GetBrowseBorder() )
