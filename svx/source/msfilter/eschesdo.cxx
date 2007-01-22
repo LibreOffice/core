@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 17:39:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:26:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,12 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
+        // #i51348# get shape name
+        String aShapeName;
+        if( const SdrObject* pSdrObj = rObj.GetSdrObject() )
+            if( pSdrObj->GetName().Len() > 0 )
+                aShapeName = pSdrObj->GetName();
+
         Point aTextRefPoint;
 
         if( rObj.GetType().EqualsAscii( "drawing.Group" ))
@@ -264,7 +270,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
             if( xXIndexAccess.is() && 0 != xXIndexAccess->getCount() )
             {
-                nShapeID = mpEscherEx->EnterGroup( &rObj.GetRect() );
+                nShapeID = mpEscherEx->EnterGroup( aShapeName, &rObj.GetRect() );
                 nShapeType = ESCHER_ShpInst_Min;
 
                 for( UINT32 n = 0, nCnt = xXIndexAccess->getCount();
@@ -304,6 +310,10 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPicStream();
         EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpEscherEx, mpPicStrm, aRect100thmm );
+
+        // #i51348# shape name
+        if( aShapeName.Len() > 0 )
+            aPropOpt.AddOpt( ESCHER_Prop_wzName, aShapeName );
 
         if ( rObj.GetType().EqualsAscii( "drawing.Custom" ) )
         {
