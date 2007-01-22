@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:17:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 12:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode *start,
     SCTAB  nTab;
     const sal_Unicode *p = start;
 
-    pAddr->SetTab( 0 );
+    //pAddr->SetTab( 0 );
     if( *p == '\'' ) // XL only seems to use single quotes for sheet names
     {
         for( p++; *p ; )
@@ -280,7 +280,7 @@ lcl_ScRange_Parse_XL_Header( ScRange& r,
     else
     {
         nFlags |= SCA_VALID_TAB | SCA_VALID_TAB2;
-        r.aEnd.SetTab( 0 );
+        // Use the current tab, it needs to be passed in. : r.aEnd.SetTab( .. );
     }
 
     return p;
@@ -824,14 +824,14 @@ lcl_ScAddress_Parse ( BOOL& bExternal, const sal_Unicode* p,
 
     case ScAddress::CONV_XL_A1:
         {
-            ScRange r;
+            ScRange r = rAddr;
             USHORT nFlags = lcl_ScRange_Parse_XL_A1( r, p, pDoc, TRUE );
             rAddr = r.aStart;
             return nFlags;
         }
     case ScAddress::CONV_XL_R1C1:
         {
-            ScRange r;
+            ScRange r = rAddr;
             USHORT nFlags = lcl_ScRange_Parse_XL_R1C1( r, p, pDoc, rDetails, TRUE );
             rAddr = r.aStart;
             return nFlags;
