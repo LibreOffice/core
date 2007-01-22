@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:22:56 $
+#   last change: $Author: obo $ $Date: 2007-01-22 14:46:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,7 @@ sub create_epm_header
     push(@epmheader, $line);
 
     $line = "%release" . " " . $installer::globals::packagerevision . "\n";
+    if ( $installer::globals::islinuxrpmbuild ) { $line = "%release" . " " . $installer::globals::buildid . "\n"; }
     push(@epmheader, $line);
 
     # Description, Copyright and Vendor are multilingual and are defined in
@@ -300,28 +301,62 @@ sub create_epm_header
         }
     }
 
+    my $license_in_package_defined = 0;
+
+    if ( $installer::globals::issolarisbuild )
+    {
+        if ( $onepackage->{'solariscopyright'} )
+        {
+            $licensefilename = $onepackage->{'solariscopyright'};
+            $license_in_package_defined = 1;
+        }
+    }
+
+    # searching for and readme file
+
     for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
     {
         my $onefile = ${$filesinproduct}[$i];
         my $filename = $onefile->{'Name'};
-
-        if ( $filename eq $licensefilename )
-        {
-            $foundlicensefile = 1;
-            $line = "%license" . " " . $onefile->{'sourcepath'} . "\n";
-            push(@epmheader, $line);
-        }
-
         if ( $filename eq $readmefilename )
         {
             $foundreadmefile = 1;
             $line = "%readme" . " " . $onefile->{'sourcepath'} . "\n";
             push(@epmheader, $line);
-        }
-
-        if ( $foundlicensefile && $foundreadmefile )
-        {
             last;
+        }
+    }
+
+    # searching for and license file
+
+    if ( $license_in_package_defined )
+    {
+        # Copyright file has to be located next to the package list
+        my $path = $installer::globals::absolutepackagelistpath;
+        installer::pathanalyzer::get_path_from_fullqualifiedname(\$path);
+        $licensefilename = $path . $licensefilename;
+
+        if ( -f $licensefilename )
+        {
+            $foundlicensefile = 1;
+            $line = "%license" . " " . $licensefilename . "\n";
+            push(@epmheader, $line);
+        }
+    }
+    else
+    {
+        for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
+        {
+            my $onefile = ${$filesinproduct}[$i];
+            my $filename = $onefile->{'Name'};
+
+            if ( $filename eq $licensefilename )
+            {
+                $foundlicensefile = 1;
+                $line = "%license" . " " . $onefile->{'sourcepath'} . "\n";
+                push(@epmheader, $line);
+                last;
+            }
         }
     }
 
