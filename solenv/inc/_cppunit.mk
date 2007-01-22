@@ -5,6 +5,8 @@ TEST1LIB=$(SHL1TARGETN)
 .IF "$(TESTOPT)"==""
     TEST1OPT="-jobexclude"
     TEST1OPT+=$(SHL1TARGET).xsce
+    TEST1OPT="-sf"
+    TEST1OPT+=$(mktmp "foo")
     TEST1OPT+="-onlyerrors"
     TEST1OPT+=" "
     TEST1OPT+=$(TESTOPTADD)
@@ -28,6 +30,8 @@ TEST2LIB=$(SHL2TARGETN)
 .IF "$(TESTOPT)"==""
     TEST2OPT="-jobexclude"
     TEST2OPT+=$(SHL2TARGET).xsce
+    TEST2OPT="-sf"
+    TEST2OPT+=$(mktmp "foo")
     TEST2OPT+="-onlyerrors"
     TEST2OPT+=" "
     TEST2OPT+=$(TESTOPTADD)
@@ -51,6 +55,8 @@ TEST3LIB=$(SHL3TARGETN)
 .IF "$(TESTOPT)"==""
     TEST3OPT="-jobexclude"
     TEST3OPT+=$(SHL3TARGET).xsce
+    TEST3OPT="-sf"
+    TEST3OPT+=$(mktmp "foo")
     TEST3OPT+="-onlyerrors"
     TEST3OPT+=" "
     TEST3OPT+=$(TESTOPTADD)
@@ -74,6 +80,8 @@ TEST4LIB=$(SHL4TARGETN)
 .IF "$(TESTOPT)"==""
     TEST4OPT="-jobexclude"
     TEST4OPT+=$(SHL4TARGET).xsce
+    TEST4OPT="-sf"
+    TEST4OPT+=$(mktmp "foo")
     TEST4OPT+="-onlyerrors"
     TEST4OPT+=" "
     TEST4OPT+=$(TESTOPTADD)
@@ -97,6 +105,8 @@ TEST5LIB=$(SHL5TARGETN)
 .IF "$(TESTOPT)"==""
     TEST5OPT="-jobexclude"
     TEST5OPT+=$(SHL5TARGET).xsce
+    TEST5OPT="-sf"
+    TEST5OPT+=$(mktmp "foo")
     TEST5OPT+="-onlyerrors"
     TEST5OPT+=" "
     TEST5OPT+=$(TESTOPTADD)
@@ -120,6 +130,8 @@ TEST6LIB=$(SHL6TARGETN)
 .IF "$(TESTOPT)"==""
     TEST6OPT="-jobexclude"
     TEST6OPT+=$(SHL6TARGET).xsce
+    TEST6OPT="-sf"
+    TEST6OPT+=$(mktmp "foo")
     TEST6OPT+="-onlyerrors"
     TEST6OPT+=" "
     TEST6OPT+=$(TESTOPTADD)
@@ -143,6 +155,8 @@ TEST7LIB=$(SHL7TARGETN)
 .IF "$(TESTOPT)"==""
     TEST7OPT="-jobexclude"
     TEST7OPT+=$(SHL7TARGET).xsce
+    TEST7OPT="-sf"
+    TEST7OPT+=$(mktmp "foo")
     TEST7OPT+="-onlyerrors"
     TEST7OPT+=" "
     TEST7OPT+=$(TESTOPTADD)
@@ -166,6 +180,8 @@ TEST8LIB=$(SHL8TARGETN)
 .IF "$(TESTOPT)"==""
     TEST8OPT="-jobexclude"
     TEST8OPT+=$(SHL8TARGET).xsce
+    TEST8OPT="-sf"
+    TEST8OPT+=$(mktmp "foo")
     TEST8OPT+="-onlyerrors"
     TEST8OPT+=" "
     TEST8OPT+=$(TESTOPTADD)
@@ -189,6 +205,8 @@ TEST9LIB=$(SHL9TARGETN)
 .IF "$(TESTOPT)"==""
     TEST9OPT="-jobexclude"
     TEST9OPT+=$(SHL9TARGET).xsce
+    TEST9OPT="-sf"
+    TEST9OPT+=$(mktmp "foo")
     TEST9OPT+="-onlyerrors"
     TEST9OPT+=" "
     TEST9OPT+=$(TESTOPTADD)
@@ -212,6 +230,8 @@ TEST10LIB=$(SHL10TARGETN)
 .IF "$(TESTOPT)"==""
     TEST10OPT="-jobexclude"
     TEST10OPT+=$(SHL10TARGET).xsce
+    TEST10OPT="-sf"
+    TEST10OPT+=$(mktmp "foo")
     TEST10OPT+="-onlyerrors"
     TEST10OPT+=" "
     TEST10OPT+=$(TESTOPTADD)
