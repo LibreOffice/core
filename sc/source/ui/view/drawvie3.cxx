@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:08:35 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,9 @@ void __EXPORT ScDrawView::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
         SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
         if (ValidTab(nDelTab))
         {
-            HideSdrPage();
+            // used to be: HidePagePgNum(nDelTab) - hide only if the deleted sheet is shown here
+            if ( nDelTab == nTab )
+                HideSdrPage();
         }
     }
     else if (rHint.ISA(ScTabSizeChangedHint))               // Groesse geaendert
