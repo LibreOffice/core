@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:24:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:22:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 
 #include <stack>
 
+#ifndef SC_FDUMPERDFF_HXX
+#include "fdumperdff.hxx"
+#endif
 #ifndef SC_FDUMPEROLE_HXX
 #include "fdumperole.hxx"
 #endif
@@ -132,6 +135,28 @@ public:
     static void         AppendAddress( String& rStr, const FormulaAddress& rPos, bool bNameMode );
     static void         AppendRange( String& rStr, const FormulaRange& rRange, bool bNameMode );
 };
+
+// ============================================================================
+// ============================================================================
+
+class RecordHeaderObject : public RecordHeaderBase
+{
+public:
+    explicit            RecordHeaderObject( const InputObjectBase& rParent );
+
+    inline bool         IsMergeContRec() const { return mbMergeContRec; }
+    inline bool         HasRecName( sal_uInt16 nRecId ) const { return GetRecNames()->HasName( nRecId ); }
+
+    void                DumpRecordHeader( XclImpStream& rStrm );
+
+protected:
+    virtual bool        ImplIsValid() const;
+
+private:
+    bool                mbMergeContRec;
+};
+
+typedef ScfRef< RecordHeaderObject > RecHeaderObjectRef;
 
 // ============================================================================
 // ============================================================================
@@ -357,8 +382,11 @@ public:
 
     sal_uInt16          ReadFormulaSize();
     sal_uInt16          DumpFormulaSize( const sal_Char* pcName = 0 );
-    void                DumpFormula( const sal_Char* pcName, sal_uInt16 nSize, bool bNameMode );
-    void                DumpFormula( const sal_Char* pcName, bool bNameMode );
+
+    void                DumpCellFormula( const sal_Char* pcName, sal_uInt16 nSize );
+    void                DumpCellFormula( const sal_Char* pcName = 0 );
+    void                DumpNameFormula( const sal_Char* pcName, sal_uInt16 nSize );
+    void                DumpNameFormula( const sal_Char* pcName = 0 );
 
 protected:
     virtual void        ImplDumpHeader();
@@ -366,6 +394,9 @@ protected:
 
 private:
     void                ConstructOwn();
+
+    void                DumpFormula( const sal_Char* pcName, sal_uInt16 nSize, bool bNameMode );
+    void                DumpFormula( const sal_Char* pcName, bool bNameMode );
 
     FormulaAddress      CreateTokenAddress( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelC, bool bRelR, bool bNameMode ) const;
     String              CreateFunc( sal_uInt16 nFuncIdx ) const;
@@ -477,34 +508,24 @@ protected:
     virtual void        ImplDumpRecord();
     virtual void        ImplPostProcessRecord();
 
-    inline bool         IsMergeContRec() const { return mbMergeContRec; }
+    inline RecordHeaderObject& GetRecordHeader() const { return *mxHdrObj; }
+    inline FormulaObject& GetFormulaDumper() const { return *mxFmlaObj; }
+    inline DffDumpObject& GetDffDumper() const { return *mxDffObj; }
 
     void                DumpRepeatedRecordId();
-
-    sal_uInt16          DumpFormulaSize( const sal_Char* pcName = 0 );
-    void                DumpCellFormula( const sal_Char* pcName, sal_uInt16 nSize );
-    void                DumpCellFormula( const sal_Char* pcName = 0 );
-    void                DumpNameFormula( const sal_Char* pcName, sal_uInt16 nSize );
-    void                DumpNameFormula( const sal_Char* pcName = 0 );
 
 private:
     void                ConstructOwn();
 
-    void                DumpRecordHeader();
-    void                DumpRecord();
+    void                DumpRecordBody();
     void                DumpSimpleRecord( const String& rRecData );
 
 private:
     String              maProgressName;
+    RecHeaderObjectRef  mxHdrObj;
     FormulaObjectRef    mxFmlaObj;
-    NameListRef         mxRecNames;
+    DffDumpObjectRef    mxDffObj;
     NameListRef         mxSimpleRecs;
-    bool                mbShowRecPos;
-    bool                mbShowRecSize;
-    bool                mbShowRecId;
-    bool                mbShowRecName;
-    bool                mbShowRecBody;
-    bool                mbMergeContRec;
 };
 
 // ============================================================================
@@ -529,8 +550,11 @@ private:
     rtl_TextEncoding    GetFontEncoding( sal_uInt16 nXfIdx ) const;
     String              CreateFontName( const XclFontData& rFontData ) const;
 
-    sal_uInt16          DumpPatternIdx( const sal_Char* pcName = 0 );
-    sal_uInt16          DumpColorIdx( const sal_Char* pcName = 0 );
+    template< typename Type >
+    Type                DumpPatternIdx( const sal_Char* pcName = 0 );
+    template< typename Type >
+    Type                DumpColorIdx( const sal_Char* pcName = 0 );
+
     sal_uInt16          DumpFontIdx( const sal_Char* pcName = 0 );
     sal_uInt16          DumpFormatIdx( const sal_Char* pcName = 0 );
     sal_uInt16          DumpXfIdx( const sal_Char* pcName = 0, bool bBiff2Style = false );
@@ -541,6 +565,10 @@ private:
     void                DumpFontRec();
     void                DumpFormatRec();
     void                DumpXfRec();
+
+    void                DumpObjRec();
+    void                DumpObjRec5();
+    void                DumpObjRec8();
 
 private:
     typedef ::std::vector< XclFontData > XclFontDataVec;
@@ -558,6 +586,20 @@ private:
     sal_uInt16          mnPTSxliIdx;
     bool                mbHasCodePage;
 };
+
+// ----------------------------------------------------------------------------
+
+template< typename Type >
+Type WorkbookStreamObject::DumpPatternIdx( const sal_Char* pcName )
+{
+    return DumpDec< Type >( pcName ? pcName : "fill-pattern", mxFillPatterns );
+}
+
+template< typename Type >
+Type WorkbookStreamObject::DumpColorIdx( const sal_Char* pcName )
+{
+    return DumpDec< Type >( pcName ? pcName : "color-idx", mxColors );
+}
 
 // ============================================================================
 
@@ -604,6 +646,17 @@ class VbaProjectStorageObject : public OleStorageObject
 {
 public:
     explicit            VbaProjectStorageObject( const OleStorageObject& rParentStrg );
+
+protected:
+    virtual void        ImplDumpBody();
+};
+
+// ============================================================================
+
+class VbaStorageObject : public OleStorageObject
+{
+public:
+    explicit            VbaStorageObject( const OleStorageObject& rParentStrg );
 
 protected:
     virtual void        ImplDumpBody();
