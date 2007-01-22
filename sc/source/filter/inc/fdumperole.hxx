@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,8 +145,6 @@ class OlePropertyStreamObject : public OleStreamObject
 {
 public:
     explicit            OlePropertyStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName );
-
-    static void         InitializeConfig( Config& rCfg );
 
 protected:
     inline explicit     OlePropertyStreamObject() {}
