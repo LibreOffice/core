@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:24:36 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,11 +322,13 @@ private:
     void                ProcessExternal( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
 
     void                ProcessFunction( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
+    void                PrepareFunction( XclExpFuncData& rFuncData );
     void                FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nCloseSpaces );
     void                FinishIfFunction( XclExpFuncData& rFuncData, sal_uInt16 nFuncTokPos );
     void                FinishChooseFunction( XclExpFuncData& rFuncData, sal_uInt16 nFuncTokPos );
 
     XclExpTokenData     ProcessParam( XclExpTokenData aTokData, XclExpFuncData& rFuncData );
+    void                PrepareParam( XclExpFuncData& rFuncData );
     void                FinishParam( XclExpFuncData& rFuncData, sal_uInt16 nParamPos );
     void                AppendDefaultParam( XclExpFuncData& rFuncData );
     void                AppendTrailingParam( XclExpFuncData& rFuncData );
@@ -723,6 +725,7 @@ inline sal_uInt8 lclGetCompareTokenId( OpCode eOpCode )
         case ocGreaterEqual:    return EXC_TOKID_GE;
         case ocGreater:         return EXC_TOKID_GT;
         case ocNotEqual:        return EXC_TOKID_NE;
+        default:;
     }
     return EXC_TOKID_NONE;
 }
@@ -740,6 +743,7 @@ inline sal_uInt8 lclGetAddSubTokenId( OpCode eOpCode )
     {
         case ocAdd:     return EXC_TOKID_ADD;
         case ocSub:     return EXC_TOKID_SUB;
+        default:;
     }
     return EXC_TOKID_NONE;
 }
@@ -751,6 +755,7 @@ inline sal_uInt8 lclGetMulDivTokenId( OpCode eOpCode )
     {
         case ocMul:     return EXC_TOKID_MUL;
         case ocDiv:     return EXC_TOKID_DIV;
+        default:;
     }
     return EXC_TOKID_NONE;
 }
@@ -775,6 +780,7 @@ inline sal_uInt8 lclGetUnaryPreTokenId( OpCode eOpCode )
         case ocAdd:     return EXC_TOKID_UPLUS;     // +(1)
         case ocNeg:     return EXC_TOKID_UMINUS;    // NEG(1)
         case ocNegSub:  return EXC_TOKID_UMINUS;    // -(1)
+        default:;
     }
     return EXC_TOKID_NONE;
 }
@@ -1177,6 +1183,9 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_u
     XclExpFuncData aFuncData( rTokData, *pFuncInfo, aExtFuncData, nExpClass );
     XclExpTokenData aTokData;
 
+    // preparations for special functions, before function processing starts
+    PrepareFunction( aFuncData );
+
     enum { STATE_START, STATE_OPEN, STATE_PARAM, STATE_SEP, STATE_CLOSE, STATE_END }
         eState = STATE_START;
     while( eState != STATE_END ) switch( eState )
@@ -1207,6 +1216,21 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_u
             FinishFunction( aFuncData, aTokData.mnSpaces );
             eState = STATE_END;
         break;
+    }
+}
+
+void XclExpFmlaCompImpl::PrepareFunction( XclExpFuncData& rFuncData )
+{
+    switch( rFuncData.GetOpCode() )
+    {
+        case ocCot:                     // simulate COT(x) by (1/TAN(x))
+        case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
+            AppendIntToken( 1 );
+        break;
+        case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
+            AppendNumToken( F_PI2 );
+        break;
+        default:;
     }
 }
 
@@ -1259,8 +1283,24 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
         // update jump tokens for specific functions
         switch( rFuncData.GetOpCode() )
         {
-            case ocIf:      FinishIfFunction( rFuncData, nFuncTokPos );     break;
-            case ocChose:   FinishChooseFunction( rFuncData, nFuncTokPos ); break;
+            case ocIf:
+                FinishIfFunction( rFuncData, nFuncTokPos );
+            break;
+            case ocChose:
+                FinishChooseFunction( rFuncData, nFuncTokPos );
+            break;
+
+            case ocCot:                     // simulate COT(x) by (1/TAN(x))
+            case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
+                AppendOpTokenId( EXC_TOKID_DIV, EXC_TOKCLASS_NONE );
+                AppendParenToken();
+            break;
+            case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
+                AppendOpTokenId( EXC_TOKID_SUB, EXC_TOKCLASS_NONE );
+                AppendParenToken();
+            break;
+
+            default:;
         }
     }
     else
@@ -1342,6 +1382,7 @@ XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclE
         bool bOldIsArrExp = mbIsArrExp;
         UpdateArrExpFlag( nExpClass, rFuncData.GetReturnClass() );
         // process the parameter, stop at next ocClose or ocSep
+        PrepareParam( rFuncData );
         /*  #i37355# insert tMissArg token for missing parameters --
             Excel import filter adds ocMissing token (handled in Factor()),
             but Calc itself does not do this if a new formula is entered. */
@@ -1357,6 +1398,18 @@ XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclE
         if( mbOk ) FinishParam( rFuncData, nParamPos );
     }
     return aTokData;
+}
+
+void XclExpFmlaCompImpl::PrepareParam( XclExpFuncData& rFuncData )
+{
+    switch( rFuncData.GetOpCode() )
+    {
+        case ocArcCotHyp:               // simulate ACOTH(x) by ATANH(1/(x))
+            if( rFuncData.GetParamCount() == 0 )
+                AppendIntToken( 1 );
+        break;
+        default:;
+    }
 }
 
 void XclExpFmlaCompImpl::FinishParam( XclExpFuncData& rFuncData, sal_uInt16 nParamPos )
@@ -1392,6 +1445,16 @@ void XclExpFmlaCompImpl::FinishParam( XclExpFuncData& rFuncData, sal_uInt16 nPar
                 default:    AppendJumpToken( rFuncData, EXC_TOK_ATTR_GOTO );
             }
         break;
+
+        case ocArcCotHyp:               // simulate ACOTH(x) by ATANH(1/(x))
+            if( nParamCount == 1 )
+            {
+                AppendParenToken();
+                AppendOpTokenId( EXC_TOKID_DIV, EXC_TOKCLASS_NONE );
+            }
+        break;
+
+        default:;
     }
 }
 
@@ -1469,6 +1532,7 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
             if( nParamCount == 0 )
                 AppendDefaultParam( rFuncData );
         break;
+        default:;
     }
 }
 
