@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:58 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:17:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,6 +475,18 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt
                 // a temporary SdrPageWindow for this Redraw.
                 SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
                 SdrPageWindow aTemporaryPageWindow(*((SdrPageView*)this), aTemporaryPaintWindow);
+
+                // #i72752#
+                // Copy existing paint region if other PageWindows exist, this was created by
+                // PrepareRedraw() from BeginDrawLayer(). Needs to be used e.g. when suddenly SW
+                // paints into an unknown device other than the view was created for (e.g. VirtualDevice)
+                if(PageWindowCount())
+                {
+                    SdrPageWindow* pExistingPageWindow = GetPageWindow(0L);
+                    SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
+                    const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                }
 
                 aTemporaryPageWindow.RedrawLayer(nPaintMode, &nID, pRedirector);
             }
