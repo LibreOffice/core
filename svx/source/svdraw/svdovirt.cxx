@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:30 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,8 +260,15 @@ sal_uInt32 SdrVirtObj::GetHdlCount() const
 SdrHdl* SdrVirtObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pHdl=rRefObj.GetHdl(nHdlNum);
-    Point aP(pHdl->GetPos()+aAnchor);
-    pHdl->SetPos(aP);
+
+    // #i73248#
+    // GetHdl() at SdrObject is not guaranteed to return an object
+    if(pHdl)
+    {
+        Point aP(pHdl->GetPos()+aAnchor);
+        pHdl->SetPos(aP);
+    }
+
     return pHdl;
 }
 
@@ -279,7 +286,38 @@ SdrHdl* SdrVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const
 
 void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrObject::AddToHdlList(rHdlList);
+    // #i73248#
+    // SdrObject::AddToHdlList(rHdlList) is not a good thing to call
+    // since at SdrPathObj, only AddToHdlList may be used and the call
+    // will instead use the standard implementation which uses GetHdlCount()
+    // and GetHdl instead. This is not wrong, but may be much less effective
+    // and may not be prepared to GetHdl returning NULL
+
+    // get handles using AddToHdlList from ref object
+    SdrHdlList aLocalList(0);
+    rRefObj.AddToHdlList(aLocalList);
+    const sal_uInt32 nHdlCount(aLocalList.GetHdlCount());
+
+    if(nHdlCount)
+    {
+        // translate handles and add them to dest list. They are temporarily part of
+        // two lists then
+        const Point aOffset(GetOffset());
+
+        for(sal_uInt32 a(0L); a < nHdlCount; a++)
+        {
+            SdrHdl* pCandidate = aLocalList.GetHdl(a);
+            pCandidate->SetPos(pCandidate->GetPos() + aOffset);
+            rHdlList.AddHdl(pCandidate);
+        }
+
+        // remove them from source list, else they will be deleted when
+        // source list is deleted
+        while(aLocalList.GetHdlCount())
+        {
+            aLocalList.RemoveHdl(aLocalList.GetHdlCount() - 1L);
+        }
+    }
 }
 
 FASTBOOL SdrVirtObj::HasSpecialDrag() const
@@ -625,7 +663,8 @@ XubString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 
 const Point SdrVirtObj::GetOffset() const
 {
-    return Point(0,0);
+    // #i73248# default offset of SdrVirtObj is aAnchor
+    return aAnchor;
 }
 
 // eof
