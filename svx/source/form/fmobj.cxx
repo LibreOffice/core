@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 10:12:23 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -630,30 +630,21 @@ sal_Int32 FmFormObj::getType() const
 
 SdrLayerID FmFormObj::GetLayer() const
 {
-    if(GetPage())
-    {
-        // use the SdrLayerAdmin from the page, it's parent is the model one
-        const SdrLayerAdmin& rAdmin(GetPage()->GetLayerAdmin());
-        return rAdmin.GetLayerID(rAdmin.GetControlLayerName(), TRUE);
-    }
-    else if(GetModel())
-    {
-        // use the SdrLayerAdmin from the model. No parents to visit.
-        const SdrLayerAdmin& rAdmin(GetModel()->GetLayerAdmin());
-        return rAdmin.GetLayerID(rAdmin.GetControlLayerName(), FALSE);
-    }
-
-    // return parent's knowledge when no page and no model. Without page and model
-    // there is no SdrLayerAdmin for this object anyways, so return member.
+    // #i72535#
+    // i70852 was too radical, in SW obects (and thus, FormControls, too)
+    // get moved to invisible layers to hide them (e.g. in hidden sections).
+    // This means that form controls ARE allowed to be on other layers than
+    // the form control layer ATM and that being member of form control layer
+    // is no criteria to find all FormControls of a document.
+    // To fix, use parent functionality
     return SdrUnoObj::GetLayer();
 }
 
-void FmFormObj::NbcSetLayer(SdrLayerID /*nLayer*/)
+void FmFormObj::NbcSetLayer(SdrLayerID nLayer)
 {
-    // nothing to do, Layer cannot be changed for FmFormObj. Parents
-    // do not need to be called, SdrUnoObj::NbcSetLayer will not do
-    // it's special handling, but call SdrObject::NbcSetLayer which
-    // will not change since it also uses GetLayer() to test for change
+    // #i72535#
+    // See above. To fix, use parent functionality
+    return SdrUnoObj::NbcSetLayer(nLayer);
 }
 
 // eof
