@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:12:19 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,13 +178,11 @@ void ViewShell::Scroll()
                         // #i68597# when scrolling, let DrawingLayer know about refreshed areas,
                         // even when no DL objects are in the area. This is needed to allow
                         // fully buffered overlay.
-                        Rectangle aDLRect;
-
                         if(!IsPaintInProgress())
                         {
-                            aDLRect = aAlignedScrollRect.SVRect();
+                            Rectangle aDLRect(aAlignedScrollRect.SVRect());
                             aDLRect.Move( -rScroll.GetOffs(), 0);
-                            DLPreOutsidePaint(Region(aDLRect));
+                            DLPrePaint2(Region(aDLRect));
                         }
 
                         GetWin()->Scroll( -rScroll.GetOffs(), 0,
@@ -192,10 +190,7 @@ void ViewShell::Scroll()
                                           SCROLL_CHILDREN );
 
                         // #i68597#
-                        if(!IsPaintInProgress())
-                        {
-                            DLPostOutsidePaint(Region(aDLRect));
-                        }
+                        DLPostPaint2();
 
                         SwRect aRect( aRectangle );
                         Imp()->ScrolledRect( aRect, -rScroll.GetOffs() );
@@ -218,13 +213,11 @@ void ViewShell::Scroll()
                         // #i68597# when scrolling, let DrawingLayer know about refreshed areas,
                         // even when no DL objects are in the area. This is needed to allow
                         // fully buffered overlay.
-                        Rectangle aDLRect;
-
                         if(!IsPaintInProgress())
                         {
-                            aDLRect = aAlignedScrollRect.SVRect();
+                            Rectangle aDLRect(aAlignedScrollRect.SVRect());
                             aDLRect.Move( 0, rScroll.GetOffs());
-                            DLPreOutsidePaint(Region(aDLRect));
+                            DLPrePaint2(Region(aDLRect));
                         }
 
                         // OD 2004-05-28 #i29527# - add flag SCROLL_NOWINDOWINVALIDATE
@@ -234,10 +227,7 @@ void ViewShell::Scroll()
                                           SCROLL_CHILDREN | SCROLL_NOWINDOWINVALIDATE );
 
                         // #i68597#
-                        if(!IsPaintInProgress())
-                        {
-                            DLPostOutsidePaint(Region(aDLRect));
-                        }
+                        DLPostPaint2();
 
                         SwRect aRect( aRectangle );
                         Imp()->ScrolledRect( aRect, rScroll.GetOffs() );
@@ -740,6 +730,10 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
         pVout->SetLineColor( pOld->GetLineColor() );
         pVout->SetFillColor( pOld->GetFillColor() );
 
+        // #i72754# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
+        const Region aRepaintRegion(aScRect.SVRect());
+        GetShell()->DLPrePaint2(aRepaintRegion);
+
         //Virtuelles Device in die ViewShell 'selektieren'
         GetShell()->pOut = pVout;
 
@@ -792,8 +786,16 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
 
         GetShell()->pOut = pOld;
         delete pVout;
+
+        // controll layer is repainted additionally. It will look different when painted in VDev,
+        // so it's a good idea to do so.
         if( GetShell()->GetViewOptions()->IsControl() && HasDrawView() )
+        {
             PaintLayer( GetShell()->getIDocumentDrawModelAccess()->GetControlsId(), aScRect );
+        }
+
+        // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
+        GetShell()->DLPostPaint2();
     }
     else
     {
