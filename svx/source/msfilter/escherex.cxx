@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 17:39:45 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 13:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4709,7 +4709,7 @@ EscherExHostAppData* EscherEx::EnterAdditionalTextGroup()
 
 // ---------------------------------------------------------------------------------------------
 
-UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
+UINT32 EscherEx::EnterGroup( const String& rShapeName, const Rectangle* pBoundRect )
 {
     Rectangle aRect;
     if( pBoundRect )
@@ -4735,6 +4735,11 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x00040004 );
         aPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft, 0 );
         aPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight, 0 );
+
+        // #i51348# shape name
+        if( rShapeName.Len() > 0 )
+            aPropOpt.AddOpt( ESCHER_Prop_wzName, rShapeName );
+
         aPropOpt.Commit( *mpOutStrm );
         if ( mnGroupLevel > 1 )
         {
@@ -4755,6 +4760,11 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
     CloseContainer();                                               // ESCHER_SpContainer
     mnGroupLevel++;
     return nShapeId;
+}
+
+UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
+{
+    return EnterGroup( String::EmptyString(), pBoundRect );
 }
 
 // ---------------------------------------------------------------------------------------------
