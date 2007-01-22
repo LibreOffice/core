@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:32:29 $
+#   last change: $Author: obo $ $Date: 2007-01-22 14:47:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ sub create_directory
     my ($directory) = @_;
 
     my $returnvalue = 1;
+    my $infoline = "";
 
     if (!(-d $directory))
     {
@@ -67,8 +68,25 @@ sub create_directory
         }
         else
         {
-            pre2par::exiter::exit_program("Error: Could not create directory: $directory", "create_directory");
+            # New solution in parallel packing: It is possible, that the directory now exists, although it
+            # was not created in this process. There is only an important error, if the directory does not
+            # exist now.
+
+            if (!(-d $directory))
+            {
+                pre2par::exiter::exit_program("Error: Could not create directory: $directory", "create_directory");
+            }
+            else
+            {
+                $infoline = "\nAnother process created this directory in exactly this moment :-) : $directory\n";
+                push(@pre2par::globals::logfileinfo, $infoline);
+            }
         }
+    }
+    else
+    {
+        $infoline = "\nAlready existing directory, did not create: $directory\n";
+        push(@pre2par::globals::logfileinfo, $infoline);
     }
 }
 
