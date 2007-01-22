@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:39:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,16 @@
 #include <vector>
 
 class GDIMetaFile;
-class BitmapEx;
 class VirtualDevice;
 class Gradient;
+class BitmapEx;
+class MapMode;
+class Size;
+
+namespace basegfx {
+    class B2DPolyPolygon;
+    class B2DPolygon;
+}
 
 namespace cppcanvas
 {
@@ -67,6 +74,7 @@ namespace cppcanvas
     namespace internal
     {
         struct OutDevState;
+        struct ActionFactoryParameters;
 
         // state stack of OutputDevice, to correctly handle
         // push/pop actions
@@ -116,70 +124,77 @@ namespace cppcanvas
             ImplRenderer(const ImplRenderer&);
             ImplRenderer& operator=( const ImplRenderer& );
 
-            void updateClipping( VectorOfOutDevStates&              rStates,
-                                 const ::basegfx::B2DPolyPolygon&   rClipPoly,
-                                 const CanvasSharedPtr&             rCanvas,
+            void updateClipping( const ::basegfx::B2DPolyPolygon&   rClipPoly,
+                                 const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 
-            void updateClipping( VectorOfOutDevStates&  rStates,
-                                 const ::Rectangle&     rClipRect,
-                                 const CanvasSharedPtr& rCanvas,
-                                 bool                   bIntersect );
+            void updateClipping( const ::Rectangle&                 rClipRect,
+                                 const ActionFactoryParameters&     rParms,
+                                 bool                               bIntersect );
 
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvasFont > createFont( double&                  o_rFontRotation,
-                                                                       const ::Font&            rFont,
-                                                                       const CanvasSharedPtr&   rCanvas,
-                                                                       const ::VirtualDevice&   rVDev,
-                                                                       const Parameters&        rParms ) const;
-            bool            createActions( const CanvasSharedPtr&   rCanvas,
-                                           VirtualDevice&           rVDev,
-                                           GDIMetaFile&             rMtf,
-                                           VectorOfOutDevStates&    rStates,
-                                           const Parameters&        rParms,
-                                           bool                     bSubsettableActions,
-                                           sal_Int32&               io_rCurrActionIndex );
-            bool            createFillAndStroke( const ::PolyPolygon&           rPolyPoly,
-                                                 const CanvasSharedPtr&         rCanvas,
-                                                 sal_Int32&                     rActionIndex,
-                                                 const VectorOfOutDevStates&    rStates );
-            void            skipContent( GDIMetaFile& rMtf,
-                                         const char*  pCommentString,
-                                         sal_Int32&   io_rCurrActionIndex ) const;
+                ::com::sun::star::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
+                                                                       const ::Font&                   rFont,
+                                                                       const ActionFactoryParameters&  rParms ) const;
+            bool createActions( GDIMetaFile&                    rMtf,
+                                const ActionFactoryParameters&  rParms,
+                                bool                            bSubsettableActions );
+            bool createFillAndStroke( const ::basegfx::B2DPolyPolygon& rPolyPoly,
+                                      const ActionFactoryParameters&   rParms );
+            bool createFillAndStroke( const ::basegfx::B2DPolygon&   rPoly,
+                                      const ActionFactoryParameters& rParms );
+            void skipContent( GDIMetaFile& rMtf,
+                              const char*  pCommentString,
+                              sal_Int32&   io_rCurrActionIndex ) const;
 
-            bool            isActionContained( GDIMetaFile& rMtf,
-                                               const char*  pCommentString,
-                                               USHORT       nType ) const;
+            bool isActionContained( GDIMetaFile& rMtf,
+                                    const char*  pCommentString,
+                                    USHORT       nType ) const;
 
-            void            createGradientAction( const ::PolyPolygon&      rPoly,
-                                                  const ::Gradient&         rGradient,
-                                                  ::VirtualDevice&          rVDev,
-                                                  const CanvasSharedPtr&    rCanvas,
-                                                  VectorOfOutDevStates&     rStates,
-                                                  const Parameters&         rParms,
-                                                  sal_Int32&                io_rCurrActionIndex,
-                                                  bool                      bIsPolygonRectangle,
-                                                  bool                      bSubsettableActions );
+            void createGradientAction( const ::PolyPolygon&           rPoly,
+                                       const ::Gradient&              rGradient,
+                                       const ActionFactoryParameters& rParms,
+                                       bool                           bIsPolygonRectangle,
+                                       bool                           bSubsettableActions );
 
-            void            createTextAction( const ::Point&                rStartPoint,
-                                              const String                  rString,
-                                              int                           nIndex,
-                                              int                           nLength,
-                                              const sal_Int32*              pCharWidths,
-                                              ::VirtualDevice&              rVDev,
-                                              const CanvasSharedPtr&        rCanvas,
-                                              VectorOfOutDevStates&         rStates,
-                                              const Parameters&             rParms,
-                                              bool                          bSubsettable,
-                                              sal_Int32&                    io_rCurrActionIndex );
+            void createTextAction( const ::Point&                 rStartPoint,
+                                   const String                   rString,
+                                   int                            nIndex,
+                                   int                            nLength,
+                                   const sal_Int32*               pCharWidths,
+                                   const ActionFactoryParameters& rParms,
+                                   bool                           bSubsettable );
 
-            bool            getSubsetIndices( sal_Int32&                        io_rStartIndex,
-                                              sal_Int32&                        io_rEndIndex,
-                                              ActionVector::const_iterator&     o_rRangeBegin,
-                                              ActionVector::const_iterator&     o_rRangeEnd ) const;
+            bool getSubsetIndices( sal_Int32&                    io_rStartIndex,
+                                   sal_Int32&                    io_rEndIndex,
+                                   ActionVector::const_iterator& o_rRangeBegin,
+                                   ActionVector::const_iterator& o_rRangeEnd ) const;
 
 
-            ActionVector                            maActions;
+            ActionVector maActions;
+        };
+
+
+        /// Common parameters when creating actions
+        struct ActionFactoryParameters
+        {
+            ActionFactoryParameters( VectorOfOutDevStates&       rStates,
+                                     const CanvasSharedPtr&      rCanvas,
+                                     ::VirtualDevice&            rVDev,
+                                     const Renderer::Parameters& rParms,
+                                     sal_Int32&                  io_rCurrActionIndex ) :
+                mrStates(rStates),
+                mrCanvas(rCanvas),
+                mrVDev(rVDev),
+                mrParms(rParms),
+                mrCurrActionIndex(io_rCurrActionIndex)
+            {}
+
+            VectorOfOutDevStates&       mrStates;
+            const CanvasSharedPtr&      mrCanvas;
+            ::VirtualDevice&            mrVDev;
+            const Renderer::Parameters& mrParms;
+            sal_Int32&                  mrCurrActionIndex;
         };
     }
 }
