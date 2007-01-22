@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrmediaobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:59:39 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:13:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@ namespace sdr
             // Paint this object. This is before evtl. SubObjects get painted. It needs to return
             // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
             virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
+
+            // #i72701#
+            virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
 
         public:
 
