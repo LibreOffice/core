@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:49:05 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -827,8 +827,7 @@ void SdrPaintView::SetAllLayersPrintable(BOOL bPrn)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #define SVX_REPAINT_TIMER_TEST
 
-void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMod,
-    ::sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMod, ::sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
 #ifdef SVX_REPAINT_TIMER_TEST
 #define REMEMBERED_TIMES_COUNT  (10)
@@ -849,80 +848,11 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT
     {
 #endif // SVX_REPAINT_TIMER_TEST
 
-    DBG_ASSERT(pOut, "SdrPaintView::CompleteRedraw: No OutDev (!)");
-    SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
-    sal_Bool bIsTempTarget(sal_False);
+    SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
+    OSL_ENSURE(pPaintWindow, "SdrPaintView::CompleteRedraw: No OutDev (!)");
 
-    if(pPaintWindow)
-    {
-        // draw preprocessing, only for known devices
-        // prepare PreRendering
-        pPaintWindow->PreparePreRenderDevice();
-    }
-    else
-    {
-        // None of the known OutputDevices is the target of this paint, use
-        // a temporary SdrPaintWindow for this Redraw.
-        pPaintWindow = new SdrPaintWindow(*this, *pOut);
-        bIsTempTarget = sal_True;
-    }
-
-    // redraw all PageViews with the target. This may expand the RedrawRegion
-    // at the PaintWindow, plus taking care of FormLayer expansion
-    if(mpPageView)
-    {
-        mpPageView->CompleteRedraw(*pPaintWindow, rReg, nPaintMod, pRedirector);
-    }
-
-    if(bIsTempTarget)
-    {
-        // get rid of temp target again
-        delete pPaintWindow;
-        pPaintWindow = 0L;
-    }
-    else
-    {
-        // draw postprocessing, only for known devices
-        sal_Bool bFormControlsUsed(sal_False);
-
-        if(mpPageView)
-        {
-            bFormControlsUsed = mpPageView->AreFormControlsUsed();
-        }
-
-        if(bFormControlsUsed)
-        {
-            // output PreRendering and destroy it so that it is not used for FormLayer
-            // or overlay
-            pPaintWindow->OutputPreRenderDevice(pPaintWindow->GetRedrawRegion());
-            pPaintWindow->DestroyPreRenderDevice();
-
-            // draw form layer directly to window.
-            ImpFormLayerDrawing(*pPaintWindow);
-
-            // draw old text edit stuff before overlay to have it as part of the background
-            // ATM. This will be changed to have the text editing on the overlay, bit it
-            // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
-            ImpTextEditDrawing(rReg, *pPaintWindow);
-
-            // draw Overlay directly to window. This will save the contents of the window
-            // in the RedrawRegion to the overlay background buffer, too.
-            pPaintWindow->DrawOverlay(pPaintWindow->GetRedrawRegion());
-        }
-        else
-        {
-            // draw old text edit stuff before overlay to have it as part of the background
-            // ATM. This will be changed to have the text editing on the overlay, bit it
-            // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
-            ImpTextEditDrawing(rReg, *pPaintWindow);
-
-            // draw Overlay, also to PreRender device if exists
-            pPaintWindow->DrawOverlay(pPaintWindow->GetRedrawRegion());
-
-            // output PreRendering
-            pPaintWindow->OutputPreRenderDevice(pPaintWindow->GetRedrawRegion());
-        }
-    }
+    DoCompleteRedraw(*pPaintWindow, rReg, nPaintMod, pRedirector);
+    EndCompleteRedraw(*pPaintWindow, rReg);
 
 #ifdef SVX_REPAINT_TIMER_TEST
     }
@@ -976,6 +906,95 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT
     }
 #endif // SVX_REPAINT_TIMER_TEST
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// #i72889#
+
+SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
+{
+    OSL_ENSURE(pOut, "SdrPaintView::BeginCompleteRedraw: No OutDev (!)");
+    SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
+
+    if(pPaintWindow)
+    {
+        // draw preprocessing, only for known devices
+        // prepare PreRendering
+        pPaintWindow->PreparePreRenderDevice();
+    }
+    else
+    {
+        // None of the known OutputDevices is the target of this paint, use
+        // a temporary SdrPaintWindow for this Redraw.
+        pPaintWindow = new SdrPaintWindow(*this, *pOut);
+        pPaintWindow->setTemporaryTarget(true);
+    }
+
+    return pPaintWindow;
+}
+
+void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, USHORT nPaintMod, ::sdr::contact::ViewObjectContactRedirector* pRedirector)
+{
+    // redraw all PageViews with the target. This may expand the RedrawRegion
+    // at the PaintWindow, plus taking care of FormLayer expansion
+    if(mpPageView)
+    {
+        mpPageView->CompleteRedraw(rPaintWindow, rReg, nPaintMod, pRedirector);
+    }
+}
+
+void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg)
+{
+    if(rPaintWindow.getTemporaryTarget())
+    {
+        // get rid of temp target again
+        delete (&rPaintWindow);
+    }
+    else
+    {
+        // draw postprocessing, only for known devices
+        sal_Bool bFormControlsUsed(sal_False);
+
+        if(mpPageView)
+        {
+            bFormControlsUsed = mpPageView->AreFormControlsUsed();
+        }
+
+        if(bFormControlsUsed)
+        {
+            // output PreRendering and destroy it so that it is not used for FormLayer
+            // or overlay
+            rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
+            rPaintWindow.DestroyPreRenderDevice();
+
+            // draw form layer directly to window.
+            ImpFormLayerDrawing(rPaintWindow);
+
+            // draw old text edit stuff before overlay to have it as part of the background
+            // ATM. This will be changed to have the text editing on the overlay, bit it
+            // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
+            ImpTextEditDrawing(rReg, rPaintWindow);
+
+            // draw Overlay directly to window. This will save the contents of the window
+            // in the RedrawRegion to the overlay background buffer, too.
+            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion());
+        }
+        else
+        {
+            // draw old text edit stuff before overlay to have it as part of the background
+            // ATM. This will be changed to have the text editing on the overlay, bit it
+            // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
+            ImpTextEditDrawing(rReg, rPaintWindow);
+
+            // draw Overlay, also to PreRender device if exists
+            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion());
+
+            // output PreRendering
+            rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg, sal_Bool bPrepareBuffered)
 {
