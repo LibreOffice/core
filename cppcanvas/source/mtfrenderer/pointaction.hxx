@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pointaction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:21:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,10 @@
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
-class Point;
 class Color;
-
+namespace basegfx {
+    class B2DPoint;
+}
 
 /* Definition of internal::PointActionFactory class */
 
@@ -62,12 +63,12 @@ namespace cppcanvas
         {
         public:
             /// Point in current color
-            static ActionSharedPtr createPointAction( const ::Point&,
+            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
                                                       const CanvasSharedPtr&,
                                                       const OutDevState& );
 
             /// Point in given color
-            static ActionSharedPtr createPointAction( const ::Point&,
+            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
                                                       const CanvasSharedPtr&,
                                                       const OutDevState&,
                                                       const ::Color&        );

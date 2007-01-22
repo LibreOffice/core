@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolyaction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:21:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 11:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,10 @@
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
-class PolyPolygon;
 
+namespace basegfx {
+    class B2DPolyPolygon;
+}
 namespace com { namespace sun { namespace star { namespace rendering
 {
     struct Texture;
@@ -67,29 +69,29 @@ namespace cppcanvas
         {
         public:
             /// Create polygon, fill/stroke according to state
-            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&     );
 
             /// Create texture-filled polygon
-            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
                                                          const ::com::sun::star::rendering::Texture& );
 
             /// Create line polygon (always stroked, not filled)
-            static ActionSharedPtr createLinePolyPolyAction( const ::PolyPolygon&,
+            static ActionSharedPtr createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                              const CanvasSharedPtr&,
                                                              const OutDevState& );
 
             /// Create stroked polygon
-            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
                                                          const ::com::sun::star::rendering::StrokeAttributes& );
 
             /// For transparent painting of the given polygon (normally, we take the colors always opaque)
-            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
                                                          int nTransparency );
