@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:07:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,7 +297,8 @@ static const ::rtl::OUString CMD_DO_ENTRY_BACKUP             = ::rtl::OUString::
 static const ::rtl::OUString CMD_DO_ENTRY_CLEANUP            = ::rtl::OUString::createFromAscii("/doEntryCleanUp"         );    // remove the specified entry from the recovery cache
 static const ::rtl::OUString CMD_DO_SESSION_SAVE             = ::rtl::OUString::createFromAscii("/doSessionSave"          );    // save all open documents if e.g. a window manager closes an user session
 static const ::rtl::OUString CMD_DO_SESSION_RESTORE          = ::rtl::OUString::createFromAscii("/doSessionRestore"       );    // restore a saved user session from disc
-static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY         = ::rtl::OUString::createFromAscii("/disableRecovery"        );    // disable recovery temp. for this office session
+static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY         = ::rtl::OUString::createFromAscii("/disableRecovery"        );    // disable recovery and auto save (!) temp. for this office session
+static const ::rtl::OUString CMD_DO_SET_AUTOSAVE_STATE       = ::rtl::OUString::createFromAscii("/setAutoSaveState"       );    // disable/enable auto save (not crash save) for this office session
 
 static const ::rtl::OUString REFERRER_USER                   = ::rtl::OUString::createFromAscii("private:user");
 
@@ -306,6 +307,7 @@ static const ::rtl::OUString PROP_PROGRESS                   = ::rtl::OUString::
 static const ::rtl::OUString PROP_SAVEPATH                   = ::rtl::OUString::createFromAscii("SavePath"         );
 static const ::rtl::OUString PROP_ENTRY_ID                   = ::rtl::OUString::createFromAscii("EntryID"          );
 static const ::rtl::OUString PROP_DBG_MAKE_IT_FASTER         = ::rtl::OUString::createFromAscii("DBGMakeItFaster"  );
+static const ::rtl::OUString PROP_AUTOSAVE_STATE             = ::rtl::OUString::createFromAscii("AutoSaveState"    );
 
 static const ::rtl::OUString OPERATION_START                 = ::rtl::OUString::createFromAscii("start" );
 static const ::rtl::OUString OPERATION_STOP                  = ::rtl::OUString::createFromAscii("stop"  );
@@ -723,19 +725,47 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
         return;
     }
 
-    m_eJob |= eNewJob;
+    ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
     // check if somewhere wish to disable recovery temp. for this office session
-    if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+    // This can be done immediatly ... must not been done asynchronous.
+    if ((eNewJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
     {
-       implts_stopTimer();
-       implts_stopListening();
-       return;
+        // it's important to set a flag internaly, so AutoRecovery will be supressed - even if it's requested.
+        m_eJob |= eNewJob;
+        implts_stopTimer();
+        implts_stopListening();
+        return;
     }
 
-    ::comphelper::SequenceAsHashMap lArgs   (lArguments);
-    sal_Bool                        bAsync  = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, (sal_Bool)sal_False);
-    DispatchParams                  aParams (lArgs, static_cast< css::frame::XDispatch* >(this));
+    // disable/enable AutoSave for this office session only
+    // independend from the configuration entry.
+    if ((eNewJob & AutoRecovery::E_SET_AUTOSAVE_STATE) == AutoRecovery::E_SET_AUTOSAVE_STATE)
+    {
+        sal_Bool bOn = lArgs.getUnpackedValueOrDefault(PROP_AUTOSAVE_STATE, (sal_Bool)sal_True);
+        if (bOn)
+        {
+            // dont enable AutoSave hardly !
+            // reload configuration to know the current state.
+            implts_readAutoSaveConfig();
+            implts_actualizeTimer();
+            // can it happen that might be the listener was stopped ? .-)
+            // make sure it runs always ... even if AutoSave itself was disabled temporarly.
+            implts_startListening();
+        }
+        else
+        {
+            implts_stopTimer();
+            m_eJob       &= ~AutoRecovery::E_AUTO_SAVE;
+            m_eTimerType  =  AutoRecovery::E_DONT_START_TIMER;
+        }
+        return;
+    }
+
+    m_eJob |= eNewJob;
+
+    sal_Bool       bAsync  = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, (sal_Bool)sal_False);
+    DispatchParams aParams (lArgs, static_cast< css::frame::XDispatch* >(this));
 
     // Hold this instance alive till the asynchronous operation will be finished.
     if (bAsync)
@@ -781,43 +811,64 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         // if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
         //  Auto save is called from our internal timer ... not via dispatch() API !
         // else
-        if ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE)
+        if (
+            ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY      ) != AutoRecovery::E_DISABLE_AUTORECOVERY      )
+           )
         {
             LOG_RECOVERY("... prepare emergency save ...")
             bAllowAutoSaveReactivation = sal_False;
             implts_prepareEmergencySave();
         }
         else
-        if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
+        if (
+            ((eJob & AutoRecovery::E_EMERGENCY_SAVE  ) == AutoRecovery::E_EMERGENCY_SAVE  ) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+           )
         {
             LOG_RECOVERY("... do emergency save ...")
             bAllowAutoSaveReactivation = sal_False;
             implts_doEmergencySave(aParams);
         }
         else
-        if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
+        if (
+            ((eJob & AutoRecovery::E_RECOVERY        ) == AutoRecovery::E_RECOVERY        ) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+           )
         {
             LOG_RECOVERY("... do recovery ...")
             implts_doRecovery(aParams);
         }
         else
-        if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
+        if (
+            ((eJob & AutoRecovery::E_SESSION_SAVE    ) == AutoRecovery::E_SESSION_SAVE    ) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            )
         {
             LOG_RECOVERY("... do session save ...")
             bAllowAutoSaveReactivation = sal_False;
             implts_doSessionSave(aParams);
         }
         else
-        if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
+        if (
+            ((eJob & AutoRecovery::E_SESSION_RESTORE ) == AutoRecovery::E_SESSION_RESTORE ) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            )
         {
             LOG_RECOVERY("... do session restore ...")
             implts_doSessionRestore(aParams);
         }
         else
-        if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
+        if (
+            ((eJob & AutoRecovery::E_ENTRY_BACKUP    ) == AutoRecovery::E_ENTRY_BACKUP    ) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            )
             implts_backupWorkingEntry(aParams);
         else
-        if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
+        if (
+            ((eJob & AutoRecovery::E_ENTRY_CLEANUP   ) == AutoRecovery::E_ENTRY_CLEANUP   ) &&
+            ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
+            )
             implts_cleanUpWorkingEntry(aParams);
     }
     catch(const css::uno::RuntimeException& exRun)
@@ -1123,8 +1174,45 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
 }
 
 //-----------------------------------------------
+void AutoRecovery::implts_readAutoSaveConfig()
+{
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xCommonRegistry(implts_openConfig(), css::uno::UNO_QUERY);
+
+    // AutoSave [bool]
+    sal_Bool bEnabled = sal_False;
+    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_ENABLED) >>= bEnabled;
+
+    // SAFE -> ------------------------------
+    WriteGuard aWriteLock(m_aLock);
+    if (bEnabled)
+    {
+        m_eJob       |= AutoRecovery::E_AUTO_SAVE;
+        m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
+    }
+    else
+    {
+        m_eJob       &= ~AutoRecovery::E_AUTO_SAVE;
+        m_eTimerType  = AutoRecovery::E_DONT_START_TIMER;
+    }
+    aWriteLock.unlock();
+    // <- SAFE ------------------------------
+
+    // AutoSaveTimeIntervall [int] in min
+    sal_Int32 nTimeIntervall = 15;
+    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL) >>= nTimeIntervall;
+
+    // SAFE -> ----------------------------------
+    aWriteLock.lock();
+    m_nAutoSaveTimeIntervall = nTimeIntervall;
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+}
+
+//-----------------------------------------------
 void AutoRecovery::implts_readConfig()
 {
+    implts_readAutoSaveConfig();
+
     css::uno::Reference< css::container::XHierarchicalNameAccess > xCommonRegistry(implts_openConfig(), css::uno::UNO_QUERY);
 
     // REINTRANT -> --------------------------------
@@ -1142,35 +1230,6 @@ void AutoRecovery::implts_readConfig()
     // <- REINTRANT --------------------------------
 
     css::uno::Any aValue;
-
-    // AutoSave [bool]
-    aValue = xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_ENABLED);
-    sal_Bool bEnabled = sal_False;
-    if (aValue >>= bEnabled)
-    {
-        // SAFE -> ------------------------------
-        aWriteLock.lock();
-        if (bEnabled)
-        {
-            m_eJob       |= AutoRecovery::E_AUTO_SAVE;
-            m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
-        }
-        else
-        {
-            m_eJob       &= ~AutoRecovery::E_AUTO_SAVE;
-            m_eTimerType  = AutoRecovery::E_DONT_START_TIMER;
-        }
-        aWriteLock.unlock();
-        // <- SAFE ------------------------------
-    }
-
-    // AutoSaveTimeIntervall [int] in min
-    aValue = xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL);
-    // SAFE -> ----------------------------------
-    aWriteLock.lock();
-    aValue >>= m_nAutoSaveTimeIntervall;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 
     // RecoveryList [set]
     aValue = xCommonRegistry->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST);
@@ -2843,6 +2902,9 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
         else
         if (aURL.Path.equals(CMD_DO_DISABLE_RECOVERY))
             return AutoRecovery::E_DISABLE_AUTORECOVERY;
+        else
+        if (aURL.Path.equals(CMD_DO_SET_AUTOSAVE_STATE))
+            return AutoRecovery::E_SET_AUTOSAVE_STATE;
     }
 
     LOG_WARNING("AutoRecovery::implts_classifyJob()", "Invalid URL (protocol).")
