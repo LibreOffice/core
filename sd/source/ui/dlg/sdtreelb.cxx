@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:09:49 $
+ *  last change: $Author: obo $ $Date: 2007-01-22 15:34:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,11 +208,10 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 ,   mpBookmarkDoc       ( NULL )
 ,   mpMedium            ( NULL )
 ,   mpOwnMedium         ( NULL )
-,   maTransparencyColor ( RGB_COLORDATA (0xff,0,0xff) )
-,   maImgOle            ( Bitmap( SdResId( BMP_OLE ) ), maTransparencyColor )
-,   maImgGraphic        ( Bitmap( SdResId( BMP_GRAPHIC ) ), maTransparencyColor )
-,   maImgOleH           ( Bitmap( SdResId( BMP_OLE_H ) ), maTransparencyColor)
-,   maImgGraphicH       ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), maTransparencyColor)
+,   maImgOle             ( BitmapEx( SdResId( BMP_OLE ) ) )
+,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
+,   maImgOleH            ( BitmapEx( SdResId( BMP_OLE_H ) ) )
+,   maImgGraphicH        ( BitmapEx( SdResId( BMP_GRAPHIC_H ) ) )
 ,   mbLinkableSelected  ( FALSE )
 ,   mpDropNavWin        ( NULL )
 {
@@ -351,29 +350,19 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
     SdPage*      pPage = NULL;
     SvLBoxEntry* pEntry = NULL;
 
-    Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-    Image aImgPage( aBmpPage, maTransparencyColor );
-    Bitmap aBmpPageExcl( SdResId( BMP_PAGE_EXCLUDED ) );
-    Image aImgPageExcl( aBmpPageExcl, maTransparencyColor );
-    Bitmap aBmpPageObjsExcl( SdResId( BMP_PAGEOBJS_EXCLUDED ) );
-    Image aImgPageObjsExcl( aBmpPageObjsExcl, maTransparencyColor );
-    Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-    Image aImgPageObjs( aBmpPageObjs, maTransparencyColor );
-    Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-    Image aImgObjects( aBmpObjects, maTransparencyColor );
+    Image aImgPage( BitmapEx( SdResId( BMP_PAGE ) ) );
+    Image aImgPageExcl( BitmapEx( SdResId( BMP_PAGE_EXCLUDED ) ) );
+    Image aImgPageObjsExcl( BitmapEx( SdResId( BMP_PAGEOBJS_EXCLUDED ) ) );
+    Image aImgPageObjs( BitmapEx( SdResId( BMP_PAGEOBJS ) ) );
+    Image aImgObjects( BitmapEx( SdResId( BMP_OBJECTS ) ) );
 
-    Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
-    Image aImgPageH( aBmpPageH , maTransparencyColor );
-    Bitmap aBmpPageExclH( SdResId( BMP_PAGE_EXCLUDED_H ) );
-    Image aImgPageExclH( aBmpPageExclH, maTransparencyColor );
-    Bitmap aBmpPageObjExclH( SdResId( BMP_PAGEOBJS_EXCLUDED_H ) );
-    Image aImgPageObjsExclH( aBmpPageObjExclH, maTransparencyColor );
-    Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
-    Image aImgPageObjsH( aBmpPageObjsH, maTransparencyColor );
-    Bitmap aBmpObjectsH( SdResId( BMP_OBJECTS_H ) );
-    Image aImgObjectsH( aBmpObjectsH, maTransparencyColor );
+    Image aImgPageH( BitmapEx( SdResId( BMP_PAGE_H ) ) );
+    Image aImgPageExclH( BitmapEx( SdResId( BMP_PAGE_EXCLUDED_H ) ) );
+    Image aImgPageObjsExclH( BitmapEx( SdResId( BMP_PAGEOBJS_EXCLUDED_H ) ) );
+    Image aImgPageObjsH( BitmapEx( SdResId( BMP_PAGEOBJS_H ) ) );
+    Image aImgObjectsH( BitmapEx( SdResId( BMP_OBJECTS_H ) ) );
 
-    // Zuerst alle Pages incl. Objekte einfuegen
+    // first insert all pages including objects
     USHORT nPage = 0;
     const USHORT nMaxPages = mpDoc->GetPageCount();
 
@@ -521,14 +510,10 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     mpMedium = pInMedium;
     maDocName = rDocName;
 
-    Bitmap aBmpDocOpen( SdResId( BMP_DOC_OPEN ) );
-    Image aImgDocOpen( aBmpDocOpen, maTransparencyColor );
-    Bitmap aBmpDocClosed( SdResId( BMP_DOC_CLOSED ) );
-    Image aImgDocClosed( aBmpDocClosed, maTransparencyColor );
-    Bitmap aBmpDocOpenH( SdResId( BMP_DOC_OPEN_H ) );
-    Image aImgDocOpenH( aBmpDocOpenH, maTransparencyColor );
-    Bitmap aBmpDocClosedH( SdResId( BMP_DOC_CLOSED_H ) );
-    Image aImgDocClosedH( aBmpDocClosedH, maTransparencyColor );
+    Image aImgDocOpen( BitmapEx( SdResId( BMP_DOC_OPEN ) ) );
+    Image aImgDocClosed( BitmapEx( SdResId( BMP_DOC_CLOSED ) ) );
+    Image aImgDocOpenH( BitmapEx( SdResId( BMP_DOC_OPEN_H ) ) );
+    Image aImgDocClosedH( BitmapEx( SdResId( BMP_DOC_CLOSED_H ) ) );
 
     // Dokumentnamen einfuegen
     SvLBoxEntry* pFileEntry = InsertEntry( maDocName,
@@ -724,22 +709,16 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
             SdPage*      pPage = NULL;
             SvLBoxEntry* pPageEntry = NULL;
 
-            Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-            Image aImgPage( aBmpPage, maTransparencyColor );
-            Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-            Image aImgPageObjs( aBmpPageObjs, maTransparencyColor );
-            Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-            Image aImgObjects( aBmpObjects, maTransparencyColor );
-            Bitmap aBmpPageH( SdResId( BMP_PAGE_H ) );
-            Image aImgPageH( aBmpPageH, maTransparencyColor );
-            Bitmap aBmpPageObjsH( SdResId( BMP_PAGEOBJS_H ) );
-            Image aImgPageObjsH( aBmpPageObjsH, maTransparencyColor );
-            Bitmap aBmpImgObjectsH( SdResId( BMP_OBJECTS_H ) );
-            Image aImgObjectsH( aBmpImgObjectsH, maTransparencyColor );
+            Image aImgPage( BitmapEx( SdResId( BMP_PAGE ) ) );
+            Image aImgPageObjs( BitmapEx( SdResId( BMP_PAGEOBJS ) ) );
+            Image aImgObjects( BitmapEx( SdResId( BMP_OBJECTS ) ) );
+            Image aImgPageH( BitmapEx( SdResId( BMP_PAGE_H ) ) );
+            Image aImgPageObjsH( BitmapEx( SdResId( BMP_PAGEOBJS_H ) ) );
+            Image aImgObjectsH( BitmapEx( SdResId( BMP_OBJECTS_H ) ) );
 
-            // Dokumentname ist schon eingefuegt
+            // document name already inserted
 
-            // Nur alle "normalen" Pages mit Objekten einfuegen
+            // only insert all "normal" ? slides with objects
             USHORT nPage = 0;
             const USHORT nMaxPages = mpBookmarkDoc->GetPageCount();
 
