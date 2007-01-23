@@ -41,3 +41,4 @@
  <toolbar:toolbaritem xlink:href=".uno:SelectAll" toolbar:visible="false" toolbar:helpid="5723"/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false" toolbar:helpid="10296"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:visible="false" toolbar:helpid="10297"/>
+</toolbar:toolbar>
