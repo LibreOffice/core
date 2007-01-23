@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:36 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -883,8 +883,8 @@ IMPL_LINK( SvxFontWorkDialog, SelectShadowHdl_Impl, void *, EMPTYARG )
         }
         else if ( nLastShadowTbxId == TBI_SHADOW_SLANT )
         {
-            nSaveShadowAngle = aMtrFldShadowX.GetValue();
-            nSaveShadowSize  = aMtrFldShadowY.GetValue();
+            nSaveShadowAngle = static_cast<long>(aMtrFldShadowX.GetValue());
+            nSaveShadowSize  = static_cast<long>(aMtrFldShadowY.GetValue());
         }
         nLastShadowTbxId = nId;
 
@@ -954,8 +954,8 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     }
     else if(nLastShadowTbxId == TBI_SHADOW_SLANT)
     {
-        nValueX = aMtrFldShadowX.GetValue();
-        nValueY = aMtrFldShadowY.GetValue();
+        nValueX = static_cast<long>(aMtrFldShadowX.GetValue());
+        nValueY = static_cast<long>(aMtrFldShadowY.GetValue());
     }
 
     XFormTextShadowXValItem aShadowXItem( nValueX );
