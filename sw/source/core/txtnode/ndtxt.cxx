@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:51:59 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2313,12 +2313,16 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
             }
         }
 
-        if ( !pRet &&
-             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) &&
-             GetOutlineLevel() != NO_NUMBERING )
-        {
-            pRet = GetDoc()->GetOutlineNumRule();
-        }
+        // --> OD 2006-11-20 #i71764#
+        // Document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE has no influence
+        // any more.
+//        if ( !pRet &&
+//             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) &&
+//             GetOutlineLevel() != NO_NUMBERING )
+//        {
+//            pRet = GetDoc()->GetOutlineNumRule();
+//        }
+        // <--
     }
     // old code before tuning
 //    // --> OD 2005-10-25 #126347#
