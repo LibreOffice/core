@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:25:05 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,6 @@
 #include "macrconf.hxx"
 #include "mnumgr.hxx"
 #include "msgpool.hxx"
-#include "newhdl.hxx"
 #include "progress.hxx"
 #include "sfxhelp.hxx"
 #include "sfxresid.hxx"
@@ -302,8 +301,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pInterfaces = new SfxInterface*[pAppData_Impl->nInterfaces];
     memset( pAppData_Impl->pInterfaces, 0, sizeof(SfxInterface*) * pAppData_Impl->nInterfaces );
 
-    // create NewHandler and its Resource
-    SfxNewHdl* pNewHdl = SfxNewHdl::GetOrCreate();
     Registrations_Impl();
 
 //    ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -345,7 +342,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pPool = NoChaos::GetItemPool();
     SetPool( pAppData_Impl->pPool );
 
-    InsertLateInitHdl( LINK(pNewHdl, SfxNewHdl, InitMem_Impl) );
     InsertLateInitHdl( LINK(this, SfxApplication,SpecialService_Impl) );
     InsertLateInitHdl( STATIC_LINK( pAppData_Impl, SfxAppData_Impl, CreateDocumentTemplates ) );
 
