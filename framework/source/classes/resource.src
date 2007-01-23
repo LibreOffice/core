@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:18:35 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_CLOSE;
-            Text[ de ] = "Symbolleiste s~chliessen" ;
+            Text[ de ] = "Symbolleiste s~chließen" ;
             Text[ en-US ] = "Close ~Toolbar" ;
         };
     };
