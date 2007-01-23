@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:15:15 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,7 +539,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                 return;
                         }
 
-                        pMed->Close();
+                        pMed->CloseAndRelease();
                         pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
                         pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
                         pMed->CompleteReOpen();
@@ -795,7 +795,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             return;
                     }
 
-                    pMedium->Close();
+                    pMedium->CloseAndRelease();
                 }
 
                 xNewObj = SfxObjectShell::CreateObject( pOldFilter->GetServiceName(), SFX_CREATE_MODE_STANDARD );
