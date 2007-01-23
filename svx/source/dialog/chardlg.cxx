@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:06:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1027,7 +1027,8 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
         DBG_ERRORFILE( "invalid font name box" );
     }
 
-    pSizeBox->Fill( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ), pFontList );
+    FontInfo _aFontInfo( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) );
+    pSizeBox->Fill( &_aFontInfo, pFontList );
 }
 
 // -----------------------------------------------------------------------
