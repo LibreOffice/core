@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:30:41 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@
 #endif
 
 #include <utility>
+#include "lazydelete.hxx"
 
 using namespace ::com::sun::star::uno;
 
@@ -534,6 +535,10 @@ void Application::Reschedule( bool bAllEvents )
     pSVData->maAppData.mnDispatchLevel++;
     pSVData->mpDefInst->Yield( false, bAllEvents );
     pSVData->maAppData.mnDispatchLevel--;
+
+    // flush lazy deleted objects
+    if( pSVData->maAppData.mnDispatchLevel == 0 )
+        vcl::LazyDelete::flush();
 }
 
 // -----------------------------------------------------------------------
@@ -552,6 +557,10 @@ void Application::Yield( bool bAllEvents )
     pSVData->maAppData.mnDispatchLevel++;
     pSVData->mpDefInst->Yield( !pSVData->maAppData.mbAppQuit, bAllEvents );
     pSVData->maAppData.mnDispatchLevel--;
+
+    // flush lazy deleted objects
+    if( pSVData->maAppData.mnDispatchLevel == 0 )
+        vcl::LazyDelete::flush();
 }
 
 // -----------------------------------------------------------------------
