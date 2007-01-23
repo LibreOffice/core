@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unogaltheme.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:19:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 09:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,9 +66,7 @@ namespace unogallery {
 
 GalleryTheme::GalleryTheme( const ::rtl::OUString& rThemeName )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    mpGallery = ::Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
+    mpGallery = ::Gallery::GetGalleryInstance();
     mpTheme = ( mpGallery ? mpGallery->AcquireTheme( rThemeName, *this ) : NULL );
 
     if( mpGallery )
@@ -91,8 +89,6 @@ GalleryTheme::~GalleryTheme()
 
         if( mpTheme )
             mpGallery->ReleaseTheme( mpTheme, *this );
-
-        ::Gallery::ReleaseGallery( mpGallery );
     }
 }
 

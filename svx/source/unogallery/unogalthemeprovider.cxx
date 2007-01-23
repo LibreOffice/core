@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unogalthemeprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:19:43 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 09:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,19 +96,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL GalleryThemeProvider_getSupportedServi
 GalleryThemeProvider::GalleryThemeProvider() :
     mbHiddenThemes( sal_False )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    mpGallery = ::Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
+    mpGallery = ::Gallery::GetGalleryInstance();
 }
 
 // ------------------------------------------------------------------------------
 
 GalleryThemeProvider::~GalleryThemeProvider()
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    if( mpGallery )
-        ::Gallery::ReleaseGallery( mpGallery );
 }
 
 // ------------------------------------------------------------------------------
