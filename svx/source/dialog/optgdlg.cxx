@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:58:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,8 +525,8 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
-    long nNum = aYearValueField.GetValue();
-    String aOutput( String::CreateFromInt32( nNum ) );
+    sal_Int64 nNum = aYearValueField.GetValue();
+    String aOutput( String::CreateFromInt64( nNum ) );
     aYearValueField.SetText( aOutput );
     aYearValueField.SetSelection( Selection( 0, aOutput.Len() ) );
     TwoFigureHdl( pEd );
