@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:09:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,11 +383,11 @@ void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
 {
     if (rEvt.GetKeyCode() == KEY_RETURN && GetText().Len())
     {
-        sal_Int32 nRecord = GetValue();
+        sal_Int64 nRecord = GetValue();
         if (nRecord < GetMin() || nRecord > GetMax())
             return;
         else
-            ((NavigationBar*)GetParent())->PositionDataSource(nRecord);
+            ((NavigationBar*)GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
     }
     else if (rEvt.GetKeyCode() == KEY_TAB)
         GetParent()->GetParent()->GrabFocus();
@@ -399,12 +399,12 @@ void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
 void DbGridControl::NavigationBar::AbsolutePos::LoseFocus()
 {
     NumericField::LoseFocus();
-    sal_Int32 nRecord = GetValue();
+    sal_Int64 nRecord = GetValue();
     if (nRecord < GetMin() || nRecord > GetMax())
         return;
     else
     {
-        ((NavigationBar*)GetParent())->PositionDataSource(nRecord);
+        ((NavigationBar*)GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
         ((NavigationBar*)GetParent())->InvalidateState(NavigationBar::RECORD_ABSOLUTE);
     }
 }
@@ -615,7 +615,7 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, sal_Bool
 
         sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1);
 
-        // Wann muß alles invalidiert werden
+        // Wann muï¿½ alles invalidiert werden
         bAll = bAll || m_nCurrentPos <= 0;
         bAll = bAll || nCurrentPos <= 0;
         bAll = bAll || m_nCurrentPos >= nAdjustedRowCount;
@@ -1277,7 +1277,7 @@ void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
         if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
             SetMode( m_nMode );
 
-        // liefert die Groeße der Reserved ControlArea
+        // liefert die Groeï¿½e der Reserved ControlArea
         Point aPoint = GetControlArea().TopLeft();
         sal_uInt16 nX = (sal_uInt16)aPoint.X();
 
@@ -1309,7 +1309,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     Reference< XPropertySet > xDataSourceSet = m_pDataCursor->getPropertySet();
     if (xDataSourceSet.is())
     {
-        // feststellen welche Updatemöglichkeiten bestehen
+        // feststellen welche Updatemï¿½glichkeiten bestehen
         sal_Int32 nPrivileges = 0;
         xDataSourceSet->getPropertyValue(FM_PROP_PRIVILEGES) >>= nPrivileges;
         if ((nPrivileges & Privilege::INSERT) == 0)
@@ -1553,7 +1553,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
             Reference< XPropertySet >  xSet(_xCursor, UNO_QUERY);
             if (xSet.is())
             {
-                // feststellen welche Updatemöglichkeiten bestehen
+                // feststellen welche Updatemï¿½glichkeiten bestehen
                 sal_Int32 nConcurrency = ResultSetConcurrency::READ_ONLY;
                 xSet->getPropertyValue(FM_PROP_RESULTSET_CONCURRENCY) >>= nConcurrency;
 
@@ -1897,8 +1897,8 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
         nLimit = nLinesOnScreen;
     }
 
-    // Im folgenden werden die Positionierungen so vorgenommen, daß sichergestellt ist
-    // daß ausreichend Zeilen im DatenCache vorhanden sind
+    // Im folgenden werden die Positionierungen so vorgenommen, daï¿½ sichergestellt ist
+    // daï¿½ ausreichend Zeilen im DatenCache vorhanden sind
 
     // Fenster geht nach unten, weniger als zwei Fenster Differenz
     // oder Cache angepasst und noch kein Rowcount
@@ -2394,7 +2394,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         // da der letzte Datensatz bereits erreicht wurde!
         if (nRow == m_nCurrentPos)
         {
-            // auf die aktuelle Zeile bewegt, dann muß kein abgleich gemacht werden, wenn
+            // auf die aktuelle Zeile bewegt, dann muï¿½ kein abgleich gemacht werden, wenn
             // gerade ein Datensatz eingefuegt wird
             m_nSeekPos = nRow;
         }
@@ -2645,7 +2645,7 @@ void DbGridControl::SetDesignMode(sal_Bool bMode)
 {
     if (IsDesignMode() != bMode)
     {
-        // Enable/Disable für den Designmode anpassen damit die Headerbar konfigurierbar bleibt
+        // Enable/Disable fï¿½r den Designmode anpassen damit die Headerbar konfigurierbar bleibt
         if (bMode)
         {
             if (!IsEnabled())
@@ -2969,7 +2969,7 @@ void DbGridControl::DeleteSelectedRows()
 
 
     /*
-    // muß der Cache wiederhergestellt werden?
+    // muï¿½ der Cache wiederhergestellt werden?
     if (nCacheSize)
     {
         // Cache wieder einschalten
