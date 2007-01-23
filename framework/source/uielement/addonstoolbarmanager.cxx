@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:17:15 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,15 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
 
     // Base class will destroy our m_pToolBar member
     ToolBarManager::dispose();
+}
+
+bool AddonsToolBarManager::MenuItemAllowed( sal_uInt16 nId ) const
+{
+    if (( nId == MENUITEM_TOOLBAR_VISIBLEBUTTON ) ||
+        ( nId == MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR ))
+        return false;
+    else
+        return true;
 }
 
 void AddonsToolBarManager::RefreshImages()
