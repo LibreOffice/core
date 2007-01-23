@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:09:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1345,6 +1345,44 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                         pGrfObj );
             }
             delete pGrfObj;
+        }
+        else if( FN_UNO_REPLACEMENT_GRAPHIC_URL == pCur->nWID )
+        {
+            GraphicObject *pGrfObj = 0;
+            OUString aGrfUrl;
+            aValue >>= aGrfUrl;
+            ::rtl::OUString aPackageProtocol( RTL_CONSTASCII_USTRINGPARAM( sPackageProtocol ) );
+            ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
+
+            if( aGrfUrl.compareTo( aPackageProtocol, aPackageProtocol.getLength() ) == 0 )
+            {
+                pGrfObj = new GraphicObject;
+                pGrfObj->SetUserData( aGrfUrl );
+                pGrfObj->SetSwapState();
+            }
+            else if( aGrfUrl.compareTo( aGraphicProtocol, aGraphicProtocol.getLength() ) == 0 )
+            {
+                ByteString sId( aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1).getStr(), RTL_TEXTENCODING_ASCII_US );
+                pGrfObj = new GraphicObject( sId );
+            }
+
+            if ( pGrfObj )
+            {
+                SwDoc* pDoc = pFmt->GetDoc();
+                const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
+                if ( pCnt->GetCntntIdx() && pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ] )
+                {
+                    SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ]->GetOLENode();
+
+                    if ( pOleNode )
+                    {
+                        svt::EmbeddedObjectRef xObj = pOleNode->GetOLEObj().GetObject();
+
+                        ::rtl::OUString aMediaType;
+                        xObj.SetGraphic( pGrfObj->GetGraphic(), aMediaType );
+                    }
+                }
+            }
         }
         else if(0 != (bNextFrame = (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME))))
             || rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME)))
