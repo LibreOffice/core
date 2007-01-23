@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:39:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,10 +203,15 @@ void SwDoc::PropagateOutlineRule()
         {
             SwClientIter aIter(*pColl);
 
-            const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule(TRUE);
+            // --> OD 2006-11-20 #i71764#
+            // Check only the list style, which is set at the paragraph style
+            const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( FALSE );
+            // <--
 
-            if (!get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) &&
-                rCollRuleItem.GetValue().Len() == 0)
+            // --> OD 2006-11-20 #i71764#
+            // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
+            if ( rCollRuleItem.GetValue().Len() == 0 )
+            // <--
             {
                 SwNumRule * pOutlineRule = GetOutlineNumRule();
 
@@ -252,7 +257,7 @@ void SwDoc::PropagateOutlineRule()
 //                // Do not set numbering level at text node, if text node has
 //                // no numbering rule. Because in this situation, it isn't inserted
 //                // into any numbering tree. Thus, a <SetLevel(..)> isn't correct -
-//                // it only creates an not inserted numberring tree node.
+//                // it only creates an not inserted numbering tree node.
 //                if ( pCurNumRule == GetOutlineNumRule() )
 //                {
 //                    pTxtNode->SetLevel(pColl->GetOutlineLevel());
