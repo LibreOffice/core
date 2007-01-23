@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsnap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:04:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,25 +113,25 @@ SdSnapLineDlg::SdSnapLineDlg(
     // Hier werden die Max- und MinWerte in Ahaengigkeit von der
     // WorkArea, PoolUnit und der FieldUnit:
     SetMetricValue( aMtrFldX, aWorkArea.Left(), ePoolUnit );
-    long nValue = aMtrFldX.GetValue();
+    long nValue = static_cast<long>(aMtrFldX.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldX.SetMin( nValue );
     aMtrFldX.SetFirst( nValue );
 
     SetMetricValue( aMtrFldX, aWorkArea.Right()+1, ePoolUnit );
-    nValue = aMtrFldX.GetValue();
+    nValue = static_cast<long>(aMtrFldX.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldX.SetMax( nValue );
     aMtrFldX.SetLast( nValue );
 
     SetMetricValue( aMtrFldY, aWorkArea.Top(), ePoolUnit );
-    nValue = aMtrFldY.GetValue();
+    nValue = static_cast<long>(aMtrFldY.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldY.SetMin( nValue );
     aMtrFldY.SetFirst( nValue );
 
     SetMetricValue( aMtrFldY, aWorkArea.Bottom()+1, ePoolUnit );
-    nValue = aMtrFldY.GetValue();
+    nValue = static_cast<long>(aMtrFldY.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldY.SetMax( nValue );
     aMtrFldY.SetLast( nValue );
@@ -216,7 +216,7 @@ void SdSnapLineDlg::SetInputFields(BOOL bEnableX, BOOL bEnableY)
     }
     else if ( aMtrFldX.IsEnabled() )
     {
-        nXValue = aMtrFldX.GetValue();
+        nXValue = static_cast<long>(aMtrFldX.GetValue());
         aMtrFldX.SetText(String());
         aMtrFldX.Disable();
         aFtX.Disable();
@@ -230,7 +230,7 @@ void SdSnapLineDlg::SetInputFields(BOOL bEnableX, BOOL bEnableY)
     }
     else if ( aMtrFldY.IsEnabled() )
     {
-        nYValue = aMtrFldY.GetValue();
+        nYValue = static_cast<long>(aMtrFldY.GetValue());
         aMtrFldY.SetText(String());
         aMtrFldY.Disable();
         aFtY.Disable();
