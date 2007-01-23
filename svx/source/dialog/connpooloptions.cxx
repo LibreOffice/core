@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:07:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,7 +488,7 @@ namespace offapp
     {
         if (DriverPooling* pCurrentDriver = m_pDriverList->getCurrentRow())
         {
-            pCurrentDriver->nTimeoutSeconds = m_aTimeout.GetValue();
+            pCurrentDriver->nTimeoutSeconds = static_cast<long>(m_aTimeout.GetValue());
             m_pDriverList->updateCurrentRow();
         }
     }
