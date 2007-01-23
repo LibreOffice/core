@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:22:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -917,9 +917,9 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     long nFDist   = aBspWin.GetFtDist();
 
     long nHeight = Max( (long)MINBODY,
-        aHeightEdit.Denormalize( aHeightEdit.GetValue( FUNIT_TWIP ) ) );
+        static_cast<long>(aHeightEdit.Denormalize( aHeightEdit.GetValue( FUNIT_TWIP ) ) ) );
     long nDist   = aTurnOnBox.IsChecked() ?
-        aDistEdit.Denormalize( aDistEdit.GetValue( FUNIT_TWIP ) ) : 0;
+        static_cast<long>(aDistEdit.Denormalize( aDistEdit.GetValue( FUNIT_TWIP ) )) : 0;
 
     long nMin;
     long nMax;
@@ -972,11 +972,11 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
 
     // Einzuege beschraenken
     nMax = nW - nBL - nBR -
-           aRMEdit.Denormalize( aRMEdit.GetValue( FUNIT_TWIP ) ) - MINBODY;
+           static_cast<long>(aRMEdit.Denormalize( aRMEdit.GetValue( FUNIT_TWIP ) )) - MINBODY;
     aLMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
 
     nMax = nW - nBL - nBR -
-           aLMEdit.Denormalize( aLMEdit.GetValue( FUNIT_TWIP ) ) - MINBODY;
+           static_cast<long>(aLMEdit.Denormalize( aLMEdit.GetValue( FUNIT_TWIP ) )) - MINBODY;
     aRMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
     return 0;
 }
