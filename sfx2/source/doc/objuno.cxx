@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:20:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1336,6 +1336,8 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
     else
     {
         _pMedium = new SfxMedium( aURL, SFX_STREAM_READONLY, sal_True );
+        _pMedium->UseInteractionHandler( sal_False );
+
         SvStream* pStream = _pMedium->GetInStream();
         if ( pStream )
         {
@@ -1343,7 +1345,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
             if ( !rStorage->GetName().Len() )
                 rStorage->SetName( aURL );
 
-            if ( !rStorage->GetError() && !SFX_APP()->GetFilterMatcher().GuessFilter( *_pMedium, &_pFilter ) && _pFilter )
+            if ( !rStorage->GetError() && !SFX_APP()->GetFilterMatcher().GuessFilterControlDefaultUI( *_pMedium, &_pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED, sal_False ) && _pFilter )
             {
                 rStorage->SetVersion( _pFilter->GetVersion() );
                 bOK = _pInfo->LoadFromBinaryFormat( rStorage );
