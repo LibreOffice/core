@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:14:06 $
+#   last change: $Author: obo $ $Date: 2007-01-23 12:29:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,14 +35,13 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=		sysshell
-TARGET=			testsyssh
-TARGET1=		testsmplmail
-TARGET2=		testprx
-TARGET4=        testfopen
-LIBTARGET=		NO
-TARGETTYPE=		CUI
-
+PRJNAME=shell
+TARGET=testsyssh
+TARGET1=testsmplmail
+TARGET2=testprx
+TARGET4=testfopen
+LIBTARGET=NO
+TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
 
