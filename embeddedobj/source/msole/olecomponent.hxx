@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:22:26 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:33:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,10 @@ class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCl
 
     sal_Bool m_bOleInitialized;
 
+    // specifies whether the workaround for some rare embedded objects is activated ( f.e. AcrobatReader 7.0.8 object )
+    // such objects report the dirty state wrongly sometimes and do not allow to store them any time
+    sal_Bool m_bWorkaroundActive;
+
 
     sal_Bool InitializeObject_Impl();
 
@@ -145,6 +149,7 @@ class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCl
     void RetrieveObjectDataFlavors_Impl();
 
     void Dispose();
+
 
 public:
     OleComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_xFactory,
@@ -200,6 +205,8 @@ public:
 
     ::com::sun::star::uno::Sequence< sal_Int8 > GetCLSID();
 
+    sal_Bool IsWorkaroundActive() { return m_bWorkaroundActive; }
+
     sal_Bool IsDirty();
 
     void StoreOwnTmpIfNecessary();
@@ -207,6 +214,7 @@ public:
     sal_Bool SaveObject_Impl();
     sal_Bool OnShowWindow_Impl( bool bShow );
     void OnViewChange_Impl( sal_uInt32 dwAspect );
+    void OnClose_Impl();
 
     // XCloseable
     virtual void SAL_CALL close( sal_Bool DeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
