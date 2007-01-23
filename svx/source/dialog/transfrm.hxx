@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:32:12 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,6 @@ private:
     DECL_LINK( ClickSizeProtectHdl, void * );
     DECL_LINK( ClickAutoHdl, void * );
 
-    void        DisableSizeControls();
     void        SetMaxSize( Rectangle aRect );
     Rectangle   GetRect();
 #endif
@@ -189,6 +188,8 @@ public:
 
     void        DisableResize();
     void        DisableProtect();
+
+    void        UpdateControlStates();
 };
 
 /*************************************************************************
