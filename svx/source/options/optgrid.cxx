@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:00:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,10 @@
  * --------------------------------------------------*/
 void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
 {
-    nFirst  = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
-    nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
-    nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
-    nMax = rField.Denormalize( rField.GetMax( FUNIT_TWIP ) );
+    nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
+    nLast = static_cast<long>(rField.Denormalize( rField.GetLast( FUNIT_TWIP ) ));
+    nMin = static_cast<long>(rField.Denormalize( rField.GetMin( FUNIT_TWIP ) ));
+    nMax = static_cast<long>(rField.Denormalize( rField.GetMax( FUNIT_TWIP ) ));
 }
 
 void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, long nMax)
@@ -290,8 +290,8 @@ BOOL SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         aGridItem.nFldDrawX    = (UINT32) nX;
         aGridItem.nFldDrawY    = (UINT32) nY;
-        aGridItem.nFldDivisionX = aNumFldDivisionX.GetValue();
-        aGridItem.nFldDivisionY = aNumFldDivisionY.GetValue();
+        aGridItem.nFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue());
+        aGridItem.nFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue());
 
         rCoreSet.Put( aGridItem );
     }
@@ -358,7 +358,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
         {
             // Metriken einstellen
             long nFirst, nLast, nMin, nMax;
-            long nVal = aMtrFldDrawX.Denormalize( aMtrFldDrawX.GetValue( FUNIT_TWIP ) );
+            long nVal = static_cast<long>(aMtrFldDrawX.Denormalize( aMtrFldDrawX.GetValue( FUNIT_TWIP ) ));
 
             lcl_GetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
             SetFieldUnit( aMtrFldDrawX, eFUnit, TRUE );
@@ -366,7 +366,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
             aMtrFldDrawX.SetValue( aMtrFldDrawX.Normalize( nVal ), FUNIT_TWIP );
 
-            nVal = aMtrFldDrawY.Denormalize( aMtrFldDrawY.GetValue( FUNIT_TWIP ) );
+            nVal = static_cast<long>(aMtrFldDrawY.Denormalize( aMtrFldDrawY.GetValue( FUNIT_TWIP ) ));
             lcl_GetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
             SetFieldUnit( aMtrFldDrawY, eFUnit, TRUE );
             lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
