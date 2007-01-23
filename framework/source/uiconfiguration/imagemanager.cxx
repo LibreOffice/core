@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:20:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,9 +315,13 @@ sal_Bool ImageManager::implts_loadUserImages(
 
                 if ( xBitmapStream.is() )
                 {
-                    SvStream* pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
-                    vcl::PNGReader aPngReader( *pSvStream );
-                    BitmapEx aUserBitmap = aPngReader.Read();
+                    SvStream* pSvStream( 0 );
+            BitmapEx aUserBitmap;
+            {
+                pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
+                vcl::PNGReader aPngReader( *pSvStream );
+                aUserBitmap = aPngReader.Read();
+            }
                     delete pSvStream;
 
                     // Delete old image list and create a new one from the read bitmap
