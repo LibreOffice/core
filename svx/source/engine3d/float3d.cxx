@@ -4,9 +4,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:19:13 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1851,7 +1851,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Anzahl Segmente (horizontal)
     if( !aNumHorizontal.IsEmptyFieldValue() )
     {
-        sal_uInt32 nValue = aNumHorizontal.GetValue();
+        sal_uInt32 nValue = static_cast<sal_uInt32>(aNumHorizontal.GetValue());
         rAttrs.Put(Svx3DHorizontalSegmentsItem(nValue));
     }
     else
@@ -1860,7 +1860,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Anzahl Segmente (vertikal)
     if( !aNumVertical.IsEmptyFieldValue() )
     {
-        UINT32 nValue = aNumVertical.GetValue();
+        UINT32 nValue = static_cast<UINT32>(aNumVertical.GetValue());
         rAttrs.Put(Svx3DVerticalSegmentsItem(nValue));
     }
     else
