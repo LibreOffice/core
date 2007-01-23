@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:29:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:37:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1291,7 +1291,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                     // Prozentwerte werden negativ gesetzt, damit
                     // diese nicht skaliert werden; dieses wird
                     // im Item beruecksichtigt ( KA05.11.96 )
-                    pItem = new XFillBmpSizeXItem( -labs( aMtrFldXSize.GetValue() ) );
+                    pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(aMtrFldXSize.GetValue()) ) );
                 }
             }
             else if( aTsbOriginal.IsEnabled() &&
@@ -1328,7 +1328,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                     // Prozentwerte werden negativ gesetzt, damit
                     // diese vom MetricItem nicht skaliert werden;
                     // dieses wird im Item beruecksichtigt ( KA05.11.96 )
-                    pItem = new XFillBmpSizeYItem( -labs( aMtrFldYSize.GetValue() ) );
+                    pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(aMtrFldYSize.GetValue()) ) );
                 }
             }
             else if( aTsbOriginal.IsEnabled() &&
@@ -2473,7 +2473,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, EMPTYARG )
         if( eScaleState == STATE_NOCHECK )
             pItem = new XFillBmpSizeXItem( GetCoreValue( aMtrFldXSize, ePoolUnit ) );
         else
-            pItem = new XFillBmpSizeXItem( -labs( aMtrFldXSize.GetValue() ) );
+            pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(aMtrFldXSize.GetValue()) ) );
 
         rXFSet.Put( *pItem );
 
@@ -2494,7 +2494,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, EMPTYARG )
         if( eScaleState == STATE_NOCHECK )
             pItem = new XFillBmpSizeYItem( GetCoreValue( aMtrFldYSize, ePoolUnit ) );
         else
-            pItem = new XFillBmpSizeYItem( -labs( aMtrFldYSize.GetValue() ) );
+            pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(aMtrFldYSize.GetValue()) ) );
 
         rXFSet.Put( *pItem );
 

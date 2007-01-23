@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:30:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,7 @@ BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
                 pXHatch = new XHatch( aLbLineColor.GetSelectEntryColor(),
                                  (XHatchStyle) aLbLineType.GetSelectEntryPos(),
                                  GetCoreValue( aMtrDistance, ePoolUnit ),
-                                 aMtrAngle.GetValue() * 10 );
+                                 static_cast<long>(aMtrAngle.GetValue() * 10) );
             }
             DBG_ASSERT( pXHatch, "XHatch konnte nicht erzeugt werden" );
             rSet.Put( XFillStyleItem( XFILL_HATCH ) );
@@ -439,7 +439,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
     XHatch aXHatch( aLbLineColor.GetSelectEntryColor(),
                     (XHatchStyle) aLbLineType.GetSelectEntryPos(),
                     GetCoreValue( aMtrDistance, ePoolUnit ),
-                    aMtrAngle.GetValue() * 10 );
+                    static_cast<long>(aMtrAngle.GetValue() * 10) );
 
     rXFSet.Put( XFillHatchItem( String(), aXHatch ) );
     XOut.SetFillAttr( aXFillAttr.GetItemSet() );
@@ -604,7 +604,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         XHatch aXHatch( aLbLineColor.GetSelectEntryColor(),
                         (XHatchStyle) aLbLineType.GetSelectEntryPos(),
                         GetCoreValue( aMtrDistance, ePoolUnit ),
-                        aMtrAngle.GetValue() * 10 );
+                        static_cast<long>(aMtrAngle.GetValue() * 10) );
         XHatchEntry* pEntry = new XHatchEntry( aXHatch, aName );
 
         pHatchingList->Insert( pEntry, nCount );
@@ -680,7 +680,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 XHatch aXHatch( aLbLineColor.GetSelectEntryColor(),
                                 (XHatchStyle) aLbLineType.GetSelectEntryPos(),
                                  GetCoreValue( aMtrDistance, ePoolUnit ),
-                                aMtrAngle.GetValue() * 10 );
+                                static_cast<long>(aMtrAngle.GetValue() * 10) );
 
                 XHatchEntry* pEntry = new XHatchEntry( aXHatch, aName );
 
