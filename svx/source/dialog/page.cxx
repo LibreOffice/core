@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:06:42 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,27 +422,27 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     aLeftMarginEdit.SetFirst( aLeftMarginEdit.Normalize( aPrintOffset.X() ), FUNIT_TWIP );
-    nFirstLeftMargin = aLeftMarginEdit.GetFirst();
+    nFirstLeftMargin = static_cast<long>(aLeftMarginEdit.GetFirst());
     aRightMarginEdit.SetFirst( aRightMarginEdit.Normalize(
         aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X() + nOffset ), FUNIT_TWIP);
-    nFirstRightMargin = aRightMarginEdit.GetFirst();
+    nFirstRightMargin = static_cast<long>(aRightMarginEdit.GetFirst());
     aTopMarginEdit.SetFirst( aTopMarginEdit.Normalize( aPrintOffset.Y() ), FUNIT_TWIP );
-    nFirstTopMargin = aTopMarginEdit.GetFirst();
+    nFirstTopMargin = static_cast<long>(aTopMarginEdit.GetFirst());
     aBottomMarginEdit.SetFirst( aBottomMarginEdit.Normalize(
         aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y() + nOffset ), FUNIT_TWIP );
-    nFirstBottomMargin = aBottomMarginEdit.GetFirst();
+    nFirstBottomMargin = static_cast<long>(aBottomMarginEdit.GetFirst());
     aLeftMarginEdit.SetLast( aLeftMarginEdit.Normalize(
         aPrintOffset.X() + aPrintSize.Width() ), FUNIT_TWIP );
-    nLastLeftMargin = aLeftMarginEdit.GetLast();
+    nLastLeftMargin = static_cast<long>(aLeftMarginEdit.GetLast());
     aRightMarginEdit.SetLast( aRightMarginEdit.Normalize(
         aPrintOffset.X() + aPrintSize.Width() ), FUNIT_TWIP );
-    nLastRightMargin = aRightMarginEdit.GetLast();
+    nLastRightMargin = static_cast<long>(aRightMarginEdit.GetLast());
     aTopMarginEdit.SetLast( aTopMarginEdit.Normalize(
         aPrintOffset.Y() + aPrintSize.Height() ), FUNIT_TWIP );
-    nLastTopMargin = aTopMarginEdit.GetLast();
+    nLastTopMargin = static_cast<long>(aTopMarginEdit.GetLast());
     aBottomMarginEdit.SetLast( aBottomMarginEdit.Normalize(
         aPrintOffset.Y() + aPrintSize.Height() ), FUNIT_TWIP );
-    nLastBottomMargin = aBottomMarginEdit.GetLast();
+    nLastBottomMargin = static_cast<long>(aBottomMarginEdit.GetLast());
 }
 
 // -----------------------------------------------------------------------
@@ -1192,13 +1192,13 @@ void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
     pImpl->mpDefPrinter->SetMapMode( aOldMode );
     pImpl->mpDefPrinter->SetOrientation( eOldOri );
 
-    long nSetL = aLeftMarginEdit.Denormalize(
+    sal_Int64 nSetL = aLeftMarginEdit.Denormalize(
                     aLeftMarginEdit.GetValue( FUNIT_TWIP ) );
-    long nSetR = aRightMarginEdit.Denormalize(
+    sal_Int64 nSetR = aRightMarginEdit.Denormalize(
                     aRightMarginEdit.GetValue( FUNIT_TWIP ) );
-    long nSetT = aTopMarginEdit.Denormalize(
+    sal_Int64 nSetT = aTopMarginEdit.Denormalize(
                     aTopMarginEdit.GetValue( FUNIT_TWIP ) );
-    long nSetB = aBottomMarginEdit.Denormalize(
+    sal_Int64 nSetB = aBottomMarginEdit.Denormalize(
                     aBottomMarginEdit.GetValue( FUNIT_TWIP ) );
 
     long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
@@ -1210,13 +1210,13 @@ void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
         aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y() + nOffset;
 
     aLeftMarginEdit.SetFirst( aLeftMarginEdit.Normalize( nNewL ), FUNIT_TWIP );
-    nFirstLeftMargin = aLeftMarginEdit.GetFirst();
+    nFirstLeftMargin = static_cast<long>(aLeftMarginEdit.GetFirst());
     aRightMarginEdit.SetFirst( aRightMarginEdit.Normalize( nNewR ), FUNIT_TWIP );
-    nFirstRightMargin = aRightMarginEdit.GetFirst();
+    nFirstRightMargin = static_cast<long>(aRightMarginEdit.GetFirst());
     aTopMarginEdit.SetFirst( aTopMarginEdit.Normalize( nNewT ), FUNIT_TWIP );
-    nFirstTopMargin = aTopMarginEdit.GetFirst();
+    nFirstTopMargin = static_cast<long>(aTopMarginEdit.GetFirst());
     aBottomMarginEdit.SetFirst( aBottomMarginEdit.Normalize( nNewB ), FUNIT_TWIP );
-    nFirstBottomMargin = aBottomMarginEdit.GetFirst();
+    nFirstBottomMargin = static_cast<long>(aBottomMarginEdit.GetFirst());
 
     if ( bSet )
     {
@@ -1545,10 +1545,10 @@ IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
     long nHFRight = Max( aBspWin.GetHdRight(), aBspWin.GetFtRight() );
 
     // Aktuelle Werte der Seitenr"ander
-    long nBT = aTopMarginEdit.Denormalize(aTopMarginEdit.GetValue(FUNIT_TWIP));
-    long nBB = aBottomMarginEdit.Denormalize(aBottomMarginEdit.GetValue(FUNIT_TWIP));
-    long nBL = aLeftMarginEdit.Denormalize(aLeftMarginEdit.GetValue(FUNIT_TWIP));
-    long nBR = aRightMarginEdit.Denormalize(aRightMarginEdit.GetValue(FUNIT_TWIP));
+    long nBT = static_cast<long>(aTopMarginEdit.Denormalize(aTopMarginEdit.GetValue(FUNIT_TWIP)));
+    long nBB = static_cast<long>(aBottomMarginEdit.Denormalize(aBottomMarginEdit.GetValue(FUNIT_TWIP)));
+    long nBL = static_cast<long>(aLeftMarginEdit.Denormalize(aLeftMarginEdit.GetValue(FUNIT_TWIP)));
+    long nBR = static_cast<long>(aRightMarginEdit.Denormalize(aRightMarginEdit.GetValue(FUNIT_TWIP)));
 
     // Breite Umrandung der Seite berechnen
     const SfxItemSet* _pSet = &GetItemSet();
@@ -1564,8 +1564,8 @@ IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
             (const SvxBoxItem&)_pSet->Get(GetWhich(SID_ATTR_BORDER_OUTER))));
     }
 
-    long nH  = aPaperHeightEdit.Denormalize(aPaperHeightEdit.GetValue(FUNIT_TWIP));
-    long nW  = aPaperWidthEdit.Denormalize(aPaperWidthEdit.GetValue(FUNIT_TWIP));
+    long nH  = static_cast<long>(aPaperHeightEdit.Denormalize(aPaperHeightEdit.GetValue(FUNIT_TWIP)));
+    long nW  = static_cast<long>(aPaperWidthEdit.Denormalize(aPaperWidthEdit.GetValue(FUNIT_TWIP)));
 
     // Grenzen Papier
     // Maximum liegt bei 54cm
@@ -1578,8 +1578,8 @@ IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
     aPaperWidthEdit.SetMin(aPaperWidthEdit.Normalize(nMin), FUNIT_TWIP);
 
     // Falls sich die Papiergr"o\se ge"adert hat
-    nH = aPaperHeightEdit.Denormalize(aPaperHeightEdit.GetValue(FUNIT_TWIP));
-    nW = aPaperWidthEdit.Denormalize(aPaperWidthEdit.GetValue(FUNIT_TWIP));
+    nH = static_cast<long>(aPaperHeightEdit.Denormalize(aPaperHeightEdit.GetValue(FUNIT_TWIP)));
+    nW = static_cast<long>(aPaperWidthEdit.Denormalize(aPaperWidthEdit.GetValue(FUNIT_TWIP)));
 
     // Top
     long nMax = nH - nBB - aBorder.Height() - MINBODY -
@@ -1715,7 +1715,7 @@ bool SvxPageDescPage::IsPrinterRangeOverflow(
 {
     bool bRet = false;
     bool bCheck = ( ( pImpl->m_nPos & nPos ) == 0 );
-    long nValue = rField.GetValue();
+    long nValue = static_cast<long>(rField.GetValue());
     if ( bCheck &&
          (  nValue < nFirstMargin || nValue > nLastMargin ) &&
          rField.GetText() != rField.GetSavedValue() )
@@ -1735,7 +1735,7 @@ void SvxPageDescPage::CheckMarginEdits( bool _bClear )
     if ( _bClear )
         pImpl->m_nPos = 0;
 
-    long nValue = aLeftMarginEdit.GetValue();
+    sal_Int64 nValue = aLeftMarginEdit.GetValue();
     if (  nValue < nFirstLeftMargin || nValue > nLastLeftMargin )
         pImpl->m_nPos |= MARGIN_LEFT;
     nValue = aRightMarginEdit.GetValue();
