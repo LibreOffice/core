@@ -26,7 +26,6 @@
  */
 
 #include "DocumentElement.hxx"
-#include "DocumentHandler.hxx"
 #include "FilterInternal.hxx"
 #include <string.h>
 
@@ -37,9 +36,9 @@ void TagElement::print() const
     WRITER_DEBUG_MSG(("%s\n", msTagName.cstr()));
 }
 
-void TagOpenElement::write(DocumentHandler &xHandler) const
+void TagOpenElement::write(DocumentHandler *pHandler) const
 {
-    xHandler.startElement(getTagName().cstr(), maAttrList);
+    pHandler->startElement(getTagName().cstr(), maAttrList);
 }
 
 void TagOpenElement::print() const
@@ -52,17 +51,17 @@ void TagOpenElement::addAttribute(const char *szAttributeName, const WPXString &
         maAttrList.insert(szAttributeName, sAttributeValue);
 }
 
-void TagCloseElement::write(DocumentHandler &xHandler) const
+void TagCloseElement::write(DocumentHandler *pHandler) const
 {
     WRITER_DEBUG_MSG(("TagCloseElement: write (%s)\n", getTagName().cstr()));
 
-    xHandler.endElement(getTagName().cstr());
+    pHandler->endElement(getTagName().cstr());
 }
 
-void CharDataElement::write(DocumentHandler &xHandler) const
+void CharDataElement::write(DocumentHandler *pHandler) const
 {
     WRITER_DEBUG_MSG(("TextElement: write\n"));
-    xHandler.characters(msData);
+    pHandler->characters(msData);
 }
 
 TextElement::TextElement(const WPXString & sTextBuf) :
@@ -72,7 +71,7 @@ TextElement::TextElement(const WPXString & sTextBuf) :
 
 // write: writes a text run, appropriately converting spaces to <text:s>
 // elements
-void TextElement::write(DocumentHandler &xHandler) const
+void TextElement::write(DocumentHandler *pHandler) const
 {
     WPXPropertyList xBlankAttrList;
 
@@ -89,15 +88,15 @@ void TextElement::write(DocumentHandler &xHandler) const
 
         if (iNumConsecutiveSpaces > 1) {
             if (sTemp.len() > 0) {
-                xHandler.characters(sTemp);
+                pHandler->characters(sTemp);
                 sTemp.clear();
             }
-            xHandler.startElement("text:s", xBlankAttrList);
-            xHandler.endElement("text:s");
+            pHandler->startElement("text:s", xBlankAttrList);
+            pHandler->endElement("text:s");
         }
         else {
                         sTemp.append(i());
         }
     }
-    xHandler.characters(sTemp);
+    pHandler->characters(sTemp);
 }
