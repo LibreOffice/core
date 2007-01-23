@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cusshow.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:19:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:53:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #endif
 
 class SdDrawDocument;
+class SdPage;
 
 /*************************************************************************
 |*
@@ -89,6 +90,9 @@ public:
     String GetName() const              { return aName; }
 
     SdDrawDocument* GetDoc() const { return pDoc; }
+
+    void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
+    void RemovePage( const SdPage* pPage );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoCustomShow();
 };
