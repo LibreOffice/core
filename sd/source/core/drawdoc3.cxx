@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:31:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,6 +791,12 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                     bMustRename = sal_True;
                 }
 
+                SdPage* pBookmarkPage = dynamic_cast< SdPage* >( pBookmarkDoc->GetPage(nBMPage) );
+                if (bReplace )
+                {
+                    ReplacePageInCustomShows( dynamic_cast< SdPage* >( GetPage( nActualInsertPos ) ), pBookmarkPage );
+                }
+
                 Merge(*pBookmarkDoc,
                       nBMPage,           // Von Seite (Standard)
                       nBMPage+1,         // Bis Seite (Notizen)
@@ -799,6 +805,15 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                       FALSE,             // Aber nur die benoetigten MasterPages
                       TRUE,              // Undo-Aktion erzeugen
                       bCopy);            // Seiten kopieren (oder mergen)
+
+                if( bReplace )
+                {
+                    if( GetPage( nActualInsertPos ) != pBookmarkPage )
+                    {
+                        // bookmark page was not moved but cloned, so update custom shows again
+                        ReplacePageInCustomShows( pBookmarkPage, dynamic_cast< SdPage* >( GetPage( nActualInsertPos ) ) );
+                    }
+                }
 
                 if( bMustRename )
                 {
@@ -835,7 +850,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                         {
                             // #96029# Take old slide names for inserted pages
                             SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
-                            pPage->SetName( pStandardPage->GetName() );
+                            pPage->SetName( pStandardPage->GetRealName() );
                         }
 
                         AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pStandardPage));
@@ -856,7 +871,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                             // #96029# Take old slide names for inserted pages
                             SdPage* pNewNotesPage = (SdPage*) GetPage(nActualInsertPos+1);
                             if( pNewNotesPage )
-                                pNewNotesPage->SetName( pStandardPage->GetName() );
+                                pNewNotesPage->SetName( pStandardPage->GetRealName() );
                         }
 
                         AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
