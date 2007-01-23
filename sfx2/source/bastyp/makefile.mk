@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-02 16:24:14 $
+#   last change: $Author: obo $ $Date: 2007-01-23 07:13:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@ SLOFILES =\
         $(SLO)$/misc.obj				\
         $(SLO)$/progress.obj			\
         $(SLO)$/sfxresid.obj			\
-        $(SLO)$/newhdl.obj				\
         $(SLO)$/bitset.obj				\
         $(SLO)$/minarray.obj			\
         $(SLO)$/fltfnc.obj				\
@@ -64,8 +63,7 @@ SLOFILES =\
 SRS1NAME=$(TARGET)
 SRC1FILES =\
         fltfnc.src	\
-        bastyp.src	\
-        newhdl.src
+                bastyp.src
 
 EXCEPTIONSFILES =\
     $(SLO)$/helper.obj
