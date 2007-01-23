@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:05:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,22 +117,22 @@ String GetMetricStr_Impl( long nVal )
 
     String sMetric;
     const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep().GetChar(0);
-    long nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0, eInUnit, eOutUnit );
+    sal_Int64 nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0, eInUnit, eOutUnit );
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )
         sMetric += '-';
-    sMetric += String::CreateFromInt32( nConvVal / 100 );
+    sMetric += String::CreateFromInt64( nConvVal / 100 );
 
     if( FUNIT_NONE != eOutUnit )
     {
         sMetric += cSep;
-        long nFract = nConvVal % 100;
+        sal_Int64 nFract = nConvVal % 100;
 
         if ( nFract < 0 )
             nFract *= -1;
         if ( nFract < 10 )
             sMetric += '0';
-        sMetric += String::CreateFromInt32( nFract );
+        sMetric += String::CreateFromInt64( nFract );
     }
 
     return sMetric;
