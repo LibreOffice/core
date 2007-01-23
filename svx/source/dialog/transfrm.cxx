@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:58:40 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,10 +143,10 @@ static USHORT pSlantRanges[] =
 Rectangle lcl_ConvertRect( const Rectangle& rInRect, USHORT nDigits, MapUnit ePoolUnit, FieldUnit eDlgUnit )
 {
     Rectangle aRect;
-    aRect.Left()   = MetricField::ConvertValue( rInRect.Left(), nDigits, ePoolUnit, eDlgUnit );
-    aRect.Right()  = MetricField::ConvertValue( rInRect.Right(), nDigits, ePoolUnit, eDlgUnit );
-    aRect.Top()    = MetricField::ConvertValue( rInRect.Top(), nDigits, ePoolUnit, eDlgUnit );
-    aRect.Bottom() = MetricField::ConvertValue( rInRect.Bottom(), nDigits, ePoolUnit, eDlgUnit );
+    aRect.Left()   = static_cast<long>(MetricField::ConvertValue( rInRect.Left(), nDigits, ePoolUnit, eDlgUnit ));
+    aRect.Right()  = static_cast<long>(MetricField::ConvertValue( rInRect.Right(), nDigits, ePoolUnit, eDlgUnit ));
+    aRect.Top()    = static_cast<long>(MetricField::ConvertValue( rInRect.Top(), nDigits, ePoolUnit, eDlgUnit ));
+    aRect.Bottom() = static_cast<long>(MetricField::ConvertValue( rInRect.Bottom(), nDigits, ePoolUnit, eDlgUnit ));
     return( aRect );
 }
 
@@ -154,8 +154,8 @@ Rectangle lcl_ConvertRect( const Rectangle& rInRect, USHORT nDigits, MapUnit ePo
 Point lcl_ConvertPoint( Point aInPt, USHORT nDigits, MapUnit ePoolUnit, FieldUnit eDlgUnit )
 {
     Point aPt;
-    aPt.X() = MetricField::ConvertValue( aInPt.X(), nDigits, ePoolUnit, eDlgUnit );
-    aPt.Y() = MetricField::ConvertValue( aInPt.Y(), nDigits, ePoolUnit, eDlgUnit );
+    aPt.X() = static_cast<long>(MetricField::ConvertValue( aInPt.X(), nDigits, ePoolUnit, eDlgUnit ));
+    aPt.Y() = static_cast<long>(MetricField::ConvertValue( aInPt.Y(), nDigits, ePoolUnit, eDlgUnit ));
     return( aPt );
 }
 
@@ -370,7 +370,7 @@ BOOL SvxAngleTabPage::FillItemSet( SfxItemSet& rSet )
         || aMtrPosY.IsValueModified())
     {
         rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_ANGLE ),
-                        aMtrAngle.GetValue() ) );
+                        static_cast<INT32>(aMtrAngle.GetValue()) ) );
 
         Fraction aUIScale = pView->GetModel()->GetUIScale();
         long nTmp = GetCoreValue( aMtrPosX, ePoolUnit );
@@ -601,7 +601,7 @@ BOOL SvxSlantTabPage::FillItemSet( SfxItemSet& rAttrs )
     aStr = aMtrAngle.GetText();
     if( aStr != aMtrAngle.GetSavedValue() )
     {
-        nValue = aMtrAngle.GetValue();
+        nValue = static_cast<INT32>(aMtrAngle.GetValue());
         rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
         bModified = TRUE;
     }
@@ -974,18 +974,18 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
 
         // get Width
-        double nWidth = maMtrWidth.GetValue( meDlgUnit );
+        double nWidth = static_cast<double>(maMtrWidth.GetValue( meDlgUnit ));
         nWidth = MetricField::ConvertDoubleValue( nWidth, maMtrWidth.GetBaseValue(), maMtrWidth.GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
         long lWidth = long(nWidth * (double)aUIScale);
         lWidth = OutputDevice::LogicToLogic( lWidth, MAP_100TH_MM, (MapUnit)mePoolUnit );
-        lWidth = maMtrWidth.Denormalize( lWidth );
+        lWidth = static_cast<long>(maMtrWidth.Denormalize( lWidth ));
 
         // get Height
-        double nHeight = maMtrHeight.GetValue( meDlgUnit );
+        double nHeight = static_cast<double>(maMtrHeight.GetValue( meDlgUnit ));
         nHeight = MetricField::ConvertDoubleValue( nHeight, maMtrHeight.GetBaseValue(), maMtrHeight.GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
         long lHeight = long(nHeight * (double)aUIScale);
         lHeight = OutputDevice::LogicToLogic( lHeight, MAP_100TH_MM, (MapUnit)mePoolUnit );
-        lHeight = maMtrWidth.Denormalize( lHeight );
+        lHeight = static_cast<long>(maMtrWidth.Denormalize( lHeight ));
 
         // put Width & Height to itemset
         rOutAttrs.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ),
@@ -1196,8 +1196,8 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
     {
-        long lX = maMtrPosX.GetValue();
-        long lY = maMtrPosY.GetValue();
+        long lX = static_cast<long>(maMtrPosX.GetValue());
+        long lY = static_cast<long>(maMtrPosY.GetValue());
 
         // #106330#
         // The below BugFix assumed that GetTopLeftPosition()
@@ -1364,7 +1364,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
             break;
     }
 
-    long nMaxLong = MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit ) - 1L;
+    long nMaxLong = static_cast<long>(MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit )) - 1L;
 
     if( Abs( aTmpRect.Left() ) > nMaxLong )
     {
@@ -1387,15 +1387,15 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
         aTmpRect.Bottom() = nMaxLong * nMult;
     }
 
-    maMtrPosX.SetMin( aTmpRect.Left() );
-    maMtrPosX.SetFirst( aTmpRect.Left() );
-    maMtrPosX.SetMax( aTmpRect.Right() );
-    maMtrPosX.SetLast( aTmpRect.Right() );
+    maMtrPosX.SetMin( maMtrPosX.Normalize(aTmpRect.Left()) );
+    maMtrPosX.SetFirst( maMtrPosX.Normalize(aTmpRect.Left()) );
+    maMtrPosX.SetMax( maMtrPosX.Normalize(aTmpRect.Right()) );
+    maMtrPosX.SetLast( maMtrPosX.Normalize(aTmpRect.Right()) );
 
-    maMtrPosY.SetMin( aTmpRect.Top() );
-    maMtrPosY.SetFirst( aTmpRect.Top() );
-    maMtrPosY.SetMax( aTmpRect.Bottom() );
-    maMtrPosY.SetLast( aTmpRect.Bottom() );
+    maMtrPosY.SetMin( maMtrPosY.Normalize(aTmpRect.Top()) );
+    maMtrPosY.SetFirst( maMtrPosY.Normalize(aTmpRect.Top()) );
+    maMtrPosY.SetMax( maMtrPosY.Normalize(aTmpRect.Bottom()) );
+    maMtrPosY.SetLast( maMtrPosY.Normalize(aTmpRect.Bottom()) );
 
     // size
     aTmpRect = maWorkArea;
@@ -1460,11 +1460,11 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
             break;
     }
 
-    maMtrWidth.SetMax( aTmpRect.GetWidth() );
-    maMtrWidth.SetLast( aTmpRect.GetWidth() );
+    maMtrWidth.SetMax( maMtrWidth.Normalize(aTmpRect.GetWidth()) );
+    maMtrWidth.SetLast( maMtrWidth.Normalize(aTmpRect.GetWidth()) );
 
-    maMtrHeight.SetMax( aTmpRect.GetHeight() );
-    maMtrHeight.SetLast( aTmpRect.GetHeight() );
+    maMtrHeight.SetMax( maMtrHeight.Normalize(aTmpRect.GetHeight()) );
+    maMtrHeight.SetLast( maMtrHeight.Normalize(aTmpRect.GetHeight()) );
 
 }
 
@@ -1583,7 +1583,8 @@ void SvxPositionSizeTabPage::DisableProtect()
 Rectangle SvxPositionSizeTabPage::GetRect()
 {
     Rectangle aTmpRect( maRect );
-    aTmpRect.SetSize( Size( maMtrWidth.GetValue(), maMtrHeight.GetValue() ) );
+    aTmpRect.SetSize( Size( static_cast<long>(maMtrWidth.GetValue()),
+                            static_cast<long>(maMtrHeight.GetValue()) ) );
 
     switch ( maCtlSize.GetActualRP() )
     {
@@ -1637,7 +1638,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
     if( maCbxScale.IsChecked() &&
         maCbxScale.IsEnabled() )
     {
-        long nHeight = (long) ( ((double) mlOldHeight * (double) maMtrWidth.GetValue()) / (double) mlOldWidth );
+        sal_Int64 nHeight = sal_Int64( ((double) mlOldHeight * (double) maMtrWidth.GetValue()) / (double) mlOldWidth );
         if( nHeight <= maMtrHeight.GetMax( FUNIT_NONE ) )
         {
             maMtrHeight.SetUserValue( nHeight, FUNIT_NONE );
@@ -1646,7 +1647,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
         {
             nHeight = maMtrHeight.GetMax( FUNIT_NONE );
             maMtrHeight.SetUserValue( nHeight );
-            const long nWidth = (long) ( ((double) mlOldWidth * (double) nHeight) / (double) mlOldHeight );
+            const sal_Int64 nWidth = sal_Int64( ((double) mlOldWidth * (double) nHeight) / (double) mlOldHeight );
             maMtrWidth.SetUserValue( nWidth, FUNIT_NONE );
         }
     }
@@ -1660,7 +1661,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeHeightHdl, void *, EMPTYARG )
     if( maCbxScale.IsChecked() &&
         maCbxScale.IsEnabled() )
     {
-        long nWidth = (long) ( ((double) mlOldWidth * (double) maMtrHeight.GetValue()) / (double) mlOldHeight );
+        sal_Int64 nWidth = sal_Int64( ((double) mlOldWidth * (double) maMtrHeight.GetValue()) / (double) mlOldHeight );
         if( nWidth <= maMtrWidth.GetMax( FUNIT_NONE ) )
         {
             maMtrWidth.SetUserValue( nWidth, FUNIT_NONE );
@@ -1669,7 +1670,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeHeightHdl, void *, EMPTYARG )
         {
             nWidth = maMtrWidth.GetMax( FUNIT_NONE );
             maMtrWidth.SetUserValue( nWidth );
-            const long nHeight = (long) ( ((double) mlOldHeight * (double) nWidth) / (double) mlOldWidth );
+            const sal_Int64 nHeight = sal_Int64( ((double) mlOldHeight * (double) nWidth) / (double) mlOldWidth );
             maMtrHeight.SetUserValue( nHeight, FUNIT_NONE );
         }
     }
