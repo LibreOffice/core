@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 09:00:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -975,7 +975,7 @@ void SvxFontSizeBox_Impl::Select()
 
     if ( !IsTravelSelect() )
     {
-        long nSelVal = GetValue();
+        sal_Int64 nSelVal = GetValue();
         float fSelVal = float( nSelVal ) / 10; //LogicToLogic( nSelVal, MAP_POINT, MAP_100TH_MM )) / 10;
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontHeight.Height" ));
@@ -1023,7 +1023,7 @@ void SvxFontSizeBox_Impl::Update( const SvxFontItem* pFontItem )
         ( pDocSh ? pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) : NULL );
 
     // Sizes-Liste auff"ullen
-    long nOldVal = GetValue(); // alten Wert merken
+    sal_Int64 nOldVal = GetValue(); // alten Wert merken
     const FontList* _pFontList = pFontListItem ? pFontListItem->GetFontList() : NULL;
     if ( _pFontList && pFontItem )
     {
