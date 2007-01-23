@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:25:07 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1264,10 +1264,10 @@ void LocaleDataWrapper::getDateFormatsImpl()
 // The ImplAdd... methods are taken from class International and modified to
 // suit the needs.
 
-static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, ULONG nNumber )
+static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber )
 {
     // fill temp buffer with digits
-    sal_Unicode aTempBuf[30];
+    sal_Unicode aTempBuf[64];
     sal_Unicode* pTempBuf = aTempBuf;
     do
     {
@@ -1290,10 +1290,10 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, ULONG nNumber )
 }
 
 
-static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, ULONG nNumber, int nMinLen )
+static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMinLen )
 {
     // fill temp buffer with digits
-    sal_Unicode aTempBuf[30];
+    sal_Unicode aTempBuf[64];
     sal_Unicode* pTempBuf = aTempBuf;
     do
     {
@@ -1383,10 +1383,10 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBu
 
 
 sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
-        long nNumber, USHORT nDecimals, BOOL bUseThousandSep,
+        sal_Int64 nNumber, USHORT nDecimals, BOOL bUseThousandSep,
         BOOL bTrailingZeros ) const
 {
-    sal_Unicode aNumBuf[32];
+    sal_Unicode aNumBuf[64];
     sal_Unicode* pNumBuf;
     USHORT  nNumLen;
     USHORT  i = 0;
@@ -1404,7 +1404,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         bNeg = FALSE;
 
     // convert number
-    pNumBuf = ImplAddUNum( aNumBuf, (ULONG)nNumber );
+    pNumBuf = ImplAddUNum( aNumBuf, (sal_uInt64)nNumber );
     nNumLen = (USHORT)(ULONG)(pNumBuf-aNumBuf);
     pNumBuf = aNumBuf;
 
@@ -1686,7 +1686,7 @@ String LocaleDataWrapper::getDuration( const Time& rTime, BOOL bSec, BOOL b100Se
 inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USHORT nDecimals )
 {
     // approximately 3.2 bits per digit
-    const size_t nDig = ((sizeof(long) * 8) / 3) + 1;
+    const size_t nDig = ((sizeof(sal_Int64) * 8) / 3) + 1;
     // digits, separators, leading zero, sign
     size_t nGuess = ((nDecimals < nDig) ?
         ((((nDig - nDecimals) / 3) * rLoc.getNumThousandSep().Len()) + nDig) :
@@ -1695,14 +1695,14 @@ inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USH
 }
 
 
-String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals,
+String LocaleDataWrapper::getNum( sal_Int64 nNumber, USHORT nDecimals,
         BOOL bUseThousandSep, BOOL bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    sal_Unicode aBuf[48];       // big enough for 64-bit long
+    sal_Unicode aBuf[64];       // big enough for 64-bit long
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
-    sal_Unicode* const pBuffer = (nGuess < 42 ? aBuf :
+    sal_Unicode* const pBuffer = (nGuess < 54 ? aBuf :
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
@@ -1715,21 +1715,21 @@ String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals,
 }
 
 
-String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
+String LocaleDataWrapper::getCurr( sal_Int64 nNumber, USHORT nDecimals,
         const String& rCurrencySymbol, BOOL bUseThousandSep ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    sal_Unicode aBuf[75];
-    sal_Unicode aNumBuf[48];    // big enough for 64-bit long
+    sal_Unicode aBuf[107];
+    sal_Unicode aNumBuf[64];    // big enough for 64-bit long
     sal_Unicode cZeroChar = getCurrZeroChar();
 
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
-    sal_Unicode* const pNumBuffer = (nGuess < 42 ? aNumBuf :
+    sal_Unicode* const pNumBuffer = (nGuess < 54 ? aNumBuf :
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* const pBuffer =
-        ((size_t(rCurrencySymbol.Len()) + nGuess + 20) < sizeof(aBuf) ? aBuf :
+        ((size_t(rCurrencySymbol.Len()) + nGuess + 20) < sizeof(aBuf)/sizeof(aBuf[0]) ? aBuf :
         new sal_Unicode[ rCurrencySymbol.Len() + nGuess + 20 ]);
     sal_Unicode* pBuf = pBuffer;
 
@@ -1909,9 +1909,9 @@ String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
     String aNumber( pBuffer, (xub_StrLen)(ULONG)(pBuf-pBuffer) );
 
     if ( pBuffer != aBuf )
-        delete pBuffer;
+        delete [] pBuffer;
     if ( pNumBuffer != aNumBuf )
-        delete pNumBuffer;
+        delete [] pNumBuffer;
 
     return aNumber;
 }
