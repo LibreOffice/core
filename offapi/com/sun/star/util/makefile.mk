@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:18:52 $
+#   last change: $Author: obo $ $Date: 2007-01-23 07:05:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,7 @@ IDLFILES=\
     OfficeInstallationDirectories.idl\
     XOfficeInstallationDirectories.idl\
     RevisionTag.idl\
+    UriAbbreviation.idl\
 
 # ------------------------------------------------------------------
 
