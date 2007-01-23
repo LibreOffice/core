@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:24:57 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,6 +420,7 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
     DECL_LINK( DestroyDialogHdl, AbstractMailMergeWizard* );
     DECL_LINK( DestroyWizardHdl, AbstractMailMergeWizard* );
+    DECL_LINK( CloseFrameHdl, AbstractMailMergeWizard* );
 
     void ExecutionFinished( bool bDeleteConfigItem );
     void ExecuteWizard();
@@ -673,16 +674,9 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
         }
     case RET_CANCEL:
         {
-            //the wizard has been canceled
-            if(m_pMMConfig->GetTargetView())
-            {
-                m_pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
-                m_pMMConfig->SetTargetView(0);
-            }
-            if(m_pMMConfig->GetSourceView())
-                m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame()->Appear();
-
-            ExecutionFinished( true );
+            // close frame and destroy wizard asynchronously
+            Application::PostUserEvent(
+                LINK( this, SwMailMergeWizardExecutor, CloseFrameHdl ), m_pWizard );
             break;
         }
     default: //finish
@@ -717,6 +711,26 @@ IMPL_LINK( SwMailMergeWizardExecutor, DestroyDialogHdl, AbstractMailMergeWizard*
 IMPL_LINK( SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard*, pDialog )
 {
     delete pDialog;
+    return 0L;
+}
+
+IMPL_LINK( SwMailMergeWizardExecutor, CloseFrameHdl, AbstractMailMergeWizard*, pDialog )
+{
+    if(m_pMMConfig->GetTargetView())
+    {
+        m_pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
+        m_pMMConfig->SetTargetView(0);
+    }
+    if(m_pMMConfig->GetSourceView())
+        m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame()->Appear();
+
+    m_pMMConfig->Commit();
+    delete m_pMMConfig;
+    m_pMMConfig = 0;
+    // m_pWizard already deleted by closing the target view
+    m_pWizard = 0;
+    release();
+
     return 0L;
 }
 
