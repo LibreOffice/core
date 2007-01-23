@@ -64,15 +64,15 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1)` \
-    $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_1.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -84,13 +84,13 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP1OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP1OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -233,15 +233,15 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2)` \
-    $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_2.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -253,13 +253,13 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP2OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP2OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -402,15 +402,15 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3)` \
-    $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_3.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -422,13 +422,13 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP3OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP3OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -571,15 +571,15 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4)` \
-    $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_4.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -591,13 +591,13 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP4OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP4OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -740,15 +740,15 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5)` \
-    $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_5.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -760,13 +760,13 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP5OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP5OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -909,15 +909,15 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6)` \
-    $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_6.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -929,13 +929,13 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP6OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP6OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1078,15 +1078,15 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7)` \
-    $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_7.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -1098,13 +1098,13 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP7OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP7OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1247,15 +1247,15 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8)` \
-    $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_8.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -1267,13 +1267,13 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP8OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP8OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1416,15 +1416,15 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9)` \
-    $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_9.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -1436,13 +1436,13 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP9OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP9OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1585,15 +1585,15 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10)` \
-    $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_10.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -1605,13 +1605,13 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP10OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP10OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
