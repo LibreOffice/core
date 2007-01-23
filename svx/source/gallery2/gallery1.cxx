@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:16:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,32 +65,6 @@ using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
-
-// ---------------------
-// - GalleryCacheEntry -
-// ---------------------
-
-class GalleryCacheEntry
-{
-private:
-
-    Gallery*                mpGallery;
-    String                  maMultiPath;
-    ULONG                   mnRefCount;
-
-public:
-
-                            GalleryCacheEntry( Gallery* pGallery, const String& rMultiPath ) :
-                                mpGallery( pGallery ), maMultiPath( rMultiPath ) {}
-                            ~GalleryCacheEntry() { delete mpGallery; }
-
-    Gallery*                GetGallery() const { return mpGallery; }
-    const String&           GetMultiPath() const { return maMultiPath; }
-
-    ULONG                   GetRefCount() const { return mnRefCount; }
-    void                    IncRefCount() { mnRefCount++; }
-    void                    DecRefCount() { mnRefCount--; }
-};
 
 // ---------------------
 // - GalleryThemeEntry -
@@ -233,12 +207,6 @@ public:
 };
 
 // -----------
-// - Statics -
-// -----------
-
-List Gallery::aGalleryCache;
-
-// -----------
 // - Gallery -
 // -----------
 
@@ -265,46 +233,20 @@ Gallery::~Gallery()
 
 // ------------------------------------------------------------------------
 
-Gallery* Gallery::AcquireGallery( const String& rMultiPath )
+Gallery* Gallery::GetGalleryInstance()
 {
-    Gallery*                pGallery = NULL;
-    GalleryCacheEntry*      pEntry = NULL;
-    GalleryCacheEntry*      pFound = NULL;
-
-    for( pEntry = (GalleryCacheEntry*) aGalleryCache.First(); pEntry && !pGallery; pEntry = (GalleryCacheEntry*) aGalleryCache.Next() )
-        if( rMultiPath == pEntry->GetMultiPath() )
-            pGallery = ( pFound = pEntry )->GetGallery();
+    static Gallery* pGallery = NULL;
 
     if( !pGallery )
-        aGalleryCache.Insert( pFound = new GalleryCacheEntry( new Gallery( rMultiPath ), rMultiPath ), LIST_APPEND );
-
-    pFound->IncRefCount();
-
-    return( pFound->GetGallery() );
-}
-
-// ------------------------------------------------------------------------
-
-void Gallery::ReleaseGallery( Gallery* pGallery )
-{
-    GalleryCacheEntry*      pFound = NULL;
-    GalleryCacheEntry*      pEntry;
-
-    for( pEntry = (GalleryCacheEntry*) aGalleryCache.First(); pEntry && !pFound; pEntry = (GalleryCacheEntry*) aGalleryCache.Next() )
-        if( pGallery == pEntry->GetGallery() )
-            pFound = pEntry;
-
-    if( pFound )
     {
-        pFound->DecRefCount();
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( !pGallery )
+        {
+            pGallery = new Gallery( SvtPathOptions().GetGalleryPath() );
+        }
+    }
 
-        if( !pFound->GetRefCount() )
-            delete (GalleryCacheEntry*) aGalleryCache.Remove( pFound );
-    }
-    else
-    {
-        DBG_ERROR( "Gallery::ReleaseGallery(...): Gallery entry not found" );
-    }
+    return pGallery;
 }
 
 // ------------------------------------------------------------------------
