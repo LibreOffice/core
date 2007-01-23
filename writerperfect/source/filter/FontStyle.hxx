@@ -36,7 +36,7 @@ class FontStyle : public Style
 public:
     FontStyle(const char *psName, const char *psFontFamily);
     ~FontStyle();
-    virtual void write(DocumentHandler &xHandler) const;
+    virtual void write(DocumentHandler *pHandler) const;
     const WPXString &getFontFamily() const { return msFontFamily; }
 
 private:

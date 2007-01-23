@@ -38,13 +38,13 @@ FontStyle::~FontStyle()
 {
 }
 
-void FontStyle::write(DocumentHandler &xHandler) const
+void FontStyle::write(DocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:font-decl");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("fo:font-family", msFontFamily);
     styleOpen.addAttribute("style:font-pitch", msFontPitch);
-    styleOpen.write(xHandler);
+    styleOpen.write(pHandler);
     TagCloseElement styleClose("style:font-decl");
-    styleClose.write(xHandler);
+    styleClose.write(pHandler);
 }
