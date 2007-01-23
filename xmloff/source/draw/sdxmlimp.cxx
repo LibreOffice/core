@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:28:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <tools/string.hxx>
 
 #ifndef _XMLOFF_XMLMETAI_HXX
 #include "xmlscripti.hxx"
@@ -116,6 +118,8 @@
 #include <com/sun/star/style/XStyle.hpp>
 #endif
 
+#include "XMLFontStylesContext.hxx"
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -124,6 +128,7 @@ using namespace ::xmloff::token;
 
 static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
 {
+    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS       },
     { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES          },
     { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES      },
     { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
@@ -316,6 +321,11 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
+        case XML_TOK_DOC_FONTDECLS:
+        {
+            pContext = GetSdImport().CreateFontDeclsContext( rLocalName, xAttrList );
+            break;
+        }
         case XML_TOK_DOC_SETTINGS:
         {
             if( GetImport().getImportFlags() & IMPORT_SETTINGS )
@@ -768,6 +778,19 @@ SvXMLImportContext* SdXMLImport::CreateMasterStylesContext(const OUString& rLoca
     mpMasterStylesContext->AddRef();
 
     return mpMasterStylesContext;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    XMLFontStylesContext *pFSContext =
+            new XMLFontStylesContext( *this, XML_NAMESPACE_OFFICE,
+                                      rLocalName, xAttrList,
+                                      gsl_getSystemTextEncoding() );
+    SetFontDecls( pFSContext );
+    return pFSContext;
 }
 
 //////////////////////////////////////////////////////////////////////////////
