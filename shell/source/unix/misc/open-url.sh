@@ -96,15 +96,15 @@ esac
 # special handling for mailto: uris
 if echo $1 | grep '^mailto:' > /dev/null; then
   # check $MAILER variable
-  if [ $MAILER ]; then
-    $MAILER $1 &
+  if [ ! -z "$MAILER" ]; then
+    $MAILER "$1" &
     exit 0
   else
     # mozilla derivates may need -remote semantics
     for i in thunderbird mozilla netscape; do
       mailer=`which $i`
       if [ ! -z "$mailer" ]; then
-        run_mozilla $mailer $1
+        run_mozilla "$mailer" "$1"
         exit 0
       fi
     done
@@ -113,15 +113,15 @@ if echo $1 | grep '^mailto:' > /dev/null; then
   fi
 else
   # check $BROWSER variable
-  if [ $BROWSER ]; then
-    $BROWSER $1 &
+  if [ ! -z "$BROWSER" ]; then
+    $BROWSER "$1" &
     exit 0
   else
     # mozilla derivates may need -remote semantics
     for i in firefox mozilla netscape; do
       browser=`which $i`
       if [ ! -z "$browser" ]; then
-        run_mozilla $browser $1
+        run_mozilla "$browser" "$1"
         exit 0
       fi
     done
