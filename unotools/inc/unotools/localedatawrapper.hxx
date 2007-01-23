@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-21 10:59:09 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
             void                getDefaultCalendarImpl();
 
             sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
-                                    long nNumber, USHORT nDecimals,
+                                    sal_Int64 nNumber, USHORT nDecimals,
                                     BOOL bUseThousandSep, BOOL bTrailingZeros ) const;
 
 public:
@@ -292,18 +292,18 @@ public:
                                     </FALSE> := trailing zeros are only displayed
                                         if the value is not an integer value.
                                  */
-            String              getNum( long nNumber, USHORT nDecimals,
+            String              getNum( sal_Int64 nNumber, USHORT nDecimals,
                                     BOOL bUseThousandSep = TRUE,
                                     BOOL bTrailingZeros = TRUE ) const;
 
                                 /// "Secure" currency formatted string.
-            String              getCurr( long nNumber, USHORT nDecimals,
+            String              getCurr( sal_Int64 nNumber, USHORT nDecimals,
                                     const String& rCurrencySymbol,
                                     BOOL bUseThousandSep = TRUE ) const;
                                 /** Default currency formatted string, use with
                                     care as default currency may change in any
                                     locale, for example, DEM -> EUR */
-            String              getCurr( long nNumber, USHORT nDecimals,
+            String              getCurr( sal_Int64 nNumber, USHORT nDecimals,
                                         BOOL bUseThousandSep = TRUE ) const
                                     { return getCurr( nNumber, nDecimals,
                                         getCurrSymbol(), bUseThousandSep ); }
