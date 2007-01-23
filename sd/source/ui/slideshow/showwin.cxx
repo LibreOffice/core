@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:05:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
         switch( nKeyCode )
         {
         case KEY_PAGEUP:
-        case KEY_RIGHT:
+        case KEY_LEFT:
         case KEY_UP:
         case KEY_P:
         case KEY_HOME:
