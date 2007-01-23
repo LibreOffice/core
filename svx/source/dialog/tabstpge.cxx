@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:28:48 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 {
     // Einen neuen Hinzufuegen und Selectieren
     // Wert aus der Anzeige holen
-    long nVal = aTabBox.Denormalize( aTabBox.GetValue( eDefUnit ) );
+    long nVal = static_cast<long>(aTabBox.Denormalize( aTabBox.GetValue( eDefUnit ) ));
 
     // Wenn der pBtn == 0 && der Value == 0 dann keinen Tab Erzeugen
     // weil ueber OK erzeugt
@@ -757,7 +757,7 @@ IMPL_LINK( SvxTabulatorTabPage, ModifyHdl_Impl, MetricBox *, EMPTYARG )
         SetFillAndTabType_Impl();
 
         aAktTab.GetTabPos() =
-            aTabBox.Denormalize( aTabBox.GetValue( eDefUnit ) );
+            static_cast<long>(aTabBox.Denormalize( aTabBox.GetValue( eDefUnit ) ));
 
         aNewBtn.Disable();
         aDelBtn.Enable();
