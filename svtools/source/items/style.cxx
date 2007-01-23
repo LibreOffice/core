@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:19:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,9 +258,6 @@ const XubString& SfxStyleSheetBase::GetFollow() const
 
 BOOL SfxStyleSheetBase::SetFollow( const XubString& rName )
 {
-    if ( rName == aName )
-        return FALSE;
-
     if( aFollow != rName )
     {
         if( !rPool.Find( rName, nFamily ) )
