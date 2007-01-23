@@ -41,7 +41,7 @@ void OrderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &
         setListLevel(iLevel, new OrderedListLevelStyle(xPropList));
 }
 
-void OrderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
+void OrderedListLevelStyle::write(DocumentHandler *pHandler, int iLevel) const
 {
     WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
@@ -57,7 +57,7 @@ void OrderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
                 listLevelStyleOpen.addAttribute("style:num-format", mPropList["style:num-format"]->getStr());
         if (mPropList["text:start-value"])
                 listLevelStyleOpen.addAttribute("text:start-value", mPropList["text:start-value"]->getStr());
-    listLevelStyleOpen.write(xHandler);
+    listLevelStyleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:properties");
         if (mPropList["text:space-before"])
@@ -66,10 +66,10 @@ void OrderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
     if (mPropList["text:min-label-distance"])
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
-    stylePropertiesOpen.write(xHandler);
+    stylePropertiesOpen.write(pHandler);
 
-    xHandler.endElement("style:properties");
-    xHandler.endElement("text:list-level-style-number");
+    pHandler->endElement("style:properties");
+    pHandler->endElement("text:list-level-style-number");
 }
 
 UnorderedListLevelStyle::UnorderedListLevelStyle(const WPXPropertyList &xPropList)
@@ -85,7 +85,7 @@ void UnorderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList
         setListLevel(iLevel, new UnorderedListLevelStyle(xPropList));
 }
 
-void UnorderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
+void UnorderedListLevelStyle::write(DocumentHandler *pHandler, int iLevel) const
 {
     WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
@@ -95,7 +95,7 @@ void UnorderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
     listLevelStyleOpen.addAttribute("style:num-suffice", ".");
         if (mPropList["text:bullet-char"])
                 listLevelStyleOpen.addAttribute("text:bullet-char", mPropList["text:bullet-char"]->getStr());
-    listLevelStyleOpen.write(xHandler);
+    listLevelStyleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:properties");
         if (mPropList["text:space-before"])
@@ -105,10 +105,10 @@ void UnorderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
     if (mPropList["text:min-label-distance"])
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
     stylePropertiesOpen.addAttribute("style:font-name", "OpenSymbol");
-    stylePropertiesOpen.write(xHandler);
+    stylePropertiesOpen.write(pHandler);
 
-    xHandler.endElement("style:properties");
-    xHandler.endElement("text:list-level-style-bullet");
+    pHandler->endElement("style:properties");
+    pHandler->endElement("text:list-level-style-bullet");
 }
 
 ListStyle::ListStyle(const char *psName, const int iListID) :
@@ -146,16 +146,16 @@ void ListStyle::setListLevel(int iLevel, ListLevelStyle *iListLevelStyle)
         mppListLevels[iLevel] = iListLevelStyle;
 }
 
-void ListStyle::write(DocumentHandler &xHandler) const
+void ListStyle::write(DocumentHandler *pHandler) const
 {
     TagOpenElement listStyleOpenElement("text:list-style");
     listStyleOpenElement.addAttribute("style:name", getName());
-    listStyleOpenElement.write(xHandler);
+    listStyleOpenElement.write(pHandler);
 
     for (int i=0; i<WP6_NUM_LIST_LEVELS; i++) {
         if (mppListLevels[i] != NULL)
-            mppListLevels[i]->write(xHandler, i);
+            mppListLevels[i]->write(pHandler, i);
     }
 
-    xHandler.endElement("text:list-style");
+    pHandler->endElement("text:list-style");
 }
