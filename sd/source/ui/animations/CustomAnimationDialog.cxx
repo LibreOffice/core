@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:22:40 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:13:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,7 +711,7 @@ TransparencyPropertyBox::~TransparencyPropertyBox()
 
 void TransparencyPropertyBox::updateMenu()
 {
-    long nValue = mpMetric->GetValue();
+    sal_Int64 nValue = mpMetric->GetValue();
     for( USHORT i = 25; i < 101; i += 25 )
         mpMenu->CheckItem( i, nValue == i );
 }
@@ -827,9 +827,9 @@ RotationPropertyBox::~RotationPropertyBox()
 
 void RotationPropertyBox::updateMenu()
 {
-    long nValue = mpMetric->GetValue();
+    sal_Int64 nValue = mpMetric->GetValue();
     bool bDirection = nValue >= 0;
-    nValue = abs( nValue );
+    nValue = (nValue < 0 ? -nValue : nValue);
 
     mpMenu->CheckItem( CM_QUARTER_SPIN, nValue == 90 );
     mpMenu->CheckItem( CM_HALF_SPIN, nValue == 180 );
@@ -852,9 +852,9 @@ IMPL_LINK( RotationPropertyBox, implModifyHdl, Control*, EMPTYARG )
 
 IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 {
-    long nValue = mpMetric->GetValue();
+    sal_Int64 nValue = mpMetric->GetValue();
     bool bDirection = nValue >= 0;
-    nValue = abs( nValue );
+    nValue = (nValue < 0 ? -nValue : nValue);
 
     switch( pPb->GetCurItemId() )
     {
@@ -968,7 +968,7 @@ ScalePropertyBox::~ScalePropertyBox()
 
 void ScalePropertyBox::updateMenu()
 {
-    long nValue = mpMetric->GetValue();
+    sal_Int64 nValue = mpMetric->GetValue();
 
     mpMenu->CheckItem( 25, nValue == 25 );
     mpMenu->CheckItem( 50, nValue == 50 );
@@ -992,7 +992,7 @@ IMPL_LINK( ScalePropertyBox, implModifyHdl, Control*, EMPTYARG )
 
 IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 {
-    long nValue = mpMetric->GetValue();
+    sal_Int64 nValue = mpMetric->GetValue();
 
     int nDirection = mnDirection;
 
