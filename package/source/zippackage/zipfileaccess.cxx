@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zipfileaccess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:49:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,10 +146,10 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const ::rtl::OUString& aStri
                                                     const uno::Sequence< ::rtl::OUString >& aPattern )
 {
     sal_Int32 nInd = aPattern.getLength() - 1;
-    if ( !nInd )
+    if ( nInd < 0 )
         return sal_False;
 
-    if ( nInd == 1 )
+    if ( nInd == 0 )
     {
         if ( !aPattern[0].getLength() )
             return sal_True;
@@ -453,7 +453,7 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( !m_pListenersContainer )
+    if ( m_pListenersContainer )
         m_pListenersContainer->removeInterface( xListener );
 }
 
