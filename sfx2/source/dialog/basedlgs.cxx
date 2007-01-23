@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:26:52 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,13 +93,27 @@ void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-class SfxFloatingWindow_Impl
+class SfxFloatingWindow_Impl : public SfxListener
 {
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
     BOOL                bConstructed;
+    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
+
+void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
+{
+    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    {
+        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        {
+            case SFX_HINT_DYING:
+                pMgr->Destroy();
+                break;
+        }
+    }
+}
 
 // class SfxModalDefParentHelper -----------------------------------------
 
@@ -522,6 +536,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
+    if ( pBindinx )
+        pImp->StartListening( *pBindinx );
 }
 
 // -----------------------------------------------------------------------
@@ -539,6 +555,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     sal_uInt32 nId = GetHelpId();
     SetHelpId(0);
     SetUniqueId( nId );
+    if ( pBindinx )
+        pImp->StartListening( *pBindinx );
 }
 
 //-------------------------------------------------------------------------
