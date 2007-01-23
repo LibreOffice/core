@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mav $ $Date: 2006-10-16 06:20:56 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
+#include <rtl/ref.hxx>
 
 #include <olecomponent.hxx>
 #include <olewrapclient.hxx>
@@ -360,6 +361,7 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
 , m_nOLEMiscFlags( 0 )
 , m_nAdvConn( 0 )
 , m_bOleInitialized( sal_False )
+, m_bWorkaroundActive( sal_False )
 {
     OSL_ENSURE( m_pUnoOleObject, "No owner object is provided!" );
 
@@ -916,7 +918,17 @@ void OleComponent::RunObject()
 
     if ( !OleIsRunning( m_pNativeImpl->m_pOleObject ) )
     {
-        HRESULT hr = OleRun( m_pNativeImpl->m_pObj );
+        HRESULT hr = S_OK;
+        try
+        {
+            hr = OleRun( m_pNativeImpl->m_pObj );
+        }
+        catch( ... )
+        {
+            int i = 0;
+            i++;
+        }
+
         if ( FAILED( hr ) )
         {
             if ( hr == REGDB_E_CLASSNOTREG )
@@ -1200,6 +1212,9 @@ sal_Bool OleComponent::IsDirty()
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
+    if ( IsWorkaroundActive() )
+        return sal_True;
+
     CComPtr< IPersistStorage > pPersistStorage;
     HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IPersistStorage, (void**)&pPersistStorage );
     if ( FAILED( hr ) || !pPersistStorage )
@@ -1220,7 +1235,7 @@ void OleComponent::StoreOwnTmpIfNecessary()
     if ( FAILED( hr ) || !pPersistStorage )
         throw io::IOException(); // TODO
 
-    if ( pPersistStorage->IsDirty() != S_FALSE )
+    if ( m_bWorkaroundActive || pPersistStorage->IsDirty() != S_FALSE )
     {
         hr = OleSave( pPersistStorage, m_pNativeImpl->m_pIStorage, TRUE );
         if ( FAILED( hr ) )
@@ -1235,31 +1250,21 @@ void OleComponent::StoreOwnTmpIfNecessary()
             if ( FAILED( hr ) )
                 throw io::IOException(); // TODO
 
-            // the result of the followin call is not checked because some objects, for example AcrobatReader7.0.8
+            // the result of the following call is not checked because some objects, for example AcrobatReader7.0.8
             // return error even in case the saving was done correctly
             hr = pPersistStorage->Save( m_pNativeImpl->m_pIStorage, TRUE );
+
+            // another workaround for AcrobatReader7.0.8 object, this object might think that it is not changed
+            // when it has been created from file, although it must be saved
+            m_bWorkaroundActive = sal_True;
         }
-
-        // it is possible that the object decided not to store, then it might return S_FALSE that in no failure
-        hr = pPersistStorage->SaveCompleted( NULL );
-        if ( FAILED( hr ) && hr != E_UNEXPECTED )
-            throw io::IOException(); // TODO
-
-//REMOVE        if ( !bStoreVisReplace )
-//REMOVE        {
-//REMOVE            // remove all the cache streams from the storage
-//REMOVE            for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
-//REMOVE            {
-//REMOVE                ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
-//REMOVE                aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
-//REMOVE                hr = m_pNativeImpl->m_pIStorage->DestroyElement( aStreamName.getStr() );
-//REMOVE                if ( FAILED( hr ) )
-//REMOVE                    break;
-//REMOVE            }
-//REMOVE        }
 
         hr = m_pNativeImpl->m_pIStorage->Commit( STGC_DEFAULT );
         if ( FAILED( hr ) )
+            throw io::IOException(); // TODO
+
+        hr = pPersistStorage->SaveCompleted( NULL );
+        if ( FAILED( hr ) && hr != E_UNEXPECTED )
             throw io::IOException(); // TODO
 
         // STATSTG aStat;
@@ -1320,24 +1325,38 @@ sal_Bool OleComponent::OnShowWindow_Impl( bool bShow )
 void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 {
     // TODO: check if it is enough or may be saving notifications are required for Visio2000
-    OleEmbeddedObject* pLockObject = NULL;
+    ::rtl::Reference< OleEmbeddedObject > xLockObject;
 
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( m_pUnoOleObject )
-        {
-            pLockObject = m_pUnoOleObject;
-            pLockObject->acquire();
-        }
+            xLockObject = m_pUnoOleObject;
     }
 
-    if ( pLockObject )
+    if ( xLockObject.is() )
     {
         // the request will be deleted immedeatelly after execution by it's implementation
-        MainThreadNotificationRequest* pMTNotifRequest = new MainThreadNotificationRequest( pLockObject, dwAspect );
+        MainThreadNotificationRequest* pMTNotifRequest = new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect );
         MainThreadNotificationRequest::mainThreadWorkerStart( pMTNotifRequest );
+    }
+}
 
-        pLockObject->release();
+//----------------------------------------------
+void OleComponent::OnClose_Impl()
+{
+    ::rtl::Reference< OleEmbeddedObject > xLockObject;
+
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        if ( m_pUnoOleObject )
+            xLockObject = m_pUnoOleObject;
+    }
+
+    if ( xLockObject.is() )
+    {
+        // the request will be deleted immedeatelly after execution by it's implementation
+        MainThreadNotificationRequest* pMTNotifRequest = new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE );
+        MainThreadNotificationRequest::mainThreadWorkerStart( pMTNotifRequest );
     }
 }
 
