@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:03:11 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,7 @@ void ImplGrafMetricField::Modify()
 
 IMPL_LINK( ImplGrafMetricField, ImplModifyHdl, Timer*, EMPTYARG )
 {
-    const long nVal = GetValue();
+    const sal_Int64 nVal = GetValue();
 
     // Convert value to an any to be usable with dispatch API
     Any a;
