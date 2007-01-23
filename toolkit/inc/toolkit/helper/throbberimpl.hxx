@@ -4,9 +4,9 @@
  *
  *  $RCSfile: throbberimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:51:56 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ namespace toolkit
                           throw ( RuntimeException );
         // Helpers
         void initImage() throw ( RuntimeException );
+        sal_Bool isHCMode() throw ( RuntimeException );
     };
 //........................................................................
 } // namespacetoolkit

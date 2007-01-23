@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xthrobber.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:52:48 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,9 +164,14 @@ namespace toolkit
     {
         ::vos::OGuard aGuard( GetMutex() );
         Sequence< Reference< XGraphic > > aImageList(12);
+        sal_uInt16 nIconIdStart = RID_TK_ICON_THROBBER_START;
+
+        if ( mpThrobber->isHCMode() )
+            nIconIdStart = RID_TK_HC_ICON_THROBBER_START;
+
         for ( sal_uInt16 i=0; i<12; i++ )
         {
-            Image aImage = TK_RES_IMAGE( RID_TK_ICON_THROBBER_START + i );
+            Image aImage = TK_RES_IMAGE( nIconIdStart + i );
             aImageList[i] = aImage.GetXGraphic();
         }
 
