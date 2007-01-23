@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:14:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:50:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ public:
     void            Reformat();
     void            Modify();
 
-    void            Fill( const FontInfo& rInfo, const FontList* pList );
+    void            Fill( const FontInfo* pInfo, const FontList* pList );
 
     void            EnableRelativeMode( USHORT nMin = 50, USHORT nMax = 150,
                                         USHORT nStep = 5 );
