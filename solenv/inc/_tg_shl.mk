@@ -260,10 +260,10 @@ $(SHL1TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @+$(TYPE) $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @echo  $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    $(MISC)$/$(TARGET).$(@:b)_1.cmd
 .ELSE
     $(SHL1LINKER) @$(mktmp \
         $(SHL1LINKFLAGS) \
@@ -345,15 +345,15 @@ $(SHL1TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
-    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
 .IF "$(SHL1VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL1VERSIONMAP) $@
@@ -367,13 +367,13 @@ $(SHL1TARGETN) : \
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
     +-$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
@@ -670,10 +670,10 @@ $(SHL2TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @+$(TYPE) $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @echo  $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    $(MISC)$/$(TARGET).$(@:b)_2.cmd
 .ELSE
     $(SHL2LINKER) @$(mktmp \
         $(SHL2LINKFLAGS) \
@@ -755,15 +755,15 @@ $(SHL2TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
-    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
 .IF "$(SHL2VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL2VERSIONMAP) $@
@@ -777,13 +777,13 @@ $(SHL2TARGETN) : \
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
     +-$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
@@ -1080,10 +1080,10 @@ $(SHL3TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @+$(TYPE) $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @echo  $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    $(MISC)$/$(TARGET).$(@:b)_3.cmd
 .ELSE
     $(SHL3LINKER) @$(mktmp \
         $(SHL3LINKFLAGS) \
@@ -1165,15 +1165,15 @@ $(SHL3TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
-    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
 .IF "$(SHL3VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL3VERSIONMAP) $@
@@ -1187,13 +1187,13 @@ $(SHL3TARGETN) : \
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
     +-$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
@@ -1490,10 +1490,10 @@ $(SHL4TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @+$(TYPE) $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @echo  $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    $(MISC)$/$(TARGET).$(@:b)_4.cmd
 .ELSE
     $(SHL4LINKER) @$(mktmp \
         $(SHL4LINKFLAGS) \
@@ -1575,15 +1575,15 @@ $(SHL4TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
-    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
 .IF "$(SHL4VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL4VERSIONMAP) $@
@@ -1597,13 +1597,13 @@ $(SHL4TARGETN) : \
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
     +-$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
@@ -1900,10 +1900,10 @@ $(SHL5TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @+$(TYPE) $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @echo  $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    $(MISC)$/$(TARGET).$(@:b)_5.cmd
 .ELSE
     $(SHL5LINKER) @$(mktmp \
         $(SHL5LINKFLAGS) \
@@ -1985,15 +1985,15 @@ $(SHL5TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
-    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
 .IF "$(SHL5VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL5VERSIONMAP) $@
@@ -2007,13 +2007,13 @@ $(SHL5TARGETN) : \
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
     +-$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
@@ -2310,10 +2310,10 @@ $(SHL6TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @+$(TYPE) $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @echo  $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    $(MISC)$/$(TARGET).$(@:b)_6.cmd
 .ELSE
     $(SHL6LINKER) @$(mktmp \
         $(SHL6LINKFLAGS) \
@@ -2395,15 +2395,15 @@ $(SHL6TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
-    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
 .IF "$(SHL6VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL6VERSIONMAP) $@
@@ -2417,13 +2417,13 @@ $(SHL6TARGETN) : \
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
     +-$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
@@ -2720,10 +2720,10 @@ $(SHL7TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @+$(TYPE) $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @echo  $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    $(MISC)$/$(TARGET).$(@:b)_7.cmd
 .ELSE
     $(SHL7LINKER) @$(mktmp \
         $(SHL7LINKFLAGS) \
@@ -2805,15 +2805,15 @@ $(SHL7TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
-    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
 .IF "$(SHL7VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL7VERSIONMAP) $@
@@ -2827,13 +2827,13 @@ $(SHL7TARGETN) : \
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
     +-$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
@@ -3130,10 +3130,10 @@ $(SHL8TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @+$(TYPE) $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @echo  $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    $(MISC)$/$(TARGET).$(@:b)_8.cmd
 .ELSE
     $(SHL8LINKER) @$(mktmp \
         $(SHL8LINKFLAGS) \
@@ -3215,15 +3215,15 @@ $(SHL8TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
-    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
 .IF "$(SHL8VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL8VERSIONMAP) $@
@@ -3237,13 +3237,13 @@ $(SHL8TARGETN) : \
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
     +-$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
@@ -3540,10 +3540,10 @@ $(SHL9TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @+$(TYPE) $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @echo  $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    $(MISC)$/$(TARGET).$(@:b)_9.cmd
 .ELSE
     $(SHL9LINKER) @$(mktmp \
         $(SHL9LINKFLAGS) \
@@ -3625,15 +3625,15 @@ $(SHL9TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
-    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
 .IF "$(SHL9VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL9VERSIONMAP) $@
@@ -3647,13 +3647,13 @@ $(SHL9TARGETN) : \
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
     +-$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
@@ -3950,10 +3950,10 @@ $(SHL10TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @+$(TYPE) $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @echo  $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    $(MISC)$/$(TARGET).$(@:b)_10.cmd
 .ELSE
     $(SHL10LINKER) @$(mktmp \
         $(SHL10LINKFLAGS) \
@@ -4035,15 +4035,15 @@ $(SHL10TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
-    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
 .IF "$(SHL10VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL10VERSIONMAP) $@
@@ -4057,13 +4057,13 @@ $(SHL10TARGETN) : \
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
     +-$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
