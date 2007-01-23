@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:09:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,8 @@
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
 #include <configsettings.hxx>
 #endif
+
+#include "lazydelete.hxx"
 
 #include <map>
 
@@ -955,6 +957,8 @@ Menu::~Menu()
 {
     DBG_DTOR( Menu, NULL );
 
+    vcl::LazyDeletor<Menu>::Undelete( this );
+
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING, ITEMPOS_INVALID );
 
     // at the window free the reference to the accessible component
@@ -988,6 +992,11 @@ Menu::~Menu()
     ImplSetSalMenu( NULL );
 }
 
+void Menu::doLazyDelete()
+{
+    vcl::LazyDeletor<Menu>::Delete( this );
+}
+
 void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
@@ -1008,6 +1017,11 @@ void Menu::ImplInit()
 
     // Native-support: returns NULL if not supported
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar );
+}
+
+Menu* Menu::ImplGetStartedFrom() const
+{
+    return pStartedFrom;
 }
 
 void Menu::ImplLoadRes( const ResId& rResId )
