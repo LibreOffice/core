@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc_animations.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:15:03 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,4 +36,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-// eof
+#include "drawdoc.hxx"
+#include "cusshow.hxx"
+
+/** replaces a slide from all custom shows with a new one or removes a slide from
+    all custom shows if pNewPage is 0.
+*/
+void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdPage* pNewPage )
+{
+    if ( mpCustomShowList )
+    {
+        for (ULONG i = 0; i < mpCustomShowList->Count(); i++)
+        {
+            SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(i);
+            if( pNewPage == 0 )
+                pCustomShow->RemovePage(pOldPage);
+            else
+                pCustomShow->ReplacePage(pOldPage,pNewPage);
+        }
+    }
+}
+
