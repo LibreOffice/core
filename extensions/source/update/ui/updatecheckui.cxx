@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:32:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/floatwin.hxx>
@@ -134,6 +135,7 @@ class BubbleWindow : public FloatingWindow
     Size            maMaxTextSize;
     Rectangle       maTitleRect;
     Rectangle       maTextRect;
+    long            mnTipOffset;
 
 private:
     void            RecalcTextRects();
@@ -156,6 +158,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XJob > mrJob;
+    osl::Mutex          maMutex;
     rtl::OUString       maDefaultTitle;
     rtl::OUString       maDefaultText;
     rtl::OUString       maBubbleTitle;
@@ -167,11 +170,10 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
     MenuBar*            mpIconMBar;
     ResMgr*             mpUpdResMgr;
     ResMgr*             mpSfxResMgr;
-    ULONG               mnLastUserEvent;
     Timer               maWaitTimer;
-    Timer               maRetryTimer;
     Timer               maTimeoutTimer;
     Link                maWindowEventHdl;
+    Link                maApplicationEventHdl;
     sal_Bool            mbShowBubble;
     sal_Bool            mbShowMenuIcon;
     USHORT              mnIconID;
@@ -183,11 +185,12 @@ private:
                     DECL_LINK( TimeOutHdl, Timer* );
                     DECL_LINK( UserEventHdl, UpdateCheckUI* );
                     DECL_LINK( WindowEventHdl, VclWindowEvent* );
+                    DECL_LINK( ApplicationEventHdl, VclSimpleEvent* );
 
     BubbleWindow*   GetBubbleWindow();
     void            RemoveBubbleWindow( sal_Bool bRemoveIcon );
     Image           GetMenuBarIcon( MenuBar* pMBar );
-    void            AddMenuBarIcon();
+    void            AddMenuBarIcon( SystemWindow* pSysWin );
     Image           GetBubbleImage( ::rtl::OUString &rURL );
 
     uno::Reference< document::XEventBroadcaster > getGlobalEventBroadcaster() const
@@ -257,19 +260,18 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     maTimeoutTimer.SetTimeout( 10000 );
     maTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, TimeOutHdl ) );
 
-    maRetryTimer.SetTimeout( 200 );
-    maRetryTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, UserEventHdl ) );
-
     uno::Reference< document::XEventBroadcaster > xBroadcaster( getGlobalEventBroadcaster() );
     xBroadcaster->addEventListener( this );
 
     maWindowEventHdl = LINK( this, UpdateCheckUI, WindowEventHdl );
-    mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
+    maApplicationEventHdl = LINK( this, UpdateCheckUI, ApplicationEventHdl );
+    Application::AddEventListener( maApplicationEventHdl );
 }
 
 //------------------------------------------------------------------------------
 UpdateCheckUI::~UpdateCheckUI()
 {
+    Application::RemoveEventListener( maApplicationEventHdl );
     RemoveBubbleWindow( TRUE );
     delete mpUpdResMgr;
     delete mpSfxResMgr;
@@ -397,65 +399,40 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
 }
 
 //------------------------------------------------------------------------------
-void UpdateCheckUI::AddMenuBarIcon()
+void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin )
 {
     if ( ! mbShowMenuIcon )
         return;
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    Window *pTopWin = Application::GetFirstTopLevelWindow();
-    Window *pActiveWin = Application::GetActiveTopWindow();
-    SystemWindow *pActiveSysWin = NULL;
-
-    if ( pActiveWin && pActiveWin->IsTopWindow() )
-        pActiveSysWin = pActiveWin->GetSystemWindow();
-
-    while ( !pActiveSysWin && pTopWin ) {
-        if ( pTopWin->IsTopWindow() )
-            pActiveSysWin = pTopWin->GetSystemWindow();
-        pTopWin = Application::GetNextTopLevelWindow( pTopWin );
-    }
-
-    if ( !pActiveSysWin && mpIconSysWin )
-        RemoveBubbleWindow( FALSE );
-
-    if ( pActiveSysWin ) {
-        MenuBar *pActiveMBar = pActiveSysWin->GetMenuBar();
-        if ( ( pActiveSysWin != mpIconSysWin ) ||
-             ( pActiveMBar != mpIconMBar ) )
-        {
-            RemoveBubbleWindow( TRUE );
-
-            if ( pActiveMBar )
-            {
-                Image aImage = GetMenuBarIcon( pActiveMBar );
-                mnIconID = pActiveMBar->AddMenuBarButton( aImage,
-                                    LINK( this, UpdateCheckUI, ClickHdl ) );
-                pActiveMBar->SetMenuBarButtonHighlightHdl( mnIconID,
-                                    LINK( this, UpdateCheckUI, HighlightHdl ) );
-            }
-            mpIconMBar = pActiveMBar;
-            mpIconSysWin = pActiveSysWin;
-            mpIconSysWin->AddEventListener( maWindowEventHdl );
-
-            if ( mbShowBubble && pActiveMBar )
-            {
-                mpBubbleWin = GetBubbleWindow();
-                if ( mpBubbleWin )
-                {
-                    mpBubbleWin->Show( TRUE );
-                    maTimeoutTimer.Start();
-                }
-                mbShowBubble = FALSE;
-            }
-        }
-    }
-
-    if ( mnIconID == 0 )
+    MenuBar *pActiveMBar = pSysWin->GetMenuBar();
+    if ( ( pSysWin != mpIconSysWin ) || ( pActiveMBar != mpIconMBar ) )
     {
-        OSL_TRACE( "AddMenuBarIcon(): No icon added, retrying!" );
-        maRetryTimer.Start();
+        RemoveBubbleWindow( TRUE );
+
+        if ( pActiveMBar )
+        {
+            Image aImage = GetMenuBarIcon( pActiveMBar );
+            mnIconID = pActiveMBar->AddMenuBarButton( aImage,
+                                    LINK( this, UpdateCheckUI, ClickHdl ) );
+            pActiveMBar->SetMenuBarButtonHighlightHdl( mnIconID,
+                                    LINK( this, UpdateCheckUI, HighlightHdl ) );
+        }
+        mpIconMBar = pActiveMBar;
+        mpIconSysWin = pSysWin;
+        mpIconSysWin->AddEventListener( maWindowEventHdl );
+
+        if ( mbShowBubble && pActiveMBar )
+        {
+            mpBubbleWin = GetBubbleWindow();
+            if ( mpBubbleWin )
+            {
+                mpBubbleWin->Show( TRUE );
+                maTimeoutTimer.Start();
+            }
+            mbShowBubble = FALSE;
+        }
     }
 }
 
@@ -465,15 +442,6 @@ void SAL_CALL UpdateCheckUI::notifyEvent(const document::EventObject& rEvent)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    OSL_TRACE( "notifyEvent: %s", rtl::OUStringToOString(rEvent.EventName, RTL_TEXTENCODING_UTF8).getStr() );
-    if( (rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnFocus") ) == 0) ||
-        (rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnLoad") ) == 0) ||
-        (rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnNew") ) == 0) ||
-        (rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnViewClosed") ) == 0) )
-    {
-        if( ! mnLastUserEvent )
-            mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
-    }
     if( rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnPrepareViewClosing") ) == 0 )
     {
         RemoveBubbleWindow( TRUE );
@@ -525,10 +493,8 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
     }
     else if( rPropertyName.compareToAscii( PROPERTY_SHOW_BUBBLE ) == 0 ) {
         rValue >>= mbShowBubble;
-        if ( mbShowBubble ) {
-            if( ! mnLastUserEvent )
-                mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
-        }
+        if ( mbShowBubble )
+            Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
         else if ( mpBubbleWin )
             mpBubbleWin->Hide();
     }
@@ -547,14 +513,9 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
         {
             mbShowMenuIcon = bShowMenuIcon;
             if ( bShowMenuIcon )
-            {
-                if( ! mnLastUserEvent )
-                    mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
-            }
+                Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
             else
-            {
                 RemoveBubbleWindow( TRUE );
-            }
         }
     }
     else
@@ -736,9 +697,23 @@ IMPL_LINK( UpdateCheckUI, TimeOutHdl, Timer*, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
 {
-    mnLastUserEvent = 0;
+    vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    AddMenuBarIcon();
+    Window *pTopWin = Application::GetFirstTopLevelWindow();
+    Window *pActiveWin = Application::GetActiveTopWindow();
+    SystemWindow *pActiveSysWin = NULL;
+
+    if ( pActiveWin && pActiveWin->IsTopWindow() )
+        pActiveSysWin = pActiveWin->GetSystemWindow();
+
+    while ( !pActiveSysWin && pTopWin ) {
+        if ( pTopWin->IsTopWindow() )
+            pActiveSysWin = pTopWin->GetSystemWindow();
+        pTopWin = Application::GetNextTopLevelWindow( pTopWin );
+    }
+
+    if ( pActiveSysWin )
+        AddMenuBarIcon( pActiveSysWin );
 
     return 0;
 }
@@ -751,21 +726,46 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
         if ( mpIconSysWin == pEvent->GetWindow() )
             RemoveBubbleWindow( TRUE );
     }
-
-    if ( VCLEVENT_WINDOW_ACTIVATE == pEvent->GetId() )
+    else if ( VCLEVENT_WINDOW_MENUBARADDED == pEvent->GetId() )
     {
-        Window *pActWin = pEvent->GetWindow();
-        if ( pActWin && pActWin->IsTopWindow() )
+        osl::MutexGuard aGuard( maMutex );
+        Window *pWindow = pEvent->GetWindow();
+        if ( pWindow )
         {
-            SystemWindow *pActiveSysWin = pActWin->GetSystemWindow();
-            if ( ( pActiveSysWin != mpIconSysWin ) && !mnLastUserEvent )
-                mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
+            SystemWindow *pSysWin = pWindow->GetSystemWindow();
+            if ( pSysWin )
+            {
+                AddMenuBarIcon( pSysWin );
+            }
         }
     }
-
     return 0;
 }
 
+//------------------------------------------------------------------------------
+IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
+{
+    switch (pEvent->GetId())
+    {
+        case VCLEVENT_WINDOW_SHOW:
+        case VCLEVENT_WINDOW_ACTIVATE:
+        case VCLEVENT_WINDOW_GETFOCUS: {
+            osl::MutexGuard aGuard( maMutex );
+            Window *pWindow = static_cast< VclWindowEvent * >(pEvent)->GetWindow();
+            if ( pWindow && pWindow->IsTopWindow() )
+            {
+                SystemWindow *pSysWin = pWindow->GetSystemWindow();
+                MenuBar      *pMBar   = pSysWin->GetMenuBar();
+                if ( pSysWin && pMBar )
+                {
+                    AddMenuBarIcon( pSysWin );
+                }
+            }
+            break;
+        }
+    }
+    return 0;
+}
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -790,6 +790,7 @@ BubbleWindow::BubbleWindow( Window* pParent, const XubString& rTitle,
     maBubbleTitle = rTitle;
     maBubbleText = rText;
     maBubbleImage = rImage;
+    mnTipOffset = 0;
 
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetHelpColor() ) );
 }
@@ -812,7 +813,7 @@ void BubbleWindow::Resize()
     Rectangle aRect( 0, TIP_HEIGHT, aSize.Width(), aSize.Height() - TIP_HEIGHT );
     maRectPoly = Polygon( aRect, 6, 6 );
     Region aRegion( maRectPoly );
-    long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET;
+    long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
 
     Point aPointArr[4];
     aPointArr[0] = Point( nTipOffset, TIP_HEIGHT );
@@ -840,7 +841,7 @@ void BubbleWindow::Paint( const Rectangle& rRect )
 
     Color aOldLine = GetLineColor();
     Size aSize = GetSizePixel();
-    long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET;
+    long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
 
     SetLineColor( GetSettings().GetStyleSettings().GetHelpColor() );
     DrawLine( Point( nTipOffset+2, TIP_HEIGHT ),
@@ -906,6 +907,12 @@ void BubbleWindow::Show( BOOL bVisible, USHORT nFlags )
     Point aPos;
     aPos.X() = maTipPos.X() - aWindowSize.Width() + TIP_RIGHT_OFFSET;
     aPos.Y() = maTipPos.Y();
+    Point aScreenPos = GetParent()->OutputToAbsoluteScreenPixel( aPos );
+    if ( aScreenPos.X() < 0 )
+    {
+        mnTipOffset = aScreenPos.X();
+        aPos.X() -= mnTipOffset;
+    }
     SetPosSizePixel( aPos, aWindowSize );
 
     FloatingWindow::Show( bVisible, nFlags );
