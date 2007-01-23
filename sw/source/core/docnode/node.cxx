@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:53:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:31:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1198,9 +1198,12 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     // Warning: this does not have to be a SwTxtNode.
     SwTxtNode* pTxtNd = dynamic_cast<SwTxtNode*>(this);
 
-
-    if ( pTxtNd )
-        pTxtNd->SyncNumberAndNumRule();
+    // --> OD 2006-12-06 #i56253#
+    // Change text node after change of numbering rule is performed/modified.
+    // Otherwise, corresponding information about numbering restart is missing for the undo action.
+//    if ( pTxtNd )
+//        pTxtNd->SyncNumberAndNumRule();
+    // <--
 
     if( bNumRuleSet )
     {
@@ -1233,6 +1236,10 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             SwModify::Modify( pOldValue, pNewValue );
         }
     }
+    // --> OD 2006-12-06 #i56253#
+    if ( pTxtNd )
+        pTxtNd->SyncNumberAndNumRule();
+    // <--
 
     if( sOldNumRule.Len() && sNumRule != sOldNumRule )
     {
