@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:53:07 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1059,7 +1059,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             if( maMF_ADVANCE_AUTO_AFTER.IsEnabled())
             {
 //                 sal_uInt16 nDigits = maMF_ADVANCE_AUTO_AFTER.GetDecimalDigits();
-                aResult.mnTime = maMF_ADVANCE_AUTO_AFTER.GetValue();
+                aResult.mnTime = static_cast<long>(maMF_ADVANCE_AUTO_AFTER.GetValue());
                 // / static_cast< sal_uInt16 >( pow( 10.0, static_cast< double >( nDigits )));
                 aResult.mbTimeAmbiguous = false;
             }
