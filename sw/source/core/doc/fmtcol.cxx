@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:10:48 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,11 @@
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
+// --> OD 2006-11-22 #i71574#
+#ifndef _FMTCOLFUNC_HXX
+#include <fmtcolfunc.hxx>
+#endif
+// <--
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
@@ -83,6 +88,41 @@ TYPEINIT1( SwCollCondition, SwClient );
 SV_IMPL_PTRARR( SwFmtCollConditions, SwCollConditionPtr );
 
 
+// --> OD 2006-11-22 #i71574#
+void TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
+                                        SwFmt* pFmt,
+                                        const SwNumRuleItem* pNewNumRuleItem )
+{
+    SwTxtFmtColl* pTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(pFmt);
+    if ( !pTxtFmtColl )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( false,
+                "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
+#endif
+        return;
+    }
+
+    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
+    {
+        if ( !pNewNumRuleItem )
+        {
+            pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, FALSE, (const SfxPoolItem**)&pNewNumRuleItem );
+        }
+        if ( pNewNumRuleItem )
+        {
+            String sNumRuleName = pNewNumRuleItem->GetValue();
+            if ( sNumRuleName.Len() == 0 ||
+                 sNumRuleName != pTxtFmtColl->GetDoc()->GetOutlineNumRule()->GetName() )
+            {
+                // delete assignment of paragraph style to list level of outline style.
+                pTxtFmtColl->DeleteAssignmentToListLevelOfOutlineStyle();
+            }
+        }
+    }
+}
+// <--
+
 /*
  * SwTxtFmtColl  TXT
  */
@@ -102,8 +142,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
     SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
     // --> OD 2006-10-17 #i70223#
-    const bool bAssignedToListLevelOfOutlineStyle( 0 <= GetOutlineLevel() &&
-                                                   GetOutlineLevel() < MAXLEVEL );
+    const bool bAssignedToListLevelOfOutlineStyle( AssignedToListLevelOfOutlineStyle() );
     const SwNumRuleItem* pNewNumRuleItem( 0L );
     // <--
 
@@ -181,13 +220,8 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     // --> OD 2006-10-17 #i70223#
     if ( bAssignedToListLevelOfOutlineStyle && pNewNumRuleItem )
     {
-        String sNumRuleName = pNewNumRuleItem->GetValue();
-        if ( sNumRuleName.Len() == 0 ||
-             sNumRuleName != GetDoc()->GetOutlineNumRule()->GetName() )
-        {
-            // delete assignment to list level of outline style.
-            SetOutlineLevel( NO_NUMBERING );
-        }
+        TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
+                                                        this, pNewNumRuleItem );
     }
     // <--
 
