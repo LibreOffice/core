@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:27:40 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 06:50:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,7 +516,10 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
     if(NUM_PAGETYPE_BULLET == nType)
     {
         for ( USHORT i = 0; i < 8; i++ )
+        {
             InsertItem( i + 1, i );
+            SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTIONS + i ) );
+        }
     }
 }
 
@@ -542,7 +545,11 @@ void SvxNumValueSet::SetNumberingSettings(
     if(aNum.getLength() > 8)
             SetStyle( GetStyle()|WB_VSCROLL);
     for ( USHORT i = 0; i < aNum.getLength(); i++ )
+    {
             InsertItem( i + 1, i );
+            if( i < 8 )
+                SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
+    }
 }
 /* -----------------------------31.01.01 09:50--------------------------------
 
@@ -558,7 +565,11 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     if(aOutlineSettings.getLength() > 8)
         SetStyle( GetStyle() | WB_VSCROLL );
     for ( sal_uInt16 i = 0; i < aOutlineSettings.getLength(); i++ )
+    {
         InsertItem( i + 1, i );
+        if( i < 8 )
+            SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + i ));
+    }
 }
 
 SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
