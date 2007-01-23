@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjsimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:23:58 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,26 +108,11 @@ struct ObjAnchorOrder
     {
         // get attributes of listed object
         const SwFrmFmt& rFmtListed = _pListedAnchoredObj->GetFrmFmt();
-        const IDocumentDrawModelAccess* pIDDMA = rFmtListed.getIDocumentDrawModelAccess();
-        SdrLayerID nHellId = pIDDMA->GetHellId();
-        SdrLayerID nInvisibleHellId = pIDDMA->GetInvisibleHellId();
         const SwFmtAnchor* pAnchorListed = &(rFmtListed.GetAnchor());
-        const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosListed =
-                                        &(rFmtListed.GetWrapInfluenceOnObjPos());
-        const bool bWrapThroughOrHellListed =
-                    rFmtListed.GetSurround().GetSurround() == SURROUND_THROUGHT ||
-                    _pListedAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
-                    _pListedAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
 
         // get attributes of new object
         const SwFrmFmt& rFmtNew = _pNewAnchoredObj->GetFrmFmt();
         const SwFmtAnchor* pAnchorNew = &(rFmtNew.GetAnchor());
-        const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosNew =
-                                        &(rFmtNew.GetWrapInfluenceOnObjPos());
-        const bool bWrapThroughOrHellNew =
-                    rFmtNew.GetSurround().GetSurround() == SURROUND_THROUGHT ||
-                    _pNewAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
-                    _pNewAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
 
         // check for to-page anchored objects
         if ( pAnchorListed->GetAnchorId() == FLY_PAGE &&
@@ -175,7 +160,44 @@ struct ObjAnchorOrder
         }
 
         // objects anchored at the same content.
+        // --> OD 2006-11-29 #???# - objects have to be ordered by anchor node position
+        // Thus, compare content anchor node positions and anchor type,
+        // if not anchored at-paragraph
+        if ( pAnchorListed->GetAnchorId() != FLY_AT_CNTNT &&
+             pAnchorNew->GetAnchorId() != FLY_AT_CNTNT &&
+             pCntntAnchorListed && pCntntAnchorNew )
+        {
+            if ( pCntntAnchorListed->nContent != pCntntAnchorNew->nContent )
+            {
+                return pCntntAnchorListed->nContent < pCntntAnchorNew->nContent;
+            }
+            else if ( pAnchorListed->GetAnchorId() == FLY_AUTO_CNTNT &&
+                      pAnchorNew->GetAnchorId() == FLY_IN_CNTNT )
+            {
+                return true;
+            }
+            else if ( pAnchorListed->GetAnchorId() == FLY_IN_CNTNT &&
+                      pAnchorNew->GetAnchorId() == FLY_AUTO_CNTNT )
+            {
+                return false;
+            }
+        }
+        // <--
+
+        // objects anchored at the same content and at the same content anchor
+        // node position with the same anchor type
         // Thus, compare its wrapping style including its layer
+        const IDocumentDrawModelAccess* pIDDMA = rFmtListed.getIDocumentDrawModelAccess();
+        const SdrLayerID nHellId = pIDDMA->GetHellId();
+        const SdrLayerID nInvisibleHellId = pIDDMA->GetInvisibleHellId();
+        const bool bWrapThroughOrHellListed =
+                    rFmtListed.GetSurround().GetSurround() == SURROUND_THROUGHT ||
+                    _pListedAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
+                    _pListedAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
+        const bool bWrapThroughOrHellNew =
+                    rFmtNew.GetSurround().GetSurround() == SURROUND_THROUGHT ||
+                    _pNewAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
+                    _pNewAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
         if ( bWrapThroughOrHellListed != bWrapThroughOrHellNew )
         {
             if ( bWrapThroughOrHellListed )
@@ -190,6 +212,10 @@ struct ObjAnchorOrder
 
         // objects anchored at the same content with a set text wrapping
         // Thus, compare wrap influences on object position
+        const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosListed =
+                                        &(rFmtListed.GetWrapInfluenceOnObjPos());
+        const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosNew =
+                                        &(rFmtNew.GetWrapInfluenceOnObjPos());
         // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
         if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true ) !=
                 pWrapInfluenceOnObjPosNew->GetWrapInfluenceOnObjPos( true ) )
@@ -202,30 +228,6 @@ struct ObjAnchorOrder
                 return true;
             else
                 return false;
-        }
-
-        // objects anchored at the same content with same wrap influence.
-        // Thus, compare anchor types
-        if ( pAnchorListed->GetAnchorId() != pAnchorNew->GetAnchorId() )
-        {
-            // order of anchor types: FLY_PAGE = 1, FLY_AT_FLY = 2, FLY_AT_CNTNT = 3,
-            // FLY_AUTO_CNTNT = 4 and FLY_IN_CNTNT = 5
-            static int aAnchorTypeOrder[5] = { 3, 5, 1, 2, 4 };
-
-            return aAnchorTypeOrder[pAnchorListed->GetAnchorId()] <
-                                    aAnchorTypeOrder[pAnchorNew->GetAnchorId()];
-        }
-
-        // objects anchored at the same content with same wrap influence and
-        // same anchor type.
-        // Thus, compare content anchor node positions, if existing
-        // --> OD 2006-07-07 #134369#
-        // compare doesn't make sense for at-paragraph anchored objects.
-        if ( pAnchorListed->GetAnchorId() != FLY_AT_CNTNT &&
-             pCntntAnchorListed && pCntntAnchorNew &&
-             pCntntAnchorListed->nContent != pCntntAnchorNew->nContent )
-        {
-            return pCntntAnchorListed->nContent < pCntntAnchorNew->nContent;
         }
 
         // objects anchored at the same content position/page/fly with same
