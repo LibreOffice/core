@@ -48,7 +48,7 @@ class Style
     Style(const WPXString &psName) : msName(psName) {}
     virtual ~Style() {}
 
-    virtual void write(DocumentHandler &xHandler) const {};
+    virtual void write(DocumentHandler * /* pHandler */) const {};
     const WPXString &getName() const { return msName; }
 
  private:
