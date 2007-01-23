@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:30:31 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
     XGradient aTmpGradient( aLbColorFrom.GetSelectEntryColor(),
                           aLbColorTo.GetSelectEntryColor(),
                           (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                          aMtrAngle.GetValue() * 10, // sollte in Resource geaendert werden
+                          static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
                           (USHORT) aMtrCenterX.GetValue(),
                           (USHORT) aMtrCenterY.GetValue(),
                           (USHORT) aMtrBorder.GetValue(),
@@ -392,7 +392,7 @@ BOOL SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
             pXGradient = new XGradient( aLbColorFrom.GetSelectEntryColor(),
                         aLbColorTo.GetSelectEntryColor(),
                         (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                        aMtrAngle.GetValue() * 10, // sollte in Resource geaendert werden
+                        static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
                         (USHORT) aMtrCenterX.GetValue(),
                         (USHORT) aMtrCenterY.GetValue(),
                         (USHORT) aMtrBorder.GetValue(),
@@ -447,7 +447,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
     XGradient aXGradient( aLbColorFrom.GetSelectEntryColor(),
                           aLbColorTo.GetSelectEntryColor(),
                           eXGS,
-                          aMtrAngle.GetValue() * 10, // sollte in Resource geaendert werden
+                          static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
                           (USHORT) aMtrCenterX.GetValue(),
                           (USHORT) aMtrCenterY.GetValue(),
                           (USHORT) aMtrBorder.GetValue(),
@@ -536,7 +536,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         XGradient aXGradient( aLbColorFrom.GetSelectEntryColor(),
                               aLbColorTo.GetSelectEntryColor(),
                               (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                              aMtrAngle.GetValue() * 10, // sollte in Resource geaendert werden
+                              static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
                               (USHORT) aMtrCenterX.GetValue(),
                               (USHORT) aMtrCenterY.GetValue(),
                               (USHORT) aMtrBorder.GetValue(),
@@ -618,7 +618,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 XGradient aXGradient( aLbColorFrom.GetSelectEntryColor(),
                                       aLbColorTo.GetSelectEntryColor(),
                                       (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                                      aMtrAngle.GetValue() * 10, // sollte in Resource geaendert werden
+                                      static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
                                       (USHORT) aMtrCenterX.GetValue(),
                                       (USHORT) aMtrCenterY.GetValue(),
                                       (USHORT) aMtrBorder.GetValue(),
