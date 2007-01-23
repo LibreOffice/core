@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:30 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,13 +202,15 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 // If the object is switched to running state later
                 // the component will become "complete"
 
+                // the loaded state must be set before, because of notifications!
+                m_nObjectState = nNewState;
+
                 {
                     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
                     m_pOleComponent->CloseObject();
                 }
 
                 // GetRidOfComponent();
-                m_nObjectState = nNewState;
                 aGuard.clear();
                 StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
                 aGuard.reset();
