@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:36:07 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -630,7 +630,7 @@ String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
             break;
         case FIELD_PROPERTY_TEXTLEN:
             if (pTextLen)
-                return String::CreateFromInt32(pTextLen->GetValue());
+                return String::CreateFromInt64(pTextLen->GetValue());
         case FIELD_PROPERTY_NUMTYPE:
             if (pNumType)
                 return pNumType->GetSelectEntry();
@@ -1993,11 +1993,11 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         pFieldDescr->SetAutoIncrement( pAutoIncrement->GetSelectEntryPos() == 0 );
 
     if( pTextLen )
-        pFieldDescr->SetPrecision( pTextLen->GetValue() );
+        pFieldDescr->SetPrecision( static_cast<sal_Int32>(pTextLen->GetValue()) );
     else if( pLength )
-        pFieldDescr->SetPrecision( pLength->GetValue() );
+        pFieldDescr->SetPrecision( static_cast<sal_Int32>(pLength->GetValue()) );
     if( pScale )
-        pFieldDescr->SetScale( pScale->GetValue() );
+        pFieldDescr->SetScale( static_cast<sal_Int32>(pScale->GetValue()) );
 
     if(m_pColumnName)
         pFieldDescr->SetName(m_pColumnName->GetText());
