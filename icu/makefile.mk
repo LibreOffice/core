@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 15:51:25 $
+#   last change: $Author: obo $ $Date: 2007-01-23 06:31:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,14 @@ icu_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 icu_CFLAGS+=-O $(ARCH_FLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS)
 
+# until someone introduces SOLARIS 64-bit builds
+.IF "$(OS)"=="SOLARIS"
+DISABLE_64BIT=--enable-64bit-libs=no
+.ENDIF			# "$(OS)"=="SOLARIS"
+
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
