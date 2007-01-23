@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphconvert.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:30:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,10 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
 // MainThreadNotificationRequest
 // =====================================================================
 
-MainThreadNotificationRequest::MainThreadNotificationRequest( OleEmbeddedObject* pObj, sal_uInt32 nAspect )
-: m_pObject( pObj )
-, m_xObject( static_cast< embed::XEmbeddedObject* >( pObj ) )
+MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect )
+: m_pObject( xObj.get() )
+, m_xObject( static_cast< embed::XEmbeddedObject* >( xObj.get() ) )
+, m_nNotificationType( nNotificationType )
 , m_nAspect( nAspect )
 {}
 
@@ -141,7 +142,9 @@ IMPL_STATIC_LINK_NOINSTANCE( MainThreadNotificationRequest, worker, MainThreadNo
                 {
                     // this is the main thread, the solar mutex must be locked
                     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                    if ( pMTRequest->m_nAspect == embed::Aspects::MSOLE_CONTENT )
+                    if ( pMTRequest->m_nNotificationType == OLECOMP_ONCLOSE )
+                        pMTRequest->m_pObject->OnClosed_Impl();
+                    else if ( pMTRequest->m_nAspect == embed::Aspects::MSOLE_CONTENT )
                         pMTRequest->m_pObject->OnViewChanged_Impl();
                     else if ( pMTRequest->m_nAspect == embed::Aspects::MSOLE_ICON )
                         pMTRequest->m_pObject->OnIconChanged_Impl();
