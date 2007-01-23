@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:17:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:35:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     eUnit = pPool->GetMetric( nWhich );
     nEscAbs = ( ( const SdrCaptionEscAbsItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_ANSATZ, nEscAbs, eUnit );
-    nEscAbs = aMF_ANSATZ.GetValue();
+    nEscAbs = static_cast<long>(aMF_ANSATZ.GetValue());
 
     //------- relative Ansatzentfernung ----------
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
@@ -311,14 +311,14 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     eUnit = pPool->GetMetric( nWhich );
     nLineLen = ( ( const SdrCaptionLineLenItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_LAENGE, nLineLen, eUnit );
-    nLineLen = aMF_LAENGE.GetValue();
+    nLineLen = static_cast<long>(aMF_LAENGE.GetValue());
 
     //------- Abstand zur Box ----------
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
     nGap = ( ( const SdrCaptionGapItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_ABSTAND, nGap, eUnit );
-    nGap = aMF_ABSTAND.GetValue();
+    nGap = static_cast<long>(aMF_ABSTAND.GetValue());
 
     nCaptionType = (short)( ( const SdrCaptionTypeItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
     bFixedAngle = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFIXEDANGLE ) ) ).GetValue();
