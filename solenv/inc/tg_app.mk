@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:00:24 $
+#   last change: $Author: obo $ $Date: 2007-01-23 06:34:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,15 +101,15 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(OS)"=="MACOSX"
     @echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @+-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
-    $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
@@ -121,13 +121,13 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP$(TNR)OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(@:b).cmd
-    @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(@:b).cmd
-    cat $(MISC)$/$(@:b).cmd
-    @source $(MISC)$/$(@:b).cmd
+    $(APP$(TNR)OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
