@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:41:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 12:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,6 @@
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-
-#ifndef _RTL_STRBUF_HXX_
-#include <rtl/strbuf.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -121,6 +117,20 @@ namespace // private
         Sequence< OUString > aRet(1);
         aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SystemShellExecute");
         return aRet;
+    }
+}
+
+void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL)
+{
+    sal_Int32 nmax = rURL.getLength();
+    for(sal_Int32 n=0; n < nmax; ++n)
+    {
+        // escape every non alpha numeric characters (excluding a few "known good") by prepending a '\'
+        sal_Char c = rURL[n];
+        if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
+            rBuffer.append( '\\' );
+
+        rBuffer.append( c );
     }
 }
 
@@ -208,7 +218,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
         nIndex = aTmp.lastIndexOf('/');
         if (nIndex > 0)
-            aBuffer.append(aTmp.copy(0, nIndex+1));
+            escapeForShell(aBuffer, aTmp.copy(0, nIndex+1));
 
         // Respect the desktop environment - if there is an executable named
         // <desktop-environement-is>-open-url, pass the url to this one instead
@@ -236,21 +246,19 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
         aBuffer.append("open-url");
 #endif
-        aBuffer.append(" \'");
-        aBuffer.append(OUStringToOString(aURL, osl_getThreadTextEncoding()));
-        aBuffer.append("\'");
+        aBuffer.append(" ");
+        escapeForShell(aBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
 
         if ( pDesktopLaunch && *pDesktopLaunch )
         {
             aLaunchBuffer.append( pDesktopLaunch );
-            aLaunchBuffer.append( " \'" );
-            aLaunchBuffer.append(OUStringToOString(aURL, osl_getThreadTextEncoding()));
-            aLaunchBuffer.append( "\'" );
+            aLaunchBuffer.append(" ");
+            escapeForShell(aLaunchBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
         }
     } else {
-        aBuffer.append(OUStringToOString(aCommand, osl_getThreadTextEncoding()));
+        escapeForShell(aBuffer, OUStringToOString(aCommand, osl_getThreadTextEncoding()));
         aBuffer.append(" ");
-        aBuffer.append(OUStringToOString(aParameter, osl_getThreadTextEncoding()));
+        escapeForShell(aBuffer, OUStringToOString(aParameter, osl_getThreadTextEncoding()));
     }
 
     // Prefer DESKTOP_LAUNCH when available
