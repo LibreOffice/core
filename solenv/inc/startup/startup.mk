@@ -46,9 +46,7 @@ OS_variable_needed
 
 # ----------------- Default Control Macro definitions -----------------------
 # Select appropriate defaults for basic macros
-   MAKE          *=  $(MAKECMD) -S $(MFLAGS)
-   TMPDIR        *:= $/tmp
-   DIVFILE       *=  $(TMPFILE)
+   MAKE          *=  $(MAKECMD) $(MFLAGS)
    TMPDIR        *:= $/tmp
    DIVFILE       *=  $(TMPFILE)
 
