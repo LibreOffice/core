@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pgfnote.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:08:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
         // Breite
     Fraction aTmp( 100, 1 );
     aTmp *= pFtnInfo->GetWidth();
-    aLineWidthEdit.SetValue( aTmp );
+    aLineWidthEdit.SetValue( static_cast<long>(aTmp) );
 
         // Abstand Fussnotenbereich
     aDistEdit.SetValue(aDistEdit.Normalize(pFtnInfo->GetTopDist()),FUNIT_TWIP);
