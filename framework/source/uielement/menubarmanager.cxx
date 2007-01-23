@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:08:40 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1940,6 +1940,21 @@ void MenuBarManager::impl_RetrieveShortcutsFromConfiguration(
 
 void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts )
 {
+    if ( !m_bModuleIdentified )
+    {
+        m_bModuleIdentified = sal_True;
+        Reference< XModuleManager > xModuleManager;
+        xModuleManager = Reference< XModuleManager >( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+
+        try
+        {
+            m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
+        }
+        catch( Exception& )
+        {
+        }
+    }
+
     if ( m_bModuleIdentified )
     {
         Reference< XAcceleratorConfiguration > xDocAccelCfg( m_xDocAcceleratorManager );
