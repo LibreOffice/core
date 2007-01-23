@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:14:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,14 +145,14 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 {
     if ( _bForce || ( GetText() != GetSavedValue() ) )
     {
-        INT32 nRecord = GetValue();
+        sal_Int64 nRecord = GetValue();
         if (nRecord < GetMin() || nRecord > GetMax())
         {
             Sound::Beep();
             return;
         }
 
-        SfxInt32Item aPositionParam( FN_PARAM_1, nRecord );
+        SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<INT32>(nRecord) );
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
