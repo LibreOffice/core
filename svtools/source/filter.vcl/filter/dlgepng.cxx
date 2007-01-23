@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:51:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ DlgExportEPNG::DlgExportEPNG( FltCallDialogParameter& rPara ) :
 IMPL_LINK( DlgExportEPNG, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
-    WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) ), aNumCompression.GetValue() );
+    WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) ), static_cast<sal_Int32>(aNumCompression.GetValue()) );
     sal_Int32 nInterlace = 0;
     if ( aCbxInterlaced.IsChecked() )
         nInterlace++;
