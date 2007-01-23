@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:20:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 06:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,15 +838,127 @@ String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
 
+String RID_SVXSTR_BULLET_DESCRIPTION_0
+{
+    Text [ de ] = "Kleine ausgefüllte kreisförmige Gliederungspunkte";
+    Text [en-US] = "Solid small circular bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_1
+{
+    Text [ de ] = "Große ausgefüllte kreisförmige Gliederungspunkte";
+    Text [en-US] = "Solid large circular bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_2
+{
+    Text [ de ] = "Ausgefüllte diamantförmige Gliederungspunkte";
+    Text [en-US] = "Solid diamond bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_3
+{
+    Text [ de ] = "Große ausgefüllte quadratische Gliederungspunkte";
+    Text [en-US] = "Solid large square bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_4
+{
+    Text [ de ] = "Ausgefüllte nach rechts zeigende Pfeile als Gliederungspunkte";
+    Text [en-US] = "Right pointing arrow bullets filled out";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_5
+{
+    Text [ de ] = "Nach rechts zeigende Pfeile als Gliederungspunkte";
+    Text [en-US] = "Right pointing arrow bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_6
+{
+    Text [ de ] = "Kreuzmarken als Gliederungspunkte";
+    Text [en-US] = "Check mark bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_7
+{
+    Text [ de ] = "Haken als Gliederungspunkte";
+    Text [en-US] = "Tick mark bullets";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_0
+{
+    Text [ de ] = "Nummer 1) 2) 3)";
+    Text [en-US] = "Number 1) 2) 3)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_1
+{
+    Text [ de ] = "Nummer 1. 2. 3.";
+    Text [en-US] = "Number 1. 2. 3.";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_2
+{
+    Text [ de ] = "Nummer (1) (2) (3)";
+    Text [en-US] = "Number (1) (2) (3)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_3
+{
+    Text [ de ] = "Große römische Zahlen I. II. III.";
+    Text [en-US] = "Uppercase Roman number I. II. III.";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_4
+{
+    Text [ de ] = "Großbuchstaben A) B) C)";
+    Text [en-US] = "Uppercase letter A) B) C)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_5
+{
+    Text [ de ] = "Kleinbuchstaben a) b) c)";
+    Text [en-US] = "Lowercase letter a) b) c)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_6
+{
+    Text [ de ] = "Kleinbuchstaben (a) (b) (c)";
+    Text [en-US] = "Lowercase letter (a) (b) (c)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_7
+{
+    Text [ de ] = "Kleine römische Zahhlen i. ii. iii.";
+    Text [en-US] = "Lowercase Roman number i. ii. iii.";
+};
 
-
-
-
-
-
-
-
-
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_0
+{
+    Text [ de ] = "Numerisch, numerisch, kleine Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
+    Text [en-US] = "Numeric, numeric, lowercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_1
+{
+    Text [ de ] = "Numerisch, kleine Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
+    Text [en-US] = "Numeric, lowercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_2
+{
+    Text [ de ] = "Numerisch, kleine Buchstaben, kleine römische Zahlen, große Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
+    Text [en-US] = "Numeric, lowercase letters, lowercase Roman, uppercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_3
+{
+    Text [ de ] = "Numerisch";
+    Text [en-US] = "Numeric";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_4
+{
+    Text [ de ] = "Große römische Zahlen, große Buchstaben, kleine römische Zahlen, kleine Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
+    Text [en-US] = "Uppercase Roman, uppercase letters, lowercase Roman, lowercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_5
+{
+    Text [ de ] = "Große Buchstaben, große römische Zahlen, kleine Buchstaben, kleine römische Zahlen, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
+    Text [en-US] = "Uppercase letters, uppercase Roman, lowercase letters, lowercase Roman, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_6
+{
+    Text [ de ] = "Numerisch, vollständig";
+    Text [en-US] = "Numeric with all sublevels";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_7
+{
+    Text [ de ] = "Nach rechts zeigender Pfeil als Gliederungspunkt, ausgefüllte schwarzer nach rechts zeigender Pfeil als Gliederungspunkt, ausgefüllter schwarzer diamantförmiger Gliederungspunkt, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
+    Text [en-US] = "Right pointing bullet, right pointing arrow bullet, solid diamond bullet, solid small circular bullet";
+};
 
 
 
