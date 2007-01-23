@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:31:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1060,11 +1060,16 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
     aLabelBox   .SetText(sCapBackup );
     aIdxBox     .SetText(sIdxBackup );
 
-    aStandardHeightLB.Fill( pFontList->Get(sStdBackup, sStdBackup), pFontList );
-    aTitleHeightLB.Fill(    pFontList->Get(sOutBackup, sOutBackup ), pFontList );
-    aListHeightLB.Fill(     pFontList->Get(sListBackup,sListBackup), pFontList );
-    aLabelHeightLB.Fill(    pFontList->Get(sCapBackup, sCapBackup ), pFontList );
-    aIndexHeightLB.Fill(    pFontList->Get(sIdxBackup, sIdxBackup ), pFontList );
+    FontInfo aFontInfo( pFontList->Get(sStdBackup, sStdBackup) );
+    aStandardHeightLB.Fill( &aFontInfo, pFontList );
+    aFontInfo = pFontList->Get(sOutBackup, sOutBackup );
+    aTitleHeightLB.Fill( &aFontInfo, pFontList );
+    aFontInfo = pFontList->Get(sListBackup,sListBackup);
+    aListHeightLB.Fill( &aFontInfo, pFontList );
+    aFontInfo = pFontList->Get(sCapBackup, sCapBackup );
+    aLabelHeightLB.Fill( &aFontInfo, pFontList );
+    aFontInfo = pFontList->Get(sIdxBackup, sIdxBackup );
+    aIndexHeightLB.Fill( &aFontInfo, pFontList );
 
     aStandardHeightLB.SetValue( CalcToPoint( nStandardHeight, SFX_MAPUNIT_TWIP, 10 ) );
     aTitleHeightLB.   SetValue( CalcToPoint( nTitleHeight   , SFX_MAPUNIT_TWIP, 10 ) );
@@ -1211,7 +1216,8 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
     {
         pHeightLB = &aIndexHeightLB;
     }
-    pHeightLB->Fill( pFontList->Get(sEntry, sEntry), pFontList );
+    FontInfo aFontInfo( pFontList->Get(sEntry, sEntry) );
+    pHeightLB->Fill( &aFontInfo, pFontList );
 
     return 0;
 }
