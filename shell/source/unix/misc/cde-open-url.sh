@@ -58,5 +58,5 @@ else
 fi
 
 if [ -z "$TMPFILE" ]; then exit 1; fi
-( echo $1 > "$TMPFILE"; dtaction Open "$TMPFILE"; rm -f "$TMPFILE" ) &
+( echo "$1" > "$TMPFILE"; dtaction Open "$TMPFILE"; rm -f "$TMPFILE" ) &
 exit 0
