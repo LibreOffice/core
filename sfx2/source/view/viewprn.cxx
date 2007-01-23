@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:59:43 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -854,11 +854,8 @@ void SfxViewShell::LockPrinter( BOOL bLock)
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::Print( SfxProgress& /*rProgress*/, PrintDialog *pDlg )
+USHORT SfxViewShell::Print( SfxProgress& /*rProgress*/, PrintDialog* /*pDlg*/ )
 {
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_PRINTDOC, pObjShell));
-    GetObjectShell()->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_STARTED, pDlg, NULL ) );
     return 0;
 }
 
