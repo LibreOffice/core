@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:50:35 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,7 +474,7 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 #endif
 
 protected:
-    virtual XubString CreateFieldText( long nValue ) const;
+    virtual XubString CreateFieldText( sal_Int64 nValue ) const;
 
 public:
                     FontSizeBox( Window* pParent, WinBits nWinStyle = 0 );
@@ -497,13 +497,13 @@ public:
                         { bPtRelative = bPtRel; SetRelative( TRUE ); }
     BOOL            IsPtRelative() const { return bPtRelative; }
 
-    virtual void    SetValue( long nNewValue, FieldUnit eInUnit );
-    virtual void    SetValue( long nNewValue  );
-    virtual long    GetValue( FieldUnit eOutUnit ) const;
-    virtual long    GetValue() const;
-    long            GetValue( USHORT nPos, FieldUnit eOutUnit ) const;
-    void            SetUserValue( long nNewValue, FieldUnit eInUnit );
-    void            SetUserValue( long nNewValue ) { SetUserValue( nNewValue, FUNIT_NONE ); }
+    virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
+    virtual void    SetValue( sal_Int64 nNewValue  );
+    virtual sal_Int64   GetValue( FieldUnit eOutUnit ) const;
+    virtual sal_Int64   GetValue() const;
+    sal_Int64           GetValue( USHORT nPos, FieldUnit eOutUnit ) const;
+    void            SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
+    void            SetUserValue( sal_Int64 nNewValue ) { SetUserValue( nNewValue, FUNIT_NONE ); }
 
 private:
     // declared as private because some compilers would generate the default functions
