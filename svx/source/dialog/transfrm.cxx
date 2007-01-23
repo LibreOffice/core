@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:09 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,12 +227,9 @@ void SvxTransformTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxPositionSizeTabPage&) rPage ).Construct();
           if( nAnchorCtrls & SVX_OBJ_NORESIZE )
               ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
-
           if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
               ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
-
-//          if(nAnchorCtrls & 0x00ff )
-//              ( (SvxPositionSizeTabPage&) rPage ).ShowAnchorCtrls(nAnchorCtrls);
+            ( (SvxPositionSizeTabPage&) rPage ).UpdateControlStates();
         break;
         case RID_SVXPAGE_SWPOSSIZE :
         {
@@ -784,9 +781,6 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
-//  maDdLbAnchor.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetAnchorHdl ) );
-//  maDdLbOrient.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetOrientHdl ) );
-
     meRP = RP_LT; // s.o.
 
     maMtrWidth.SetModifyHdl( LINK( this, SvxPositionSizeTabPage, ChangeWidthHdl ) );
@@ -847,16 +841,8 @@ void SvxPositionSizeTabPage::Construct()
                 if( maAnchorPos != pObj->GetAnchorPos() )
                 {
                     // Unterschiedliche Ankerpositionen
-                    maFtPosX.Disable();
-                    maMtrPosX.Disable();
                     maMtrPosX.SetText( String() );
-                    maFtPosY.Disable();
-                    maMtrPosY.Disable();
                     maMtrPosY.SetText( String() );
-                    maFlPosition.Disable();
-                    maFtPosReference.Disable();
-                    maCtlPos.Disable();
-                    maTsbPosProtect.Disable();
                     mbPageDisabled = TRUE;
                     return;
                 }
@@ -1087,12 +1073,10 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
             sal_Bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
             maTsbPosProtect.SetState( bProtected ? STATE_CHECK : STATE_NOCHECK );
             maTsbPosProtect.EnableTriState( FALSE );
-            maTsbSizeProtect.Enable( !mbProtectDisabled & !bProtected );
         }
         else
         {
             maTsbPosProtect.SetState( STATE_DONTKNOW );
-            maTsbSizeProtect.Enable( !mbProtectDisabled );
         }
 
         maTsbPosProtect.SaveValue();
@@ -1101,42 +1085,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
         // #i2379# Disable controls for protected objects
         ChangePosProtectHdl( this );
 
-/*      if(maAnchorBox.IsVisible()) //nur fuer den Writer
-        {
-            pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_ANCHOR );
-            USHORT nAnchorPos = 0;
-            if(pItem)
-            {
-                nAnchorPos = ((const SfxUInt16Item*)pItem)->GetValue();
-                for (USHORT i = 0; i < maDdLbAnchor.GetEntryCount(); i++)
-                {
-                    if ((ULONG)maDdLbAnchor.GetEntryData(i) == (ULONG)nAnchorPos)
-                    {
-                        maDdLbAnchor.SelectEntryPos(i);
-                        break;
-                    }
-                }
-                maDdLbAnchor.SaveValue();
-                SetAnchorHdl(&maDdLbAnchor);
-            }
-            if(nAnchorPos == (USHORT)SVX_FLY_IN_CNTNT)
-            {
-                maCtlPos.Disable();
-                pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_VERT_ORIENT );
-                if(pItem)
-                {
-                    maDdLbOrient.SelectEntryPos(((const SfxUInt16Item*)pItem)->GetValue());
-                }
-            }
-            else
-            {
-                maDdLbOrient.SelectEntryPos(     (USHORT)SVX_VERT_LINE_CENTER );
-            }
-            maDdLbOrient.SaveValue();
-            SetOrientHdl(&maDdLbOrient);
-            maCtlPos.Invalidate();
-        }
-*/  }
+    }
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
     mlOldWidth = Max( pItem ? ( (const SfxUInt32Item*)pItem )->GetValue() : 0, (UINT32)1 );
@@ -1282,68 +1231,46 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 IMPL_LINK( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, EMPTYARG )
 {
-    maTsbSizeProtect.Enable( !mbProtectDisabled & (maTsbPosProtect.GetState() != STATE_CHECK) );
-
     // #106572# Remember user's last choice
     maTsbSizeProtect.SetState( maTsbPosProtect.GetState() == STATE_CHECK ?
                                STATE_CHECK : mnProtectSizeState );
 
-    DisableSizeControls();
-
-    if( maTsbPosProtect.GetState() == STATE_CHECK )
-    {
-        maFlPosition.Disable();
-        maFtPosX.Disable();
-        maMtrPosX.Disable();
-        maFtPosY.Disable();
-        maMtrPosY.Disable();
-        maFtPosReference.Disable();
-        maCtlPos.Disable();
-        maCtlPos.Invalidate();
-    }
-    else
-    {
-        maFlPosition.Enable();
-        maFtPosX.Enable();
-        maMtrPosX.Enable();
-        maFtPosY.Enable();
-        maMtrPosY.Enable();
-        maFtPosReference.Enable();
-        maCtlPos.Enable();
-        maCtlPos.Invalidate();
-    }
-
+    UpdateControlStates();
     return( 0L );
 }
 
 //------------------------------------------------------------------------
 
-void SvxPositionSizeTabPage::DisableSizeControls()
+void SvxPositionSizeTabPage::UpdateControlStates()
 {
-    if( maTsbSizeProtect.GetState() == STATE_CHECK )
-    {
-        maFlSize.Disable();
-        maFtWidth.Disable();
-        maMtrWidth.Disable();
-        maFtHeight.Disable();
-        maMtrHeight.Disable();
-        maCbxScale.Disable();
-        maFtSizeReference.Disable();
-        maCtlSize.Disable();
-        maCtlSize.Invalidate();
-    }
-    else
-    {
-        maFlSize.Enable();
-        maFtWidth.Enable();
-        maMtrWidth.Enable();
-        maFtHeight.Enable();
-        maMtrHeight.Enable();
-        maCbxScale.Enable();
-        maFtSizeReference.Enable();
-        maCtlSize.Enable();
-        maCtlSize.Invalidate();
-    }
+    const bool bPosProtect =  maTsbPosProtect.GetState() == STATE_CHECK;
+    const bool bSizeProtect = maTsbSizeProtect.GetState() == STATE_CHECK;
+    const bool bHeightChecked = !maTsbAutoGrowHeight.IsTriStateEnabled() && (maTsbAutoGrowHeight.GetState() == STATE_CHECK);
+    const bool bWidthChecked = !maTsbAutoGrowWidth.IsTriStateEnabled() && (maTsbAutoGrowWidth.GetState() == STATE_CHECK);
+
+    maFlPosition.Enable( !bPosProtect && !mbPageDisabled );
+    maFtPosX.Enable( !bPosProtect && !mbPageDisabled );
+    maMtrPosX.Enable( !bPosProtect && !mbPageDisabled );
+    maFtPosY.Enable( !bPosProtect && !mbPageDisabled );
+    maMtrPosY.Enable( !bPosProtect && !mbPageDisabled );
+    maFtPosReference.Enable( !bPosProtect && !mbPageDisabled );
+    maCtlPos.Enable( !bPosProtect );
+    maTsbPosProtect.Enable( !mbProtectDisabled && !mbPageDisabled );
+
+    maFlSize.Enable( !mbSizeDisabled && !bSizeProtect );
+    maCtlSize.Enable( !mbSizeDisabled && !bSizeProtect && (!bHeightChecked || !bWidthChecked) );
+    maFtWidth.Enable( !mbSizeDisabled && !bSizeProtect && !bWidthChecked );
+    maMtrWidth.Enable( !mbSizeDisabled && !bSizeProtect && !bWidthChecked );
+    maFtHeight.Enable( !mbSizeDisabled && !bSizeProtect && !bHeightChecked );
+    maMtrHeight.Enable( !mbSizeDisabled && !bSizeProtect && !bHeightChecked );
+    maCbxScale.Enable( !mbSizeDisabled && !bSizeProtect && !bHeightChecked && !bWidthChecked );
+    maFtSizeReference.Enable( !mbSizeDisabled && !bSizeProtect );
+    maFlProtect.Enable( !mbProtectDisabled );
+    maTsbSizeProtect.Enable( !mbProtectDisabled && !bPosProtect );
+
+    maCtlSize.Invalidate();
+    maCtlPos.Invalidate();
+
 }
 
 //------------------------------------------------------------------------
@@ -1363,7 +1290,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeSizeProtectHdl, void *, EMPTYARG )
         mnProtectSizeState = maTsbSizeProtect.GetState();
     }
 
-    DisableSizeControls();
+    UpdateControlStates();
 
     return( 0L );
 }
@@ -1639,44 +1566,8 @@ void SvxPositionSizeTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
 
 //------------------------------------------------------------------------
 
-/*void SvxPositionSizeTabPage::ShowAnchorCtrls(USHORT nAnchorCtrls)
-{
-    maTsbAutoGrowWidth.Hide();
-    maTsbAutoGrowHeight.Hide();
-    maFlAdjust.Hide();
-
-    maAnchorBox      .Show();
-    maFtAnchor       .Show();
-    maFtOrient       .Show();
-    maDdLbOrient     .Show();
-
-    for (USHORT i = 0; i < maDdLbAnchor.GetEntryCount(); i++)
-        maDdLbAnchor.SetEntryData(i, (void *)(long)i);
-
-    if (!(nAnchorCtrls & SVX_OBJ_AT_FLY))
-        maDdLbAnchor.RemoveEntry(3);
-    if (!(nAnchorCtrls & SVX_OBJ_PAGE))
-        maDdLbAnchor.RemoveEntry(2);
-    if (!(nAnchorCtrls & SVX_OBJ_IN_CNTNT))
-        maDdLbAnchor.RemoveEntry(1);
-    if (!(nAnchorCtrls & SVX_OBJ_AT_CNTNT))
-        maDdLbAnchor.RemoveEntry(0);
-
-    maDdLbAnchor     .Show();
-};*/
-
-//------------------------------------------------------------------------
-
 void SvxPositionSizeTabPage::DisableResize()
 {
-    maFlSize.Disable();
-    maFtWidth.Disable();
-    maMtrWidth.Disable();
-    maFtHeight.Disable();
-    maMtrHeight.Disable();
-    maCbxScale.Disable();
-    maFtSizeReference.Disable();
-    maCtlSize.Disable();
     mbSizeDisabled = true;
 }
 
@@ -1684,65 +1575,10 @@ void SvxPositionSizeTabPage::DisableResize()
 
 void SvxPositionSizeTabPage::DisableProtect()
 {
-    maFlProtect.Disable();
-    maTsbPosProtect.Disable();
-    maTsbSizeProtect.Disable();
     mbProtectDisabled = true;
 }
 
 //------------------------------------------------------------------------
-
-/*IMPL_LINK( SvxPositionSizeTabPage, SetAnchorHdl, ListBox *, pBox)
-{
-    BOOL bDisable = TRUE;
-    switch( (ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos()) )
-    {
-        case SVX_FLY_AT_CNTNT:
-        case SVX_FLY_PAGE:
-        break;
-        case SVX_FLY_IN_CNTNT: bDisable = FALSE;
-        break;
-    }
-    maCtlPos.Enable(bDisable);
-    maCtlPos.Invalidate();
-    if(bDisable)
-    {
-        maDdLbOrient.Disable();
-        maFtOrient.Disable();
-        maMtrPosX.Enable();
-        maMtrPosY.Enable();
-    }
-    else
-    {
-        maMtrPosX.Disable();
-        maDdLbOrient.Enable();
-        maFtOrient.Enable();
-        SetOrientHdl(&maDdLbOrient);
-    }
-    return 0;
-}
-*/
-//------------------------------------------------------------------------
-
-/*IMPL_LINK( SvxPositionSizeTabPage, SetOrientHdl, ListBox *, pBox )
-{
-    if(pBox->IsEnabled())
-    switch( pBox->GetSelectEntryPos() )
-    {
-        case SVX_VERT_TOP         :
-           case SVX_VERT_CENTER      :
-        case SVX_VERT_BOTTOM      :
-        case SVX_VERT_LINE_TOP    :
-        case SVX_VERT_LINE_CENTER :
-        case SVX_VERT_LINE_BOTTOM :
-                    maMtrPosY.Disable();
-        break;
-        case SVX_VERT_NONE:
-                    maMtrPosY.Enable();
-        break;
-    }
-    return 0;
-}*/
 
 Rectangle SvxPositionSizeTabPage::GetRect()
 {
@@ -1842,47 +1678,9 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeHeightHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, ClickSizeProtectHdl, void *, p )
+IMPL_LINK( SvxPositionSizeTabPage, ClickSizeProtectHdl, void *, EMPTYARG )
 {
-    if( !mbSizeDisabled )
-    {
-        BOOL bHeightChecked = !maTsbAutoGrowHeight.IsTriStateEnabled() &&
-                              maTsbAutoGrowHeight.GetState() == STATE_CHECK;
-        BOOL bWidthChecked = !maTsbAutoGrowWidth.IsTriStateEnabled() &&
-                             maTsbAutoGrowWidth.GetState() == STATE_CHECK;
-        if( p == &maTsbAutoGrowHeight || p == NULL )
-        {
-            if( bHeightChecked )
-            {
-                maFtHeight.Disable();
-                maMtrHeight.Disable();
-                maCbxScale.Disable();
-            }
-            else
-            {
-                maFtHeight.Enable();
-                maMtrHeight.Enable();
-                if( !bWidthChecked )
-                    maCbxScale.Enable();
-            }
-        }
-        if( p == &maTsbAutoGrowWidth || p == NULL )
-        {
-            if( bWidthChecked )
-            {
-                maFtWidth.Disable();
-                maMtrWidth.Disable();
-                maCbxScale.Disable();
-            }
-            else
-            {
-                maFtWidth.Enable();
-                maMtrWidth.Enable();
-                if( !bHeightChecked )
-                    maCbxScale.Enable();
-            }
-        }
-    }
+    UpdateControlStates();
     return( 0L );
 }
 
