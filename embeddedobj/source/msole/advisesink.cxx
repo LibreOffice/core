@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advisesink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:21:42 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include <osl/diagnose.h>
 #include <advisesink.hxx>
 #include <olecomponent.hxx>
+
+#include <rtl/ref.hxx>
 
 OleWrapperAdviseSink::OleWrapperAdviseSink( OleComponent* pOleComp )
 : m_nRefCount( 0 )
@@ -98,22 +100,16 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange(LPFORMATETC, LPSTGMEDIUM)
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
 {
-    OleComponent* pLockComponent = NULL;
+    ::rtl::Reference< OleComponent > xLockComponent;
 
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( m_pOleComp )
-        {
-            pLockComponent = m_pOleComp;
-            pLockComponent->acquire();
-        }
+            xLockComponent = m_pOleComp;
     }
 
-    if ( pLockComponent )
-    {
-        pLockComponent->OnViewChange_Impl( dwAspect );
-        pLockComponent->release();
-    }
+    if ( xLockComponent.is() )
+        xLockComponent->OnViewChange_Impl( dwAspect );
 }
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER)
@@ -130,7 +126,16 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)
 {
-    // mainly handled by inprocess handler
+    ::rtl::Reference< OleComponent > xLockComponent;
+
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        if ( m_pOleComp )
+            xLockComponent = m_pOleComp;
+    }
+
+    if ( xLockComponent.is() )
+        xLockComponent->OnClose_Impl();
 
     // TODO: sometimes it can be necessary to simulate OnShowWindow( False ) here
 }
