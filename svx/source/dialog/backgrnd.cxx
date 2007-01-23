@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:05:10 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,7 +838,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if( bColTransparency &&
             aBgdColor.GetTransparency() < 0xff)
         {
-            aBgdColor.SetTransparency(lcl_PercentToTransparency(aColTransMF.GetValue()));
+            aBgdColor.SetTransparency(lcl_PercentToTransparency(static_cast<long>(aColTransMF.GetValue())));
         }
         if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
             || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap gewechselt?
@@ -892,7 +892,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                         aTmpBrush = SvxBrushItem( aBgdGraphic,
                                         eNewPos,
                                         nWhich );
-                    lcl_SetTransparency(aTmpBrush, aGraphTransMF.GetValue());
+                    lcl_SetTransparency(aTmpBrush, static_cast<long>(aGraphTransMF.GetValue()));
 
                     rCoreSet.Put(aTmpBrush);
                 }
@@ -926,7 +926,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 }
                 if(pTmpBrush)
                 {
-                    lcl_SetTransparency(*pTmpBrush, aGraphTransMF.GetValue());
+                    lcl_SetTransparency(*pTmpBrush, static_cast<long>(aGraphTransMF.GetValue()));
                     rCoreSet.Put(*pTmpBrush);
                     delete pTmpBrush;
                 }
