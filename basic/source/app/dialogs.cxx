@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:22:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:51:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -578,7 +578,8 @@ IMPL_LINK( FontOptions, FontNameChanged, void*, EMPTYARG )
 
 IMPL_LINK( FontOptions, FontStyleChanged, void*, EMPTYARG )
 {
-    aFontSize.Fill( aFontList.Get( aFontName.GetText(), aFontStyle.GetText() ), &aFontList );
+    FontInfo aFontInfo( aFontList.Get( aFontName.GetText(), aFontStyle.GetText() ) );
+    aFontSize.Fill( &aFontInfo, &aFontList );
     FontSizeChanged( NULL );
     return 0;
 }
