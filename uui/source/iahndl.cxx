@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:24:21 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,8 +346,8 @@ public:
           m_rRequest(rRequest)
     {
     }
-
     star::uno::Reference< star::task::XInteractionRequest > m_rRequest;
+    star::beans::Optional< rtl::OUString >                  m_aResult;
 };
 
 long UUIInteractionHelper::handlerequest(
@@ -387,8 +387,18 @@ UUIInteractionHelper::handleRequest(
         handle_impl(rRequest);
 }
 
+long UUIInteractionHelper::getstringfromrequest(
+    void* pHandleData,void* pInteractionHelper)
+{
+    HandleData* pHND = (HandleData*) pHandleData;
+    UUIInteractionHelper* pUUI = (UUIInteractionHelper*) pInteractionHelper;
+    pHND->m_aResult = pUUI->getStringFromRequest_impl(pHND->m_rRequest);
+    pHND->set();
+    return 0;
+}
+
 star::beans::Optional< rtl::OUString >
-UUIInteractionHelper::getStringFromRequest(
+UUIInteractionHelper::getStringFromRequest_impl(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
     throw (star::uno::RuntimeException)
 {
@@ -400,6 +410,33 @@ UUIInteractionHelper::getStringFromRequest(
     handleErrorHandlerRequests(rRequest, true, bSuccess, aMessage);
 
     return star::beans::Optional< rtl::OUString >(bSuccess, aMessage);
+}
+
+star::beans::Optional< rtl::OUString >
+UUIInteractionHelper::getStringFromRequest(
+    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
+    throw (star::uno::RuntimeException)
+{
+    Application* pApp = 0;
+    if(
+        // be aware,it is the same type
+        ((oslThreadIdentifier) Application::GetMainThreadIdentifier())
+        != osl_getThreadIdentifier(NULL)
+        &&
+        (pApp = GetpApp())
+        != 0
+    ) {
+        // we are not in the main thread, let it handle that stuff
+        HandleData aHD(rRequest);
+        Link aLink(&aHD,getstringfromrequest);
+        pApp->PostUserEvent(aLink,this);
+        ULONG locks = Application::ReleaseSolarMutex();
+        aHD.wait();
+        Application::AcquireSolarMutex(locks);
+        return aHD.m_aResult;
+    }
+    else
+        return getStringFromRequest_impl(rRequest);
 }
 
 void UUIInteractionHelper::handleMessageboxRequests(
