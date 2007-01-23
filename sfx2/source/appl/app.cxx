@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:45:59 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:13:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,6 @@
 #include "viewsh.hxx"
 #include "genlink.hxx"
 #include "topfrm.hxx"
-#include "newhdl.hxx"
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"
