@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tptable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:00:12 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:46:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ public:
                             NumericField( pParent, rResId ) {}
 
     virtual void        Modify();
-    virtual void        SetValue( long nValue );
-    virtual long        GetValue() const;
+    virtual void        SetValue( sal_Int64 nValue );
+    virtual sal_Int64   GetValue() const;
 };
 
 //===================================================================
