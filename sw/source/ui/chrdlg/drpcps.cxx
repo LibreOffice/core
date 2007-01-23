@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:38:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ class SwDropCapsPict : public Control
     long            mnLineH;
     long            mnTextH;
     USHORT          mnDistance;
-    USHORT          mnLeading;
+    sal_Int32       mnLeading;
     Printer*        mpPrinter;
     BOOL            mbDelPrinter;
     SvULongs        maTextWidth;
@@ -266,7 +266,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     // gray lines
     mnTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES;
     mnLineH = mnTotLineH - 2;
-    mnLeading = (USHORT) GetFontMetric().GetIntLeading();
+    mnLeading = GetFontMetric().GetIntLeading();
 
     Font aFont;
     {
