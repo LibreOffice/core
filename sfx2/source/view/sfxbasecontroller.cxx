@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:29:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:14:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,7 +579,8 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
     {
         if ( aEvent.Action == ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED )
         {
-            m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( FALSE );
+            if ( !m_pController->GetViewShell_Impl()->GetUIActiveIPClient_Impl() )
+                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( FALSE );
         }
         else if ( aEvent.Action == ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED )
         {
