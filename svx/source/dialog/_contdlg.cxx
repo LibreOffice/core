@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:14:31 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@
 
 inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
-    String aVal = UniString::CreateFromInt32( MetricField::ConvertValue( nVal_100, 2, MAP_100TH_MM, eFieldUnit ) );
+    String aVal = UniString::CreateFromInt64( MetricField::ConvertValue( nVal_100, 2, MAP_100TH_MM, eFieldUnit ) );
 
     while( aVal.Len() < 3 )
         aVal.Insert( sal_Unicode('0'), 0 );
@@ -1106,7 +1106,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
         if( aGraphic.GetType() == GRAPHIC_BITMAP )
         {
             Bitmap      aBmp( aGraphic.GetBitmap() );
-            const long  nTol = aMtfTolerance.GetValue() * 255L / 100L;
+            const long  nTol = static_cast<long>(aMtfTolerance.GetValue() * 255L / 100L);
 
             aMask = aBmp.CreateMask( rColor, nTol );
 
