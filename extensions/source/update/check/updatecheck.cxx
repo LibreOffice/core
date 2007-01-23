@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:12:28 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,13 +624,13 @@ UpdateCheckJob::runAsThread()
             else
             {
                 // Increase next by 1, 5, 15, 60, .. minutes
-                static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600, 0 /* Ignored */ };
+                static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600 };
                 static sal_uInt8 n = 0;
 
                 if( n < sizeof(nRetryInterval) / sizeof(sal_Int16) )
                     ++n;
 
-                tv.Seconds = nRetryInterval[n];
+                tv.Seconds = nRetryInterval[n-1];
                 osl_waitCondition(m_hCondition, &tv);
                 continue;
             }
