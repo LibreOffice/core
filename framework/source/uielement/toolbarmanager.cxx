@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:25:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1604,6 +1604,11 @@ sal_Bool ToolBarManager::IsPluginMode() const
     return bPluginMode;
 }
 
+bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
+{
+    return true;
+}
+
 IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 {
     ResetableGuard aGuard( m_aLock );
@@ -1704,7 +1709,11 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 
     USHORT i;
     for( i=0; i< aPopupMenu.GetItemCount(); i++)
-        pMenu->CopyItem( aPopupMenu, i, MENU_APPEND );
+    {
+        sal_uInt16 nId = aPopupMenu.GetItemId( i );
+        if ( MenuItemAllowed( nId ))
+            pMenu->CopyItem( aPopupMenu, i, MENU_APPEND );
+    }
 
     // set submenu to toolbar menu
     if( aPopupMenu.GetPopupMenu( 1 ) )
