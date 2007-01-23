@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:47:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,11 @@
 #ifndef _SWCACHE_HXX
 #include <swcache.hxx>
 #endif
+// --> OD 2006-11-22 #i71574#
+#ifndef _FMTCOLFUNC_HXX
+#include <fmtcolfunc.hxx>
+#endif
+// <--
 
 TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
 
@@ -492,6 +497,12 @@ BOOL SwFmt::SetAttr(const SfxPoolItem& rAttr )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rAttr ))) )
             aSet.SetModifyAtAttr( this );
+        // --> OD 2006-11-22 #i71574#
+        if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
+        {
+            TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
+        }
+        // <--
     }
     else
     {
@@ -529,12 +540,19 @@ BOOL SwFmt::SetAttr( const SfxItemSet& rSet )
     // fuer FrmFmt's immer das Modify verschicken!
     BOOL bRet = FALSE;
     USHORT nFmtWhich;
-    if( IsModifyLocked() || (!GetDepends() &&
-        (RES_GRFFMTCOLL == (nFmtWhich = Which()) ||
-         RES_TXTFMTCOLL == nFmtWhich ) ) )
+    if ( IsModifyLocked() ||
+         ( !GetDepends() &&
+           ( RES_GRFFMTCOLL == ( nFmtWhich = Which() ) ||
+             RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rSet ))) )
             aSet.SetModifyAtAttr( this );
+        // --> OD 2006-11-22 #i71574#
+        if ( nFmtWhich == RES_TXTFMTCOLL )
+        {
+            TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
+        }
+        // <--
     }
     else
     {
