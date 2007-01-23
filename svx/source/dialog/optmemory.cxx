@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ using namespace ::sfx2;
 
 inline long OfaMemoryOptionsPage::GetNfGraphicCacheVal( void ) const
 {
-    return aNfGraphicCache.GetValue() << 20;
+    return static_cast<long>(aNfGraphicCache.GetValue() << 20);
 }
 
 inline void OfaMemoryOptionsPage::SetNfGraphicCacheVal( long nSizeInBytes )
@@ -294,8 +294,8 @@ BOOL OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     rGrfMgr.SetCacheTimeout( aCacheOptions.GetGraphicManagerObjectReleaseTime() );
 
     // OLECache
-    aCacheOptions.SetWriterOLE_Objects( aNfOLECache.GetValue() );
-    aCacheOptions.SetDrawingEngineOLE_Objects( aNfOLECache.GetValue() );
+    aCacheOptions.SetWriterOLE_Objects( static_cast<long>(aNfOLECache.GetValue()) );
+    aCacheOptions.SetDrawingEngineOLE_Objects( static_cast<long>(aNfOLECache.GetValue()) );
 
     if( aQuickLaunchCB.IsChecked() != aQuickLaunchCB.GetSavedValue())
     {
