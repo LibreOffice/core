@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:19 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,7 @@ public:
 
     void OnIconChanged_Impl();
     void OnViewChanged_Impl();
+    void OnClosed_Impl();
 
 // XEmbeddedObject
 
