@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:01:36 $
+#   last change: $Author: obo $ $Date: 2007-01-23 06:34:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -297,10 +297,10 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @echo  $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
-    $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @+$(TYPE) $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @echo  $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .ELSE
     $(SHL$(TNR)LINKER) @$(mktmp \
         $(SHL$(TNR)LINKFLAGS) \
@@ -382,15 +382,15 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL$(TNR)STDLIBS)` \
-    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL$(TNR)VERSIONMAP) $@
@@ -404,13 +404,13 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
-    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-    @cat $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
     +-$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
