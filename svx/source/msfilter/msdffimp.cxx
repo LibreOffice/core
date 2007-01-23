@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:39:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7695,8 +7695,9 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 SvStream* pDataStrm,
                 ErrCode& rError,
                 UINT32 nConvertFlags,
-                sal_Int64 nAspect )
+                sal_Int64 nReccomendedAspect )
 {
+    sal_Int64 nAspect = nReccomendedAspect;
     SdrOle2Obj* pRet = 0;
     if( rSrcStorage.Is() && xDestStorage.is() && rStorageName.Len() )
     {
@@ -7735,6 +7736,25 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
                 if( bValidStorage )
                 {
+                    if ( nAspect != embed::Aspects::MSOLE_ICON )
+                    {
+                        // check whether the object is iconified one
+                        // usually this information is already known, the only exception
+                        // is a kind of embedded objects in Word documents
+                        // TODO/LATER: should the caller be notified if the aspect changes in future?
+
+                        SvStorageStreamRef xObjInfoSrc = xObjStg->OpenSotStream(
+                            String( RTL_CONSTASCII_STRINGPARAM( "\3ObjInfo" ) ),
+                            STREAM_STD_READ | STREAM_NOCREATE );
+                        if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
+                        {
+                            BYTE nByte = 0;
+                            *xObjInfoSrc >> nByte;
+                            if ( ( nByte >> 4 ) & embed::Aspects::MSOLE_ICON )
+                                nAspect = embed::Aspects::MSOLE_ICON;
+                        }
+                    }
+
                     uno::Reference < embed::XEmbeddedObject > xObj( CheckForConvertToSOObj(
                                 nConvertFlags, *xObjStg, xDestStorage, rGrf, rVisArea ));
                     if ( xObj.is() )
