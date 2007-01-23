@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:23:43 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1067,7 +1067,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
         CalcMargin_Impl();
 
         RangeHdl_Impl( 0 );
-        UpdateExample_Impl();
+        UpdateExample_Impl( true );
 
         if ( eMode == SVX_PAGE_MODE_PRESENTATION )
         {
@@ -1108,7 +1108,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
                      aTopMarginEdit.GetFirst() > aTopMarginEdit.GetValue() )
                     aTopMarginEdit.SetValue( aTopMarginEdit.GetFirst() );
             }
-            UpdateExample_Impl();
+            UpdateExample_Impl( true );
         }
     }
     return 0;
@@ -1135,7 +1135,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeModify_Impl, Edit *, EMPTYARG )
             break;
         }
     }
-    UpdateExample_Impl();
+    UpdateExample_Impl( true );
     return 0;
 }
 
