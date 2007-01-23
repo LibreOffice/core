@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:04:12 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,8 @@ class AddonsToolBarManager : public ToolBarManager
         DECL_LINK( Deactivate, ToolBox * );
         DECL_LINK( StateChanged, StateChangedType* );
         DECL_LINK( DataChanged, DataChangedEvent* );
+
+        virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
     private:
         struct AddonsParams
