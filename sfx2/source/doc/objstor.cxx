@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-09 14:29:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1978,9 +1978,13 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         if ( !pFilter || IsPackageStorageFormat_Impl( *pMedium ) )
         {
             uno::Reference < embed::XStorage > xOld = GetStorage();
+
+            // when the package based medium is broken and has no storage or if the storage
+            // is the same as the document storage the current document storage should be preserved
             xStorage = pMedium->GetStorage();
             bOk = SaveCompleted( xStorage );
-            if ( bOk && (!pOld || !pOld->HasStorage_Impl() || xOld != pOld->GetStorage() ) )
+            if ( bOk && xStorage.is() && xOld != xStorage
+              && (!pOld || !pOld->HasStorage_Impl() || xOld != pOld->GetStorage() ) )
             {
                 // old own storage was not controlled by old Medium -> dispose it
                 try {
