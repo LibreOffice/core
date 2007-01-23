@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:08:16 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ STD_RES_FILE( gid_File_Res_TextConversionDlgs, textconversiondlgs )
 
 STD_RES_FILE_PATCH( gid_File_Res_Sw, sw )
 
-STD_RES_FILE( gid_File_Res_Tk, tk )
+STD_RES_FILE_PATCH( gid_File_Res_Tk, tk )
 
 STD_RES_FILE( gid_File_Res_Tpl, tpl )
 
