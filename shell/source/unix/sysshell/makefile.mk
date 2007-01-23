@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:55:26 $
+#   last change: $Author: obo $ $Date: 2007-01-23 12:29:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=SHELL
+PRJNAME=shell
 TARGET=sysshell
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
