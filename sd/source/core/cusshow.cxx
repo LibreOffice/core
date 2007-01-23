@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cusshow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:21:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,3 +110,29 @@ uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
 
     return xShow;
 }
+
+void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
+{
+    if( !pNewPage )
+    {
+        RemovePage( pOldPage );
+    }
+    else
+    {
+        ULONG nPos;
+        while( (nPos = GetPos( (void*)pOldPage )) != CONTAINER_ENTRY_NOTFOUND  )
+        {
+            Replace( (void*)pNewPage, nPos );
+        }
+    }
+}
+
+void SdCustomShow::RemovePage( const SdPage* pPage )
+{
+    ULONG nPos;
+    while( (nPos = GetPos( (void*)pPage )) != CONTAINER_ENTRY_NOTFOUND  )
+    {
+        Remove( nPos );
+    }
+}
+
