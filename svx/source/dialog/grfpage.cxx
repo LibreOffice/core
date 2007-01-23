@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:13:20 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@
 
 inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
 {
-    return rMetric.Denormalize( rMetric.GetValue( eUnit ));
+    return static_cast<long>(rMetric.Denormalize( rMetric.GetValue( eUnit )));
 }
 
 /*--------------------------------------------------------------------
@@ -255,7 +255,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 
         aPageSize = ((const SvxSizeItem*)pItem)->GetSize();
 
-        long nTmp = aHeightMF.Normalize(aPageSize.Height());
+        sal_Int64 nTmp = aHeightMF.Normalize(aPageSize.Height());
         aHeightMF.SetMax( nTmp, eUnit );
         nTmp = aWidthMF.Normalize(aPageSize.Width());
         aWidthMF.SetMax( nTmp, eUnit );
@@ -387,8 +387,8 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     nOldWidth = aSize.Width();
     nOldHeight = aSize.Height();
 
-    long nWidth = aWidthMF.Normalize(nOldWidth);
-    long nHeight = aHeightMF.Normalize(nOldHeight);
+    sal_Int64 nWidth = aWidthMF.Normalize(nOldWidth);
+    sal_Int64 nHeight = aHeightMF.Normalize(nOldHeight);
 
     if (nWidth != aWidthMF.GetValue(FUNIT_TWIP))
     {
@@ -536,7 +536,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
     {
         long nLeft = lcl_GetValue( aLeftMF, eUnit );
         long nRight = lcl_GetValue( aRightMF, eUnit );
-        long nWidthZoom = aWidthZoomMF.GetValue();
+        long nWidthZoom = static_cast<long>(aWidthZoomMF.GetValue());
         if(bZoom && ( ( ( aOrigSize.Width() - (nLeft + nRight )) * nWidthZoom )
                             / 100 >= aPageSize.Width() ) )
         {
@@ -569,7 +569,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
     {
         long nTop = lcl_GetValue( aTopMF, eUnit );
         long nBottom = lcl_GetValue( aBottomMF, eUnit );
-        long nHeightZoom = aHeightZoomMF.GetValue();
+        long nHeightZoom = static_cast<long>(aHeightZoomMF.GetValue());
         if(bZoom && ( ( ( aOrigSize.Height() - (nTop + nBottom )) * nHeightZoom)
                                             / 100 >= aPageSize.Height()))
         {
@@ -710,7 +710,7 @@ void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
         FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ));
 
-        long nSpin = aLeftMF.Normalize(aOrigSize.Width()) / 20;
+        sal_Int64 nSpin = aLeftMF.Normalize(aOrigSize.Width()) / 20;
         nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
                                                eUnit, aLeftMF.GetUnit());
 
