@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:27:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -934,17 +934,28 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rReq.Done( *pSet );
                 ::SfxToSwPageDescAttr( rWrtSh, *pSet );
+                // --> OD 2006-12-06 #i56253#
+                // enclose all undos.
+                // Thus, check conditions, if actions will be performed.
+                const bool bUndoNeeded( pSet->Count() ||
+                        SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) ||
+                        SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) );
+                if ( bUndoNeeded )
+                {
+                    rWrtSh.StartUndo( UNDO_INSATTR );
+                }
+                // <--
                 if( pSet->Count() )
                 {
                     rWrtSh.StartAction();
-                    rWrtSh.StartUndo( UNDO_START );
+//                    rWrtSh.StartUndo( UNDO_START );
                     if ( SFX_ITEM_SET == pSet->GetItemState(FN_DROP_TEXT, FALSE, &pItem) )
                     {
                         if ( ((SfxStringItem*)pItem)->GetValue().Len() )
                             rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
                     }
                     rWrtSh.SetAttr( *pSet );
-                    rWrtSh.EndUndo( UNDO_END );
+//                    rWrtSh.EndUndo( UNDO_END );
                     rWrtSh.EndAction();
                     SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
                     if(pColl && pColl->IsAutoUpdateFmt())
@@ -975,6 +986,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SetNodeNumStart(nNumStart);
                     rWrtSh.SetNumRuleStart(FALSE);
                 }
+                // --> OD 2006-12-06 #i56253#
+                if ( bUndoNeeded )
+                {
+                    rWrtSh.EndUndo( UNDO_INSATTR );
+                }
+                // <--
             }
 
             delete pDlg;
