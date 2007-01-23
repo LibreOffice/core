@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:33:58 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1298,12 +1298,12 @@ DBG_NAME(OAdoDetailsPage)
         {
             if ( m_aCBUseSSL.IsChecked() )
             {
-                m_iNormalPort = m_aNFPortNumber.GetValue();
+                m_iNormalPort = static_cast<sal_Int32>(m_aNFPortNumber.GetValue());
                 m_aNFPortNumber.SetValue(m_iSSLPort);
             }
             else
             {
-                m_iSSLPort = m_aNFPortNumber.GetValue();
+                m_iSSLPort = static_cast<sal_Int32>(m_aNFPortNumber.GetValue());
                 m_aNFPortNumber.SetValue(m_iNormalPort);
             }
         }
