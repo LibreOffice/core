@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsize.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:09:31 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
         aMF_VALUE.Enable(!aCB_STANDARD.IsChecked());
         if (aCB_STANDARD.IsChecked())
         {
-            m_nPrevValue = aMF_VALUE.GetValue(FUNIT_CM);
+            m_nPrevValue = static_cast<sal_Int32>(aMF_VALUE.GetValue(FUNIT_CM));
                 // don't use getValue as this will use aCB_STANDARD.to determine if we're standard
             aMF_VALUE.SetEmptyFieldValue();
         }
