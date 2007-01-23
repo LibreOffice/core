@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:09:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2401,12 +2401,12 @@ void FilterCache::impl_readOldFormat()
     try
     {
         css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
-        xCfg = css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY);
-        if (!xCfg.is())
-            return;
+        xCfg = css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY_THROW);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    /* corrupt filter addon ? because it's external (optional) code .. we can ignore it. Addon wont work then ...
+       but that seams to be acceptable.
+       see #139088# for further informations
+    */
     catch(const css::uno::Exception&)
         { return; }
 
