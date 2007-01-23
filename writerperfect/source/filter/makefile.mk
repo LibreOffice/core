@@ -17,13 +17,11 @@ SLOFILES= \
     $(SLO)$/DocumentElement.obj		\
     $(SLO)$/FontStyle.obj			\
     $(SLO)$/ListStyle.obj			\
-    $(SLO)$/OODocumentHandler.obj		\
+    $(SLO)$/DocumentHandler.obj		\
     $(SLO)$/PageSpan.obj			\
     $(SLO)$/SectionStyle.obj		\
     $(SLO)$/TableStyle.obj			\
     $(SLO)$/TextRunStyle.obj 		\
-    $(SLO)$/WordPerfectCollector.obj 	\
-    $(SLO)$/WordPerfectImportFilter.obj 	\
-    $(SLO)$/genericfilter.obj		
+    $(SLO)$/DocumentCollector.obj
 
 .INCLUDE :  target.mk
