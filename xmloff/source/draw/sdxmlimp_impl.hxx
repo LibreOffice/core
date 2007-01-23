@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:50:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 
 enum SdXMLDocElemTokenMap
 {
+    XML_TOK_DOC_FONTDECLS,
     XML_TOK_DOC_STYLES,
     XML_TOK_DOC_AUTOSTYLES,
     XML_TOK_DOC_MASTERSTYLES,
@@ -296,6 +297,8 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext* CreateMasterStylesContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+    SvXMLImportContext *CreateFontDeclsContext(const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     // Styles and AutoStyles contexts
     const SdXMLMasterStylesContext* GetMasterStylesContext() const { return mpMasterStylesContext; }
