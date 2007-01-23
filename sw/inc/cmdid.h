@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:38:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -894,6 +894,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 100)
 
 #define FN_UNO_PARA_STYLE_CONDITIONS        (FN_EXTRA2 + 101)
+
+#define FN_UNO_REPLACEMENT_GRAPHIC_URL      (FN_EXTRA2 + 102)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
