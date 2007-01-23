@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 15:50:07 $
+#   last change: $Author: obo $ $Date: 2007-01-23 06:33:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -334,16 +334,12 @@ not_existing$/s_%.dpcc : %.c;@noop $(assign all_local_slo+:=$<)
 not_existing$/o_%.dpcc : %.c;@noop $(assign all_local_obj+:=$<)
 
 $(MISC)$/%.dpslo :
-    +$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(all_local_slo)) > $@
-    +$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(all_misc_slo)) >> $@
-    +$(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n"))) >> $@
-    +$(TYPE) $(mktmp $(foreach,i,$(all_misc_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n"))) >> $@
+    +$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(all_local_slo) $(all_misc_slo)) > $@
+    +$(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n")) $(foreach,i,$(all_misc_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n"))) >> $@
 
 $(MISC)$/%.dpobj :
-    +$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(all_local_obj)) > $@
-    +$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(all_misc_obj)) >> $@
-    +$(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n"))) >> $@
-    +$(TYPE) $(mktmp $(foreach,i,$(all_misc_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n"))) >> $@
+    +$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(all_local_obj) $(all_misc_obj)) > $@
+    +$(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n")) $(foreach,i,$(all_misc_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n"))) >> $@
 
 # see also %.dpslo 
 not_existing$/s_%.dpcc : %.cxx;@noop $(assign all_local_slo+:=$<)
