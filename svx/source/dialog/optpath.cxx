@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:36:26 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,23 +555,23 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     aNewObj.removeFinalSlash();
 
     // then the new path also an URL else system path
-    String aNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+    String sNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
     FASTBOOL bChanged =
 #ifdef UNX
 // Unix is case sensitive
-        ( aNewPathStr != sWritable );
+        ( sNewPathStr != sWritable );
 #else
-        ( aNewPathStr.CompareIgnoreCaseToAscii( sWritable ) != COMPARE_EQUAL );
+        ( sNewPathStr.CompareIgnoreCaseToAscii( sWritable ) != COMPARE_EQUAL );
 #endif
 
     if ( bChanged )
     {
-        pPathBox->SetEntryText( Convert_Impl( aNewPathStr ), pEntry, 1 );
+        pPathBox->SetEntryText( Convert_Impl( sNewPathStr ), pEntry, 1 );
         nPos = (USHORT)pPathBox->GetModel()->GetAbsPos( pEntry );
         pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(nPos)->GetUserData();
         pPathImpl->eState = SFX_ITEM_SET;
-        pPathImpl->sWritablePath = sWritable;
+        pPathImpl->sWritablePath = sNewPathStr;
     }
 }
 
