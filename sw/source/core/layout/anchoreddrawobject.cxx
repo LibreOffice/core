@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:25:16 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,11 +885,13 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
         GetFrmFmt().SetAttr( aHori );
 
         SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
-        if ( aVert.GetRelationOrient() == REL_CHAR ||
-             aVert.GetRelationOrient() == REL_VERT_LINE )
-        {
-            nVertPos = -nVertPos;
-        }
+        // --> OD 2007-01-03 #i73079# - vertical position already correct
+//        if ( aVert.GetRelationOrient() == REL_CHAR ||
+//             aVert.GetRelationOrient() == REL_VERT_LINE )
+//        {
+//            nVertPos = -nVertPos;
+//        }
+        // <--
         aVert.SetPos( nVertPos );
         GetFrmFmt().SetAttr( aVert );
         // <--
