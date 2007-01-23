@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:51:07 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:34:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -682,6 +682,14 @@ void DocumentHolder::DisconnectFrameDocument()
 {
     try
     {
+        uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
+        xModifiable->removeModifyListener( (util::XModifyListener*)this );
+    }
+    catch( uno::Exception& )
+    {}
+
+    try
+    {
         uno::Reference< util::XCloseBroadcaster > xBroadcaster(
             m_xDocument, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
@@ -702,6 +710,14 @@ void DocumentHolder::DisconnectFrameDocument()
 
 void DocumentHolder::CloseDocument()
 {
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
+        xModifiable->removeModifyListener( (util::XModifyListener*)this );
+    }
+    catch( uno::Exception& )
+    {}
+
     uno::Reference< util::XCloseBroadcaster > xBroadcaster(
         m_xDocument, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
@@ -961,6 +977,18 @@ void DocumentHolder::show()
             catch( uno::Exception& )
             {
                 OSL_ENSURE( sal_False, "Can not adjust the frame!\n" );
+            }
+
+
+            if ( !m_bLink )
+            {
+                try
+                {
+                    uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
+                    xModifiable->addModifyListener( (util::XModifyListener*)this );
+                }
+                catch( uno::Exception& )
+                {}
             }
         }
 
