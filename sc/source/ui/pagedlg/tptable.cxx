@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tptable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:24:03 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ void EmptyNumericField::Modify()
         SetEmptyFieldValue();
 }
 
-void EmptyNumericField::SetValue( long nValue )
+void EmptyNumericField::SetValue( sal_Int64 nValue )
 {
     if( nValue == 0 )
         SetEmptyFieldValue();
@@ -69,7 +69,7 @@ void EmptyNumericField::SetValue( long nValue )
         NumericField::SetValue( nValue );
 }
 
-long EmptyNumericField::GetValue() const
+sal_Int64 EmptyNumericField::GetValue() const
 {
     return IsEmptyFieldValue() ? 0 : NumericField::GetValue();
 }
