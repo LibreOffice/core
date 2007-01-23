@@ -41,12 +41,12 @@ TableCellStyle::TableCellStyle(const WPXPropertyList &xPropList, const char *psN
 {
 }
 
-void TableCellStyle::write(DocumentHandler &xHandler) const
+void TableCellStyle::write(DocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("style:family", "table-cell");
-    styleOpen.write(xHandler);
+    styleOpen.write(pHandler);
 
         // WLACH_REFACTORING: Only temporary.. a much better solution is to
         // generalize this sort of thing into the "Style" superclass
@@ -58,10 +58,10 @@ void TableCellStyle::write(DocumentHandler &xHandler) const
                         stylePropList.insert(i.key(), i()->clone());
         }
         stylePropList.insert("fo:padding", "0.0382inch");
-        xHandler.startElement("style:properties", stylePropList);
-    xHandler.endElement("style:properties");
+        pHandler->startElement("style:properties", stylePropList);
+    pHandler->endElement("style:properties");
 
-    xHandler.endElement("style:style");
+    pHandler->endElement("style:style");
 }
 
 TableRowStyle::TableRowStyle(const WPXPropertyList &propList, const char *psName) :
@@ -70,22 +70,22 @@ TableRowStyle::TableRowStyle(const WPXPropertyList &propList, const char *psName
 {
 }
 
-void TableRowStyle::write(DocumentHandler &xHandler) const
+void TableRowStyle::write(DocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("style:family", "table-row");
-    styleOpen.write(xHandler);
+    styleOpen.write(pHandler);
 
         TagOpenElement stylePropertiesOpen("style:properties");
         if (mPropList["style:min-row-height"])
                 stylePropertiesOpen.addAttribute("style:min-row-height", mPropList["style:min-row-height"]->getStr());
         else if (mPropList["style:row-height"])
                 stylePropertiesOpen.addAttribute("style:row-height", mPropList["style:row-height"]->getStr());
-        stylePropertiesOpen.write(xHandler);
-        xHandler.endElement("style:properties");
+        stylePropertiesOpen.write(pHandler);
+        pHandler->endElement("style:properties");
 
-    xHandler.endElement("style:style");
+    pHandler->endElement("style:style");
 }
 
 
@@ -99,19 +99,22 @@ TableStyle::TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVe
 TableStyle::~TableStyle()
 {
     typedef std::vector<TableCellStyle *>::iterator TCSVIter;
+    typedef std::vector<TableRowStyle *>::iterator TRSVIter;
     for (TCSVIter iterTableCellStyles = mTableCellStyles.begin() ; iterTableCellStyles != mTableCellStyles.end(); iterTableCellStyles++)
         delete(*iterTableCellStyles);
+    for (TRSVIter iterTableRowStyles = mTableRowStyles.begin() ; iterTableRowStyles != mTableRowStyles.end(); iterTableRowStyles++)
+        delete(*iterTableRowStyles);
 
 }
 
-void TableStyle::write(DocumentHandler &xHandler) const
+void TableStyle::write(DocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("style:family", "table");
     if (getMasterPageName())
         styleOpen.addAttribute("style:master-page-name", getMasterPageName()->cstr());
-    styleOpen.write(xHandler);
+    styleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:properties");
         if (mPropList["table:align"])
@@ -124,36 +127,36 @@ void TableStyle::write(DocumentHandler &xHandler) const
         stylePropertiesOpen.addAttribute("style:width", mPropList["style:width"]->getStr());
     if (mPropList["fo:break-before"])
         stylePropertiesOpen.addAttribute("fo:break-before", mPropList["fo:break-before"]->getStr());
-    stylePropertiesOpen.write(xHandler);
+    stylePropertiesOpen.write(pHandler);
 
-    xHandler.endElement("style:properties");
+    pHandler->endElement("style:properties");
 
-    xHandler.endElement("style:style");
+    pHandler->endElement("style:style");
 
     int i=1;
         WPXPropertyListVector::Iter j(mColumns);
     for (j.rewind(); j.next();)
     {
-        TagOpenElement styleOpen("style:style");
+        TagOpenElement styleNestedOpen("style:style");
         WPXString sColumnName;
         sColumnName.sprintf("%s.Column%i", getName().cstr(), i);
-        styleOpen.addAttribute("style:name", sColumnName);
-        styleOpen.addAttribute("style:family", "table-column");
-        styleOpen.write(xHandler);
+        styleNestedOpen.addAttribute("style:name", sColumnName);
+        styleNestedOpen.addAttribute("style:family", "table-column");
+        styleNestedOpen.write(pHandler);
 
-                xHandler.startElement("style:properties", j());
-        xHandler.endElement("style:properties");
+                pHandler->startElement("style:properties", j());
+        pHandler->endElement("style:properties");
 
-        xHandler.endElement("style:style");
+        pHandler->endElement("style:style");
 
         i++;
     }
 
     typedef std::vector<TableRowStyle *>::const_iterator TRSVIter;
     for (TRSVIter iterTableRow = mTableRowStyles.begin() ; iterTableRow != mTableRowStyles.end(); iterTableRow++)
-        (*iterTableRow)->write(xHandler);
+        (*iterTableRow)->write(pHandler);
 
     typedef std::vector<TableCellStyle *>::const_iterator TCSVIter;
     for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); iterTableCell++)
-        (*iterTableCell)->write(xHandler);
+        (*iterTableCell)->write(pHandler);
 }
