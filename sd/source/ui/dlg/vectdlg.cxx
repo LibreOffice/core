@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vectdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:11:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:14:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,8 +217,8 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
             {
                 const long      nWidth = pRAcc->Width();
                 const long      nHeight = pRAcc->Height();
-                const long      nTileX = aMtFillHoles.GetValue();
-                const long      nTileY = aMtFillHoles.GetValue();
+                const long      nTileX = static_cast<long>(aMtFillHoles.GetValue());
+                const long      nTileY = static_cast<long>(aMtFillHoles.GetValue());
                 const long      nCountX = nWidth / nTileX;
                 const long      nCountY = nHeight / nTileY;
                 const long      nRestX = nWidth % nTileX;
