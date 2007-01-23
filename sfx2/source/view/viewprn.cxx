@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:15:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,6 +339,38 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 #pragma optimize ( "", off )
 #endif
 
+class SfxPrintGuard_Impl
+{
+    SfxObjectShell* m_pObjectShell;
+    sal_Bool        m_bOrigStatus;
+    sal_Bool        m_bNeedsChange;
+
+public:
+    SfxPrintGuard_Impl( SfxObjectShell* pObjectShell )
+    : m_pObjectShell( pObjectShell )
+    , m_bOrigStatus( sal_False )
+    , m_bNeedsChange( sal_False )
+    {
+        if ( m_pObjectShell )
+        {
+            m_bOrigStatus = m_pObjectShell->IsEnableSetModified();
+
+            // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+            if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+            {
+                m_pObjectShell->EnableSetModified( sal_False );
+                m_bNeedsChange = sal_True;
+            }
+        }
+    }
+
+    ~SfxPrintGuard_Impl()
+    {
+        if ( m_pObjectShell && m_bNeedsChange )
+            m_pObjectShell->EnableSetModified( m_bOrigStatus );
+    }
+};
+
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
     USHORT                  nCopies=1;
@@ -426,6 +458,13 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
             sal_Bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
 
+            SfxObjectShell* pDoc = NULL;
+            if ( SID_PRINTDOC == nId )
+                pDoc = GetObjectShell();
+
+            // Let the document stay nonmodified during the printing if the configuration says to do so
+            SfxPrintGuard_Impl aGuard( pDoc );
+
             // if no arguments are given, retrieve them from a dialog
             if ( !bIsAPI )
             {
@@ -434,7 +473,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 nDialogRet = 0;
                 if ( SID_PRINTDOC == nId )
                 {
-                    SfxObjectShell* pDoc = GetObjectShell();
                     bool bDetectHidden = ( !bSilent && !bPrintOnHelp && pDoc );
                     if ( !bDetectHidden
                         || pDoc->QueryHiddenInformation( WhenPrinting, NULL ) == RET_YES )
@@ -684,32 +722,17 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( !pInfo->IsUseUserData() )
                 aUserName.Erase();
 
-            // check configuration: shall update of printing information in DocInfo set the document to "modified"?
-            BOOL bOldFlag = pObjSh->IsEnableSetModified();
-            BOOL bDontModifyDoc = !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed();
-            if ( bDontModifyDoc && bOldFlag )
-                // prevent document from getting into the "modified" state
-                pObjSh->EnableSetModified( FALSE );
+            // Let the document stay nonmodified during the printing if the configuration says to do so
+            SfxPrintGuard_Impl aGuard( pObjSh );
 
             pInfo->SetPrinted( aUserName );
             pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
-
-            if ( bDontModifyDoc && bOldFlag != pObjSh->IsEnableSetModified() )
-                pObjSh->EnableSetModified( bOldFlag );
 
             GetObjectShell()->Broadcast( SfxPrintingHint( -1, pPrintDlg, pPrinter ) );
             ErrCode nError = DoPrint( pPrinter, pPrintDlg, bSilent );
             if ( nError == PRINTER_OK )
             {
-                // printer was started sucessfully
-                bOldFlag = pObjSh->IsEnableSetModified();
-                if ( bDontModifyDoc && bOldFlag )
-                    pObjSh->EnableSetModified( FALSE );
-
                 pObjSh->FlushDocInfo();
-
-                if ( bDontModifyDoc && bOldFlag != pObjSh->IsEnableSetModified() )
-                    pObjSh->EnableSetModified( bOldFlag );
 
                 Invalidate( SID_PRINTDOC );
                 Invalidate( SID_PRINTDOCDIRECT );
@@ -728,16 +751,9 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             }
             else
             {
-                bOldFlag = pObjSh->IsEnableSetModified();
-                if ( bDontModifyDoc && bOldFlag )
-                    pObjSh->EnableSetModified( FALSE );
-
                 // printing not succesful, reset DocInfo
                 pInfo->SetPrinted(aOldStamp);
                 pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
-
-                if ( bDontModifyDoc && bOldFlag != pObjSh->IsEnableSetModified() )
-                    pObjSh->EnableSetModified( bOldFlag );
 
                 if ( nError != PRINTER_ABORT )
                 {
