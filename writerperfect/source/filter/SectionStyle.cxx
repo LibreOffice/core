@@ -35,10 +35,6 @@
 double rint(double x);
 #endif /* _WIN32 */
 
-const float fDefaultSideMargin = 1.0f; // inches
-const float fDefaultPageWidth = 8.5f; // inches (OOo required default: we will handle this later)
-const float fDefaultPageHeight = 11.0f; // inches
-
 SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
                            const WPXPropertyListVector &xColumns,
                            const char *psName) :
@@ -48,34 +44,43 @@ SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
 {
 }
 
-void SectionStyle::write(DocumentHandler &xHandler) const
+void SectionStyle::write(DocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("style:family", "section");
-    styleOpen.write(xHandler);
+    styleOpen.write(pHandler);
 
     // if the number of columns is <= 1, we will never come here. This is only an additional check
+    // style properties
+    pHandler->startElement("style:properties", mPropList);
+
+    // column properties
+    WPXPropertyList columnProps;
+
     if (mColumns.count() > 1)
     {
-        // style properties
-                xHandler.startElement("style:properties", mPropList);
-
-        // column properties
-                WPXPropertyList columnProps;
                 columnProps.insert("fo:column-count", (int)mColumns.count());
-                xHandler.startElement("style:columns", columnProps);
+                pHandler->startElement("style:columns", columnProps);
 
                 WPXPropertyListVector::Iter i(mColumns);
                 for (i.rewind(); i.next();)
         {
-                        xHandler.startElement("style:column", i());
-                        xHandler.endElement("style:column");
+                        pHandler->startElement("style:column", i());
+                        pHandler->endElement("style:column");
         }
-
-                xHandler.endElement("style:columns");
-                xHandler.endElement("style:properties");
+    }
+    else
+    {
+        columnProps.insert("fo:column-count", 0);
+        columnProps.insert("fo:column-gap", 0.0f);
+        pHandler->startElement("style:columns", columnProps);
     }
 
-    xHandler.endElement("style:style");
+    pHandler->endElement("style:columns");
+
+
+    pHandler->endElement("style:properties");
+
+    pHandler->endElement("style:style");
 }
