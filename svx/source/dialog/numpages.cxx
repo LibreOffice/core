@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:19:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2105,7 +2105,7 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(e));
-                aNumFmt.SetIncludeUpperLevels((BYTE) std::min(pBox->GetValue(), (long) (e + 1)) );
+                aNumFmt.SetIncludeUpperLevels((BYTE) std::min(pBox->GetValue(), sal_Int64(e + 1)) );
                 pActNum->SetLevel(e, aNumFmt);
             }
             nMask <<= 1;
@@ -2523,8 +2523,8 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
     BOOL bWidth = pField == &aWidthMF;
     bLastWidthModified = bWidth;
     BOOL bRatio = aRatioCB.IsChecked();
-    long nWidthVal = aWidthMF.Denormalize(aWidthMF.GetValue(FUNIT_100TH_MM));
-    long nHeightVal = aHeightMF.Denormalize(aHeightMF.GetValue(FUNIT_100TH_MM));
+    long nWidthVal = static_cast<long>(aWidthMF.Denormalize(aWidthMF.GetValue(FUNIT_100TH_MM)));
+    long nHeightVal = static_cast<long>(aHeightMF.Denormalize(aHeightMF.GetValue(FUNIT_100TH_MM)));
     nWidthVal = OutputDevice::LogicToLogic( nWidthVal ,
                                                 MAP_100TH_MM, (MapUnit)eCoreUnit );
     nHeightVal = OutputDevice::LogicToLogic( nHeightVal,
@@ -3132,7 +3132,7 @@ void SvxNumPositionTabPage::InitControls()
             nDistBorderNum = (long)aNumFmtArr[nLvl]->GetAbsLSpace()+ aNumFmtArr[nLvl]->GetFirstLineOffset();
         }
         SetMetricValue(aDistBorderMF, nDistBorderNum, eCoreUnit);
-//  so war es früher Abstand Text<->Rand
+//  so war es frï¿½her Abstand Text<->Rand
 //      SetMetricValue(aDistBorderMF,
 //          bRelative ? (long)nFirstLSpace : (long)aNumFmtArr[nLvl]->GetAbsLSpace(),
 //                                                      eCoreUnit);
