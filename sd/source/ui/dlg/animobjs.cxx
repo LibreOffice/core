@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:58:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,7 +426,7 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
     }
     else if( p == &aRbtBitmap || aRbtBitmap.IsChecked() )
     {
-        ULONG n = aNumFldBitmap.GetValue();
+        ULONG n = static_cast<ULONG>(aNumFldBitmap.GetValue());
         if( n > 0 )
         {
             Time* pTime = static_cast< Time* >( aTimeList.GetObject( n - 1 ) );
@@ -562,7 +562,7 @@ IMPL_LINK( AnimationWindow, ClickCreateGroupHdl, void *, EMPTYARG )
 
 IMPL_LINK( AnimationWindow, ModifyBitmapHdl, void *, EMPTYARG )
 {
-    ULONG nBmp = aNumFldBitmap.GetValue();
+    ULONG nBmp = static_cast<ULONG>(aNumFldBitmap.GetValue());
 
     if( nBmp > aBmpExList.Count() )
         nBmp = aBmpExList.Count();
@@ -581,7 +581,7 @@ IMPL_LINK( AnimationWindow, ModifyBitmapHdl, void *, EMPTYARG )
 
 IMPL_LINK( AnimationWindow, ModifyTimeHdl, void *, EMPTYARG )
 {
-    ULONG nPos = aNumFldBitmap.GetValue() - 1;
+    ULONG nPos = static_cast<ULONG>(aNumFldBitmap.GetValue() - 1);
 
     Time* pTime = static_cast< Time* >( aTimeList.GetObject( nPos ) );
     DBG_ASSERT( pTime, "Zeit nicht gefunden!" )
