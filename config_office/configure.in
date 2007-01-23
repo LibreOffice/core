@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-01-16 16:08:42 $
+dnl * Date: $Date: 2007-01-23 06:35:17 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.195 $ )
+AC_REVISION( $Revision: 1.196 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3726,6 +3726,8 @@ elif test "$_os" != "WINNT" ; then
    CFLAGS=$X_CFLAGS
    LDFLAGS="$X_LDFLAGS $X_LIBS"
    AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", [AC_MSG_ERROR([X Development libraries not found])])
+   dnl Check if the XauDisposeAuth symbol is provided by libXau.
+   AC_CHECK_LIB(Xau, XauDisposeAuth, XAU_LIBS="-lXau", [])
 else
    x_includes="no_x_includes"
    x_libraries="no_x_libraries"
@@ -3749,6 +3751,7 @@ else
 fi
 AC_SUBST(XLIB)
 AC_SUBST(DISABLE_XAW)
+AC_SUBST(XAU_LIBS)
 
 dnl ===================================================================
 dnl Check if fontconfig/fontconfig.h is available 
