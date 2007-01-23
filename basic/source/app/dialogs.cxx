@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:51:11 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,8 +515,8 @@ void MiscOptions::Save( Config &aConfig )
 {
     aConfig.SetGroup("Communication");
     aConfig.WriteKey( "Host", ByteString( aEDHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
-    aConfig.WriteKey( "TTPort", ByteString::CreateFromInt32( aNFTTPort.GetValue() ) );
-    aConfig.WriteKey( "UnoPort", ByteString::CreateFromInt32( aNFUNOPort.GetValue() ) );
+    aConfig.WriteKey( "TTPort", ByteString::CreateFromInt64( aNFTTPort.GetValue() ) );
+    aConfig.WriteKey( "UnoPort", ByteString::CreateFromInt64( aNFUNOPort.GetValue() ) );
 
     aConfig.SetGroup("Misc");
     aConfig.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
@@ -527,7 +527,7 @@ void MiscOptions::Save( Config &aConfig )
     USHORT n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
         aConfig.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
-    aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt32( aTFMaxLRU.GetValue() ) );
+    aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt64( aTFMaxLRU.GetValue() ) );
 }
 
 
@@ -594,7 +594,7 @@ void FontOptions::UpdatePreview()
 {
     Font aFont = aFontList.Get( aFontName.GetText(), aFontStyle.GetText() );
 //    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
-    ULONG nFontSize = (aFontSize.GetValue() + 5) / 10;
+    ULONG nFontSize = static_cast<ULONG>((aFontSize.GetValue() + 5) / 10);
     aFont.SetHeight( nFontSize );
     aFTPreview.SetFont( aFont );
     aFTPreview.SetText( aFontName.GetText() );
@@ -867,7 +867,7 @@ void GenericOptions::Save( Config &aConfig )
     (void) aConfig; /* avoid warning about unused parameter */
     DBG_ASSERT( &aConfig == &aConf, "Saving to different Configuration" )
 
-    // eventuelle Änderungen Speichern
+    // eventuelle ï¿½nderungen Speichern
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 }
 
@@ -932,7 +932,7 @@ void TextAndWin::Resize()
     nWinPosY += nTopSpace;
     pWin->SetPosPixel( Point( 0, nWinPosY ) );
 
-    // Größe des Window anpassen
+    // Grï¿½ï¿½e des Window anpassen
     long nWinHeight = GetOutputSizePixel().Height();
     nWinHeight -= nWinPosY;
     nWinHeight -= nBottomSpace;
@@ -1056,9 +1056,9 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
         aMlbSlots.Clear();
 
         if ( pWinInfo->nRType & DH_MODE_DATA_VALID )    // kein altes Office
-            nDisplayMode = pWinInfo->nRType;            // Wird im Reset zur Übermittlung des Modus verwendet
+            nDisplayMode = pWinInfo->nRType;            // Wird im Reset zur ï¿½bermittlung des Modus verwendet
 //        if ( pWinInfo->aUId.GetULONG() & DH_MODE_DATA_VALID ) // kein altes Office
-//          nDisplayMode = pWinInfo->aUId.GetULONG();   // Wird im Reset zur Übermittlung des Modus verwendet
+//          nDisplayMode = pWinInfo->aUId.GetULONG();   // Wird im Reset zur ï¿½bermittlung des Modus verwendet
 
         return;
     }
@@ -1126,7 +1126,7 @@ void DisplayHidDlg::Resize()
     {
 //      SetUpdateMode( FALSE );
 
-        // Minimalgröße
+        // Minimalgrï¿½ï¿½e
         Size aSize( GetOutputSizePixel() );
         aSize.Width() = std::max( aSize.Width(), (long)(aOKClose.GetSizePixel().Width() * 3 ));
         aSize.Height() = std::max( aSize.Height(), (long)(aOKClose.GetSizePixel().Height() * 8 ));
@@ -1145,15 +1145,15 @@ void DisplayHidDlg::Resize()
         // Breite des SplitWindows bestimmen
         long nSplitWidth = GetSizePixel().Width();
         nSplitWidth -= aPbBenennen.GetSizePixel().Width();
-        nSplitWidth -= 3 * nSpace;  // Die Zwischenräume
+        nSplitWidth -= 3 * nSpace;  // Die Zwischenrï¿½ume
         nSplitWidth -= nSpace / 2;  // Etwas mehr Platz am rechten Rand
 
-        // Höhe des SplitWindows bestimmen
+        // Hï¿½he des SplitWindows bestimmen
         long nSplitHeight = GetOutputSizePixel().Height();
         nSplitHeight -= pSplit->GetPosPixel().Y();
         nSplitHeight -= nSpace; // der Abstand unten
 
-        // Größe des SplitWindows setzen
+        // Grï¿½ï¿½e des SplitWindows setzen
         pSplit->SetSizePixel( Size( nSplitWidth, nSplitHeight ) );
 
         Point aPos;
@@ -1164,7 +1164,7 @@ void DisplayHidDlg::Resize()
         aPos.Move( nSpace, 0 );
         aPbKopieren.SetPosPixel( aPos );
 
-        // Button "Alles Wählen" gleich darunter positionieren
+        // Button "Alles Wï¿½hlen" gleich darunter positionieren
         aPos.Move( 0, aPbKopieren.GetSizePixel().Height() );
         aPos.Move( 0, nSpace );
         aPbSelectAll.SetPosPixel( aPos );
@@ -1174,7 +1174,7 @@ void DisplayHidDlg::Resize()
         aPos.Move( 0, nSpace );
         aPbBenennen.SetPosPixel( aPos );
 
-        // Und zum Schluß noch den "Close" Button positionieren
+        // Und zum Schluï¿½ noch den "Close" Button positionieren
         aPos = pSplit->GetPosPixel();
         aPos.Move( nSpace, -aOKClose.GetSizePixel().Height() );
         aPos.Move( pSplit->GetSizePixel().Width(), pSplit->GetSizePixel().Height() );
@@ -1233,7 +1233,7 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aNumericFieldRID_NF_NEW_LONG.Show();
                 aNumericFieldRID_NF_NEW_LONG.SetText( pVar->GetString() );
                 aNumericFieldRID_NF_NEW_LONG.Reformat();
-                // Müssen hart gesetzt werden, da der Rsc Compiler damit nicht klar kommt.
+                // Mï¿½ssen hart gesetzt werden, da der Rsc Compiler damit nicht klar kommt.
                 aNumericFieldRID_NF_NEW_LONG.SetMin( -aNumericFieldRID_NF_NEW_LONG.GetMax()-1 );
                 aNumericFieldRID_NF_NEW_LONG.SetFirst( -aNumericFieldRID_NF_NEW_LONG.GetLast()-1 );
                 break;
@@ -1319,7 +1319,7 @@ SvNumberformat::
             pVar->PutInteger( (INT16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
         case SbxLONG:
-            pVar->PutLong( aNumericFieldRID_NF_NEW_LONG.GetValue() );
+            pVar->PutLong( static_cast<INT32>(aNumericFieldRID_NF_NEW_LONG.GetValue()) );
             break;
         case SbxDOUBLE:
         case SbxSINGLE:
@@ -1346,7 +1346,7 @@ SvNumberformat::
 
     if ( bError )
     {
-//      ErrorBox( this, WB_OK | WB_DEF_OK, "Der Wert ist ungültig und kann daher nicht gesetzt werden" ).Execute();
+//      ErrorBox( this, WB_OK | WB_DEF_OK, "Der Wert ist ungï¿½ltig und kann daher nicht gesetzt werden" ).Execute();
         ErrorBox( this, ResId( IDS_INVALID_VALUE ) ).Execute();
         return 1;
     }
