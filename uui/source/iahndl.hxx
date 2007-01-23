@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:08:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,15 @@ private:
 
     static long
     handlerequest(void* pHandleData, void* pInteractionHandler);
+
+    com::sun::star::beans::Optional< rtl::OUString >
+    getStringFromRequest_impl(com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionRequest > const &
+                rRequest)
+        throw (com::sun::star::uno::RuntimeException);
+
+    static long
+    getstringfromrequest(void* pHandleData, void* pInteractionHandler);
 
     Window * getParentProperty() SAL_THROW(());
 
