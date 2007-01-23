@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:43:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include "gallery.hrc"
 
 #include <cstdio>
+#include <list>
 
 // ---------------------
 // - GalleryThemeEntry -
@@ -128,11 +129,11 @@ class GalleryTheme;
 
 class Gallery : public SfxBroadcaster
 {
-    friend class GalleryCacheEntry;
+    // only for gengal utility!
+    friend Gallery* createGallery( const rtl::OUString& );
+    friend void disposeGallery( Gallery* );
 
 private:
-
-    static List                 aGalleryCache;
 
     GalleryThemeList            aThemeList;
     GalleryImportThemeList      aImportList;
@@ -155,13 +156,12 @@ private:
     GalleryTheme*               ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
     void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
 
-                                Gallery( const String& rMultiPath );
-                                ~Gallery();
+                                SVX_DLLPUBLIC Gallery( const String& rMultiPath );
+                                SVX_DLLPUBLIC ~Gallery();
 
 public:
 
-    SVX_DLLPUBLIC static Gallery*               AcquireGallery( const String& rMultiPath );
-    SVX_DLLPUBLIC static void                   ReleaseGallery( Gallery* pGallery );
+    SVX_DLLPUBLIC static Gallery* GetGalleryInstance();
 
     const ULONG                 GetThemeCount() const { return aThemeList.Count(); }
     const GalleryThemeEntry*    GetThemeInfo( ULONG nPos ) { return aThemeList.GetObject( nPos ); }
