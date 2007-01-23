@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:50:27 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,29 +144,37 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     css::uno::Reference< css::lang::XSingleServiceFactory > xCreator;
     ::rtl::OUString sCreator = IMPLEMENTATIONNAME_FWK_TASKCREATOR;
 
-    if (
-        ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_BLANK  ) ) ||
-        ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_DEFAULT) )
-       )
-    {
-        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(xSMGR, PACKAGE, RELPATH, KEY, ::comphelper::ConfigurationHelper::E_READONLY);
-        aVal >>= sCreator;
-    }
-
     try
     {
+        if (
+            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_BLANK  ) ) ||
+            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_DEFAULT) )
+           )
+        {
+            css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(xSMGR, PACKAGE, RELPATH, KEY, ::comphelper::ConfigurationHelper::E_READONLY);
+            aVal >>= sCreator;
+        }
+
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
                     xSMGR->createInstance(sCreator), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
-    {
+    {}
+
+    // no catch here ... without an task creator service we cant open ANY document window within the office.
+    // Thats IMHO not a good idea. Then we should accept the stacktrace showing us the real problem.
+    // BTW: The used fallback creator service (IMPLEMENTATIONNAME_FWK_TASKCREATOR) is implemented in the same
+    // library then these class here ... Why we should not be able to create it ?
+    if ( ! xCreator.is())
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
                     xSMGR->createInstance(IMPLEMENTATIONNAME_FWK_TASKCREATOR), css::uno::UNO_QUERY_THROW);
-    }
 
     css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstance(), css::uno::UNO_QUERY_THROW);
 
-    if (bVisible && xTask.is())
+    if (
+        (bVisible  ) &&
+        (xTask.is())
+       )
     {
         css::uno::Reference< css::awt::XWindow > xWindow = xTask->getContainerWindow();
         if (xWindow.is())
