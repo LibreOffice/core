@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:04:52 $
+#   last change: $Author: obo $ $Date: 2007-01-23 12:27:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 COMP1TYPELIST=syssh
 
+TESTAPP1=urltest
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -68,7 +70,25 @@ SHL1STDLIBS=$(CPPULIB)\
 SHL1LIBS=
 SHL1DEPN=
 
+.IF "$(test)" != "" 
+
+APP1TARGET=$(TESTAPP1)
+APP1STDLIBS= $(SHL1STDLIBS)
+APP1OBJS= \
+    $(SLO)$/shellexec.obj \
+    $(SLO)$/$(APP1TARGET).obj
+
+.ENDIF # "$(test)" != "" 
+
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
+run_test : $(BIN)$/$(TESTAPP1).sh
+    dmake test=t
+    $(BIN)$/$(TESTAPP1) urltest.txt
+
+$(BIN)$/$(TESTAPP1).sh : $$(@:f)
+    $(COPY) $< $@
+    -chmod +x $@ 
