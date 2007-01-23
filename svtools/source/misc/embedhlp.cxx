@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:03:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,9 +398,6 @@ void EmbeddedObjectRef::Clear()
     }
 
     mpImp->pContainer = 0;
-    mpImp->pGraphic = 0;
-    mpImp->pHCGraphic = 0;
-    mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
     mpImp->bIsLocked = FALSE;
     mpImp->bNeedUpdate = sal_False;
 }
