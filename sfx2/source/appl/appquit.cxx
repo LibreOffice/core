@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:57:21 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@
 #include "printer.hxx"
 #include "arrdecl.hxx"
 #include "sfxresid.hxx"
-#include "newhdl.hxx"
 #include "event.hxx"
 #include "macrconf.hxx"
 #include "mnumgr.hxx"
