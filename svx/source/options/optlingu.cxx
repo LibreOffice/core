@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:05:58 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1237,7 +1237,7 @@ SvxLinguTabPage::~SvxLinguTabPage()
 
 //------------------------------------------------------------------------
 
-//nicht überladen wegschmeissen
+//nicht ï¿½berladen wegschmeissen
 sal_uInt16* SvxLinguTabPage::GetRanges()
 {
     //TL???
@@ -1441,7 +1441,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         bModified |= sal_True;
     }
 
-    // pOld ist alte Wert wenn wert geändert mit neuen Wert ins Item Set
+    // pOld ist alte Wert wenn wert geï¿½ndert mit neuen Wert ins Item Set
     BOOL bNewMarkOff = aLinguOptionsCLB.IsChecked( (USHORT) EID_HIDE_MARKINGS );
     pOld = GetItem( rCoreSet, SID_AUTOSPELL_MARKOFF );
     if ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() != bNewMarkOff )
@@ -1915,7 +1915,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                 aDlg.GetNumericFld().SetValue( aData.GetNumericValue() );
                 if (RET_OK == aDlg.Execute() )
                 {
-                    nVal = aDlg.GetNumericFld().GetValue();
+                    nVal = static_cast<long>(aDlg.GetNumericFld().GetValue());
                     if (-1 != nVal && aData.GetNumericValue() != nVal)
                     {
                         aData.SetNumericValue( (BYTE)nVal ); //! sets IsModified !
