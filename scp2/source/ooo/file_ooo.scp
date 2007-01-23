@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 14:49:30 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 12:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,7 +370,7 @@ File gid_File_Bin_Gnome_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "gnome-open-url";
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
 End
 
 File gid_File_Bin_Gnome_Open_Url_Bin
@@ -384,7 +384,7 @@ File gid_File_Bin_Kde_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "kde-open-url";
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
 End
 
 File gid_File_Bin_Cde_Open_Url
