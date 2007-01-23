@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:34:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,10 +101,10 @@ String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
 
 void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
 {
-    long nFirst = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
-    long nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
-    long nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
-    long nMax = rField.Denormalize( rField.GetMax( FUNIT_TWIP ) );
+    sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
+    sal_Int64 nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
+    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
+    sal_Int64 nMax = rField.Denormalize( rField.GetMax( FUNIT_TWIP ) );
 
     if ( !bAll )
     {
@@ -158,8 +158,8 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
 
 void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, BOOL bAll )
 {
-    long nMin = rBox.Denormalize( rBox.GetMin( FUNIT_TWIP ) );
-    long nMax = rBox.Denormalize( rBox.GetMax( FUNIT_TWIP ) );
+    sal_Int64 nMin = rBox.Denormalize( rBox.GetMin( FUNIT_TWIP ) );
+    sal_Int64 nMax = rBox.Denormalize( rBox.GetMax( FUNIT_TWIP ) );
 
     if ( !bAll )
     {
@@ -226,18 +226,9 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet )
 // -----------------------------------------------------------------------
 void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
 {
-    long nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MAP_100TH_MM );
-    /* #i69437#
-     * work around limited precision of MetricField
-     */
-    FieldUnit eValUnit = FUNIT_100TH_MM;
-    if( nVal > rField.Denormalize( 0x3fffffff ) )
-    {
-        nVal /= 1000;
-        eValUnit = FUNIT_CM;
-    }
+    sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MAP_100TH_MM );
     nVal = rField.Normalize( nVal );
-    rField.SetValue( nVal, eValUnit );
+    rField.SetValue( nVal, FUNIT_100TH_MM );
 
 /*
     if ( SFX_MAPUNIT_100TH_MM == eUnit )
@@ -285,10 +276,26 @@ void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
 
 long GetCoreValue( const MetricField& rField, SfxMapUnit eUnit )
 {
-    long nVal = rField.GetValue( FUNIT_100TH_MM );
-    long nUnitVal = OutputDevice::LogicToLogic( nVal, MAP_100TH_MM, (MapUnit)eUnit );
-    nUnitVal = rField.Denormalize( nUnitVal );
-    return nUnitVal;
+    sal_Int64 nVal = rField.GetValue( FUNIT_100TH_MM );
+    // avoid rounding issues
+    const sal_Int64 nSizeMask = 0xffffffffff000000LL;
+    bool bRoundBefore = true;
+    if( nVal >= 0 )
+    {
+        if( (nVal & nSizeMask) == 0 )
+            bRoundBefore = false;
+    }
+    else
+    {
+        if( ((-nVal) & nSizeMask ) == 0 )
+            bRoundBefore = false;
+    }
+    if( bRoundBefore )
+        nVal = rField.Denormalize( nVal );
+    sal_Int64 nUnitVal = OutputDevice::LogicToLogic( static_cast<long>(nVal), MAP_100TH_MM, (MapUnit)eUnit );
+    if( ! bRoundBefore )
+        nUnitVal = rField.Denormalize( nUnitVal );
+    return static_cast<long>(nUnitVal);
 
 /*
     long nRet = rField.GetValue( MapToFieldUnit( eUnit ) );
