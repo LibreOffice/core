@@ -4,9 +4,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:59:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:13:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,22 +160,22 @@ CopyDlg::~CopyDlg()
 {
     String& rStr = GetExtraData();
 
-    rStr = UniString::CreateFromInt32( maNumFldCopies.GetValue() );
+    rStr = UniString::CreateFromInt64( maNumFldCopies.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( maMtrFldMoveX.GetValue() );
+    rStr += UniString::CreateFromInt64( maMtrFldMoveX.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( maMtrFldMoveY.GetValue() );
+    rStr += UniString::CreateFromInt64( maMtrFldMoveY.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( maMtrFldAngle.GetValue() );
+    rStr += UniString::CreateFromInt64( maMtrFldAngle.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( maMtrFldWidth.GetValue() );
+    rStr += UniString::CreateFromInt64( maMtrFldWidth.GetValue() );
     rStr.Append( TOKEN );
 
-    rStr += UniString::CreateFromInt32( maMtrFldHeight.GetValue() );
+    rStr += UniString::CreateFromInt64( maMtrFldHeight.GetValue() );
     rStr.Append( TOKEN );
 
     rStr += UniString::CreateFromInt32( (long)maLbStartColor.GetSelectEntryColor().GetColor() );
@@ -288,7 +288,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (UINT16) maNumFldCopies.GetValue() ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_Y, nMoveY ) );
-    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, maMtrFldAngle.GetValue() ) );
+    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, static_cast<INT32>(maMtrFldAngle.GetValue()) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_WIDTH, nWidth ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_HEIGHT, nHeight ) );
 
