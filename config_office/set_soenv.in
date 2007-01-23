@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.133 $
-# Date:        $Date: 2007-01-16 16:09:14 $
+# Version:     $Revision: 1.134 $
+# Date:        $Date: 2007-01-23 06:35:28 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1859,6 +1859,7 @@ ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
 ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
+ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 if ($platform !~ m/cygwin/)
