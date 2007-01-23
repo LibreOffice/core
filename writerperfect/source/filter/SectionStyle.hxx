@@ -37,7 +37,7 @@ class SectionStyle : public Style
 {
 public:
     SectionStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &xColumns, const char *psName);
-    virtual void write(DocumentHandler &xHandler) const;
+    virtual void write(DocumentHandler *pHandler) const;
 
 private:
         WPXPropertyList mPropList;
