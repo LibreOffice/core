@@ -4,9 +4,9 @@
  *
  *  $RCSfile: throbberimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 16:15:58 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,17 @@ namespace toolkit
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
         if ( pImage )
             pImage->SetImage( maImageList[ 0 ] );
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool Throbber_Impl::isHCMode()
+        throw (RuntimeException)
+    {
+        FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
+        if ( pImage )
+            return pImage->GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+        else
+            return Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark();
     }
 
     // -----------------------------------------------------------------------
