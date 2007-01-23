@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:23:02 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,6 +479,11 @@ public:
 
     SD_DLLPUBLIC ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
     void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
+
+    /** replacespOldPage from all custom shows with pNewPage or removes pOldPage from
+        all custom shows if pNewPage is 0.
+    */
+    void ReplacePageInCustomShows( const SdPage* pOldPage, const SdPage* pNewPage );
 
 public:
 
