@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:22:40 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,6 +526,13 @@ if( nErr == 1 || nErr == USHRT_MAX || nErr == ULONG_MAX )       \
 
 sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
+    return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont, sal_True );
+}
+
+//----------------------------------------------------------------
+
+sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, const SfxFilter** ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont, sal_Bool bDefUI ) const
+{
     const SfxFilter* pOldFilter = *ppFilter;
 
     // no detection service -> nothing to do !
@@ -538,7 +545,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**
     {
         // open the stream one times only ...
         // Otherwhise it will be tried more then once and show the same interaction more then once ...
-        rMedium.UseInteractionHandler(TRUE);
+        rMedium.UseInteractionHandler( bDefUI );
         ::rtl::OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInStream = rMedium.GetInputStream();
 
