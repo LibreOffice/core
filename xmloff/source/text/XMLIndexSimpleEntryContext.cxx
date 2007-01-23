@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexSimpleEntryContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:07:12 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,10 +125,10 @@ void XMLIndexSimpleEntryContext::StartElement(
         {
             sCharStyleName = xAttrList->getValueByIndex(nAttr);
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
-                XML_STYLE_FAMILY_TEXT_PARAGRAPH, sCharStyleName );
+                XML_STYLE_FAMILY_TEXT_TEXT, sCharStyleName );
             // #142494#: Check if style exists
             const Reference < ::com::sun::star::container::XNameContainer > & rStyles =
-                GetImport().GetTextImport()->GetParaStyles();
+                GetImport().GetTextImport()->GetTextStyles();
             if( rStyles.is() && rStyles->hasByName( sDisplayStyleName ) )
                 bCharStyleNameOK = sal_True;
             else
