@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:17:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,13 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
+#include <vcl/salbtype.hxx>
 
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
+#include <com/sun/star/text/GraphicCrop.hpp>
 #endif
 
 #include "descriptor.hxx"
@@ -416,6 +420,52 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     return xRet;
 }
 
+
+
+void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyValue >& rFilterData )
+{
+    sal_Int32 nPixelWidth = 0;
+    sal_Int32 nPixelHeight= 0;
+    text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
+
+    for( sal_Int32 i = 0; i < rFilterData.getLength(); ++i )
+    {
+        const ::rtl::OUString   aName(  rFilterData[ i ].Name );
+        const uno::Any          aValue( rFilterData[ i ].Value );
+
+        if( COMPARE_EQUAL == aName.compareToAscii( "PixelWidth" ) )
+            aValue >>= nPixelWidth;
+        else if( COMPARE_EQUAL == aName.compareToAscii( "PixelHeight" ) )
+            aValue >>= nPixelHeight;
+        else if (COMPARE_EQUAL == aName.compareToAscii( "GraphicCrop" ) )
+            aValue >>= aGraphicCrop;
+    }
+    if ( rGraphic.GetType() == GRAPHIC_BITMAP )
+    {
+        if ( aGraphicCrop.Left || aGraphicCrop.Top || aGraphicCrop.Right || aGraphicCrop.Bottom )
+        {
+            BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+
+            // convert crops to pixel
+            Point aCropLeftTop( Application::GetDefaultDevice()->
+                LogicToLogic( Point( aGraphicCrop.Left, aGraphicCrop.Top ), MapMode( MAP_100TH_MM ), aBmpEx.GetPrefMapMode() ) );
+            Point aRB( Application::GetDefaultDevice()->
+                LogicToLogic( Point( aGraphicCrop.Right, aGraphicCrop.Bottom ), MapMode( MAP_100TH_MM ), aBmpEx.GetPrefMapMode() ) );
+            Point aCropRightBottom( aBmpEx.GetSizePixel().Width() - aRB.X(), aBmpEx.GetSizePixel().Height() - aRB.Y() );
+
+            aBmpEx.Crop( Rectangle( aCropLeftTop, aCropRightBottom ) );
+            rGraphic = aBmpEx;
+        }
+        Size aSizePixel( rGraphic.GetSizePixel() );
+        if ( nPixelWidth && nPixelHeight && ( nPixelWidth != aSizePixel.Width() ) || ( nPixelHeight != aSizePixel.Height() ) )
+        {
+            BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+            aBmpEx.Scale( Size( nPixelWidth, nPixelHeight ) );
+            rGraphic = aBmpEx;
+        }
+    }
+}
+
 // ------------------------------------------------------------------------------
 
 void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const uno::Sequence< beans::PropertyValue >& rMediaProperties )
@@ -519,18 +569,20 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
                 if( pGraphic && ( pGraphic->GetType() != GRAPHIC_NONE ) )
                 {
+                    ::Graphic aGraphic( *pGraphic );
+                    ImplApplyFilterData( aGraphic, aFilterDataSeq );
+
                     if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
-                        (*pOStm) << *pGraphic;
+                        (*pOStm) << aGraphic;
                     else
                     {
-                        pFilter->ExportGraphic( *pGraphic, aPath, *pOStm,
+                        pFilter->ExportGraphic( aGraphic, aPath, *pOStm,
                                                 pFilter->GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
                                                     ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
                     }
                 }
             }
         }
-
         delete pOStm;
     }
 }
