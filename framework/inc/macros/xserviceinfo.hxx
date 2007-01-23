@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xserviceinfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:24:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,14 @@
 #include <com/sun/star/uno/Type.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
@@ -114,7 +122,7 @@ ________________________________________________________________________________
 //  private
 //  implementation of XServiceInfo and helper functions
 //*****************************************************************************************************************
-#define PRIVATE_DEFINE_XSERVICEINFO( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                       \
+#define PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                  \
     /*===========================================================================================================*/                                 \
     /* XServiceInfo                                                                                              */                                 \
     /*===========================================================================================================*/                                 \
@@ -177,8 +185,10 @@ ________________________________________________________________________________
     ::rtl::OUString CLASS::impl_getStaticImplementationName()                                                                                       \
     {                                                                                                                                               \
         return IMPLEMENTATIONNAME ;                                                                                                                 \
-    }                                                                                                                                               \
-                                                                                                                                                    \
+    }
+
+#define PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \
+    PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                      \
     /*===========================================================================================================*/                                 \
     /* Helper for registry                                                                                       */                                 \
     /* Attention: To avoid against wrong ref counts during our own initialize procedure, we must                 */                                 \
@@ -196,6 +206,33 @@ ________________________________________________________________________________
         pClass->impl_initService();                                                                                                                                                                \
         /* return new created service as reference */                                                                                                                                              \
         return xService;                                                                                                                                                                           \
+    }
+
+#define PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \
+    PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                      \
+    /*===========================================================================================================*/                                 \
+    /* Helper for registry                                                                                       */                                 \
+    /* Attention: To avoid against wrong ref counts during our own initialize procedure, we must                 */                                 \
+    /*            use right EXTERNAL handling of them. That's why you should do nothing in your ctor, which could*/                                 \
+    /*            work on your ref count! All other things are allowed. Do work with your own reference - please */                                 \
+    /*            use "impl_initService()" method.                                                               */                                 \
+    /*===========================================================================================================*/                                 \
+    css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )\
+        throw( css::uno::Exception )                                                                                                                                \
+    {                                                                                                                                                               \
+        /* retrieve component context from the given service manager */                                                                                             \
+        static const ::rtl::OUString PROP_DEFAULTCONTEXT = ::rtl::OUString::createFromAscii("DefaultContext");                                                      \
+        css::uno::Reference< css::beans::XPropertySet >    xSMGRProps(xServiceManager, css::uno::UNO_QUERY_THROW);                                                  \
+        css::uno::Reference< css::uno::XComponentContext > xComponentContext;                                                                                       \
+        xSMGRProps->getPropertyValue( PROP_DEFAULTCONTEXT ) >>= xComponentContext;                                                                                  \
+        /* create new instance of service */                                                                                                                        \
+        CLASS* pClass = new CLASS( xComponentContext );                                                                                                             \
+        /* hold it alive by increasing his ref count!!! */                                                                                                          \
+        css::uno::Reference< css::uno::XInterface > xService( static_cast< XINTERFACECAST* >(pClass), css::uno::UNO_QUERY );                                        \
+        /* initialize new service instance ... he can use his own refcount ... we hold it! */                                                                       \
+        pClass->impl_initService();                                                                                                                                 \
+        /* return new created service as reference */                                                                                                               \
+        return xService;                                                                                                                                            \
     }
 
 //*****************************************************************************************************************
@@ -253,11 +290,19 @@ ________________________________________________________________________________
 //  implementation of XServiceInfo
 //*****************************************************************************************************************
 #define DEFINE_XSERVICEINFO_MULTISERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
-    PRIVATE_DEFINE_XSERVICEINFO( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                       \
+    PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_SINGLEFACTORY( CLASS )
 
 #define DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )        \
-    PRIVATE_DEFINE_XSERVICEINFO( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                       \
+    PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
+    PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )
+
+#define DEFINE_XSERVICEINFO_MULTISERVICE_2( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )            \
+    PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
+    PRIVATE_DEFINE_SINGLEFACTORY( CLASS )
+
+#define DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )      \
+    PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )
 
 //*****************************************************************************************************************
