@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:35:57 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2091,7 +2091,7 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
 bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
 {
     // Only if hidden text should not be shown:
-    if ( rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
         return false;
 
     const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
