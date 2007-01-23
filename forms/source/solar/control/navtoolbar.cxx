@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navtoolbar.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:02:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -646,7 +646,7 @@ namespace frm
     {
         if ( _bForce || ( GetText() != GetSavedValue() ) )
         {
-            sal_Int32 nRecord = GetValue();
+            sal_Int64 nRecord = GetValue();
             if ( nRecord < GetMin() || nRecord > GetMax() )
                 return;
 
