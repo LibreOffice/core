@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:15:21 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ GalleryBrowser::GalleryBrowser( SfxBindings* _pBindings, SfxChildWindow* pCW,
                                 Window* pParent, const ResId& rResId ) :
     SfxDockingWindow( _pBindings, pCW, pParent, rResId )
 {
-    mpGallery = Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
+    mpGallery = Gallery::GetGalleryInstance();
     mpBrowser1 = new GalleryBrowser1( this, GAL_RESID( GALLERY_BROWSER1 ), mpGallery );
     mpSplitter = new GallerySplitter( this, GAL_RESID( GALLERY_SPLITTER ) );
     mpBrowser2 = new GalleryBrowser2( this, GAL_RESID( GALLERY_BROWSER2 ), mpGallery );
@@ -140,7 +140,6 @@ GalleryBrowser::~GalleryBrowser()
     delete mpBrowser2;
     delete mpSplitter;
     delete mpBrowser1;
-    Gallery::ReleaseGallery( mpGallery );
 }
 
 // -----------------------------------------------------------------------------
