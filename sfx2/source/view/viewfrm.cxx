@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:29:41 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,6 @@ namespace css = ::com::sun::star;
 #include "dispatch.hxx"
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
-#include "newhdl.hxx"
 #include "request.hxx"
 #include "docfac.hxx"
 #include "ipclient.hxx"
@@ -1778,7 +1777,6 @@ SfxViewFrame::~SfxViewFrame()
     // Member l"oschen
     KillDispatcher_Impl();
 
-    SfxNewHdl::Get()->TryAllocBuffer();
     delete pImp;
 }
 
