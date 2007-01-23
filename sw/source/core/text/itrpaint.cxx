@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:44:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         pPor = bDrawInWindow || GetInfo().X() <= nMaxRight ||
                // --> FME 2004-06-24 #i16816# tagged pdf support
-               ( GetInfo().GetVsh()->GetViewOptions()->IsPDFExport() &&
+               ( GetInfo().GetVsh() &&
+                 GetInfo().GetVsh()->GetViewOptions()->IsPDFExport() &&
                  pNext && pNext->IsHolePortion() ) ?
                // <--
                pNext :
