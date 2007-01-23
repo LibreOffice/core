@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:58:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -907,16 +907,16 @@ namespace
             // alter Wert, skaliert
             long nHeight;
             if ( _pFontSizeLB->IsPtRelative() )
-                nHeight = rOldItem.GetHeight() + PointToTwips( _pFontSizeLB->GetValue() / 10 );
+                nHeight = rOldItem.GetHeight() + PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
             else
-                nHeight = rOldItem.GetHeight() * _pFontSizeLB->GetValue() / 100;
+                nHeight = static_cast<long>(rOldItem.GetHeight() * _pFontSizeLB->GetValue() / 100);
 
             // Umrechnung in twips fuer das Beispiel-Window
             aSize.Height() =
                 ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), SFX_FUNIT_TWIP );
         }
         else if ( _pFontSizeLB->GetText().Len() )
-            aSize.Height() = PointToTwips( _pFontSizeLB->GetValue() / 10 );
+            aSize.Height() = PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
         else
             aSize.Height() = 200;   // default 10pt
         aFontInfo.SetSize( aSize );
@@ -1440,7 +1440,7 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         CLEARTITEM;
 
     // FontSize
-    long nSize = pSizeBox->GetValue();
+    long nSize = static_cast<long>(pSizeBox->GetValue());
 
     if ( !pSizeBox->GetText().Len() )   // GetValue() gibt dann Min-Wert zurueck
         nSize = 0;
@@ -3236,7 +3236,7 @@ IMPL_LINK( SvxCharPositionPage, KerningSelectHdl_Impl, ListBox*, EMPTYARG )
 
 IMPL_LINK( SvxCharPositionPage, KerningModifyHdl_Impl, MetricField*, EMPTYARG )
 {
-    long nVal = m_aKerningEdit.GetValue();
+    long nVal = static_cast<long>(m_aKerningEdit.GetValue());
     nVal = LogicToLogic( nVal, MAP_POINT, MAP_TWIP );
     long nKern = (short)m_aKerningEdit.Denormalize( nVal );
 
@@ -3313,7 +3313,7 @@ void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
         // Condensed -> max value == 1/6 of the current font height
         SvxFont& rFont = GetPreviewFont();
         long nMax = rFont.GetSize().Height() / 6;
-        long nKern = (short)m_aKerningEdit.Denormalize( LogicToLogic( m_aKerningEdit.GetValue(), MAP_POINT, MAP_TWIP ) );
+        long nKern = (short)m_aKerningEdit.Denormalize( LogicToLogic( static_cast<long>(m_aKerningEdit.GetValue()), MAP_POINT, MAP_TWIP ) );
         m_aKerningEdit.SetMax( m_aKerningEdit.Normalize( nKern > nMax ? nKern : nMax ), FUNIT_TWIP );
         m_aKerningEdit.SetLast( m_aKerningEdit.GetMax( m_aKerningEdit.GetUnit() ) );
     }
@@ -3445,7 +3445,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit( MAP_POINT );
-        long nBig = m_aKerningEdit.Normalize( (long)rItem.GetValue() );
+        long nBig = static_cast<long>(m_aKerningEdit.Normalize( static_cast<long>(rItem.GetValue()) ));
         long nKerning = LogicToLogic( nBig, eOrgUnit, ePntUnit );
 
         // Kerning am Font setzen, vorher in Twips umrechnen
@@ -3471,7 +3471,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         //enable/disable and set min/max of the Edit
         KerningSelectHdl_Impl(&m_aKerningLB);
         //the attribute value must be displayed also if it's above the maximum allowed value
-        long nVal = m_aKerningEdit.GetMax();
+        long nVal = static_cast<long>(m_aKerningEdit.GetMax());
         if(nVal < nKerning)
             m_aKerningEdit.SetMax( nKerning );
         m_aKerningEdit.SetValue( nKerning );
@@ -3652,7 +3652,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     if ( nPos == LW_GESPERRT || nPos == LW_SCHMAL )
     {
-        long nTmp = m_aKerningEdit.GetValue();
+        long nTmp = static_cast<long>(m_aKerningEdit.GetValue());
         long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
         nKerning = (short)m_aKerningEdit.Denormalize( nVal );
 
