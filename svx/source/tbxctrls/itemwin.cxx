@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:03:41 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,7 +597,7 @@ void SvxMetricField::ReleaseFocus_Impl()
 
 void SvxMetricField::Down()
 {
-    long nValue = GetValue();
+    sal_Int64 nValue = GetValue();
     nValue -= GetSpinSize();
 
     // Um unter OS/2 einen Sprung auf Max zu verhindern
