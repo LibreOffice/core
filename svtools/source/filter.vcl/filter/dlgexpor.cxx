@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:51:40 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,8 +187,8 @@ IMPL_LINK( DlgExportPix, OK, void *, EMPTYARG )
 
     sal_Int32   nRes = Max( Min( aCbbRes.GetText().ToInt32(), sal_Int32( 600 ) ), sal_Int32( 75 ) );
     ::com::sun::star::awt::Size aSize(
-        (long)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM ),
-            (long)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
+        static_cast<long>(MetricField::ConvertDoubleValue( static_cast<double>(aMtfSizeX.GetValue()), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM )),
+            static_cast<long>(MetricField::ConvertDoubleValue( static_cast<double>(aMtfSizeY.GetValue()), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM )) );
 
     sal_Int32 nMode;
     if ( aRbRes.IsChecked() )
@@ -398,8 +398,8 @@ IMPL_LINK( DlgExportVec, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
     ::com::sun::star::awt::Size aSize(
-        (long)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM ),
-            (long)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
+        static_cast<long>(MetricField::ConvertDoubleValue( static_cast<double>(aMtfSizeX.GetValue()), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM )),
+            static_cast<long>(MetricField::ConvertDoubleValue( static_cast<double>(aMtfSizeY.GetValue()), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM )) );
 
     sal_Int32 nMode;
     if ( aRbSize.IsChecked() )
