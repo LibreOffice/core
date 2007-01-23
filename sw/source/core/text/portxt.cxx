@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:50:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:32:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -756,7 +756,7 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    if( rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
+    if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
     {
         const XubString aTxt( ' ' );
         rInf.DrawText( aTxt, *this, 0, 1, false );
