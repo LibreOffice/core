@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:11:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1233,10 +1233,9 @@ void FontSizeBox::Modify()
 
 // -----------------------------------------------------------------------
 
-void FontSizeBox::Fill( const FontInfo& rInfo, const FontList* pList )
+void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
 {
     // remember for relative mode
-    aFontInfo = rInfo;
     pFontList = pList;
 
     // no font sizes need to be set for relative mode
@@ -1245,7 +1244,17 @@ void FontSizeBox::Fill( const FontInfo& rInfo, const FontList* pList )
 
     // query font sizes
     const long* pTempAry;
-    const long* pAry = pList->GetSizeAry( rInfo );
+    const long* pAry = 0;
+
+    if( pInfo )
+    {
+        aFontInfo = *pInfo;
+        pAry = pList->GetSizeAry( *pInfo );
+    }
+    else
+    {
+        pAry = pList->GetStdSizeAry();
+    }
 
     if ( pAry == pList->GetStdSizeAry() )
     {
@@ -1391,7 +1400,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
             SetMax( 9999 );
             SetUnit( FUNIT_POINT );
             if ( pFontList )
-                Fill( aFontInfo, pFontList );
+                Fill( &aFontInfo, pFontList );
         }
 
         SetText( aStr );
