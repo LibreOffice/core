@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:11:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 09:00:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1607,7 +1607,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                             nAnz = nOfs;
                             nOfs &= 0x000FFFFF;
                             nAnz >>= 20;
-                            while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs < nPersistPtrAnz ) )
+                            while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs <= nPersistPtrAnz ) )
                             {
                                 sal_uInt32 nPt;
                                 rStCtrl >> nPt;
