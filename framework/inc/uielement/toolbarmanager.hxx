@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:07:15 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         DECL_LINK( MenuDeactivate, Menu * );
         DECL_LINK( AsyncUpdateControllersHdl, Timer * );
         DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo* );
+
+        virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
         void RemoveControllers();
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
