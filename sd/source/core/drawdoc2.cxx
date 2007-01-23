@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:31:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,16 +433,7 @@ SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
 
     ((SdPage*)pPage)->DisconnectLink();
-    if (mpCustomShowList)
-    {
-        for (ULONG i = 0; i < mpCustomShowList->Count(); i++)
-        {
-            // Ggf. Seite aus der CustomShows ausfuegen
-            SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(i);
-            pCustomShow->Remove(pPage);
-        }
-    }
-
+    ReplacePageInCustomShows( dynamic_cast< SdPage* >( pPage ), 0 );
     UpdatePageObjectsInNotes(nPgNum);
 
     return pPage;
