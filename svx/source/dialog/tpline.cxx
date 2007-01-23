@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:37:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:37:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -815,7 +815,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     if(nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || bNewSize)
     {
-        //wurde also per Auswahl gesetzt oder Größe ist anders
+        //wurde also per Auswahl gesetzt oder Grï¿½ï¿½e ist anders
         SvxSizeItem  aSItem(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),aSymbolSize);
         const SfxPoolItem* pSOld = GetOldItem( rAttrs, rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE) );
         bNewSize  = pSOld ? *(const SvxSizeItem *)pSOld != aSItem : bNewSize ;
@@ -1627,7 +1627,7 @@ void SvxLineTabPage::FillUserData()
 
 
 //#58425# Symbole auf einer Linie (z.B. StarChart)
-//Handler für Popup-Menue der Symbolauswahl (NumMenueButton)
+//Handler fï¿½r Popup-Menue der Symbolauswahl (NumMenueButton)
 //der folgende Link stammt urspruenglich aus SvxNumOptionsTabPage
 IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 {
@@ -1765,7 +1765,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
     return 0;
 }
 //#58425# Symbole auf einer Linie (z.B. StarChart)
-//Handler für Popup-Menue der Symbolauswahl (NumMenueButton)
+//Handler fï¿½r Popup-Menue der Symbolauswahl (NumMenueButton)
 //der folgende Link stammt urspruenglich aus SvxNumOptionsTabPage:
 IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
 {
@@ -1804,7 +1804,7 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
 }
 
 //#58425# Symbole auf einer Linie (z.B. StarChart)
-//Handler für Menuebutton
+//Handler fï¿½r Menuebutton
 IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 {
     USHORT nItemId = pButton->GetCurItemId();
@@ -1847,7 +1847,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
             SVX_TRACE(213, aStr );
 #endif
             bDontSetSize=TRUE;
-            bNewSize=false; //frühere Änderungen gelten nicht in diesem Fall!
+            bNewSize=false; //frï¿½here ï¿½nderungen gelten nicht in diesem Fall!
             nSymbolType=SVX_SYMBOLTYPE_AUTO;
             bEnable=FALSE;
         }
@@ -1927,8 +1927,8 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
     BOOL bWidth = (BOOL)(pField == &aSymbolWidthMF);
     bLastWidthModified = bWidth;
     BOOL bRatio = aSymbolRatioCB.IsChecked();
-    long nWidthVal = aSymbolWidthMF.Denormalize(aSymbolWidthMF.GetValue(FUNIT_100TH_MM));
-    long nHeightVal= aSymbolHeightMF.Denormalize(aSymbolHeightMF.GetValue(FUNIT_100TH_MM));
+    long nWidthVal = static_cast<long>(aSymbolWidthMF.Denormalize(aSymbolWidthMF.GetValue(FUNIT_100TH_MM)));
+    long nHeightVal= static_cast<long>(aSymbolHeightMF.Denormalize(aSymbolHeightMF.GetValue(FUNIT_100TH_MM)));
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MAP_100TH_MM,(MapUnit)ePoolUnit );
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MAP_100TH_MM,(MapUnit)ePoolUnit);
     aSymbolSize=Size(nWidthVal,nHeightVal);
