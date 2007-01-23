@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:01:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:30:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,12 +328,16 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                     pColl->SetAttr( aLR );
                 }
 
-                if (! pDoc->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE))
+                // --> OD 2006-11-20 #i71764#
+                // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
+                // All paragraph styles, which are assigned to a level of the
+                // outline style has to have the outline style set as its list style.
                 {
                     SwNumRuleItem aItem(pOutlineRule->GetName());
 
                     pColl->SetAttr(aItem);
                 }
+                // <--
             }
         }
         pColl->SetNextTxtFmtColl( *pDoc->GetTxtCollFromPool(
