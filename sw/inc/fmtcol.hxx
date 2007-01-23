@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:23:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,18 @@ public:
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
 
     BOOL IsAtDocNodeSet() const;
+
+    // --> OD 2006-11-22 #i71574#
+    inline const bool AssignedToListLevelOfOutlineStyle() const
+    {
+        return ( 0 <= GetOutlineLevel() && GetOutlineLevel() < MAXLEVEL );
+    }
+
+    inline void DeleteAssignmentToListLevelOfOutlineStyle()
+    {
+        SetOutlineLevel( NO_NUMBERING );
+    }
+    // <--
 
 /*----------------- JP 09.08.94 17:36 -------------------
  wird die Funktionalitaet von Zeichenvorlagen an Absatzvorlagen
