@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:20:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 09:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ public:
                                              SvxFontHeightToolBoxControl& rCtrl );
 
     void                statusChanged_Impl( long nHeight, SfxItemState eState );
-    void                Update( const SvxFontItem& rFontItem );
+    void                Update( const SvxFontItem* pFontItem );
 
     virtual long        Notify( NotifyEvent& rNEvt );
 };
@@ -1015,7 +1015,7 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, SfxItemState eState )
 
 // -----------------------------------------------------------------------
 
-void SvxFontSizeBox_Impl::Update( const SvxFontItem& rFontItem )
+void SvxFontSizeBox_Impl::Update( const SvxFontItem* pFontItem )
 {
     // Fontliste vom Document abholen
     const SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -1024,12 +1024,15 @@ void SvxFontSizeBox_Impl::Update( const SvxFontItem& rFontItem )
 
     // Sizes-Liste auff"ullen
     long nOldVal = GetValue(); // alten Wert merken
-    FontInfo _aFontInfo;
     const FontList* _pFontList = pFontListItem ? pFontListItem->GetFontList() : NULL;
-    if ( _pFontList )
+    if ( _pFontList && pFontItem )
     {
-        _aFontInfo = FontInfo( _pFontList->Get( rFontItem.GetFamilyName(), rFontItem.GetStyleName() ) );
-        Fill( _aFontInfo, _pFontList );
+        FontInfo _aFontInfo( _pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() ) );
+        Fill( &_aFontInfo, _pFontList );
+    }
+    else
+    {
+        Fill( NULL, _pFontList );
     }
     SetValue( nOldVal ); // alten Wert wiederherstellen
     aCurText = GetText(); // zum R"ucksetzen bei ESC merken
@@ -2821,8 +2824,7 @@ void SvxFontHeightToolBoxControl::StateChanged(
         delete pFontItem;
         pFontItem = (eState == SFX_ITEM_AVAILABLE) ? (SvxFontItem*)pState->Clone() : NULL;
 
-        if ( pFontItem )
-            pBox->Update( *pFontItem );
+        pBox->Update( pFontItem );
     }
 }
 
