@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:20:58 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,7 +492,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 {
 // updating the FilterData sequence and storing FilterData to configuration
     paParent->mbUseLosslessCompression = maRbLosslessCompression.IsChecked();
-    paParent->mnQuality = maNfQuality.GetValue();
+    paParent->mnQuality = static_cast<sal_Int32>(maNfQuality.GetValue());
     paParent->mbReduceImageResolution = maCbReduceImageResolution.IsChecked();
     paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().ToInt32();
     paParent->mbUseTaggedPDF =  maCbTaggedPDF.IsChecked();
@@ -638,10 +638,10 @@ void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     else if( maRbMagnZoom.IsChecked() )
     {
         paParent->mnMagnification = 4;
-        paParent->mnZoom = maNumZoom.GetValue();
+        paParent->mnZoom = static_cast<sal_Int32>(maNumZoom.GetValue());
     }
 
-    paParent->mnInitialPage = maNumInitialPage.GetValue();
+    paParent->mnInitialPage = static_cast<sal_Int32>(maNumInitialPage.GetValue());
 
     paParent->mnPageLayout = 0;
     if( maRbPgLySinglePage.IsChecked() )
@@ -806,7 +806,7 @@ void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     paParent->mbDisplayPDFDocumentTitle = maCbDispDocTitle.IsChecked();
     paParent->mbUseTransitionEffects = maCbTransitionEffects.IsChecked();
     paParent->mnOpenBookmarkLevels = maRbAllBookmarkLevels.IsChecked() ?
-                                     -1 : maNumBookmarkLevels.GetValue();
+                                     -1 : static_cast<sal_Int32>(maNumBookmarkLevels.GetValue());
 }
 
 // -----------------------------------------------------------------------------
