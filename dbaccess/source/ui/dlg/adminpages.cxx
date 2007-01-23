@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:07:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,7 +297,7 @@ DBG_NAME(OGenericAdministrationPage)
     {
         if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().ToInt32()) )
         {
-            _rSet.Put(SfxInt32Item(_nID, _pEdit->GetValue()));
+            _rSet.Put(SfxInt32Item(_nID, static_cast<INT32>(_pEdit->GetValue())));
             _bChangedSomething = sal_True;
         }
     }
