@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.108 $
+#   $Revision: 1.109 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 15:10:33 $
+#   last change: $Author: obo $ $Date: 2007-01-23 07:11:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ SHL4IMPLIB=		ifwk
 
 SHL4OBJS=       \
                 $(SLO)$/desktop.obj					\
-          $(SLO)$/loaddispatcher.obj          \
+                $(SLO)$/loaddispatcher.obj          \
                 $(SLO)$/dispatchprovider.obj		\
                 $(SLO)$/dispatchinformationprovider.obj		\
                 $(SLO)$/documentproperties.obj		\
@@ -328,6 +328,7 @@ SHL4OBJS=       \
                 $(SLO)$/spinfieldtoolbarcontroller.obj    \
                 $(SLO)$/edittoolbarcontroller.obj         \
                 $(SLO)$/dropdownboxtoolbarcontroller.obj  \
+                $(SLO)$/uriabbreviation.obj               \
                 $(SLO)$/popupmenudispatcher.obj
 
 SHL4STDLIBS=	\
@@ -383,6 +384,7 @@ SHL5DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN)
 DEF5NAME=		$(SHL5TARGET)
 
 SHL5VERSIONMAP= exports.map
+            
 
 # --- Targets -----------------------------------------------------------------
 
