@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:50:49 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1410,7 +1410,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
 
 // -----------------------------------------------------------------------
 
-XubString FontSizeBox::CreateFieldText( long nValue ) const
+XubString FontSizeBox::CreateFieldText( sal_Int64 nValue ) const
 {
     XubString sRet( MetricBox::CreateFieldText( nValue ) );
     if ( bRelativeMode && bPtRelative && (0 <= nValue) && sRet.Len() )
@@ -1420,13 +1420,15 @@ XubString FontSizeBox::CreateFieldText( long nValue ) const
 
 // -----------------------------------------------------------------------
 
-void FontSizeBox::SetValue( long nNewValue, FieldUnit eInUnit )
+void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     if ( !bRelative )
     {
-        long nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
+        sal_Int64 nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
         FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
-        String aName = aFontSizeNames.Size2Name( nTempValue );
+        // conversion loses precision; however font sizes should
+        // never have a problem with that
+        String aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
         if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
         {
             mnLastValue = nTempValue;
@@ -1441,38 +1443,38 @@ void FontSizeBox::SetValue( long nNewValue, FieldUnit eInUnit )
 
 // -----------------------------------------------------------------------
 
-void FontSizeBox::SetValue( long nNewValue )
+void FontSizeBox::SetValue( sal_Int64 nNewValue )
 {
     SetValue( nNewValue, FUNIT_NONE );
 }
 
 // -----------------------------------------------------------------------
 
-long FontSizeBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
+sal_Int64 FontSizeBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
 {
     if ( !bRelative )
     {
-        long nComboVal = (long)ComboBox::GetEntryData( nPos );
+        sal_Int64 nComboVal = static_cast<sal_Int64>(reinterpret_cast<long>(ComboBox::GetEntryData( nPos )));
         if ( nComboVal < 0 )     // marked as special?
         {
-            return MetricField::ConvertValue( (long)-nComboVal, mnBaseValue, GetDecimalDigits(),
-                                                meUnit, eOutUnit );
+            return MetricField::ConvertValue( -nComboVal, mnBaseValue, GetDecimalDigits(),
+                                              meUnit, eOutUnit );
         }
     }
 
     // do normal font size processing
-    long nRetValue = MetricBox::GetValue( nPos, eOutUnit );
+    sal_Int64 nRetValue = MetricBox::GetValue( nPos, eOutUnit );
     return nRetValue;
 }
 
 // -----------------------------------------------------------------------
 
-long FontSizeBox::GetValue( FieldUnit eOutUnit ) const
+sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 {
     if ( !bRelative )
     {
         FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
-        long nValue = aFontSizeNames.Name2Size( GetText() );
+        sal_Int64 nValue = aFontSizeNames.Name2Size( GetText() );
         if ( nValue)
             return MetricField::ConvertValue( nValue, GetBaseValue(), GetDecimalDigits(), GetUnit(), eOutUnit );
     }
@@ -1482,7 +1484,7 @@ long FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 
 // -----------------------------------------------------------------------
 
-long FontSizeBox::GetValue() const
+sal_Int64 FontSizeBox::GetValue() const
 {
     // implementation not inline, because it is a virtual function
     return GetValue( FUNIT_NONE );
@@ -1490,13 +1492,15 @@ long FontSizeBox::GetValue() const
 
 // -----------------------------------------------------------------------
 
-void FontSizeBox::SetUserValue( long nNewValue, FieldUnit eInUnit )
+void FontSizeBox::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     if ( !bRelative )
     {
-        long nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
+        sal_Int64 nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
         FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
-        String aName = aFontSizeNames.Size2Name( nTempValue );
+        // conversion loses precision
+        // however font sizes should never have a problem with that
+        String aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
         if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
         {
             mnLastValue = nTempValue;
