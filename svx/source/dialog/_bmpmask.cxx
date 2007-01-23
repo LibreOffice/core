@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:03:42 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -687,28 +687,28 @@ USHORT SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, ULONG* pTo
     {
         pSrcCols[nCount] = pQSet1->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor1.GetSelectEntryColor();
-        pTols[nCount++] = aSp1.GetValue();
+        pTols[nCount++] = static_cast<ULONG>(aSp1.GetValue());
     }
 
     if ( aCbx2.IsChecked() )
     {
         pSrcCols[nCount] = pQSet2->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor2.GetSelectEntryColor();
-        pTols[nCount++] = aSp2.GetValue();
+        pTols[nCount++] = static_cast<ULONG>(aSp2.GetValue());
     }
 
     if ( aCbx3.IsChecked() )
     {
         pSrcCols[nCount] = pQSet3->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor3.GetSelectEntryColor();
-        pTols[nCount++] = aSp3.GetValue();
+        pTols[nCount++] = static_cast<ULONG>(aSp3.GetValue());
     }
 
     if ( aCbx4.IsChecked() )
     {
         pSrcCols[nCount] = pQSet4->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor4.GetSelectEntryColor();
-        pTols[nCount++] = aSp4.GetValue();
+        pTols[nCount++] = static_cast<ULONG>(aSp4.GetValue());
     }
 
     return nCount;
