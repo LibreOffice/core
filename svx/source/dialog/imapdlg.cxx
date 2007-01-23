@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:35:13 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ SFX_IMPL_MODELESSDIALOG( SvxIMapDlgChildWindow, SID_IMAP );
 
 inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
-    String aVal = UniString::CreateFromInt32( MetricField::ConvertValue( nVal_100, 2, MAP_100TH_MM, eFieldUnit ) );
+    String aVal = UniString::CreateFromInt64( MetricField::ConvertValue( nVal_100, 2, MAP_100TH_MM, eFieldUnit ) );
 
     while( aVal.Len() < 3 )
         aVal.Insert( sal_Unicode('0'), 0 );
