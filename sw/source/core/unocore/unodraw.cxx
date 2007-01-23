@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:12:05 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,9 @@
 #endif
 // <--
 // --> OD 2005-03-10 #i44334#, #i44681#
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
-#include <basegfx/matrix/b3dhommatrix.hxx>
+// --> OD 2007-01-03 #i73079# - use correct matrix type
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 // <--
 
@@ -2468,7 +2469,9 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
             // apply translation difference to transformation matrix.
             if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
             {
-                ::basegfx::B3DHomMatrix aTempMatrix;
+                // --> OD 2007-01-03 #i73079# - use correct matrix type
+                ::basegfx::B2DHomMatrix aTempMatrix;
+                // <--
 
                 aTempMatrix.set(0, 0, aMatrix.Line1.Column1 );
                 aTempMatrix.set(0, 1, aMatrix.Line1.Column2 );
@@ -2480,7 +2483,9 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
                 aTempMatrix.set(2, 1, aMatrix.Line3.Column2 );
                 aTempMatrix.set(2, 2, aMatrix.Line3.Column3 );
 
-                aTempMatrix.translate( aTranslateDiff.X, aTranslateDiff.Y, 0.0 );
+                // --> OD 2007-01-03 #i73079#
+                aTempMatrix.translate( aTranslateDiff.X, aTranslateDiff.Y );
+                // <--
 
                 aMatrix.Line1.Column1 = aTempMatrix.get(0, 0);
                 aMatrix.Line1.Column2 = aTempMatrix.get(0, 1);
