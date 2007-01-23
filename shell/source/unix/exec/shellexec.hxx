@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellexec.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 12:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
+#endif
+
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -89,5 +93,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 };
+
+
+// helper function - needed for urltest
+void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL);
 
 #endif
