@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:18:48 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:35:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,7 +510,7 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
 
     if( aMtrFldDecimalPlaces.GetText() != aMtrFldDecimalPlaces.GetSavedValue() )
     {
-        nValue = aMtrFldDecimalPlaces.GetValue();
+        nValue = static_cast<INT32>(aMtrFldDecimalPlaces.GetValue());
         rAttrs.Put(
             SdrMeasureDecimalPlacesItem(
                 sal::static_int_cast< INT16 >( nValue ) ) );
