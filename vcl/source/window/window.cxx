@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.249 $
+ *  $Revision: 1.250 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:02:03 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,7 @@
 #endif
 
 #include <pdfextoutdevdata.hxx>
+#include "lazydelete.hxx"
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -4305,6 +4306,8 @@ Window::Window( Window* pParent, const ResId& rResId )
 
 Window::~Window()
 {
+    vcl::LazyDeletor<Window>::Undelete( this );
+
     DBG_DTOR( Window, ImplDbgCheckWindow );
     DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
 
@@ -4737,6 +4740,12 @@ Window::~Window()
 
     // should be the last statements
     delete mpWindowImpl; mpWindowImpl = NULL;
+}
+
+// -----------------------------------------------------------------------
+void Window::doLazyDelete()
+{
+    vcl::LazyDeletor<Window>::Delete( this );
 }
 
 // -----------------------------------------------------------------------
