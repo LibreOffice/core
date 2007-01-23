@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtnotification.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:30:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,16 +44,23 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
+#include <rtl/ref.hxx>
+
 class OleEmbeddedObject;
+
+#define OLECOMP_ONVIEWCHANGE    1
+#define OLECOMP_ONCLOSE         2
 
 class MainThreadNotificationRequest
 {
     OleEmbeddedObject* m_pObject;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XEmbeddedObject > m_xObject;
+
+    sal_uInt16 m_nNotificationType;
     sal_uInt32 m_nAspect;
 
 public:
-    MainThreadNotificationRequest( OleEmbeddedObject* pObj, sal_uInt32 nAspect );
+    MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect = 0 );
 
     static long worker( MainThreadNotificationRequest*, MainThreadNotificationRequest* );
 
