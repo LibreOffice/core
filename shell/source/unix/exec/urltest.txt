@@ -1,0 +1,11 @@
+http://www.openoffice.org
+http://en.wiktionary.org/wiki/harmless';CMD=lsx-lx$HOME;IFS=x;$CMD;#'
+http://en.wikipedia.org/wiki/Shell_(computers)
+http://www.google.com/search?hl=$100+bill
+http://unix.t-a-y-l-o-r.com/;clear;ls
+http://www.google.com/;exec mozilla;
+http://www.yahoo.com/<>
+http://www.yahoo.com/\
+http://www.yahoo.com/"
+http://www.yahoo.com/'
+http://www.yahoo.com/;echo 'this';
