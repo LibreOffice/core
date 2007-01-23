@@ -4,9 +4,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:24:21 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -591,7 +591,7 @@ void SvtHistoryOptions_Impl::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
             }
         }
         *pMaxSize = nSize;
-        ConfigItem::SetModified();
+        Commit();
     }
 }
 
@@ -608,7 +608,7 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
     if( pList!=NULL && pMaxSize!=NULL )
     {
         pList->clear();
-        ConfigItem::SetModified();
+        Commit();
     }
 }
 
@@ -658,14 +658,14 @@ void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    
                 pList->pop_back();
             // Append new item to list.
             pList->push_front( aItem );
-            ConfigItem::SetModified();
+            Commit();
         }
         else if (pItem != pList->begin())
         {
             IMPL_THistoryItem aTempItem = *pItem;
             pList->erase(pItem);
             pList->push_front(aTempItem);
-            ConfigItem::SetModified();
+            Commit();
         }
     }
 }
