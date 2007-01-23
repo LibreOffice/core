@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:08:39 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -452,6 +452,12 @@ short SwOutlineTabDialog::Ok()
     // geschehen, um evtl. aufgehobene Zuordnungen
     // auch wieder zu loeschen
 
+    // --> OD 2006-12-11 #130443#
+    // encapsulate changes into a action to avoid effects on the current cursor
+    // position during the changes.
+    rWrtSh.StartAction();
+    // <--
+
     const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
 
     USHORT i, nCount = rWrtSh.GetTxtFmtCollCount();
@@ -515,6 +521,10 @@ short SwOutlineTabDialog::Ok()
     }
 
     rWrtSh.SetOutlineNumRule( *pNumRule);
+
+    // --> OD 2006-12-11 #130443#
+    rWrtSh.EndAction();
+    // <--
 
     return RET_OK;
 }
