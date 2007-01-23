@@ -4,6 +4,11 @@
 #include <sot/storage.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_H_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+
+
 #include <libwpd/WPXStream.h>
 
 class WPXSvInputStream : public WPXInputStream
@@ -15,6 +20,7 @@ public:
 
     virtual bool isOLEStream();
     virtual WPXInputStream * getDocumentOLEStream();
+    virtual WPXInputStream * getDocumentOLEStream(const char *name);
 
     virtual const uint8_t *read(size_t numBytes, size_t &numBytesRead);
     virtual int seek(long offset, WPX_SEEK_TYPE seekType);
@@ -25,9 +31,10 @@ private:
     SotStorageRef       mxChildStorage;
     SotStorageStreamRef mxChildStream;
     ::com::sun::star::uno::Reference<
-              ::com::sun::star::io::XInputStream > mxStream;
+            ::com::sun::star::io::XInputStream > mxStream;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::io::XSeekable > mxSeekable;
     ::com::sun::star::uno::Sequence< sal_Int8 > maData;
-    sal_Int64 mnOffset;
     sal_Int64 mnLength;
 };
 
