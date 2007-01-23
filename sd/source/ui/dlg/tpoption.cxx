@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:10:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,7 +429,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
         if( eFUnit != aMtrFldOriginalWidth.GetUnit() )
         {
             // Metriken einstellen
-            long nVal = aMtrFldOriginalWidth.Denormalize( aMtrFldOriginalWidth.GetValue( FUNIT_TWIP ) );
+            sal_Int64 nVal = aMtrFldOriginalWidth.Denormalize( aMtrFldOriginalWidth.GetValue( FUNIT_TWIP ) );
             SetFieldUnit( aMtrFldOriginalWidth, eFUnit, TRUE );
             aMtrFldOriginalWidth.SetValue( aMtrFldOriginalWidth.Normalize( nVal ), FUNIT_TWIP );
 
@@ -649,7 +649,7 @@ IMPL_LINK( SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox *, EMPTYARG )
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         FieldUnit eUnit = (FieldUnit)(long)aLbMetric.GetEntryData( nPos );
-        long nVal =
+        sal_Int64 nVal =
             aMtrFldTabstop.Denormalize( aMtrFldTabstop.GetValue( FUNIT_TWIP ) );
         SetFieldUnit( aMtrFldTabstop, eUnit );
         aMtrFldTabstop.SetValue( aMtrFldTabstop.Normalize( nVal ), FUNIT_TWIP );
@@ -775,14 +775,14 @@ IMPL_LINK( SdTpOptionsMisc, ModifyScaleHdl, void *, EMPTYARG )
 IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
 {
     // Berechnen des Massstabs
-    long nOrgW = aMtrFldOriginalWidth.GetValue();
-    long nOrgH = aMtrFldOriginalHeight.GetValue();
+    long nOrgW = static_cast<long>(aMtrFldOriginalWidth.GetValue());
+    long nOrgH = static_cast<long>(aMtrFldOriginalHeight.GetValue());
 
     if( nOrgW == 0 || nOrgH == 0 )
         return( 0L );
 
-    Fraction aFract1( nOrgW, aMtrFldInfo1.GetValue() );
-    Fraction aFract2( nOrgH, aMtrFldInfo2.GetValue() );
+    Fraction aFract1( nOrgW, static_cast<long>(aMtrFldInfo1.GetValue()) );
+    Fraction aFract2( nOrgH, static_cast<long>(aMtrFldInfo2.GetValue()) );
     Fraction aFract( aFract1 > aFract2 ? aFract1 : aFract2 );
 
     long nValue;
