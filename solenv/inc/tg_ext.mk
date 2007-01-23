@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 16:35:56 $
+#   last change: $Author: obo $ $Date: 2007-01-23 06:34:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     +-$(TOUCH) $(@:d)$(@:b)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
-create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
+create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     @+-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp >& $(NULLDEV)
     @+-$(RM) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
