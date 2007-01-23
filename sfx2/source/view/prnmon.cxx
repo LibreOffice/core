@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:50:24 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@
 #include "sfxresid.hxx"
 #include "event.hxx"
 #include "request.hxx"
+#include "app.hxx"
 
 #include "view.hrc"
 
@@ -303,6 +304,7 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
 {
     pImp->pPrinter->SetEndPrintHdl( LINK( this, SfxPrintProgress, EndPrintNotify ) );
     pImp->pPrinter->SetErrorHdl( LINK( this, SfxPrintProgress, PrintErrorNotify ) );
+    pImp->pPrinter->SetStartPrintHdl( LINK( this, SfxPrintProgress, StartPrintNotify ) );
     pImp->bCallbacks = TRUE;
 
     SfxObjectShell* pDoc = pViewSh->GetObjectShell();
@@ -410,6 +412,14 @@ IMPL_LINK_INLINE_START( SfxPrintProgress, PrintErrorNotify, void *, EMPTYARG )
 IMPL_LINK_INLINE_END( SfxPrintProgress, PrintErrorNotify, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
+
+IMPL_LINK( SfxPrintProgress, StartPrintNotify, void *, EMPTYARG )
+{
+    SfxObjectShell *pObjShell = pImp->pViewShell->GetObjectShell();
+    SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_PRINTDOC, pObjShell));
+    pObjShell->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_STARTED, NULL, NULL ) );
+    return 0;
+}
 
 IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, EMPTYARG )
 {
