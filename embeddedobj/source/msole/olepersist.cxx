@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:48 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1042,6 +1042,20 @@ void OleEmbeddedObject::OnViewChanged_Impl()
 }
 
 //------------------------------------------------------
+void OleEmbeddedObject::OnClosed_Impl()
+{
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nObjectState != embed::EmbedStates::LOADED )
+    {
+        sal_Int32 nOldState = m_nObjectState;
+        m_nObjectState = embed::EmbedStates::LOADED;
+        StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+    }
+}
+
+//------------------------------------------------------
 ::rtl::OUString OleEmbeddedObject::CreateTempURLEmpty_Impl()
 {
     OSL_ENSURE( !m_aTempURL.getLength(), "The object has already the temporary file!" );
@@ -1745,7 +1759,8 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     m_xNewCachedVisRepl = uno::Reference< io::XStream >();
     m_bStoreLoaded = sal_False;
 
-    if ( bUseNew && m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
+    if ( bUseNew && m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded
+      && m_nObjectState != embed::EmbedStates::LOADED )
     {
         // the object replacement image should be updated, so the cached size as well
         m_bHasCachedSize = sal_False;
@@ -1889,7 +1904,8 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         }
 
         // the replacement is changed probably, and it must be in the object stream
-        m_xCachedVisualRepresentation = uno::Reference< io::XStream >();
+        if ( !m_pOleComponent->IsWorkaroundActive() )
+            m_xCachedVisualRepresentation = uno::Reference< io::XStream >();
         SetVisReplInStream( sal_True );
     }
 #endif
@@ -1909,7 +1925,8 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         }
         else
         {
-            m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
+            if ( !m_xCachedVisualRepresentation.is() )
+                m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
             RemoveVisualCache_Impl( m_xObjectStream );
         }
 
