@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:41:15 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 07:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1779,7 +1779,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 							<desc>Defines the min range for the picklist size.</desc>
 						</info>
 					</minInclusive>
-					<maxInclusive oor:value="10">
+					<maxInclusive oor:value="100">
 						<info>
 							<desc>Defines the max range for the picklist size.</desc>
 						</info>
