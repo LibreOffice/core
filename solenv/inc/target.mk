@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.186 $
+#   $Revision: 1.187 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:03:29 $
+#   last change: $Author: obo $ $Date: 2007-01-23 06:34:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@ SOLARINC+=$(DAOINC)
 INCLUDE:=
 .EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(UNOINCLUDES) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(UNOINCLUDES) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 INCLUDE_C=$(subst,$/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(INCLUDE))
 .EXPORT : LIB
@@ -1352,7 +1352,6 @@ ALLTAR:	\
         last_target
 
 .ELSE			# "$(L10N_framework)"!=""
-#		$(NOOPTTARGET) $(EXCEPTIONSTARGET)
 
 ALLTAR: \
         "$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk" \
@@ -1482,10 +1481,6 @@ TARGETDEPS+=$(EXCEPTIONSNOOPTTARGET)
 TARGETDEPS+=$(NOOPTTARGET)
 .ENDIF
 
-.IF "$(EXCEPTIONS_FLAG)"==""
-TARGETDEPS+=$(EXCEPTIONSTARGET)
-.ENDIF
-
 #don't override .TARGETS when called with targets
 .IF "$(MAKETARGETS)$(TNR)$(EXCEPTIONSNOOPT_FLAG)$(EXCEPTIONS_FLAG)$(NOOPT_FLAG)"==""
 .IF "$(TARGETDEPS)"!=""
@@ -1519,9 +1514,6 @@ $(NOOPTTARGET) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(NOOPTFILES)"!=""
 $(NOOPTFILES) : $(UNOUCRHEADER)
-.ENDIF			# "$(SLOFILES)"!=""
-.IF "$(EXCEPTIONSTARGET)"!=""
-$(EXCEPTIONSTARGET) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(EXCEPTIONSFILES)"!=""
 $(EXCEPTIONSFILES) : $(UNOUCRHEADER)
@@ -1994,27 +1986,6 @@ $(NOOPTFILES):
 .ENDIF
 .ENDIF
 
-
-# ----------------------------------
-# - EXCEPTIONS - files mit exceptions -
-# ----------------------------------
-
-.IF "$(EXCEPTIONSTARGET)" != ""
-.IF "$(EXCEPTIONS_FLAG)" == ""
-
-$(EXCEPTIONSTARGET):
-    @echo --- EXCEPTIONSFILES ---
-    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
-    @echo --- EXCEPTIONSFILES OVER ---
-
-$(EXCEPTIONSFILES):
-    @echo --- EXCEPTIONS ---
-    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $@
-    @echo --- EXCEPTIONS OVER ---
-
-
-.ENDIF
-.ENDIF
 
 # ----------------------------------
 # - EXCEPTIONSNOOPT - files with exceptions, without optimization -
