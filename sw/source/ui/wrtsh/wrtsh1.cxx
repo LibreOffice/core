@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:57:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1190,12 +1190,17 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 pCollRule = 0L;
             }
         }
-        if ( pCollRule == NULL &&
-             NO_NUMBERING != pColl->GetOutlineLevel() &&
-             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) )
-        {
-            pCollRule = GetDoc()->GetOutlineNumRule();
-        }
+        // --> OD 2006-11-20 #i71764#
+        // Document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE has no influence
+        // any more.
+//        if ( pCollRule == NULL &&
+//             NO_NUMBERING != pColl->GetOutlineLevel() &&
+//             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) )
+//        {
+//            pCollRule = GetDoc()->GetOutlineNumRule();
+//        }
+        // <--
+
         // <--
         // --> OD 2005-10-25 #b6340308#
         if ( !pCollRule )
