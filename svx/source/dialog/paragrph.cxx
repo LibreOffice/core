@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:33:43 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,8 +231,8 @@ IMPL_LINK( SvxStdParagraphTabPage, ELRLoseFocusHdl, Edit *, EMPTYARG )
     FieldUnit eUnit =
         MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
-    long nL = aLeftIndent.Denormalize( aLeftIndent.GetValue( eUnit ) );
-    long nR = aRightIndent.Denormalize( aRightIndent.GetValue( eUnit ) );
+    sal_Int64 nL = aLeftIndent.Denormalize( aLeftIndent.GetValue( eUnit ) );
+    sal_Int64 nR = aRightIndent.Denormalize( aRightIndent.GetValue( eUnit ) );
     String aTmp = aFLineIndent.GetText();
 
     // Erstzeilen Einzug
@@ -242,7 +242,7 @@ IMPL_LINK( SvxStdParagraphTabPage, ELRLoseFocusHdl, Edit *, EMPTYARG )
         aFLineIndent.SetMin( aFLineIndent.Normalize( -nL ), eUnit );
 
     // Check nur fuer konkrete Breite (Shell)
-    long nTmp = nWidth - nL - nR - MM50;
+    sal_Int64 nTmp = nWidth - nL - nR - MM50;
     aFLineIndent.SetMax( aFLineIndent.Normalize( nTmp ), eUnit );
 
     if ( !aTmp.Len() )
@@ -304,8 +304,8 @@ BOOL SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
             case LLINESPACE_PROP:
                 SetLineSpace_Impl( aSpacing, nPos,
-                                   aLineDistAtPercentBox.Denormalize(
-                                   aLineDistAtPercentBox.GetValue() ) );
+                                   static_cast<long>(aLineDistAtPercentBox.Denormalize(
+                                   aLineDistAtPercentBox.GetValue() )) );
                 break;
 
             case LLINESPACE_MIN:
@@ -875,7 +875,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
         {
             aLineDistAtPercentBox.Hide();
             pActLineDistFld = &aLineDistAtMetricBox;
-            long nTemp = aLineDistAtMetricBox.GetValue();
+            sal_Int64 nTemp = aLineDistAtMetricBox.GetValue();
             aLineDistAtMetricBox.SetMin(aLineDistAtMetricBox.Normalize(nMinFixDist), FUNIT_TWIP);
 
             // wurde der Wert beim SetMin veraendert, dann ist es Zeit
@@ -941,9 +941,9 @@ void SvxStdParagraphTabPage::UpdateExample_Impl( BOOL bAll )
     aExampleWin.SetFirstLineOfst(
         (short)aFLineIndent.Denormalize( aFLineIndent.GetValue( FUNIT_TWIP ) ) );
     aExampleWin.SetLeftMargin(
-        aLeftIndent.Denormalize( aLeftIndent.GetValue( FUNIT_TWIP ) ) );
+        static_cast<long>(aLeftIndent.Denormalize( aLeftIndent.GetValue( FUNIT_TWIP ) ) ) );
     aExampleWin.SetRightMargin(
-        aRightIndent.Denormalize( aRightIndent.GetValue( FUNIT_TWIP ) ) );
+        static_cast<long>(aRightIndent.Denormalize( aRightIndent.GetValue( FUNIT_TWIP ) ) ) );
     aExampleWin.SetUpper(
         (USHORT)aTopDist.Denormalize( aTopDist.GetValue( FUNIT_TWIP ) ) );
     aExampleWin.SetLower(
