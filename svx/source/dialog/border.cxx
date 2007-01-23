@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:05:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,7 +499,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                 SetMetricValue( aTopMF,     pBoxInfoItem->GetDefDist(), eCoreUnit );
                 SetMetricValue( aBottomMF,  pBoxInfoItem->GetDefDist(), eCoreUnit );
 
-                nMinValue = aLeftMF.GetValue();
+                nMinValue = static_cast<long>(aLeftMF.GetValue());
 
                 if ( pBoxInfoItem->IsMinDist() )
                 {
@@ -1221,7 +1221,7 @@ IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, MetricField*, pField)
 {
     if ( bSync )
     {
-        long nVal = pField->GetValue();
+        sal_Int64 nVal = pField->GetValue();
         if(pField != &aLeftMF)
             aLeftMF.SetValue(nVal);
         if(pField != &aRightMF)
