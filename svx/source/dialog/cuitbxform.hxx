@@ -31,7 +31,7 @@ public:
     FmInputRecordNoDialog(Window * pParent);
 
     void SetValue(long dNew) { m_aRecordNo.SetValue(dNew); }
-    long GetValue() const { return m_aRecordNo.GetValue(); }
+    long GetValue() const { return static_cast<long>(m_aRecordNo.GetValue()); }
 };
 
 #endif
