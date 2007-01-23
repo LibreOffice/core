@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:56:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:49:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1225,7 +1225,7 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
             bEnableReload = TRUE;
             aURL = ::std::auto_ptr< String >( new String() );
             aFrame = ::std::auto_ptr< String >( new String() );
-            nDelay = aNFReload.GetValue();
+            nDelay = static_cast<ULONG>(aNFReload.GetValue());
             break;
         case S_Forward:
             DBG_ASSERT( aEDForwardURL.GetText().Len(), "+SfxInternetPage::FillItemSet(): empty URL should be not possible for forward option!" );
@@ -1233,7 +1233,7 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
             bEnableReload = TRUE;
             aURL = ::std::auto_ptr< String >( new String( URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aEDForwardURL.GetText(), URIHelper::GetMaybeFileHdl(), true ) ) );
             aFrame = ::std::auto_ptr< String >( new String( aCBFrame.GetText() ) );
-            nDelay = aNFAfter.GetValue();
+            nDelay = static_cast<ULONG>(aNFAfter.GetValue());
             break;
               default:
                   break;
