@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:16:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -753,9 +753,9 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
             if( m_aHoriByMF.IsValueModified() || m_aVertByMF.IsValueModified() )
             {
                 long nHoriByPos =
-                            m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP));
+                            static_cast<long>(m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP)));
                 long nVertByPos =
-                            m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP));
+                            static_cast<long>(m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP)));
 
                 // Altes Rechteck mit CoreUnit
                 m_aRect = m_pSdrView->GetAllMarkedRect();
@@ -785,7 +785,7 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 short nAlign = GetAlignment(m_pHMap, nMapPos, m_aHoriLB, m_aHoriToLB);
                 short nRel = GetRelation(m_pHMap, m_aHoriToLB);
                 const long nHoriByPos =
-                            m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP));
+                            static_cast<long>(m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP)));
                 if(nAlign != rHoriOrient.GetValue()||
                     nRel != rHoriRelation.GetValue()||
                         m_aHoriByMF.IsEnabled() && nHoriByPos != rHoriPosition.GetValue())
@@ -815,7 +815,7 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 // --> OD 2004-10-21 #i34055# - convert vertical position for
                 // as-character anchored objects
                 long nVertByPos =
-                        m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP));
+                        static_cast<long>(m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP)));
                 if ( GetAnchorType() == TextContentAnchorType_AS_CHARACTER )
                 {
                     nVertByPos *= -1;
@@ -851,8 +851,8 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
     }
     if ( m_aWidthMF.IsValueModified() || m_aHeightMF.IsValueModified() )
     {
-        sal_uInt32 nWidth = m_aWidthMF.Denormalize(m_aWidthMF.GetValue(FUNIT_TWIP));
-        sal_uInt32 nHeight = m_aHeightMF.Denormalize(m_aHeightMF.GetValue(FUNIT_TWIP));
+        sal_uInt32 nWidth = static_cast<sal_uInt32>(m_aWidthMF.Denormalize(m_aWidthMF.GetValue(FUNIT_TWIP)));
+        sal_uInt32 nHeight = static_cast<sal_uInt32>(m_aHeightMF.Denormalize(m_aHeightMF.GetValue(FUNIT_TWIP)));
         rSet.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ),
                         (UINT32) nWidth ) );
         rSet.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ),
@@ -1148,15 +1148,15 @@ IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
         aVal.nVertOrient = VertOrientation::NONE;
 
     const long nAtHorzPosVal =
-                    m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP));
+                    static_cast<long>(m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP)));
     const long nAtVertPosVal =
-                    m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP));
+                    static_cast<long>(m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP)));
 
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
 
-    sal_Int32 nWidth = m_aWidthMF. Denormalize(m_aWidthMF.GetValue(FUNIT_TWIP));
-    sal_Int32 nHeight = m_aHeightMF.Denormalize(m_aHeightMF.GetValue(FUNIT_TWIP));
+    sal_Int32 nWidth = static_cast<sal_uInt32>(m_aWidthMF. Denormalize(m_aWidthMF.GetValue(FUNIT_TWIP)));
+    sal_Int32 nHeight = static_cast<sal_uInt32>(m_aHeightMF.Denormalize(m_aHeightMF.GetValue(FUNIT_TWIP)));
     aVal.nWidth  = nWidth;
     aVal.nHeight = nHeight;
 
@@ -1173,7 +1173,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
     sal_Int32 nMaxWidth(aVal.nMaxWidth);
     sal_Int32 nMaxHeight(aVal.nMaxHeight);
 
-    sal_Int32 nTmp = m_aHeightMF.Normalize(nMaxHeight);
+    sal_Int64 nTmp = m_aHeightMF.Normalize(nMaxHeight);
     m_aHeightMF.SetMax(nTmp, FUNIT_TWIP);
 
     nTmp = m_aWidthMF.Normalize(nMaxWidth);
@@ -1397,18 +1397,18 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
   -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit *, pEdit )
 {
-    sal_Int32 nWidth = m_aWidthMF.Denormalize(m_aWidthMF.GetValue(FUNIT_TWIP));
-    sal_Int32 nHeight = m_aHeightMF.Denormalize(m_aHeightMF.GetValue(FUNIT_TWIP));
+    sal_Int64 nWidth = m_aWidthMF.Denormalize(m_aWidthMF.GetValue(FUNIT_TWIP));
+    sal_Int64 nHeight = m_aHeightMF.Denormalize(m_aHeightMF.GetValue(FUNIT_TWIP));
     if ( m_aKeepRatioCB.IsChecked() )
     {
         if ( pEdit == &m_aWidthMF )
         {
-            nHeight = sal_Int32((double)nWidth / m_fWidthHeightRatio);
+            nHeight = sal_Int64((double)nWidth / m_fWidthHeightRatio);
             m_aHeightMF.SetValue(m_aHeightMF.Normalize(nHeight), FUNIT_TWIP);
         }
         else if(pEdit == &m_aHeightMF)
         {
-            nWidth = sal_Int32((double)nHeight * m_fWidthHeightRatio);
+            nWidth = sal_Int64((double)nHeight * m_fWidthHeightRatio);
             m_aWidthMF.SetValue(m_aWidthMF.Normalize(nWidth), FUNIT_TWIP);
         }
     }
@@ -1691,8 +1691,8 @@ void SvxSwPosSizeTabPage::UpdateExample()
     }
 
     // Size
-    long nXPos = m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP));
-    long nYPos = m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP));
+    long nXPos = static_cast<long>(m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP)));
+    long nYPos = static_cast<long>(m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP)));
     m_aExampleWN.SetRelPos(Point(nXPos, nYPos));
 
     m_aExampleWN.SetAnchor( GetAnchorType() );
