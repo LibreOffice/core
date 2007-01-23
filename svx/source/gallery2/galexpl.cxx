@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:16:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ Gallery* GalleryExplorer::ImplGetGallery()
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
     if( !pGallery )
-        pGallery = Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
+        pGallery = Gallery::GetGalleryInstance();
 
     return pGallery;
 }
