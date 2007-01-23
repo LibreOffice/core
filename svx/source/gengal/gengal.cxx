@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gengal.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:49:52 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 08:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
-
+#include <memory>
 #include <list>
 
 #include <unotools/streamwrap.hxx>
@@ -107,15 +107,24 @@ Reference< XMultiServiceFactory > createApplicationServiceManager()
     return xMS;
 }
 
+Gallery* createGallery( const rtl::OUString& aGalleryURL )
+{
+    return new Gallery( aGalleryURL );
+}
+
+void disposeGallery( Gallery* pGallery )
+{
+    delete pGallery;
+}
+
 static void createTheme( rtl::OUString aThemeName,
                          rtl::OUString aGalleryURL,
                          rtl::OUString aDestDir,
                          UINT32 nNumFrom,
                          FileNameList &rFiles )
 {
-    Gallery* pGallery;
+    Gallery * pGallery( createGallery( aGalleryURL ) );
 
-    pGallery = Gallery::AcquireGallery( aGalleryURL );
     if (!pGallery ) {
             fprintf( stderr, "Could't acquire '%s'\n",
                      (const sal_Char *) rtl::OUStringToOString( aGalleryURL,
@@ -132,6 +141,7 @@ static void createTheme( rtl::OUString aThemeName,
     if( !pGallery->HasTheme( aThemeName) ) {
             if( !pGallery->CreateTheme( aThemeName, nNumFrom ) ) {
                     fprintf( stderr, "Failed to create theme\n" );
+                    disposeGallery( pGallery );
                     exit( 1 );
             }
     }
@@ -145,6 +155,7 @@ static void createTheme( rtl::OUString aThemeName,
     GalleryTheme *pGalTheme = pGallery->AcquireTheme( aThemeName, aListener );
     if ( pGalTheme == NULL  ) {
             fprintf( stderr, "Failed to acquire theme\n" );
+            disposeGallery( pGallery );
             exit( 1 );
     }
 
@@ -177,6 +188,7 @@ static void createTheme( rtl::OUString aThemeName,
         SvStream *pStream = ::utl::UcbStreamHelper::CreateStream( *aIter, STREAM_READ );
         if (!pStream) {
             fprintf( stderr, "Can't find image to import\n" );
+            disposeGallery( pGallery );
             exit (1);
         }
         *pStream >> aGraphic;
@@ -202,8 +214,7 @@ static void createTheme( rtl::OUString aThemeName,
     }
 
     pGallery->ReleaseTheme( pGalTheme, aListener );
-
-    Gallery::ReleaseGallery( pGallery );
+    disposeGallery( pGallery );
 }
 
 static void PrintHelp()
