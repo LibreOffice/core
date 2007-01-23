@@ -1,6 +1,6 @@
 PRJ=..
 PRJNAME=writerperfect
-TARGET=wpft
+TARGET=writerperfect
 VERSION=$(UPD)
 
 .INCLUDE :  settings.mk
@@ -15,10 +15,11 @@ LIBWPD=-lwpdlib
 LIBWPD=$(LIBPRE) wpdlib.lib
 .ENDIF
 
-LIB1TARGET= $(SLB)$/$(TARGET).lib
+LIB1TARGET= $(SLB)$/wpft.lib
 LIB1FILES= \
     $(SLB)$/stream.lib  \
-    $(SLB)$/filter.lib
+    $(SLB)$/filter.lib  \
+    $(SLB)$/wpdimp.lib
 SHL1LIBS=$(LIB1TARGET)
 SHL1STDLIBS+= \
     $(SVLLIB)	\
@@ -35,10 +36,10 @@ SHL1STDLIBS+= \
     $(XMLOFFLIB) \
     $(LIBWPD)
 
-SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET = wpft$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1LIBS = $(LIB1TARGET)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=wpft.map
 DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE :  target.mk
