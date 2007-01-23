@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:29:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-23 11:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,7 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     if( eState != aTsbEndless.GetSavedValue() ||
         aStr != aNumFldCount.GetSavedValue() )
     {
-        long nValue = 0;
+        sal_Int64 nValue = 0;
         if( eState == STATE_CHECK /*#89844#*/ && aTsbEndless.IsEnabled())
             bModified = TRUE;
         else
@@ -457,7 +457,7 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     if( eState != aTsbAuto.GetSavedValue() ||
         aStr != aMtrFldDelay.GetSavedValue() )
     {
-        long nValue = 0;
+        sal_Int64 nValue = 0;
         if( eState == STATE_CHECK )
             bModified = TRUE;
         else
@@ -478,7 +478,7 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     if( eState != aTsbPixel.GetSavedValue() ||
         aStr != aMtrFldAmount.GetSavedValue() )
     {
-        long nValue = 0;
+        sal_Int64 nValue = 0;
         if( eState == STATE_CHECK )
         {
             nValue = aMtrFldAmount.GetValue();
@@ -687,7 +687,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickPixelHdl_Impl, void *, EMPTYARG )
     TriState eState = aTsbPixel.GetState();
     if( eState == STATE_CHECK )
     {
-        long nValue = aMtrFldAmount.GetValue() / 10;
+        sal_Int64 nValue = aMtrFldAmount.GetValue() / 10;
         aMtrFldAmount.Enable();
         aMtrFldAmount.SetUnit( FUNIT_CUSTOM );
         //SetFieldUnit( aMtrFldAmount, FUNIT_CUSTOM );
@@ -703,7 +703,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickPixelHdl_Impl, void *, EMPTYARG )
     }
     else if( eState == STATE_NOCHECK )
     {
-        long nValue = aMtrFldAmount.GetValue() * 10;
+        sal_Int64 nValue = aMtrFldAmount.GetValue() * 10;
         aMtrFldAmount.Enable();
         aMtrFldAmount.SetUnit( eFUnit );
         //SetFieldUnit( aMtrFldAmount, eFUnit );
