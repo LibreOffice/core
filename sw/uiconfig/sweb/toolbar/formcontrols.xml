@@ -22,3 +22,4 @@
  <toolbar:toolbaritem xlink:href=".uno:FormDesignTools" toolbar:helpid="helpid:11046"  />
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:UseWizards" toolbar:helpid="helpid:10727"  />
+</toolbar:toolbar>
