@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: vg $ $Date: 2006-03-15 09:29:04 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:07:08 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -52,24 +52,24 @@ EXAMPLE_NAME=OfficeDevLinguisticExample
 OUT_COMP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
 COMPONENT1_NAME=SampleHyphenator
-COMPONENT1_PACKAGE = $(OUT_BIN)/$(COMPONENT1_NAME).$(UNOPKG_EXT)
-COMPONENT1_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).$(UNOPKG_EXT)")
+COMPONENT1_PACKAGE = $(OUT_BIN)/$(COMPONENT1_NAME).$(UNOOXT_EXT)
+COMPONENT1_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).$(UNOOXT_EXT)")
 COMPONENT1_JAR_NAME = $(COMPONENT1_NAME).uno.jar
 COMPONENT1_JAR = $(OUT_COMP_CLASS)/$(COMPONENT1_JAR_NAME)
 COMPONENT1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
 COMPONENT1_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME)/META-INF/manifest.xml
 
 COMPONENT2_NAME=SampleSpellChecker
-COMPONENT2_PACKAGE = $(OUT_BIN)/$(COMPONENT2_NAME).$(UNOPKG_EXT)
-COMPONENT2_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT2_NAME).$(UNOPKG_EXT)")
+COMPONENT2_PACKAGE = $(OUT_BIN)/$(COMPONENT2_NAME).$(UNOOXT_EXT)
+COMPONENT2_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT2_NAME).$(UNOOXT_EXT)")
 COMPONENT2_JAR_NAME = $(COMPONENT2_NAME).uno.jar
 COMPONENT2_JAR = $(OUT_COMP_CLASS)/$(COMPONENT2_JAR_NAME)
 COMPONENT2_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME).uno.Manifest
 COMPONENT2_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME)/META-INF/manifest.xml
 
 COMPONENT3_NAME=SampleThesaurus
-COMPONENT3_PACKAGE = $(OUT_BIN)/$(COMPONENT3_NAME).$(UNOPKG_EXT)
-COMPONENT3_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT3_NAME).$(UNOPKG_EXT)")
+COMPONENT3_PACKAGE = $(OUT_BIN)/$(COMPONENT3_NAME).$(UNOOXT_EXT)
+COMPONENT3_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT3_NAME).$(UNOOXT_EXT)")
 COMPONENT3_JAR_NAME = $(COMPONENT3_NAME).uno.jar
 COMPONENT3_JAR = $(OUT_COMP_CLASS)/$(COMPONENT3_JAR_NAME)
 COMPONENT3_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT3_NAME).uno.Manifest
@@ -151,7 +151,7 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 #	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 #	-$(MKDIR) $(subst /,$(PS),$(@D))
 #	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
-#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMPONENT1_JAR) : $(COMPONENT1_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
@@ -162,7 +162,7 @@ $(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR) $(COMPONENT1_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMPONENT2_JAR) : $(COMPONENT2_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
@@ -173,7 +173,7 @@ $(COMPONENT2_PACKAGE) : $(COMPONENT2_JAR) $(COMPONENT2_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMPONENT3_JAR) : $(COMPONENT3_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
@@ -184,7 +184,7 @@ $(COMPONENT3_PACKAGE) : $(COMPONENT3_JAR) $(COMPONENT3_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE) $(COMPONENT2_PACKAGE) $(COMPONENT3_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
