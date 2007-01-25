@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:39:24 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:04:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,10 +80,10 @@ RUN: run
 # start an office if the parameter is set for the makefile
 .IF "$(OFFICE)" == ""
 run:
-    +@echo "Execute this test with 'dmake run OFFICE=/system/path/to/office/program'."
-    +@echo "The office will be started by the test with a socket connection on port 8100"
+    @echo "Execute this test with 'dmake run OFFICE=/system/path/to/office/program'."
+    @echo "The office will be started by the test with a socket connection on port 8100"
 .ELSE
 run: $(CLASSDIR)$/$(PACKAGE)$/$(TARGET).props
-    +java -cp $(CLASSPATH) $(CT_APP) -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;" $(CT_TESTBASE) $(CT_TEST)
+    java -cp $(CLASSPATH) $(CT_APP) -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;" $(CT_TESTBASE) $(CT_TEST)
 .ENDIF
 
