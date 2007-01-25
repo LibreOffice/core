@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:44:11 $
+#   last change: $Author: obo $ $Date: 2007-01-25 14:17:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ALLTAR : $(BASEADDRESSES)
 $(BASEADDRESSES) .PHONY :
 .IF "$(GUI)"=="WNT"
 .IF "$(product)"=="full"
-    +$(PERL) rebase.pl -C $(BASEADDRESSES) -b $(STARTADDRESS) -d -e 10000 -l $(LOGFILE) -m $(MISC) -v -R $(SOLARBINDIR) -N $(EXCLUDELIST) $(IMAGENAMES)
+    $(PERL) rebase.pl -C $(BASEADDRESSES) -b $(STARTADDRESS) -d -e 10000 -l $(LOGFILE) -m $(MISC) -v -R $(SOLARBINDIR) -N $(EXCLUDELIST) $(IMAGENAMES)
 .ELSE	# "$(product)"=="full"
     @echo Doing nothing on non product builds ...
 .ENDIF	# "$(product)"=="full"
