@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:25:35 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:46:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,9 @@ DisplayHint : ALLDEP
 .INCLUDE :  target.mk
 
 DisplayHint:
-    +@echo "\ntype 'dmake FinalizedMandatoryTest'"
-    +@echo "\ntype 'dmake TypeDetection6FileFormat'"
-    +@echo "! BE SHURE YOU HAVE 'TypeDetection6FileFormat.xcu' SUCCESSFUL REGISTERED IN YOU OFFICE !"
+    @echo "\ntype 'dmake FinalizedMandatoryTest'"
+    @echo "\ntype 'dmake TypeDetection6FileFormat'"
+    @echo "! BE SHURE YOU HAVE 'TypeDetection6FileFormat.xcu' SUCCESSFUL REGISTERED IN YOU OFFICE !"
 
 RUN: run
 
@@ -98,8 +98,8 @@ run: \
 
 
 FinalizedMandatoryTest:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).FinalizedMandatoryTest
+    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).FinalizedMandatoryTest
     
 TypeDetection6FileFormat:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).TypeDetection6FileFormat
+    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).TypeDetection6FileFormat
 
