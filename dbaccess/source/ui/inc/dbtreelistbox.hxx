@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:14:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 12:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,7 @@ namespace dbaui
         // Window
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
+        virtual void    StateChanged( StateChangedType nStateChange );
         virtual void    InitEntry( SvLBoxEntry* pEntry, const XubString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind);
 
         virtual void    SelectEntry(SvLBoxEntry* _pEntry);
