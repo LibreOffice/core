@@ -66,15 +66,12 @@ MAXLINELENGTH	= 65530
    RMTARGET      *=  $<
 
 # Default recipe that is used to remove intermediate targets.
-.REMOVE :; #+-echo dummy remove #$(RM) $(RMFLAGS) $(RMTARGET)
+.REMOVE :; #echo dummy remove #$(RM) $(RMFLAGS) $(RMTARGET)
 #.REMOVE :; echo $(RM) $(RMFLAGS) $(RMTARGET)
 
-dummy_mh:
-    @+-echo dummy mh
-
 # Directory caching configuration.
-  .DIRCACHE         *:= yes
-  .DIRCACHERESPCASE *:= yes
+.DIRCACHE         *:= yes
+.DIRCACHERESPCASE *:= yes
 
 # Define the special NULL Prerequisite
 NULLPRQ *:= __.NULLPRQ
