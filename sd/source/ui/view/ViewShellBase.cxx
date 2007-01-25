@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:36:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,9 +643,9 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
 
 
 
-USHORT  ViewShellBase::Print(SfxProgress& rProgress, PrintDialog* pDlg)
+USHORT  ViewShellBase::Print(SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDlg)
 {
-    return mpPrintManager->Print (rProgress, pDlg);
+    return mpPrintManager->Print (rProgress, bIsAPI, pDlg);
 }
 
 
@@ -654,9 +654,9 @@ USHORT  ViewShellBase::Print(SfxProgress& rProgress, PrintDialog* pDlg)
 ErrCode ViewShellBase::DoPrint (
     SfxPrinter* pPrinter,
     PrintDialog* pPrintDialog,
-    BOOL bSilent)
+    BOOL bSilent, BOOL bIsAPI )
 {
-    return mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent);
+    return mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
 }
 
 
