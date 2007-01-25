@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:33:09 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:36:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ TARGETTYPE=CUI
 .IF "$(GUI)"=="WNT"
 # provide dummy header for generated sources
 $(INCCOM)$/unistd.h : unistd.h
-    @+$(COPY) $< $@
+    @$(COPY) $< $@
 
 .ENDIF # "$(GUI)"=="WNT"
 
