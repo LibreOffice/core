@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:16:09 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,8 +423,7 @@ public:
     void        CompileNameFormula( BOOL bCreateFormulaString );
     void        CompileColRowNameFormula();
 
-    // maximale Stringlaengen einer Column, fuer z.B. dBase Export
-    xub_StrLen  GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd ) const;
+    sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
     xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
                                     SCROW nRowStart, SCROW nRowEnd ) const;
 
