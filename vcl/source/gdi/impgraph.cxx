@@ -5,9 +5,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:03:05 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1592,7 +1592,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
             if( !rIStm.GetError() )
             {
-                UINT32  nMagic1, nMagic2;
+                UINT32  nMagic1(0), nMagic2(0);
                 ULONG   nActPos = rIStm.Tell();
 
                 rIStm >> nMagic1 >> nMagic2;
@@ -1600,7 +1600,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                 rImpGraphic = ImpGraphic( aBmpEx );
 
-                if( ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) && !rIStm.GetError() )
+                if( !rIStm.GetError() && ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) )
                 {
                     delete rImpGraphic.mpAnimation;
                     rImpGraphic.mpAnimation = new Animation;
