@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:04:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,6 +462,9 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont, int nScreen )
 
 Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nReqScreen )
 {
+    if( rServerFont.IsGlyphInvisible( nGlyphIndex ) )
+        return NO_PIXMAP;
+
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
     Pixmap aPixmap = GetPixmap( rGlyphData, nReqScreen );
     if( aPixmap == NO_PIXMAP )
@@ -565,6 +568,9 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nR
 const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
     int nGlyphIndex )
 {
+    if( rServerFont.IsGlyphInvisible( nGlyphIndex ) )
+        return NO_RAWBMP;
+
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
 
     const RawBitmap* pRawBitmap = GetRawBitmap( rGlyphData );
@@ -595,6 +601,9 @@ const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
 
 Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 {
+    if( rServerFont.IsGlyphInvisible( nGlyphIndex ) )
+        return NO_GLYPHID;
+
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
 
     Glyph aGlyphId = GetRenderGlyph( rGlyphData );
