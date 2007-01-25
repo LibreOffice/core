@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:50:26 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,8 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     aTargetURL.Complete = aCommandURL;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
+    if ( aTargetURL.Arguments.getLength() )
+        return NULL;
 
     SfxObjectShell* pObjShell = NULL;
     Reference < XController > xController;
@@ -249,7 +251,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
             ::com::sun::star::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
-                            pObjShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
+                pObjShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
         }
     }
 
