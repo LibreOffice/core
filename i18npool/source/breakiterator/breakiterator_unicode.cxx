@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-25 09:35:31 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include <unicode/rbbi.h>
 #include <unicode/udata.h>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 
 U_CDECL_BEGIN
 extern const char OpenOffice_dat[];
@@ -111,7 +112,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             icuBI->aBreakIterator=NULL;
         }
         if (rule) {
-            Sequence< OUString > breakRules = LocaleData().getBreakIteratorRules(rLocale);
+            uno::Sequence< OUString > breakRules = LocaleData().getBreakIteratorRules(rLocale);
 
             status = U_ZERO_ERROR;
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);
