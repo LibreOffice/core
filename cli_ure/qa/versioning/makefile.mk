@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-07-25 07:53:03 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:43:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,13 +94,13 @@ COPYVERSIONLIBS: MAKEOUTDIR
 
 CSFILES2 = runtests.cs
 $(EXETARGET2): $(CSFILES2) MAKEOUTDIR
-    +$(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET2) \
+    $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET2) \
         $(CSFILES2)
 
 
 CSFILESLIB = version.cs
 $(TESTLIB): $(CSFILESLIB) MAKEOUTDIR
-    +$(CSC) $(CSCFLAGS) -target:library -out:$(TESTLIB) \
+    $(CSC) $(CSCFLAGS) -target:library -out:$(TESTLIB) \
         -reference:$(BIN)$/cli_ure.dll \
          -reference:$(BIN)$/cli_types.dll \
          -reference:$(BIN)$/cli_basetypes.dll \
@@ -110,7 +110,7 @@ $(TESTLIB): $(CSFILESLIB) MAKEOUTDIR
 #This target only checks if the the office/program/assembly directory
 #contains the proper libraries.
 $(OUTDIR)$/buildwithofficelibs.dll: MAKEOUTDIR
-    +$(CSC) $(CSCFLAGS) -target:library -out:$@ \
+    $(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:"$(office)"$/program$/assembly$/cli_ure.dll \
          -reference:"$(office)"$/program$/assembly$/cli_types.dll \
          -reference:"$(office)"$/program$/assembly$/cli_basetypes.dll \
@@ -163,7 +163,7 @@ CT_NOOFFICE = -NoOffice
 # --- Targets ------------------------------------------------------
 
 RUN: $(OUTDIR)$/buildwithofficelibs.dll
-    +java -cp $(CLASSPATH) -DSystemRoot=$(SystemRoot) -Dcli_test_program=$(EXETARGET2) -Duno_path="$(office)"\program $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
+    java -cp $(CLASSPATH) -DSystemRoot=$(SystemRoot) -Dcli_test_program=$(EXETARGET2) -Duno_path="$(office)"\program $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
 
 run: RUN
 
