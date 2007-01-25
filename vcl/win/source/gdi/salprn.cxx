@@ -1784,9 +1784,9 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
         aInfo.lpszDocName = (LPWSTR)rJobName.GetBuffer();
         if ( pFileName || aOutFileName.getLength() )
         {
-            if ( pFileName->Len() || aOutFileName.getLength() )
+            if ( (pFileName && pFileName->Len()) || aOutFileName.getLength() )
             {
-                aInfo.lpszOutput = (LPWSTR)(pFileName ? pFileName->GetBuffer() : aOutFileName.getStr());
+                aInfo.lpszOutput = (LPWSTR)( (pFileName && pFileName->Len()) ? pFileName->GetBuffer() : aOutFileName.getStr());
             }
             else
                 aInfo.lpszOutput = L"FILE:";
