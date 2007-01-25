@@ -88,10 +88,10 @@ CLASSPATH !:=$(JAVA_CLASSPATHS:t$(PATH_SEPERATOR))
 JFLAGS = -deprecation -classpath $(CLASSPATH)
 
 %.class : %.java
-    +$(JAVAC) $(JFLAGS) $<
+    $(JAVAC) $(JFLAGS) $<
 
 %.class : %.java
-    +$(JAVAC) $(JFLAGS) $<
+    $(JAVAC) $(JFLAGS) $<
 
 AccessibilityWorkBench : ObjectView Tools $(JAVA_FILES:b:+".class")
 
@@ -116,12 +116,12 @@ Tools.clean .SETDIR=tools :
 dist: AccessibilityWorkBench.jar
 
 AccessibilityWorkBench.jar: $(JAVA_FILES:b:+".class") jawb.mf
-    +jar -cfm AccessibilityWorkBench.jar jawb.mf *.class ov\*.class tools\*.class
+    jar -cfm AccessibilityWorkBench.jar jawb.mf *.class ov\*.class tools\*.class
 
 # Example of how to run the work bench.
 run: all
-    +$(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER)
+    $(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER)
 
 runjar: all dist
-    +$(JAVA) -classpath $(CLASSPATH) -jar AccessibilityWorkBench.jar -p $(PORT_NUMBER)
+    $(JAVA) -classpath $(CLASSPATH) -jar AccessibilityWorkBench.jar -p $(PORT_NUMBER)
 
