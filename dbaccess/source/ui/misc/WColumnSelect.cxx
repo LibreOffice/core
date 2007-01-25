@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:40:49 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 12:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,7 +392,6 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
             ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
             OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
             ODatabaseExport::TColumnVector::size_type nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
-            m_pParent->removeColumnNameFromNameMap(_sColumnName);
 
             _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< USHORT >(nPos)),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
