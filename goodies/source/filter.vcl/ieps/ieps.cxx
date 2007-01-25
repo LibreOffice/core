@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:15:13 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 16:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     rtl::OUString arg1 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-f"));
     rtl::OUString arg2 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("emf"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("emf:-OO"));
     rtl::OUString arg3 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
     rtl::OUString output;
@@ -188,19 +188,32 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     };
     oslProcess aProcess;
     oslFileHandle pIn = NULL;
+    oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
     oslProcessError eErr = osl_executeProcess_WithRedirectedIO(fileName.pData,
         args, sizeof(args)/sizeof(rtl_uString *), osl_Process_SEARCHPATH,
-        osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, 0, &pErr);
+        osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, &pOut, &pErr);
     if (eErr!=osl_Process_E_None)
         return false;
 
     bool bRet = false;
     sal_uInt64 nCount;
     osl_writeFile(pIn, pBuf, nBytesRead, &nCount);
-    osl_closeFile(pIn);
-    osl_joinProcess(aProcess);
-    if (nCount == nBytesRead)
+    if (pIn) osl_closeFile(pIn);
+    bool bEMFSupported=true;
+    if (pOut)
+    {
+        rtl::ByteSequence seq;
+                if (osl_File_E_None == osl_readLine(pOut, (sal_Sequence **)&seq))
+        {
+                        rtl::OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
+            if (line.indexOf(rtl::OString("Unsupported output format")) == 0)
+                bEMFSupported=false;
+        }
+        osl_closeFile(pOut);
+    }
+    if (pErr) osl_closeFile(pErr);
+    if (nCount == nBytesRead && bEMFSupported)
     {
         SvFileStream aFile(output, STREAM_READ);
         if (GraphicConverter::Import(aFile, rGraphic, CVT_EMF) == ERRCODE_NONE)
@@ -225,7 +238,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     bool bRet = false;
     sal_uInt64 nCount;
     osl_writeFile(pIn, pBuf, nBytesRead, &nCount);
-    osl_closeFile(pIn);
+    if (pIn) osl_closeFile(pIn);
     if (nCount == nBytesRead)
     {
         SvMemoryStream aMemStm;
@@ -247,7 +260,8 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
             bRet = true;
         }
     }
-    osl_closeFile(pOut);
+    if (pOut) osl_closeFile(pOut);
+    if (pErr) osl_closeFile(pErr);
     return bRet;
 }
 
@@ -274,7 +288,7 @@ static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
 }
 
 static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    const Size &rSize, Graphic &rGraphic)
+    Graphic &rGraphic)
 {
 #ifdef WNT
     rtl::OUString fileName =
@@ -286,40 +300,41 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     rtl::OUString arg1 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-q"));
     rtl::OUString arg2 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dNOPAUSE"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dBATCH"));
     rtl::OUString arg3 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dPARANOIDSAFER"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dNOPAUSE"));
     rtl::OUString arg4 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-g"));
-    arg4 = arg4 + rtl::OUString::valueOf(static_cast<sal_Int32>(rSize.Width()));
-    arg4 = arg4 + rtl::OUString::valueOf(sal_Unicode('x'));
-    arg4 = arg4 + rtl::OUString::valueOf(static_cast<sal_Int32>(rSize.Height()));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dPARANOIDSAFER"));
     rtl::OUString arg5 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dTextAlphaBits=4"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dEPSCrop"));
     rtl::OUString arg6 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dGraphicsAlphaBits=4"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dTextAlphaBits=4"));
     rtl::OUString arg7 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sDEVICE=png256"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dGraphicsAlphaBits=4"));
     rtl::OUString arg8 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sOutputFile=-"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-r300x300"));
     rtl::OUString arg9 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sDEVICE=png256"));
+    rtl::OUString arg10 =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sOutputFile=-"));
+    rtl::OUString arg11 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData, arg5.pData,
-        arg6.pData, arg7.pData, arg8.pData, arg9.pData
+        arg6.pData, arg7.pData, arg8.pData, arg9.pData, arg10.pData,
+        arg11.pData
     };
     return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
         sizeof(args)/sizeof(rtl_uString *));
 }
 
-static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    const Size &rSize, Graphic &rGraphic)
+static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
 {
     if (RenderAsPNGThroughConvert(pBuf, nBytesRead, rGraphic))
         return true;
     else
-        return RenderAsPNGThroughGS(pBuf, nBytesRead, rSize, rGraphic);
+        return RenderAsPNGThroughGS(pBuf, nBytesRead, rGraphic);
 }
 
 // this method adds a replacement action containing the original wmf or tiff replacement,
@@ -656,11 +671,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                         {
                             bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
                             if (!bHasPreview)
-                            {
-                                Size aSize(nWidth, nHeight);
-                                aSize = Application::GetDefaultDevice()->LogicToPixel(aSize, MAP_POINT);
-                                bHasPreview = RenderAsPNG(pBuf, nBytesRead, aSize, aGraphic);
-                            }
+                                bHasPreview = RenderAsPNG(pBuf, nBytesRead, aGraphic);
                         }
 
                         // if there is no preview -> make a red box
