@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 15:50:40 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:08:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,6 @@ ALLIDLFILES = \
 .INCLUDE : target.mk
 
 $(UNOUCRRDB) : $(ALLIDLFILES) $(SOLARBINDIR)$/types.rdb
-    +$(IDLC) -I. -I$(SOLARIDLDIR) -O$(UCR) $(ALLIDLFILES)
-    +$(REGMERGE) $@ /UCR $(UCR)$/{$(?:f:s/.idl/.urd/)}
+    $(IDLC) -I. -I$(SOLARIDLDIR) -O$(UCR) $(ALLIDLFILES)
+    $(REGMERGE) $@ /UCR $(UCR)$/{$(?:f:s/.idl/.urd/)}
     touch $@
