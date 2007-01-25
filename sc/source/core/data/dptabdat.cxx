@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabdat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:58:08 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:04:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
 
 #include "dptabdat.hxx"
 #include "global.hxx"
@@ -59,6 +62,55 @@ BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
     return bHasValue ? ( r.bHasValue && rtl::math::approxEqual( fValue, r.fValue ) ) :
                        ( !r.bHasValue &&
                         ScGlobal::pTransliteration->isEqual( aString, r.aString ) );
+}
+
+size_t ScDPItemData::Hash() const
+{
+    if ( bHasValue )
+        return (size_t) rtl::math::approxFloor( fValue );
+    else
+        // If we do unicode safe case insensitive hash we can drop
+        // ScDPItemData::operator== and use ::IsCasInsEqual
+        return rtl_ustr_hashCode_WithLength( aString.GetBuffer(), aString.Len() );
+}
+
+BOOL ScDPItemData::operator==( const ScDPItemData& r ) const
+{
+    if ( bHasValue )
+    {
+        if ( r.bHasValue )
+            return rtl::math::approxEqual( fValue, r.fValue );
+        else
+            return FALSE;
+    }
+    else if ( r.bHasValue )
+        return FALSE;
+    else
+        // need exact equality until we have a safe case insensitive string hash
+        return aString == r.aString;
+}
+
+sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
+                                 const ScDPItemData& rB )
+{
+    if ( rA.bHasValue )
+    {
+        if ( rB.bHasValue )
+        {
+            if ( rtl::math::approxEqual( rA.fValue, rB.fValue ) )
+                return 0;
+            else if ( rA.fValue < rB.fValue )
+                return -1;
+            else
+                return 1;
+        }
+        else
+            return -1;           // values first
+    }
+    else if ( rB.bHasValue )
+        return 1;                // values first
+    else
+        return ScGlobal::pCollator->compareString( rA.aString, rB.aString );
 }
 
 // -----------------------------------------------------------------------
