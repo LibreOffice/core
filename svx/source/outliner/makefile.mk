@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:56:14 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:43:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,6 @@ SLOFILES=	\
             $(SLO)$/outlvw.obj 		\
             $(SLO)$/outleeng.obj 	\
             $(SLO)$/outlobj.obj
-
-SVXLIGHTOBJFILES= \
-            $(OBJ)$/outliner.obj 	\
-            $(OBJ)$/outlin2.obj		\
-            $(OBJ)$/paralist.obj 	\
-            $(OBJ)$/outlvw.obj 		\
-            $(OBJ)$/outleeng.obj 	\
-            $(OBJ)$/outlobj.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=	outliner.src
