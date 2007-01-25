@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 15:26:55 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:45:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -138,13 +138,9 @@ BUILD_ACTION:=make
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
-.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-CC:=$(COMPATH)$/bin$/cc
-CXX:=$(COMPATH)$/bin$/CC
 CXXFLAGS:=-features=tmplife
 .EXPORT : CXXFLAGS 
 .ENDIF          # "$(COMNAME)"=="sunpro5"
-.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF
 
 MOZDIR=$(MISC)$/build$/mozilla
@@ -180,7 +176,7 @@ PATH!:=$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell cygpath $(MOZ_TOOLS_DO
 SET_MOZ_TOOLS_INSTALL_BAT:=setenv MOZ_TOOLS "$(MOZ_TOOLS_DOS)"
 .ELSE # "$(USE_SHELL)"!="4nt"
 # MOZ_TOOLS must contain an absolute path
-MOZ_TOOLS_DOS:=$(shell +echo %@SFN[$(MISC)])\build\moztoolsinst
+MOZ_TOOLS_DOS:=$(shell echo %@SFN[$(MISC)])\build\moztoolsinst
 PATH!:=$(MOZ_TOOLS_DOS)\vc71\bin;$(MOZ_TOOLS_DOS)\bin;$(PATH)
 SET_MOZ_TOOLS_INSTALL_BAT:=set MOZ_TOOLS=$(MOZ_TOOLS_DOS)
 .ENDIF # "$(USE_SHELL)"!="4nt"
@@ -217,23 +213,23 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/remove_build.flag
 # is newer.
 $(MISC)$/remove_build.flag : $(PATCH_FILE_NAME)
     $(REMOVE_PACKAGE_COMMAND)
-    +$(TOUCH) $(MISC)$/remove_build.flag
+    $(TOUCH) $(MISC)$/remove_build.flag
 
 # Unpack/setup Windows build tools
 .IF "$(GUI)"=="WNT"
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/build$/wintools.complete
 
 $(MISC)$/build$/wintools.unpack : $(PRJ)$/download$/$(WINTOOLS_ZIPFILE_NAME)
-    +-$(RENAME) $(MOZTOOLSUNPACK) $(MOZTOOLSUNPACK)_removeme
-    +-$(RENAME) $(MOZTOOLSINST) $(MOZTOOLSINST)_removeme
-    +-rm -rf $(MOZTOOLSUNPACK)_removeme $(MOZTOOLSINST)_removeme
-    @+-$(MKDIRHIER) $(MOZTOOLSUNPACK)
+    -$(RENAME) $(MOZTOOLSUNPACK) $(MOZTOOLSUNPACK)_removeme
+    -$(RENAME) $(MOZTOOLSINST) $(MOZTOOLSINST)_removeme
+    -rm -rf $(MOZTOOLSUNPACK)_removeme $(MOZTOOLSINST)_removeme
+    @-$(MKDIRHIER) $(MOZTOOLSUNPACK)
     unzip $(PRJ)$/download$/$(WINTOOLS_ZIPFILE_NAME) -d $(MOZTOOLSUNPACK)
-    +$(TOUCH) $(MISC)$/build$/wintools.unpack
+    $(TOUCH) $(MISC)$/build$/wintools.unpack
 
 $(MISC)$/build$/wintools.install : $(MISC)$/build$/wintools.unpack
-    +cd $(MOZTOOLSUNPACK)$/buildtools$/windows && $(SET_MOZ_TOOLS_INSTALL_BAT) && cmd /c install.bat
-    +$(TOUCH) $(MISC)$/build$/wintools.install
+    cd $(MOZTOOLSUNPACK)$/buildtools$/windows && $(SET_MOZ_TOOLS_INSTALL_BAT) && cmd /c install.bat
+    $(TOUCH) $(MISC)$/build$/wintools.install
 
 $(MISC)$/build$/wintools.complete : \
   $(MISC)$/build$/wintools.install \
@@ -243,7 +239,7 @@ $(MISC)$/build$/wintools.complete : \
     unzip $(PRJ)$/download$/$(LIBGLIB_VC71_ZIPFILE_NAME) -d $(MOZTOOLSINST)
 # chmod is also needed for W32-4nt build (when cygwin unzip is used)
     -chmod -R +x $(MOZTOOLSINST)$/vc71$/bin
-    +$(TOUCH) $(MISC)$/build$/wintools.complete
+    $(TOUCH) $(MISC)$/build$/wintools.complete
 .ENDIF # "$(GUI)"=="WNT"
 
 zip:	\
