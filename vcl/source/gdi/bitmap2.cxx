@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:57:13 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,6 +395,10 @@ BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader )
         if ( rHeader.nSize > DIBINFOHEADERSIZE )
             rIStm.SeekRel( rHeader.nSize - DIBINFOHEADERSIZE );
     }
+
+    // #144105# protect a little against damaged files
+    if( rHeader.nSizeImage > (16 * rHeader.nWidth * rHeader.nHeight) )
+        rHeader.nSizeImage = 0;
 
     return( ( rHeader.nPlanes == 1 ) && ( rIStm.GetError() == 0UL ) );
 }
