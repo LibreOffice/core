@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:39:32 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_i18npool.hxx"
 #include <breakiterator_unicode.hxx>
+#include <localedata.hxx>
 #include <i18nutil/unicode.hxx>
 #include <unicode/locid.h>
 #include <unicode/rbbi.h>
@@ -89,11 +90,18 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
 {
     sal_Bool newBreak = sal_False;
     UErrorCode status = U_ZERO_ERROR;
+    sal_Int16 breakType = 0;
     switch (rBreakType) {
-        case LOAD_CHARACTER_BREAKITERATOR: icuBI=&character; break;
-        case LOAD_WORD_BREAKITERATOR: icuBI=&word; break;
+        case LOAD_CHARACTER_BREAKITERATOR: icuBI=&character; breakType = 3; break;
+        case LOAD_WORD_BREAKITERATOR: icuBI=&word;
+            switch (rWordType) {
+                case WordType::ANYWORD_IGNOREWHITESPACES: breakType = 0; wordRule = "edit_word"; break;
+                case WordType::DICTIONARY_WORD: breakType = 1; wordRule = "dict_word"; break;
+                case WordType::WORD_COUNT: breakType = 2; wordRule = "count_word"; break;
+            }
+            break;
         case LOAD_SENTENCE_BREAKITERATOR: icuBI=&sentence; break;
-        case LOAD_LINE_BREAKITERATOR: icuBI=&line; break;
+        case LOAD_LINE_BREAKITERATOR: icuBI=&line; breakType = 4; break;
     }
     if (!icuBI->aBreakIterator || rWordType != aWordType ||
             rLocale.Language != aLocale.Language || rLocale.Country != aLocale.Country ||
@@ -103,28 +111,33 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             icuBI->aBreakIterator=NULL;
         }
         if (rule) {
-            if (rWordType)
-                rule = rWordType == WordType::WORD_COUNT ? "count_word" :
-                        rWordType == WordType::DICTIONARY_WORD ? "dict_word" : "edit_word";
+            Sequence< OUString > breakRules = LocaleData().getBreakIteratorRules(rLocale);
 
             status = U_ZERO_ERROR;
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);
             if ( !U_SUCCESS(status) ) throw ERROR;
 
-            status = U_ZERO_ERROR;
-            OStringBuffer aUDName(64);
-            aUDName.append(rule);
-            aUDName.append('_');
-            aUDName.append( OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US));
-            UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
-            if( U_SUCCESS(status) )
-                icuBI->aBreakIterator = new RuleBasedBreakIterator( pUData, status);
-            if (!U_SUCCESS(status) ) {
+            if (breakRules.getLength() > 0 && breakRules[breakType].getLength() > 0) {
+                icuBI->aBreakIterator = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk",
+                    OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
+            } else {
+                if (rWordType) rule = wordRule;
+
                 status = U_ZERO_ERROR;
-                pUData = udata_open("OpenOffice", "brk", rule, &status);
+                OStringBuffer aUDName(64);
+                aUDName.append(rule);
+                aUDName.append('_');
+                aUDName.append( OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US));
+                UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
                 if( U_SUCCESS(status) )
                     icuBI->aBreakIterator = new RuleBasedBreakIterator( pUData, status);
-                if (!U_SUCCESS(status) ) icuBI->aBreakIterator=NULL;
+                if (!U_SUCCESS(status) ) {
+                    status = U_ZERO_ERROR;
+                    pUData = udata_open("OpenOffice", "brk", rule, &status);
+                    if( U_SUCCESS(status) )
+                        icuBI->aBreakIterator = new RuleBasedBreakIterator( pUData, status);
+                    if (!U_SUCCESS(status) ) icuBI->aBreakIterator=NULL;
+                }
             }
         }
 
