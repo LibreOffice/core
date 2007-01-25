@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:29:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 12:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,8 +332,10 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
     {
         if ( m_pLists[i] )
         {
+            m_pLists[i]->clearCurrentSelectionEntry();
             m_pLists[i]->Hide();
-            ::std::auto_ptr<Window> aTemp(m_pLists[i]);
+            ::std::auto_ptr<DBTreeListBox> aTemp(m_pLists[i]);
+            m_pLists[i]->clearCurrentSelectionEntry();
             m_pLists[i] = NULL;
         }
 
@@ -680,12 +682,18 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
         pCurrent->Hide();
 
     showPreview(NULL);
+    BOOL bHasFocus = FALSE;
     m_aFL.Show();
+    {
+        bHasFocus = pCurrent->HasChildPathFocus();
     _pWindow->Show();
+    }
     m_aTBPreview.Show();
     m_aBorder.Show();
     switchPreview(m_ePreviewMode,TRUE);
 
+    if ( bHasFocus )
+        _pWindow->GrabFocus();
     Resize();
 }
 // -----------------------------------------------------------------------------
