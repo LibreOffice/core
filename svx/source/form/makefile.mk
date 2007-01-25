@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:27:00 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:43:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -114,10 +114,6 @@ SLOFILES = \
 .IF "$(OS)$(CPU)"=="SOLARISI"
 NOOPTFILES=$(SLO)$/fmprop.obj
 .ENDIF
-
-SVXLIGHTOBJFILES= \
-    $(OBJ)$/fmpage.obj      \
-    $(OBJ)$/fmmodel.obj
 
 # --- Targets ----------------------------------
 
