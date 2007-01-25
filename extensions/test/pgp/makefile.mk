@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:58:09 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:14:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ ALL: ALLDEP
 .INCLUDE :  target.mk
 
 $(GENJAVAFILES) : $(RDB)
-#	+javamaker -BUCR -O$(OUT) $(TYPES) $(RDB)
-    +javamaker @$(mktmp -BUCR -O$(OUT) $(TYPES) $(RDB))
+#	javamaker -BUCR -O$(OUT) $(TYPES) $(RDB)
+    javamaker @$(mktmp -BUCR -O$(OUT) $(TYPES) $(RDB))
 
 $(JAVACLASSFILES) : $(GENJAVAFILES)
