@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:42:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,19 +137,41 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 }
 
 // -----------------------------------------------------------------------------
+class FocusWindowWaitCursor
+{
+    Window*         m_pFocusWindow;
+    public:
+    FocusWindowWaitCursor() :
+        m_pFocusWindow( Application::GetFocusWindow() )
+    {
+        if( m_pFocusWindow )
+        {
+            m_pFocusWindow->AddEventListener( LINK( this, FocusWindowWaitCursor, DestroyedLink ) );
+            m_pFocusWindow->EnterWait();
+        }
+    }
+    ~FocusWindowWaitCursor()
+    {
+        if( m_pFocusWindow )
+            m_pFocusWindow->LeaveWait();
+    }
+
+    DECL_LINK( DestroyedLink, VclWindowEvent* );
+};
+
+IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent*, pEvent )
+{
+    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING )
+        m_pFocusWindow = NULL;
+    return 0;
+}
 
 sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    Window* pFocusWindow = Application::GetFocusWindow();
-
-    if( pFocusWindow )
-        pFocusWindow->EnterWait();
+    FocusWindowWaitCursor aCur;
 
     const sal_Bool bRet = implExport( rDescriptor );
-
-    if( pFocusWindow )
-        pFocusWindow->LeaveWait();
 
     return bRet;
 }
