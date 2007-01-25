@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:53:58 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:29:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,27 +103,27 @@ all: $(CPP_DOCU_INDEX_FILE)
 
 
 $(CPP_DOCU_CLEANUP_FLAG) : $(INCLUDELIST) $(PRJ)$/docs$/cpp$/ref$/cpp.css
-    +-$(MY_DELETE_RECURSIVE) $(DESTDIRGENCPPREF) >& $(NULLDEV)
-    +$(TOUCH) $@
+    -$(MY_DELETE_RECURSIVE) $(DESTDIRGENCPPREF) >& $(NULLDEV)
+    $(TOUCH) $@
 
 $(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
-    +-$(MKDIRHIER) $(@:d)        
-    +$(MY_AUTODOC) -html $(DESTDIRGENCPPREF) -name $(CPPDOCREFNAME) $(AUTODOCPARAMS)
-    +-rm $(@:d:d)$/cpp.css
+    -$(MKDIRHIER) $(@:d)        
+    $(MY_AUTODOC) -html $(DESTDIRGENCPPREF) -name $(CPPDOCREFNAME) $(AUTODOCPARAMS)
+    -rm $(@:d:d)$/cpp.css
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/cpp$/ref$/cpp.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/cpp.css
 
 $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
-    +-$(MKDIRHIER) $(@:d)        
-    +$(MY_COPY) $< $@
-    +cd $(JAVA_SRC_DIR) && unzip -quo $(@:f)
+    -$(MKDIRHIER) $(@:d)        
+    $(MY_COPY) $< $@
+    cd $(JAVA_SRC_DIR) && unzip -quo $(@:f)
 
 #$(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/%.java : $(PRJ)$/source$/bean$/com$/sun$/star$/beans$/%.java 
-#	+-$(MKDIRHIER) $(@:d)        
-#	+$(MY_COPY) $< $@
+#	-$(MKDIRHIER) $(@:d)        
+#	$(MY_COPY) $< $@
 
 #$(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES) $(JAVA_BEAN_SRC_FILES)
 .IF "$(SOLAR_JAVA)"!=""
 $(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES)
-    +-$(MKDIRHIER) $(@:d)        
+    -$(MKDIRHIER) $(@:d)        
     $(WRAPCMD) $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
 .ENDIF
