@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 12:34:11 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:53:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,14 +83,14 @@ $(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
     cp $(@:d)$*.tmp $@
 .ENDIF
-    +$(RM) $(@:d)$*.tmp > $(NULLDEV)
-    +$(RM) $(@:d)$*.val > $(NULLDEV)
-    +$(RM) $(@:d)$*.san > $(NULLDEV)
+    $(RM) $(@:d)$*.tmp > $(NULLDEV)
+    $(RM) $(@:d)$*.val > $(NULLDEV)
+    $(RM) $(@:d)$*.san > $(NULLDEV)
 
 $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcs : %.xcs
 # just a copy for now - insert "cfgex" commandline when required
     -$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
+    $(COPY) $< $@
 
 # Create properties files for localized <info> contents (Currently not built)
 .IF "$(XCS_RESOURCES)" != ""
@@ -150,8 +150,8 @@ $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
     cp $(@:d)$*.tmp $@
 .ENDIF
-    +$(RM) $(@:d)$*.tmp > $(NULLDEV)
-    +$(RM) $(@:d)$*.val > $(NULLDEV)
+    $(RM) $(@:d)$*.tmp > $(NULLDEV)
+    $(RM) $(@:d)$*.val > $(NULLDEV)
 
 # --- localizations ---
 .IF "$(WITH_LANG)"!=""
@@ -186,7 +186,7 @@ $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
     cp $(@:d)$*.tmp $@
 .ENDIF
-    +$(RM) $(@:d)$*.tmp > $(NULLDEV)
+    $(RM) $(@:d)$*.tmp > $(NULLDEV)
 
 # --- languagepack tag modules ---
 .IF "$(LANGUAGEPACKS)" != ""
@@ -222,7 +222,7 @@ $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/%.xcu :| $$(@:b:s/-/./:b).xcu
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
     cp $(@:d)$(@:f:s/.xcu/.tmp/) $@
 .ENDIF
-    +$(RM) $(@:d)$(@:f:s/.xcu/.tmp/) > $(NULLDEV)
+    $(RM) $(@:d)$(@:f:s/.xcu/.tmp/) > $(NULLDEV)
 
 .IF "$(XCUFILES)"!=""
 ALLTAR: \
