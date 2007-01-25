@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:08:56 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -867,8 +867,7 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
-                            BOOL bSilent )
+ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, BOOL bIsAPI )
 {
     SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
     SfxPrinter *pDocPrinter = GetPrinter(TRUE);
@@ -885,7 +884,7 @@ ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
     PreparePrint( pDlg );
     SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
 
-    SfxViewShell::Print(*pProgress, pDlg); //???
+    SfxViewShell::Print(*pProgress, bIsAPI, pDlg ); //???
 
     MapMode eOldMapMode( pPrinter->GetMapMode() );
     Font aOldFont( pPrinter->Printer::GetFont() );
