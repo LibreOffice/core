@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:58:37 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:51:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,5 +79,5 @@ DEFLIB1NAME	=basegfx
 .INCLUDE :  target.mk
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    @+$(TYPE) $(TARGET).flt > $@
+    @$(TYPE) $(TARGET).flt > $@
 
