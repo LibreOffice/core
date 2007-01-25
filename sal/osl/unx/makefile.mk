@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 15:55:00 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:24:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ $(OBJ)$/interlck.o: $(MISC)$/interlck_sparc.s
     $(ASM) $(AFLAGS) -o $@ $<
 
 $(MISC)$/interlck_sparc.s: asm/interlck_sparc.s
-    +tr -d "\015" < $< > $@
+    tr -d "\015" < $< > $@
 
 .ENDIF
 
@@ -179,6 +179,6 @@ $(OBJ)$/interlck.o: $(MISC)$/interlck_x86.s
     $(ASM) $(AFLAGS) -o $@ $<
 
 $(MISC)$/interlck_x86.s: asm/interlck_x86.s
-    +tr -d "\015" < $< > $@
+    tr -d "\015" < $< > $@
 
 .ENDIF
