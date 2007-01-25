@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 10:23:59 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:37:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,29 +77,29 @@ $(HXXFILES) : $(MISC)$/xfilter.pl
 
 $(INCCOM)$/keycodes.hxx : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/vcl$/keycodes.hxx \
                           $(MISC)$/xfilter.pl
-    +$(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  vcl$/keycodes.hxx  $(INCCOM)$/keycodes  KEY_
+    $(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  vcl$/keycodes.hxx  $(INCCOM)$/keycodes  KEY_
 
 $(INCCOM)$/classes.hxx :  ..$/inc$/rcontrol.hxx \
                           $(MISC)$/xfilter.pl
-    +$(PERL) $(MISC)$/xfilter.pl ..$/inc  rcontrol.hxx  $(INCCOM)$/classes  M_
+    $(PERL) $(MISC)$/xfilter.pl ..$/inc  rcontrol.hxx  $(INCCOM)$/classes  M_
 
 $(INCCOM)$/r_cmds.hxx :   ..$/inc$/rcontrol.hxx \
                           $(MISC)$/xfilter.pl
-    +$(PERL) $(MISC)$/xfilter.pl ..$/inc  rcontrol.hxx  $(INCCOM)$/r_cmds  RC_
+    $(PERL) $(MISC)$/xfilter.pl ..$/inc  rcontrol.hxx  $(INCCOM)$/r_cmds  RC_
 
 $(INCCOM)$/res_type.hxx : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/vcl$/wintypes.hxx \
                           $(MISC)$/xfilter.pl
-    +$(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  vcl$/wintypes.hxx  $(INCCOM)$/res_type  WINDOW_
+    $(PERL) $(MISC)$/xfilter.pl $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)  vcl$/wintypes.hxx  $(INCCOM)$/res_type  WINDOW_
 
 
 
 $(MISC)$/xfilter.pl : filter.pl
 .IF "$(GUI)" == "UNX" || "$(USE_SHELL)"!="4nt"
-       +tr  -d "\015" < filter.pl > $(MISC)$/xfilter.pl
+       tr  -d "\015" < filter.pl > $(MISC)$/xfilter.pl
        chmod 664 $(MISC)$/xfilter.pl
 .ELSE
-       +$(COPY) filter.pl $(MISC)$/xfilter.pl
-       +attrib  -r $(MISC)$/xfilter.pl
+       $(COPY) filter.pl $(MISC)$/xfilter.pl
+       attrib  -r $(MISC)$/xfilter.pl
 .ENDIF
 
 
@@ -111,7 +111,7 @@ INIFILE=$(BIN)$/testtool.ini
 .END
 
 $(INIFILE): testtool.ini
-        +-$(COPY) $< $@
+        -$(COPY) $< $@
 
 ALLTAR: \
         $(INIFILE)
