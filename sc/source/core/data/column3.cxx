@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:19:23 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #include "collect.hxx"
 #include "errorcodes.hxx"
 #include "brdcst.hxx"
-#include "docoptio.hxx"         // GetStdPrecision fuer GetMaxStringLen
+#include "docoptio.hxx"         // GetStdPrecision fuer GetMaxNumberStringLen
 #include "subtotal.hxx"
 #include "markdata.hxx"
 #include "detfunc.hxx"          // fuer Notizen bei DeleteRange
@@ -1798,12 +1798,14 @@ BOOL ScColumn::HasStringCells( SCROW nStartRow, SCROW nEndRow ) const
 }
 
 
-xub_StrLen ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd ) const
+sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const
 {
-    xub_StrLen nStringLen = 0;
+    sal_Int32 nStringLen = 0;
     if ( pItems )
     {
         String aString;
+        rtl::OString aOString;
+        bool bIsOctetTextEncoding = rtl_isOctetTextEncoding( eCharSet);
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
         SCSIZE nIndex;
         SCROW nRow;
@@ -1818,8 +1820,25 @@ xub_StrLen ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd ) const
                     nRow, ATTR_VALUE_FORMAT ))->GetValue();
                 ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
                     *pNumFmt );
-                if ( nStringLen < aString.Len() )
-                    nStringLen = aString.Len();
+                sal_Int32 nLen;
+                if (bIsOctetTextEncoding)
+                {
+                    rtl::OUString aOUString( aString);
+                    if (!aOUString.convertToString( &aOString, eCharSet,
+                                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                                RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+                    {
+                        // TODO: anything? this is used by the dBase export filter
+                        // that throws an error anyway, but in case of another
+                        // context we might want to indicate a conversion error
+                        // early.
+                    }
+                    nLen = aOString.getLength();
+                }
+                else
+                    nLen = aString.Len() * sizeof(sal_Unicode);
+                if ( nStringLen < nLen)
+                    nStringLen = nLen;
             }
             nIndex++;
         }
