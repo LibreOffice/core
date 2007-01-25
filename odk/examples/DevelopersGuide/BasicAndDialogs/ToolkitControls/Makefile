@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:08:03 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:03:04 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -53,8 +53,8 @@ SAMPLE_GEN_OUT=$(OUT_MISC)/$(SAMPLE_NAME)
 
 COMP_NAME=ToolkitControls
 COMP_GEN_OUT=$(SAMPLE_GEN_OUT)/$(COMP_NAME)
-COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
-COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(COMP_GEN_OUT)/META-INF/manifest.xml
 COMP_REGISTERFLAG=$(COMP_GEN_OUT)$(PS)devguide_basic_$(COMP_NAME)_register_component.flag
 
