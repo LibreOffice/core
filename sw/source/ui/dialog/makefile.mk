@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 07:13:37 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:25:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,12 +89,12 @@ LIB1OBJFILES =  \
 $(INCCOM)$/swuilib.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     $(RM) $@
-    +echo \#define DLL_NAME \"libswui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    echo \#define DLL_NAME \"libswui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
 .IF "$(USE_SHELL)"!="4nt"
-    +echo \#define DLL_NAME \"swui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    echo \#define DLL_NAME \"swui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE          # "$(USE_SHELL)"!="4nt"
-    +echo #define DLL_NAME "swui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+    echo #define DLL_NAME "swui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
 .ENDIF          # "$(USE_SHELL)"!="4nt"
 .ENDIF
 
