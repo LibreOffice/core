@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:24:26 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:24:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,14 @@ sub create_directories
         else { $path = $installer::globals::unpackpath; }
         $path =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
         $path = $path . $installer::globals::separator;
+    }
+    elsif ( ( $newdirectory eq "jds" ) )
+    {
+        if ( $installer::globals::jdstemppathdefined ) { $path = $installer::globals::jdstemppath; }
+        else { $path = $installer::globals::unpackpath; }
+        $path =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
+        $path = $path . $installer::globals::separator;
+        installer::systemactions::create_directory($path);
     }
     else
     {
