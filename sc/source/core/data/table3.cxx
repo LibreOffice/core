@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:09:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1713,11 +1713,11 @@ ULONG ScTable::GetCodeCount() const
     return nCodeCount;
 }
 
-xub_StrLen ScTable::GetMaxStringLen( SCCOL nCol,
-                                SCROW nRowStart, SCROW nRowEnd ) const
+sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
+        SCROW nRowEnd, CharSet eCharSet ) const
 {
     if ( ValidCol(nCol) )
-        return aCol[nCol].GetMaxStringLen( nRowStart, nRowEnd );
+        return aCol[nCol].GetMaxStringLen( nRowStart, nRowEnd, eCharSet );
     else
         return 0;
 }
