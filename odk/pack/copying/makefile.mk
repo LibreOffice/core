@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 12:26:09 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:29:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -244,5 +244,5 @@ all : \
 
 .IF "$(SOLAR_JAVA)" != ""
 $(MYZIPTARGET) : $(BIN)$/unowinreg.dll $(DESTCLASSESLIST)
-    +cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
+    cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
 .ENDIF
