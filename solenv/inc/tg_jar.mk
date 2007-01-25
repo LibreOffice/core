@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 16:21:18 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:54:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,14 @@ $(JARTARGETN) : $(JARMANIFEST) $(JAVACLASSFILES) $(JAVATARGET)
 CUSTOMMANIFESTFILEDEP:=$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
 
 $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(CUSTOMMANIFESTFILE)
-    +-$(RM) $@
+    -$(RM) $@
 #>& $(NULLDEV)
-    +$(COPY) $< $@
+    $(COPY) $< $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 
 $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     -$(MKDIRHIER) $(@:d) >& $(NULLDEV)
-    +-$(RM) $@ >& $(NULLDEV)
+    -$(RM) $@ >& $(NULLDEV)
     echo Manifest-Version: 1.0 > $@
 .IF "$(JARCLASSPATH)" != ""
     echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
@@ -67,7 +67,7 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
     echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
 .IF "$(CUSTOMMANIFESTFILE)"!=""
-    +$(TYPE) $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
+    $(TYPE) $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 .ENDIF			# "$(JARMANIFEST)"!=""
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
@@ -84,11 +84,11 @@ $(JARTARGETN) :
 #$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell -cat -s $(MISC)$/$(JARTARGETN).dep )
 .ENDIF			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
-    @+-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
+    @-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
 .IF "$(JARMANIFEST)"!=""
-    +cd $(CLASSDIR)$/$(TARGET) && zip -u -rX ..$/$(@:f) $(subst,$(CLASSDIR)$/$(TARGET)$/, $(JARMANIFEST)) $(CHECKZIPRESULT)
+    cd $(CLASSDIR)$/$(TARGET) && zip -u -rX ..$/$(@:f) $(subst,$(CLASSDIR)$/$(TARGET)$/, $(JARMANIFEST)) $(CHECKZIPRESULT)
 .ENDIF			# "$(JARMANIFEST)"!=""
-    +cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
+    cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
 .ENDIF
 
