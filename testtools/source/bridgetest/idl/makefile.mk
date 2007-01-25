@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:25:47 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:23:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ $(MISC)$/$(TARGET).javamaker.done: $(BIN)$/bridgetest.rdb
 
 $(BIN)$/bridgetest.rdb: bridgetest.idl
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
-    +- $(RM) $@
+    - $(RM) $@
     $(REGMERGE) $@ /UCR $(MISC)$/$(TARGET)$/bridgetest.urd
 
 .IF "$(GUI)" == "WNT"
