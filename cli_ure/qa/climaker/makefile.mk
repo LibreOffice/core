@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-03 17:13:20 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:42:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ $(EXETARGET): $(CSFILES) $(OUTDIR)$/cli_test_types.dll
     $(GNUCOPY) -p $(BIN)$/cli_basetypes.dll $(OUTDIR)$/cli_basetypes.dll
     $(GNUCOPY) -p $(BIN)$/cli_ure.dll $(OUTDIR)$/cli_ure.dll
     $(GNUCOPY) -p $(BIN)$/climaker.exe $(OUTDIR)
-    +$(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET) \
+    $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET) \
         -reference:$(BIN)$/cli_ure.dll \
          -reference:$(BIN)$/cli_types.dll \
          -reference:$(BIN)$/cli_basetypes.dll \
@@ -138,6 +138,6 @@ CT_NOOFFICE = -NoOffice
 # --- Targets ------------------------------------------------------
 
 RUN:
-    +java -cp $(CLASSPATH) -Dcli_ure_test=$(EXETARGET) $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
+    java -cp $(CLASSPATH) -Dcli_ure_test=$(EXETARGET) $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
 
 run: RUN
