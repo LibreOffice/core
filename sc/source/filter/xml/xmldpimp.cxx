@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:52:13 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1454,7 +1454,10 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
             if (IsXMLToken(sValue, XML_AUTO))
                 bAutoStart = sal_True;
             else
+            {
                 GetScImport().GetMM100UnitConverter().convertDateTime(fStart, sValue);
+                bAutoStart = sal_False;
+            }
         }
         else if (IsXMLToken(aLocalName, XML_DATE_END))
         {
@@ -1462,21 +1465,30 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
             if (IsXMLToken(sValue, XML_AUTO))
                 bAutoEnd = sal_True;
             else
+            {
                 GetScImport().GetMM100UnitConverter().convertDateTime(fEnd, sValue);
+                bAutoEnd = sal_False;
+            }
         }
         else if (IsXMLToken(aLocalName, XML_START))
         {
             if (IsXMLToken(sValue, XML_AUTO))
                 bAutoStart = sal_True;
             else
+            {
                 GetScImport().GetMM100UnitConverter().convertDouble(fStart, sValue);
+                bAutoStart = sal_False;
+            }
         }
         else if (IsXMLToken(aLocalName, XML_END))
         {
             if (IsXMLToken(sValue, XML_AUTO))
                 bAutoEnd = sal_True;
             else
+            {
                 GetScImport().GetMM100UnitConverter().convertDouble(fEnd, sValue);
+                bAutoEnd = sal_False;
+            }
         }
         else if (IsXMLToken(aLocalName, XML_STEP))
                 GetScImport().GetMM100UnitConverter().convertDouble(fStep, sValue);
