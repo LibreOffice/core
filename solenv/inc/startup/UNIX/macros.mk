@@ -11,7 +11,9 @@ GROUPSHELL *:= $(SHELL)
 .ENDIF # $(USE_SHELL) == bash
 
    GROUPFLAGS       *:= $(SHELLFLAGS)
-   SHELLMETAS       *:= "<>|/
+
+# incomplete - better use METAS from startup.mk
+#   SHELLMETAS       *:= "<>|/
    RM               *=  rm
    RMFLAGS          *=  -f
    MV	            *=  mv
