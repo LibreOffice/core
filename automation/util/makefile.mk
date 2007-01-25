@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 00:27:47 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:38:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ SHL1STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        $(LIBPRE) advapi32.lib	\
-        $(LIBPRE) gdi32.lib
+        advapi32.lib	\
+        gdi32.lib
 .ENDIF
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
@@ -131,8 +131,8 @@ SHL3STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL3STDLIBS+= \
-        $(LIBPRE) advapi32.lib	\
-        $(LIBPRE) gdi32.lib
+        advapi32.lib	\
+        gdi32.lib
 .ENDIF
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
@@ -210,7 +210,7 @@ APP1STDLIBS+= -lapp -lsample
 
 
 APP1LIBS=\
-        $(LIBPRE) $(LB)$/testtool.lib
+        $(LB)$/testtool.lib
 
 APP1OBJS=       $(OBJ)$/testbasi.obj \
                 $(OBJ)$/cmdbasestream.obj \
@@ -253,7 +253,7 @@ APP3DEPN=$(SHL1IMPLIBN)
 .ENDIF
 
 APP3LIBS= \
-        $(LIBPRE) $(LB)$/miniapp.lib
+        $(LB)$/miniapp.lib
 
 .IF "$(GUI)" != "UNX"
 #		win16 braucht ein appobj
