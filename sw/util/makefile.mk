@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:55:04 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:25:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,11 +94,11 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
     $(OUT)$/slo$/swdll.obj
 
 LIB1FILES       = \
-        $(LIBPRE) $(SLB)$/core1.lib	\
-        $(LIBPRE) $(SLB)$/core2.lib	\
-        $(LIBPRE) $(SLB)$/filter.lib	\
-        $(LIBPRE) $(SLB)$/ui1.lib	\
-        $(LIBPRE) $(SLB)$/ui2.lib
+        $(SLB)$/core1.lib	\
+        $(SLB)$/core2.lib	\
+        $(SLB)$/filter.lib	\
+        $(SLB)$/ui1.lib	\
+        $(SLB)$/ui2.lib
 
 .IF "$(OS)"!="MACOSX"
 # static libraries
