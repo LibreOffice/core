@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 12:15:29 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:33:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,11 @@ ALLTAR : make_test
 
 make_test:
 .IF $(NOREMOVE)
-    @+$(PERL) smoketest.pl -nr $(LAST_MINOR)
+    @$(PERL) smoketest.pl -nr $(LAST_MINOR)
 .ELSE
-    @+$(PERL) smoketest.pl $(LAST_MINOR)
+    @$(PERL) smoketest.pl $(LAST_MINOR)
 .ENDIF
 
 noremove:
-    @+$(PERL) smoketest.pl -nr $(LAST_MINOR)
+    @$(PERL) smoketest.pl -nr $(LAST_MINOR)
 
