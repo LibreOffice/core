@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:57:45 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:31:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,12 @@ $(BIN)$/$(TARGET).rdb: types.idl
     - rm $@
     - $(MKDIR) $(MISC)$/$(TARGET)
     - $(MKDIR) $(MISC)$/$(TARGET)$/inc
-    idlc -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
-    regmerge $@ /UCR $(MISC)$/$(TARGET)$/types.urd
-    cppumaker -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
-    javamaker -BUCR -nD -O$(CLASSDIR) $@ -X$(SOLARBINDIR)$/types.rdb
-    regmerge $@ / $(SOLARBINDIR)$/types.rdb
-    regcomp -register -r $@ -c acceptor.uno$(DLLPOST) \
+    $(IDLC) -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
+    $(REGMERGE) $@ /UCR $(MISC)$/$(TARGET)$/types.urd
+    $(CPPUMAKER) -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
+    $(JAVAMAKER) -BUCR -nD -O$(CLASSDIR) $@ -X$(SOLARBINDIR)$/types.rdb
+    $(REGMERGE) $@ / $(SOLARBINDIR)$/types.rdb
+    $(REGCOMP) -register -r $@ -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) -c connector.uno$(DLLPOST) \
         -c remotebridge.uno$(DLLPOST) -c uuresolver.uno$(DLLPOST)
 
