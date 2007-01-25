@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:47:25 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ public:
     void            PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData );
     void            Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                             ScMarkData* pMarkData, Window* pDialogParent,
-                            BOOL bForceSelected );
+                            BOOL bForceSelected, BOOL bIsAPI );
 
     void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = FALSE );
     BOOL            IsOle();
