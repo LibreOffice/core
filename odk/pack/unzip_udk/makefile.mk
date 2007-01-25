@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:58:41 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:29:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@ TARGET=unzip_udk
 all: ..$/misc$/deltree.txt
 
 ..$/misc$/deltree.txt .SETDIR=$(OUT)$/bin : $(PRJ)$/pack$/unzip_udk$/deltree.txt
-    +-$(MY_DELETE_RECURSIVE) $(PRODUCT_NAME) >& $(NULLDEV)
-    +-rm -f $(PRODUCT_NAME).zip >& $(NULLDEV)
-    +-$(MY_DELETE_RECURSIVE) $(PRODUCT_NAME2) >& $(NULLDEV)
-    +-rm -f odkidl.zip >& $(NULLDEV)
-    +-rm -f odk_ooidl.zip >& $(NULLDEV)
-    +@echo "" > ..$/misc$/deltree.txt
+    -$(MY_DELETE_RECURSIVE) $(PRODUCT_NAME) >& $(NULLDEV)
+    -rm -f $(PRODUCT_NAME).zip >& $(NULLDEV)
+    -$(MY_DELETE_RECURSIVE) $(PRODUCT_NAME2) >& $(NULLDEV)
+    -rm -f odkidl.zip >& $(NULLDEV)
+    -rm -f odk_ooidl.zip >& $(NULLDEV)
+    @echo "" > ..$/misc$/deltree.txt
