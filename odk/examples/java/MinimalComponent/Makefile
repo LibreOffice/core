@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.17 $
+#  $Revision: 1.18 $
 #
-#  last change: $Author: kz $ $Date: 2006-11-06 15:07:59 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:09:22 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -60,8 +60,8 @@ COMP_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(COMP_NAME)
 COMP_GEN_OUT=$(SAMPLE_GEN_OUT)/$(COMP_NAME)
 COMP_RDB_NAME=$(COMP_NAME).uno.rdb
 COMP_RDB=$(COMP_GEN_OUT)/$(COMP_RDB_NAME)
-COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
-COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_JAR_NAME=$(COMP_NAME).uno.jar
 COMP_JAR=$(SAMPLE_CLASS_OUT)/$(COMP_JAR_NAME)
 COMP_JAR_MANIFEST=$(COMP_GEN_OUT)/$(COMP_NAME).uno.Manifest
