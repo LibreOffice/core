@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:02:22 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:45:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,7 @@ public:
 
     virtual USHORT  SetPrinter( SfxPrinter* pNew,
                                         USHORT nDiff = SFX_PRINTER_ALL);
-    virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog,
-                                     BOOL bSilent );
+    virtual ErrCode DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
     virtual         SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
 
     void            SourceSaved() {bSourceSaved = TRUE;}
