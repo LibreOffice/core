@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-22 10:44:08 $
+#   last change: $Author: obo $ $Date: 2007-01-25 14:01:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,14 @@ TARGET=so_stlport
 .IF "$(USE_SYSTEM_STL)"=="YES"
 $(INCCOM)$/stlport$/hash_map : systemstl/hash_map
         @echo "You choose to build without stlport, so some headers will be used to bring the sgi extensions into the std namespace"
-        +-$(MKDIR) $(INCCOM)$/stlport
-        +$(COPY) systemstl/functional $(INCCOM)$/stlport
-        +$(COPY) systemstl/hash_map $(INCCOM)$/stlport
-        +$(COPY) systemstl/hash_set $(INCCOM)$/stlport
-        +$(COPY) systemstl/numeric $(INCCOM)$/stlport
-        +$(COPY) systemstl/slist $(INCCOM)$/stlport
-        +$(COPY) systemstl/rope $(INCCOM)$/stlport
-        +$(COPY) systemstl/vector $(INCCOM)$/stlport
+        -$(MKDIR) $(INCCOM)$/stlport
+        $(COPY) systemstl/functional $(INCCOM)$/stlport
+        $(COPY) systemstl/hash_map $(INCCOM)$/stlport
+        $(COPY) systemstl/hash_set $(INCCOM)$/stlport
+        $(COPY) systemstl/numeric $(INCCOM)$/stlport
+        $(COPY) systemstl/slist $(INCCOM)$/stlport
+        $(COPY) systemstl/rope $(INCCOM)$/stlport
+        $(COPY) systemstl/vector $(INCCOM)$/stlport
 .ENDIF
 
 
@@ -211,17 +211,17 @@ all :
 
 $(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
 avoid_win32_patches :
-    @+$(ECHONL)
+    @$(ECHONL)
     @echo ERROR! this module can't use automated patch creation
     @echo on windows.
-    @+$(ECHONL)
+    @$(ECHONL)
     force_dmake_to_error
 
 $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .IF "$(USE_SHELL)"=="4nt"
-    +win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
+    win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +win32_custom.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
+    win32_custom.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
@@ -229,9 +229,9 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 .IF "$(USE_NEW_SDK)"!=""
 $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .IF "$(USE_SHELL)"=="4nt"
-    +win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
+    win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +win32_sdk.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
+    win32_sdk.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
