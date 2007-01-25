@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:53:52 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:39:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -132,15 +130,15 @@ CPPUMAKERFLAGS = -L
 # 		-Tcom.sun.star.uno.XCurrentContext
 
 $(BIN)$/anyperformance.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
-    +regmerge $@ / $(UNOUCRRDB)
+    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    regmerge $@ / $(UNOUCRRDB)
     touch $@
 
-# 	+regcomp -register -r $@ -c javaloader.dll
-# 	+regcomp -register -r $@ -c jen.dll
+# 	regcomp -register -r $@ -c javaloader.dll
+# 	regcomp -register -r $@ -c jen.dll
 
 unoheader: $(BIN)$/anyperformance.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/anyperformance.rdb
-#	+cunomaker -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/anyperformance.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/anyperformance.rdb
+#	cunomaker -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/anyperformance.rdb
 
