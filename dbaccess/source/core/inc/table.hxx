@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:28:55 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,6 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
         virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
         virtual void columnDropped(const ::rtl::OUString& _sName);
-        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone);
 
         /** creates the column collection for the table
             @param  _rNames
