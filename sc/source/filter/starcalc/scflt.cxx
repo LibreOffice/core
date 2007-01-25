@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:21:16 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1770,12 +1770,13 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
             rStream >> NoteLen;
             if (NoteLen != 0)
             {
-                sal_Char Note[4096];
-                rStream.Read(Note, NoteLen);
-                Note[NoteLen] = 0;
-                    String aText( SC10TOSTRING(Note));
-                    ScPostIt aNote(aText, pDoc);
+                sal_Char* pNote = new sal_Char[NoteLen+1];
+                rStream.Read(pNote, NoteLen);
+                pNote[NoteLen] = 0;
+                String aText( SC10TOSTRING(pNote));
+                ScPostIt aNote(aText, pDoc);
                 pDoc->SetNote(Col, static_cast<SCROW> (Row), Tab, aNote );
+                delete [] pNote;
             }
         }
         pPrgrsBar->Progress();
