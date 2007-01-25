@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:22:58 $
+#   last change: $Author: obo $ $Date: 2007-01-25 16:23:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1451,6 +1451,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         # $installer::globals::subdir is only "RPMS" or "packages"
                         $installer::globals::subdir = installer::epmfile::create_new_directory_structure($newepmdir);
                         $installer::globals::postprocess_specialepm = 1;
+
+                        if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix_solaris_x86_patch($packagename); }
                     }
                 }
                 else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
