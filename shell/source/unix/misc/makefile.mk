@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 11:26:32 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:37:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,4 +77,4 @@ OBJFILES = $(APP1OBJS) $(APP2OBJS)
 ALLTAR : $(SCRIPTFILES) $(AWKFILES)
 
 $(SCRIPTFILES) : $$(@:f:+".sh")
-    +@tr -d "\015" < $(@:f:+".sh") > $@
+    @tr -d "\015" < $(@:f:+".sh") > $@
