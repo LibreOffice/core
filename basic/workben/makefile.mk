@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:52:18 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:01:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,9 @@ APP1STDLIBS+= \
 .ENDIF
 
 APP1LIBS= \
-            $(LIBPRE) $(LB)$/basic.lib \
-            $(LIBPRE) $(LB)$/app.lib \
-            $(LIBPRE) $(LB)$/sample.lib
+            $(LB)$/basic.lib \
+            $(LB)$/app.lib \
+            $(LB)$/sample.lib
 .IF "$(GUI)"=="UNX"
 APP1STDLIBS+=	\
             $(BASICLIB)
