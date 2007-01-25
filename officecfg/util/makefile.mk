@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:49:29 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:06:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,11 @@ TARGET=util
 # --- Targets ------------------------------------------------------
 
 $(MISC)$/$(TARGET)_delzip :
-    +-$(RM) $(BIN)$/registry_{$(alllangiso)}.zip	
-    +-$(RM) $(COMMON_OUTPUT)$/bin$/registry_{$(alllangiso)}.zip
+    -$(RM) $(BIN)$/registry_{$(alllangiso)}.zip	
+    -$(RM) $(COMMON_OUTPUT)$/bin$/registry_{$(alllangiso)}.zip
 
 $(BIN)$/registry_{$(alllangiso)}.zip : $(MISC)$/$(TARGET)_delzip
-    +cd $(MISC)$/registry$/res$/$(@:b:s/registry_//) && zip -ru ..$/..$/..$/..$/bin$/registry_$(@:b:s/registry_//).zip org/*
+    cd $(MISC)$/registry$/res$/$(@:b:s/registry_//) && zip -ru ..$/..$/..$/..$/bin$/registry_$(@:b:s/registry_//).zip org/*
 
 ALLTAR: \
     $(MISC)$/$(TARGET)_delzip \
