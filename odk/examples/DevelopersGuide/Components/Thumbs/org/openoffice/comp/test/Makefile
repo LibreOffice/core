@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:17:28 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:04:52 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -102,7 +102,7 @@ $(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANI
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$(COMPONENT_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(COMPONENT_RDB_NAME) $(COMPONENT_JAR_NAME)
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(COMPONENT_RDB_NAME)))
 
 $(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(PACKAGE)/$(APP1_NAME).class
