@@ -180,7 +180,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print >> sys.stderr, "PyMailSMPTService recipients are", truerecipients
 
-		self.server.sendmail(sender, recipients, msg.as_string())
+		self.server.sendmail(sender, truerecipients, msg.as_string())
 
 class PyMailIMAPService(unohelper.Base, XMailService):
 	def __init__( self, ctx ):
