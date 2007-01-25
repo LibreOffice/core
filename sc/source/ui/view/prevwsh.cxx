@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:07:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,7 +476,7 @@ void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
     pDocShell->PreparePrint( pPrintDialog, NULL );
 }
 
-USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog )
+USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog )
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
@@ -491,8 +491,8 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, PrintDialog* pPri
     aProps[0].Value <<= aSheets;
     SetAdditionalPrintOptions( aProps );
 
-    SfxViewShell::Print( rProgress, pPrintDialog );
-    pDocShell->Print( rProgress, pPrintDialog, NULL, pPreview, FALSE );
+    SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
+    pDocShell->Print( rProgress, pPrintDialog, NULL, pPreview, FALSE, bIsAPI );
 
     return 0;
 }
