@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:20:39 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2485,14 +2485,13 @@ void SwPagePreView::ScrollDocSzChg()
 
 // alles zum Thema Drucken
 
-USHORT  SwPagePreView::Print( SfxProgress &rProgress, PrintDialog *pDlg )
+USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pDlg )
 {
     ViewShell* pSh = aViewWin.GetViewShell();
     SfxPrinter* pPrinter = GetPrinter();
-    if( !pPrinter || !pPrinter->InitJob( &aViewWin, pSh->HasDrawView() &&
-                    pSh->GetDrawView()->GetModel()->HasTransparentObjects() ))
+    if( !pPrinter || !pPrinter->InitJob( &aViewWin,
+                pSh->HasDrawView() && !bIsAPI && pSh->GetDrawView()->GetModel()->HasTransparentObjects() ))
         return ERRCODE_IO_ABORT;
-
 
     SwWait aWait( *GetDocShell(), TRUE );
 
