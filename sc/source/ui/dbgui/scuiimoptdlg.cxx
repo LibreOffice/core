@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiimoptdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:28:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:07:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,13 +174,12 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     aEdTextSep.SetText( aEdTextSep.GetEntry(0) );
 
     if ( bOnlyDbtoolsEncodings )
-    {   //!TODO: Unicode and MultiByte would need work in each filter
-        // Think of field lengths in dBase export
+    {
+        // Even dBase export allows multibyte now
         if ( bMultiByte )
-            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE );
+            aLbFont.FillFromDbTextEncodingMap( bImport );
         else
-            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE |
-                RTL_TEXTENCODING_INFO_MULTIBYTE );
+            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else if ( !bAscii )
     {   //!TODO: Unicode would need work in each filter
