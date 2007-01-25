@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkbridge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:25:45 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,17 @@
 
 bool InitAtkBridge(void)
 {
+    const char* pVersion = atk_get_toolkit_version();
+    if( ! pVersion )
+    {
+        g_warning( "unable to get gail version number" );
+        return false;
+    }
+
     unsigned int major, minor, micro;
 
     /* check gail minimum version requirements */
-    if( sscanf( atk_get_toolkit_version(), "%u.%u.%u", &major, &minor, &micro) < 3 )
+    if( sscanf( pVersion, "%u.%u.%u", &major, &minor, &micro) < 3 )
     {
         g_warning( "unable to parse gail version number" );
         return false;
