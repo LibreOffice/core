@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:18:20 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,7 +714,7 @@ void DockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
             Show( FALSE, SHOW_NOFOCUSCHANGE );
             SetFloatingMode( bFloatMode );
             bShow = TRUE;
-            if ( bFloatMode )
+            if ( bFloatMode && mpFloatWin )
                 mpFloatWin->SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
         }
         if ( !bFloatMode )
@@ -860,7 +860,7 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
     }
     if ( IsFloatingMode() != bFloatMode )
     {
-        if ( PrepareToggleFloatingMode() )
+        if ( PrepareToggleFloatingMode() ) // changes to floating mode can be vetoed
         {
             BOOL bVisible = IsVisible();
 
