@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:11:42 $
+#   last change: $Author: obo $ $Date: 2007-01-25 10:55:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,15 @@ ZIP1LIST = uretest
 
 ALLTAR: \
     $(BIN)$/ure$/README \
+    $(BIN)$/ure$/THIRDPARTYLICENSEREADME.html \
     $(BIN)$/ure$/jvmfwk3$(MY_RC) \
     $(BIN)$/ure$/uno$(MY_RC)
 
 $(BIN)$/ure$/README: README
+    - $(MKDIR) $(@:d)
+    + $(COPY) $< $@
+
+$(BIN)$/ure$/THIRDPARTYLICENSEREADME.html: THIRDPARTYLICENSEREADME.html
     - $(MKDIR) $(@:d)
     + $(COPY) $< $@
 
