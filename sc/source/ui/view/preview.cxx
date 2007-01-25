@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:06 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svx/fmview.hxx>
 #include <svx/sizeitem.hxx>
+#include <svx/svdpagv.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -142,7 +143,8 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
     // #114135#
     if ( pModel )
     {
-        if ( pDrawView && !pDrawView->GetSdrPageView())
+        SdrPage* pPage = pModel->GetPage(nTab);
+        if ( pDrawView && ( !pDrawView->GetSdrPageView() || pDrawView->GetSdrPageView()->GetPage() != pPage ) )
         {
             //  die angezeigte Page der DrawView umzustellen (s.u.) funktioniert nicht ?!?
             delete pDrawView;
@@ -156,7 +158,7 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
             // (Einstellung "Im Entwurfsmodus oeffnen"), darum hier zuruecksetzen
             pDrawView->SetDesignMode( TRUE );
             pDrawView->SetPrintPreview( TRUE );
-            pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+            pDrawView->ShowSdrPage(pPage);
         }
 #if 0
         else if ( !pDrawView->GetSdrPageView())     // angezeigte Page umstellen
