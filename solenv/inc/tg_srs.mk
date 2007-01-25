@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:04:23 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:57:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@ HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS$(TNR)NAM
 $(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
-    +$(TYPE) $(mktmp  $(subst,$/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    $(TYPE) $(mktmp  $(subst,$/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDSRS$(TNR)PARTICLE)
 
@@ -54,16 +54,16 @@ ALLTAR : $(HIDSRS$(TNR)PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    +-$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS$(TNR)NAME).srs} -fo=$@ $(SRC$(TNR)FILES)
+    -$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr >& $(NULLDEV)
+    $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS$(TNR)NAME).srs} -fo=$@ $(SRC$(TNR)FILES)
 
 .IF "$(WITH_LANG)"!=""
 $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
     -$(MKDIR) $(@:d)
-    +-$(RM) $@
+    -$(RM) $@
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-    +$(RENAME) $@.$(INPATH) $@
-    +-$(RM) $@.$(INPATH)
+    $(RENAME) $@.$(INPATH) $@
+    -$(RM) $@.$(INPATH)
 
 $(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -71,15 +71,15 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
 .ENDIF			# "$(WITH_LANG)"!=""
     @echo ------------------------------
     @echo Making: $@
-    +$(RSC) -presponse @$(mktmp \
+    $(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
         $< \
     )
-    +-$(RM) $@
-    +$(RENAME) $@.$(INPATH) $@
-    +-$(RM) $@.$(INPATH)
+    -$(RM) $@
+    $(RENAME) $@.$(INPATH) $@
+    -$(RM) $@.$(INPATH)
 
 .ENDIF          # "$(SRS$(TNR)NAME)"!=""
 
