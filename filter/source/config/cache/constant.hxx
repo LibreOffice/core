@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constant.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-25 09:28:04 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 namespace filter { namespace config {
 extern rtl::OUString pFilterStrings[];
-}; };
+} }
 #ifndef PROPNAME_IMPL_DECL
 #  define PROPNAME_DECL(index, str) (pFilterStrings[(index)])
 #else
