@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:51:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1062,9 +1062,9 @@ void PushButton::ImplDrawPushButtonFrame( Window* pDev,
         StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
         aStyleSettings.Set3DColors( pDev->GetControlBackground() );
         aSettings.SetStyleSettings( aStyleSettings );
-        ((OutputDevice*)pDev)->SetSettings( aSettings );
+        pDev->OutputDevice::SetSettings( aSettings );
         rRect = aDecoView.DrawButton( rRect, nStyle );
-        ((OutputDevice*)pDev)->SetSettings( aOldSettings );
+        pDev->OutputDevice::SetSettings( aOldSettings );
     }
     else
         rRect = aDecoView.DrawButton( rRect, nStyle );
