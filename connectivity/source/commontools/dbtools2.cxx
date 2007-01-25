@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:14:09 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -882,7 +882,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const ::rtl::OUString& _rSourc
         SharedResources aResources;
         ::rtl::OUString sMessage = aResources.getResourceStringWithSubstitution( STR_CANNOT_CONVERT_STRING,
             "$string$", _rSource,
-            "$charset$", lcl_getEncodingName( _eEncoding )
+            "$charset", lcl_getEncodingName( _eEncoding )
         );
 
         throw SQLException(
