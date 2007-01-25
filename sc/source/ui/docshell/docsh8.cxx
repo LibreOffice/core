@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:22:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <stdio.h>
 #include <tools/urlobj.hxx>
 #include <svtools/converter.hxx>
 #include <svtools/zforlist.hxx>
@@ -444,7 +445,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                             const ScRange& rDataRange, BOOL bHasFieldNames,
                             rtl::OUString* pColNames, sal_Int32* pColTypes,
                             sal_Int32* pColLengths, sal_Int32* pColScales,
-                            BOOL& bHasMemo )
+                            BOOL& bHasMemo, CharSet eCharSet )
 {
     //  updating of column titles didn't work in 5.2 and isn't always wanted
     //  (saving normally shouldn't modify the document)
@@ -468,9 +469,9 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     {
         BOOL bTypeDefined = FALSE;
         BOOL bPrecDefined = FALSE;
-        long nFieldLen = 0;
-        long nPrecision = 0;
-        long nDbType = sdbc::DataType::SQLNULL;
+        sal_Int32 nFieldLen = 0;
+        sal_Int32 nPrecision = 0;
+        sal_Int32 nDbType = sdbc::DataType::SQLNULL;
         String aFieldName, aString;
 
         // Feldname[,Type[,Width[,Prec]]]
@@ -616,7 +617,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
         {   // maximale Feldbreite bestimmen
             nFieldLen = pDoc->GetMaxStringLen( nTab, nCol, nFirstDataRow,
-                nLastRow );
+                nLastRow, eCharSet );
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
         }
@@ -774,7 +775,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     lcl_GetColumnTypes( *this, aDataRange, bHasFieldNames,
                         aColNames.getArray(), aColTypes.getArray(),
                         aColLengths.getArray(), aColScales.getArray(),
-                        bHasMemo );
+                        bHasMemo, eCharSet );
 
     INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
@@ -1074,62 +1075,100 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     }
     catch ( sdbc::SQLException& aException )
     {
-        if (aException.ErrorCode == 22018)
+        sal_Int32 nError = aException.ErrorCode;
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "ScDocShell::DBaseExport: SQLException ErrorCode: %d, SQLState: %s, Message: %s\n",
+                nError, OUStringToOString( aException.SQLState,
+                    RTL_TEXTENCODING_UTF8).getStr(), OUStringToOString(
+                        aException.Message, RTL_TEXTENCODING_UTF8).getStr());
+#endif
+        if (nError == 22018 || nError == 22001)
         {
             // SQL error 22018: Character not in target encoding.
+            // SQL error 22001: String length exceeds field width (after encoding).
+            bool bEncErr = (nError == 22018);
+            bool bIsOctetTextEncoding = rtl_isOctetTextEncoding( eCharSet);
+            DBG_ASSERT( !bEncErr || bIsOctetTextEncoding, "ScDocShell::DBaseExport: encoding error and not an octect textencoding");
             SCCOL nDocCol = nFirstCol;
-            DBG_ASSERT( rtl_isOctetTextEncoding( eCharSet), "ScDocShell::DBaseExport: not an octect textencoding");
-            if (rtl_isOctetTextEncoding( eCharSet))
+            const sal_Int32* pColTypes = aColTypes.getConstArray();
+            const sal_Int32* pColLengths = aColLengths.getConstArray();
+            ScHorizontalCellIterator aIter( &aDocument, nTab, nFirstCol,
+                    nDocRow, nLastCol, nDocRow);
+            ScBaseCell* pCell = NULL;
+            bool bTest = true;
+            while (bTest && ((pCell = aIter.GetNext( nDocCol, nDocRow)) != NULL))
             {
-                const sal_Int32* pColTypes = aColTypes.getConstArray();
-                ScHorizontalCellIterator aIter( &aDocument, nTab, nFirstCol,
-                        nDocRow, nLastCol, nDocRow);
-                ScBaseCell* pCell = NULL;
-                bool bTest = true;
-                while (bTest && ((pCell = aIter.GetNext( nDocCol, nDocRow)) != NULL))
+                SCCOL nCol = nDocCol - nFirstCol;
+                switch (pColTypes[nCol])
                 {
-                    SCCOL nCol = nDocCol - nFirstCol;
-                    switch (pColTypes[nCol])
-                    {
-                        case sdbc::DataType::LONGVARCHAR:
+                    case sdbc::DataType::LONGVARCHAR:
+                        {
+                            if ( pCell->GetCellType() != CELLTYPE_NOTE )
                             {
-                                if ( pCell->GetCellType() != CELLTYPE_NOTE )
-                                {
-                                    if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                        lcl_getLongVarCharEditString( aString,
-                                                pCell, aEditEngine);
-                                    else
-                                        lcl_getLongVarCharString( aString,
-                                                pCell, aDocument, nDocCol,
-                                                nDocRow, nTab, *pNumFmt);
-                                }
+                                if ( pCell->GetCellType() == CELLTYPE_EDIT )
+                                    lcl_getLongVarCharEditString( aString,
+                                            pCell, aEditEngine);
+                                else
+                                    lcl_getLongVarCharString( aString,
+                                            pCell, aDocument, nDocCol,
+                                            nDocRow, nTab, *pNumFmt);
                             }
-                            break;
+                        }
+                        break;
 
-                        case sdbc::DataType::VARCHAR:
-                            aDocument.GetString( nDocCol, nDocRow, nTab, aString);
-                            break;
+                    case sdbc::DataType::VARCHAR:
+                        aDocument.GetString( nDocCol, nDocRow, nTab, aString);
+                        break;
 
-                        default:
-                            bTest = false;
-                    }
-                    if (bTest)
+                    // NOTE: length of DECIMAL fields doesn't need to be
+                    // checked here, the database driver adjusts the field
+                    // width accordingly.
+
+                    default:
+                        bTest = false;
+                }
+                if (bTest)
+                {
+                    sal_Int32 nLen;
+                    if (bIsOctetTextEncoding)
                     {
                         rtl::OUString aOUString( aString);
                         rtl::OString aOString;
                         if (!aOUString.convertToString( &aOString, eCharSet,
                                     RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                                     RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+                        {
                             bTest = false;
+                            bEncErr = true;
+                        }
+                        nLen = aOString.getLength();
+#if OSL_DEBUG_LEVEL > 1
+                        if (!bTest)
+                            fprintf( stderr, "ScDocShell::DBaseExport encoding error, string with default replacements: ``%s''\n",
+                                    OUStringToOString( aOUString, eCharSet).getStr());
+#endif
                     }
                     else
-                        bTest = true;
+                        nLen = aString.Len() * sizeof(sal_Unicode);
+                    if (!bEncErr &&
+                            pColTypes[nCol] != sdbc::DataType::LONGVARCHAR &&
+                            pColLengths[nCol] < nLen)
+                    {
+                        bTest = false;
+#if OSL_DEBUG_LEVEL > 1
+                        fprintf( stderr, "ScDocShell::DBaseExport: field width: %d, encoded length: %d\n",
+                                (int)pColLengths[nCol], (int)nLen);
+#endif
+                    }
                 }
+                else
+                    bTest = true;
             }
             String sPosition( ScAddress( nDocCol, nDocRow, nTab).GetColRowString());
             String sEncoding( SvxTextEncodingTable().GetTextString( eCharSet));
-            nErr = *new TwoStringErrorInfo( SCERR_EXPORT_ENCODING, sPosition,
-                    sEncoding, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
+            nErr = *new TwoStringErrorInfo( (bEncErr ? SCERR_EXPORT_ENCODING :
+                        SCERR_EXPORT_FIELDWIDTH), sPosition, sEncoding,
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
         }
         else
             nErr = SCERR_EXPORT_CONNECT;
