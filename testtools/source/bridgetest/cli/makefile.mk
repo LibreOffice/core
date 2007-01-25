@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 12:48:10 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:23:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ $(DESTDIR)$/cli_cs_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(CSC) $(CSCFLAGS) -target:library -out:$@ \
+    $(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_BASETYPES) \
@@ -148,7 +148,7 @@ $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(CSC) $(CSCFLAGS) -target:library -out:$@ \
+    $(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_BASETYPES) \
@@ -162,7 +162,7 @@ $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(VBC) $(VBC_FLAGS) \
+    $(VBC) $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_TYPES) \
@@ -179,7 +179,7 @@ $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(VBC) $(VBC_FLAGS) \
+    $(VBC) $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_BASETYPES) \
@@ -203,7 +203,7 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         $(CLI_TYPES) \
         $(CLI_URE) \
         $(CLI_CPPUHELPER)
-    +$(CSC) $(CSCFLAGS) -target:exe -out:$@ \
+    $(CSC) $(CSCFLAGS) -target:exe -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_TYPES) \
