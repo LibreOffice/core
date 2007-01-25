@@ -10,10 +10,10 @@ RESLIB1HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES1PARTICLE): $(RESLIB1HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB1HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB1HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES1PARTICLE)
 
@@ -62,15 +62,15 @@ $(RESLIB1TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB1TARGETN)"!=""
@@ -88,10 +88,10 @@ RESLIB2HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES2PARTICLE): $(RESLIB2HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB2HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB2HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES2PARTICLE)
 
@@ -140,15 +140,15 @@ $(RESLIB2TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB2TARGETN)"!=""
@@ -166,10 +166,10 @@ RESLIB3HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES3PARTICLE): $(RESLIB3HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB3HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB3HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES3PARTICLE)
 
@@ -218,15 +218,15 @@ $(RESLIB3TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB3TARGETN)"!=""
@@ -244,10 +244,10 @@ RESLIB4HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES4PARTICLE): $(RESLIB4HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB4HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB4HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES4PARTICLE)
 
@@ -296,15 +296,15 @@ $(RESLIB4TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB4TARGETN)"!=""
@@ -322,10 +322,10 @@ RESLIB5HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES5PARTICLE): $(RESLIB5HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB5HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB5HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES5PARTICLE)
 
@@ -374,15 +374,15 @@ $(RESLIB5TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB5TARGETN)"!=""
@@ -400,10 +400,10 @@ RESLIB6HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES6PARTICLE): $(RESLIB6HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB6HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB6HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES6PARTICLE)
 
@@ -452,15 +452,15 @@ $(RESLIB6TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB6TARGETN)"!=""
@@ -478,10 +478,10 @@ RESLIB7HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES7PARTICLE): $(RESLIB7HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB7HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB7HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES7PARTICLE)
 
@@ -530,15 +530,15 @@ $(RESLIB7TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB7TARGETN)"!=""
@@ -556,10 +556,10 @@ RESLIB8HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES8PARTICLE): $(RESLIB8HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB8HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB8HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES8PARTICLE)
 
@@ -608,15 +608,15 @@ $(RESLIB8TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB8TARGETN)"!=""
@@ -634,10 +634,10 @@ RESLIB9HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES9PARTICLE): $(RESLIB9HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB9HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB9HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES9PARTICLE)
 
@@ -686,15 +686,15 @@ $(RESLIB9TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB9TARGETN)"!=""
@@ -712,10 +712,10 @@ RESLIB10HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RE
 $(HIDRES10PARTICLE): $(RESLIB10HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB10HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB10HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES10PARTICLE)
 
@@ -764,15 +764,15 @@ $(RESLIB10TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB10TARGETN)"!=""
