@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:06:56 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1251,13 +1251,13 @@ void __EXPORT ScTabViewShell::PreparePrint( PrintDialog* pPrintDialog )
 }
 
 ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
-                                 PrintDialog *pPrintDialog, BOOL bSilent )
+                                 PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI )
 {
     //  #72527# if SID_PRINTDOCDIRECT is executed and there's a selection,
     //  ask if only the selection should be printed
 
     const ScMarkData& rMarkData = GetViewData()->GetMarkData();
-    if ( !pPrintDialog && !bSilent && ( rMarkData.IsMarked() || rMarkData.IsMultiMarked() ) )
+    if ( !pPrintDialog && !bSilent && !bIsAPI && ( rMarkData.IsMarked() || rMarkData.IsMultiMarked() ) )
     {
         SvxPrtQryBox aQuery( GetDialogParent() );
         short nBtn = aQuery.Execute();
@@ -1270,14 +1270,14 @@ ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
     }
 
     //  SfxViewShell::DoPrint calls Print (after StartJob etc.)
-    ErrCode nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent );
+    ErrCode nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent, bIsAPI );
 
     bPrintSelected = FALSE;
 
     return nRet;
 }
 
-USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress,
+USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress, BOOL bIsAPI,
                                        PrintDialog* pPrintDialog )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
@@ -1313,9 +1313,9 @@ USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress,
 
     //  ... use aSheets here ...
 
-    SfxViewShell::Print( rProgress, pPrintDialog );
+    SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
     pDocShell->Print( rProgress, pPrintDialog, &GetViewData()->GetMarkData(),
-                        GetDialogParent(), bPrintSelected );
+                        GetDialogParent(), bPrintSelected, bIsAPI );
 
     return 0;
 }
