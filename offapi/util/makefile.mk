@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:57:17 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:10:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -155,14 +155,14 @@ ALLTAR : $(UCR)$/types.db \
        $(UNOTYPE_STATISTICS)
 
 $(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
-    +-$(RM) $(REGISTRYCHECKFLAG)
-    +$(GNUCOPY) -f $(UCR)$/offapi.db $@
-    +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
+    -$(RM) $(REGISTRYCHECKFLAG)
+    $(GNUCOPY) -f $(UCR)$/offapi.db $@
+    $(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
 
 $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
-    +-$(RM) $(REGISTRYCHECKFLAG)
-    +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
-    +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
+    -$(RM) $(REGISTRYCHECKFLAG)
+    $(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
+    $(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
 #JSC: The type library has changed, all temporary not checked types are removed
 #     and will be check from now on.
@@ -171,12 +171,12 @@ $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udk
 #JSC: i have removed the doc rdb because all type information is already in the
 #     types.rdb, even the service and singleton type info. IDL docu isn't checked.
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
+    $(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
         && echo > $(REGISTRYCHECKFLAG)
 
 #JSC: new target to prepare some UNO type statistics, the ouput will be later used
 #     for versioning of UNO cli type libraries
 $(UNOTYPE_STATISTICS) : $(REGISTRYCHECKFLAG)
-    +$(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" > $@
+    $(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" > $@
 
 .INCLUDE :  target.mk
