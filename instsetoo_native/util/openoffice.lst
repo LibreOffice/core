@@ -155,8 +155,8 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 1.1
-            PACKAGEVERSION 1.1
+            PRODUCTVERSION 1.2
+            PACKAGEVERSION 1.2
             PACKAGEREVISION 1
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
