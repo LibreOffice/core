@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:07:49 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:02:46 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -52,8 +52,8 @@ EXAMPLE_NAME=BaDCreatingDialogsExample
 OUT_COMP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
 COMPONENT_NAME=SampleDialog
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
 COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
 COMPONENT_JAR = $(OUT_CLASS)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
@@ -110,7 +110,7 @@ $(COMPONENT_PACKAGE) : $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_ZIP) ../bin/$(@F) $(<F)
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""

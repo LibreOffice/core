@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:08:17 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:03:17 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -64,8 +64,8 @@ APP5_NAME=SelectionChangeListener
 APP5_JAR=$(SAMPLE_CLASS_OUT)/$(APP5_NAME).jar
 
 COMPONENT_NAME=JavaSampleChartAddIn
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
 COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
 COMPONENT_JAR = $(SAMPLE_CLASS_OUT)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE = $(SAMPLE_CLASS_OUT)/$(COMPONENT_NAME).uno.Manifest
@@ -147,7 +147,7 @@ $(COMPONENT_PACKAGE) : $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
-	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) ../../../bin/$(@F) -u META-INF/manifest.xml
+	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) ../../../bin/$(@F) -u META-INF/manifest.xml
 
 $(COMP_REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
