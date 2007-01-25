@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.188 $
+#   $Revision: 1.189 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:53:02 $
+#   last change: $Author: hjs $ $Date: 2007-01-25 18:22:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1689,7 +1689,7 @@ COMPVTMP:=$(mktmp iii)
     @echo COMPATH_STORED:=$(COMPATH) >> $(COMPVTMP)
     @-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
     @$(TYPE) $(COMPVTMP) > $(@)_$(COMPVTMP:b)
-    @$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV) $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ >& $(NULLDEV) $(FI)
     @-$(RENAME) $(@)_$(COMPVTMP:b) $@
     @-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
 .ELSE           # "$(CCNUMVER)"!=""
