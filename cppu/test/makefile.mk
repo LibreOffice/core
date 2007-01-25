@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:26:55 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:33:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -152,15 +150,15 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.uno.XCurrentContext
 
 $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
-    +regmerge $@ / $(UNOUCRRDB)
+    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    regmerge $@ / $(UNOUCRRDB)
     touch $@
 
-# 	+regcomp -register -r $@ -c javaloader.dll
-# 	+regcomp -register -r $@ -c jen.dll
+# 	regcomp -register -r $@ -c javaloader.dll
+# 	regcomp -register -r $@ -c jen.dll
 
 unoheader: $(BIN)$/testcppu.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
-#	+cunomaker -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
+#	cunomaker -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
 
