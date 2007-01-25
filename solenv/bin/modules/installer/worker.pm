@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:24:31 $
+#   last change: $Author: obo $ $Date: 2007-01-25 16:28:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2323,6 +2323,196 @@ sub find_file_by_id
     if (! $foundfile ) { $onefile  = ""; }
 
     return $onefile;
+}
+
+#########################################################
+# Calling sum
+#########################################################
+
+sub call_sum
+{
+    my ($filename) = @_;
+
+    $sumfile = "/usr/bin/sum";
+
+    if ( ! -f $sumfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/sum", "call_sum"); }
+
+    my $systemcall = "$sumfile $filename |";
+
+    my $sumoutput = "";
+
+    open (SUM, "$systemcall");
+    $sumoutput = <SUM>;
+    close (SUM);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $sumoutput;
+}
+
+#########################################################
+# Calling wc
+# wc -c pkginfo | cut -f6 -d' '
+#########################################################
+
+sub call_wc
+{
+    my ($filename) = @_;
+
+    $wcfile = "/usr/bin/wc";
+
+    if ( ! -f $wcfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/wc", "call_wc"); }
+
+    my $systemcall = "$wcfile -c $filename |";
+
+    my $wcoutput = "";
+
+    open (WC, "$systemcall");
+    $wcoutput = <WC>;
+    close (WC);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $wcoutput;
+}
+
+##############################################
+# Setting architecture ARCH=i86pc
+# instead of ARCH=i386.
+##############################################
+
+sub set_old_architecture_string
+{
+    my ($pkginfofile) = @_;
+
+    for ( my $i = 0; $i <= $#{$pkginfofile}; $i++ )
+    {
+        if ( ${$pkginfofile}[$i] =~ /^\s*ARCH=i386\s*$/ )
+        {
+            ${$pkginfofile}[$i] =~ s/i386/i86pc/;
+            last;
+        }
+    }
+}
+
+##############################################
+# Setting checksum and wordcount for changed
+# pkginfo file into pkgmap.
+##############################################
+
+sub set_pkginfo_line
+{
+    my ($pkgmapfile, $pkginfofilename) = @_;
+
+    # 1 i pkginfo 442 34577 1166716297
+    # ->
+    # 1 i pkginfo 443 34737 1166716297
+    #
+    # wc -c pkginfo | cut -f6 -d' '  -> 442  (variable)
+    # sum pkginfo | cut -f1 -d' '  -> 34577  (variable)
+    # grep 'pkginfo' pkgmap | cut -f6 -d' '  -> 1166716297  (fix)
+
+    my $checksum = call_sum($pkginfofilename);
+    if ( $checksum =~ /^\s*(\d+)\s+.*$/ ) { $checksum = $1; }
+
+    my $wordcount = call_wc($pkginfofilename);
+    if ( $wordcount =~ /^\s*(\d+)\s+.*$/ ) { $wordcount = $1; }
+
+    for ( my $i = 0; $i <= $#{$pkgmapfile}; $i++ )
+    {
+        if ( ${$pkgmapfile}[$i] =~ /(^.*\bpkginfo\b\s+)(\d+)(\s+)(\d+)(\s+)(\d+)(\s*$)/ )
+        {
+            my $newline = $1 . $wordcount . $3 . $checksum . $5 . $6 . $7;
+            ${$pkgmapfile}[$i] = $newline;
+            last;
+        }
+    }
+}
+
+##############################################
+# Creating double packages for Solaris x86.
+# One package with ARCH=i386 and one with
+# ARCH=i86pc.
+##############################################
+
+sub fix_solaris_x86_patch
+{
+    my ($packagename) = @_;
+
+    # $packagename is: "SUNWstaroffice-core01"
+    # $installer::globals::subdir is "packages"
+    # Current working directory is: "<path>/install/en-US_inprogress"
+
+    # create new folder in "packages": $packagename . ".i"
+    my $newpackagename = $packagename . "\.i";
+    my $newdir = $installer::globals::subdir . $installer::globals::separator . $newpackagename;
+    installer::systemactions::create_directory($newdir);
+
+    # collecting all directories in the package
+    my $olddir = $installer::globals::subdir . $installer::globals::separator . $packagename;
+    my $allsubdirs = installer::systemactions::get_all_directories_without_path($olddir);
+
+    # link all directories from $packagename to $packagename . ".i"
+    for ( my $i = 0; $i <= $#{$allsubdirs}; $i++ )
+    {
+        my $sourcedir = $olddir . $installer::globals::separator . ${$allsubdirs}[$i];
+        my $destdir = $newdir . $installer::globals::separator . ${$allsubdirs}[$i];
+        installer::systemactions::hardlink_complete_directory($sourcedir, $destdir);
+    }
+
+    # copy "pkginfo" and "pkgmap" from $packagename to $packagename . ".i"
+    my @allcopyfiles = ("pkginfo", "pkgmap");
+    for ( my $i = 0; $i <= $#allcopyfiles; $i++ )
+    {
+        my $sourcefile = $olddir . $installer::globals::separator . $allcopyfiles[$i];
+        my $destfile = $newdir . $installer::globals::separator . $allcopyfiles[$i];
+        installer::systemactions::copy_one_file($sourcefile, $destfile);
+    }
+
+    # change in pkginfo in $packagename . ".i" the value for ARCH from i386 to i86pc
+    my $pkginfofilename = "pkginfo";
+    $pkginfofilename = $newdir . $installer::globals::separator . $pkginfofilename;
+
+    my $pkginfofile = installer::files::read_file($pkginfofilename);
+    set_old_architecture_string($pkginfofile);
+    installer::files::save_file($pkginfofilename, $pkginfofile);
+
+    # adapt the values in pkgmap for pkginfo file, because this file was edited
+    my $pkgmapfilename = "pkgmap";
+    $pkgmapfilename = $newdir . $installer::globals::separator . $pkgmapfilename;
+
+    my $pkgmapfile = installer::files::read_file($pkgmapfilename);
+    set_pkginfo_line($pkgmapfile, $pkginfofilename);
+    installer::files::save_file($pkgmapfilename, $pkgmapfile);
+
 }
 
 1;
