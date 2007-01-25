@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:22:27 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:02:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,4 +39,4 @@ PRJNAME=xmloff
 TARGET=qa_unoapi
 
 ALLTAR:
-    +$(SOLARENV)$/bin$/checkapi -sce xmloff.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+    $(SOLARENV)$/bin$/checkapi -sce xmloff.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
