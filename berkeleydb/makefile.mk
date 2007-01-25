@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 14:08:30 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:11:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,10 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
-.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-CC:=$(COMPATH)$/bin$/cc
-CXX:=$(COMPATH)$/bin$/CC
-.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+#CC:=$(COMPATH)$/bin$/cc
+#CXX:=$(COMPATH)$/bin$/CC
+#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 LDFLAGS:=-R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
