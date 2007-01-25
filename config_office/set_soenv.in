@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.134 $
-# Date:        $Date: 2007-01-23 06:35:28 $
+# Version:     $Revision: 1.135 $
+# Date:        $Date: 2007-01-25 13:07:59 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
-     $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
+     $LD_LIBRARY_PATH, $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
      $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
@@ -1001,50 +1001,6 @@ elsif ($platform !~ m/cygwin/)
 {  AddWarning( "set_soenv", "$platform not configured for runtime shared libraries" );
 }
 	
-# Compiler directives.
-if ($platform =~ m/solaris/) 
-{  $SOLARDEF          = $D."UNX".
-                        $D.$COM.
-                        $D.$GVER.
-                        $D."_PTHREADS".
-                        $D."NO_AUDIO".
-                        $D."SYSV".
-                        $D.$OS.
-                        $D.$CPUNAME.
-                        $D."SUN".
-                        $D."SUN4".
-                        $D."_REENTRANT".
-                        $D."_POSIX_PTHREAD_SEMANTICS".
-                        $D."SUPD=$UPD".
-                        $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
-}
-elsif ($platform =~ m/linux-gnu|netbsd|freebsd|osf1|irix|aix/)
-{  $SOLARDEF          = $D."UNX".
-                        $D.$COM.
-                        $D.$CVER.
-                        $D.$GVER.
-                        $D.$OS.
-                        $D.$CPUNAME;
-    if  ($platform =~ m/freebsd/)
-    {  $SOLARDEF     .= $D."X86".
-                        $D."OSVERSION=$OSVERSION".
-                        " @PTHREAD_CFLAGS@";
-    }
-    $SOLARDEF        .= $D."_REENTRANT".
-					    $D."_POSIX_PTHREAD_SEMANTICS";
-    if  ($GLIBC ne "" )
-    {  $SOLARDEF     .= $D."GLIBC=".$GLIBC;
-    }
-    $SOLARDEF        .= $D."SUPD=$UPD".
-                        $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
-}
-elsif ($platform =~ m/darwin/) {
-	;
-}
-elsif ($platform !~ m/cygwin/ )
-{  AddWarning( "set_soenv", "$platform not configured for compiler directives" );
-}
-
 # Location used by the linker to create libraries.
 if ($platform =~ m/solaris/) 
 {  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
@@ -1710,7 +1666,6 @@ else {
     ToFile( "LD_LIBRARY_PATH",   $LD_LIBRARY_PATH,   "e" );
   }
 }
-ToFile( "SOLARDEF",          $SOLARDEF,          "e" );
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
 ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
