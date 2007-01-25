@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_moz.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:46:43 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:55:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,11 @@ EXTRA_MOZ_TARGET+= $(XPIDL_TYPELIB_MODULE)
 ALLMOZ:=$(EXTRA_MOZ_TARGET) $(DO_XPIDL) $(GEN_PRCPUCFG) $(EXPORT_HEADER)
 
 $(INCCOM)$/%.h : %.idl
-    +$(COPY) $< $(INCCOM)
-    +$(XPIDL) -m header -w -I $(SOLARIDLDIR)$/mozilla -I$(INCCOM) -I . -o $(INCCOM)$/$* $<
+    $(COPY) $< $(INCCOM)
+    $(XPIDL) -m header -w -I $(SOLARIDLDIR)$/mozilla -I$(INCCOM) -I . -o $(INCCOM)$/$* $<
 
 $(MISC)$/%.xpt : %.idl
-    +$(XPIDL) -m typelib -w -I $(SOLARIDLDIR)$/mozilla -I$(INCCOM) -I . -o $(MISC)$/$* $<
+    $(XPIDL) -m typelib -w -I $(SOLARIDLDIR)$/mozilla -I$(INCCOM) -I . -o $(MISC)$/$* $<
 
 .INCLUDE : target.mk
 
@@ -81,17 +81,17 @@ CPUCFG=_netbsd.cfg
 
 .IF "$(GEN_PRCPUCFG)"!=""
 $(GEN_PRCPUCFG): $(PRJ)$/pr$/include$/md$/$(CPUCFG) 
-    @+$(COPY) $(PRJ)$/pr$/include$/md$/$(CPUCFG) $@
+    @$(COPY) $(PRJ)$/pr$/include$/md$/$(CPUCFG) $@
 .ENDIF
 
 .IF "$(EXPORTS)"!=""
 $(EXPORT_HEADER):
-    @+$(COPY) $(EXPORTS) $(INCCOM)
+    @$(COPY) $(EXPORTS) $(INCCOM)
 .ENDIF
 
 .IF "$(XPIDLSRCS)"!=""
 $(XPIDL_TYPELIB_MODULE): $(foreach,i,$(XPIDLXPT) $(MISC)$/$i)
-    +$(XPIDL_LINK) $(MISC)$/$(XPIDL_MODULE).xpt $^
-    @+-mkdir $(BIN)$/components
-    @+$(COPY) $@ $(BIN)$/components
+    $(XPIDL_LINK) $(MISC)$/$(XPIDL_MODULE).xpt $^
+    @-mkdir $(BIN)$/components
+    @$(COPY) $@ $(BIN)$/components
 .ENDIF
