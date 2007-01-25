@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:32:29 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:36:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,8 @@ ALL : 	$(BIN)$/applicat.rdb	\
     ALLTAR
 
 $(BIN)$/applicat.rdb: $(SOLARBINDIR)$/udkapi.rdb
-    +rm -f $@
-    +regmerge $@ / $?
+    rm -f $@
+    regmerge $@ / $?
 
 
 .INCLUDE :  target.mk
