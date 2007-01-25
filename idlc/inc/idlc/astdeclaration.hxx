@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astdeclaration.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:40:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,16 +137,20 @@ public:
 
     virtual sal_Bool dump(RegistryKey& rKey);
 
+    bool isPredefined() { return m_bPredefined; }
+    void setPredefined(bool bPredefined);
+
 protected:
     ::rtl::OString      m_localName;
     ::rtl::OString      m_scopedName;       // full qualified name
     ::rtl::OString      m_fullName;         // full qualified name with '/' as seperator
     AstScope*           m_pScope;
-    const NodeType      m_nodeType;
+    NodeType            m_nodeType;
     sal_Bool            m_bImported;        // imported ?
     sal_Bool            m_bIsAdded;         // mark declaration as added in scope
     sal_Bool            m_bInMainFile;      // defined in main file
     bool                m_bPublished;
+    bool                m_bPredefined;
     sal_Int32           m_lineNumber;       // line number defined in
     ::rtl::OString      m_fileName;         // fileName defined in
     ::rtl::OUString     m_documentation;    // fileName defined in
