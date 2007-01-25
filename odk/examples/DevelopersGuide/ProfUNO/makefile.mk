@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:13:11 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:27:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ all : \
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
 
 $(DESTDIREXAMPLES)$/%$/office_connectrc : $(PRJ)$/examples$/%$/office_connectrc
-    +-$(MKDIRHIER) $(@:d)        
-    +-rm -f $@ >& $(NULLDEV)
+    -$(MKDIRHIER) $(@:d)        
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
