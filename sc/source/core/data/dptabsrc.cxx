@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:42:59 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:05:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2404,9 +2404,7 @@ ScDPMember::ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
     nDim( nD ),
     nHier( nH ),
     nLev( nL ),
-    aName( rN ),
-    fValue( fV ),
-    bHasValue( bHV ),
+    maData( rN, fV, bHV ),
     bVisible( TRUE ),
     bShowDet( TRUE )
 {
@@ -2428,54 +2426,32 @@ BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
                                         nHier, nLev );
 
         //  fValue is converted from integer, so simple comparison works
-        return nComp == fValue;
+        return nComp == maData.fValue;
     }
 
-    return r.IsCaseInsEqual( ScDPItemData( aName, fValue, bHasValue ) );
+    return r.IsCaseInsEqual( maData );
 }
 
 sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
 {
-    sal_Int32 nResult;
-    if ( bHasValue )
-    {
-        if ( rOther.bHasValue )
-        {
-            if ( rtl::math::approxEqual( fValue, rOther.fValue ) )
-                nResult = 0;
-            else if ( fValue < rOther.fValue )
-                nResult = -1;
-            else
-                nResult = 1;
-        }
-        else
-            nResult = -1;           // values first
-    }
-    else if ( rOther.bHasValue )
-        nResult = 1;                // values first
-    else
-        nResult = ScGlobal::pCollator->compareString( aName, rOther.aName );
-
-    return nResult;
+    return ScDPItemData::Compare( maData, rOther.maData );
 }
 
 void ScDPMember::FillItemData( ScDPItemData& rData ) const
 {
     //! handle date hierarchy...
 
-    rData.aString   = aName;
-    rData.fValue    = fValue;
-    rData.bHasValue = bHasValue;
+    rData = maData;
 }
 
 String ScDPMember::GetNameStr() const
 {
-    return aName;
+    return maData.aString;
 }
 
 ::rtl::OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
 {
-    return aName;
+    return maData.aString;
 }
 
 void SAL_CALL ScDPMember::setName( const ::rtl::OUString& rNewName ) throw(uno::RuntimeException)
