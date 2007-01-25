@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:06:57 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ SfxTabPage*  PrintManager::CreatePrintOptionsPage( ::Window *pParent, const SfxI
 
 
 
-USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
+USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDlg)
 {
     SfxPrinter* pPrinter = mrBase.GetPrinter(TRUE);
     ViewShell* pShell = mrBase.GetMainViewShell();
@@ -340,7 +340,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
             static_cast<OutlineViewShell*>(pShell)->PrepareClose (FALSE, FALSE);
 
         // Basisklasse rufen, um Basic anzusprechen
-        mrBase.SfxViewShell::Print( rProgress, pDlg );
+        mrBase.SfxViewShell::Print( rProgress, bIsAPI, pDlg );
 
         // Setzen des Textes des Druckmonitors
         rProgress.SetText( String( SdResId( STR_STATSTR_PRINT ) ) );
@@ -517,7 +517,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
             }
         }
 
-        if (pPrinter->InitJob (mrBase.GetWindow(), bContainsTransparency))
+        if (pPrinter->InitJob (mrBase.GetWindow(), !bIsAPI && bContainsTransparency))
         {
             PrintInfo aInfo(
                 *pShell,
@@ -586,7 +586,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
 ErrCode PrintManager::DoPrint (
     SfxPrinter* pPrinter,
     PrintDialog* pPrintDialog,
-    BOOL bSilent)
+    BOOL bSilent, BOOL bIsAPI )
 {
     ErrCode nResult = ERRCODE_NONE;
 
@@ -608,7 +608,7 @@ ErrCode PrintManager::DoPrint (
 
         // #105477# Don't show query dialog if print dialog has been shown
         if ( !pPrintDialog
-            && !bSilent
+            && !bSilent && !bIsAPI
             && (rMarkList.GetMarkCount() || sNewPageRange.Len()) )
         {
             SvxPrtQryBox aQuery (mrBase.GetWindow());
@@ -636,7 +636,7 @@ ErrCode PrintManager::DoPrint (
             //  Forward the call to SfxViewShell::DoPrint() which
             //  eventually calls Print() (after StartJob etc.)
             nResult = mrBase.SfxViewShell::DoPrint (
-                pPrinter, pPrintDialog, bSilent);
+                pPrinter, pPrintDialog, bSilent, bIsAPI );
 
             RestrictPrintingToSelection (FALSE);
         }
