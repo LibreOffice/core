@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:19:15 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,10 +282,10 @@ public:
     BOOL            Merge(SwWrtShell* pSh);
     // Mischen von Datensaetzen in Felder, dann drucken
     BOOL            MergePrint( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress );
+                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI );
     // printing parts of a merge result document
     BOOL            MergePrintDocuments( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress );
+                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI );
 
     // Datenbankfelder mit fehlendem Datenbankname initialisieren
     inline BOOL     IsInitDBFields() const  { return bInitDBFields; }
