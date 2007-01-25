@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 16:32:15 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:33:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,11 +76,11 @@ $(MISC)$/$(TARGET).javamaker.done: $(BIN)$/TestExtension.rdb
 
 $(BIN)$/TestExtension.rdb: TestExtension.idl
     $(IDLC) -O$(MISC) -I$(SOLARIDLDIR) -cid -we $<
-    +-$(RM) $@
+    -$(RM) $@
     $(REGMERGE) $@ /UCR $(MISC)$/TestExtension.urd
 
 $(MISC)$/$(ZIP1TARGET).createdir :
-    +$(MKDIRHIER) $(MISC)$/$(TARGET)$/META-INF >& $(NULLDEV) && $(TOUCH) $@
+    $(MKDIRHIER) $(MISC)$/$(TARGET)$/META-INF >& $(NULLDEV) && $(TOUCH) $@
 
 $(MISC)$/$(TARGET)_resort : manifest.xml $(JARTARGETN) $(MISC)$/$(ZIP1TARGET).createdir $(BIN)$/TestExtension.rdb
     $(GNUCOPY) -u manifest.xml $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
