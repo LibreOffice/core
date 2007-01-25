@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 11:58:59 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:35:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,9 @@ CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAG
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
 .IF "$(COMNAME)"=="sunpro5"
-.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-CC:=$(COMPATH)$/bin$/cc
-.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+#CC:=$(COMPATH)$/bin$/cc
+#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 
 .IF "$(OS)" == "IRIX"
@@ -169,10 +169,10 @@ $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 #--------------------
 # to be moved to tg_ext.mk
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
-    @+-$(RM) $@
+    @-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
 .ELSE			# "$(GUI)"=="UNX"
     @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
 .ENDIF			# "$(GUI)"=="UNX"
-    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+    @$(COPY) $(mktmp $(UNPACKCMD)) $@
