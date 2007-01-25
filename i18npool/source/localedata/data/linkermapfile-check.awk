@@ -16,6 +16,7 @@ BEGIN {
     sPublic[nPublics++] = "getAllCalendars_"
     sPublic[nPublics++] = "getAllCurrencies_"
     sPublic[nPublics++] = "getAllFormats_"
+    sPublic[nPublics++] = "getBreakIteratorRules_"
     sPublic[nPublics++] = "getCollationOptions_"
     sPublic[nPublics++] = "getCollatorImplementation_"
     sPublic[nPublics++] = "getContinuousNumberingLevels_"
