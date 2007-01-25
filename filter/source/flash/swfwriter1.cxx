@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 15:05:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:01:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,7 +633,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         //     for rotatet text
         Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
 
-        ::basegfx::B3DHomMatrix m;
+        ::basegfx::B2DHomMatrix m; // #i73264#
 
         double scale = 1.0;
 
@@ -652,9 +652,9 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
             scale =  (double)n1 / (double)n2;
         }
 
-        m.rotate( 0.0 , 0.0 , static_cast<double>(nOrientation) * F_PI1800 );
-        m.translate( double(aPt.X() / scale), double(aPt.Y()) , 0.0 );
-        m.scale( scale, 1.0 , 1.0 );
+        m.rotate( static_cast<double>(nOrientation) * F_PI1800 );
+        m.translate( double(aPt.X() / scale), double(aPt.Y()) );
+        m.scale( scale, scale );
 
         sal_Int16 nHeight = _Int16( map( Size( 0, aFont.GetHeight() ) ).Height() );
 
@@ -1007,10 +1007,10 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
             // AS: Since images are being cropped now, no translation is normally necessary.
             //  However, some things like graphical bullet points are still get translated.
-            ::basegfx::B3DHomMatrix m;
-            m.scale(1.0/XScale, 1.0/YScale, 1.0);
+            ::basegfx::B2DHomMatrix m; // #i73264#
+            m.scale(1.0/XScale, 1.0/YScale );
             if (destRect.Left() || destRect.Top())
-                m.translate(destRect.Left(), destRect.Top(), 0.0);
+                m.translate(destRect.Left(), destRect.Top());
 
             FillStyle aFillStyle( nBitmapId, true, m );
 
@@ -1313,7 +1313,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             // CL->AS: Should we also scale down the quality here depending on image scale?
             sal_uInt16 nBitmapId = defineBitmap( aGraphic.GetBitmapEx(), mnJPEGCompressMode );
 
-            ::basegfx::B3DHomMatrix aMatrix;
+            ::basegfx::B2DHomMatrix aMatrix; // #i73264#
 
             SvtGraphicFill::Transform aTransform;
 
@@ -1337,7 +1337,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             double XScale = (double)aNewRect.GetWidth()/aOldRect.GetWidth();
             double YScale = (double)aNewRect.GetHeight()/aOldRect.GetHeight();
 
-             aMatrix.scale( XScale, YScale , 1.0);
+             aMatrix.scale( XScale, YScale );
 
             FillStyle aFillStyle( nBitmapId, !rFilling.IsTiling(), aMatrix );
 
