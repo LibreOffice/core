@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 03:49:29 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:53:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,13 +123,13 @@ YACCFLAGS+=-v
 
 $(MISC)$/stripped_scanner.ll : scanner.ll
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
-    +tr -d "\015" < scanner.ll > $(MISC)$/stripped_scanner.ll
+    tr -d "\015" < scanner.ll > $(MISC)$/stripped_scanner.ll
 .ELSE
-    +cat scanner.ll > $(MISC)$/stripped_scanner.ll
+    cat scanner.ll > $(MISC)$/stripped_scanner.ll
 .ENDIF
 
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
-    +flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll
+    flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll
 
 $(OBJ)$/wrap_parser.obj: $(MISC)$/parser.cxx
 $(OBJ)$/wrap_scanner.obj: $(MISC)$/scanner.cxx
