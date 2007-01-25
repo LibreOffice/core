@@ -61,7 +61,6 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\geometry
 ..\inc\drawinglayer\geometry\viewinformation2d.hxx %_DEST%\inc%_EXT%\drawinglayer\geometry\viewinformation2d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor2d
-..\inc\drawinglayer\processor2d\animatedextractor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\animatedextractor2d.hxx
 ..\inc\drawinglayer\processor2d\baseprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\baseprocessor2d.hxx
 ..\inc\drawinglayer\processor2d\vclprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\vclprocessor2d.hxx
 

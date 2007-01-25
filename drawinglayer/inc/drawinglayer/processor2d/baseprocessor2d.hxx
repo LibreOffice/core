@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:28:25 $
+ *  last change: $Author: aw $ $Date: 2007-01-25 12:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,9 @@ namespace drawinglayer
                 primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitiveSequence, rSource);
             }
 
-            // data access
+            // data access and reset
             const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitiveSequence; }
+            void reset() { maPrimitiveSequence = primitive2d::Primitive2DSequence(); }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

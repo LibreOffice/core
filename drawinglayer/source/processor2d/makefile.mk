@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2006-10-19 10:35:37 $
+#   last change: $Author: aw $ $Date: 2007-01-25 12:57:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/animatedextractor2d.obj		\
         $(SLO)$/baseprocessor2d.obj			\
         $(SLO)$/vclprocessor2d.obj
 
