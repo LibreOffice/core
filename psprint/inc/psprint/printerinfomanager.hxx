@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 11:54:10 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 10:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,12 @@ class PrinterInfoManager
 public:
     enum Type { Default = 0, CUPS = 1 };
 
+    struct SystemPrintQueue
+    {
+        rtl::OUString       m_aQueue;
+        rtl::OUString       m_aLocation;
+        rtl::OUString       m_aComment;
+    };
 protected:
     // needed for checkPrintersChanged: files (not necessarily existant)
     // and their last known modification time
@@ -133,12 +139,13 @@ protected:
     std::list< WatchFile >            m_aWatchFiles;
     rtl::OUString                     m_aDefaultPrinter;
     rtl::OUString                     m_aSystemPrintCommand;
-    std::list< rtl::OUString >      m_aSystemPrintQueues;
 
-    SystemQueueInfo*                    m_pQueueInfo;
+    std::list< SystemPrintQueue >     m_aSystemPrintQueues;
 
-    Type                                m_eType;
-    bool                                m_bUseIncludeFeature;
+    SystemQueueInfo*                  m_pQueueInfo;
+
+    Type                              m_eType;
+    bool                              m_bUseIncludeFeature;
 
     PrinterInfoManager( Type eType = Default );
     virtual ~PrinterInfoManager();
@@ -207,7 +214,7 @@ public:
 
     // primarily used internally but also by padmin
     // returns the printer queue names
-    virtual const std::list< rtl::OUString >& getSystemPrintQueues();
+    virtual const std::list< SystemPrintQueue >& getSystemPrintQueues();
 
     // similar but returnse whole commandlines
     virtual void getSystemPrintCommands( std::list< rtl::OUString >& rCommands );
