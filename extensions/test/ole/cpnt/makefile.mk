@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 11:59:49 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:14:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,8 +101,8 @@ ALLTAR : 	$(MISC)$/$(TARGET).cppumaker.done
 ALLIDLFILES:=	..$/idl$/oletest.idl
 
 $(BIN)$/oletest.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR)  -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    idlc -I$(PRJ) -I$(SOLARIDLDIR)  -O$(BIN) $?
+    regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 
 $(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/oletest.rdb
