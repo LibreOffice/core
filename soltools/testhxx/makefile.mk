@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-06 14:24:28 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:36:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,8 @@ MY_EXECUTABLE := chmod +x
 ALLTAR: $(BIN)$/$(TARGET)$(MY_SCRIPT_EXT)
 
 $(BIN)$/$(TARGET)$(MY_SCRIPT_EXT) .ERRREMOVE: $(MISC)$/testhxx.output create.pl
-    + $(PERL) -w create.pl < $(MISC)$/testhxx.output > $@
+    $(PERL) -w create.pl < $(MISC)$/testhxx.output > $@
     $(MY_EXECUTABLE) $@
 
 $(MISC)$/testhxx.output: $(SLO)$/testhxx.obj
-    + $(TOUCH) $<
+    $(TOUCH) $<
