@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:40:28 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:16:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,4 +92,4 @@ JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 .INCLUDE :  target.mk
 
 TST:
-        +@echo $(JAVACLASSFILES)
+        @echo $(JAVACLASSFILES)
