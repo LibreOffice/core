@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 12:27:11 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:30:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,73 +33,73 @@
 
 
 $(DESTDIRDOCU)$/%.html : $(PRJ)$/docs$/%.html
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRDOCU)$/%.css : $(PRJ)$/docs$/%.css
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/%
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
 $(DESTDIR)$/configure : $(PRJ)$/configure
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +-chmod 755 $@
+    -chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure.pl $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +-chmod 755 $@
+    -chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/config.guess : $(SOLARENV)$/bin$/config.guess
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SOLARENV)$/bin$/config.guess $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +-chmod 755 $@
+    -chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/config.sub : $(SOLARENV)$/bin$/config.sub
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SOLARENV)$/bin$/config.sub $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +-chmod 755 $@
+    -chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/setsdkenv_unix : $(PRJ)$/setsdkenv_unix
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +-chmod 755 $@
+    -chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/setsdkenv_unix.%.in : $(PRJ)$/setsdkenv_unix.%.in
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +-chmod 644 $@
+    -chmod 644 $@
 .ENDIF
 
 $(DESTDIR)$/%.bat : $(PRJ)$/%.bat
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIR)$/setsdkenv_windows.template : $(PRJ)$/setsdkenv_windows.template
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIR)$/cfgWin.js : $(PRJ)$/cfgWin.js
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/cfgWin.js $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
 .IF "$(COMEX)"=="7"
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< | $(SED) -e 's/stlport_vc7/stlport_vc6/' $(MY_TEXTCOPY_TARGETPRE) $@
 .ELSE
@@ -107,60 +107,60 @@ $(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk
 .ENDIF
 
 $(DESTDIRXML)$/module-description.dtd : $(XMLOUT)$/module-description.dtd
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(XMLOUT)$/module-description.dtd $(MY_TEXTCOPY_TARGETPRE) $@
 $(DESTDIRXML)$/%.xml : $(XMLOUT)$/%.xml
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(BINOUT)$/$(@:f) $@
 .IF "$(GUI)"=="UNX"
-    +-strip $@
+    -strip $@
 .ENDIF
 
 $(DESTDIRBIN)$/%.bin : $(BINOUT)$/%.bin
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(BINOUT)$/$(@:f) $@
 .IF "$(GUI)"=="UNX"
-    +-strip $@
+    -strip $@
 .ENDIF
 
 $(DESTDIRBIN)$/regcomp : $(BINOUT)$/regcomp
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +-chmod 755 $@
+    -chmod 755 $@
 .ENDIF
 
 $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) : $(BIN)$/unoapploader$(EXEPOSTFIX)
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(BIN)$/$(@:f) $@
 .IF "$(GUI)"=="UNX"
-    +-strip $@
+    -strip $@
 .ENDIF
 
 # special rule for special Java UNO native library
 # (used for all platforms but built only under windows;
 # otherwise provided in external)
 $(DESTDIRJAR)$/win$/unowinreg.dll : $(BIN)$/unowinreg.dll
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $< $@
 
 $(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(DLLOUT)$/$(@:f) $@
 
 $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/%.class : $(CLASSDIR)$/com$/sun$/star$/lib$/loader$/%.class
-    +-$(RM) $(@:db)*.class >& $(NULLDEV)
-    +$(COPY) $(<:db)*.class $(@:d)
+    -$(RM) $(@:db)*.class >& $(NULLDEV)
+    $(COPY) $(<:db)*.class $(@:d)
 
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRINC)$/udkversion.mk :
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     @echo #UDK version number > $@
     @echo #major >> $@
     @echo UDK_MAJOR=$(UDK_MAJOR) >> $@
@@ -173,34 +173,35 @@ $(DESTDIRINC)$/% : $(INCOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRLIB)$/%.lib : $(LIBOUT)$/%.lib
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(LIBOUT)$/$(@:f) $@
 
 $(DESTDIRLIB)$/%.a : $(LIBOUT)$/%.a
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(LIBOUT)$/$(@:f) $@
 
 $(DIR_CREATE_FLAG) :
 .IF "$(USE_SHELL)" != "4nt"
-    +$(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 20 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
-    +sleep 2
+    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 20 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
+    sleep 2
 .ELSE
-    +$(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | tr "\\" "/" | xargs mkdir.exe -p && echo "dirs created" > $@ && touch $@
+    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | tr "\\" "/" | xargs mkdir.exe -p && echo "dirs created" > $@ && touch $@
+# keep forced shell as delay is a 4nt internal command
     +delay 2
 .ENDIF
 
 $(DESTDIRSETTINGS)$/component.uno.def : $(PRJ)$/settings$/component.uno.def
-    +-rm -f $@ >& $(NULLDEV)
+    -rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRSETTINGS)$/component.uno.map : $(SOLARENV)$/bin$/addsym.awk $(SOLARENV)$/src$/component.map
-    @+-$(RM) -f $@ >& $(NULLDEV)
+    @-$(RM) -f $@ >& $(NULLDEV)
 .IF "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+    tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' > $@
+    tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' > $@
 .ENDIF          # "$(COMID)"=="gcc3"
-    @+chmod 664 $@
+    @chmod 664 $@
 
 $(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
 
