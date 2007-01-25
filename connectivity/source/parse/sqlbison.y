@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.55 2006-08-28 14:54:46 ihi Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.56 2007-01-25 11:57:58 obo Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: ihi $ $Date: 2006-08-28 14:54:46 $ $Revision: 1.55 $
+//	$Author: obo $ $Date: 2007-01-25 11:57:58 $ $Revision: 1.56 $
 //
 // Description:
 //
@@ -1903,6 +1903,7 @@ date_function_1Argument:
 	|	SQL_TOKEN_MINUTE              
 	|	SQL_TOKEN_SECOND         
 	|	SQL_TOKEN_YEAR
+	|	SQL_TOKEN_DAY
 	|	SQL_TOKEN_TIMEVALUE
 	|	SQL_TOKEN_DATEVALUE
 	;
