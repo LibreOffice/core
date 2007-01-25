@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-02 17:40:11 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:16:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,11 @@ OWNJAR: ALLTAR
 
 # LLA: parameter v is only verbose, need too long!
 OWNJAR: LIGHT
-    +jar cfm $(CLASSDIR)$/$(TARGET).jar manifest -C $(PRJ) objdsc $(JARCOMMANDS_TESTS) $(JARCOMMANDS_RUNNER)
+    jar cfm $(CLASSDIR)$/$(TARGET).jar manifest -C $(PRJ) objdsc $(JARCOMMANDS_TESTS) $(JARCOMMANDS_RUNNER)
 
 # LLA: parameter v is only verbose, need too long!
 LIGHT:
-    +jar cfm $(CLASSDIR)$/$(TARGET)Light.jar manifest $(JARCOMMANDS_RUNNER)
+    jar cfm $(CLASSDIR)$/$(TARGET)Light.jar manifest $(JARCOMMANDS_RUNNER)
 
 .ELSE
 all:
