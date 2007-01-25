@@ -22,18 +22,18 @@ SHELL *:= $(COMSPEC)
 
    SHELLFLAGS       *:= $(SWITCHAR)c
    GROUPFLAGS       *:= $(SHELLFLAGS)
-   SHELLMETAS       *:= "<>|%&
+   SHELLMETAS       *:= "<>|&%^
 # Fix syntax highlighting: "
    GROUPSUFFIX      *:= .bat
    DIVFILE          *=  $(TMPFILE:s,/,\,)
-   RM               *=  del
+   RM               *=  +del
    RMFLAGS          *= /y /E
-   MV	            *=  rename
+   MV	            *=  +rename
    __.DIVSEP-sh-yes *:= \\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR        := \\
 # See iz61212 for the reason why PWD is overwritten
-   PWD:=$(shell +echo %_cwd)
+   PWD:=$(shell echo %_cwd)
 .EXPORT : PWD
    
 .ELSE	# Non 4nt case
@@ -64,7 +64,7 @@ SHELL *:= $(COMSPEC)
 
 .IF $(USE_SHELL) == 4nt
 
-my4ver:=$(shell +echo %_4ver)
+my4ver:=$(shell echo %_4ver)
 
 .IF "$(my4ver:s/.//:s/,//)" >= "400"
 .ELSE			# "$(my4ver:s/.//:s/,//)" >= "400"
