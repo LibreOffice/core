@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 17:17:38 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:07:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 .IF "$(GUI)" == "WNT"
 FILEURLPREFIX = file:///
-MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell +$(WRAPCMD) echo $(SOLARBINDIR))))
+MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
 .ELSE
 FILEURLPREFIX = file://
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
@@ -89,14 +89,14 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     $(IDLC) -O$(@:d) -I$(SOLARIDLDIR) -cid -we $<
 
 $(MISC)$/$(TARGET)$/types.rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.urd
-    -+ $(RM) $@
+    - $(RM) $@
     $(REGMERGE) $@ /UCR $<
 
 $(MISC)$/$(TARGET)$/uno.rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
         $(DLLDEST)$/$(SHL2TARGET)$(DLLPOST) \
         $(MISC)$/$(TARGET)$/$(TARGET).uno.jar $(MISC)$/$(TARGET)$/bootstrap.rdb
     - $(MKDIR) $(@:d)
-    + $(COPY) $(SOLARBINDIR)$/types.rdb $@
+    $(COPY) $(SOLARBINDIR)$/types.rdb $@
     $(REGMERGE) $@ / $(MISC)$/$(TARGET)$/types.rdb
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
         -c javavm.uno$(DLLPOST) -c reflection.uno$(DLLPOST) \
@@ -111,7 +111,7 @@ $(MISC)$/$(TARGET)$/uno.rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
 
 $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
     - $(MKDIR) $(@:d)
-    + $(COPY) $(SOLARBINDIR)$/types.rdb $@
+    $(COPY) $(SOLARBINDIR)$/types.rdb $@
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
         -c javavm.uno$(DLLPOST) -c uriproc.uno$(DLLPOST)
 
@@ -136,11 +136,11 @@ $(MISC)$/$(TARGET)$/$(TARGET).uno.jar: $(JAVACLASSFILES) \
 
 test .PHONY: $(SHL1TARGETN) $(MISC)$/$(TARGET)$/uno.rdb
 .IF "$(GUI)" == "WNT"
-    + set CLASSPATH=$(CLASSPATH) && \
+    set CLASSPATH=$(CLASSPATH) && \
     set URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) && \
     testshl2 $(SHL1TARGETN) -forward "$(MISC)$/$(TARGET)$/uno.rdb#$(SOLARBINDIR)"
 .ELSE
-    + setenv CLASSPATH $(CLASSPATH) && \
+    setenv CLASSPATH $(CLASSPATH) && \
     setenv URE_INTERNAL_JAVA_DIR $(MY_URE_INTERNAL_JAVA_DIR) && \
     testshl2 $(SHL1TARGETN) -forward "$(MISC)$/$(TARGET)$/uno.rdb#$(SOLARLIBDIR)"
 .ENDIF
