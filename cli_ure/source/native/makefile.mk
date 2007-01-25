@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 11:06:05 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:43:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -135,10 +135,10 @@ CFLAGSCXX += -clr:oldSyntax
 $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk
     @echo $(ASSEMBLY_KEY_X)
     $(GNUCOPY) -p assembly.cxx $@
-    +echo $(ECHOQUOTE) \
+    echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )]; $(ECHOQUOTE) \
     >> $(OUT)$/misc$/assembly_cppuhelper.cxx
-    +echo $(ECHOQUOTE) \
+    echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))]; $(ECHOQUOTE) \
     >> $(OUT)$/misc$/assembly_cppuhelper.cxx
 
@@ -149,14 +149,14 @@ ALLTAR : $(POLICY_ASSEMBLY_FILE)
 
 #do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
-    +$(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_CPPUHELPER_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_cppuhelper.config
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk
-    +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
     $< $@
 
 .ENDIF			# "$(BUILD_FOR_CLI)" != ""
