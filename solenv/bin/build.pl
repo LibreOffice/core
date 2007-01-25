@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.153 $
+#   $Revision: 1.154 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-12 11:34:31 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:48:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.153 $ ';
+    $id_str = ' $Revision: 1.154 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -478,7 +478,7 @@ sub dmake_dir {
         RemoveFromDependencies($BuildDir, \%LocalDepsHash) if (!$child);
         return if ($cmd_file || $show);
         chdir $BuildDir;
-        cwd();
+        getcwd();
         if ($html) {
             my $log_file = $jobs_hash{$BuildDir}->{LONG_LOG_PATH};
             my $log_dir = File::Basename::dirname($log_file);
@@ -522,7 +522,7 @@ sub jam_dir {
     print "Jam-primer: Checking for Jamfile in $Jamfile\n";
     if (-r $Jamfile) {
         print "Jam-primer: Running 'jam build-$JamPrj'\n";
-        my $currentDir = cwd();
+        my $currentDir = getcwd();
         chdir $StandDir;
         system("jam -j$JamProcessNum build-$JamPrj");
         chdir $currentDir;
@@ -875,7 +875,7 @@ sub get_stand_dir {
     };
     my $StandDir;
     do {
-        $StandDir = cwd();
+        $StandDir = getcwd();
         foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
             if (-e 'prj/'.$_) {
                 $StandDir =~ /([\.\w]+$)/;
@@ -1728,7 +1728,7 @@ sub copy_output_trees {
     $ENVHASH{'spec_src'} = 0;
     $ENVHASH{'dest'} = "$src_dest";
     $ENVHASH{'i_server'} = '';
-    $ENVHASH{'current_dir'} = cwd();
+    $ENVHASH{'current_dir'} = getcwd();
     $ENVHASH{'remote'} = '';
     # hack for SO environment
     $ENVHASH{'SRC_ROOT'} = '/so/ws/' . $ENV{WORK_STAMP} . '/src';
@@ -1770,10 +1770,10 @@ sub provide_consistency {
         if ($$var_ref) {
             return if (-d $StandDir.$$var_ref);
             $$var_ref .= '.lnk' and return if (-d $StandDir.$$var_ref.'.lnk');
-            my $current_dir = cwd();
+            my $current_dir = getcwd();
             checkout_module($$var_ref, 'image');
             chdir $current_dir;
-            cwd();
+            getcwd();
             return;
         };
     };
@@ -2273,14 +2273,14 @@ sub clear_delivered {
             my $module_path = CorrectPath($StandDir.$module);
             print "Removing delivered from module $module\n";
             next if ($show);
-            my $current_dir = cwd();
+            my $current_dir = getcwd();
             chdir($module_path.'.lnk') or chdir($module_path);
             if (system($undeliver)) {
                 $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
                 print_error("Cannot run: $undeliver");
             }
             chdir $current_dir;
-            cwd();
+            getcwd();
         };
     };
     $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
@@ -2355,7 +2355,7 @@ sub checkout_current_module {
     my $module_name = shift;
     my $link_name = $module_name . '.lnk';
     chdir $StandDir;
-    cwd();
+    getcwd();
     print "\nBreaking link to module $module_name";
     checkout_module($module_name);
     if (!-d $module_name && !$show) {
@@ -2370,11 +2370,11 @@ sub checkout_current_module {
     };
     print_error("Cannot $action $link_name. Please $action it manually") if ($action);
     chdir $module_name;
-    cwd();
+    getcwd();
 };
 
 sub check_dir {
-    my $start_dir = cwd();
+    my $start_dir = getcwd();
     my @dir_entries = split(/[\\\/]/, $start_dir);
     my $current_module = $dir_entries[$#dir_entries];
     $current_module = $` if ($current_module =~ /(\.lnk)$/);
@@ -2386,14 +2386,14 @@ sub check_dir {
             checkout_current_module($current_module);
         };
     } elsif ((-l $link_name) && (chdir $link_name)) {
-        if ($start_dir eq cwd()) {
+        if ($start_dir eq getcwd()) {
             # we're dealing with link => fallback to SRC_ROOT under UNIX
             $StandDir = $ENV{SRC_ROOT}.'/';
             checkout_current_module($current_module);
             return;
         } else {
             chdir $start_dir;
-            cwd();
+            getcwd();
         };
     };
 };
@@ -2459,7 +2459,7 @@ sub do_post_job {
         print "$job\n";
     } else {
         chdir $module_path;
-        cwd();
+        getcwd();
         if ($html) {
             # tested on Linux only!!
             my $log_file = $jobs_hash{$post_job_name}->{LONG_LOG_PATH};
