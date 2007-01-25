@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:00:12 $
+#   last change: $Author: obo $ $Date: 2007-01-25 14:22:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,4 +55,4 @@ SLOFILES = $(SHL1OBJS)
 ALLTAR: test
 
 test .PHONY: $(SHL1TARGETN)
-    + cd $(SHL1TARGETN:d) && testshl2 $(SHL1TARGETN:f)
+    cd $(SHL1TARGETN:d) && testshl2 $(SHL1TARGETN:f)
