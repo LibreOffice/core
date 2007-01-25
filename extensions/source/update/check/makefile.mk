@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 15:17:13 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:14:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,10 +119,10 @@ XCU_SOURCEDIR:=.
 
 $(SPOOLDIR)$/$(PACKAGEDIR)$/Addons$/Addons-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Addons.xcu
     @$(MKDIRHIER) $(@:d)
-    @+$(COPY) $< $@
+    @$(COPY) $< $@
 
 $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Jobs.xcu
     @$(MKDIRHIER) $(@:d)
-    @+$(PERL) transform.pl < $< > $@
-#	@+$(COPY) $< $@
+    @$(PERL) transform.pl < $< > $@
+#	@$(COPY) $< $@
 
