@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 11:55:02 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:05:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,11 @@ ALLTAR : RUNINSTRUCTIONS
 #The OOoBean uses the classpath to find the office installation.
 #Therefore we must use the jar files from the office.
 RUN:
-    +java -cp $(OFFICE_CLASSPATH) $(OOOBEAN_OPTIONS) $(PACKAGE).Test
+    java -cp $(OFFICE_CLASSPATH) $(OOOBEAN_OPTIONS) $(PACKAGE).Test
 run: RUN
 
 rund:
-    +java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8100 -cp $(OFFICE_CLASSPATH) $(OOOBEAN_OPTIONS) $(PACKAGE).Test
+    java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8100 -cp $(OFFICE_CLASSPATH) $(OOOBEAN_OPTIONS) $(PACKAGE).Test
 
 
 
