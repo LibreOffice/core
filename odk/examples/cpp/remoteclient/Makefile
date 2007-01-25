@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.12 $
+#  $Revision: 1.13 $
 #
-#  last change: $Author: ihi $ $Date: 2006-12-20 12:25:56 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:08:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -103,7 +103,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^ \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
