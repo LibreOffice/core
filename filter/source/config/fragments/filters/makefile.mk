@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:02:17 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:46:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,16 +49,13 @@ PRJNAME = filter
 
 .INCLUDE: ..$/packagedef.mk
 
-#FILTERS_LIST= \
-#    $(ALL_UI_FILTERS)
-
 .INCLUDE: target.mk
 
 ALLTAR: $(ALL_UI_FILTERS)
 
 .IF "$(WITH_LANG)"!=""
 $(DIR_LOCFRAG)$/filters$/%.xcu : %.xcu
-    +$(MKDIRHIER) $(@:d)
+    -$(MKDIRHIER) $(@:d)
     $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
 
 .IF "$(ALL_UI_FILTERS)"!=""
