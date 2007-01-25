@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:22:19 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:27:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,10 +57,10 @@ ALLTAR : $(INCCOM)$/langmacros.inc $(INCCOM)$/images.inc
 .PHONY $(INCCOM)$/langmacros.inc:
     @echo ------------------------------
     @echo Making: $@  
-    +-$(RENAME) $@ $@.tmp >& $(NULLDEV)
-    +$(PERL) macro.pl -o $@.tmp && $(RENAME) $@.tmp $@
+    -$(RENAME) $@ $@.tmp >& $(NULLDEV)
+    $(PERL) macro.pl -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
 
 .PHONY $(INCCOM)$/images.inc:
-    +-$(RENAME) $@ $@.tmp >& $(NULLDEV)
-    +$(PERL) -w images.pl -o $@.tmp && $(RENAME) $@.tmp $@
+    -$(RENAME) $@ $@.tmp >& $(NULLDEV)
+    $(PERL) -w images.pl -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
 
