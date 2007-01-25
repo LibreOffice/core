@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 00:58:20 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:17:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,20 +59,20 @@ JARCOMPRESS   = TRUE
 #------ some information how to run the test -----------------------
 
 MYTAR: ALLTAR
-    +@echo 
-    +@echo ###########################   N O T E  ######################################
-    +@echo 
-    +@echo To run the test successfully you have to extend your LD_LIBRARY_PATH
-    +@echo to your office program directory!
-    +@echo Example:
-    +@echo setenv LD_LIBRARY_PATH /myOffice/program:\$$LD_LIBRARY_PATH
-    +@echo
-    +@echo To run the you have to use the parameter cmd:
-    +@echo cmd="PATH_TO_OFFICE_BINARY -accept=socket,host=localhost,port=8100;urp;"
-    +@echo 
-    +@echo Example:
-    +@echo dmake run cmd="/myOffice/program/soffice -accept=socket,host=localhost,port=8100;urp;"
-    +@echo
+    @echo 
+    @echo ###########################   N O T E  ######################################
+    @echo 
+    @echo To run the test successfully you have to extend your LD_LIBRARY_PATH
+    @echo to your office program directory!
+    @echo Example:
+    @echo setenv LD_LIBRARY_PATH /myOffice/program:\$$LD_LIBRARY_PATH
+    @echo
+    @echo To run the you have to use the parameter cmd:
+    @echo cmd="PATH_TO_OFFICE_BINARY -accept=socket,host=localhost,port=8100;urp;"
+    @echo 
+    @echo Example:
+    @echo dmake run cmd="/myOffice/program/soffice -accept=socket,host=localhost,port=8100;urp;"
+    @echo
     
 
 # --- Parameters for the test --------------------------------------
@@ -104,8 +104,8 @@ RUN: run
 # muss noch angepasst werden: es soll auf -AppExecutionCommand und -NoOffice gepr??ft werden
 #.IF "$(OFFICE)" == ""
 #run:
-#    +@echo Exit
+#    @echo Exit
 #.ELSE
 run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_NOOFFICE) $(CT_PACKAGE).RecoveryTest
+    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_NOOFFICE) $(CT_PACKAGE).RecoveryTest
 
