@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabres.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:36:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"       // enum ScSubTotalFunc
 #endif
+#include <hash_map>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -309,7 +311,7 @@ private:
     ScDPResultData*         pResultData;
     ScDPDimension*          pParentDim;             //! Ref
     ScDPLevel*              pParentLevel;           //! Ref
-    ScDPMember*             pMemberDesc;            //! Ref
+    const ScDPMember*       pMemberDesc;            //! Ref
     ScDPResultDimension*    pChildDimension;
     ScDPDataMember*         pDataRoot;
     BOOL                    bHasElements;
@@ -341,6 +343,7 @@ public:
     long                GetSubTotalCount( long* pUserSubStart = NULL ) const;
 
     BOOL                IsNamedItem( const ScDPItemData& r ) const;
+    BOOL                IsValidEntry( const ScDPItemData* pMembers ) const;
 
     void                SetHasElements()    { bHasElements = TRUE; }
     void                SetAutoHidden()     { bAutoHidden = TRUE; }
@@ -379,8 +382,8 @@ public:
 
     ScDPDataMember*         GetDataRoot() const             { return pDataRoot; }
 
-    ScDPDimension*          GetParentDim()      { return pParentDim; }          //! Ref
-    ScDPLevel*              GetParentLevel()    { return pParentLevel; }        //! Ref
+    const ScDPDimension*            GetParentDim() const            { return pParentDim; }      //! Ref
+    const ScDPLevel*                GetParentLevel() const          { return pParentLevel; }    //! Ref
 
     ScDPAggData*        GetColTotal( long nMeasure ) const;
 };
@@ -389,17 +392,17 @@ class ScDPDataMember
 {
 private:
     ScDPResultData*         pResultData;
-    ScDPResultMember*       pResultMember;          //! Ref?
+    const ScDPResultMember*     pResultMember;          //! Ref?
     ScDPDataDimension*      pChildDimension;
     ScDPAggData             aAggregate;
 
     void                UpdateValues( const ScDPValueData* pValues, const ScDPSubTotalState& rSubState );
 
 public:
-                        ScDPDataMember( ScDPResultData* pData, ScDPResultMember* pRes );
+                        ScDPDataMember( ScDPResultData* pData, const ScDPResultMember* pRes );
                         ~ScDPDataMember();
 
-    void                InitFrom( ScDPResultDimension* pDim );
+    void                InitFrom( const ScDPResultDimension* pDim );
 
     String              GetName() const;
     BOOL                IsVisible() const;
@@ -442,9 +445,6 @@ public:
 
 //! replace PtrArr with 32-bit array ????
 
-typedef ScDPResultMember* ScDPResultMemberPtr;
-SV_DECL_PTRARR_DEL(ScDPResultMembers, ScDPResultMemberPtr, SC_DP_RES_GROW, SC_DP_RES_GROW);
-
 typedef ScDPDataMember* ScDPDataMemberPtr;
 SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW, SC_DP_RES_GROW);
 
@@ -453,9 +453,18 @@ SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW, SC_DP_RES
 
 class ScDPResultDimension
 {
+public :
+    struct MemberHashFunc : public std::unary_function< const ScDPItemData &, size_t >
+    {
+        size_t operator() (const ScDPItemData &rData) const { return rData.Hash(); }
+    };
+    typedef std::vector <ScDPResultMember *>                            MemberArray;
+    typedef std::hash_map <ScDPItemData, ScDPResultMember *, MemberHashFunc>    MemberHash;
+
 private:
     ScDPResultData*         pResultData;
-    ScDPResultMembers       aMembers;
+    MemberArray             maMemberArray;
+    MemberHash              maMemberHash;
     BOOL                    bInitialized;
     String                  aDimensionName;     //! or ptr to IntDimension?
     BOOL                    bIsDataLayout;      //! or ptr to IntDimension?
@@ -468,6 +477,7 @@ private:
     long                    nAutoMeasure;
     long                    nAutoCount;
 
+    ScDPResultMember*       FindMember( const ScDPItemData& rData ) const;
 public:
                         ScDPResultDimension( ScDPResultData* pData );
                         ~ScDPResultDimension();
@@ -520,7 +530,8 @@ public:
 
                         //  for ScDPDataDimension::InitFrom
     long                GetMemberCount() const;
-    ScDPResultMember*   GetMember(long n) const;
+    const ScDPResultMember* GetMember(long n) const;
+    ScDPResultMember*       GetMember(long n);
 
     const ScMemberSortOrder& GetMemberOrder() const     { return aMemberOrder; }
     ScMemberSortOrder&  GetMemberOrder()                { return aMemberOrder; }
@@ -544,7 +555,7 @@ class ScDPDataDimension
 {
 private:
     ScDPResultData*     pResultData;
-    ScDPResultDimension* pResultDimension;  // column
+    const ScDPResultDimension* pResultDimension;  // column
     ScDPDataMembers     aMembers;
     BOOL                bIsDataLayout;      //! or ptr to IntDimension?
 
@@ -552,7 +563,7 @@ public:
                         ScDPDataDimension( ScDPResultData* pData );
                         ~ScDPDataDimension();
 
-    void                InitFrom( ScDPResultDimension* pDim );      // recursive
+    void                InitFrom( const ScDPResultDimension* pDim );        // recursive
     void                ProcessData( const ScDPItemData* pDataMembers, const ScDPValueData* pValues,
                                     const ScDPSubTotalState& rSubState );
 

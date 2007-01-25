@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabdat.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:36:18 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,14 @@ struct ScDPItemData
                     aString(rS), fValue(fV), bHasValue( bHV ) {}
 
     void        SetString( const String& rS ) { aString = rS; bHasValue = FALSE; }
-
     BOOL        IsCaseInsEqual( const ScDPItemData& r ) const;
+
+    size_t      Hash() const;
+
+    // exact equality
+    BOOL        operator==( const ScDPItemData& r ) const;
+    // case insensitive equality
+    static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 };
 
 #define SC_VALTYPE_EMPTY    0
