@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 15:12:29 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:30:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -174,15 +174,15 @@ ALLTAR : 	$(BIN)$/test.rdb	\
     $(BIN)$/client.rdb	
 
 $(BIN)$/test.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    $(IDLC) -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    $(REGMERGE) $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 
 $(BIN)$/client.rdb: $(BIN)$/test.rdb
-    +rm -f $(BIN)$/client.rdb
-    +regmerge $@ / $(BIN)$/test.rdb $(SOLARBINDIR)$/udkapi.rdb
+    rm -f $(BIN)$/client.rdb
+    $(REGMERGE) $@ / $(BIN)$/test.rdb $(SOLARBINDIR)$/udkapi.rdb
 
 $(BIN)$/server.rdb: $(BIN)$/test.rdb
-    +rm -f $(BIN)$/client.rdb
-    +regmerge $@ / $(BIN)$/test.rdb $(SOLARBINDIR)$/udkapi.rdb
+    rm -f $(BIN)$/client.rdb
+    $(REGMERGE) $@ / $(BIN)$/test.rdb $(SOLARBINDIR)$/udkapi.rdb
 
