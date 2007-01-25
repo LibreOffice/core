@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:19:34 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:27:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,10 @@ PRJNAME=bridges
 TARGET=sunpro5_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -87,5 +84,5 @@ SHL1STDLIBS= \
 
 
 $(SLO)$/%.obj: %.s
-    CC -KPIC -c -o $(SLO)$/$(@:b).o $< ; touch $@
+    CC -KPIC -c -o $(SLO)$/$(@:b).o $< && touch $@
 
