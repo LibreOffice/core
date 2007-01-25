@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_obj.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:41:13 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:56:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-    +$(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) >> $@
-    @+$(TYPE) $@ | tr -d ï\n\rï > $@
-    @+$(ECHONL) >> $@
+    $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) >> $@
+    @$(TYPE) $@ | tr -d ï\n\rï > $@
+    @$(ECHONL) >> $@
 .ELSE			# "$(COM)"=="GCC"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
@@ -54,9 +54,9 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .IF "$(GUI)"=="UNX"
     echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
-    @-+nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @-nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
-    @+nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(OBJTARGET)"!=""
@@ -70,7 +70,7 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    +$(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
+    $(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
 .ELSE
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
