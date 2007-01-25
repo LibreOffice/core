@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:27:26 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:33:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,6 @@ $(PACKAGE_RPM) : $(MISC)/$(TARGET)-menus.spec
         --define "source $(ABSLOCALOUT)$/misc$/redhat" \
         --define "unique $(shell echo $$$$)" \
         --define "_builddir $(ABSLOCALOUT)$/misc$/$(TARGET)/BUILD" && $(TOUCH) $@
-    @+$(TYPE) $@ || echo "ERROR: packing $(TARGET) failed! "
+    @$(TYPE) $@ || echo "ERROR: packing $(TARGET) failed! "
 
 .ENDIF
