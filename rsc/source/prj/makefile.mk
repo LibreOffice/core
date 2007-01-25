@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 16:33:34 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:41:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ OBJFILES=   $(OBJ)$/gui.obj          \
 .IF "$(GUI)$(COM)$(COMEX)" != "DOSSTCX"
 APP1TARGET= rsc
 APP1STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB) $(VOSLIB) $(SALLIB) # $(RTLLIB)
-APP1LIBS=   $(LIBPRE) $(LB)$/rsctoo.lib
+APP1LIBS=   $(LB)$/rsctoo.lib
 APP1OBJS=   $(OBJ)$/start.obj
 APP1STACK=64000
 .IF "$(GUI)" != "OS2"
@@ -85,11 +85,11 @@ APP2STDLIBS=$(STATIC) -latools $(BPICONVLIB) $(VOSLIB) $(OSLLIB) $(RTLLIB) $(DYN
 APP2STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB) $(VOSLIB) $(SALLIB) #RTLLIB)
 .ENDIF
 .ENDIF
-APP2LIBS=   $(LIBPRE) $(LB)$/rsctoo.lib \
-            $(LIBPRE) $(LB)$/rscres.lib \
-            $(LIBPRE) $(LB)$/rscpar.lib \
-            $(LIBPRE) $(LB)$/rscrsc.lib \
-            $(LIBPRE) $(LB)$/rscmis.lib
+APP2LIBS=   $(LB)$/rsctoo.lib \
+            $(LB)$/rscres.lib \
+            $(LB)$/rscpar.lib \
+            $(LB)$/rscrsc.lib \
+            $(LB)$/rscmis.lib
 APP2OBJS=   $(OBJ)$/gui.obj
 APP2STACK=64000
 .IF "$(GUI)" != "OS2"
