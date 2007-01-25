@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:26:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,9 +616,8 @@ public:
 
     void        DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd );
 
-    // maximale Stringlaengen einer Column, fuer z.B. dBase Export
-    xub_StrLen  GetMaxStringLen( SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    sal_Int32   GetMaxStringLen( SCCOL nCol,
+                                    SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
     xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
                                     SCCOL nCol,
                                     SCROW nRowStart, SCROW nRowEnd ) const;
