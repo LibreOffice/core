@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:40:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,7 +729,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
 
             GetObjectShell()->Broadcast( SfxPrintingHint( -1, pPrintDlg, pPrinter ) );
-            ErrCode nError = DoPrint( pPrinter, pPrintDlg, bSilent );
+            ErrCode nError = DoPrint( pPrinter, pPrintDlg, bSilent, bIsAPI );
             if ( nError == PRINTER_OK )
             {
                 pObjSh->FlushDocInfo();
@@ -808,7 +808,7 @@ void SfxViewShell::PreparePrint( PrintDialog * )
 
 ErrCode SfxViewShell::DoPrint( SfxPrinter *pPrinter,
                                PrintDialog *pPrintDlg,
-                               BOOL bSilent )
+                               BOOL bSilent, BOOL bIsAPI )
 {
     // Printer-Dialogbox waehrend des Ausdrucks mu\s schon vor
     // StartJob erzeugt werden, da SV bei einem Quit-Event h"angt
@@ -829,7 +829,7 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter *pPrinter,
     if ( pPrinter->StartJob(pObjShell->GetTitle(0)) )
     {
         // Drucken
-        Print( *pProgress, pPrintDlg );
+        Print( *pProgress, bIsAPI, pPrintDlg );
         pProgress->Stop();
         pProgress->DeleteOnEndPrint();
         pPrinter->EndJob();
@@ -870,7 +870,7 @@ void SfxViewShell::LockPrinter( BOOL bLock)
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::Print( SfxProgress& /*rProgress*/, PrintDialog* /*pDlg*/ )
+USHORT SfxViewShell::Print( SfxProgress& /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog* /*pDlg*/ )
 {
     return 0;
 }
