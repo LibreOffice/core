@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:09:10 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 10:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                     (*pFilterData)[ i ].Value >>= mnInterlaced;
                 else if ( (*pFilterData)[ i ].Name.equalsAscii( "MaxChunkSize" ) )
                 {
-                    sal_Int32 nVal;
+                    sal_Int32 nVal = 0;
                     if ( (*pFilterData)[ i ].Value >>= nVal )
                         mnMaxChunkSize = (sal_uInt32)nVal;
                 }
