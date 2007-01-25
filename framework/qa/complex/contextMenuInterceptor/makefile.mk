@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-04 15:41:47 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:16:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,4 +82,4 @@ CT_APP      = org.openoffice.Runner
 RUN: run
 
 run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) -tdoc \\margritte\qaapi\workspace\qadev\testdocs $(CT_PACKAGE).CheckContextMenuInterceptor
+    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) -tdoc \\margritte\qaapi\workspace\qadev\testdocs $(CT_PACKAGE).CheckContextMenuInterceptor
