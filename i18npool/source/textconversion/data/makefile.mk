@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:21:50 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:26:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ LIB1OBJFILES=$(SHL1OBJS)
 
 APP1TARGET = genconv_dict
 $(MISC)$/%.cxx : %.dic
-    +$(BIN)$/genconv_dict $* $< $@
+    $(BIN)$/genconv_dict $* $< $@
 
 # ugly - is this dependency really required here?
 $(foreach,i,$(shell $(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genconv_dict
