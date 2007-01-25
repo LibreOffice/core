@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 11:02:04 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:09:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,15 +84,15 @@ $(MISC)$/x$(TARGET).c: $(TARGET).cl $(CL2CSRC) $(MISC)$/cl2c.pl
 
 $(MISC)$/cl2c.pl: ..$/util/cl2c.pl
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +tr -d "\015" < ..$/util$/cl2c.pl > $@
-    +chmod +rw $@
+    tr -d "\015" < ..$/util$/cl2c.pl > $@
+    chmod +rw $@
 .ELSE
-    @+$(COPY) ..$/util$/cl2c.pl $@
+    @$(COPY) ..$/util$/cl2c.pl $@
 .ENDIF
     
 # copy file to include in package
 $(INCCOM)$/xlang.h : $(SOLARINCDIR)$/i18npool$/lang.h
-    @+$(COPY) $(SOLARINCDIR)$/i18npool$/lang.h $@
+    @$(COPY) $(SOLARINCDIR)$/i18npool$/lang.h $@
 
 
 $(SLOFILES) : $(INCCOM)$/xlang.h $(CFILES)
