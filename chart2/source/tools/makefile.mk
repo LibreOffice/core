@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 15:33:09 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:38:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,5 +156,5 @@ DEF1DES=		Chart Tools
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk \
                             exports.flt
-    +$(TYPE) exports.flt > $@
+    $(TYPE) exports.flt > $@
 
