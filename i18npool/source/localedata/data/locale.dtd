@@ -372,11 +372,22 @@
 <!ELEMENT Transliteration EMPTY>
 <!ATTLIST Transliteration  %UNOModule;>
 
-<!ELEMENT LC_MISC (ForbiddenCharacters?, ReservedWords?)>
+<!ELEMENT LC_MISC (ForbiddenCharacters?, BreakIteratorRules?, ReservedWords?)>
 <!ATTLIST LC_MISC %RefLocale;>
 <!ELEMENT ForbiddenCharacters (ForbiddenLineBeginCharacters, ForbiddenLineEndCharacters)>
 <!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
 <!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
+
+<!-- optional break iterator rules for the languages. 
+     if defined, 5 rules should be all listed, each of them can be blank and default will be used.
+     order of the rules is significant!
+-->
+<!ELEMENT BreakIteratorRules (EditMode, DictionaryMode, WordCountMode, CharacterMode, LineMode)>
+<!ELEMENT EditMode (#PCDATA)>
+<!ELEMENT DictionaryMode (#PCDATA)>
+<!ELEMENT WordCountMode (#PCDATA)>
+<!ELEMENT CharacterMode (#PCDATA)>
+<!ELEMENT LineMode (#PCDATA)>
 
 <!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarter1Abbreviation, quarter2Abbreviation, quarter3Abbreviation, quarter4Abbreviation)>
 <!-- order is significant! -->
