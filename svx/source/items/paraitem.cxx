@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:10:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 16:19:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1071,7 +1071,7 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_STD_TAB:
         {
             const SvxTabStop &rTab = *(GetStart());
-            rVal <<= bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
+            rVal <<= static_cast<sal_Int32>(bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos());
             break;
         }
     }
