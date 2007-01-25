@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:47:16 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:38:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ SHL1HEADER=nativeview.h
 $(SLO)$/nativeview.obj : $(SHL1HEADER)
 
 $(SHL1HEADER) :
-        + javah -classpath $(OUT)$/class -o $(SHL1HEADER) embeddedobj.test
+        javah -classpath $(OUT)$/class -o $(SHL1HEADER) embeddedobj.test
 
 .ENDIF                  # "$(JAVANUMVER:s/.//)" >= "000100040000"
 
