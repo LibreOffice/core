@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astscope.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:44:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,8 @@ protected:
     { return m_declarations.back(); }
 
 private:
-    DeclList        m_declarations;
-    const NodeType  m_nodeType;
+    DeclList    m_declarations;
+    NodeType    m_nodeType;
 };
 
 #endif // _IDLC_ASTSCOPE_HXX_
