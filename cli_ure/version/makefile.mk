@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-03 14:32:53 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:44:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ $(BIN)$/cliureversion.mk: version.txt
 #Create the config file that is used with the policy assembly 
 #only if new published types have been added, the cliureversion.mk is written.
 #INCVERSION .PHONY: version.txt incversions.txt  
-#	+$(PERL) $(PRJ)$/source$/scripts$/increment_version.pl \
+#	$(PERL) $(PRJ)$/source$/scripts$/increment_version.pl \
 #	$< $(BIN)$/cliureversion.mk $(SOLARBINDIR)$/unotype_statistics.txt
 
 
