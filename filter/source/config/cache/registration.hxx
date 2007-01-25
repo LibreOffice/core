@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:24:36 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ namespace comphelper{
 
 /** TODO    doc
  */
-#define _COMPHELPER_COMPONENT_GETFACTORY(FACTORYLIST)                                                                                               \
+#define _COMPHELPER_COMPONENT_GETFACTORY(STATIC_INIT,FACTORYLIST)                                                                                               \
     extern "C" void* SAL_CALL component_getFactory(const sal_Char* pImplementationName,                                                             \
                                                          void*     pServiceManager    ,                                                             \
                                                          void*     /* pRegistryKey */ )                                                             \
@@ -209,6 +209,8 @@ namespace comphelper{
             (!pServiceManager    )                                                                                                                  \
            )                                                                                                                                        \
         return NULL;                                                                                                                                \
+                                                                                                                                                    \
+        STATIC_INIT                                                                                                                                 \
                                                                                                                                                     \
         css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR     = reinterpret_cast< css::lang::XMultiServiceFactory* >(pServiceManager);  \
         css::uno::Reference< css::lang::XSingleServiceFactory > xFactory  ;                                                                         \
