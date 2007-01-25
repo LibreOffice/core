@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1589,9 +1589,16 @@ public:
     void            CompileNameFormula( BOOL bCreateFormulaString );
     void            CompileColRowNameFormula();
 
-    // maximale Stringlaengen einer Column, fuer z.B. dBase Export
-    xub_StrLen      GetMaxStringLen( SCTAB nTab, SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    /** Maximum string length of a column, e.g. for dBase export.
+        @return String length in octets (!) of the destination encoding. In
+                case of non-octet encodings (e.g. UCS2) the length in code
+                points times sizeof(sal_Unicode) is returned. */
+    sal_Int32       GetMaxStringLen( SCTAB nTab, SCCOL nCol,
+                                     SCROW nRowStart, SCROW nRowEnd,
+                                     CharSet eCharSet ) const;
+    /** Maximum string length of numerical cells of a column, e.g. for dBase export.
+        @return String length in characters (!) including the decimal
+                separator, and the decimal precision needed. */
     xub_StrLen      GetMaxNumberStringLen( USHORT& nPrecision,
                                     SCTAB nTab, SCCOL nCol,
                                     SCROW nRowStart, SCROW nRowEnd ) const;
