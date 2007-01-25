@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:26:26 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,8 +252,7 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
-                                     BOOL bSilent )
+ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, BOOL bIsAPI )
 {
     // First test
     SwWrtShell* pSh = &GetWrtShell();
@@ -263,8 +262,8 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
     USHORT nMergeType = pMgr->GetMergeType();
     if( DBMGR_MERGE_MAILMERGE != nMergeType &&
         DBMGR_MERGE_DOCUMENTS != nMergeType &&
-            !pDlg && !bSilent
-        && !bIsApi && ( pSh->IsSelection() || pSh->IsFrmSelected() ||
+            !pDlg &&
+            !bIsAPI && ( pSh->IsSelection() || pSh->IsFrmSelected() ||
         pSh->IsObjSelected() ) )
     {
         short nBtn = SvxPrtQryBox(&GetEditWin()).Execute();
@@ -299,8 +298,8 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
         pProgress = new SfxPrintProgress( this, !bSilent );
     pProgress->SetWaitMode(FALSE);
 
-    BOOL bStartJob = pPrinter->InitJob( &GetEditWin(), pSh->HasDrawView() &&
-                    pSh->GetDrawView()->GetModel()->HasTransparentObjects());
+    BOOL bStartJob = pPrinter->InitJob( &GetEditWin(),
+            !bIsAPI && pSh->HasDrawView() && pSh->GetDrawView()->GetModel()->HasTransparentObjects());
     if( bStartJob )
     {
         // Drucker starten
@@ -315,9 +314,9 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             SwView::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(),
                             pSh->getIDocumentDeviceAccess()->getPrintData() );
             if(DBMGR_MERGE_DOCUMENTS == nMergeType)
-                bStartJob = pMgr->MergePrintDocuments( *this, aOpts, *pProgress );
+                bStartJob = pMgr->MergePrintDocuments( *this, aOpts, *pProgress, bIsAPI );
             else
-                bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
+                bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress, bIsAPI );
         }
         else
         {
@@ -397,7 +396,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             pViewProperties[15].Value <<= (sal_Bool)aOpts.bPrintEmptyPages;
             SetAdditionalPrintOptions(aViewProperties);
 
-            SfxViewShell::Print(*pProgress);
+            SfxViewShell::Print(*pProgress, bIsAPI );
             if ( !pProgress->IsAborted() )
             {
                 if( bPrtPros )
@@ -425,7 +424,6 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
         }
     }
 
-    bIsApi = FALSE;
     if( !bStartJob )
     {
         // Printer konnte nicht gestartet werden
@@ -556,6 +554,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                     return;
                 }
             }
+
             //set the appropriate view options to print
             //on silent mode the field commands have to be switched off always
             //on default print the user is asked what to do
@@ -600,7 +599,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 
                 SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
             }
-            bIsApi = rReq.IsAPI();
+
             SfxViewShell::ExecuteSlot( rReq, SfxViewShell::GetInterface() );
             if(pOrgViewOption)
             {
