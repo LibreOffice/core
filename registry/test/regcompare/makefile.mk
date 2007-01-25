@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:18:08 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:39:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,69 +46,69 @@ test .PHONY: $(MISC)$/$(TARGET)$/psa.urd $(MISC)$/$(TARGET)$/psb.urd \
         $(MISC)$/$(TARGET)$/usa.urd $(MISC)$/$(TARGET)$/usb.urd \
         $(MISC)$/$(TARGET)$/pe.urd $(MISC)$/$(TARGET)$/ue.urd \
         $(MISC)$/$(TARGET)$/other1.urd $(MISC)$/$(TARGET)$/other2.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/psa.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/psb.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/usa.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/usb.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/pe.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/ue.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/other1.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/other2.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/psa.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/psb.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/usa.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/usb.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/pe.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/ue.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/other1.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/psa.urd -r2 $(MISC)$/$(TARGET)$/other2.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/psa.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/psb.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/usa.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/usb.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/pe.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/ue.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/other1.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/other2.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/psa.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/psb.urd
-    + $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -SUCCESS $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/usa.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/usb.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/pe.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/ue.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/other1.urd
-    + $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
+    $(EXECTEST) -FAILURE $(BIN)/regcompare$(EXECPOST) -f -t -u \
         -r1 $(MISC)$/$(TARGET)$/usa.urd -r2 $(MISC)$/$(TARGET)$/other2.urd
 
 $(MISC)$/$(TARGET)$/%.urd: %.idl
