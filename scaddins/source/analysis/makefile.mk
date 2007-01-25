@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 13:13:16 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:22:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,8 +137,8 @@ RESLIB1SRSFILES=\
 .INCLUDE : target.mk
 
 $(BIN)$/analysisadd.rdb: $(ALLIDLFILES)
-    +$(IDLC) -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +$(REGMERGE) $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    $(IDLC) -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    $(REGMERGE) $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 
 
