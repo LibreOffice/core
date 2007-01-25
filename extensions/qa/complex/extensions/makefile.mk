@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 15:11:12 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:13:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,26 +93,19 @@ JARCOMPRESS 	= TRUE
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
-ALL :   ALLTAR
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
-
 .INCLUDE :  target.mk
-
 
 RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
 
 run:copy_resources
-    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_all.sce
+    java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_all.sce
 
 run_%:copy_resources
-    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
+    java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
 
 
 copy_resources: $(RESLIB1TARGETN) $(RESLIB2TARGETN)
-    +@$(foreach,i,$(RESLIB1TARGETN) $(COPY) $i $(i:s/de/invalid/:s/_A_//) $(command_seperator)) echo.
-    +@$(foreach,i,$(RESLIB2TARGETN) $(COPY) $i $(i:s/en-US/invalid/:s/_B_//) $(command_seperator)) echo.
+    @$(foreach,i,$(RESLIB1TARGETN) $(COPY) $i $(i:s/de/invalid/:s/_A_//) $(command_seperator)) echo.
+    @$(foreach,i,$(RESLIB2TARGETN) $(COPY) $i $(i:s/en-US/invalid/:s/_B_//) $(command_seperator)) echo.
 
