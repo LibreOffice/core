@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.14 $
+#  $Revision: 1.15 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:17:39 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:09:34 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -51,8 +51,8 @@ include $(SETTINGS)/dk.mk
 COMP_NAME=PropTest
 COMP_CLASS_OUT=$(OUT_CLASS)/$(COMP_NAME)
 COMP_GEN_OUT=$(OUT_MISC)/$(COMP_NAME)
-COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
-COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_JAR_NAME=$(COMP_NAME).uno.jar
 COMP_JAR=$(COMP_CLASS_OUT)/$(COMP_JAR_NAME)
 COMP_JAR_MANIFEST=$(COMP_CLASS_OUT)/$(COMP_NAME).uno.Manifest
