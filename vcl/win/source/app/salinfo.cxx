@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:32:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,53 +36,32 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+// rely on unicows on for multimon functions for older versions
+#if WINVER < 0x0500
+#undef WINVER
+#define WINVER 0x0500
+#endif
+
 #define VCL_NEED_BASETSD
 #include <tools/presys.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 #include <windows.h>
+#include <winuser.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
 #include <tools/postsys.h>
 
 #include <tools/string.hxx>
-#include <salsys.hxx>
+#include <salsys.h>
 #include <salframe.h>
 #include <salinst.h>
 #include <saldata.hxx>
 #include <tools/debug.hxx>
 #include <svdata.hxx>
 #include <window.hxx>
-
-#include <multimon.h>
-
-#include <vector>
-
-class WinSalSystem : public SalSystem
-{
-    std::vector< Rectangle > m_aMonitors;
-    std::vector< Rectangle > m_aWorkAreas;
-    unsigned int             m_nPrimary;
-public:
-    WinSalSystem() : m_nPrimary( 0 ) {}
-    virtual ~WinSalSystem();
-
-    virtual unsigned int GetDisplayScreenCount();
-    virtual bool IsMultiDisplay();
-    virtual unsigned int GetDefaultDisplayNumber();
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
-    virtual int ShowNativeMessageBox( const String& rTitle,
-                                      const String& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton);
-    bool initMonitors();
-    void addMonitor( const Rectangle& rRect) { m_aMonitors.push_back( rRect ); }
-    void addWorkArea( const Rectangle& rRect) { m_aWorkAreas.push_back( rRect ); }
-    void setLastToPrimary() { m_nPrimary = m_aMonitors.size()-1; }
-};
 
 SalSystem* WinSalInstance::CreateSalSystem()
 {
@@ -95,26 +74,49 @@ WinSalSystem::~WinSalSystem()
 
 // -----------------------------------------------------------------------
 
-static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
-                                          HDC,
-                                          LPRECT,
+static WIN_BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
+                                          HDC hDC,
+                                          LPRECT lpRect,
                                           LPARAM dwData )
 {
-    MONITORINFO aInfo;
-    aInfo.cbSize = sizeof( aInfo );
-    GetMonitorInfo( hMonitor, &aInfo );
     WinSalSystem* pSys = reinterpret_cast<WinSalSystem*>(dwData);
-    pSys->addMonitor( Rectangle( Point( aInfo.rcMonitor.left,
-                                        aInfo.rcMonitor.top ),
-                                 Size( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
-                                       aInfo.rcMonitor.bottom - aInfo.rcMonitor.top ) ) );
-    pSys->addWorkArea( Rectangle( Point( aInfo.rcWork.left,
-                                         aInfo.rcWork.top ),
-                                  Size( aInfo.rcWork.right - aInfo.rcWork.left,
-                                        aInfo.rcWork.bottom - aInfo.rcWork.top ) ) );
-    if( (aInfo.dwFlags & MONITORINFOF_PRIMARY) != 0 )
-        pSys->setLastToPrimary();
+    return pSys->handleMonitorCallback( reinterpret_cast<sal_IntPtr>(hMonitor),
+                                        reinterpret_cast<sal_IntPtr>(hDC),
+                                        reinterpret_cast<sal_IntPtr>(lpRect) );
+}
+
+BOOL WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_IntPtr )
+{
+    MONITORINFOEXW aInfo;
+    aInfo.cbSize = sizeof( aInfo );
+    if( GetMonitorInfoW( reinterpret_cast<HMONITOR>(hMonitor), &aInfo ) )
+    {
+        aInfo.szDevice[CCHDEVICENAME-1] = 0;
+        rtl::OUString aDeviceName( aInfo.szDevice );
+        std::map< rtl::OUString, unsigned int >::const_iterator it =
+            m_aDeviceNameToMonitor.find( aDeviceName );
+        if( it != m_aDeviceNameToMonitor.end() )
+        {
+            DisplayMonitor& rMon( m_aMonitors[ it->second ] );
+            rMon.m_aArea = Rectangle( Point( aInfo.rcMonitor.left,
+                                             aInfo.rcMonitor.top ),
+                                      Size( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
+                                            aInfo.rcMonitor.bottom - aInfo.rcMonitor.top ) );
+            rMon.m_aWorkArea = Rectangle( Point( aInfo.rcWork.left,
+                                                 aInfo.rcWork.top ),
+                                          Size( aInfo.rcWork.right - aInfo.rcWork.left,
+                                                aInfo.rcWork.bottom - aInfo.rcWork.top ) );
+            if( (aInfo.dwFlags & MONITORINFOF_PRIMARY) != 0 )
+                m_nPrimary = it->second;
+        }
+    }
     return TRUE;
+}
+
+void WinSalSystem::clearMonitors()
+{
+    m_aMonitors.clear();
+    m_nPrimary = 0;
 }
 
 bool WinSalSystem::initMonitors()
@@ -142,16 +144,39 @@ bool WinSalSystem::initMonitors()
         {
             int w = GetSystemMetrics( SM_CXSCREEN );
             int h = GetSystemMetrics( SM_CYSCREEN );
-            m_aMonitors.push_back( Rectangle( Point(), Size( w, h ) ) );
+            m_aMonitors.push_back( DisplayMonitor( rtl::OUString(),
+                                                   rtl::OUString(),
+                                                   Rectangle( Point(), Size( w, h ) ),
+                                                   Rectangle( Point(), Size( w, h ) ),
+                                                   0 ) );
+            m_aDeviceNameToMonitor[ rtl::OUString() ] = 0;
+            m_nPrimary = 0;
             RECT aWorkRect;
             if( SystemParametersInfo( SPI_GETWORKAREA, 0, &aWorkRect, 0 ) )
-                m_aWorkAreas.push_back( Rectangle( aWorkRect.left, aWorkRect.top,
-                                                   aWorkRect.right, aWorkRect.bottom ) );
-            else
-                m_aWorkAreas.push_back( m_aMonitors.front() );
+                m_aMonitors.back().m_aWorkArea =  Rectangle( aWorkRect.left, aWorkRect.top,
+                                                             aWorkRect.right, aWorkRect.bottom );
         }
         else
         {
+            DISPLAY_DEVICEW aDev;
+            aDev.cb = sizeof( aDev );
+            DWORD nDevice = 0;
+            while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
+            {
+                if( (aDev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) == 0 ) // sort out non monitors
+                {
+                    aDev.DeviceName[31] = 0;
+                    aDev.DeviceString[127] = 0;
+                    rtl::OUString aDeviceName( aDev.DeviceName );
+                    rtl::OUString aDeviceString( aDev.DeviceString );
+                    m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
+                    m_aMonitors.push_back( DisplayMonitor( aDeviceString,
+                                                           aDeviceName,
+                                                           Rectangle(),
+                                                           Rectangle(),
+                                                           aDev.StateFlags ) );
+                }
+            }
             HDC aDesktopRC = GetDC( NULL );
             EnumDisplayMonitors( aDesktopRC, NULL, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
         }
@@ -160,13 +185,17 @@ bool WinSalSystem::initMonitors()
     {
         int w = GetSystemMetrics( SM_CXSCREEN );
         int h = GetSystemMetrics( SM_CYSCREEN );
-        m_aMonitors.push_back( Rectangle( Point(), Size( w, h ) ) );
+        m_aMonitors.push_back( DisplayMonitor( rtl::OUString(),
+                                               rtl::OUString(),
+                                               Rectangle( Point(), Size( w, h ) ),
+                                               Rectangle( Point(), Size( w, h ) ),
+                                               0 ) );
+        m_aDeviceNameToMonitor[ rtl::OUString() ] = 0;
+        m_nPrimary = 0;
         RECT aWorkRect;
         if( SystemParametersInfo( SPI_GETWORKAREA, 0, &aWorkRect, 0 ) )
-            m_aWorkAreas.push_back( Rectangle( aWorkRect.left, aWorkRect.top,
-                                               aWorkRect.right, aWorkRect.bottom ) );
-        else
-            m_aWorkAreas.push_back( m_aMonitors.front() );
+            m_aMonitors.back().m_aWorkArea =  Rectangle( aWorkRect.left, aWorkRect.top,
+                                                         aWorkRect.right, aWorkRect.bottom );
     }
 
     return m_aMonitors.size() > 0;
@@ -185,19 +214,26 @@ bool WinSalSystem::IsMultiDisplay()
 
 unsigned int WinSalSystem::GetDefaultDisplayNumber()
 {
+    initMonitors();
     return m_nPrimary;
 }
 
 Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
-    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen] : Rectangle();
+    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aArea : Rectangle();
 }
 
 Rectangle WinSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
-    return (nScreen < m_aWorkAreas.size()) ? m_aWorkAreas[nScreen] : Rectangle();
+    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aWorkArea : Rectangle();
+}
+
+rtl::OUString WinSalSystem::GetScreenName( unsigned int nScreen )
+{
+    initMonitors();
+    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aName : rtl::OUString();
 }
 
 // -----------------------------------------------------------------------
