@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:04:48 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:43:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ ALLTAR : $(BIN)$/climaker.exe.config
 $(BIN)$/climaker.exe.config : climaker.exe.config
     $(GNUCOPY) -f $? $@
 .IF "$(USE_SHELL)"!="4nt"
-    +chmod +x $@
+    chmod +x $@
 .ENDIF
 
 .ENDIF
