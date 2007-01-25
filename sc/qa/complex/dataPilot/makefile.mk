@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:05:28 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:09:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,4 +63,4 @@ JARCOMPRESS 	= TRUE
 
 
 run:
-    +java -cp $(CLASSPATH) org.openoffice.Runner -TimeOut 0 -tb java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)
+    java -cp $(CLASSPATH) org.openoffice.Runner -TimeOut 0 -tb java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)
