@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:58:23 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1259,8 +1259,10 @@ void SwXMLTextParagraphExport::exportTable(
                 // AUTOSTYLES: Optimization: Do not export table autostyle if
                 // we are currently exporting the content.xml stuff and
                 // the table is located in header/footer:
-                const bool bExportContent = ( GetExport().getExportFlags() & EXPORT_CONTENT ) != 0;
-                if ( !bExportContent || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
+                // #144704: During the flat XML export (used e.g. by .sdw-export)
+                // ALL flags are set at the same time.
+                const bool bExportStyles = ( GetExport().getExportFlags() & EXPORT_STYLES ) != 0;
+                if ( bExportStyles || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
                     ((SwXMLExport&)GetExport()).ExportTableAutoStyles( *pTblNd );
             }
             else
