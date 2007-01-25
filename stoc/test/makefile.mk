@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:21:16 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:32:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -237,24 +237,24 @@ TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
 TESTSECURITY:=com.sun.star.security.AllPermission;com.sun.star.security.XPolicy;com.sun.star.security.XAccessController;com.sun.star.io.FilePermission;com.sun.star.connection.SocketPermission;com.sun.star.uno.XCurrentContext
 
 $(BIN)$/test1.rdb: $(SHL1TARGETN)
-    +cd $(BIN) && regcomp -register -r test1.rdb -c $(SHL1TARGET)
+    cd $(BIN) && regcomp -register -r test1.rdb -c $(SHL1TARGET)
 
 $(BIN)$/test2.rdb:
-    +cd $(BIN) && regcomp -register -r test2.rdb -c remotebridge.uno$(DLLPOST)
+    cd $(BIN) && regcomp -register -r test2.rdb -c remotebridge.uno$(DLLPOST)
 
 $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
-    +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
-    +regcomp -register -r $@ -c reflection.uno$(DLLPOST)
+    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
+    regcomp -register -r $@ -c reflection.uno$(DLLPOST)
     touch $@
 
 $(MISC)$/test_types_generated.flag : $(BIN)$/stoctest.rdb  makefile.mk
     -rm -f $(MISC)$/test_types_generated.flag
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(FACTORYTYPES) -T"$(TESTIADAPTER)" $(BIN)$/stoctest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTCOREFL)" $(BIN)$/stoctest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTINTROSP)" $(BIN)$/stoctest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTCONV)" $(BIN)$/stoctest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTPROXYFAC)" $(BIN)$/stoctest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTSECURITY)" $(BIN)$/stoctest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(FACTORYTYPES) -T"$(TESTIADAPTER)" $(BIN)$/stoctest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTCOREFL)" $(BIN)$/stoctest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTINTROSP)" $(BIN)$/stoctest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTCONV)" $(BIN)$/stoctest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTPROXYFAC)" $(BIN)$/stoctest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTSECURITY)" $(BIN)$/stoctest.rdb
     touch $(MISC)$/test_types_generated.flag
