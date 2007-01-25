@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:29:51 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:07:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -166,8 +166,8 @@ SHL1STDLIBS+= $(JPEG3RDLIB)
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
         uwinapi.lib \
-        $(LIBPRE) advapi32.lib	\
-        $(LIBPRE) gdi32.lib \
+        advapi32.lib	\
+        gdi32.lib \
         ole32.lib 	\
         uuid.lib 	\
         advapi32.lib	\
@@ -210,8 +210,8 @@ SHL2STDLIBS= \
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
         uwinapi.lib \
-        $(LIBPRE) advapi32.lib	\
-        $(LIBPRE) gdi32.lib
+        advapi32.lib	\
+        gdi32.lib
 .ENDIF # WNT
 
 SHL2LIBS=	$(SLB)$/svl.lib
@@ -292,10 +292,10 @@ ALL: $(SLB)$/svl.lib \
 $(MISC)$/$(SHL1TARGET).flt: svt.flt
     @echo ------------------------------
     @echo Making: $@
-    +$(TYPE) svt.flt >$@
+    $(TYPE) svt.flt >$@
 
 $(MISC)$/$(SHL2TARGET).flt: svl.flt
     @echo ------------------------------
     @echo Making: $@
-    +$(TYPE) svl.flt >$@
+    $(TYPE) svl.flt >$@
 
