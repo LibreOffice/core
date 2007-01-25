@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:39:08 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:25:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -183,4 +183,4 @@ DEF4NAME=$(SHL4TARGET)
 # --- Filter -----------------------------------------------------------
 
 $(MISC)$/$(SHL3TARGET).flt: makefile.mk
-    +$(TYPE) $(SHL3TARGET).flt > $@
+    $(TYPE) $(SHL3TARGET).flt > $@
