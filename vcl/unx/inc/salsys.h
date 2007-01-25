@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:01:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ public:
     virtual unsigned int GetDefaultDisplayNumber();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
+    virtual rtl::OUString GetScreenName( unsigned int nScreen );
     virtual int ShowNativeDialog( const String& rTitle,
                                   const String& rMessage,
                                   const std::list< String >& rButtons,
