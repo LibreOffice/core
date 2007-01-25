@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-03 10:12:33 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:24:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -525,6 +525,25 @@ sub clean_output_tree
             push(@installer::globals::logfileinfo, $infoline);
             my $systemcall = "rmdir $installer::globals::shiptestdirectory";
             my $returnvalue = system($systemcall);
+        }
+    }
+}
+
+###############################################################
+# Removing all directories that are saved in the
+# global directory @installer::globals::jdsremovedirs
+###############################################################
+
+sub clean_jds_temp_dirs
+{
+    installer::logger::print_message( "... cleaning jds directories ...\n" );
+
+    for ( my $i = 0; $i <= $#installer::globals::jdsremovedirs; $i++ )
+    {
+        if ( -d $installer::globals::jdsremovedirs[$i] )
+        {
+            installer::logger::print_message( "... removing directory $installer::globals::jdsremovedirs[$i] ...\n" );
+            installer::systemactions::remove_complete_directory($installer::globals::jdsremovedirs[$i], 1);
         }
     }
 }
@@ -1809,7 +1828,6 @@ sub copy_all_packages
     $destdir =~ s/\/\s*$//;
 
     # $allexcludepackages is a list of RPMs and packages, that shall NOT be included into jds product
-
     my $allpackages = get_all_packages_in_installdir($sourcedir);
 
     for ( my $i = 0; $i <= $#{$allpackages}; $i++ )
@@ -1840,7 +1858,11 @@ sub copy_all_packages
                 {
                     my $destinationdir = $destdir . $installer::globals::separator . $packagename;
                     if ( ! -d $onepackage ) { installer::exiter::exit_program("ERROR: Could not find Solaris package $onepackage!", "copy_all_packages"); }
-                    installer::systemactions::hardlink_complete_directory($onepackage, $destinationdir);
+                    # installer::systemactions::hardlink_complete_directory($onepackage, $destinationdir);
+                    # installer::systemactions::copy_complete_directory($onepackage, $destinationdir);
+
+                    my $systemcall = "cp -p -R $onepackage $destinationdir";
+                     make_systemcall($systemcall);
                 }
             }
             else
@@ -1989,6 +2011,8 @@ sub create_jds_sets
     # determining the source directory
     my $alldirs = installer::systemactions::get_all_directories($installationdir);
     my $sourcedir = ${$alldirs}[0]; # there is only one directory
+
+    if ( $installer::globals::issolarisbuild ) { $sourcedir = $installer::globals::saved_packages_path; }
 
     # copy all packages/RPMs
     copy_all_packages($allexcludepackages, $sourcedir, $jdsdir);
