@@ -19,7 +19,7 @@ PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
 .ENDIF
 
 FINDLIBFILES_TMP:=$(subst,/,$/ \
-    $(shell +$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v .pyc ))
+    $(shell $(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v .pyc ))
 FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
 
 FILES=\
@@ -46,16 +46,16 @@ $(BIN)$/python-core-$(PYVERSION).zip : $(FILES) $(BIN)$/python.sh
 .ENDIF
 .ENDIF
     -rm -f $@
-    +cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
+    cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
 
 $(DESTROOT)$/lib$/% : $(SOLARLIBDIR)$/python$/%
-    -+$(MKDIRHIER) $(@:d) 
+    -$(MKDIRHIER) $(@:d) 
     -rm -f $@
     cat $< > $@
 
 .IF "$(GUI)"== "UNX"
 $(BIN)$/python$(EXECPOST).bin : $(SOLARBINDIR)$/python$(EXECPOST)
-    -+$(MKDIRHIER) $(@:d)
+    -$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@
 .IF "$(OS)" != "MACOSX"
@@ -64,7 +64,7 @@ $(BIN)$/python$(EXECPOST).bin : $(SOLARBINDIR)$/python$(EXECPOST)
     chmod +x $@
 .ELSE
 $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
-    -+$(MKDIRHIER) $(@:d)
+    -$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@
 .ENDIF
