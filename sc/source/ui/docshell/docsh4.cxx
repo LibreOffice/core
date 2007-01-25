@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:46:28 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1767,7 +1767,7 @@ BOOL lcl_HasTransparent( ScDocument* pDoc, SCTAB nTab, const ScRange* pRange )
 }
 
 void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
-                        ScMarkData* pMarkData, Window* pDialogParent, BOOL bForceSelected )
+                        ScMarkData* pMarkData, Window* pDialogParent, BOOL bForceSelected, BOOL bIsAPI )
 {
     SfxPrinter* pPrinter = GetPrinter();
     if ( !pPrinter ) return;
@@ -1885,7 +1885,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
         }
     }
 
-    BOOL bContinue = pPrinter->InitJob( pDialogParent, bHasTransp );
+    BOOL bContinue = pPrinter->InitJob( pDialogParent, !bIsAPI && bHasTransp );
 
     if ( bContinue )
     {
