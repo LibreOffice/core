@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:32:51 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:41:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,8 @@ APP1STDLIBS= \
 
 ALL : ALLTAR
 # hjs - do *not* call deliver out of makefiles
-#	+deliver.pl
-    +regcomp -register -r $(BIN)$/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
+#	deliver.pl
+    regcomp -register -r $(BIN)$/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
