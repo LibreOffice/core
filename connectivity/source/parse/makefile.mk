@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 15:14:26 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:47:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ SLOFILES =  \
 .INCLUDE :  target.mk
 
 $(MISC)$/%.cxx:	%.l
-    +flex -i -8 -PSQLyy -L -o$(MISC)$/sqlflex.cxx sqlflex.l
+    flex -i -8 -PSQLyy -L -o$(MISC)$/sqlflex.cxx sqlflex.l
 
 $(INCCOM)$/sqlbison.hxx : $(YACCTARGET)
 $(EXCEPTIONSFILES) : $(INCCOM)$/sqlbison.hxx
