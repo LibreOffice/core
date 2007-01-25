@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 11:30:41 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:43:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,5 +97,5 @@ ALLTAR : \
     $(SCRIPTFILES)
 
 $(SCRIPTFILES) : $$(@:f:+".sh")
-    +@tr -d "\015" < $(@:f:+".sh") > $@
+    @tr -d "\015" < $(@:f:+".sh") > $@
 
