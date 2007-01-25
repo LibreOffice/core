@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 10:43:02 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:24:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,13 +101,13 @@ ALL : 	\
 .INCLUDE :  target.mk
 
 $(DLLDEST)$/%.py: %.py
-    +cp $? $@
+    cp $? $@
 
 $(DLLDEST)$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
-    +cp $? $@
+    cp $? $@
 
 $(DLLDEST)$/regcomp$(EXECPOST) : $(SOLARBINDIR)$/regcomp$(EXECPOST)
-    +cp $? $@
+    cp $? $@
 
 $(DLLDEST)$/pyuno_regcomp.rdb: $(DLLDEST)$/uno_types.rdb $(SOLARBINDIR)$/pyuno_services.rdb
     -rm -f $@
@@ -117,9 +117,9 @@ doc .PHONY:
     @echo start test with  dmake runtest
 
 runtest : ALL
-    +cd $(DLLDEST) && $(TEST_ENV) && python main.py 
-    +cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
+    cd $(DLLDEST) && $(TEST_ENV) && python main.py 
+    cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
             -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))
-    +cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
+    cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
             -l com.sun.star.loader.Python -c vnd.sun.star.expand:$(DOLLAR_SIGN)FOO/samplecomponent.py
 
