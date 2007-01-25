@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:40:41 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:35:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1217,7 +1217,7 @@ void SmViewShell::Impl_Print(
     rOutDev.Pop();
 }
 
-USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
+USHORT SmViewShell::Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
 
@@ -1225,7 +1225,7 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
     Printer *pPrinter = aPrinterAccess.GetPrinter();
     OutputDevice *pOutDev = pPrinter;
 
-    SfxViewShell::Print (rProgress, pPrintDialog);
+    SfxViewShell::Print (rProgress, bIsAPI, pPrintDialog);
 
     pPrinter->StartPage();
 
