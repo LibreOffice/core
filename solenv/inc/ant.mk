@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 10:56:40 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:51:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ $(CLASSDIR)$/solar.properties : $(SOLARENV)$/inc/minor.mk $(SOLARENV)$/inc/ant.p
     @echo solar.sourceversion=$(SOURCEVERSION) >> $@
     @echo solar.udkstamp=$(UDKSTAMP) >> $@
     @echo solar.extstamp=$(EXTSTAMP) >> $@
-    @+cat $(DMAKEROOT)$/../ant.properties >> $@
+    @cat $(DMAKEROOT)$/../ant.properties >> $@
 
 ANTBUILD .PHONY:
     $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS)
