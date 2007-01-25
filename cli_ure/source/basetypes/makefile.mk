@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:04:24 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:43:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,20 +81,20 @@ CSFILES = \
 .IF "$(CCNUMVER)" <= "001399999999"
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
-    +echo $(ECHOQUOTE) \
+    echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")] \
     [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
     >> $@
 .ELSE
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
-    +echo $(ECHOQUOTE) \
+    echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")]$(ECHOQUOTE) \
     >> $@
 .ENDIF
 
 $(BIN)$/cli_basetypes.dll : $(CSFILES) $(BIN)$/cliureversion.mk 
-    +$(CSC) $(CSCFLAGS) \
+    $(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
         -reference:System.dll \
@@ -103,7 +103,7 @@ $(BIN)$/cli_basetypes.dll : $(CSFILES) $(BIN)$/cliureversion.mk
 
 #do not forget to deliver cli_types.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_basetypes.config
-    +$(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_BASETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_basetypes.config
@@ -111,7 +111,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_basetypes.config
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_basetypes.config: cli_basetypes_config $(BIN)$/cliureversion.mk 
-    +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
     $< $@
 
 
