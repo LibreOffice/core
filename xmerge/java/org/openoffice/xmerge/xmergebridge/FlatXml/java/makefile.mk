@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:48:09 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:35:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -102,9 +102,9 @@ $(GENJAVACLASSFILES): $(GENJAVAFILES)
 
 $(CLASSDIR)$/$(TARGETJARFILE): $(JAVAFILES) $(GENJAVACLASSFILES)
     $(JAVAC) $(JAVACPS) $(MYCLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
-    +cd $(CLASSDIR) && jar -cvf $(TARGETJARFILE) ConverterBridge.class ConverterBridge$$_ConverterBridge.class com$/sun$/star$/documentconversion$/XConverterBridge.class
-    @echo +java -classpath $(CLASSPATH) com.sun.star.tools.uno.RegComp $(UNOUCRRDB) register ConverterBridge.jar com.sun.star.loader.Java2
-    +java -classpath $(CLASSPATH) com.sun.star.tools.uno.RegComp $(UNOUCRRDB) register ConverterBridge.jar com.sun.star.loader.Java2
+    cd $(CLASSDIR) && jar -cvf $(TARGETJARFILE) ConverterBridge.class ConverterBridge$$_ConverterBridge.class com$/sun$/star$/documentconversion$/XConverterBridge.class
+    @echo java -classpath $(CLASSPATH) com.sun.star.tools.uno.RegComp $(UNOUCRRDB) register ConverterBridge.jar com.sun.star.loader.Java2
+    java -classpath $(CLASSPATH) com.sun.star.tools.uno.RegComp $(UNOUCRRDB) register ConverterBridge.jar com.sun.star.loader.Java2
 
 #$(INTERFACES) : XConverterBridge.idl 
 #	idlc $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) XConverterBridge.idl 
