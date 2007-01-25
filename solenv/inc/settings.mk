@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.207 $
+#   $Revision: 1.208 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 12:34:00 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:52:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,8 @@ WRONG_SOURCEVERSION
 # Create $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk if needed
 %minor.mk : $(SOLARENV)$/inc$/minor.mk
     @-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) >& $(NULLDEV)
-    @+$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
-    @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
+    @$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
+    @$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
 .ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 
 # Force creation of $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/
@@ -624,14 +624,14 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 # target instead of using $(OUT)$/inc$/myworld.mk as target name.
 # (See iz62795)
 $(OUT)$/inc$/%world.mk :
-    @+$(MKOUT) $(ROUT)
+    @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
 .INCLUDE : $(OUT)$/inc$/myworld.mk
 
 .IF "$(common_build)"!=""
 $(LOCAL_COMMON_OUT)$/inc$/%world.mk :
-    @+$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
+    @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
 .INCLUDE : $(LOCAL_COMMON_OUT)$/inc$/myworld.mk
@@ -1112,10 +1112,6 @@ RSCDEFS+= -DPRODUCT_FULL -DNDEBUG
 .IF "$(DBG_LEVEL)"!=""
 CDEFS+=-DOSL_DEBUG_LEVEL=$(DBG_LEVEL)
 RSCDEFS+=-DOSL_DEBUG_LEVEL=$(DBG_LEVEL)
-.ENDIF
-
-.IF "$(svx_light)"!=""
-CDEFS+=-DSVX_LIGHT
 .ENDIF
 
 .IF "$(optimize)"!=""
