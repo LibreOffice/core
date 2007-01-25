@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 14:46:58 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:23:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ use installer::packagelist;
 use installer::pathanalyzer;
 use installer::remover;
 use installer::scriptitems;
+use installer::worker;
 
 ############################################################################
 # The header file contains the strings for the epm header in all languages
@@ -471,13 +472,38 @@ sub create_epm_header
 
         if ( $installer::globals::add_required_package ) { $requiresstring = $requiresstring . "," . $installer::globals::add_required_package; }
 
+        # The requires string can contain the separator "," in the names (descriptions) of the packages
+        # (that are required for Solaris depend files). Therefore "," inside such a description has to
+        # masked with a backslash.
+        # This masked separator need to be found and replaced, before the stringlist is converted into an array.
+        # This replacement has to be turned back after the array is created.
+
+        my $replacementstring = "COMMAREPLACEMENT";
+        $requiresstring = installer::converter::replace_masked_separator($requiresstring, ",", "$replacementstring");
+
         my $allrequires = installer::converter::convert_stringlist_into_array(\$requiresstring, ",");
+
+        installer::converter::resolve_masked_separator($allrequires, ",", $replacementstring);
 
         for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
         {
             my $onerequires = ${$allrequires}[$i];
             $onerequires =~ s/\s*$//;
-            installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
+            installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
+
+            # Special handling for Solaris. In depend files, the names of the packages are required, not
+            # only the abbreviation. Therefore there is a special syntax for names in packagelist:
+            # solarisrequires = "SUNWcar (Name="Package name of SUNWcar"),SUNWkvm (Name="Package name of SUNWcar"), ...
+            if ( $installer::globals::issolarispkgbuild )
+            {
+                if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
+                {
+                    $onerequires = $1;
+                    $packagename = $2;
+                    $installer::globals::dependfilenames{$onerequires} = $packagename;
+                }
+            }
+
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
         }
@@ -488,13 +514,30 @@ sub create_epm_header
         {
             my $requiresstring = $installer::globals::add_required_package;
 
+            my $replacementstring = "COMMAREPLACEMENT";
+            $requiresstring = installer::converter::replace_masked_separator($requiresstring, ",", "$replacementstring");
             my $allrequires = installer::converter::convert_stringlist_into_array(\$requiresstring, ",");
+            installer::converter::resolve_masked_separator($allrequires, ",", $replacementstring);
 
             for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
             {
                 my $onerequires = ${$allrequires}[$i];
                 $onerequires =~ s/\s*$//;
-                installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
+                installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
+
+                # Special handling for Solaris. In depend files, the names of the packages are required, not
+                # only the abbreviation. Therefore there is a special syntax for names in packagelist:
+                # solarisrequires = "SUNWcar (Name="Package name of SUNWcar"),SUNWkvm (Name="Package name of SUNWcar"), ...
+                if ( $installer::globals::issolarispkgbuild )
+                {
+                    if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
+                    {
+                        $onerequires = $1;
+                        $packagename = $2;
+                        $installer::globals::dependfilenames{$onerequires} = $packagename;
+                    }
+                }
+
                 $line = "%requires" . " " . $onerequires . "\n";
                 push(@epmheader, $line);
             }
@@ -985,6 +1028,26 @@ sub set_solaris_parameter_in_pkginfo
     $newline = "EMAIL=\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
+}
+
+#####################################################################
+# epm uses as archtecture for Solaris x86 "i86pc". This has to be
+# changed to "i386".
+#####################################################################
+
+sub fix_architecture_setting
+{
+    my ($changefile) = @_;
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        if ( ${$changefile}[$i] =~ /^\s*ARCH=i86pc\s*$/ )
+        {
+            ${$changefile}[$i] =~ s/i86pc/i386/;
+            last;
+        }
+
+    }
 }
 
 #####################################################################
@@ -1514,6 +1577,32 @@ sub collect_patch_files
 }
 
 ############################################################
+# Including package names into the depend files.
+# The package names have to be included into
+# packagelist. They are already saved in
+# %installer::globals::dependfilenames.
+############################################################
+
+sub put_packagenames_into_dependfile
+{
+    my ( $file ) = @_;
+
+    for ( my $i = 0; $i <= $#{$file}; $i++ )
+    {
+        my $line = ${$file}[$i];
+        if ( $line =~ /^\s*\w\s+(.*?)\s*$/ )
+        {
+            my $abbreviation = $1;
+            if ( exists($installer::globals::dependfilenames{$abbreviation}) )
+            {
+                $line =~ s/\s*$//;
+                ${$file}[$i] = $line . "\t" . $installer::globals::dependfilenames{$abbreviation} . "\n";
+            }
+        }
+    }
+}
+
+############################################################
 # Including the relocatable directory into
 # spec file and pkginfo file
 # Linux: set topdir in specfile
@@ -1576,6 +1665,7 @@ sub prepare_packages
         set_revision_in_pkginfo($changefile, $filename, $variableshashref);
         set_maxinst_in_pkginfo($changefile, $filename);
         set_solaris_parameter_in_pkginfo($changefile, $filename, $variableshashref);
+        if ( $installer::globals::issolarisx86build ) { fix_architecture_setting($changefile); }
         if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref); }
         if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
         if ( $installer::globals::languagepack ) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
@@ -1598,6 +1688,16 @@ sub prepare_packages
 
         installer::files::save_file($prototypefilename, $prototypefile);
         if ( $installer::globals::patch ) { collect_patch_files($prototypefile, $packagename, ""); }
+
+        # Adding package names into depend files for Solaris (not supported by epm)
+        my $dependfilename = $packagename . ".depend";
+        $dependfilename = $newepmdir . $dependfilename;
+        if ( -f $dependfilename)
+        {
+            my $dependfile = installer::files::read_file($dependfilename);
+            put_packagenames_into_dependfile($dependfile);
+            installer::files::save_file($dependfilename, $dependfile);
+        }
     }
 
     return $newepmdir;
@@ -1694,7 +1794,7 @@ sub determine_rpm_version
 
 sub create_packages_without_epm
 {
-    my ($epmdir, $packagename, $includepatharrayref) = @_;
+    my ($epmdir, $packagename, $includepatharrayref, $allvariables, $languagestringref) = @_;
 
     # Solaris: pkgmk -o -f solaris-2.8-sparc/SUNWso8m34.prototype -d solaris-2.8-sparc
     # Solaris: pkgtrans solaris-2.8-sparc SUNWso8m34.pkg SUNWso8m34
@@ -1746,6 +1846,32 @@ sub create_packages_without_epm
                 $infoline = "Success: Executed \"$systemcall\" successfully!\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 last;
+            }
+        }
+
+        # It might be necessary to save uncompressed Solaris packages
+
+        if ( $allvariables->{'JDSBUILD'} )
+        {
+            if ( ! $installer::globals::jds_language_controlled )
+            {
+                my $correct_language = installer::worker::check_jds_language($allvariables, $languagestringref);
+                $installer::globals::correct_jds_language = $correct_language;
+                $installer::globals::jds_language_controlled = 1;
+            }
+
+            if ( $installer::globals::correct_jds_language )
+            {
+                if ( $installer::globals::saved_packages_path eq "" )
+                {
+                    $packagestempdir = installer::systemactions::create_directories("jds", $languagestringref);
+                    $installer::globals::saved_packages_path = $packagestempdir;
+                    push(@installer::globals::jdsremovedirs, $packagestempdir);
+                }
+
+                $systemcall = "cd $destinationdir; cp -p -R $packagename $installer::globals::saved_packages_path;";
+                 make_systemcall($systemcall);
+                installer::logger::print_message( "... $systemcall ...\n" );
             }
         }
 
