@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:50:08 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:35:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ ALL : ALLTAR \
 .INCLUDE :  target.mk
 
 $(DLLDEST)$/%.py: %.py
-    +cp $? $@
+    cp $? $@
 
 # For Mac OS X,
 # The python loader component is linked against libpyuno.dylib,
@@ -120,9 +120,9 @@ $(DLLDEST)$/%.py: %.py
 $(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLLPOST)
     -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
 .IF "$(OS)"=="MACOSX"
-    +cd $(DLLDEST) && sh -c "DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH):$(OUT)$/lib;export DYLD_LIBRARY_PATH;regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))"
+    cd $(DLLDEST) && sh -c "DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH):$(OUT)$/lib;export DYLD_LIBRARY_PATH;regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))"
 .ELSE
-    +cd $(DLLDEST) && regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))
+    cd $(DLLDEST) && regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))
 .ENDIF    # $(OS)=="MACOSX"
-    +cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
+    cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
 
