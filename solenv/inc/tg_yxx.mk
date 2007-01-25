@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_yxx.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:42:09 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:57:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,27 +38,27 @@ $(MISC)$/%.cxx : %.y
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
-    +tr -d "\015" < $< > $(MISC)$/stripped_$<
+    tr -d "\015" < $< > $(MISC)$/stripped_$<
 .ELSE
-    +cat $< > $(MISC)$/stripped_$<
+    cat $< > $(MISC)$/stripped_$<
 .ENDIF
     $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)$/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
-    +-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-    +-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-    +$(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    -$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    -$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    $(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
 
 $(INCCOM)$/yy%.cxx : %.y
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
-    +tr -d "\015" < $< > $(MISC)$/stripped_$<
+    tr -d "\015" < $< > $(MISC)$/stripped_$<
 .ELSE
-    +cat $< > $(MISC)$/stripped_$<
+    cat $< > $(MISC)$/stripped_$<
 .ENDIF
     $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)$/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
-    @+-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-    @+-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-    +$(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    @-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    @-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    $(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
 
