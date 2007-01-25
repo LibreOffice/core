@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:26:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -758,6 +758,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, cons
     if ( xAppend.is() )
     {
         xAppend->appendByDescriptor(descriptor);
+        xReturn = createObject( _rForName );
     }
     else if ( m_pTable && !m_pTable->isNew() )
     {
@@ -766,13 +767,15 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, cons
         else
             ::dbtools::throwGenericSQLException( DBA_RES( RID_STR_NO_COLUMN_ADD ), static_cast<XChild*>(static_cast<TXChild*>(this)) );
     }
+    else
+        xReturn = cloneDescriptor( descriptor );
 
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnAppended( descriptor );
 
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 
-    return xReturn.is() ? xReturn : createObject( _rForName );
+    return xReturn;
 }
 // -------------------------------------------------------------------------
 // XDrop
