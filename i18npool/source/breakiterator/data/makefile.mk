@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:21:12 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:25:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ DEPOBJFILES= \
 .INCLUDE :  target.mk
 
 $(MISC)$/dict_%.cxx : %.dic
-    +$(BIN)$/gendict $< $@
+    $(BIN)$/gendict $< $@
 
 # ugly - is this dependency really required here?
 $(foreach,i,$(shell $(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gendict$(EXECPOST)
