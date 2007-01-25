@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_math.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:15:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:57:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,11 +686,19 @@ RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_New_Command
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
+// RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Open_Command
+//     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+//     ModuleID = gid_Module_Prg_Math_Bin;
+//     Subkey = "opendocument.MathDocument.1\shell\open\command";
+//     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+// End
+
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "opendocument.MathDocument.1\shell\open\command";
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\smath.exe\" -o \"%1\"";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Print_Command
