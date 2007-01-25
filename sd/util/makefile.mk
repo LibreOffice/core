@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 14:48:07 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:22:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,6 @@ SHL4DEPN=$(SHL1IMPLIBN)
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @+$(TYPE) sd.flt > $@
+    @$(TYPE) sd.flt > $@
 
 
