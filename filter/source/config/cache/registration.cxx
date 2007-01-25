@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:38:23 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,13 @@
 //_______________________________________________
 // includes
 
+#ifdef _FILTER_CONFIG_CONSTANT_HXX_
+#  error "Already included constant.hxx"
+#else
+#  define PROPNAME_IMPL_DECL
+#  include "constant.hxx"
+#endif
+#include <stdio.h>
 #include "typedetection.hxx"
 #include "filterfactory.hxx"
 #include "contenthandlerfactory.hxx"
@@ -57,6 +64,40 @@ namespace css = ::com::sun::star;
 
 //_______________________________________________
 // definitions
+
+rtl::OUString pFilterStrings[19];
+static bool bInitialized = false;
+
+static void InitConstants()
+{
+    if (!bInitialized)
+    {
+        ::osl::MutexGuard aGuard(::osl::Mutex::getGlobalMutex());
+        if (!bInitialized)
+        {
+            PROPNAME_NAME;
+            PROPNAME_UINAME;
+            PROPNAME_UINAMES;
+            PROPNAME_PREFERRED;
+            PROPNAME_PREFERREDFILTER;
+            PROPNAME_DETECTSERVICE;
+            PROPNAME_MEDIATYPE;
+            PROPNAME_CLIPBOARDFORMAT;
+            PROPNAME_URLPATTERN;
+            PROPNAME_EXTENSIONS;
+            PROPNAME_TYPE;
+            PROPNAME_DOCUMENTSERVICE;
+            PROPNAME_FILTERSERVICE;
+            PROPNAME_UICOMPONENT;
+            PROPNAME_FLAGS;
+            PROPNAME_USERDATA;
+            PROPNAME_TEMPLATENAME;
+            PROPNAME_FILEFORMATVERSION;
+            PROPNAME_TYPES;
+            bInitialized = true;
+        }
+    }
+}
 
 // extern "C" component_getImplementationEnvironment()
 _COMPHELPER_COMPONENT_GETIMPLEMENTATIONENVIRONMENT
@@ -88,6 +129,7 @@ _COMPHELPER_COMPONENT_WRITEINFO
 // extern "C" component_getFactory()
 _COMPHELPER_COMPONENT_GETFACTORY
 (
+    { InitConstants(); },
     _COMPHELPER_MULTIINSTANCEFACTORY( TypeDetection::impl_getImplementationName()   ,
                                       TypeDetection::impl_getSupportedServiceNames(),
                                       TypeDetection::impl_createInstance            )
