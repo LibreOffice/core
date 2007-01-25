@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:53:47 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:28:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ ODKCHECKFILE=$(MISC)$/$(TARGET).txt
 all : $(ODKCHECKFILE)
 
 $(ODKCHECKFILE) : $(SDK_CONTENT_CHECK_FILES)
-    +@echo "" > $(ODKCHECKFILE)
+    @echo "" > $(ODKCHECKFILE)
 # THE PERL SCRIPT DELETES THE CHECK FILE, WHEN AN ERROR OCCURS
     -diff -br $(DESTDIRINC)$/typelib  $(SOLARINCDIR)$/typelib 	$(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
     -diff -br $(DESTDIRINC)$/uno   	$(SOLARINCDIR)$/uno 		$(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
