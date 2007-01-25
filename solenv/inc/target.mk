@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.187 $
+#   $Revision: 1.188 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 06:34:02 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:53:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -259,7 +259,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) 
 
 .IF "$(L10N_framework)"==""
 .IF "$(JARFILES)"!=""
-NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell -+ls -1 $(JARDIR) | $(GREP) "^$i") $(SOLARBINDIR)$/$i $(JARDIR)$/$i))
+NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell -ls -1 $(JARDIR) | $(GREP) "^$i") $(SOLARBINDIR)$/$i $(JARDIR)$/$i))
 .ENDIF			# "$(JARFILES)"!=""
 .IF "$(EXTRAJARFILES)"!=""
 NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(COMMON_BUILD_TOOLS)$/$i)
@@ -1529,13 +1529,13 @@ $(UNOUCRHEADER) : $(UNOUCRTARGET)
 
 $(UNOUCROUT)$/%.flag :
     @-$(MKDIRHIER) $(@:d)
-    @+$(TOUCH) $@
+    @$(TOUCH) $@
 
 $(UNOUCRTARGET) : $(UNOUCRDEP) $(UNOUCRTYPEFLAGS)
 .IF "$(XML2MK_FILES)"!=""
-    @+-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
+    @-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
 .ENDIF			# "$(XML2MK_FILES)"!=""
-    +$(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && $(TOUCH) $@
+    $(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && $(TOUCH) $@
 .ENDIF			# "$(UNOTYPES)" != ""
 
 .IF "$(COMP1RDBTARGETN)"!=""
@@ -1614,49 +1614,49 @@ $(JAVATARGET) : $(GENJAVAFILES)
 
 .IF "$(HXXCOPYFILES)" != ""
 $(HXXCOPYTARGET):	$(HXXCOPYFILES)
-    @-+$(COPY) $(COPYUPDATE) $(HXXCOPYFILES) $(INCCOM)
+    $(COPY) $(COPYUPDATE) $(HXXCOPYFILES) $(INCCOM) $(CHECKCOPYURESULT)
 .ENDIF
 
 .IF "$(UNIXTEXT)"!=""
 $(UNIXTEXT) : $(UNIXTEXT:f)
     @echo Making $@
-    @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(@:f) > $@
+    @-$(RM) -f $@ >& $(NULLDEV)
+    @tr -d "\015" < $(@:f) > $@
 
 .ENDIF			# "$(UNIXTEXT)"!=""
 
 makedoc:
-        @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
-        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
-#		+-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
+        @-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
+        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+#		-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
 
 .IF "$(LOCALDBTARGET)"!=""
 $(LOCALDBTARGET) : $(URDFILES)
-    +-$(RM) $@
-    +$(REGMERGE) $@ UCR @$(mktmp $(URDFILES))
+    -$(RM) $@
+    $(REGMERGE) $@ UCR @$(mktmp $(URDFILES))
 .ENDIF
 
 .IF "$(LOCALDOCDBTARGET)"!=""
 $(LOCALDOCDBTARGET) : $(URDDOCFILES)
-    +-$(RM) $@
-    +$(REGMERGE) $@ UCR @$(mktmp $(URDDOCFILES))
+    -$(RM) $@
+    $(REGMERGE) $@ UCR @$(mktmp $(URDDOCFILES))
 .ENDIF
 
 .IF "$(UNOIDLDBTARGET)"!=""
 $(UNOIDLDBTARGET) : $(UNOIDLDBFILES) $(UNOIDLDBREGS)
-    +-$(RM) $@
-    +$(REGMERGE) $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
+    -$(RM) $@
+    $(REGMERGE) $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
 .IF "$(LOCALREGDB)"!=""
-    +$(REGMERGE) $(LOCALREGDB) / $@
+    $(REGMERGE) $(LOCALREGDB) / $@
 .ENDIF
 .ENDIF			# "$(UNOIDLDBTARGET)"!=""
 
 .IF "$(UNOIDLDBDOCTARGET)"!=""
 $(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS)
-    +-$(RM) $@
-    +$(REGMERGE) $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
+    -$(RM) $@
+    $(REGMERGE) $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
 .IF "$(LOCALREGDB)"!=""
-    +$(REGMERGE) $(LOCALREGDB) / $@
+    $(REGMERGE) $(LOCALREGDB) / $@
 .ENDIF
 .ENDIF			# "$(UNOIDLDBDOCTARGET)"!=""
 
@@ -1668,7 +1668,7 @@ $(SCP_PRODUCT_TYPE):
 .ENDIF			# "$(PARFILES)"!=""
 
 "$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg" :
-    +$(TOUCH) $@
+    $(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
 .IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
@@ -1687,13 +1687,13 @@ COMPVTMP:=$(mktmp iii)
     @echo CCVER:=$(CCVER:s/-/ /:1) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
     @echo COMPATH_STORED:=$(COMPATH) >> $(COMPVTMP)
-    @+-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
-    @+$(TYPE) $(COMPVTMP) > $(@)_$(COMPVTMP:b)
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV) $(FI)
-    @+-$(RENAME) $(@)_$(COMPVTMP:b) $@
-    @+-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
+    @-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
+    @$(TYPE) $(COMPVTMP) > $(@)_$(COMPVTMP:b)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV) $(FI)
+    @-$(RENAME) $(@)_$(COMPVTMP:b) $@
+    @-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
 .ELSE           # "$(CCNUMVER)"!=""
-    @+-$(RM) $@ >& $(NULLDEV)
+    @-$(RM) $@ >& $(NULLDEV)
 .ENDIF          # "$(CCNUMVER)"!=""
 
 .ENDIF			# "$(COMPVERMK)"!=""
@@ -1705,7 +1705,7 @@ COMPVTMP:=$(mktmp iii)
 .ELSE          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
 "$(JAVAVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
 .ENDIF          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
-    @+-$(RM) $@
+    @-$(RM) $@
     @echo JAVAVER:=$(JAVAVER) > $@
     @echo JAVANUMVER:=$(JAVANUMVER) >> $@
     @echo JAVALOCATION:=$(JAVA_HOME) >> $@
@@ -1722,10 +1722,10 @@ $(TARGETDEPS) : $(LOCALIZE_ME_DEST)
 
 .IF "$(WITH_LANG)"==""
 $(LOCALIZE_ME_DEST) : $(LOCALIZE_ME)
-    +-$(RM) $(INCCOM)$/$(TARGET)_lastrun.mk
+    -$(RM) $(INCCOM)$/$(TARGET)_lastrun.mk
     -$(MKDIR) $(@:d)
-    +-$(RM) $@
-    +$(COPY) $(@:b:+"_tmpl")$(@:e) $@
+    -$(RM) $@
+    $(COPY) $(@:b:+"_tmpl")$(@:e) $@
 
 .ELSE			# "$(WITH_LANG)"==""
 #  LASTRUN_MERGED
@@ -1737,9 +1737,9 @@ $(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) localize.sdf
     echo LASTRUN_MERGED:=TRUE > $(INCCOM)$/$(TARGET)_lastrun.mk
 .ENDIF			# "$(LASTRUN_MERGED)"=="TRUE"
     -$(MKDIR) $(@:d)
-    +-$(RM) $@
+    -$(RM) $@
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m localize.sdf -l all
-    +$(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
+    $(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
 
 .ENDIF			# "$(WITH_LANG)"==""
 .ENDIF          # "$(LOCALIZE_ME_DEST)"!=""
@@ -1753,9 +1753,9 @@ $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
 .ELSE			# "$(WITH_LANG)"!=""
 $(MISC)$/$(TARGET)_%.done : %.xrb
 .ENDIF			# "$(WITH_LANG)"!=""
-    @+-$(RM) $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
-    +$(WRAPCMD) native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
-    @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+    @-$(RM) $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+    $(WRAPCMD) native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
+    @$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(HIDSID1PARTICLE)$(SDI1TARGET)$(HIDSID2PARTICLE)$(SDI2TARGET)$(HIDSID3PARTICLE)$(SDI3TARGET)$(HIDSID4PARTICLE)$(SDI4TARGET)$(HIDSID5PARTICLE)$(SDI5TARGET)$(HIDSID6PARTICLE)$(SDI6TARGET)$(HIDSID7PARTICLE)$(SDI7TARGET)$(HIDSID8PARTICLE)$(SDI8TARGET)$(HIDSID9PARTICLE)$(SDI9TARGET)"!=""
@@ -1770,9 +1770,9 @@ $(MISC)$/$(TARGET)_%.done : %.xrb
 $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
         @echo ------------------------------
         @echo Making: $@
-        @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
-        +$(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
-        @+$(RENAME) $@.$(ROUT).tmp $@
+        @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+        $(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
+        @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF	    
 
 # -------
@@ -1934,22 +1934,22 @@ $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 .IF "$(IDLFILES)"!=""
 
 $(URDTARGET) : $(DEPIDLFILES)
-        @+-mkdir $(OUT)$/ucr >& $(NULLDEV)
+        @-mkdir $(OUT)$/ucr >& $(NULLDEV)
 # use this target only to speedup single proceess builds
 # see according rules in rules.mk
 .IF "$(MAXPROCESS)"<="1"
-        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
     @echo > $@
 
 .IF "$(URDDOC)"!=""
 
 $(URDDOCTARGET) : $(DEPIDLFILES)
-        @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
+        @-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
 # use this target only to speedup single proceess builds
 # see according rules in rules.mk
 .IF "$(MAXPROCESS)"<="1"
-        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
     @echo > $@
     
@@ -2035,117 +2035,118 @@ OTHERTARGET : $(OTHER)
 
 killbin:
 .IF "$(GUI)"=="WNT"
-    @+$(IFEXIST) $(BIN)$/$(SHL1TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL1TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL2TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL2TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL3TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL3TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL4TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL4TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL5TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL5TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL6TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL6TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL7TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL7TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL8TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL8TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(SHL9TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL9TARGET).dll $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(FI)
-    @+$(IFEXIST) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL1TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL1TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL2TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL2TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL3TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL3TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL4TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL4TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL5TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL5TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL6TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL6TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL7TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL7TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL8TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL8TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL9TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL9TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(FI)
 
 .ELSE			# "$(GUI)"=="WNT"
 .IF "$(SHL1TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL1TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL1TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL2TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL2TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL2TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL3TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL3TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL3TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL4TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL4TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL4TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL5TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL5TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL5TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL6TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL6TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL6TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL7TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL7TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL7TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL8TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL8TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL8TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL9TARGET)"!=""
-    @+-$(RM) $(LB)/$(DLLPRE)$(SHL9TARGET)$(DLLPOST)
+    @-$(RM) $(LB)/$(DLLPRE)$(SHL9TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(APP1TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP1TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP1TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP2TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP2TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP2TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP3TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP3TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP3TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP4TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP4TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP4TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP5TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP5TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP5TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP6TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP6TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP6TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP7TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP7TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP7TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP8TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP8TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP8TARGET)$(EXECPOST)
 .ENDIF
 .IF "$(APP9TARGET)"!=""
-    @+-$(RM) $(BIN)/$(APP9TARGET)$(EXECPOST)
+    @-$(RM) $(BIN)/$(APP9TARGET)$(EXECPOST)
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 
 killobj:
 .IF "$(SLOFILES)" != ""
-    +-cd $(SLO) && $(TYPE) $(mktmp  $(SLOFILES:f)) | xargs -n 20 rm 
-    +-cd $(SLO) && $(TYPE) $(mktmp  $(SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    -cd $(SLO) && $(TYPE:s/+//) $(mktmp  $(SLOFILES:f)) | xargs -n 20 rm 
+    -cd $(SLO) && $(TYPE:s/+//) $(mktmp  $(SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(OBJFILES)" != ""
-    +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:f)) | xargs -n 20 rm 
-    +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    -cd $(OBJ) && $(TYPE:s/+//) $(mktmp  $(OBJFILES:f)) | xargs -n 20 rm 
+    -cd $(OBJ) && $(TYPE:s/+//) $(mktmp  $(OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
+
 .IF "$(REAL_$(SECOND_BUILD)_SLOFILES)" != ""
-    +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:f)) | xargs -n 20 rm
-    +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    -cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE:s/+//) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:f)) | xargs -n 20 rm
+    -cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE:s/+//) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(REAL_$(SECOND_BUILD)_OBJFILES)" != ""
-    +-cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:f)) | xargs -n 20 rm 
-    +-cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    -cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE:s/+//) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:f)) | xargs -n 20 rm 
+    -cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE:s/+//) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(DEPOBJFILES)" != ""
-    +-cd $(SLO) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
-    +-cd $(SLO) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
-    +-cd $(OBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
-    +-cd $(OBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    -cd $(SLO) && $(TYPE:s/+//) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
+    -cd $(SLO) && $(TYPE:s/+//) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    -cd $(OBJ) && $(TYPE:s/+//) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
+    -cd $(OBJ) && $(TYPE:s/+//) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
     @echo objects weg!
 
 killsrs:
 # doesn't work - fix me!
 .IF "$(SRSFILES)" != ""
-    +$(RM) $(SRSFILES)
+    $(RM) $(SRSFILES)
 .ENDIF
     @echo srsfiles weg!
 
 killres:
 .IF "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
-    +$(RM) $(RESLIB1TARGETN) $(RESLIB2TARGETN) $(RESLIB3TARGETN) $(RESLIB4TARGETN) $(RESLIB5TARGETN) $(RESLIB6TARGETN) $(RESLIB7TARGETN) $(RESLIB8TARGETN) $(RESLIB9TARGETN)
+    $(RM) $(RESLIB1TARGETN) $(RESLIB2TARGETN) $(RESLIB3TARGETN) $(RESLIB4TARGETN) $(RESLIB5TARGETN) $(RESLIB6TARGETN) $(RESLIB7TARGETN) $(RESLIB8TARGETN) $(RESLIB9TARGETN)
     @echo resource files removed!
 .ELSE			# "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
     @echo no resource files defined!
@@ -2153,27 +2154,27 @@ killres:
 
 killdef:
 .IF "$(DEFTARGETN)" != ""
-    +$(RM) $(DEFTARGETN)
+    $(RM) $(DEFTARGETN)
 .ENDIF
     @echo deffiles weg!
 
 killlib:
 .IF "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
-    +$(RM) $(LIB1TARGETN) $(LIB2TARGETN) $(LIB3TARGETN) $(LIB4TARGETN) $(LIB5TARGETN) $(LIB6TARGETN) $(LIB7TARGETN) $(LIB8TARGETN) $(LIB9TARGETN)
+    $(RM) $(LIB1TARGETN) $(LIB2TARGETN) $(LIB3TARGETN) $(LIB4TARGETN) $(LIB5TARGETN) $(LIB6TARGETN) $(LIB7TARGETN) $(LIB8TARGETN) $(LIB9TARGETN)
 .IF "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
-    +$(RM) $(LIB1ARCHIV) $(LIB2ARCHIV) $(LIB3ARCHIV) $(LIB4ARCHIV) $(LIB5ARCHIV) $(LIB6ARCHIV) $(LIB7ARCHIV) $(LIB8ARCHIV) $(LIB9ARCHIV)
+    $(RM) $(LIB1ARCHIV) $(LIB2ARCHIV) $(LIB3ARCHIV) $(LIB4ARCHIV) $(LIB5ARCHIV) $(LIB6ARCHIV) $(LIB7ARCHIV) $(LIB8ARCHIV) $(LIB9ARCHIV)
 .ENDIF			# "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
     @echo lib/archive files removed!
 .ENDIF			# "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
 .IF "$(SLOTARGET)$(OBJTARGET)"!=""
-    +$(RM) $(SLOTARGET) $(OBJTARGET)
+    $(RM) $(SLOTARGET) $(OBJTARGET)
     @echo default lib files removed!
 .ENDIF			# "$(SLOTARGET)$(OBJTARGET)"!=""
     @echo done!
 
 clean_misc :
 .IF "$(MISC)"!=""
-    +rm -rf $(MISC)$/*
+    rm -rf $(MISC)$/*
     @echo misc is gone!
 .ELSE			# "$(MISC)"!=""
     @echo can\'t be done! $$(MISC) not defined.
@@ -2182,9 +2183,9 @@ clean_misc :
 clean_all :
 .IF "$(OUT)"!=""
 .IF "$(USE_SHELL)"!="4nt"
-    +test -f $(PRJ)$/prj/build.lst && rm -rf $(OUT)
+    test -f $(PRJ)$/prj/build.lst && rm -rf $(OUT)
 .ELSE			# "$(USE_SHELL)"!="4nt"
-    +$(IFEXIST) $(PRJ)$/prj/build.lst $(THEN) del /sxyz $(OUT) $(FI)
+    $(IFEXIST) $(PRJ)$/prj/build.lst $(THEN) del /sxyz $(OUT) $(FI)
 .ENDIF			# "$(USE_SHELL)"!="4nt"
     @echo local output tree is gone!
 .ELSE			# "$(OUT)"!=""
@@ -2242,10 +2243,10 @@ $(INCCOM)$/%_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkc
     @echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
     @echo $(EMQ)#define _RSCREVISION $(EMQ)"$(USQ)$(RSCREVISION)$(USQ)$(EMQ)" >> $(VERSIONTMP)
     @echo $(EMQ)#define _INPATH $(EMQ)"$(INPATH)$(EMQ)"           >> $(VERSIONTMP)
-    @+-$(RM) $(@)_$(VERSIONTMP:b) >& $(NULLDEV)
-    @+$(TYPE) $(VERSIONTMP) > $(@)_$(VERSIONTMP:b)
-    @+-$(RM) $@ >& $(NULLDEV)
-    @+-$(RENAME) $(@)_$(VERSIONTMP:b) $@
+    @-$(RM) $(@)_$(VERSIONTMP:b) >& $(NULLDEV)
+    @$(TYPE) $(VERSIONTMP) > $(@)_$(VERSIONTMP:b)
+    @-$(RM) $@ >& $(NULLDEV)
+    @-$(RENAME) $(@)_$(VERSIONTMP:b) $@
 
 .IF "$(MAKEFILERC)"==""
 warn_target_empty:
@@ -2267,10 +2268,10 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
     @echo Making $@ :
     @echo ---------------
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
     @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010> $@.$(ROUT).tmp
     $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 
 .IF "$(SOLAR_JAVA)"!=""
@@ -2282,7 +2283,7 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
 .INCLUDE : tg_merge.mk
 
 wordcount:
-    +wc *.* >> $(TMP)$/wc.lst
+    wc *.* >> $(TMP)$/wc.lst
 
 testt:
     @echo test
@@ -2319,7 +2320,7 @@ $(SUBDIRS) .PHONY :
     ]
 .ELSE			# "$(GUI)"!="UNX"
 $(SUBDIRS) .PHONY :
-    +cd $@; $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
+    cd $@; $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
 .ENDIF			# "$(GUI)"!="UNX"
 #.ENDIF
 .ENDIF			# "$(mk_tmp)$(BSCLIENT)"!=""
