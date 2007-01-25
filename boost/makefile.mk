@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:06:52 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:32:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ TARGET=ooo_boost
 all:
     @echo "An already available installation of boost should exist on your system."        
     @echo "Therefore the version provided here does not need to be built in addition."
-.ELSE
+.ELSE			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
 
 # --- Files --------------------------------------------------------
 
@@ -68,19 +68,8 @@ BUILD_FLAGS=
 
 # --- Targets ------------------------------------------------------
 
-all: \
-    $(MISC)$/$(TARGET)_remove_build.flag \
-    ALLTAR
-
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-# Since you never know what will be in a patch (for example, it may already
-# patch at configure level), we remove the entire package directory if a patch
-# is newer.
-$(MISC)$/$(TARGET)_remove_build.flag : $(PRJ)$/$(PATCH_FILE_NAME)
-    $(REMOVE_PACKAGE_COMMAND)
-    +$(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
-
-.ENDIF
+.ENDIF			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
