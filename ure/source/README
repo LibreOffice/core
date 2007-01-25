@@ -4,9 +4,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:37:38 $
+#   last change: $Author: obo $ $Date: 2007-01-25 10:54:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ Overview of URE installation
 Linux x86, Solaris x86, and Solaris SPARC:
 
 /opt/openoffice.org/ure/LICENSE
+/opt/openoffice.org/ure/THIRDPARTYLICENSEREADME.html
 /opt/openoffice.org/ure/README
 /opt/openoffice.org/ure/bin/uno
 /opt/openoffice.org/ure/bin/regcomp
@@ -115,6 +116,7 @@ Linux x86, Solaris x86, and Solaris SPARC:
 Windows:
 
 Program Files\URE\LICENSE
+Program Files\URE\THIRDPARTYLICENSEREADME.html
 Program Files\URE\README
 Program Files\URE\bin\uno.exe
 Program Files\URE\bin\regcomp.exe
