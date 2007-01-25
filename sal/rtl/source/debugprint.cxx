@@ -4,9 +4,9 @@
  *
  *  $RCSfile: debugprint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:04:51 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 16:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,16 @@ const sal_Char *dbg_dump(const rtl::OString &rStr)
 const sal_Char *dbg_dump(const rtl::OUString &rStr)
 {
     return dbg_dump(rtl::OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
+}
+
+const sal_Char *dbg_dump(rtl_String *pStr)
+{
+    return dbg_dump(rtl::OString(pStr));
+}
+
+const sal_Char *dbg_dump(rtl_uString *pStr)
+{
+    return dbg_dump(rtl::OUString(pStr));
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
