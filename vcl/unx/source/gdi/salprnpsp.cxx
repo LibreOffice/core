@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:59:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ static void getPaLib()
             oslModule       pPrinterDriverLib = osl_loadModule( printerDriverLibName.pData, SAL_LOADMODULE_DEFAULT );
             if( !pPrinterDriverLib )
             {
-                fprintf( stderr, "salprnpsp.cxx: Cannot load printer setup library %s.\n", printerDriverLibName.pData );
+                fprintf( stderr, "salprnpsp.cxx: Cannot load printer setup library %s.\n", (char *) printerDriverLibName.pData);
                 return;
             }
 
