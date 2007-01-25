@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 03:03:17 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:26:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@ PRJNAME=configmgr
 TARGET=qa_unoapi
 
 ALLTAR:
-    +$(SOLARENV)$/bin$/checkapi -sce cfgmgr2.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
-    +@echo =======================================================================
-    +@echo In case of problems with sysmgr1.SystemIntegration make sure that you 
-    +@echo =======================================================================
-    +@echo built and registered qadevOOo/testsdocs/backend/org/openoffice/JavaSystemBackend 
-    +@echo =======================================================================			
+    $(SOLARENV)$/bin$/checkapi -sce cfgmgr2.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+    @echo =======================================================================
+    @echo In case of problems with sysmgr1.SystemIntegration make sure that you 
+    @echo =======================================================================
+    @echo built and registered qadevOOo/testsdocs/backend/org/openoffice/JavaSystemBackend 
+    @echo =======================================================================			
