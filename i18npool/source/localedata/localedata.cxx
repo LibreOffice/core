@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:32:13 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,6 +791,30 @@ LocaleData::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeExcepti
         else {
             ForbiddenCharacters chars1;
             return chars1;
+        }
+}
+
+
+Sequence< OUString > SAL_CALL
+LocaleData::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeException)
+{
+        sal_Int16 LCBreakIteratorRuleCount = 0;
+        sal_Unicode **LCBreakIteratorRulesArray = NULL;
+
+        MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getBreakIteratorRules" );
+
+        if ( func ) {
+            LCBreakIteratorRulesArray = func(LCBreakIteratorRuleCount);
+            Sequence< OUString > seq(LCBreakIteratorRuleCount);
+            for(int i = 0; i < (LCBreakIteratorRuleCount); i++) {
+                OUString  elem(LCBreakIteratorRulesArray[i]);
+                seq[i] = elem;
+            }
+            return seq;
+        }
+        else {
+            Sequence< OUString > seq1(0);
+            return seq1;
         }
 }
 
