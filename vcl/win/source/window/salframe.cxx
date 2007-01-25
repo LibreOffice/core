@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:33:42 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
-#ifndef _SV_SALSYS_HXX
-#include <salsys.hxx>
+#ifndef _SV_SALSYS_H
+#include <salsys.h>
 #endif
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
@@ -5706,9 +5706,14 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         return 0;
     }
 
+    ImplSVData* pSVData = ImplGetSVData();
+    // #i72707# TODO: the mbDeInit check will not be needed
+    // once all windows that are not properly closed on exit got fixed
+    if( pSVData->mbDeInit )
+        return 0;
+
     if ( WM_USER_SYSTEM_WINDOW_ACTIVATED == nMsg )
     {
-        ImplSVData* pSVData = ImplGetSVData();
         if (pSVData->mpIntroWindow)
             pSVData->mpIntroWindow->Hide();
 
@@ -6135,17 +6140,23 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 
 BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult )
 {
-    // Hier verarbeiten wir alle Messages, die fuer alle Frame-Fenster gelten,
-    // damit diese nur einmal verarbeitet werden
+    // handle all messages concerning all frames so they get processed only once
     // Must work for Unicode and none Unicode
+    BOOL bResult = FALSE;
     if ( (nMsg == WM_PALETTECHANGED) || (nMsg == SAL_MSG_POSTPALCHANGED) )
     {
         int bDef = TRUE;
         rlResult = ImplHandlePalette( FALSE, hWnd, nMsg, wParam, lParam, bDef );
-        return (bDef != 0);
+        bResult = (bDef != 0);
     }
-    else
-        return FALSE;
+    else if( nMsg == WM_DISPLAYCHANGE )
+    {
+        WinSalSystem* pSys = static_cast<WinSalSystem*>(ImplGetSalSystem());
+        if( pSys )
+            pSys->clearMonitors();
+        bResult = (pSys != NULL);
+    }
+    return bResult;
 }
 
 // -----------------------------------------------------------------------
