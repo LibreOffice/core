@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:09:50 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:44:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,20 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-SVXLIGHTOBJFILES=\
-        $(OBJ)$/UnoForbiddenCharsTable.obj \
-        $(OBJ)$/unoedsrc.obj	\
-        $(OBJ)$/unoedhlp.obj	\
-        $(OBJ)$/unopracc.obj	\
-        $(OBJ)$/unoedprx.obj	\
-        $(OBJ)$/unoviwed.obj	\
-        $(OBJ)$/unoviwou.obj	\
-        $(OBJ)$/unofored.obj	\
-        $(OBJ)$/unoforou.obj	\
-        $(OBJ)$/unotext.obj		\
-        $(OBJ)$/unotext2.obj	\
-        $(OBJ)$/unofield.obj
 
 SLOFILES =	\
         $(SLO)$/UnoForbiddenCharsTable.obj \
