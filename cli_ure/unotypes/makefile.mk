@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 14:04:42 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:44:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ CLIMAKERFLAGS += --verbose
 
 #When changing the assembly version then this must also be done in scp2
 $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb $(BIN)$/cliureversion.mk
-    +$(WRAPCMD) $(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
+    $(WRAPCMD) $(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
                 --keyfile $(BIN)$/cliuno.snk \
         --assembly-version $(CLI_TYPES_NEW_VERSION) \
@@ -78,14 +78,14 @@ $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
 #do not forget to deliver cli_types.config. It is NOT embedded in the policy file.
 # iz62624: Add dependency for "$(OUT)$/bin$/cli_types.dll" because climaker locks cliuno.mk.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_types.config $(OUT)$/bin$/cli_types.dll
-    +$(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_TYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_types.config
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_types.config: cli_types_config $(BIN)$/cliureversion.mk 
-    +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
     $< $@
 
 
