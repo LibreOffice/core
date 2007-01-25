@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:43:32 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:06:02 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -54,8 +54,8 @@ SAMPLE_GEN_OUT = $(OUT_MISC)/$(SAMPLE_NAME)
 
 COMP_NAME=SampleFilter
 COMP_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(COMP_NAME)
-COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
-COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_JAR_NAME = $(COMP_NAME).uno.jar
 COMP_JAR = $(SAMPLE_CLASS_OUT)/$(COMP_JAR_NAME)
 COMP_MANIFESTFILE = $(SAMPLE_GEN_OUT)/$(COMP_NAME).uno.Manifest
@@ -114,7 +114,7 @@ $(COMP_PACKAGE) : $(COMP_JAR) TypeDetection.xcu $(COMP_UNOPKG_MANIFEST)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_ZIP) $@ TypeDetection.xcu
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(<F)
-	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
