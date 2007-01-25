@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:40:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,21 +149,26 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     // define the modules  com::sun::star::uno
     AstModule* pParentScope = pRoot;
     AstModule* pModule = new AstModule(OString("com"), pParentScope);
+    pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
     pModule = new AstModule(OString("sun"), pParentScope);
+    pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
     pModule = new AstModule(OString("star"), pParentScope);
+    pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
     pModule = new AstModule(OString("uno"), pParentScope);
+    pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
 
     // define XInterface
     AstInterface* pInterface = new AstInterface(OString("XInterface"), NULL, pParentScope);
     pInterface->setDefined();
+    pInterface->setPredefined(true);
     pInterface->setPublished();
     pParentScope->addDeclaration(pInterface);
 
