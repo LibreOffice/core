@@ -4,9 +4,9 @@
  *
  *  $RCSfile: display.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:51:34 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:23:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ private:
 
 static const char* pScreenAreaName = "ScreenArea";
 static const char* pWorkAreaName = "WorkArea";
+static const char* pScreenName = "ScreenName";
 
 // --------------------------------------------------------------------
 
@@ -134,6 +135,10 @@ Any SAL_CALL DisplayInfo::getPropertyValue( const OUString& PropertyName ) throw
     else if( PropertyName.equalsAscii( pWorkAreaName ) )
     {
         aRect = Application::GetWorkAreaPosSizePixel( mnDisplay );
+    }
+    else if( PropertyName.equalsAscii( pScreenName ) )
+    {
+        return Any( Application::GetScreenName( mnDisplay ) );
     }
     else
         throw UnknownPropertyException();
