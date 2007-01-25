@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: thb $ $Date: 2006-05-31 12:47:19 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:08:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,19 +66,8 @@ BUILD_FLAGS=
 
 # --- Targets ------------------------------------------------------
 
-all: \
-    $(MISC)$/$(TARGET)_remove_build.flag \
-    ALLTAR
-
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-# Since you never know what will be in a patch (for example, it may already
-# patch at configure level), we remove the entire package directory if a patch
-# is newer.
-$(MISC)$/$(TARGET)_remove_build.flag : $(PRJ)$/$(PATCH_FILE_NAME)
-    $(REMOVE_PACKAGE_COMMAND)
-    +$(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
 
 .ENDIF
