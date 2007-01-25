@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:51:41 $
+#   last change: $Author: hjs $ $Date: 2007-01-25 18:56:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA
 
 # --- TARGETS -----------------------------------------------------
 
-$(CLASSDIR)$/solar.properties : $(SOLARENV)$/inc/minor.mk $(SOLARENV)$/inc/ant.properties
+$(CLASSDIR)$/solar.properties : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg $(SOLARENV)$/inc/ant.properties
     @echo Making: $@
     @echo solar.build=$(BUILD) > $@
     @echo solar.rscversion=$(USQ)$(RSCVERSION)$(USQ) >> $@
