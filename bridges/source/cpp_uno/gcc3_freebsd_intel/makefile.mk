@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:20:36 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:27:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,10 @@ PRJNAME=bridges
 TARGET=gcc3_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
