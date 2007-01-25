@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:15:12 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ public:
         @param pDialog
             The dialog specifies what to print.
     */
-    virtual USHORT Print (SfxProgress& rProgress, PrintDialog* pDialog);
+    virtual USHORT Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDialog);
 
     /** Show a dialog that allows the user to select the print range
         (among other things) before starting the actual printing.
@@ -101,7 +101,7 @@ public:
     virtual ErrCode DoPrint (
         SfxPrinter *pPrinter,
         PrintDialog *pPrintDialog,
-        BOOL bSilent);
+        BOOL bSilent, BOOL bIsAPI );
 
     /** When called with <TRUE/> then printing is restricted to the
         selected pages.  Otherwise all pages are printed.  Note that
