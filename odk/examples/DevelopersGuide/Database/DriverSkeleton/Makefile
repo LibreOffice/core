@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: ihi $ $Date: 2006-12-20 12:24:29 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:05:49 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -57,8 +57,8 @@ OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
 COMPONENT_XML=skeleton.xml
 COMPONENT_RDB_NAME = $(COMPONENT_NAME).uno.rdb
 COMPONENT_RDB = $(OUT_COMP_MISC)/$(COMPONENT_RDB_NAME)
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
 COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_MISC)/$(COMPONENT_NAME)/META-INF/manifest.xml
 
 REGISTERFLAG = $(OUT_COMP_MISC)/devguide_$(COMPONENT_NAME)_register_component.flag
@@ -126,7 +126,7 @@ $(COMPONENT_PACKAGE) : $(COMPONENT_LIBRARY) $(COMPONENT_UNOPKG_MANIFEST)
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_MISC)/$(UNOPKG_PLATFORM))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_MISC)/$(UNOPKG_PLATFORM))
 	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && $(SDK_ZIP) ../../bin/$(@F) $(UNOPKG_PLATFORM)/$(<F)
-	cd $(subst /,$(PS),$(OUT_COMP_MISC)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_MISC)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
