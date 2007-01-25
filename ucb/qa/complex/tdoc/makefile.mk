@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-18 08:45:54 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:40:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,11 @@ CT_TESTDOCS = -tdoc $(PWD)$/..$/test_documents
 # --- Targets ------------------------------------------------------
 
 run: ALLTAR
-    +@echo .
-    +@echo "The followig tests are available:"
-    +@echo $(foreach,i,$(JAVAFILES) "dmake $(i:b)     ")
+    @echo .
+    @echo "The followig tests are available:"
+    @echo $(foreach,i,$(JAVAFILES) "dmake $(i:b)     ")
 
 .INCLUDE :  target.mk
 
 Check%:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_TESTDOCS) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).$@
+    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_TESTDOCS) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).$@
