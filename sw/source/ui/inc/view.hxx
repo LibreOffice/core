@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:53:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     bShowAtResize : 1,
                     bInOuterResizePixel : 1,
                     bInInnerResizePixel : 1,
-                    bIsApi : 1,
                     bPasteState : 1,
                     bPasteSpecialState : 1,
                     bInMailMerge : 1,
@@ -443,7 +442,7 @@ public:
     virtual USHORT          SetPrinter( SfxPrinter* pNew,
                                         USHORT nDiff = SFX_PRINTER_ALL);
     virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog,
-                                     BOOL bSilent );
+                                     BOOL bSilent, BOOL bIsAPI );
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
