@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 15:10:57 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:56:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,21 +41,21 @@
 $(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID$(TNR)PARTICLE)"!=""
 
 .IF "$(SDI$(TNR)TARGET)"!=""
 $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI$(TNR)NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI$(TNR)NAME).ilb	\
