@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_base.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:15:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,11 +109,19 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell
     Value = "open";
 End
 
+// RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
+//     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+//     Subkey = "opendocument.DatabaseDocument.1\shell\open\command";
+//     ModuleID = gid_Module_Prg_Base_Bin;
+//     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+// End
+
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.DatabaseDocument.1\shell\open\command";
     ModuleID = gid_Module_Prg_Base_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\sbase.exe\" -o \"%1\"";
+    Styles = (PATCH);
 End
 
 // "OpenWith" Windows Registry keys for .odb
