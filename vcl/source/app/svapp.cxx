@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:07:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1361,6 +1361,12 @@ unsigned int Application::GetScreenCount()
 {
     SalSystem* pSys = ImplGetSalSystem();
     return pSys ? pSys->GetDisplayScreenCount() : 0;
+}
+
+rtl::OUString Application::GetScreenName( unsigned int nScreen )
+{
+    SalSystem* pSys = ImplGetSalSystem();
+    return pSys ? pSys->GetScreenName( nScreen ) : rtl::OUString();
 }
 
 bool Application::IsMultiDisplay()
