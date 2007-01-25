@@ -4,21 +4,21 @@
 $(HIDSID1PARTICLE): $(SDI1TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI1NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI1NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID1PARTICLE)"!=""
 
 .IF "$(SDI1TARGET)"!=""
 $(SDI1TARGET): $(SVSDI1DEPEND) $(SDI1NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI1NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI1NAME).ilb	\
@@ -37,21 +37,21 @@ $(SDI1TARGET): $(SVSDI1DEPEND) $(SDI1NAME).sdi
 $(HIDSID2PARTICLE): $(SDI2TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI2NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI2NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID2PARTICLE)"!=""
 
 .IF "$(SDI2TARGET)"!=""
 $(SDI2TARGET): $(SVSDI2DEPEND) $(SDI2NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI2NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI2NAME).ilb	\
@@ -70,21 +70,21 @@ $(SDI2TARGET): $(SVSDI2DEPEND) $(SDI2NAME).sdi
 $(HIDSID3PARTICLE): $(SDI3TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI3NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI3NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID3PARTICLE)"!=""
 
 .IF "$(SDI3TARGET)"!=""
 $(SDI3TARGET): $(SVSDI3DEPEND) $(SDI3NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI3NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI3NAME).ilb	\
@@ -103,21 +103,21 @@ $(SDI3TARGET): $(SVSDI3DEPEND) $(SDI3NAME).sdi
 $(HIDSID4PARTICLE): $(SDI4TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI4NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI4NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID4PARTICLE)"!=""
 
 .IF "$(SDI4TARGET)"!=""
 $(SDI4TARGET): $(SVSDI4DEPEND) $(SDI4NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI4NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI4NAME).ilb	\
@@ -136,21 +136,21 @@ $(SDI4TARGET): $(SVSDI4DEPEND) $(SDI4NAME).sdi
 $(HIDSID5PARTICLE): $(SDI5TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI5NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI5NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID5PARTICLE)"!=""
 
 .IF "$(SDI5TARGET)"!=""
 $(SDI5TARGET): $(SVSDI5DEPEND) $(SDI5NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI5NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI5NAME).ilb	\
@@ -169,21 +169,21 @@ $(SDI5TARGET): $(SVSDI5DEPEND) $(SDI5NAME).sdi
 $(HIDSID6PARTICLE): $(SDI6TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI6NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI6NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID6PARTICLE)"!=""
 
 .IF "$(SDI6TARGET)"!=""
 $(SDI6TARGET): $(SVSDI6DEPEND) $(SDI6NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI6NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI6NAME).ilb	\
@@ -202,21 +202,21 @@ $(SDI6TARGET): $(SVSDI6DEPEND) $(SDI6NAME).sdi
 $(HIDSID7PARTICLE): $(SDI7TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI7NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI7NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID7PARTICLE)"!=""
 
 .IF "$(SDI7TARGET)"!=""
 $(SDI7TARGET): $(SVSDI7DEPEND) $(SDI7NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI7NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI7NAME).ilb	\
@@ -235,21 +235,21 @@ $(SDI7TARGET): $(SVSDI7DEPEND) $(SDI7NAME).sdi
 $(HIDSID8PARTICLE): $(SDI8TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI8NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI8NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID8PARTICLE)"!=""
 
 .IF "$(SDI8TARGET)"!=""
 $(SDI8TARGET): $(SVSDI8DEPEND) $(SDI8NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI8NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI8NAME).ilb	\
@@ -268,21 +268,21 @@ $(SDI8TARGET): $(SVSDI8DEPEND) $(SDI8NAME).sdi
 $(HIDSID9PARTICLE): $(SDI9TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI9NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI9NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID9PARTICLE)"!=""
 
 .IF "$(SDI9TARGET)"!=""
 $(SDI9TARGET): $(SVSDI9DEPEND) $(SDI9NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI9NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI9NAME).ilb	\
@@ -301,21 +301,21 @@ $(SDI9TARGET): $(SVSDI9DEPEND) $(SDI9NAME).sdi
 $(HIDSID10PARTICLE): $(SDI10TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@.$(ROUT).tmp $@
+    @-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
     @$(TYPE) $(MISC)$/$(SDI10NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
     @$(TYPE) $(MISC)$/$(SDI10NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    @-$(RM) $@
+    @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF # "$(HIDSID10PARTICLE)"!=""
 
 .IF "$(SDI10TARGET)"!=""
 $(SDI10TARGET): $(SVSDI10DEPEND) $(SDI10NAME).sdi
     @echo ------------------------------
     @echo Making: $@
-    @+-$(RM) $@
+    @-$(RM) $@
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI10NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI10NAME).ilb	\
