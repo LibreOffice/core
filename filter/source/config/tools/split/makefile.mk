@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:37:00 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:47:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,9 @@ $(JARTARGETN) : $(OWNCOPY)
 .ENDIF
 
 $(OWNCOPY) : $(CFGFILES)
-    +-$(MKDIR) $(CLASSDIR)$/$(PACKAGE)
-    +$(COPY) $? $(CLASSDIR)$/$(PACKAGE) && $(TOUCH) $@
+    -$(MKDIR) $(CLASSDIR)$/$(PACKAGE)
+    $(COPY) $? $(CLASSDIR)$/$(PACKAGE) && $(TOUCH) $@
 
 run :
-    +@$(MKDIR) c:\temp\fragments
-    +@$(JAVA) -jar $(CLASSDIR)$/FCFGSplit.jar debug=4 xmlfile=o:/src680/src.m7/officecfg/registry/data/org/openoffice/Office/TypeDetection.xcu outdir=c:/temp/fragments
+    @$(MKDIR) c:\temp\fragments
+    @$(JAVA) -jar $(CLASSDIR)$/FCFGSplit.jar debug=4 xmlfile=o:/src680/src.m7/officecfg/registry/data/org/openoffice/Office/TypeDetection.xcu outdir=c:/temp/fragments
