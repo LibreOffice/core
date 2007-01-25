@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:20:27 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,11 +381,11 @@ void ScDocument::InvalidateTableArea()
     }
 }
 
-xub_StrLen ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd ) const
+sal_Int32 ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
+        SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
-        return pTab[nTab]->GetMaxStringLen( nCol, nRowStart, nRowEnd );
+        return pTab[nTab]->GetMaxStringLen( nCol, nRowStart, nRowEnd, eCharSet );
     else
         return 0;
 }
