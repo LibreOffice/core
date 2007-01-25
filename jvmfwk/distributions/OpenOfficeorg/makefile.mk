@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:28:42 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:33:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,14 @@ nojava:
 $(BIN)$/javavendors_ooo.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_macosx.xml javavendors_linux.xml
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    +-$(COPY) javavendors_macosx.xml $(BIN)$/javavendors_ooo.xml
+    -$(COPY) javavendors_macosx.xml $(BIN)$/javavendors_ooo.xml
 .ELIF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
-    +-$(COPY) javavendors_linux.xml $(BIN)$/javavendors_ooo.xml
+    -$(COPY) javavendors_linux.xml $(BIN)$/javavendors_ooo.xml
 .ELSE
-    +-$(COPY) javavendors_unx.xml $(BIN)$/javavendors_ooo.xml
+    -$(COPY) javavendors_unx.xml $(BIN)$/javavendors_ooo.xml
 .ENDIF
 .ELIF "$(GUI)"=="WNT"
-    +-$(COPY) javavendors_wnt.xml $(BIN)$/javavendors_ooo.xml	
+    -$(COPY) javavendors_wnt.xml $(BIN)$/javavendors_ooo.xml	
 .ELSE
     @echo Unsupported platform.
 .ENDIF
