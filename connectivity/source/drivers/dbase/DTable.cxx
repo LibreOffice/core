@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:16:24 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
@@ -1563,7 +1566,8 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         }
 
         sal_Bool bHadError = sal_False;
-        sal_Bool bCharacterConversionError = sal_False;
+        sal_Int32 nErrorCode = 1000;
+        ::rtl::OUString sSQLState = ::dbtools::getStandardSQLState( SQL_GENERAL_ERROR );
         Any aSQLError;
         try
         {
@@ -1660,7 +1664,13 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 break;
             }
         }
-        catch( SQLException& e ) { aSQLError <<= e; bHadError = sal_True; bCharacterConversionError = ( e.ErrorCode == 22018 ); }
+        catch( SQLException& e )
+        {
+            aSQLError = ::cppu::getCaughtException();
+            bHadError = sal_True;
+            nErrorCode = e.ErrorCode;
+            sSQLState = e.SQLState;
+        }
         catch ( Exception& ) { bHadError = sal_True; }
 
         if ( bHadError )
@@ -1674,13 +1684,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             sMsg += aColName;
             sMsg += ::rtl::OUString::createFromAscii("'");
 
-            throw SQLException(
-                    sMsg,
-                    *this,
-                    bCharacterConversionError ? ::rtl::OUString::createFromAscii( "22018" ) : ::dbtools::getStandardSQLState( SQL_GENERAL_ERROR ),
-                    bCharacterConversionError ? 22018 : 1000,
-                    aSQLError
-                );
+            throw SQLException( sMsg, *this, sSQLState, nErrorCode, aSQLError );
         }
         // Und weiter ...
         nByteOffset += nLen;
