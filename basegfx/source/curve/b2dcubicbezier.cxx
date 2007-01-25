@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dcubicbezier.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:58:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,20 @@ namespace basegfx
             if(nMaxRecursionDepth)
             {
                 // do angle test
-                const B2DVector aLeft(rfEA - rfPA);
-                const B2DVector aRight(rfEB - rfPB);
+                B2DVector aLeft(rfEA - rfPA);
+                B2DVector aRight(rfEB - rfPB);
+
+                // #i72104#
+                if(aLeft.equalZero())
+                {
+                    aLeft = rfEB - rfPA;
+                }
+
+                if(aRight.equalZero())
+                {
+                    aRight = rfEA - rfPB;
+                }
+
                 const double fCurrentAngle(aLeft.angle(aRight));
 
                 if(fabs(fCurrentAngle) > (F_PI - fAngleBound))
@@ -155,7 +167,7 @@ namespace basegfx
             else
             {
                 const B2DVector aBase(rfPB - rfPA);
-                const bool bBaseEqualZero(aLeft.equalZero());
+                const bool bBaseEqualZero(aBase.equalZero()); // #i72104#
 
                 if(!bBaseEqualZero)
                 {
@@ -226,7 +238,7 @@ namespace basegfx
                 bool bAngleIsSmallerLeft(bAllParallel && bLeftEqualZero);
                 if(!bAngleIsSmallerLeft)
                 {
-                    const B2DVector aLeftLeft(aS1L - rfPA);
+                    const B2DVector aLeftLeft(bLeftEqualZero ? aS2L - aS1L : aS1L - rfPA); // #i72104#
                     const B2DVector aRightLeft(aS2L - aS3C);
                     const double fCurrentAngleLeft(aLeftLeft.angle(aRightLeft));
                     bAngleIsSmallerLeft = (fabs(fCurrentAngleLeft) > (F_PI - rfAngleBound));
@@ -237,7 +249,7 @@ namespace basegfx
                 if(!bAngleIsSmallerRight)
                 {
                     const B2DVector aLeftRight(aS2R - aS3C);
-                    const B2DVector aRightRight(aS1R - rfPB);
+                    const B2DVector aRightRight(bRightEqualZero ? aS2R - aS1R : aS1R - rfPB); // #i72104#
                     const double fCurrentAngleRight(aLeftRight.angle(aRightRight));
                     bAngleIsSmallerRight = (fabs(fCurrentAngleRight) > (F_PI - rfAngleBound));
                 }
