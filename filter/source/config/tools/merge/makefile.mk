@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:10:16 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:47:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ $(JARTARGETN) : $(OWNCOPY)
 .ENDIF
 
 $(OWNCOPY) : $(CFGFILES)
-    +-$(MKDIR) $(CLASSDIR)$/$(PACKAGE)
-    +$(COPY) $? $(CLASSDIR)$/$(PACKAGE) && $(TOUCH) $@
+    -$(MKDIR) $(CLASSDIR)$/$(PACKAGE)
+    $(COPY) $? $(CLASSDIR)$/$(PACKAGE) && $(TOUCH) $@
 
 .ENDIF # "$(SOLAR_JAVA)" != ""
