@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 15:45:16 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:37:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ SHL1HEADER=$(OUT)$/inc$/WindowsAccessBridgeAdapter.h
 $(SLO)$/WindowsAccessBridgeAdapter.obj : $(SHL1HEADER)
 
 $(SHL1HEADER) :
-    + javah -classpath $(OUT)$/class -o $(SHL1HEADER) org.openoffice.accessibility.WindowsAccessBridgeAdapter
+    javah -classpath $(OUT)$/class -o $(SHL1HEADER) org.openoffice.accessibility.WindowsAccessBridgeAdapter
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000"
