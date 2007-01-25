@@ -46,6 +46,6 @@ CLASSPATH !:=$(JAVA_CLASSPATHS:t$(PATH_SEPERATOR))
 JFLAGS = -deprecation -classpath $(CLASSPATH)
 
 %.class : %.java
-    +$(JAVAC) $(JFLAGS) $<
+    $(JAVAC) $(JFLAGS) $<
 
 ov : $(JAVA_FILES:b:+".class")
