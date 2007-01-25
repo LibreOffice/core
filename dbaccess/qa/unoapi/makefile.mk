@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-25 15:09:06 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:50:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,12 @@ PRJNAME=dbaccess
 TARGET=qa_unoapi
 
 ALLTAR:
-    +$(SOLARENV)$/bin$/checkapi -sce dbaccess.sce -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
-    +@echo =======================================================================
-    +@echo In case of problems make sure that you put valid values in the dbaccess.props and added an appropriate jdbc-driver to your office installation
-    +@echo =======================================================================
-    +@echo In case of problems with TableWindowAccessibility or JoinViewAccessibility this might be because of connection problems, just re-run the testcases 
-    +@echo =======================================================================		
+    $(SOLARENV)$/bin$/checkapi -sce dbaccess.sce -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+    @echo =======================================================================
+    @echo In case of problems make sure that you put valid values in the dbaccess.props and added an appropriate jdbc-driver to your office installation
+    @echo =======================================================================
+    @echo In case of problems with TableWindowAccessibility or JoinViewAccessibility this might be because of connection problems, just re-run the testcases 
+    @echo =======================================================================		
 
 run_%:
-    +$(SOLARENV)$/bin$/checkapi -o dbaccess.$(@:s/run_//) -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+    $(SOLARENV)$/bin$/checkapi -o dbaccess.$(@:s/run_//) -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
