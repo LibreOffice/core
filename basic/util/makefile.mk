@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 11:55:15 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:01:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo __CT >> $@
 
 $(SRS)$/basic.srs:
-    +$(TYPE) $(SRS)$/classes.srs + $(SRS)$/runtime.srs + $(SRS)$/sbx.srs > $@
+    $(TYPE) $(SRS)$/classes.srs + $(SRS)$/runtime.srs + $(SRS)$/sbx.srs > $@
 
 
