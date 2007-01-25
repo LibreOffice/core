@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:31:34 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:25:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,4 +38,4 @@ PRJNAME=sw
 TARGET=qa_unoapi
 
 ALLTAR:
-    +$(SOLARENV)$/bin$/checkapi -sce sw.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+    $(SOLARENV)$/bin$/checkapi -sce sw.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
