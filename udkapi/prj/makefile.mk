@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:43:36 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:38:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ INCLUDES= \
 .INCLUDE: $(INCLUDES)
 
 out$/$(PRJNAME).rdb:: $(ALLIDLFILES)
-    +unoidl @$(mktmp -I$(PRJ) -Burd -OHout $(ALLIDLFILES:+"\n"))
-    +regmerge @$(mktmp  $@ /UCR out$/{$(?:f:s/.idl/.urd/:+"\n")} )
+    unoidl @$(mktmp -I$(PRJ) -Burd -OHout $(ALLIDLFILES:+"\n"))
+    regmerge @$(mktmp  $@ /UCR out$/{$(?:f:s/.idl/.urd/:+"\n")} )
     touch $@
 

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:44:28 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:38:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,8 @@
 #*************************************************************************
 
 $(OUT)$/misc$/$(TARGET).idls: makefile.mk
-    +-$(RM) $@
-    +$(TYPE) $(mktmp $(foreach,i,$(IDLFILES) $(PACKAGE)$/$i)) >>$@
+    -$(RM) $@
+    $(TYPE) $(mktmp $(foreach,i,$(IDLFILES) $(PACKAGE)$/$i)) >>$@
 
 ALLTAR: $(OUT)$/misc$/$(TARGET).idls
 
