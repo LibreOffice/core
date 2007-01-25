@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:09:26 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1851,13 +1851,14 @@ void ScTabView::KillEditView( BOOL bNoPaint )
             {
                 pGridWin[i]->ShowCursor();
 
-                // simplify refresh due to overlay objects - just set MapMode
                 pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
 
-                //if (bExtended || ( bAtCursor && !bNoPaint ))
-                //  pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2 );
-                //else
-                //  pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
+                // #i73567# the cell still has to be repainted
+                if (bExtended || ( bAtCursor && !bNoPaint ))
+                {
+                    pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2 );
+                    pGridWin[i]->UpdateSelectionOverlay();
+                }
             }
 
     if (pDrawView)
