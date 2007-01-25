@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:59:34 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:45:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,26 +64,26 @@ ALLTAR: \
 .IF "$(GUI)" == "UNX"
 
 $(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip $(OS)$(COM)$(CPU)runtime.zip
-    +unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && unzip -o -d $(LB) $(OS)$(COM)$(CPU)runtime.zip && $(TOUCH) $@
-    +chmod -R 775 $(LB)
+    unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && unzip -o -d $(LB) $(OS)$(COM)$(CPU)runtime.zip && $(TOUCH) $@
+    chmod -R 775 $(LB)
 
 $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
-    +unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
-    +chmod -R 775 $(INCCOM)
+    unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
+    chmod -R 775 $(INCCOM)
 
 .ELSE
 
 $(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip
-    +unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && \
+    unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && \
     $(TOUCH) $@
 
 $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
-    +unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
+    unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
 
 .ENDIF
 
 $(BIN)$/mozruntime.zip : $(OS)$(COM)$(CPU)runtime.zip
-    +$(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
+    $(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
 
 
 .ENDIF	 # unpack mozab zips
