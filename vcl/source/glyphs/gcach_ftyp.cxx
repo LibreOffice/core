@@ -1777,6 +1777,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     typedef std::vector<ImplKernPairData> KernVector;
     KernVector aKernGlyphVector;
     ImplKernPairData aKernPair;
+    aKernPair.mnKern = 0; // To prevent "is used uninitialized" warning...
 
     const FT_Byte* pBuffer = pKern;
     ULONG nVersion = GetUShort( pBuffer+0 );
