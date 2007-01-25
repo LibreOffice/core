@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:50:42 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:34:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,5 +124,5 @@ $(INCCOM)$/dllname.hxx: makefile.mk
 $(SLO)$/basiclib.obj : $(INCCOM)$/dllname.hxx
 
 $(INCCOM)$/basicide.hrc: basidesh.hrc
-    @-+$(COPY) basidesh.hrc $@
+    @-$(COPY) basidesh.hrc $@
 
