@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:18:57 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:37:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,4 +82,4 @@ DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk xcr.flt
     @echo ------------------------------
     @echo Making: $@
-    +$(TYPE) xcr.flt > $@
+    $(TYPE) xcr.flt > $@
