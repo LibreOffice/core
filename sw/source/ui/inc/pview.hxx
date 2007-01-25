@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:58:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SW_DLLPRIVATE int             ChgPage( int eMvMode, int bUpdateScrollbar = TRUE );
 
 
-    SW_DLLPRIVATE virtual USHORT          Print( SfxProgress &rProgress,
+    SW_DLLPRIVATE virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI,
                                    PrintDialog *pPrintDialog = 0 );
     SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
     SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
