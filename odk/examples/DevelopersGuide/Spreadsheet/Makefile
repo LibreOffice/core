@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: kz $ $Date: 2006-02-03 17:15:04 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:08:12 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -58,8 +58,8 @@ COMP1_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(COMP1_NAME)
 COMP1_GEN_OUT=$(SAMPLE_GEN_OUT)/$(COMP1_NAME)
 COMP1_RDB_NAME=$(COMP1_NAME).uno.rdb
 COMP1_RDB=$(COMP1_GEN_OUT)/$(COMP1_RDB_NAME)
-COMP1_PACKAGE=$(OUT_BIN)/$(COMP1_NAME).$(UNOPKG_EXT)
-COMP1_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP1_NAME).$(UNOPKG_EXT)")
+COMP1_PACKAGE=$(OUT_BIN)/$(COMP1_NAME).$(UNOOXT_EXT)
+COMP1_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP1_NAME).$(UNOOXT_EXT)")
 COMP1_JAR_NAME=$(COMP1_NAME).uno.jar
 COMP1_JAR=$(SAMPLE_CLASS_OUT)/$(COMP1_JAR_NAME)
 COMP1_MANIFESTFILE=$(COMP1_GEN_OUT)/$(COMP1_NAME).uno.Manifest
@@ -70,8 +70,8 @@ COMP1_REGISTERFLAG=$(SAMPLE_GEN_OUT)/devguide_$(COMP1_NAME)_register_component.f
 COMP2_NAME=ExampleDataPilotSource
 COMP2_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(COMP2_NAME)
 COMP2_GEN_OUT=$(SAMPLE_GEN_OUT)/$(COMP2_NAME)
-COMP2_PACKAGE=$(OUT_BIN)/$(COMP2_NAME).$(UNOPKG_EXT)
-COMP2_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP2_NAME).$(UNOPKG_EXT)")
+COMP2_PACKAGE=$(OUT_BIN)/$(COMP2_NAME).$(UNOOXT_EXT)
+COMP2_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP2_NAME).$(UNOOXT_EXT)")
 COMP2_JAR_NAME=$(COMP2_NAME).uno.jar
 COMP2_JAR=$(SAMPLE_CLASS_OUT)/$(COMP2_JAR_NAME)
 COMP2_MANIFESTFILE=$(COMP2_GEN_OUT)/$(COMP2_NAME).uno.Manifest
@@ -200,19 +200,19 @@ $(COMP1_PACKAGE) : $(COMP1_RDB) $(COMP1_JAR) $(COMP1_UNOPKG_MANIFEST)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(COMP1_GEN_OUT)) && $(SDK_ZIP) ../../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP1_JAR_NAME)
-	cd $(subst /,$(PS),$(COMP1_GEN_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(COMP1_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMP2_PACKAGE) : $(COMP2_JAR) $(COMP2_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
-	cd $(subst /,$(PS),$(COMP2_GEN_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(COMP2_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml
 
-$(SAMPLE_GEN_OUT)/devguide_$(COMP1_NAME)_register_component.flag : $(OUT_BIN)/$(COMP1_NAME).$(UNOPKG_EXT)
+$(SAMPLE_GEN_OUT)/devguide_$(COMP1_NAME)_register_component.flag : $(OUT_BIN)/$(COMP1_NAME).$(UNOOXT_EXT)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP1_NAME).$(UNOPKG_EXT)")
+	$(DEPLOYTOOL) $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP1_NAME).$(UNOOXT_EXT)")
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -222,11 +222,11 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-$(SAMPLE_GEN_OUT)/devguide_$(COMP2_NAME)_register_component.flag : $(OUT_BIN)/$(COMP2_NAME).$(UNOPKG_EXT)
+$(SAMPLE_GEN_OUT)/devguide_$(COMP2_NAME)_register_component.flag : $(OUT_BIN)/$(COMP2_NAME).$(UNOOXT_EXT)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP2_NAME).$(UNOPKG_EXT)")
+	$(DEPLOYTOOL) $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP2_NAME).$(UNOOXT_EXT)")
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
