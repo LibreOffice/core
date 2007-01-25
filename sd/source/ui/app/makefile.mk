@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:41:27 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:21:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ all: \
     ALLTAR
 
 $(INCCOM)$/sddll0.hxx: makefile.mk
-    +@echo $@
+    @echo $@
 .IF "$(GUI)"=="UNX"
     echo \#define DLL_NAME \"libsd$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE			# "$(GUI)"=="UNX"
