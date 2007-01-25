@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constant.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:27:52 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:28:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,15 @@
 
 #include "macros.hxx"
 
+namespace filter { namespace config {
+extern rtl::OUString pFilterStrings[];
+}; };
+#ifndef PROPNAME_IMPL_DECL
+#  define PROPNAME_DECL(index, str) (pFilterStrings[(index)])
+#else
+#  define PROPNAME_DECL(index, str) pFilterStrings[(index)] = _FILTER_CONFIG_FROM_ASCII_(str)
+#endif
+
 /*  disable impl_loadOnDemand function of BaseContainer for certain
     functions, where it the feature "impl_loadItemOnDemand() of class FilterCache
     can be used instead of loadAll()!*/
@@ -48,40 +57,40 @@
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_NAME  _FILTER_CONFIG_FROM_ASCII_("Name")
+#define  PROPNAME_NAME  PROPNAME_DECL(0, "Name")
 
 /** @short  used to identify a type item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_UINAME            _FILTER_CONFIG_FROM_ASCII_("UIName"          )
-#define  PROPNAME_UINAMES           _FILTER_CONFIG_FROM_ASCII_("UINames"         )
-#define  PROPNAME_PREFERRED         _FILTER_CONFIG_FROM_ASCII_("Preferred"       )
-#define  PROPNAME_PREFERREDFILTER   _FILTER_CONFIG_FROM_ASCII_("PreferredFilter" )
-#define  PROPNAME_DETECTSERVICE     _FILTER_CONFIG_FROM_ASCII_("DetectService"   )
-#define  PROPNAME_MEDIATYPE         _FILTER_CONFIG_FROM_ASCII_("MediaType"       )
-#define  PROPNAME_CLIPBOARDFORMAT   _FILTER_CONFIG_FROM_ASCII_("ClipboardFormat" )
-#define  PROPNAME_URLPATTERN        _FILTER_CONFIG_FROM_ASCII_("URLPattern"      )
-#define  PROPNAME_EXTENSIONS        _FILTER_CONFIG_FROM_ASCII_("Extensions"      )
+#define  PROPNAME_UINAME            PROPNAME_DECL(1, "UIName"          )
+#define  PROPNAME_UINAMES           PROPNAME_DECL(2, "UINames"         )
+#define  PROPNAME_PREFERRED         PROPNAME_DECL(3, "Preferred"       )
+#define  PROPNAME_PREFERREDFILTER   PROPNAME_DECL(4, "PreferredFilter" )
+#define  PROPNAME_DETECTSERVICE     PROPNAME_DECL(5, "DetectService"   )
+#define  PROPNAME_MEDIATYPE         PROPNAME_DECL(6, "MediaType"       )
+#define  PROPNAME_CLIPBOARDFORMAT   PROPNAME_DECL(7, "ClipboardFormat" )
+#define  PROPNAME_URLPATTERN        PROPNAME_DECL(8, "URLPattern"      )
+#define  PROPNAME_EXTENSIONS        PROPNAME_DECL(9, "Extensions"      )
 
 /** @short  used to identify a filter item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_TYPE              _FILTER_CONFIG_FROM_ASCII_("Type"             )
-#define  PROPNAME_DOCUMENTSERVICE   _FILTER_CONFIG_FROM_ASCII_("DocumentService"  )
-#define  PROPNAME_FILTERSERVICE     _FILTER_CONFIG_FROM_ASCII_("FilterService"    )
-#define  PROPNAME_UICOMPONENT       _FILTER_CONFIG_FROM_ASCII_("UIComponent"      )
-#define  PROPNAME_FLAGS             _FILTER_CONFIG_FROM_ASCII_("Flags"            )
-#define  PROPNAME_USERDATA          _FILTER_CONFIG_FROM_ASCII_("UserData"         )
-#define  PROPNAME_TEMPLATENAME      _FILTER_CONFIG_FROM_ASCII_("TemplateName"     )
-#define  PROPNAME_FILEFORMATVERSION _FILTER_CONFIG_FROM_ASCII_("FileFormatVersion")
+#define  PROPNAME_TYPE              PROPNAME_DECL(10, "Type"             )
+#define  PROPNAME_DOCUMENTSERVICE   PROPNAME_DECL(11, "DocumentService"  )
+#define  PROPNAME_FILTERSERVICE     PROPNAME_DECL(12, "FilterService"    )
+#define  PROPNAME_UICOMPONENT       PROPNAME_DECL(13, "UIComponent"      )
+#define  PROPNAME_FLAGS             PROPNAME_DECL(14, "Flags"            )
+#define  PROPNAME_USERDATA          PROPNAME_DECL(15, "UserData"         )
+#define  PROPNAME_TEMPLATENAME      PROPNAME_DECL(16, "TemplateName"     )
+#define  PROPNAME_FILEFORMATVERSION PROPNAME_DECL(17, "FileFormatVersion")
 
 /** @short  used to identify a frame loader or detect service item
             property against the configuration API and can be used
             at all name containers (based on this filtercache) too.
  */
-#define  PROPNAME_TYPES     _FILTER_CONFIG_FROM_ASCII_("Types")
+#define  PROPNAME_TYPES     PROPNAME_DECL(18, "Types")
 
 /** @short  used to identify the list of sorted filters for a specific
             office module
