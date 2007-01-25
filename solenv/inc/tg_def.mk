@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:39:15 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:53:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ DEF$(TNR)DEPN+=$(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(GUI)"=="WNT"
 DEF$(TNR)EXPORTFILE=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
-    +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF$(TNR)EXPORTFILE)"==""
@@ -72,7 +72,7 @@ DEF$(TNR)FILTER=$(SOLARENV)$/inc$/dummy.flt
 DEF$(TNR)UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE$(TNR):=$(shell +echo %_disk)
+BUILD_DRIVE$(TNR):=$(shell echo %_disk)
 #BUILD_DRIVE$(TNR):=O
 
 .IF "$(BUILD_DRIVE$(TNR))"=="O"
@@ -98,13 +98,13 @@ $(DEF$(TNR)TARGETN) .PHONY :
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) update $(DEFSTAG)
+    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) update $(DEFSTAG)
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
-#	+-attrib -r defs$/$(OUTPATH)
-    @+-$(RM) $@.tmpfile
+#	-attrib -r defs$/$(OUTPATH)
+    @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL$(TNR)TARGETN:f) 								 >$@.tmpfile
@@ -117,20 +117,20 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
-    @-+$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
-    @+$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
+    @-$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    @$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(DEF$(TNR)CEXP)"!=""
-    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
+    @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ELSE
-    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
+    @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    +$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    $(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
-    @+$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB$(TNR)NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
+    @$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB$(TNR)NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
 .IF "$(DEF$(TNR)CEXP)"!=""
-    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -A $(DEF$(TNR)CEXP) -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+    @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -A $(DEF$(TNR)CEXP) -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ELSE
-    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+    @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -140,8 +140,8 @@ $(DEF$(TNR)TARGETN) .PHONY :
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) commit
-    +$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
+    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) commit
+    $(4nt_force_shell)$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
@@ -207,10 +207,10 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo $(DEF$(TNR)EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORTFILE)"!=""
-    +$(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@.tmpfile
+    $(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@.tmpfile
 .ENDIF
-    @+-$(RM) $@
-    @+$(RENAME) $@.tmpfile $@
+    @-$(RM) $@
+    @$(RENAME) $@.tmpfile $@
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
