@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DialogComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:04:59 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -179,6 +179,7 @@ public class DialogComponent {
 
         private String aHandlerMethod1 = "doit1";
         private String aHandlerMethod2 = "doit2";
+        private String aHandlerMethod3 = "doit3";
 
         //XDialogEventHandler
         public boolean callHandlerMethod( /*IN*/XDialog xDialog, /*IN*/Object EventObject, /*IN*/String MethodName ) {
@@ -190,6 +191,11 @@ public class DialogComponent {
             else if ( MethodName.equals( aHandlerMethod2 ) )
             {
                 showMessageBox( "DialogComponent", "callHandlerMethod() handled \"" + aHandlerMethod2 + "\"" );
+                return true;
+            }
+            else if ( MethodName.equals( aHandlerMethod3 ) )
+            {
+                showMessageBox( "DialogComponent", "callHandlerMethod() handled \"" + aHandlerMethod3 + "\"" );
                 return true;
             }
             return false;
@@ -251,27 +257,6 @@ public class DialogComponent {
             // return  DialogComponent.class.getName();
             return  _DialogComponent.class.getName();
         }
-
-        /*
-        //XServiceInfo
-        public String getImplementationName(  ) {
-            return getClass().getName();
-        }
-
-        // XServiceInfo
-        public boolean supportsService( String serviceName ) {
-            if ( serviceName.equals( __serviceName))
-                return true;
-            return false;
-        }
-        //XServiceInfo
-        public String[] getSupportedServiceNames(  ) {
-            String[] retValue= new String[0];
-            retValue[0]= __serviceName;
-            return retValue;
-        }
-        */
-
 
         public void showMessageBox(String sTitle, String sMessage) {
             try {
@@ -341,27 +326,4 @@ public class DialogComponent {
                                                 _DialogComponent.getServiceNames(),
                                                 regKey);
     }
-
-    /*
-    public static XSingleServiceFactory __getServiceFactory(
-                                                String implName,
-                                                XMultiServiceFactory multiFactory,
-                                                XRegistryKey regKey) {
-        XSingleServiceFactory xSingleServiceFactory = null;
-
-        if (implName.equals( _DialogComponent.class.getName()) )
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                _DialogComponent.class, _DialogComponent.__serviceName,
-                multiFactory, regKey);
-        return xSingleServiceFactory;
-    }
-
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey){
-        boolean bReg= FactoryHelper.writeRegistryServiceInfo(
-            _DialogComponent.class.getName(),
-            _DialogComponent.__serviceName, regKey);
-        return bReg;
-    }
-    */
-
 }
