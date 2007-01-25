@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 11:29:55 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:34:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -257,6 +257,6 @@ $(RPMFILE) : $(RPMDEPN) $(MISC)/$(TARGET)-menus.spec
         --define "_builddir $(shell cd ../share; pwd)" \
         --define "unixfilename $(UNIXFILENAME)" \
         --define "version $(PKGVERSION)" --define "release $(PKGREV)" && $(TOUCH) $(MISC)$/$(TARGET).rpmflag
-    @+$(TYPE) $(MISC)$/$(TARGET).rpmflag || echo "ERROR: packing $(TARGET) failed! "
+    @$(TYPE) $(MISC)$/$(TARGET).rpmflag || echo "ERROR: packing $(TARGET) failed! "
     
 .ENDIF
