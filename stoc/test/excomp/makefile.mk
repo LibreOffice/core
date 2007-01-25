@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:26:20 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:33:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,8 @@ ALL: 		ALLDEP
 .INCLUDE :	target.mk
 
 $(BIN)$/excomp.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(MISC)$/excomp $?
-    +regmerge $@ /UCR $(MISC)$/excomp$/{$(?:f:s/.idl/.urd/)}
-    +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
+    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(MISC)$/excomp $?
+    regmerge $@ /UCR $(MISC)$/excomp$/{$(?:f:s/.idl/.urd/)}
+    regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
     touch $@
 
