@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:04:01 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1624,7 +1624,7 @@ void PPDContext::rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes )
     m_aCurrentValues.clear();
 
     char* pRun = (char*)pBuffer;
-    while( *pRun && nBytes )
+    while( nBytes && *pRun )
     {
         ByteString aLine( pRun );
         int nPos = aLine.Search( ':' );
