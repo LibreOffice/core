@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:43:23 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:59:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OB
 .INCLUDE :  target.mk
 
 $(MISC)$/%_yy.c : %lex.l
-    +flex -l -w -8 -o$@ $<
+    flex -l -w -8 -o$@ $<
 
 # Helper to suppress warnings in lex generated c code, see #i57362#
 
