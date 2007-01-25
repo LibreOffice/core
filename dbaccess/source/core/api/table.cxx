@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:27:38 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,10 +202,6 @@ void ODBTable::columnDropped(const ::rtl::OUString& _sName)
     {
         xDrop->dropByName(_sName);
     }
-}
-//--------------------------------------------------------------------------
-void ODBTable::columnCloned(const Reference< XPropertySet >& /*_xClone*/)
-{
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
