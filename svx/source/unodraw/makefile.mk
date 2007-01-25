@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:02:16 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:44:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,32 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-SVXLIGHTOBJFILES=\
-        $(OBJ)$/unopool.obj \
-        $(OBJ)$/XPropertyTable.obj \
-        $(OBJ)$/UnoNameItemTable.obj \
-        $(OBJ)$/unoshape.obj	\
-        $(OBJ)$/unoipset.obj	\
-        $(OBJ)$/unoctabl.obj	\
-        $(OBJ)$/unoshap2.obj	\
-        $(OBJ)$/unoshap3.obj	\
-        $(OBJ)$/unoshap4.obj	\
-        $(OBJ)$/unopage.obj		\
-        $(OBJ)$/unoshtxt.obj	\
-        $(OBJ)$/unoshcol.obj	\
-        $(OBJ)$/unoprov.obj		\
-        $(OBJ)$/unomod.obj      \
-        $(OBJ)$/unonrule.obj	\
-        $(OBJ)$/unofdesc.obj	\
-        $(OBJ)$/unomlstr.obj	\
-        $(OBJ)$/unogtabl.obj	\
-        $(OBJ)$/unohtabl.obj	\
-        $(OBJ)$/unobtabl.obj	\
-        $(OBJ)$/unottabl.obj	\
-        $(OBJ)$/unomtabl.obj	\
-        $(OBJ)$/unodtabl.obj	\
-        $(OBJ)$/gluepts.obj
 
 SLOFILES =	\
         $(SLO)$/UnoNamespaceMap.obj \
