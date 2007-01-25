@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:05:40 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:24:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,6 @@ ALLTAR : $(INCCOM)$/sal$/typesizes.h
 .ENDIF			# "$(L10N-framework)"==""
 
 $(INCCOM)$/sal$/typesizes.h : $(BIN)$/$(TARGET)
-    +-$(MKDIR) $(INCCOM)$/sal
+    -$(MKDIR) $(INCCOM)$/sal
     $(BIN)$/$(TARGET) $@
 
