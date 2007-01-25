@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:36:34 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:34:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ RCFILE=$(BIN)$/jvmfwk3.ini
 
 .INCLUDE: target.mk
 $(RCFILE): jvmfwk3rc
-    +-$(COPY) $< $@
+    -$(COPY) $< $@
 
 ALLTAR: \
     $(RCFILE)
