@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 06:31:31 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:37:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,10 @@ PATCH_FILE_NAME=${TARFILE_NAME}.patch
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
-.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-CC:=$(COMPATH)$/bin$/cc
-CXX:=$(COMPATH)$/bin$/CC
-.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+#CC:=$(COMPATH)$/bin$/cc
+#CXX:=$(COMPATH)$/bin$/CC
+#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 
 .IF "$(SYSBASE)"!=""
@@ -154,7 +154,7 @@ ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
 
-CONFIGURE_ACTION+= $(COPY) ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
+CONFIGURE_ACTION+= $(COPY:s/+//) ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
 
 .IF "$(CCNUMVER)"<="001400000000"
 BUILD_ACTION=cd allinone && nmake /f all.mak CFG="all - Win32 Release" EXFLAGS="-EHsc" && cd ..$/..
@@ -191,7 +191,7 @@ OUT2BIN= \
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILE_NAME) | tar $(TAR_EXCLUDE_SWITCH) -xvf -
-    +$(TOUCH) $(PACKAGE_DIR)$/so_add_binary
+    $(TOUCH) $(PACKAGE_DIR)$/so_add_binary
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
 
