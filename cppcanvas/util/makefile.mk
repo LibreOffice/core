@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-29 11:07:29 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:37:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,4 +71,4 @@ DEFLIB1NAME	=$(TARGET)
 .INCLUDE :	target.mk
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    @+$(TYPE) $(TARGET).flt > $@
+    @$(TYPE) $(TARGET).flt > $@
