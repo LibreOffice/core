@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2006-12-14 17:59:28 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:48:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,4 +107,4 @@ SHL1STDLIBS += winmm.lib kernel32.lib
 .INCLUDE :	target.mk
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk $(TARGET).flt
-    @+$(TYPE) $(TARGET).flt > $@
+    @$(TYPE) $(TARGET).flt > $@
