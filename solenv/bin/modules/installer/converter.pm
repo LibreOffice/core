@@ -4,9 +4,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:22:45 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:23:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -394,6 +394,34 @@ sub get_number_from_directory
     }
 
     return $number;
+}
+
+#################################################################
+# Replacing separators, that are included into quotes
+#################################################################
+
+sub replace_masked_separator
+{
+    my ($string, $separator, $replacementstring) = @_;
+
+    $string =~ s/\\\Q$separator\E/$replacementstring/g;
+
+    return $string;
+}
+
+#################################################################
+# Resolving separators, that were replaced
+# in function mask_separator_in_quotes
+#################################################################
+
+sub resolve_masked_separator
+{
+    my ($arrayref, $separator, $replacementstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        ${$arrayref}[$i] =~ s/$replacementstring/$separator/g
+    }
 }
 
 1;
