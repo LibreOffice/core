@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:19:03 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:07:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,14 +37,11 @@ PRJ=..
 PRJNAME=cppuhelper
 TARGET=testhelper
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -147,23 +144,23 @@ UNO_OUT = $(OUT)$/lib
 .ENDIF
 
 $(BIN)$/cpputest.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
-    +regmerge $@ / $(UNOUCRRDB)
-    +regcomp -register -r $@ -c reflection.uno$(DLLPOST)
+    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    regmerge $@ / $(UNOUCRRDB)
+    regcomp -register -r $@ -c reflection.uno$(DLLPOST)
     touch $@
-    +$(COPY) $(UNO_PATH)$/servicemgr.uno* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/shlibloader.uno* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/simplereg.uno* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/nestedreg.uno* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/typemgr.uno* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/regtypeprov.uno* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/implreg.uno* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/security.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/servicemgr.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/shlibloader.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/simplereg.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/nestedreg.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/typemgr.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/regtypeprov.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/implreg.uno* $(UNO_OUT)
+    $(COPY) $(UNO_PATH)$/security.uno* $(UNO_OUT)
 
 unoheader: $(BIN)$/cpputest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES)" $(BIN)$/cpputest.rdb
-    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(FACTORYTYPES)" $(BIN)$/cpputest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES)" $(BIN)$/cpputest.rdb
+    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(FACTORYTYPES)" $(BIN)$/cpputest.rdb
 
 
 $(BIN)$/testdefaultbootstrapping.pl: testdefaultbootstrapping.pl
