@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 13:03:27 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,73 +182,80 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
             iVerb = OLEIVERB_SHOW;
     }
 
-    switch(iVerb) {
-        case OLEIVERB_DISCARDUNDOSTATE:
-            // free any undostate?
-            break;
-        case OLEIVERB_INPLACEACTIVATE:
-            OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
+    try
+    {
+        switch(iVerb) {
+            case OLEIVERB_DISCARDUNDOSTATE:
+                // free any undostate?
+                break;
+            case OLEIVERB_INPLACEACTIVATE:
+                OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
 
-            return m_pDocHolder->InPlaceActivate(pActiveSite,FALSE);
-            break;
-        case OLEIVERB_UIACTIVATE:
-            OSL_ENSURE(m_pDocHolder,"no document for     inplace activation");
+                return m_pDocHolder->InPlaceActivate(pActiveSite,FALSE);
+                break;
+            case OLEIVERB_UIACTIVATE:
+                OSL_ENSURE(m_pDocHolder,"no document for     inplace activation");
 
-            return m_pDocHolder->InPlaceActivate(pActiveSite,TRUE);
-            break;
-        case OLEIVERB_PRIMARY:
-        case OLEIVERB_SHOW:
-            OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
+                return m_pDocHolder->InPlaceActivate(pActiveSite,TRUE);
+                break;
+            case OLEIVERB_PRIMARY:
+            case OLEIVERB_SHOW:
+                OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
 
-            if(m_pDocHolder->isActive())
-                return NOERROR; //Already active
+                if(m_pDocHolder->isActive())
+                    return NOERROR; //Already active
 
-            if(SUCCEEDED(
-                m_pDocHolder->InPlaceActivate(
-                    pActiveSite,TRUE)))
-                return NOERROR;
+                if(SUCCEEDED(
+                    m_pDocHolder->InPlaceActivate(
+                        pActiveSite,TRUE)))
+                    return NOERROR;
 
-            // intended fall trough
-        case OLEIVERB_OPEN:
-            OSL_ENSURE(m_pDocHolder,"no document to open");
+                // intended fall trough
+            case OLEIVERB_OPEN:
+                OSL_ENSURE(m_pDocHolder,"no document to open");
 
-            // the commented code could be usefull in case
-            // outer window would be resized depending from inner one
-            // RECTL aEmbArea;
-            // m_pDocHolder->GetVisArea( &aEmbArea );
-            // m_pDocHolder->show();
-            // m_pDocHolder->SetVisArea( &aEmbArea );
+                // the commented code could be usefull in case
+                // outer window would be resized depending from inner one
+                // RECTL aEmbArea;
+                // m_pDocHolder->GetVisArea( &aEmbArea );
+                // m_pDocHolder->show();
+                // m_pDocHolder->SetVisArea( &aEmbArea );
 
-            if(m_pDocHolder->isActive())
-            {
-                m_pDocHolder->InPlaceDeactivate();
-                m_pDocHolder->DisableInplaceActivation(true);
-            }
+                if(m_pDocHolder->isActive())
+                {
+                    m_pDocHolder->InPlaceDeactivate();
+                    m_pDocHolder->DisableInplaceActivation(true);
+                }
 
-            SIZEL aEmbSize;
-            m_pDocHolder->GetExtent( &aEmbSize );
-            m_pDocHolder->show();
-            m_pDocHolder->resizeWin( aEmbSize );
+                SIZEL aEmbSize;
+                m_pDocHolder->GetExtent( &aEmbSize );
+                m_pDocHolder->show();
+                m_pDocHolder->resizeWin( aEmbSize );
 
-            if ( m_pClientSite )
-                m_pClientSite->OnShowWindow( TRUE );
+                if ( m_pClientSite )
+                    m_pClientSite->OnShowWindow( TRUE );
 
-            notify();
-            break;
-        case OLEIVERB_HIDE:
-            OSL_ENSURE(m_pDocHolder,"no document to hide");
+                notify();
+                break;
+            case OLEIVERB_HIDE:
+                OSL_ENSURE(m_pDocHolder,"no document to hide");
 
-            if(m_pDocHolder->isActive())
-                m_pDocHolder->InPlaceDeactivate();
-            else {
-                m_pDocHolder->hide();
+                if(m_pDocHolder->isActive())
+                    m_pDocHolder->InPlaceDeactivate();
+                else {
+                    m_pDocHolder->hide();
 
-                if( m_pClientSite )
-                    m_pClientSite->OnShowWindow(FALSE);
-            }
-            break;
-        default:
-            break;
+                    if( m_pClientSite )
+                        m_pClientSite->OnShowWindow(FALSE);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    catch( uno::Exception& )
+    {
+        return OLEOBJ_S_CANNOT_DOVERB_NOW;
     }
 
     return NOERROR;
