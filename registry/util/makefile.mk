@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:19:35 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:39:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,5 +80,5 @@ DEF1DES	= RegistryRuntime
 .INCLUDE :  target.mk
 
 makedocpp: $(DOCPPFILES)
-     + docpp -H -m -f  -u -d $(OUT)$/doc$/$(PRJNAME) $(DOCPPFILES)
+     docpp -H -m -f  -u -d $(OUT)$/doc$/$(PRJNAME) $(DOCPPFILES)
 
