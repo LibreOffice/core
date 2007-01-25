@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:07:57 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1026,7 +1026,7 @@ SwNewDBMgr::~SwNewDBMgr()
 
 
 BOOL SwNewDBMgr::MergePrint( SwView& rView,
-                             SwPrtOptions& rOpt, SfxProgress& rProgress )
+                             SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
 {
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
@@ -1114,7 +1114,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                 pEvtSrc->LaunchMailMergeEvent( aEvt );
             }
 
-            rView.SfxViewShell::Print( rProgress ); // ggf Basic-Macro ausfuehren
+            rView.SfxViewShell::Print( rProgress, bIsAPI ); // ggf Basic-Macro ausfuehren
             if( rOpt.IsPrintSingleJobs() && bRet )
             {
                 //rOpt.bJobStartet = FALSE;
@@ -1179,7 +1179,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
 
   -----------------------------------------------------------------------*/
 BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress )
+                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
 {
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
@@ -1271,7 +1271,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
         pViewProperties[0].Value <<= ::rtl::OUString( aTmp );
         rView.SetAdditionalPrintOptions(aViewProperties);
 
-        rView.SfxViewShell::Print( rProgress ); // ggf Basic-Macro ausfuehren
+        rView.SfxViewShell::Print( rProgress, bIsAPI ); // ggf Basic-Macro ausfuehren
         if( rOpt.IsPrintSingleJobs() && bRet )
         {
             //rOpt.bJobStartet = FALSE;
