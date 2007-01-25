@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EApi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:28:19 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 13:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,8 @@ bool EApiInit()
 }
 
 #if 0
-
+// hjs: SOLARDEF does no longer exist please lookup the required
+// defines in a regular compile line
 /*
  * Test code - enable &
  *
