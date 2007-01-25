@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:27:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,9 @@
 #include <tools/stream.hxx>
 #endif
 
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
-#include <basegfx/matrix/b3dhommatrix.hxx>
+// #i73264#
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _OSL_FILE_HXX_
@@ -236,11 +237,11 @@ public:
     void addRGBA( const Color& rColor );
     void addRGB( const Color& rColor );
     void addRect( const Rectangle& rRect );
-    void addMatrix( const ::basegfx::B3DHomMatrix& rMatrix );
+    void addMatrix( const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#
     void addString( const char* pString );
     void addStream( SvStream& rIn );
 
-    static void writeMatrix( SvStream& rOut, const ::basegfx::B3DHomMatrix& rMatrix );
+    static void writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#
     static void writeRect( SvStream& rOut, const Rectangle& rRect );
 
 private:
@@ -283,7 +284,7 @@ public:
     FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient );
 
     /** this c'tor creates a tiled or clipped bitmap fill style */
-    FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B3DHomMatrix& rMatrix );
+    FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#
 
     void addTo( Tag* pTag ) const;
 
@@ -291,7 +292,7 @@ private:
     void Impl_addGradient( Tag* pTag ) const;
 
     FillStyleType   meType;
-    ::basegfx::B3DHomMatrix     maMatrix;
+    ::basegfx::B2DHomMatrix     maMatrix; // #i73264#
     sal_uInt16      mnBitmapId;
     Color           maColor;
     Gradient        maGradient;
