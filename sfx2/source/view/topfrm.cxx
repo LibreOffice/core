@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:15:03 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1023,7 +1023,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             pFrame->GetDispatcher()->Update_Impl();
         pFrame->Show();
         GetWindow().Show();
-        if ( !IsInPlace() )
+        if ( !IsInPlace() || pPluginItem && pPluginItem->GetValue() == 3 )
             pFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
         pDoc->OwnerLock( sal_False );
 
