@@ -4,9 +4,9 @@
  *
  *  $RCSfile: startmenuicon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:42:20 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #error YES
 #endif
 
+
 std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
     std::_tstring   result;
@@ -81,22 +82,37 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
     std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
     std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
 
-//    MessageBox(NULL, sDesktopFile.c_str(), TEXT("OfficeMenuFolder"), MB_OK | MB_ICONINFORMATION);
+    //    MessageBox(NULL, sDesktopFile.c_str(), TEXT("OfficeMenuFolder"), MB_OK | MB_ICONINFORMATION);
 
     std::_tstring   sIconFile = GetMsiProperty( handle, TEXT("INSTALLLOCATION") ) + TEXT("program\\soffice.exe");
 
-    WritePrivateProfileString(
-        TEXT(".ShellClassInfo"),
-        TEXT("IconFile"),
-        sIconFile.c_str(),
-        sDesktopFile.c_str() );
+    OSVERSIONINFO   osverinfo;
+    osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    GetVersionEx( &osverinfo );
 
-    WritePrivateProfileString(
-        TEXT(".ShellClassInfo"),
-        TEXT("IconIndex"),
-        TEXT("18"),
-        sDesktopFile.c_str() );
+    if (osverinfo.dwMajorVersion < 6 /* && osverinfo.dwMinorVersion  */ )
+    {
+        // This icon (18) is a Windows folder until XP Version (number is 0 based)
+        WritePrivateProfileString(
+            TEXT(".ShellClassInfo"),
+            TEXT("IconFile"),
+            sIconFile.c_str(),
+            sDesktopFile.c_str() );
 
+        // FYI: in tool 'ResHack' this icon can be found on position '19' (number is 1 based)
+        WritePrivateProfileString(
+            TEXT(".ShellClassInfo"),
+            TEXT("IconIndex"),
+            TEXT("18"),
+            sDesktopFile.c_str() );
+    }
+    // else
+    // {
+    //     // at the moment there exists no Vista Icon, so we use the default folder icon.
+    //     // add the icon into desktop/util/verinfo.rc
+    // }
+
+    // The value '0' is to avoid a message like "You Are Deleting a System Folder" warning when deleting or moving the folder.
     WritePrivateProfileString(
         TEXT(".ShellClassInfo"),
         TEXT("ConfirmFileOp"),
@@ -104,15 +120,16 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
         sDesktopFile.c_str() );
 
     /*
-    WritePrivateProfileString(
-        TEXT(".ShellClassInfo"),
-        TEXT("InfoTip"),
-        TEXT("StarOffice Productivity Suite"),
-        sDesktopFile.c_str() );
-        */
+      WritePrivateProfileString(
+      TEXT(".ShellClassInfo"),
+      TEXT("InfoTip"),
+      TEXT("StarOffice Productivity Suite"),
+      sDesktopFile.c_str() );
+    */
 
     SetFileAttributes( sDesktopFile.c_str(), FILE_ATTRIBUTE_HIDDEN );
     SetFileAttributes( sOfficeMenuFolder.c_str(), FILE_ATTRIBUTE_SYSTEM );
+
 
     return ERROR_SUCCESS;
 }
