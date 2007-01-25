@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-12-13 16:57:09 $
+ *  last change: $Author: aw $ $Date: 2007-01-25 18:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,8 +121,8 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERPRIMITIVE2D_HXX
-#include <drawinglayer/primitive2d/markerprimitive2d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERARRAYPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1477,87 +1477,73 @@ namespace drawinglayer
         }
 
         // marker
-        void VclProcessor2D::RenderMarkerPrimitive2D(const primitive2d::MarkerPrimitive2D& rMarkCandidate)
+        void VclProcessor2D::RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkArrayCandidate)
         {
-            const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkCandidate.getRGBColor()));
+            const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
+            const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkArrayCandidate.getRGBColor()));
             const Color aColor(aRGBColor);
 
-            // evtl. just test markers
-            static bool bForceMarkersToRangeTest(false);
-
-            if(bForceMarkersToRangeTest)
+            if(primitive2d::MARKERSTYLE2D_POINT == rMarkArrayCandidate.getStyle())
             {
-                // ATM just test marker range
-                const basegfx::B2DRange aRange(rMarkCandidate.getB2DRange(getViewInformation2D()));
-                basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRange));
-                aPolygon.transform(maCurrentTransformation);
+                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
+                {
+                    const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
+                    const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
 
-                mpOutputDevice->SetFillColor();
-                mpOutputDevice->SetLineColor(aColor);
-                mpOutputDevice->DrawPolygon(Polygon(aPolygon));
+                    mpOutputDevice->DrawPixel(aPos, aColor);
+                }
             }
             else
             {
-                const basegfx::B2DPoint aViewPosition(maCurrentTransformation * rMarkCandidate.getPosition());
-                Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
+                const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
 
-                switch(rMarkCandidate.getStyle())
+                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
                 {
-                    default : // MARKERSTYLE2D_POINT
+                    const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
+                    Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
+                    aPos = mpOutputDevice->LogicToPixel(aPos);
+
+                    mpOutputDevice->EnableMapMode(false);
+
+                    switch(rMarkArrayCandidate.getStyle())
                     {
-                        mpOutputDevice->DrawPixel(aPos, aColor);
-                        break;
+                        case primitive2d::MARKERSTYLE2D_CROSS :
+                        {
+                            mpOutputDevice->DrawPixel(aPos, aColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aColor);
+
+                            break;
+                        }
+                        case primitive2d::MARKERSTYLE2D_GLUEPOINT :
+                        {
+                            // backpen
+                            mpOutputDevice->SetLineColor(aColor);
+                            mpOutputDevice->DrawLine(aPos + Point(-2, -3), aPos + Point(+3, +2));
+                            mpOutputDevice->DrawLine(aPos + Point(-3, -2), aPos + Point(+2, +3));
+                            mpOutputDevice->DrawLine(aPos + Point(-3, +2), aPos + Point(+2, -3));
+                            mpOutputDevice->DrawLine(aPos + Point(-2, +3), aPos + Point(+3, -2));
+
+                            // frontpen (hard coded)
+                            Color aFrontColor(COL_LIGHTBLUE);
+                            const basegfx::BColor aRGBFrontColor(maBColorModifierStack.getModifiedColor(aFrontColor.getBColor()));
+                            aFrontColor = Color(aRGBFrontColor);
+
+                            mpOutputDevice->SetLineColor(aFrontColor);
+                            mpOutputDevice->DrawLine(aPos + Point(-2, -2), aPos + Point(+2, +2));
+                            mpOutputDevice->DrawLine(aPos + Point(-2, +2), aPos + Point(+2, -2));
+
+                            break;
+                        }
+                        default : // primitive2d::MARKERSTYLE2D_POINT
+                        {
+                            break;
+                        }
                     }
-                    case primitive2d::MARKERSTYLE2D_CROSS :
-                    {
-                        basegfx::B2DRange aRange;
-                        rMarkCandidate.getRealtiveViewRange(aRange);
-                        const basegfx::B2DPoint aCenter(aRange.getCenter());
 
-                        aPos = mpOutputDevice->LogicToPixel(aPos);
-                        aPos.X() += basegfx::fround(aCenter.getX());
-                        aPos.Y() += basegfx::fround(aCenter.getY());
-
-                        const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-                        mpOutputDevice->EnableMapMode(false);
-
-                        mpOutputDevice->DrawPixel(aPos, aColor);
-                        mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aColor);
-                        mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aColor);
-                        mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aColor);
-                        mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aColor);
-
-                        mpOutputDevice->EnableMapMode(bWasEnabled);
-                        break;
-                    }
-                    case primitive2d::MARKERSTYLE2D_GLUEPOINT :
-                    {
-                        basegfx::B2DRange aRange;
-                        rMarkCandidate.getRealtiveViewRange(aRange);
-                        const basegfx::B2DPoint aCenter(aRange.getCenter());
-
-                        aPos = mpOutputDevice->LogicToPixel(aPos);
-                        aPos.X() += basegfx::fround(aCenter.getX());
-                        aPos.Y() += basegfx::fround(aCenter.getY());
-
-                        const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-                        mpOutputDevice->EnableMapMode(false);
-
-                        // backpen
-                        mpOutputDevice->SetLineColor(aColor);
-                        mpOutputDevice->DrawLine(aPos + Point(-2, -3), aPos + Point(+3, +2));
-                        mpOutputDevice->DrawLine(aPos + Point(-3, -2), aPos + Point(+2, +3));
-                        mpOutputDevice->DrawLine(aPos + Point(-3, +2), aPos + Point(+2, -3));
-                        mpOutputDevice->DrawLine(aPos + Point(-2, +3), aPos + Point(+3, -2));
-
-                        // frontpen (hard coded)
-                        mpOutputDevice->SetLineColor(COL_LIGHTBLUE);
-                        mpOutputDevice->DrawLine(aPos + Point(-2, -2), aPos + Point(+2, +2));
-                        mpOutputDevice->DrawLine(aPos + Point(-2, +2), aPos + Point(+2, -2));
-
-                        mpOutputDevice->EnableMapMode(bWasEnabled);
-                        break;
-                    }
+                    mpOutputDevice->EnableMapMode(bWasEnabled);
                 }
             }
         }
@@ -1654,8 +1640,8 @@ namespace drawinglayer
                                 }
                                 case Create2DPrimitiveID('2','M','a','r') :
                                 {
-                                    // marker
-                                    RenderMarkerPrimitive2D(static_cast< const primitive2d::MarkerPrimitive2D& >(*pBasePrimitive));
+                                    // marker array
+                                    RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
                                 default :

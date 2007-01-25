@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:28:25 $
+ *  last change: $Author: aw $ $Date: 2007-01-25 18:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ namespace drawinglayer { namespace primitive2d {
     class MaskPrimitive2D;
     class AlphaPrimitive2D;
     class TransformPrimitive2D;
-    class MarkerPrimitive2D;
+    class MarkerArrayPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ namespace drawinglayer
             void RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
             void RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate);
             void RenderTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
-            void RenderMarkerPrimitive2D(const primitive2d::MarkerPrimitive2D& rTransCandidate);
+            void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
 
         public:
             // constructor/destructor

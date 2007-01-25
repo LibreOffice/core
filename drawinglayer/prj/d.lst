@@ -19,7 +19,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\gridprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\gridprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\groupprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\groupprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\helplineprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\helplineprimitive2d.hxx
-..\inc\drawinglayer\primitive2d\markerprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\markerprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\markerarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\markerarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\maskprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\maskprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\metafileprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\metafileprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx

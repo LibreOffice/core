@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:08 $
+ *  last change: $Author: aw $ $Date: 2007-01-25 18:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERPRIMITIVE2D_HXX
-#include <drawinglayer/primitive2d/markerprimitive2d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERARRAYPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
@@ -61,7 +61,7 @@ namespace drawinglayer
     {
         Primitive2DSequence GridPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::vector< BasePrimitive2D* > aTempPrimitiveTarget;
+            Primitive2DSequence aRetval;
 
             if(!rViewInformation.getViewport().isEmpty() && getWidth() > 0.0 && getHeight() > 0.0)
             {
@@ -148,6 +148,10 @@ namespace drawinglayer
                     nSmallStepsY = (sal_uInt32)(fStepY / fSmallStepY);
                 }
 
+                // prepare point vectors for point and cross markers
+                std::vector< basegfx::B2DPoint > aPositionsPoint;
+                std::vector< basegfx::B2DPoint > aPositionsCross;
+
                 for(double fX(0.0); fX < aScale.getX(); fX += fStepX)
                 {
                     const bool bXZero(basegfx::fTools::equalZero(fX));
@@ -160,8 +164,7 @@ namespace drawinglayer
                         if(rViewInformation.getDiscreteViewport().isInside(aViewPos) && !bXZero && !bYZero)
                         {
                             const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
-                            MarkerPrimitive2D* pNew = new MarkerPrimitive2D(aLogicPos, 0.5, 0.5, getBColor(), MARKERSTYLE2D_CROSS);
-                            aTempPrimitiveTarget.push_back(pNew);
+                            aPositionsCross.push_back(aLogicPos);
                         }
 
                         if(getSubdivisionsX() && !bYZero)
@@ -175,8 +178,7 @@ namespace drawinglayer
                                 if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                                 {
                                     const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
-                                    MarkerPrimitive2D* pNew = new MarkerPrimitive2D(aLogicPos, 0.5, 0.5, getBColor(), MARKERSTYLE2D_POINT);
-                                    aTempPrimitiveTarget.push_back(pNew);
+                                    aPositionsPoint.push_back(aLogicPos);
                                 }
                             }
                         }
@@ -192,22 +194,32 @@ namespace drawinglayer
                                 if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                                 {
                                     const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
-                                    MarkerPrimitive2D* pNew = new MarkerPrimitive2D(aLogicPos, 0.5, 0.5, getBColor(), MARKERSTYLE2D_POINT);
-                                    aTempPrimitiveTarget.push_back(pNew);
+                                    aPositionsPoint.push_back(aLogicPos);
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            // prepare return value
-            Primitive2DSequence aRetval(aTempPrimitiveTarget.size());
+                // prepare return value
+                const sal_uInt32 nCountPoint(aPositionsPoint.size());
+                const sal_uInt32 nCountCross(aPositionsCross.size());
+                const sal_uInt32 nRetvalCount((nCountPoint ? 1 : 0) + (nCountCross ? 1 : 0));
+                sal_uInt32 nInsertCounter(0);
 
-            for(sal_uInt32 a(0L); a < aTempPrimitiveTarget.size(); a++)
-            {
-                const Primitive2DReference xRef(aTempPrimitiveTarget[a]);
-                aRetval[a] = xRef;
+                aRetval.realloc(nRetvalCount);
+
+                // add MarkerArrayPrimitive2D if point markers were added
+                if(nCountPoint)
+                {
+                    aRetval[nInsertCounter++] = Primitive2DReference(new MarkerArrayPrimitive2D(aPositionsPoint, MARKERSTYLE2D_POINT, getBColor()));
+                }
+
+                // add MarkerArrayPrimitive2D if cross markers were added
+                if(nCountCross)
+                {
+                    aRetval[nInsertCounter++] = Primitive2DReference(new MarkerArrayPrimitive2D(aPositionsCross, MARKERSTYLE2D_CROSS, getBColor()));
+                }
             }
 
             return aRetval;
