@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:33:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,14 +66,15 @@ struct XIMArg
 #define XIIIMP_PATH     "/usr/lib/im/" XIIIMP_LIB
 #endif
 
-/* global variables */
-static void *g_dlmodule = 0;
-
 extern "C" {
 typedef XIM (*OpenFunction)(Display*, XrmDatabase, char*, char*, XIMArg*);
 }
 
+/* global variables */
+#if !defined(MACOSX)
+static void *g_dlmodule = 0;
 static OpenFunction g_open_im = (OpenFunction)NULL;
+#endif
 
 /* utility function to transform vararg list into an array of XIMArg */
 
@@ -242,7 +243,10 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
 #endif
       }
 
+// in #if to prevent warning "warning: label 'legacy_XIM' defined but not used"
+#if !defined(MACOSX)
      legacy_XIM:
+#endif
 
     if (!xim)
         xim = XOpenIM(display, rdb, res_name, res_class);
