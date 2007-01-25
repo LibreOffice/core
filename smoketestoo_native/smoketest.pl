@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 12:18:34 $
+#   last change: $Author: obo $ $Date: 2007-01-25 16:11:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ else {
 }
 
 @error_messages = ( '',
-            'log flag for pkgadd still exist. Installation not possible!',
+            'lock flag for pkgadd still exist. Installation not possible!',
             'Error during installation!',
             'Error: patching configuration failed!',
             'Error: starting office failed or office crashed!',
@@ -256,7 +256,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.22 $ ';
+$id_str = ' $Revision: 1.23 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -725,7 +725,7 @@ sub getInstset {
         ($NEWINSTSET, $INSTSET, $sufix) = fileparse ($smoketest_install);
         return ($NEWINSTSET, $INSTSET);
     }
-    if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
+    if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP) and ($gui ne $cygwin)) {
         ($NEWINSTSET, $INSTSET) = getSetFromServer();
     }
     else {
