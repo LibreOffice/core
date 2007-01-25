@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:23:26 $
+#   last change: $Author: obo $ $Date: 2007-01-25 16:23:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1028,6 +1028,26 @@ sub set_solaris_parameter_in_pkginfo
     $newline = "EMAIL=\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
+}
+
+#####################################################################
+# epm uses as archtecture for Solaris x86 "i86pc". This has to be
+# changed to "i386".
+#####################################################################
+
+sub fix_architecture_setting
+{
+    my ($changefile) = @_;
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        if ( ${$changefile}[$i] =~ /^\s*ARCH=i86pc\s*$/ )
+        {
+            ${$changefile}[$i] =~ s/i86pc/i386/;
+            last;
+        }
+
+    }
 }
 
 #####################################################################
