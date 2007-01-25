@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:04:11 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,18 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 {
     ScModule*        pScMod  = SC_MOD();
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
-    ScTabViewShell*  pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+
+    // #i73615# don't rely on SfxViewShell::Current while constructing the input line
+    // (also for GetInputHdl below)
+    ScTabViewShell* pViewSh = NULL;
+    SfxDispatcher* pDisp = pBind->GetDispatcher();
+    if ( pDisp )
+    {
+        SfxViewFrame* pViewFrm = pDisp->GetFrame();
+        if ( pViewFrm )
+            pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+    }
+    DBG_ASSERT( pViewSh, "no view shell for input window" );
 
     BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
 
@@ -209,7 +220,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     aWndPos     .Show();
     aTextWindow .Show();
 
-    pInputHdl = SC_MOD()->GetInputHdl( NULL, FALSE );   // use own handler even if ref-handler is set
+    pInputHdl = SC_MOD()->GetInputHdl( pViewSh, FALSE );    // use own handler even if ref-handler is set
     if (pInputHdl)
         pInputHdl->SetInputWindow( this );
 
