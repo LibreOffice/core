@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 15:39:54 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:11:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ ALLTAR: \
 $(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/types.rdb
     rm -f $@
     $(GNUCOPY) $(SOLARBINDIR)$/types.rdb $@
-    +cd $(BIN) && \
+    cd $(BIN) && \
         regcomp -register -r applicat.rdb \
             -c i18npool.uno$(DLLPOST)
 
