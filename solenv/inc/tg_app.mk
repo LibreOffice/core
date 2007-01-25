@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 06:34:13 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:53:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ APP$(TNR)PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP$(TNR)PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP$(TNR)TARGET)_linkinc.ls .PHONY:
-    @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    @-$(RM) $@ >& $(NULLDEV)
+    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP$(TNR)TARGETN:b)_linkinc.ls
@@ -100,19 +100,19 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(@:b).list
-    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-    @+-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)$/$(@:b).list
+    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
     $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-    @source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -121,25 +121,25 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @+-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP$(TNR)OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-    @source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP$(TNR)LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
+    @-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP$(TNR)ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP$(TNR)ICON:s/\/\\/)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP$(TNR)ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP$(TNR)ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF		# "$(APP$(TNR)ICON)" != ""
 .IF "$(APP$(TNR)VERINFO)" != ""
@@ -163,14 +163,14 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
         $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) \
         )
-    @-+echo linking $@.manifest ...
-    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    +$(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    @-echo linking $@.manifest ...
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
 .ELSE
-        +-$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
-        +-$(RM) $(MISC)\$(APP$(TNR)TARGET).lst
-        +-$(RM) $(MISC)\linkobj.lst
-        +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
+        -$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
+        -$(RM) $(MISC)\$(APP$(TNR)TARGET).lst
+        -$(RM) $(MISC)\linkobj.lst
+        for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP$(TNR)TARGET).lst
         $(APP$(TNR)LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
@@ -184,18 +184,18 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
         $(APP$(TNR)STDLIB) $(STDLIB$(TNR)))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
-        +$(IFEXIST) $(MISC)$/$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)$/$(APP$(TNR)TARGET).lst  >> $(MISC)$/$(APP$(TNR)TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)$/$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)$/$(APP$(TNR)TARGET).lst  >> $(MISC)$/$(APP$(TNR)TARGET).lnk $(FI)
         $(APP$(TNR)LINKER) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP$(TNR)TARGET)" == "loader"
-    +$(PERL) loader.pl $@
+    $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+    $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
 .ENDIF			# "$(USE_SHELL)"=="4nt"
-    +$(RM) $@
-    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+    $(RM) $@
+    $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
 
 .ENDIF			# "$(GUI)" == "WNT"
