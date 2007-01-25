@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 12:34:56 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:20:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,19 +67,19 @@ $(COMMONMISC)$/readme.dtd : ..$/readme.dtd
     +$(COPY) $< $@
 
 $(MISC)$/$(GUI)$/README%.html : $(MISC)$/readme%.html
-    @+-$(MKDIR) $(@:d)
-    +$(COPY) $< $@
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
    
 $(MISC)$/$(GUI)$/README% : $(MISC)$/readme%.txt
-    @+-$(MKDIR) $(@:d)
-    +$(COPY) $< $@
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
    
 $(MISC)$/$(GUI)$/readme% : $(MISC)$/readme%
-    @+-$(MKDIR) $(@:d)
-    +$(COPY) $< $@
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
    
 $(MISC)$/readme%.html :
-    @+-$(MKDIR) $(@:d)
+    @-$(MKDIR) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(XT_JAR)$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=html file=$@
 .ELSE
@@ -95,7 +95,7 @@ $(MISC)$/readme%.html :
 .ENDIF
 
 $(MISC)$/readme%.txt :
-    @+-$(MKDIR) $(@:d)
+    @-$(MKDIR) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(XT_JAR)$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=text file=$@
 .ELSE
