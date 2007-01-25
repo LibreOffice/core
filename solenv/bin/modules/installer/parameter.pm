@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 14:47:24 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:24:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -418,6 +418,9 @@ sub setglobalvariables
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "i";
         $installer::globals::temppath = installer::systemactions::create_pid_directory($installer::globals::temppath);
         push(@installer::globals::removedirs, $installer::globals::temppath);
+        $installer::globals::jdstemppath = $installer::globals::temppath;
+        $installer::globals::jdstemppath =~ s/i_/j_/;
+        push(@installer::globals::jdsremovedirs, $installer::globals::jdstemppath);
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
         installer::systemactions::create_directory($installer::globals::temppath);
         if ( $^O =~ /cygwin/i )
@@ -427,10 +430,12 @@ sub setglobalvariables
             chomp( $installer::globals::cyg_temppath = qx{cygpath -w "$installer::globals::cyg_temppath"} );
         }
         $installer::globals::temppathdefined = 1;
+        $installer::globals::jdstemppathdefined = 1;
     }
     else
     {
         $installer::globals::temppathdefined = 0;
+        $installer::globals::jdstemppathdefined = 0;
     }
 
 }
