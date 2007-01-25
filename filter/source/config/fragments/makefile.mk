@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:07:47 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:46:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -165,56 +165,56 @@ PACKLANG := $(JAVAI) $(JAVACPS) $(XALAN_JAR) org.apache.xalan.xslt.Process -XSL 
 # -----------------------------------------------------------------------------
 
 $(REALFILTERPACKAGES_TYPES_FLAG) : $$(TYPES_4$$(@:b))
-     +@echo ===================================================================
-     +@echo Merge type fragments for package $@
-     +@echo ===================================================================
-     +-$(MKDIRHIER) $(DIR_MODPACKS)
-     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_types.xcu xmlpackage=Types tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
+     @echo ===================================================================
+     @echo Merge type fragments for package $@
+     @echo ===================================================================
+     -$(MKDIRHIER) $(DIR_MODPACKS)
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_types.xcu xmlpackage=Types tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
 
 $(REALFILTERPACKAGES_FILTERS_UI_MERGE) : $(ALL_UI_FILTERS)
-     +@echo ===================================================================
-     +@echo Merge localized filter fragments for package $@
-     +@echo ===================================================================
-     +-$(MKDIRHIER) $(DIR_LOCMERGE)
-     +$(MERGE) fragmentsdir=$(DIR_LOCFRAG) tempdir=$(TEMP) pkg=$@ xmlpackage=Filter fcfg=$(mktmp items=$(ALL_UI_FILTERS:b:t",")) languagepack=true
+     @echo ===================================================================
+     @echo Merge localized filter fragments for package $@
+     @echo ===================================================================
+     -$(MKDIRHIER) $(DIR_LOCMERGE)
+     $(MERGE) fragmentsdir=$(DIR_LOCFRAG) tempdir=$(TEMP) pkg=$@ xmlpackage=Filter fcfg=$(mktmp items=$(ALL_UI_FILTERS:b:t",")) languagepack=true
 
 # Note: The used XSL transformation returns errors on stderr.
 # But they dont do it in case we use the -OUT parameter.
 # So we have to dump stdout to the target file and let stderr messages break the build!
 $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS) : $(REALFILTERPACKAGES_FILTERS_UI_MERGE)
-     +@echo ===================================================================
-     +@echo Building language packages $(@:b:s/Filter_//) for filters
-     +@echo ===================================================================
-     +-$(MKDIRHIER) $(@:d)
-     +$(PACKLANG) -IN $< -PARAM lang $(@:d:d:d:d:d:d:d:d:b) > $@
+     @echo ===================================================================
+     @echo Building language packages $(@:b:s/Filter_//) for filters
+     @echo ===================================================================
+     -$(MKDIRHIER) $(@:d)
+     $(PACKLANG) -IN $< -PARAM lang $(@:d:d:d:d:d:d:d:d:b) > $@
 
 $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS_PACKED) : $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS)
 
 $(REALFILTERPACKAGES_FILTERS_FLAG) : $$(FILTERS_4$$(@:b))
-     +@echo ===================================================================
-     +@echo Building packages filter $@
-     +@echo ===================================================================
-     +-$(MKDIRHIER) $(DIR_MODPACKS)
-     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_filters.xcu xmlpackage=Filter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
+     @echo ===================================================================
+     @echo Building packages filter $@
+     @echo ===================================================================
+     -$(MKDIRHIER) $(DIR_MODPACKS)
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_filters.xcu xmlpackage=Filter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
 
 $(REALFILTERPACKAGES_OTHERS_FLAG) : $$(ALL_4$$(@:b))
-     +@echo ===================================================================
-     +@echo Building packages others $@
-     +@echo ===================================================================
-     +-$(MKDIRHIER) $(DIR_MODPACKS)
-     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_others.xcu xmlpackage=Misc lcfg=$(mktmp items=$(FRAMELOADERS_4$(@:b):b:t",":s/.xcu//)) ccfg=$(mktmp items=$(CONTENTHANDLERS_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
+     @echo ===================================================================
+     @echo Building packages others $@
+     @echo ===================================================================
+     -$(MKDIRHIER) $(DIR_MODPACKS)
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_others.xcu xmlpackage=Misc lcfg=$(mktmp items=$(FRAMELOADERS_4$(@:b):b:t",":s/.xcu//)) ccfg=$(mktmp items=$(CONTENTHANDLERS_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
 
 $(INTERNALFILTERPACKAGES_TYPES_FLAG) : $$(TYPES_4$$(@:b))
-    +@echo ===================================================================
-     +@echo Building special packages types $@
-     +@echo ===================================================================
-     +-$(MKDIRHIER) $(DIR_MODPACKS)
-     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_types.xcu xmlpackage=Types tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
+    @echo ===================================================================
+     @echo Building special packages types $@
+     @echo ===================================================================
+     -$(MKDIRHIER) $(DIR_MODPACKS)
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_types.xcu xmlpackage=Types tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
 
 $(INTERNALFILTERPACKAGES_FILTERS_FLAG) : $$(FILTERS_4$$(@:b))
-     +@echo ===================================================================
-     +@echo Building special packages filter $@
-     +@echo ===================================================================
-     +-$(MKDIRHIER) $(DIR_MODPACKS)
-     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_filters.xcu xmlpackage=GraphicFilter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu//)) subdir_filters=internalgraphicfilters && $(TOUCH) $@
+     @echo ===================================================================
+     @echo Building special packages filter $@
+     @echo ===================================================================
+     -$(MKDIRHIER) $(DIR_MODPACKS)
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(DIR_MODPACKS) pkg=$(DIR_MODPACKS)$/$(@:b)_filters.xcu xmlpackage=GraphicFilter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu//)) subdir_filters=internalgraphicfilters && $(TOUCH) $@
 
