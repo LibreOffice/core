@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 10:55:03 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:52:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,27 +58,27 @@ ALLTAR: \
     $(BIN)$/ure$/uno$(MY_RC)
 
 $(BIN)$/ure$/README: README
-    - $(MKDIR) $(@:d)
-    + $(COPY) $< $@
+    -$(MKDIR) $(@:d)
+    $(COPY) $< $@
 
 $(BIN)$/ure$/THIRDPARTYLICENSEREADME.html: THIRDPARTYLICENSEREADME.html
     - $(MKDIR) $(@:d)
     + $(COPY) $< $@
 
 $(BIN)$/ure$/jvmfwk3$(MY_RC): jvmfwk3$(MY_RC)
-    - $(MKDIR) $(@:d)
-    + $(COPY) $< $@
+    -$(MKDIR) $(@:d)
+    $(COPY) $< $@
 
 $(BIN)$/ure$/uno$(MY_RC): uno$(MY_RC)
-    - $(MKDIR) $(@:d)
-    + $(COPY) $< $@
+    -$(MKDIR) $(@:d)
+    $(COPY) $< $@
 
 .IF "$(OS)" != "WNT"
 
 ALLTAR: $(BIN)$/ure$/startup.sh
 
 $(BIN)$/ure$/startup.sh: startup.sh
-    - $(MKDIR) $(@:d)
-    + $(COPY) $< $@
+    -$(MKDIR) $(@:d)
+    $(COPY) $< $@
 
 .ENDIF
