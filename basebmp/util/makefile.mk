@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2006-05-31 10:12:13 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:50:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,5 +70,5 @@ DEFLIB1NAME	=basebmp
 .INCLUDE :  target.mk
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    @+$(TYPE) $(TARGET).flt > $@
+    @$(TYPE) $(TARGET).flt > $@
 
