@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:38:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:25:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,6 @@
 static const struct timeval noyield__ = { 0, 0 };
 static const struct timeval yield__   = { 0, 10000 };
 
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 static const char* XRequest[] = {
     // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
     NULL,
@@ -261,7 +260,6 @@ static const char* XRequest[] = {
     NULL,
     "X_NoOperation"
 };
-#endif
 
 // -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -524,6 +522,35 @@ void EmitFontpathWarning( void )
 
 } /* extern "C" */
 
+static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
+{
+    char msg[ 120 ] = "";
+#if ! ( defined LINUX && defined PPC )
+    XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
+#endif
+    fprintf( stderr, "X-Error: %s\n", msg );
+    if( pEvent->request_code > capacityof( XRequest ) )
+        fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
+    else if( XRequest[pEvent->request_code] )
+        fprintf( stderr, "\tMajor opcode: %d (%s)\n",
+                 pEvent->request_code, XRequest[pEvent->request_code] );
+    else
+        fprintf( stderr, "\tMajor opcode: %d (BadRequest?)\n", pEvent->request_code );
+    fprintf( stderr, "\tResource ID:  0x%lx\n",
+             pEvent->resourceid );
+    fprintf( stderr, "\tSerial No:    %ld (%ld)\n",
+             pEvent->serial, LastKnownRequestProcessed(pDisplay) );
+
+    if( !getenv( "SAL_SYNCHRONIZE" ) )
+    {
+        fprintf( stderr, "These errors are reported asynchronously,\n");
+        fprintf( stderr, "set environment variable SAL_SYNCHRONIZE to 1 to help debugging\n");
+    }
+
+    fflush( stdout );
+    fflush( stderr );
+}
+
 void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
     if( m_bHaveSystemChildFrames )
@@ -548,25 +575,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             return;
 
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-    char msg[ 120 ] = "";
-#if ! ( defined LINUX && defined PPC )
-        XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
-#endif
-        fprintf( stderr, "X-Error: %s\n", msg );
-        if( pEvent->request_code > capacityof( XRequest ) )
-            fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
-        else if( XRequest[pEvent->request_code] )
-            fprintf( stderr, "\tMajor opcode: %d (%s)\n",
-                     pEvent->request_code, XRequest[pEvent->request_code] );
-        else
-            fprintf( stderr, "\tMajor opcode: %d (BadRequest?)\n", pEvent->request_code );
-        fprintf( stderr, "\tResource ID:  0x%lx\n",
-                 pEvent->resourceid );
-        fprintf( stderr, "\tSerial No:    %ld (%ld)\n",
-                 pEvent->serial, LastKnownRequestProcessed(pDisplay) );
-
-        fflush( stdout );
-        fflush( stderr );
+        PrintXError( pDisplay, pEvent );
 #endif
         if( pDisplay != GetX11SalData()->GetDisplay()->GetDisplay() )
             return;
@@ -577,8 +586,10 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             case osl_Signal_ActIgnore       :
                 return;
             case osl_Signal_ActAbortApp     :
+                PrintXError( pDisplay, pEvent );
                 abort();
             case osl_Signal_ActKillApp      :
+                PrintXError( pDisplay, pEvent );
                 exit(0);
             case osl_Signal_ActCallNextHdl  :
                 break;
