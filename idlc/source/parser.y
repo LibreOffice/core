@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:20:11 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,6 +534,15 @@ module_dcl :
 			{
 				pExists->setInMainfile(idlc()->isInMainFile());
 				pExists->setFileName(pModule->getFileName());
+                if (pExists->isPredefined())
+                {
+                    pExists->setPredefined(false);
+                    if (pExists->getDocumentation().getLength() == 0 &&
+                        pModule->getDocumentation().getLength() > 0)
+                    {
+                        pExists->setDocumentation(pModule->getDocumentation());
+                    }
+                }
 				delete(pModule);
 				pModule = (AstModule*)pExists;
 			} else
@@ -672,7 +681,18 @@ interface_dcl :
 							delete pInterface;
 							pInterface = pForward;
 						}
-					}
+					} else {
+                        // special handling for XInterface because it is predefined
+                        if ( pForward->isPredefined() &&
+                             pForward->getScopedName() == "com::sun::star::uno::XInterface")
+                        {
+                            /* replace the predefined XInterface */
+                            *pForward = *pInterface;
+                            delete pInterface;
+                            pInterface = pForward;
+                        }
+                        
+                    }
 				}
 			} else
 			{
