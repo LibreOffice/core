@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 15:33:23 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:38:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,4 +119,4 @@ DEF1DES=		Viewable Component Chart View
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk \
                             exports.flt
-    +$(TYPE) exports.flt > $@
+    $(TYPE) exports.flt > $@
