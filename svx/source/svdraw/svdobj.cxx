@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:46:43 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3058,6 +3058,12 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) 
         pRet = ImpConvertToContourObj(pRet, bForceLineDash);
     }
 
+    // #i73441# preserve LayerID
+    if(pRet && pRet->GetLayer() != GetLayer())
+    {
+        pRet->SetLayer(GetLayer());
+    }
+
     return pRet;
 }
 
@@ -3072,6 +3078,12 @@ SdrObject* SdrObject::ConvertToPolyObj(BOOL bBezier, BOOL bLineToArea) const
         SdrObject* pNewRet = ConvertToContourObj(pRet);
         delete pRet;
         pRet = pNewRet;
+    }
+
+    // #i73441# preserve LayerID
+    if(pRet && pRet->GetLayer() != GetLayer())
+    {
+        pRet->SetLayer(GetLayer());
     }
 
     return pRet;
