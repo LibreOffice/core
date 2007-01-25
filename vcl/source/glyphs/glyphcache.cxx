@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:23:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 10:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ GlyphCache::~GlyphCache()
     if( mpFtManager )
         delete mpFtManager;
 }
+
 
 // -----------------------------------------------------------------------
 
@@ -374,7 +375,10 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
     mpPrevGCFont( NULL ),
     mpNextGCFont( NULL ),
     mnCos( 0x10000),
-    mnSin( 0)
+    mnSin( 0 ),
+    mnZWJ( 0 ),
+    mnZWNJ( 0 ),
+    mbCollectedZW( false )
 {
     // TODO: move update of mpFontEntry into FontEntry class when
     // it becomes reponsible for the ServerFont instantiation
@@ -468,6 +472,23 @@ Point ServerFont::TransformPoint( const Point& rPoint ) const
     long nX = (long)(rPoint.X() * dCos + rPoint.Y() * dSin);
     long nY = (long)(rPoint.Y() * dCos - rPoint.X() * dSin);
     return Point( nX, nY );
+}
+
+bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
+{
+    if (!mbCollectedZW)
+    {
+        mnZWJ = GetGlyphIndex( 0x200D );
+        mnZWNJ = GetGlyphIndex( 0x200C );
+        mbCollectedZW = true;
+    }
+
+    if( !nGlyphIndex ) // don't hide the NotDef glyph
+        return false;
+    if( (nGlyphIndex == mnZWNJ) || (nGlyphIndex == mnZWJ) )
+        return true;
+
+    return false;
 }
 
 // =======================================================================
