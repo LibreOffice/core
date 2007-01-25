@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:13:56 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:07:21 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -57,8 +57,8 @@ SCRIPT_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(SCRIPT_NAME)
 SCRIPT_GEN_OUT=$(SAMPLE_GEN_OUT)/$(SCRIPT_NAME)
 SCRIPT_JAR_NAME=$(SCRIPT_NAME).jar
 SCRIPT_JAR=$(SAMPLE_CLASS_OUT)/$(SCRIPT_JAR_NAME)
-SCRIPT_PACKAGE = $(OUT_BIN)/$(SCRIPT_NAME).$(UNOPKG_EXT)
-SCRIPT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(SCRIPT_NAME).$(UNOPKG_EXT)")
+SCRIPT_PACKAGE = $(OUT_BIN)/$(SCRIPT_NAME).$(UNOOXT_EXT)
+SCRIPT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(SCRIPT_NAME).$(UNOOXT_EXT)")
 SCRIPT_REGISTERFLAG=$(SCRIPT_GEN_OUT)$(PS)devguide_scriptingframework_$(SCRIPT_NAME)_register_scriptpkg.flag
 
 JAVAFILES  = \
