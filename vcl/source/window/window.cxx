@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.250 $
+ *  $Revision: 1.251 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:08:32 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1218,7 +1218,7 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 
     char* pRes = (char*)GetClassRes();
     pRes += 8;
-    ULONG nStyle = GetLongRes( (void*)pRes );
+    sal_uInt32 nStyle = (sal_uInt32)GetLongRes( (void*)pRes );
     ((ResId&)rResId).aWinBits = nStyle;
     return nStyle;
 }
@@ -1230,7 +1230,7 @@ void Window::ImplLoadRes( const ResId& /*rResId*/ )
     // newer move this line after IncrementRes
     char* pRes = (char*)GetClassRes();
     pRes += 12;
-    ULONG nHelpId = (ULONG)GetLongRes( (void*)pRes );
+    sal_uInt32 nHelpId = (sal_uInt32)GetLongRes( (void*)pRes );
     if ( !nHelpId )
         nHelpId = ImplAutoHelpID();
     SetHelpId( nHelpId );
@@ -6369,7 +6369,9 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             */
             if( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mbEnableNativeWidget )
             {
-                if( mpWindowImpl->mpParent &&
+                if( !mpWindowImpl->mbNoParentUpdate &&
+                    !(nFlags & SHOW_NOPARENTUPDATE) &&
+                    mpWindowImpl->mpParent &&
                     mpWindowImpl->mpParent->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
                 {
                     const int workaround_border = 5;
