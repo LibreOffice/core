@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 10:45:36 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:07:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@ TARGET=pyprov
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
 
@@ -54,6 +52,6 @@ ALL : ALLTAR \
         $(DLLDEST)$/mailmerge.py
 
 $(DLLDEST)$/%.py: %.py
-    +cp $? $@
+    cp $? $@
 
 .INCLUDE :  target.mk
