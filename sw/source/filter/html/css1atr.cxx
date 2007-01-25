@@ -4,9 +4,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:53:10 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,9 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     {
         bFirstCSS1Rule = FALSE;
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_style );
+        ((((sOut += '<') += sHTML_style) += ' ') += sHTML_O_type) += "=\"text/css\">";
+        Strm() << sOut.GetBuffer();
+        sOut.Erase();
         OutNewLine();
         Strm() << '<' << sHTML_comment;
 
