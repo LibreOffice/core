@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:12:23 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:04:00 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -51,8 +51,8 @@ include $(SETTINGS)/dk.mk
 COMPONENT_NAME=ProtocolHandlerAddon_java
 OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
 OUT_COMP_MISC=$(OUT_MISC)/$(COMPONENT_NAME)
-COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
-COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
+COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
 COMPONENT_JAR_NAME=$(COMPONENT_NAME).uno.jar
 COMPONENT_JAR=$(OUT_CLASS)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
@@ -110,7 +110,7 @@ $(COMPONENT_PACKAGE) : $(COMPONENT_JAR) Addons.xcu ProtocolHandler.xcu $(COMPONE
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_MISC))
 	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
 	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
