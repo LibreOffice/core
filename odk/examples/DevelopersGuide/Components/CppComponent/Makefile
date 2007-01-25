@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.9 $
+#  $Revision: 1.10 $
 #
-#  last change: $Author: ihi $ $Date: 2006-12-20 12:24:15 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:04:13 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -63,8 +63,8 @@ APP1_BINARY= $(OUT_BIN)/$(APP1_NAME)$(EXE_EXT)
 COMP_XML=$(COMP_NAME).uno.xml
 COMP_RDB_NAME = $(COMP_NAME).uno.rdb
 COMP_RDB = $(SAMPLE_GEN_OUT)/$(COMP_RDB_NAME)
-COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
-COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(SAMPLE_GEN_OUT)/$(COMP_NAME)/META-INF/manifest.xml
 
 COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_register_component.flag
@@ -152,8 +152,8 @@ $(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) $(COMP_RDB) $(COMP_UNOPKG_M
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(UNOPKG_PLATFORM))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(UNOPKG_PLATFORM))
-	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(basename $(@F)).rdb $(UNOPKG_PLATFORM)/$(<F)
-	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(COMP_RDB_NAME) $(UNOPKG_PLATFORM)/$(<F)
+	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 
 $(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
