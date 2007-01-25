@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 14:45:27 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:23:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ DLLPRE = # no leading "lib" on .so files
 .IF "$(GUI)"=="WNT"
 BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
-MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell +$(WRAPCMD) echo $(SOLARBINDIR))))
+MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
 MY_LOCAL_CLASSDIR=$(subst,\,/ file:///$(PWD)$/$(CLASSDIR))
 .ELSE
 BATCH_INPROCESS=bridgetest_inprocess
@@ -165,7 +165,7 @@ MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))$(P
 # Use "127.0.0.1" instead of "localhost", see #i32281#:
 $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
-    +$(WRAPCMD) echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
+    $(WRAPCMD) echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
         com.sun.star.comp.bridge.TestComponentMain \
         \""uno:socket,host=127.0.0.1,port=2002;urp;test"\" \
         > $@
@@ -184,7 +184,7 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
         $(MISC)$/$(TARGET)$/bootstrap.rdb $(SHL3TARGETN)
     - $(MKDIR) $(@:d)
-    +cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb\
+    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb\
         -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) \
         -c connector.uno$(DLLPOST) \
@@ -204,7 +204,7 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
 
 $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
     - $(MKDIR) $(@:d)
-    + $(COPY) $(SOLARBINDIR)$/types.rdb $@
+     $(COPY) $(SOLARBINDIR)$/types.rdb $@
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
         -c javavm.uno$(DLLPOST) -c uriproc.uno$(DLLPOST)
