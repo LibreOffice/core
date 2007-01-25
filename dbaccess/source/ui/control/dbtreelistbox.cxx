@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:13:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 12:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -585,6 +585,12 @@ IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
     if (m_pSelectedEntry)
         aSelectHdl.Call( m_pSelectedEntry );
     return 0L;
+}
+// -----------------------------------------------------------------------------
+void DBTreeListBox::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_VISIBLE && m_aTimer.IsActive() )
+        m_aTimer.Stop();
 }
 // .........................................................................
 }   // namespace dbaui
