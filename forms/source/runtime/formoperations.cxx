@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formoperations.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:47:47 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,7 +809,7 @@ namespace frm
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentRecord_throw: to be called within a MethodGuard'ed section only!" );
 
         if ( !impl_hasCursor_nothrow() )
-            return sal_False;
+            return false;
 
         // nothing to do if the record is not modified
         sal_Bool bResult = !impl_isModifiedRow_throw();
@@ -1624,7 +1624,7 @@ namespace frm
         if ( !m_xController.is() || !impl_hasCursor_nothrow() || !impl_isParseable_throw() )
             return;
 
-        if ( !impl_commitCurrentControl_throw() || impl_commitCurrentRecord_throw() )
+        if ( !impl_commitCurrentControl_throw() || !impl_commitCurrentRecord_throw() )
             return;
         try
         {
