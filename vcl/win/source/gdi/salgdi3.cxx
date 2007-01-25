@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:33:17 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:26:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -892,12 +892,13 @@ void ImplWinFontData::ReadOs2Table( HDC hDC )
         // to have access to the needed struct members.
         sal_uInt32 ulUnicodeRange1 = GetUInt( pOS2map + 42 );
         sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
+#if 0
         sal_uInt32 ulUnicodeRange3 = GetUInt( pOS2map + 50 );
-        //sal_uInt32 ulUnicodeRange4 = GetUInt( pOS2map + 54 );
+        sal_uInt32 ulUnicodeRange4 = GetUInt( pOS2map + 54 );
+#endif
 
         // Check for CJK capabilities of the current font
-        mbHasCJKSupport = (ulUnicodeRange2 & 0x2fff0000)
-                        | (ulUnicodeRange3 & 0x00000001);
+        mbHasCJKSupport = (ulUnicodeRange2 & 0x2FF00000);
         mbHasKoreanRange= (ulUnicodeRange1 & 0x10000000)
                         | (ulUnicodeRange2 & 0x01100000);
     }
@@ -1904,9 +1905,12 @@ void ImplReleaseTempFonts( SalData& rSalData )
         delete p;
     }
 
-    // notify everybody
-    if( nCount )
-        ::SendMessage( HWND_BROADCAST, WM_FONTCHANGE, 0, NULL );
+#ifndef FR_PRIVATE
+    // notify every other application
+    // unless the temp fonts were installed as private fonts
+    if( nCount > 0 )
+        ::PostMessage( HWND_BROADCAST, WM_FONTCHANGE, 0, NULL );
+#endif // FR_PRIVATE
 }
 
 // -----------------------------------------------------------------------
