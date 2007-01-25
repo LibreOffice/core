@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
+ *  last change: $Author: hdu $ $Date: 2007-01-25 12:15:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,13 +154,14 @@ namespace drawinglayer
             // get outlines
             TextLayouterDevice aTextLayouter;
             aTextLayouter.setFontAttributes(getFontAttributes(), getTextTransform());
-            PolyPolyVector aPolyPolyVector;
-            aTextLayouter.getTextOutlines(aPolyPolyVector, getText(), 0L, getText().Len(), aNewIntegerDXArray);
+
+            basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
+            aTextLayouter.getTextOutlines( aB2DPolyPolyVector,
+                getText(), 0L, getText().Len(), aNewIntegerDXArray);
 
             // get result count
-            const sal_uInt32 nCount(aPolyPolyVector.size());
-
-            if(nCount)
+            const sal_uInt32 nCount = aB2DPolyPolyVector.size();
+            if( nCount )
             {
                 // outlines already have scale and rotate included, so build new transformation
                 basegfx::B2DVector aScale, aTranslate;
@@ -172,7 +173,8 @@ namespace drawinglayer
 
                 if(bShearUsed)
                 {
-                    // The order would be wrong when just adding shear, so rotate back, apply shear, rotate again
+                    // The order would be wrong when just adding shear,
+                    // so rotate back, apply shear, rotate again
                     if(bRotateUsed)
                     {
                         aNewTransform.rotate(-fRotate);
@@ -183,7 +185,7 @@ namespace drawinglayer
 
                     if(bRotateUsed)
                     {
-                        aNewTransform.rotate(fRotate);
+                        aNewTransform.rotate(+fRotate);
                     }
                 }
 
@@ -196,11 +198,11 @@ namespace drawinglayer
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
                     // prepare polygon
-                    basegfx::B2DPolyPolygon aPolyPolygon(aPolyPolyVector[a].getB2DPolyPolygon());
-                    aPolyPolygon.transform(aNewTransform);
+                    basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
+                    rPolyPolygon.transform(aNewTransform);
 
                     // create primitive
-                    const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(aPolyPolygon, getFontColor()));
+                    const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor()));
                     aRetval[a] = xRef;
                 }
 

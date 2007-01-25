@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:04 $
+ *  last change: $Author: hdu $ $Date: 2007-01-25 12:15:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,7 @@ namespace
         if(!mpVirDev)
         {
             mpVirDev = new VirtualDevice();
-            mpVirDev->SetMapMode(MAP_100TH_MM);
-            mpVirDev->SetReferenceDevice(VirtualDevice::REFDEV_MODE06);
+            mpVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
         }
 
         if(!mnUseCount)
@@ -142,7 +141,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         // static pointer here
-        ImpTimedRefDev* pImpGlobalRefDev = 0L;
+        static ImpTimedRefDev* pImpGlobalRefDev = 0L;
 
         // static methods here
         VirtualDevice& acquireGlobalVirtualDevice()
@@ -173,12 +172,12 @@ namespace drawinglayer
 
         void TextLayouterDevice::setFont(const Font& rFont)
         {
-            mrDevice.SetFont(rFont);
+            mrDevice.SetFont( rFont );
         }
 
         void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform)
         {
-            mrDevice.SetFont(getVclFontFromFontAttributes(rFontAttributes, rTransform));
+            setFont( getVclFontFromFontAttributes(rFontAttributes, rTransform) );
         }
 
         double TextLayouterDevice::getTextHeight()
@@ -191,9 +190,9 @@ namespace drawinglayer
             return mrDevice.GetTextWidth(rText, nIndex, nLength);
         }
 
-        bool TextLayouterDevice::getTextOutlines(PolyPolyVector& rPolyPolyVector, const String& rText, xub_StrLen nIndex, xub_StrLen nLength, const ::std::vector< sal_Int32 >& rDXArray)
+        bool TextLayouterDevice::getTextOutlines( basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector, const String& rText, xub_StrLen nIndex, xub_StrLen nLength, const ::std::vector< sal_Int32 >& rDXArray)
         {
-            return mrDevice.GetTextOutlines(rPolyPolyVector, rText, nIndex, nIndex, nLength, true, 0, &(rDXArray[0]));
+            return mrDevice.GetTextOutlines( rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, true, 0, &(rDXArray[0]));
         }
 
         basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength)
