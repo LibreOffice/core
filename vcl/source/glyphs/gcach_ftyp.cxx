@@ -982,7 +982,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         // Check for CJK capabilities of the current font
         // #107888# workaround for Asian...
         // TODO: remove when ExtLeading fully implemented
-        BOOL bCJKCapable = ((( pOS2->ulUnicodeRange2 & 0x2fff0000 ) | ( pOS2->ulUnicodeRange3 & 0x00000001 )) != 0 );
+        BOOL bCJKCapable = ((pOS2->ulUnicodeRange2 & 0x2FF00000) != 0);
 
         if ( bCJKCapable )
         {
