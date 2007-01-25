@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 14:47:11 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:23:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,7 @@ BEGIN
     $temppath = "";
     $cyg_temppath = "";
     $temppathdefined = 0;
+    $jdstemppathdefined = 0;
     $packageversion = 1;
     $packagerevision = 1;
     $rpmcommand = "";
@@ -114,6 +115,7 @@ BEGIN
     $debian = "";
     $installertypedir = "";
     $controlledmakecabversion = "5";
+    $saved_packages_path = "";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -165,6 +167,7 @@ BEGIN
     %alluniquefilenames = ();
     %alllcuniquefilenames = ();
     %uniquefilenamesequence = ();
+    %dependfilenames = ();
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
@@ -195,6 +198,8 @@ BEGIN
     $makedownload = 1;
     $makejds = 1;
     $jdsexcludefilename ="";
+    $jds_language_controlled = 0;
+    $correct_jds_language = 0;
     $islanguagepackinunixmulti = 0;
     @installsetfiles = ();
     @binarytableonlyfiles = ();
@@ -265,6 +270,7 @@ BEGIN
     %componentconditions = ();
 
     @removedirs = ();
+    @jdsremovedirs = ();
     @emptypackages = ();
     %fontpackageexists = ();
 
