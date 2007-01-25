@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:07:08 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:32:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,6 @@ all: \
 # is newer.
 $(MISC)$/$(TARGET)_remove_build.flag : $(PRJ)$/$(PATCH_FILE_NAME)
     $(REMOVE_PACKAGE_COMMAND)
-    +$(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
+    $(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
 
 .ENDIF
