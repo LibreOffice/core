@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 17:41:53 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:24:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ $(BIN)$/boot_services.rdb: \
     $(REGCOMP) -register -r $(BIN)$/regcomp.rdb -c "$(strip $(REGISTERLIBS_JAVA))"
     $(REGMERGE) $(BIN)$/regcomp.rdb / $(SOLARBINDIR)/udkapi.rdb
 # now do the registration
-    +$(REGCOMP_ENV) && \
+    $(REGCOMP_ENV) && \
         $(REGCOMP) -br $(BIN)$/regcomp.rdb 			\
             -register					\
             -r $(BIN)$/boot_services.tmp 		\
