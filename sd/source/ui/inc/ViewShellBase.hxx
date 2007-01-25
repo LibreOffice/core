@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:40:19 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,13 +165,13 @@ public:
         const SfxItemSet &rOptions);
 
     /// Forwarded to the print manager.
-    virtual USHORT Print (SfxProgress& rProgress, PrintDialog* pDialog);
+    virtual USHORT Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDialog);
 
     /// Forwarded to the print manager.
     virtual ErrCode DoPrint (
         SfxPrinter *pPrinter,
         PrintDialog *pPrintDialog,
-        BOOL bSilent);
+        BOOL bSilent, BOOL bIsAPI );
 
     /// Forwarded to the print manager.
     USHORT SetPrinterOptDlg (
