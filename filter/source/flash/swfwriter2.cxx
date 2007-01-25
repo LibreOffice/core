@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:27:29 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,14 +315,14 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
 
 // -----------------------------------------------------------------------------
 
-void Tag::addMatrix( const ::basegfx::B3DHomMatrix& rMatrix )
+void Tag::addMatrix( const ::basegfx::B2DHomMatrix& rMatrix ) // #i73264#
 {
     writeMatrix( *this, rMatrix );
 }
 
 // -----------------------------------------------------------------------------
 
-void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B3DHomMatrix& rMatrix )
+void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) // #i73264#
 {
 
     BitStream aBits;
@@ -545,7 +545,7 @@ FillStyle::FillStyle( const Color& rSolidColor )
 // -----------------------------------------------------------------------------
 
 /** this c'tor creates a tiled or clipped bitmap fill style */
-FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B3DHomMatrix& rMatrix )
+FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B2DHomMatrix& rMatrix ) // #i73264#
 :   meType( bClipped ? clipped_bitmap : tiled_bitmap ),
     maMatrix( rMatrix ),
     mnBitmapId( nBitmapId )
@@ -617,9 +617,9 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 {
     vector< struct GradRecord > aGradientRecords;
 
-    ::basegfx::B3DHomMatrix m;
+    ::basegfx::B2DHomMatrix m; // #i73264#
 
-    m.rotate( 0.0, 0.0, (maGradient.GetAngle() - 900) * F_PI1800 );
+    m.rotate( (maGradient.GetAngle() - 900) * F_PI1800 );
 
     switch( maGradient.GetStyle() )
     {
@@ -634,25 +634,25 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
 
-            m.scale( 1.2, 1.2, 1.0 );
+            m.scale( 1.2, 1.2 );
 
             if( scalex > scaley )
             {
                 double scale_move = scaley / scalex;
 
-                m.translate( tx, scale_move * ty, 0.0 );
+                m.translate( tx, scale_move * ty );
 
 
-                m.scale( scalex, scalex , 1.0);
+                m.scale( scalex, scalex );
             }
             else
             {
                 double scale_move = scalex / scaley;
 
-                m.translate( scale_move * tx, ty , 0.0);
+                m.translate( scale_move * tx, ty );
 
 
-                m.scale( scaley, scaley, 1.0 );
+                m.scale( scaley, scaley );
             }
 
         }
@@ -667,8 +667,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
 
-            m.translate( tx, ty , 0.0);
-            m.scale( scalex, scaley , 1.0);
+            m.translate( tx, ty );
+            m.scale( scalex, scaley );
         }
         break;
     case GradientStyle_SQUARE:
@@ -680,15 +680,15 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
 
-            m.scale( scalex, scaley , 1.0);
+            m.scale( scalex, scaley );
 
-            m.translate( maBoundRect.GetWidth() / 2.0, maBoundRect.GetHeight() / 2.0 , 0.0);
+            m.translate( maBoundRect.GetWidth() / 2.0, maBoundRect.GetHeight() / 2.0 );
         }
         break;
     case  GradientStyle_FORCE_EQUAL_SIZE: break;
     }
 
-    m.translate( maBoundRect.nLeft, maBoundRect.nTop , 0.0);
+    m.translate( maBoundRect.nLeft, maBoundRect.nTop );
 
     pTag->addMatrix( m );
 
