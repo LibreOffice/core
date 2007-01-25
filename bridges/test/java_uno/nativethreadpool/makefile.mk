@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 23:01:08 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:31:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,10 @@ $(MISC)$/$(TARGET)$/types.rdb: types.idl
     - rm $@
     - $(MKDIR) $(MISC)$/$(TARGET)
     - $(MKDIR) $(MISC)$/$(TARGET)$/inc
-    idlc -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
-    regmerge $@ /UCR $(MISC)$/$(TARGET)$/types.urd
-    cppumaker -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
-    javamaker -BUCR -nD -O$(CLASSDIR) $@ -X$(SOLARBINDIR)$/types.rdb
+    $(IDLC) -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
+    $(REGMERGE) $@ /UCR $(MISC)$/$(TARGET)$/types.urd
+    $(CPPUMAKER) -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
+    $(JAVAMAKER) -BUCR -nD -O$(CLASSDIR) $@ -X$(SOLARBINDIR)$/types.rdb
 
 $(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET)$/types.rdb
 
@@ -95,21 +95,21 @@ $(BIN)$/$(TARGET).uno.jar: $(JAVACLASSFILES) relay.manifest
 $(BIN)$/$(TARGET).rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
         $(BIN)$/$(TARGET).uno.jar
     cp $(MISC)$/$(TARGET)$/types.rdb $@
-    regmerge $@ / $(SOLARBINDIR)$/types.rdb
-    regcomp -register -r $@ -c acceptor.uno$(DLLPOST) \
+    $(REGMERGE) $@ / $(SOLARBINDIR)$/types.rdb
+    $(REGCOMP) -register -r $@ -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) -c connector.uno$(DLLPOST) \
         -c remotebridge.uno$(DLLPOST) -c uuresolver.uno$(DLLPOST) \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
         -c uriproc.uno$(DLLPOST)
     cp $(SOLARBINDIR)$/types.rdb $(MISC)$/$(TARGET)$/bootstrap.rdb
-    regcomp -register -r $(MISC)$/$(TARGET)$/bootstrap.rdb \
+    $(REGCOMP) -register -r $(MISC)$/$(TARGET)$/bootstrap.rdb \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
         -c uriproc.uno$(DLLPOST)
 .IF "$(GUI)" == "WNT"
     ERROR -- missing platform
 .ELSE # GUI, WNT
     + setenv OO_JAVA_PROPERTIES RuntimeLib=$(JVM_LIB_URL) ; \
-        regcomp -register -r $@ -c file://$(PWD)/$(BIN)$/$(TARGET).uno.jar \
+        $(REGCOMP) -register -r $@ -c file://$(PWD)/$(BIN)$/$(TARGET).uno.jar \
         -br $(MISC)$/$(TARGET)$/bootstrap.rdb -classpath $(EXEC_CLASSPATH) \
         -env:URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 .ENDIF # GUI, WNT

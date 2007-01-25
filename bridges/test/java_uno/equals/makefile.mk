@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 23:00:05 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:31:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,10 @@ $(MISC)$/$(TARGET).rdb: types.idl
     - rm $@
     - $(MKDIR) $(MISC)$/$(TARGET)
     - $(MKDIR) $(MISC)$/$(TARGET)$/inc
-    idlc -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
-    regmerge $(MISC)$/$(TARGET).rdb /UCR $(MISC)$/$(TARGET)$/types.urd
-    cppumaker -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
-    javamaker -BUCR -nD -O$(CLASSDIR) $@ -X$(SOLARBINDIR)$/types.rdb
+    $(IDLC) -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
+    $(REGMERGE) $(MISC)$/$(TARGET).rdb /UCR $(MISC)$/$(TARGET)$/types.urd
+    $(CPPUMAKER) -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
+    $(JAVAMAKER) -BUCR -nD -O$(CLASSDIR) $@ -X$(SOLARBINDIR)$/types.rdb
 
 $(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).rdb
 
@@ -99,6 +99,6 @@ $(BIN)$/testequals$(SCRIPTEXT): $(BIN)$/testequals_services.rdb
 
 $(BIN)$/testequals_services.rdb:
     - rm $@
-    regcomp -register -r $@ -c bridgefac.uno
-    regcomp -register -r $@ -c connector.uno
-    regcomp -register -r $@ -c remotebridge.uno
+    $(REGCOMP) -register -r $@ -c bridgefac.uno
+    $(REGCOMP) -register -r $@ -c connector.uno
+    $(REGCOMP) -register -r $@ -c remotebridge.uno
