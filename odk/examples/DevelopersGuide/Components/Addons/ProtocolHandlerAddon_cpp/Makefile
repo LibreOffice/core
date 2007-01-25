@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: ihi $ $Date: 2006-12-20 12:24:00 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:03:46 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -54,8 +54,8 @@ OUT_COMP_INC=$(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
 COMPONENT_XML=$(COMPONENT_NAME).uno.xml
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
 COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_GEN)/$(COMPONENT_NAME)/META-INF/manifest.xml
 
 REGISTERFLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_register_component.flag
@@ -122,7 +122,7 @@ $(COMPONENT_PACKAGE) : $(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME) Addons.xcu Protoc
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) ../../bin/$(@F) $(UNOPKG_PLATFORM)/$(<F)
 	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu
-	cd $(subst /,$(PS),$(OUT_COMP_GEN)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
