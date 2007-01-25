@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:41:27 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:56:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,10 @@ RESLIB$(TNR)HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid 
 $(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
 # need to strip since solaris cannot handle tab-only whitespace here
-    +$(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB$(TNR)HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @+$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(mktmp  $(strip, $(subst,$/,/ $(RESLIB$(TNR)HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
+    @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES$(TNR)PARTICLE)
 
@@ -98,15 +98,15 @@ $(RESLIB$(TNR)TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
-    @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB$(TNR)TARGETN)"!=""
