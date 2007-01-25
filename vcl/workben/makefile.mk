@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 11:27:30 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:04:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ ALLTAR : $(BIN)$/applicat.rdb
 $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     rm -f $@
     $(GNUCOPY) $(UNOUCRRDB) $@
-     +cd $(BIN) && \
+     cd $(BIN) && \
          regcomp -register -r applicat.rdb \
              -c i18nsearch.uno$(DLLPOST) \
              -c i18npool.uno$(DLLPOST)
