@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:13:54 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:57:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,29 +50,16 @@ TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  ..$/version.mk
 
-.IF "$(depend)" == ""
 # --- Files --------------------------------------------------------
 
-.IF "$(header)" == ""
-
-#.IF "$(OS)"=="SOLARIS"
-#LINKFLAGS+= -temp=/tmp -PIC -instances=extern -ptr$(SLO)
-#
-#   erstmal raus. wer brauchts?
-#CFLAGSSLO += -instances=extern -template=wholeclass
-#CFLAGSOBJ += -instances=global -template=wholeclass
+#.IF "$(UPDATER)"=="YES"
+#LIB1TARGET=$(LB)$/a$(TARGET).lib
+#LIB1ARCHIV=$(LB)$/lib$(TARGET)$(VOS_MAJOR)$(DLLPOSTFIX).a
+#LIB1FILES=$(LB)$/cpp$(TARGET).lib
 #.ENDIF
-
-.IF "$(UPDATER)"=="YES"
-LIB1TARGET=$(LB)$/a$(TARGET).lib
-LIB1ARCHIV=$(LB)$/lib$(TARGET)$(VOS_MAJOR)$(DLLPOSTFIX).a
-LIB1FILES=$(LB)$/cpp$(TARGET).lib
-.ENDIF
 
 SHL1TARGET=$(VOS_TARGET)$(VOS_MAJOR)$(COMID)
 SHL1IMPLIB=i$(TARGET)
@@ -90,15 +77,10 @@ SHL1STDLIBS+=	\
 
 
 SHL1LIBS=    $(SLB)$/cpp$(TARGET).lib
-.IF "$(linkinc)" != ""
-SHL1FILE=$(MISC)$/vos.slo
-
-.ELSE
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" != "MAC"
 SHL1OBJS=    \
     $(SLO)$/object.obj
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -110,13 +92,6 @@ DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =cppvos
 
 # --- Targets ------------------------------------------------------
-
-.ENDIF
-
-.IF "$(GUI)"=="WIN"
-ALL: $(MISC)$/implib.cmd ALLTAR
-.ENDIF
-
 
 .INCLUDE :  target.mk
 
@@ -133,23 +108,5 @@ $(MISC)$/$(SHL1TARGET).flt:
     @echo _TI1 >> $@
     @echo exception::exception >> $@
     @echo @std@ >> $@
-.IF "$(GUI)"!="OS2"
-.IF "$(GUI)"!="MAC"
     @echo __>>$@
-.ENDIF
-.ENDIF
 
-$(MISC)$/implib.cmd: $(MISC)$/$(SHL1TARGET).def
-    @+-echo "/^name/d" > $@
-    @+-echo "/^option/d"    >> $@
-    @+-echo "s/^export//g"  >> $@
-    @+-echo "s/^ /++/g" >> $@
-    @+-echo "s/.*\./&vos$(UPD)wn./g"    >> $@
-    @+-sed -e s/\"//g $@ > $(MISC)$/tmp.sed
-    @+-sed -f $(MISC)$/tmp.sed $(MISC)$/$(SHL1TARGET).def > $(MISC)$/implib.lnk
-    @+-wlib -o $(LB)/ivos.lib @$(MISC)$/implib.lnk
-.ELSE
-
-.INCLUDE :  target.mk
-
-.ENDIF
