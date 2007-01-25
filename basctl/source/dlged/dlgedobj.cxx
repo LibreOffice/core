@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:35:42 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 12:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,7 @@ awt::DeviceInfo DlgEdObj::getFormDeviceInfo( const DlgEdForm& _rForm )
     if ( !xDialogControl.is() )
     {
         Reference< awt::XControlContainer > xEditorControlContainer( pEditor->GetWindowControlContainer() );
-        xDialogControl = GetTemporaryControlForWindow( *pWindow, xEditorControlContainer );
+        xDialogControl = _rForm.GetTemporaryControlForWindow( *pWindow, xEditorControlContainer );
         bIsTemporaryControl = true;
     }
 
