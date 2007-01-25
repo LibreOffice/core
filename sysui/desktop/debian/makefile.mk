@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-18 16:37:21 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:33:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,7 @@ $(DEBFILE) : $(DEBDEPN) control postinst postrm prerm
     @chmod a+rx $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/post* $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/pre*
     @chmod g-s $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN
     /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(@:f) $@" && $(TOUCH) $(MISC)$/$(TARGET).debflag
-    @+$(TYPE) $(MISC)$/$(TARGET).debflag || echo "ERROR: packing $(TARGET) failed! "
+    @$(TYPE) $(MISC)$/$(TARGET).debflag || echo "ERROR: packing $(TARGET) failed! "
     @chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
     @$(RM) -r $(MISC)/$(TARGET)/$(@:f)/DEBIAN
     @chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
