@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:53:32 $
+#   last change: $Author: obo $ $Date: 2007-01-25 11:36:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/ed_ipersiststr.obj \
         $(SLO)$/ed_idataobj.obj    \
         $(SLO)$/ed_iinplace.obj    \
+        $(SLO)$/ed_ioleobject.obj  \
         $(SLO)$/iipaobj.obj        \
         $(SLO)$/intercept.obj      \
         $(SLO)$/syswinwrapper.obj  \
