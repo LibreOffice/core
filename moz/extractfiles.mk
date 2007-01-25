@@ -4,9 +4,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-03 10:14:12 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:45:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -173,14 +173,14 @@ extract_mozab_files:	$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) \
     $(MISC)$/build$/so_moz_lib_files
     
 make_temp_dir:
-    @+-$(MKDIR)	$(RUNTIME_DIR)	>& $(NULLDEV)
-    @+-$(MKDIR)	$(RUNTIME_DIR)$/components	>& $(NULLDEV)
-    @+-$(MKDIR)	$(RUNTIME_DIR)$/defaults	>& $(NULLDEV)
-    @+-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref	>& $(NULLDEV)
-    @+-$(MKDIR)	$(LIB_DIR)	>& $(NULLDEV)
-    @+-$(MKDIR)	$(INCLUDE_DIR)	>& $(NULLDEV)
+    @-$(MKDIR)	$(RUNTIME_DIR)	>& $(NULLDEV)
+    @-$(MKDIR)	$(RUNTIME_DIR)$/components	>& $(NULLDEV)
+    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults	>& $(NULLDEV)
+    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref	>& $(NULLDEV)
+    @-$(MKDIR)	$(LIB_DIR)	>& $(NULLDEV)
+    @-$(MKDIR)	$(INCLUDE_DIR)	>& $(NULLDEV)
 .IF "$(OS)"=="SOLARIS"
-    +-$(MKDIR)	$(RUNTIME_DIR)$/res	>& $(NULLDEV)
+    -$(MKDIR)	$(RUNTIME_DIR)$/res	>& $(NULLDEV)
 .ENDIF
 
 $(OUT)$/bin$/mozruntime.zip: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
@@ -188,103 +188,103 @@ $(OUT)$/bin$/mozruntime.zip: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
 $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 # copy files in BIN_RUNTIMELIST
-    +$(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
+    $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 .IF "$(GUI)" == "UNX"
-    +$(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
+    $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(LIB_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 .ENDIF
 
 # copy files in RES_FILELIST
 .IF "$(OS)"=="SOLARIS"
-    @+$(COPY) $(MOZ_BIN_DIR)$/res$/charsetalias.properties $(RUNTIME_DIR)$/res$/charsetalias.properties
+    @$(COPY) $(MOZ_BIN_DIR)$/res$/charsetalias.properties $(RUNTIME_DIR)$/res$/charsetalias.properties
 .ELSE
     @echo No Res Files to copy.
 .ENDIF
 
 # copy files in COMPONENT_RUNTIMELIST
-        +$(foreach,file,$(COMPONENT_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$(file)$(DLLPOST) \
+    $(foreach,file,$(COMPONENT_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$(file)$(DLLPOST) \
     $(RUNTIME_DIR)$/components$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 
 # copy files in COMREGISTRY_FILELIST
-    +$(foreach,file,$(COMREGISTRY_FILELIST) $(COPY) $(MOZ_BIN_DIR)$/components$/$(file) \
+    $(foreach,file,$(COMREGISTRY_FILELIST) $(COPY) $(MOZ_BIN_DIR)$/components$/$(file) \
     $(RUNTIME_DIR)$/components$/$(file) &&) \
     echo >& $(NULLDEV)
 
 # copy files in DEFAULTS_RUNTIMELIST
-    @+-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref	>& $(NULLDEV)
-    @+-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/autoconfig	>& $(NULLDEV)
-    @+-$(MKDIR)	$(RUNTIME_DIR)$/greprefs	>& $(NULLDEV)
-    +$(foreach,file,$(DEFAULTS_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(file) $(RUNTIME_DIR)$/$(file) &&) \
+    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref	>& $(NULLDEV)
+    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/autoconfig	>& $(NULLDEV)
+    @-$(MKDIR)	$(RUNTIME_DIR)$/greprefs	>& $(NULLDEV)
+    $(foreach,file,$(DEFAULTS_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(file) $(RUNTIME_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
 # copy regxpcom
-    @+$(COPY) $(MOZ_BIN_DIR)$/regxpcom$(REG_SUBFIX) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
+    @$(COPY) $(MOZ_BIN_DIR)$/regxpcom$(REG_SUBFIX) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"!="MACOSX"
-    +cd $(RUNTIME_DIR) && strip *$(DLLPOST)
-    +cd $(RUNTIME_DIR)$/components && strip *$(DLLPOST)
+    cd $(RUNTIME_DIR) && strip *$(DLLPOST)
+    cd $(RUNTIME_DIR)$/components && strip *$(DLLPOST)
 .ENDIF
 .ENDIF
 
 # zip runtime files to mozruntime.zip
-    +cd $(RUNTIME_DIR) && .$/regxpcom$(REG_SUBFIX)
-    +$(COPY) $(RUNTIME_DIR)$/components$/xpti.dat $(RUNTIME_DIR)$/components$/xptitemp.dat
-    +$(RM) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
-    +cd $(RUNTIME_DIR) && zip -r ..$/..$/bin$/mozruntime.zip *
+    cd $(RUNTIME_DIR) && .$/regxpcom$(REG_SUBFIX)
+    $(COPY) $(RUNTIME_DIR)$/components$/xpti.dat $(RUNTIME_DIR)$/components$/xptitemp.dat
+    $(RM) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
+    cd $(RUNTIME_DIR) && zip -r ..$/..$/bin$/mozruntime.zip *
     
-    +$(TOUCH) $@
+    $(TOUCH) $@
 
 $(INCCOM)$/nsBuildID.h: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-    @+-echo "You can delete $(INCCOM) to force it copy all include files again."
+    @-echo "You can delete $(INCCOM) to force it copy all include files again."
     
 $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /QSZ $(INCLUDE_PATH)* $(INCLUDE_DIR)
-    +$(COPY) /QSZ $(PUBLIC_PATH)* $(INCLUDE_DIR)
+    $(COPY) /QSZ $(INCLUDE_PATH)* $(INCLUDE_DIR)
+    $(COPY) /QSZ $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ELSE
 .IF "$(OS)"!="SOLARIS"
-    +$(GNUCOPY) -pRL $(INCLUDE_PATH)* $(INCLUDE_DIR)
-    +$(GNUCOPY) -pRL $(PUBLIC_PATH)* $(INCLUDE_DIR)
+    $(GNUCOPY) -pRL $(INCLUDE_PATH)* $(INCLUDE_DIR)
+    $(GNUCOPY) -pRL $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ELSE			# "$(OS)"!="SOLARIS"
-    +$(COPY) -pr $(INCLUDE_PATH)* $(INCLUDE_DIR)
-    +$(COPY) -pr $(PUBLIC_PATH)* $(INCLUDE_DIR)
+    $(COPY) -pr $(INCLUDE_PATH)* $(INCLUDE_DIR)
+    $(COPY) -pr $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ENDIF			# "$(OS)"!="SOLARIS"
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-    +chmod -R 775 $(INCCOM)
+    chmod -R 775 $(INCCOM)
 .ENDIF
-    +$(TOUCH) $@
+    $(TOUCH) $@
 
 $(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file))
     echo $(foreach,file,$(LIBLIST) $(MOZ_DIST_DIR)$/lib$/$(file))
-    +$(foreach,file,$(LIBLIST) $(COPY) $(MOZ_DIST_DIR)$/lib$/$(file) \
+    $(foreach,file,$(LIBLIST) $(COPY) $(MOZ_DIST_DIR)$/lib$/$(file) \
     $(LIB_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    +chmod -R 775 $(LB)
+    chmod -R 775 $(LB)
 .ENDIF
-    +$(TOUCH) $@
+    $(TOUCH) $@
     
 $(BIN_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-    @+$(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/$(DLLPRE)$@$(DLLPOST)
+    @$(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/$(DLLPRE)$@$(DLLPOST)
 
 $(COMPONENT_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-    @+$(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/components$/$(DLLPRE)$@$(DLLPOST)
+    @$(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/components$/$(DLLPRE)$@$(DLLPOST)
     
 $(COMREGISTRY_FILELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-    @+$(COPY) $(MOZ_BIN_DIR)$/components$/$@ $(RUNTIME_DIR)$/components$/$@
+    @$(COPY) $(MOZ_BIN_DIR)$/components$/$@ $(RUNTIME_DIR)$/components$/$@
 
 $(DEFAULTS_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-    @+$(COPY) $(MOZ_BIN_DIR)$/$@ $(RUNTIME_DIR)$/$@
+    @$(COPY) $(MOZ_BIN_DIR)$/$@ $(RUNTIME_DIR)$/$@
 
 RES_FILELIST: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
 .IF "$(OS)"=="SOLARIS"
-    @+$(COPY) $(MOZ_BIN_DIR)$/res$/charsetalias.properties $(RUNTIME_DIR)$/res$/charsetalias.properties
+    @$(COPY) $(MOZ_BIN_DIR)$/res$/charsetalias.properties $(RUNTIME_DIR)$/res$/charsetalias.properties
 .ELSE
     @echo No Res Files to copy.
 .ENDIF
@@ -294,12 +294,12 @@ $(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     noop
 
 $(MISC)$/CREATETARBALL:	extract_mozab_files
-    @+-$(MKDIR)	$(OUT)$/zipped	>& $(NULLDEV)
-    +$(COPY) $(BIN)$/mozruntime.zip $(OUT)$/zipped$/$(MOZTARGET)runtime.zip
+    @-$(MKDIR)	$(OUT)$/zipped	>& $(NULLDEV)
+    $(COPY) $(BIN)$/mozruntime.zip $(OUT)$/zipped$/$(MOZTARGET)runtime.zip
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"!="MACOSX"
-    +cd $(LB) && strip *$(DLLPOST)
+    cd $(LB) && strip *$(DLLPOST)
 .ENDIF
 .ENDIF
-    +cd $(LB) && zip -r ..$/zipped$/$(MOZTARGET)lib.zip *
-    +cd $(INCCOM) && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
+    cd $(LB) && zip -r ..$/zipped$/$(MOZTARGET)lib.zip *
+    cd $(INCCOM) && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
