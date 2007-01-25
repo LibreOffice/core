@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:04:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #include <salinst.h>
 #include <saldisp.hxx>
 #include <salsys.h>
+
+#include <rtl/ustrbuf.hxx>
+#include <osl/thread.h>
 
 
 SalSystem* X11SalInstance::CreateSalSystem()
@@ -102,6 +105,47 @@ Rectangle X11SalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
 {
     // FIXME: workareas
     return GetDisplayScreenPosSizePixel( nScreen );
+}
+
+rtl::OUString X11SalSystem::GetScreenName( unsigned int nScreen )
+{
+    rtl::OUString aScreenName;
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    if( pSalDisp->IsXinerama() )
+    {
+        const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
+        if( nScreen >= rScreens.size() )
+            nScreen = 0;
+        rtl::OUStringBuffer aBuf( 256 );
+        aBuf.append( rtl::OStringToOUString( rtl::OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
+        aBuf.appendAscii( " [" );
+        aBuf.append( static_cast<sal_Int32>(nScreen) );
+        aBuf.append( sal_Unicode(']') );
+        aScreenName = aBuf.makeStringAndClear();
+    }
+    else
+    {
+        if( nScreen >= static_cast<unsigned int>(pSalDisp->GetScreenCount()) )
+            nScreen = 0;
+        rtl::OUStringBuffer aBuf( 256 );
+        aBuf.append( rtl::OStringToOUString( rtl::OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
+        // search backwards for ':'
+        int nPos = aBuf.getLength();
+        if( nPos > 0 )
+            nPos--;
+        while( nPos > 0 && aBuf.charAt( nPos ) != ':' )
+            nPos--;
+        // search forward to '.'
+        while( nPos < aBuf.getLength() && aBuf.charAt( nPos ) != '.' )
+            nPos++;
+        if( nPos < aBuf.getLength() )
+            aBuf.setLength( nPos+1 );
+        else
+            aBuf.append( sal_Unicode('.') );
+        aBuf.append( static_cast<sal_Int32>(nScreen) );
+        aScreenName = aBuf.makeStringAndClear();
+    }
+    return aScreenName;
 }
 
 int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
