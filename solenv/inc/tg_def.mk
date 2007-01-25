@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:53:53 $
+#   last change: $Author: hjs $ $Date: 2007-01-25 18:40:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,14 +117,14 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    @-$(EXPORT$(TNR)_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL$(TNR)TARGET).exp
     @$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(DEF$(TNR)CEXP)"!=""
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    $(EXPORT$(TNR)_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL$(TNR)TARGET).exp
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
     @$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB$(TNR)NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
 .IF "$(DEF$(TNR)CEXP)"!=""
@@ -141,7 +141,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 # don't forget to have the right DEFSTAG set!
 #
     $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
+    $(4nt_force_shell)$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
