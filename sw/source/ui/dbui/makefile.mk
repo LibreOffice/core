@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-06 13:01:01 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:25:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,8 +105,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/mmaddressblockpage.obj \
         $(SLO)$/mmconfigitem.obj \
         $(SLO)$/mmlayoutpage.obj \
-        $(SLO)$/mmoutputpage.obj \
-        $(SLO)$/dbtree.obj
+        $(SLO)$/mmoutputpage.obj
         
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
