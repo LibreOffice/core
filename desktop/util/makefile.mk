@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:17:33 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:28:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ APP1STACK=10000000
 # create a manifest file with the same name as the
 #office executable file soffice.exe.manifest
 #$(BIN)$/$(TARGET).exe.manifest: template.manifest
-#+$(COPY) $< $@
+#$(COPY) $< $@
 
 .ENDIF # WNT
 
@@ -250,10 +250,10 @@ ALLTAR: $(BIN)$/so$/$(TARGET).bin
 .ENDIF # WNT
 
 $(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
-    +$(COPY) $< $@
+    $(COPY) $< $@
 
 $(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
-    +$(COPY) $< $@
+    $(COPY) $< $@
 
 ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
 
@@ -263,18 +263,18 @@ ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
 # create a manifest file with the same name as the
 # office executable file soffice.exe.manifest
 $(MISC)$/$(TARGET).exe.manifest: template.manifest
-   +$(COPY) $< $@
+   $(COPY) $< $@
 
 # create a manifest file with the same name as the
 # office executable file soffice.bin.manifest 
 $(MISC)$/$(TARGET).bin.manifest: template.manifest
-   +$(COPY) $< $@
+   $(COPY) $< $@
 
 $(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
-   +$(COPY) $< $@
+   $(COPY) $< $@
 
 $(BIN)$/so$/$(TARGET).bin: $(BIN)$/so$/$(TARGET)$(EXECPOST)
-   +$(COPY) $< $@
+   $(COPY) $< $@
 
 $(MISCX)$/$(APP1TARGET).def : makefile.mk
     echo  NAME			soffice								>$@
@@ -285,4 +285,4 @@ $(MISCX)$/$(APP1TARGET).def : makefile.mk
 
 $(BIN)$/so: makefile.mk
     @echo APP5 : $(APP5TARGET)
-    @+-mkdir $(BIN)$/so >& $(NULLDEV)
+    @-mkdir $(BIN)$/so >& $(NULLDEV)
