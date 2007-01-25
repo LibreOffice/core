@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:59:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,7 +513,7 @@ const SfxFont* SfxPrinter::GetFontByName( const String &rFontName )
 
 //--------------------------------------------------------------------
 
-BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bDocumentContainsTransparentObjects )
+BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects )
 {
     const SvtPrinterOptions     aPrinterOpt;
     const SvtPrintFileOptions   aPrintFileOpt;
@@ -524,7 +524,7 @@ BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bDocumentContainsTransparentOb
 
     ( ( IsPrintFileEnabled() && GetPrintFile().Len() ) ? pPrintFileOpt : pPrinterOpt )->GetPrinterOptions( aNewPrinterOptions );
 
-    if( bDocumentContainsTransparentObjects && !aNewPrinterOptions.IsReduceTransparency() )
+    if( bAskAboutTransparentObjects && !aNewPrinterOptions.IsReduceTransparency() )
     {
         if ( !Application::IsHeadlessModeEnabled() )
         {
