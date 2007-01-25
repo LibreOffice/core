@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:58 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:05:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,7 +389,9 @@ BOOL lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
     {
         const basegfx::B2DPolygon aSubPoly(rPolyPolygon.getB2DPolygon(0L));
 
-        if(4L == aSubPoly.count() && aSubPoly.isClosed())
+        // #i73305# circle consists of 4 segments, too, distinguishable from square by
+        // the use of control points
+        if(4L == aSubPoly.count() && aSubPoly.isClosed() && !aSubPoly.areControlPointsUsed())
         {
             return true;
         }
