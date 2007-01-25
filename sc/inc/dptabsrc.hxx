@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:36:50 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:03:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,9 @@
 #include <cppuhelper/implbase5.hxx>
 #endif
 
+#ifndef SC_DPTABDAT_HXX
+#include "dptabdat.hxx"
+#endif
 
 class ScDPResultMember;
 class ScDPResultData;
@@ -762,10 +765,8 @@ private:
     long            nHier;
     long            nLev;
 
-    String          aName;              // name for api etc.
+    ScDPItemData    maData;
 //  String          aCaption;           // visible name (changeable by user)
-    double          fValue;             // used internally for matching
-    BOOL            bHasValue;          // TRUE if this is a value
 
     BOOL            bVisible;
     BOOL            bShowDet;
