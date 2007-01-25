@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:24:18 $
+#   last change: $Author: obo $ $Date: 2007-01-25 16:23:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -965,6 +965,37 @@ sub get_all_directories
         my $completeentry = $basedir . $installer::globals::separator . $direntry;
 
         if ( -d $completeentry ) { push(@alldirs, $completeentry); }
+    }
+
+    closedir(DIR);
+
+    return \@alldirs;
+}
+
+##############################################################
+# Collecting all directories inside a directory
+# Returning without path
+##############################################################
+
+sub get_all_directories_without_path
+{
+    my ($basedir) = @_;
+
+    my @alldirs = ();
+    my $direntry;
+
+    $basedir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    opendir(DIR, $basedir);
+
+    foreach $direntry (readdir (DIR))
+    {
+        next if $direntry eq ".";
+        next if $direntry eq "..";
+
+        my $completeentry = $basedir . $installer::globals::separator . $direntry;
+
+        if ( -d $completeentry ) { push(@alldirs, $direntry); }
     }
 
     closedir(DIR);
