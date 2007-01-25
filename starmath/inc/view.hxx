@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:40:27 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,8 +266,7 @@ protected:
                   const String& rText,
                   USHORT        MaxWidth);
 
-    virtual USHORT Print(SfxProgress &rProgress,
-                         PrintDialog *pPrintDialog = 0);
+    virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0);
     virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
     virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
                               USHORT     nDiffFlags = SFX_PRINTER_ALL);
