@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 14:46:32 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:22:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1438,7 +1438,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                         my $newepmdir = installer::epmfile::prepare_packages($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $allvariableshashref, $filesinpackage, $languagestringref); # adding the line for Prefix / Basedir, include rpmdir
 
-                        installer::epmfile::create_packages_without_epm($newepmdir, $packagename, $includepatharrayref);    # start to package
+                        installer::epmfile::create_packages_without_epm($newepmdir, $packagename, $includepatharrayref, $allvariableshashref, $languagestringref);  # start to package
 
                         # finally removing all temporary files
 
@@ -1600,11 +1600,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if (( $is_success ) && ( $create_jds ))
             {
-                my $correct_language = installer::worker::check_jds_language($allvariableshashref, $languagestringref);
+                if ( ! $installer::globals::jds_language_controlled )
+                {
+                    my $correct_language = installer::worker::check_jds_language($allvariableshashref, $languagestringref);
+                    $installer::globals::correct_jds_language = $correct_language;
+                    $installer::globals::jds_language_controlled = 1;
+                }
 
-                if ( $correct_language )
+                if ( $installer::globals::correct_jds_language )
                 {
                     my $jdsdir = installer::worker::create_jds_sets($finalinstalldir, $allvariableshashref, $languagestringref, $languagesarrayref, $includepatharrayref);
+                    installer::worker::clean_jds_temp_dirs();
                     installer::worker::analyze_and_save_logfile($loggingdir, $jdsdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
                 }
             }
