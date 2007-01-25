@@ -2,10 +2,11 @@ su	sysui	:	offapi xml2cmp rdbmaker transex3 setup_native SUN:officenames NULL
 su	sysui\source\win32\QuickStart		nmake	-	w	su_win32_quickstart NULL
 su	sysui\source\win32\QuickStart\so	nmake	-	w	su_win32_quickstart_so su_win32_quickstart.w NULL
 su	sysui\desktop\icons					nmake	-	w	su_iconsw NULL
-su  sysui\desktop\share                 nmake   -   u   su_dtshare NULL
+su  sysui\desktop\cleanversion          nmake   -   u   su_dtcleanversion NULL
+su  sysui\desktop\share                 nmake   -   u   su_dtshare su_dtcleanversion.u NULL
 su	sysui\desktop\menus					get     -   all su_dtmenus NULL
 su	sysui\desktop\mimetypes				get     -   all su_dtmime NULL
-su  sysui\desktop\redhat                nmake   -   u   su_dtredhat su_dtshare.u NULL
+su  sysui\desktop\redhat                nmake   -   u   su_dtredhat su_dtshare.u su_dtcleanversion.u NULL
 su  sysui\desktop\suse                  nmake   -   u   su_dtsuse su_dtshare.u NULL
 su  sysui\desktop\mandriva              nmake   -   u   su_dtmdk su_dtshare.u NULL
 su  sysui\desktop\freedesktop           nmake   -   u   su_dtfreedesktop su_dtredhat.u NULL
