@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:38:33 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,6 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
             }
             // common for dBase import/export
             eEncoding = RTL_TEXTENCODING_IBM_850;
-            bMultiByte = sal_False;
             bDBEnc = sal_True;
         }
         else if ( aFilterString == ScDocShell::GetDifFilterName() )
