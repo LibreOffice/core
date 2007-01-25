@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:34:08 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -710,32 +710,19 @@ void DocumentHolder::DisconnectFrameDocument()
 
 void DocumentHolder::CloseDocument()
 {
-    try
+    DisconnectFrameDocument();
+
+    uno::Reference< util::XCloseable > xCloseable(
+            m_xDocument, uno::UNO_QUERY );
+
+    if ( xCloseable.is() )
     {
-        uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
-        xModifiable->removeModifyListener( (util::XModifyListener*)this );
-    }
-    catch( uno::Exception& )
-    {}
-
-    uno::Reference< util::XCloseBroadcaster > xBroadcaster(
-        m_xDocument, uno::UNO_QUERY );
-    if ( xBroadcaster.is() )
-    {
-        xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
-
-        uno::Reference< util::XCloseable > xCloseable(
-            xBroadcaster, uno::UNO_QUERY );
-
-        if ( xCloseable.is() )
+        try
         {
-            try
-            {
-                xCloseable->close( sal_True );
-            }
-            catch( uno::Exception& )
-            {}
+            xCloseable->close( sal_True );
         }
+        catch( uno::Exception& )
+        {}
     }
 
     m_pIDispatch = NULL;
@@ -745,10 +732,14 @@ void DocumentHolder::CloseDocument()
 
 void DocumentHolder::CloseFrame()
 {
-    uno::Reference< util::XCloseBroadcaster > xBroadcaster(
-        m_xFrame, uno::UNO_QUERY );
-    if ( xBroadcaster.is() )
+    try
+    {
+        uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+            m_xFrame, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
+    }
+    catch( uno::Exception& )
+    {}
 
     uno::Reference<util::XCloseable> xCloseable(
         m_xFrame,uno::UNO_QUERY);
@@ -1561,10 +1552,14 @@ void SAL_CALL
 DocumentHolder::notifyClosing(
     const lang::EventObject& aSource )
 {
-    uno::Reference< util::XCloseBroadcaster > xEventBroadcaster(
-        aSource.Source, uno::UNO_QUERY );
-    if ( xEventBroadcaster.is() )
+    try
+    {
+        uno::Reference< util::XCloseBroadcaster > xEventBroadcaster(
+            aSource.Source, uno::UNO_QUERY_THROW );
         xEventBroadcaster->removeCloseListener( (util::XCloseListener*)this );
+    }
+    catch( uno::Exception& )
+    {}
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
     {
