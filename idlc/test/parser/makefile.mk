@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:18:11 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:55:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,21 +43,21 @@ TARGET := test_parser
 ALLTAR: test
 
 test .PHONY:
-    + $(EXECTEST) attribute.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) attribute.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) constant.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) constant.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) constructor.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) constructor.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) interfaceinheritance.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) interfaceinheritance.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) methodoverload.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) methodoverload.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) polystruct.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) polystruct.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) published.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) published.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) struct.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) struct.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(EXECTEST) typedef.tests $(BIN)/idlc$(EXECPOST) \
+    $(EXECTEST) typedef.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
