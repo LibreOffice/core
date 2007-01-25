@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: vg $ $Date: 2006-11-02 11:05:17 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:05:36 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -60,8 +60,8 @@ COMP_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(COMP_NAME)
 COMP_GEN_OUT=$(SAMPLE_GEN_OUT)/$(COMP_NAME)
 COMP_RDB_NAME=$(COMP_NAME).uno.rdb
 COMP_RDB=$(COMP_GEN_OUT)/$(COMP_RDB_NAME)
-COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
-COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_JAR_NAME=$(COMP_NAME).uno.jar
 COMP_JAR=$(SAMPLE_CLASS_OUT)/$(COMP_JAR_NAME)
 COMP_JAR_MANIFEST=$(COMP_GEN_OUT)/$(COMP_NAME).uno.Manifest
@@ -169,16 +169,11 @@ DialogComponentExample : $(COMP_REGISTERFLAG)
 	@echo Load the "$(QM)PropertySet.odt$(QM)" document to see how this component works. You can
 	@echo use this component inside your office installation, see the example description.
 	@echo -
-	@echo $(MAKE) PropertySet.odt.load
+	@echo $(MAKE) DialogComponent.odt.load
 	@echo --------------------------------------------------------------------------------
- 
-#%.run: $(SAMPLE_CLASS_OUT)/%.jar
-#	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
-# TODO (from PropertySet sample):
-#	PropertySet.odt.load : $(COMP_REGISTERFLAG)
-#	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
- 
+DialogComponent.odt.load : $(COMP_REGISTERFLAG)
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
 .PHONY: clean
 clean :
