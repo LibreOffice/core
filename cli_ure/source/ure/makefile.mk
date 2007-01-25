@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:05:12 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:44:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,20 +77,20 @@ CSFILES = \
 .IF "$(CCNUMVER)" <= "001399999999"
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
-    +echo $(ECHOQUOTE) \
+    echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)")] \
     [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
     >> $@
 .ELSE
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
-    +echo $(ECHOQUOTE) \
+    echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)")]$(ECHOQUOTE) \
     >> $@
 .ENDIF
 
 $(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll $(BIN)$/cliureversion.mk 
-    +$(CSC) $(CSCFLAGS) \
+    $(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(OUT)$/bin$/cli_types.dll \
@@ -101,14 +101,14 @@ $(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll $(BIN)$/cliureversion.mk
 
 #do not forget to deliver cli_ure.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_ure.config
-    +$(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_URE_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_ure.config
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_ure.config: cli_ure_config $(BIN)$/cliureversion.mk 
-    +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
     $< $@
 
 
