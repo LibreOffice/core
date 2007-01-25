@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astdeclaration.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:11:14 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
     , m_bImported(sal_False)
     , m_bIsAdded(sal_False)
     , m_bInMainFile(sal_False)
+    , m_bPredefined(false)
 {
     if ( m_pScope )
     {
@@ -109,6 +110,16 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
 AstDeclaration::~AstDeclaration()
 {
 
+}
+
+void AstDeclaration::setPredefined(bool bPredefined)
+{
+    m_bPredefined = bPredefined;
+    if ( m_bPredefined )
+    {
+        m_fileName = OString();
+        m_bInMainFile = sal_False;
+    }
 }
 
 void AstDeclaration::setName(const ::rtl::OString& name)
@@ -205,8 +216,10 @@ sal_Bool AstDeclaration::dump(RegistryKey& rKey)
                         break;
                 }
             }
+
             ++iter;
         }
     }
     return bRet;
 }
+
