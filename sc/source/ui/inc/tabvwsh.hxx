@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:45:41 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,8 +397,8 @@ public:
     virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
     virtual ErrCode         DoPrint( SfxPrinter *pPrinter,
                                          PrintDialog *pPrintDialog,
-                                         BOOL bSilent );
-    virtual USHORT          Print( SfxProgress& rProgress, PrintDialog* pPrintDialog = NULL );
+                                         BOOL bSilent, BOOL bIsAPI );
+    virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog = NULL );
 
     void            TestFunction( USHORT nPar );
 
