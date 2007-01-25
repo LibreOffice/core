@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:17:54 $
+#  last change: $Author: obo $ $Date: 2007-01-25 11:09:48 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -62,8 +62,8 @@ APP3_JAR=$(OUT_COMP_CLASS)/$(APP3_NAME).jar
 COMPONENT_NAME=CalcAddins
 COMPONENT_RDB_NAME=$(COMPONENT_NAME).uno.rdb
 COMPONENT_RDB=$(OUT_COMP_GEN)/$(COMPONENT_RDB_NAME)
-COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
-COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
+COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
 COMPONENT_JAR_NAME=$(COMPONENT_NAME).uno.jar
 COMPONENT_JAR=$(OUT_COMP_CLASS)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
@@ -167,7 +167,7 @@ $(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANI
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(COMPONENT_RDB_NAME) $(COMPONENT_JAR_NAME)
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_COMP_CLASS)/$(<F)))
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
