@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:21:33 $
+ *  last change: $Author: rt $ $Date: 2007-01-25 09:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1304,6 +1304,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
     of.writeRefFunction("getForbiddenCharacters_", useLocale);
+    of.writeRefFunction("getBreakIteratorRules_", useLocale);
     of.writeRefFunction("getReservedWords_", useLocale);
     return;
     }
@@ -1311,6 +1312,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     if (!reserveNode)
         incError( "No ReservedWords element."); // should not happen if validated..
     const LocaleNode * forbidNode = findNode("ForbiddenCharacters");
+    const LocaleNode * breakNode = findNode("BreakIteratorRules");
 
     sal_Int16 nbOfWords = 0;
     ::rtl::OUString str;
@@ -1341,6 +1343,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("};\n\n");
+    of.writeFunction("getReservedWords_", "nbOfReservedWords", "LCReservedWordsArray");
 
     if (forbidNode)    {
          of.writeParameter( "forbiddenBegin", forbidNode -> getChildAt(0)->getValue());
@@ -1354,7 +1357,29 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tforbiddenEnd\n");
     of.writeAsciiString("};\n\n");
     of.writeFunction("getForbiddenCharacters_", "2", "LCForbiddenCharactersArray");
-    of.writeFunction("getReservedWords_", "nbOfReservedWords", "LCReservedWordsArray");
+
+    if (breakNode) {
+         of.writeParameter( "EditMode", breakNode -> getChildAt(0)->getValue());
+         of.writeParameter( "DictionaryMode", breakNode -> getChildAt(1)->getValue());
+         of.writeParameter( "WordCountMode", breakNode -> getChildAt(2)->getValue());
+         of.writeParameter( "CharacterMode", breakNode -> getChildAt(3)->getValue());
+         of.writeParameter( "LineMode", breakNode -> getChildAt(4)->getValue());
+    } else {
+         of.writeParameter( "EditMode", ::rtl::OUString());
+         of.writeParameter( "DictionaryMode", ::rtl::OUString());
+         of.writeParameter( "WordCountMode", ::rtl::OUString());
+         of.writeParameter( "CharacterMode", ::rtl::OUString());
+         of.writeParameter( "LineMode", ::rtl::OUString());
+    }
+    of.writeAsciiString("\nstatic const sal_Unicode* LCBreakIteratorRulesArray[] = {\n");
+    of.writeAsciiString("\tEditMode,\n");
+    of.writeAsciiString("\tDictionaryMode,\n");
+    of.writeAsciiString("\tWordCountMode,\n");
+    of.writeAsciiString("\tCharacterMode,\n");
+    of.writeAsciiString("\tLineMode\n");
+    of.writeAsciiString("};\n\n");
+    of.writeFunction("getBreakIteratorRules_", "5", "LCBreakIteratorRulesArray");
+
 }
 
 void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
