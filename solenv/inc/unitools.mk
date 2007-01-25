@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 16:22:24 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:58:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,13 +91,16 @@ USQ:=
 NULLDEV:=nul
 
 # iz29609 helpmacro to check if file exists 4nt style
-IFEXIST:=if exist
+IFEXIST:=+if exist
 THEN:=
 FI:=
 PIPEERROR=|&
 
 # iz31658
 CHECKZIPRESULT:=^ iff errorlevel == 12 .and. errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
+
+# try the same for 4nt "copy /u"
+CHECKCOPYURESULT:=^ iff errorlevel == 2 then ( echo Nothing to update for copy ^ set somedummyvar=%somedummyvar)
 
 # tell makedepend to write windows native format
 MKDEPFLAGS=-n
@@ -131,13 +134,13 @@ RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
 .ELSE			# "$(USE_SHELL)"!="4nt"
-CDD=cdd
-COPY*=copy
+CDD=+cdd
+COPY*=+copy
 COPYRECURSE=/s
 COPYUPDATE=/u
-DELAY=delay
-ECHON*=echos
-ECHONL=echo.
+DELAY=+delay
+ECHON*=+echos
+ECHONL=+echo.
 FIND*=$(BUILD_TOOLS)$/find.exe
 .IF "$(use_cygcp)"!=""
 GNUCOPY=$(BUILD_TOOLS)$/gnucp.exe
@@ -147,12 +150,13 @@ GNUMAKE*=$(BUILD_TOOLS)$/gnumake.exe
 GREP*=$(BUILD_TOOLS)$/grep.exe
 LS*=$(BUILD_TOOLS)$/ls.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
-MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
-MKDIRHIER=$(MKDIR) 
-PERL*:=call perl5.btm
-RENAME*=ren
+MKDIR=+mkdir
+MKDIRHIER=$(MKDIR) /sn
+PERL*:=+call perl5.btm
+RENAME*=+ren
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
-TYPE*=type
+TYPE*=+type
+4nt_force_shell:=+
 .ENDIF  "$(USE_SHELL)"!="4nt"
 DUMPBIN*=$(WRAPCMD) dumpbin
 
