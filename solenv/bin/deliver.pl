@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.111 $
+#   $Revision: 1.112 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-19 15:36:33 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:48:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.111 $ ';
+$id_str = ' $Revision: 1.112 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -477,7 +477,7 @@ sub init_globals
 
     # special security check for release engineers
     if ( defined($updater) && !defined($build_sosl) && !$opt_force) {
-        my $path = cwd();
+        my $path = getcwd();
         if ( $path !~ /$work_stamp/io ) {
             print_error("can't deliver from local directory to SOLARVERSION");
             print STDERR "\nDANGER! Release Engineer:\n";
@@ -558,7 +558,7 @@ sub get_base
     # a module base dir contains a subdir 'prj'
     # which in turn contains a file 'd.lst'
     my (@field, $base, $dlst);
-    my $path = cwd();
+    my $path = getcwd();
 
     @field = split(/\//, $path);
 
