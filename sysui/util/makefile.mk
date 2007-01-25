@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2006-01-20 14:02:17 $
+#   last change: $Author: obo $ $Date: 2007-01-25 15:34:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,5 +48,5 @@ USE_LDUMP2=TRUE
 ALLTAR : $(MISC)$/checksize.done
 
 $(MISC)$/checksize.done .PHONY:
-    +$(PERL) checksize.pl
+    $(PERL) checksize.pl
 
