@@ -32,7 +32,7 @@ from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.lang import EventObject
 from com.sun.star.mail import SendMailMessageFailedException
 
-from email.mime.MIMEBase import MIMEBase
+from email.MIMEBase import MIMEBase
 from email.Message import Message
 from email import Encoders
 from email.MIMEMultipart import MIMEMultipart
