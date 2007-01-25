@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:30:53 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:23:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,6 +412,8 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
 void DeInitVCL()
 {
+    DBG_ASSERT( Application::GetTopWindowCount()==0, "DeInitVCL: some windows are still alive!" );
+
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mbDeInit = TRUE;
 
