@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:37:03 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,8 +247,7 @@ public:
     Rectangle   m_pixmapRect;
     GdkPixmap*  m_pixmap;
 
-    NWPixmapCacheData()
-        { m_pixmap = NULL; };
+    NWPixmapCacheData() : m_nType(0), m_nState(0), m_pixmap(0) {}
     ~NWPixmapCacheData()
         { SetPixmap( NULL ); };
     void SetPixmap( GdkPixmap* pPixmap );
