@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:39:46 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:47:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,13 @@ all: \
 
 
 $(OUT)$/bin$/docbooktosoffheadings.xsl: docbooktosoffheadings.xsl
-         +$(COPY) docbooktosoffheadings.xsl $(OUT)$/bin$/docbooktosoffheadings.xsl
+         $(COPY) docbooktosoffheadings.xsl $(OUT)$/bin$/docbooktosoffheadings.xsl
 
 $(OUT)$/bin$/sofftodocbookheadings.xsl: sofftodocbookheadings.xsl
-         +$(COPY) sofftodocbookheadings.xsl $(OUT)$/bin$/sofftodocbookheadings.xsl
+         $(COPY) sofftodocbookheadings.xsl $(OUT)$/bin$/sofftodocbookheadings.xsl
 
 $(OUT)$/bin$/DocBookTemplate.stw: DocBookTemplate.stw
-         +$(COPY) DocBookTemplate.stw $(OUT)$/bin$/DocBookTemplate.stw
+         $(COPY) DocBookTemplate.stw $(OUT)$/bin$/DocBookTemplate.stw
 
 .INCLUDE: target.mk
 
