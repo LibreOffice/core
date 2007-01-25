@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 14:39:36 $
+#   last change: $Author: obo $ $Date: 2007-01-25 12:43:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,6 @@ ENABLE_EXCEPTIONS=TRUE
 CDEFS+=-DEDITDEBUG
 .ENDIF
 
-.IF "$(header)" == ""
-
 SLOFILES =	\
             $(SLO)$/svxacorr.obj \
             $(SLO)$/acorrcfg.obj \
@@ -88,37 +86,11 @@ SLOFILES =	\
             $(SLO)$/textconv.obj \
             $(SLO)$/unolingu.obj
 
-SVXLIGHTOBJFILES= \
-            $(OBJ)$/txtrange.obj \
-            $(OBJ)$/swafopt.obj \
-            $(OBJ)$/editattr.obj \
-            $(OBJ)$/editdbg.obj	\
-            $(OBJ)$/editdoc.obj	\
-            $(OBJ)$/editdoc2.obj \
-            $(OBJ)$/editeng.obj	\
-            $(OBJ)$/editobj.obj	\
-            $(OBJ)$/editsel.obj	\
-            $(OBJ)$/editview.obj  \
-            $(OBJ)$/eerdll.obj	\
-            $(OBJ)$/impedit.obj	\
-            $(OBJ)$/impedit2.obj \
-            $(OBJ)$/impedit3.obj \
-            $(OBJ)$/impedit4.obj \
-            $(OBJ)$/impedit5.obj \
-            $(OBJ)$/forbiddencharacterstable.obj \
-            $(OBJ)$/unolingu.obj
-.ENDIF
-
 SRS1NAME=$(TARGET)
 SRC1FILES=	editeng.src
 
 EXCEPTIONSFILES= \
     $(SLO)$/unolingu.obj
-
-.IF "$(SVXLIGHT)"!=""
-EXCEPTIONSFILES+= \
-    $(OBJ)$/sxl_unolingu.obj
-.ENDIF          # "$(SVXLIGHT)"!=""
 
 .INCLUDE :  target.mk
 
