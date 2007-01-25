@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfmtf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:27:11 $
+ *  last change: $Author: obo $ $Date: 2007-01-25 11:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,9 @@ protected:
     void InsertObj( SdrObject* pObj, sal_Bool bScale = sal_True );
     void MapScaling();
 
-    sal_Bool CheckLastLineMerge(const XPolygon& rSrcPoly);
-    sal_Bool CheckLastPolyLineAndFillMerge(const XPolyPolygon& rPoly);
+    // #i73407# reformulation to use new B2DPolygon classes
+    bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);
+    bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
 public:
     ImpSdrGDIMetaFileImport(SdrModel& rModel);
@@ -176,4 +177,4 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDFMTF_HXX
-
+// eof
