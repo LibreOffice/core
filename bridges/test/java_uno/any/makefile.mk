@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:42:59 $
+#   last change: $Author: obo $ $Date: 2007-01-25 13:31:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,11 +124,11 @@ $(OUT)$/bin$/TestJni$(SCRIPTEXT) : $(JAVACLASSFILES)
     $(GIVE_EXEC_RIGHTS) $@
 
 $(BIN)$/test_java_uno_anytest.rdb : types.idl
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    $(IDLC) -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    $(REGMERGE) $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
 
 $(MISC)$/gen_files.flag : $(BIN)$/test_java_uno_anytest.rdb
-    +cppumaker -C -BUCR -O $(OUT)$/inc$/test -X $(SOLARBINDIR)$/udkapi.rdb $?
-    +cppumaker -C -BUCR -O $(OUT)$/inc$/test -T com.sun.star.uno.XInterface $(SOLARBINDIR)$/udkapi.rdb
-    +javamaker -nD -BUCR -O $(CLASSDIR) -X $(SOLARBINDIR)$/udkapi.rdb $?
-    +$(TOUCH) $@
+    $(CPPUMAKER) -C -BUCR -O $(OUT)$/inc$/test -X $(SOLARBINDIR)$/udkapi.rdb $?
+    $(CPPUMAKER) -C -BUCR -O $(OUT)$/inc$/test -T com.sun.star.uno.XInterface $(SOLARBINDIR)$/udkapi.rdb
+    $(JAVAMAKER) -nD -BUCR -O $(CLASSDIR) -X $(SOLARBINDIR)$/udkapi.rdb $?
+    $(TOUCH) $@
