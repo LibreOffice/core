@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:28:00 $
+ *  last change: $Author: obo $ $Date: 2007-01-26 08:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
         {
             BreakPoint* pBrk = new BreakPoint( nLine );
             pBrk->bEnabled = aCheckBox.IsChecked();
-            pBrk->nStopAfter = aNumericField.GetValue();
+            pBrk->nStopAfter = (ULONG) aNumericField.GetValue();
             m_aModifiedBreakPointList.InsertSorted( pBrk );
             String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
@@ -286,7 +286,6 @@ BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
     BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
     return pBrk;
 }
-
 
 
 
