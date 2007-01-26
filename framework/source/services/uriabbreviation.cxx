@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uriabbreviation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-26 07:50:37 $
+ *  last change: $Author: obo $ $Date: 2007-01-26 09:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,3 +104,8 @@ UriAbbreviation::UriAbbreviation(css::uno::Reference< css::uno::XComponentContex
 }
 
 } // namespace framework
+
+
+
+
+
