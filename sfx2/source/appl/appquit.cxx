@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:13:44 $
+ *  last change: $Author: obo $ $Date: 2007-01-26 09:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,6 @@ void SfxApplication::Deinitialize()
     DELETEX(pAppData_Impl->pTbxCtrlFac);
     DELETEX(pAppData_Impl->pStbCtrlFac);
     DELETEX(pAppData_Impl->pMenuCtrlFac);
-    SfxNewHdl::Delete();
     DELETEX(pAppData_Impl->pViewFrames);
     DELETEX(pAppData_Impl->pViewShells);
     DELETEX(pAppData_Impl->pObjShells);
