@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lazydelete.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:07:54 $
+ *  last change: $Author: obo $ $Date: 2007-01-26 07:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
 #ifndef LAZYDELETE_CXX
 #define LAZYDELETE_CXX
@@ -87,4 +89,3 @@ template<> bool LazyDeletor<Menu>::is_less( Menu* left, Menu* right )
 }
 
 #endif
-
