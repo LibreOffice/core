@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:52:35 $
+#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -495,12 +495,12 @@ $(SLO)$/%.obj : %.asm
        @echo Making: $@
 .IF "$(COM)"=="WTC"
         $(ASM) $(AFLAGS) -D$(COM) $*.asm -fo=$(SLO)$/$*.obj
-        -$(IFEXIST) $*.err $(THEN) $(RM) $*.err $(FI)
+        -$(IFEXIST) $*.err $(THEN) $(RM:s/+//) $*.err $(FI)
 .ELSE
 .IF "$(COM)"=="MSC"
 .IF "$(ASM)"=="ml"
     $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)$/$*.obj $*.asm
-    -$(IFEXIST) $*.err $(THEN) $(RM) $*.err $(FI)
+    -$(IFEXIST) $*.err $(THEN) $(RM:s/+//) $*.err $(FI)
 .ELSE			# "$(ASM)"=="ml"
     @-$(RM) $@ >& $(NULLDEV)
     $(ASM) $(AFLAGS) $*.asm,$(SLO)$/$*.obj;
@@ -514,9 +514,9 @@ $(OBJ)$/%.obj : %.asm
 .IF "$(COM)"=="MSC"
 .IF "$(ASM)"=="ml"
     $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)$/$*.obj $*.asm
-    -$(IFEXIST) $*.err $(THEN) $(RM) $*.err $(FI)
+    -$(IFEXIST) $*.err $(THEN) $(RM:s/+//) $*.err $(FI)
 .ELSE			# "$(ASM)"=="ml"
-    @$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV) $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ >& $(NULLDEV) $(FI)
     $(ASM) $(AFLAGS) $*.asm,$(OBJ)$/$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"

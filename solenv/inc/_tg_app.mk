@@ -128,7 +128,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP1TARGET).lnk
         -$(RM) $(MISC)\$(APP1TARGET).lst
@@ -297,7 +297,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP2TARGET).lnk
         -$(RM) $(MISC)\$(APP2TARGET).lst
@@ -466,7 +466,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP3TARGET).lnk
         -$(RM) $(MISC)\$(APP3TARGET).lst
@@ -635,7 +635,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP4TARGET).lnk
         -$(RM) $(MISC)\$(APP4TARGET).lst
@@ -804,7 +804,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP5TARGET).lnk
         -$(RM) $(MISC)\$(APP5TARGET).lst
@@ -973,7 +973,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP6TARGET).lnk
         -$(RM) $(MISC)\$(APP6TARGET).lst
@@ -1142,7 +1142,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP7TARGET).lnk
         -$(RM) $(MISC)\$(APP7TARGET).lst
@@ -1311,7 +1311,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP8TARGET).lnk
         -$(RM) $(MISC)\$(APP8TARGET).lst
@@ -1480,7 +1480,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP9TARGET).lnk
         -$(RM) $(MISC)\$(APP9TARGET).lst
@@ -1649,7 +1649,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         )
     @-echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP10TARGET).lnk
         -$(RM) $(MISC)\$(APP10TARGET).lst

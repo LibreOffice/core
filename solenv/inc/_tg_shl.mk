@@ -283,7 +283,7 @@ $(SHL1TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
@@ -301,7 +301,7 @@ $(SHL1TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL1USE_EXPORTS)"!="name"
     $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
@@ -318,7 +318,7 @@ $(SHL1TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL1TARGET).lnk
@@ -339,7 +339,7 @@ $(SHL1TARGETN) : \
         $(SHL1LINKER) @$(MISC)$/$(SHL1TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -693,7 +693,7 @@ $(SHL2TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
@@ -711,7 +711,7 @@ $(SHL2TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL2USE_EXPORTS)"!="name"
     $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
@@ -728,7 +728,7 @@ $(SHL2TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL2TARGET).lnk
@@ -749,7 +749,7 @@ $(SHL2TARGETN) : \
         $(SHL2LINKER) @$(MISC)$/$(SHL2TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1103,7 +1103,7 @@ $(SHL3TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
@@ -1121,7 +1121,7 @@ $(SHL3TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL3USE_EXPORTS)"!="name"
     $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
@@ -1138,7 +1138,7 @@ $(SHL3TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL3TARGET).lnk
@@ -1159,7 +1159,7 @@ $(SHL3TARGETN) : \
         $(SHL3LINKER) @$(MISC)$/$(SHL3TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1513,7 +1513,7 @@ $(SHL4TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
@@ -1531,7 +1531,7 @@ $(SHL4TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL4USE_EXPORTS)"!="name"
     $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
@@ -1548,7 +1548,7 @@ $(SHL4TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL4TARGET).lnk
@@ -1569,7 +1569,7 @@ $(SHL4TARGETN) : \
         $(SHL4LINKER) @$(MISC)$/$(SHL4TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1923,7 +1923,7 @@ $(SHL5TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
@@ -1941,7 +1941,7 @@ $(SHL5TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL5USE_EXPORTS)"!="name"
     $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
@@ -1958,7 +1958,7 @@ $(SHL5TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL5TARGET).lnk
@@ -1979,7 +1979,7 @@ $(SHL5TARGETN) : \
         $(SHL5LINKER) @$(MISC)$/$(SHL5TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2333,7 +2333,7 @@ $(SHL6TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
@@ -2351,7 +2351,7 @@ $(SHL6TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL6USE_EXPORTS)"!="name"
     $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
@@ -2368,7 +2368,7 @@ $(SHL6TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL6TARGET).lnk
@@ -2389,7 +2389,7 @@ $(SHL6TARGETN) : \
         $(SHL6LINKER) @$(MISC)$/$(SHL6TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2743,7 +2743,7 @@ $(SHL7TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
@@ -2761,7 +2761,7 @@ $(SHL7TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL7USE_EXPORTS)"!="name"
     $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
@@ -2778,7 +2778,7 @@ $(SHL7TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL7TARGET).lnk
@@ -2799,7 +2799,7 @@ $(SHL7TARGETN) : \
         $(SHL7LINKER) @$(MISC)$/$(SHL7TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3153,7 +3153,7 @@ $(SHL8TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
@@ -3171,7 +3171,7 @@ $(SHL8TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL8USE_EXPORTS)"!="name"
     $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
@@ -3188,7 +3188,7 @@ $(SHL8TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL8TARGET).lnk
@@ -3209,7 +3209,7 @@ $(SHL8TARGETN) : \
         $(SHL8LINKER) @$(MISC)$/$(SHL8TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3563,7 +3563,7 @@ $(SHL9TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
@@ -3581,7 +3581,7 @@ $(SHL9TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL9USE_EXPORTS)"!="name"
     $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
@@ -3598,7 +3598,7 @@ $(SHL9TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL9TARGET).lnk
@@ -3619,7 +3619,7 @@ $(SHL9TARGETN) : \
         $(SHL9LINKER) @$(MISC)$/$(SHL9TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3973,7 +3973,7 @@ $(SHL10TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
@@ -3991,7 +3991,7 @@ $(SHL10TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL10USE_EXPORTS)"!="name"
     $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
@@ -4008,7 +4008,7 @@ $(SHL10TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL10TARGET).lnk
@@ -4029,7 +4029,7 @@ $(SHL10TARGETN) : \
         $(SHL10LINKER) @$(MISC)$/$(SHL10TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"

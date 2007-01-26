@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.189 $
+#   $Revision: 1.190 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-25 18:22:07 $
+#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1770,7 +1770,7 @@ $(MISC)$/$(TARGET)_%.done : %.xrb
 $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
         @echo ------------------------------
         @echo Making: $@
-        @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+        @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
         $(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
         @$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF	    
@@ -2035,24 +2035,24 @@ OTHERTARGET : $(OTHER)
 
 killbin:
 .IF "$(GUI)"=="WNT"
-    @$(IFEXIST) $(BIN)$/$(SHL1TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL1TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL2TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL2TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL3TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL3TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL4TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL4TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL5TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL5TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL6TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL6TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL7TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL7TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL8TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL8TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(SHL9TARGET).dll $(THEN) $(RM) $(BIN)$/$(SHL9TARGET).dll $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(FI)
-    @$(IFEXIST) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL1TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL1TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL2TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL2TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL3TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL3TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL4TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL4TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL5TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL5TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL6TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL6TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL7TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL7TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL8TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL8TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(SHL9TARGET).dll $(THEN) $(RM:s/+//) $(BIN)$/$(SHL9TARGET).dll $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP1TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP2TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP3TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP4TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP5TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP6TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP7TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP8TARGET)$(EXECPOST) $(FI)
+    @$(IFEXIST) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(THEN) $(RM:s/+//) $(BIN)$/$(APP9TARGET)$(EXECPOST) $(FI)
 
 .ELSE			# "$(GUI)"=="WNT"
 .IF "$(SHL1TARGET)"!=""
@@ -2268,7 +2268,7 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
     @echo Making $@ :
     @echo ---------------
-    @$(IFEXIST) $@ $(THEN) $(RM) $@ $(FI)
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
     @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010> $@.$(ROUT).tmp
     $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
     @$(RENAME) $@.$(ROUT).tmp $@

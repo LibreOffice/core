@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:57:00 $
+#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ $(SHL$(TNR)TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
@@ -338,7 +338,7 @@ $(SHL$(TNR)TARGETN) : \
     @$(LS) $@ >& $(NULLDEV)
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
@@ -355,7 +355,7 @@ $(SHL$(TNR)TARGETN) : \
     )
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-    $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+    $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
@@ -376,7 +376,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)LINKER) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
         @echo linking $@.manifest ...
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
-        $(IFEXIST) $@.manifest $(THEN) $(RM) $@.manifest $(FI)
+        $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
