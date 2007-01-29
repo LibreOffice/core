@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkutil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:28:17 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,4 +705,5 @@ ooo_atk_util_get_type (void)
 
   return type;
 }
+
 
