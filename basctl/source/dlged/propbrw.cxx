@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-19 08:41:39 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTOR_HPP_
+#include <com/sun/star/inspection/XObjectInspector.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -355,14 +359,14 @@ sal_Bool PropBrw::Close()
 }
 
 //----------------------------------------------------------------------------
-
-::comphelper::OComposedPropertySet* PropBrw::CreateCompPropSet(const SdrMarkList& _rMarkList)
+Sequence< Reference< XInterface > >
+    PropBrw::CreateMultiSelectionSequence( const SdrMarkList& _rMarkList )
 {
-    PropertySetArray aSets;
+    Sequence< Reference< XInterface > > aSeq;
+    InterfaceArray aInterfaces;
 
     sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
-
-    for(sal_uInt32 i=0;i<nMarkCount;i++)
+    for( sal_uInt32 i = 0 ; i < nMarkCount ; i++ )
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
@@ -378,9 +382,9 @@ sal_Bool PropBrw::Close()
             DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pCurrent);
             if (pDlgEdObj)
             {
-                Reference< XPropertySet > xControlModel(pDlgEdObj->GetUnoControlModel(), UNO_QUERY);
-                if (xControlModel.is())
-                    aSets.push_back(xControlModel);
+                Reference< XInterface > xControlInterface(pDlgEdObj->GetUnoControlModel(), UNO_QUERY);
+                if (xControlInterface.is())
+                    aInterfaces.push_back(xControlInterface);
             }
 
             // next element
@@ -389,8 +393,29 @@ sal_Bool PropBrw::Close()
         if (pGroupIterator)
             delete pGroupIterator;
     }
-    Reference< XPropertySet > *pSets = aSets.empty() ? 0 : &aSets[0];
-    return new ::comphelper::OComposedPropertySet(Sequence< Reference< XPropertySet > >(pSets, aSets.size()));
+
+    sal_Int32 nCount = aInterfaces.size();
+    aSeq.realloc( nCount );
+    Reference< XInterface >* pInterfaces = aSeq.getArray();
+    for( sal_Int32 i = 0 ; i < nCount ; i++ )
+        pInterfaces[i] = aInterfaces[i];
+
+    return aSeq;
+}
+
+//----------------------------------------------------------------------------
+void PropBrw::implSetNewObjectSequence
+    ( const Sequence< Reference< XInterface > >& _rObjectSeq )
+{
+    Reference< inspection::XObjectInspector > xObjectInspector(m_xBrowserController, UNO_QUERY);
+    if ( xObjectInspector.is() )
+    {
+        xObjectInspector->inspect( _rObjectSeq );
+
+        ::rtl::OUString aText = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
+        aText += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
+        SetText( aText );
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -515,11 +540,12 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     {
         aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES)));
     }
-    else    // multiselection
-    {
-        aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
-        aName += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
-    }
+    // #i73075 Handled in implSetNewObjectSequence
+    //else    // multiselection
+    //{
+    //  aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
+    //  aName += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
+    //}
 
     return aName;
 }
@@ -585,7 +611,7 @@ void PropBrw::Update( SdrView* pNewView )
             {
                 if ( pDlgEdObj->IsGroupObject() ) // group object
                 {
-                    implSetNewObject( Reference< XPropertySet>( CreateCompPropSet( rMarkList ) ) );
+                    implSetNewObjectSequence( CreateMultiSelectionSequence( rMarkList ) );
                 }
                 else // single selection
                 {
@@ -599,7 +625,7 @@ void PropBrw::Update( SdrView* pNewView )
         }
         else if ( nMarkCount > 1 ) // multiple selection
         {
-            implSetNewObject( Reference< XPropertySet>( CreateCompPropSet( rMarkList ) ) );
+            implSetNewObjectSequence( CreateMultiSelectionSequence( rMarkList ) );
         }
         else
         {
