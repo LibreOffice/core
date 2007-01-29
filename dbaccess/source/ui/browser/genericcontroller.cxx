@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:13 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,7 @@
 #include <rtl/logfile.hxx>
 #endif
 #include <algorithm>
+#include <hash_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
