@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:04:02 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -883,24 +883,31 @@ void DAVResourceAccess::getUserRequestHeaders(
 {
     if ( xEnv.is() )
     {
-    uno::Reference< ucb::XWebDAVCommandEnvironment > xDAVEnv(
-        xEnv, uno::UNO_QUERY );
-    if ( xDAVEnv.is() )
-    {
-        uno::Sequence< beans::NamedValue > aRequestHeaders
-        = xDAVEnv->getUserRequestHeaders( rURI, rMethod );
+        uno::Reference< ucb::XWebDAVCommandEnvironment > xDAVEnv(
+            xEnv, uno::UNO_QUERY );
 
-        for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
+        if ( xDAVEnv.is() )
         {
-        rtl::OUString aValue;
-        OSL_ENSURE( aRequestHeaders[ n ].Value >>= aValue,
-                "DAVResourceAccess::getUserRequestHeaders :"
-                    "Value is not a string! Ignoring..." );
-        rRequestHeaders.push_back( DAVRequestHeader(
-                           aRequestHeaders[ n ].Name,
-                           aValue ) );
+            uno::Sequence< beans::NamedValue > aRequestHeaders
+                = xDAVEnv->getUserRequestHeaders( rURI, rMethod );
+
+            for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
+            {
+                rtl::OUString aValue;
+                sal_Bool isString = aRequestHeaders[ n ].Value >>= aValue;
+
+                if ( !isString )
+                {
+                    OSL_ENSURE( isString,
+                        "DAVResourceAccess::getUserRequestHeaders :"
+                        "Value is not a string! Ignoring..." );
+                }
+
+                rRequestHeaders.push_back( DAVRequestHeader(
+                    aRequestHeaders[ n ].Name,
+                    aValue ) );
+            }
         }
-    }
     }
 }
 
