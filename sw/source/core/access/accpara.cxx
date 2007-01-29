@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:09:35 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,25 @@
 #include <unomap.hxx>
 #endif
 // <--
+// --> OD 2007-01-15 #i72800#
+#ifndef _UNOPRNMS_HXX
+#include <unoprnms.hxx>
+#endif
+// <--
+// --> OD 2007-01-15 #i73371#
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
+#include <com/sun/star/text/WritingMode2.hpp>
+#endif
+// <--
+// --> OD 2007-01-17 #i71385#
+#ifndef _SVX_BRSHITEM_HXX
+#include <svx/brshitem.hxx>
+#endif
+#ifndef _VIEWIMP_HXX
+#include <viewimp.hxx>
+#endif
+// <--
+
 #include <algorithm>
 
 using namespace ::com::sun::star::i18n;
@@ -1027,6 +1046,71 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     /* <-#i13955# */
 }
 
+// --> OD 2007-01-17 #i71385#
+bool lcl_GetBackgroundColor( Color & rColor,
+                             const SwFrm* pFrm,
+                             SwCrsrShell* pCrsrSh )
+{
+    const SvxBrushItem* pBackgrdBrush = 0;
+    const Color* pSectionTOXColor = 0;
+    SwRect aDummyRect;
+    if ( pFrm &&
+         pFrm->GetBackgroundBrush( pBackgrdBrush, pSectionTOXColor, aDummyRect, false ) )
+    {
+        if ( pSectionTOXColor )
+        {
+            rColor = *pSectionTOXColor;
+            return true;
+        }
+        else
+        {
+            rColor =  pBackgrdBrush->GetColor();
+            return true;
+        }
+    }
+    else if ( pCrsrSh )
+    {
+        rColor = pCrsrSh->Imp()->GetRetoucheColor();
+        return true;
+    }
+
+    return false;
+}
+
+sal_Int32 SAL_CALL SwAccessibleParagraph::getForeground()
+                                throw (::com::sun::star::uno::RuntimeException)
+{
+    Color aBackgroundCol;
+
+    if ( lcl_GetBackgroundColor( aBackgroundCol, GetFrm(), GetCrsrShell() ) )
+    {
+        if ( aBackgroundCol.IsDark() )
+        {
+            return COL_WHITE;
+        }
+        else
+        {
+            return COL_BLACK;
+        }
+    }
+
+    return SwAccessibleContext::getForeground();
+}
+
+sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
+                                throw (::com::sun::star::uno::RuntimeException)
+{
+    Color aBackgroundCol;
+
+    if ( lcl_GetBackgroundColor( aBackgroundCol, GetFrm(), GetCrsrShell() ) )
+    {
+        return aBackgroundCol.GetColor();
+    }
+
+    return SwAccessibleContext::getBackground();
+}
+// <--
+
 OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
         throw( RuntimeException )
 {
@@ -1383,6 +1467,79 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
 
                 ++pPropMap;
             }
+
+            // --> OD 2007-01-15 #i72800#
+            // add property value entry for the paragraph style
+            if ( !bOnlyCharAttrs && pTxtNode->GetTxtColl() )
+            {
+                const OUString sParaStyleName =
+                        OUString::createFromAscii(
+                                GetPropName( UNO_NAME_PARA_STYLE_NAME ).pName );
+                if ( aDefAttrSeq.find( sParaStyleName ) == aDefAttrSeq.end() )
+                {
+                    PropertyValue rPropVal;
+                    rPropVal.Name = sParaStyleName;
+                    Any aVal( makeAny( OUString( pTxtNode->GetTxtColl()->GetName() ) ) );
+                    rPropVal.Value = aVal;
+                    rPropVal.Handle = -1;
+                    rPropVal.State = ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+
+                    aDefAttrSeq[rPropVal.Name] = rPropVal;
+                }
+            }
+            // <--
+
+            // --> OD 2007-01-15 #i73371#
+            // resolve value css::WritingMode2::PAGE of property value entry WritingMode
+            if ( !bOnlyCharAttrs && GetFrm() )
+            {
+                const OUString sWritingMode =
+                        OUString::createFromAscii(
+                                GetPropName( UNO_NAME_WRITING_MODE ).pName );
+                tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( sWritingMode );
+                if ( aIter != aDefAttrSeq.end() )
+                {
+                    PropertyValue rPropVal( (*aIter).second );
+                    sal_Int16 nVal;
+                    rPropVal.Value >>= nVal;
+                    if ( nVal == com::sun::star::text::WritingMode2::PAGE )
+                    {
+                        const SwFrm* pUpperFrm( GetFrm()->GetUpper() );
+                        while ( pUpperFrm )
+                        {
+                            if ( pUpperFrm->GetType() &
+                                   ( FRM_PAGE | FRM_FLY | FRM_SECTION | FRM_TAB | FRM_CELL ) )
+                            {
+                                if ( pUpperFrm->IsVertical() )
+                                {
+                                    nVal = com::sun::star::text::WritingMode2::TB_RL;
+                                }
+                                else if ( pUpperFrm->IsRightToLeft() )
+                                {
+                                    nVal = com::sun::star::text::WritingMode2::RL_TB;
+                                }
+                                else
+                                {
+                                    nVal = com::sun::star::text::WritingMode2::LR_TB;
+                                }
+                                rPropVal.Value <<= nVal;
+                                aDefAttrSeq[rPropVal.Name] = rPropVal;
+                                break;
+                            }
+
+                            if ( dynamic_cast<const SwFlyFrm*>(pUpperFrm) )
+                            {
+                                pUpperFrm = dynamic_cast<const SwFlyFrm*>(pUpperFrm)->GetAnchorFrm();
+                            }
+                            else
+                            {
+                                pUpperFrm = pUpperFrm->GetUpper();
+                            }
+                        }
+                    }
+                }
+            }
+            // <--
         }
 
         if ( aRequestedAttributes.getLength() == 0 )
@@ -1540,7 +1697,6 @@ Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
 
     return aValues;
 }
-
 // <--
 
 com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
