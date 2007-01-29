@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:13:32 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ hidspecial SID_GALLERY_IMPORTTHEME          { HelpID = SID_GALLERY_IMPORTTHEME; 
 hidspecial HID_GALLERY_NEW_THEME            { HelpID = HID_GALLERY_NEW_THEME; };
 hidspecial HID_GALLERY_WINDOW               { HelpID = HID_GALLERY_WINDOW; };
 hidspecial HID_GALLERY_TITLE                { HelpID = HID_GALLERY_TITLE; };
+hidspecial HID_GALLERY_TITLE_EDIT           { HelpID = HID_GALLERY_TITLE_EDIT; };
 hidspecial HID_IMPGRF_BTN_STANDARD          { HelpID = HID_IMPGRF_BTN_STANDARD; };
 hidspecial HID_IMPGRF_BTN_INTERNET          { HelpID = HID_IMPGRF_BTN_INTERNET; };
 hidspecial HID_IMPGRF_BTN_PROPERTIES        { HelpID = HID_IMPGRF_BTN_PROPERTIES; };
@@ -404,7 +405,7 @@ hidspecial HID_COLORPAGE_BASICSTRING_CB                { HelpID =  HID_COLORPAGE
 hidspecial HID_COLORPAGE_BASICOPERATOR_CB              { HelpID =  HID_COLORPAGE_BASICOPERATOR_CB               ; };
 hidspecial HID_COLORPAGE_BASICKEYWORD_CB               { HelpID =  HID_COLORPAGE_BASICKEYWORD_CB                ; };
 hidspecial HID_COLORPAGE_BASICERROR_CB                 { HelpID =  HID_COLORPAGE_BASICERROR_CB                  ; };
-
+hidspecial HID_GALLERY_EDIT_MSNAME                     { HelpID =  HID_GALLERY_EDIT_MSNAME ; };
 hidspecial HID_OFAPAGE_AUTOCORR_CLB                 { HelpId = HID_OFAPAGE_AUTOCORR_CLB; };
 hidspecial HID_OFAPAGE_AUTOFORMAT_CLB               { HelpId = HID_OFAPAGE_AUTOFORMAT_CLB; };
 hidspecial HID_OFA_MAILATTACH_TABBAR                { HelpId = HID_OFA_MAILATTACH_TABBAR; };
