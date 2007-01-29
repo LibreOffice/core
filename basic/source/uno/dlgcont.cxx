@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:41:05 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,10 +418,10 @@ static OUString aResourceFileNameBase = OUString::createFromAscii( "DialogString
 static OUString aResourceFileCommentBase = OUString::createFromAscii( "# Strings for Dialog Library " );
 
 // Resource handling
-Reference< ::com::sun::star::resource::XStringResourcePersistance >
+Reference< ::com::sun::star::resource::XStringResourcePersistence >
     SfxDialogLibraryContainer::implCreateStringResource( SfxDialogLibrary* pDialogLibrary )
 {
-    Reference< resource::XStringResourcePersistance > xRet;
+    Reference< resource::XStringResourcePersistence > xRet;
     OUString aLibName = pDialogLibrary->getName();
     bool bReadOnly = pDialogLibrary->mbReadOnly;
 
@@ -441,7 +441,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistance >
         aArgs[4] <<= aComment;
 
         // TODO: Ctor
-        xRet = Reference< resource::XStringResourcePersistance >( mxMSF->createInstance
+        xRet = Reference< resource::XStringResourcePersistence >( mxMSF->createInstance
             ( OUString::createFromAscii( "com.sun.star.resource.StringResourceWithStorage" ) ), UNO_QUERY );
 
         uno::Reference< embed::XStorage > xLibrariesStor;
@@ -489,7 +489,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistance >
         aArgs[5] <<= xDummyHandler;
 
         // TODO: Ctor
-        xRet = Reference< resource::XStringResourcePersistance >( mxMSF->createInstance
+        xRet = Reference< resource::XStringResourcePersistence >( mxMSF->createInstance
             ( OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ) ), UNO_QUERY );
 
         // TODO: Ctor
@@ -518,10 +518,10 @@ void SfxDialogLibraryContainer::implSetStorage( const Reference< embed::XStorage
         OUString aName = pNames[ i ];
         SfxDialogLibrary* pDialogLibrary = static_cast<SfxDialogLibrary*>( getImplLib( aName ) );
 
-        Reference< resource::XStringResourcePersistance > xStringResourcePersistance =
-            pDialogLibrary->getStringResourcePersistance();
+        Reference< resource::XStringResourcePersistence > xStringResourcePersistence =
+            pDialogLibrary->getStringResourcePersistence();
 
-        if( xStringResourcePersistance.is() )
+        if( xStringResourcePersistence.is() )
         {
             Reference< embed::XStorage > xLibrariesStor;
             Reference< embed::XStorage > xLibraryStor;
@@ -536,7 +536,7 @@ void SfxDialogLibraryContainer::implSetStorage( const Reference< embed::XStorage
                     throw uno::RuntimeException();
 
                 Reference< resource::XStringResourceWithStorage >
-                    xStringResourceWithStorage( xStringResourcePersistance, UNO_QUERY );
+                    xStringResourceWithStorage( xStringResourcePersistence, UNO_QUERY );
                 if( xStringResourceWithStorage.is() )
                     xStringResourceWithStorage->setStorage( xLibraryStor );
             }
@@ -627,8 +627,8 @@ sal_Bool SfxDialogLibrary::isModified( void )
 {
     sal_Bool bRet = implIsModified();
 
-    if( !bRet && m_xStringResourcePersistance.is() )
-        bRet = m_xStringResourcePersistance->isModified();
+    if( !bRet && m_xStringResourcePersistence.is() )
+        bRet = m_xStringResourcePersistence->isModified();
     // else: Resources not accessed so far -> not modified
 
     return bRet;
@@ -636,8 +636,8 @@ sal_Bool SfxDialogLibrary::isModified( void )
 
 void SfxDialogLibrary::storeResources( void )
 {
-    if( m_xStringResourcePersistance.is() )
-        m_xStringResourcePersistance->store();
+    if( m_xStringResourcePersistence.is() )
+        m_xStringResourcePersistence->store();
 }
 
 void SfxDialogLibrary::storeResourcesAsURL
@@ -647,12 +647,12 @@ void SfxDialogLibrary::storeResourcesAsURL
     m_aName = NewName;
     aComment += m_aName;
 
-    if( m_xStringResourcePersistance.is() )
+    if( m_xStringResourcePersistence.is() )
     {
-        m_xStringResourcePersistance->setComment( aComment );
+        m_xStringResourcePersistence->setComment( aComment );
 
         Reference< resource::XStringResourceWithLocation >
-            xStringResourceWithLocation( m_xStringResourcePersistance, UNO_QUERY );
+            xStringResourceWithLocation( m_xStringResourcePersistence, UNO_QUERY );
         if( xStringResourceWithLocation.is() )
             xStringResourceWithLocation->storeAsURL( URL );
     }
@@ -664,9 +664,9 @@ void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
     OUString aComment = aResourceFileCommentBase;
     aComment += m_aName;
 
-    if( m_xStringResourcePersistance.is() )
+    if( m_xStringResourcePersistence.is() )
     {
-        m_xStringResourcePersistance->storeToURL
+        m_xStringResourcePersistence->storeToURL
             ( URL, aResourceFileNameBase, aComment, xHandler );
     }
 }
@@ -677,9 +677,9 @@ void SfxDialogLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Ref
     OUString aComment = aResourceFileCommentBase;
     aComment += m_aName;
 
-    if( m_xStringResourcePersistance.is() )
+    if( m_xStringResourcePersistence.is() )
     {
-        m_xStringResourcePersistance->storeToStorage
+        m_xStringResourcePersistence->storeToStorage
             ( xStorage, aResourceFileNameBase, aComment );
     }
 }
@@ -689,10 +689,10 @@ void SfxDialogLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Ref
 Reference< resource::XStringResourceResolver >
     SAL_CALL SfxDialogLibrary::getStringResource(  ) throw (RuntimeException)
 {
-    if( !m_xStringResourcePersistance.is() )
-        m_xStringResourcePersistance = m_pParent->implCreateStringResource( this );
+    if( !m_xStringResourcePersistence.is() )
+        m_xStringResourcePersistence = m_pParent->implCreateStringResource( this );
 
-    Reference< resource::XStringResourceResolver > xRet( m_xStringResourcePersistance, UNO_QUERY );
+    Reference< resource::XStringResourceResolver > xRet( m_xStringResourcePersistence, UNO_QUERY );
     return xRet;
 }
 

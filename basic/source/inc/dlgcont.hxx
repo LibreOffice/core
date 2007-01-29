@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:40:39 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #ifndef _COM_SUN_STAR_AWT_XSTRINGRESOURCESUPPLIER_HPP_
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEPERSISTANCE_HPP_
-#include "com/sun/star/resource/XStringResourcePersistance.hpp"
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEPERSISTENCE_HPP_
+#include "com/sun/star/resource/XStringResourcePersistence.hpp"
 #endif
 
 #include <cppuhelper/implbase1.hxx>
@@ -102,7 +102,7 @@ public:
                    ::com::sun::star::uno::RuntimeException);
 
     // Resource handling
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistance >
+    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
         implCreateStringResource( class SfxDialogLibrary* pDialog );
 
     // Service
@@ -122,7 +122,7 @@ class SfxDialogLibrary : public SfxDialogLibrary_BASE
 {
     SfxDialogLibraryContainer*                                      m_pParent;
     ::com::sun::star::uno::Reference
-        < ::com::sun::star::resource::XStringResourcePersistance>   m_xStringResourcePersistance;
+        < ::com::sun::star::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
     ::rtl::OUString                                                 m_aName;
 
     // Provide modify state including resources
@@ -159,10 +159,10 @@ public:
     ::rtl::OUString getName( void )
         { return m_aName; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistance >
-        getStringResourcePersistance( void )
+    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
+        getStringResourcePersistence( void )
     {
-        return m_xStringResourcePersistance;
+        return m_xStringResourcePersistence;
     }
 };
 
