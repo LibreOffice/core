@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:11:41 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,6 +339,8 @@ public:
                    SlideshowImpl*  pSlideShow,
                    bool            bFullScreen );
 
+    void ignoreNextMouseReleased() { mbMousePressedEaten = true; }
+
     /// Dispose all internal references
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
 
@@ -401,6 +403,7 @@ private:
     AnimationMode                           meAnimationMode;
     bool                                    mbFirstPaint;
     bool                                    mbFullScreen;
+    bool                                    mbMousePressedEaten;
 };
 
 
