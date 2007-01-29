@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:50:26 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,7 @@
 #ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
 #endif
+#include <wrong.hxx>
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #ifndef _ENHANCEDPDFEXPORTHELPER_HXX
@@ -1688,43 +1689,10 @@ BOOL SwTxtFormatInfo::LastKernPortion()
  *                      class SwTxtSlot
  *************************************************************************/
 
-SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor )
-{
-    bOn = pPor->GetExpTxt( *pNew, aTxt );
-
-    // Der Text wird ausgetauscht...
-    if( bOn )
-    {
-        pInf = (SwTxtSizeInfo*)pNew;
-        nIdx = pInf->GetIdx();
-        nLen = pInf->GetLen();
-        pInf->SetLen( pPor->GetLen() );
-        pOldTxt = &(pInf->GetTxt());
-        pInf->SetTxt( aTxt );
-        pInf->SetIdx( 0 );
-    }
-}
-
-/*************************************************************************
- *                       SwTxtSlot::~SwTxtSlot()
- *************************************************************************/
-
-SwTxtSlot::~SwTxtSlot()
-{
-    if( bOn )
-    {
-        pInf->SetTxt( *pOldTxt );
-        pInf->SetIdx( nIdx );
-        pInf->SetLen( nLen );
-    }
-}
-
-/*************************************************************************
- *                      class SwTxtSlotLen
- *************************************************************************/
-
-SwTxtSlotLen::SwTxtSlotLen( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
-    const sal_Char *pCh )
+SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
+                      bool bTxtLen, bool bExgSmartTagList, const sal_Char *pCh )
+    : pOldTxt( 0 ),
+      pOldSmartTagList( 0 )
 {
     if( pCh )
     {
@@ -1743,21 +1711,40 @@ SwTxtSlotLen::SwTxtSlotLen( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor
         pOldTxt = &(pInf->GetTxt());
         pInf->SetTxt( aTxt );
         pInf->SetIdx( 0 );
-        pInf->SetLen( pInf->GetTxt().Len() );
+        pInf->SetLen( bTxtLen ? pInf->GetTxt().Len() : pPor->GetLen() );
+
+        // ST2
+        if ( bExgSmartTagList )
+        {
+            pOldSmartTagList = static_cast<SwTxtPaintInfo*>(pInf)->GetSmartTags();
+            if ( pOldSmartTagList )
+            {
+                const sal_Int32 nPos = pOldSmartTagList->GetPos(nIdx);
+                if ( pOldSmartTagList->Pos(nPos) == nIdx )
+                    ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
+                else
+                    ((SwTxtPaintInfo*)pInf)->SetSmartTags( 0);
+            }
+        }
     }
 }
 
 /*************************************************************************
- *                       SwTxtSlotLen::~SwTxtSlotLen()
+ *                       SwTxtSlot::~SwTxtSlot()
  *************************************************************************/
 
-SwTxtSlotLen::~SwTxtSlotLen()
+SwTxtSlot::~SwTxtSlot()
 {
     if( bOn )
     {
         pInf->SetTxt( *pOldTxt );
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );
+
+        // ST2
+        // Restore old smart tag list
+        if ( pOldSmartTagList )
+            ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList );
     }
 }
 
