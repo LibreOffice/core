@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventcontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:56:00 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 
+#include <hash_map>
 #include <cppuhelper/implbase2.hxx>
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
                                  ::com::sun::star::container::XContainer > NameContainerHelper;
