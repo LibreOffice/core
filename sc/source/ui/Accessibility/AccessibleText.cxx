@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:22:05 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -889,6 +889,28 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         Window* pWin = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWin)
             aSize = pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+
+        /*  #i19430# Gnopernicus reads text partly if it sticks out of the cell
+            boundaries. This leads to wrong results in cases where the cell text
+            is rotated, because rotation is not taken into account when calcu-
+            lating the visible part of the text. In these cases we will expand
+            the cell size passed as paper size to the edit engine. The function
+            accessibility::AccessibleStaticTextBase::GetParagraphBoundingBox()
+            (see svx/source/accessibility/AccessibleStaticTextBase.cxx) will
+            return the size of the complete text then, which is used to expand
+            the cell bounding box in ScAccessibleCell::GetBoundingBox()
+            (see sc/source/ui/Accessibility/AccessibleCell.cxx). */
+        if (pDocShell && pDocShell->GetDocument())
+        {
+            const SfxInt32Item* pItem = static_cast< const SfxInt32Item* >(
+                pDocShell->GetDocument()->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_ROTATE_VALUE ) );
+            if( pItem && (pItem->GetValue() != 0) )
+            {
+                pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
+                long nTextWidth = static_cast< long >( pEditEngine->CalcTextWidth() );
+                aSize.setWidth( std::max( aSize.getWidth(), nTextWidth + 2 ) );
+            }
+        }
 
         pEditEngine->SetPaperSize(aSize);
 
