@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringresource.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:37:14 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,9 +287,12 @@ public:
 
 typedef ::cppu::ImplInheritanceHelper1<
         StringResourceImpl,
-        ::com::sun::star::resource::XStringResourcePersistance > StringResourcePersistanceImpl_BASE;
+        ::com::sun::star::resource::XStringResourcePersistence > StringResourcePersistenceImpl_BASE;
 
-class StringResourcePersistanceImpl : public StringResourcePersistanceImpl_BASE
+class BinaryOutput;
+class BinaryInput;
+
+class StringResourcePersistenceImpl : public StringResourcePersistenceImpl_BASE
 {
 protected:
     ::rtl::OUString                                                             m_aNameBase;
@@ -300,13 +303,13 @@ protected:
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // Scan locale properties files
-    virtual void implScanLocales( void ) = 0;
+    virtual void implScanLocales( void );
 
     // Method to load a locale if necessary, returns true if loading was successful
     virtual bool loadLocale( LocaleItem* pLocaleItem );
 
     // does the actual loading
-    virtual bool implLoadLocale( LocaleItem* pLocaleItem ) = 0;
+    virtual bool implLoadLocale( LocaleItem* pLocaleItem );
 
     virtual void implLoadAllLocales( void );
 
@@ -320,6 +323,8 @@ protected:
 
     bool implWritePropertiesFile( LocaleItem* pLocaleItem, const ::com::sun::star::uno::Reference
         < ::com::sun::star::io::XOutputStream >& xOutputStream, const ::rtl::OUString& aComment );
+
+    void implWriteLocaleBinary( LocaleItem* pLocaleItem, BinaryOutput& rOut );
 
     void implStoreAtStorage
     (
@@ -360,9 +365,9 @@ protected:
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 public:
-    StringResourcePersistanceImpl(
+    StringResourcePersistenceImpl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    virtual ~StringResourcePersistanceImpl();
+    virtual ~StringResourcePersistenceImpl();
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  )
@@ -432,7 +437,7 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);
 
-    // XStringResourcePersistance
+    // XStringResourcePersistence
     virtual void SAL_CALL store(  )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
@@ -449,11 +454,15 @@ public:
         const ::rtl::OUString& Comment, const ::com::sun::star::uno::Reference
         < ::com::sun::star::task::XInteractionHandler >& Handler )
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL importBinary( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Data )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 };
 
 
 typedef ::cppu::ImplInheritanceHelper2<
-        StringResourcePersistanceImpl,
+        StringResourcePersistenceImpl,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::resource::XStringResourceWithStorage > StringResourceWithStorageImpl_BASE;
 
@@ -542,7 +551,7 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);
 
-    // XStringResourcePersistance
+    // XStringResourcePersistence
     virtual void SAL_CALL store(  )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
@@ -559,6 +568,10 @@ public:
         const ::rtl::OUString& Comment, const ::com::sun::star::uno::Reference
         < ::com::sun::star::task::XInteractionHandler >& Handler )
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL importBinary( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Data )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XStringResourceWithStorage
     virtual void SAL_CALL storeAsStorage
@@ -571,7 +584,7 @@ public:
 
 
 typedef ::cppu::ImplInheritanceHelper2<
-        StringResourcePersistanceImpl,
+        StringResourcePersistenceImpl,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::resource::XStringResourceWithLocation > StringResourceWithLocationImpl_BASE;
 
@@ -664,7 +677,7 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);
 
-    // XStringResourcePersistance
+    // XStringResourcePersistence
     virtual void SAL_CALL store(  )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
@@ -681,6 +694,10 @@ public:
         const ::rtl::OUString& Comment, const ::com::sun::star::uno::Reference
         < ::com::sun::star::task::XInteractionHandler >& Handler )
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL importBinary( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Data )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XStringResourceWithLocation
     virtual void SAL_CALL storeAsURL( const ::rtl::OUString& URL )
