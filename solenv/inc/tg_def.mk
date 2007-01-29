@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-29 10:52:01 $
+#   last change: $Author: hjs $ $Date: 2007-01-29 11:44:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 
 DEF$(TNR)FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
@@ -80,7 +81,6 @@ BUILD_DRIVE$(TNR):=$(shell echo %_disk)
 EXPORT$(TNR)_PROTECT=$(TMP)$/$(DEF$(TNR)UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE$(TNR))"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""

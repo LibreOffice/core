@@ -28,6 +28,7 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
 
 DEF1FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB1NAME)"!=""
@@ -43,7 +44,6 @@ BUILD_DRIVE1:=$(shell echo %_disk)
 EXPORT1_PROTECT=$(TMP)$/$(DEF1UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE1)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE1)"=="O"
 
 .ENDIF			# "$(DEFLIB1NAME)"!=""
@@ -222,6 +222,7 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
 
 DEF2FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB2NAME)"!=""
@@ -237,7 +238,6 @@ BUILD_DRIVE2:=$(shell echo %_disk)
 EXPORT2_PROTECT=$(TMP)$/$(DEF2UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE2)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE2)"=="O"
 
 .ENDIF			# "$(DEFLIB2NAME)"!=""
@@ -416,6 +416,7 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
 
 DEF3FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB3NAME)"!=""
@@ -431,7 +432,6 @@ BUILD_DRIVE3:=$(shell echo %_disk)
 EXPORT3_PROTECT=$(TMP)$/$(DEF3UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE3)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE3)"=="O"
 
 .ENDIF			# "$(DEFLIB3NAME)"!=""
@@ -610,6 +610,7 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
 
 DEF4FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB4NAME)"!=""
@@ -625,7 +626,6 @@ BUILD_DRIVE4:=$(shell echo %_disk)
 EXPORT4_PROTECT=$(TMP)$/$(DEF4UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE4)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE4)"=="O"
 
 .ENDIF			# "$(DEFLIB4NAME)"!=""
@@ -804,6 +804,7 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
 
 DEF5FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB5NAME)"!=""
@@ -819,7 +820,6 @@ BUILD_DRIVE5:=$(shell echo %_disk)
 EXPORT5_PROTECT=$(TMP)$/$(DEF5UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE5)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE5)"=="O"
 
 .ENDIF			# "$(DEFLIB5NAME)"!=""
@@ -998,6 +998,7 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
 
 DEF6FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB6NAME)"!=""
@@ -1013,7 +1014,6 @@ BUILD_DRIVE6:=$(shell echo %_disk)
 EXPORT6_PROTECT=$(TMP)$/$(DEF6UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE6)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE6)"=="O"
 
 .ENDIF			# "$(DEFLIB6NAME)"!=""
@@ -1192,6 +1192,7 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
 
 DEF7FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB7NAME)"!=""
@@ -1207,7 +1208,6 @@ BUILD_DRIVE7:=$(shell echo %_disk)
 EXPORT7_PROTECT=$(TMP)$/$(DEF7UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE7)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE7)"=="O"
 
 .ENDIF			# "$(DEFLIB7NAME)"!=""
@@ -1386,6 +1386,7 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
 
 DEF8FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB8NAME)"!=""
@@ -1401,7 +1402,6 @@ BUILD_DRIVE8:=$(shell echo %_disk)
 EXPORT8_PROTECT=$(TMP)$/$(DEF8UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE8)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE8)"=="O"
 
 .ENDIF			# "$(DEFLIB8NAME)"!=""
@@ -1580,6 +1580,7 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
 
 DEF9FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB9NAME)"!=""
@@ -1595,7 +1596,6 @@ BUILD_DRIVE9:=$(shell echo %_disk)
 EXPORT9_PROTECT=$(TMP)$/$(DEF9UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE9)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE9)"=="O"
 
 .ENDIF			# "$(DEFLIB9NAME)"!=""
@@ -1774,6 +1774,7 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
 
 DEF10FILTER=$(SOLARENV)$/inc$/dummy.flt
 
+RMHACK:=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB10NAME)"!=""
@@ -1789,7 +1790,6 @@ BUILD_DRIVE10:=$(shell echo %_disk)
 EXPORT10_PROTECT=$(TMP)$/$(DEF10UNIQE:b).bat &&
 RMHACK:=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE10)"=="O"
-RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE10)"=="O"
 
 .ENDIF			# "$(DEFLIB10NAME)"!=""
