@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:13:47 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:48:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,7 @@
 
 #include <canvasbitmap.hxx>
 #include <canvastools.hxx>
+#include <hash_map>
 
 
 using namespace ::com::sun::star;
