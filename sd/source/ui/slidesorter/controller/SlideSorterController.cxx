@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:21:49 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,8 @@ SlideSorterController::SlideSorterController (
       mpEditModeChangeMasterPage(NULL),
       maTotalWindowArea(),
       mbIsMakeSelectionVisiblePending(false),
-      mnPaintEntranceCount(0)
+      mnPaintEntranceCount(0),
+      mbIsContextMenuOpen(false)
 {
     OSL_ASSERT(pParentWindow!=NULL);
 
@@ -165,6 +166,7 @@ SlideSorterController::SlideSorterController (
     mrView.SetActualWin(pWindow);
     pWindow->SetCenterAllowed (false);
     pWindow->SetViewSize (mrView.GetModelArea().GetSize());
+    pWindow->EnableRTL(FALSE);
     mrView.HandleModelChange();
 
     // Now that the window is present we can create the preview cache and
@@ -457,7 +459,10 @@ bool SlideSorterController::Command (
 
             pWindow->ReleaseMouse();
             if (rEvent.IsMouseEvent())
+            {
+                mbIsContextMenuOpen = true;
                 GetViewShell().GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nPopupId));
+            }
             else
             {
                 // The event is not a mouse event.  Use the center of the
@@ -473,6 +478,7 @@ bool SlideSorterController::Command (
                             view::SlideSorterView::CS_SCREEN,
                             view::SlideSorterView::BBT_SHAPE));
                         Point aPosition (aBBox.Center());
+                        mbIsContextMenuOpen = true;
                         GetViewShell().GetViewFrame()->GetDispatcher()->ExecutePopup(
                             SdResId(nPopupId),
                             pWindow,
@@ -480,6 +486,7 @@ bool SlideSorterController::Command (
                     }
                 }
             }
+            mbIsContextMenuOpen = false;
             if (pPage == NULL)
                 GetView().GetOverlay().GetInsertionIndicatorOverlay().Hide();
             bEventHasBeenHandled = true;
@@ -1379,6 +1386,14 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
             makeAny(sNewName));
     }
     while (false);
+}
+
+
+
+
+bool SlideSorterController::IsContextMenuOpen (void) const
+{
+    return mbIsContextMenuOpen;
 }
 
 
