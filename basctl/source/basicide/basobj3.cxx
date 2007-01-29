@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:30:16 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,6 +477,9 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
     Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
 
     // rename dialog
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    IDEBaseWindow* pWin = NULL;
+    Reference< container::XNameContainer > xEditorDialogModel;
     if( xLib.is() && xLib->hasByName( aOUOldName ) )
     {
         if ( xLib->hasByName( aOUNewName ) )
@@ -486,34 +489,54 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
                 Reference<XInterface>() );
         }
 
+        if ( pIDEShell )
+        {
+            pWin = pIDEShell->FindWindow( pShell, rLibName, rOldName, BASICIDE_TYPE_DIALOG, FALSE );
+            if ( pWin )
+                xEditorDialogModel = ((DialogWindow*)pWin)->GetEditor()->GetDialog();
+        }
+
         // get dialog
         Any aElement = xLib->getByName( aOUOldName );
 
         // remove dialog from dialog container
         xLib->removeByName( aOUOldName );
 
-        // create dialog model
+        // create or take existing dialog model
         Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-        Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
-            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+        Reference< container::XNameContainer > xDialogModel;
+        if( xEditorDialogModel.is() )
+        {
+            xDialogModel = xEditorDialogModel;
+        }
+        else
+        {
+            xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
+                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+        }
 
         Reference< io::XInputStreamProvider > xISP;
         aElement >>= xISP;
         if( xISP.is() )
         {
-            // import dialog model
             Reference< XComponentContext > xContext;
             Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
             OSL_ASSERT( xProps.is() );
             OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-            Reference< io::XInputStream > xInput( xISP->createInputStream() );
-            ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+            if( !xEditorDialogModel.is() )
+            {
+                // import dialog model
+                Reference< io::XInputStream > xInput( xISP->createInputStream() );
+                ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+            }
 
             // set new name as property
             Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
             Any aName;
             aName <<= aOUNewName;
             xDlgPSet->setPropertyValue( DLGED_PROP_NAME, aName );
+
+            LocalizationMgr::renameStringResourceIDs( pShell, rLibName, aOUNewName, xDialogModel );
 
             // export dialog model
             xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
@@ -530,38 +553,23 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
             Reference<XInterface>() );
     }
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    if ( pIDEShell )
+    if ( pWin )
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( pShell, rLibName, rOldName, BASICIDE_TYPE_DIALOG, FALSE );
-        if ( pWin )
+        // set new name in window
+        pWin->SetName( rNewName );
+
+        // update property browser
+        ((DialogWindow*)pWin)->UpdateBrowser();
+
+        // update tabwriter
+        USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
+        DBG_ASSERT( nId, "No entry in Tabbar!" );
+        if ( nId )
         {
-            // set new name in window
-            pWin->SetName( rNewName );
-
-            // get dialog model from dialog editor and set new name as property
-            Reference< container::XNameContainer > xDlgModel = ((DialogWindow*)pWin)->GetEditor()->GetDialog();
-            if( xDlgModel.is() )
-            {
-                Reference< beans::XPropertySet > xPSet( xDlgModel, UNO_QUERY );
-                Any aName;
-                aName <<= aOUNewName;
-                xPSet->setPropertyValue( DLGED_PROP_NAME, aName );
-            }
-
-            // update property browser
-            ((DialogWindow*)pWin)->UpdateBrowser();
-
-            // update tabwriter
-            USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
-            DBG_ASSERT( nId, "No entry in Tabbar!" );
-            if ( nId )
-            {
-                BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
-                pTabBar->SetPageText( nId, rNewName );
-                pTabBar->Sort();
-                pTabBar->MakeVisible( pTabBar->GetCurPageId() );
-            }
+            BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
+            pTabBar->SetPageText( nId, rNewName );
+            pTabBar->Sort();
+            pTabBar->MakeVisible( pTabBar->GetCurPageId() );
         }
     }
 }
