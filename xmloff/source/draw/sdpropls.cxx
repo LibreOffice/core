@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:33:19 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,11 +394,16 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FrameIsBorder",              XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_BORDER,       XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER ),
     GMAP( "FrameMarginWidth",           XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_HORIZONTAL,    XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI ),
     GMAP( "FrameMarginHeight",          XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_VERTICAL,      XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_VERT ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,    CTF_SD_OLE_VIS_AREA_LEFT ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,     CTF_SD_OLE_VIS_AREA_TOP ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH ),
-    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT ),
+    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,   CTF_SD_OLE_VIS_AREA_IMPORT_LEFT ),
+    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,    CTF_SD_OLE_VIS_AREA_IMPORT_TOP ),
+    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY,  CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH ),
+    GMAP( "VisibleArea",                XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY, CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT ),
     GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML__EMPTY,                     XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL ),
+    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT,          XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_SD_OLE_VIS_AREA_EXPORT_LEFT ),
+    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_TOP,           XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_SD_OLE_VIS_AREA_EXPORT_TOP ),
+    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_WIDTH,         XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,   CTF_SD_OLE_VIS_AREA_EXPORT_WIDTH ),
+    GMAP( "IsInternal",                 XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_HEIGHT,        XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY|MID_FLAG_NO_PROPERTY_IMPORT,  CTF_SD_OLE_VIS_AREA_EXPORT_HEIGHT ),
+
     GMAP( "Aspect",                     XML_NAMESPACE_DRAW, XML_DRAW_ASPECT,                XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_ASPECT ),
 
     // caption properties
@@ -1400,11 +1405,12 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_FONTWORK_SHADOWTRANSPARENCE:   pFontWorkShadowTransparence = property; break;
 
             // OLE
-            case CTF_SD_OLE_VIS_AREA_LEFT:          pOLEVisAreaLeft = property;     break;
-            case CTF_SD_OLE_VIS_AREA_TOP:           pOLEVisAreaTop = property;      break;
-            case CTF_SD_OLE_VIS_AREA_WIDTH:         pOLEVisAreaWidth = property;    break;
-            case CTF_SD_OLE_VIS_AREA_HEIGHT:        pOLEVisAreaHeight = property;   break;
+            case CTF_SD_OLE_VIS_AREA_EXPORT_LEFT:           pOLEVisAreaLeft = property;     break;
+            case CTF_SD_OLE_VIS_AREA_EXPORT_TOP:            pOLEVisAreaTop = property;      break;
+            case CTF_SD_OLE_VIS_AREA_EXPORT_WIDTH:          pOLEVisAreaWidth = property;    break;
+            case CTF_SD_OLE_VIS_AREA_EXPORT_HEIGHT:     pOLEVisAreaHeight = property;   break;
             case CTF_SD_OLE_ISINTERNAL:             pOLEIsInternal = property;      break;
+
             case CTF_FRAME_DISPLAY_SCROLLBAR:
                 {
                     if( !property->maValue.hasValue() )
@@ -1444,11 +1450,45 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     if( pOLEIsInternal )
     {
         sal_Bool bInternal = sal_Bool();
-        if( (pOLEIsInternal->maValue >>= bInternal) && bInternal )
+        if( (pOLEIsInternal->maValue >>= bInternal) && !bInternal )
         {
-            if( pOLEVisAreaLeft ) pOLEVisAreaLeft->mnIndex = -1;
-            if( pOLEVisAreaTop ) pOLEVisAreaTop->mnIndex = -1;
-            if( pOLEVisAreaWidth ) pOLEVisAreaWidth->mnIndex = -1;
+            try
+            {
+                const OUString sVisibleArea( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") );
+                awt::Rectangle aRect;
+                if( rPropSet->getPropertyValue( sVisibleArea ) >>= aRect )
+                {
+                    if( pOLEVisAreaLeft )
+                    {
+                        pOLEVisAreaLeft->mnIndex = getPropertySetMapper()->FindEntryIndex( CTF_SD_OLE_VIS_AREA_IMPORT_LEFT );
+                        pOLEVisAreaLeft->maValue <<= aRect;
+                    }
+                    if( pOLEVisAreaTop )
+                    {
+                        pOLEVisAreaTop->mnIndex = getPropertySetMapper()->FindEntryIndex( CTF_SD_OLE_VIS_AREA_IMPORT_TOP );
+                        pOLEVisAreaTop->maValue <<=  aRect;
+                    }
+                    if( pOLEVisAreaWidth )
+                    {
+                        pOLEVisAreaWidth->mnIndex = getPropertySetMapper()->FindEntryIndex( CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH );
+                        pOLEVisAreaWidth->maValue <<= aRect;
+                    }
+                    if( pOLEVisAreaHeight )
+                    {
+                        pOLEVisAreaHeight->mnIndex = getPropertySetMapper()->FindEntryIndex( CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT );
+                        pOLEVisAreaHeight->maValue <<= aRect;
+                    }
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+        else
+        {
+            if( pOLEVisAreaLeft )   pOLEVisAreaLeft->mnIndex = -1;
+            if( pOLEVisAreaTop )    pOLEVisAreaTop->mnIndex = -1;
+            if( pOLEVisAreaWidth )  pOLEVisAreaWidth->mnIndex = -1;
             if( pOLEVisAreaHeight ) pOLEVisAreaHeight->mnIndex = -1;
         }
 
