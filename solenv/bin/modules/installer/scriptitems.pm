@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-29 14:35:12 $
+#   last change: $Author: rt $ $Date: 2007-01-29 16:05:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -426,6 +426,7 @@ sub replace_setup_variables
 
     my $productname = $hashref->{'PRODUCTNAME'};
     my $productversion = $hashref->{'PRODUCTVERSION'};
+    my $userdirproductversion = $hashref->{'USERDIRPRODUCTVERSION'};
     my $productkey = $productname . " " . $productversion;
 
     # string "Product Update X"
@@ -451,7 +452,7 @@ sub replace_setup_variables
     if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
     # $updateid
-    my $updateid = $productname . "_" . $productversion . "_" . $$languagestringref;
+    my $updateid = $productname . "_" . $userdirproductversion . "_" . $$languagestringref;
 
     # $useragent
     # OpenOffice.org/2.2 (680m212 (Build:9263); Solaris; SPARC; BundledLanguages=en-US_fr)
