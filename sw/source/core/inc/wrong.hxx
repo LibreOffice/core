@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:06:02 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,26 @@
 #ifndef _WRONG_HXX
 #define _WRONG_HXX
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_XUB_STRLEN
-#define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
-#endif
+#include <vector>
 
-#define WRPOS( nIdx ) ((xub_StrLen)( GetObject( nIdx ) ))
-#define WRLEN( nIdx ) ((xub_StrLen)( aLen.GetObject( nIdx ) ))
+class SwWrongList;
 
-class SwWrongList : public SvXub_StrLens
+// ST2
+class SwWrongArea
 {
-    SvXub_StrLens aLen;
+public:
+    xub_StrLen mnPos;
+    xub_StrLen mnLen;
+    SwWrongList* mpSubList;
+    SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL) {}
+    SwWrongArea( xub_StrLen pos, xub_StrLen len, SwWrongList* pSubList )
+        : mnPos(pos), mnLen(len), mpSubList(pSubList) {}
+};
+
+class SwWrongList
+{
+    std::vector<SwWrongArea> maList;
+
     xub_StrLen nBeginInvalid;   // Start des ungueltigen Bereichs
     xub_StrLen nEndInvalid;     // Ende des ungueltigen Bereichs
     void ShiftLeft( xub_StrLen &rPos, xub_StrLen nStart, xub_StrLen nEnd )
@@ -55,9 +63,28 @@ class SwWrongList : public SvXub_StrLens
     void ShiftRight( xub_StrLen &rPos, xub_StrLen nStart, xub_StrLen nEnd )
     { if( rPos >= nStart ) rPos += nStart - nEnd; }
     void _Invalidate( xub_StrLen nBegin, xub_StrLen nEnd );
+
+    void Insert(USHORT nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos);
+    void Remove( USHORT nIdx, USHORT nLen );
+
+    // forbidden and not implemented
+    SwWrongList( const SwWrongList& rCpy );
+    SwWrongList& operator= (const SwWrongList &);
+
 public:
-    inline SwWrongList() :
-        SvXub_StrLens(5,5), aLen(5,5), nBeginInvalid( STRING_LEN ){}
+
+    SwWrongList() : nBeginInvalid( STRING_LEN ) { maList.reserve( 5 ); }
+    ~SwWrongList()
+    {
+        for ( unsigned int i=0; i< maList.size(); i++)
+        {
+            if (maList[i].mpSubList)
+                delete maList[i].mpSubList;
+            maList[i].mpSubList = NULL;
+        }
+        //maList.resize(0);
+    }
+
     inline xub_StrLen GetBeginInv() const { return nBeginInvalid; }
     inline xub_StrLen GetEndInv() const { return nEndInvalid; }
     inline BOOL InsideInvalid( xub_StrLen nChk ) const
@@ -72,10 +99,16 @@ public:
     BOOL Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
             xub_StrLen nLen, USHORT nIndex, xub_StrLen nCursorPos );
     USHORT GetPos( xub_StrLen nValue ) const;
+
     sal_Bool Check( xub_StrLen &rChk, xub_StrLen &rLn ) const;
     sal_Bool InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const;
     xub_StrLen NextWrong( xub_StrLen nChk ) const;
-    xub_StrLen LastWrong( xub_StrLen nChk ) const;
+
+    // used for sub positions check
+    sal_Bool CheckSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn  ) const;
+    sal_Bool InWrongWordSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn ) const;
+    void NextWrongSub( xub_StrLen &nChk, xub_StrLen &nSubChk ) const;
+
     void Move( xub_StrLen nPos, long nDiff );
 
     // Divide the list into two part, the wrong words until nSplitPos will be
@@ -85,14 +118,43 @@ public:
     // the other wrong list has to be inserted.
     void JoinList( SwWrongList* pNext, xub_StrLen nInsertPos );
 
-    inline xub_StrLen Len( USHORT nIdx ) const { return WRLEN( nIdx );  }
-    inline xub_StrLen Pos( USHORT nIdx ) const { return WRPOS( nIdx );  }
-    inline void Insert( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere )
-    {SvXub_StrLens::Insert( nNewPos, nWhere ); aLen.Insert( nNewLen, nWhere );}
+    inline xub_StrLen Len( USHORT nIdx ) const
+    {
+        return nIdx < maList.size() ? maList[nIdx].mnLen : 0;
+    }
 
-// Wer braucht dies?
-    void Insert( ULONG nNew )
-    ;// { SvULongs::Insert( nNew, GetPos( (USHORT)( nNew & WRMASK ) ) ); }
+    inline xub_StrLen Pos( USHORT nIdx ) const
+    {
+        return nIdx < maList.size() ? maList[nIdx].mnPos : 0;
+    }
+
+    inline USHORT Count() const { return (USHORT)maList.size(); }
+
+    inline void Insert( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere )
+    {
+        std::vector<SwWrongArea>::iterator i = maList.begin();
+        if ( nWhere >= maList.size() )
+            i = maList.end(); // robust
+        else
+            i += nWhere;
+        maList.insert(i, SwWrongArea( nNewPos, nNewLen, 0 ) );
+    }
+
+    inline SwWrongList* SubList( USHORT nIdx ) const
+    {
+        return nIdx < maList.size() ? maList[nIdx].mpSubList : 0;
+    }
+
+    inline void InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere, SwWrongList* pSubList )
+    {
+        std::vector<SwWrongArea>::iterator i = maList.begin();
+        if ( nWhere >= maList.size() )
+            i = maList.end(); // robust
+        else
+            i += nWhere;
+        maList.insert(i, SwWrongArea( nNewPos, nNewLen, pSubList ) );
+    }
+
 };
 
 
