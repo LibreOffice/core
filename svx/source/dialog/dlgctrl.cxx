@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:26 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,8 +915,7 @@ SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, USHORT nNumber )
 
     nSquares = nLines * nLines;
     pPixel = new USHORT[ nSquares ];
-
-    // Reset(); <-- wird vom Dialog aufgerufen
+    rtl_zeroMemory(pPixel, nSquares * sizeof(USHORT));
 }
 
 /*************************************************************************
@@ -1069,9 +1068,8 @@ USHORT SvxPixelCtl::GetBitmapPixel( const USHORT nPixel )
 
 void SvxPixelCtl::Reset()
 {
-    // Initialisierung des Arrays
-    for( USHORT i = 0; i < nSquares; i++)
-        *(pPixel + i) = 0;
+    // clear pixel area
+    rtl_zeroMemory(pPixel, nSquares * sizeof(USHORT));
     Invalidate();
 }
 
