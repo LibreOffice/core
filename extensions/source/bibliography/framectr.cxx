@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:56:16 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,8 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
+#include <hash_map>
 
 using namespace osl;
 using namespace cppu;
