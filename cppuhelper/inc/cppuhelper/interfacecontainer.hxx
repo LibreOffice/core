@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interfacecontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:31:01 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@
 #include <cppuhelper/interfacecontainer.h>
 
 
-#define CONT_HASHMAP ::std::hash_map< key , void* , hashImpl , equalImpl >
-
 namespace cppu
 {
 
@@ -48,7 +46,7 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::OMul
     SAL_THROW( () )
     : rMutex( rMutex_ )
 {
-    m_pMap = new CONT_HASHMAP;
+    m_pMap = new InterfaceMap;
 }
 
 //===================================================================
@@ -56,8 +54,8 @@ template< class key , class hashImpl , class equalImpl >
 inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMultiTypeInterfaceContainerHelperVar()
     SAL_THROW( () )
 {
-    typename CONT_HASHMAP::iterator iter = m_pMap->begin();
-    typename CONT_HASHMAP::iterator end = m_pMap->end();
+    typename InterfaceMap::iterator iter = m_pMap->begin();
+    typename InterfaceMap::iterator end = m_pMap->end();
 
     while( iter != end )
     {
@@ -74,14 +72,14 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
     SAL_THROW( () )
 {
     ::osl::MutexGuard aGuard( rMutex );
-    typename CONT_HASHMAP::size_type nSize = m_pMap->size();
+    typename InterfaceMap::size_type nSize = m_pMap->size();
     if( nSize != 0 )
     {
         ::com::sun::star::uno::Sequence< key > aInterfaceTypes( nSize );
         key * pArray = aInterfaceTypes.getArray();
 
-        typename CONT_HASHMAP::iterator iter = m_pMap->begin();
-        typename CONT_HASHMAP::iterator end = m_pMap->end();
+        typename InterfaceMap::iterator iter = m_pMap->begin();
+        typename InterfaceMap::iterator end = m_pMap->end();
 
         sal_uInt32 i = 0;
         while( iter != end )
@@ -108,7 +106,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
 {
     ::osl::MutexGuard aGuard( rMutex );
 
-     typename CONT_HASHMAP::iterator iter = m_pMap->find( rKey );
+     typename InterfaceMap::iterator iter = find( rKey );
     if( iter != m_pMap->end() )
             return (OInterfaceContainerHelper*) (*iter).second;
     return 0;
@@ -122,11 +120,11 @@ sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::a
     SAL_THROW( () )
 {
     ::osl::MutexGuard aGuard( rMutex );
-    typename CONT_HASHMAP::iterator iter = m_pMap->find( rKey );
+    typename InterfaceMap::iterator iter = find( rKey );
     if( iter == m_pMap->end() )
     {
         OInterfaceContainerHelper * pLC = new OInterfaceContainerHelper( rMutex );
-        (*m_pMap)[rKey] = pLC;
+        m_pMap->push_back(std::pair<key, void*>(rKey, pLC));
         return pLC->addInterface( rListener );
     }
     else
@@ -143,7 +141,7 @@ inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalIm
     ::osl::MutexGuard aGuard( rMutex );
 
     // search container with id nUik
-    typename CONT_HASHMAP::iterator iter = m_pMap->find( rKey );
+    typename InterfaceMap::iterator iter = find( rKey );
     // container found?
     if( iter != m_pMap->end() )
         return ((OInterfaceContainerHelper*)(*iter).second)->removeInterface( rListener );
@@ -158,7 +156,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
     const ::com::sun::star::lang::EventObject & rEvt )
     SAL_THROW( () )
 {
-    typename CONT_HASHMAP::size_type nSize = 0;
+    typename InterfaceMap::size_type nSize = 0;
     OInterfaceContainerHelper ** ppListenerContainers = NULL;
     {
         ::osl::MutexGuard aGuard( rMutex );
@@ -169,10 +167,10 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
             ppListenerContainers = new ppp[nSize];
             //ppListenerContainers = new (ListenerContainer*)[nSize];
 
-            typename CONT_HASHMAP::iterator iter = m_pMap->begin();
-            typename CONT_HASHMAP::iterator end = m_pMap->end();
+            typename InterfaceMap::iterator iter = m_pMap->begin();
+            typename InterfaceMap::iterator end = m_pMap->end();
 
-            typename CONT_HASHMAP::size_type i = 0;
+            typename InterfaceMap::size_type i = 0;
             while( iter != end )
             {
                 ppListenerContainers[i++] = (OInterfaceContainerHelper*)(*iter).second;
@@ -182,7 +180,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
     }
 
     // create a copy, because do not fire event in a guarded section
-    for( typename CONT_HASHMAP::size_type i = 0; i < nSize; i++ )
+    for( typename InterfaceMap::size_type i = 0; i < nSize; i++ )
     {
         if( ppListenerContainers[i] )
             ppListenerContainers[i]->disposeAndClear( rEvt );
@@ -196,8 +194,8 @@ template< class key , class hashImpl , class equalImpl >
 void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear() SAL_THROW( () )
 {
     ::osl::MutexGuard aGuard( rMutex );
-    typename CONT_HASHMAP::iterator iter = m_pMap->begin();
-    typename CONT_HASHMAP::iterator end = m_pMap->end();
+    typename InterfaceMap::iterator iter = m_pMap->begin();
+    typename InterfaceMap::iterator end = m_pMap->end();
 
     while( iter != end )
     {
