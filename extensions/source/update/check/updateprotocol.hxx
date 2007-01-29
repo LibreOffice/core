@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateprotocol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:56:56 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,14 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATIONPROVIDER_HPP_
+#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
+#endif
+
 // Returns 'true' if successfully connected to the update server
 bool checkForUpdates(
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & rxContext,
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > const & rxInteractionHandler,
-    rtl::OUString& rUpdateURL, rtl::OUString& rVersionFound);
+    rtl::OUString& rUpdateURL, rtl::OUString& rVersionFound,
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >& rxProvider
+    );
