@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbaslib.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:59:24 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,13 @@ public:
     void    storeLibrariesToStorage(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
             );
+
+
+    /** checks if any modules in the SfxLibraryContainer exceed the binary
+        limits.
+    */
+    sal_Bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& sModules );
+
 
 private:
     void    impl_releaseContainers();
