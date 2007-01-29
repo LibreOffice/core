@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodelapi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:01:29 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,12 @@ private:
                                               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
                                               const rtl::OUString& rType,
                                               rtl::OUString& rFileNamePath );
+    SaveResult          ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
+                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
+                                                 const ::rtl::OUString& rFilterName,
+                                                 bool bModified,
+                                                 sal_Int32& rNumArgs,
+                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
     DECL_LINK( DoneHdl, void* );
 
