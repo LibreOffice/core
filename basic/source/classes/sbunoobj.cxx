@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:30:52 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,7 +504,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     return eRetType;
 }
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
-static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, sal_Bool bIsZeroIndex )
+static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, sal_Bool bIsZeroIndex, Type* pType = NULL )
 {
     Type aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
@@ -516,6 +516,11 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
     {
         Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( aType );
         Reference< XIdlArray > xIdlArray = xIdlTargetClass->getArray();
+        typelib_TypeDescription * pTD = 0;
+        aType.getDescription( &pTD );
+        Type aElementType( ((typelib_IndirectTypeDescription *)pTD)->pType );
+        ::typelib_typedescription_release( pTD );
+
         sal_Int32 nLen = xIdlArray->getLen( aValue );
         for ( sal_Int32 index = 0; index < nLen; ++index )
         {
@@ -538,7 +543,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
             else
                 indices[ dimCopy - 1] = index + 1;
 
-            implSequenceToMultiDimArray( pArray, indices, sizes, aElementAny, dimCopy, bIsZeroIndex );
+            implSequenceToMultiDimArray( pArray, indices, sizes, aElementAny, dimCopy, bIsZeroIndex, &aElementType );
         }
 
     }
@@ -554,9 +559,9 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
             return;
         }
 
+        SbxDataType eSbxElementType = unoToSbxType( pType ? pType->getTypeClass() : aValue.getValueTypeClass() );
         if ( !pArray )
         {
-            SbxDataType eSbxElementType = unoToSbxType( aValue.getValueTypeClass() );
             pArray = new SbxDimArray( eSbxElementType );
             sal_Int32 nIndexLen = indices.getLength();
 
@@ -573,7 +578,6 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
 
         if ( pArray )
         {
-            SbxDataType eSbxElementType = unoToSbxType( aValue.getValueTypeClass() );
             SbxVariableRef xVar = new SbxVariable( eSbxElementType );
             unoToSbxValue( (SbxVariable*)xVar, aValue );
 
