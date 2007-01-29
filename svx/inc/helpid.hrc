@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:43:13 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,7 @@
 #define HID_GALLERY_MN_PREVIEW                  (HID_SVX_START + 191)
 #define HID_GALLERY_MN_DELETE                   (HID_SVX_START + 192)
 #define HID_GALLERY_TITLE                       (HID_SVX_START + 193)
+#define HID_GALLERY_TITLE_EDIT                  (HID_SVX_START + 194)
 
 //#define HID_BASICIDE_OBJCAT_SHOW              (HID_SVX_START + 195)
 //#define HID_BASICIDE_OBJCAT_PROPS             (HID_SVX_START + 196)
