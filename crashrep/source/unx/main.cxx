@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 13:32:09 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,9 +966,10 @@ static void read_settings_from_environment( hash_map< string, string >& rSetting
     if ( strEnv.length() )
     {
         rSettings[ "EMAIL" ] = strEnv;
-        rSettings[ "CONTACT" ] = "true";
+        if ( !(rSettings.find( "CONTACT" )->second).length() )
+            rSettings[ "CONTACT" ] = "true";
     }
-    else
+    else if ( !(rSettings.find( "CONTACT" )->second).length() )
         rSettings[ "CONTACT" ] = "false";
 
 
