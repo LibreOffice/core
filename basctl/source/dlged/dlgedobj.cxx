@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 12:01:11 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -615,6 +615,13 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
                     aAny <<= xCtrl;
                     xCont->removeByName( aOldName );
                     xCont->insertByName( aNewName , aAny );
+
+                    DlgEditor* pEditor;
+                    if ( ISA(DlgEdForm) )
+                        pEditor = ((DlgEdForm*)this)->GetDlgEditor();
+                    else
+                        pEditor = GetDlgEdForm()->GetDlgEditor();
+                    LocalizationMgr::renameControlResourceIDsForEditorObject( pEditor, aAny, aNewName );
                 }
             }
             else
