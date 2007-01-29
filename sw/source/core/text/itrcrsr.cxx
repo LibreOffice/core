@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:35:43 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1578,7 +1578,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             {
                 SwTxtSizeInfo aSizeInf( GetInfo(), rText, nCurrStart );
                 ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
-                SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor) );
+                SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor), false, false );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
                         ((SwDropPortion*)pPor)->GetFnt() : NULL );
 
