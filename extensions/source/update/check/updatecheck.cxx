@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:10:16 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@
 namespace awt = com::sun::star::awt ;
 namespace beans = com::sun::star::beans ;
 namespace container = com::sun::star::container ;
+namespace deployment = com::sun::star::deployment ;
 namespace frame = com::sun::star::frame ;
 namespace lang = com::sun::star::lang ;
 namespace c3s = com::sun::star::system ;
@@ -212,6 +213,7 @@ class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServic
     rtl::OUString getBuildId();
 
     uno::Reference< uno::XInterface > m_xUIService;
+    uno::Reference<deployment::XUpdateInformationProvider> m_xProvider;
 
     sal_Bool (* m_pHasInternetConnection) ();
 
@@ -281,9 +283,16 @@ UpdateCheckJob::~UpdateCheckJob()
     if( m_hThread )
     {
         osl_terminateThread(m_hThread);
-        osl_setCondition(m_hCondition);
 
-        osl_joinWithThread(m_hThread);
+        // Cancel potentially hanging http request - not yet implemented ..
+        if( m_xProvider.is() )
+            m_xProvider->cancel();
+        // .. so do not join until #i73893# is fixed
+        else
+        {
+            osl_setCondition(m_hCondition);
+            osl_joinWithThread(m_hThread);
+        }
         osl_destroyThread(m_hThread);
     }
 
@@ -592,7 +601,7 @@ UpdateCheckJob::runAsThread()
             rtl::OUString aVersionFound;
 
             if( hasInternetConnection() &&
-                checkForUpdates(m_xContext, uno::Reference< task::XInteractionHandler >(), aDownloadURL, aVersionFound) )
+                checkForUpdates(m_xContext, uno::Reference< task::XInteractionHandler >(), aDownloadURL, aVersionFound, m_xProvider) )
             {
                 /*
                  * found updates for previous version are removed at startup, so
@@ -632,8 +641,9 @@ UpdateCheckJob::runAsThread()
 
                 tv.Seconds = nRetryInterval[n-1];
                 osl_waitCondition(m_hCondition, &tv);
-                continue;
             }
+
+            m_xProvider.clear();
         }
     }
 
@@ -779,7 +789,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
         uno::Sequence< beans::NamedValue > aResult(1);
         aResult[0].Name = UNISTRING("SendDispatchResult");
 
-        if( checkForUpdates(m_xContext, getInteractionHandler(), aDownloadURL, aVersionFound) )
+        if( checkForUpdates(m_xContext, getInteractionHandler(), aDownloadURL, aVersionFound, m_xProvider) )
         {
             if( aDownloadURL.getLength() > 0 )
             {
@@ -812,6 +822,8 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
         {
             aResult[0].Value = uno::makeAny(sal_False);
         }
+
+        m_xProvider.clear();
 
         return uno::makeAny(aResult);
     }
@@ -940,6 +952,12 @@ void SAL_CALL
 UpdateCheckJob::disposing(const lang::EventObject&) throw (uno::RuntimeException)
 {
     g_aInstance.clear();
+
+    uno::Reference < util::XChangesNotifier > xChangesNotifier;
+    xChangesNotifier = uno::Reference < util::XChangesNotifier >( getOwnConfigAccess(), uno::UNO_QUERY );
+
+    if ( xChangesNotifier.is() )
+        xChangesNotifier->removeChangesListener( uno::Reference< util::XChangesListener >(const_cast <UpdateCheckJob *> (this) ) );
 }
 
 } // anonymous namespace
