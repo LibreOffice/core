@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:00:18 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,6 +246,22 @@ Rectangle ScAccessibleCell::GetBoundingBox(void) const
             aCellRect = aRect.Intersection(aCellRect);
         }
 
+        /*  #i19430# Gnopernicus reads text partly if it sticks out of the cell
+            boundaries. This leads to wrong results in cases where the cell
+            text is rotated, because rotation is not taken into account when
+            calculating the visible part of the text. In these cases we will
+            simply expand the cell size to the width of the unrotated text. */
+        if (mpDoc)
+        {
+            const SfxInt32Item* pItem = static_cast< const SfxInt32Item* >(
+                mpDoc->GetAttr( maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), ATTR_ROTATE_VALUE ) );
+            if( pItem && (pItem->GetValue() != 0) )
+            {
+                Rectangle aParaRect = GetParagraphBoundingBox();
+                if( !aParaRect.IsEmpty() && (aCellRect.GetWidth() < aParaRect.GetWidth()) )
+                    aCellRect.SetSize( Size( aParaRect.GetWidth(), aCellRect.GetHeight() ) );
+            }
+        }
     }
     if (aCellRect.IsEmpty())
         aCellRect.SetPos(Point(-1, -1));
