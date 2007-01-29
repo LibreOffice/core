@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:39:40 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,7 @@
 #include <vcl/bitmapex.hxx>
 #include <svtools/embedhlp.hxx>
 #include <rtl/logfile.hxx>
+#include <basic/modsizeexceeded.hxx>
 
 #include "app.hxx"
 #include "objsh.hxx"
@@ -227,7 +228,6 @@
 #include "fltoptint.hxx"
 #include "viewfrm.hxx"
 #include "graphhelp.hxx"
-#include "modsizeexceeded.hxx"
 #include "appbaslib.hxx"
 
 #include "../appl/app.hrc"
@@ -3827,16 +3827,12 @@ void SfxObjectShell::UpdateLinks()
 
 sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
-        (void) xHandler;
-/*      Task 71380 Needed to be comented out as related code
-        from cws npower3 got lost with moving LibraryContainer
-        implementation from sfx2 to basic.
-
+    if ( !pImp->pBasicManager->isValid() )
+        GetBasicManager();
     uno::Sequence< rtl::OUString > sModules;
     if ( xHandler.is() )
     {
-        ::basic::SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-        if( pBasicCont && pBasicCont->LegacyPsswdBinaryLimitExceeded( sModules ) )
+        if( pImp->pBasicManager->LegacyPsswdBinaryLimitExceeded( sModules ) )
         {
             ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( sModules );
             uno::Reference< task::XInteractionRequest > xReq( pReq );
@@ -3844,7 +3840,6 @@ sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference
             return pReq->isApprove();
         }
     }
-*/
     // No interaction handler, default is to continue to save
     return sal_True;
 }
