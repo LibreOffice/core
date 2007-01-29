@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtypes.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:00:37 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:50:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <queue>
+#include <hash_map>
 
 //_________________________________________________________________________________________________________________
 // own includes
