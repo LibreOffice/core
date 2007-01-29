@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:37:14 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 17:03:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -775,7 +775,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
                 pThis->Width( nOldWidth - nSpaceOffs + 12 );
                 {
-                    SwTxtSlotLen aDiffTxt( &aInf, this, sDoubleSpace );
+                    SwTxtSlot aDiffTxt( &aInf, this, true, false, sDoubleSpace );
                     aInf.DrawText( *this, aInf.GetLen(), sal_True );
                 }
             }
