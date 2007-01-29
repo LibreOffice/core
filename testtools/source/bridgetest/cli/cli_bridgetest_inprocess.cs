@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cli_bridgetest_inprocess.cs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:48:09 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ public class BridgeTest
                 test_client = new cs_testobj.BridgeTest( xContext );
                 xClient = (XMain) test_client;
                 Console.WriteLine(
-                    "\n[cli bridgetest] C# client calls C# object");
+                    "\n[cli bridgetest] 1. C# client calls C# object");
                 // run with CLI target object
                 xClient.run(
                     new String [] {
@@ -181,11 +181,12 @@ public class BridgeTest
                         "com.sun.star.test.bridge.BridgeTest", xContext );
                 xClient = (XMain) test_client;
                 Console.WriteLine(
-                    "\n[cli bridgetest] C++ client (native) calls C# object");
+                    "\n[cli bridgetest] 2. C++ client (native) calls C# object");
                 // run with CLI target object
                 xClient.run(
                     new String [] {
-                    "com.sun.star.test.bridge.cli_uno.CsTestObject" } );
+                    "com.sun.star.test.bridge.cli_uno.CsTestObject",
+					"noCurrentContext"} );
             
                 // III:        
                 // uno -ro uno_services.rdb -ro uno_types.rdb
@@ -199,7 +200,7 @@ public class BridgeTest
                         xContext );
                 xClient = (XMain) test_client;
                 Console.WriteLine(
-                    "\n[cli bridgetest] C# client calls C++ object (native)");
+                    "\n[cli bridgetest] 3. C# client calls C++ object (native)");
                 // run with native target object
                 xClient.run(
                     new String [] { "com.sun.star.test.bridge.CppTestObject" } );
@@ -215,7 +216,7 @@ public class BridgeTest
                         xContext );
                 xClient = (XMain) test_client;
                 Console.WriteLine(
-                    "\n[cli bridgetest] Visual Basic client calls C++ (native) object" );
+                    "\n[cli bridgetest] 4. Visual Basic client calls C++ (native) object" );
                 // run with native target object
                 xClient.run(
                     new String [] { "com.sun.star.test.bridge.CppTestObject" } );
@@ -247,7 +248,7 @@ public class BridgeTest
                         xContext );
                 xClient = (XMain) test_client;
                 Console.WriteLine(
-                    "\n[cli bridgetest] CLI C++ client calls C++ object (native)");
+                    "\n[cli bridgetest] 6. CLI C++ client calls C++ object (native)");
                 // run with native target object
                 xClient.run(
                     new String [] { "com.sun.star.test.bridge.CppTestObject" } );
