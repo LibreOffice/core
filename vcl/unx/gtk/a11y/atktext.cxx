@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:10:18 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,7 @@ text_wrapper_get_run_attributes( AtkText        *text,
             uno::Sequence< beans::PropertyValue > aAttributeList =
                 pTextAttributes->getRunAttributes( offset, uno::Sequence< rtl::OUString > () );
 
-            pSet = attribute_set_new_from_property_values( aAttributeList );
+            pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
 
             accessibility::TextSegment aTextSegment =
                 pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
@@ -431,7 +431,7 @@ text_wrapper_get_default_attributes( AtkText *text )
             uno::Sequence< beans::PropertyValue > aAttributeList =
                 pTextAttributes->getDefaultAttributes( uno::Sequence< rtl::OUString > () );
 
-            pSet = attribute_set_new_from_property_values( aAttributeList );
+            pSet = attribute_set_new_from_property_values( aAttributeList, false, text );
         }
     }
     catch(const uno::Exception& e) {
