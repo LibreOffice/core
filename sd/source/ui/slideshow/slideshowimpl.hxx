@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:34:44 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,6 +403,7 @@ private:
     ::std::auto_ptr<PaneHider> mpPaneHider;
 
     ULONG   mnEndShowEvent;
+    ULONG   mnContextMenuEvent;
 };
 
 class SlideShowImplGuard
