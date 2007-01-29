@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:14:13 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,7 +524,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 
     prepareExecute();
 
-    getDialog()->EnableAutocompletion( FALSE );
+    getDialog()->EnableAutocompletion( TRUE );
     // now we are ready to execute the dialog
     sal_Int16 nRet = getDialog()->Execute();
 
