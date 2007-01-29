@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:51:05 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,8 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mbIsMouseMotionListener( false ),
     meAnimationMode( eAnimationMode ),
     mbFirstPaint( true ),
-    mbFullScreen( bFullScreen )
+    mbFullScreen( bFullScreen ),
+    mbMousePressedEaten( false )
 {
     init();
 }
@@ -538,8 +539,13 @@ void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& ) throw (Run
 void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
-    if( mpSlideShow && !mpSlideShow->isInputFreezed() )
+    if( mpSlideShow && mpSlideShow->isInputFreezed() )
     {
+        mbMousePressedEaten = true;
+    }
+    else
+    {
+        mbMousePressedEaten = false;
 
         // Change event source, to enable listeners to match event
         // with view
@@ -557,9 +563,13 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno
 void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
-    if( mpSlideShow && !mpSlideShow->isInputFreezed() )
+    if( mbMousePressedEaten )
     {
-
+        // if mouse button down was ignored, also ignore mouse button up
+        mbMousePressedEaten = false;
+    }
+    else if( mpSlideShow && !mpSlideShow->isInputFreezed() )
+    {
         // Change event source, to enable listeners to match event
         // with view
         WrappedMouseEvent aEvent;
