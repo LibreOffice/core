@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:01:37 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,9 @@
 #ifndef _SWF_WRITER_HXX_
 #define _SWF_WRITER_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
@@ -52,9 +49,6 @@
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
-//#ifndef _B2D_MATRIX3D_HXX
-//#include <goodies/matrix3d.hxx>
-//#endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -445,7 +439,11 @@ private:
                                    const double P3x, const double P3y,
                                    const double P4x, const double P4y );
 
+    com::sun::star::uno::Reference < com::sun::star::i18n::XBreakIterator > Impl_GetBreakIterator();
+
 private:
+    com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIterator;
+
     FontMap                 maFonts;
 
     sal_Int32 mnDocWidth;
