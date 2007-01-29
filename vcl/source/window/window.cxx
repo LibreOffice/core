@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.251 $
+ *  $Revision: 1.252 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:24:52 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6360,32 +6360,25 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
                 }
             }
 
-            /*
-            * #i48371# native theming: some themes draw outside the control
-            * area we tell them to (bad thing, but we cannot do much about it ).
-            * On hiding these controls they get invalidated with their window rectangle
-            * which leads to the parts outside the control area being left and not
-            * invalidated. Workaround: invalidate an area on the parent, too
-            */
-            if( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mbEnableNativeWidget )
+            if ( !mpWindowImpl->mbFrame )
             {
-                if( !mpWindowImpl->mbNoParentUpdate &&
-                    !(nFlags & SHOW_NOPARENTUPDATE) &&
-                    mpWindowImpl->mpParent &&
-                    mpWindowImpl->mpParent->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
+                if( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mbEnableNativeWidget )
                 {
+                    /*
+                    * #i48371# native theming: some themes draw outside the control
+                    * area we tell them to (bad thing, but we cannot do much about it ).
+                    * On hiding these controls they get invalidated with their window rectangle
+                    * which leads to the parts outside the control area being left and not
+                    * invalidated. Workaround: invalidate an area on the parent, too
+                    */
                     const int workaround_border = 5;
-                    Size aSize( mnOutWidth  + 2*workaround_border,
-                                mnOutHeight + 2*workaround_border );
-                    Point aPos( mnOutOffX - mpWindowImpl->mpParent->mnOutOffX - workaround_border,
-                                mnOutOffY - mpWindowImpl->mpParent->mnOutOffY - workaround_border );
-                    Region aReg( Rectangle( aPos, aSize ) );
-                    mpWindowImpl->mpParent->ImplInvalidate( &aReg, 0 );
+                    Rectangle aBounds( aInvRegion.GetBoundRect() );
+                    aBounds.Left()      -= workaround_border;
+                    aBounds.Top()       -= workaround_border;
+                    aBounds.Right()     += workaround_border;
+                    aBounds.Bottom()    += workaround_border;
+                    aInvRegion = aBounds;
                 }
-                ImplGenerateMouseMove();
-            }
-            else if ( !mpWindowImpl->mbFrame )
-            {
                 if ( !mpWindowImpl->mbNoParentUpdate && !(nFlags & SHOW_NOPARENTUPDATE) )
                 {
                     if ( !aInvRegion.IsEmpty() )
