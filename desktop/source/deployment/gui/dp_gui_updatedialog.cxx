@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:53:29 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,12 +446,14 @@ void UpdateDialog::Thread::handleGeneralError(css::uno::Any const & exception)
     }
 }
 
+//Parameter package can be null
 void UpdateDialog::Thread::handleSpecificError(
     css::uno::Reference< css::deployment::XPackage > const & package,
     css::uno::Any const & exception) const
 {
     UpdateDialog::SpecificError data;
-    data.name = package->getDisplayName();
+    if (package.is())
+        data.name = package->getDisplayName();
     css::uno::Exception e;
     if (exception >>= e) {
         data.message = e.Message;
