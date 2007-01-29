@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:00:47 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,6 +209,8 @@ namespace accessibility
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex );
         sal_Bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                               sal_Int32 nEndPara, sal_Int32 nEndIndex );
+
+        Rectangle                   GetParagraphBoundingBox() const;
 
     private:
 
@@ -456,6 +458,21 @@ namespace accessibility
         {
             return sal_False;
         }
+    }
+
+    Rectangle AccessibleStaticTextBase_Impl::GetParagraphBoundingBox() const
+    {
+        Rectangle aRect;
+        if( mpTextParagraph )
+        {
+            awt::Rectangle aAwtRect = mpTextParagraph->getBounds();
+            aRect = Rectangle( Point( aAwtRect.X, aAwtRect.Y ), Size( aAwtRect.Width, aAwtRect.Height ) );
+        }
+        else
+        {
+            aRect.SetEmpty();
+        }
+        return aRect;
     }
 
     //------------------------------------------------------------------------
@@ -915,6 +932,11 @@ namespace accessibility
         return mpImpl->CopyText( aStartIndex.nPara, aStartIndex.nIndex,
                                  aEndIndex.nPara, aEndIndex.nIndex );
     }
+
+   Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
+   {
+       return mpImpl->GetParagraphBoundingBox();
+   }
 
 }  // end of namespace accessibility
 
