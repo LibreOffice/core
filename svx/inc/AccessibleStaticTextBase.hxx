@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:11:06 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,9 @@ namespace accessibility
 
         // child-related methods from XAccessibleComponent
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        Rectangle GetParagraphBoundingBox() const;
 
     private:
 
