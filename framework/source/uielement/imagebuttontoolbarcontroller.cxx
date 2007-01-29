@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:20:51 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,9 @@ throw ( RuntimeException )
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-    if ( rControlCommand.Command.equalsAsciiL( "SetImage", 7 ))
+    // i73486 to be downward compatible use old and "wrong" also!
+    if (( rControlCommand.Command.equalsAsciiL( "SetImag", 7 )) ||
+        ( rControlCommand.Command.equalsAsciiL( "SetImage", 8 )) )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
