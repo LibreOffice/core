@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:02:45 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,6 +364,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     };
     Edit EDT_TITLE
     {
+        HelpId = HID_GALLERY_TITLE_EDIT;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 18 ) ;
         Size = MAP_APPFONT ( 88, 12 ) ;
