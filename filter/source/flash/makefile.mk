@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 14:01:39 $
+#   last change: $Author: rt $ $Date: 2007-01-29 14:46:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,6 @@ SHL1STDLIBS+=\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB) 
-
-#	$(ONELIB)			\
-#	$(VOSLIB)			\
 
 # static libraries must come at the end for MACOSX
 .IF "$(OS)" == "MACOSX"
