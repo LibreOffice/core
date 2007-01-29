@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:01:50 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:47:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
+
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <comphelper/processfactory.hxx>
+
 #ifndef _SWF_WRITER_HXX_
 #include "swfwriter.hxx"
 #endif
@@ -78,7 +84,9 @@
 using namespace ::swf;
 using namespace ::std;
 using namespace ::rtl;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 
@@ -537,7 +545,33 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 {
     sal_uInt32 nLen = rText.Len();
 
-    if( nLen )
+    if( !nLen )
+        return;
+
+    const bool bRTL = (mpVDev->GetLayoutMode() & TEXT_LAYOUT_BIDI_RTL) != 0;
+
+    sal_Int16 nScriptType = ScriptType::LATIN;
+    Reference < XBreakIterator > xBI( Impl_GetBreakIterator() );
+    if( xBI.is() )
+    {
+        const OUString oText( rText );
+        nScriptType = xBI->getScriptType( oText, 0 );
+    }
+
+    // if the text is either right to left or complex or asian, we
+    // ask the output device for a polygon representation.
+    // On complex and asian text, each unicode character can have
+    // different glyph representation, based on context. Also positioning
+    // is not trivial so we let the output device do it for us.
+    if( bRTL || (nScriptType != ScriptType::LATIN) )
+    {
+        // todo: optimize me as this will generate a huge amount of duplicate polygons
+        PolyPolygon aPolyPoygon;
+        mpVDev->GetTextOutline( aPolyPoygon, rText, 0, 0, (USHORT)nLen, TRUE, nWidth, pDXArray );
+        aPolyPoygon.Translate( rPos );
+        Impl_writePolyPolygon( aPolyPoygon, sal_True, aTextColor, aTextColor );
+    }
+    else
     {
         Size    aNormSize;
         sal_Int32* pOwnArray;
@@ -1855,6 +1889,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_FONT_ACTION ):
             case( META_PUSH_ACTION ):
             case( META_POP_ACTION ):
+            case( META_LAYOUTMODE_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( mpVDev );
             }
@@ -1866,7 +1901,6 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_MASKSCALEPART_ACTION ):
             case( META_WALLPAPER_ACTION ):
             case( META_TEXTLINE_ACTION ):
-            case( META_LAYOUTMODE_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
             }
@@ -2056,4 +2090,14 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
             }
         }
     }
+}
+
+Reference < XBreakIterator > Writer::Impl_GetBreakIterator()
+{
+    if ( !mxBreakIterator.is() )
+    {
+        Reference< XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        mxBreakIterator.set( xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY );
+    }
+    return mxBreakIterator;
 }
