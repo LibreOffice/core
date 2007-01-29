@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 10:59:49 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,11 +216,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
 //////////////////////////////////////////////////////////////////////////////
 // OLE part 1
-#define CTF_SD_OLE_VIS_AREA_LEFT        1040
-#define CTF_SD_OLE_VIS_AREA_TOP         1041
-#define CTF_SD_OLE_VIS_AREA_WIDTH       1042
-#define CTF_SD_OLE_VIS_AREA_HEIGHT      1043
-#define CTF_SD_OLE_ISINTERNAL           1044
+#define CTF_SD_OLE_VIS_AREA_IMPORT_LEFT     1040
+#define CTF_SD_OLE_VIS_AREA_IMPORT_TOP      1041
+#define CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH    1042
+#define CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT   1043
+#define CTF_SD_OLE_ISINTERNAL               1044
 
 #define CTF_SD_MOVE_PROTECT             1045
 #define CTF_SD_SIZE_PROTECT             1046
@@ -245,8 +245,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
 //////////////////////////////////////////////////////////////////////////////
 // OLE part 2
-#define CTF_SD_OLE_ASPECT               1059
-
+#define CTF_SD_OLE_ASPECT                   1059
+#define CTF_SD_OLE_VIS_AREA_EXPORT_LEFT     1060
+#define CTF_SD_OLE_VIS_AREA_EXPORT_TOP      1061
+#define CTF_SD_OLE_VIS_AREA_EXPORT_WIDTH    1062
+#define CTF_SD_OLE_VIS_AREA_EXPORT_HEIGHT   1063
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
