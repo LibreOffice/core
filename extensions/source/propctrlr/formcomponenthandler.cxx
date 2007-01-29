@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:53:53 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,9 @@
 #ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEMANAGER_HPP_
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RESOURCE_MISSINGRESOURCEEXCEPTION_HPP_
+#include <com/sun/star/resource/MissingResourceException.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
@@ -326,6 +329,7 @@ namespace pcr
         { "Title",           5 },
         { "HelpText",        8 },
         { "CurrencySymbol", 14 },
+        { "StringItemList", 14 },
         { 0, 0                 }
     };
 
@@ -365,9 +369,10 @@ namespace pcr
             {}
 
             Reference< resource::XStringResourceResolver > xRet;
+            TypeClass eType = _rPropertyValue.getValueType().getTypeClass();
             if( xStringResourceResolver.is() &&
                 xStringResourceResolver->getLocales().getLength() > 0 &&
-                _rPropertyValue.getValueType().getTypeClass() == TypeClass_STRING &&
+                (eType == TypeClass_STRING || eType == TypeClass_SEQUENCE) &&
                 lcl_isLanguageDependentProperty( _rPropertyName ) )
             {
                 xRet = xStringResourceResolver;
@@ -388,16 +393,48 @@ namespace pcr
             = lcl_getStringResourceResolverForProperty( m_xComponent, _rPropertyName, aPropertyValue );
         if( xStringResourceResolver.is() )
         {
-            ::rtl::OUString aPropStr;
-            aPropertyValue >>= aPropStr;
-            if( aPropStr.getLength() > 1 )
+            TypeClass eType = aPropertyValue.getValueType().getTypeClass();
+            if( eType == TypeClass_STRING )
             {
-                ::rtl::OUString aPureIdStr = aPropStr.copy( 1 );
-                if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
+                ::rtl::OUString aPropStr;
+                aPropertyValue >>= aPropStr;
+                if( aPropStr.getLength() > 1 )
                 {
-                    ::rtl::OUString aResourceStr = xStringResourceResolver->resolveString( aPureIdStr );
-                    aPropertyValue <<= aResourceStr;
+                    ::rtl::OUString aPureIdStr = aPropStr.copy( 1 );
+                    if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
+                    {
+                        ::rtl::OUString aResourceStr = xStringResourceResolver->resolveString( aPureIdStr );
+                        aPropertyValue <<= aResourceStr;
+                    }
                 }
+            }
+            // StringItemList?
+            else if( eType == TypeClass_SEQUENCE )
+            {
+                Sequence< ::rtl::OUString > aStrings;
+                aPropertyValue >>= aStrings;
+
+                const ::rtl::OUString* pStrings = aStrings.getConstArray();
+                sal_Int32 nCount = aStrings.getLength();
+
+                Sequence< ::rtl::OUString > aResolvedStrings;
+                aResolvedStrings.realloc( nCount );
+                ::rtl::OUString* pResolvedStrings = aResolvedStrings.getArray();
+                try
+                {
+                    for ( sal_Int32 i = 0; i < nCount; ++i )
+                    {
+                        ::rtl::OUString aIdStr = pStrings[i];
+                        ::rtl::OUString aPureIdStr = aIdStr.copy( 1 );
+                        if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
+                            pResolvedStrings[i] = xStringResourceResolver->resolveString( aPureIdStr );
+                        else
+                            pResolvedStrings[i] = aIdStr;
+                    }
+                }
+                catch( resource::MissingResourceException & )
+                {}
+                aPropertyValue <<= aResolvedStrings;
             }
         }
         else
@@ -442,15 +479,132 @@ namespace pcr
                 if( xStringResourceManager.is() )
                 {
                     Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
-                    ::rtl::OUString aPropStr;
-                    aPropertyValue >>= aPropStr;
-                    if( aPropStr.getLength() > 1 )
+                    TypeClass eType = aPropertyValue.getValueType().getTypeClass();
+                    if( eType == TypeClass_STRING )
                     {
-                        ::rtl::OUString aPureIdStr = aPropStr.copy( 1 );
-                        ::rtl::OUString aValueStr;
-                        _rValue >>= aValueStr;
-                        xStringResourceManager->setString( aPureIdStr, aValueStr );
-                        aValue = aPropertyValue;    // set value to force modified
+                        ::rtl::OUString aPropStr;
+                        aPropertyValue >>= aPropStr;
+                        if( aPropStr.getLength() > 1 )
+                        {
+                            ::rtl::OUString aPureIdStr = aPropStr.copy( 1 );
+                            ::rtl::OUString aValueStr;
+                            _rValue >>= aValueStr;
+                            xStringResourceManager->setString( aPureIdStr, aValueStr );
+                            aValue = aPropertyValue;    // set value to force modified
+                        }
+                    }
+                    // StringItemList?
+                    else if( eType == TypeClass_SEQUENCE )
+                    {
+                        static ::rtl::OUString aDot = ::rtl::OUString::createFromAscii( "." );
+                        static ::rtl::OUString aEsc = ::rtl::OUString::createFromAscii( "&" );
+
+                        // Put strings into resource using new ids
+                        Sequence< ::rtl::OUString > aNewStrings;
+                        _rValue >>= aNewStrings;
+
+                        const ::rtl::OUString* pNewStrings = aNewStrings.getConstArray();
+                        sal_Int32 nNewCount = aNewStrings.getLength();
+
+                        // Create new Ids
+                        ::rtl::OUString* pNewPureIds = new ::rtl::OUString[nNewCount];
+                        ::rtl::OUString aIdStrBase = aDot;
+                        Any aNameAny = m_xComponent->getPropertyValue(PROPERTY_NAME);
+                        ::rtl::OUString sControlName;
+                        aNameAny >>= sControlName;
+                        aIdStrBase += sControlName;
+                        aIdStrBase += aDot;
+                        aIdStrBase += _rPropertyName;
+                        sal_Int32 i;
+                        ::rtl::OUString aDummyStr;
+                        for ( i = 0; i < nNewCount; ++i )
+                        {
+                            sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
+                            ::rtl::OUString aPureIdStr = ::rtl::OUString::valueOf( nUniqueId );
+                            aPureIdStr += aIdStrBase;
+                            pNewPureIds[i] = aPureIdStr;
+                            // Force usage of next Unique Id
+                            xStringResourceManager->setString( aPureIdStr, aDummyStr );
+                        }
+
+                        // Move strings to new Ids for all locales
+                        Sequence< Locale > aLocaleSeq = xStringResourceManager->getLocales();
+                        const Locale* pLocale = aLocaleSeq.getConstArray();
+                        sal_Int32 nLocaleCount = aLocaleSeq.getLength();
+                        Sequence< ::rtl::OUString > aOldIdStrings;
+                        aPropertyValue >>= aOldIdStrings;
+                        try
+                        {
+                            const ::rtl::OUString* pOldIdStrings = aOldIdStrings.getConstArray();
+                            sal_Int32 nOldIdCount = aOldIdStrings.getLength();
+                            for ( i = 0; i < nNewCount; ++i )
+                            {
+                                ::rtl::OUString aOldIdStr;
+                                ::rtl::OUString aOldPureIdStr;
+                                if( i < nOldIdCount )
+                                {
+                                    aOldIdStr = pOldIdStrings[i];
+                                    aOldPureIdStr = aOldIdStr.copy( 1 );
+                                }
+                                ::rtl::OUString aNewPureIdStr = pNewPureIds[i];
+
+                                for ( sal_Int32 iLocale = 0; iLocale < nLocaleCount; ++iLocale )
+                                {
+                                    Locale aLocale = pLocale[iLocale];
+
+                                    ::rtl::OUString aResourceStr;
+                                    if( aOldPureIdStr.getLength() != 0 )
+                                    {
+                                        if( xStringResourceManager->hasEntryForIdAndLocale( aOldPureIdStr, aLocale ) )
+                                        {
+                                            aResourceStr = xStringResourceManager->
+                                                resolveStringForLocale( aOldPureIdStr, aLocale );
+                                        }
+                                    }
+                                    xStringResourceManager->setStringForLocale( aNewPureIdStr, aResourceStr, aLocale );
+                                }
+                            }
+                        }
+                        catch( resource::MissingResourceException & )
+                        {}
+
+
+                        // Set new strings for current locale and create
+                        // new Id sequence as new property value
+                        Sequence< ::rtl::OUString > aNewIdStrings;
+                        aNewIdStrings.realloc( nNewCount );
+                        ::rtl::OUString* pNewIdStrings = aNewIdStrings.getArray();
+                        for ( i = 0; i < nNewCount; ++i )
+                        {
+                            ::rtl::OUString aPureIdStr = pNewPureIds[i];
+                            ::rtl::OUString aStr = pNewStrings[i];
+                            xStringResourceManager->setString( aPureIdStr, aStr );
+
+                            ::rtl::OUString aIdStr = aEsc;
+                            aIdStr += aPureIdStr;
+                            pNewIdStrings[i] = aIdStr;
+                        }
+                        aValue <<= aNewIdStrings;
+
+                        // Remove old ids from resource for all locales
+                        const ::rtl::OUString* pOldIdStrings = aOldIdStrings.getConstArray();
+                        sal_Int32 nOldIdCount = aOldIdStrings.getLength();
+                        for( i = 0 ; i < nOldIdCount ; ++i )
+                        {
+                            ::rtl::OUString aIdStr = pOldIdStrings[i];
+                            ::rtl::OUString aPureIdStr = aIdStr.copy( 1 );
+                            for ( sal_Int32 iLocale = 0; iLocale < nLocaleCount; ++iLocale )
+                            {
+                                Locale aLocale = pLocale[iLocale];
+                                try
+                                {
+                                    xStringResourceManager->removeIdForLocale( aPureIdStr, aLocale );
+                                }
+                                catch( resource::MissingResourceException & )
+                                {}
+                            }
+                        }
+                        delete[] pNewPureIds;
                     }
                 }
             }
