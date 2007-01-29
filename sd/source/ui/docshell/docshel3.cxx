@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:12:07 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             {
                 rtl::Reference< FuSearch > xFuSearch( dynamic_cast< FuSearch* >( GetDocShellFunction().get() ) );
 
-                if( !xFuSearch.is() )
+                if( !xFuSearch.is() && mpViewShell )
                 {
                     ::sd::View* pView = mpViewShell->GetView();
                     SetDocShellFunction( FuSearch::Create( mpViewShell, mpViewShell->GetActiveWindow(), pView, mpDoc, rReq ) );
@@ -258,15 +258,21 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_HANGUL_HANJA_CONVERSION:
         {
-            FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
-            static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True );
+            if( mpViewShell )
+            {
+                FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
+                static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True );
+            }
         }
         break;
 
         case SID_CHINESE_CONVERSION:
         {
-            FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
-            static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartChineseConversion();
+            if( mpViewShell )
+            {
+                FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
+                static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartChineseConversion();
+            }
         }
         break;
 
