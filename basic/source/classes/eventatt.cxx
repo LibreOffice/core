@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:24:55 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCESUPPLIER_HPP_
+#include <com/sun/star/resource/XStringResourceSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEMANAGER_HPP_
+#include <com/sun/star/resource/XStringResourceManager.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -104,9 +110,10 @@
 
 
 #include <cppuhelper/implbase1.hxx>
-using namespace ::com::sun::star::script;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::resource;
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::script::XScriptEventsAttacher > ScriptEventsAttacherHelper;
 
@@ -711,8 +718,75 @@ void SAL_CALL DialogEventAttacher::attachEvents
 
 }
 
+Reference< XStringResourceManager > getStringResourceFromDialogLibrary( const Any& aDlgLibAny )
+{
+    Reference< resource::XStringResourceManager > xStringResourceManager;
+
+    Reference< resource::XStringResourceSupplier > xStringResourceSupplier;
+    aDlgLibAny >>= xStringResourceSupplier;
+    if( xStringResourceSupplier.is() )
+    {
+        Reference< resource::XStringResourceResolver >
+            xStringResourceResolver = xStringResourceSupplier->getStringResource();
+
+        xStringResourceManager =
+            Reference< resource::XStringResourceManager >( xStringResourceResolver, UNO_QUERY );
+    }
+    return xStringResourceManager;
+}
+
+Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
+{
+    Any aRetDlgLibAny;
+
+    SbxVariable* pDlgLibContVar = pBasic->Find
+        (  String::CreateFromAscii("DialogLibraries"), SbxCLASS_OBJECT );
+    if( pDlgLibContVar && pDlgLibContVar->ISA(SbUnoObject) )
+    {
+        SbUnoObject* pDlgLibContUnoObj = (SbUnoObject*)(SbxBase*)pDlgLibContVar;
+        Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
+
+        Reference< XNameAccess > xDlgLibContNameAccess;
+        aDlgLibContAny >>= xDlgLibContNameAccess;
+        if( xDlgLibContNameAccess.is() )
+        {
+            Sequence< OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
+            const OUString* pLibNames = aLibNames.getConstArray();
+            sal_Int32 nLibNameCount = aLibNames.getLength();
+
+            for( sal_Int32 iLib = 0 ; iLib < nLibNameCount ; iLib++ )
+            {
+                Any aDlgLibAny = xDlgLibContNameAccess->getByName( pLibNames[ iLib ] );
+
+                Reference< XNameAccess > xDlgLibNameAccess;
+                aDlgLibAny >>= xDlgLibNameAccess;
+                if( xDlgLibNameAccess.is() )
+                {
+                    Sequence< OUString > aDlgNames = xDlgLibNameAccess->getElementNames();
+                    const OUString* pDlgNames = aDlgNames.getConstArray();
+                    sal_Int32 nDlgNameCount = aDlgNames.getLength();
+
+                    for( sal_Int32 iDlg = 0 ; iDlg < nDlgNameCount ; iDlg++ )
+                    {
+                        Any aDlgAny = xDlgLibNameAccess->getByName( pDlgNames[ iDlg ] );
+                        if( aDlgAny == rDlgAny )
+                        {
+                            aRetDlgLibAny = aDlgLibAny;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return aRetDlgLibAny;
+}
+
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
+    static OUString aResourceResolverPropName = OUString::createFromAscii( "ResourceResolver" );
+
     (void)pBasic;
     (void)bWrite;
 
@@ -738,7 +812,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    Any aAnyISP = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+    SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+    Any aAnyISP = pUnoObj->getUnoAny();
     TypeClass eType = aAnyISP.getValueType().getTypeClass();
 
     if( eType != TypeClass_INTERFACE )
@@ -768,6 +843,43 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     Reference< XInputStream > xInput( xISP->createInputStream() );
     s_xmlscript->importDialogModel( xInput, xDialogModel, xContext );
 
+    // Find dialog library for dialog, direct access is not possible here
+    StarBASIC* pStartedBasic = pINST->GetBasic();
+    SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : NULL;
+    SbxObject* pParentParentBasic = pParentBasic ? pParentBasic->GetParent() : NULL;
+
+    SbxObject* pSearchBasic1 = NULL;
+    SbxObject* pSearchBasic2 = NULL;
+    if( pParentParentBasic )
+    {
+        pSearchBasic1 = pParentBasic;
+        pSearchBasic2 = pParentParentBasic;
+    }
+    else
+    {
+        pSearchBasic1 = pStartedBasic;
+        pSearchBasic2 = pParentBasic;
+    }
+
+    Any aDlgLibAny;
+    if( pSearchBasic1 )
+    {
+        aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic1 );
+        if( pSearchBasic2 && aDlgLibAny.getValueType().getTypeClass() == TypeClass_VOID )
+            aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic2 );
+    }
+
+    // Get resource from dialog library and set at dialog
+    Reference< XStringResourceManager > xStringResourceManager
+        = getStringResourceFromDialogLibrary( aDlgLibAny );
+    if( xStringResourceManager.is() )
+    {
+        Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+        Any aStringResourceManagerAny;
+        aStringResourceManagerAny <<= xStringResourceManager;
+        xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+    }
+
     // Add dialog model to dispose vector
     Reference< XComponent > xDlgComponent( xDialogModel, UNO_QUERY );
     pINST->getComponentVector().push_back( xDlgComponent );
@@ -779,13 +891,12 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     Reference< XWindow > xW( xDlg, UNO_QUERY );
     xW->setVisible( sal_False );
     Reference< XToolkit > xToolkit( xMSF->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
+    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
     xDlg->createPeer( xToolkit, NULL );
-        StarBASIC* pStartedBasic = pINST->GetBasic();
-        // need ThisCompoent from calling script
+    // need ThisCompoent from calling script
 
-        OSL_TRACE("About to try get a hold of ThisComponent");
-        Reference< frame::XModel > xModel = getModelFromBasic( pStartedBasic ) ;
+    OSL_TRACE("About to try get a hold of ThisComponent");
+    Reference< frame::XModel > xModel = getModelFromBasic( pStartedBasic ) ;
     attachDialogEvents( pStartedBasic, xModel, xDlg );
 
     // Return dialog
