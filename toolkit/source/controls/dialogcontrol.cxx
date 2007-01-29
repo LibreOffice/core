@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:34:44 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,21 @@ using namespace ::com::sun::star::util;
 using namespace toolkit;
 
 #define PROPERTY_RESOURCERESOLVER rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ))
+
+struct LanguageDependentProp
+{
+    const char* pPropName;
+    sal_Int32   nPropNameLength;
+};
+
+// Attention: Please update both statics (count/array)!
+static const sal_uInt32 nLanguageDependentDialogPropCount = 2;
+static LanguageDependentProp aLanguageDependentDialogProp[] =
+{
+    { "Title",    5 },
+    { "HelpText", 8 },
+    { 0, 0          }
+};
 
 // ----------------------------------------------------------------------------
 // functor for disposing a control model
@@ -1691,6 +1706,34 @@ void UnoDialogControl::ImplUpdateResourceResolver()
                 catch ( NoSuchElementException& )
                 {
                 }
+            }
+        }
+
+        // propagate resource resolver changes to language dependent props of the dialog
+        Reference< XPropertySet > xPropertySet( getModel(), UNO_QUERY );
+        if ( xPropertySet.is() )
+        {
+            Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
+            Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
+
+            aPropNames.realloc( nLanguageDependentDialogPropCount );
+
+            sal_Int32 i = 0;
+            const LanguageDependentProp* pLangProps = aLanguageDependentDialogProp;
+            while ( pLangProps->pPropName != 0 )
+            {
+                if ( aPropNames.getLength() == i )
+                    aPropNames.realloc(i+1);
+                aPropNames[i++] = rtl::OUString::createFromAscii( pLangProps->pPropName );
+                ++pLangProps;
+            }
+
+            try
+            {
+                xMultiPropSet->firePropertiesChangeEvent( aPropNames, xListener );
+            }
+            catch ( NoSuchElementException& )
+            {
             }
         }
     }
