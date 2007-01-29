@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:46:29 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,12 @@ public:
 
     virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException);
+    // --> OD 2007-01-17 #i71385#
+    virtual sal_Int32 SAL_CALL getForeground()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBackground()
+        throw (::com::sun::star::uno::RuntimeException);
+    // <--
 
     //=====  XServiceInfo  ====================================================
 
