@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:35:07 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ static LanguageDependentProp aLanguageDependentProp[] =
     { "Title",           5 },
     { "HelpText",        8 },
     { "CurrencySymbol", 14 },
+    { "StringItemList", 14 },
     { 0, 0                 }
 };
 
@@ -353,12 +354,15 @@ void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const An
             ( rPropName.equalsAsciiL( "Label",           5 )) ||
             ( rPropName.equalsAsciiL( "Title",           5 )) ||
             ( rPropName.equalsAsciiL( "HelpText",        8 )) ||
-            ( rPropName.equalsAsciiL( "CurrencySymbol", 14 )) )
+            ( rPropName.equalsAsciiL( "CurrencySymbol", 14 )) ||
+            ( rPropName.equalsAsciiL( "StringItemList", 14 )) )
         {
             rtl::OUString aValue;
+            uno::Sequence< rtl::OUString > aSeqValue;
 
             if ( aVal >>= aValue )
             {
+                // Map single string value
                 if (( aValue.getLength() > 0 ) &&
                     ( aValue.compareToAscii( "&", 1 ) == 0 ))
                 {
@@ -369,6 +373,25 @@ void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const An
                     if ( ImplMapPlaceHolder( aKeyValue ))
                         aVal <<= aKeyValue;
                 }
+            }
+            else if ( aVal >>= aSeqValue )
+            {
+                // Map sequence strings
+                for ( sal_Int32 i = 0; i < aSeqValue.getLength(); i++ )
+                {
+                    aValue = aSeqValue[i];
+                    if (( aValue.getLength() > 0 ) &&
+                        ( aValue.compareToAscii( "&", 1 ) == 0 ))
+                    {
+                        // Magic symbol '&' found at first place. Interpret as a place
+                        // holder identifier. Now try to map it to the real value. The
+                        // magic symbol must be removed.
+                        rtl::OUString aKeyValue( aValue.copy( 1 ));
+                        if ( ImplMapPlaceHolder( aKeyValue ))
+                            aSeqValue[i] = aKeyValue;
+                    }
+                }
+                aVal <<= aSeqValue;
             }
         }
 
