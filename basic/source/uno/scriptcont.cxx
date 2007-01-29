@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:41:30 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,8 +112,10 @@
 #include <svtools/ehdl.hxx>
 #include "basmgr.hxx"
 #include "sbmod.hxx"
+#include "modsizeexceeded.hxx"
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/util/VetoException.hpp>
 
 namespace basic
 {
@@ -546,17 +548,34 @@ void setStreamKey( uno::Reference< io::XStream > xStream, const ::rtl::OUString&
 
 // Impl methods
 sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
-    const ::rtl::OUString& aName, const uno::Reference< embed::XStorage >& xStorage )
+    const ::rtl::OUString& aName, const uno::Reference< embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     OUString aDummyLocation;
     Reference< XSimpleFileAccess > xDummySFA;
-    return implStorePasswordLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA );
+    return implStorePasswordLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xHandler );
 }
 
 sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const ::rtl::OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                        const ::rtl::OUString& aTargetURL, const Reference< XSimpleFileAccess > xToUseSFI )
+                        const ::rtl::OUString& aTargetURL, const Reference< XSimpleFileAccess > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
+    bool bExport = aTargetURL.getLength();
+    // Only need to handle the export case here,
+    // save/saveas etc are handled in sfxbasemodel::storeSelf &
+    // sfxbasemodel::impl_store
+    uno::Sequence<rtl::OUString> aNames;
+    if ( bExport && LegacyPsswdBinaryLimitExceeded(aNames) )
+    {
+        if ( xHandler.is() )
+        {
+            ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( aNames );
+            uno::Reference< task::XInteractionRequest > xReq( pReq );
+            xHandler->handle( xReq );
+            if ( pReq->isAbort() )
+                throw util::VetoException();
+        }
+    }
+
     BasicManager* pBasicMgr = getBasicManager();
     StarBASIC* pBasicLib = pBasicMgr->GetLib( aName );
     if( !pBasicLib )
@@ -568,7 +587,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
 
     sal_Bool bLink = pLib->mbLink;
     sal_Bool bStorage = xStorage.is() && !bLink;
-    bool bExport = aTargetURL.getLength();
     if( bStorage )
     {
         for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
