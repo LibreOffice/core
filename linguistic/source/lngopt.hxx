@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:37:10 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef _LINGUISTIC_LNGOPT_HHX_
 #define _LINGUISTIC_LNGOPT_HHX_
+
+#include <functional>
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase5.hxx> // helper for implementations
