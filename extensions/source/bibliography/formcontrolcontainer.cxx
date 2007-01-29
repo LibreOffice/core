@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolcontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:55:59 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:49:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #endif
 
 #include <algorithm>
+#include <functional>
 
 //.........................................................................
 namespace bib
