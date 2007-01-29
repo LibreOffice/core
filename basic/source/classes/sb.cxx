@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:00:06 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -846,8 +846,16 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
         if( !pModule->IsCompiled() )
             pModule->Compile();
+    }
+    // compile modules first then RunInit ( otherwise there is
+    // can be order dependency, e.g. classmodule A has a member
+    // of of type classmodule B and classmodule B hasn't been compiled yet )
+    for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
+    {
+        SbModule* pModule = (SbModule*)pModules->Get( nMod );
         pModule->RunInit();
     }
+
     // Alle Objekte ueberpruefen, ob es sich um ein Basic handelt
     // Wenn ja, auch dort initialisieren
     for ( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
@@ -1494,6 +1502,9 @@ static const char pItemStr[]    = "Item";
 static const char pRemoveStr[]  = "Remove";
 static USHORT nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
+SbxInfoRef BasicCollection::xAddInfo = NULL;
+SbxInfoRef BasicCollection::xItemInfo = NULL;
+
 BasicCollection::BasicCollection( const XubString& rClass )
              : SbxObject( rClass )
 {
@@ -1505,6 +1516,7 @@ BasicCollection::BasicCollection( const XubString& rClass )
         nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemoveStr ) );
     }
     Initialize();
+
 }
 
 BasicCollection::~BasicCollection()
@@ -1532,6 +1544,19 @@ void BasicCollection::Initialize()
     p->SetFlag( SBX_DONTSTORE );
     p = Make( String::CreateFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
+    if ( !xAddInfo.Is() )
+    {
+        xAddInfo = new SbxInfo;
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Item") ), SbxVARIANT, SBX_READ );
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Key") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Before") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("After") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+    }
+    if ( !xItemInfo.Is() )
+    {
+        xItemInfo = new SbxInfo;
+        xItemInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Index") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);
+    }
 }
 
 SbxVariable* BasicCollection::Find( const XubString& rName, SbxClassType t )
@@ -1549,11 +1574,12 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
         ULONG nId = p->GetId();
         BOOL bRead  = BOOL( nId == SBX_HINT_DATAWANTED );
         BOOL bWrite = BOOL( nId == SBX_HINT_DATACHANGED );
+        BOOL bRequestInfo = BOOL( nId == SBX_HINT_INFOWANTED );
         SbxVariable* pVar = p->GetVar();
         SbxArray* pArg = pVar->GetParameters();
+        XubString aVarName( pVar->GetName() );
         if( bRead || bWrite )
         {
-            XubString aVarName( pVar->GetName() );
             if( pVar->GetHashCode() == nCountHash
                   && aVarName.EqualsIgnoreCaseAscii( pCountStr ) )
                 pVar->PutLong( xItemArray->Count32() );
@@ -1569,6 +1595,15 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
             else
                 SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
             return;
+        }
+        else if ( bRequestInfo )
+        {
+            if( pVar->GetHashCode() == nAddHash
+                  && aVarName.EqualsIgnoreCaseAscii( pAddStr ) )
+                pVar->SetInfo( xAddInfo );
+            else if( pVar->GetHashCode() == nItemHash
+                  && aVarName.EqualsIgnoreCaseAscii( pItemStr ) )
+                pVar->SetInfo( xItemInfo );
         }
     }
     SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
@@ -1624,7 +1659,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
             SbxVariable* pBefore = pPar_->Get(3);
             if( nCount == 5 )
             {
-                if( !pBefore->IsErr() )
+                if( !( pBefore->IsErr() || ( pBefore->GetType() == SbxEMPTY ) ) )
                 {
                     SetError( SbERR_BAD_ARGUMENT );
                     return;
@@ -1654,7 +1689,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
         if( nCount >= 3 )
         {
             SbxVariable* pKey = pPar_->Get(2);
-            if( !pKey->IsErr() )
+            if( !( pKey->IsErr() || ( pKey->GetType() == SbxEMPTY ) ) )
             {
                 if( pKey->GetType() != SbxSTRING )
                 {
@@ -1694,7 +1729,8 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
         pRes = xItemArray->Get32( nIndex );
     if( !pRes )
         SetError( SbxERR_BAD_INDEX );
-    *(pPar_->Get(0)) = *pRes;
+    else
+        *(pPar_->Get(0)) = *pRes;
 }
 
 void BasicCollection::CollRemove( SbxArray* pPar_ )
