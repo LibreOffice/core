@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:18:59 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,12 +63,16 @@ class LocalizationMgr
     {
         SET_IDS,
         RESET_IDS,
-        REMOVE_IDS_FROM_RESOURCE
+        RENAME_DIALOG_IDS,
+        RENAME_CONTROL_IDS,
+        REMOVE_IDS_FROM_RESOURCE,
+        MOVE_RESOURCES
     };
     static sal_Int32 implHandleControlResourceProperties( ::com::sun::star::uno::Any aControlAny,
             const ::rtl::OUString& aDialogName, const ::rtl::OUString& aCtrlName,
             ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
-            xStringResourceManager, HandleResourceMode eMode );
+            xStringResourceManager, ::com::sun::star::uno::Reference< ::com::sun::star::resource::
+            XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode );
 
     void enableResourceForAllLibraryDialogs( void )
     {
@@ -111,10 +115,16 @@ public:
     static void setControlResourceIDsForNewEditorObject( DlgEditor* pEditor,
         ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName );
 
+    static void renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
+        ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aNewCtrlName );
+
     static void deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
         ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName );
 
     static void setStringResourceAtDialog( SfxObjectShell* pShell, const String& aLibName, const String& aDlgName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
+
+    static void renameStringResourceIDs( SfxObjectShell* pShell, const String& aLibName, const String& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
     static void removeResourceForDialog( SfxObjectShell* pShell, const String& aLibName, const String& aDlgName,
@@ -123,6 +133,16 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
         getStringResourceFromDialogLibrary( ::com::sun::star::uno::Reference
             < ::com::sun::star::container::XNameContainer > xDialogLib );
+
+    // Clipboard
+    static void LocalizationMgr::resetResourceForDialog(
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
+        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
+
+    static void moveResourcesForPastedEditorObject( DlgEditor* pEditor,
+        ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::resource::
+        XStringResourceResolver > xSourceStringResolver );
 };
 
 #endif
