@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:09:11 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,7 +428,7 @@ BOOL SwOLENode::SavePersistentData()
             if ( xChild.is() )
                 xChild->setParent( 0 );
 
-            pCnt->RemoveEmbeddedObject( aOLEObj.aName );
+            pCnt->RemoveEmbeddedObject( aOLEObj.aName, sal_False );
 
             // TODO/LATER: aOLEObj.aName has no meaning here, since the undo container contains the object
             // by different name, in future it might makes sence that the name is transported here.
