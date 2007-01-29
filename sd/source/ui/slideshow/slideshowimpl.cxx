@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:34:31 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,7 +562,8 @@ SlideshowImpl::SlideshowImpl(
     msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
     msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
-    mnEndShowEvent(0)
+    mnEndShowEvent(0),
+    mnContextMenuEvent(0)
 {
     if( mpViewShell )
         mpOldActiveWindow = mpViewShell->GetActiveWindow();
@@ -586,6 +587,10 @@ SlideshowImpl::~SlideshowImpl()
 
     if( mnEndShowEvent )
         Application::RemoveUserEvent( mnEndShowEvent );
+    if( mnContextMenuEvent )
+        Application::RemoveUserEvent( mnContextMenuEvent );
+
+    maInputFreezeTimer.Stop();
 
     stopShow();
 
@@ -2031,6 +2036,15 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
         const int nKeyCode = rKEvt.GetKeyCode().GetCode();
         switch( nKeyCode )
         {
+            case awt::Key::CONTEXTMENU:
+                if( !mnContextMenuEvent )
+                {
+                    if( mpShowWindow )
+                        maPopupMousePos = mpShowWindow->GetPointerState().maPos;
+                    mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+                }
+                break;
+
             // cancel show
             case KEY_ESCAPE:
             case KEY_SUBTRACT:
@@ -2143,15 +2157,17 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
 
 void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
 {
-    if( rMEvt.IsRight() )
+    if( rMEvt.IsRight() && !mnContextMenuEvent )
     {
         maPopupMousePos = rMEvt.GetPosPixel();
-        Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+        mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
     }
 }
 
 IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
 {
+    mnContextMenuEvent = 0;
+
     if( mpSlideController.get() == 0 )
         return 0;
 
@@ -2231,6 +2247,9 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
     pMenu->SetSelectHdl( LINK( this, SlideshowImpl, ContextMenuSelectHdl ) );
     pMenu->Execute( mpShowWindow, maPopupMousePos );
     delete pMenu;
+
+    if( mxView.is() )
+        mxView->ignoreNextMouseReleased();
 
     pause( mbWasPaused );
     return 0;
