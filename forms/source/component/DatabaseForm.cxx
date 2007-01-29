@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:46:20 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <hash_map>
 
 #ifndef _FRM_DATABASEFORM_HXX_
 #include "DatabaseForm.hxx"
