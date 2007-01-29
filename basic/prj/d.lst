@@ -53,4 +53,5 @@ hedabu: ..\inc\sbxfac.hxx %_DEST%\inc%_EXT%\basic\sbxfac.hxx
 hedabu: ..\inc\sbxmstrm.hxx %_DEST%\inc%_EXT%\basic\sbxmstrm.hxx
 
 hedabu: ..\inc\namecont.hxx %_DEST%\inc%_EXT%\basic\namecont.hxx
+hedabu: ..\inc\modsizeexceeded.hxx %_DEST%\inc%_EXT%\basic\modsizeexceeded.hxx
 hedabu: ..\inc\basicmanagerrepository.hxx %_DEST%\inc%_EXT%\basic\basicmanagerrepository.hxx
