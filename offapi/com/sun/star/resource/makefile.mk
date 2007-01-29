@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:44:53 $
+#   last change: $Author: rt $ $Date: 2007-01-29 16:41:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ IDLFILES=\
     XResourceBundleLoader.idl\
     XStringResourceResolver.idl\
     XStringResourceManager.idl\
-    XStringResourcePersistance.idl\
+    XStringResourcePersistence.idl\
     XStringResourceWithStorage.idl\
     XStringResourceWithLocation.idl\
     XStringResourceSupplier.idl\
