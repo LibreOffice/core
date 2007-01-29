@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:30:49 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1085,9 +1085,11 @@ void SelectionFunction::EventPostprocessing (const EventDescriptor& rDescriptor)
         mpWindow->ReleaseMouse();
 
         // The overlays should not be visible anymore.  Warn when one of
-        // them still is.
+        // them still is.  An exception is th insertion indicator in the
+        // case that the context menu is visible.
         DBG_ASSERT(
-            !rOverlay.GetInsertionIndicatorOverlay().IsShowing(),
+            mrController.IsContextMenuOpen()
+                || !rOverlay.GetInsertionIndicatorOverlay().IsShowing(),
             "slidesorter::SelectionFunction: insertion indicator still visible");
         DBG_ASSERT(
             !rOverlay.GetSubstitutionOverlay().IsShowing(),
@@ -1097,7 +1099,8 @@ void SelectionFunction::EventPostprocessing (const EventDescriptor& rDescriptor)
             "slidesorter::SelectionFunction: selection rectangle still visible");
 
         // Now turn them off.
-        rOverlay.GetInsertionIndicatorOverlay().Hide();
+        if ( ! mrController.IsContextMenuOpen())
+            rOverlay.GetInsertionIndicatorOverlay().Hide();
         rOverlay.GetSubstitutionOverlay().Hide();
         rOverlay.GetSelectionRectangleOverlay().Hide();
     }
