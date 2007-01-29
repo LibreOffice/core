@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:54:29 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <com/sun/star/awt/Key.hpp>
 
 #include "ShowWindow.hxx"
 
@@ -68,6 +70,8 @@
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
+
+using namespace ::com::sun::star;
 
 namespace sd {
 
@@ -145,6 +149,7 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_P:
         case KEY_HOME:
         case KEY_END:
+        case awt::Key::CONTEXTMENU:
             // these keys will be handled by the slide show even
             // while in end mode
             break;
@@ -173,6 +178,7 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_P:
         case KEY_HOME:
         case KEY_END:
+        case awt::Key::CONTEXTMENU:
             // these keys will be handled by the slide show even
             // while in end mode
             break;
