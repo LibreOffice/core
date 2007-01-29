@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:19:23 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:43:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,7 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #define _CPPUHELPER_INTERFACECONTAINER_H_
 
-#include <hash_map>
-#include <functional>
+#include <vector>
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -406,8 +405,24 @@ public:
 
     typedef key keyType;
 private:
-    ::std::hash_map< key , void* , hashImpl , equalImpl > *m_pMap;
+    typedef ::std::vector< std::pair < key , void* > > InterfaceMap;
+    InterfaceMap *m_pMap;
     ::osl::Mutex &  rMutex;
+
+    inline typename InterfaceMap::iterator find(const key &rKey) const
+    {
+        typename InterfaceMap::iterator iter = m_pMap->begin();
+        typename InterfaceMap::iterator end = m_pMap->end();
+
+        while( iter != end )
+        {
+            equalImpl equal;
+            if( equal( iter->first, rKey ) )
+                break;
+            iter++;
+        }
+        return iter;
+    }
 
     inline OMultiTypeInterfaceContainerHelperVar( const OMultiTypeInterfaceContainerHelperVar & ) SAL_THROW( () );
     inline OMultiTypeInterfaceContainerHelperVar & operator = ( const OMultiTypeInterfaceContainerHelperVar & ) SAL_THROW( () );
