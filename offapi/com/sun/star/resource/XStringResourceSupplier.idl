@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStringResourceSupplier.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:44:17 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ interface XStringResourceSupplier: com::sun::star::uno::XInterface
         Provides access to a string resource.
         Depending on the context the returned object may also support
         <type scope="com::sun::star::resource">XStringResourceManager</type> or
-        <type scope="com::sun::star::resource">XStringResourcePersistance</type> or
+        <type scope="com::sun::star::resource">XStringResourcePersistence</type> or
         <type scope="com::sun::star::resource">XStringResourceWithStorage</type>
 
         @returns an interface
