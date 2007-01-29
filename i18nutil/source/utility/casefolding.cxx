@@ -4,9 +4,9 @@
  *
  *  $RCSfile: casefolding.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:02:38 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,10 @@ static Mapping mapping_0130[] = {{0, 1, {0x0069, 0, 0}},{0, 1, {0x0130, 0, 0}}};
 
 #define cased_letter(ch) (CaseMappingIndex[ch>>8] >= 0 && (CaseMappingValue[(CaseMappingIndex[ch>>8] << 8) + (ch&0xff)].type & CasedLetter))
 
+// for Lithuanian, condition to make explicit dot above when lowercasing capital I's and J's
+// whenever there are more accents above.
+#define accent_above(ch) (ch >= 0x0300 && ch <= 0x0314 || ch >= 0x033D && ch <= 0x0344 || ch == 0x0346 || ch >= 0x034A && ch <= 0x034C)
+
 Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale& aLocale, sal_uInt8 nMappingType) throw (RuntimeException)
 {
         switch(str[pos]) {
@@ -77,10 +81,10 @@ Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos,
             return (langIs("tr") || langIs("az")) ? mapping_0130[0] : mapping_0130[1];
         case 0x0069:
             return (langIs("tr") || langIs("az")) ? mapping_0069[0] : mapping_0069[1];
-        case 0x0049: return langIs("lt") ? mapping_0049[0] :
+        case 0x0049: return langIs("lt") && pos > len && accent_above(str[pos+1]) ? mapping_0049[0] :
                     (langIs("tr") || langIs("az")) ? mapping_0049[1] : mapping_0049[2];
-        case 0x004a: return langIs("lt") ? mapping_004a[0] : mapping_004a[1];
-        case 0x012e: return langIs("lt") ? mapping_012e[0] : mapping_012e[1];
+        case 0x004a: return langIs("lt") && pos > len && accent_above(str[pos+1]) ? mapping_004a[0] : mapping_004a[1];
+        case 0x012e: return langIs("lt") && pos > len && accent_above(str[pos+1]) ? mapping_012e[0] : mapping_012e[1];
         case 0x00cc: return langIs("lt") ? mapping_00cc[0] : mapping_00cc[1];
         case 0x00cd: return langIs("lt") ? mapping_00cd[0] : mapping_00cd[1];
         case 0x0128: return langIs("lt") ? mapping_0128[0] : mapping_0128[1];
