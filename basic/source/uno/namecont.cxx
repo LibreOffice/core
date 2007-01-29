@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:41:19 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:06:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@
 #ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
 #endif
+#include "sbmod.hxx"
+
 
 namespace basic
 {
@@ -1106,7 +1108,7 @@ SfxLibrary* SfxLibraryContainer::getImplLib( const String& rLibraryName )
 sal_Bool SfxLibraryContainer::implStorePasswordLibrary(
     SfxLibrary*,
     const OUString&,
-    const uno::Reference< embed::XStorage >& )
+    const uno::Reference< embed::XStorage >&, const uno::Reference< task::XInteractionHandler >&  )
 {
     return sal_False;
 }
@@ -1116,7 +1118,8 @@ sal_Bool SfxLibraryContainer::implStorePasswordLibrary(
     const ::rtl::OUString& /*aName*/,
     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& /*xStorage*/,
     const ::rtl::OUString& /*aTargetURL*/,
-    const Reference< XSimpleFileAccess > /*xToUseSFI*/ )
+    const Reference< XSimpleFileAccess > /*xToUseSFI*/,
+    const uno::Reference< task::XInteractionHandler >&  )
 {
     return sal_False;
 }
@@ -1675,7 +1678,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     loadLibrary( rLib.aName );
 
                 if( pImplLib->mbPasswordProtected )
-                    implStorePasswordLibrary( pImplLib, rLib.aName, xLibraryStor );
+                    implStorePasswordLibrary( pImplLib, rLib.aName, xLibraryStor, uno::Reference< task::XInteractionHandler >() );
                     // TODO: Check return value
                 else
                     implStoreLibrary( pImplLib, rLib.aName, xLibraryStor );
@@ -2314,7 +2317,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
 
     uno::Reference< ::com::sun::star::embed::XStorage > xDummyStor;
     if( pImplLib->mbPasswordProtected )
-        implStorePasswordLibrary( pImplLib, Name, xDummyStor, URL, xToUseSFI );
+        implStorePasswordLibrary( pImplLib, Name, xDummyStor, URL, xToUseSFI, Handler );
     else
         implStoreLibrary( pImplLib, Name, xDummyStor, URL, xToUseSFI, Handler );
 
@@ -2385,6 +2388,49 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     }
 }
 
+
+bool SfxLibraryContainer::LegacyPsswdBinaryLimitExceeded( Sequence< rtl::OUString >& rNames )
+{
+    Sequence< OUString > aNames = maNameContainer.getElementNames();
+    const OUString* pNames = aNames.getConstArray();
+    sal_Int32 i, nNameCount = aNames.getLength();
+    for( i = 0 ; i < nNameCount ; i++ )
+    {
+        SfxLibrary* pLib = getImplLib( pNames[ i ] );
+        if( !pLib->mbSharedIndexFile  && pLib->mbPasswordProtected )
+        {
+            StarBASIC* pBasicLib = (  mpBasMgr ? mpBasMgr->GetLib( pNames[ i ] ) : NULL );
+            if ( pBasicLib )
+            {
+                Sequence< OUString > aElementNames = pLib->getElementNames();
+                sal_Int32 nLen = aElementNames.getLength();
+                const OUString* pStr = aElementNames.getConstArray();
+                Sequence< OUString > aBigModules( nLen );
+                sal_Int32 nBigModules = 0;
+
+                for( sal_Int32 index = 0 ; index < nLen ; index++ )
+                {
+                    OUString aElementName = pStr[ index ];
+                    SbModule* pMod = pBasicLib->FindModule( aElementName );
+                    if ( pMod )
+                    {
+                        if ( pMod->ExceedsLegacyModuleSize() )
+                        {
+                            aBigModules[ nBigModules++ ] = aElementName;
+                        }
+                    }
+                }
+                if ( nBigModules )
+                {
+                    aBigModules.realloc( nBigModules );
+                    rNames = aBigModules;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 //============================================================================
 
