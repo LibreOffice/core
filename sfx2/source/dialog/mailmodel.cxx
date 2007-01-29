@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:08:48 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 
 #ifndef  _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
@@ -105,6 +108,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
+#include <com/sun/star/document/XExporter.hpp>
 #endif
 
 #ifndef _RTL_TEXTENC_H
@@ -213,6 +222,108 @@ sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XMode
     }
 
     return sal_False;
+}
+
+SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
+    uno::Reference< lang::XMultiServiceFactory > xSMGR,
+    uno::Reference< frame::XModel > xModel,
+    const rtl::OUString& rFilterName,
+    bool bModified,
+    sal_Int32& rNumArgs,
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
+{
+    SaveResult eRet( SAVE_ERROR );
+
+    try
+    {
+        uno::Sequence < beans::PropertyValue > aProps;
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xFilterCFG =
+                uno::Reference< container::XNameAccess >(
+                    xSMGR->createInstance(
+                        ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ), uno::UNO_QUERY );
+        css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
+
+        if ( !xFilterCFG.is() )
+            return eRet;
+
+        uno::Any aAny = xFilterCFG->getByName( rFilterName );
+
+        if ( aAny >>= aProps )
+        {
+            sal_Int32 nPropertyCount = aProps.getLength();
+            for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+            {
+                if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii( "UIComponent" )) )
+                {
+                    ::rtl::OUString aServiceName;
+                    aProps[nProperty].Value >>= aServiceName;
+                    if( aServiceName.getLength() )
+                    {
+                        uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
+                            xSMGR->createInstance( aServiceName ), uno::UNO_QUERY );
+                        uno::Reference< beans::XPropertyAccess > xFilterProperties(
+                            xFilterDialog, uno::UNO_QUERY );
+
+                        if( xFilterDialog.is() && xFilterProperties.is() )
+                        {
+                            uno::Reference< document::XExporter > xExporter( xFilterDialog, uno::UNO_QUERY );
+                            if( xExporter.is() )
+                                xExporter->setSourceDocument(
+                                    uno::Reference< lang::XComponent >( xModel, uno::UNO_QUERY ) );
+
+                            if( xFilterDialog->execute() )
+                            {
+                                //get the filter data
+                                uno::Sequence< beans::PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
+
+                                //add them to the args
+                                for ( sal_Int32 nInd = 0; nInd < aPropsFromDialog.getLength(); nInd++ )
+                                {
+                                    if( aPropsFromDialog[ nInd ].Name.equals( ::rtl::OUString::createFromAscii( "FilterData" ) ) )
+                                    {
+                                        //found the filterdata, add to the storing argument
+                                        rArgs.realloc( ++rNumArgs );
+                                        rArgs[rNumArgs-1].Name = aPropsFromDialog[ nInd ].Name;
+                                        rArgs[rNumArgs-1].Value = aPropsFromDialog[ nInd ].Value;
+                                        break;
+                                    }
+                                }
+                                eRet = SAVE_SUCCESSFULL;
+                            }
+                            else
+                            {
+                                // cancel from dialog, then do not send
+                                // If the model is not modified, it could be modified by the dispatch calls.
+                                // Therefore set back to modified = false. This should not hurt if we call
+                                // on a non-modified model.
+                                if ( !bModified )
+                                {
+                                    try
+                                    {
+                                        xModifiable->setModified( sal_False );
+                                    }
+                                    catch( com::sun::star::beans::PropertyVetoException& )
+                                    {
+                                    }
+                                }
+                                eRet = SAVE_CANCELLED;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    catch( css::uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    return eRet;
 }
 
 sal_Int32 SfxMailModel::GetCount() const
@@ -512,6 +623,17 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                                 }
                             }
                         }
+                    }
+
+                    //check if this is the pdf otput filter (i#64555)
+                    if( bSendAsPDF )
+                    {
+                        SaveResult eShowPDFFilterDialog = ShowFilterOptionsDialog(
+                                                            xSMGR, xModel, aFilterName, bModified, nNumArgs, aArgs );
+
+                        // don't continue on dialog cancel or error
+                        if ( eShowPDFFilterDialog != SAVE_SUCCESSFULL )
+                            return eShowPDFFilterDialog;
                     }
 
                     xStorable->storeToURL( aFileURL, aArgs );
