@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:18:03 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@
 #include "module.hxx"
 #include "objsh.hxx"
 #include "docfac.hxx"
+
+#include <hash_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
