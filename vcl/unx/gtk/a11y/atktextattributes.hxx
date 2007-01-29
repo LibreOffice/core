@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktextattributes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:11:54 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,9 @@
 
 AtkAttributeSet*
 attribute_set_new_from_property_values(
-    const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAttributeList );
+    const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAttributeList,
+    bool run_attributes_only,
+    AtkText *text);
 
 bool
 attribute_set_map_to_property_values(
