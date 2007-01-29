@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:36:23 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,81 +713,88 @@ BOOL SbiRuntime::Step()
             SbError err = nError;
             ClearExprStack();
             nError = 0;
+            pInst->nErr = err;
+            pInst->nErl = nLine;
+            pErrCode    = pCode;
+            pErrStmnt   = pStmnt;
+            // An error occured in an error handler
+            // force parent handler ( if there is one )
+            // to handle the error
+            bool bLetParentHandleThis = false;
+
             // Im Error Handler? Dann Std-Error
-            if( bInError )
-            {
-                StepSTDERROR();
-                pInst->Abort();
-            }
-            else
+            if ( !bInError )
             {
                 bInError = TRUE;
 
-                pInst->nErr = err;
-                pInst->nErl = nLine;
-                pErrCode    = pCode;
-                pErrStmnt   = pStmnt;
                 if( !bError )           // On Error Resume Next
                     StepRESUME( 1 );
                 else if( pError )       // On Error Goto ...
                     pCode = pError;
-                else                    // Standard-Fehlerbehandlung
+                else
+                    bLetParentHandleThis = true;
+                         }
+            else
+            {
+                bLetParentHandleThis = true;
+                pError = NULL; //terminate the handler
+            }
+            if ( bLetParentHandleThis )
+            {
+                // AB 13.2.1997, neues Error-Handling:
+                // Uebergeordnete Error-Handler beruecksichtigen
+
+                // Wir haben keinen Error-Handler -> weiter oben suchen
+                SbiRuntime* pRtErrHdl = NULL;
+                SbiRuntime* pRt = this;
+                while( NULL != (pRt = pRt->pNext) )
                 {
-                    // AB 13.2.1997, neues Error-Handling:
-                    // Uebergeordnete Error-Handler beruecksichtigen
-
-                    // Wir haben keinen Error-Handler -> weiter oben suchen
-                    SbiRuntime* pRtErrHdl = NULL;
-                    SbiRuntime* pRt = this;
-                    while( NULL != (pRt = pRt->pNext) )
+                    // Gibt es einen Error-Handler?
+                    if( pRt->bError == FALSE || pRt->pError != NULL )
                     {
-                        // Gibt es einen Error-Handler?
-                        if( pRt->bError == FALSE || pRt->pError != NULL )
-                        {
-                            pRtErrHdl = pRt;
-                            break;
-                        }
+                        pRtErrHdl = pRt;
+                        break;
                     }
-
-                    // Error-Hdl gefunden?
-                    if( pRtErrHdl )
-                    {
-                        // (Neuen) Error-Stack anlegen
-                        SbErrorStack*& rErrStack = GetSbData()->pErrStack;
-                        if( rErrStack )
-                            delete rErrStack;
-                        rErrStack = new SbErrorStack();
-
-                        // Alle im Call-Stack darunter stehenden RTs manipulieren
-                        pRt = this;
-                        do
-                        {
-                            // Fehler setzen
-                            pRt->nError = err;
-                            if( pRt != pRtErrHdl )
-                                pRt->bRun = FALSE;
-
-                            // In Error-Stack eintragen
-                            SbErrorStackEntry *pEntry = new SbErrorStackEntry
-                                ( pRt->pMeth, pRt->nLine, pRt->nCol1, pRt->nCol2 );
-                            rErrStack->C40_INSERT(SbErrorStackEntry, pEntry, rErrStack->Count() );
-
-                            // Nach RT mit Error-Handler aufhoeren
-                            if( pRt == pRtErrHdl )
-                                break;
-                            pRt = pRt->pNext;
-                        }
-                        while( pRt );
-                    }
-                    // Kein Error-Hdl gefunden -> altes Vorgehen
-                    else
-                    {
-                        pInst->Abort();
-                    }
-
-                    // ALT: Nur
-                    // pInst->Abort();
                 }
+
+                // Error-Hdl gefunden?
+                if( pRtErrHdl )
+                {
+                    // (Neuen) Error-Stack anlegen
+                    SbErrorStack*& rErrStack = GetSbData()->pErrStack;
+                    if( rErrStack )
+                        delete rErrStack;
+                    rErrStack = new SbErrorStack();
+
+                    // Alle im Call-Stack darunter stehenden RTs manipulieren
+                    pRt = this;
+                    do
+                    {
+                        // Fehler setzen
+                        pRt->nError = err;
+                        if( pRt != pRtErrHdl )
+                            pRt->bRun = FALSE;
+
+                        // In Error-Stack eintragen
+                        SbErrorStackEntry *pEntry = new SbErrorStackEntry
+                            ( pRt->pMeth, pRt->nLine, pRt->nCol1, pRt->nCol2 );
+                        rErrStack->C40_INSERT(SbErrorStackEntry, pEntry, rErrStack->Count() );
+
+                        // Nach RT mit Error-Handler aufhoeren
+                        if( pRt == pRtErrHdl )
+                            break;
+                           pRt = pRt->pNext;
+                    }
+                    while( pRt );
+                }
+                // Kein Error-Hdl gefunden -> altes Vorgehen
+                else
+                {
+                    pInst->Abort();
+                }
+
+                // ALT: Nur
+                // pInst->Abort();
             }
         }
     }
