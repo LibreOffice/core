@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:37:21 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,12 @@ protected:
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual sal_Bool Close();
 
-    DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>, PropertySetArray);
+    DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, InterfaceArray);
 
-    ::comphelper::OComposedPropertySet* CreateCompPropSet(const SdrMarkList& rMarkList);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+        CreateMultiSelectionSequence( const SdrMarkList& _rMarkList );
+    void implSetNewObjectSequence( const ::com::sun::star::uno::Sequence
+        < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rObjectSeq );
 
     void implSetNewObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
