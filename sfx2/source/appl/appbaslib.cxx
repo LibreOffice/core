@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbaslib.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:56:47 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:07:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,17 @@ SfxLibraryContainer* SfxBasicManagerHolder::impl_getContainer( ContainerType _eT
     }
     DBG_ERROR( "SfxBasicManagerHolder::impl_getContainer: illegal container type!" );
     return NULL;
+}
+
+// could have moved this to basic/BasicManager class, however probably best
+// to keep the nasty use of the uno implementation SfxLibraryContainer class in
+// one place
+sal_Bool
+SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< rtl::OUString >& sModules )
+{
+    if ( mpBasicLibContainer )
+        return mpBasicLibContainer->LegacyPsswdBinaryLimitExceeded( sModules );
+    return sal_True;
 }
 
 //============================================================================
