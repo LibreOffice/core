@@ -40,7 +40,10 @@ BUILD_DRIVE1:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE1)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT1_PROTECT=$(TMP)$/$(DEF1UNIQE:b).bat && 
+EXPORT1_PROTECT=$(TMP)$/$(DEF1UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE1)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE1)"=="O"
 
 .ENDIF			# "$(DEFLIB1NAME)"!=""
@@ -80,14 +83,14 @@ $(DEF1TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(SHL1USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT1_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL1TARGET).exp
+    @-$(EXPORT1_PROTECT) $(RMHACK) $(MISC)$/$(SHL1TARGET).exp
     @$(EXPORT1_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
 .IF "$(DEF1CEXP)"!=""
     @$(EXPORT1_PROTECT) $(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(MISC)$/$(SHL1TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT1_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(MISC)$/$(SHL1TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT1_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL1TARGET).exp
+    $(EXPORT1_PROTECT) $(RMHACK) $(MISC)$/$(SHL1TARGET).exp
 .ELSE			# "$(SHL1USE_EXPORTS)"!="ordinal"
     @$(EXPORT1_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB1NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL1TARGET).direct
 .IF "$(DEF1CEXP)"!=""
@@ -231,7 +234,10 @@ BUILD_DRIVE2:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE2)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT2_PROTECT=$(TMP)$/$(DEF2UNIQE:b).bat && 
+EXPORT2_PROTECT=$(TMP)$/$(DEF2UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE2)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE2)"=="O"
 
 .ENDIF			# "$(DEFLIB2NAME)"!=""
@@ -271,14 +277,14 @@ $(DEF2TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(SHL2USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT2_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL2TARGET).exp
+    @-$(EXPORT2_PROTECT) $(RMHACK) $(MISC)$/$(SHL2TARGET).exp
     @$(EXPORT2_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
 .IF "$(DEF2CEXP)"!=""
     @$(EXPORT2_PROTECT) $(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(MISC)$/$(SHL2TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT2_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(MISC)$/$(SHL2TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT2_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL2TARGET).exp
+    $(EXPORT2_PROTECT) $(RMHACK) $(MISC)$/$(SHL2TARGET).exp
 .ELSE			# "$(SHL2USE_EXPORTS)"!="ordinal"
     @$(EXPORT2_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB2NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL2TARGET).direct
 .IF "$(DEF2CEXP)"!=""
@@ -422,7 +428,10 @@ BUILD_DRIVE3:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE3)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT3_PROTECT=$(TMP)$/$(DEF3UNIQE:b).bat && 
+EXPORT3_PROTECT=$(TMP)$/$(DEF3UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE3)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE3)"=="O"
 
 .ENDIF			# "$(DEFLIB3NAME)"!=""
@@ -462,14 +471,14 @@ $(DEF3TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(SHL3USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT3_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL3TARGET).exp
+    @-$(EXPORT3_PROTECT) $(RMHACK) $(MISC)$/$(SHL3TARGET).exp
     @$(EXPORT3_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
 .IF "$(DEF3CEXP)"!=""
     @$(EXPORT3_PROTECT) $(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(MISC)$/$(SHL3TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT3_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(MISC)$/$(SHL3TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT3_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL3TARGET).exp
+    $(EXPORT3_PROTECT) $(RMHACK) $(MISC)$/$(SHL3TARGET).exp
 .ELSE			# "$(SHL3USE_EXPORTS)"!="ordinal"
     @$(EXPORT3_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB3NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL3TARGET).direct
 .IF "$(DEF3CEXP)"!=""
@@ -613,7 +622,10 @@ BUILD_DRIVE4:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE4)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT4_PROTECT=$(TMP)$/$(DEF4UNIQE:b).bat && 
+EXPORT4_PROTECT=$(TMP)$/$(DEF4UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE4)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE4)"=="O"
 
 .ENDIF			# "$(DEFLIB4NAME)"!=""
@@ -653,14 +665,14 @@ $(DEF4TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(SHL4USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT4_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL4TARGET).exp
+    @-$(EXPORT4_PROTECT) $(RMHACK) $(MISC)$/$(SHL4TARGET).exp
     @$(EXPORT4_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
 .IF "$(DEF4CEXP)"!=""
     @$(EXPORT4_PROTECT) $(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(MISC)$/$(SHL4TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT4_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(MISC)$/$(SHL4TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT4_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL4TARGET).exp
+    $(EXPORT4_PROTECT) $(RMHACK) $(MISC)$/$(SHL4TARGET).exp
 .ELSE			# "$(SHL4USE_EXPORTS)"!="ordinal"
     @$(EXPORT4_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB4NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL4TARGET).direct
 .IF "$(DEF4CEXP)"!=""
@@ -804,7 +816,10 @@ BUILD_DRIVE5:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE5)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT5_PROTECT=$(TMP)$/$(DEF5UNIQE:b).bat && 
+EXPORT5_PROTECT=$(TMP)$/$(DEF5UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE5)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE5)"=="O"
 
 .ENDIF			# "$(DEFLIB5NAME)"!=""
@@ -844,14 +859,14 @@ $(DEF5TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(SHL5USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT5_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL5TARGET).exp
+    @-$(EXPORT5_PROTECT) $(RMHACK) $(MISC)$/$(SHL5TARGET).exp
     @$(EXPORT5_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
 .IF "$(DEF5CEXP)"!=""
     @$(EXPORT5_PROTECT) $(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(MISC)$/$(SHL5TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT5_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(MISC)$/$(SHL5TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT5_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL5TARGET).exp
+    $(EXPORT5_PROTECT) $(RMHACK) $(MISC)$/$(SHL5TARGET).exp
 .ELSE			# "$(SHL5USE_EXPORTS)"!="ordinal"
     @$(EXPORT5_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB5NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL5TARGET).direct
 .IF "$(DEF5CEXP)"!=""
@@ -995,7 +1010,10 @@ BUILD_DRIVE6:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE6)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT6_PROTECT=$(TMP)$/$(DEF6UNIQE:b).bat && 
+EXPORT6_PROTECT=$(TMP)$/$(DEF6UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE6)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE6)"=="O"
 
 .ENDIF			# "$(DEFLIB6NAME)"!=""
@@ -1035,14 +1053,14 @@ $(DEF6TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(SHL6USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT6_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL6TARGET).exp
+    @-$(EXPORT6_PROTECT) $(RMHACK) $(MISC)$/$(SHL6TARGET).exp
     @$(EXPORT6_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
 .IF "$(DEF6CEXP)"!=""
     @$(EXPORT6_PROTECT) $(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(MISC)$/$(SHL6TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT6_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(MISC)$/$(SHL6TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT6_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL6TARGET).exp
+    $(EXPORT6_PROTECT) $(RMHACK) $(MISC)$/$(SHL6TARGET).exp
 .ELSE			# "$(SHL6USE_EXPORTS)"!="ordinal"
     @$(EXPORT6_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB6NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL6TARGET).direct
 .IF "$(DEF6CEXP)"!=""
@@ -1186,7 +1204,10 @@ BUILD_DRIVE7:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE7)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT7_PROTECT=$(TMP)$/$(DEF7UNIQE:b).bat && 
+EXPORT7_PROTECT=$(TMP)$/$(DEF7UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE7)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE7)"=="O"
 
 .ENDIF			# "$(DEFLIB7NAME)"!=""
@@ -1226,14 +1247,14 @@ $(DEF7TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(SHL7USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT7_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL7TARGET).exp
+    @-$(EXPORT7_PROTECT) $(RMHACK) $(MISC)$/$(SHL7TARGET).exp
     @$(EXPORT7_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
 .IF "$(DEF7CEXP)"!=""
     @$(EXPORT7_PROTECT) $(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(MISC)$/$(SHL7TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT7_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(MISC)$/$(SHL7TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT7_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL7TARGET).exp
+    $(EXPORT7_PROTECT) $(RMHACK) $(MISC)$/$(SHL7TARGET).exp
 .ELSE			# "$(SHL7USE_EXPORTS)"!="ordinal"
     @$(EXPORT7_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB7NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL7TARGET).direct
 .IF "$(DEF7CEXP)"!=""
@@ -1377,7 +1398,10 @@ BUILD_DRIVE8:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE8)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT8_PROTECT=$(TMP)$/$(DEF8UNIQE:b).bat && 
+EXPORT8_PROTECT=$(TMP)$/$(DEF8UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE8)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE8)"=="O"
 
 .ENDIF			# "$(DEFLIB8NAME)"!=""
@@ -1417,14 +1441,14 @@ $(DEF8TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(SHL8USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT8_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL8TARGET).exp
+    @-$(EXPORT8_PROTECT) $(RMHACK) $(MISC)$/$(SHL8TARGET).exp
     @$(EXPORT8_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
 .IF "$(DEF8CEXP)"!=""
     @$(EXPORT8_PROTECT) $(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(MISC)$/$(SHL8TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT8_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(MISC)$/$(SHL8TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT8_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL8TARGET).exp
+    $(EXPORT8_PROTECT) $(RMHACK) $(MISC)$/$(SHL8TARGET).exp
 .ELSE			# "$(SHL8USE_EXPORTS)"!="ordinal"
     @$(EXPORT8_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB8NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL8TARGET).direct
 .IF "$(DEF8CEXP)"!=""
@@ -1568,7 +1592,10 @@ BUILD_DRIVE9:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE9)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT9_PROTECT=$(TMP)$/$(DEF9UNIQE:b).bat && 
+EXPORT9_PROTECT=$(TMP)$/$(DEF9UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE9)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE9)"=="O"
 
 .ENDIF			# "$(DEFLIB9NAME)"!=""
@@ -1608,14 +1635,14 @@ $(DEF9TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(SHL9USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT9_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL9TARGET).exp
+    @-$(EXPORT9_PROTECT) $(RMHACK) $(MISC)$/$(SHL9TARGET).exp
     @$(EXPORT9_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
 .IF "$(DEF9CEXP)"!=""
     @$(EXPORT9_PROTECT) $(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(MISC)$/$(SHL9TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT9_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(MISC)$/$(SHL9TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT9_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL9TARGET).exp
+    $(EXPORT9_PROTECT) $(RMHACK) $(MISC)$/$(SHL9TARGET).exp
 .ELSE			# "$(SHL9USE_EXPORTS)"!="ordinal"
     @$(EXPORT9_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB9NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL9TARGET).direct
 .IF "$(DEF9CEXP)"!=""
@@ -1759,7 +1786,10 @@ BUILD_DRIVE10:=$(shell echo %_disk)
 
 .IF "$(BUILD_DRIVE10)"=="O"
 # in case of RE build, protect against failed lock
-EXPORT10_PROTECT=$(TMP)$/$(DEF10UNIQE:b).bat && 
+EXPORT10_PROTECT=$(TMP)$/$(DEF10UNIQE:b).bat &&
+RMHACK:=$(RM:s/+//)
+.ELSE			# "$(BUILD_DRIVE10)"=="O"
+RMHACK:=$(RM)
 .ENDIF			# "$(BUILD_DRIVE10)"=="O"
 
 .ENDIF			# "$(DEFLIB10NAME)"!=""
@@ -1799,14 +1829,14 @@ $(DEF10TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(SHL10USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT10_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL10TARGET).exp
+    @-$(EXPORT10_PROTECT) $(RMHACK) $(MISC)$/$(SHL10TARGET).exp
     @$(EXPORT10_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
 .IF "$(DEF10CEXP)"!=""
     @$(EXPORT10_PROTECT) $(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(MISC)$/$(SHL10TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT10_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(MISC)$/$(SHL10TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT10_PROTECT) $(RM:s/+//) $(MISC)$/$(SHL10TARGET).exp
+    $(EXPORT10_PROTECT) $(RMHACK) $(MISC)$/$(SHL10TARGET).exp
 .ELSE			# "$(SHL10USE_EXPORTS)"!="ordinal"
     @$(EXPORT10_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB10NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL10TARGET).direct
 .IF "$(DEF10CEXP)"!=""
