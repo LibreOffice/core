@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateprotocol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:17:28 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:00:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-
-#ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATIONPROVIDER_HPP_
-#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_XML_XPATH_XXPATHAPI_HPP_
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
@@ -105,7 +101,8 @@ bool
 checkForUpdates(
     uno::Reference< uno::XComponentContext > const & rxContext,
     uno::Reference< task::XInteractionHandler > const & rxInteractionHandler,
-    rtl::OUString& rUpdateURL, rtl::OUString& rVersionFound )
+    rtl::OUString& rUpdateURL, rtl::OUString& rVersionFound,
+    uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider)
 {
     OSL_TRACE("checking for updates ..\n");
 
@@ -129,8 +126,7 @@ checkForUpdates(
     OSL_ASSERT( rxContext->getServiceManager().is() );
 
     // the update information provider
-    uno::Reference< deployment::XUpdateInformationProvider > aUpdateInfoProvider =
-        deployment::UpdateInformationProvider::create( rxContext );
+    rUpdateInfoProvider =  deployment::UpdateInformationProvider::create( rxContext );
 
     // XPath implementation
     uno::Reference< xml::xpath::XXPathAPI > xXPath(
@@ -140,12 +136,12 @@ checkForUpdates(
     xXPath->registerNS( UNISTRING("inst"), UNISTRING("http://installation.openoffice.org/description") );
 
     if( rxInteractionHandler.is() )
-        aUpdateInfoProvider->setInteractionHandler(rxInteractionHandler);
+        rUpdateInfoProvider->setInteractionHandler(rxInteractionHandler);
 
     try
     {
         uno::Sequence< uno::Reference< xml::dom::XElement > > aUpdateInfoList =
-            aUpdateInfoProvider->getUpdateInformation( aRepositoryList, aInstallSetID );
+            rUpdateInfoProvider->getUpdateInformation( aRepositoryList, aInstallSetID );
 
         rtl::OUStringBuffer aBuffer;
         aBuffer.appendAscii("/child::inst:description[inst:os=\'");
