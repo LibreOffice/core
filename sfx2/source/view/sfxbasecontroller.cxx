@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:14:52 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,8 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
+
+#include <hash_map>
 
 #include "event.hxx"
 
