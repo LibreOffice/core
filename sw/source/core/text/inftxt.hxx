@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:50:38 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ class SwTxtFtn;
 class SwAttrIter;
 struct SwMultiCreator;
 class SwMultiPortion;
+class SwWrongList;
 
 /* Minimum: Prozentwert fuers kernen */
 #define MINKERNPERCENT 5
@@ -388,8 +389,8 @@ public:
 
 class SwTxtPaintInfo : public SwTxtSizeInfo
 {
-    SwWrongList *pWrongList;
-    SwWrongList *pSmartTags;    // SMARTTAGS
+    const SwWrongList *pWrongList;
+    const SwWrongList *pSmartTags;    // SMARTTAGS
     std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // Fuer den Hintergrund
     SwRect      aItemRect;          // ebenfalls fuer den Hintergrund
@@ -488,12 +489,12 @@ public:
     inline std::vector<long>* GetpSpaceAdd() const { return pSpaceAdd; }
 
 
-    inline void SetWrongList( SwWrongList *pNew ){ pWrongList = pNew; }
-    inline SwWrongList* GetpWrongList() const { return pWrongList; }
+    inline void SetWrongList( const SwWrongList *pNew ){ pWrongList = pNew; }
+    inline const SwWrongList* GetpWrongList() const { return pWrongList; }
 
     // SMARTTAGS
-    inline void SetSmartTags( SwWrongList *pNew ){ pSmartTags = pNew; }
-    inline SwWrongList* GetSmartTags() const { return pSmartTags; }
+    inline void SetSmartTags( const SwWrongList *pNew ){ pSmartTags = pNew; }
+    inline const SwWrongList* GetSmartTags() const { return pSmartTags; }
 };
 
 /*************************************************************************
@@ -733,29 +734,12 @@ public:
 // Die Art und Weise ist etwas kriminell, rInf ist const und wird
 // trotzdem veraendert. Da rInf im DTOR wieder restauriert wird,
 // ist dies zulaessig, es handelt sich um ein "logisches const".
-// Die beiden Klassen SwTxtSlot und SwTxtSlotLen sind Zwillinge, sie
-// unterscheiden sich nur im Ctor in der Zuweisung der Textlaenge
-// an pInf. Aenderungen muessen in beiden gepflegt werden!
 
 class SwTxtSlot
 {
-    const XubString *pOldTxt;
     XubString aTxt;
-    xub_StrLen nIdx;
-    xub_StrLen nLen;
-    sal_Bool bOn;
-protected:
-    SwTxtSizeInfo *pInf;
-public:
-    SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor );
-    ~SwTxtSlot();
-    inline sal_Bool IsOn() const { return bOn; }
-};
-
-class SwTxtSlotLen
-{
     const XubString *pOldTxt;
-    XubString aTxt;
+    const SwWrongList* pOldSmartTagList;
     xub_StrLen nIdx;
     xub_StrLen nLen;
     sal_Bool bOn;
@@ -764,9 +748,9 @@ protected:
 public:
     // Der Ersetzungstring kommt wahlweise aus der Portion via GetExpText()
     // oder aus dem char Pointer pCh, wenn dieser ungleich NULL ist.
-    SwTxtSlotLen( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
-                  const sal_Char *pCh = NULL );
-    ~SwTxtSlotLen();
+    SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor, bool bTxtLen,
+               bool bExgSmartTagList, const sal_Char *pCh = NULL );
+    ~SwTxtSlot();
     inline sal_Bool IsOn() const { return bOn; }
 };
 
