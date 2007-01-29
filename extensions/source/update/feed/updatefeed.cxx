@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatefeed.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:18:30 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,13 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#ifndef  _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
@@ -88,6 +94,10 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_XML_DOM_XDOCUMENTBUILDER_HPP_
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #endif
@@ -97,9 +107,18 @@
 #endif
 
 #include <rtl/ref.hxx>
+#include <rtl/memory.h>
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h>
 #include <osl/conditn.hxx>
+
+#ifndef _ZLIB_H
+#ifdef SYSTEM_ZLIB
+#include "zlib.h"
+#else
+#include "zlib/zlib.h"
+#endif
+#endif
 
 namespace beans = com::sun::star::beans ;
 namespace container = com::sun::star::container ;
@@ -110,6 +129,7 @@ namespace task = com::sun::star::task ;
 namespace ucb = com::sun::star::ucb ;
 namespace uno = com::sun::star::uno ;
 namespace xml = com::sun::star::xml ;
+namespace sdbc = com::sun::star::sdbc ;
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -172,8 +192,149 @@ public:
     virtual uno::Reference< io::XInputStream > SAL_CALL getInputStream()
         throw (uno::RuntimeException) { return m_xStream; };
     virtual void SAL_CALL setInputStream( uno::Reference< io::XInputStream > const & rStream )
-        throw (uno::RuntimeException) { m_xStream = INPUT_STREAM(rStream); };
+        throw (uno::RuntimeException) { m_xStream = rStream; };
 };
+
+//------------------------------------------------------------------------------
+
+class InflateInputStream : public ::cppu::WeakImplHelper1< io::XInputStream >
+{
+    uno::Reference< io::XInputStream > m_xStream;
+
+    uno::Sequence < sal_Int8 > m_aBuffer;
+    bool m_bRead;
+    sal_Int32 m_nOffset;
+
+    rtl::OUString m_aContentEncoding;
+
+    void readIntoMemory();
+
+public:
+    InflateInputStream(const uno::Reference< io::XInputStream >& rxStream,const rtl::OUString& rContentEncoding) :
+        m_xStream(rxStream), m_nOffset(0), m_bRead(false), m_aContentEncoding(rContentEncoding) {};
+
+    virtual sal_Int32 SAL_CALL readBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL readSomeBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+        { readIntoMemory(); return readBytes(aData, nMaxBytesToRead ); };
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+        {
+            readIntoMemory();
+            if( m_nOffset + nBytesToSkip < m_aBuffer.getLength() )
+                m_nOffset += nBytesToSkip;
+            else
+                m_nOffset = m_aBuffer.getLength();
+        };
+    virtual sal_Int32 SAL_CALL available()
+        throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
+        {   readIntoMemory(); return m_aBuffer.getLength() - m_nOffset; };
+    virtual void SAL_CALL closeInput( )
+        throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
+        { m_xStream->closeInput(); };
+};
+
+
+sal_Int32 SAL_CALL
+InflateInputStream::readBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+{
+    readIntoMemory();
+    sal_Int32 nAvailable = available();
+    sal_Int32 nBytesToCopy =  nAvailable < nBytesToRead ? nAvailable : nBytesToRead;
+    if( nBytesToCopy > 0 )
+    {
+        aData.realloc(nBytesToCopy);
+        rtl_copyMemory(aData.getArray(), m_aBuffer.getConstArray() + m_nOffset, nBytesToCopy);
+        m_nOffset += nBytesToCopy;
+    }
+
+    return nBytesToCopy;
+};
+
+void InflateInputStream::readIntoMemory()
+{
+    if( !m_bRead && m_xStream.is() )
+    {
+        uno::Sequence < sal_Int8 > aCompressedBuffer;
+        uno::Sequence < sal_Int8 > aTempBuffer(4096);
+        sal_Int32 nBytesRead;
+
+        m_bRead = true;
+
+        do
+        {
+            nBytesRead = m_xStream->readBytes(aTempBuffer, aTempBuffer.getLength());
+
+            if( nBytesRead > 0 )
+            {
+                sal_Int32 nOffset = aCompressedBuffer.getLength();
+                aCompressedBuffer.realloc( nOffset + nBytesRead );
+
+                rtl_copyMemory(aCompressedBuffer.getArray() + nOffset, aTempBuffer.getConstArray(), nBytesRead);
+            }
+        }
+        while( nBytesRead == aTempBuffer.getLength() );
+
+        z_stream *pStream = new z_stream;
+        /* memset to 0 to set zalloc/opaque etc */
+        rtl_zeroMemory (pStream, sizeof(*pStream));
+
+        int windowSize = 15;
+        int headerOffset = 0;
+
+        if( m_aContentEncoding.equalsAscii("gzip") )
+        {
+            sal_uInt8 magic[2];
+            magic[0] = *((sal_uInt8 *) aCompressedBuffer.getConstArray());
+            magic[1] = *((sal_uInt8 *) aCompressedBuffer.getConstArray() + 1);
+
+            if( (magic[0] == 0x1f) && (magic[1] == 0x8b) )
+            {
+                windowSize = -14;
+                headerOffset = 10;
+            }
+        }
+
+        pStream->next_in = (unsigned char *) aCompressedBuffer.getConstArray();
+        pStream->avail_in = aCompressedBuffer.getLength();
+
+        pStream->next_in += headerOffset;
+        pStream->avail_in -= headerOffset;
+
+        if( Z_OK == inflateInit2(pStream, windowSize) )
+        {
+            int result;
+
+            do
+            {
+                sal_Int32 nOffset = m_aBuffer.getLength();
+                m_aBuffer.realloc(nOffset + 4096);
+
+                pStream->next_out  = reinterpret_cast < unsigned char* > ( m_aBuffer.getArray() + nOffset );
+                pStream->avail_out = 4096;
+
+                result = ::inflate(pStream, Z_FINISH);
+
+                if( result ==  Z_STREAM_END )
+                    break;
+
+            } while( result ==  Z_BUF_ERROR );
+
+            inflateEnd(pStream);
+            m_aBuffer.realloc(pStream->total_out);
+
+        }
+
+        if (pStream != NULL)
+        {
+            delete pStream;
+            pStream = NULL;
+        }
+    }
+}
+
 
 //------------------------------------------------------------------------------
 
@@ -262,7 +423,7 @@ public:
 //------------------------------------------------------------------------------
 
 UpdateInformationProvider::UpdateInformationProvider(uno::Reference<uno::XComponentContext> const & xContext) :
-    m_xContext(xContext), m_aRequestHeaderList(1)
+    m_xContext(xContext), m_aRequestHeaderList(2)
 {
     rtl::OUString aPath;
     if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
@@ -282,12 +443,14 @@ UpdateInformationProvider::UpdateInformationProvider(uno::Reference<uno::XCompon
 
         m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
         m_aRequestHeaderList[0].Value = getUILanguage( xContext );
+        m_aRequestHeaderList[1].Name = UNISTRING("Accept-Encoding");
+        m_aRequestHeaderList[1].Value = uno::makeAny( UNISTRING("gzip,deflate") );
 
         if( aUserAgent.getLength() > 0 )
         {
-            m_aRequestHeaderList.realloc(2);
-            m_aRequestHeaderList[1].Name = UNISTRING("User-Agent");
-            m_aRequestHeaderList[1].Value = uno::makeAny(aUserAgent);
+            m_aRequestHeaderList.realloc(3);
+            m_aRequestHeaderList[2].Name = UNISTRING("User-Agent");
+            m_aRequestHeaderList[2].Value = uno::makeAny(aUserAgent);
         }
     }
 }
@@ -389,13 +552,42 @@ UpdateInformationProvider::load(
         throw;
     }
 
+    uno::Sequence< beans::Property > aProps( 1 );
+    aProps[0].Name = UNISTRING( "Content-Encoding" );
+
+    aCommand.Name = UNISTRING("getPropertyValues");
+    aCommand.Argument = uno::makeAny( aProps );
+
+    sal_Bool bCompressed = sal_False;
+    rtl::OUString aContentEncoding;
+
+    try
+    {
+        uno::Any aResult = xCommandProcessor->execute(aCommand, 0,
+            static_cast < XCommandEnvironment *> (this));
+        uno::Reference< sdbc::XRow > xPropList( aResult, uno::UNO_QUERY );
+        if ( xPropList.is() ) {
+            aContentEncoding = xPropList->getString(1);
+            if( aContentEncoding.equalsAscii("gzip") ||  aContentEncoding.equalsAscii("deflate"))
+                bCompressed = sal_True;
+        }
+    }
+    catch( const uno::Exception &e )
+    {
+        OSL_TRACE( "Caught exception: %s\n",
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+    }
+
     storeCommandInfo(0, uno::Reference< ucb::XCommandProcessor > ());
 
     uno::Reference< ucb::XCommandProcessor2 > xCommandProcessor2(xCommandProcessor, uno::UNO_QUERY);
     if( xCommandProcessor2.is() )
         xCommandProcessor2->releaseCommandIdentifier(nCommandId);
 
-    return aSink->getInputStream();
+    if ( bCompressed )
+        return INPUT_STREAM( new InflateInputStream( aSink->getInputStream(), aContentEncoding ) );
+    else
+        return INPUT_STREAM(aSink->getInputStream());
 }
 
 //------------------------------------------------------------------------------

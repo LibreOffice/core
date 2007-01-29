@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 15:18:18 $
+#   last change: $Author: rt $ $Date: 2007-01-29 14:35:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@ ENABLE_EXCEPTIONS=TRUE
 # no "lib" prefix
 DLLPRE =
 
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CFLAGS+=-DSYSTEM_ZLIB
+.ENDIF
+
 # --- Files ---
 
 
@@ -59,9 +63,10 @@ SHL1OBJS=$(SLOFILES)
 
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1STDLIBS=    \
-        $(CPPUHELPERLIB) \
-        $(CPPULIB) \
-        $(SALLIB)
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB) \
+    $(ZLIB3RDLIB)
         
 SHL1VERSIONMAP=..$/exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
