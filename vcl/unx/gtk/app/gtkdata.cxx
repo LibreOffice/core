@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:36:47 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:24:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,7 +504,6 @@ void GtkXLib::Init()
     nParams++;
 
     g_set_application_name(X11SalData::getFrameClassName());
-    g_set_prgname(X11SalData::getFrameResName());
 
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
