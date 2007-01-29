@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:21:24 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,6 +336,11 @@ public:
     */
     void PageNameHasChanged (int nPageIndex, const String& rsOldName);
 
+    /** Return whether a context menu has been opened by the called
+        SlideSorterController object and is still open.
+    */
+    bool IsContextMenuOpen (void) const;
+
 private:
     SlideSorterViewShell& mrViewShell;
     model::SlideSorterModel& mrModel;
@@ -392,6 +397,10 @@ private:
         Paint().
     */
     sal_Int32 mnPaintEntranceCount;
+
+    /** Remember whether the context menu is open.
+    */
+    bool mbIsContextMenuOpen;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().
