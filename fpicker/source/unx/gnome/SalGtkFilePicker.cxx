@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 11:53:14 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 #include <tools/urlobj.hxx>
 
 #include <iostream>
+#include <algorithm>
 #include "resourceprovider.hxx"
 #ifndef _SV_RC_H
 #include <tools/rc.hxx>
