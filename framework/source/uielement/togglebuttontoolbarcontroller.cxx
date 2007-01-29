@@ -4,9 +4,9 @@
  *
  *  $RCSfile: togglebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:21:50 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,8 +215,10 @@ throw (::com::sun::star::uno::RuntimeException)
                 aPopup.CheckItem( sal_uInt16( i+1 ), sal_False );
         }
 
+        m_pToolbar->SetItemDown( m_nID, TRUE );
         aPopup.SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
         aPopup.Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
+        m_pToolbar->SetItemDown( m_nID, FALSE );
     }
 
     return xWindow;
