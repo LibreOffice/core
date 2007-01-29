@@ -4,9 +4,9 @@
  *
  *  $RCSfile: managelang.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:52:05 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT ( MANAGE_COL1 , MANAGE_ROW5 ) ;
-        Size = MAP_APPFONT ( MANAGE_DLG_WIDTH - RSC_SP_FLGR_INNERBORDER_LEFT - RSC_SP_FLGR_INNERBORDER_RIGHT, 6*RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( MANAGE_DLG_WIDTH - 2*RSC_SP_FLGR_INNERBORDER_LEFT, INFO_LINES_COUNT*RSC_CD_FIXEDTEXT_HEIGHT ) ;
         WordBreak = TRUE ;
         Text [ de ] = "Die Standardsprache wird angezeigt, wenn für die Sprache der Benutzerschnittstelle keine spezielle Lokalisierung vorhanden ist. Weiterhin werden alle Texte der Standardsprache in neu angelegte Sprachressourcen kopiert." ;
         Text [ en-US ] = "The default language is used if no localization for a user interface locale is present. Furthermore all strings from the default language are copied to resources of newly added languages." ;
@@ -134,7 +134,7 @@ QueryBox RID_QRYBOX_LANGUAGE
     Title [ de ] = "Sprachressourcen löschen" ;
     Title [ en-US ] = "Delete Language Resources" ;
     Message [ de ] = "Sie sind im Begriff die Ressourcen der selektierten Sprache(n) zu löschen. Alle Texte der Benutzerschnittstelle in dieser Sprache(n) werden dabei gelöscht.\n\nMöchten Sie die Ressourcen der selektierten Sprache(n) löschen?";
-    Message [ en-US ] = "Your are about to delete the resources for the selected language(s). All user interface strings for this language(s) will be deleted.\n\nDo you want to delete the resources of the selected language(s)?";
+    Message [ en-US ] = "You are about to delete the resources for the selected language(s). All user interface strings for this language(s) will be deleted.\n\nDo you want to delete the resources of the selected language(s)?";
     BUTTONS = WB_OK_CANCEL ;
     DEFBUTTON = WB_DEF_CANCEL ;
 };
@@ -171,7 +171,7 @@ ModalDialog RID_DLG_SETDEF_LANGUAGE
     FixedText FT_DEF_INFO
     {
         Pos = MAP_APPFONT ( SETDEF_COL1 , SETDEF_ROW3 ) ;
-        Size = MAP_APPFONT ( SETDEF_LB_WIDTH, 6*RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( SETDEF_LB_WIDTH, INFO_LINES_COUNT*RSC_CD_FIXEDTEXT_HEIGHT ) ;
         WordBreak = TRUE ;
         Text [ de ] = "Selektieren Sie eine Sprache, um die Standardsprache für die Benutzerschnittstelle festzulegen. Die aktuellen Texte der Benutzerschnittstelle werden dann dieser neu angelegten Sprachressource zugewiesen." ;
         Text [ en-US ] = "Select a language to define the default user interface language. All currently present strings will be assigned to the resources created for the selected language." ;
