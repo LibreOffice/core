@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:48:33 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
 class SwViewOption;
+class SwWrongList;
 
 #define GRID_ON         0
 #define GRID_HEIGHT     1
@@ -225,6 +226,13 @@ class SwTxtFrm: public SwCntntFrm
         @author OD
     */
     void _CalcHeightOfLastLine( const bool _bUseFont = false );
+
+    // ST2
+    SwWrongList* _SmartTagScan ( ::rtl::OUString aTxtToScan, SwWrongList *pSmartTagList,
+                                 xub_StrLen nBegin,xub_StrLen nEnd,
+                                 xub_StrLen nInsertPos, xub_StrLen nActPos,
+                                 xub_StrLen &nChgStart, xub_StrLen &nChgEnd,
+                                 xub_StrLen &nInvStart, xub_StrLen &nInvEnd);
 
 public:
 
