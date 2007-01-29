@@ -4,9 +4,9 @@
  *
  *  $RCSfile: managelang.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:52:37 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ private:
     String              m_sCreateLangStr;
 
     void                Init();
+    void                CalcInfoSize();
     void                FillLanguageBox();
     void                ClearLanguageBox();
 
@@ -111,20 +112,21 @@ public:
 class SetDefaultLanguageDialog : public ModalDialog
 {
 private:
-    FixedText       m_aLanguageFT;
-    SvxLanguageBox  m_aLanguageLB;
-    SvxCheckListBox m_aCheckLangLB;
-    FixedText       m_aInfoFT;
+    FixedText           m_aLanguageFT;
+    SvxLanguageBox*     m_pLanguageLB;
+    SvxCheckListBox*    m_pCheckLangLB;
+    FixedText           m_aInfoFT;
 
-    FixedLine       m_aBtnLine;
-    OKButton        m_aOKBtn;
-    CancelButton    m_aCancelBtn;
-    HelpButton      m_aHelpBtn;
+    FixedLine           m_aBtnLine;
+    OKButton            m_aOKBtn;
+    CancelButton        m_aCancelBtn;
+    HelpButton          m_aHelpBtn;
 
     bool                m_bIsDefaultMode;
     LocalizationMgr*    m_pLocalizationMgr;
 
-    void            FillLanguageBox();
+    void                FillLanguageBox();
+    void                CalcInfoSize();
 
 public:
     SetDefaultLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr );
