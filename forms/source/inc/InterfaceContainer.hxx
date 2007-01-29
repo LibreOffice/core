@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:13:55 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 15:46:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #define _FRM_INTERFACE_CONTAINER_HXX_
+
+#include <hash_map>
 
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
