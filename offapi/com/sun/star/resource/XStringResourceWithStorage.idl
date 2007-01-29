@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStringResourceWithStorage.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:44:40 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #ifndef __com_sun_star_resource_XStringResourceWithStorage_idl__
 #define __com_sun_star_resource_XStringResourceWithStorage_idl__
 
-#ifndef __com_sun_star_resource_XStringResourcePersistance_idl__
-#include <com/sun/star/resource/XStringResourcePersistance.idl>
+#ifndef __com_sun_star_resource_XStringResourcePersistence_idl__
+#include <com/sun/star/resource/XStringResourcePersistence.idl>
 #endif
 
 
@@ -46,12 +46,12 @@ module com { module sun { module star { module resource {
 
 //=============================================================================
 /**
-    Extends <type>XStringResourcePersistance</type> by methods to handle an
+    Extends <type>XStringResourcePersistence</type> by methods to handle an
     associated <type scope="com::sun::star::embed">XStorage</type> instance.
 
-    @see <type>XStringResourcePersistance</type>.
+    @see <type>XStringResourcePersistence</type>.
 */
-interface XStringResourceWithStorage: com::sun::star::resource::XStringResourcePersistance
+interface XStringResourceWithStorage: com::sun::star::resource::XStringResourcePersistence
 {
     /**
         Stores all string table data to a storage and associates this storage
