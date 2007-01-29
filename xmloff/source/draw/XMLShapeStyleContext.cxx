@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:26:05 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 14:48:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,8 +237,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         }
     }
 
-    const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
-    struct _ContextID_Index_Pair aContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
+    struct _ContextID_Index_Pair aContextIDs[] =
     {
         { CTF_DASHNAME , -1 },
         { CTF_LINESTARTNAME , -1 },
@@ -247,9 +246,13 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         { CTF_FILLTRANSNAME , -1 },
         { CTF_FILLHATCHNAME , -1 },
         { CTF_FILLBITMAPNAME , -1 },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_LEFT, -1 },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_TOP, -1 },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH, -1 },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT, -1 },
         { -1, -1 }
     };
-    static sal_uInt16 aFamilies[MAX_SPECIAL_DRAW_STYLES] =
+    static sal_uInt16 aFamilies[] =
     {
         XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
         XML_STYLE_FAMILY_SD_MARKER_ID,
@@ -267,43 +270,73 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
     Reference< XPropertySetInfo > xInfo;
-    for( sal_uInt16 i=0; i<MAX_SPECIAL_DRAW_STYLES; i++ )
+    // get property set mapper
+    UniReference<XMLPropertySetMapper> xPropMapper( xImpPrMap->getPropertySetMapper() );
+
+    for( sal_uInt16 i=0; aContextIDs[i].nContextID != -1; i++ )
     {
         sal_Int32 nIndex = aContextIDs[i].nIndex;
-        if( nIndex != -1 )
+        if( nIndex != -1 ) switch( aContextIDs[i].nContextID )
+        {
+        case CTF_DASHNAME:
+        case CTF_LINESTARTNAME:
+        case CTF_LINEENDNAME:
+        case CTF_FILLGRADIENTNAME:
+        case CTF_FILLTRANSNAME:
+        case CTF_FILLHATCHNAME:
+        case CTF_FILLBITMAPNAME:
         {
             struct XMLPropertyState& rState = GetProperties()[nIndex];
             OUString sStyleName;
             rState.maValue >>= sStyleName;
-            sStyleName = GetImport().GetStyleDisplayName( aFamilies[i],
-                                                          sStyleName );
-            // get property set mapper
-            UniReference<XMLPropertySetMapper> rPropMapper =
-                                        xImpPrMap->getPropertySetMapper();
-
-            // set property
-            const OUString& rPropertyName =
-                    rPropMapper->GetEntryAPIName(rState.mnIndex);
-            if( !xInfo.is() )
-                xInfo = rPropSet->getPropertySetInfo();
-            if ( xInfo->hasPropertyByName( rPropertyName ) )
+            sStyleName = GetImport().GetStyleDisplayName( aFamilies[i], sStyleName );
+            try
             {
-                Any aAny;
-                aAny <<= sStyleName;
 
-                try
+                // set property
+                const OUString& rPropertyName = xPropMapper->GetEntryAPIName(rState.mnIndex);
+                if( !xInfo.is() )
+                    xInfo = rPropSet->getPropertySetInfo();
+                if ( xInfo->hasPropertyByName( rPropertyName ) )
                 {
-                    rPropSet->setPropertyValue( rPropertyName, aAny );
-                }
-                catch ( ::com::sun::star::lang::IllegalArgumentException& e )
-                {
-                    Sequence<OUString> aSeq(1);
-                    aSeq[0] = sStyleName;
-                    GetImport().SetError(
-                        XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
-                        aSeq, e.Message, NULL );
+                    rPropSet->setPropertyValue( rPropertyName, Any( sStyleName ) );
                 }
             }
+            catch ( ::com::sun::star::lang::IllegalArgumentException& e )
+            {
+                Sequence<OUString> aSeq(1);
+                aSeq[0] = sStyleName;
+                GetImport().SetError(
+                    XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
+                    aSeq, e.Message, NULL );
+            }
+            break;
+        }
+        case CTF_SD_OLE_VIS_AREA_IMPORT_LEFT:
+        case CTF_SD_OLE_VIS_AREA_IMPORT_TOP:
+        case CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH:
+        case CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT:
+        {
+            struct XMLPropertyState& rState = GetProperties()[nIndex];
+            const OUString& rPropertyName = xPropMapper->GetEntryAPIName(rState.mnIndex);
+            try
+            {
+                if( !xInfo.is() )
+                    xInfo = rPropSet->getPropertySetInfo();
+                if ( xInfo->hasPropertyByName( rPropertyName ) )
+                {
+                    rPropSet->setPropertyValue( rPropertyName, rState.maValue );
+                }
+            }
+            catch ( ::com::sun::star::lang::IllegalArgumentException& e )
+            {
+                Sequence<OUString> aSeq;
+                GetImport().SetError(
+                    XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
+                    aSeq, e.Message, NULL );
+            }
+            break;
+        }
         }
     }
 
