@@ -4,9 +4,9 @@
  *
  *  $RCSfile: managelang.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:36:20 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 17:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,12 @@
 #include "dlgresid.hrc"
 #include "helpid.hrc"
 
+#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -54,6 +60,13 @@
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #endif
 #include <comphelper/processfactory.hxx>
+
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
+#endif
+#ifndef _VCL_I18NHELP_HXX
+//#include <vcl/i18nhelp.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -72,6 +85,7 @@
 #endif
 #include <sfx2/bindings.hxx>
 
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::uno;
@@ -82,6 +96,33 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
                   rLocaleLeft.Country.equals( rLocaleRight.Country ) &&
                   rLocaleLeft.Variant.equals( rLocaleRight.Variant ) );
     return bRet;
+}
+
+namespace {
+    long getLongestWordWidth( const String& rText, const Window& rWin )
+    {
+        long nWidth = 0;
+        Reference< XBreakIterator > xBreakIter( vcl::unohelper::CreateBreakIterator() );
+        sal_Int32 nStartPos = 0;
+        const Locale aLocale = Application::GetSettings().GetUILocale();
+        Boundary aBoundary = xBreakIter->getWordBoundary(
+            rText, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+
+        while ( aBoundary.startPos != aBoundary.endPos )
+        {
+            nStartPos = aBoundary.endPos;
+            String sWord( rText.Copy(
+                (USHORT)aBoundary.startPos,
+                (USHORT)aBoundary.endPos - (USHORT)aBoundary.startPos ) );
+            long nTemp = rWin.GetCtrlTextWidth( sWord );
+            if ( nTemp > nWidth )
+                nWidth = nTemp;
+            aBoundary = xBreakIter->nextWord(
+                rText, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES );
+        }
+
+        return nWidth;
+    }
 }
 
 ManageLanguageDialog::ManageLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr ) :
@@ -131,6 +172,36 @@ void ManageLanguageDialog::Init()
     m_aLanguageLB.SetSelectHdl( LINK( this, ManageLanguageDialog, SelectHdl ) );
 
     m_aLanguageLB.EnableMultiSelection( TRUE );
+    CalcInfoSize();
+}
+
+void ManageLanguageDialog::CalcInfoSize()
+{
+    String sInfoStr = m_aInfoFT.GetText();
+    long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
+    long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
+    long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;
+    long nLines = ( nTxtWidth / nInfoWidth ) + 1;
+    if ( nLines > INFO_LINES_COUNT )
+    {
+        Size aFTSize = m_aLanguageFT.GetSizePixel();
+        Size aSize = m_aInfoFT.GetSizePixel();
+        long nNewHeight = aFTSize.Height() * nLines;
+        long nDelta = nNewHeight - aSize.Height();
+        aSize.Height() = nNewHeight;
+        m_aInfoFT.SetSizePixel( aSize );
+
+        aSize = m_aLanguageLB.GetSizePixel();
+        aSize.Height() -= nDelta;
+        m_aLanguageLB.SetSizePixel( aSize );
+
+        Point aNewPos = m_aInfoFT.GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        m_aInfoFT.SetPosPixel( aNewPos );
+        aNewPos = m_aMakeDefPB.GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        m_aMakeDefPB.SetPosPixel( aNewPos );
+    }
 }
 
 void ManageLanguageDialog::FillLanguageBox()
@@ -264,8 +335,8 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
     ModalDialog( pParent, IDEResId( RID_DLG_SETDEF_LANGUAGE ) ),
 
     m_aLanguageFT   ( this, ResId( FT_DEF_LANGUAGE ) ),
-    m_aLanguageLB   ( this, ResId( LB_DEF_LANGUAGE ) ),
-    m_aCheckLangLB  ( this, ResId( LB_ADD_LANGUAGE ) ),
+    m_pLanguageLB   ( new SvxLanguageBox( this, ResId( LB_DEF_LANGUAGE ) ) ),
+    m_pCheckLangLB  ( NULL ),
     m_aInfoFT       ( this, ResId( FT_DEF_INFO ) ),
     m_aBtnLine      ( this, ResId( FL_DEF_BUTTONS ) ),
     m_aOKBtn        ( this, ResId( PB_DEF_OK ) ),
@@ -279,69 +350,100 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
     {
         // change to "Add Interface Language" mode
         SetHelpId( HID_BASICIDE_ADDNEW_LANGUAGE );
-        m_aLanguageLB.Hide();
-        m_aCheckLangLB.Show();
+        m_pCheckLangLB = new SvxCheckListBox( this, ResId( LB_ADD_LANGUAGE ) );
         SetText( String( ResId( STR_ADDLANG_TITLE ) ) );
         m_aLanguageFT.SetText( String( ResId( STR_ADDLANG_LABEL ) ) );
         m_aInfoFT.SetText( String( ResId( STR_ADDLANG_INFO ) ) );
     }
-    else
-    {
-        m_aCheckLangLB.Hide();
-        m_aLanguageLB.Show();
-    }
 
     FreeResource();
+
     FillLanguageBox();
+    CalcInfoSize();
 }
 
 SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
 {
+    delete m_pLanguageLB;
+    delete m_pCheckLangLB;
 }
 
 void SetDefaultLanguageDialog::FillLanguageBox()
 {
     // fill list with all languages
-    m_aLanguageLB.SetLanguageList( LANG_LIST_ALL, FALSE );
+    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, FALSE );
     // remove the already localized languages
     Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
     const Locale* pLocale = aLocaleSeq.getConstArray();
     INT32 i, nCount = aLocaleSeq.getLength();
     for ( i = 0;  i < nCount;  ++i )
-        m_aLanguageLB.RemoveLanguage( SvxLocaleToLanguage( pLocale[i] ) );
+        m_pLanguageLB->RemoveLanguage( SvxLocaleToLanguage( pLocale[i] ) );
 
     // fill checklistbox if not in default mode
     if ( m_pLocalizationMgr->isLibraryLocalized() )
     {
-        USHORT j, nCount_ = m_aLanguageLB.GetEntryCount();
+        USHORT j, nCount_ = m_pLanguageLB->GetEntryCount();
         for ( j = 0;  j < nCount_;  ++j )
-            m_aCheckLangLB.InsertEntry( m_aLanguageLB.GetEntry(j) );
+        {
+            m_pCheckLangLB->InsertEntry(
+                m_pLanguageLB->GetEntry(j), LISTBOX_APPEND, m_pLanguageLB->GetEntryData(j) );
+        }
+        delete m_pLanguageLB;
+        m_pLanguageLB = NULL;
     }
     else
         // preselect current UI language
-        m_aLanguageLB.SelectLanguage( Application::GetSettings().GetUILanguage() );
+        m_pLanguageLB->SelectLanguage( Application::GetSettings().GetUILanguage() );
+}
+
+void SetDefaultLanguageDialog::CalcInfoSize()
+{
+    String sInfoStr = m_aInfoFT.GetText();
+    long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
+    long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
+    long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;
+    long nLines = ( nTxtWidth / nInfoWidth ) + 1;
+    if ( nLines > INFO_LINES_COUNT )
+    {
+        Size aFTSize = m_aLanguageFT.GetSizePixel();
+        Size aSize = m_aInfoFT.GetSizePixel();
+        long nNewHeight = aFTSize.Height() * nLines;
+        long nDelta = nNewHeight - aSize.Height();
+        aSize.Height() = nNewHeight;
+        m_aInfoFT.SetSizePixel( aSize );
+
+        Window* pWin = ( m_pLanguageLB != NULL ) ? dynamic_cast< Window* >( m_pLanguageLB )
+                                                 : dynamic_cast< Window* >( m_pCheckLangLB );
+        aSize = pWin->GetSizePixel();
+        aSize.Height() -= nDelta;
+        pWin->SetSizePixel( aSize );
+
+        Point aNewPos = m_aInfoFT.GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        m_aInfoFT.SetPosPixel( aNewPos );
+    }
 }
 
 Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
 {
     bool bNotLocalized = !m_pLocalizationMgr->isLibraryLocalized();
-    INT32 nSize = bNotLocalized ? 1 : m_aCheckLangLB.GetCheckedEntryCount();
+    INT32 nSize = bNotLocalized ? 1 : m_pCheckLangLB->GetCheckedEntryCount();
     Sequence< Locale > aLocaleSeq( nSize );
     if ( bNotLocalized )
     {
         Locale aLocale;
-        SvxLanguageToLocale( aLocale, m_aLanguageLB.GetSelectLanguage() );
+        SvxLanguageToLocale( aLocale, m_pLanguageLB->GetSelectLanguage() );
         aLocaleSeq[0] = aLocale;
     }
     else
     {
-        USHORT i, nCount = static_cast< USHORT >( m_aCheckLangLB.GetEntryCount() );
+        USHORT i, nCount = static_cast< USHORT >( m_pCheckLangLB->GetEntryCount() );
         INT32 j = 0;
         for ( i = 0; i < nCount; ++i )
         {
-            if ( m_aCheckLangLB.IsChecked(i) )
+            if ( m_pCheckLangLB->IsChecked(i) )
             {
-                LanguageType eType = LanguageType( (ULONG)m_aLanguageLB.GetEntryData(i) );
+                LanguageType eType = LanguageType( (ULONG)m_pCheckLangLB->GetEntryData(i) );
                 Locale aLocale;
                 SvxLanguageToLocale( aLocale, eType );
                 aLocaleSeq[j++] = aLocale;
