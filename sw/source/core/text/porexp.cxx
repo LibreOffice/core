@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:37:00 $
+ *  last change: $Author: rt $ $Date: 2007-01-29 16:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
-    SwTxtSlot aDiffTxt( &rInf, this );
+    SwTxtSlot aDiffTxt( &rInf, this, false, false );
     return rInf.GetTxtSize();
 }
 
@@ -98,7 +98,7 @@ SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 
 sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 {
-    SwTxtSlotLen aDiffTxt( &rInf, this );
+    SwTxtSlot aDiffTxt( &rInf, this, true, false );
     const xub_StrLen nFullLen = rInf.GetLen();
 
     // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
@@ -119,7 +119,8 @@ sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    SwTxtSlotLen aDiffTxt( &rInf, this );
+    SwTxtSlot aDiffTxt( &rInf, this, true, true );
+
     rInf.DrawBackBrush( *this );
 
     // do we have to repaint a post it portion?
@@ -132,7 +133,11 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();
 
-    rInf.DrawText( *this, rInf.GetLen(), sal_False );
+    // ST2
+    if ( rInf.GetSmartTags() )
+        rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, sal_False, sal_True );
+    else
+        rInf.DrawText( *this, rInf.GetLen(), sal_False );
 }
 
 /*************************************************************************
