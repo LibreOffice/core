@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:52:38 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,9 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
 {
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MAP_PIXEL);
+
+    // Even RTL languages don't use RTL for math
+    rCmdBox.GetEditWindow()->EnableRTL( FALSE );
 
     ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
 
