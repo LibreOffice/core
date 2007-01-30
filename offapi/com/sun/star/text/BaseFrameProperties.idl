@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseFrameProperties.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:37:26 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,9 @@
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
 #endif
-
+#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#endif
 
 //=============================================================================
 
@@ -69,6 +71,11 @@
  */
 published service BaseFrameProperties
 {
+    /** gives access to the UserDefinedAttributes property.
+        @since  OOo 2.1
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
     //-------------------------------------------------------------------------
     /** contains the number of the page where the objects are anchored.
         <p> The value is valid only if the
@@ -343,9 +350,10 @@ published service BaseFrameProperties
     //-------------------------------------------------------------------------
     /** returns the actual size of the object.
 
-        <p>Since to obtain the actual size of the object the
-        layouting for the frame needs to be finished this property is only
-        available if the document is already formatted.</p>
+        <p>Since to obtain the correct actual size of the object not only
+        the  layouting for the frame needs to be finished but the whole
+        document needs to be formatted as well. Thus if that was not done
+        previously it may take some while to retrieve this value.</p>
 
         @since OOo 2.0.4
      */
