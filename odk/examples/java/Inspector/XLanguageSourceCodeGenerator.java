@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLanguageSourceCodeGenerator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:04:02 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,13 +37,14 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+import com.sun.star.uno.TypeClass;
 import java.util.Vector;
 
 public interface XLanguageSourceCodeGenerator {
 
-    public String getHeaderSourceCode(Object _oUnoObject, String _sClassName);
+    public String getHeaderSourceCode(Object _oUnoObject, String _sClassName, TypeClass _aTypeClass);
 
-    public String getMainMethodSignatureSourceCode(UnoNode _oUnoNode, String _soReturnObjectDescription);
+    public String getMainMethodSignatureSourceCode(XUnoNode _oUnoNode, String _soReturnObjectDescription);
 
     public String getMethodTerminationSourceCode();
 
@@ -75,11 +76,11 @@ public interface XLanguageSourceCodeGenerator {
 
     public String getcharTypeDescription();
 
-    public String getstringTypeDescription();
+    public String getstringTypeDescription(boolean _bAsHeaderSourceCode);
 
     public String gettypeTypeDescription();
 
-    public String getanyTypeDescription();
+    public String getanyTypeDescription(boolean _bAsHeaderSourceCode);
 
     public String getArrayDeclaration(String sVariableDeclaration);
 

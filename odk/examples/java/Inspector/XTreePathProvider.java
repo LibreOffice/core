@@ -13,14 +13,13 @@
  */
 public interface XTreePathProvider {
 
-    public UnoNode getLastPathComponent();
+    public XUnoNode getLastPathComponent();
 
-    public UnoNode getPathComponent(int i);
+    public XUnoNode getPathComponent(int i);
 
     public int getPathCount();
 
     public XTreePathProvider getParentPath();
 
-    public XTreePathProvider pathByAddingChild(UnoNode _oUnoNode);
-
+    public XTreePathProvider pathByAddingChild(XUnoNode _oUnoNode);
 }

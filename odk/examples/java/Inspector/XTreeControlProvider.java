@@ -1,33 +1,65 @@
-/*
- * XTreeControlProvider.java
+/*************************************************************************
  *
- * Created on 12. Dezember 2006, 11:42
+ *  $RCSfile: XTreeControlProvider.java,v $
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:16:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  the BSD license.
+ *
+ *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. Neither the name of Sun Microsystems, Inc. nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+ *  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+ *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *************************************************************************/
 
-/**
- *
- * @author bc93774
- */
+import com.sun.star.beans.Property;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.reflection.XIdlMethod;
+import com.sun.star.uno.Type;
+
 public interface XTreeControlProvider {
 
     public static String sTitle = "User defined";
 
-    public String enableFilterElements(UnoNode _oUnoNode);
+    public String enableFilterElements(XUnoNode _oUnoNode);
 
     public void setSourceCode(String _sSourceCode);
 
     public Object inspect(java.lang.Object _oUserDefinedObject, String _sTitle) throws com.sun.star.uno.RuntimeException;
 
-    public void nodeInserted(UnoNode _oParentNode, UnoNode _oChildNode, int index);
+    public void nodeInserted(XUnoNode _oParentNode, XUnoNode _oChildNode, int index);
 
-    public void nodeChanged(UnoNode _oNode);
+    public void nodeChanged(XUnoNode _oNode);
 
     public boolean setNodeVisible(Object node, boolean v);
 
-    public UnoNode getSelectedNode();
+    public XUnoNode getSelectedNode();
 
     public XTreePathProvider getSelectedPath();
 
@@ -35,25 +67,33 @@ public interface XTreeControlProvider {
 
     public void addTreeExpandListener();
 
-    public void setMaximumOfProgressBar();
-
     public void addInspectorPane(InspectorPane _oInspectorPane);
 
-    public boolean isPropertyNode(UnoNode _oUnoNode);
+    public boolean isPropertyNode(XUnoNode _oUnoNode);
 
-    public boolean isMethodNode(UnoNode _oUnoNode);
+    public boolean isMethodNode(XUnoNode _oUnoNode);
 
-    public boolean isObjectNode(UnoNode _oUnoNode);
+    public boolean isFacetteNode(XUnoNode _oUnoNode);
 
-    public boolean isFacetteNode(UnoNode _oUnoNode);
+    public XUnoNode addUnoNode(Object _oUnoObject);
 
-    public boolean isServiceNode(UnoNode _oUnoNode);
+    public XUnoNode addUnoNode(Object _oUnoObject, Type _aType);
 
-    public boolean isInterfaceNode(UnoNode _oUnoNode);
+    public XUnoFacetteNode addUnoFacetteNode(XUnoNode _oParentNode, String _sNodeDescription, Object _oUnoObject);
 
-//    public void setProgressValue(int _nValue, String _sTitle);
+    public XUnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod);
 
-//    public void hideProgressPanel();
+    public XUnoPropertyNode addUnoPropertyNodeWithName(Property _aProperty);
 
-//    public SwingTreeControlProvider.ProgressDisplay getProgressDisplay();
+    public XUnoPropertyNode addUnoPropertyNodeWithHandle(Property _aProperty);
+
+    public XUnoPropertyNode addUnoPropertyNodeWithType(Property _aProperty);
+
+    public XUnoPropertyNode addUnoPropertyNodeWithAttributesDescription(Property _aProperty);
+
+    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty);
+
+    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, PropertyValue _aPropertyValue, Object _oReturnObject);
+
+    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty, Object _oUnoReturnObject);
 }
