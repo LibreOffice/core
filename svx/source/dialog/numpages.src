@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 06:50:31 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:25:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,7 +915,7 @@ String RID_SVXSTR_SINGLENUM_DESCRIPTION_6
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_7
 {
-    Text [ de ] = "Kleine römische Zahhlen i. ii. iii.";
+    Text [ de ] = "Kleine römische Zahlen i. ii. iii.";
     Text [en-US] = "Lowercase Roman number i. ii. iii.";
 };
 
