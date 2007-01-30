@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:36:04 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 #endif
 #ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
+#endif
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
 #endif
 #ifndef _SWCLI_HXX
 #include <swcli.hxx>
@@ -1468,7 +1471,9 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         else
         {
             SfxItemSet aSet( pDoc->GetAttrPool(),
-                RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
+                RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                0L);
 
             aSet.SetParent(&pFmt->GetAttrSet());
             aPropSet.setPropertyValue(*pCur, aValue, aSet);
@@ -1740,28 +1745,20 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(WID_LAYOUT_SIZE == pCur->nWID)
         {
-            // property is only valid/available if the document is layoutet
-            // so we check this now
-            if (pFmt->GetDoc()->GetRootFrm())
+            // format document completely in order to get correct value
+            mpDoc->GetEditShell()->CalcLayout();
+
+            SwClientIter aIter( *pFmt );
+            SwClient* pC = aIter.First( TYPE( SwFrm ) );
+            if (pC)
             {
-                SwClientIter aIter( *pFmt );
-                for (SwClient* pC = aIter.First( TYPE( SwFrm ) );
-                        pC; pC = aIter.Next() )
-                {
-                    SwFrm *pTmpFrm = static_cast< SwFrm * >(pC);
-                    // check if the frame is valid (actually it does not always
-                    // mean that this frame was already formated. But it is the
-                    // best way to check that is available...)
-                    if (pTmpFrm->IsValid())
-                    {
-                        const SwRect &rRect = pTmpFrm->Frm();
-                        Size aMM100Size = OutputDevice::LogicToLogic(
-                                Size( rRect.Width(), rRect.Height() ),
-                                MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
-                        aAny <<= awt::Size( aMM100Size.Width(), aMM100Size.Height() );
-                        break;
-                    }
-                }
+                SwFrm *pTmpFrm = static_cast< SwFrm * >(pC);
+                DBG_ASSERT( pTmpFrm->IsValid(), "frame not valid" );
+                const SwRect &rRect = pTmpFrm->Frm();
+                Size aMM100Size = OutputDevice::LogicToLogic(
+                        Size( rRect.Width(), rRect.Height() ),
+                        MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
+                aAny <<= awt::Size( aMM100Size.Width(), aMM100Size.Height() );
             }
         }
         else
