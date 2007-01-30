@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:55:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 14:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ static const sal_Char sAPI_fieldmaster_database[] = "com.sun.star.text.FieldMast
 
 // property names
 static const sal_Char sAPI_hint[]               = "Hint";
+static const sal_Char sAPI_help[]               = "Help";
+static const sal_Char sAPI_tooltip[]            = "Tooltip";
 static const sal_Char sAPI_content[]            = "Content";
 static const sal_Char sAPI_sub_type[]           = "SubType";
 static const sal_Char sAPI_is_expression[]      = "IsExpression";
@@ -177,12 +179,15 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName,
     sal_Bool bName, sal_Bool bFormula, sal_Bool bFormulaDefault,
-    sal_Bool bDescription, sal_Bool bVisible, sal_Bool bIsDisplayFormula,
+    sal_Bool bDescription, sal_Bool bHelp, sal_Bool bHint, sal_Bool bVisible,
+    sal_Bool bIsDisplayFormula,
     sal_Bool bType, sal_Bool bStyle, sal_Bool bValue,
     sal_Bool bPresentation) :
         XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, rLocalName),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
         sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint)),
+        sPropertyHelp(RTL_CONSTASCII_USTRINGPARAM(sAPI_help)),
+        sPropertyTooltip(RTL_CONSTASCII_USTRINGPARAM(sAPI_tooltip)),
         sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
         sPropertyIsDisplayFormula(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_show_formula)),
         sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
@@ -192,11 +197,15 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
         bNameOK(sal_False),
         bFormulaOK(sal_False),
         bDescriptionOK(sal_False),
+        bHelpOK(sal_False),
+        bHintOK(sal_False),
         bDisplayOK(sal_False),
         bSetName(bName),
         bSetFormula(bFormula),
         bSetFormulaDefault(bFormulaDefault),
         bSetDescription(bDescription),
+        bSetHelp(bHelp),
+        bSetHint(bHint),
         bSetVisible(bVisible),
         bSetDisplayFormula(bIsDisplayFormula),
         bSetPresentation(bPresentation)
@@ -217,6 +226,14 @@ void XMLVarFieldImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_DESCRIPTION:
             sDescription = sAttrValue;
             bDescriptionOK = sal_True;
+            break;
+        case XML_TOK_TEXTFIELD_HELP:
+            sHelp = sAttrValue;
+            bHelpOK = true;
+            break;
+        case XML_TOK_TEXTFIELD_HINT:
+            sHint = sAttrValue;
+            bHintOK = true;
             break;
         case XML_TOK_TEXTFIELD_FORMULA:
             {
@@ -289,6 +306,20 @@ void XMLVarFieldImportContext::PrepareField(
         xPropertySet->setPropertyValue(sPropertyHint, aAny);
     }
 
+    if (bSetHelp && bHelpOK)
+    {
+        Any aAny;
+        aAny <<= sHelp;
+        xPropertySet->setPropertyValue(sPropertyHelp, aAny);
+    }
+
+    if (bSetHint && bHintOK)
+    {
+        Any aAny;
+        aAny <<= sHint;
+        xPropertySet->setPropertyValue(sPropertyTooltip, aAny);
+    }
+
     if (bSetVisible && bDisplayOK)
     {
         Any aAny;
@@ -343,12 +374,12 @@ XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName, VarType eVarType,
     sal_Bool bName, sal_Bool bFormula, sal_Bool bFormulaDefault,
-    sal_Bool bDescription, sal_Bool bVisible, sal_Bool bIsDisplayFormula,
+    sal_Bool bDescription, sal_Bool bHelp, sal_Bool bHint, sal_Bool bVisible, sal_Bool bIsDisplayFormula,
     sal_Bool bType, sal_Bool bStyle, sal_Bool bValue, sal_Bool bPresentation) :
         XMLVarFieldImportContext(rImport, rHlp, pServiceName,
                                  nPrfx, rLocalName,
                                  bName, bFormula, bFormulaDefault,
-                                 bDescription, bVisible, bIsDisplayFormula,
+                                 bDescription, bHelp, bHint, bVisible, bIsDisplayFormula,
                                  bType, bStyle, bValue, bPresentation),
         eFieldType(eVarType)
 {
@@ -433,7 +464,8 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
                                     nPrfx, rLocalName, VarTypeSequence,
                                     // name, formula
                                     sal_True, sal_True, sal_True,
-                                    sal_False, sal_False, sal_False,
+                                    sal_False, sal_False, sal_False, sal_False,
+                                    sal_False,
                                     sal_False, sal_False, sal_False, sal_True),
 
         sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
@@ -506,7 +538,8 @@ XMLVariableSetFieldImportContext::XMLVariableSetFieldImportContext(
                                     // name, formula, value&type, style,
                                     // display none
                                     sal_True, sal_True, sal_True,
-                                    sal_False, sal_True, sal_False,
+                                    sal_False, sal_False, sal_False,
+                                    sal_True, sal_False,
                                     sal_True, sal_True, sal_True,
                                     sal_True),
         sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
@@ -541,7 +574,8 @@ XMLVariableInputFieldImportContext::XMLVariableInputFieldImportContext(
                                     // name, description, display none/formula,
                                     // value&type, style, formula
                                     sal_True, sal_True, sal_True,
-                                    sal_True, sal_True, sal_False,
+                                    sal_True, sal_True, sal_True,
+                                    sal_True, sal_False,
                                     sal_True, sal_True, sal_True,
                                     sal_True),
         sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type)),
@@ -581,7 +615,8 @@ XMLUserFieldImportContext::XMLUserFieldImportContext(
                                     rLocalName, VarTypeUserField,
                                     // name, display none/formula, style
                                     sal_True, sal_False, sal_False,
-                                    sal_False, sal_True, sal_True,
+                                    sal_False, sal_False, sal_False, sal_True,
+                                    sal_True,
                                     sal_False, sal_True, sal_False,
                                     sal_False)
 {
@@ -603,6 +638,7 @@ XMLUserFieldInputImportContext::XMLUserFieldInputImportContext(
                                  nPrfx, rLocalName,
                                  // name, description, style
                                  sal_True, sal_False, sal_False,
+                                 sal_False, sal_False,
                                  sal_True, sal_False, sal_False,
                                  sal_False /*???*/, sal_True, sal_False,
                                  sal_False)
@@ -634,7 +670,8 @@ XMLVariableGetFieldImportContext::XMLVariableGetFieldImportContext(
                                  nPrfx, rLocalName,
                                  // name, style, display formula
                                  sal_True, sal_False, sal_False,
-                                 sal_False, sal_False, sal_True,
+                                 sal_False, sal_False, sal_False,
+                                 sal_False, sal_True,
                                  sal_True, sal_True, sal_False,
                                  sal_True),
         sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
@@ -672,7 +709,8 @@ XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
                                  nPrfx, rLocalName,
                                  // formula, type, style, display formula
                                  sal_False, sal_True, sal_True,
-                                 sal_False, sal_False, sal_True,
+                                 sal_False, sal_False, sal_False,
+                                 sal_False, sal_True,
                                  sal_True, sal_True, sal_False,
                                  sal_True),
         sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
@@ -708,7 +746,8 @@ XMLTextInputFieldImportContext::XMLTextInputFieldImportContext(
                                  nPrfx, sLocalName,
                                  // description
                                  sal_False, sal_False, sal_False,
-                                 sal_True, sal_False, sal_False,
+                                 sal_True, sal_True, sal_True,
+                                 sal_False, sal_False,
                                  sal_False, sal_False, sal_False,
                                  sal_False),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content))
