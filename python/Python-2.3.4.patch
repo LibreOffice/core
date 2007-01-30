@@ -240,6 +240,48 @@
   fi
   
   #
+*** misc/Python-2.3.4/pyconfig.h.in	Mon Mar 22 21:20:32 2004
+--- misc/build/Python-2.3.4/pyconfig.h.in	Mon Oct 30 11:23:14 2006
+***************
+*** 841,846 ****
+--- 841,849 ----
+  /* Define _OSF_SOURCE to get the makedev macro. */
+  #undef _OSF_SOURCE
+  
++  /* _XOPEN defines and C++ are incompatibl */
++ #ifndef __cplusplus
++ 
+  /* Define to 2 if the system does not provide POSIX.1 features except with
+     this defined. */
+  #undef _POSIX_1_SOURCE
+***************
+*** 854,862 ****
+--- 857,870 ----
+  /* Define if you have POSIX threads, and your system does not define that. */
+  #undef _POSIX_THREADS
+  
++ #endif
++ 
+  /* Define to force use of thread-safe errno, h_errno, and other functions */
+  #undef _REENTRANT
+  
++  /* _XOPEN defines and C++ are incompatibl */
++ #ifndef __cplusplus
++ 
+  /* Define to the level of X/Open that your system supports */
+  #undef _XOPEN_SOURCE
+  
+***************
+*** 863,868 ****
+--- 871,878 ----
+  /* Define to activate Unix95-and-earlier features */
+  #undef _XOPEN_SOURCE_EXTENDED
+  
++ #endif
++ 
+  /* Define on FreeBSD to activate all library features */
+  #undef __BSD_VISIBLE
+  
 *** misc/Python-2.3.4/Include/pyport.h	Tue Sep 30 16:56:50 2003
 --- misc/build/Python-2.3.4/Include/pyport.h	Thu Jun 29 11:02:18 2006
 ***************
