@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 12:09:24 $
+#   last change: $Author: rt $ $Date: 2007-01-30 08:24:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@ JAVA_RUNTIME=-ljava_g
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
 ARCH_FLAGS*=
 
-CXX=CC
-CC=cc
+CXX*=CC
+CC*=cc
 
 CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp
 CFLAGSCC=-xCC $(ARCH_FLAGS)
