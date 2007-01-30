@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:59:23 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -927,7 +927,12 @@ void SwXTextPortionEnumeration::CreatePortions()
                                 bAtEnd = sal_True;
                             }
                             if(nNextIndex < 0)
-                                sal_Bool bMove = pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
+                            {
+                                // a text portion should stay within it's paragraph (#i56165)
+                                //sal_Bool bMove = pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
+                                pUnoCrsr->GetPoint()->nContent = pCNd->Len();
+                                bAtEnd = sal_True;
+                            }
                             else
                             {
                                 DBG_ASSERT(nNextIndex > nCurrentIndex || nNextIndex == nEndPos,
