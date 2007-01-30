@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextPortion.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:30:49 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ published service TextPortion
 {
     service com::sun::star::text::TextRange;
 
+    //-------------------------------------------------------------------------
     /** contains text frames, graphic objects, embedded objects or
          shapes that are anchored at or as character.
         @see com.sun.star.text.TextFrame
@@ -81,11 +82,13 @@ published service TextPortion
      */
     [optional] interface ::com::sun::star::container::XContentEnumerationAccess;
 
+    //-------------------------------------------------------------------------
     /** gives access to a sequence of properties.
         @since OOo 2.0.0
      */
     [optional] interface ::com::sun::star::beans::XTolerantMultiPropertySet;
 
+    //-------------------------------------------------------------------------
     /** contains the type of the text portion.
     <p> Valid content type names are:</p>
     <UL>
@@ -98,18 +101,27 @@ published service TextPortion
         <LI><P>DocumentIndexMark - a document index mark</P>
         <LI><P>Bookmark - a bookmark</P>
         <LI><P>Redline - a redline portion which is a result of the change tracking feature.</P>
-        <LI><P>Ruby - a ruby attribute which is used in Asian text.</P>
+        <LI><P>Ruby - a ruby attribute which is used in Asian text</P>
+        <LI><P>Frame - a frame.</P>
     </UL>
     <p>The text portions for reference marks and document index marks are generated twice for
          each mark since they may include string content.</p>
      */
     [readonly, property] string TextPortionType;
+
+    //-------------------------------------------------------------------------
     /** returns the control character if the text portion contains a ControlCharacter*/
     [readonly, property] short ControlCharacter;
+
+    //-------------------------------------------------------------------------
     /** contains the bookmark if the portion is of the type */
     [optional, property] com::sun::star::text::XTextContent Bookmark;
+
+    //-------------------------------------------------------------------------
     /** determines whether the portion is a point only.*/
     [optional, property] boolean IsCollapsed;
+
+    //-------------------------------------------------------------------------
     /** determines whether the portion is a start portion if two portions are needed to include an
      object (i.e. DocmentIndexMark)*/
     [optional, property] boolean IsStart;
