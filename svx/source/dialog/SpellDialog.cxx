@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:03:29 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:26:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1714,6 +1714,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
         const TextCharAttrib* pLastLang = 0;
         const TextCharAttrib* pLastError = 0;
         LanguageType eLang = LANGUAGE_DONTKNOW;
+        const TextCharAttrib* pError = 0;
         while(aCursor.GetIndex() < nTextLen)
         {
             const TextCharAttrib* pLang = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_LANGUAGE);
@@ -1724,12 +1725,13 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 lcl_InsertBreakPosition_Impl(aBreakPositions, pLang->GetEnd(), eLang);
                 pLastLang = pLang;
             }
-            const TextCharAttrib* pError = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR);
+            pError = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_SPELL_ERROR);
             if(pError && pLastError != pError)
             {
                 lcl_InsertBreakPosition_Impl(aBreakPositions, pError->GetStart(), eLang);
                 lcl_InsertBreakPosition_Impl(aBreakPositions, pError->GetEnd(), eLang);
                 pLastError = pError;
+
             }
             aCursor.GetIndex()++;
         }
@@ -1765,6 +1767,31 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 nStart = aStart->nPosition;
                 eLang = aStart->eLanguage;
                 ++aStart;
+            }
+        }
+
+        // quick partly fix of #i71318. Correct fix needs to patch the TextEngine itself...
+        // this one will only prevent text from disappearing. It may to not have the
+        // correct language and will probably not spell checked...
+        ULONG nPara = pTextEngine->GetParagraphCount();
+        if (nPara > 1)
+        {
+            String aLeftOverText;
+            for (ULONG i = 1;  i < nPara;  ++i)
+            {
+                aLeftOverText.AppendAscii( "\x0a" );    // the manual line break...
+                aLeftOverText += pTextEngine->GetText(i);
+            }
+            if (pError)
+            {   // we need to add a new portion containing the left-over text
+                svx::SpellPortion aPortion2;
+                aPortion2.eLanguage = eLang;
+                aPortion2.sText = aLeftOverText;
+                aRet.push_back( aPortion2 );
+            }
+            else
+            {   // we just need to append the left-over text to the last portion (which had no errors)
+                aRet[ aRet.size() - 1 ].sText += aLeftOverText;
             }
         }
    }
