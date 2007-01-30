@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:32:50 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
 #endif
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
