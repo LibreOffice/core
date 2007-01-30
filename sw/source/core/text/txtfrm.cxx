@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:51:04 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@
 #include <fmtcntnt.hxx>     // SwFmtCntnt
 #endif
 // <--
+#include <SmartTagMgr.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #ifndef _TXTPAINT_HXX
@@ -1127,6 +1128,9 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     _InvalidateRange( SwCharRange( nPos, 1 ) );
             }
             bSetFldsDirty = sal_True;
+            // ST2
+            if ( SmartTagMgr::getSmartTagMgr().HasRecognizers() )
+                SET_WRONG( nPos, nPos + 1, Invalidate )
         }
         break;
         case RES_TXTATR_FTN :
