@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:28:15 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 13:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,8 @@
 #include <osl/time.h>
 #include <vcl/msgbox.hxx>
 #include <osl/file.hxx>
+#include <unotools/bootstrap.hxx>
+#include <unotools/configmgr.hxx>
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -1933,8 +1935,8 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     if (bStopListening)
         implts_stopModifyListeningOnDoc(aInfo);
 
-    implts_removeTempFile(aInfo.OldTempURL);
-    implts_removeTempFile(aInfo.NewTempURL);
+    AutoRecovery::st_impl_removeFile(aInfo.OldTempURL);
+    AutoRecovery::st_impl_removeFile(aInfo.NewTempURL);
     implts_flushConfigItem(aInfo, sal_True); // TRUE => remove it from config
 }
 
@@ -2055,8 +2057,8 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     aCacheLock.unlock();
 
-    implts_removeTempFile(sRemoveURL1);
-    implts_removeTempFile(sRemoveURL2);
+    AutoRecovery::st_impl_removeFile(sRemoveURL1);
+    AutoRecovery::st_impl_removeFile(sRemoveURL2);
 }
 
 //-----------------------------------------------
@@ -2484,7 +2486,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // We must know if the user modifies the document again ...
     implts_startModifyListeningOnDoc(rInfo);
 
-    implts_removeTempFile(sRemoveFile);
+    AutoRecovery::st_impl_removeFile(sRemoveFile);
 }
 
 //-----------------------------------------------
@@ -2786,25 +2788,6 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_removeTempFile(const ::rtl::OUString& sURL)
-{
-    if (!sURL.getLength())
-        return;
-
-    try
-    {
-        ::ucb::Content aContent = ::ucb::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >());
-        aContent.executeCommand(::rtl::OUString::createFromAscii("delete"), css::uno::makeAny(sal_True));
-    }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        {
-            LOG_ASSERT(sal_False, "Could not remove at least one temp. file owned by the AutoRecovery service (located in <so8user>/user/backup directory.")
-        }
-}
-
-//-----------------------------------------------
 void AutoRecovery::implts_informListener(      sal_Int32                      eJob  ,
                                          const css::frame::FeatureStateEvent& aEvent)
 {
@@ -3031,6 +3014,14 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // Of course following recovery session must be started without
     // any "handle" state ...
     implts_resetHandleStates(sal_False);
+
+    // flush config cached back to disc.
+    impl_flushALLConfigChanges();
+
+    // try to make sure next time office will be started user wont be
+    // notified about any other might be running office instance
+    // remove ".lock" file from disc !
+    AutoRecovery::st_impl_removeLockFile();
 }
 
 //-----------------------------------------------
@@ -3104,6 +3095,14 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
         CFG_ENTRY_SESSIONDATA,
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
+
+    // flush config cached back to disc.
+    impl_flushALLConfigChanges();
+
+    // try to make sure next time office will be started user wont be
+    // notified about any other might be running office instance
+    // remove ".lock" file from disc !
+    AutoRecovery::st_impl_removeLockFile();
 }
 
 //-----------------------------------------------
@@ -3194,8 +3193,8 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
         if (rInfo.ID != aParams.m_nWorkingEntryID)
             continue;
 
-        implts_removeTempFile(rInfo.OldTempURL);
-        implts_removeTempFile(rInfo.NewTempURL);
+        AutoRecovery::st_impl_removeFile(rInfo.OldTempURL);
+        AutoRecovery::st_impl_removeFile(rInfo.NewTempURL);
         implts_flushConfigItem(rInfo, sal_True); // TRUE => remove it from xml config!
 
         m_lDocCache.erase(pIt);
@@ -3581,6 +3580,64 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
         rArgs.erase(pArg);
         pArg = rArgs.end();
     }
+}
+
+//-----------------------------------------------
+void AutoRecovery::impl_flushALLConfigChanges()
+{
+    try
+    {
+        // SAFE ->
+        ReadGuard aReadLock(m_aLock);
+        css::uno::Reference< css::uno::XInterface > xRecoveryCfg(m_xRecoveryCFG, css::uno::UNO_QUERY);
+        aReadLock.unlock();
+        // <- SAFE
+
+        if (xRecoveryCfg.is())
+            ::comphelper::ConfigurationHelper::flush(xRecoveryCfg);
+
+        // SOLAR SAFE ->
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        ::utl::ConfigManager* pCfgMgr = ::utl::ConfigManager::GetConfigManager();
+        if (pCfgMgr)
+            pCfgMgr->StoreConfigItems();
+    }
+    catch(const css::uno::Exception&)
+        {}
+}
+
+//-----------------------------------------------
+void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
+{
+    if ( ! sURL.getLength())
+        return;
+
+    try
+    {
+        ::ucb::Content aContent = ::ucb::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >());
+        aContent.executeCommand(::rtl::OUString::createFromAscii("delete"), css::uno::makeAny(sal_True));
+    }
+    catch(const css::uno::Exception&)
+        {}
+}
+
+//-----------------------------------------------
+void AutoRecovery::st_impl_removeLockFile()
+{
+    try
+    {
+        ::rtl::OUString sUserURL;
+        ::utl::Bootstrap::locateUserInstallation( sUserURL );
+
+        ::rtl::OUStringBuffer sLockURLBuf;
+        sLockURLBuf.append     (sUserURL);
+        sLockURLBuf.appendAscii("/.lock");
+        ::rtl::OUString sLockURL = sLockURLBuf.makeStringAndClear();
+
+        AutoRecovery::st_impl_removeFile(sLockURL);
+    }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 } // namespace framework
