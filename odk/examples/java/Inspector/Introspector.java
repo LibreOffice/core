@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Introspector.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 14:59:09 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -145,15 +145,17 @@ public class Introspector extends WeakBase{
     boolean bIsContainer = false;
     try {
         XIntrospectionAccess xIntrospectionAccessObject = getXIntrospectionAccess(_oUnoObject);
-        XEnumerationAccess xEnumerationAccess = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, xIntrospectionAccessObject.queryAdapter( new Type( XEnumerationAccess.class ) ) );
-        if (xEnumerationAccess != null){
-            XEnumeration xEnumeration = xEnumerationAccess.createEnumeration();
-            bIsContainer = xEnumeration.hasMoreElements();
-        }
-        if (!bIsContainer){
-            XIndexAccess xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xIntrospectionAccessObject.queryAdapter(new Type( XIndexAccess.class )));
-            if (xIndexAccess != null){
-                bIsContainer = (xIndexAccess.getCount() > 0);
+        if (xIntrospectionAccessObject != null){
+            XEnumerationAccess xEnumerationAccess = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, xIntrospectionAccessObject.queryAdapter( new Type( XEnumerationAccess.class ) ) );
+            if (xEnumerationAccess != null){
+                XEnumeration xEnumeration = xEnumerationAccess.createEnumeration();
+                bIsContainer = xEnumeration.hasMoreElements();
+            }
+            if (!bIsContainer){
+                XIndexAccess xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xIntrospectionAccessObject.queryAdapter(new Type( XIndexAccess.class )));
+                if (xIndexAccess != null){
+                    bIsContainer = (xIndexAccess.getCount() > 0);
+                }
             }
         }
     } catch (IllegalTypeException ex) {
@@ -316,6 +318,7 @@ public class Introspector extends WeakBase{
     }
 
 
+
     public static boolean isObjectSequence(Object _oUnoObject){
         Type aType = AnyConverter.getType(_oUnoObject);
         return aType.getTypeClass().getValue() == TypeClass.SEQUENCE_value;
@@ -323,8 +326,12 @@ public class Introspector extends WeakBase{
 
 
     public static boolean isObjectPrimitive(Object _oUnoObject){
-        Type aType = AnyConverter.getType(_oUnoObject);
-        return isObjectPrimitive(_oUnoObject.getClass(), aType.getTypeClass());
+        boolean breturn = false;
+        if (_oUnoObject != null){
+            Type aType = AnyConverter.getType(_oUnoObject);
+            breturn = isObjectPrimitive(_oUnoObject.getClass(), aType.getTypeClass());
+        }
+        return breturn;
     }
 
 
@@ -399,15 +406,17 @@ public class Introspector extends WeakBase{
 
     private XServiceTypeDescription getServiceTypeDescription(String _sServiceName, TypeClass _eTypeClass){
     try{
-        TypeClass[] eTypeClasses = new com.sun.star.uno.TypeClass[2];
-        eTypeClasses[0] = com.sun.star.uno.TypeClass.SERVICE;
-        eTypeClasses[1] = _eTypeClass;
-        XTypeDescriptionEnumeration xTDEnumeration = getXTypeDescriptionEnumerationAccess().createTypeDescriptionEnumeration(Introspector.getModuleName(_sServiceName), eTypeClasses, TypeDescriptionSearchDepth.INFINITE);
-        while (xTDEnumeration.hasMoreElements()) {
-            XTypeDescription xTD = xTDEnumeration.nextTypeDescription();
-            if (xTD.getName().equals(_sServiceName)){
-                XServiceTypeDescription xServiceTypeDescription = (XServiceTypeDescription) UnoRuntime.queryInterface(XServiceTypeDescription.class, xTD);
-                return xServiceTypeDescription;
+        if (_sServiceName.length() > 0){
+            TypeClass[] eTypeClasses = new com.sun.star.uno.TypeClass[2];
+            eTypeClasses[0] = com.sun.star.uno.TypeClass.SERVICE;
+            eTypeClasses[1] = _eTypeClass;
+            XTypeDescriptionEnumeration xTDEnumeration = getXTypeDescriptionEnumerationAccess().createTypeDescriptionEnumeration(Introspector.getModuleName(_sServiceName), eTypeClasses, TypeDescriptionSearchDepth.INFINITE);
+            while (xTDEnumeration.hasMoreElements()) {
+                XTypeDescription xTD = xTDEnumeration.nextTypeDescription();
+                if (xTD.getName().equals(_sServiceName)){
+                    XServiceTypeDescription xServiceTypeDescription = (XServiceTypeDescription) UnoRuntime.queryInterface(XServiceTypeDescription.class, xTD);
+                    return xServiceTypeDescription;
+                }
             }
         }
         return null;
@@ -432,15 +441,18 @@ public class Introspector extends WeakBase{
 
 
     public XTypeDescription getReferencedType(String _sTypeName){
+    XTypeDescription xTypeDescription = null;
     try{
         XHierarchicalNameAccess xHierarchicalNameAccess = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, m_xTDEnumerationAccess);
-        XIndirectTypeDescription xIndirectTypeDescription = (XIndirectTypeDescription) UnoRuntime.queryInterface(XIndirectTypeDescription.class, xHierarchicalNameAccess.getByHierarchicalName(_sTypeName));
-        XTypeDescription xTypeDescription = xIndirectTypeDescription.getReferencedType();
-        return xTypeDescription;
+        if (xHierarchicalNameAccess != null){
+            XIndirectTypeDescription xIndirectTypeDescription = (XIndirectTypeDescription) UnoRuntime.queryInterface(XIndirectTypeDescription.class, xHierarchicalNameAccess.getByHierarchicalName(_sTypeName));
+            xTypeDescription = xIndirectTypeDescription.getReferencedType();
+        }
     } catch (Exception ex) {
         ex.printStackTrace(System.out);
-        return null;
-    }}
+    }
+        return xTypeDescription;
+    }
 
 
     public XInterfaceTypeDescription[] getInterfaceDescriptionsOfService(String _sServiceName){
@@ -469,7 +481,12 @@ public class Introspector extends WeakBase{
 
     public static String getModuleName(String _sTypeClass){
         int nlastindex = _sTypeClass.lastIndexOf(".");
-        return _sTypeClass.substring(0, nlastindex);
+        if (nlastindex > -1){
+            return _sTypeClass.substring(0, nlastindex);
+        }
+        else{
+            return "";
+        }
     }
 
 
@@ -554,5 +571,45 @@ public class Introspector extends WeakBase{
             bHasSupportedServices = sSupportedServiceNames.length > 0;
         }
         return bHasSupportedServices;
+    }
+
+
+    public Object getValueOfText(TypeClass aTypeClass, String sText){
+        Object oReturn = null;
+        switch (aTypeClass.getValue()){
+            case TypeClass.CHAR_value:
+                break;
+            case TypeClass.DOUBLE_value:
+                oReturn = Double.valueOf(sText);
+                break;
+            case TypeClass.ENUM_value:
+                break;
+            case TypeClass.FLOAT_value:
+                oReturn = Float.valueOf(sText);
+                break;
+            case TypeClass.HYPER_value:
+                oReturn = Long.valueOf(sText);
+                break;
+            case TypeClass.LONG_value:
+                oReturn = Integer.valueOf(sText);
+                break;
+            case TypeClass.SHORT_value:
+                oReturn = Byte.valueOf(sText);
+                break;
+            case TypeClass.STRING_value:
+                oReturn = sText;
+                break;
+            case TypeClass.UNSIGNED_HYPER_value:
+                oReturn = Long.valueOf(sText);
+                break;
+            case TypeClass.UNSIGNED_LONG_value:
+                oReturn = Integer.valueOf(sText);
+                break;
+            case TypeClass.UNSIGNED_SHORT_value:
+                oReturn = Byte.valueOf(sText);
+                break;
+            default:
+        }
+        return oReturn;
     }
 }
