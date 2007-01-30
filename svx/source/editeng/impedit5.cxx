@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:39:59 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -860,9 +860,9 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
             EditCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( nWhich, nLastEnd );
             while ( pAttr )
             {
+                nLastEnd = pAttr->GetEnd();
                 if ( pAttr->GetStart() > nLastEnd )
                     aEditDoc.InsertAttrib( pNode, nLastEnd, pAttr->GetStart(), rItem );
-                nLastEnd = pAttr->GetEnd();
                 // #112831# Last Attr might go from 0xffff to 0x0000
                 pAttr = nLastEnd ? pNode->GetCharAttribs().FindNextAttrib( nWhich, nLastEnd ) : NULL;
             }
