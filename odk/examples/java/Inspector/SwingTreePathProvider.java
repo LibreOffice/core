@@ -10,13 +10,13 @@ public class SwingTreePathProvider implements XTreePathProvider {
     }
 
 
-    public UnoNode getLastPathComponent(){
-        return (UnoNode) m_aTreePath.getLastPathComponent();
+    public XUnoNode getLastPathComponent(){
+        return (XUnoNode) m_aTreePath.getLastPathComponent();
     }
 
 
-    public UnoNode getPathComponent(int i){
-        return (UnoNode) m_aTreePath.getPathComponent(i);
+    public XUnoNode getPathComponent(int i){
+        return (XUnoNode) m_aTreePath.getPathComponent(i);
     }
 
     public int getPathCount(){
@@ -29,7 +29,7 @@ public class SwingTreePathProvider implements XTreePathProvider {
     }
 
 
-    public XTreePathProvider pathByAddingChild(UnoNode _oUnoNode){
+    public XTreePathProvider pathByAddingChild(XUnoNode _oUnoNode){
         TreePath aTreePath = m_aTreePath.pathByAddingChild(_oUnoNode);
         return new SwingTreePathProvider(aTreePath);
     }

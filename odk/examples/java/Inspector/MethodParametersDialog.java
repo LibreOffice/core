@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodParametersDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 14:59:41 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,6 +37,7 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+
 import com.sun.star.reflection.ParamInfo;
 import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.uno.TypeClass;
@@ -45,6 +46,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -72,12 +75,15 @@ public class MethodParametersDialog extends JDialog{
     private Object m_oUnoReturnObject = null;
     private JLabel jLblResult;
     private JPanel jResultPanel = null;
+    private boolean bisdiposed = false;
+    private XUnoMethodNode m_xUnoMethodNode;
 
 
-     public MethodParametersDialog(XIdlMethod _xIdlMethod, Object _oUnoObject) {
-        m_aParamInfo = _xIdlMethod.getParameterInfos();
-        m_xIdlMethod = _xIdlMethod;
-        m_oUnoObject = _oUnoObject;
+    public MethodParametersDialog(XUnoMethodNode _xUnoMethodNode){
+        m_xUnoMethodNode = _xUnoMethodNode;
+        m_xIdlMethod = _xUnoMethodNode.getXIdlMethod();
+        m_aParamInfo = m_xIdlMethod.getParameterInfos();
+        m_oUnoObject = m_xUnoMethodNode.getUnoObject();
         Object[] m_aParameterObjects = new Object[m_aParamInfo.length];
     }
 
@@ -95,6 +101,7 @@ public class MethodParametersDialog extends JDialog{
         jLblHeader.setText("Please insert the values for the given Parameters of the method '" + m_xIdlMethod.getName() + "'");
         jHeaderPanel.add(jLblHeader,BorderLayout.WEST);
         jPnlParamContainer.add(jHeaderPanel);
+
         m_aParameterPanels = new ParameterPanel[m_aParamInfo.length];
         for (int i = 0; i < m_aParameterPanels.length; i++){
             m_aParameterPanels[i] = new ParameterPanel(m_aParamInfo[i]);
@@ -105,13 +112,22 @@ public class MethodParametersDialog extends JDialog{
         pack();
         setLocation(350, 350);
         setTitle("Object Inspector - Parameter Values of '" + m_xIdlMethod.getName() + "'");
+        super.setFocusable(true);
+        super.setFocusableWindowState(true);
+        super.requestFocus();
+        m_aParameterPanels[0].getInputComponent().requestFocusInWindow();
         show();
-        Vector aMethodObjects = new Vector();
-        for (int i = 0; i < m_aParameterPanels.length; i++){
-            aMethodObjects.add(m_aParameterPanels[i].getValue());
+        if (!bisdiposed){
+            Vector aMethodObjects = new Vector();
+            for (int i = 0; i < m_aParameterPanels.length; i++){
+                aMethodObjects.add(m_aParameterPanels[i].getValue());
+            }
+            aMethodObjects.add(m_oUnoReturnObject);
+            return aMethodObjects;
         }
-        aMethodObjects.add(m_oUnoReturnObject);
-        return aMethodObjects;
+        else{
+            return null;
+        }
     }
 
 
@@ -190,7 +206,6 @@ public class MethodParametersDialog extends JDialog{
             addBorderPanel(this, BorderLayout.SOUTH);
             JPanel jPnlCenter1 = new javax.swing.JPanel();
             jPnlCenter1.setLayout(new javax.swing.BoxLayout(jPnlCenter1, javax.swing.BoxLayout.X_AXIS));
-
             JLabel jLabel1 = new JLabel();
             jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
             String sParamText = _aParamInfo.aName + " (" + _aParamInfo.aType.getName() +")";
@@ -232,45 +247,15 @@ public class MethodParametersDialog extends JDialog{
             add(jPnlEast, BorderLayout.EAST);
         }
 
+        private JComponent getInputComponent(){
+            return m_jComponent;
+        }
 
         public Object getValue(){
             Object oReturn = null;
             if (m_jComponent instanceof JTextField){
                 String sText = ((JTextField) m_jComponent).getText();
-                switch (m_aTypeClass.getValue()){
-                    case TypeClass.CHAR_value:
-                        break;
-                    case TypeClass.DOUBLE_value:
-                        oReturn = Double.valueOf(sText);
-                        break;
-                    case TypeClass.ENUM_value:
-                        break;
-                    case TypeClass.FLOAT_value:
-                        oReturn = Float.valueOf(sText);
-                        break;
-                    case TypeClass.HYPER_value:
-                        oReturn = Long.valueOf(sText);
-                        break;
-                    case TypeClass.LONG_value:
-                        oReturn = Integer.valueOf(sText);
-                        break;
-                    case TypeClass.SHORT_value:
-                        oReturn = Byte.valueOf(sText);
-                        break;
-                    case TypeClass.STRING_value:
-                        oReturn = sText;
-                        break;
-                    case TypeClass.UNSIGNED_HYPER_value:
-                        oReturn = Long.valueOf(sText);
-                        break;
-                    case TypeClass.UNSIGNED_LONG_value:
-                        oReturn = Integer.valueOf(sText);
-                        break;
-                    case TypeClass.UNSIGNED_SHORT_value:
-                        oReturn = Byte.valueOf(sText);
-                        break;
-                    default:
-                }
+                oReturn = Introspector.getIntrospector().getValueOfText(m_aTypeClass, sText);
             }
             else{
                 JComboBox jComboBox = ((JComboBox) m_jComponent);
@@ -341,8 +326,11 @@ public class MethodParametersDialog extends JDialog{
             jPnlBottomCenter.add(jInvokeButton);
             addGapPanel(jPnlBottomCenter);
             JButton jCancelButton = new JButton("Cancel");
+            jCancelButton.setFocusCycleRoot(true);
+            jCancelButton.setFocusPainted(true);
             jCancelButton.addActionListener(new ActionListener(){
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    bisdiposed = true;
                     dispose();
                 }
             });
@@ -362,15 +350,11 @@ public class MethodParametersDialog extends JDialog{
     public void invokeParameterMethod(){
     try{
         Object[] oParameters = getParameterValues();
-        Object[][] aParams = new Object[1][oParameters.length];
-        for ( int i = 0; i < oParameters.length; i++ ) {
-            aParams[0][i] = oParameters[i];
-        }
-        m_oUnoReturnObject = m_xIdlMethod.invoke(m_oUnoObject, aParams);
+        m_oUnoReturnObject = m_xUnoMethodNode.invoke(m_oUnoObject, oParameters);
         insertResultPanel(null);
     } catch (Exception ex) {
         insertResultPanel(ex);
         m_oUnoReturnObject = null;
-        ex.printStackTrace(System.out);
     }}
+
 }
