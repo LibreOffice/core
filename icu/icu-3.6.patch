@@ -135,6 +135,41 @@
   else
   	@echo "$@" > $@
   endif
+*** misc/icu/source/layout/CoverageTables.cpp	Sat May  8 01:28:42 2004
+--- misc/build/icu/source/layout/CoverageTables.cpp	Fri Jan 19 16:03:21 2007
+***************
+*** 44,49 ****
+--- 44,53 ----
+      le_uint16 count = SWAPW(glyphCount);
+      le_uint8 bit = OpenTypeUtilities::highBit(count);
+      le_uint16 power = 1 << bit;
++ 
++     if (count == 0)
++         return -1;
++ 
+      le_uint16 extra = count - power;
+      le_uint16 probe = power;
+      le_uint16 index = 0;
+*** misc/icu/source/layout/DeviceTables.cpp	Fri Jan 14 18:25:12 2005
+--- misc/build/icu/source/layout/DeviceTables.cpp	Fri Jan 19 16:03:20 2007
+***************
+*** 22,28 ****
+      le_uint16 format = SWAPW(deltaFormat) - 1;
+      le_int16 result = 0;
+      
+!     if (ppem >= start && ppem <= SWAPW(endSize)) {
+          le_uint16 sizeIndex = ppem - start;
+          le_uint16 bits = fieldBits[format];
+          le_uint16 count = 16 / bits;
+--- 22,29 ----
+      le_uint16 format = SWAPW(deltaFormat) - 1;
+      le_int16 result = 0;
+      
+!     if (ppem >= start && ppem <= SWAPW(endSize)
+!      && format < sizeof(fieldBits)/sizeof(fieldBits[0])) {
+          le_uint16 sizeIndex = ppem - start;
+          le_uint16 bits = fieldBits[format];
+          le_uint16 count = 16 / bits;
 *** misc/icu/source/layout/GXLayoutEngine.cpp	Fri Sep  2 20:22:10 2005
 --- misc/build/icu/source/layout/GXLayoutEngine.cpp	Wed Jan  3 09:40:21 2007
 ***************
@@ -154,6 +189,245 @@
   
       if (LE_FAILURE(success)) {
           return 0;
+*** misc/icu/source/layout/IndicClassTables.cpp	Wed Aug 23 02:12:40 2006
+--- misc/build/icu/source/layout/IndicClassTables.cpp	Fri Jan 19 16:03:21 2007
+***************
+*** 94,100 ****
+      _dr, _db, _db, _db, _db, _xx, _xx, _l1, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
+      _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _cn, // 09D0 - 09DF
+      _iv, _iv, _dv, _dv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 09E0 - 09EF
+!     _ct, _ct, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx                           // 09F0 - 09FA
+  };
+  
+  static const IndicClassTable::CharClass punjCharClasses[] =
+--- 94,100 ----
+      _dr, _db, _db, _db, _db, _xx, _xx, _l1, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
+      _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _cn, // 09D0 - 09DF
+      _iv, _iv, _dv, _dv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 09E0 - 09EF
+!     _rv, _ct, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx                           /* 09F0 - 09FA */
+  };
+  
+  static const IndicClassTable::CharClass punjCharClasses[] =
+***************
+*** 120,125 ****
+--- 120,138 ----
+      _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0AE0 - 0AEF
+  };
+  
++ #if 1
++ static const IndicClassTable::CharClass oryaCharClasses[] =
++ {
++     _xx, _ma, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, /* 0B00 - 0B0F */
++     _iv, _xx, _xx, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _ct, _bb, /* 0B10 - 0B1F */
++     _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _pb, /* 0B20 - 0B2F */
++     _rb, _xx, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _nu, _xx, _dr, _da, /* 0B30 - 0B3F */
++     _dr, _db, _db, _db, _xx, _xx, _xx, _dl, _s1, _xx, _xx, _s2, _s3, _vr, _xx, _xx, /* 0B40 - 0B4F */
++     _xx, _xx, _xx, _xx, _xx, _xx, _da, _dr, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _pb, /* 0B50 - 0B5F */
++     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, /* 0B60 - 0B6F */
++     _xx, _bb                                                                        /* 0B70 - 0B71 */
++ };
++ #else
+  static const IndicClassTable::CharClass oryaCharClasses[] =
+  {
+      _xx, _ma, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0B00 - 0B0F
+***************
+*** 131,136 ****
+--- 144,150 ----
+      _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0B60 - 0B6F
+      _xx, _ct                                                                        // 0B70 - 0B71
+  };
++ #endif
+  
+  static const IndicClassTable::CharClass tamlCharClasses[] =
+  {
+***************
+*** 150,156 ****
+      _xx, _mp, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0C00 - 0C0F
+      _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C10 - 0C1F
+      _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _bb, // 0C20 - 0C2F
+!     _bb, _ct, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _da, _da, // 0C30 - 0C3F
+      _da, _dr, _dr, _dr, _dr, _xx, _a1, _da, _s1, _xx, _da, _da, _da, _vr, _xx, _xx, // 0C40 - 0C4F
+      _xx, _xx, _xx, _xx, _xx, _da, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0C50 - 0C5F
+      _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0C60 - 0C6F
+--- 164,170 ----
+      _xx, _mp, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0C00 - 0C0F
+      _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C10 - 0C1F
+      _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _bb, // 0C20 - 0C2F
+!     _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _da, _da, // 0C30 - 0C3F
+      _da, _dr, _dr, _dr, _dr, _xx, _a1, _da, _s1, _xx, _da, _da, _da, _vr, _xx, _xx, // 0C40 - 0C4F
+      _xx, _xx, _xx, _xx, _xx, _da, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0C50 - 0C5F
+      _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0C60 - 0C6F
+***************
+*** 173,178 ****
+--- 187,205 ----
+      _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0CE0 - 0CEF
+  };
+  
++ #if 1
++ //use the pango char class table here
++ static const IndicClassTable::CharClass mlymCharClasses[] =
++ {
++     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, /* 0D00 - 0D0F */
++     _iv, _xx, _iv, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, /* 0D10 - 0D1F */
++     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _pb, /* 0D20 - 0D2F */
++     _pb, _cn, _ct, _ct, _ct, _pb, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _dr, _dr, /* 0D30 - 0D3F */
++     _dr, _dr, _dr, _dr, _xx, _xx, _dl, _dl, _dl, _xx, _s1, _s2, _s3, _vr, _xx, _xx, /* 0D40 - 0D4F */
++     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _dr, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, /* 0D50 - 0D5F */
++     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  /* 0D60 - 0D6F */
++ };
++ #else
+  // FIXME: this is correct for old-style Malayalam (MAL) but not for reformed Malayalam (MLR)
+  // FIXME: should there be a REPH for old-style Malayalam?
+  static const IndicClassTable::CharClass mlymCharClasses[] =
+***************
+*** 185,190 ****
+--- 212,218 ----
+      _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0D50 - 0D5F
+      _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0D60 - 0D6F
+  };
++ #endif
+   
+  static const IndicClassTable::CharClass sinhCharClasses[] =
+  {
+***************
+*** 232,238 ****
+  #define TAML_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT | SF_FILTER_ZERO_WIDTH)
+  #define TELU_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
+  #define KNDA_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
+! #define MLYM_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT | SF_FILTER_ZERO_WIDTH)
+  #define SINH_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
+  
+  //
+--- 260,266 ----
+  #define TAML_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT | SF_FILTER_ZERO_WIDTH)
+  #define TELU_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
+  #define KNDA_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
+! #define MLYM_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
+  #define SINH_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
+  
+  //
+***************
+*** 256,262 ****
+  
+  static const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FLAGS, mlymCharClasses, mlymSplitTable};
+  
+! static const IndicClassTable sinhClassTable = {0x0D80, 0x0DF4, 3, SINH_SCRIPT_FLAGS, sinhCharClasses, sinhSplitTable};
+  
+  //
+  // IndicClassTable addresses
+--- 284,290 ----
+  
+  static const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FLAGS, mlymCharClasses, mlymSplitTable};
+  
+! static const IndicClassTable sinhClassTable = {0x0D80, 0x0DF4, 4, SINH_SCRIPT_FLAGS, sinhCharClasses, sinhSplitTable};
+  
+  //
+  // IndicClassTable addresses
+*** misc/icu/source/layout/IndicReordering.cpp	Tue Apr 25 21:08:12 2006
+--- misc/build/icu/source/layout/IndicReordering.cpp	Fri Jan 19 16:03:20 2007
+***************
+*** 50,55 ****
+--- 50,63 ----
+  #define distFeatureMask 0x00010000UL
+  #define initFeatureMask 0x00008000UL
+  
++ // TODO: Find better names for these!
++ #define tagArray4 (loclFeatureMask | nuktFeatureMask | akhnFeatureMask | vatuFeatureMask | presFeatureMask | blwsFeatureMask | abvsFeatureMask | pstsFeatureMask | halnFeatureMask | blwmFeatureMask | abvmFeatureMask | distFeatureMask)
++ #define tagArray3 (pstfFeatureMask | tagArray4)
++ #define tagArray2 (halfFeatureMask | tagArray3)
++ #define tagArray1 (blwfFeatureMask | tagArray2)
++ #define tagArray0 (rphfFeatureMask | tagArray1)
++ 
++ 
+  class IndicReorderingOutput : public UMemory {
+  private:
+      le_int32   fOutIndex;
+***************
+*** 154,159 ****
+--- 162,188 ----
+          fSMabove = fSMbelow = 0;
+      }
+  
++     void swapChars(int a, int b)
++     {
++ 	LEErrorCode success = LE_NO_ERROR;
++         LEUnicode temp_char;
++         le_uint32 temp_index;
++         FeatureMask temp_tag;
++ 
++         temp_char = fOutChars[fOutIndex + b];
++ 	temp_index = fGlyphStorage.getCharIndex(fOutIndex + b, success);
++         temp_tag = fGlyphStorage.getAuxData(fOutIndex + b, success);
++ 
++         fOutChars[fOutIndex + b] = fOutChars[fOutIndex + a];
++         le_uint32 toswap = fGlyphStorage.getCharIndex(fOutIndex + a, success);
++         fGlyphStorage.setCharIndex(fOutIndex + b,  toswap, success);
++         fGlyphStorage.setAuxData(fOutIndex + b, tagArray3, success);
++ 
++         fOutChars[fOutIndex + a] = temp_char;
++         fGlyphStorage.setCharIndex(fOutIndex + a, temp_index, success);
++         fGlyphStorage.setAuxData(fOutIndex + a, temp_tag, success);
++     }
++ 
+      void writeChar(LEUnicode ch, le_uint32 charIndex, FeatureMask charFeatures)
+      {
+          LEErrorCode success = LE_NO_ERROR;
+***************
+*** 335,347 ****
+      C_DOTTED_CIRCLE = 0x25CC
+  };
+  
+- // TODO: Find better names for these!
+- #define tagArray4 (loclFeatureMask | nuktFeatureMask | akhnFeatureMask | vatuFeatureMask | presFeatureMask | blwsFeatureMask | abvsFeatureMask | pstsFeatureMask | halnFeatureMask | blwmFeatureMask | abvmFeatureMask | distFeatureMask)
+- #define tagArray3 (pstfFeatureMask | tagArray4)
+- #define tagArray2 (halfFeatureMask | tagArray3)
+- #define tagArray1 (blwfFeatureMask | tagArray2)
+- #define tagArray0 (rphfFeatureMask | tagArray1)
+- 
+  static const FeatureMap featureMap[] =
+  {
+      {loclFeatureTag, loclFeatureMask},
+--- 364,369 ----
+***************
+*** 373,379 ****
+      {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, 12}, //  2 - consonant with nukta
+      {-1,  6,  1, -1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, 12}, //  3 - consonant
+      {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1,  7}, //  4 - consonant virama
+!     {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  5 - dependent vowels
+      {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  6 - vowel mark
+      {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
+      {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
+--- 395,401 ----
+      {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, 12}, //  2 - consonant with nukta
+      {-1,  6,  1, -1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, 12}, //  3 - consonant
+      {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1,  7}, //  4 - consonant virama
+!     {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5, -1, -1, -1, -1, -1}, //  5 - dependent vowels
+      {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  6 - vowel mark
+      {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
+      {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
+***************
+*** 629,634 ****
+--- 651,670 ----
+                  output.writeChar(chars[i], i, tagArray4);
+              }
+  
++             /* for the special conjuction of Cons+0x0d4d+0x0d31 or Cons+0x0d4d+0x0d30 of Malayalam */
++             if ((baseConsonant - 2 >= 0) &&
++                 (chars[baseConsonant - 1] == 0x0d4d) &&
++ 		((chars[baseConsonant] == 0x0d31) || 
++ 		 (chars[baseConsonant] == 0x0d30)) &&
++                 ((chars[baseConsonant - 2] >= 0x0d15) &&
++                  (chars[baseConsonant - 2] <= 0x0d39)))  {
++ 
++                 output.swapChars(-1, -3);
++ 
++ 		if (mpreFixups)
++ 			mpreFixups->reduce();
++             }
++ 
+              if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) != 0) {
+                  output.writeMbelow();
+                  output.writeSMbelow(); // FIXME: there are no SMs in these scripts...
 *** misc/icu/source/layout/LESwaps.h	Thu Jun 23 00:39:36 2005
 --- misc/build/icu/source/layout/LESwaps.h	Wed Jan  3 09:40:21 2007
 ***************
@@ -230,6 +504,36 @@
   /**
    * This class is used to access data which stored in big endian order
    * regardless of the conventions of the platform. It has been designed
+*** misc/icu/source/layout/MPreFixups.cpp	Sat May  8 01:28:44 2004
+--- misc/build/icu/source/layout/MPreFixups.cpp	Fri Jan 19 16:03:20 2007
+***************
+*** 40,45 ****
+--- 40,51 ----
+      }
+  }
+  
++ void MPreFixups::reduce()
++ {
++     if (fFixupCount > 0)
++         fFixupCount--;
++ }
++ 
+  void MPreFixups::apply(LEGlyphStorage &glyphStorage)
+  {
+      for (le_int32 fixup = 0; fixup < fFixupCount; fixup += 1) {
+*** misc/icu/source/layout/MPreFixups.h	Mon Apr 12 20:51:32 2004
+--- misc/build/icu/source/layout/MPreFixups.h	Fri Jan 19 16:03:20 2007
+***************
+*** 31,36 ****
+--- 31,38 ----
+      
+      void apply(LEGlyphStorage &glyphStorage);
+  
++     void reduce();
++ 
+  private:
+      FixupData *fFixupData;
+      le_int32   fFixupCount;
 *** misc/icu/source/test/intltest/loctest.cpp	Thu Jul  6 03:50:04 2006
 --- misc/build/icu/source/test/intltest/loctest.cpp	Wed Jan  3 09:40:21 2007
 ***************
