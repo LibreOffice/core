@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:42:55 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,15 +55,38 @@ sal_Bool SwWrongList::InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const
 {
     MSHORT nPos = GetPos( rChk );
     xub_StrLen nWrPos;
-    if( nPos < Count() && ( nWrPos = WRPOS( nPos ) ) <= rChk )
+    if( nPos < Count() && ( nWrPos = Pos( nPos ) ) <= rChk )
     {
-        rLn = WRLEN( nPos );
+        rLn = Len( nPos );
         if( nWrPos + rLn <= rChk )
             return sal_False;
         rChk = nWrPos;
         return sal_True;
     }
     return sal_False;
+}
+
+sal_Bool SwWrongList::InWrongWordSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn ) const
+{
+   MSHORT nPos = GetPos( rChk );
+   xub_StrLen nWrPos;
+   if( nPos < Count() && ( nWrPos = Pos( nPos ) ) <= rChk )
+   {
+       rLn = Len( nPos );
+       if( nWrPos + rLn <= rChk )
+           return sal_False;
+       rChk = nWrPos;
+
+       // check subposition
+       SwWrongList* pWrongList = SubList(nPos);
+       if (pWrongList)
+       {
+         return pWrongList->InWrongWord(sub_rChk, sub_rLn);
+       }
+
+       return sal_True;
+   }
+   return sal_False;
 }
 
 /*************************************************************************
@@ -78,8 +101,8 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
     if( nPos == Count() )
         return sal_False;
 
-    xub_StrLen nEnd = WRLEN( nPos );
-    nEnd += ( nWrPos = WRPOS( nPos ) );
+    xub_StrLen nEnd = Len( nPos );
+    nEnd += ( nWrPos = Pos( nPos ) );
     if( nEnd == rChk )
     {
         ++nPos;
@@ -87,8 +110,8 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
             return sal_False;
         else
         {
-            nEnd = WRLEN( nPos );
-            nEnd += ( nWrPos = WRPOS( nPos ) );
+            nEnd = Len( nPos );
+            nEnd += ( nWrPos = Pos( nPos ) );
         }
     }
     if( nEnd > rChk && nWrPos < rLn )
@@ -103,6 +126,59 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
     return sal_False;
 }
 
+sal_Bool SwWrongList::CheckSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn  ) const
+{
+    MSHORT nPos = GetPos( rChk );
+    rLn += rChk;
+    xub_StrLen nWrPos;
+    sal_Bool subListResult = sal_False;
+
+    if( nPos == Count() )
+        return sal_False;
+
+    xub_StrLen nEnd = Len( nPos );
+    nEnd += ( nWrPos = Pos( nPos ) );
+
+    // Check sublist at current position
+    SwWrongList *pWrongList = SubList(nPos);
+    if (pWrongList)
+    {
+        subListResult = pWrongList->Check(sub_rChk, sub_rLn);
+    }
+
+    if( nEnd == rChk )
+    {
+        ++nPos;
+        if( nPos == Count() )
+            return sal_False;
+        else
+        {
+            nEnd = Len( nPos );
+            nEnd += ( nWrPos = Pos( nPos ) );
+
+            pWrongList = SubList(nPos);
+            if (pWrongList)
+            {
+                subListResult = pWrongList->Check(sub_rChk, sub_rLn);
+            }
+        }
+    }
+
+    if( nEnd > rChk && nWrPos < rLn )
+    {
+        if( nWrPos > rChk )
+            rChk = nWrPos;
+        if( nEnd < rLn )
+            rLn = nEnd;
+        rLn -= rChk;
+        if (pWrongList)
+            return subListResult;
+        else
+            return (0 != rLn);
+    }
+    return sal_False;
+}
+
 /*************************************************************************
  * xub_StrLen SwWrongList::NextWrong() liefert die naechste Fehlerposition
  *************************************************************************/
@@ -113,11 +189,11 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
     xub_StrLen nPos = GetPos( nChk );
     if( nPos < Count() )
     {
-        nRet = WRPOS( nPos );
-        if( nRet < nChk && nRet + WRLEN( nPos ) <= nChk )
+        nRet = Pos( nPos );
+        if( nRet < nChk && nRet + Len( nPos ) <= nChk )
         {
             if( ++nPos < Count() )
-                nRet = WRPOS( nPos );
+                nRet = Pos( nPos );
             else
                 nRet = STRING_LEN;
         }
@@ -129,21 +205,36 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
     return nRet;
 }
 
-/*************************************************************************
- * xub_StrLen SwWrongList::LastWrong() liefert die letzte Fehlerposition
- *************************************************************************/
-
-xub_StrLen SwWrongList::LastWrong( xub_StrLen nChk ) const
+void SwWrongList::NextWrongSub( xub_StrLen &nChk, xub_StrLen &nSubChk ) const
 {
-    xub_StrLen nPos = GetPos( nChk );
     xub_StrLen nRet;
-    if( nPos >= Count() || ( nRet = WRPOS( nPos ) ) >= nChk )
-        nRet = nPos ? WRPOS( --nPos ) : STRING_LEN;
-    if( nChk > GetBeginInv() && ( nRet == STRING_LEN || nRet < GetEndInv() ) )
-        nRet = nChk > GetEndInv() ? GetEndInv() : nChk;
-    else if( nRet < STRING_LEN )
-        nRet += WRLEN( nPos );
-    return nRet;
+    xub_StrLen nSubRet = STRING_LEN;
+    xub_StrLen nPos = GetPos( nChk );
+    if( nPos < Count() )
+    {
+        nRet = Pos( nPos );
+        if( nRet < nChk && nRet + Len( nPos ) <= nChk )
+        {
+            if( ++nPos < Count() )
+                nRet = Pos( nPos );
+            else
+                nRet = STRING_LEN;
+        }
+    }
+    else
+        nRet = STRING_LEN;
+
+    SwWrongList* pWrongList = SubList(nPos);
+    if (pWrongList)
+    {
+        nSubRet = pWrongList->NextWrong(nSubChk);
+    }
+
+    if( nRet > GetBeginInv() && nChk < GetEndInv() )
+        nRet = nChk > GetBeginInv() ? nChk : GetBeginInv();
+
+    nChk = nRet;
+    nSubChk = nSubRet;
 }
 
 /*************************************************************************
@@ -161,12 +252,12 @@ MSHORT SwWrongList::GetPos( xub_StrLen nValue ) const
         while( nUnten <= nOben )
         {
             nMitte = nUnten + ( nOben - nUnten ) / 2;
-            xub_StrLen nTmp = WRPOS( nMitte );
+            xub_StrLen nTmp = Pos( nMitte );
             if( nTmp == nValue )
                 return nMitte;
             else if( nTmp < nValue )
             {
-                if( nTmp + WRLEN( nMitte ) >= nValue )
+                if( nTmp + Len( nMitte ) >= nValue )
                     return nMitte;
                 nUnten = nMitte + 1;
             }
@@ -207,23 +298,23 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
         xub_StrLen nWrPos;
         xub_StrLen nWrLen;
         sal_Bool bJump = sal_False;
-        while( nLst < Count() && WRPOS( nLst ) < nEnd )
+        while( nLst < Count() && Pos( nLst ) < nEnd )
             ++nLst;
-        if( nLst > i && ( nWrPos = WRPOS( nLst - 1 ) ) <= nPos )
+        if( nLst > i && ( nWrPos = Pos( nLst - 1 ) ) <= nPos )
         {
-            nWrLen = WRLEN( nLst - 1 );
+            nWrLen = Len( nLst - 1 );
             // calculate new length of word
             nWrLen = ( nEnd > nWrPos + nWrLen ) ?
                        nPos - nWrPos :
                        static_cast<xub_StrLen>(nWrLen + nDiff);
             if( nWrLen )
             {
-                aLen.GetObject( --nLst ) = nWrLen;
+                maList[--nLst].mnLen = nWrLen;
                 bJump = sal_True;
             }
         }
         Remove( i, nLst - i );
-        aLen.Remove( i, nLst - i );
+
         if ( bJump )
             ++i;
         if( STRING_LEN == GetBeginInv() )
@@ -248,11 +339,11 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
         }
         // Wenn wir mitten in einem falschen Wort stehen, muss vom Wortanfang
         // invalidiert werden.
-        if( i < Count() && nPos >= ( nWrPos = WRPOS( i ) ) )
+        if( i < Count() && nPos >= ( nWrPos = Pos( i ) ) )
         {
             Invalidate( nWrPos, nEnd );
-            xub_StrLen nWrLen = WRLEN( i ) + xub_StrLen( nDiff );
-            aLen.GetObject( i++ ) = nWrLen;
+            xub_StrLen nWrLen = Len( i ) + xub_StrLen( nDiff );
+            maList[i++].mnLen = nWrLen;
             nWrLen += nWrPos;
             Invalidate( nWrPos, nWrLen );
         }
@@ -261,8 +352,8 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
     }
     while( i < Count() )
     {
-        const xub_StrLen nTmp = static_cast<xub_StrLen>(nDiff + GetObject( i ));
-        GetObject( i++ ) = nTmp;
+        const xub_StrLen nTmp = static_cast<xub_StrLen>(nDiff + maList[i].mnPos);
+        maList[i++].mnPos = nTmp;
     }
 }
 
@@ -277,21 +368,22 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
  * any longer
  *************************************************************************/
 sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
-                         xub_StrLen nLen, MSHORT nIndex, xub_StrLen nCursorPos )
+                             xub_StrLen nLen, MSHORT nIndex, xub_StrLen nCursorPos )
 {
+  // length of word must be greater than 0 and cursor position must be outside the word
     sal_Bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
     xub_StrLen nWrPos;
     xub_StrLen nWrEnd = rEnd;
     MSHORT nCnt = nIndex;
-    if( nIndex < Count() && ( nWrPos = WRPOS( nIndex ) ) < nPos )
+    if( nIndex < Count() && ( nWrPos = Pos( nIndex ) ) < nPos )
     {
-        nWrEnd = nWrPos + WRLEN( nCnt++ );
+        nWrEnd = nWrPos + Len( nCnt++ );
         if( rStart > nWrPos )
             rStart = nWrPos;
     }
-    while( nCnt < Count() && ( nWrPos = WRPOS( nCnt ) ) < nPos )
-        nWrEnd = nWrPos + WRLEN( nCnt++ );
-    if( nCnt < Count() && nWrPos == nPos && WRLEN( nCnt ) == nLen )
+    while( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
+        nWrEnd = nWrPos + Len( nCnt++ );
+    if( nCnt < Count() && nWrPos == nPos && Len( nCnt ) == nLen )
     {
         ++nCnt;
         bRet = sal_True;
@@ -306,18 +398,18 @@ sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nP
         }
     }
     nPos += nLen;
-    if( nCnt < Count() && ( nWrPos = WRPOS( nCnt ) ) < nPos )
+    if( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
     {
-        nWrEnd = nWrPos + WRLEN( nCnt++ );
+        nWrEnd = nWrPos + Len( nCnt++ );
         if( rStart > nWrPos )
             rStart = nWrPos;
     }
-    while( nCnt < Count() && ( nWrPos = WRPOS( nCnt ) ) < nPos )
-        nWrEnd = nWrPos + WRLEN( nCnt++ );
+    while( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
+        nWrEnd = nWrPos + Len( nCnt++ );
     if( rEnd < nWrEnd )
         rEnd = nWrEnd;
     Remove( nIndex, nCnt - nIndex );
-    aLen.Remove( nIndex, nCnt - nIndex );
+
     return bRet;
 }
 
@@ -325,8 +417,8 @@ sal_Bool SwWrongList::InvalidateWrong( )
 {
     if( Count() )
     {
-        xub_StrLen nFirst = WRPOS( 0 );
-        xub_StrLen nLast = WRPOS( Count() - 1 ) + WRLEN( Count() - 1 );
+        xub_StrLen nFirst = Pos( 0 );
+        xub_StrLen nLast = Pos( Count() - 1 ) + Len( Count() - 1 );
         Invalidate( nFirst, nLast );
         return sal_True;
     }
@@ -340,24 +432,24 @@ SwWrongList* SwWrongList::SplitList( xub_StrLen nSplitPos )
     MSHORT nLst = 0;
     xub_StrLen nWrPos;
     xub_StrLen nWrLen;
-    while( nLst < Count() && WRPOS( nLst ) < nSplitPos )
+    while( nLst < Count() && Pos( nLst ) < nSplitPos )
         ++nLst;
-    if( nLst && ( nWrPos = WRPOS( nLst - 1 ) )
-        + ( nWrLen = WRLEN( nLst - 1 ) ) > nSplitPos )
+    if( nLst && ( nWrPos = Pos( nLst - 1 ) )
+        + ( nWrLen = Len( nLst - 1 ) ) > nSplitPos )
     {
         nWrLen += nWrPos - nSplitPos;
-        GetObject( --nLst ) = nSplitPos;
-        aLen.GetObject( nLst ) = nWrLen;
+        maList[--nLst].mnPos = nSplitPos;
+        maList[nLst].mnLen = nWrLen;
     }
     if( nLst )
     {
         pRet = new SwWrongList;
-        pRet->SvXub_StrLens::Insert( this, 0, 0, nLst );
-        pRet->aLen.Insert( &aLen, 0, 0, nLst );
+        pRet->Insert(0, maList.begin(), ( nLst >= maList.size() ? maList.end() : maList.begin() + nLst ) );
+
         pRet->SetInvalid( GetBeginInv(), GetEndInv() );
         pRet->_Invalidate( nSplitPos ? nSplitPos - 1 : nSplitPos, nSplitPos );
         Remove( 0, nLst );
-        aLen.Remove( 0, nLst );
+
     }
     if( STRING_LEN == GetBeginInv() )
         SetInvalid( 0, 1 );
@@ -370,8 +462,8 @@ SwWrongList* SwWrongList::SplitList( xub_StrLen nSplitPos )
     nLst = 0;
     while( nLst < Count() )
     {
-        nWrPos = GetObject( nLst ) - nSplitPos;
-        GetObject( nLst++ ) = nWrPos;
+        nWrPos = maList[nLst].mnPos - nSplitPos;
+        maList[nLst++].mnPos = nWrPos;
     }
     return pRet;
 }
@@ -382,29 +474,78 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
     {
         USHORT nCnt = Count();
         pNext->Move( 0, nInsertPos );
-        SvXub_StrLens::Insert( pNext, nCnt, 0, pNext->Count() );
-        aLen.Insert( &pNext->aLen, nCnt, 0, pNext->Count() );
+        Insert(nCnt, pNext->maList.begin(), pNext->maList.end());
+
         Invalidate( pNext->GetBeginInv(), pNext->GetEndInv() );
         if( nCnt && Count() > nCnt )
         {
-            xub_StrLen nWrPos = WRPOS( nCnt );
-            xub_StrLen nWrLen = WRLEN( nCnt );
+            xub_StrLen nWrPos = Pos( nCnt );
+            xub_StrLen nWrLen = Len( nCnt );
             if( !nWrPos )
             {
                 nWrPos += nInsertPos;
                 nWrLen -= nInsertPos;
-                GetObject( nCnt ) = nWrPos;
-                aLen.GetObject( nCnt ) = nWrLen;
+                maList[nCnt].mnPos = nWrPos;
+                maList[nCnt].mnLen = nWrLen;
             }
-            if( nWrPos == WRPOS( nCnt - 1 ) + WRLEN( nCnt - 1 ) )
+            if( nWrPos == Pos( nCnt - 1 ) + Len( nCnt - 1 ) )
             {
-                nWrLen += WRLEN( nCnt - 1 );
-                aLen.GetObject( nCnt - 1 ) = nWrLen;
+                nWrLen += Len( nCnt - 1 );
+                maList[nCnt - 1].mnLen = nWrLen;
                 Remove( nCnt, 1 );
-                aLen.Remove( nCnt, 1 );
+
             }
         }
     }
     Invalidate( nInsertPos ? nInsertPos - 1 : nInsertPos, nInsertPos + 1 );
 }
 
+// New functions: Necessary because SwWrongList has been changed to use std::vector
+void SwWrongList::Insert(USHORT nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
+{
+    std::vector<SwWrongArea>::iterator i = maList.begin();
+    if ( nWhere >= maList.size() )
+        i = maList.end(); // robust
+    else
+        i += nWhere;
+    maList.insert(i, startPos, endPos); // insert [startPos, endPos[ before i
+
+    // ownership of the sublist is passed to maList, therefore we have to set the
+    // pSubList-Pointers to 0
+    while ( startPos != endPos )
+    {
+        (*startPos).mpSubList = 0;
+        ++startPos;
+    }
+}
+
+void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
+{
+    if ( nIdx >= maList.size() ) return;
+    std::vector<SwWrongArea>::iterator i1 = maList.begin();
+    i1 += nIdx;
+
+    std::vector<SwWrongArea>::iterator i2 = i1;
+    if ( nIdx + nLen >= maList.size() )
+        i2 = maList.end(); // robust
+    else
+        i2 += nLen;
+
+    std::vector<SwWrongArea>::iterator iLoop = i1;
+    while ( iLoop != i2 )
+    {
+        if ( (*iLoop).mpSubList )
+            delete (*iLoop).mpSubList;
+        ++iLoop;
+    }
+
+#if OSL_DEBUG_LEVEL > 1
+    const nOldSize = Count();
+#endif
+
+    maList.erase(i1, i2);
+
+#if OSL_DEBUG_LEVEL > 1
+    ASSERT( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" )
+#endif
+}
