@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porglue.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:37:41 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
         }
         else
         {
-            SwTxtSlotLen aSlot( &rInf, this );
+            SwTxtSlot aSlot( &rInf, this, true, false );
             rInf.DrawText( *this, rInf.GetLen(), sal_True );
         }
     }
