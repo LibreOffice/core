@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:41:17 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1577,7 +1577,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( PrtWidth() )
     {
         rInf.DrawViewOpt( *this, POR_QUOVADIS );
-        SwTxtSlotLen aDiffTxt( &rInf, this );
+        SwTxtSlot aDiffTxt( &rInf, this, true, false );
         SwFontSave aSave( rInf, pFnt );
         rInf.DrawText( *this, rInf.GetLen(), sal_True );
     }
