@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:58:35 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1212,7 +1212,7 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
     {
         // check for exceeding selections
         if(!bFirstParagraph &&
-            CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
+            (CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType))
         {
             SwPosition* pStart = pUnoCrsr->Start();
             ::std::auto_ptr<SwUnoCrsr> aNewCrsr( pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False) );
