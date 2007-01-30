@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inspector.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 14:58:30 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -105,7 +105,7 @@ public class Inspector{
         public void openIdlFileforSelectedNode(){
             InspectorPane oInspectorPane = m_oSwingDialogProvider.getSelectedInspectorPage();
             if (oInspectorPane != null){
-                UnoNode oUnoNode = oInspectorPane.getSelectedNode();
+                XUnoNode oUnoNode = oInspectorPane.getSelectedNode();
                 if (oUnoNode != null){
                     oUnoNode.openIdlDescription();
                 }
@@ -143,7 +143,7 @@ public class Inspector{
         public void inspectSelectedNode(){
             InspectorPane oInspectorPane = m_oSwingDialogProvider.getSelectedInspectorPage();
             if (oInspectorPane != null){
-                UnoNode oUnoNode = oInspectorPane.getSelectedNode();
+                XUnoNode oUnoNode = oInspectorPane.getSelectedNode();
                 Object oUnoObject = oUnoNode.getUnoObject();
                 if (oUnoObject != null){
                     String sNodeDescription = UnoNode.getNodeDescription(oUnoObject);
