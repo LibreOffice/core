@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:58:08 $
+#   last change: $Author: rt $ $Date: 2007-01-30 08:26:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ PATCH_FILE_NAME=epm-3.7.patch
 .IF "$(GUI)"=="UNX" && "$(BUILD_EPM)" != "NO"
 
 CONFIGURE_ACTION=.$/configure
+CONFIGURE_FLAGS=--disable-fltk
 BUILD_ACTION=make
 OUT2BIN=epm epminstall mkepmlist
 
