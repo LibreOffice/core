@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:59:02 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1086,32 +1086,7 @@ sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( un
         bRet = sal_True;
     else if(COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextField"))
         bRet = 0 != GetFldFmt();
-    else
-    {
-        SwFrmFmt* pCurFrmFmt = pFrameFmt;
-        if(!pCurFrmFmt && !pUnoCrsr->HasMark() && pUnoCrsr->GetCntntNode()->Len())
-        {
-            // hier die zeichengebundenen am Cursor suchen - hier kann es nur einen geben
-            SwTxtAttr* pTxtAttr = pUnoCrsr->GetNode()->GetTxtNode()->GetTxtAttr(
-                            pUnoCrsr->GetPoint()->nContent, RES_TXTATR_FLYCNT);
-            DBG_ASSERT(pTxtAttr, "Hier muss doch ein Fly-Attribut zu finden sein!")
-            if(pTxtAttr)
-            {
-                const SwFmtFlyCnt& rFlyCnt = pTxtAttr->GetFlyCnt();
-                pCurFrmFmt = rFlyCnt.GetFrmFmt();
-            }
-        }
-        if(pCurFrmFmt)
-        {
-            const SwNodeIndex* pIdx = pCurFrmFmt->GetCntnt().GetCntntIdx();
-            const SwNode* pNd = GetCrsr()->GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
 
-            if((!pNd->IsNoTxtNode() && COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextFrame"))||
-                (pNd->IsGrfNode() && COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextGraphicObject")) ||
-                (pNd->IsOLENode() && COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextEmbeddedObject")))
-                bRet = sal_True;
-        }
-    }
     return bRet;
 }
 /* ---------------------------------------------------------------------------
@@ -1137,35 +1112,6 @@ uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames(void)
     pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
     if(bField)
         pArray[7] = C2U("com.sun.star.text.TextField");
-    else
-    {
-        SwFrmFmt* pCurFrmFmt = pFrameFmt;
-        if(!pCurFrmFmt && !pUnoCrsr->HasMark())
-        {
-            // hier die zeichengebundenen am Cursor suchen - hier kann es nur einen geben
-            SwTxtAttr* pTxtAttr = pUnoCrsr->GetNode()->GetTxtNode()->GetTxtAttr(
-                            pUnoCrsr->GetPoint()->nContent, RES_TXTATR_FLYCNT);
-            // if any - it could also be an empty paragraph
-            if(pTxtAttr)
-            {
-                const SwFmtFlyCnt& rFlyCnt = pTxtAttr->GetFlyCnt();
-                pCurFrmFmt = rFlyCnt.GetFrmFmt();
-            }
-        }
-        if(pCurFrmFmt)
-        {
-            aRet.realloc(8);
-            pArray = aRet.getArray();
-            const SwNodeIndex* pIdx = pCurFrmFmt->GetCntnt().GetCntntIdx();
-            const SwNode* pNd = GetCrsr()->GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
-            if(!pNd->IsNoTxtNode())
-                pArray[7] = C2U("com.sun.star.text.TextFrame");
-            else if(pNd->IsGrfNode())
-                pArray[7] = C2U("com.sun.star.text.TextGraphicObject");
-            else
-                pArray[7] = C2U("com.sun.star.text.TextEmbeddedObject");
-        }
-    }
     return aRet;
 }
 /*-- 11.12.98 09:57:01---------------------------------------------------
