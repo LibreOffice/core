@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<oor:component-schema 
+    xmlns:oor="http://openoffice.org/2001/registry" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    oor:name="ObjectInspector" 
+    oor:package="org.openoffice.inspector" 
+    xml:lang="en-US">
+    <info>
+        <desc>Configuration parameters for the Object Inspector.</desc>
+    </info>
+    <component>
+        <prop oor:name="Language" oor:type="xs:string"/>
+    </component>        
+</oor:component-schema>
