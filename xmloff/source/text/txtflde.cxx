@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:28:45 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 14:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,7 +467,8 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
     sPropertyValue(RTL_CONSTASCII_USTRINGPARAM("Value")),
     sPropertyVariableName(RTL_CONSTASCII_USTRINGPARAM("VariableName")),
     sPropertyVariableSubType(RTL_CONSTASCII_USTRINGPARAM("VariableSubtype")),
-
+      sPropertyHelp(RTL_CONSTASCII_USTRINGPARAM("Help")),
+      sPropertyTooltip(RTL_CONSTASCII_USTRINGPARAM("Tooltip")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -1347,6 +1348,10 @@ void XMLTextFieldExport::ExportFieldHelper(
         // text input field: description and string-value
         ProcessString(XML_DESCRIPTION,
                       GetStringProperty(sPropertyHint, rPropSet));
+        ProcessString(XML_HELP,
+                      GetStringProperty(sPropertyHelp, rPropSet), true);
+        ProcessString(XML_HINT,
+                      GetStringProperty(sPropertyTooltip, rPropSet), true);
         ExportElement(XML_TEXT_INPUT, sPresentation);
         break;
 
@@ -1897,12 +1902,17 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DROP_DOWN:
     {
         ProcessString(XML_NAME, GetStringProperty(sPropertyName, rPropSet));
+        ProcessString(XML_HELP,
+                      GetStringProperty(sPropertyHelp, rPropSet), true);
+        ProcessString(XML_HINT,
+                      GetStringProperty(sPropertyTooltip, rPropSet), true);
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT, XML_DROPDOWN,
                                   sal_False, sal_False );
-        ProcessStringSequence(
-            GetStringSequenceProperty( sPropertyItems, rPropSet ),
-            GetStringProperty( sPropertySelectedItem, rPropSet ) );
+        ProcessStringSequence
+            (GetStringSequenceProperty( sPropertyItems, rPropSet ),
+             GetStringProperty( sPropertySelectedItem, rPropSet ) );
+
         GetExport().Characters( sPresentation );
     }
     break;

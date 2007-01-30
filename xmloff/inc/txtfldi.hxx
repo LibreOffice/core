@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:56:46 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 14:45:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,8 @@ enum XMLTextFieldAttrTokens
 {
     XML_TOK_TEXTFIELD_FIXED = 0,
     XML_TOK_TEXTFIELD_DESCRIPTION,
+    XML_TOK_TEXTFIELD_HELP,
+    XML_TOK_TEXTFIELD_HINT,
     XML_TOK_TEXTFIELD_PLACEHOLDER_TYPE,
     XML_TOK_TEXTFIELD_TIME_ADJUST,
     XML_TOK_TEXTFIELD_DATE_ADJUST,
@@ -1469,12 +1471,18 @@ class XMLDropDownFieldImportContext : public XMLTextFieldImportContext
 {
     std::vector<rtl::OUString> aLabels;
     rtl::OUString sName;
+    rtl::OUString sHelp;
+    rtl::OUString sHint;
     sal_Int32 nSelected;
     bool bNameOK;
+    bool bHelpOK;
+    bool bHintOK;
 
     const rtl::OUString sPropertyItems;
     const rtl::OUString sPropertySelectedItem;
     const rtl::OUString sPropertyName;
+    const rtl::OUString sPropertyHelp;
+    const rtl::OUString sPropertyToolTip;
 
 public:
     TYPEINFO();
