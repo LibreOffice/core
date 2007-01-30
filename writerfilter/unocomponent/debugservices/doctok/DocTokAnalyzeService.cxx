@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokAnalyzeService.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-12 16:56:16 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:26:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,6 +237,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
                                     "<exception>file open failed</exception>\n");
                             bStatus = false;
                         }
+                        fprintf(stderr, "done\n");
                     }
 
                     xInputStream->closeInput();
