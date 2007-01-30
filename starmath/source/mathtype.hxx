@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathtype.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:10:15 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,29 +72,44 @@ typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 class MathType
 {
 public:
-    MathType(String &rIn) : bSilent(sal_False),nDefaultSize(12),nLSize(0),
-        nDSize(0),nCurSize(0),nLastSize(0),nVAlign(0),nHAlign(0),rRet(rIn)
-    {
-        Init();
-    }
-    MathType(String &rIn,SmNode *pIn) : bSilent(sal_False),nDefaultSize(12),
-        nLSize(0),nDSize(0),nCurSize(0),nLastSize(0),nVAlign(0),nHAlign(2),
-        pTree(pIn),rRet(rIn),nInsertion(0),nSpec(0)
-    {
-        Init();
-    }
+    MathType( String &rIn );
+    MathType( String &rIn, SmNode *pIn );
+
     int Parse( SotStorage* pStor );
     int ConvertFromStarMath( SfxMedium& rMedium );
 
 private:
+    MathTypeFontSet aUserStyles;
+    String          sPost;
+
+    String          &rRet;
+    SmNode          *pTree;
+    SvStorageStream *pS;
+
+    int nPendingAttributes;
+    ULONG nInsertion;
+
+    xub_StrLen nPostSup;
+    xub_StrLen nPostlSup;
+    sal_Int16 aSizeTable[7];
+    sal_Int16 nDefaultSize;
+    sal_Int16 nLSize;
+    sal_Int16 nDSize;
+    sal_Int16 nCurSize;
+    sal_Int16 nLastSize;
+    sal_uInt8 nSpec;
+    sal_Bool bSilent, bReInterpBrace;
+    sal_uInt8 nTypeFace;
+
+    sal_uInt8 nHAlign;
+    sal_uInt8 nVAlign;
+
 /*Ver 2 Header*/
     sal_uInt8 nVersion;
     sal_uInt8 nPlatform;
     sal_uInt8 nProduct;
     sal_uInt8 nProdVersion;
     sal_uInt8 nProdSubVersion;
-
-    SvStorageStream *pS;
 
     void Init();
 
@@ -141,29 +156,6 @@ private:
     void HandleText(SmNode *pNode,int nLevel);
     void HandleAttributes(SmNode *pNode,int nLevel);
     void TypeFaceToString(String &rRet,sal_uInt8 nFace);
-
-    String &rRet;
-    SmNode *pTree;
-
-    sal_uInt8 nHAlign;
-    sal_uInt8 nVAlign;
-
-    int nPendingAttributes;
-    ULONG nInsertion;
-
-    sal_Int16 aSizeTable[7];
-    sal_Int16 nDefaultSize;
-    sal_Int16 nLSize;
-    sal_Int16 nDSize;
-    sal_Int16 nCurSize;
-    sal_Int16 nLastSize;
-    sal_uInt8 nSpec;
-    sal_Bool bSilent,bReInterpBrace;
-    String sPost;
-    xub_StrLen nPostSup;
-    xub_StrLen nPostlSup;
-    sal_uInt8 nTypeFace;
-    MathTypeFontSet aUserStyles;
 
     enum MTOKENS {END,LINE,CHAR,TMPL,PILE,MATRIX,EMBEL,RULER,FONT,SIZE};
     enum MTEMPLATES
