@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:53:52 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 13:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -540,7 +540,6 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     // Determine file name from model
                     INetURLObject aFileObj( xStorable->getLocation() );
-                    aFileObj.removeExtension();
                     aFileName = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE );
                 }
             }
