@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:34:40 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,8 +221,72 @@ class SwUnoCollection
 
 #define SW_SERVICE_LAST                 SW_SERVICE_TYPE_TEXT_GRAPHIC
 
-
 #define SW_SERVICE_INVALID          USHRT_MAX
+
+//
+// case-corrected versions of service-names (see #i67811)
+//
+#define CSS_TEXT_TEXTFIELD_DATE_TIME                    "com.sun.star.text.textfield.DateTime"
+#define CSS_TEXT_TEXTFIELD_USER                         "com.sun.star.text.textfield.User"
+#define CSS_TEXT_TEXTFIELD_SET_EXPRESSION               "com.sun.star.text.textfield.SetExpression"
+#define CSS_TEXT_TEXTFIELD_GET_EXPRESSION               "com.sun.star.text.textfield.GetExpression"
+#define CSS_TEXT_TEXTFIELD_FILE_NAME                    "com.sun.star.text.textfield.FileName"
+#define CSS_TEXT_TEXTFIELD_PAGE_NUMBER                  "com.sun.star.text.textfield.PageNumber"
+#define CSS_TEXT_TEXTFIELD_AUTHOR                       "com.sun.star.text.textfield.Author"
+#define CSS_TEXT_TEXTFIELD_CHAPTER                      "com.sun.star.text.textfield.Chapter"
+#define CSS_TEXT_TEXTFIELD_GET_REFERENCE                "com.sun.star.text.textfield.GetReference"
+#define CSS_TEXT_TEXTFIELD_CONDITIONAL_TEXT             "com.sun.star.text.textfield.ConditionalText"
+#define CSS_TEXT_TEXTFIELD_ANNOTATION                   "com.sun.star.text.textfield.Annotation"
+#define CSS_TEXT_TEXTFIELD_INPUT                        "com.sun.star.text.textfield.Input"
+#define CSS_TEXT_TEXTFIELD_MACRO                        "com.sun.star.text.textfield.Macro"
+#define CSS_TEXT_TEXTFIELD_DDE                          "com.sun.star.text.textfield.DDE"
+#define CSS_TEXT_TEXTFIELD_HIDDEN_PARAGRAPH             "com.sun.star.text.textfield.HiddenParagraph"
+#define CSS_TEXT_TEXTFIELD_TEMPLATE_NAME                "com.sun.star.text.textfield.TemplateName"
+#define CSS_TEXT_TEXTFIELD_EXTENDED_USER                "com.sun.star.text.textfield.ExtendedUser"
+#define CSS_TEXT_TEXTFIELD_REFERENCE_PAGE_SET           "com.sun.star.text.textfield.ReferencePageSet"
+#define CSS_TEXT_TEXTFIELD_REFERENCE_PAGE_GET           "com.sun.star.text.textfield.ReferencePageGet"
+#define CSS_TEXT_TEXTFIELD_JUMP_EDIT                    "com.sun.star.text.textfield.JumpEdit"
+#define CSS_TEXT_TEXTFIELD_SCRIPT                       "com.sun.star.text.textfield.Script"
+#define CSS_TEXT_TEXTFIELD_DATABASE_NEXT_SET            "com.sun.star.text.textfield.DatabaseNextSet"
+#define CSS_TEXT_TEXTFIELD_DATABASE_NUMBER_OF_SET       "com.sun.star.text.textfield.DatabaseNumberOfSet"
+#define CSS_TEXT_TEXTFIELD_DATABASE_SET_NUMBER          "com.sun.star.text.textfield.DatabaseSetNumber"
+#define CSS_TEXT_TEXTFIELD_DATABASE                     "com.sun.star.text.textfield.Database"
+#define CSS_TEXT_TEXTFIELD_DATABASE_NAME                "com.sun.star.text.textfield.DatabaseName"
+#define CSS_TEXT_TEXTFIELD_TABLE_FORMULA                "com.sun.star.text.textfield.TableFormula"
+#define CSS_TEXT_TEXTFIELD_PAGE_COUNT                   "com.sun.star.text.textfield.PageCount"
+#define CSS_TEXT_TEXTFIELD_PARAGRAPH_COUNT              "com.sun.star.text.textfield.ParagraphCount"
+#define CSS_TEXT_TEXTFIELD_WORD_COUNT                   "com.sun.star.text.textfield.WordCount"
+#define CSS_TEXT_TEXTFIELD_CHARACTER_COUNT              "com.sun.star.text.textfield.CharacterCount"
+#define CSS_TEXT_TEXTFIELD_TABLE_COUNT                  "com.sun.star.text.textfield.TableCount"
+#define CSS_TEXT_TEXTFIELD_GRAPHIC_OBJECT_COUNT         "com.sun.star.text.textfield.GraphicObjectCount"
+#define CSS_TEXT_TEXTFIELD_EMBEDDED_OBJECT_COUNT        "com.sun.star.text.textfield.EmbeddedObjectCount"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_CHANGE_AUTHOR        "com.sun.star.text.textfield.docinfo.ChangeAuthor"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_CHANGE_DATE_TIME     "com.sun.star.text.textfield.docinfo.ChangeDateTime"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_EDIT_TIME            "com.sun.star.text.textfield.docinfo.EditTime"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_DESCRIPTION          "com.sun.star.text.textfield.docinfo.Description"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_AUTHOR        "com.sun.star.text.textfield.docinfo.CreateAuthor"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_DATE_TIME     "com.sun.star.text.textfield.docinfo.CreateDateTime"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO0                "com.sun.star.text.textfield.docinfo.Info0"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO1                "com.sun.star.text.textfield.docinfo.Info1"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO2                "com.sun.star.text.textfield.docinfo.Info2"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO3                "com.sun.star.text.textfield.docinfo.Info3"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_AUTHOR         "com.sun.star.text.textfield.docinfo.PrintAuthor"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_DATE_TIME      "com.sun.star.text.textfield.docinfo.PrintDateTime"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_KEY_WORDS            "com.sun.star.text.textfield.docinfo.KeyWords"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_SUBJECT              "com.sun.star.text.textfield.docinfo.Subject"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_TITLE                "com.sun.star.text.textfield.docinfo.Title"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_REVISION             "com.sun.star.text.textfield.docinfo.Revision"
+#define CSS_TEXT_TEXTFIELD_BIBLIOGRAPHY                 "com.sun.star.text.textfield.Bibliography"
+#define CSS_TEXT_TEXTFIELD_COMBINED_CHARACTERS          "com.sun.star.text.textfield.CombinedCharacters"
+#define CSS_TEXT_TEXTFIELD_DROP_DOWN                    "com.sun.star.text.textfield.DropDown"
+#define CSS_TEXT_TEXTFIELD_INPUT_USER                   "com.sun.star.text.textfield.InputUser"
+#define CSS_TEXT_TEXTFIELD_HIDDEN_TEXT                  "com.sun.star.text.textfield.HiddenText"
+#define CSS_TEXT_FIELDMASTER_USER                       "com.sun.star.text.fieldmaster.User"
+#define CSS_TEXT_FIELDMASTER_DDE                        "com.sun.star.text.fieldmaster.DDE"
+#define CSS_TEXT_FIELDMASTER_SET_EXPRESSION             "com.sun.star.text.fieldmaster.SetExpression"
+#define CSS_TEXT_FIELDMASTER_DATABASE                   "com.sun.star.text.fieldmaster.Database"
+#define CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY               "com.sun.star.text.fieldmaster.Bibliography"
+
 
 class SwXServiceProvider
 {
