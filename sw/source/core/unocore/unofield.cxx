@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:56:58 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,6 +211,9 @@ using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
 #define COM_TEXT_FLDMASTER      "com.sun.star.text.FieldMaster."
+
+// case-corrected version of the first part for the service names (see #i67811)
+#define COM_TEXT_FLDMASTER_CC   "com.sun.star.text.fieldmaster."
 
 static const sal_uInt16 aDocInfoSubTypeFromService[] =
 {
@@ -2404,10 +2407,32 @@ OUString SwXTextField::getImplementationName(void) throw( uno::RuntimeException 
 /* -----------------19.03.99 14:11-------------------
  *
  * --------------------------------------------------*/
+
+static OUString OldNameToNewName_Impl( const OUString &rOld )
+{
+    static OUString aOldNamePart1( OUString::createFromAscii(".TextField.DocInfo.") );
+    static OUString aOldNamePart2( OUString::createFromAscii(".TextField.") );
+    static OUString aNewNamePart1( OUString::createFromAscii(".textfield.docinfo.") );
+    static OUString aNewNamePart2( OUString::createFromAscii(".textfield.") );
+    OUString sServiceNameCC( rOld );
+    sal_Int32 nIdx = sServiceNameCC.indexOf( aOldNamePart1 );
+    if (nIdx >= 0)
+        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, aOldNamePart1.getLength(), aNewNamePart1 );
+    nIdx = sServiceNameCC.indexOf( aOldNamePart2 );
+    if (nIdx >= 0)
+        sServiceNameCC = sServiceNameCC.replaceAt( nIdx, aOldNamePart2.getLength(), aNewNamePart2 );
+    return sServiceNameCC;
+}
+
 sal_Bool SwXTextField::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     OUString sServiceName = SwXServiceProvider::GetProviderName(m_nServiceId);
-    return sServiceName == rServiceName ||
+
+    // case-corected version of service-name (see #i67811)
+    // (need to supply both because of compatibility to older versions)
+    OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
+
+    return sServiceName == rServiceName || sServiceNameCC == rServiceName ||
         rServiceName.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent"));
 }
@@ -2416,11 +2441,19 @@ sal_Bool SwXTextField::supportsService(const OUString& rServiceName) throw( uno:
  * --------------------------------------------------*/
 uno::Sequence< OUString > SwXTextField::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
     OUString sServiceName = SwXServiceProvider::GetProviderName(m_nServiceId);
-    pArray[0] = sServiceName;
-    pArray[1] = C2U("com.sun.star.text.TextContent");
+
+    // case-corected version of service-name (see #i67811)
+    // (need to supply both because of compatibility to older versions)
+    OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
+    sal_Int32 nLen = sServiceName == sServiceNameCC ? 2 : 3;
+
+    uno::Sequence< OUString > aRet( nLen );
+    OUString* pArray = aRet.getArray();
+    *pArray++ = sServiceName;
+    if (nLen == 3)
+        *pArray++ = sServiceNameCC;
+    *pArray++ = C2U("com.sun.star.text.TextContent");
     return aRet;
 }
 
@@ -2536,10 +2569,10 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
     Iteration ueber nicht-Standard Feldtypen
     USER/SETEXP/DDE/DATABASE
     Der Name ist demnach:
-    "com.sun.star.text.FieldMaster.User" + <Feltypname>
-    "com.sun.star.text.FieldMaster.DDE" + <Feltypname>
-    "com.sun.star.text.FieldMaster.SetExpression" + <Feltypname>
-    "com.sun.star.text.FieldMaster.DataBase" + <Feltypname>
+    "com.sun.star.text.fieldmaster.User" + <Feltypname>
+    "com.sun.star.text.fieldmaster.DDE" + <Feltypname>
+    "com.sun.star.text.fieldmaster.SetExpression" + <Feltypname>
+    "com.sun.star.text.fieldmaster.DataBase" + <Feltypname>
 
     Falls wir grosszuegig werden wollen, dann koennte man com.sun.star.text
     auch optional weglassen
@@ -2547,8 +2580,8 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
 
 sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
 {
-    if( rName.EqualsAscii( COM_TEXT_FLDMASTER, 0,
-                            RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER )) )
+    if( rName.EqualsAscii( COM_TEXT_FLDMASTER, 0, RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER ))
+        ||  rName.EqualsAscii( COM_TEXT_FLDMASTER_CC, 0, RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER_CC )))
         rName.Erase(0, 30);
 
     sal_uInt16 nResId = USHRT_MAX;
@@ -2622,25 +2655,25 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
     switch( rFldType.Which() )
     {
     case RES_USERFLD:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
         rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "User."));
         rName += rFldType.GetName();
         break;
     case RES_DDEFLD:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
         rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "DDE."));
         rName += rFldType.GetName();
         break;
 
     case RES_SETEXPFLD:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
         rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "SetExpression."));
         rName += String( SwStyleNameMapper::GetSpecialExtraProgName( rFldType.GetName() ) );
         break;
 
     case RES_DBFLD:
         {
-            rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+            rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
             rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "DataBase."));
             String sDBName(rFldType.GetName());
             sDBName.SearchAndReplaceAll(DB_DELIM, '.');
@@ -2649,7 +2682,7 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
         break;
 
     case RES_AUTHORITY:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
         rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "Bibliography"));
         break;
 
