@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:39:14 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2277,8 +2277,20 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, BYTE nMode,
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
             aDelEnd = EndOfWord( aCurPos );
-            if ( aDelEnd.GetIndex() == aCurPos.GetIndex() )
-                aDelEnd = WordLeft( aCurPos );
+            if (aDelEnd.GetIndex() == aCurPos.GetIndex())
+            {
+                xub_StrLen nLen = aCurPos.GetNode()->Len();
+                // end of para?
+                if (aDelEnd.GetIndex() == nLen)
+                    aDelEnd = WordLeft( aCurPos );
+                else // there's still sth to delete on the right
+                {
+                    aDelEnd = EndOfWord( WordRight( aCurPos ) );
+                    // if there'n no next word...
+                    if (aDelEnd.GetIndex() == nLen )
+                        aDelEnd.SetIndex( nLen );
+                }
+            }
         }
         else    // DELMODE_RESTOFCONTENT
         {
