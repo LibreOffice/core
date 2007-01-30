@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:28:03 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 13:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -886,10 +886,6 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                                              AutoRecovery::TDocumentInfo&   rInfo           );
 
         //---------------------------------------
-        // TODO document me
-        void implts_removeTempFile(const ::rtl::OUString& sURL);
-
-        //---------------------------------------
         /** @short  notifies all interested listener about the current state
                     of the currently running operation.
 
@@ -974,6 +970,17 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         void implts_cleanUpWorkingEntry(const DispatchParams& aParams);
 
         //---------------------------------------
+        /** try to make sure that all changed config items (not our used
+            config access only) will be flushed back to disc.
+
+            E.g. our svtools::ConfigItems() has to be flushed explicitly .-(
+
+            Note: This method cant fail. Flushing of config entries is an
+                  optional feature. Errors can be ignored.
+         */
+        void impl_flushALLConfigChanges();
+
+        //---------------------------------------
         // TODO document me
         AutoRecovery::EFailureSafeResult implts_copyFile(const ::rtl::OUString& sSource    ,
                                                          const ::rtl::OUString& sTargetPath,
@@ -1047,6 +1054,33 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                        ::comphelper::MediaDescriptor&             rArgs    ,
                                  const css::uno::Reference< css::frame::XFrame >& xNewFrame);
+
+        //---------------------------------------
+        /** try to remove the specified file from disc.
+
+            Every URL supported by our UCB component can be used here.
+            Further it doesnt matter if the file realy exists or not.
+            Because removing a non exsistent file will have the same
+            result at the end ... a non existing file .-)
+
+            On the other side removing of files from disc is an optional
+            feature. If we are not able doing so ... its not a real problem.
+            Ok - users disc place will be samller then ... but we should produce
+            a crash during crash save because we cant delete a temporary file only !
+
+            @param  sURL
+                    the url of the file, which should be removed.
+         */
+        static void st_impl_removeFile(const ::rtl::OUString& sURL);
+
+        //---------------------------------------
+        /** try to remove ".lock" file from disc if office will be terminated
+            not using the offical way .-)
+
+            This method has to be handled "optional". So every error inside
+            has to be ignored ! This method CANT FAIL ... it can forget something only .-)
+         */
+        static void st_impl_removeLockFile();
 };
 
 } // namespace framework
