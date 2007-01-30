@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.21 $
+#  $Revision: 1.22 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:09:08 $
+#  last change: $Author: rt $ $Date: 2007-01-30 08:10:58 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -76,20 +76,19 @@ IDLFILES = InstanceInspector.idl \
 # module structure, for the example we know the module structure
 PACKAGE = org/openoffice
 
-COMP_JAVAFILES = XDialogProvider.java XTreeControlProvider.java XTreePathProvider.java MethodParametersDialog.java HideableMutableTreeNode.java HideableTreeModel.java Introspector.java UnoNode.java UnoMethodNode.java UnoPropertyNode.java UnoInterfaceNode.java UnoServiceNode.java UnoObjectNode.java UnoFacetteNode.java TDocSupplier.java UnoTreeRenderer.java InspectorAddon.java XLanguageSourceCodeGenerator.java SourceCodeGenerator.java InspectorPane.java SwingDialogProvider.java SwingTreeControlProvider.java SwingTreePathProvider.java Inspector.java
+COMP_JAVAFILES = XDialogProvider.java XTreeControlProvider.java XTreePathProvider.java MethodParametersDialog.java HideableMutableTreeNode.java HideableTreeModel.java Introspector.java XUnoNode.java SwingUnoNode.java UnoNode.java XUnoMethodNode.java SwingUnoMethodNode.java UnoMethodNode.java XUnoPropertyNode.java SwingUnoPropertyNode.java UnoPropertyNode.java XUnoFacetteNode.java SwingUnoFacetteNode.java TDocSupplier.java UnoTreeRenderer.java InspectorAddon.java XLanguageSourceCodeGenerator.java SourceCodeGenerator.java InspectorPane.java SwingDialogProvider.java SwingTreeControlProvider.java SwingTreePathProvider.java Inspector.java 
 COMP_CLASSFILES = $(patsubst %.java,$(COMP_CLASS_OUT)/%.class,$(COMP_JAVAFILES))
 
 GEN_CLASSFILES = $(patsubst %.idl,$(SAMPLE_CLASS_OUT)/$(PACKAGE)/%.class,$(IDLFILES))
 GEN_TYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
 GEN_URDFILES = $(patsubst %.idl,$(SAMPLE_GEN_OUT)/%.urd,$(IDLFILES))
 
-# the generated types are necessary for the component and the application jar
+# the generated types are necessary for the component jar
 GEN_CLASSFILENAMES = $(subst $(SAMPLE_CLASS_OUT)/,,$(GEN_CLASSFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(SAMPLE_CLASS_OUT)\
-		$(PATH_SEPARATOR)$(COMP_CLASS_OUT)\
-		$(PATH_SEPARATOR)$(APP1_CLASS_OUT))
+		$(PATH_SEPARATOR)$(COMP_CLASS_OUT))
 
 COMP_IMAGE_FILES= images/containers_16.png \
 		images/content_16.png \
@@ -149,6 +148,10 @@ $(COMP_GEN_OUT)/%/manifest.xml :
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Addons.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)ProtocolHandler.xcu$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-schema$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)ObjectInspector.xcs$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)ObjectInspector.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_GEN_OUT)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
@@ -156,13 +159,13 @@ $(COMP_GEN_OUT)/%/manifest.xml :
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) Addons.xcu ProtocolHandler.xcu $(COMP_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) Addons.xcu ProtocolHandler.xcu  ObjectInspector.xcu ObjectInspector.xcs $(COMP_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) ../../../bin/$(@F) $(COMP_RDB_NAME)
 
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_JAR_NAME)
-	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu
+	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu ObjectInspector.xcu ObjectInspector.xcs
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
