@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingDialogProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:00:29 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -319,12 +319,12 @@ public class SwingDialogProvider implements XDialogProvider{
             JMenuBar jMenuBar1 = new javax.swing.JMenuBar();
             addFileMenu(jMenuBar1);
             addInspectMenu(jMenuBar1);
-            JMenu jMnuEdit = new JMenu("Edit");
-            JMenu jMnuView = new JMenu("View");
-            addOptionsMenu(jMenuBar1);
+//            JMenu jMnuEdit = new JMenu("Edit");
+//            JMenu jMnuView = new JMenu("View");
+//            addOptionsMenu(jMenuBar1);
             jMenuBar1.setFont(new java.awt.Font("Dialog", 0, 12));
-            jMenuBar1.add(jMnuEdit);
-            jMenuBar1.add(jMnuView);
+//            jMenuBar1.add(jMnuEdit);
+//            jMenuBar1.add(jMnuView);
             addHelpMenu(jMenuBar1);
             addMenuBar(jMenuBar1);
         }

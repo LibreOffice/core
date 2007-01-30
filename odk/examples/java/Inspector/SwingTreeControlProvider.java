@@ -1,5 +1,49 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SwingTreeControlProvider.java,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:13:01 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  the BSD license.
+ *
+ *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. Neither the name of Sun Microsystems, Inc. nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+ *  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+ *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *************************************************************************/
+
+import com.sun.star.beans.Property;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.NullPointerException;
-import com.sun.star.uno.AnyConverter;
+import com.sun.star.reflection.XConstantTypeDescription;
+import com.sun.star.reflection.XIdlMethod;
+import com.sun.star.uno.Type;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -21,19 +65,10 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-/*
- * SwingTreeControlProvider.java
- *
- * Created on 12. Dezember 2006, 11:43
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 
-/**
- *
- * @author bc93774
- */
+
+
+
 public class SwingTreeControlProvider implements XTreeControlProvider{
     private JTextArea jtxtGeneratedSourceCode = new JTextArea();
     private JTextField jtxtFilter = new JTextField();
@@ -43,21 +78,30 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     private JPanel jPnlPath = new JPanel(new BorderLayout());
     private JLabel jLblPath = new JLabel("Generated source code");
     private JProgressBar jProgressBar1 = new JProgressBar();
-    private JTree jTree = new javax.swing.JTree();
+    private JTree jTree = null;
     private XDialogProvider m_xDialogProvider;
     private HideableTreeModel treeModel;
     private UnoTreeRenderer oUnoTreeRenderer;
     private InspectorPane m_oInspectorPane;
     private Object oUserDefinedObject = null;
     private boolean bIsUserDefined = false;
-    private UnoObjectNode root;
+    private SwingUnoNode oRootNode;
 
     private final int nDIALOGWIDTH = 800;
 
 
 
     public SwingTreeControlProvider(XDialogProvider _xDialogProvider){
+    try{
         m_xDialogProvider = _xDialogProvider;
+        jTree = new javax.swing.JTree();
+    }catch( java.lang.RuntimeException exception ) {
+        exception.printStackTrace(System.out);
+    }
+    catch (Throwable t) {
+        t.printStackTrace();
+    }
+
     }
 
 
@@ -76,12 +120,13 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
 
     private void ComponentSelector(Object _oRootObject, String _sRootTreeNodeName) {
         String sTreeNodeName =  _sRootTreeNodeName;
-        root = new UnoObjectNode(_oRootObject, _sRootTreeNodeName);
-        treeModel = new HideableTreeModel(root);
+        oRootNode = new SwingUnoNode(_oRootObject);
+        oRootNode.setLabel(_sRootTreeNodeName);
+        treeModel = new HideableTreeModel(oRootNode);
         jTree.setModel(treeModel);
         jTree.setRootVisible(true);
         jTree.setVisible(true);
-        root.addDummyNode();
+        oRootNode.setFoldable(true);
         enableFilterElements(null);
     }
 
@@ -129,9 +174,9 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
         }
 
 
-        public String enableFilterElements(UnoNode _oUnoNode){
+        public String enableFilterElements(XUnoNode _oUnoNode){
             String sFilter ="";
-            boolean bIsFacetteNode = m_oInspectorPane.isFacetteNode(_oUnoNode);
+            boolean bIsFacetteNode = isFacetteNode(_oUnoNode);
             this.jtxtFilter.setEnabled(bIsFacetteNode);
             this.jlblFilter.setEnabled(bIsFacetteNode);
             sFilter = m_oInspectorPane.getFilter(_oUnoNode);
@@ -144,9 +189,9 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             public void keyReleased(KeyEvent e){
                 String sFilter = jtxtFilter.getText();
                 SwingTreePathProvider oSwingTreePathProvider = new SwingTreePathProvider(jTree.getSelectionPath());
-                UnoNode oUnoNode = oSwingTreePathProvider.getLastPathComponent();
-                if (oUnoNode instanceof UnoFacetteNode){
-                    m_oInspectorPane.applyFilter((UnoFacetteNode) oUnoNode, sFilter);
+                XUnoNode oUnoNode = oSwingTreePathProvider.getLastPathComponent();
+                if (oUnoNode instanceof XUnoFacetteNode){
+                    m_oInspectorPane.applyFilter((XUnoFacetteNode) oUnoNode, sFilter);
                 }
             }
         }
@@ -185,7 +230,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                     public void valueChanged(TreeSelectionEvent event) {
                         TreePath tp = event.getNewLeadSelectionPath();
                         if (tp != null){
-                            UnoNode oUnoNode = getSelectedNode();
+                            XUnoNode oUnoNode = getSelectedNode();
                             String sFilter = enableFilterElements(oUnoNode);
                         }
                     }
@@ -197,7 +242,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                     if ( event.getKeyCode() == KeyEvent.VK_F1 ) {
                         //  function key F1 pressed
                         TreePath aTreePath = jTree.getSelectionPath();
-                        UnoNode oUnoNode = (UnoNode) aTreePath.getLastPathComponent();
+                        SwingUnoNode oUnoNode = (SwingUnoNode) aTreePath.getLastPathComponent();
                         oUnoNode.openIdlDescription();
                     }
                 }
@@ -233,15 +278,12 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             jTree.addTreeWillExpandListener(
                 new TreeWillExpandListener() {
                     public void treeWillExpand(javax.swing.event.TreeExpansionEvent event) throws javax.swing.tree.ExpandVetoException {
-                    SwingTreePathProvider oSwingTreePathProvider = new SwingTreePathProvider(event.getPath());
-                    UnoNode oUnoNode = oSwingTreePathProvider.getLastPathComponent();
-                    try{
+                        SwingTreePathProvider oSwingTreePathProvider = new SwingTreePathProvider(event.getPath());
+                        XUnoNode oUnoNode = oSwingTreePathProvider.getLastPathComponent();
                         if (!m_oInspectorPane.expandNode(oUnoNode, oSwingTreePathProvider)){
                             throw new ExpandVetoException(event);
                         }
-                    }finally{
-//                        hideProgressPanel();
-                    }}
+                    }
 
                     public void treeWillCollapse( javax.swing.event.TreeExpansionEvent evt) throws javax.swing.tree.ExpandVetoException {
                     }
@@ -265,23 +307,23 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     }
 
 
-    public UnoNode getSelectedNode(){
-        UnoNode oUnoNode = null;
+    public XUnoNode getSelectedNode(){
+        XUnoNode oUnoNode = null;
         TreePath aTreePath = jTree.getSelectionPath();
         Object oNode = aTreePath.getLastPathComponent();
-        if (oNode instanceof UnoNode){
-            oUnoNode = (UnoNode) oNode;
+        if (oNode instanceof XUnoNode){
+            oUnoNode = (XUnoNode) oNode;
         }
         return oUnoNode;
     }
 
 
-    public void nodeInserted(UnoNode _oParentNode, UnoNode _oChildNode, int index) {
+    public void nodeInserted(XUnoNode _oParentNode, XUnoNode _oChildNode, int index) {
         getModel().nodeInserted(_oParentNode, _oChildNode, _oParentNode.getChildCount()-1);
     }
 
 
-    public void nodeChanged(UnoNode _oNode) {
+    public void nodeChanged(XUnoNode _oNode) {
         getModel().nodeChanged(_oNode);
     }
 
@@ -291,97 +333,95 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     }
 
 
-    public void setMaximumOfProgressBar(){
-        jProgressBar1.setMaximum(5);
+    public boolean isPropertyNode(XUnoNode _oUnoNode){
+        return (_oUnoNode instanceof SwingUnoPropertyNode);
     }
 
 
-    public boolean isPropertyNode(UnoNode _oUnoNode){
-        return (_oUnoNode instanceof UnoPropertyNode);
+    public boolean isMethodNode(XUnoNode _oUnoNode){
+        return (_oUnoNode instanceof SwingUnoMethodNode);
     }
 
 
-    public boolean isMethodNode(UnoNode _oUnoNode){
-        return (_oUnoNode instanceof UnoMethodNode);
+    public boolean isFacetteNode(XUnoNode _oUnoNode){
+        return (_oUnoNode instanceof SwingUnoFacetteNode);
     }
 
 
-    public boolean isObjectNode(UnoNode _oUnoNode){
-        return (_oUnoNode instanceof UnoObjectNode);
+    public XUnoNode addUnoNode(Object _oUnoObject){
+        return new SwingUnoNode(_oUnoObject);
     }
 
 
-    public boolean isFacetteNode(UnoNode _oUnoNode){
-        return (_oUnoNode instanceof UnoFacetteNode);
-    }
-
-    public boolean isServiceNode(UnoNode _oUnoNode){
-        return (_oUnoNode instanceof UnoServiceNode);
+    public XUnoNode addUnoNode(Object _oUnoObject, Type _aType){
+        return new SwingUnoNode(_oUnoObject, _aType);
     }
 
 
-    public boolean isInterfaceNode(UnoNode _oUnoNode){
-        return (_oUnoNode instanceof UnoInterfaceNode);
+    public XUnoFacetteNode addUnoFacetteNode(XUnoNode _oParentNode, String _sNodeDescription, Object _oUnoObject){
+        SwingUnoFacetteNode oSwingUnoFacetteNode = new SwingUnoFacetteNode(_oUnoObject);
+        oSwingUnoFacetteNode.setLabel(_sNodeDescription);
+        if (_oParentNode != null){
+            ((SwingUnoNode) _oParentNode).addChildNode(oSwingUnoFacetteNode);
+        }
+        return oSwingUnoFacetteNode;
+    }
+
+
+    public XUnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod){
+        SwingUnoMethodNode oSwingUnoMethodNode = new SwingUnoMethodNode(_xIdlMethod, _objectElement);
+        return oSwingUnoMethodNode;
+    }
+
+
+    public XUnoPropertyNode addUnoPropertyNodeWithName(Property _aProperty){
+        SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
+        oUnoPropertyNode.setLabel("Name: " + _aProperty.Name);
+        return oUnoPropertyNode;
+    }
+
+
+    public XUnoPropertyNode addUnoPropertyNodeWithHandle(Property _aProperty){
+        SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
+        oUnoPropertyNode.setLabel("Handle: " + _aProperty.Handle);
+        return oUnoPropertyNode;
+    }
+
+
+    public XUnoPropertyNode addUnoPropertyNodeWithType(Property _aProperty){
+        SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
+        oUnoPropertyNode.setLabel("Type: " + _aProperty.Type.getTypeName());
+        return oUnoPropertyNode;
+    }
+
+
+    public XUnoPropertyNode addUnoPropertyNodeWithAttributesDescription(Property _aProperty){
+        SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
+        XConstantTypeDescription[] xPropertyAttributesTypeDescriptions = Introspector.getIntrospector().getFieldsOfConstantGroup("com.sun.star.beans.PropertyAttribute");
+        String sDisplay = Introspector.getIntrospector().getConstantDisplayString((int) _aProperty.Attributes, xPropertyAttributesTypeDescriptions, "Attributes: ");
+        oUnoPropertyNode.setLabel(sDisplay);
+        return oUnoPropertyNode;
+    }
+
+
+    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty){
+        SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty, _oUnoObject, null);
+        oUnoPropertyNode.setPropertyNodeType(XUnoPropertyNode.nPROPERTYSETINFOTYPE);
+        oUnoPropertyNode.setLabel(UnoPropertyNode.getStandardPropertyDescription(_aProperty, null));
+        return oUnoPropertyNode;
+    }
+
+
+    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, Property _aProperty, Object _oUnoReturnObject){
+        SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty, _oUnoObject, _oUnoReturnObject);
+        oUnoPropertyNode.setLabel(UnoPropertyNode.getStandardPropertyDescription(_aProperty, _oUnoReturnObject));
+        return oUnoPropertyNode;
+    }
+
+
+    public XUnoPropertyNode addUnoPropertyNode(Object _oUnoObject, PropertyValue _aPropertyValue, Object _oReturnObject){
+        SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aPropertyValue, _oUnoObject, _oReturnObject);
+        oUnoPropertyNode.setLabel(UnoPropertyNode.getStandardPropertyValueDescription(_aPropertyValue));
+        return oUnoPropertyNode;
     }
 }
-
-
-//        public ProgressDisplay getProgressDisplay(){
-//            return new ProgressDisplay();
-//        }
-//
-//
-//    public class ProgressDisplay extends Thread{
-//        public ProgressDisplay(){
-//        }
-//
-//        public void  run ()   {
-//  try {
-//            synchronized(jProgressBar1){
-//                jProgressBar1.setVisible(true);
-//                jPanelProgress.setVisible(true);
-//                m_xDialogProvider.paint();
-//                jProgressBar1.paintImmediately(jProgressBar1.getBounds());
-//                jProgressBar1.setStringPainted(true);
-//            }
-//  } catch (RuntimeException e) {
-//  }}
-//    }
-//
-//
-//    public void setProgressValue(int _nValue, String _sTitle){
-//        this.jProgressBar1.setValue(_nValue);
-//        this.jProgressBar1.setString(_sTitle);
-//        this.jProgressBar1.setStringPainted(true);
-//        jProgressBar1.paint(jProgressBar1.getGraphics());
-//    }
-
-
-//        private void initializeProgressPanel(){
-//            JPanel jPnlProgressSouth = new JPanel(new BorderLayout());
-//            jPnlProgressSouth.setPreferredSize(new Dimension(nDIALOGWIDTH, 10));
-//            jProgressBar1 = new javax.swing.JProgressBar();
-//            jProgressBar1.setStringPainted(true);
-//            jPanelProgress.add(jProgressBar1, java.awt.BorderLayout.NORTH);
-//            jPanelProgress.add(jPnlProgressSouth, java.awt.BorderLayout.SOUTH);
-//            jPnlBottom.add(jPanelProgress, java.awt.BorderLayout.NORTH);
-//            hideProgressPanel();
-//        }
-//
-//        public JPanel getBottomPanel(){
-//            return jPnlBottom;
-//        }
-//
-//
-//        public void hideProgressPanel(){
-//            jProgressBar1.setValue(0);
-//            jProgressBar1.setString("");
-//            jProgressBar1.setVisible(false);
-//            jPanelProgress.setVisible(false);
-//            jPanelProgress.invalidate();
-//            jProgressBar1.invalidate();
-//            this.m_xDialogProvider.paint();
-//            jTree.paintImmediately(jTree.getBounds());
-//        }
-
-
