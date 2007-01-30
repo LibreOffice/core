@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:53:46 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 15:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,62 @@ static sal_Unicode Convert(sal_Unicode nIn)
     }
 
     return nIn;
+}
+
+MathType::MathType( String &rIn ) :
+    rRet( rIn ),
+    pTree( NULL ),
+    pS( NULL ),
+    nPendingAttributes( 0 ),
+    nInsertion( 0 ),
+    nPostSup( 0 ),
+    nPostlSup( 0 ),
+    nDefaultSize( 12 ),
+    nLSize( 0 ),
+    nDSize( 0 ),
+    nCurSize( 0 ),
+    nLastSize( 0 ),
+    nSpec( 0 ),
+    bSilent( sal_False ),
+    bReInterpBrace( sal_False ),
+    nTypeFace( 0 ),
+    nHAlign( 0 ),
+    nVAlign( 0 ),
+    nVersion( 0 ),
+    nPlatform( 0 ),
+    nProduct( 0 ),
+    nProdVersion( 0 ),
+    nProdSubVersion( 0 )
+{
+    Init();
+}
+
+MathType::MathType( String &rIn, SmNode *pIn ) :
+    rRet( rIn ),
+    pTree( pIn ),
+    pS( NULL ),
+    nPendingAttributes( 0 ),
+    nInsertion( 0 ),
+    nPostSup( 0 ),
+    nPostlSup( 0 ),
+    nDefaultSize( 12 ),
+    nLSize( 0 ),
+    nDSize( 0 ),
+    nCurSize( 0 ),
+    nLastSize( 0 ),
+    nSpec( 0 ),
+    bSilent( sal_False ),
+    bReInterpBrace( sal_False ),
+    nTypeFace( 0 ),
+    nHAlign( 2 ),
+    nVAlign( 0 ),
+    nVersion( 0 ),
+    nPlatform( 0 ),
+    nProduct( 0 ),
+    nProdVersion( 0 ),
+    nProdSubVersion( 0 )
+{
+    Init();
 }
 
 void MathType::Init()
