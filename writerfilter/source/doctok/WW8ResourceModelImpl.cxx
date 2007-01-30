@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,6 +779,11 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
     output.addItem("</attribute>");
 }
 
+bool WW8PropertiesHandler::compare(SprmSharedPointer_t sprm1, SprmSharedPointer_t sprm2)
+{
+    return sprm1->getId() < sprm2->getId();
+}
+
 void WW8PropertiesHandler::sprm(Sprm & sprm_)
 {
     string tmpStr = "<sprm id=\"";
@@ -885,6 +890,11 @@ void dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n)
     tmpStr += sBuffer;
 
     o.addItem(tmpStr);
+}
+
+void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
+          const rtl::OUString & /*str*/)
+{
 }
 
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:11:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,8 @@ public:
 
     doctok::Reference<Properties>::Pointer_t
     getField(const CpAndFc & rCpAndFc);
+
+    WW8FLD::Pointer_t getWW8FLD(const CpAndFc & rCpAndFc);
 };
 
 /**
@@ -261,6 +263,12 @@ class WW8DocumentImpl : public WW8Document
 
     /// picture location
     sal_uInt32 mfcPicLoc;
+
+    /// true if FFDATA structure is found at offset mfcPicLoc in data stream
+    bool mbPicIsData;
+
+    /// current field descriptor
+    WW8FLD::Pointer_t mpFLD;
 
     /// CpAndFcs in the document where properties change
     CpAndFcs mCpAndFcs;
@@ -666,6 +674,11 @@ public:
     getField(const CpAndFc & rCpAndFc) const;
 
     /**
+       Return current field descriptor.
+    */
+    WW8FLD::Pointer_t getCurrentFLD() const;
+
+    /**
        Return stream of text box.
 
        @param nShpId    shape id of text box
@@ -705,6 +718,9 @@ public:
 
     sal_uInt32 getPicLocation() const;
     void setPicLocation(sal_uInt32 fcPicLoc);
+
+    bool isPicData();
+    void setPicIsData(bool bPicIsData);
 
     /**
        Create events for the document.

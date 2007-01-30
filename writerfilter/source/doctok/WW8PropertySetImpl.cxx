@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PropertySetImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,8 +326,13 @@ void WW8PropertySetImpl::resolveLocal(Sprm & sprm)
         {
             Value::Pointer_t pValue = sprm.getValue();
             getDocument()->setPicLocation(pValue->getInt());
+            getDocument()->setPicIsData(false);
         }
         break;
+    case 0x806:
+        {
+            getDocument()->setPicIsData(true);
+        }
     default:
         break;
     }

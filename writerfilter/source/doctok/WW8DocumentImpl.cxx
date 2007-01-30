@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:34:05 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ WW8DocumentImpl::~WW8DocumentImpl()
 }
 
 WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
-: bSubDocument(false), mfcPicLoc(0), mpStream(rpStream)
+: bSubDocument(false), mfcPicLoc(0), mbPicIsData(false), mpStream(rpStream)
 {
     mpDocStream = getSubStream(::rtl::OUString::createFromAscii
                                ("WordDocument"));
@@ -508,7 +508,7 @@ bool WW8DocumentImpl::isSpecial(sal_uInt32 nChar)
 
 WW8DocumentImpl::WW8DocumentImpl(const WW8DocumentImpl & rSrc,
                                  const CpAndFc & rStart, const CpAndFc & rEnd)
-: bSubDocument(true), mfcPicLoc(0)
+: bSubDocument(true), mfcPicLoc(0), mbPicIsData(false)
 {
     Assign(rSrc);
 
@@ -894,6 +894,8 @@ doctok::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
     case PROP_FLD:
         {
             pResult = getField(rCpAndFc);
+
+            mpFLD = mpFieldHelper->getWW8FLD(rCpAndFc);
         }
 
         break;
@@ -1215,14 +1217,17 @@ WW8DocumentImpl::getBlip(sal_uInt32 nBid)
 {
     doctok::Reference<Properties>::Pointer_t pResult;
 
-    DffRecord::Pointer_t pDffRecord(mpDffBlock->getBlip(nBid));
-
-    if (pDffRecord.get() != NULL)
+    if (mpDffBlock != NULL)
     {
-        DffBSE * pBlip = new DffBSE(*pDffRecord);
+        DffRecord::Pointer_t pDffRecord(mpDffBlock->getBlip(nBid));
 
-        if (pBlip != NULL)
+        if (pDffRecord.get() != NULL)
+        {
+            DffBSE * pBlip = new DffBSE(*pDffRecord);
+
+            if (pBlip != NULL)
             pResult = doctok::Reference<Properties>::Pointer_t(pBlip);
+        }
     }
 
     return pResult;
@@ -1234,6 +1239,11 @@ WW8DocumentImpl::getField(const CpAndFc & rCpAndFc) const
     return mpFieldHelper->getField(rCpAndFc);
 }
 
+WW8FLD::Pointer_t WW8DocumentImpl::getCurrentFLD() const
+{
+    return mpFLD;
+}
+
 sal_uInt32 WW8DocumentImpl::getPicLocation() const
 {
     return mfcPicLoc;
@@ -1242,6 +1252,16 @@ sal_uInt32 WW8DocumentImpl::getPicLocation() const
 void WW8DocumentImpl::setPicLocation(sal_uInt32 fcPicLoc)
 {
     mfcPicLoc = fcPicLoc;
+}
+
+bool WW8DocumentImpl::isPicData()
+{
+    return mbPicIsData;
+}
+
+void WW8DocumentImpl::setPicIsData(bool bPicIsData)
+{
+    mbPicIsData = bPicIsData;
 }
 
 doctok::Reference<Stream>::Pointer_t
@@ -1353,10 +1373,14 @@ void WW8DocumentImpl::resolvePicture(Stream & rStream)
         WW8StructBase aStruct(*pStream, mfcPicLoc, 4);
         sal_uInt32 nCount = aStruct.getU32(0);
 
-        doctok::Reference<Properties>::Pointer_t pPicf
-            (new WW8PICF(*pStream, mfcPicLoc, nCount));
+        {
+            WW8PICF * pPicf = new WW8PICF(*pStream, mfcPicLoc, nCount);
+            pPicf->setDocument(this);
 
-        rStream.props(pPicf);
+            doctok::Reference<Properties>::Pointer_t pProps(pPicf);
+
+            rStream.props(pProps);
+        }
     }
 }
 
@@ -2102,10 +2126,17 @@ void FieldHelper::init()
     }
 }
 
+WW8FLD::Pointer_t FieldHelper::getWW8FLD(const CpAndFc & rCpAndFc)
+{
+    WW8FLD::Pointer_t pFld = mMap[rCpAndFc];
+
+    return pFld;
+}
+
 doctok::Reference<Properties>::Pointer_t
 FieldHelper::getField(const CpAndFc & rCpAndFc)
 {
-    WW8FLD::Pointer_t pFLD = mMap[rCpAndFc];
+    WW8FLD::Pointer_t pFLD = getWW8FLD(rCpAndFc);
 
     return doctok::Reference<Properties>::Pointer_t
         (new WW8FLD(*pFLD));

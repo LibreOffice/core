@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-27 09:03:47 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,10 @@ public:
 
 class WW8PropertiesHandler : public Properties
 {
+    typedef boost::shared_ptr<Sprm> SprmSharedPointer_t;
+    typedef vector<SprmSharedPointer_t> SprmPointers_t;
+    SprmPointers_t sprms;
+
 public:
     WW8PropertiesHandler()
     {
@@ -360,6 +364,11 @@ public:
 
     virtual void attribute(Id name, Value & val);
     virtual void sprm(Sprm & sprm);
+
+    void dumpSprm(SprmSharedPointer_t sprm);
+    void dumpSprms();
+
+    static bool compare(SprmSharedPointer_t sprm1, SprmSharedPointer_t sprm2);
 };
 
 class WW8BinaryObjHandler : public BinaryObj
@@ -413,6 +422,8 @@ public:
 
 void dump(OutputWithDepth<string> & o, const char * name, doctok::Reference<Properties>::Pointer_t props);
 void dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
+void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
+          const rtl::OUString & /*str*/);
 
 }
 
