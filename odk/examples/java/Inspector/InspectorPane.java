@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InspectorPane.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 14:58:49 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -43,6 +43,7 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
@@ -117,10 +118,6 @@ import javax.swing.event.TreeWillExpandListener;
         }
 
 
-        public boolean isFacetteNode(UnoNode _oUnoNode){
-            return (_oUnoNode instanceof UnoFacetteNode);
-        }
-
 
         private Type[] getTypes(Object _oUnoObject){
             Type[] aTypes = null;
@@ -134,14 +131,24 @@ import javax.swing.event.TreeWillExpandListener;
         }
 
 
-        private Object invokeMethodNode(UnoMethodNode _oUnoMethodNode){
-            UnoNode oUnoNode = null;
-            Object oUnoReturnObject = _oUnoMethodNode.getUnoReturnObject();
+        private Object invoke(XUnoMethodNode _oUnoMethodNode){
+        try{
+            String sParamValueDescription = "";
+            Object oUnoReturnObject = _oUnoMethodNode.invoke();
             boolean bHasParameters = _oUnoMethodNode.hasParameters();
             boolean bIsPrimitive = _oUnoMethodNode.isPrimitive();
             if (oUnoReturnObject != null ){
-                if (bHasParameters || !bIsPrimitive){
-                    String sNodeDescription = "";
+                if (bHasParameters){
+                    sParamValueDescription = " (" + m_oSourceCodeGenerator.getMethodParameterValueDescription(_oUnoMethodNode, _oUnoMethodNode.getLastParameterObjects(), true) + ")";
+                }
+                String sNodeDescription = "";
+                XUnoNode oUnoNode = null;
+                if (_oUnoMethodNode.getXIdlMethod().getReturnType().getTypeClass().getValue() == TypeClass.VOID_value){
+                    sNodeDescription += _oUnoMethodNode.getXIdlMethod().getReturnType().getName() + " " + _oUnoMethodNode.getXIdlMethod().getName() + sParamValueDescription;
+                    _oUnoMethodNode.setLabel(sNodeDescription);
+                    m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
+                }
+                else if (bHasParameters || !bIsPrimitive){
                     if (bIsPrimitive){
                         sNodeDescription += m_oSourceCodeGenerator.getStringValueOfObject(oUnoReturnObject, _oUnoMethodNode.getTypeClass());
                     }
@@ -150,55 +157,59 @@ import javax.swing.event.TreeWillExpandListener;
                         String sShortClassName = m_oSourceCodeGenerator.getShortClassName(aReturnObject.getType().getTypeName());
                         sNodeDescription += m_oSourceCodeGenerator.getVariableNameforUnoObject(sShortClassName);
                     }
-                    if (bHasParameters){
-                        sNodeDescription += " (" + m_oSourceCodeGenerator.getMethodParameterValueDescription(_oUnoMethodNode, true) + ")";
-                    }
                     if (m_oIntrospector.isArray(oUnoReturnObject)){
                         if (m_oIntrospector.isUnoTypeObject(oUnoReturnObject)){
-                            oUnoNode = addUnoFacetteNode(UnoNode.SINTERFACEDESCRIPTION, _oUnoMethodNode.getUnoObject());
+                            oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SINTERFACEDESCRIPTION, _oUnoMethodNode.getUnoObject());
                         }
                         else if(m_oIntrospector.isUnoPropertyTypeObject(oUnoReturnObject)){
-                            oUnoNode = addUnoFacetteNode(UnoNode.SPROPERTYINFODESCRIPTION, oUnoReturnObject);
+                            oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SPROPERTYINFODESCRIPTION, oUnoReturnObject);
                         }
                         else if(m_oIntrospector.isUnoPropertyValueTypeObject(oUnoReturnObject)){
-                            oUnoNode = addUnoFacetteNode(UnoNode.SPROPERTYVALUEDESCRIPTION, oUnoReturnObject);
+                            oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION, oUnoReturnObject);
                         }
                     }
                     if (oUnoNode == null){
-                        oUnoNode = addUnoObjectNode(sNodeDescription, oUnoReturnObject);
+                        if (bHasParameters){
+                            sNodeDescription += sParamValueDescription;
+                        }
+                        oUnoNode = addUnoNode(null, oUnoReturnObject, sNodeDescription);
+                        if (bHasParameters){
+                            oUnoNode.setParameterObjects(_oUnoMethodNode.getLastParameterObjects());
+                        }
                     }
-                    if (!bIsPrimitive){
-                        oUnoNode.addDummyNode();
+                    if (oUnoNode != null){
+                        oUnoNode.setFoldable(!bIsPrimitive);
+                        _oUnoMethodNode.setFoldable(false);
+                        _oUnoMethodNode.addChildNode(oUnoNode);
+                        m_xTreeControlProvider.nodeInserted(_oUnoMethodNode, oUnoNode, _oUnoMethodNode.getChildCount()-1);
                     }
-                    _oUnoMethodNode.removeDummyNode();
-                    _oUnoMethodNode.add(oUnoNode);
-                    m_xTreeControlProvider.nodeInserted(_oUnoMethodNode, oUnoNode, _oUnoMethodNode.getChildCount()-1);
                 }
                 else{
                     if (bIsPrimitive){
-                        String sNodeDescription = (String) _oUnoMethodNode.getUserObject();
-                        sNodeDescription  = _oUnoMethodNode.getStandardMethodDescription() + "=" +_oUnoMethodNode.getDisplayValueOfPrimitiveType(oUnoReturnObject);
-                        _oUnoMethodNode.setUserObject(sNodeDescription);
+                        sNodeDescription  = _oUnoMethodNode.getStandardMethodDescription() + "=" + UnoMethodNode.getDisplayValueOfPrimitiveType(oUnoReturnObject);
+                        _oUnoMethodNode.setLabel(sNodeDescription);
                         m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
                     }
                 }
             }
+            // ReturnObject of method node == null..
             else{
                 if (!bHasParameters){
-                    String sNodeDescription = (String) _oUnoMethodNode.getUserObject() + " = null";
-                    _oUnoMethodNode.setUserObject(sNodeDescription);
+                    _oUnoMethodNode.setLabel(_oUnoMethodNode.getLabel() + " = null");
                     m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
                 }
             }
             return oUnoReturnObject;
-        }
+        }catch(Exception exception ) {
+            return null;
+        }}
 
 
         public void invokeSelectedMethodNode(){
             XTreePathProvider xTreePathProvider = m_xTreeControlProvider.getSelectedPath();
-            UnoNode oUnoNode = xTreePathProvider.getLastPathComponent();
-            if (oUnoNode instanceof UnoMethodNode){
-                invokeMethodNode((UnoMethodNode) oUnoNode);
+            XUnoNode oUnoNode = xTreePathProvider.getLastPathComponent();
+            if (oUnoNode instanceof XUnoMethodNode){
+                invoke((XUnoMethodNode) oUnoNode);
                 m_xTreeControlProvider.expandPath(xTreePathProvider);
             }
         }
@@ -206,38 +217,43 @@ import javax.swing.event.TreeWillExpandListener;
 
         public void addSourceCodeOfSelectedNode(){
             XTreePathProvider oTreePathProvider = m_xTreeControlProvider.getSelectedPath();
+            XUnoNode oUnoNode = oTreePathProvider.getLastPathComponent();
+            if (oUnoNode instanceof XUnoMethodNode){
+                XUnoMethodNode oUnoMethodNode = (XUnoMethodNode) oUnoNode;
+                if (!oUnoMethodNode.isInvoked()){
+                    invoke(oUnoMethodNode);
+                }
+            }
             String sSourceCode = m_oSourceCodeGenerator.addSourceCodeOfUnoObject(oTreePathProvider);
             m_xTreeControlProvider.setSourceCode(sSourceCode);
         }
 
 
-        protected UnoNode getSelectedNode(){
+        protected XUnoNode getSelectedNode(){
             return m_xTreeControlProvider.getSelectedNode();
         }
 
 
         //  add the object to the hashtable for a possible access in the tree
-        private  UnoFacetteNode addUnoFacetteNode(String _sNodeDescription, Object _oUnoObject){
-            UnoFacetteNode oUnoFacetteNode = new UnoFacetteNode(_oUnoObject);
-            oUnoFacetteNode.setUserObject(_sNodeDescription);
-            return oUnoFacetteNode;
+        private  XUnoFacetteNode addUnoFacetteNode(XUnoNode _oParentNode, String _sNodeDescription, Object _oUnoObject){
+            return m_xTreeControlProvider.addUnoFacetteNode( _oParentNode, _sNodeDescription, _oUnoObject);
         }
 
 
-        private UnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod){
-            UnoMethodNode oUnoMethodNode = new UnoMethodNode(_xIdlMethod, _objectElement);
-            return oUnoMethodNode;
+        private XUnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod){
+            return m_xTreeControlProvider.addMethodNode(_objectElement, _xIdlMethod);
         }
 
 
-        public void addMethodsToTreeNode(HideableMutableTreeNode _oGrandParentNode, Object _oUnoParentObject, XIdlMethod[] _xIdlMethods){
-            if (UnoNode.isValid(_xIdlMethods)){
+
+        public void addMethodsToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoParentObject, XIdlMethod[] _xIdlMethods){
+            if (this.m_oIntrospector.isValid(_xIdlMethods)){
                 for ( int n = 0; n < _xIdlMethods.length; n++ ) {
                     XIdlMethod xIdlMethod = _xIdlMethods[n];
                     if (!xIdlMethod.getDeclaringClass().getName().equals("com.sun.star.uno.XInterface")){
-                        UnoMethodNode oChildNode = addMethodNode(_oUnoParentObject, xIdlMethod);
+                        XUnoMethodNode oChildNode = addMethodNode(_oUnoParentObject, xIdlMethod);
                         if (oChildNode != null){
-                            _oGrandParentNode.add(oChildNode);
+                            _oGrandParentNode.addChildNode(oChildNode);
                         }
                     }
                 }
@@ -245,60 +261,32 @@ import javax.swing.event.TreeWillExpandListener;
         }
 
 
-        private void addSingleTypeToTree(Object _oUnoObject, Type _aType, UnoNode _oParentNode){
-        try{
-            UnoInterfaceNode oChildNode = addUnoInterfaceNode(_aType, _oUnoObject);
-           _oParentNode.add(oChildNode);
+        private void addFacetteNodesToTreeNode(XUnoNode _oParentNode, Object _oUnoObject){
+            if (m_oIntrospector.hasMethods(_oUnoObject)){
+                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SMETHODDESCRIPTION, _oUnoObject);
+            }
+            if (m_oIntrospector.hasProperties(_oUnoObject)){
+                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SPROPERTYDESCRIPTION, _oUnoObject);
+            }
+            if (m_oIntrospector.hasInterfaces(_oUnoObject)){
+                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SINTERFACEDESCRIPTION, _oUnoObject);
+            }
+            if (m_oIntrospector.isContainer(_oUnoObject)){
+                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SCONTAINERDESCRIPTION, _oUnoObject);
+            }
+            if (m_oIntrospector.hasSupportedServices(_oUnoObject)){
+                XUnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(_oParentNode, XUnoFacetteNode.SSERVICEDESCRIPTION, _oUnoObject);
+            }
         }
-        catch( Exception exception ) {
-            exception.printStackTrace(System.out);
-        }}
 
 
-        //  add the object to the hashtable for a possible access in the tree
-       private UnoInterfaceNode addUnoInterfaceNode(Type _aType, Object _oUnoObject){
-           UnoInterfaceNode oUnoInterfaceNode = new UnoInterfaceNode(_oUnoObject, _aType);
-           return oUnoInterfaceNode;
-        }
-
-
-        private void addTypesToTree(Object _oUnoObject, Type[] _aTypes, UnoNode _oGrandParentNode){
-            if (_oUnoObject != null){
+        private void addInterfacesToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoParentObject, Type[] _aTypes) {
+        try {
+            if (_oUnoParentObject != null){
                 for ( int m = 0; m < _aTypes.length; m++ ) {
-                    addSingleTypeToTree(_oUnoObject, _aTypes[m], _oGrandParentNode);
+                    addUnoNode(_oGrandParentNode, _oUnoParentObject, _aTypes[m]);
                 }
             }
-        }
-
-
-        private void addFacetteNodesToTreeNode(UnoNode _oParentNode){
-            Object oUnoObject = _oParentNode.getUnoObject();
-            if (m_oIntrospector.hasMethods(oUnoObject)){
-                UnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(UnoNode.SMETHODDESCRIPTION, oUnoObject);
-                _oParentNode.add(oUnoFacetteNode);
-            }
-            if (m_oIntrospector.hasProperties(oUnoObject)){
-                UnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(UnoNode.SPROPERTYDESCRIPTION, oUnoObject);
-                _oParentNode.add(oUnoFacetteNode);
-            }
-            if (m_oIntrospector.hasInterfaces(oUnoObject)){
-                UnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(UnoNode.SINTERFACEDESCRIPTION, oUnoObject);
-                _oParentNode.add(oUnoFacetteNode);
-            }
-            if (m_oIntrospector.isContainer(oUnoObject)){
-                UnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(UnoNode.SCONTAINERDESCRIPTION, oUnoObject);
-                _oParentNode.add(oUnoFacetteNode);
-            }
-            if (m_oIntrospector.hasSupportedServices(oUnoObject)){
-                UnoFacetteNode oUnoFacetteNode = addUnoFacetteNode(UnoNode.SSERVICEDESCRIPTION, oUnoObject);
-                _oParentNode.add(oUnoFacetteNode);
-            }
-        }
-
-
-        private void addInterfacesToTreeNode(UnoNode _oGrandParentNode, Object _oUnoParentObject, Type[] _aTypes) {
-        try {
-            addTypesToTree(_oUnoParentObject, _aTypes, _oGrandParentNode);
         }
         catch( Exception exception ) {
             exception.printStackTrace(System.out);
@@ -306,7 +294,7 @@ import javax.swing.event.TreeWillExpandListener;
 
 
         //  add all services for the given object to the tree under the node parent
-        private void addServicesToTreeNode(UnoNode _oGrandParentNode, Object _oUnoObject) {
+        private void addServicesToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoObject) {
         try{
             XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
             if ( xServiceInfo != null ){
@@ -314,8 +302,8 @@ import javax.swing.event.TreeWillExpandListener;
                 for ( int m = 0; m < sSupportedServiceNames.length; m++ ) {
                     String sServiceName = sSupportedServiceNames[m];
                     if (sServiceName.length() > 0){
-                        UnoServiceNode oChildNode = addUnoServiceNode(sSupportedServiceNames[m], _oUnoObject);
-                        _oGrandParentNode.add(oChildNode);
+                        XUnoNode oUnoNode = addUnoNode(_oGrandParentNode, _oUnoObject, sSupportedServiceNames[m]);
+                        oUnoNode.setNodeType(XUnoNode.nSERVICE);
                     }
                 }
             }
@@ -325,7 +313,7 @@ import javax.swing.event.TreeWillExpandListener;
         }}
 
 
-        private void addPropertiesAndInterfacesOfService(UnoServiceNode _oUnoServiceNode){
+        private void addPropertiesAndInterfacesOfService(XUnoNode _oUnoServiceNode){
             String sServiceName  = _oUnoServiceNode.getClassName();
             Object oUnoObject = _oUnoServiceNode.getUnoObject();
             addInterfacesToTreeNode(_oUnoServiceNode, oUnoObject, m_oIntrospector.getInterfaces(oUnoObject, sServiceName));
@@ -333,7 +321,7 @@ import javax.swing.event.TreeWillExpandListener;
         }
 
 
-    private void addPropertiesToTreeNode(UnoNode _oParentNode, Object _oUnoParentObject,  Property[] _aProperties) {
+    private void addPropertiesToTreeNode(XUnoNode _oParentNode, Object _oUnoParentObject,  Property[] _aProperties) {
     try {
         if (_aProperties.length > 0){
             for ( int n = 0; n < _aProperties.length; n++ ){
@@ -344,15 +332,9 @@ import javax.swing.event.TreeWillExpandListener;
                     if (xPropertySet.getPropertySetInfo().hasPropertyByName(aProperty.Name)){
                         Object objectElement = xPropertySet.getPropertyValue(aProperty.Name);
                         if (objectElement != null) {
-                            UnoNode oChildNode = null;
-                            if (!m_oIntrospector.isObjectPrimitive(objectElement)){
-                                oChildNode =  UnoPropertyNode.getUnoPropertyNode(objectElement, aProperty, objectElement); //addUnoObjectNode(UnoPropertyNode.getStandardPropertyDescription(aProperty), objectElement);
-                            }
-                            else{
-                                oChildNode = UnoPropertyNode.getUnoPropertyNode(_oUnoParentObject, aProperty, objectElement);
-                            }
+                            XUnoNode oChildNode = m_xTreeControlProvider.addUnoPropertyNode(_oUnoParentObject, aProperty, objectElement);
                             if (oChildNode != null){
-                                _oParentNode.add(oChildNode);
+                                _oParentNode.addChildNode(oChildNode);
                             }
                         }
                     }
@@ -365,104 +347,107 @@ import javax.swing.event.TreeWillExpandListener;
     }}
 
 
-    public void addContainerElementsToTreeNode(UnoNode _oGrandParentNode, Object _oUnoParentObject){
+    public void addContainerElementsToTreeNode(XUnoNode _oParentNode, Object _oUnoParentObject){
         Object[] oUnoContainerElements = m_oIntrospector.getUnoObjectsOfContainer(_oUnoParentObject);
         if (m_oIntrospector.isValid(oUnoContainerElements)){
             if (oUnoContainerElements.length > 0){
-                UnoFacetteNode  oParentNode = addUnoFacetteNode(UnoNode.SCONTAINERDESCRIPTION, _oUnoParentObject);
                 for (int i=0; i< oUnoContainerElements.length; i++){
-                    UnoObjectNode oChildNode = addUnoObjectNode(UnoNode.getNodeDescription(oUnoContainerElements[i], i), oUnoContainerElements[i]);
-                    oParentNode.add(oChildNode);
-                }
-                if (oParentNode.getChildCount() > 0){
-                    _oGrandParentNode.add(oParentNode);
-                    m_xTreeControlProvider.nodeInserted(_oGrandParentNode, oParentNode, _oGrandParentNode.getChildCount()-1);
+                    XUnoNode oChildNode = addUnoNode(_oParentNode, oUnoContainerElements[i], UnoNode.getNodeDescription(oUnoContainerElements[i]));
+                    m_xTreeControlProvider.nodeInserted(_oParentNode, oChildNode, _oParentNode.getChildCount()-1);
                 }
             }
         }
     }
 
 
-    private UnoObjectNode addUnoObjectNode(String _sNodeDescription, Object _oUnoObject){
-        UnoObjectNode oUnoObjectNode = new UnoObjectNode(_oUnoObject, _sNodeDescription);
+    private XUnoNode addUnoNode(XUnoNode _oParentNode, Object _oUnoObject, String _sLabel ){
+        XUnoNode oUnoNode = this.m_xTreeControlProvider.addUnoNode(_oUnoObject);
+        oUnoNode.setLabel(_sLabel);
+        if (_oParentNode != null){
+            _oParentNode.addChildNode(oUnoNode);
+        }
+        setNodeFoldable(oUnoNode, _oUnoObject);
+        return oUnoNode;
+    }
+
+
+    private void setNodeFoldable(XUnoNode _oUnoNode, Object _oUnoObject){
         if (_oUnoObject != null){
             if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){
-                oUnoObjectNode.addDummyNode();
+                _oUnoNode.setFoldable(true);
             }
         }
-        return oUnoObjectNode;
     }
 
 
-    private UnoServiceNode addUnoServiceNode(String _sNodeDescription, Object _oUnoObject){
-        UnoServiceNode oUnoServiceNode = new UnoServiceNode(_oUnoObject);
-        oUnoServiceNode.setUserObject(_sNodeDescription);
-        return oUnoServiceNode;
+    private XUnoNode addUnoNode(XUnoNode _oParentNode, Object _oUnoObject, Type _aType){
+        XUnoNode oUnoNode = this.m_xTreeControlProvider.addUnoNode(_oUnoObject, _aType);
+        if (_oParentNode != null){
+            _oParentNode.addChildNode(oUnoNode);
+        }
+        setNodeFoldable(oUnoNode, _oUnoObject);
+        return oUnoNode;
     }
 
 
-    private void addPropertySetInfoNodesToTreeNode(UnoFacetteNode _oUnoFacetteNode, Object _oUnoObject){
+    private void addPropertySetInfoNodesToTreeNode(XUnoFacetteNode _oUnoFacetteNode, Object _oUnoObject){
         if (_oUnoObject.getClass().isArray()){
             Object[] object = ( Object[] ) _oUnoObject;
             for ( int i = 0; i < object.length; i++ ) {
                 Property aProperty = (Property) object[i];
-                UnoPropertyNode oUnoPropertyNode = UnoPropertyNode.getUnoPropertyNode(_oUnoObject, aProperty);
-                oUnoPropertyNode.setUserObject(UnoNode.SPROPERTYINFODESCRIPTION + " (" + aProperty.Name + ")");
-                oUnoPropertyNode.addDummyNode();
-                _oUnoFacetteNode.add(oUnoPropertyNode);
+                XUnoPropertyNode oUnoPropertyNode = m_xTreeControlProvider.addUnoPropertyNode(_oUnoObject, aProperty);
+                oUnoPropertyNode.setLabel(XUnoFacetteNode.SPROPERTYINFODESCRIPTION + " (" + aProperty.Name + ")");
+                oUnoPropertyNode.setFoldable(true);
+                _oUnoFacetteNode.addChildNode(oUnoPropertyNode);
             }
         }
     }
 
-    private void addPrimitiveValuesToTreeNode(UnoNode _oUnoNode, Object _oUnoObject){
+    private void addPrimitiveValuesToTreeNode(XUnoNode _oUnoNode, Object _oUnoObject){
         if (_oUnoObject.getClass().isArray()){
             if (!_oUnoObject.getClass().getComponentType().isPrimitive()){
                 Object[] object = ( Object[] ) _oUnoObject;
                 for ( int i = 0; i < object.length; i++ ) {
                     if (m_oIntrospector.isObjectPrimitive(object[i])){
-                        UnoObjectNode oChildNode = addUnoObjectNode(UnoNode.getNodeDescription(object[i]), null);
-                        _oUnoNode.add(oChildNode);
+                        XUnoNode oChildNode = addUnoNode(_oUnoNode, null, UnoNode.getNodeDescription(object[i]));
                     }
                 }
             }
             else{
                 String[] sDisplayValues = UnoNode.getDisplayValuesofPrimitiveArray(_oUnoObject);
                 for ( int i = 0; i < sDisplayValues.length; i++ ) {
-                    UnoObjectNode oUnoObjectNode = this.addUnoObjectNode(sDisplayValues[i], null);
-                    _oUnoNode.add(oUnoObjectNode);
+                    XUnoNode oUnoNode = addUnoNode(_oUnoNode, null, sDisplayValues[i]);
                 }
             }
         }
     }
 
 
-    private void addPropertySetInfoSubNodes(UnoPropertyNode _oUnoPropertyNode){
+    private void addPropertySetInfoSubNodes(XUnoPropertyNode _oUnoPropertyNode){
         Property aProperty = _oUnoPropertyNode.getProperty();
-        _oUnoPropertyNode.add(UnoPropertyNode.getUnoPropertyNodeWithName(aProperty));
-        _oUnoPropertyNode.add(UnoPropertyNode.getUnoPropertyNodeWithType(aProperty));
-        _oUnoPropertyNode.add(UnoPropertyNode.getUnoPropertyNodeWithHandle(aProperty));
-        _oUnoPropertyNode.add(UnoPropertyNode.getUnoPropertyNodeWithAttributesDescription(aProperty));
+        _oUnoPropertyNode.addChildNode(m_xTreeControlProvider.addUnoPropertyNodeWithName(aProperty));
+        _oUnoPropertyNode.addChildNode(m_xTreeControlProvider.addUnoPropertyNodeWithType(aProperty));
+        _oUnoPropertyNode.addChildNode(m_xTreeControlProvider.addUnoPropertyNodeWithHandle(aProperty));
+        _oUnoPropertyNode.addChildNode(m_xTreeControlProvider.addUnoPropertyNodeWithAttributesDescription(aProperty));
     }
 
 
-    private void addPropertyValueSubNodes(UnoFacetteNode _oUnoFacetteNode, Object _oUnoObject){
+    private void addPropertyValueSubNodes(XUnoFacetteNode _oUnoFacetteNode, Object _oUnoObject){
         if (m_oIntrospector.isUnoPropertyValueTypeObject(_oUnoObject)){
             Object[] object = ( Object[] ) _oUnoObject;
             for ( int i = 0; i < object.length; i++ ) {
                 String sObjectClassName = object[i].getClass().getName();
                 if (sObjectClassName.equals("com.sun.star.beans.PropertyValue")){
-                    UnoNode oChildNode = null;
+                    XUnoNode oChildNode = null;
                     PropertyValue aPropertyValue = (PropertyValue) object[i];
                     if (! m_oIntrospector.isObjectPrimitive(aPropertyValue.Value)){
-                        // TODO: should we not rather insert an ObjectNode here?
-                        String sTreeNodeName = UnoPropertyNode.getStandardNonPrimitivePropertyValueDescription(aPropertyValue);
-                        oChildNode = UnoPropertyNode.getUnoPropertyNode(sTreeNodeName, _oUnoObject, aPropertyValue, _oUnoObject);
+                        oChildNode = m_xTreeControlProvider.addUnoPropertyNode(_oUnoObject, aPropertyValue, _oUnoObject);
                     }
                     else{
-                        oChildNode = addUnoObjectNode(UnoPropertyNode.getStandardPrimitivePropertyValueDescription(aPropertyValue), aPropertyValue.Value);
+                        oChildNode = addUnoNode(null, aPropertyValue.Value, UnoPropertyNode.getStandardPropertyValueDescription(aPropertyValue));
                     }
                     if (oChildNode != null){
-                        _oUnoFacetteNode.add(oChildNode);
+                        _oUnoFacetteNode.addChildNode(oChildNode);
                     }
                 }
             }
@@ -470,22 +455,23 @@ import javax.swing.event.TreeWillExpandListener;
     }
 
 
-    public boolean expandNode(UnoNode _oUnoNode, XTreePathProvider _xTreePathProvider){
+    public boolean expandNode(XUnoNode _oUnoNode, XTreePathProvider _xTreePathProvider){
         if ( _oUnoNode != null ) {
-            _oUnoNode.removeDummyNode();
+            _oUnoNode.setFoldable(false);
             if (m_xTreeControlProvider.isMethodNode(_oUnoNode)){
-                UnoMethodNode oUnoMethodNode = (UnoMethodNode) _oUnoNode;
+                XUnoMethodNode oUnoMethodNode = (XUnoMethodNode) _oUnoNode;
                 if (!oUnoMethodNode.isInvoked()){
-                    Object oUnoReturnObject = invokeMethodNode((UnoMethodNode) _oUnoNode);
+                    Object oUnoReturnObject = invoke((XUnoMethodNode) _oUnoNode);
                     if (oUnoReturnObject == null){
+                        _oUnoNode.setFoldable(true);
                         return false;
                     }
                 }
             }
             else if (m_xTreeControlProvider.isPropertyNode(_oUnoNode)){
-                UnoPropertyNode oUnoPropertyNode = (UnoPropertyNode) _oUnoNode;
-                Object oUnoObject = oUnoPropertyNode.getUnoObject();
-                if (oUnoPropertyNode.getPropertyNodeType() == UnoPropertyNode.nPROPERTYSETINFOTYPE){
+                XUnoPropertyNode oUnoPropertyNode = (XUnoPropertyNode) _oUnoNode;
+                Object oUnoObject = oUnoPropertyNode.getUnoReturnObject();
+                if (oUnoPropertyNode.getPropertyNodeType() == XUnoPropertyNode.nPROPERTYSETINFOTYPE){
                     addPropertySetInfoSubNodes(oUnoPropertyNode);
                 }
                 else{
@@ -495,34 +481,23 @@ import javax.swing.event.TreeWillExpandListener;
                         addPrimitiveValuesToTreeNode(oUnoPropertyNode, oUnoObject);
                     }
                     else{
-                        addFacetteNodesToTreeNode(oUnoPropertyNode);
+                        addFacetteNodesToTreeNode(oUnoPropertyNode, oUnoObject);
                     }
                 }
             }
-            else if (m_xTreeControlProvider.isObjectNode(_oUnoNode)){
-                UnoObjectNode oUnoObjectNode = (UnoObjectNode) _oUnoNode;
-                Object oUnoObject = oUnoObjectNode.getUnoObject();
-                if ( oUnoObject.getClass().isArray()){
-                    // TOODO probably we should provid a possibility to insert also non-primitive nodes
-                     addPrimitiveValuesToTreeNode(oUnoObjectNode, oUnoObject);
-                }
-                else{
-                    addFacetteNodesToTreeNode(oUnoObjectNode);
-                }
-            }
             else if (m_xTreeControlProvider.isFacetteNode(_oUnoNode)){
-                UnoFacetteNode oUnoFacetteNode = (UnoFacetteNode) _oUnoNode;
+                XUnoFacetteNode oUnoFacetteNode = (XUnoFacetteNode) _oUnoNode;
                 Object oUnoObject = _oUnoNode.getUnoObject();
                 if (oUnoFacetteNode.isMethodNode()){
                     addMethodsToTreeNode(oUnoFacetteNode, oUnoObject, m_oIntrospector.getMethods(oUnoObject));
                 }
                 if (oUnoFacetteNode.isPropertyNode()){
-                    String sNodeDescription = (String) oUnoFacetteNode.getUserObject();
+                    String sNodeDescription = oUnoFacetteNode.getLabel();
                     // TODO: it's very dangerous to distinguishe the different UnoFacetteNodes only by the nodedescription
-                    if (sNodeDescription.startsWith(UnoNode.SPROPERTYINFODESCRIPTION)){
+                    if (sNodeDescription.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
                         addPropertySetInfoNodesToTreeNode(oUnoFacetteNode, oUnoObject);
                     }
-                    else if (sNodeDescription.startsWith(UnoNode.SPROPERTYVALUEDESCRIPTION)){
+                    else if (sNodeDescription.startsWith(XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION)){
                         addPropertyValueSubNodes(oUnoFacetteNode, oUnoObject);
                     }
                     else{
@@ -539,14 +514,24 @@ import javax.swing.event.TreeWillExpandListener;
                     addContainerElementsToTreeNode(oUnoFacetteNode, oUnoObject);
                 }
             }
-            else if (m_xTreeControlProvider.isServiceNode(_oUnoNode)){
-                UnoServiceNode oUnoServiceNode = (UnoServiceNode) _oUnoNode;
-                addPropertiesAndInterfacesOfService(oUnoServiceNode);
+            else if (_oUnoNode.getNodeType() == XUnoNode.nSERVICE){
+                addPropertiesAndInterfacesOfService(_oUnoNode);
             }
-            else if (m_xTreeControlProvider.isInterfaceNode(_oUnoNode)){
-                UnoInterfaceNode oUnoInterfaceNode = (UnoInterfaceNode) _oUnoNode;
-                Type aType = oUnoInterfaceNode.getUnoType();
-                addMethodsToTreeNode(oUnoInterfaceNode, oUnoInterfaceNode.getUnoObject(), m_oIntrospector.getMethodsOfInterface(aType));
+            else if (_oUnoNode.getNodeType() == XUnoNode.nINTERFACE){
+                Type aType = _oUnoNode.getUnoType();
+                if (aType != null){
+                    addMethodsToTreeNode(_oUnoNode, _oUnoNode.getUnoObject(), m_oIntrospector.getMethodsOfInterface(aType));
+                }
+            }
+            else if (_oUnoNode.getNodeType() == XUnoNode.nOTHERS){
+                Object oUnoObject = _oUnoNode.getUnoObject();
+                if ( oUnoObject.getClass().isArray()){
+                    // TOODO probably we should provid a possibility to insert also non-primitive nodes
+                     addPrimitiveValuesToTreeNode(_oUnoNode, oUnoObject);
+                }
+                else{
+                    addFacetteNodesToTreeNode(_oUnoNode, oUnoObject);
+                }
             }
         }
         return true;
@@ -554,9 +539,9 @@ import javax.swing.event.TreeWillExpandListener;
 
 
 
-        public void applyFilter(UnoFacetteNode _oUnoFacetteNode, String _sFilter){
+        public void applyFilter(XUnoFacetteNode _oUnoFacetteNode, String _sFilter){
             for (int i = 0; i < _oUnoFacetteNode.getChildCount(); i++){
-                UnoNode oUnoNode = (UnoNode) _oUnoFacetteNode.getChildAt(i);
+                XUnoNode oUnoNode = _oUnoFacetteNode.getChild(i);
                 boolean bIsVisible = oUnoNode.isFilterApplicable(_sFilter);
                 m_xTreeControlProvider.setNodeVisible(oUnoNode, bIsVisible);
             }
@@ -569,7 +554,7 @@ import javax.swing.event.TreeWillExpandListener;
          *
          */
         private Object getUnoObjectOfExplicitTreeNode(XTreePathProvider _xTreePathProvider){
-            UnoNode oUnoNode = _xTreePathProvider.getLastPathComponent();
+            XUnoNode oUnoNode = _xTreePathProvider.getLastPathComponent();
             if (oUnoNode != null){
                 return oUnoNode.getUnoObject();
             }
@@ -577,19 +562,19 @@ import javax.swing.event.TreeWillExpandListener;
         }
 
 
-        public String getFilter(UnoNode _oUnoNode){
+        public String getFilter(XUnoNode _oUnoNode){
             String sFilter = "";
             if (_oUnoNode != null){
-                UnoNode oUnoNode = _oUnoNode;
+                XUnoNode oUnoNode = _oUnoNode;
                 boolean bleaveLoop = false;
                 do{
-                    if (isFacetteNode(oUnoNode)){
-                        sFilter = ((UnoFacetteNode) oUnoNode).getFilter();
+                    if (m_xTreeControlProvider.isFacetteNode(oUnoNode)){
+                        sFilter = ((XUnoFacetteNode) oUnoNode).getFilter();
                         bleaveLoop = true;
                     }
                     else{
-                        if (oUnoNode.getParent() != null){
-                            oUnoNode = (UnoNode) oUnoNode.getParent();
+                        if (oUnoNode.getParentNode() != null){
+                            oUnoNode = oUnoNode.getParentNode();
                         }
                         else{
                             bleaveLoop = true;
@@ -604,7 +589,6 @@ import javax.swing.event.TreeWillExpandListener;
         /** In opposition to 'getUnoObjectOfexplictTreeNode' this method inspects the passed node if it represents a Uno object
          *  if not it keeps checking all ancestors until it finds a Uno representation
          */
-
         private Object getUnoObjectOfTreeNode(XTreePathProvider _xTreePathProvider){
             XTreePathProvider xTreePathProvider = _xTreePathProvider;
             HideableMutableTreeNode oNode = null;
@@ -627,8 +611,8 @@ import javax.swing.event.TreeWillExpandListener;
 
 
         public void showPopUpMenu(Object _invoker, int x, int y) throws ClassCastException{
-            UnoNode oUnoNode = getSelectedNode();
-            boolean bdoEnable = oUnoNode instanceof UnoMethodNode;
+            XUnoNode oUnoNode = getSelectedNode();
+            boolean bdoEnable = oUnoNode instanceof XUnoMethodNode;
             m_xDialogProvider.enableInvokeMenuItem(bdoEnable);
             m_xDialogProvider.showPopUpMenu(_invoker, x, y);
         }
