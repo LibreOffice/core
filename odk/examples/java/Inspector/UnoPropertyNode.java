@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoPropertyNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:02:51 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -59,62 +59,10 @@ public class UnoPropertyNode extends UnoNode{
     PropertyValue aPropertyValue;
     String m_sPropertyName;
     Object m_oUnoReturnObject;
-    public static int nDEFAULT = 0;
-    public static int nPROPERTYSETINFOTYPE = 1;
-    public static int nPROPERTYVALUETYPE = 2;
-    private int m_nPropertyType = nDEFAULT;
+    private int m_nPropertyType = XUnoPropertyNode.nDEFAULT;
+    private String sLabel = "";
 
     private static XConstantTypeDescription[] xPropertyAttributesTypeDescriptions = null;
-
-
-    public static UnoPropertyNode getUnoPropertyNodeWithName(Property _aProperty){
-        UnoPropertyNode oUnoPropertyNode = new UnoPropertyNode(_aProperty);
-        oUnoPropertyNode.setUserObject("Name: " + _aProperty.Name);
-        return oUnoPropertyNode;
-    }
-
-
-    public static UnoPropertyNode getUnoPropertyNodeWithHandle(Property _aProperty){
-        UnoPropertyNode oUnoPropertyNode = new UnoPropertyNode(_aProperty);
-        oUnoPropertyNode.setUserObject("Handle: " + _aProperty.Handle);
-        return oUnoPropertyNode;
-    }
-
-
-    public static UnoPropertyNode getUnoPropertyNodeWithType(Property _aProperty){
-        UnoPropertyNode oUnoPropertyNode = new UnoPropertyNode(_aProperty);
-        oUnoPropertyNode.setUserObject("Type: " + _aProperty.Type.getTypeName());
-        return oUnoPropertyNode;
-    }
-
-
-    public static UnoPropertyNode getUnoPropertyNodeWithAttributesDescription(Property _aProperty){
-        UnoPropertyNode oUnoPropertyNode = new UnoPropertyNode(_aProperty);
-        XConstantTypeDescription[] xPropertyAttributesTypeDescriptions = Introspector.getIntrospector().getFieldsOfConstantGroup("com.sun.star.beans.PropertyAttribute");
-        String sDisplay = Introspector.getIntrospector().getConstantDisplayString((int) _aProperty.Attributes, xPropertyAttributesTypeDescriptions, "Attributes: ");
-        oUnoPropertyNode.setUserObject(sDisplay);
-        return oUnoPropertyNode;
-    }
-
-
-    public static UnoPropertyNode getUnoPropertyNode(Object _oUnoObject, Property _aProperty){
-        UnoPropertyNode oUnoPropertyNode = new UnoPropertyNode(_aProperty, _oUnoObject, null);
-        oUnoPropertyNode.setPropertyNodeType(nPROPERTYSETINFOTYPE);
-        return oUnoPropertyNode;
-    }
-
-
-    public static UnoPropertyNode getUnoPropertyNode(Object _oUnoObject, Property _aProperty, Object _oUnoReturnObject){
-        UnoPropertyNode oUnoPropertyNode = new UnoPropertyNode(_aProperty, _oUnoObject, _oUnoReturnObject);
-        return oUnoPropertyNode;
-    }
-
-
-    public static UnoPropertyNode getUnoPropertyNode(String _sNodeDescription, Object _oUnoObject, PropertyValue _aPropertyValue, Object _oReturnObject){
-        UnoPropertyNode oUnoPropertyNode = new UnoPropertyNode(_aPropertyValue, _oUnoObject, _oReturnObject);
-        oUnoPropertyNode.setUserObject(_sNodeDescription);
-        return oUnoPropertyNode;
-    }
 
 
     /** Creates a new instance of UnoMethodNode */
@@ -123,7 +71,6 @@ public class UnoPropertyNode extends UnoNode{
         aProperty = _aProperty;
         m_sPropertyName = aProperty.Name;
         m_oUnoReturnObject = _oUnoReturnObject;
-        assignNodeDescription();
     }
 
 
@@ -132,6 +79,13 @@ public class UnoPropertyNode extends UnoNode{
         aProperty = _aProperty;
         m_sPropertyName = aProperty.Name;
         m_oUnoReturnObject = null;
+    }
+
+    public UnoPropertyNode(PropertyValue _aPropertyValue, Object _oUnoObject, Object _oUnoReturnObject) {
+        super(_oUnoObject);
+        m_oUnoReturnObject = _oUnoReturnObject;
+        aPropertyValue = _aPropertyValue;
+        m_sPropertyName = aPropertyValue.Name;
     }
 
 
@@ -145,16 +99,12 @@ public class UnoPropertyNode extends UnoNode{
     }
 
 
-    public UnoPropertyNode(PropertyValue _aPropertyValue, Object _oUnoObject, Object _oUnoReturnObject) {
-        super(_oUnoObject);
-        m_oUnoReturnObject = _oUnoReturnObject;
-        aPropertyValue = _aPropertyValue;
-        m_sPropertyName = aPropertyValue.Name;
-    }
-
-
     public String getPropertyName(){
         return m_sPropertyName;
+    }
+
+    public String getName(){
+        return this.m_sPropertyName;
     }
 
 
@@ -175,9 +125,6 @@ public class UnoPropertyNode extends UnoNode{
         else{
             sClassName = "com.sun.star.beans.Property";
         }
-        if (sClassName.equals("")){
-            sClassName = super.getClassName();
-        }
         return sClassName;
     }
 
@@ -186,10 +133,6 @@ public class UnoPropertyNode extends UnoNode{
         return m_sPropertyName;
     }
 
-
-    public String getName(){
-        return m_sPropertyName;
-    }
 
 
     protected boolean doesServiceSupportProperty(String _sServiceName, String _sPropertyName){
@@ -229,24 +172,32 @@ public class UnoPropertyNode extends UnoNode{
     }
 
 
-    private void assignNodeDescription(){
+    protected boolean isFoldable(){
+        boolean bIsFoldable = false;
         if (! isPrimitive()){
             String sTypeName = getUnoReturnObject().getClass().getName();
-            if ( sTypeName.equals("com.sun.star.uno.Type")){
-                String sTreeNodeName = getPropertyTypeDescription(aProperty, getUnoReturnObject());
-                setUserObject(sTreeNodeName);
+            bIsFoldable = (!sTypeName.equals("com.sun.star.uno.Type"));
+        }
+        return bIsFoldable;
+    }
+
+
+    protected String getLabel(){
+        if (!sLabel.equals("")){
+            if (! isPrimitive()){
+                if (isFoldable()){
+                    sLabel = getPropertyTypeDescription(aProperty, getUnoReturnObject());
+                }
+                else{
+                    sLabel = getStandardPropertyDescription(aProperty, getUnoReturnObject());
+                }
             }
-            else{
-                String sTreeNodeName = getStandardPropertyDescription(aProperty);
-                setUserObject(sTreeNodeName);
-                addDummyNode();
+            else {
+                sLabel =  getStandardPropertyDescription(aProperty, getUnoReturnObject());
             }
         }
-        else {
-            String sTreeNodeName =  getPrimitivePropertyTypeDescription(aProperty, getUnoReturnObject());
-            setUserObject(sTreeNodeName);
-        }
-     }
+        return sLabel;
+    }
 
     public Property getProperty(){
         return aProperty;
@@ -257,23 +208,23 @@ public class UnoPropertyNode extends UnoNode{
     }
 
 
-    protected String getPrimitivePropertyTypeDescription(Property _aProperty, Object _objectElement){
-        return _aProperty.Name + " (" + _aProperty.Type.getTypeName() + ") = " + getDisplayValueOfPrimitiveType(_objectElement);
+    protected static String getStandardPropertyDescription(Property _aProperty, Object _objectElement){
+        if (!Introspector.isObjectPrimitive(_objectElement)){
+            return _aProperty.Name + " = (" + _aProperty.Type.getTypeName() + ") ";
+        }
+        else{
+            return _aProperty.Name + " (" + _aProperty.Type.getTypeName() + ") = " + getDisplayValueOfPrimitiveType(_objectElement);
+        }
     }
 
 
-    protected static String getStandardPropertyDescription(Property _aProperty){
-        return _aProperty.Name + " = (" + _aProperty.Type.getTypeName() + ") ";
-    }
-
-
-    protected static String getStandardNonPrimitivePropertyValueDescription(PropertyValue _aPropertyValue){
-        return _aPropertyValue.Name;
-    }
-
-
-    protected static String getStandardPrimitivePropertyValueDescription(PropertyValue _aPropertyValue){
-        return _aPropertyValue.Name + " : " + UnoNode.getDisplayValueOfPrimitiveType(_aPropertyValue.Value);
+    protected static String getStandardPropertyValueDescription(PropertyValue _aPropertyValue){
+        if (!Introspector.isObjectPrimitive(_aPropertyValue.Value)){
+            return _aPropertyValue.Name;
+        }
+        else{
+            return _aPropertyValue.Name + " : " + UnoNode.getDisplayValueOfPrimitiveType(_aPropertyValue.Value);
+        }
     }
 }
 

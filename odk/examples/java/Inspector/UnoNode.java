@@ -1,11 +1,10 @@
-
 /*************************************************************************
  *
  *  $RCSfile: UnoNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:02:17 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -61,34 +60,32 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 import java.util.List;
 import java.util.Vector;
-import javax.swing.tree.TreeNode;
 
-
-public abstract class UnoNode extends HideableMutableTreeNode{
+public class UnoNode{
 
     String sPath = null;
     Object m_oUnoObject;
     private XMultiComponentFactory m_xMultiComponentFactory;
     private XComponentContext m_xComponentContext;
-    protected static String SMETHODDESCRIPTION = "Methods";
-    protected static String SPROPERTYDESCRIPTION = "Properties";
-    protected static String SPROPERTYINFODESCRIPTION = "PropertyInfo";
-    protected static String SCONTAINERDESCRIPTION = "Container";
-    protected static String SSERVICEDESCRIPTION = "Services";
-    protected static String SINTERFACEDESCRIPTION = "Interfaces";
-    protected static String SCONTENTDESCRIPTION = "Content";
-    protected static String SPROPERTYVALUEDESCRIPTION = "PropertyValues";
+    private Object[] m_oParamObjects = null;
+    private int m_nNodeType = XUnoNode.nOTHERS;
+    private Type aType = null;
+    private String sLabel = "";
 
 
 
     /** Creates a new instance of UnoNode */
     public UnoNode(Object _oUnoObject) {
-        super();
         m_xComponentContext = Introspector.getIntrospector().getXComponentContext();
         m_xMultiComponentFactory = m_xComponentContext.getServiceManager();
         m_oUnoObject = _oUnoObject;
     }
 
+    public UnoNode(Object _oUnoObject, Type _aType) {
+        this(_oUnoObject);
+        aType = _aType;
+        m_nNodeType = XUnoNode.nINTERFACE;
+    }
 
     public Object getUnoObject(){
         return m_oUnoObject;
@@ -105,7 +102,7 @@ public abstract class UnoNode extends HideableMutableTreeNode{
     }
 
 
-    protected static XTypeDescriptionEnumerationAccess getXTypeDescriptionEnumerationAccess(){
+    private static XTypeDescriptionEnumerationAccess getXTypeDescriptionEnumerationAccess(){
        return Introspector.getIntrospector().getXTypeDescriptionEnumerationAccess();
     }
 
@@ -114,36 +111,45 @@ public abstract class UnoNode extends HideableMutableTreeNode{
         return "";
     }
 
+    public int getNodeType(){
+        return m_nNodeType;
+    }
+
+    public void setNodeType(int _nNodeType){
+        m_nNodeType = _nNodeType;
+    }
 
     public String getClassName(){
         String sClassName = "";
-        TreeNode oTreeNode = getParent();
-        if (oTreeNode != null){
-           if (oTreeNode instanceof UnoNode){
-               UnoNode oUnoNode = (UnoNode) oTreeNode;
-               sClassName = oUnoNode.getClassName();
-           }
+        if (m_nNodeType == XUnoNode.nINTERFACE){
+            sClassName = aType.getTypeName();
+        }
+        else if(m_nNodeType == XUnoNode.nSERVICE){
+            sClassName = sLabel;
         }
         return sClassName;
     }
 
 
-    public abstract String getName();
+    public Type getUnoType(){
+        return aType;
+    }
 
+    protected void  setLabel(String _sLabel){
+        sLabel = _sLabel;
+    }
 
-
-    public void openIdlDescription(){
+    public void openIdlDescription(String _sClassName){
     try{
-        String sClassName = getClassName();
         String sAnchor = getAnchor();
         String sFallbackUrl = "http://api.openoffice.org/docs/common/ref/com/sun/star/module-ix";
         String sIdlUrl = "http://api.openoffice.org/docs/common/ref/";
-        if (sClassName.equals("")){
+        if (_sClassName.equals("")){
             sIdlUrl = sFallbackUrl;
             sAnchor = "";
         }
         else{
-            sIdlUrl += sClassName.replace('.', '/');
+            sIdlUrl += _sClassName.replace('.', '/');
         }
         sIdlUrl += ".html";
         if (sAnchor != null){
@@ -161,7 +167,7 @@ public abstract class UnoNode extends HideableMutableTreeNode{
     }}
 
 
-    public com.sun.star.util.URL getDispatchURL(String _sURL){
+    private com.sun.star.util.URL getDispatchURL(String _sURL){
         try {
             Object oTransformer = getXMultiComponentFactory().createInstanceWithContext("com.sun.star.util.URLTransformer", getXComponentContext());
             XURLTransformer xTransformer = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
@@ -188,7 +194,7 @@ public abstract class UnoNode extends HideableMutableTreeNode{
     }}
 
 
-    public XDispatch getXDispatcher(com.sun.star.util.URL oURL) {
+    private XDispatch getXDispatcher(com.sun.star.util.URL oURL) {
     try {
         com.sun.star.util.URL[] oURLArray = new com.sun.star.util.URL[1];
         oURLArray[0] = oURL;
@@ -210,56 +216,32 @@ public abstract class UnoNode extends HideableMutableTreeNode{
 
 
 
-    protected boolean isFilterApplicable(String _sFilter){
+    public boolean isFilterApplicable(String _sFilter, String _sName){
         boolean bFilterDoesApply = true;
         if (_sFilter.length() > 0){
-            if (getName().indexOf(_sFilter) == -1){
+            if (_sName.indexOf(_sFilter) == -1){
                 bFilterDoesApply = false;
             }
         }
         return bFilterDoesApply;
     }
 
-    public void setVisible(String _sFilter){
-        boolean bisVisible = isFilterApplicable(_sFilter);
-        super.setVisible(bisVisible);
-    }
 
-
-    public static boolean isValid(Object[] _oObject){
-        if (_oObject != null){
-            if (_oObject.length > 0){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public static boolean isValid(Object _oObject){
-        if (_oObject != null){
-            return (!AnyConverter.isVoid(_oObject));
-        }
-        return false;
-    }
+//    public static String getServiceDescription(Object _oUnoObject){
+//        String sClassName = "";
+//        XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, _oUnoObject);
+//        if (xServiceInfo != null){
+//            String[] sChildServiceNames = removeMandatoryServiceNames(xServiceInfo.getSupportedServiceNames());
+//            if (sChildServiceNames.length > 0){
+//                sClassName = sChildServiceNames[0];
+//            }
+//        }
+//        return sClassName;
+//    }
 
 
 
-    public static String getServiceDescription(Object _oUnoObject){
-        String sClassName = "";
-        XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, _oUnoObject);
-        if (xServiceInfo != null){
-            String[] sChildServiceNames = deleteMandatoryServiceNames(xServiceInfo.getSupportedServiceNames());
-            if (sChildServiceNames.length > 0){
-                sClassName = sChildServiceNames[0];
-            }
-        }
-        return sClassName;
-    }
-
-
-
-    protected static String[] getMandatoryServiceNames(String _sServiceName){
+    private static String[] getMandatoryServiceNames(String _sServiceName){
     String[] sMandatoryServiceNames  = new String[]{};
     try {
         TypeClass[] eTypeClasses = new com.sun.star.uno.TypeClass[1];
@@ -285,7 +267,7 @@ public abstract class UnoNode extends HideableMutableTreeNode{
     }
 
 
-    protected static String[] deleteMandatoryServiceNames(String[] _sServiceNames){
+    private static String[] removeMandatoryServiceNames(String[] _sServiceNames){
     try{
         List aList = java.util.Arrays.asList(_sServiceNames);
         Vector aVector = new Vector(aList);
@@ -308,7 +290,7 @@ public abstract class UnoNode extends HideableMutableTreeNode{
     }
 
 
-    protected  static String getDisplayValueOfPrimitiveType(Object _objectElement){
+    public  static String getDisplayValueOfPrimitiveType(Object _objectElement){
     String sValue ="";
     try{
         if (AnyConverter.isString(_objectElement)){
@@ -426,12 +408,12 @@ public abstract class UnoNode extends HideableMutableTreeNode{
     }
 
 
-    protected static String getNodeDescription(Object _oUnoObject, int _nIndex){
+    public static String getNodeDescription(Object _oUnoObject, int _nIndex){
         return getNodeDescription(_oUnoObject) + "[" + (_nIndex + 1) + "]";
     }
 
 
-    protected static String getNodeDescription(Object _oUnoObject){
+    public static String getNodeDescription(Object _oUnoObject){
         XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
         if ( xServiceInfo != null ) {
             return xServiceInfo.getImplementationName();
@@ -445,4 +427,11 @@ public abstract class UnoNode extends HideableMutableTreeNode{
         }
     }
 
+    public void setParameterObjects(Object[] _oParamObjects){
+        m_oParamObjects = _oParamObjects;
+    }
+
+    public Object[] getParameterObjects(){
+        return m_oParamObjects;
+    }
 }

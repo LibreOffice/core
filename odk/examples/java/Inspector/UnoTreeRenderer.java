@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoTreeRenderer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:03:11 $
+ *  last change: $Author: rt $ $Date: 2007-01-30 08:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -83,28 +83,28 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
         Component rc = super.getTreeCellRendererComponent( tree, value, sel,expanded, leaf, row,hasFocus);
         String  sLabelText = (String)node.getUserObject();
         if (sLabelText != null){
-            if (sLabelText.equals(UnoNode.SCONTAINERDESCRIPTION)){
+            if (sLabelText.equals(XUnoFacetteNode.SCONTAINERDESCRIPTION)){
                 setIcon(m_oContainerIcon);
             }
-            else if (sLabelText.equals(UnoNode.SCONTENTDESCRIPTION)){
+            else if (sLabelText.equals(XUnoFacetteNode.SCONTENTDESCRIPTION)){
                 setIcon(m_oContentIcon);
             }
-            else if (sLabelText.equals(UnoNode.SINTERFACEDESCRIPTION)){
+            else if (sLabelText.equals(XUnoFacetteNode.SINTERFACEDESCRIPTION)){
                 setIcon(m_oInterfaceIcon);
             }
-            else if (sLabelText.equals(UnoNode.SMETHODDESCRIPTION)){
+            else if (sLabelText.equals(XUnoFacetteNode.SMETHODDESCRIPTION)){
                 setIcon(m_oMethodIcon);
             }
-            else if (sLabelText.equals(UnoNode.SPROPERTYDESCRIPTION)){
+            else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYDESCRIPTION)){
                 setIcon(m_oPropertyIcon);
             }
-            else if (sLabelText.startsWith(UnoNode.SPROPERTYINFODESCRIPTION)){
+            else if (sLabelText.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
                 setIcon(m_oPropertyIcon);
             }
-            else if (sLabelText.equals(UnoNode.SPROPERTYVALUEDESCRIPTION)){
+            else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION)){
                 setIcon(m_oPropertyValueIcon);
             }
-            else if (sLabelText.equals(UnoNode.SSERVICEDESCRIPTION)){
+            else if (sLabelText.equals(XUnoFacetteNode.SSERVICEDESCRIPTION)){
                 setIcon(m_oServiceIcon);
             }
             else{
