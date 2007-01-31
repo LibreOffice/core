@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:39:22 $
+ *  last change: $Author: rt $ $Date: 2007-01-31 13:04:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1947,14 +1947,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 /*****************************************************************************/
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
-#if defined(LINUX) || defined(FREEBSD)
     socklen_t AddrLen;
-#else
-    /* mfe: Solaris 'cc +w' means Addrlen should be signed! */
-    /*      it's really defined as 'int*' in /usr/include/sys/socket.h! */
-    /*      the man page says it expects a 'size_t' */
-    int AddrLen;
-#endif
     struct sockaddr Addr;
     oslSocketAddr  pAddr;
 
@@ -1963,7 +1956,7 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 
     AddrLen= sizeof(struct sockaddr);
 
-    if (getsockname(pSocket->m_Socket, &Addr, PTR_SIZE_T(AddrLen)) == OSL_SOCKET_ERROR)
+    if (getsockname(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
         return ((oslSocketAddr)NULL);
 
     pAddr = __osl_createSocketAddrFromSystem( &Addr );
@@ -1975,7 +1968,7 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 /*****************************************************************************/
 oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
 {
-    sal_uInt32 AddrLen;
+    socklen_t AddrLen;
     struct sockaddr Addr;
 
     OSL_ASSERT(pSocket);
@@ -1987,7 +1980,7 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
     pSocket->m_nLastError=0;
     AddrLen= sizeof(struct sockaddr);
 
-    if(getpeername(pSocket->m_Socket, &Addr, PTR_SIZE_T(AddrLen)) == OSL_SOCKET_ERROR)
+    if(getpeername(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
     {
         pSocket->m_nLastError=errno;
         return 0;
@@ -2149,26 +2142,11 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
         if ( FD_ISSET(pSocket->m_Socket, &WriteSet ) )
         {
             int nErrorCode = 0;
-#ifdef SOLARIS
-/*  mfe: Solaris 'cc +w' means 5th argument should be a 'int*'!
-         it's really defined as 'int*' in /usr/include/sys/socket.h!
-         the man page says it expects a 'size_t*'
-*/
-            int nErrorSize = sizeof( nErrorCode );
-#else
-            size_t nErrorSize = sizeof( nErrorCode );
-#endif
+            socklen_t nErrorSize = sizeof( nErrorCode );
 
             int nSockOpt;
 
             nSockOpt = getsockopt ( pSocket->m_Socket, SOL_SOCKET, SO_ERROR,
-#ifdef SOLARIS
-/*  mfe: Solaris 'cc +w' means 4th argument should be a 'char*'!
-         it's really defined as 'char*' in /usr/include/sys/socket.h!
-         the man page says it expects a 'void*'
-*/
-                                    (char*)
-#endif
                                     &nErrorCode, &nErrorSize );
             if ( (nSockOpt == 0) && (nErrorCode == 0))
                 Result = osl_Socket_Ok;
@@ -2214,9 +2192,9 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
 {
     struct sockaddr Addr;
     int Connection, Flags;
-    sal_uInt32 AddrLen = sizeof(struct sockaddr);
     oslSocket pConnectionSockImpl;
 
+    socklen_t AddrLen = sizeof(struct sockaddr);
     OSL_ASSERT(pSocket);
     if ( pSocket == 0 )
     {
@@ -2237,7 +2215,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     /* prevent Linux EINTR behaviour */
     do
     {
-        Connection = accept(pSocket->m_Socket, &Addr, PTR_SIZE_T(AddrLen));
+        Connection = accept(pSocket->m_Socket, &Addr, &AddrLen);
     } while (Connection == -1 && errno == EINTR);
 
 
@@ -2352,7 +2330,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
 {
     int nRead;
     struct sockaddr *pSystemSockAddr = 0;
-    int AddrLen = 0;
+    socklen_t AddrLen = 0;
     if( pSenderAddr )
     {
         AddrLen = sizeof( struct sockaddr );
@@ -2373,7 +2351,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
                      BufferSize,
                      MSG_FLAG_TO_NATIVE(Flag),
                      pSystemSockAddr,
-                     PTR_SIZE_T(AddrLen));
+                     &AddrLen);
 
     if ( nRead < 0 )
     {
@@ -2728,6 +2706,8 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
                             void*                   pBuffer,
                             sal_uInt32                  BufferLen)
 {
+    socklen_t nOptLen = (socklen_t) BufferLen;
+
     OSL_ASSERT(pSocket);
     if ( pSocket == 0 )
     {
@@ -2740,7 +2720,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
                   OPTION_LEVEL_TO_NATIVE(Level),
                   OPTION_TO_NATIVE(Option),
                   (sal_Char*)pBuffer,
-                  PTR_SIZE_T(BufferLen)) == -1)
+                  &nOptLen) == -1)
     {
         pSocket->m_nLastError=errno;
         return -1;
@@ -2847,7 +2827,7 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
 oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
 {
     int Type=0;
-    sal_uInt32 TypeSize= sizeof(Type);
+    socklen_t TypeSize= sizeof(Type);
 
     OSL_ASSERT(pSocket);
     if ( pSocket == 0 )
@@ -2861,7 +2841,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
                   OPTION_LEVEL_TO_NATIVE(osl_Socket_LevelSocket),
                   OPTION_TO_NATIVE(osl_Socket_OptionType),
                   (sal_Char*)&Type,
-                  PTR_SIZE_T(TypeSize)) == -1)
+                  &TypeSize) == -1)
     {
         /* error */
         pSocket->m_nLastError=errno;
