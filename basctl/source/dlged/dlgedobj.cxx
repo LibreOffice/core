@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:51:37 $
+ *  last change: $Author: rt $ $Date: 2007-01-31 13:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     DBG_ASSERT( xPSetForm.is(), "DlgEdObj::TransformControlToSdrCoordinates: no form property set!" );
     if ( !xPSetForm.is() )
         return false;
-    sal_Int32 nFormX, nFormY, nFormWidth, nFormHeight;
+    sal_Int32 nFormX = 0, nFormY = 0, nFormWidth, nFormHeight;
     xPSetForm->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nFormX;
     xPSetForm->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nFormY;
     xPSetForm->getPropertyValue( DLGED_PROP_WIDTH ) >>= nFormWidth;
@@ -458,7 +458,7 @@ void DlgEdObj::SetRectFromProps()
     Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
     if ( xPSet.is() )
     {
-        sal_Int32 nXIn, nYIn, nWidthIn, nHeightIn;
+        sal_Int32 nXIn = 0, nYIn = 0, nWidthIn = 0, nHeightIn = 0;
         xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nXIn;
         xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nYIn;
         xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidthIn;
@@ -533,13 +533,13 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
             Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
             if ( xPSet.is() )
             {
-                sal_Int32 nX, nY, nWidth, nHeight;
+                sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
                 xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nX;
                 xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nY;
                 xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
                 xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nHeight;
 
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 evt.NewValue >>= nValue;
                 sal_Int32 nNewValue = nValue;
 
@@ -732,9 +732,9 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
                 );
 
             // check tab index
-            sal_Int16 nOldTabIndex;
+            sal_Int16 nOldTabIndex = 0;
             evt.OldValue >>= nOldTabIndex;
-            sal_Int16 nNewTabIndex;
+            sal_Int16 nNewTabIndex = 0;
             evt.NewValue >>= nNewTabIndex;
             if ( nNewTabIndex < 0 )
                 nNewTabIndex = 0;
@@ -1520,7 +1520,7 @@ void DlgEdForm::SetRectFromProps()
     Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
     if ( xPSet.is() )
     {
-        sal_Int32 nXIn, nYIn, nWidthIn, nHeightIn;
+        sal_Int32 nXIn = 0, nYIn = 0, nWidthIn = 0, nHeightIn = 0;
         xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nXIn;
         xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nYIn;
         xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidthIn;
@@ -1607,7 +1607,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                 Reference< beans::XPropertySet > xPSetForm( GetUnoControlModel(), UNO_QUERY );
                 if ( xPSetForm.is() )
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     evt.NewValue >>= nValue;
                     sal_Int32 nNewValue = nValue;
 
@@ -1661,7 +1661,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                         Reference< beans::XPropertySet > xPSet( (*aIter)->GetUnoControlModel(), UNO_QUERY );
                         if ( xPSet.is() )
                         {
-                            sal_Int32 nX, nY, nWidth, nHeight;
+                            sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
                             xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nX;
                             xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nY;
                             xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
