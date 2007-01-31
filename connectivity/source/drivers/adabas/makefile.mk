@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 05:25:38 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:34:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,8 @@ SLOFILES=\
         $(SLO)$/BStatement.obj                  \
         $(SLO)$/BResultSetMetaData.obj			\
         $(SLO)$/BResultSet.obj
-        
-.IF "$(OS)"=="MACOSX"
-#SHL1VERSIONMAP=$(ADABAS_TARGET).$(DLLPOSTFIX).map
-.ELSE      
+
 SHL1VERSIONMAP=$(ADABAS_TARGET).map
-.ENDIF
 
 # --- Library -----------------------------------
 
