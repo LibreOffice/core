@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 14:31:29 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:35:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,13 +61,8 @@ SLOFILES=\
         $(SLO)$/YUser.obj				\
         $(SLO)$/YUsers.obj				\
         $(SLO)$/Yservices.obj
-        
 
-.IF "$(OS)"=="MACOSX"
-#SHL1VERSIONMAP=$(MYSQL_TARGET).$(DLLPOSTFIX).map
-.ELSE      
 SHL1VERSIONMAP=$(MYSQL_TARGET).map
-.ENDIF
 
 # --- Library -----------------------------------
 
