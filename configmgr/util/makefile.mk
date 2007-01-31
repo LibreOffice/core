@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:26:28 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:43:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,9 @@ DLLPRE =
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR).uno
-.IF "$(OS)"=="MACOSX"
-#SHL1VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
-.ELSE
+
 SHL1VERSIONMAP= $(TARGET).map
-.ENDIF
+
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(COMPHELPERLIB)			\
