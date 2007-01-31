@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-02 12:47:43 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:36:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,7 @@ SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
-.IF "$(OS)"=="MACOSX"
-.ELSE
 SHL1VERSIONMAP=exports.map
-.ENDIF 
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
