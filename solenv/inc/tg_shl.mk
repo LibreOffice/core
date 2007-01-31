@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:42 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:59:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,8 @@ $(USE_SHL$(TNR)VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL$(TNR)VERSIONMAP): \
@@ -179,20 +177,47 @@ $(USE_SHL$(TNR)VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET)$(SHL$(TNR)VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL$(TNR)OBJS)"!=""
+    +-echo $(foreach,i,$(SHL$(TNR)OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL$(TNR)LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
@@ -386,16 +411,11 @@ $(SHL$(TNR)TARGETN) : \
     @echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL$(TNR)STDLIBS)` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-.IF "$(SHL$(TNR)VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL$(TNR)VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
