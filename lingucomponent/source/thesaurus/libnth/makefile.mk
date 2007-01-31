@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:44:10 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:44:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,9 +127,8 @@ SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-.IF "$(OS)"!="MACOSX"
+
 SHL1VERSIONMAP= $(TARGET).map
-.ENDIF
 
 # build DEF file
 DEF1NAME	 =$(SHL1TARGET)
