@@ -105,10 +105,8 @@ $(USE_SHL1VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL1VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL1VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL1VERSIONMAP): \
@@ -142,20 +140,47 @@ $(USE_SHL1VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL1VERSIONMAP)"!=""
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1VERSIONMAP:b)_$(SHL1TARGET)$(SHL1VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL1VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL1VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL1VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL1VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL1OBJS)"!=""
+    +-echo $(foreach,i,$(SHL1OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL1LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL1VERSIONMAP)"!=""
@@ -349,16 +374,11 @@ $(SHL1TARGETN) : \
     @echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
-.IF "$(SHL1VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL1VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -515,10 +535,8 @@ $(USE_SHL2VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL2VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL2VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL2VERSIONMAP): \
@@ -552,20 +570,47 @@ $(USE_SHL2VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL2VERSIONMAP)"!=""
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2VERSIONMAP:b)_$(SHL2TARGET)$(SHL2VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL2VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL2VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL2VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL2VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL2OBJS)"!=""
+    +-echo $(foreach,i,$(SHL2OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL2LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL2VERSIONMAP)"!=""
@@ -759,16 +804,11 @@ $(SHL2TARGETN) : \
     @echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
-.IF "$(SHL2VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL2VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -925,10 +965,8 @@ $(USE_SHL3VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL3VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL3VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL3VERSIONMAP): \
@@ -962,20 +1000,47 @@ $(USE_SHL3VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL3VERSIONMAP)"!=""
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3VERSIONMAP:b)_$(SHL3TARGET)$(SHL3VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL3VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL3VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL3VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL3VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL3OBJS)"!=""
+    +-echo $(foreach,i,$(SHL3OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL3LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL3VERSIONMAP)"!=""
@@ -1169,16 +1234,11 @@ $(SHL3TARGETN) : \
     @echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
-.IF "$(SHL3VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL3VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -1335,10 +1395,8 @@ $(USE_SHL4VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL4VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL4VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL4VERSIONMAP): \
@@ -1372,20 +1430,47 @@ $(USE_SHL4VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL4VERSIONMAP)"!=""
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4VERSIONMAP:b)_$(SHL4TARGET)$(SHL4VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL4VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL4VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL4VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL4VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL4OBJS)"!=""
+    +-echo $(foreach,i,$(SHL4OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL4LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL4VERSIONMAP)"!=""
@@ -1579,16 +1664,11 @@ $(SHL4TARGETN) : \
     @echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
-.IF "$(SHL4VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL4VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -1745,10 +1825,8 @@ $(USE_SHL5VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL5VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL5VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL5VERSIONMAP): \
@@ -1782,20 +1860,47 @@ $(USE_SHL5VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL5VERSIONMAP)"!=""
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5VERSIONMAP:b)_$(SHL5TARGET)$(SHL5VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL5VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL5VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL5VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL5VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL5OBJS)"!=""
+    +-echo $(foreach,i,$(SHL5OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL5LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL5VERSIONMAP)"!=""
@@ -1989,16 +2094,11 @@ $(SHL5TARGETN) : \
     @echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
-.IF "$(SHL5VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL5VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -2155,10 +2255,8 @@ $(USE_SHL6VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL6VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL6VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL6VERSIONMAP): \
@@ -2192,20 +2290,47 @@ $(USE_SHL6VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL6VERSIONMAP)"!=""
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6VERSIONMAP:b)_$(SHL6TARGET)$(SHL6VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL6VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL6VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL6VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL6VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL6OBJS)"!=""
+    +-echo $(foreach,i,$(SHL6OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL6LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL6VERSIONMAP)"!=""
@@ -2399,16 +2524,11 @@ $(SHL6TARGETN) : \
     @echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
-.IF "$(SHL6VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL6VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -2565,10 +2685,8 @@ $(USE_SHL7VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL7VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL7VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL7VERSIONMAP): \
@@ -2602,20 +2720,47 @@ $(USE_SHL7VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL7VERSIONMAP)"!=""
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7VERSIONMAP:b)_$(SHL7TARGET)$(SHL7VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL7VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL7VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL7VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL7VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL7OBJS)"!=""
+    +-echo $(foreach,i,$(SHL7OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL7LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL7VERSIONMAP)"!=""
@@ -2809,16 +2954,11 @@ $(SHL7TARGETN) : \
     @echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
-.IF "$(SHL7VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL7VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -2975,10 +3115,8 @@ $(USE_SHL8VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL8VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL8VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL8VERSIONMAP): \
@@ -3012,20 +3150,47 @@ $(USE_SHL8VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL8VERSIONMAP)"!=""
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8VERSIONMAP:b)_$(SHL8TARGET)$(SHL8VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL8VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL8VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL8VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL8VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL8OBJS)"!=""
+    +-echo $(foreach,i,$(SHL8OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL8LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL8VERSIONMAP)"!=""
@@ -3219,16 +3384,11 @@ $(SHL8TARGETN) : \
     @echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
-.IF "$(SHL8VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL8VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -3385,10 +3545,8 @@ $(USE_SHL9VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL9VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL9VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL9VERSIONMAP): \
@@ -3422,20 +3580,47 @@ $(USE_SHL9VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL9VERSIONMAP)"!=""
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9VERSIONMAP:b)_$(SHL9TARGET)$(SHL9VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL9VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL9VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL9VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL9VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL9OBJS)"!=""
+    +-echo $(foreach,i,$(SHL9OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL9LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL9VERSIONMAP)"!=""
@@ -3629,16 +3814,11 @@ $(SHL9TARGETN) : \
     @echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
-.IF "$(SHL9VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL9VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -3795,10 +3975,8 @@ $(USE_SHL10VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL10VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL10VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL10VERSIONMAP): \
@@ -3832,20 +4010,47 @@ $(USE_SHL10VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL10VERSIONMAP)"!=""
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10VERSIONMAP:b)_$(SHL10TARGET)$(SHL10VERSIONMAP:e)
-.IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 SHL10VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL10VERSIONMAP)
-.ENDIF
 .ENDIF
 
 $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
     @-$(RM) -f $@ >& $(NULLDEV)
+
+# The following files will only be generated and needed on Mac OS X as temporary files
+# in order to generate exported symbols list out of Linux/Solaris map files
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+.ENDIF
+
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL10VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL10VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
+
+# Mac OS X post-processing generate an exported symbols list from the generated map file
+# for details on exported symbols list see man ld on Mac OS X
+.IF "$(OS)"=="MACOSX"
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL10OBJS)"!=""
+    +-echo $(foreach,i,$(SHL10OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL10LIBS)"!=""	
+    +-$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated 
+# exported symbols list
+    +cp $@.exported-symbols $@ 
+.ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL10VERSIONMAP)"!=""
@@ -4039,16 +4244,11 @@ $(SHL10TARGETN) : \
     @echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
-.IF "$(SHL10VERSIONMAP)"!=""
-.IF "$(DEBUG)"==""
-    @strip -i -r -u -S -s $(SHL10VERSIONMAP) $@
-.ENDIF
-.ENDIF
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
