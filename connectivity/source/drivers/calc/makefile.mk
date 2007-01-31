@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 05:36:28 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:34:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,8 @@ SLOFILES=\
     $(SLO)$/Cservices.obj			\
     $(SLO)$/CDriver.obj
 
-.IF "$(OS)"!="MACOSX"
 SHL1VERSIONMAP= $(TARGET).map
-.ENDIF
+
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
