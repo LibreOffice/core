@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:51:25 $
+ *  last change: $Author: rt $ $Date: 2007-01-31 13:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -617,7 +617,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
         if ( xPSet.is() )
         {
             // get dialog size from properties
-            sal_Int32 nWidth, nHeight;
+            sal_Int32 nWidth = 0, nHeight = 0;
             xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
             xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nHeight;
 
@@ -1417,7 +1417,7 @@ bool DlgEditor::AdjustPageSize()
     Reference< beans::XPropertySet > xPSet( m_xUnoControlDialogModel, UNO_QUERY );
     if ( xPSet.is() )
     {
-        sal_Int32 nFormXIn, nFormYIn, nFormWidthIn, nFormHeightIn;
+        sal_Int32 nFormXIn = 0, nFormYIn = 0, nFormWidthIn = 0, nFormHeightIn = 0;
         xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nFormXIn;
         xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nFormYIn;
         xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nFormWidthIn;
