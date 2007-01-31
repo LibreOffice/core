@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 01:21:58 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:34:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,11 +86,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/DDriver.obj
 
 
-.IF "$(OS)"=="MACOSX"
-#SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map
-.ELSE      
 SHL1VERSIONMAP=$(TARGET).map
-.ENDIF
+
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
