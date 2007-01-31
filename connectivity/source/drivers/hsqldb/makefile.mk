@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 12:45:45 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:35:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,13 +86,8 @@ SLOFILES=\
         $(SLO)$/HUsers.obj                      \
         $(SLO)$/Hservices.obj                   \
         $(SLO)$/accesslog.obj
-        
 
-.IF "$(OS)"=="MACOSX"
-#SHL1VERSIONMAP=$(HSQLDB_TARGET).$(DLLPOSTFIX).map
-.ELSE      
 SHL1VERSIONMAP=$(HSQLDB_TARGET).map
-.ENDIF
 
 # --- Library -----------------------------------
 
