@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-18 14:14:53 $
+#   last change: $Author: rt $ $Date: 2007-01-31 08:42:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,8 @@ DLLPRE=lib
 DLLPOST=.dylib
 
 # We don't use mapping on MacOS X
-LINKVERSIONMAPFLAG=-Wl,--version-script
+#LINKVERSIONMAPFLAG=-Wl,--version-script
+LINKVERSIONMAPFLAG=-Wl,-exported_symbols_list
 
 SONAME_SWITCH=-Wl,-h
 
