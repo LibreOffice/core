@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 15:55:26 $
+ *  last change: $Author: rt $ $Date: 2007-01-31 13:04:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,6 @@
 #   elif __BYTE_ORDER == __PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#   define  PTR_SIZE_T(s)               ((size_t *)&(s))
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
@@ -156,7 +155,6 @@
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN_OO
 #   endif
-#   define  PTR_SIZE_T(s)               ((size_t *)&(s))
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
@@ -247,7 +245,6 @@ extern unsigned int nanosleep(unsigned int);
 #   define  sched_yield()               pthread_yield()
 #   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
 #   define  LIBPATH "LIBPATH"
-#   define  PTR_SIZE_T(s)               ((size_t *)&(s))
 #   define  NO_PTHREAD_SEMAPHORES
 #   define  NO_DL_FUNCTIONS
 #endif
@@ -265,7 +262,6 @@ extern unsigned int nanosleep(unsigned int);
 #   include <crypt.h>
 #   include <machine/param.h>
 #   define  LIBPATH "SHLIB_PATH"
-#   define  PTR_SIZE_T(s)               ((int *)&(s))
 #   define  PTR_FD_SET(s)               ((int *)&(s))
 #   define  PTHREAD_VALUE(t)            ((t).field2)
 #   define  PTHREAD_NONE_INIT           { 0, -1 }
@@ -302,7 +298,6 @@ extern unsigned int nanosleep(unsigned int);
 #   endif
 #   define  SA_FAMILY_DECL \
         union { struct { short sa_family2; } sa_generic; } sa_union
-#   define  PTR_SIZE_T(s)               ((int *)&(s))
 #   define  NO_PTHREAD_PRIORITY
 #   include <dlfcn.h>
 #   define  IOCHANNEL_TRANSFER_BSD
@@ -322,7 +317,6 @@ extern char *strdup(const char *);
 #   define  IORESOURCE_TRANSFER_SYSV
 #   define  IOCHANNEL_TRANSFER_BSD
 #   define  LIBPATH "LD_LIBRARY_PATH"
-#   define  PTR_SIZE_T(s)               ((int *)&(s))
 #endif
 
 #ifdef MACOSX
@@ -404,10 +398,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #else
 #   error undetermined endianess
 #endif
-#endif
-
-#ifndef PTR_SIZE_T
-#   define PTR_SIZE_T(s)                (&(s))
 #endif
 
 #ifndef PTR_FD_SET
