@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-31 13:04:51 $
+ *  last change: $Author: rt $ $Date: 2007-02-01 12:52:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -923,11 +923,11 @@ void DlgEditor::Copy()
             uno::Reference< resource::XStringResourceManager >
                 xStringResourceManager( xStringResourcePersistence, uno::UNO_QUERY );
             LocalizationMgr::resetResourceForDialog( xClipDialogModel, xStringResourceManager );
-            Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel, xContext );
-            Reference< XInputStream > xStream( xISP->createInputStream() );
+            Reference< XInputStreamProvider > xISP2 = ::xmlscript::exportDialogModel( xClipDialogModel, xContext );
+            Reference< XInputStream > xStream2( xISP2->createInputStream() );
             Sequence< sal_Int8 > NoResourceDialogModelBytes;
-            implCopyStreamToByteSequence( xStream, NoResourceDialogModelBytes );
-            xStream->closeInput();
+            implCopyStreamToByteSequence( xStream2, NoResourceDialogModelBytes );
+            xStream2->closeInput();
 
             // Old format contains dialog with replaced ids
             Sequence< Any > aSeqData(2);
