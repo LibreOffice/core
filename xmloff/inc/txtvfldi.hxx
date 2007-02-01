@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 14:46:31 $
+ *  last change: $Author: rt $ $Date: 2007-02-01 09:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,6 @@ class XMLVarFieldImportContext : public XMLTextFieldImportContext
 protected:
     const ::rtl::OUString sPropertyContent;
     const ::rtl::OUString sPropertyHint;
-    const ::rtl::OUString sPropertyHelp;
-    const ::rtl::OUString sPropertyTooltip;
     const ::rtl::OUString sPropertyIsVisible;
     const ::rtl::OUString sPropertyIsDisplayFormula;
     const ::rtl::OUString sPropertyCurrentPresentation;
@@ -174,8 +172,6 @@ private:
     ::rtl::OUString sName;              /// name attribute
     ::rtl::OUString sFormula;           /// formula attribute
     ::rtl::OUString sDescription;       /// description
-    ::rtl::OUString sHelp;              /// help text
-    ::rtl::OUString sHint;              /// hint
     XMLValueImportHelper aValueHelper;  /// value, value-type, and style
     sal_Bool bDisplayFormula;           /// display formula?(rather than value)
     sal_Bool bDisplayNone;              /// hide field?
@@ -183,16 +179,12 @@ private:
     sal_Bool bNameOK;                   /// sName was set
     sal_Bool bFormulaOK;                /// sFormula was set
     sal_Bool bDescriptionOK;            /// sDescription was set
-    sal_Bool bHelpOK;                   /// sHelp was set
-    sal_Bool bHintOK;                   /// sHint was set
     sal_Bool bDisplayOK;                /// sDisplayFormula/-None were set
 
     sal_Bool bSetName;                  /// set sName with ???-property
     sal_Bool bSetFormula;               /// set Formula property
     sal_Bool bSetFormulaDefault;        /// use content as default for formula
     sal_Bool bSetDescription;           /// set sDescription with Hint-property
-    sal_Bool bSetHelp;
-    sal_Bool bSetHint;
     sal_Bool bSetVisible;               /// set IsVisible
     sal_Bool bSetDisplayFormula;        /// set DisplayFormula (sub type???)
     sal_Bool bSetPresentation;          /// set presentation frm elem. content?
@@ -213,8 +205,6 @@ public:
         sal_Bool bFormula,              /// set Formula property
         sal_Bool bFormulaDefault,       /// use content as default for formula
         sal_Bool bDescription,          /// set sDescription with Hint-property
-        sal_Bool bHelp,
-        sal_Bool bHint,
         sal_Bool bVisible,              /// set IsVisible (display attr)
         sal_Bool bDisplayFormula,       /// set ??? (display attr.)
         sal_Bool bType,                 /// set value type with ???-property
@@ -341,8 +331,6 @@ public:
         sal_Bool bFormula,              /// see XMLTextFieldImportContext
         sal_Bool bFormulaDefault,       /// see XMLTextFieldImportContext
         sal_Bool bDescription,          /// see XMLTextFieldImportContext
-        sal_Bool bHelp,                 /// see XMLTextFieldImportContext
-        sal_Bool bHint,                 /// see XMLTextFieldImportContext
         sal_Bool bVisible,              /// see XMLTextFieldImportContext
         sal_Bool bDisplayFormula,       /// see XMLTextFieldImportContext
         sal_Bool bType,                 /// see XMLTextFieldImportContext

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 14:47:41 $
+ *  last change: $Author: rt $ $Date: 2007-02-01 09:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -906,7 +906,6 @@ namespace xmloff { namespace token {
         TOKEN( "header-style",                    XML_HEADER_STYLE ),
         TOKEN( "headers",                         XML_HEADERS ),
         TOKEN( "height",                          XML_HEIGHT ),
-        TOKEN( "help",                            XML_HELP ),
         TOKEN( "help-file-name",                  XML_HELP_FILE_NAME ),
         TOKEN( "help-id",                         XML_HELP_ID ),
         TOKEN( "help-message",                    XML_HELP_MESSAGE ),
@@ -918,7 +917,6 @@ namespace xmloff { namespace token {
         TOKEN( "hide-shape",                      XML_HIDE_SHAPE ),
         TOKEN( "hide-text",                       XML_HIDE_TEXT ),
         TOKEN( "highlighted-range",               XML_HIGHLIGHTED_RANGE ),
-        TOKEN( "hint",                            XML_HINT ),
         TOKEN( "horizontal",                      XML_HORIZONTAL ),
         TOKEN( "horizontal-lines",                XML_HORIZONTAL_LINES ),
         // --> OD 2005-05-12 #i49139#
