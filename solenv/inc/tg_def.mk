@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-29 11:44:56 $
+#   last change: $Author: rt $ $Date: 2007-02-01 09:59:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 
 DEF$(TNR)FILTER=$(SOLARENV)$/inc$/dummy.flt
 
-RMHACK:=$(RM)
+RMHACK$(TNR):=$(RM)
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
@@ -79,7 +79,7 @@ BUILD_DRIVE$(TNR):=$(shell echo %_disk)
 .IF "$(BUILD_DRIVE$(TNR))"=="O"
 # in case of RE build, protect against failed lock
 EXPORT$(TNR)_PROTECT=$(TMP)$/$(DEF$(TNR)UNIQE:b).bat &&
-RMHACK:=$(RM:s/+//)
+RMHACK$(TNR):=$(RM:s/+//)
 .ELSE			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 
@@ -120,14 +120,14 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
-    @-$(EXPORT$(TNR)_PROTECT) $(RMHACK) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    @-$(EXPORT$(TNR)_PROTECT) $(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
     @$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(DEF$(TNR)CEXP)"!=""
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ELSE
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ENDIF
-    $(EXPORT$(TNR)_PROTECT) $(RMHACK) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    $(EXPORT$(TNR)_PROTECT) $(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
     @$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB$(TNR)NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
 .IF "$(DEF$(TNR)CEXP)"!=""
