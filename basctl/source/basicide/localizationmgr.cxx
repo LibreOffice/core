@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:48:15 $
+ *  last change: $Author: rt $ $Date: 2007-02-01 11:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -890,6 +890,11 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     sal_Int32 nChangedCount = implHandleControlResourceProperties
         ( aControlAny, aDialogName, aNewCtrlName, xStringResourceManager,
           xDummyStringResolver, RENAME_CONTROL_IDS );
+    // HACK to make code warning free
+    // What did you really use nChangedCount for?
+    if( nChangedCount )
+        nChangedCount ++;
+
 }
 
 
