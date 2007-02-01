@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 14:52:35 $
+ *  last change: $Author: rt $ $Date: 2007-02-01 10:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,8 +345,6 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_FIXED, XML_TOK_TEXTFIELD_FIXED },
     { XML_NAMESPACE_TEXT, XML_DESCRIPTION,  XML_TOK_TEXTFIELD_DESCRIPTION },
-    { XML_NAMESPACE_TEXT, XML_HELP, XML_TOK_TEXTFIELD_HELP },
-    { XML_NAMESPACE_TEXT, XML_HINT, XML_TOK_TEXTFIELD_HINT },
     { XML_NAMESPACE_TEXT, XML_PLACEHOLDER_TYPE,
                 XML_TOK_TEXTFIELD_PLACEHOLDER_TYPE },
     { XML_NAMESPACE_TEXT, XML_NAME, XML_TOK_TEXTFIELD_NAME },
@@ -4031,13 +4029,9 @@ XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
     sName(),
     nSelected( -1 ),
     bNameOK( false ),
-    bHelpOK(false),
-    bHintOK(false),
     sPropertyItems( RTL_CONSTASCII_USTRINGPARAM( "Items" ) ),
     sPropertySelectedItem( RTL_CONSTASCII_USTRINGPARAM( "SelectedItem" ) ),
-    sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
-    sPropertyHelp( RTL_CONSTASCII_USTRINGPARAM( "Help" ) ),
-    sPropertyToolTip( RTL_CONSTASCII_USTRINGPARAM( "Tooltip" ) )
+    sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
 {
     bValid = sal_True;
 }
@@ -4103,17 +4097,8 @@ void XMLDropDownFieldImportContext::ProcessAttribute(
         sName = sAttrValue;
         bNameOK = true;
     }
-    else if (nAttrToken == XML_TOK_TEXTFIELD_HELP)
-    {
-        sHelp = sAttrValue;
-        bHelpOK = true;
-    }
-    else if (nAttrToken == XML_TOK_TEXTFIELD_HINT)
-    {
-        sHint = sAttrValue;
-        bHintOK = true;
-    }
 }
+
 
 void XMLDropDownFieldImportContext::PrepareField(
     const Reference<XPropertySet>& xPropertySet)
@@ -4143,19 +4128,6 @@ void XMLDropDownFieldImportContext::PrepareField(
         aAny <<= sName;
         xPropertySet->setPropertyValue( sPropertyName, aAny );
     }
-    // set help
-    if( bHelpOK )
-    {
-        aAny <<= sHelp;
-        xPropertySet->setPropertyValue( sPropertyHelp, aAny );
-    }
-    // set hint
-    if( bHintOK )
-    {
-        aAny <<= sHint;
-        xPropertySet->setPropertyValue( sPropertyToolTip, aAny );
-    }
-
 }
 
 /** import header fields (<draw:header>) */
