@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:53:04 $
+ *  last change: $Author: rt $ $Date: 2007-02-01 08:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ public:
             < ::com::sun::star::container::XNameContainer > xDialogLib );
 
     // Clipboard
-    static void LocalizationMgr::resetResourceForDialog(
+    static void resetResourceForDialog(
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
 
