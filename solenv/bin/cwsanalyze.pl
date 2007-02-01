@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 10:12:56 $
+#   last change: $Author: rt $ $Date: 2007-02-01 14:37:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.16 $ ';
+my $id_str = ' $Revision: 1.17 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -115,6 +115,7 @@ my $opt_force             = 0;              # force integration
 my $opt_no_set_integrated = 0;              # don't toggle integration status
 my $vcsid = "unknown";
 my $opt_auto_int          = 0;              # integrate automatically if no conflicts are shown
+my $opt_resume            = 0;              # resume a broken integration
 my $opt_quiet             = 0;              # minimal output
 my @args_bak = @ARGV;
 my @problem_log = ();
@@ -174,7 +175,7 @@ sub parse_options
 {   my $dir = 0;
     my $help = 0;
     my $success = GetOptions('d=s' => \$dir, 'n' => \$opt_fast, 'h' => \$help,
-                             'F' => \$opt_force, 'q' => \$opt_no_set_integrated, 'A' => \$opt_auto_int, 'z' => \$opt_quiet);
+                             'F' => \$opt_force, 'q' => \$opt_no_set_integrated, 'A' => \$opt_auto_int, 'r' => \$opt_resume, 'z' => \$opt_quiet);
     if ( !$success || @ARGV<1 ) {
         usage();
         exit(1);
@@ -304,16 +305,29 @@ sub integrate
 
     my ($ntotal_merged, $ntotal_new, $ntotal_removed, $ntotal_conflicts, $ntotal_alerts) =
                 (0, 0, 0, 0, 0);
+    my @failed_registrations;
     foreach (@modules) {
-        my($nmerged, $nnew, $nremoved, $nconflicts, $nalerts) = integrate_module($cws, $dir, $_);
+        my($nmerged, $nnew, $nremoved, $nconflicts, $nalerts, $eisfailure_ref) = integrate_module($cws, $dir, $_);
         $ntotal_new       += $nnew;
         $ntotal_removed   += $nremoved;
         $ntotal_merged    += $nmerged;
         $ntotal_conflicts += $nconflicts;
         $ntotal_alerts    += $nalerts;
+        push @failed_registrations, @$eisfailure_ref;
+    }
+
+    # If some files could not be registered to EIS try again
+    # (EIS may have been temporarily unavailable)
+    my @repeated_regfailures;
+    foreach my $arg_ref ( @failed_registrations ) {
+        $cws->add_file( @$arg_ref ) or push @repeated_regfailures, $$arg_ref[0] .'/'. $$arg_ref[1];
     }
 
     print "All modules: $ntotal_new new, $ntotal_removed removed, $ntotal_merged merge(s), $ntotal_conflicts conflicts(s). $ntotal_alerts alert(s)\n";
+
+    if ( @repeated_regfailures ) {
+        prompt_manual_registration( $child, $master, @repeated_regfailures );
+    }
 
     # set CWS status
     if ( !$opt_no_set_integrated ) {
@@ -473,6 +487,14 @@ sub integrate_module
 
     # statistics counters
     my ($nnew, $nremoved, $nmerged, $nconflicts, $nalerts) = (0, 0, 0, 0, 0);
+    # for error handling of EIS registrations
+    my @failed2register;
+
+    if ( @{$changed_files_ref} && $opt_resume ) {
+        # opt_resume: we already have integrated parts of this CWS
+        $changed_files_ref = clear_finished_files( $cws, $module, $changed_files_ref );
+    }
+
     if ( @{$changed_files_ref} ) {
         # ok we've got changed files
         STDOUT->autoflush(1);
@@ -600,8 +622,11 @@ sub integrate_module
             }
 
             # register new revision with EIS
-            $cws->add_file($module, $archive, $new_revision,
-                           $revision_authors_ref, $revision_taskids_ref);
+            if ( ! $cws->add_file($module, $archive, $new_revision,
+                           $revision_authors_ref, $revision_taskids_ref) ) {
+                push @failed2register, [$module, $archive, $new_revision,
+                           $revision_authors_ref, $revision_taskids_ref];
+            }
 
         }
         # chdir back
@@ -610,7 +635,7 @@ sub integrate_module
 
     # emit some statistics
     print "'$module': $nnew new, $nremoved removed, $nmerged merge(s), $nconflicts conflicts(s). $nalerts alert(s)\n";
-    return ($nmerged, $nnew, $nremoved, $nconflicts, $nalerts);
+    return ($nmerged, $nnew, $nremoved, $nconflicts, $nalerts, \@failed2register);
 }
 
 # Get all revision comments on child workspace branch.
@@ -772,6 +797,32 @@ sub get_changed_files
     }
     STDOUT->autoflush(0);
     return $changed_files_ref;
+}
+
+# For repeated integrations (only to be done in case of crashes):
+# clear files list, avoid integrating twice
+sub clear_finished_files
+{
+    my $cws       = shift;
+    my $module    = shift;
+    my $files_ref = shift;
+    my ($integrated_files_ref, %integrated_files, @remaining_files);
+
+    $integrated_files_ref = $cws->files();
+    foreach ( @$integrated_files_ref ) {
+        my @filedata = split /,/, $_;
+        next unless ( $filedata[0] eq $module );
+        if ( $filedata[1] ) {
+            $integrated_files{$filedata[1]} ++;
+        }
+    }
+    foreach my $change_ref (@{$files_ref}) {
+        push @remaining_files, $change_ref unless $integrated_files{$$change_ref[0]};
+    }
+    if ( my $n_in_EIS = keys %integrated_files ) {
+        print_message("skipping $n_in_EIS file(s): already integrated\n");
+    }
+    return \@remaining_files;
 }
 
 # New files may be in new CVS subdirectories.
@@ -957,6 +1008,18 @@ sub auto_int
     }
     $log->end_log_extended($script_name,$vcsid,"success");
     exit;
+}
+
+sub prompt_manual_registration
+{
+    return unless defined($log);
+    my $cws_name = shift;
+    my $mws_name = shift;
+    my @files = @_;
+    print_warning( "Could not register all files to EIS. Please manually call");
+    foreach my $file ( @files ) {
+        print STDERR "\tperl \$COMMON_ENV_TOOLS/cwsaddfile.pl -c $cws_name -m $mws_name $file\n";
+    }
 }
 
 sub check_alarms
