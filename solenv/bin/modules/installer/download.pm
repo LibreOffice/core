@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-13 19:33:33 $
+#   last change: $Author: vg $ $Date: 2007-02-02 17:29:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -884,27 +884,42 @@ sub nsis_language_converter
     my $nsislanguage = "";
 
     if ( $language eq "en-US" ) { $nsislanguage = "English"; }
+    elsif ( $language eq "sq" ) { $nsislanguage = "Albanian"; }
     elsif ( $language eq "ar" ) { $nsislanguage = "Arabic"; }
     elsif ( $language eq "bg" ) { $nsislanguage = "Bulgarian"; }
     elsif ( $language eq "ca" ) { $nsislanguage = "Catalan"; }
+    elsif ( $language eq "hr" ) { $nsislanguage = "Croatian"; }
     elsif ( $language eq "cs" ) { $nsislanguage = "Czech"; }
     elsif ( $language eq "da" ) { $nsislanguage = "Danish"; }
+    elsif ( $language eq "nl" ) { $nsislanguage = "Dutch"; }
     elsif ( $language eq "de" ) { $nsislanguage = "German"; }
+    elsif ( $language eq "de-LU" ) { $nsislanguage = "Luxembourgish"; }
     elsif ( $language eq "et" ) { $nsislanguage = "Estonian"; }
+    elsif ( $language eq "fa" ) { $nsislanguage = "Farsi"; }
     elsif ( $language eq "el" ) { $nsislanguage = "Greek"; }
     elsif ( $language eq "fi" ) { $nsislanguage = "Finnish"; }
     elsif ( $language eq "fr" ) { $nsislanguage = "French"; }
     elsif ( $language eq "hu" ) { $nsislanguage = "Hungarian"; }
     elsif ( $language eq "he" ) { $nsislanguage = "Hebrew"; }
+    elsif ( $language eq "id" ) { $nsislanguage = "Indonesian"; }
     elsif ( $language eq "it" ) { $nsislanguage = "Italian"; }
-    elsif ( $language eq "nl" ) { $nsislanguage = "Dutch"; }
+    elsif ( $language eq "lv" ) { $nsislanguage = "Latvian"; }
+    elsif ( $language eq "lt" ) { $nsislanguage = "Lithuanian"; }
+    elsif ( $language eq "mk" ) { $nsislanguage = "Macedonian"; }
+    elsif ( $language eq "no" ) { $nsislanguage = "Norwegian"; }
+    elsif ( $language eq "no-NO" ) { $nsislanguage = "Norwegian"; }
     elsif ( $language eq "es" ) { $nsislanguage = "Spanish"; }
+    elsif ( $language eq "sl" ) { $nsislanguage = "Slovenian"; }
     elsif ( $language eq "sv" ) { $nsislanguage = "Swedish"; }
     elsif ( $language eq "sk" ) { $nsislanguage = "Slovak"; }
     elsif ( $language eq "pl" ) { $nsislanguage = "Polish"; }
     elsif ( $language eq "pt-BR" ) { $nsislanguage = "PortugueseBR"; }
     elsif ( $language eq "pt" ) { $nsislanguage = "Portuguese"; }
+    elsif ( $language eq "ro" ) { $nsislanguage = "Romanian"; }
     elsif ( $language eq "ru" ) { $nsislanguage = "Russian"; }
+    elsif ( $language eq "sr" ) { $nsislanguage = "Serbian"; }
+    elsif ( $language eq "sr-SP" ) { $nsislanguage = "Serbian"; }
+    elsif ( $language eq "uk" ) { $nsislanguage = "Ukrainian"; }
     elsif ( $language eq "tr" ) { $nsislanguage = "Turkish"; }
     elsif ( $language eq "ja" ) { $nsislanguage = "Japanese"; }
     elsif ( $language eq "ko" ) { $nsislanguage = "Korean"; }
