@@ -19,6 +19,7 @@ sk    1250  1051   # Slovak
 en-GB 1252  2057
 en-ZA 1252  7177
 da    1252  1030
+dz       0  2129   # Dzongkha (same ID as tibetan bhutan (s. i40713))
 sv    1252  1053
 nb    1252  1044
 nn    1252  2068
