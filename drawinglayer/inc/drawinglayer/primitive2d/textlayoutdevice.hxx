@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:28:02 $
+ *  last change: $Author: hdu $ $Date: 2007-02-02 15:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,11 @@ namespace drawinglayer { namespace primitive2d {
     struct FontAttributes;
 }}
 
+namespace basegfx {
+    class B2DPolyPolygon;
+    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // access to one global impTimedRefDev incarnation in namespace drawinglayer::primitive
 
@@ -73,7 +78,7 @@ namespace drawinglayer
     {
         class TextLayouterDevice
         {
-            // interlally used VirtualDevice
+            // internally used VirtualDevice
             VirtualDevice&                  mrDevice;
 
         public:
@@ -84,7 +89,9 @@ namespace drawinglayer
             void setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform);
             double getTextHeight();
             double getTextWidth(const String& rText, xub_StrLen nIndex, xub_StrLen nLength);
-            bool getTextOutlines(PolyPolyVector& rPolyPolyVector, const String& rText, xub_StrLen nIndex, xub_StrLen nLength, const ::std::vector< sal_Int32 >& rDXArray);
+            bool getTextOutlines( basegfx::B2DPolyPolygonVector&,
+                const String&, xub_StrLen nIndex, xub_StrLen nLength,
+                const ::std::vector< sal_Int32 >& rDXArray );
             basegfx::B2DRange getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength);
         };
     } // end of namespace primitive2d
@@ -93,4 +100,3 @@ namespace drawinglayer
 //////////////////////////////////////////////////////////////////////////////
 
 #endif //_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
-

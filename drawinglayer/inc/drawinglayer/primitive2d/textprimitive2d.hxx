@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:05 $
+ *  last change: $Author: hdu $ $Date: 2007-02-02 15:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ namespace drawinglayer
         private:
             basegfx::B2DHomMatrix                   maTextTransform;    // text range transformation from unit range ([0.0 .. 1.0]) to text range
             String                                  maText;             // the text
+            // TODO: int mnSubstringStartIndex, mnSubstringEndIndex;
             ::std::vector< double >                 maDXArray;          // the DX array scale-independent in unit coordinates
             FontAttributes                          maFontAttributes;   // the font to use
             basegfx::BColor                         maFontColor;        // font color
