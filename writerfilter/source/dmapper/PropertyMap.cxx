@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-12-29 07:46:31 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,6 +364,7 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
     uno::Reference< beans::XPropertySet >  xFirst;
     uno::Reference< beans::XPropertySet >  xSecond;
     sal_Int32 nOffsetFrom = (nValue & 0x00E0) >> 5;
+    //missing feature: front/back page border
     //sal_Int32 bPageDepth = (nValue & 0x0018) >> 3; //unused infromation: 0 - in front 1 - in back
     //todo: negative spacing (from ww8par6.cxx)
     if( nOffsetFrom == 1 )

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2006-12-29 07:46:30 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2320,12 +2320,14 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x6C05:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmPicBrcRight
-    case 0x3000:
+    case 0x3000:// sprmScnsPgn
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmScnsPgn
-    case 0x3001:
+        //missing feature: chapter number separator
+    break;
+    case 0x3001: // sprmSiHeadingPgn
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmSiHeadingPgn
+        //missing feature: heading number level
+    break;
     case 0xD202:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSOlstAnm
