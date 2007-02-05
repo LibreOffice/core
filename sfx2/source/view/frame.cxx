@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:28:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1328,6 +1328,13 @@ void SfxFrame::Appear()
         if ( xTopWindow.is() )
             xTopWindow->toFront();
     }
+}
+
+void SfxFrame::AppearWithUpdate()
+{
+    Appear();
+    if ( GetCurrentViewFrame() )
+        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( sal_True );
 }
 
 void SfxFrame::SetOwnsBindings_Impl( sal_Bool bSet )
