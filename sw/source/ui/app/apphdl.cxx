@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:36:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,13 +413,15 @@ namespace
 
 class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 {
-    SwView*                  m_pView;     // never owner
-    SwMailMergeConfigItem*   m_pMMConfig; // sometimes owner
-    AbstractMailMergeWizard* m_pWizard;   // always owner
+    SwView*                  m_pView;       // never owner
+    SwView*                  m_pView2Close; // never owner
+    SwMailMergeConfigItem*   m_pMMConfig;   // sometimes owner
+    AbstractMailMergeWizard* m_pWizard;     // always owner
 
     DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
     DECL_LINK( DestroyDialogHdl, AbstractMailMergeWizard* );
     DECL_LINK( DestroyWizardHdl, AbstractMailMergeWizard* );
+    DECL_LINK( CancelHdl, AbstractMailMergeWizard* );
     DECL_LINK( CloseFrameHdl, AbstractMailMergeWizard* );
 
     void ExecutionFinished( bool bDeleteConfigItem );
@@ -434,6 +436,7 @@ public:
 
 SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
     : m_pView( 0 ),
+      m_pView2Close( NULL ),
       m_pMMConfig( 0 ),
       m_pWizard( 0 )
 {
@@ -648,18 +651,19 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
             DBG_ASSERT(pTargetView && pSourceView, "source or target view not available" );
             if(pTargetView && pSourceView)
             {
-                pTargetView->GetViewFrame()->DoClose();
-                pSourceView->GetViewFrame()->GetFrame()->Appear();
+                m_pView2Close = pTargetView;
+                pTargetView->GetViewFrame()->GetTopViewFrame()->GetWindow().Hide();
+                pSourceView->GetViewFrame()->GetFrame()->AppearWithUpdate();
                 // the current view has be be set when the target is destroyed
                 m_pView = pSourceView;
                 m_pMMConfig->SetTargetView(0);
 
                 // destroy wizard asynchronously
                 Application::PostUserEvent(
-                    LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
+                    LINK( this, SwMailMergeWizardExecutor, CloseFrameHdl ), m_pWizard );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                m_pWizard = pFact->CreateMailMergeWizard(*pTargetView, *m_pMMConfig);
+                m_pWizard = pFact->CreateMailMergeWizard(*pSourceView, *m_pMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
 
                 // execute the wizard again
@@ -676,7 +680,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
         {
             // close frame and destroy wizard asynchronously
             Application::PostUserEvent(
-                LINK( this, SwMailMergeWizardExecutor, CloseFrameHdl ), m_pWizard );
+                LINK( this, SwMailMergeWizardExecutor, CancelHdl ), m_pWizard );
             break;
         }
     default: //finish
@@ -714,7 +718,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard*
     return 0L;
 }
 
-IMPL_LINK( SwMailMergeWizardExecutor, CloseFrameHdl, AbstractMailMergeWizard*, pDialog )
+IMPL_LINK( SwMailMergeWizardExecutor, CancelHdl, AbstractMailMergeWizard*, EMPTYARG )
 {
     if(m_pMMConfig->GetTargetView())
     {
@@ -730,6 +734,17 @@ IMPL_LINK( SwMailMergeWizardExecutor, CloseFrameHdl, AbstractMailMergeWizard*, p
     // m_pWizard already deleted by closing the target view
     m_pWizard = 0;
     release();
+
+    return 0L;
+}
+
+IMPL_LINK( SwMailMergeWizardExecutor, CloseFrameHdl, AbstractMailMergeWizard*, EMPTYARG )
+{
+    if ( m_pView2Close )
+    {
+        m_pView2Close->GetViewFrame()->DoClose();
+        m_pView2Close = NULL;
+    }
 
     return 0L;
 }
