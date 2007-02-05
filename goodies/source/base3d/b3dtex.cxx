@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:08:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:51:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ B3dTexture::B3dTexture(
     Base3DTextureWrap eT)
 :   aBitmap(rBmpEx.GetBitmap()),
     aAlphaMask(rBmpEx.GetAlpha()),
-    maBitmapSize(rBmpEx.GetSizePixel()), // #i72895#
+    aBitmapSize(rBmpEx.GetSizePixel()), // #i72895#
     pReadAccess(NULL),
     pAlphaReadAccess(NULL),
     eKind(eKnd),
