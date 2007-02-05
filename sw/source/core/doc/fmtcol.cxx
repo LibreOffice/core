@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:30:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,11 @@ void TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
         return;
     }
 
-    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
+    // --> OD 2007-01-24 #i73790#
+//    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
+    if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
+         pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
+    // <--
     {
         if ( !pNewNumRuleItem )
         {
@@ -353,6 +357,20 @@ BOOL SwTxtFmtColl::IsAtDocNodeSet() const
 
     return FALSE;
 }
+
+// --> OD 2007-01-24 #i73790#
+USHORT SwTxtFmtColl::ResetAllFmtAttr()
+{
+    const bool bOldState( mbStayAssignedToListLevelOfOutlineStyle );
+    mbStayAssignedToListLevelOfOutlineStyle = true;
+
+    USHORT nRet = SwFmtColl::ResetAllFmtAttr();
+
+    mbStayAssignedToListLevelOfOutlineStyle = bOldState;
+
+    return nRet;
+}
+// <--
 
 //FEATURE::CONDCOLL
 
