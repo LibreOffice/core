@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:39:19 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:49:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,6 @@ namespace cairocanvas
         } else {
             BitmapEx aBmpEx = bitmapExFromXBitmap(xBitmap);
             Bitmap aBitmap = aBmpEx.GetBitmap();
-            AlphaMask aAlpha = aBmpEx.GetAlpha();
 
             // there's no pixmap for alpha bitmap. we might still
             // use rgb pixmap and only access alpha pixels the
@@ -332,6 +331,7 @@ namespace cairocanvas
             }
 
             if( !pSurface ) {
+                AlphaMask aAlpha = aBmpEx.GetAlpha();
 
                 BitmapReadAccess*   pBitmapReadAcc = aBitmap.AcquireReadAccess();
                 BitmapReadAccess*   pAlphaReadAcc = NULL;
