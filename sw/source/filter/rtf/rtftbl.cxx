@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:54:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,7 +352,9 @@ void SwRTFParser::ReadTable( int nToken )
                     else
                         pFmt = aBoxFmts[ aBoxFmts.Count()-1 ];
 
-                    pBoxFmt->ResetAllAttr();
+                    // --> OD 2007-01-25 #i73790# - method renamed
+                    pBoxFmt->ResetAllFmtAttr();
+                    // <--
                     nSize += pFmt->GetFrmSize().GetWidth();
                 }
                 else
