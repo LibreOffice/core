@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:29:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@ class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
 
     SwTxtFmtColl(const SwTxtFmtColl & rRef);
 
+    // --> OD 2007-01-24 #i73790#
+    bool mbStayAssignedToListLevelOfOutlineStyle;
+    // <--
 protected:
     BYTE nOutlineLevel;
     SwTxtFmtColl *pNextTxtFmtColl;
@@ -89,7 +92,10 @@ protected:
                     USHORT nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, pFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
-        nOutlineLevel( NO_NUMBERING )
+          // --> OD 2007-01-24 #i73790#
+          mbStayAssignedToListLevelOfOutlineStyle( false ),
+          // <--
+          nOutlineLevel( NO_NUMBERING )
     { pNextTxtFmtColl = this; }
 
     SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
@@ -97,7 +103,10 @@ protected:
                     USHORT nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
-        nOutlineLevel( NO_NUMBERING )
+          // --> OD 2007-01-24 #i73790#
+          mbStayAssignedToListLevelOfOutlineStyle( false ),
+          // <--
+          nOutlineLevel( NO_NUMBERING )
     { pNextTxtFmtColl = this; }
 
 public:
@@ -127,6 +136,15 @@ public:
     }
     // <--
 
+    // --> OD 2007-01-24 #i73790#
+    // override <ResetAllFmtAttr()> to stay assigned to list level of outline style
+    virtual USHORT ResetAllFmtAttr();
+
+    inline bool StayAssignedToListLevelOfOutlineStyle() const
+    {
+        return mbStayAssignedToListLevelOfOutlineStyle;
+    }
+    // <--
 /*----------------- JP 09.08.94 17:36 -------------------
  wird die Funktionalitaet von Zeichenvorlagen an Absatzvorlagen
  ueberhaupt benoetigt ??
