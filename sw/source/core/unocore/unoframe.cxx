@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:22:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1354,16 +1354,11 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             GraphicObject *pGrfObj = 0;
             OUString aGrfUrl;
             aValue >>= aGrfUrl;
-            ::rtl::OUString aPackageProtocol( RTL_CONSTASCII_USTRINGPARAM( sPackageProtocol ) );
-            ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
 
-            if( aGrfUrl.compareTo( aPackageProtocol, aPackageProtocol.getLength() ) == 0 )
-            {
-                pGrfObj = new GraphicObject;
-                pGrfObj->SetUserData( aGrfUrl );
-                pGrfObj->SetSwapState();
-            }
-            else if( aGrfUrl.compareTo( aGraphicProtocol, aGraphicProtocol.getLength() ) == 0 )
+            // the package URL based graphics are handled in different way currently
+            // TODO/LATER: actually this is the correct place to handle them
+            ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
+            if( aGrfUrl.compareTo( aGraphicProtocol, aGraphicProtocol.getLength() ) == 0 )
             {
                 ByteString sId( aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1).getStr(), RTL_TEXTENCODING_ASCII_US );
                 pGrfObj = new GraphicObject( sId );
