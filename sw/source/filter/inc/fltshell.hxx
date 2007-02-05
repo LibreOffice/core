@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:08:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,9 @@ public:
 
     void Reset()
     {
-        pColl->ResetAllAttr();
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pColl->ResetAllFmtAttr();
+        // <--
         pColl->SetAuto(FALSE); // nach Empfehlung JP
     }
     void Derived(SwTxtFmtColl* pBase)
