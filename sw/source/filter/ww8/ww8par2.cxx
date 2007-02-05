@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:55:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4056,7 +4056,11 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     else
     {
         if (bStyExist)
-            pColl->ResetAllAttr();
+        {
+            // --> OD 2007-01-25 #i73790# - method renamed
+            pColl->ResetAllFmtAttr();
+            // <--
+        }
         pColl->SetAuto(false);          // nach Empfehlung JP
     }                                   // macht die UI aber anders
     pIo->pAktColl = pColl;
