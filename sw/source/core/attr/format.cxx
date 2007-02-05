@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:30:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -608,7 +608,10 @@ BOOL SwFmt::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
 
 
 
-USHORT SwFmt::ResetAllAttr()
+// --> OD 2007-01-24 #i73790#
+// method renamed
+USHORT SwFmt::ResetAllFmtAttr()
+// <--
 {
     if( !aSet.Count() )
         return 0;
