@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtex.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:08:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,10 +248,7 @@ protected:
     // Die Bitmap(s) der Textur
     Bitmap                  aBitmap;
     AlphaMask               aAlphaMask;
-
-    // #i72895#
-    Size                    maBitmapSize;
-
+    Size                    aBitmapSize;
     BitmapReadAccess*       pReadAccess;
     BitmapReadAccess*       pAlphaReadAccess;
 
@@ -317,7 +314,7 @@ public:
     BitmapEx GetBitmapEx() { return BitmapEx(aBitmap, aAlphaMask); }
 
     // #i72895#
-    const Size GetBitmapSize() { return maBitmapSize; }
+    const Size GetBitmapSize() { return aBitmapSize; }
 
     // Texturfunktion
     void ModifyColor(Color& rCol, double fS, double fT);
