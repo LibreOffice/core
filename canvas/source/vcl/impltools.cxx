@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impltools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:48:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,15 @@ namespace vclcanvas
             double nRotate, nShearX;
 
             aMatrix.decompose( aScale, aTranslate, nRotate, nShearX );
+
+            // #i72417# detecting the 180 degree rotation case manually here.
+            if( aScale.getX() < 0.0 &&
+                aScale.getY() < 0.0 &&
+                basegfx::fTools::equalZero(nRotate) )
+            {
+                aScale *= -1.0;
+                nRotate += M_PI;
+            }
 
             // query font metric _before_ tampering with width and height
             if( !::rtl::math::approxEqual(aScale.getX(), aScale.getY()) )
