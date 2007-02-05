@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2006-12-29 07:46:31 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,17 +208,60 @@ enum PropertyIds
 /*166*/ ,PROP_INTERVAL
 /*167*/ ,PROP_DISTANCE
 /*168*/ ,PROP_NUMBER_POSITION
-///*169*/ ,PROP_
-///*170*/ , PROP_
-///*171*/ , PROP_
-///*172*/ , PROP_
-///*173*/ , PROP_
-///*174*/ , PROP_
-///*175*/ , PROP_
-///*176*/ , PROP_
-///*177*/ , PROP_
-///*178*/ , PROP_
-///*179*/ , PROP_
+/*169*/ ,PROP_LEVEL
+/*170*/ ,PROP_LEVEL_PARAGRAPH_STYLES
+/*171*/ ,PROP_LEVEL_FORMAT
+/*172*/ ,PROP_TOKEN_TYPE
+/*173*/ ,PROP_TOKEN_HYPERLINK_START
+/*174*/ ,PROP_TOKEN_HYPERLINK_END
+/*175*/ ,PROP_TOKEN_CHAPTER_INFO
+/*176*/ ,PROP_CHAPTER_FORMAT
+/*177*/ ,PROP_TOKEN_TEXT
+/*178*/ ,PROP_TEXT
+/*179*/ ,PROP_CREATE_FROM_OUTLINE
+/*180*/ ,PROP_CREATE_FROM_MARKS
+///*181*/ ,PROP_
+///*182*/ ,PROP_
+///*183*/ ,PROP_
+///*184*/ ,PROP_
+///*185*/ ,PROP_
+///*186*/ ,PROP_
+///*187*/ ,PROP_
+///*188*/ ,PROP_
+///*189*/ ,PROP_
+///*190*/ ,PROP_
+///*191*/ ,PROP_
+///*192*/ ,PROP_
+///*193*/ ,PROP_
+///*194*/ ,PROP_
+///*195*/ ,PROP_
+///*196*/ ,PROP_
+///*197*/ ,PROP_
+///*198*/ ,PROP_
+///*199*/ ,PROP_
+///*200*/ ,PROP_
+///*201*/ ,PROP_
+///*202*/ ,PROP_
+///*203*/ ,PROP_
+///*204*/ ,PROP_
+///*205*/ ,PROP_
+///*206*/ ,PROP_
+///*207*/ ,PROP_
+///*208*/ ,PROP_
+///*209*/ ,PROP_
+///*210*/ ,PROP_
+///*211*/ ,PROP_
+///*212*/ ,PROP_
+///*213*/ ,PROP_
+///*214*/ ,PROP_
+///*215*/ ,PROP_
+///*216*/ ,PROP_
+///*217*/ ,PROP_
+///*218*/ ,PROP_
+///*219*/ ,PROP_
+
+
+
 
 
 

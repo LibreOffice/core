@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-12-28 09:16:09 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -833,7 +833,7 @@ const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyl
   -----------------------------------------------------------------------*/
 ::rtl::OUString StyleSheetTable::ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ )
 {
-    ::rtl::OUString sRet;
+    ::rtl::OUString sRet( rWWName );
     if(!m_pImpl->m_aStyleNameMap.size())
     {
         static const sal_Char *aStyleNamePairs[] =
@@ -939,7 +939,7 @@ const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyl
         }
     }
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( rWWName );
-    if(aIt != m_pImpl->m_aStyleNameMap.end())
+    if(aIt != m_pImpl->m_aStyleNameMap.end() && aIt->second.getLength())
         sRet = aIt->second;
     return sRet;
 }

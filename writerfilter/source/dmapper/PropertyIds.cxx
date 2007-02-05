@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2006-12-29 07:46:30 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,12 +266,18 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_INTERVAL               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Interval")); break;
             case PROP_DISTANCE               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Distance")); break;
             case PROP_NUMBER_POSITION        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberPosition")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_LEVEL                  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Level")); break;
+            case PROP_LEVEL_PARAGRAPH_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles")); break;
+            case PROP_LEVEL_FORMAT           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LevelFormat")); break;
+            case PROP_TOKEN_TYPE             :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TokenType")); break;
+            case PROP_TOKEN_HYPERLINK_START  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkStart")); break;
+            case PROP_TOKEN_HYPERLINK_END    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkEnd")); break;
+            case PROP_TOKEN_CHAPTER_INFO     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TokenChapterInfo")); break;
+            case PROP_CHAPTER_FORMAT         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat")); break;
+            case PROP_TOKEN_TEXT             :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TokenText")); break;
+            case PROP_TEXT                   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")); break;
+            case PROP_CREATE_FROM_OUTLINE    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline")); break;
+            case PROP_CREATE_FROM_MARKS      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

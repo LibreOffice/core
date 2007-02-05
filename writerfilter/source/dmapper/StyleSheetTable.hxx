@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-12-28 09:16:10 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ class WRITERFILTER_DLLPRIVATE StyleSheetTable :
         public doctok::Table
 {
     StyleSheetTable_Impl   *m_pImpl;
-    ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ );
 
 public:
     StyleSheetTable( DomainMapper& rDMapper );
@@ -99,6 +98,8 @@ public:
     const StyleSheetEntry* FindStyleSheetByISTD(sal_Int32 nIndex);
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
     const StyleSheetEntry* FindParentStyleSheet(sal_Int32 nBaseStyleIdentifier);
+
+    ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ );
 };
 }
 

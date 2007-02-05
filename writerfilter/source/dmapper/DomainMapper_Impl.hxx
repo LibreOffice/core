@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-12-29 07:46:30 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,11 +99,55 @@ enum ContextType
     CONTEXT_CHARACTER,
     NUMBER_OF_CONTEXTS
 };
+/*-----------------29.01.2007 11:47-----------------
+   field stack element
+ * --------------------------------------------------*/
+class FieldContext
+{
+    bool                                                                            m_bFieldCommandCompleted;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >          m_xStartRange;
+
+    ::rtl::OUString                                                                 m_sCommand;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
+    ::rtl::OUString                                                                 m_sHyperlinkURL;
+
+public:
+    FieldContext(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xStart);
+    ~FieldContext();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartRange() const { return m_xStartRange; }
+
+    void                    AppendCommand(const ::rtl::OUString& rPart);
+    const ::rtl::OUString&  GetCommand() const {return m_sCommand; }
+
+    void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
+    bool                    IsCommandCompleted() const { return m_bFieldCommandCompleted;    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >      GetTextField() const { return m_xTextField;}
+    void    SetTextField(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > xTextField) { m_xTextField = xTextField;}
+
+    void    SetTOC( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xTOC ) { m_xTOC = xTOC; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetTOC() { return m_xTOC; }
+
+    void    SetTC( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xTC ) { m_xTC = xTC; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetTC( ) { return m_xTC; }
+
+    void    SetHyperlinkURL( const ::rtl::OUString& rURL ) { m_sHyperlinkURL = rURL; }
+    const ::rtl::OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
+
+};
+
+typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
+
 typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
 typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 typedef std::stack< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert > >
                                                 TextAppendStack;
+typedef std::stack<FieldContextPtr>                FieldStack;
 
 /*-- 18.07.2006 08:49:08---------------------------------------------------
 
@@ -158,8 +202,7 @@ private:
 
     TextAppendStack                                                                 m_aTextAppendStack;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
-    ::rtl::OUString                                                                 m_sHyperlinkURL;
+    FieldStack                                                                      m_aFieldStack;
     bool                                                                            m_bFieldMode;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bIsFirstSection;
@@ -272,13 +315,29 @@ public:
 
     void PopPageHeaderFooter();
 
-    //create a new field from the command string
-    void CreateField( ::rtl::OUString& rCommand );
-    //set the field result in insert the field
-    void SetFieldMode( bool bSet ) { m_bFieldMode = bSet; }
-    bool IsFieldMode() const { return m_bFieldMode; }
+    //field context starts with a 0x13
+    void PushFieldContext();
+    //the current field context waits for the completion of the command
+    bool IsOpenFieldCommand() const;
+    bool IsOpenField() const;
+    //collect the pieces of the command
+    void AppendFieldCommand(::rtl::OUString& rPartOfCommand);
+    //the field command has to be closed (0x14 appeared)
+    void CloseFieldCommand();
+    //the _current_ fields require a string type result while TOCs accept richt results
+    bool IsFieldResultAsString();
+    //apply the result text to the related field
     void SetFieldResult( ::rtl::OUString& rResult );
-    bool IsFieldAvailable() const;
+    //the end of field is reached (0x15 appeared) - the command might still be open
+    void PopFieldContext();
+
+    //create a new field from the command string
+//    void CreateField( ::rtl::OUString& rCommand );
+    //set the field result in insert the field
+//    void SetFieldMode( bool bSet ) { m_bFieldMode = bSet; }
+//    bool IsFieldMode() const { return m_bFieldMode; }
+//    void SetFieldResult( ::rtl::OUString& rResult );
+//    bool IsFieldAvailable() const;
 
     TableManager_t & getTableManager() { return m_TableManager; }
 

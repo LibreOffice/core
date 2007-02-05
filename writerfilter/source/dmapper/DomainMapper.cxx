@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:37:27 $
+ *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,7 +480,8 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
                 m_pImpl->GetTopContext()->Insert(
                                                  bParaStyle ?
                                                  PROP_PARA_STYLE_NAME  : PROP_CHAR_STYLE_NAME,
-                                                 uno::makeAny( pEntry->sStyleName ) );
+                                                 uno::makeAny(
+                                                 m_pImpl->GetStyleSheetTable()->ConvertStyleName( pEntry->sStyleName ) ) );
             }
         }
         break;
@@ -2320,14 +2321,12 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x6C05:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmPicBrcRight
-    case 0x3000:// sprmScnsPgn
+    case 0x3000:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        //missing feature: chapter number separator
-    break;
-    case 0x3001: // sprmSiHeadingPgn
+        break;  // sprmScnsPgn
+    case 0x3001:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        //missing feature: heading number level
-    break;
+        break;  // sprmSiHeadingPgn
     case 0xD202:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmSOlstAnm
@@ -2970,19 +2969,26 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
                 case 0x07:
                 case 0x0d:
                     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)); break;
-                case 0x13: m_pImpl->SetFieldMode( true );break;
-                case 0x14: /* delimiter not necessarily available */
+                case 0x13: m_pImpl->PushFieldContext();break;
+                case 0x14:
+                    // delimiter not necessarily available
+                    // appears only if field contains further content
+                    m_pImpl->CloseFieldCommand();
+                break;
                 case 0x15: /* end of field */
-                    m_pImpl->SetFieldMode( false );
+                    m_pImpl->PopFieldContext();
                 break;
             default: bContinue = true;
             }
         }
         if(bContinue)
         {
-            if( m_pImpl->IsFieldMode())
-                m_pImpl->CreateField( sText );
-            else if( m_pImpl->IsFieldAvailable())
+            if( m_pImpl->IsOpenFieldCommand() )
+                m_pImpl->AppendFieldCommand(sText);
+//            if( m_pImpl->IsFieldMode())
+//                m_pImpl->CreateField( sText );
+            else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
+//            else if( m_pImpl->IsFieldAvailable())
                 /*depending on the success of the field insert operation this result will be
                   set at the field or directly inserted into the text*/
                 m_pImpl->SetFieldResult( sText );
