@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:18:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,9 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 {
     SwFrmFmt& rFmt = bLeft ? GetLeft() : GetMaster();
 
-    rFmt.ResetAllAttr();
+    // --> OD 2007-01-25 #i73790# - method renamed
+    rFmt.ResetAllFmtAttr();
+    // <--
     rFmt.SetAttr( SvxFrameDirectionItem() );
 }
 
