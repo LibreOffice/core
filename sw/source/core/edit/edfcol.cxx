@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfcol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:05:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,11 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
 void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
 {
     if( bReset )
-        pColl->ResetAllAttr();
+    {
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pColl->ResetAllFmtAttr();
+        // <--
+    }
 
     SwPaM * pCrsr = GetCrsr();
     SwCntntNode * pCnt = pCrsr->GetCntntNode();
