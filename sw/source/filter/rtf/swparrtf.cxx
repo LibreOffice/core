@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:55:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:54:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4098,7 +4098,9 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     rbCollExist = aResult.second;
     if (IsNewDoc() && rbCollExist)
     {
-        pColl->ResetAllAttr();
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pColl->ResetAllFmtAttr();
+        // <--
         rbCollExist = false;
     }
 
@@ -4128,7 +4130,9 @@ SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, USHORT nPos,
     rbCollExist = aResult.second;
     if (IsNewDoc() && rbCollExist)
     {
-        pFmt->ResetAllAttr();
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pFmt->ResetAllFmtAttr();
+        // <--
         rbCollExist = false;
     }
     return pFmt;
