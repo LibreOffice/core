@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:52:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3008,7 +3008,11 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     pTargetFmt->SetAttr( aFrmSz );
                 }
                 else
-                    pTargetFmt->ResetAllAttr();
+                {
+                    // --> OD 2007-01-25 #i73790# - method renamed
+                    pTargetFmt->ResetAllFmtAttr();
+                    // <--
+                }
 
                 if( USHRT_MAX != nPgDscPos )
                     m_pDoc->ChgPageDesc( nPgDscPos,
