@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:34:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 12:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,12 +184,14 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 
     try
     {
-        Reference< XCommandEnvironment >    xEnv;
-        Content                             aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
-        Sequence< OUString >                aProps( 1 );
+        ::com::sun::star::uno::Reference< XCommandEnvironment > xEnv;
+        Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+        Sequence< OUString > aProps( 2 );
 
-        aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
-        Reference< ::com::sun::star::sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+        aProps.getArray()[ 0 ] = OUString::createFromAscii( "IsFolder" );
+        aProps.getArray()[ 1 ] = OUString::createFromAscii( "IsDocument" );
+        ::com::sun::star::uno::Reference< XResultSet > xResultSet(
+            aCnt.createCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS ) );
 
         if( xResultSet.is() )
         {
