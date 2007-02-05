@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:31:56 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1894,7 +1894,9 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
         // (but preserve FillOrder)
         pBoxFmt = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
         SwFmtFillOrder aFillOrder( pBoxFmt->GetFillOrder() );
-        pBoxFmt->ResetAllAttr();
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pBoxFmt->ResetAllFmtAttr();
+        // <--
         pBoxFmt->SetAttr( aFillOrder );
         bNew = sal_True;    // it's a new format now
 
@@ -1938,7 +1940,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     // TODO: Share formats!
     SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    pFrmFmt->ResetAllAttr();
+    // --> OD 2007-01-25 #i73790# - method renamed
+    pFrmFmt->ResetAllFmtAttr();
+    // <--
     pFrmFmt->SetAttr( aFillOrder );
 
     pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
@@ -2182,7 +2186,9 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     // TODO: Share formats!
     SwFrmFmt *pFrmFmt = pLine->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    pFrmFmt->ResetAllAttr();
+    // --> OD 2007-01-25 #i73790# - method renamed
+    pFrmFmt->ResetAllFmtAttr();
+    // <--
     pFrmFmt->SetAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
