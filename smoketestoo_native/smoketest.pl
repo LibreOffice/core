@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 16:11:56 $
+#   last change: $Author: vg $ $Date: 2007-02-05 11:40:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.23 $ ';
+$id_str = ' $Revision: 1.24 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -712,7 +712,7 @@ sub getInstset {
     my ($INSTSET, $NEWINSTSET);
     my (@DirArray, $InstDir, $RootDir, $TestDir1, $TestDir2);
 
-    if (defined ($ENV{EPM}) && ($ENV{EPM} eq 'NO')) { # we do the install ourselves ...
+    if (defined ($ENV{EPM}) && ($ENV{EPM} eq 'NO') && ($gui eq "UNX")) { # we do the install ourselves ...
         return ();
     }
 
