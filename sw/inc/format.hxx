@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:20:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,12 @@ public:
     // Nimmt den Hint mit nWhich aus dem Delta-Array
     SW_DLLPUBLIC BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
 
+    // --> OD 2007-01-24 #i73790#
+    // Method renamed and made virtual
     // Nimmt alle Hints aus dem Delta-Array,
     // liefert die Anzahl der geloeschten Hints
-    USHORT ResetAllAttr();
+    virtual USHORT ResetAllFmtAttr();
+    // <--
 
     inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
     inline BOOL IsDefault() const { return DerivedFrom() == 0; }
