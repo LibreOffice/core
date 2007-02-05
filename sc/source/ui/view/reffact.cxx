@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:07:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 11:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,9 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParent,
         ScTabViewShell* pViewShell =
             PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
         DBG_ASSERT( pViewShell, "missing view shell :-(" );
-        pWindow = new ScAcceptChgDlg( pBindings, this, pParent, pViewShell->GetViewData() );
+        pWindow = pViewShell ?
+            new ScAcceptChgDlg( pBindings, this, pParent, pViewShell->GetViewData() ) :
+            NULL;
         if(pWindow!=NULL)
         {
             ((ScAcceptChgDlg*)pWindow)->Initialize( pInfo );
@@ -319,7 +321,7 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
         PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     DBG_ASSERT( pViewShell, "missing view shell :-(" );
 
-    if(pWindow!=NULL)
+    if(pWindow!=NULL && pViewShell)
     {
         ((ScAcceptChgDlg*)pWindow)->ReInit(pViewShell->GetViewData());
     }
