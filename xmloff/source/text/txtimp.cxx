@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:50:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1380,6 +1380,9 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
 // --> OD 2006-10-12 #i69629#
 // helper method to determine, if a paragraph style has a list style (inclusive
 // an empty one) inherits a list style (inclusive an empty one) from one of its parents
+// --> OD 2007-01-29 #i73973#
+// apply special case, that found list style equals the chapter numbering, also
+// to the found list styles of the parent styles.
 sal_Bool lcl_HasListStyle( OUString sStyleName,
                            const Reference < XNameContainer >& xParaStyles,
                            SvXMLImport& rImport,
@@ -1451,6 +1454,19 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                 {
                     // list style found
                     bRet = sal_True;
+                    // --> OD 2007-01-29 #i73973#
+                    // special case: the found list style equals the chapter numbering
+                    Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
+                    if ( xPropSet.is() )
+                    {
+                        OUString sListStyle;
+                        xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
+                        if ( sListStyle == sOutlineStyleName )
+                        {
+                            bRet = sal_False;
+                        }
+                    }
+                    // <--
                     break;
                 }
                 else
