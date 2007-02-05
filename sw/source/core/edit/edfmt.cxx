@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:42:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 10:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,11 @@ SwCharFmt* SwEditShell::GetCurCharFmt() const
 void SwEditShell::FillByEx(SwCharFmt* pCharFmt, BOOL bReset)
 {
     if ( bReset )
-        pCharFmt->ResetAllAttr();
+    {
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pCharFmt->ResetAllFmtAttr();
+        // <--
+    }
 
     SwPaM* pPam = GetCrsr();
     const SwCntntNode* pCNd = pPam->GetCntntNode();
