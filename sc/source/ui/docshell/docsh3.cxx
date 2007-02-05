@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:45:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-05 11:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -856,6 +856,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
         pThisAction = pThisAction->GetNext();
     }
 
+    LockPaint();    // #i73877# no repainting after each action
 
     //  MergeChangeData in das aktuelle Dokument uebernehmen
     BOOL bHasRejected = FALSE;
@@ -1031,6 +1032,8 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
 
     if (bHasRejected)
         PostPaintGridAll();         // Reject() paintet nicht selber
+
+    UnlockPaint();
 }
 
 
