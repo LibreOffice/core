@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.105 $
+#   $Revision: 1.106 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:59:13 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:01:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
 .ENDIF
 
 $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -256,7 +256,7 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)T
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL$(TNR)TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -268,7 +268,7 @@ $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL$(TNR)LINKLIST=$(MISC)$/$(SHL$(TNR)TARGET)_link.lst
 $(MISC)$/$(SHL$(TNR)TARGET)_link.lst : $(SHL$(TNR)LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"=="name"
@@ -291,7 +291,7 @@ $(SHL$(TNR)TARGETN) : \
     @echo Making: $(SHL$(TNR)TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .IF "$(SHL$(TNR)ICON)" != ""
     @echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF
@@ -308,7 +308,7 @@ $(SHL$(TNR)TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -342,7 +342,8 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -360,7 +361,8 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
