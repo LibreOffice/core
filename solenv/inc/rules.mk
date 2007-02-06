@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:35 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:56:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ $(OBJ)$/%.obj : %.cxx
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
     @$(ECHONL)
 .IF "$(COM)"=="GCC"
@@ -69,7 +69,7 @@ $(OBJ)$/%.obj : %.cpp
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
      $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
     @$(ECHONL)
 .IF "$(COM)"=="GCC"
@@ -127,7 +127,7 @@ $(SLO)$/%.obj : %.cxx
     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ENDIF
 .ELSE			# "$(GUI)"=="UNX"
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(ACT_PCH_SWITCHES) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx ) $(CAPTURE_OUTPUT)
     @$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(ACT_PCH_SWITCHES) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
@@ -148,7 +148,7 @@ $(SLO)$/%.obj : %.cpp
     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ENDIF
 .ELSE
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
     @$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
@@ -230,7 +230,7 @@ $(OBJ)$/%.obj : $(MISC)$/%.c
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
      $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(MISC)$/$*.c )
     @$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(MISC)$/$*.c )
@@ -247,7 +247,7 @@ $(SLO)$/%.obj : $(MISC)$/%.c
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
      $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c )
     @$(ECHONL)
 .IF "$(COM)"=="GCC"
@@ -268,7 +268,7 @@ $(SLO)$/%.obj : %.c
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
      $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(COM)"=="GCC"
        $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
 .ELSE
@@ -357,7 +357,7 @@ not_existing$/o_%.dpcc : $(MISC)$/%.cxx;@noop $(assign all_misc_obj+:=$<)
 # dependencies objective-c
 
 $(MISC)$/s_%.dpcc : %.m
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -366,7 +366,7 @@ $(MISC)$/s_%.dpcc : %.m
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 $(MISC)$/o_%.dpcc : %.m
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(OBJ)$/$(<:b).obj >> $@
@@ -375,7 +375,7 @@ $(MISC)$/o_%.dpcc : %.m
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 $(MISC)$/s_%.dpcc : $(MISC)$/%.m
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
@@ -388,7 +388,7 @@ $(MISC)$/s_%.dpcc : $(MISC)$/%.m
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 $(MISC)$/o_%.dpcc : $(MISC)$/%.m
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
@@ -403,7 +403,7 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.m
 # dependency dummy for *.s files
 
 $(MISC)$/s_%.dpcc : %.s
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -414,18 +414,18 @@ $(MISC)$/s_%.dpcc : %.s
 # generated source files.
 
 $(MISC)$/o_%.dpcc : 
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @echo $@ : $(OBJ)$/$(@:b:^"__":s/__o_//).obj > $@
 
 $(MISC)$/s_%.dpcc :
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @echo $@ : $(SLO)$/$(@:b::^"__":s/__s_//).obj > $@
 
 # dependencies script files
 
 $(MISC)$/%.dpsc :
-    @-$(RM) $@ >& $(NULLDEV)
-    @-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
+    @@-$(RM) $@
+    @@-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}
     @$(MAKEDEPEND) -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))} -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(*:b).scp > $@
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par  >> $@
@@ -437,7 +437,7 @@ $(MISC)$/%.dpsc :
 # dependencies rc files (native resources for windows)
 
 $(MISC)$/%.dprc : 
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @$(MAKEDEPEND) -f - -p$(RES) -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) -I$(SOLARENV)$/inc $(*:b).rc >> $@
 .IF "$(LAZY_DEPS)"==""	
 #	@echo $@ : $(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).res  >> $@
@@ -450,7 +450,7 @@ $(MISC)$/%.dpr :
     @echo ------------------------------ 
 .IF "$(nodep)"==""
     @echo Making: $@
-    -$(RM) $@  >& $(NULLDEV)
+    @@-$(RM) $@
     dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) NO_HIDS=true make_srs_deps=true $(DEPSRSFILES)
     -$(TYPE) $(MISC)$/$(PWD:f).*.dprr >> $@
 .ENDIF			# "$(nodep)"==""
@@ -459,7 +459,7 @@ $(MISC)$/%.dpz :
     @echo ------------------------------
 .IF "$(nodep)"==""
     @echo Making: $@
-    @-$(RM) $@  >& $(NULLDEV)
+    @@-$(RM) $@
 # line too long on 4nt
 .IF "$(USE_SHELL)"!="4nt"
     dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true $(ZIPDEPFILES)
@@ -468,7 +468,7 @@ $(MISC)$/%.dpz :
 .ENDIF			# "$(USE_SHELL)"!="4nt"
     $(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) | grep -v "CVS" >> $@
     echo zipdep_langs=$(alllangiso) >> $@
-    @-$(RM) $(ZIPDEPFILES) >& $(NULLDEV)
+    @@-$(RM) $(ZIPDEPFILES)
 .ENDIF			# "$(nodep)"==""
 
 # Dependencies fuer java - Files
@@ -502,7 +502,7 @@ $(SLO)$/%.obj : %.asm
     $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)$/$*.obj $*.asm
     -$(IFEXIST) $*.err $(THEN) $(RM:s/+//) $*.err $(FI)
 .ELSE			# "$(ASM)"=="ml"
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(ASM) $(AFLAGS) $*.asm,$(SLO)$/$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
@@ -521,24 +521,11 @@ $(OBJ)$/%.obj : %.asm
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
 
-#
-# keine rule fuer *.java - abh. innerhalb eines packages!
-#
-#$(CLASSDIR)$/$(PACKAGE)$/%.class : %.java
-#.IF "$(use_jdep)"!=""
-#	$(JAVAC) -depend $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $<
-#.ELSE
-#	$(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $<
-#.ENDIF
-
-# currently unused...
-.SOURCE.idl : . $(SOLARVERSION)$/$(INPATH)$/idl$/remote $(SOLARVERSION)$/$(INPATH)$/idl $(SOLARVERSION)$/$(INPATH)$/idl$(UPDMINOREXT)$/$(PACKAGE)
-
 $(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
-        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $< )
+        @noop $(assign all_outdated_idl+:=$<)
 
 $(OUT)$/ucrdoc$/$(IDLPACKAGE)$/%.urd : %.idl
-        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $< )		
+        @noop $(assign all_outdated_doc_idl+:=$<)
 
 # generate hid files
 $(SRS)$/%.hid : %.src
@@ -565,7 +552,7 @@ $(BIN)$/%.rdb: $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
 
 #strip dos lineends
 $(MISC)$/%.sh : %.sh
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
     @tr -d "\015" < $< > $@
 
 # merge targets
