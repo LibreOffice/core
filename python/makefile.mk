@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:35:10 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:15:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -166,13 +166,3 @@ $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
     cat $? > $@
 
-#--------------------
-# to be moved to tg_ext.mk
-$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
-    @-$(RM) $@
-.IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
-.ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
-.ENDIF			# "$(GUI)"=="UNX"
-    @$(COPY) $(mktmp $(UNPACKCMD)) $@
