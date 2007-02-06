@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:51 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:58:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ APP$(TNR)PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP$(TNR)PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP$(TNR)TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -132,9 +132,9 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP$(TNR)LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .IF "$(APP$(TNR)ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP$(TNR)ICON:s/\/\\/)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
