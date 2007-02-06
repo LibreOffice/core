@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.190 $
+#   $Revision: 1.191 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:26 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:58:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,6 @@ APP9TARGET=
 
 .IF "$(IDLFILES)"!=""
 
-URDTARGET:=$(MISC)$/urd_$(TARGET).don
 URDFILES+=$(foreach,i,$(IDLFILES:s/.idl/.urd/:f) $(OUT)$/ucr$/$(IDLPACKAGE)$/$i)
 UNOIDLTARGETS+=$(URDFILES)
 
@@ -212,7 +211,6 @@ LOCALDBTARGET=$(OUT)$/ucr$/$(TARGET).db
 .ENDIF
 
 .IF "$(URDDOC)" != ""
-URDDOCTARGET:=$(MISC)$/urddoc_$(TARGET).don
 URDDOCFILES+=$(foreach,i,$(IDLFILES:s/.idl/.urd/:f) $(OUT)$/ucrdoc$/$(IDLPACKAGE)$/$i)
 UNOIDLTARGETS+=$(URDDOCFILES)
 
@@ -823,163 +821,6 @@ UNOUCRTARGET:=$(INCCOM)$/$(TARGET)_headergen.done
 MAKE_HELPIDS=$(MISC)$/helpids.don
 .ENDIF
 
-.IF "$(HXX1TARGET)"!=""
-HXX1TARGETN=$(INCCOM)$/$(HXX1TARGET).$(HXX1EXT)
-.ENDIF
-
-.IF "$(HXX2TARGET)"!=""
-HXX2TARGETN=$(INCCOM)$/$(HXX2TARGET).$(HXX2EXT)
-.ENDIF
-
-.IF "$(HXX3TARGET)"!=""
-HXX3TARGETN=$(INCCOM)$/$(HXX3TARGET).$(HXX3EXT)
-.ENDIF
-
-.IF "$(HXX4TARGET)"!=""
-HXX4TARGETN=$(INCCOM)$/$(HXX4TARGET).$(HXX4EXT)
-.ENDIF
-
-.IF "$(HXX5TARGET)"!=""
-HXX5TARGETN=$(INCCOM)$/$(HXX5TARGET).$(HXX5EXT)
-.ENDIF
-
-.IF "$(HXX6TARGET)"!=""
-HXX6TARGETN=$(INCCOM)$/$(HXX6TARGET).$(HXX6EXT)
-.ENDIF
-
-.IF "$(HXX7TARGET)"!=""
-HXX7TARGETN=$(INCCOM)$/$(HXX7TARGET).$(HXX7EXT)
-.ENDIF
-
-.IF "$(HXX8TARGET)"!=""
-HXX8TARGETN=$(INCCOM)$/$(HXX8TARGET).$(HXX8EXT)
-.ENDIF
-
-.IF "$(HXX9TARGET)"!=""
-HXX9TARGETN=$(INCCOM)$/$(HXX9TARGET).$(HXX9EXT)
-.ENDIF
-
-.IF "$(HXX10TARGET)"!=""
-HXX10TARGETN=$(INCCOM)$/$(HXX10TARGET).$(HXX10EXT)
-.ENDIF
-
-.IF "$(HXX11TARGET)"!=""
-HXX11TARGETN=$(INCCOM)$/$(HXX11TARGET).$(HXX11EXT)
-.ENDIF
-
-.IF "$(HXX12TARGET)"!=""
-HXX12TARGETN=$(INCCOM)$/$(HXX12TARGET).$(HXX12EXT)
-.ENDIF
-
-.IF "$(HXX13TARGET)"!=""
-HXX13TARGETN=$(INCCOM)$/$(HXX13TARGET).$(HXX13EXT)
-.ENDIF
-
-.IF "$(HXX14TARGET)"!=""
-HXX14TARGETN=$(INCCOM)$/$(HXX14TARGET).$(HXX14EXT)
-.ENDIF
-
-.IF "$(HXX15TARGET)"!=""
-HXX15TARGETN=$(INCCOM)$/$(HXX15TARGET).$(HXX15EXT)
-.ENDIF
-
-.IF "$(HXX16TARGET)"!=""
-HXX16TARGETN=$(INCCOM)$/$(HXX16TARGET).$(HXX16EXT)
-.ENDIF
-
-.IF "$(HXX17TARGET)"!=""
-HXX17TARGETN=$(INCCOM)$/$(HXX17TARGET).$(HXX17EXT)
-.ENDIF
-
-.IF "$(HXX18TARGET)"!=""
-HXX18TARGETN=$(INCCOM)$/$(HXX18TARGET).$(HXX18EXT)
-.ENDIF
-
-.IF "$(HXX19TARGET)"!=""
-HXX19TARGETN=$(INCCOM)$/$(HXX19TARGET).$(HXX19EXT)
-.ENDIF
-
-.IF "$(HXX20TARGET)"!=""
-HXX20TARGETN=$(INCCOM)$/$(HXX20TARGET).$(HXX20EXT)
-.ENDIF
-
-.IF "$(HXX21TARGET)"!=""
-HXX21TARGETN=$(INCCOM)$/$(HXX21TARGET).$(HXX21EXT)
-.ENDIF
-
-.IF "$(HXX22TARGET)"!=""
-HXX22TARGETN=$(INCCOM)$/$(HXX22TARGET).$(HXX22EXT)
-.ENDIF
-
-.IF "$(HXX23TARGET)"!=""
-HXX23TARGETN=$(INCCOM)$/$(HXX23TARGET).$(HXX23EXT)
-.ENDIF
-
-.IF "$(HXX24TARGET)"!=""
-HXX24TARGETN=$(INCCOM)$/$(HXX24TARGET).$(HXX24EXT)
-.ENDIF
-
-.IF "$(HXX25TARGET)"!=""
-HXX25TARGETN=$(INCCOM)$/$(HXX25TARGET).$(HXX25EXT)
-.ENDIF
-
-.IF "$(HXX26TARGET)"!=""
-HXX26TARGETN=$(INCCOM)$/$(HXX26TARGET).$(HXX26EXT)
-.ENDIF
-
-.IF "$(HXX27TARGET)"!=""
-HXX27TARGETN=$(INCCOM)$/$(HXX27TARGET).$(HXX27EXT)
-.ENDIF
-
-.IF "$(HXX28TARGET)"!=""
-HXX28TARGETN=$(INCCOM)$/$(HXX28TARGET).$(HXX28EXT)
-.ENDIF
-
-.IF "$(HXX29TARGET)"!=""
-HXX29TARGETN=$(INCCOM)$/$(HXX29TARGET).$(HXX29EXT)
-.ENDIF
-
-.IF "$(HXX30TARGET)"!=""
-HXX30TARGETN=$(INCCOM)$/$(HXX30TARGET).$(HXX30EXT)
-.ENDIF
-
-.IF "$(HXX31TARGET)"!=""
-HXX31TARGETN=$(INCCOM)$/$(HXX31TARGET).$(HXX31EXT)
-.ENDIF
-
-.IF "$(HXX32TARGET)"!=""
-HXX32TARGETN=$(INCCOM)$/$(HXX32TARGET).$(HXX32EXT)
-.ENDIF
-
-.IF "$(HXX33TARGET)"!=""
-HXX33TARGETN=$(INCCOM)$/$(HXX33TARGET).$(HXX33EXT)
-.ENDIF
-
-.IF "$(HXX34TARGET)"!=""
-HXX34TARGETN=$(INCCOM)$/$(HXX34TARGET).$(HXX34EXT)
-.ENDIF
-
-.IF "$(HXX35TARGET)"!=""
-HXX35TARGETN=$(INCCOM)$/$(HXX35TARGET).$(HXX35EXT)
-.ENDIF
-
-.IF "$(HXX36TARGET)"!=""
-HXX36TARGETN=$(INCCOM)$/$(HXX36TARGET).$(HXX36EXT)
-.ENDIF
-
-.IF "$(HXX37TARGET)"!=""
-HXX37TARGETN=$(INCCOM)$/$(HXX37TARGET).$(HXX37EXT)
-.ENDIF
-
-.IF "$(HXX38TARGET)"!=""
-HXX38TARGETN=$(INCCOM)$/$(HXX38TARGET).$(HXX38EXT)
-.ENDIF
-
-.IF "$(HXX39TARGET)"!=""
-HXX39TARGETN=$(INCCOM)$/$(HXX39TARGET).$(HXX39EXT)
-.ENDIF
-
-
 .IF "$(HXXCOPYFILES)" != ""
 HXXCOPYTARGET=	copy_hxxcopyfiles
 .ENDIF
@@ -1365,8 +1206,6 @@ ALLTAR: \
         $(YACCTARGET)	\
         $(UNOUCRTARGET)	\
         $(UNOIDLDEPTARGETS) \
-        $(URDTARGET) \
-        $(URDDOCTARGET) \
         $(DEPFILES) $(DEPFILE_SLO) $(DEPFILE_OBJ) \
         $(DPRTARGET) \
         $(DPZTARGET) \
@@ -1391,7 +1230,6 @@ ALLTAR: \
         $(HIDSID3PARTICLE)	$(HIDSID4PARTICLE)	$(HIDSID5PARTICLE)		\
         $(SDI1TARGET)	$(SDI2TARGET)	$(SDI3TARGET)		\
         $(SDI4TARGET)	$(SDI5TARGET)		\
-        $(HXXALLTARGET) \
         $(HXXCOPYTARGET) \
         $(NOLIBOBJTARGET) \
         $(NOLIBSLOTARGET) \
@@ -1533,7 +1371,7 @@ $(UNOUCROUT)$/%.flag :
 
 $(UNOUCRTARGET) : $(UNOUCRDEP) $(UNOUCRTYPEFLAGS)
 .IF "$(XML2MK_FILES)"!=""
-    @-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
+    @@-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk)
 .ENDIF			# "$(XML2MK_FILES)"!=""
     $(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && $(TOUCH) $@
 .ENDIF			# "$(UNOTYPES)" != ""
@@ -1620,24 +1458,26 @@ $(HXXCOPYTARGET):	$(HXXCOPYFILES)
 .IF "$(UNIXTEXT)"!=""
 $(UNIXTEXT) : $(UNIXTEXT:f)
     @echo Making $@
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
     @tr -d "\015" < $(@:f) > $@
 
 .ENDIF			# "$(UNIXTEXT)"!=""
 
 makedoc:
-        @-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
+        @@-mkdir $(OUT)$/ucrdoc
         $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
 #		-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
 
 .IF "$(LOCALDBTARGET)"!=""
-$(LOCALDBTARGET) : $(URDFILES)
+$(LOCALDBTARGET) : $(URDFILES) $(DEPIDLFILES)
+    $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(all_outdated_idl))
     -$(RM) $@
     $(REGMERGE) $@ UCR @$(mktmp $(URDFILES))
 .ENDIF
 
 .IF "$(LOCALDOCDBTARGET)"!=""
-$(LOCALDOCDBTARGET) : $(URDDOCFILES)
+$(LOCALDOCDBTARGET) : $(URDDOCFILES) $(DEPIDLFILES)
+    $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(all_outdated_idl))
     -$(RM) $@
     $(REGMERGE) $@ UCR @$(mktmp $(URDDOCFILES))
 .ENDIF
@@ -1662,8 +1502,8 @@ $(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS)
 
 .IF "$(SCP_PRODUCT_TYPE)"!=""
 $(SCP_PRODUCT_TYPE):
-    @-$(MKDIRHIER) $(PAR)$/$@ >& $(NULLDEV)
-    @-$(MKDIRHIER) $(BIN)$/$@ >& $(NULLDEV)
+    @@-$(MKDIRHIER) $(PAR)$/$@
+    @@-$(MKDIRHIER) $(BIN)$/$@
 
 .ENDIF			# "$(PARFILES)"!=""
 
@@ -1687,13 +1527,13 @@ COMPVTMP:=$(mktmp iii)
     @echo CCVER:=$(CCVER:s/-/ /:1) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
     @echo COMPATH_STORED:=$(COMPATH) >> $(COMPVTMP)
-    @-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
+    @@-$(RM) $(@)_$(COMPVTMP:b)
     @$(TYPE) $(COMPVTMP) > $(@)_$(COMPVTMP:b)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ >& $(NULLDEV) $(FI)
     @-$(RENAME) $(@)_$(COMPVTMP:b) $@
-    @-$(RM) $(@)_$(COMPVTMP:b) >& $(NULLDEV)
+    @@-$(RM) $(@)_$(COMPVTMP:b)
 .ELSE           # "$(CCNUMVER)"!=""
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .ENDIF          # "$(CCNUMVER)"!=""
 
 .ENDIF			# "$(COMPVERMK)"!=""
@@ -1753,9 +1593,9 @@ $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
 .ELSE			# "$(WITH_LANG)"!=""
 $(MISC)$/$(TARGET)_%.done : %.xrb
 .ENDIF			# "$(WITH_LANG)"!=""
-    @-$(RM) $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(<:b).interm$(TARGET)
     $(WRAPCMD) native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
-    @$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+    @@$(RM)  $(MISC)$/$(<:b).interm$(TARGET)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(HIDSID1PARTICLE)$(SDI1TARGET)$(HIDSID2PARTICLE)$(SDI2TARGET)$(HIDSID3PARTICLE)$(SDI3TARGET)$(HIDSID4PARTICLE)$(SDI4TARGET)$(HIDSID5PARTICLE)$(SDI5TARGET)$(HIDSID6PARTICLE)$(SDI6TARGET)$(HIDSID7PARTICLE)$(SDI7TARGET)$(HIDSID8PARTICLE)$(SDI8TARGET)$(HIDSID9PARTICLE)$(SDI9TARGET)"!=""
@@ -1860,14 +1700,6 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .ENDIF
 
 # -------
-# - HXX -
-# -------
-
-.IF "$(HXX1TARGETN)$(HXX2TARGETN)$(HXX3TARGETN)$(HXX4TARGETN)$(HXX5TARGETN)$(HXX6TARGETN)$(HXX7TARGETN)$(HXX8TARGETN)$(HXX9TARGETN)$(HXX10TARGETN)"!=""
-.INCLUDE : _tg_hxx.mk
-.ENDIF			# "$(HXX1TARGETN)$(HXX2TARGETN)$(HXX3TARGETN)$(HXX4TARGETN)$(HXX5TARGETN)$(HXX6TARGETN)$(HXX7TARGETN)$(HXX8TARGETN)$(HXX9TARGETN)$(HXX10TARGETN)"!=""
-
-# -------
 # - processing config -
 # -------
 
@@ -1930,31 +1762,6 @@ last_target: $(LAZY_DEPS_WARNING)
     @echo -------------
 
 $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
-
-.IF "$(IDLFILES)"!=""
-
-$(URDTARGET) : $(DEPIDLFILES)
-        @-mkdir $(OUT)$/ucr >& $(NULLDEV)
-# use this target only to speedup single proceess builds
-# see according rules in rules.mk
-.IF "$(MAXPROCESS)"<="1"
-        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
-.ENDIF			# "$(MAXPROCESS)"<="1"
-    @echo > $@
-
-.IF "$(URDDOC)"!=""
-
-$(URDDOCTARGET) : $(DEPIDLFILES)
-        @-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
-# use this target only to speedup single proceess builds
-# see according rules in rules.mk
-.IF "$(MAXPROCESS)"<="1"
-        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
-.ENDIF			# "$(MAXPROCESS)"<="1"
-    @echo > $@
-    
-.ENDIF			# "$(URDDOC)"!=""
-.ENDIF			# "$(IDLFILES)"!=""
 
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!=""
 .IF "$(L10N_framework)"==""
@@ -2243,9 +2050,9 @@ $(INCCOM)$/%_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkc
     @echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
     @echo $(EMQ)#define _RSCREVISION $(EMQ)"$(USQ)$(RSCREVISION)$(USQ)$(EMQ)" >> $(VERSIONTMP)
     @echo $(EMQ)#define _INPATH $(EMQ)"$(INPATH)$(EMQ)"           >> $(VERSIONTMP)
-    @-$(RM) $(@)_$(VERSIONTMP:b) >& $(NULLDEV)
+    @@-$(RM) $(@)_$(VERSIONTMP:b)
     @$(TYPE) $(VERSIONTMP) > $(@)_$(VERSIONTMP:b)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     @-$(RENAME) $(@)_$(VERSIONTMP:b) $@
 
 .IF "$(MAKEFILERC)"==""
