@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 13:55:17 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:30:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@ ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Allgemein ----------------------------------------------------
 
