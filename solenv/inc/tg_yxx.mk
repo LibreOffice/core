@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_yxx.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:57:52 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:01:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,9 @@ $(MISC)$/%.cxx : %.y
 .ENDIF
     $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)$/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
-    -$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-    -$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    @@-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx
+    @@-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx
+# fail on not existing .hxx
     $(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
 
 $(INCCOM)$/yy%.cxx : %.y
@@ -58,7 +59,8 @@ $(INCCOM)$/yy%.cxx : %.y
 .ENDIF
     $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)$/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
-    @-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-    @-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    @@-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx
+    @@-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx
+# fail on not existing .hxx
     $(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
 
