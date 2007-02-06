@@ -4,9 +4,9 @@
 #
 #   $RCSfile: sc.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:38:45 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:57:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
-
-.INCLUDE :  sv.mk
 
 # MakeDepn nicht das segdefs.hxx und die PCHs auswerten lassen
 # PCHs werden nur in den ..._1st Verzeichnissen aufgenommen
