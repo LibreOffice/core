@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-08 08:34:11 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:01:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,7 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		svpre.mk
 .INCLUDE :  		settings.mk
-.INCLUDE :  		sv.mk
 
 # --- Generate -----------------------------------------------------
 
