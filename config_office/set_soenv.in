@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.135 $
-# Date:        $Date: 2007-01-25 13:07:59 $
+# Version:     $Revision: 1.136 $
+# Date:        $Date: 2007-02-06 14:26:11 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -2017,6 +2017,7 @@ open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
 print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n"; 
+print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n"; 
 close( OUT ) || print "Can't close $bootfile: $!";
 system(`cat bootstrap.1 >> bootstrap`);
 system(`chmod +x bootstrap`);
