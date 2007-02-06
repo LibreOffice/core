@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2006-04-26 20:53:23 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:15:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,7 @@ PRJINC=..$/..$/ ..$/..$/slidesorter
 
 # --- Settings -----------------------------------------------------
 
-#.INCLUDE :  sdpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
