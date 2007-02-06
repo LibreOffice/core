@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:29:41 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:23:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ $(BIN)$/unowinreg.dll : unowinreg.cxx
 .ELSE
 
 $(BIN)$/unowinreg.dll : $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/unowinreg.dll
-    -rm -f $@ >& $(NULLDEV)
+    @@-rm -f $@
     $(GNUCOPY) $< $@
 
 .ENDIF
