@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:47:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-06 14:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _PVER_HXX //autogen
-#include <svtools/pver.hxx>
 #endif
 #ifndef GCC
 #endif
