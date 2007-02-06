@@ -1,5 +1,5 @@
-*** misc/libwpd-0.8.8/src/lib/WP1Part.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP1Part.cpp	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP1Part.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1Part.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 46,51 ****
 --- 46,58 ----
@@ -16,8 +16,8 @@
   		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup\n"));
   		return WP1VariableLengthGroup::constructVariableLengthGroup(input, readVal);
   	}
-*** misc/libwpd-0.8.8/src/lib/WP1SetTabsGroup.cpp	2007-01-05 11:21:16.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP1SetTabsGroup.cpp	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP1SetTabsGroup.cpp	Fri Jan  5 11:21:16 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1SetTabsGroup.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 39,45 ****
   void WP1SetTabsGroup::_readContents(WPXInputStream *input)
@@ -56,8 +56,8 @@
   		tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
   
   		if (tmpTabType < 0)
-*** misc/libwpd-0.8.8/src/lib/WP1SubDocument.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP1SubDocument.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP1SubDocument.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1SubDocument.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 26,32 ****
   #include "WP1Parser.h"
@@ -75,8 +75,8 @@
   	WPXSubDocument(input, dataSize)
   {
   }
-*** misc/libwpd-0.8.8/src/lib/WP1SubDocument.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP1SubDocument.h	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP1SubDocument.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1SubDocument.h	Tue Jan 30 16:28:39 2007
 ***************
 *** 32,38 ****
   class WP1SubDocument : public WPXSubDocument
@@ -94,8 +94,8 @@
   	void parse(WP1Listener *listener) const;
   
   };
-*** misc/libwpd-0.8.8/src/lib/WP3PageFormatGroup.cpp	2007-01-05 11:21:13.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP3PageFormatGroup.cpp	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP3PageFormatGroup.cpp	Fri Jan  5 11:21:13 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3PageFormatGroup.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 91,98 ****
   
@@ -117,8 +117,8 @@
   			tmpTabPosition = fixedPointToFloat(readU32(input, true)) / 72.0f;
   
   			if (tmpTabType < 0)
-*** misc/libwpd-0.8.8/src/lib/WP3SubDocument.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP3SubDocument.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP3SubDocument.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3SubDocument.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 26,32 ****
   #include "WP3Parser.h"
@@ -136,8 +136,8 @@
   	WPXSubDocument(input, dataSize)
   {
   }
-*** misc/libwpd-0.8.8/src/lib/WP3SubDocument.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP3SubDocument.h	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP3SubDocument.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3SubDocument.h	Tue Jan 30 16:28:39 2007
 ***************
 *** 32,38 ****
   class WP3SubDocument : public WPXSubDocument
@@ -155,8 +155,8 @@
   	void parse(WP3Listener *listener) const;
   
   };
-*** misc/libwpd-0.8.8/src/lib/WP3TablesGroup.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP3TablesGroup.cpp	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP3TablesGroup.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3TablesGroup.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 50,59 ****
   {
@@ -214,8 +214,8 @@
   			listener->addTableColumnDefinition(fixedPointToWPUs(m_columnWidth[i]), fixedPointToWPUs(m_leftGutterSpacing),
   								fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
   		listener->startTable();
-*** misc/libwpd-0.8.8/src/lib/WP42SubDocument.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP42SubDocument.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP42SubDocument.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP42SubDocument.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 26,37 ****
   #include "WP42Parser.h"
@@ -243,8 +243,8 @@
   	WPXSubDocument(input, dataSize)
   {
   }
-*** misc/libwpd-0.8.8/src/lib/WP42SubDocument.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP42SubDocument.h	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP42SubDocument.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP42SubDocument.h	Tue Jan 30 16:28:39 2007
 ***************
 *** 32,39 ****
   class WP42SubDocument : public WPXSubDocument
@@ -264,8 +264,8 @@
   	void parse(WP42Listener *listener) const;
   
   };
-*** misc/libwpd-0.8.8/src/lib/WP5DefinitionGroup.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP5DefinitionGroup.cpp	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP5DefinitionGroup.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5DefinitionGroup.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 26,32 ****
   #include "WP5Listener.h"
@@ -339,8 +339,8 @@
   			break;
   		default:
   			break;
-*** misc/libwpd-0.8.8/src/lib/WP5DefinitionGroup.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP5DefinitionGroup.h	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP5DefinitionGroup.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5DefinitionGroup.h	Tue Jan 30 16:28:39 2007
 ***************
 *** 31,37 ****
   class WP5DefinitionGroup_DefineTablesSubGroup : public WP5VariableLengthGroup_SubGroup
@@ -368,8 +368,8 @@
   
   #endif /* WP5DEFINITIONGROUP_H */
 --- 58,63 ----
-*** misc/libwpd-0.8.8/src/lib/WP5SubDocument.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP5SubDocument.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP5SubDocument.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5SubDocument.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 26,32 ****
   #include "WP5Parser.h"
@@ -387,8 +387,8 @@
   	WPXSubDocument(input, dataSize)
   {
   }
-*** misc/libwpd-0.8.8/src/lib/WP5SubDocument.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP5SubDocument.h	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP5SubDocument.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5SubDocument.h	Tue Jan 30 16:28:39 2007
 ***************
 *** 32,38 ****
   class WP5SubDocument : public WPXSubDocument
@@ -406,8 +406,8 @@
   	void parse(WP5Listener *listener) const;
   
   };
-*** misc/libwpd-0.8.8/src/lib/WP6ExtendedDocumentSummaryPacket.cpp	2007-01-05 11:30:07.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP6ExtendedDocumentSummaryPacket.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP6ExtendedDocumentSummaryPacket.cpp	Fri Jan  5 11:30:07 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6ExtendedDocumentSummaryPacket.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 24,29 ****
 --- 24,30 ----
@@ -429,8 +429,8 @@
   	uint8_t *streamData = new uint8_t[m_dataSize];
   	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
   		streamData[i] = readU8(input);
-*** misc/libwpd-0.8.8/src/lib/WP6FontDescriptorPacket.cpp	2007-01-04 12:52:35.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP6FontDescriptorPacket.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP6FontDescriptorPacket.cpp	Thu Jan  4 12:52:35 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6FontDescriptorPacket.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 23,29 ****
    * Corel Corporation or Corel Corporation Limited."
@@ -469,8 +469,8 @@
      if (m_fontNameLength == 0) 
   	   {
   		   m_fontName = new char[1];
-*** misc/libwpd-0.8.8/src/lib/WP6GeneralTextPacket.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP6GeneralTextPacket.cpp	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP6GeneralTextPacket.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6GeneralTextPacket.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 43,48 ****
 --- 43,49 ----
@@ -526,8 +526,8 @@
   		for (unsigned int j=0; j<blockSizes[i]; j++)
   		{
   			streamData[streamPos] = readU8(input);
-*** misc/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.cpp	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 35,41 ****
   #include "libwpd.h"
@@ -565,8 +565,8 @@
   		return;
   
   	input->seek(dataOffset, WPX_SEEK_SET);
-*** misc/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.h	2007-01-13 00:18:52.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.h	Tue Jan 30 16:28:39 2007
 ***************
 *** 39,50 ****
 --- 39,54 ----
@@ -586,8 +586,8 @@
   };
   
   #endif /* WP6PREFIXDATAPACKET_H */
-*** misc/libwpd-0.8.8/src/lib/WP6SubDocument.cpp	2007-01-03 14:07:55.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP6SubDocument.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP6SubDocument.cpp	Wed Jan  3 14:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6SubDocument.cpp	Tue Jan 30 16:28:39 2007
 ***************
 *** 26,32 ****
   #include "WP6Parser.h"
@@ -605,8 +605,8 @@
   	WPXSubDocument(streamData, dataSize)
   {
   }
-*** misc/libwpd-0.8.8/src/lib/WP6SubDocument.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WP6SubDocument.h	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WP6SubDocument.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6SubDocument.h	Tue Jan 30 16:28:39 2007
 ***************
 *** 32,38 ****
   class WP6SubDocument : public WPXSubDocument
@@ -624,8 +624,8 @@
   	void parse(WP6Listener *listener) const;
   };
   #endif /* WP6SUBDOCUMENT_H */
-*** misc/libwpd-0.8.8/src/lib/WPXSubDocument.cpp	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WPXSubDocument.cpp	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WPXSubDocument.cpp	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WPXSubDocument.cpp	Tue Jan 30 16:28:40 2007
 ***************
 *** 32,49 ****
   {
@@ -667,8 +667,8 @@
   	m_stream(0)
   {
   	m_stream = new WPXMemoryInputStream(streamData, dataSize);
-*** misc/libwpd-0.8.8/src/lib/WPXSubDocument.h	2007-01-03 14:07:56.000000000 +0100
---- misc/build/libwpd-0.8.8/src/lib/WPXSubDocument.h	2007-01-15 11:03:37.000000000 +0100
+*** misc/libwpd-0.8.8/src/lib/WPXSubDocument.h	Wed Jan  3 14:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WPXSubDocument.h	Tue Jan 30 16:28:40 2007
 ***************
 *** 33,40 ****
   {
@@ -688,3 +688,17 @@
   	virtual ~WPXSubDocument();
   	WPXMemoryInputStream *getStream() const { return m_stream;}
   
+*** misc/libwpd-0.8.8/src/lib/makefile.mk	Tue Nov 14 15:45:50 2006
+--- misc/build/libwpd-0.8.8/src/lib/makefile.mk	Tue Jan 30 16:29:03 2007
+***************
+*** 7,15 ****
+  ENABLE_EXCEPTIONS=TRUE
+  LIBTARGET=NO
+  
+- .INCLUDE :  svpre.mk
+  .INCLUDE :  settings.mk
+- .INCLUDE :  sv.mk
+  
+  .IF "$(GUI)"=="WNT"
+  CFLAGS+=-GR
+--- 7,13 ----
