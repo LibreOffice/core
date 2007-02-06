@@ -4,9 +4,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:45:14 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:35:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -173,14 +173,14 @@ extract_mozab_files:	$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) \
     $(MISC)$/build$/so_moz_lib_files
     
 make_temp_dir:
-    @-$(MKDIR)	$(RUNTIME_DIR)	>& $(NULLDEV)
-    @-$(MKDIR)	$(RUNTIME_DIR)$/components	>& $(NULLDEV)
-    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults	>& $(NULLDEV)
-    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref	>& $(NULLDEV)
-    @-$(MKDIR)	$(LIB_DIR)	>& $(NULLDEV)
-    @-$(MKDIR)	$(INCLUDE_DIR)	>& $(NULLDEV)
+    @@-$(MKDIR)	$(RUNTIME_DIR)
+    @@-$(MKDIR)	$(RUNTIME_DIR)$/components
+    @@-$(MKDIR)	$(RUNTIME_DIR)$/defaults
+    @@-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref
+    @@-$(MKDIR)	$(LIB_DIR)
+    @@-$(MKDIR)	$(INCLUDE_DIR)
 .IF "$(OS)"=="SOLARIS"
-    -$(MKDIR)	$(RUNTIME_DIR)$/res	>& $(NULLDEV)
+    @@-$(MKDIR)	$(RUNTIME_DIR)$/res
 .ENDIF
 
 $(OUT)$/bin$/mozruntime.zip: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
@@ -215,9 +215,9 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     echo >& $(NULLDEV)
 
 # copy files in DEFAULTS_RUNTIMELIST
-    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref	>& $(NULLDEV)
-    @-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/autoconfig	>& $(NULLDEV)
-    @-$(MKDIR)	$(RUNTIME_DIR)$/greprefs	>& $(NULLDEV)
+    @@-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref
+    @@-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/autoconfig
+    @@-$(MKDIR)	$(RUNTIME_DIR)$/greprefs
     $(foreach,file,$(DEFAULTS_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(file) $(RUNTIME_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
 # copy regxpcom
@@ -294,7 +294,7 @@ $(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     noop
 
 $(MISC)$/CREATETARBALL:	extract_mozab_files
-    @-$(MKDIR)	$(OUT)$/zipped	>& $(NULLDEV)
+    @@-$(MKDIR)	$(OUT)$/zipped
     $(COPY) $(BIN)$/mozruntime.zip $(OUT)$/zipped$/$(MOZTARGET)runtime.zip
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"!="MACOSX"
