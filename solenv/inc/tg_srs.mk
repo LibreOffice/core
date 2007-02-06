@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:57:38 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:01:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ALLTAR : $(HIDSRS$(TNR)PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS$(TNR)NAME).srs} -fo=$@ $(SRC$(TNR)FILES)
 
 .IF "$(WITH_LANG)"!=""
