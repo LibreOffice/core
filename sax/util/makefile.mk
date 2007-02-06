@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 12:07:50 $
+#   last change: $Author: vg $ $Date: 2007-02-06 12:57:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,7 @@ TARGET = sax.uno
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 DLLPRE =
 #-----------------------------------------------------------
 
