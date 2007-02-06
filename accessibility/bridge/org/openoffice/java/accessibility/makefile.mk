@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:36:37 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:34:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ DEBUGSWITCH = true
 
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
 $(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
-    @-$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE) >& $(NULLDEV) 
+    @@-$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE)
     @-echo package org.openoffice.java.accessibility\; > $@
     @-echo public class Build { >> $@
     @-echo public static final boolean DEBUG = $(DEBUGSWITCH)\; >> $@
@@ -125,7 +125,7 @@ $(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
     @-echo } >> $@
 .ELSE
 $(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
-    @-$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE) >& $(NULLDEV) 
+    @@-$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE)
     @-echo package org.openoffice.java.accessibility; > $@
     @-echo public class Build { >> $@
     @-echo public static final boolean DEBUG = $(DEBUGSWITCH); >> $@
