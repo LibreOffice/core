@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:28:32 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:08:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -285,4 +285,4 @@ $(MISCX)$/$(APP1TARGET).def : makefile.mk
 
 $(BIN)$/so: makefile.mk
     @echo APP5 : $(APP5TARGET)
-    @-mkdir $(BIN)$/so >& $(NULLDEV)
+    @@-$(MKDIR) $(BIN)$/so
