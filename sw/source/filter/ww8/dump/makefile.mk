@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-16 13:54:06 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:19:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,7 @@ VERSION=$(UPD)
 
 # --- Settings ---------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 CXXFILES=	dump8.cxx dump8a.cxx ww8dout.cxx ww8darr.cxx ww8scan.cxx msvbasic.cxx
 
