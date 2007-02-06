@@ -59,7 +59,6 @@ hedabu: ..\inc\itemdel.hxx %_DEST%\inc%_EXT%\svtools\itemdel.hxx
 hedabu: ..\inc\wallitem.hxx %_DEST%\inc%_EXT%\svtools\wallitem.hxx
 hedabu: ..\inc\sfontitm.hxx %_DEST%\inc%_EXT%\svtools\sfontitm.hxx
 hedabu: ..\inc\bintitem.hxx %_DEST%\inc%_EXT%\svtools\bintitem.hxx
-hedabu: ..\inc\pver.hxx %_DEST%\inc%_EXT%\svtools\pver.hxx
 hedabu: ..\inc\eitem.hxx %_DEST%\inc%_EXT%\svtools\eitem.hxx
 hedabu: ..\inc\eventcfg.hxx %_DEST%\inc%_EXT%\svtools\eventcfg.hxx
 hedabu: ..\inc\filedlg.hxx %_DEST%\inc%_EXT%\svtools\filedlg.hxx
