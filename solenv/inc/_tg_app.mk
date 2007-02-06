@@ -44,7 +44,7 @@ APP1PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -95,9 +95,9 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP1LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP1LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP1LINKRES:b).rc
 .IF "$(APP1ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP1ICON:s/\/\\/)" >> $(MISC)$/$(APP1LINKRES:b).rc
@@ -213,7 +213,7 @@ APP2PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -264,9 +264,9 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP2LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP2LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP2LINKRES:b).rc
 .IF "$(APP2ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP2ICON:s/\/\\/)" >> $(MISC)$/$(APP2LINKRES:b).rc
@@ -382,7 +382,7 @@ APP3PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -433,9 +433,9 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP3LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP3LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP3LINKRES:b).rc
 .IF "$(APP3ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP3ICON:s/\/\\/)" >> $(MISC)$/$(APP3LINKRES:b).rc
@@ -551,7 +551,7 @@ APP4PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -602,9 +602,9 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP4LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP4LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP4LINKRES:b).rc
 .IF "$(APP4ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP4ICON:s/\/\\/)" >> $(MISC)$/$(APP4LINKRES:b).rc
@@ -720,7 +720,7 @@ APP5PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -771,9 +771,9 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP5LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP5LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP5LINKRES:b).rc
 .IF "$(APP5ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP5ICON:s/\/\\/)" >> $(MISC)$/$(APP5LINKRES:b).rc
@@ -889,7 +889,7 @@ APP6PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -940,9 +940,9 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP6LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP6LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP6LINKRES:b).rc
 .IF "$(APP6ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP6ICON:s/\/\\/)" >> $(MISC)$/$(APP6LINKRES:b).rc
@@ -1058,7 +1058,7 @@ APP7PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -1109,9 +1109,9 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP7LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP7LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP7LINKRES:b).rc
 .IF "$(APP7ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP7ICON:s/\/\\/)" >> $(MISC)$/$(APP7LINKRES:b).rc
@@ -1227,7 +1227,7 @@ APP8PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -1278,9 +1278,9 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP8LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP8LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP8LINKRES:b).rc
 .IF "$(APP8ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP8ICON:s/\/\\/)" >> $(MISC)$/$(APP8LINKRES:b).rc
@@ -1396,7 +1396,7 @@ APP9PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -1447,9 +1447,9 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP9LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP9LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP9LINKRES:b).rc
 .IF "$(APP9ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP9ICON:s/\/\\/)" >> $(MISC)$/$(APP9LINKRES:b).rc
@@ -1565,7 +1565,7 @@ APP10PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -1616,9 +1616,9 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
-    @-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+    @@-$(MKDIR) $(@:d:d)
 .IF "$(APP10LINKRES)" != ""
-    @-$(RM) $(MISC)$/$(APP10LINKRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(APP10LINKRES:b).rc
 .IF "$(APP10ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
     @-echo 1 ICON "$(APP10ICON:s/\/\\/)" >> $(MISC)$/$(APP10LINKRES:b).rc
