@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:54:58 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:00:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,12 @@ CUSTOMMANIFESTFILEDEP:=$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
 
 $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(CUSTOMMANIFESTFILE)
     -$(RM) $@
-#>& $(NULLDEV)
     $(COPY) $< $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 
 $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
-    -$(MKDIRHIER) $(@:d) >& $(NULLDEV)
-    -$(RM) $@ >& $(NULLDEV)
+    @@-$(MKDIRHIER) $(@:d)
+    @@-$(RM) $@
     echo Manifest-Version: 1.0 > $@
 .IF "$(JARCLASSPATH)" != ""
     echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
