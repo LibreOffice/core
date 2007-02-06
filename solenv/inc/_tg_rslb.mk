@@ -62,15 +62,15 @@ $(RESLIB1TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI1)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI1)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI1)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI1)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB1TARGETN)"!=""
@@ -140,15 +140,15 @@ $(RESLIB2TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI2)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI2)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI2)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI2)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB2TARGETN)"!=""
@@ -218,15 +218,15 @@ $(RESLIB3TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI3)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI3)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI3)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI3)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB3TARGETN)"!=""
@@ -296,15 +296,15 @@ $(RESLIB4TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI4)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI4)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI4)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI4)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB4TARGETN)"!=""
@@ -374,15 +374,15 @@ $(RESLIB5TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI5)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI5)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI5)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI5)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB5TARGETN)"!=""
@@ -452,15 +452,15 @@ $(RESLIB6TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI6)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI6)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI6)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI6)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB6TARGETN)"!=""
@@ -530,15 +530,15 @@ $(RESLIB7TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI7)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI7)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI7)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI7)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB7TARGETN)"!=""
@@ -608,15 +608,15 @@ $(RESLIB8TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI8)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI8)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI8)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI8)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB8TARGETN)"!=""
@@ -686,15 +686,15 @@ $(RESLIB9TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI9)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI9)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI9)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI9)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB9TARGETN)"!=""
@@ -764,15 +764,15 @@ $(RESLIB10TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI10)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI10)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI10)
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI10)
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB10TARGETN)"!=""
