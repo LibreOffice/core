@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:46:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-06 14:34:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #include <stdio.h>
 
-#ifndef _PVER_HXX //autogen
-#include <svtools/pver.hxx>
-#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
