@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:54:34 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:59:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,12 @@ BACK_PATH=..$/..$/..$/
 
 # Remove entire package from output directory, for example, if new patches are
 # to be applied.
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    REMOVE_PACKAGE_COMMAND=-$(RM) -r $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
-.ELSE			# "$(GUI)"=="WNT"
-    REMOVE_PACKAGE_COMMAND=-$(RM) /s $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
-.ENDIF			# "$(GUI)"=="WNT"
+# is this used at all?
+#.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+#	REMOVE_PACKAGE_COMMAND=-$(RM) -r $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
+#.ELSE			# "$(GUI)"=="WNT"
+#	REMOVE_PACKAGE_COMMAND=-$(RM) /s $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
+#.ENDIF			# "$(GUI)"=="WNT"
 
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
 P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
@@ -108,6 +109,16 @@ clean:
     cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) clean
     $(RM) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
+    @-$(RM) $@
+.IF "$(GUI)"=="UNX"
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
+.ELSE			# "$(GUI)"=="UNX"
+    @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
+.ENDIF			# "$(GUI)"=="UNX"
+    @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @$(RENAME) $@.$(INPATH) $@
+
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
@@ -124,16 +135,6 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @noop $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
 .ELSE			# "$(GUI)"=="UNX"
     @noop $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
-.ENDIF			# "$(GUI)"=="UNX"
-    @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
-    @$(RENAME) $@.$(INPATH) $@
-
-$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
-    @-$(RM) $@
-.IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
-.ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -231,7 +232,7 @@ patch : $(MISC)$/convert_dos_flag
 .ENDIF          # "$(CONVERTFILES)"!=""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(CONFIGURE_ACTION)" == "none" || "$(CONFIGURE_ACTION)"==""
     $(TOUCH) $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 .ELSE			# "$(CONFIGURE_ACTION)"=="none" || "$(CONFIGURE_ACTION)"==""
@@ -242,7 +243,7 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 
 
 $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
     $(TOUCH) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ELSE			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
@@ -251,7 +252,7 @@ $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 .ENDIF			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
 
 $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
     $(TOUCH) $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ELSE			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
@@ -313,13 +314,13 @@ $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    @-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp >& $(NULLDEV)
-    @-$(RM) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp
+    @@-$(RM) $(NEW_PATCH_FILE_NAME).bak
 #ignore returncode of 1 (indicates differences...)	
 # hard coded again to get the same directory level as before. quite ugly...
     -cd $(PRJ)$/$(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).tmp
-    @-mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
-    @-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME) >& $(NULLDEV)
+    @@-mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak
+    @@-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME)
     @echo still some problems with win32 generated patches...
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
