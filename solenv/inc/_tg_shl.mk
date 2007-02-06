@@ -145,7 +145,7 @@ SHL1VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL1VERSIONMAP)
 .ENDIF
 
 $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -219,7 +219,7 @@ SHL1DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL1TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -231,7 +231,7 @@ $(SHL1TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL1LINKLIST=$(MISC)$/$(SHL1TARGET)_link.lst
 $(MISC)$/$(SHL1TARGET)_link.lst : $(SHL1LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL1USE_EXPORTS)"=="name"
@@ -254,7 +254,7 @@ $(SHL1TARGETN) : \
     @echo Making: $(SHL1TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL1DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL1DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .IF "$(SHL1ICON)" != ""
     @echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF
@@ -271,7 +271,7 @@ $(SHL1TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -305,7 +305,8 @@ $(SHL1TARGETN) : \
         $(SHL1STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -323,7 +324,8 @@ $(SHL1TARGETN) : \
         $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -575,7 +577,7 @@ SHL2VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL2VERSIONMAP)
 .ENDIF
 
 $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -649,7 +651,7 @@ SHL2DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL2TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -661,7 +663,7 @@ $(SHL2TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL2LINKLIST=$(MISC)$/$(SHL2TARGET)_link.lst
 $(MISC)$/$(SHL2TARGET)_link.lst : $(SHL2LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL2USE_EXPORTS)"=="name"
@@ -684,7 +686,7 @@ $(SHL2TARGETN) : \
     @echo Making: $(SHL2TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL2DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL2DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .IF "$(SHL2ICON)" != ""
     @echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF
@@ -701,7 +703,7 @@ $(SHL2TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -735,7 +737,8 @@ $(SHL2TARGETN) : \
         $(SHL2STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -753,7 +756,8 @@ $(SHL2TARGETN) : \
         $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -1005,7 +1009,7 @@ SHL3VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL3VERSIONMAP)
 .ENDIF
 
 $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -1079,7 +1083,7 @@ SHL3DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL3TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -1091,7 +1095,7 @@ $(SHL3TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL3LINKLIST=$(MISC)$/$(SHL3TARGET)_link.lst
 $(MISC)$/$(SHL3TARGET)_link.lst : $(SHL3LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL3USE_EXPORTS)"=="name"
@@ -1114,7 +1118,7 @@ $(SHL3TARGETN) : \
     @echo Making: $(SHL3TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL3DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL3DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .IF "$(SHL3ICON)" != ""
     @echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF
@@ -1131,7 +1135,7 @@ $(SHL3TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -1165,7 +1169,8 @@ $(SHL3TARGETN) : \
         $(SHL3STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -1183,7 +1188,8 @@ $(SHL3TARGETN) : \
         $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -1435,7 +1441,7 @@ SHL4VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL4VERSIONMAP)
 .ENDIF
 
 $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -1509,7 +1515,7 @@ SHL4DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL4TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -1521,7 +1527,7 @@ $(SHL4TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL4LINKLIST=$(MISC)$/$(SHL4TARGET)_link.lst
 $(MISC)$/$(SHL4TARGET)_link.lst : $(SHL4LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL4USE_EXPORTS)"=="name"
@@ -1544,7 +1550,7 @@ $(SHL4TARGETN) : \
     @echo Making: $(SHL4TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL4DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL4DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .IF "$(SHL4ICON)" != ""
     @echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF
@@ -1561,7 +1567,7 @@ $(SHL4TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -1595,7 +1601,8 @@ $(SHL4TARGETN) : \
         $(SHL4STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -1613,7 +1620,8 @@ $(SHL4TARGETN) : \
         $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -1865,7 +1873,7 @@ SHL5VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL5VERSIONMAP)
 .ENDIF
 
 $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -1939,7 +1947,7 @@ SHL5DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL5TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -1951,7 +1959,7 @@ $(SHL5TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL5LINKLIST=$(MISC)$/$(SHL5TARGET)_link.lst
 $(MISC)$/$(SHL5TARGET)_link.lst : $(SHL5LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL5USE_EXPORTS)"=="name"
@@ -1974,7 +1982,7 @@ $(SHL5TARGETN) : \
     @echo Making: $(SHL5TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL5DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL5DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .IF "$(SHL5ICON)" != ""
     @echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF
@@ -1991,7 +1999,7 @@ $(SHL5TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -2025,7 +2033,8 @@ $(SHL5TARGETN) : \
         $(SHL5STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -2043,7 +2052,8 @@ $(SHL5TARGETN) : \
         $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -2295,7 +2305,7 @@ SHL6VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL6VERSIONMAP)
 .ENDIF
 
 $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -2369,7 +2379,7 @@ SHL6DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL6TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -2381,7 +2391,7 @@ $(SHL6TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL6LINKLIST=$(MISC)$/$(SHL6TARGET)_link.lst
 $(MISC)$/$(SHL6TARGET)_link.lst : $(SHL6LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL6USE_EXPORTS)"=="name"
@@ -2404,7 +2414,7 @@ $(SHL6TARGETN) : \
     @echo Making: $(SHL6TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL6DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL6DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .IF "$(SHL6ICON)" != ""
     @echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF
@@ -2421,7 +2431,7 @@ $(SHL6TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -2455,7 +2465,8 @@ $(SHL6TARGETN) : \
         $(SHL6STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -2473,7 +2484,8 @@ $(SHL6TARGETN) : \
         $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -2725,7 +2737,7 @@ SHL7VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL7VERSIONMAP)
 .ENDIF
 
 $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -2799,7 +2811,7 @@ SHL7DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL7TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -2811,7 +2823,7 @@ $(SHL7TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL7LINKLIST=$(MISC)$/$(SHL7TARGET)_link.lst
 $(MISC)$/$(SHL7TARGET)_link.lst : $(SHL7LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL7USE_EXPORTS)"=="name"
@@ -2834,7 +2846,7 @@ $(SHL7TARGETN) : \
     @echo Making: $(SHL7TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL7DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL7DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .IF "$(SHL7ICON)" != ""
     @echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF
@@ -2851,7 +2863,7 @@ $(SHL7TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -2885,7 +2897,8 @@ $(SHL7TARGETN) : \
         $(SHL7STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -2903,7 +2916,8 @@ $(SHL7TARGETN) : \
         $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -3155,7 +3169,7 @@ SHL8VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL8VERSIONMAP)
 .ENDIF
 
 $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -3229,7 +3243,7 @@ SHL8DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL8TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -3241,7 +3255,7 @@ $(SHL8TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL8LINKLIST=$(MISC)$/$(SHL8TARGET)_link.lst
 $(MISC)$/$(SHL8TARGET)_link.lst : $(SHL8LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL8USE_EXPORTS)"=="name"
@@ -3264,7 +3278,7 @@ $(SHL8TARGETN) : \
     @echo Making: $(SHL8TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL8DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL8DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .IF "$(SHL8ICON)" != ""
     @echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF
@@ -3281,7 +3295,7 @@ $(SHL8TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -3315,7 +3329,8 @@ $(SHL8TARGETN) : \
         $(SHL8STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -3333,7 +3348,8 @@ $(SHL8TARGETN) : \
         $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -3585,7 +3601,7 @@ SHL9VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL9VERSIONMAP)
 .ENDIF
 
 $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -3659,7 +3675,7 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_d
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL9TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -3671,7 +3687,7 @@ $(SHL9TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL9LINKLIST=$(MISC)$/$(SHL9TARGET)_link.lst
 $(MISC)$/$(SHL9TARGET)_link.lst : $(SHL9LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL9USE_EXPORTS)"=="name"
@@ -3694,7 +3710,7 @@ $(SHL9TARGETN) : \
     @echo Making: $(SHL9TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL9DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL9DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .IF "$(SHL9ICON)" != ""
     @echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF
@@ -3711,7 +3727,7 @@ $(SHL9TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -3745,7 +3761,8 @@ $(SHL9TARGETN) : \
         $(SHL9STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -3763,7 +3780,8 @@ $(SHL9TARGETN) : \
         $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -4015,7 +4033,7 @@ SHL10VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL10VERSIONMAP)
 .ENDIF
 
 $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
-    @-$(RM) -f $@ >& $(NULLDEV)
+    @@-$(RM) -f $@
 
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -4089,7 +4107,7 @@ SHL10DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL10TARGET)_linkinc.ls .PHONY:
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
@@ -4101,7 +4119,7 @@ $(SHL10TARGETN) : $(LINKINCTARGETS)
 .IF "$(GUI)"=="WNT"
 SHL10LINKLIST=$(MISC)$/$(SHL10TARGET)_link.lst
 $(MISC)$/$(SHL10TARGET)_link.lst : $(SHL10LIBS)
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
     $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL10USE_EXPORTS)"=="name"
@@ -4124,7 +4142,7 @@ $(SHL10TARGETN) : \
     @echo Making: $(SHL10TARGETN)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL10DEFAULTRES)"!=""
-    @-$(RM) $(MISC)$/$(SHL10DEFAULTRES:b).rc >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .IF "$(SHL10ICON)" != ""
     @echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF
@@ -4141,7 +4159,7 @@ $(SHL10TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -4175,7 +4193,8 @@ $(SHL10TARGETN) : \
         $(SHL10STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
@@ -4193,7 +4212,8 @@ $(SHL10TARGETN) : \
         $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
-    @$(LS) $@ >& $(NULLDEV)
+# double check if target was really written... still making sense?
+    @@$(LS) $@
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
