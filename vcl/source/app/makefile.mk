@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-24 13:47:17 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:18:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 CDEFS+=-DDLLPOSTFIX=$(DLLPOSTFIX)
