@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.208 $
+#   $Revision: 1.209 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:52:50 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:57:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,9 +92,9 @@ WRONG_SOURCEVERSION
 
 # Create $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk if needed
 %minor.mk : $(SOLARENV)$/inc$/minor.mk
-    @-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) >& $(NULLDEV)
-    @$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
-    @$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
+    @@-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)
+    @@$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
+    @@$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
 .ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 
 # Force creation of $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/
