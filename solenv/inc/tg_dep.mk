@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:19 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:59:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,41 +33,33 @@
 #
 #*************************************************************************
 
-.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(SRCFILES)$(SRC1FILES)$(SRC2FILES)$(SRC3FILES)$(RCFILES)$(HXX1TARGET)$(HDBDEPNTARGET)$(IDLFILES)$(PARFILES)$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
+.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(SRCFILES)$(SRC1FILES)$(SRC2FILES)$(SRC3FILES)$(RCFILES)$(HDBDEPNTARGET)$(IDLFILES)$(PARFILES)$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
 ALLDEP .PHONY: 
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @-$(IFEXIST) $(SRS)$/$(PWD:f).*.dpr $(THEN) $(RM:s/+//) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV) $(FI)
 .ELSE
-    @-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
+    @@-$(RM) $(SRS)$/$(PWD:f).*.dpr
 .ENDIF
-    @-$(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(PWD:f).*.dprr >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP1TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP2TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP3TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP4TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP5TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP6TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP7TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP8TYPELIST).mk >& $(NULLDEV)
-    @-$(RM) $(MISC)$/$(COMP9TYPELIST).mk >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(TARGET).dpr
+    @@-$(RM) $(MISC)$/$(PWD:f).*.dprr
+    @@-$(RM) $(MISC)$/$(TARGET).dpj
+    @@-$(RM) $(MISC)$/$(TARGET).dpz
+    @@-$(RM) $(MISC)$/$(COMP1TYPELIST).mk $(MISC)$/$(COMP2TYPELIST).mk $(MISC)$/$(COMP3TYPELIST).mk $(MISC)$/$(COMP4TYPELIST).mk $(MISC)$/$(COMP5TYPELIST).mk $(MISC)$/$(COMP6TYPELIST).mk $(MISC)$/$(COMP7TYPELIST).mk $(MISC)$/$(COMP8TYPELIST).mk $(MISC)$/$(COMP9TYPELIST).mk
 .IF "$(DEPFILE_SLO)"!=""	
-    @-$(RM) $(DEPFILE_SLO) >& $(NULLDEV)
+    @@-$(RM) $(DEPFILE_SLO)
 .ENDIF			# "$(DEPFILE_SLO)"!=""	
 .IF "$(DEPFILE_OBJ)"!=""	
-    @-$(RM) $(DEPFILE_OBJ) >& $(NULLDEV)
+    @@-$(RM) $(DEPFILE_OBJ)
 .ENDIF			# "$(DEPFILE_OBJ)"!=""	
 .IF "$(DEPFILES)" != ""
 #to keep win9x happy
 .IF "$(GROUPSHELL:b:l)"=="4dos"
-    @-echo $(foreach,i,$(DEPFILES) $(shell $(4nt_force_shell)-del $i >& $(NULLDEV))) >& $(NULLDEV)
+    @@-echo $(foreach,i,$(DEPFILES) $(shell $(4nt_force_shell)-del $i >& $(NULLDEV)))
 .ELSE			# "$(GROUPSHELL:b)"=="4dos"
 .IF "$(USE_SHELL)"=="4nt"
-    @-echo $(foreach,i,$(DEPFILES) $(shell $(shell $(4nt_force_shell)-del $i >& $(NULLDEV))) >& $(NULLDEV)
+    @@-echo $(foreach,i,$(DEPFILES) $(shell $(shell $(4nt_force_shell)-del $i >& $(NULLDEV)))
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(RM) $(DEPFILES) >& $(NULLDEV)
+    @@-$(RM) $(DEPFILES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(GROUPSHELL:b)"=="4dos"
 .ENDIF			# "$(DEPFILES)" != ""
