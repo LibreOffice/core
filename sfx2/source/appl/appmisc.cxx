@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:15:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-06 14:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@
 #endif
 #include <tools/rcid.h>
 #include <vos/mutex.hxx>
-#include <svtools/pver.hxx>
 #ifndef GCC
 #endif
 #ifndef _UTL_CONFIGMGR_HXX_
