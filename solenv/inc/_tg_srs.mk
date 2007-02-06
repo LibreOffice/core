@@ -18,7 +18,7 @@ ALLTAR : $(HIDSRS1PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS1NAME).dprr: $(SRC1FILES) $(HIDSRS1PARTICLE) $(HID1FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS1NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS1NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS1NAME).srs} -fo=$@ $(SRC1FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -67,7 +67,7 @@ ALLTAR : $(HIDSRS2PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS2NAME).dprr: $(SRC2FILES) $(HIDSRS2PARTICLE) $(HID2FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS2NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS2NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS2NAME).srs} -fo=$@ $(SRC2FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -116,7 +116,7 @@ ALLTAR : $(HIDSRS3PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS3NAME).dprr: $(SRC3FILES) $(HIDSRS3PARTICLE) $(HID3FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS3NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS3NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS3NAME).srs} -fo=$@ $(SRC3FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -165,7 +165,7 @@ ALLTAR : $(HIDSRS4PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS4NAME).dprr: $(SRC4FILES) $(HIDSRS4PARTICLE) $(HID4FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS4NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS4NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS4NAME).srs} -fo=$@ $(SRC4FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -214,7 +214,7 @@ ALLTAR : $(HIDSRS5PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS5NAME).dprr: $(SRC5FILES) $(HIDSRS5PARTICLE) $(HID5FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS5NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS5NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS5NAME).srs} -fo=$@ $(SRC5FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -263,7 +263,7 @@ ALLTAR : $(HIDSRS6PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS6NAME).dprr: $(SRC6FILES) $(HIDSRS6PARTICLE) $(HID6FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS6NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS6NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS6NAME).srs} -fo=$@ $(SRC6FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -312,7 +312,7 @@ ALLTAR : $(HIDSRS7PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS7NAME).dprr: $(SRC7FILES) $(HIDSRS7PARTICLE) $(HID7FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS7NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS7NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS7NAME).srs} -fo=$@ $(SRC7FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -361,7 +361,7 @@ ALLTAR : $(HIDSRS8PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS8NAME).dprr: $(SRC8FILES) $(HIDSRS8PARTICLE) $(HID8FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS8NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS8NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS8NAME).srs} -fo=$@ $(SRC8FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -410,7 +410,7 @@ ALLTAR : $(HIDSRS9PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS9NAME).dprr: $(SRC9FILES) $(HIDSRS9PARTICLE) $(HID9FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS9NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS9NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS9NAME).srs} -fo=$@ $(SRC9FILES)
 
 .IF "$(WITH_LANG)"!=""
@@ -459,7 +459,7 @@ ALLTAR : $(HIDSRS10PARTICLE)
 $(MISC)$/$(PWD:f).$(SRS10NAME).dprr: $(SRC10FILES) $(HIDSRS10PARTICLE) $(HID10FILES)
     @echo ------------------------------
     @echo Making: $@
-    -$(RM) $(MISC)$/$(PWD:f).$(SRS10NAME).dprr >& $(NULLDEV)
+    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS10NAME).dprr
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS10NAME).srs} -fo=$@ $(SRC10FILES)
 
 .IF "$(WITH_LANG)"!=""
