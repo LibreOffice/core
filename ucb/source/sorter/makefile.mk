@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:39:43 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:21:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,11 @@ PRJ=..$/..
 PRJNAME=ucb
 TARGET=srtrs
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # Version
 UCB_MAJOR=1
 
-.INCLUDE: svpre.mk
 .INCLUDE: settings.mk
-.INCLUDE: sv.mk
-
-#INCPRE+=$(PRJ)$/source$/inc
 
 SLOFILES=\
     $(SLO)$/sortdynres.obj \
@@ -62,10 +57,6 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)
-
-.IF "$(UPD)"<="618"
-SHL1STDLIBS+=$(TOOLSLIB)
-.ENDIF
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1IMPLIB=i$(TARGET)
