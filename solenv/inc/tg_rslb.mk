@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-26 10:59:05 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:00:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,15 +98,15 @@ $(RESLIB$(TNR)TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI$(TNR))
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI$(TNR))
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI$(TNR))
 .ELSE			# "$(common_build_reslib)"!=""
-    @-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
+    @@-$(RM) $(RSC_MULTI$(TNR))
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB$(TNR)TARGETN)"!=""
