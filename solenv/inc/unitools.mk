@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:58:19 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:02:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ MKDIR=+mkdir
 MKDIRHIER=$(MKDIR) /sn
 PERL*:=+call perl5.btm
 RENAME*=+ren
-TOUCH*=$(BUILD_TOOLS)$/touch.exe
+TOUCH*=$(PERL) $(SOLARENV)$/bin$/touch.pl
 TYPE*=+type
 4nt_force_shell:=+
 .ENDIF  "$(USE_SHELL)"!="4nt"
