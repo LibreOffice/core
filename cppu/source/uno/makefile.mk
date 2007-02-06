@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:26:30 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:24:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@ TARGET=cppu_uno
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  ..$/..$/util$/makefile.pmk
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
