@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgenrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:21 $
+ *  last change: $Author: vg $ $Date: 2007-02-06 13:43:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _PVER_HXX //autogen
-#include <svtools/pver.hxx>
 #endif
 #include <svtools/saveopt.hxx>
 
