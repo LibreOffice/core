@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 16:29:13 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:25:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,6 @@ SLOFILES=\
     $(SLO)$/imap2.obj               \
     $(SLO)$/imap3.obj               \
     $(SLO)$/ownlist.obj             \
-    $(SLO)$/pver.obj                \
     $(SLO)$/vcldata.obj             \
     $(SLO)$/restrictedpaths.obj     \
     $(SLO)$/dialogclosedlistener.obj\
