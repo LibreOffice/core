@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:39:53 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:22:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@ NO_BSYMBOLIC=TRUE
 # Version
 UCPFILE_MAJOR=1
 
-.INCLUDE: svpre.mk
 .INCLUDE: settings.mk
-.INCLUDE: sv.mk
 
 SLOFILES=\
     $(SLO)$/prov.obj      \
