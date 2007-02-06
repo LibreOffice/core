@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_lib.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:55:40 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:00:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -73,7 +73,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @echo using: $(LIB$(TNR)TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
