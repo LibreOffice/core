@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hjs $ $Date: 2007-01-26 10:58:02 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:56:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ LANGFILEEXT=jlf
 $(PAR)$/%.par :
     @echo ------------------------------
     @echo Making: $@
-    @-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
+    @@-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}
 .IF "$(GUI)"=="WNT"
     $(CPPLCC) -+ -P $(INCLUDE) $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
@@ -185,8 +185,8 @@ REGEXP:='s/^[\#].*$$//'
 .ENDIF
 
 $(MISC)$/%.exp : sce$/%.sce
-    @-$(RM) $@ >& $(NULLDEV)
-    @-$(RM) $(@:d)$(@:b).tst >& $(NULLDEV)
+    @@-$(RM) $@
+    @@-$(RM) $(@:d)$(@:b).tst
     $(TYPE) $< | sed $(REGEXP) | sed "s/^/test_/" > $(@:d)$(@:b).tst
     $(TYPE) $(@:d)$(@:b).tst | sed "/test_./ w $@"
 
