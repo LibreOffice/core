@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 10:02:57 $
+#   last change: $Author: vg $ $Date: 2007-02-06 13:38:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,7 @@ ENABLE_EXCEPTIONS=TRUE
 #LDUMP2=LDUMP3
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
 
