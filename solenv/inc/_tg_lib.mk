@@ -5,7 +5,7 @@
 
 $(LIB1ARCHIV) :	$(LIB1TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB1ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -36,7 +36,7 @@ $(LIB1TARGET) :	$(LIB1FILES) \
     @echo using: $(LIB1TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB1OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB1FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -73,7 +73,7 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 
 $(LIB2ARCHIV) :	$(LIB2TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB2ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -104,7 +104,7 @@ $(LIB2TARGET) :	$(LIB2FILES) \
     @echo using: $(LIB2TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB2OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB2FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -141,7 +141,7 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 
 $(LIB3ARCHIV) :	$(LIB3TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB3ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -172,7 +172,7 @@ $(LIB3TARGET) :	$(LIB3FILES) \
     @echo using: $(LIB3TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB3OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB3FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -209,7 +209,7 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 
 $(LIB4ARCHIV) :	$(LIB4TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB4ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -240,7 +240,7 @@ $(LIB4TARGET) :	$(LIB4FILES) \
     @echo using: $(LIB4TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB4OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB4FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -277,7 +277,7 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 
 $(LIB5ARCHIV) :	$(LIB5TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB5ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -308,7 +308,7 @@ $(LIB5TARGET) :	$(LIB5FILES) \
     @echo using: $(LIB5TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB5OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB5FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -345,7 +345,7 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 
 $(LIB6ARCHIV) :	$(LIB6TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB6ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -376,7 +376,7 @@ $(LIB6TARGET) :	$(LIB6FILES) \
     @echo using: $(LIB6TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB6OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB6FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -413,7 +413,7 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 
 $(LIB7ARCHIV) :	$(LIB7TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB7ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -444,7 +444,7 @@ $(LIB7TARGET) :	$(LIB7FILES) \
     @echo using: $(LIB7TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB7OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB7FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -481,7 +481,7 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 
 $(LIB8ARCHIV) :	$(LIB8TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB8ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -512,7 +512,7 @@ $(LIB8TARGET) :	$(LIB8FILES) \
     @echo using: $(LIB8TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB8OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB8FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -549,7 +549,7 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 
 $(LIB9ARCHIV) :	$(LIB9TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB9ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -580,7 +580,7 @@ $(LIB9TARGET) :	$(LIB9FILES) \
     @echo using: $(LIB9TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB9OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB9FILES:s/.obj/.o/) | xargs -n 1 >> $@
@@ -617,7 +617,7 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 
 $(LIB10ARCHIV) :	$(LIB10TARGET)
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)$/$(LIB10ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -648,7 +648,7 @@ $(LIB10TARGET) :	$(LIB10FILES) \
     @echo using: $(LIB10TARGET)
     @echo ------------------------------
     @echo Making: $@
-    @-$(RM) $@ >& $(NULLDEV)
+    @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @echo $(LIB10OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB10FILES:s/.obj/.o/) | xargs -n 1 >> $@
