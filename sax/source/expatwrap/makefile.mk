@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 12:04:36 $
+#   last change: $Author: vg $ $Date: 2007-02-06 12:56:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,7 @@ TARGET=expatwrap
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 #-----------------------------------------------------------
 .IF "$(SYSTEM_EXPAT)" == "YES"
 CFLAGS+=-DSYSTEM_EXPAT
