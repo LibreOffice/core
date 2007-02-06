@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_java.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:55:27 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:00:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,11 @@ $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java .PHONY:
 .IF "$(PACKAGE)"!=""
 $(CLASSDIR)$/$(IDLPACKAGE)$/%.class .NOINFER .IGNORE : %.java
 #	echo $@
-    -$(RM) $(JAVATARGET) >& $(NULLDEV)
+    @@-$(RM) $(JAVATARGET)
 .ELSE			# "$(PACKAGE)"!=""
 $(CLASSDIR)$/%.class .NOINFER .IGNORE : %.java
 #	echo $@
-    -$(RM) $(JAVATARGET) >& $(NULLDEV)
+    @@-$(RM) $(JAVATARGET)
 .ENDIF			# "$(PACKAGE)"!=""
 
 $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES) 
@@ -73,9 +73,9 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
 .IF "$(JAVAFILES:d)"==""
     $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
 .ELSE			# "$(JAVAFILES:d)"==""
-    @$(TOUCH) $(INPATH)_$(VCSID)_a_dummy.java >& $(NULLDEV)
+    @@$(TOUCH) $(INPATH)_$(VCSID)_a_dummy.java
     $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) .$/*.java $(uniq $(JAVAFILES:d:+"*.java"))
-    @-$(RM) $(INPATH)_$(VCSID)_a_dummy.java >& $(NULLDEV)
+    @@-$(RM) $(INPATH)_$(VCSID)_a_dummy.java
 .ENDIF			# "$(JAVAFILES:d)"==""
 .ELSE			# "$(javauno)"!=""
 .IF "$(USE_SHELL)"=="4nt"
@@ -88,7 +88,7 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
 .ENDIF			# "$(JAVARESPONSE)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
-    -find $(CLASSDIR) -type d -user $(USER) \! -perm -5 -print | xargs chmod a+r $$1 >& $(NULLDEV)
+    @@-find $(CLASSDIR) -type d -user $(USER) \! -perm -5 -print | xargs chmod a+r $$1
 .ENDIF
 .ENDIF
     @echo > $@
