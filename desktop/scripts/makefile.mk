@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:28:21 $
+#   last change: $Author: vg $ $Date: 2007-02-06 14:07:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,6 @@ UNIXTEXT= \
 ALLTAR: $(MISC)$/so$/soffice.sh
 
 $(MISC)$/so$/soffice.sh: soffice_lean.sh
-    -$(MKDIR) $(MISC)$/so >&$(NULLDEV)
+    @@-$(MKDIR) $(MISC)$/so
     $(TYPE) soffice_lean.sh | tr -d "\015" > $@
 
