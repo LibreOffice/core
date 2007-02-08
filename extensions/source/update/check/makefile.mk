@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:14:15 $
+#   last change: $Author: vg $ $Date: 2007-02-08 11:35:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -118,11 +118,11 @@ XCU_SOURCEDIR:=.
 .ENDIF			# "$(WITH_LANG)"!=""
 
 $(SPOOLDIR)$/$(PACKAGEDIR)$/Addons$/Addons-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Addons.xcu
-    @$(MKDIRHIER) $(@:d)
+    @-$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
 
 $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Jobs.xcu
-    @$(MKDIRHIER) $(@:d)
+    @-$(MKDIRHIER) $(@:d)
     @$(PERL) transform.pl < $< > $@
 #	@$(COPY) $< $@
 
