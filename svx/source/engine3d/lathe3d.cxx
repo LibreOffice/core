@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:19:39 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,8 @@ void E3dLatheObj::CreateGeometry()
             aPrev.transform(aRotMat);
             if(GetBackScale() != 100)
             {
-                ImpScalePoly(aPrev, 1.0 - fScalePerStep);
+                // #i74056#
+                aPrev = ImpScalePoly(aPrev, 1.0 - fScalePerStep);
             }
             aRotMat.identity();
             aRotMat.rotate(0.0, fAng / (double)GetHorizontalSegments(), 0.0);
@@ -288,7 +289,8 @@ void E3dLatheObj::CreateGeometry()
             aBack.transform(aRotMat);
             if(GetBackScale() != 100)
             {
-                ImpScalePoly(aBack, 1.0 + fScalePerStep);
+                // #i74056#
+                aBack = ImpScalePoly(aBack, 1.0 + fScalePerStep);
             }
 
             // Werte fuer Textur-Zwischensegmenterzeugung berechnen
@@ -312,7 +314,8 @@ void E3dLatheObj::CreateGeometry()
                 // Skalieren
                 if(GetBackScale() != 100)
                 {
-                    ImpScalePoly(aNext, 1.0 + (fScalePerStep * (double)(a+2)));
+                    // #i74056#
+                    aNext = ImpScalePoly(aNext, 1.0 + (fScalePerStep * (double)(a+2)));
                 }
 
                 // Jetzt Segment erzeugen
