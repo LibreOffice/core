@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:03:27 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1423,7 +1423,7 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphs, Point& rPos,
         long nGlyphAdvance = pG[1].maLinearPos.X() - pG->maLinearPos.X();
         if( pGlyphAdvAry )
         {
-            // override default advance with correct value
+            // override default advance width with correct value
             *(pGlyphAdvAry++) = nGlyphAdvance;
         }
         else
@@ -1592,6 +1592,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // for stretched text in a MultiSalLayout the target width needs to be
         // distributed by individually adjusting its virtual character widths
         long nTargetWidth = aMultiArgs.mnLayoutWidth;
+        nTargetWidth *= mnUnitsPerPixel; // convert target width to base font units
         aMultiArgs.mnLayoutWidth = 0;
 
         // we need to get the original unmodified layouts ready
@@ -1635,7 +1636,19 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             if( nWidthSum != nTargetWidth )
                 pJustificationArray[ nCharCount-1 ] = nTargetWidth;
 
-            // temporarily change the pDXArray
+            // the justification array is still in base level units
+            // => convert it to pixel units
+            if( mnUnitsPerPixel > 1 )
+            {
+                for( int i = 0; i < nCharCount; ++i )
+                {
+                    sal_Int32 nVal = pJustificationArray[ i ];
+                    nVal += (mnUnitsPerPixel + 1) / 2;
+                    pJustificationArray[ i ] = nVal / mnUnitsPerPixel;
+                }
+            }
+
+            // change the mpDXArray temporarilly (just for the justification)
             aMultiArgs.mpDXArray = pJustificationArray;
         }
     }
@@ -1773,7 +1786,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
 
         // if a justification array is available
-        // => use it directly to advance to the next x-position
+        // => use it directly to calculate the corresponding run width
         if( aMultiArgs.mpDXArray )
         {
             // the run advance is the width from the first char
@@ -1789,15 +1802,19 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             if( !bLTR )
                 nRunAdvance = -nRunAdvance;
 
-            // convert justification array units into fallback font units
-            nRunAdvance *= mpLayouts[n]->GetUnitsPerPixel();
+            // the requested width is still in pixel units
+            // => convert it to base level font units
+            nRunAdvance *= mnUnitsPerPixel;
+        }
+        else
+        {
+            // the measured width is still in fallback font units
+            // => convert it to base level font units
+            if( n > 0 ) // optimization: because (fUnitMul==1.0) for (n==0)
+            nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
         }
 
-        // adjust advance width from fallback font units to base units
-        if( n > 0 )
-            nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
-
-        // calculate new x position
+        // calculate new x position (in base level units)
         nXPos += nRunAdvance;
 
         // prepare for next fallback run
