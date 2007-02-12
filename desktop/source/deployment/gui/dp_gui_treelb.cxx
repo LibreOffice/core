@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:23:58 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -903,6 +903,10 @@ IMPL_STATIC_LINK_NOINSTANCE( DialogImpl, destroyDialog, void *, EMPTYARG )
 //are other dialogs open.
 BOOL DialogImpl::Close()
 {
+    //make sure the updatability thread (controls the update button) terminates
+    //this call blocks until the thread is dead.
+    if (m_updatability.get() != NULL)
+        m_updatability->stop();
     //todo check if the installation has finished
     Application::PostUserEvent(
         STATIC_LINK( 0, DialogImpl, destroyDialog ), 0 );
