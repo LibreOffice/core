@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpagewindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:15:51 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:40:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,9 +115,9 @@ using namespace ::com::sun::star;
     {
         SdrView& rView = GetPageView().GetView();
 
-        if(mrPaintWindow.OutputToWindow() && !rView.IsPrintPreview())
+        if(GetPaintWindow().OutputToWindow() && !rView.IsPrintPreview())
         {
-            Window* pWindow = (Window*)(&mrPaintWindow.GetOutputDevice());
+            Window* pWindow = (Window*)(&GetPaintWindow().GetOutputDevice());
             const_cast< SdrPageWindow* >( this )->mxControlContainer = VCLUnoHelper::CreateControlContainer( pWindow );
 
             // #100394# xC->setVisible triggers window->Show() and this has
@@ -165,7 +165,7 @@ using namespace ::com::sun::star;
                 if (xControl.is())
                     xControl->setModel(xModel);
 
-                OutputDevice& rOutDev = mrPaintWindow.GetOutputDevice();
+                OutputDevice& rOutDev = GetPaintWindow().GetOutputDevice();
                 Point aPosPix = rOutDev.GetMapMode().GetOrigin();
                 Size aSizePix = rOutDev.GetOutputSizePixel();
 
@@ -185,7 +185,7 @@ using namespace ::com::sun::star;
 SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindow)
 :   mpObjectContact(0L),
     mrPageView(rPageView),
-    mrPaintWindow(rPaintWindow)
+    mpPaintWindow(&rPaintWindow)
 {
 }
 
@@ -226,9 +226,9 @@ SdrPaintInfoRec* SdrPageWindow::ImpCreateNewPageInfoRec(const Rectangle& rDirtyR
     sal_uInt16 nPaintMode, const SdrLayerID* pId) const
 {
     SdrPaintInfoRec* pInfoRec = new SdrPaintInfoRec();
-    const sal_Bool bPrinter(mrPaintWindow.OutputToPrinter());
+    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
     Rectangle aCheckRect(rDirtyRect);
-    Size a1PixSiz(mrPaintWindow.GetOutputDevice().PixelToLogic(Size(1, 1)));
+    Size a1PixSiz(GetPaintWindow().GetOutputDevice().PixelToLogic(Size(1, 1)));
     const SdrView& rView = mrPageView.GetView();
 
     aCheckRect.Left() -= a1PixSiz.Width();
@@ -282,7 +282,7 @@ SdrPaintInfoRec* SdrPageWindow::ImpCreateNewPageInfoRec(const Rectangle& rDirtyR
 // OVERLAYMANAGER
 ::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const
 {
-    return mrPaintWindow.GetOverlayManager();
+    return GetPaintWindow().GetOverlayManager();
 }
 
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
@@ -292,11 +292,11 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
     XOutputDevice* pXOut = rView.GetExtendedOutputDevice();
 
     // get to be processed layers
-    const sal_Bool bPrinter(mrPaintWindow.OutputToPrinter());
+    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
     // get OutDev and set offset there
-    OutputDevice& rTargetDevice = mrPaintWindow.GetOutputDevice();
+    OutputDevice& rTargetDevice = GetPaintWindow().GetOutputDevice();
     pXOut->SetOutDev(&rTargetDevice);
     pXOut->SetOffset(Point());
 
@@ -453,13 +453,13 @@ void SdrPageWindow::RedrawAll(sal_uInt16 nPaintMode, ::sdr::contact::ViewObjectC
     XOutputDevice* pXOut = rView.GetExtendedOutputDevice();
 
     // get to be processed layers
-    const sal_Bool bPrinter(mrPaintWindow.OutputToPrinter());
+    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
     // get TargetDevice and force output to this one given target
     SdrPreRenderDevice* pPreRenderDevice = GetPaintWindow().GetPreRenderDevice();
     OutputDevice& rTargetDevice = (pPreRenderDevice)
-        ? pPreRenderDevice->GetPreRenderDevice() : mrPaintWindow.GetOutputDevice();
+        ? pPreRenderDevice->GetPreRenderDevice() : GetPaintWindow().GetOutputDevice();
     pXOut->SetOutDev(&rTargetDevice);
 
     // set Offset at XOutDev
@@ -527,7 +527,7 @@ void SdrPageWindow::RedrawLayer(
     XOutputDevice* pXOut = rView.GetExtendedOutputDevice();
 
     // get the layers to process
-    const sal_Bool bPrinter(mrPaintWindow.OutputToPrinter());
+    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
     // is the given layer visible at all?
@@ -542,7 +542,7 @@ void SdrPageWindow::RedrawLayer(
         SdrPreRenderDevice* pPreRenderDevice = GetPaintWindow().GetPreRenderDevice();
         OutputDevice& rTargetDevice =
             (pPreRenderDevice && !bControlLayerPainting)
-            ? pPreRenderDevice->GetPreRenderDevice() : mrPaintWindow.GetOutputDevice();
+            ? pPreRenderDevice->GetPreRenderDevice() : GetPaintWindow().GetOutputDevice();
         pXOut->SetOutDev(&rTargetDevice);
 
         // set offset at XOutDev
@@ -596,9 +596,9 @@ void SdrPageWindow::RedrawLayer(
 // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
 void SdrPageWindow::Invalidate(const Rectangle& rRectangle)
 {
-    if(GetPageView().IsVisible() && mrPaintWindow.OutputToWindow())
+    if(GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
     {
-        ((Window&)mrPaintWindow.GetOutputDevice()).Invalidate(rRectangle, INVALIDATE_NOERASE);
+        ((Window&)GetPaintWindow().GetOutputDevice()).Invalidate(rRectangle, INVALIDATE_NOERASE);
     }
 }
 
