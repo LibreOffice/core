@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:36:58 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #include <vector>
 #include <map>
 
+#include <boost/optional.hpp>
 
 typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
 
@@ -77,7 +78,7 @@ private:
     sal_Bool        bIsListening;
     DlgEdForm*      pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener> m_xContainerListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
 
 protected:
     DlgEdObj();
@@ -109,10 +110,6 @@ protected:
     virtual bool TransformFormToSdrCoordinates(
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
-
-    /** returns the DeviceInfo for the given DlgEdForm object (needed for the various Transform* methods)
-    */
-    ::com::sun::star::awt::DeviceInfo getFormDeviceInfo( const DlgEdForm& _rForm );
 
 public:
     TYPEINFO();
@@ -174,6 +171,9 @@ private:
     DlgEditor* pDlgEditor;
     ::std::vector<DlgEdObj*> pChilds;
 
+    mutable ::boost::optional< ::com::sun::star::awt::DeviceInfo >   mpDeviceInfo;
+
+
 protected:
     DlgEdForm(const ::rtl::OUString& rModelName);
     DlgEdForm(const ::rtl::OUString& rModelName,
@@ -189,7 +189,7 @@ public:
 
     virtual ~DlgEdForm();
 
-    virtual void SetDlgEditor( DlgEditor* pEditor ) { pDlgEditor = pEditor; }
+    virtual void SetDlgEditor( DlgEditor* pEditor );
     virtual DlgEditor* GetDlgEditor() const { return pDlgEditor; }
 
     virtual void AddChild( DlgEdObj* pDlgEdObj );
@@ -209,6 +209,11 @@ public:
     virtual void UpdateTabOrderAndGroups();
 
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
+
+    ::com::sun::star::awt::DeviceInfo getDeviceInfo() const;
+
+private:
+    void    ImplInvalidateDeviceInfo();
 };
 
 #endif // _BASCTL_DLGEDOBJ_HXX
