@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:13:11 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,20 +387,23 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_EXPAND_PAGE))
     {
-        BOOL bDisable = TRUE;
-        SdPage* pPage = (SdPage*) pPageView->GetPage();
-
-        if ( pPage->GetPageKind() == PK_STANDARD && !pPage->IsMasterPage() )
+        bool bDisable = true;
+        if( pPageView )
         {
-            SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
+            SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-            if (pObj && !pObj->IsEmptyPresObj())
+            if( pPage && (pPage->GetPageKind() == PK_STANDARD) && !pPage->IsMasterPage() )
             {
-                bDisable = FALSE;
+                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
+
+                if(pObj && !pObj->IsEmptyPresObj())
+                {
+                    bDisable = false;
+                }
             }
         }
 
-        if (bDisable)
+        if(bDisable)
         {
             rSet.DisableItem(SID_EXPAND_PAGE);
         }
@@ -408,20 +411,23 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_SUMMARY_PAGE))
     {
-        BOOL bDisable = TRUE;
-        SdPage* pPage = (SdPage*) pPageView->GetPage();
-
-        if (pPage->GetPageKind() == PK_STANDARD && !pPage->IsMasterPage() )
+        bool bDisable = true;
+        if( pPageView )
         {
-            SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
+            SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-            if (pObj && !pObj->IsEmptyPresObj())
+            if( pPage && (pPage->GetPageKind() == PK_STANDARD) && !pPage->IsMasterPage() )
             {
-                bDisable = FALSE;
+                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
+
+                if(pObj && !pObj->IsEmptyPresObj())
+                {
+                    bDisable = false;
+                }
             }
         }
 
-        if (bDisable)
+        if(bDisable)
         {
             rSet.DisableItem(SID_SUMMARY_PAGE);
         }
@@ -840,36 +846,39 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
             if (rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_AVAILABLE)
             {
-                SdPage* pMPage = (SdPage*) pPageView->GetPage();
-
                 BOOL bCheck = FALSE;
                 BOOL bDisable = TRUE;
-                USHORT i = 0;
-                USHORT nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
-
-                // Referenziert eine Seite mit dem AutoLayout "Titel" die
-                // aktuelle MasterPage?
-                while (i < nCount && !bCheck && bDisable)
+                if( pPageView )
                 {
-                    SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
+                    SdPage* pMPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-                    // Seite referenziert aktuelle MasterPage
-                    if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
+                    USHORT i = 0;
+                    USHORT nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
+
+                    // Referenziert eine Seite mit dem AutoLayout "Titel" die
+                    // aktuelle MasterPage?
+                    while (i < nCount && !bCheck && bDisable)
                     {
-                        // Eine Seite hat das AutoLayout "Titel"
-                        bDisable = FALSE;
+                        SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
-                        SdPage& rRefMPage = (SdPage&)(pPage->TRG_GetMasterPage());
-
-                        if(&rRefMPage == pMPage)
+                        // Seite referenziert aktuelle MasterPage
+                        if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
                         {
-                            // Eine Seite mit dem AutoLayout "Titel"
-                            // referenziert die aktuelle MasterPage
-                            bCheck = TRUE;
-                        }
-                    }
+                            // Eine Seite hat das AutoLayout "Titel"
+                            bDisable = FALSE;
 
-                    i++;
+                            SdPage& rRefMPage = (SdPage&)(pPage->TRG_GetMasterPage());
+
+                            if(&rRefMPage == pMPage)
+                            {
+                                // Eine Seite mit dem AutoLayout "Titel"
+                                // referenziert die aktuelle MasterPage
+                                bCheck = TRUE;
+                            }
+                        }
+
+                        i++;
+                    }
                 }
 
                 if (bCheck)
