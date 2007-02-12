@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:53:25 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3872,7 +3872,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     {
         case IStyleAccess::AUTO_STYLE_CHAR:
         {
-            aRange = aCharFmtSetRange;
+            aRange = aCharAutoFmtSetRange;
             pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_CHAR_AUTO_STYLE);
         }
         break;
