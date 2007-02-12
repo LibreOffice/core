@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:25:48 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,14 +112,26 @@ struct LanguageDependentProp
     sal_Int32   nPropNameLength;
 };
 
-// Attention: Please update both statics (count/array)!
-static const sal_uInt32 nLanguageDependentDialogPropCount = 2;
-static LanguageDependentProp aLanguageDependentDialogProp[] =
+// ----------------------------------------------------------------------------
+namespace
 {
-    { "Title",    5 },
-    { "HelpText", 8 },
-    { 0, 0          }
-};
+    static const Sequence< ::rtl::OUString >& lcl_getLanguageDependentProperties()
+    {
+        static Sequence< ::rtl::OUString > s_aLanguageDependentProperties;
+        if ( s_aLanguageDependentProperties.getLength() == 0 )
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if ( s_aLanguageDependentProperties.getLength() == 0 )
+            {
+                s_aLanguageDependentProperties.realloc( 2 );
+                s_aLanguageDependentProperties[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
+                s_aLanguageDependentProperties[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                // note: properties must be sorted
+            }
+        }
+        return s_aLanguageDependentProperties;
+    }
+}
 
 // ----------------------------------------------------------------------------
 // functor for disposing a control model
@@ -973,7 +985,7 @@ void SAL_CALL UnoControlDialogModel::propertyChange( const PropertyChangeEvent& 
             maModels.begin(), maModels.end(),
             CompareControlModel( Reference< XControlModel >( _rEvent.Source, UNO_QUERY ) )
         );
-    DBG_ASSERT( maModels.end() != aPos, "UnoControlDialogModel::propertyChange: don't know this model!" );
+    OSL_ENSURE( maModels.end() != aPos, "UnoControlDialogModel::propertyChange: don't know this model!" );
     if ( maModels.end() != aPos )
         sAccessor = aPos->second;
 
@@ -1664,78 +1676,54 @@ void UnoDialogControl::ImplUpdateResourceResolver()
     Reference< resource::XStringResourceResolver > xStringResourceResolver;
 
     ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
+    if ( !xStringResourceResolver.is() )
+        return;
 
-    if ( xStringResourceResolver.is() )
+    Any xNewStringResourceResolver; xNewStringResourceResolver <<= xStringResourceResolver;
+
+    Sequence< rtl::OUString > aPropNames(1);
+    aPropNames[0] = aPropName;
+
+    const Sequence< Reference< awt::XControl > > aSeq = getControls();
+    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
     {
-        Any a;
+        Reference< XControl > xControl( aSeq[i] );
+        Reference< XPropertySet > xPropertySet;
 
-        a <<= xStringResourceResolver;
+        if ( xControl.is() )
+            xPropertySet = Reference< XPropertySet >( xControl->getModel(), UNO_QUERY );
 
-        Sequence< rtl::OUString > aPropNames(1);
-        aPropNames[0] = aPropName;
+        if ( !xPropertySet.is() )
+            continue;
 
-        const Sequence< Reference< awt::XControl > > aSeq = getControls();
-        for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+        try
         {
-            Reference< XControl > xControl( aSeq[i] );
-            Reference< XPropertySet > xPropertySet;
-
-            if ( xControl.is() )
-                xPropertySet = Reference< XPropertySet >( xControl->getModel(), UNO_QUERY );
-
-            if ( xPropertySet.is() )
+            Reference< resource::XStringResourceResolver > xCurrStringResourceResolver;
+            Any aOldValue = xPropertySet->getPropertyValue( aPropName );
+            if  (   ( aOldValue >>= xCurrStringResourceResolver )
+                &&  ( xStringResourceResolver == xCurrStringResourceResolver )
+                )
             {
-                try
-                {
-                    Reference< resource::XStringResourceResolver > xCurrStringResourceResolver;
-                    Any aOldValue = xPropertySet->getPropertyValue( aPropName );
-                    if ( aOldValue >>= xCurrStringResourceResolver )
-                    {
-                        if ( xStringResourceResolver == xCurrStringResourceResolver )
-                        {
-                            Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
-                            Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
-                            xMultiPropSet->firePropertiesChangeEvent( aPropNames, xListener );
-                        }
-                        else
-                            xPropertySet->setPropertyValue( aPropName, a );
-                    }
-                    else
-                        xPropertySet->setPropertyValue( aPropName, a );
-                }
-                catch ( NoSuchElementException& )
-                {
-                }
-            }
-        }
-
-        // propagate resource resolver changes to language dependent props of the dialog
-        Reference< XPropertySet > xPropertySet( getModel(), UNO_QUERY );
-        if ( xPropertySet.is() )
-        {
-            Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
-            Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
-
-            aPropNames.realloc( nLanguageDependentDialogPropCount );
-
-            sal_Int32 i = 0;
-            const LanguageDependentProp* pLangProps = aLanguageDependentDialogProp;
-            while ( pLangProps->pPropName != 0 )
-            {
-                if ( aPropNames.getLength() == i )
-                    aPropNames.realloc(i+1);
-                aPropNames[i++] = rtl::OUString::createFromAscii( pLangProps->pPropName );
-                ++pLangProps;
-            }
-
-            try
-            {
+                Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
+                Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
                 xMultiPropSet->firePropertiesChangeEvent( aPropNames, xListener );
             }
-            catch ( NoSuchElementException& )
-            {
-            }
+            else
+                xPropertySet->setPropertyValue( aPropName, xNewStringResourceResolver );
         }
+        /*catch ( NoSuchElementException& )*/ // that's nonsense, this is never thrown above ...
+        catch ( const Exception& )
+        {
+        }
+    }
+
+    // propagate resource resolver changes to language dependent props of the dialog
+    Reference< XPropertySet > xPropertySet( getModel(), UNO_QUERY );
+    if ( xPropertySet.is() )
+    {
+        Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
+        Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
+        xMultiPropSet->firePropertiesChangeEvent( lcl_getLanguageDependentProperties(), xListener );
     }
 }
 
