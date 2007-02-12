@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-31 13:05:05 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,10 @@
 #include <tools/shl.hxx>
 #endif
 
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #endif
@@ -133,7 +137,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 
 TYPEINIT1(DlgEdObj, SdrUnoObj);
@@ -210,44 +214,6 @@ namespace
 
 //----------------------------------------------------------------------------
 
-awt::DeviceInfo DlgEdObj::getFormDeviceInfo( const DlgEdForm& _rForm )
-{
-    awt::DeviceInfo aDeviceInfo;
-
-    DlgEditor* pEditor = _rForm.GetDlgEditor();
-    DBG_ASSERT( pEditor, "DlgEdObj::getFormDeviceInfo: no editor associated with the form object!" );
-    if ( !pEditor )
-        return aDeviceInfo;
-
-    Window* pWindow = pEditor->GetWindow();
-    DBG_ASSERT( pWindow, "DlgEdObj::getFormDeviceInfo: no window associated with the editor!" );
-    if ( !pWindow )
-        return aDeviceInfo;
-
-    // obtain an XControl (might be a temporary one)
-    bool bIsTemporaryControl = false;
-    Reference< awt::XControl > xDialogControl( _rForm.GetControl() );
-    if ( !xDialogControl.is() )
-    {
-        Reference< awt::XControlContainer > xEditorControlContainer( pEditor->GetWindowControlContainer() );
-        xDialogControl = _rForm.GetTemporaryControlForWindow( *pWindow, xEditorControlContainer );
-        bIsTemporaryControl = true;
-    }
-
-    Reference< awt::XDevice > xDialogDevice;
-    if ( xDialogControl.is() )
-        xDialogDevice.set( xDialogControl->getPeer(), UNO_QUERY );
-    DBG_ASSERT( xDialogDevice.is(), "DlgEdObj::getFormDeviceInfo: no device!" );
-    if ( xDialogDevice.is() )
-        aDeviceInfo = xDialogDevice->getInfo();
-
-    if ( bIsTemporaryControl )
-        ::comphelper::disposeComponent( xDialogControl );
-    return aDeviceInfo;
-}
-
-//----------------------------------------------------------------------------
-
 uno::Reference< awt::XControl > DlgEdObj::GetControl() const
 {
     const DlgEdForm* pForm = GetDlgEdForm();
@@ -294,7 +260,7 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     aPos.Height() -= aFormPos.Height();
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
     aPos.Width() -= aDeviceInfo.LeftInset;
     aPos.Height() -= aDeviceInfo.TopInset;
 
@@ -335,7 +301,7 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
         return false;
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
     aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
     aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
 
@@ -392,7 +358,7 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     aPos.Height() += aFormPos.Height();
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
     aPos.Width() += aDeviceInfo.LeftInset;
     aPos.Height() += aDeviceInfo.TopInset;
 
@@ -433,7 +399,7 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
         return false;
 
     // take window borders into account
-    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
     aSize.Width() += aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
     aSize.Height() += aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
 
@@ -1514,6 +1480,21 @@ DlgEdForm::~DlgEdForm()
 
 //----------------------------------------------------------------------------
 
+void DlgEdForm::SetDlgEditor( DlgEditor* pEditor )
+{
+    pDlgEditor = pEditor;
+    ImplInvalidateDeviceInfo();
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::ImplInvalidateDeviceInfo()
+{
+    mpDeviceInfo.reset();
+}
+
+//----------------------------------------------------------------------------
+
 void DlgEdForm::SetRectFromProps()
 {
     // get form position and size from properties
@@ -1985,6 +1966,51 @@ FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     StartListening();
 
     return bResult;
+}
+
+//----------------------------------------------------------------------------
+
+awt::DeviceInfo DlgEdForm::getDeviceInfo() const
+{
+    awt::DeviceInfo aDeviceInfo;
+
+    DlgEditor* pEditor = GetDlgEditor();
+    DBG_ASSERT( pEditor, "DlgEdForm::getDeviceInfo: no editor associated with the form object!" );
+    if ( !pEditor )
+        return aDeviceInfo;
+
+    Window* pWindow = pEditor->GetWindow();
+    DBG_ASSERT( pWindow, "DlgEdForm::getDeviceInfo: no window associated with the editor!" );
+    if ( !pWindow )
+        return aDeviceInfo;
+
+    // obtain an XControl
+    ::utl::SharedUNOComponent< awt::XControl > xDialogControl; // ensures auto-disposal, if needed
+    xDialogControl.reset( GetControl(), ::utl::SharedUNOComponent< awt::XControl >::NoTakeOwnership );
+    if ( !xDialogControl.is() )
+    {
+        // don't create a temporary control all the time, this method here is called
+        // way too often. Instead, use a cached DeviceInfo.
+        // 2007-02-05 / i74065 / frank.schoenheit@sun.com
+        if ( !!mpDeviceInfo )
+            return *mpDeviceInfo;
+
+        Reference< awt::XControlContainer > xEditorControlContainer( pEditor->GetWindowControlContainer() );
+        xDialogControl.reset(
+            GetTemporaryControlForWindow( *pWindow, xEditorControlContainer ),
+            ::utl::SharedUNOComponent< awt::XControl >::TakeOwnership );
+    }
+
+    Reference< awt::XDevice > xDialogDevice;
+    if ( xDialogControl.is() )
+        xDialogDevice.set( xDialogControl->getPeer(), UNO_QUERY );
+    DBG_ASSERT( xDialogDevice.is(), "DlgEdForm::getDeviceInfo: no device!" );
+    if ( xDialogDevice.is() )
+        aDeviceInfo = xDialogDevice->getInfo();
+
+    mpDeviceInfo.reset( aDeviceInfo );
+
+    return aDeviceInfo;
 }
 
 //----------------------------------------------------------------------------
