@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:21:48 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:32:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ ShowView::ShowView (
 {
     // #114898#
     SetBufferedOutputAllowed(true);
-    SetBufferedOverlayAllowed(true);
+    // #i73602# Use default from the configuration
+    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_DrawImpress());
 
     EnableExtendedKeyInputDispatcher(FALSE);
     EnableExtendedMouseEventDispatcher(FALSE);
