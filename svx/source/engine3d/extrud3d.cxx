@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:19:00 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,10 @@ basegfx::B3DPolyPolygon E3dExtrudeObj::GetBackSide(const basegfx::B3DPolyPolygon
     {
         // eventuell Skalieren
         if(GetPercentBackScale() != 100)
-            ImpScalePoly(aBackSide, (double)GetPercentBackScale() / 100.0);
+        {
+            // #i74056#
+            aBackSide = ImpScalePoly(aBackSide, (double)GetPercentBackScale() / 100.0);
+        }
 
         // Verschieben
         basegfx::B3DHomMatrix aTrans;
