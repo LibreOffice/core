@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:47:11 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,22 +312,31 @@ SdrObjList* SdrObjGroup::GetSubList() const
 
 const Rectangle& SdrObjGroup::GetCurrentBoundRect() const
 {
-    if (pSub->GetObjCount()!=0) {
-        // hier auch das aOutRect=AllObjSnapRect setzen, da GetSnapRect zu selten gerufen wird.
-        ((SdrObjGroup*)this)->aOutRect=pSub->GetAllObjSnapRect();
-        return pSub->GetAllObjBoundRect();
-    } else {
-        return aOutRect;
+    // --> OD 2007-02-01 #144962#
+    // <aOutRect> has to contain the bounding rectangle
+    if ( pSub->GetObjCount()!=0 )
+    {
+        const_cast<SdrObjGroup*>(this)->aOutRect = pSub->GetAllObjBoundRect();
     }
+
+    return aOutRect;
+    // <--
 }
 
 
 const Rectangle& SdrObjGroup::GetSnapRect() const
 {
-    if (pSub->GetObjCount()!=0) {
-        ((SdrObjGroup*)this)->aOutRect=pSub->GetAllObjSnapRect();
+    // --> OD 2007-02-01 #144962#
+    // <aOutRect> has to contain the bounding rectangle
+    if ( pSub->GetObjCount()!=0 )
+    {
+        return pSub->GetAllObjSnapRect();
     }
-    return aOutRect;
+    else
+    {
+        return aOutRect;
+    }
+    // <--
 }
 
 SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
