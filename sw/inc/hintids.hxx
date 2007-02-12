@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:32:21 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,6 +418,8 @@ extern USHORT __FAR_DATA aTableBoxSetRange[];
 extern USHORT __FAR_DATA aFrmFmtSetRange[];
 // AttrSet-Range fuer die SwCharFmt
 extern USHORT __FAR_DATA aCharFmtSetRange[];
+// AttrSet-Range fuer die character autostyles
+extern USHORT __FAR_DATA aCharAutoFmtSetRange[];
 // AttrSet-Range fuer die SwPageDescFmt
 extern USHORT __FAR_DATA aPgFrmFmtSetRange[];
 
