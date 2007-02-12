@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:15:40 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,20 @@ namespace sdr
 
                 if(DoRefreshWithPreRendering())
                 {
+                    // #i73602# ensure valid and sized maOutputBufferDevice
+                    const Size aDestinationSizePixel(maBufferDevice.GetOutputSizePixel());
+                    const Size aOutputBufferSizePixel(maOutputBufferDevice.GetOutputSizePixel());
+
+                    if(aDestinationSizePixel != aOutputBufferSizePixel)
+                    {
+                        maOutputBufferDevice.SetOutputSizePixel(aDestinationSizePixel);
+                    }
+
+                    maOutputBufferDevice.SetMapMode(getOutputDevice().GetMapMode());
+                    maOutputBufferDevice.EnableMapMode(sal_False);
+                    maOutputBufferDevice.SetDrawMode(maBufferDevice.GetDrawMode());
+                    maOutputBufferDevice.SetSettings(maBufferDevice.GetSettings());
+
                     // calculate sizes
                     Rectangle aRegionRectanglePixel(
                         maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
@@ -261,8 +275,6 @@ namespace sdr
                     // truncate aRegionRectanglePixel to destination pixel size, more does
                     // not need to be prepared since destination is a buffer for a window. So,
                     // maximum size indirectly shall be limited to getOutputDevice().GetOutputSizePixel()
-                    const Size aDestinationSizePixel(maBufferDevice.GetOutputSizePixel());
-
                     if(aRegionRectanglePixel.Left() < 0L)
                     {
                         aRegionRectanglePixel.Left() = 0L;
@@ -287,22 +299,12 @@ namespace sdr
                     const Point aTopLeft(aRegionRectanglePixel.TopLeft());
                     const Size aSize(aRegionRectanglePixel.GetSize());
 
-                    // clone the maBufferDevice and copy content
-                    VirtualDevice aOutputBuffer(maBufferDevice, 0);
-                    aOutputBuffer.SetOutputSizePixel(aSize);
-                    aOutputBuffer.SetMapMode(getOutputDevice().GetMapMode());
-                    aOutputBuffer.EnableMapMode(sal_False);
-
-                    // #i29186#
-                    aOutputBuffer.SetDrawMode(maBufferDevice.GetDrawMode());
-                    aOutputBuffer.SetSettings(maBufferDevice.GetSettings());
-
                     {
                         const sal_Bool bMapModeWasEnabledDest(maBufferDevice.IsMapModeEnabled());
                         maBufferDevice.EnableMapMode(sal_False);
 
-                        aOutputBuffer.DrawOutDev(
-                            Point(), aSize, // destination
+                        maOutputBufferDevice.DrawOutDev(
+                            aTopLeft, aSize, // destination
                             aTopLeft, aSize, // source
                             maBufferDevice);
 
@@ -312,11 +314,9 @@ namespace sdr
 
                     // paint overlay content for remembered region, use
                     // method from base class directly
-                    aOutputBuffer.EnableMapMode(sal_True);
-                    aOutputBuffer.SetPixelOffset(Size(-aTopLeft.X(), -aTopLeft.Y()));
-                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, aOutputBuffer);
-                    aOutputBuffer.SetPixelOffset(Size(0, 0));
-                    aOutputBuffer.EnableMapMode(sal_False);
+                    maOutputBufferDevice.EnableMapMode(sal_True);
+                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, maOutputBufferDevice);
+                    maOutputBufferDevice.EnableMapMode(sal_False);
 
                     // copy to output
                     {
@@ -325,8 +325,8 @@ namespace sdr
 
                         getOutputDevice().DrawOutDev(
                             aTopLeft, aSize, // destination
-                            Point(), aSize, // source
-                            aOutputBuffer);
+                            aTopLeft, aSize, // source
+                            maOutputBufferDevice);
 
                         // debug
                         /*getOutputDevice().SetLineColor(COL_RED);
