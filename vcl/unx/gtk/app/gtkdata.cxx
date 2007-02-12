@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:24:18 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,38 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
     }
 
     return aFilterReturn;
+}
+
+void GtkSalDisplay::initScreen( int nScreen ) const
+{
+    if( nScreen < 0 || nScreen >= static_cast<int>(m_aScreens.size()) )
+        nScreen = m_nDefaultScreen;
+    ScreenData& rSD = const_cast<ScreenData&>(m_aScreens[nScreen]);
+    if( rSD.m_bInit )
+        return;
+
+    // choose visual for screen
+    SalDisplay::initScreen( nScreen );
+    // now set a gdk default colormap matching the chosen visual to the screen
+    GdkVisual* pVis = gdkx_visual_get( rSD.m_aVisual.visualid );
+    GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, nScreen );
+    if( pVis )
+    {
+        GdkColormap* pDefCol = gdk_screen_get_default_colormap( pScreen );
+        GdkVisual* pDefVis = gdk_colormap_get_visual( pDefCol );
+        if( pDefVis != pVis )
+        {
+           pDefCol = gdk_x11_colormap_foreign_new( pVis, rSD.m_aColormap.GetXColormap() );
+           gdk_screen_set_default_colormap( pScreen, pDefCol );
+           #if OSL_DEBUG_LEVEL > 1
+           fprintf( stderr, "set new gdk color map for screen %d\n", nScreen );
+           #endif
+        }
+    }
+    #if OSL_DEBUG_LEVEL > 1
+    else
+        fprintf( stderr, "not GdkVisual for visual id %d\n", rSD.m_aVisual.visualid );
+    #endif
 }
 
 long GtkSalDisplay::Dispatch( XEvent* pEvent )
