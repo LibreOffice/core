@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:20:07 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,8 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
 {
     // #114898#
     SetBufferedOutputAllowed(true);
-    SetBufferedOverlayAllowed(true);
+    // #i73602# Use default from the configuration
+    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_DrawImpress());
 
     EnableExtendedKeyInputDispatcher(FALSE);
     EnableExtendedMouseEventDispatcher(FALSE);
