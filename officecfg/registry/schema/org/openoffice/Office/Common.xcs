@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:52:40 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5483,21 +5483,21 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 				<value>false</value>
 			</prop>
-            <prop oor:name="ComponentSearchGroupLabel" oor:type="xs:string">
+            <prop oor:name="ComponentSearchGroupLabel" oor:type="xs:string" oor:localized="true">
                 <!-- UIHints: Edit/Find & Replace -->
                 <info>
                     <author>OS</author>
                     <desc>Specifies the divider label in case of a component-based search extension.</desc>
                 </info>
             </prop>
-            <prop oor:name="ComponentSearchCommandLabel1" oor:type="xs:string">
+            <prop oor:name="ComponentSearchCommandLabel1" oor:type="xs:string" oor:localized="true">
                 <!-- UIHints: Edit/Find & Replace -->
                 <info>
                     <author>OS</author>
                     <desc>Specifies the label of the first component-based search command.</desc>
                 </info>
             </prop>
-            <prop oor:name="ComponentSearchCommandLabel2" oor:type="xs:string">
+            <prop oor:name="ComponentSearchCommandLabel2" oor:type="xs:string" oor:localized="true">
                 <!-- UIHints: Edit/Find & Replace -->
                 <info>
                     <author>OS</author>
