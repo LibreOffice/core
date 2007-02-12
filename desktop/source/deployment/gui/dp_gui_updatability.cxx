@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatability.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:24:07 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:31:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,8 +229,8 @@ void Updatability::Thread::execute() {
             if (m_predeterminedUpdateUrl && ps.getLength() != 0) {
                 enabled = true;
             } else {
-                for (sal_Int32 j = 0; j < ps.getLength(); ++i) {
-                    if (ps[i]->getUpdateInformationURLs().getLength() != 0) {
+                for (sal_Int32 j = 0; j < ps.getLength(); ++j) {
+                    if (ps[j]->getUpdateInformationURLs().getLength() != 0) {
                         enabled = true;
                         break;
                     }
@@ -268,7 +268,9 @@ Updatability::Updatability(
     m_thread->launch();
 }
 
-Updatability::~Updatability() {}
+Updatability::~Updatability() {
+
+}
 
 void Updatability::start() {
     m_thread->start();
@@ -276,4 +278,9 @@ void Updatability::start() {
 
 void Updatability::stop() {
     m_thread->stop();
+    // Bad hack; m_thread calls Application::GetSolarMutex, which only works
+    // as long as DeInitVCL has not been called:
+    ULONG n = Application::ReleaseSolarMutex();
+    m_thread->join();
+    Application::AcquireSolarMutex(n);
 }
