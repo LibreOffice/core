@@ -4,17 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
-<<<<<<< doc.cxx
- *  $Revision: 1.53 $
-=======
- *  $Revision: 1.53 $
->>>>>>> 1.49
+ *  $Revision: 1.54 $
  *
-<<<<<<< doc.cxx
- *  last change: $Author: hr $ $Date: 2007-01-02 16:46:34 $
-=======
- *  last change: $Author: hr $ $Date: 2007-01-02 16:46:34 $
->>>>>>> 1.49
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +375,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbUseFormerTextWrapping = value;
             break;
         case CONSIDER_WRAP_ON_OBJECT_POSITION:
-            mbConsiderWrapOnObjPos;
+            mbConsiderWrapOnObjPos = value;
             break;
         case DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
             mbDoNotJustifyLinesWithManualBreak = value;
