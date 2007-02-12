@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:13:34 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
-typedef String ( *PFunc_getSpecialCharsForEdit)( Window* pParent, const Font& rFont );
+typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const Font& i_rFont, String& o_rOutString );
 
 //====================================================================
 // Lazy binding of the GetSpecialCharsForEdit function as it resides in
@@ -234,10 +234,10 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
     }
 
+    String aRet;
     if ( pfunc_getSpecialCharsForEdit )
-        return (*pfunc_getSpecialCharsForEdit)( pParent, rFont );
-    else
-        return String();
+        (*pfunc_getSpecialCharsForEdit)( pParent, rFont, aRet );
+    return aRet;
 }
 
 //====================================================================
