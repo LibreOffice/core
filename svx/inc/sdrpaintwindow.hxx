@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpaintwindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:12:35 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:39:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,8 @@ public:
 
     // OVERLAYMANAGER
     ::sdr::overlay::OverlayManager* GetOverlayManager() const;
-    void DrawOverlay(const Region& rRegion);
+    // #i73602# add flag if buffer shall be used
+    void DrawOverlay(const Region& rRegion, bool bUseBuffer);
     void HideOverlay(const Region& rRegion);
 
     // calculate visible area and return
