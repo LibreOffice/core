@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:02:43 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ public:
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );
     virtual long Dispatch( XEvent *pEvent );
+    virtual void initScreen( int nScreen ) const;
 
     static GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
                                            GdkEvent* event,
