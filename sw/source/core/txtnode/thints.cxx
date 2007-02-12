@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:53:38 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:32:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1194,7 +1194,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
     if ( !pSwpHints )
         pSwpHints = new SwpHints();
 
-    SfxItemSet aCharSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_CHRATR_END );
+    SfxItemSet aCharSet( *rSet.GetPool(), aCharAutoFmtSetRange );
 
     USHORT nWhich, nCount = 0;
     SwTxtAttr* pNew;
@@ -1218,7 +1218,8 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
             }
             else
             {
-                if ( RES_CHRATR_BEGIN <= nWhich && RES_CHRATR_END > nWhich )
+                if ( ( RES_CHRATR_BEGIN <= nWhich && RES_CHRATR_END > nWhich ) ||
+                       RES_TXTATR_UNKNOWN_CONTAINER == nWhich )
                 {
                     aCharSet.Put( *pItem );
                 }
@@ -1268,7 +1269,8 @@ void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
         USHORT nWhich = aIter.FirstWhich();
         while( nWhich )
         {
-            if( ( nWhich < RES_CHRATR_END ) &&
+            if( ( nWhich < RES_CHRATR_END ||
+                  RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) &&
                 ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, TRUE ) ) )
                 rSet.Put( pCFSet->Get( nWhich ) );
             nWhich = aIter.NextWhich();
@@ -1292,7 +1294,8 @@ void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAttr )
             USHORT nWhich = aIter.FirstWhich();
             while( nWhich )
             {
-                if( ( nWhich < RES_CHRATR_END ) &&
+                if( ( nWhich < RES_CHRATR_END ||
+                      ( RES_TXTATR_AUTOFMT == rAttr.Which() && RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) ) &&
                     ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, TRUE ) ) )
                     rSet.Put( pCFSet->Get( nWhich ) );
                 nWhich = aIter.NextWhich();
