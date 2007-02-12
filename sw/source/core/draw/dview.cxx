@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:24:15 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,8 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
 
     SetPrintPreview( rI.GetShell()->IsPreView() );
 
-    // #i68597# allow sw to use fully buffered overlay from Drawinglayer
-    SetBufferedOverlayAllowed(true);
+    // #i73602# Use default from the configuration
+    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Writer());
 }
 
 /*************************************************************************
