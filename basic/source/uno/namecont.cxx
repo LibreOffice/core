@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:06:29 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2545,12 +2545,21 @@ sal_Bool SfxLibrary::hasByName( const OUString& aName )
     return bRet;
 }
 
+void SfxLibrary::impl_checkReadOnly()
+{
+    if( mbReadOnly || (mbLink && mbReadOnlyLink) )
+        throw IllegalArgumentException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Library is readonly." ) ),
+            // TODO: resource
+            *this, 0
+        );
+}
+
 // Methods XNameReplace
 void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    if( mbReadOnly || (mbLink && mbReadOnlyLink) )
-        throw RuntimeException();
+    impl_checkReadOnly();
 
     maNameContainer.replaceByName( aName, aElement );
     mbModified = sal_True;
@@ -2561,8 +2570,7 @@ void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
 void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    if( mbReadOnly || (mbLink && mbReadOnlyLink) )
-        throw RuntimeException();
+    impl_checkReadOnly();
 
     maNameContainer.insertByName( aName, aElement );
     mbModified = sal_True;
@@ -2571,8 +2579,7 @@ void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
 void SfxLibrary::removeByName( const OUString& Name )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    if( mbReadOnly || (mbLink && mbReadOnlyLink) )
-        throw RuntimeException();
+    impl_checkReadOnly();
 
     maNameContainer.removeByName( Name );
     mbModified = sal_True;
