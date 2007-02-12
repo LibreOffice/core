@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:17:23 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -952,41 +952,53 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region&
     else
     {
         // draw postprocessing, only for known devices
-        sal_Bool bFormControlsUsed(sal_False);
+        bool bFormControlsUsed(false);
+        bool bTextEditActive(false);
 
         if(mpPageView)
         {
-            bFormControlsUsed = mpPageView->AreFormControlsUsed();
+            bFormControlsUsed = mpPageView->AreFormControlsUsed(rPaintWindow);
         }
 
-        if(bFormControlsUsed)
+        if(IsTextEdit() && GetTextEditPageView())
+        {
+            bTextEditActive = true;
+        }
+
+        if(bFormControlsUsed || bTextEditActive)
         {
             // output PreRendering and destroy it so that it is not used for FormLayer
             // or overlay
             rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
-            rPaintWindow.DestroyPreRenderDevice();
+
+            // #i73602# do not destroy PreRenderDevice, this will be bad for performance.
+            // To not use it when drawing overlay, better give a flag for that purpose
+            // rPaintWindow.DestroyPreRenderDevice();
 
             // draw form layer directly to window.
-            ImpFormLayerDrawing(rPaintWindow);
+            if(bFormControlsUsed)
+            {
+                ImpFormLayerDrawing(rPaintWindow);
+            }
 
             // draw old text edit stuff before overlay to have it as part of the background
             // ATM. This will be changed to have the text editing on the overlay, bit it
             // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
-            ImpTextEditDrawing(rReg, rPaintWindow);
+            if(bTextEditActive)
+            {
+                ImpTextEditDrawing(rReg, rPaintWindow);
+            }
 
             // draw Overlay directly to window. This will save the contents of the window
             // in the RedrawRegion to the overlay background buffer, too.
-            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion());
+            // #i73602# pass flag if buffer shall be used
+            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion(), false);
         }
         else
         {
-            // draw old text edit stuff before overlay to have it as part of the background
-            // ATM. This will be changed to have the text editing on the overlay, bit it
-            // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
-            ImpTextEditDrawing(rReg, rPaintWindow);
-
             // draw Overlay, also to PreRender device if exists
-            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion());
+            // #i73602# add flag if buffer shall be used
+            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion(), true);
 
             // output PreRendering
             rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
