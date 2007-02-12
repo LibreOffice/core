@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:32:13 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,6 +450,10 @@ void Printer::ImplInitData()
 
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 {
+    ImplSVData* pSVData = ImplGetSVData();
+    // #i74084# update info for this specific SalPrinterQueueInfo
+    pSVData->mpDefInst->GetPrinterQueueState( pInfo );
+
     // Testen, ob Treiber ueberhaupt mit dem JobSetup uebereinstimmt
     ImplJobSetup* pJobSetup = maJobSetup.ImplGetData();
 
@@ -463,8 +467,6 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
             pJobSetup->mnDriverDataLen = 0;
         }
     }
-
-    ImplSVData* pSVData = ImplGetSVData();
 
     // Printernamen merken
     maPrinterName = pInfo->maPrinterName;
