@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:37:18 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,7 @@ public:
 
     void            Remove( XEvent   *pEvent );
 
-    void            initScreen( int nScreen ) const;
+    virtual void          initScreen( int nScreen ) const;
     const ScreenData&     getDataForScreen( int nScreen ) const
     {
         if( nScreen < 0 || nScreen >= static_cast<int>(m_aScreens.size()) )
