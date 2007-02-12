@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:54:07 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:31:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1474,10 +1474,17 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
             {
                 if (pView)
                 {
-                    // falls MasterPage sichtbar: erst PageView abmelden, dann loeschen
+                    // if MasterPage is visible hide on pageview
                     SdrPageView* pPgView = pView->GetSdrPageView();
                     if (pPgView)
-                        pView->HideSdrPage();
+                    {
+                        SdrPage* pShownPage = pPgView->GetPage();
+                        if( (pShownPage == pMaster) || (pShownPage == pNotesMaster) )
+                        {
+                            pView->HideSdrPage();
+                            pView->ShowSdrPage( GetSdPage( 0, PK_STANDARD ) );
+                        }
+                    }
                 }
 
                 if( bUndo )
