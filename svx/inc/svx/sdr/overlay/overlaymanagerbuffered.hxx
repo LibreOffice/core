@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:08:00 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,13 @@ namespace sdr
         class OverlayManagerBuffered : public OverlayManager
         {
         protected:
-            // The VirtualDevice for buffering
+            // The VirtualDevice for draw window content buffering, this
+            // is the view content without overlay
             VirtualDevice                           maBufferDevice;
+
+            // #i73602# The VirtualDevice for OverlayPaint buffering. This
+            // is an extra device to avoid flickering of overlay paints
+            VirtualDevice                           maOutputBufferDevice;
 
             // Timer for buffering
             Timer                                   maBufferTimer;
