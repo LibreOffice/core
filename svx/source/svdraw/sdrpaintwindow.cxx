@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpaintwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:16:02 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,8 @@ void SdrPaintWindow::OutputPreRenderDevice(const Region& rExpandedRegion)
     }
 }
 
-void SdrPaintWindow::DrawOverlay(const Region& rRegion)
+// #i73602# add flag if buffer shall be used
+void SdrPaintWindow::DrawOverlay(const Region& rRegion, bool bUseBuffer)
 {
     // ## force creation of OverlayManager since the first repaint needs to
     // save the background to get a controlled start into overlay mechanism
@@ -251,7 +252,7 @@ void SdrPaintWindow::DrawOverlay(const Region& rRegion)
 
     if(mpOverlayManager && !OutputToPrinter())
     {
-        if(mpPreRenderDevice)
+        if(mpPreRenderDevice && bUseBuffer)
         {
             mpOverlayManager->completeRedraw(rRegion, &mpPreRenderDevice->GetPreRenderDevice());
         }
