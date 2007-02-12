@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:20:06 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:49:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -754,11 +754,10 @@ basegfx::B2DPolyPolygon E3dObject::ImpTakeContour3D() const
     {
         for (ULONG i = 0; i < pSub->GetObjCount(); i++)
         {
-#ifdef DBG_UTIL
+            // #i74258# call ImpTakeContour3D at child objects (!)
             SdrObject* pObj = pSub->GetObj(i);
             DBG_ASSERT(pObj->ISA(E3dObject), "AW: In E3dObject sind nur 3D-Objekte erlaubt!");
-#endif
-            aRetval.append(ImpTakeContour3D());
+            aRetval.append(((E3dObject*)pObj)->ImpTakeContour3D());
         }
     }
 
