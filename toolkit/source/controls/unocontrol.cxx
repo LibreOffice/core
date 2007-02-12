@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:26:00 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ struct LanguageDependentProp
     sal_Int32   nPropNameLength;
 };
 
-static LanguageDependentProp aLanguageDependentProp[] =
+static const LanguageDependentProp aLanguageDependentProp[] =
 {
     { "Text",            4 },
     { "Label",           5 },
@@ -551,6 +551,9 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 
         Reference< XControlModel > xOwnModel( getModel(), UNO_QUERY );
             // our own model for comparison
+        Reference< XPropertySet > xPS( xOwnModel, UNO_QUERY );
+        Reference< XPropertySetInfo > xPSI( xPS->getPropertySetInfo(), UNO_QUERY );
+        OSL_ENSURE( xPSI.is(), "UnoControl::ImplModelPropertiesChanged: should have property set meta data!" );
 
         const PropertyChangeEvent* pEvents = rEvents.getConstArray();
 
@@ -561,78 +564,79 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         {
             Reference< XControlModel > xModel( pEvents->Source, UNO_QUERY );
             sal_Bool bOwnModel = xModel.get() == xOwnModel.get();
-            if ( bOwnModel )
+            if ( !bOwnModel )
+                continue;
+
+            // Detect changes on our resource resolver which invalidates
+            // automatically some language dependent properties.
+            if ( pEvents->PropertyName.equalsAsciiL( "ResourceResolver", 16 ))
             {
-                // Detect changes on our resource resolver which invalidates
-                // automatically some language dependent properties.
-                if ( pEvents->PropertyName.equalsAsciiL( "ResourceResolver", 16 ))
+                Reference< resource::XStringResourceResolver > xStrResolver;
+                if ( pEvents->NewValue >>= xStrResolver )
+                    bResourceResolverSet = xStrResolver.is();
+            }
+
+            sal_uInt16 nPType = GetPropertyId( pEvents->PropertyName );
+            if ( mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
+            {
+                // if we're in design mode, then some properties can change which
+                // require creating a *new* peer (since these properties cannot
+                // be switched at existing peers)
+                if ( nPType )
+                    bNeedNewPeer = ( nPType == BASEPROPERTY_BORDER )
+                                || ( nPType == BASEPROPERTY_MULTILINE )
+                                || ( nPType == BASEPROPERTY_DROPDOWN )
+                                || ( nPType == BASEPROPERTY_HSCROLL )
+                                || ( nPType == BASEPROPERTY_VSCROLL )
+                                || ( nPType == BASEPROPERTY_ORIENTATION )
+                                || ( nPType == BASEPROPERTY_SPIN )
+                                || ( nPType == BASEPROPERTY_ALIGN );
+                else
+                    bNeedNewPeer = requiresNewPeer( pEvents->PropertyName );
+
+                if ( bNeedNewPeer )
+                    break;
+            }
+
+            if ( nPType && ( nLen > 1 ) && DoesDependOnOthers( nPType ) )
+            {
+                // Properties die von anderen abhaengen erst hinterher einstellen,
+                // weil sie von anderen Properties abhaengig sind, die aber erst spaeter
+                // eingestellt werden, z.B. VALUE nach VALUEMIN/MAX.
+                aPeerPropertiesToSet.push_back(PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
+            }
+            else
+            {
+                if ( bResourceResolverSet )
                 {
-                    Reference< resource::XStringResourceResolver > xStrResolver;
-                    if ( pEvents->NewValue >>= xStrResolver )
-                        bResourceResolverSet = xStrResolver.is();
+                    // The resource resolver property change should be one of the first ones.
+                    // All language dependent properties are dependent on this property.
+                    // As BASEPROPERTY_NATIVE_WIDGET_LOOK is not dependent on resource
+                    // resolver. We don't need to handle a special order for these two props.
+                    aPeerPropertiesToSet.insert(
+                        aPeerPropertiesToSet.begin(),
+                        PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
+                    ++nIndependentPos;
                 }
-
-                sal_uInt16 nPType = GetPropertyId( pEvents->PropertyName );
-                if ( mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
-                    {
-                    // if we're in design mode, then some properties can change which
-                    // require creating a *new* peer (since these properties cannot
-                    // be switched at existing peers)
-                    if ( nPType )
-                        bNeedNewPeer = ( nPType == BASEPROPERTY_BORDER )
-                                    || ( nPType == BASEPROPERTY_MULTILINE )
-                                    || ( nPType == BASEPROPERTY_DROPDOWN )
-                                    || ( nPType == BASEPROPERTY_HSCROLL )
-                                    || ( nPType == BASEPROPERTY_VSCROLL )
-                                    || ( nPType == BASEPROPERTY_ORIENTATION )
-                                    || ( nPType == BASEPROPERTY_SPIN )
-                                    || ( nPType == BASEPROPERTY_ALIGN );
-                    else
-                        bNeedNewPeer = requiresNewPeer( pEvents->PropertyName );
-
-                    if ( bNeedNewPeer )
-                        break;
-                    }
-
-                if ( nPType && ( nLen > 1 ) && DoesDependOnOthers( nPType ) )
+                else if ( nPType == BASEPROPERTY_NATIVE_WIDGET_LOOK )
                 {
-                    // Properties die von anderen abhaengen erst hinterher einstellen,
-                    // weil sie von anderen Properties abhaengig sind, die aber erst spaeter
-                    // eingestellt werden, z.B. VALUE nach VALUEMIN/MAX.
-                    aPeerPropertiesToSet.push_back(PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
+                    // since *a lot* of other properties might be overruled by this one, we need
+                    // a special handling:
+                    // NativeWidgetLook needs to be set first: If it is set to ON, all other
+                    // properties describing the look (e.g. BackgroundColor) are ignored, anyway.
+                    // If it is switched OFF, then we need to do it first because else it will
+                    // overrule other look-related properties, and re-initialize them from system
+                    // defaults.
+                    aPeerPropertiesToSet.insert(
+                        aPeerPropertiesToSet.begin(),
+                        PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
+                    ++nIndependentPos;
                 }
                 else
                 {
-                    if ( bResourceResolverSet )
-                    {
-                        // The resource resolver property change should be one of the first ones.
-                        // All language dependent properties are dependent on this property.
-                        // As BASEPROPERTY_NATIVE_WIDGET_LOOK is not dependent on resource
-                        // resolver. We don't need to handle a special order for these two props.
-                        aPeerPropertiesToSet.insert(
-                            aPeerPropertiesToSet.begin(),
-                            PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
-                    }
-                    else if ( nPType == BASEPROPERTY_NATIVE_WIDGET_LOOK )
-                    {
-                        // since *a lot* of other properties might be overruled by this one, we need
-                        // a special handling:
-                        // NativeWidgetLook needs to be set first: If it is set to ON, all other
-                        // properties describing the look (e.g. BackgroundColor) are ignored, anyway.
-                        // If it is switched OFF, then we need to do it first because else it will
-                        // overrule other look-related properties, and re-initialize them from system
-                        // defaults.
-                        aPeerPropertiesToSet.insert(
-                            aPeerPropertiesToSet.begin(),
-                            PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
-                        ++nIndependentPos;
-                    }
-                    else
-                    {
-                        aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
-                            PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
-                        ++nIndependentPos;
-                    }
+                    aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
+                        PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
+                    ++nIndependentPos;
                 }
             }
         }
@@ -649,7 +653,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             // Add language dependent properties into the peer property set.
             // Our resource resolver has been changed and we must be sure
             // that language dependent props use the new resolver.
-            LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
+            const LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
             while ( pLangDepProp->pPropName != 0 )
             {
                 bool bMustBeInserted( true );
@@ -666,18 +670,11 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 if ( bMustBeInserted )
                 {
                     // Add language dependent props at the end
-                    rtl::OUString             aPropName( rtl::OUString::createFromAscii( pLangDepProp->pPropName ));
-                    Reference< XPropertySet > xPS( xOwnModel, UNO_QUERY );
-
-                    try
+                    ::rtl::OUString aPropName( ::rtl::OUString::createFromAscii( pLangDepProp->pPropName ));
+                    if ( xPSI.is() && xPSI->hasPropertyByName( aPropName ) )
                     {
-                        // Retrieve value to be set again. May be we don't have the property,
-                        // therefore we need to handle NoSuchPropertyException here.
-                        Any aAny = xPS->getPropertyValue( aPropName );
-                        aPeerPropertiesToSet.push_back( PropertyValue( aPropName, 0, aAny, PropertyState_DIRECT_VALUE ));
-                    }
-                    catch ( UnknownPropertyException& )
-                    {
+                        aPeerPropertiesToSet.push_back(
+                            PropertyValue( aPropName, 0, xPS->getPropertyValue( aPropName ), PropertyState_DIRECT_VALUE ) );
                     }
                 }
 
