@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:32:59 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2056,7 +2056,10 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
     if ( !(SETATTR_NOHINTADJUST & nMode) &&
          !pHint->IsOverlapAllowedAttr() &&
          !rNode.GetDoc()->IsInXMLImport() &&
-         RES_UNKNOWNATR_CONTAINER != nWhich )
+         ( RES_TXTATR_AUTOFMT == nWhich ||
+           RES_TXTATR_INETFMT == nWhich ||
+           RES_TXTATR_CHARFMT == nWhich ||
+           RES_TXTATR_CJK_RUBY == nWhich ) )
     {
         ASSERT( nWhich != RES_TXTATR_AUTOFMT ||
                 static_cast<const SwFmtAutoFmt&>(pHint->GetAttr()).GetStyleHandle()->GetPool() ==
