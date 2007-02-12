@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:07:15 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,8 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     //HMHbDisableHdl( FALSE ),
     bInConstruct( TRUE )
 {
-    SetBufferedOverlayAllowed(true);
+    // #i73602# Use default from the configuration
+    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
     Construct();
 }
 
@@ -86,7 +87,8 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable 
     //HMHbDisableHdl( FALSE ),
     bInConstruct( TRUE )
 {
-    SetBufferedOverlayAllowed(true);
+    // #i73602# Use default from the configuration
+    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
     Construct();
 }
 
