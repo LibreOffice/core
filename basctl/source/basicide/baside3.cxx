@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:29:09 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 
 #ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -780,17 +783,15 @@ void DialogWindow::StoreData()
                     Any aAny;
                     aAny <<= xISP;
                     xLib->replaceByName( ::rtl::OUString( GetName() ), aAny );
-
-                    BasicIDE::MarkDocShellModified( GetShell() );
-                    pEditor->ClearModifyFlag();
                 }
             }
         }
-        catch ( container::NoSuchElementException& e )
+        catch ( uno::Exception& e )
         {
-            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aBStr.GetBuffer() );
+            DBG_UNHANDLED_EXCEPTION();
         }
+        BasicIDE::MarkDocShellModified( GetShell() );
+        pEditor->ClearModifyFlag();
     }
 }
 
