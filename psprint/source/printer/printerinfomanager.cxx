@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 10:56:11 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 15:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <cupsmgr.hxx>
 #include <psprint/fontmanager.hxx>
 #include <psprint/strhelper.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
@@ -1160,6 +1161,11 @@ OUString SystemQueueInfo::getCommand() const
     return aRet;
 }
 
+struct SystemCommandParameters;
+typedef void(* tokenHandler)(const std::list< rtl::OString >&,
+                std::list< PrinterInfoManager::SystemPrintQueue >&,
+                const SystemCommandParameters*);
+
 struct SystemCommandParameters
 {
     const char*     pQueueCommand;
@@ -1167,142 +1173,203 @@ struct SystemCommandParameters
     const char*     pForeToken;
     const char*     pAftToken;
     unsigned int    nForeTokenCount;
-    const char**    pExcludeList;
-    bool            bSearchAttributes;
+    tokenHandler    pHandler;
 };
 
 #if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX))
-static const char* pExcludeLpget[] =
+static void lpgetSysQueueTokenHandler(
+    const std::list< rtl::OString >& i_rLines,
+    std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
+    const SystemCommandParameters* )
 {
-    "_default",
-    "_all",
-    NULL
-};
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    std::hash_set< OUString, OUStringHash > aUniqueSet;
+    std::hash_set< OUString, OUStringHash > aOnlySet;
+    aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_all" ) ) );
+    aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+
+    // the eventual "all" attribute of the "_all" queue tells us, which
+    // printers are to be used for this user at all
+
+    // find _all: line
+    rtl::OString aAllLine( "_all:" );
+    rtl::OString aAllAttr( "all=" );
+    for( std::list< rtl::OString >::const_iterator it = i_rLines.begin();
+         it != i_rLines.end(); ++it )
+    {
+        if( it->indexOf( aAllLine, 0 ) == 0 )
+        {
+            // now find the "all" attribute
+            ++it;
+            while( it != i_rLines.end() )
+            {
+                rtl::OString aClean( WhitespaceToSpace( *it ) );
+                if( aClean.indexOf( aAllAttr, 0 ) == 0 )
+                {
+                    // insert the comma separated entries into the set of printers to use
+                    sal_Int32 nPos = aAllAttr.getLength();
+                    while( nPos != -1 )
+                    {
+                        OString aTok( aClean.getToken( 0, ',', nPos ) );
+                        if( aTok.getLength() > 0 )
+                            aOnlySet.insert( rtl::OStringToOUString( aTok, aEncoding ) );
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    bool bInsertAttribute = false;
+    rtl::OString aDescrStr( "description=" );
+    rtl::OString aLocStr( "location=" );
+    for( std::list< rtl::OString >::const_iterator it = i_rLines.begin();
+         it != i_rLines.end(); ++it )
+    {
+        sal_Int32 nPos = 0;
+        // find the begin of a new printer section
+        nPos = it->indexOf( ':', 0 );
+        if( nPos != -1 )
+        {
+            OUString aSysQueue( rtl::OStringToOUString( it->copy( 0, nPos ), aEncoding ) );
+            // do not insert duplicates (e.g. lpstat tends to produce such lines)
+            // in case there was a "_all" section, insert only those printer explicitly
+            // set in the "all" attribute
+            if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() &&
+                ( aOnlySet.empty() || aOnlySet.find( aSysQueue ) != aOnlySet.end() )
+                )
+            {
+                o_rQueues.push_back( PrinterInfoManager::SystemPrintQueue() );
+                o_rQueues.back().m_aQueue = aSysQueue;
+                o_rQueues.back().m_aLocation = aSysQueue;
+                aUniqueSet.insert( aSysQueue );
+                bInsertAttribute = true;
+            }
+            else
+                bInsertAttribute = false;
+            continue;
+        }
+        if( bInsertAttribute && ! o_rQueues.empty() )
+        {
+            // look for "description" attribute, insert as comment
+            nPos = it->indexOf( aDescrStr, 0 );
+            if( nPos != -1 )
+            {
+                ByteString aComment( WhitespaceToSpace( it->copy(nPos+12) ) );
+                if( aComment.Len() > 0 )
+                    o_rQueues.back().m_aComment = String( aComment, aEncoding );
+                continue;
+            }
+            // look for "location" attribute, inser as location
+            nPos = it->indexOf( aLocStr, 0 );
+            if( nPos != -1 )
+            {
+                ByteString aLoc( WhitespaceToSpace( it->copy(nPos+9) ) );
+                if( aLoc.Len() > 0 )
+                    o_rQueues.back().m_aLocation = String( aLoc, aEncoding );
+                continue;
+            }
+        }
+    }
+}
 #endif
+static void standardSysQueueTokenHandler(
+    const std::list< rtl::OString >& i_rLines,
+    std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
+    const SystemCommandParameters* i_pParms)
+{
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    std::hash_set< OUString, OUStringHash > aUniqueSet;
+    rtl::OString aForeToken( i_pParms->pForeToken );
+    rtl::OString aAftToken( i_pParms->pAftToken );
+    /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing
+    */
+    for( std::list< rtl::OString >::const_iterator it = i_rLines.begin();
+         it != i_rLines.end(); ++it )
+    {
+        sal_Int32 nPos = 0;
+
+        // search for a line describing a printer:
+        // find if there are enough tokens before the name
+        for( unsigned int i = 0; i < i_pParms->nForeTokenCount && nPos != -1; i++ )
+        {
+            nPos = it->indexOf( aForeToken, nPos );
+            if( nPos != -1 && it->getLength() >= nPos+aForeToken.getLength() )
+                nPos += aForeToken.getLength();
+        }
+        if( nPos != -1 )
+        {
+            // find if there is the token after the queue
+            sal_Int32 nAftPos = it->indexOf( aAftToken, nPos );
+            if( nAftPos != -1 )
+            {
+                // get the queue name between fore and aft tokens
+                OUString aSysQueue( rtl::OStringToOUString( it->copy( nPos, nAftPos - nPos ), aEncoding ) );
+                // do not insert duplicates (e.g. lpstat tends to produce such lines)
+                if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() )
+                {
+                    o_rQueues.push_back( PrinterInfoManager::SystemPrintQueue() );
+                    o_rQueues.back().m_aQueue = aSysQueue;
+                    o_rQueues.back().m_aLocation = aSysQueue;
+                    aUniqueSet.insert( aSysQueue );
+                }
+            }
+        }
+    }
+}
 
 static const struct SystemCommandParameters aParms[] =
 {
     #if defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
-    { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, NULL, false },
-    { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, NULL, false },
-    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1, NULL, false }
+    { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },
+    { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },
+    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1, standardSysQueueTokenHandler }
     #else
-    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpget list", "lp -d \"(PRINTER)\"", "", ":", 0, pExcludeLpget, true },
-    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1, NULL, false },
-    { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, NULL, false },
-    { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, NULL, false }
+    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpget list", "lp -d \"(PRINTER)\"", "", ":", 0, lpgetSysQueueTokenHandler },
+    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1, standardSysQueueTokenHandler },
+    { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },
+    { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler }
     #endif
 };
 
 void SystemQueueInfo::run()
 {
     char pBuffer[1024];
-    ByteString aPrtQueueCmd, aForeToken, aAftToken, aString;
-    unsigned int nForeTokenCount = 0, i;
     FILE *pPipe;
-    bool bSuccess = false, bSearchAttributes = false, bInsertAttribute = false;
-    std::list< ByteString > aLines;
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    OUString aPrintCommand;
-    const char** pExcludes = NULL;
+    std::list< rtl::OString > aLines;
 
     /* Discover which command we can use to get a list of all printer queues */
-    for( i = 0; i < sizeof(aParms)/sizeof(aParms[0]) && ! bSuccess; i++ )
+    for( unsigned int i = 0; i < sizeof(aParms)/sizeof(aParms[0]); i++ )
     {
         aLines.clear();
-        aPrtQueueCmd            = aParms[i].pQueueCommand;
-        aPrintCommand           = OUString::createFromAscii( aParms[i].pPrintCommand );
-        aForeToken              = aParms[i].pForeToken;
-        aAftToken               = aParms[i].pAftToken;
-        nForeTokenCount         = aParms[i].nForeTokenCount;
-        pExcludes               = aParms[i].pExcludeList;
-        bSearchAttributes       = aParms[i].bSearchAttributes;
+        rtl::OStringBuffer aCmdLine( 128 );
+        aCmdLine.append( aParms[i].pQueueCommand );
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
         #endif
-        aPrtQueueCmd += ByteString( " 2>/dev/null" );
-        if( (pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" )) )
+        aCmdLine.append( " 2>/dev/null" );
+        if( (pPipe = popen( aCmdLine.getStr(), "r" )) )
         {
             while( fgets( pBuffer, 1024, pPipe ) )
-                aLines.push_back( ByteString( pBuffer ) );
+                aLines.push_back( rtl::OString( pBuffer ) );
             if( ! pclose( pPipe ) )
-                bSuccess = true;
+            {
+                std::list< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;
+                aParms[i].pHandler( aLines, aSysPrintQueues, &(aParms[i]) );
+                MutexGuard aGuard( m_aMutex );
+                m_bChanged  = true;
+                m_aQueues   = aSysPrintQueues;
+                m_aCommand  = rtl::OUString::createFromAscii( aParms[i].pPrintCommand );
+                #if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "success\n" );
+                #endif
+                break;
+            }
         }
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "%s\n", bSuccess ? "success" : "failed" );
+        fprintf( stderr, "failed\n" );
         #endif
-    }
-
-    /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing
-    */
-    if( bSuccess )
-    {
-        std::list< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;
-        std::hash_set< OUString, OUStringHash > aUniqueSet;
-        while( pExcludes && *pExcludes )
-        {
-            aUniqueSet.insert( OUString::createFromAscii( *pExcludes ) );
-            pExcludes++;
-        }
-
-        while( aLines.begin() != aLines.end() )
-        {
-            int nPos = 0, nAftPos;
-
-            ByteString aOutLine( aLines.front() );
-            aLines.pop_front();
-
-            for( i = 0; i < nForeTokenCount && nPos != STRING_NOTFOUND; i++ )
-            {
-                nPos = aOutLine.Search( aForeToken, nPos );
-                if( nPos != STRING_NOTFOUND && aOutLine.Len() >= nPos+aForeToken.Len() )
-                    nPos += aForeToken.Len();
-            }
-            if( nPos != STRING_NOTFOUND )
-            {
-                nAftPos = aOutLine.Search( aAftToken, nPos );
-                if( nAftPos != STRING_NOTFOUND )
-                {
-                    OUString aSysQueue( String( aOutLine.Copy( nPos, nAftPos - nPos ), aEncoding ) );
-                    // do not insert duplicates (e.g. lpstat tends to produce such lines)
-                    if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() )
-                    {
-                        aSysPrintQueues.push_back( PrinterInfoManager::SystemPrintQueue() );
-                        aSysPrintQueues.back().m_aQueue = aSysQueue;
-                        aSysPrintQueues.back().m_aLocation = aSysQueue;
-                        aUniqueSet.insert( aSysQueue );
-                        bInsertAttribute = true;
-                    }
-                    else
-                        bInsertAttribute = false;
-                    continue;
-                }
-            }
-            if( bSearchAttributes && bInsertAttribute && ! aSysPrintQueues.empty() )
-            {
-                nPos = aOutLine.Search( "description=", 0 );
-                if( nPos != STRING_NOTFOUND )
-                {
-                    ByteString aComment( WhitespaceToSpace( aOutLine.Copy(nPos+12) ) );
-                    if( aComment.Len() > 0 )
-                        aSysPrintQueues.back().m_aComment = String( aComment, aEncoding );
-                    continue;
-                }
-                nPos = aOutLine.Search( "location=", 0 );
-                if( nPos != STRING_NOTFOUND )
-                {
-                    ByteString aLoc( WhitespaceToSpace( aOutLine.Copy(nPos+9) ) );
-                    if( aLoc.Len() > 0 )
-                        aSysPrintQueues.back().m_aLocation = String( aLoc, aEncoding );
-                    continue;
-                }
-            }
-        }
-
-        MutexGuard aGuard( m_aMutex );
-        m_bChanged  = true;
-        m_aQueues   = aSysPrintQueues;
-        m_aCommand  = aPrintCommand;
     }
 }
 
