@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:39:29 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -928,6 +928,10 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     Picture aAlphaPic = rPeer.CreatePicture( aAlphaPM, pAlphaFormat, CPRepeat, aAttr );
     if( !aAlphaPic )
         return false;
+
+    // set clipping
+    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+        rPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
 
     // paint source * mask over destination picture
     rPeer.CompositePicture( PictOpOver, aSrcPic, aAlphaPic, aDstPic,
