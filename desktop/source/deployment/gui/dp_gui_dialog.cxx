@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:53:18 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,6 @@ DialogImpl::DialogImpl(
 //______________________________________________________________________________
 DialogImpl::~DialogImpl()
 {
-    if (m_updatability.get() != NULL)
-        m_updatability->stop();
 }
 
 //------------------------------------------------------------------------------
