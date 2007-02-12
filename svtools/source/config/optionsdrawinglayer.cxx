@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:11:58 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,20 +83,32 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_STRIPE_COLOR_A          0
 #define DEFAULT_STRIPE_COLOR_B          16581375
 #define DEFAULT_STRIPE_LENGTH           4
+// #i73602#
+#define DEFAULT_OVERLAYBUFFER_CALC          sal_False
+#define DEFAULT_OVERLAYBUFFER_WRITER        sal_False
+#define DEFAULT_OVERLAYBUFFER_DRAWIMPRESS   sal_True
 
 #define PROPERTYNAME_OVERLAYBUFFER      OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer"    ))
 #define PROPERTYNAME_PAINTBUFFER        OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer"      ))
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorA"     ))
 #define PROPERTYNAME_STRIPE_COLOR_B     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorB"     ))
 #define PROPERTYNAME_STRIPE_LENGTH      OUString(RTL_CONSTASCII_USTRINGPARAM("StripeLength"     ))
+// #i73602#
+#define PROPERTYNAME_OVERLAYBUFFER_CALC         OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Calc"))
+#define PROPERTYNAME_OVERLAYBUFFER_WRITER       OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Writer"))
+#define PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS  OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_DrawImpress"))
 
-#define PROPERTYHANDLE_OVERLAYBUFFER    0
-#define PROPERTYHANDLE_PAINTBUFFER      1
-#define PROPERTYHANDLE_STRIPE_COLOR_A   2
-#define PROPERTYHANDLE_STRIPE_COLOR_B   3
-#define PROPERTYHANDLE_STRIPE_LENGTH    4
+#define PROPERTYHANDLE_OVERLAYBUFFER                0
+#define PROPERTYHANDLE_PAINTBUFFER                  1
+#define PROPERTYHANDLE_STRIPE_COLOR_A               2
+#define PROPERTYHANDLE_STRIPE_COLOR_B               3
+#define PROPERTYHANDLE_STRIPE_LENGTH                4
+// #i73602#
+#define PROPERTYHANDLE_OVERLAYBUFFER_CALC           5
+#define PROPERTYHANDLE_OVERLAYBUFFER_WRITER         6
+#define PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS    7
 
-#define PROPERTYCOUNT                   5
+#define PROPERTYCOUNT                               8
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -124,12 +136,20 @@ public:
     Color       GetStripeColorA() const;
     Color       GetStripeColorB() const;
     sal_uInt16  GetStripeLength() const;
+    // #i73602#
+    sal_Bool    IsOverlayBuffer_Calc() const;
+    sal_Bool    IsOverlayBuffer_Writer() const;
+    sal_Bool    IsOverlayBuffer_DrawImpress() const;
 
     void        SetOverlayBuffer( sal_Bool bState );
     void        SetPaintBuffer( sal_Bool bState );
     void        SetStripeColorA( Color aColor );
     void        SetStripeColorB( Color aColor );
     void        SetStripeLength( sal_uInt16 nLength );
+    // #i73602#
+    void        SetOverlayBuffer_Calc( sal_Bool bState );
+    void        SetOverlayBuffer_Writer( sal_Bool bState );
+    void        SetOverlayBuffer_DrawImpress( sal_Bool bState );
 
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
@@ -150,6 +170,10 @@ private:
         Color       m_bStripeColorA;
         Color       m_bStripeColorB;
         sal_uInt16  m_nStripeLength;
+        // #i73602#
+        sal_Bool    m_bOverlayBuffer_Calc;
+        sal_Bool    m_bOverlayBuffer_Writer;
+        sal_Bool    m_bOverlayBuffer_DrawImpress;
 };
 
 //_________________________________________________________________________________________________________________
@@ -165,7 +189,11 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     m_bPaintBuffer( DEFAULT_PAINTBUFFER ),
     m_bStripeColorA(Color(DEFAULT_STRIPE_COLOR_A)),
     m_bStripeColorB(Color(DEFAULT_STRIPE_COLOR_B)),
-    m_nStripeLength(DEFAULT_STRIPE_LENGTH)
+    m_nStripeLength(DEFAULT_STRIPE_LENGTH),
+    // #i73602#
+    m_bOverlayBuffer_Calc( DEFAULT_OVERLAYBUFFER_CALC ),
+    m_bOverlayBuffer_Writer( DEFAULT_OVERLAYBUFFER_WRITER ),
+    m_bOverlayBuffer_DrawImpress( DEFAULT_OVERLAYBUFFER_DRAWIMPRESS )
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
@@ -220,6 +248,28 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 seqValues[nProperty] >>= m_nStripeLength;
             }
             break;
+
+            // #i73602#
+            case PROPERTYHANDLE_OVERLAYBUFFER_CALC:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\OverlayBuffer_Calc\"?" );
+                seqValues[nProperty] >>= m_bOverlayBuffer_Calc;
+            }
+            break;
+
+            case PROPERTYHANDLE_OVERLAYBUFFER_WRITER:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\OverlayBuffer_Writer\"?" );
+                seqValues[nProperty] >>= m_bOverlayBuffer_Writer;
+            }
+            break;
+
+            case PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\OverlayBuffer_DrawImpress\"?" );
+                seqValues[nProperty] >>= m_bOverlayBuffer_DrawImpress;
+            }
+            break;
         }
     }
 }
@@ -263,6 +313,19 @@ void SvtOptionsDrawinglayer_Impl::Commit()
 
             case PROPERTYHANDLE_STRIPE_LENGTH:
                 aSeqValues[nProperty] <<= m_nStripeLength;
+            break;
+
+            // #i73602#
+            case PROPERTYHANDLE_OVERLAYBUFFER_CALC:
+                aSeqValues[nProperty] <<= m_bOverlayBuffer_Calc;
+            break;
+
+            case PROPERTYHANDLE_OVERLAYBUFFER_WRITER:
+                aSeqValues[nProperty] <<= m_bOverlayBuffer_Writer;
+            break;
+
+            case PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS:
+                aSeqValues[nProperty] <<= m_bOverlayBuffer_DrawImpress;
             break;
         }
     }
@@ -308,6 +371,22 @@ Color SvtOptionsDrawinglayer_Impl::GetStripeColorB() const
 sal_uInt16 SvtOptionsDrawinglayer_Impl::GetStripeLength() const
 {
     return m_nStripeLength;
+}
+
+// #i73602#
+sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Calc() const
+{
+    return m_bOverlayBuffer_Calc;
+}
+
+sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Writer() const
+{
+    return m_bOverlayBuffer_Writer;
+}
+
+sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_DrawImpress() const
+{
+    return m_bOverlayBuffer_DrawImpress;
 }
 
 //*****************************************************************************************************************
@@ -370,6 +449,34 @@ void SvtOptionsDrawinglayer_Impl::SetStripeLength( sal_uInt16 nLength )
     }
 }
 
+// #i73602#
+void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_Calc( sal_Bool bState )
+{
+    if(m_bOverlayBuffer_Calc != bState)
+    {
+        m_bOverlayBuffer_Calc = bState;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_Writer( sal_Bool bState )
+{
+    if(m_bOverlayBuffer_Writer != bState)
+    {
+        m_bOverlayBuffer_Writer = bState;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_DrawImpress( sal_Bool bState )
+{
+    if(m_bOverlayBuffer_DrawImpress != bState)
+    {
+        m_bOverlayBuffer_DrawImpress = bState;
+        SetModified();
+    }
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -382,7 +489,11 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
         PROPERTYNAME_PAINTBUFFER        ,
         PROPERTYNAME_STRIPE_COLOR_A     ,
         PROPERTYNAME_STRIPE_COLOR_B     ,
-        PROPERTYNAME_STRIPE_LENGTH
+        PROPERTYNAME_STRIPE_LENGTH      ,
+        // #i73602#
+        PROPERTYNAME_OVERLAYBUFFER_CALC,
+        PROPERTYNAME_OVERLAYBUFFER_WRITER,
+        PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -477,6 +588,25 @@ sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
     return m_pDataContainer->GetStripeLength();
 }
 
+// #i73602#
+sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer_Calc() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsOverlayBuffer_Calc();
+}
+
+sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer_Writer() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsOverlayBuffer_Writer();
+}
+
+sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsOverlayBuffer_DrawImpress();
+}
+
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -520,6 +650,25 @@ void SvtOptionsDrawinglayer::SetStripeLength( sal_uInt16 nLength )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetStripeLength( nLength );
+}
+
+// #i73602#
+void SvtOptionsDrawinglayer::SetOverlayBuffer_Calc( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetOverlayBuffer_Calc( bState );
+}
+
+void SvtOptionsDrawinglayer::SetOverlayBuffer_Writer( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetOverlayBuffer_Writer( bState );
+}
+
+void SvtOptionsDrawinglayer::SetOverlayBuffer_DrawImpress( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetOverlayBuffer_DrawImpress( bState );
 }
 
 //*****************************************************************************************************************
