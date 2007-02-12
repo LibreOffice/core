@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_thread.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:23:47 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@ public:
        <p>This function must be called at most once.</p>
     */
     void launch();
+
+    using osl::Thread::join;
 
     static void * operator new(std::size_t size) throw (std::bad_alloc);
 
