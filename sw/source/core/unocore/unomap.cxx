@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:36:17 $
+ *  last change: $Author: kz $ $Date: 2007-02-12 14:33:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -740,6 +740,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_CONTOURED), RES_CHRATR_CONTOUR,    CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_WORD_MODE), RES_CHRATR_WORDLINEMODE,CPPU_E2T(CPPUTYPE_BOOLEAN)  ,    PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NMID(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES), RES_TXTATR_UNKNOWN_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_PHYSICAL), FN_UNO_IS_PHYSICAL,     CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_IS_ON), RES_CHRATR_TWO_LINES,          CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, MID_TWOLINES},
