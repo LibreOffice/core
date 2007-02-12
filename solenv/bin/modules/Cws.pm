@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-09 17:19:44 $
+#   last change: $Author: kz $ $Date: 2007-02-12 15:09:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ sub new
                                       # child, each file can be added only once
     $self->{MILESTONE}    = undef;    # master milestone to which child is related
     $self->{MODULES}      = undef;    # list of modules belonging to child
+    $self->{INCOMPATIBLE_MODULES}      = undef;    # list of modules belonging to child
     $self->{TASKIDS}      = undef;    # list of tasks registered with child
     $self->{_CACHED_TAGS} = undef;    # list of cached tags (tags are looked up frequently)
     bless($self, $class);
@@ -136,7 +137,7 @@ for my $datum (qw(master milestone)) {
 
 # Accessor methods for instance data consisting of item lists
 # like modules and taskids
-for my $datum (qw(files patch_files modules taskids)) {
+for my $datum (qw(files patch_files modules incompatible_modules taskids)) {
     no strict "refs";
     *$datum = sub {
         # get current item list
@@ -291,12 +292,15 @@ sub get_cvs_head {
     return $result;
 };
 
+#### public class methods ####
+
 sub get_master_tag {
     my ($self, $master, $milestone) = @_;
     $master = $self->master() if (!defined $master);
     $milestone = $self->milestone() if (!defined $milestone);
     return uc($master) . '_' . lc($milestone);
 };
+
 
 sub get_mws {
     my $self = shift;
@@ -353,12 +357,20 @@ sub get_tags
     return @{$self->{_CACHED_TAGS}};
 }
 
-# Get child workspace owner
+# Get childworkspace owner
 sub get_owner
 {
     my $self = shift;
 
     return $self->get_owner_from_eis();
+}
+
+# get childworkspace qarep
+sub get_qarep
+{
+    my $self = shift;
+
+    return $self->get_qarep_from_eis();
 }
 
 # store an Attachment to a given CWS
@@ -420,7 +432,31 @@ sub get_public_flag
     return $self->get_public_flag_from_eis();
 }
 
-#### public class methods ####
+
+# Get the 'publicmaster' flag indicating whether a MWS is visible on OOo
+sub get_publicmaster_flag
+{
+    my $self = shift;
+
+    return $self->get_publicmaster_flag_from_eis();
+}
+
+
+sub get_subversion_flag {
+
+    my $self      = shift;
+
+    return $self->get_subversion_flag_from_eis();
+}
+
+sub set_subversion_flag {
+
+    my $self      = shift;
+    my $value     = shift;
+
+    return $self->set_subversion_flag_in_eis($value);
+}
+
 
 # Check if milestone exists
 sub is_milestone
@@ -528,6 +564,51 @@ sub get_current_milestone
     return $self->get_current_milestone_from_eis($master);
 }
 
+# Get masters
+sub get_masters
+{
+
+    my $self      = shift;
+
+    return $self->get_masters_from_eis();
+}
+
+# Get milestones for MWS.
+sub get_milestones
+{
+    my $self      = shift;
+    my $master    = shift;
+
+    return $self->get_milestones_from_eis($master);
+}
+# get build string for CWS
+
+sub get_build
+{
+    my $self      = shift;
+    my $master = $self->master();
+    my $milestone = $self->milestone();
+    if ( ! defined($milestone) ) {
+        return undef;
+    }
+    my $bid=$self->get_buildid($master,$milestone);
+    if ( ! defined($bid) ) {
+        return undef;
+    }
+    return $self->expand_buildid($bid);
+}
+
+
+
+# expand build for given cwsname
+sub expand_buildid
+{
+    my $self      = shift;
+    my $bid    = shift;
+    return $self->expand_buildid_in_eis($bid);
+}
+
+
 # Set BuildID of milestone
 sub set_milestone_buildid
 {
@@ -551,6 +632,7 @@ sub milestone_removed
     return $self->set_milestone_removed_in_eis($master, $milestone);
 }
 
+
 # Get all child workspaces which have been integrated on a
 # given master and milestone.
 sub get_integrated_cws
@@ -561,6 +643,17 @@ sub get_integrated_cws
 
     return wantarray ? @{$self->get_childworkspaces_for_milestone($master, $milestone)}
                      :   $self->get_childworkspaces_for_milestone($master, $milestone);
+}
+
+
+# Get builid for given master and milestone.
+sub get_buildid
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    return $self->get_buildid_for_milestone($master, $milestone);
 }
 
 #
@@ -816,6 +909,9 @@ sub fetch_items_from_eis
     my $result;
     if ( $type eq 'modules' ) {
         eval { $result = $eis->getModules($id) };
+    }
+    elsif ( $type eq 'incompatible_modules' ) {
+        eval { $result = $eis->getIncompatibleModules($id) };
     }
     elsif ( $type eq 'taskids' ) {
         eval { $result = $eis->getTaskIds($id) };
@@ -1092,7 +1188,29 @@ sub get_owner_from_eis
     my $result;
     eval { $result = $eis->getOwnerEmail($id) };
     if ( $@ ) {
-        carp("ERROR: get_status(): EIS database transaction failed. Reason:\n$@\n");
+        carp("ERROR: get_OwnerEmail(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+# Get child workspace qarep from EIS,
+# return undef in case of error.
+sub get_qarep_from_eis
+{
+    my $self = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getQARepresentativeEmail($id) };
+    if ( $@ ) {
+        carp("ERROR: get_qarep(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 }
@@ -1269,6 +1387,74 @@ sub get_current_milestone_from_eis
     return $result;
 }
 
+sub get_masters_from_eis
+{
+    my $self      = shift;
+
+    my $eis = Cws::eis();
+    my @result;
+    eval { @result = $eis->getMasterWorkspaces() };
+    if ( $@ ) {
+        carp("ERROR: get_masters(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    my @result2=();
+    my $i=0;
+    while ( defined($result[0][$i]) ) {
+        push @result2,$result[0][$i];
+        $i++;
+    }
+    return @result2;
+}
+
+
+sub get_milestones_from_eis
+{
+    my $self      = shift;
+    my $master    = shift;
+
+    $master    = Eis::to_string($master);
+
+    my $eis = Cws::eis();
+    my @result;
+    eval { @result = $eis->getMilestones( $master ) };
+    if ( $@ ) {
+        carp("ERROR: get_milestones(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    my @result2=();
+    my $i=0;
+    while ( defined($result[0][$i]) ) {
+        push @result2,$result[0][$i];
+        $i++;
+    }
+    return @result2;
+}
+
+# Get child workspace owner from EIS,
+# return undef in case of error.
+sub expand_buildid_in_eis
+{
+    my $self = shift;
+    my $bid = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $name = $self->child();
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->expandBuildId($bid, $name) };
+    if ( $@ ) {
+        carp("ERROR: expand_builid(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
 sub set_milestone_removed_in_eis
 {
     my $self      = shift;
@@ -1318,6 +1504,24 @@ sub get_is_milestone_used_from_eis
     eval { $result = $eis->isMilestoneInUse($master, $milestone) };
     if ( $@ ) {
         carp("ERROR: is_milestone_used(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+sub get_buildid_for_milestone
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    $master    = Eis::to_string($master);
+    $milestone = Eis::to_string($milestone);
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getMilestoneBuild($master, $milestone) };
+    if ( $@ ) {
+        carp("ERROR: get_buildid_for_milestone(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 }
@@ -1394,6 +1598,7 @@ sub get_creation_master_from_eis
 
 }
 
+# get isPublic flag from eis
 sub get_public_flag_from_eis
 {
     my $self      = shift;
@@ -1413,6 +1618,73 @@ sub get_public_flag_from_eis
     }
     return $result;
 }
+
+# get isPublicMaster flag from eis
+sub get_publicmaster_flag_from_eis
+{
+    my $self      = shift;
+
+    # check if child workspace is valid
+    my $master = $self->master();
+    if ( !$master ) {
+        carp("ERROR: MasterWorkspace not defined.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->isPublicMaster($master) };
+    if ( $@ ) {
+        carp("ERROR: get_publicmaster_flag(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+# get isSubVersion flag from eis
+sub get_subversion_flag_from_eis
+{
+    my $self = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->isSubVersion($id) };
+    if ( $@ ) {
+        carp("ERROR: get_subversion_flag(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+# set isSubVersion flag in eis
+sub set_subversion_flag_in_eis
+{
+    my $self=shift;
+    my $status=shift;
+
+    my $bool_status=SOAP::Data->type(boolean => $status);
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->setSubVersion($id,$bool_status) };
+    if ( $@ ) {
+        carp("ERROR: get_subversion_flag(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
 
 sub is_uirelevant_from_eis
 {
@@ -1638,6 +1910,7 @@ sub get_due_date_qa_from_eis
 
     return $result;
 }
+
 
 #logging
 sub set_log_entry_in_eis
