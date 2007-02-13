@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2007-01-25 12:15:23 $
+ *  last change: $Author: hdu $ $Date: 2007-02-13 08:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,8 @@ namespace drawinglayer
 
         bool TextLayouterDevice::getTextOutlines( basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector, const String& rText, xub_StrLen nIndex, xub_StrLen nLength, const ::std::vector< sal_Int32 >& rDXArray)
         {
-            return mrDevice.GetTextOutlines( rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, true, 0, &(rDXArray[0]));
+            const sal_Int32* pDXArray = rDXArray.size() ? &rDXArray[0] : NULL;
+            return mrDevice.GetTextOutlines( rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, true, 0, pDXArray);
         }
 
         basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength)
