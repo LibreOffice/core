@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 18:21:36 $
+ *  last change: $Author: hdu $ $Date: 2007-02-13 08:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1042,34 +1042,156 @@ namespace drawinglayer
 
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
                 {
-                    // handle, there is no shear and no mirror
+                    // prepare everything that is not sheared and mirrored
                     bPrimitiveAccepted = true;
-                    const Font aFont(primitive2d::getVclFontFromFontAttributes(rTextCandidate.getFontAttributes(), aScale, fRotate));
-                    const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
-                    const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
-
-                    // create transformed integer DXArray in view coordinate system
-                    ::std::vector< sal_Int32 > aTransformedDXArray;
-
-                    if(rTextCandidate.getDXArray().size())
+                    Font aFont(primitive2d::getVclFontFromFontAttributes(rTextCandidate.getFontAttributes(), aScale, fRotate));
+                    // handle additional font attributes
+                    const primitive2d::TextComplexPortionPrimitive2D* pTCPP =
+                        dynamic_cast<const primitive2d::TextComplexPortionPrimitive2D*>( &rTextCandidate );
+                    if( pTCPP != NULL )
                     {
-                        aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
-                        const basegfx::B2DVector aPixelVector(aLocalTransform * basegfx::B2DVector(1.0, 0.0));
-                        const double fPixelVectorLength(aPixelVector.getLength());
+                        // TODO: emulate all text decorations
+#if 0
+                        if( pTCPP->getFontUnderline() != primitive2d::FONT_UNDERLINE_NONE )
+                            aFont.SetUnderline( UNDERLINE_SINGLE );
 
-                        for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin()); aStart != rTextCandidate.getDXArray().end(); aStart++)
+                        // the compile time assertions make sure that the simple cast
+                        // from primitive2d::FontUnderline to vcl::FontUnderline works
+                        // TODO: test all other primitive2d<->vcl enum mappings
+                        BOOST_STATIC_ASSERT( UNDERLINE_NONE == (FontUnderline)primitive2d::FONT_UNDERLINE_NONE );
+                        BOOST_STATIC_ASSERT( UNDERLINE_SINGLE == (FontUnderline)primitive2d::FONT_UNDERLINE_SINGLE );
+                        BOOST_STATIC_ASSERT( UNDERLINE_BOLDWAVE == (FontUnderline)primitive2d::FONT_UNDERLINE_BOLDWAVE );
+                        FontUnderline eFontUnderline = (FontUnderline)pTCPP->getFontUnderline();
+#else
+                        // set Underline attribute
+                        FontUnderline eFontUnderline = UNDERLINE_NONE;
+                        switch( pTCPP->getFontUnderline() )
                         {
-                            aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorLength));
+                            default:
+                                DBG_WARNING1( "DrawingLayer: Unknown underline attribute (%d)!", pTCPP->getFontUnderline() );
+                                // fall through
+                            case primitive2d::FONT_UNDERLINE_NONE:      eFontUnderline = UNDERLINE_NONE; break;
+                            case primitive2d::FONT_UNDERLINE_SINGLE:    eFontUnderline = UNDERLINE_SINGLE; break;
+                            case primitive2d::FONT_UNDERLINE_DOUBLE:    eFontUnderline = UNDERLINE_DOUBLE; break;
+                            case primitive2d::FONT_UNDERLINE_DOTTED:    eFontUnderline = UNDERLINE_DOTTED; break;
+                            case primitive2d::FONT_UNDERLINE_DASH:      eFontUnderline = UNDERLINE_DASH; break;
+                            case primitive2d::FONT_UNDERLINE_LONGDASH:  eFontUnderline = UNDERLINE_LONGDASH; break;
+                            case primitive2d::FONT_UNDERLINE_DASHDOT:   eFontUnderline = UNDERLINE_DASHDOT; break;
+                            case primitive2d::FONT_UNDERLINE_DASHDOTDOT:eFontUnderline = UNDERLINE_DASHDOTDOT; break;
+                            case primitive2d::FONT_UNDERLINE_SMALLWAVE: eFontUnderline = UNDERLINE_SMALLWAVE; break;
+                            case primitive2d::FONT_UNDERLINE_WAVE:      eFontUnderline = UNDERLINE_WAVE; break;
+                            case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:eFontUnderline = UNDERLINE_DOUBLEWAVE; break;
+                            case primitive2d::FONT_UNDERLINE_BOLD:      eFontUnderline = UNDERLINE_BOLD; break;
+                            case primitive2d::FONT_UNDERLINE_BOLDDOTTED:eFontUnderline = UNDERLINE_BOLDDOTTED; break;
+                            case primitive2d::FONT_UNDERLINE_BOLDDASH:  eFontUnderline = UNDERLINE_BOLDDASH; break;
+                            case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:eFontUnderline = UNDERLINE_LONGDASH; break;
+                            case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:eFontUnderline = UNDERLINE_BOLDDASHDOT; break;
+                            case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:eFontUnderline = UNDERLINE_BOLDDASHDOT; break;
+                            case primitive2d::FONT_UNDERLINE_BOLDWAVE:  eFontUnderline = UNDERLINE_BOLDWAVE; break;
                         }
+#endif
+
+                        if( eFontUnderline != UNDERLINE_NONE )
+                        {
+                            aFont.SetUnderline( eFontUnderline );
+                            if( pTCPP->getWordLineMode() )
+                                aFont.SetWordLineMode( true );
+//TODO: ???                 if( pTCPP->getUnderlineAbove() )
+//                              aFont.SetUnderlineAbove( true );
+                        }
+
+                        // set Strikeout attribute
+                        FontStrikeout eFontStrikeout = STRIKEOUT_NONE;
+                        switch( pTCPP->getFontStrikeout() )
+                        {
+                            default:
+                                DBG_WARNING1( "DrawingLayer: Unknown strikeout attribute (%d)!", pTCPP->getFontUnderline() );
+                                // fall through
+                            case primitive2d::FONT_STRIKEOUT_NONE:      eFontStrikeout = STRIKEOUT_NONE; break;
+                            case primitive2d::FONT_STRIKEOUT_SINGLE:    eFontStrikeout = STRIKEOUT_SINGLE; break;
+                            case primitive2d::FONT_STRIKEOUT_DOUBLE:    eFontStrikeout = STRIKEOUT_DOUBLE; break;
+                            case primitive2d::FONT_STRIKEOUT_BOLD:      eFontStrikeout = STRIKEOUT_BOLD; break;
+                            case primitive2d::FONT_STRIKEOUT_SLASH:     eFontStrikeout = STRIKEOUT_SLASH; break;
+                            case primitive2d::FONT_STRIKEOUT_X:         eFontStrikeout = STRIKEOUT_X; break;
+                        }
+
+                        if( eFontStrikeout != STRIKEOUT_NONE )
+                            aFont.SetStrikeout( eFontStrikeout );
+
+                        // set EmphasisMark attribute
+                        FontEmphasisMark eFontEmphasisMark = EMPHASISMARK_NONE;
+                        switch( pTCPP->getFontEmphasisMark() )
+                        {
+                            default:
+                                DBG_WARNING1( "DrawingLayer: Unknown EmphasisMark style (%d)!", pTCPP->getFontEmphasisMark() );
+                                // fall through
+                            case primitive2d::FONT_EMPHASISMARK_NONE:   eFontEmphasisMark = EMPHASISMARK_NONE; break;
+                            case primitive2d::FONT_EMPHASISMARK_DOT:    eFontEmphasisMark = EMPHASISMARK_DOT; break;
+                            case primitive2d::FONT_EMPHASISMARK_CIRCLE: eFontEmphasisMark = EMPHASISMARK_CIRCLE; break;
+                            case primitive2d::FONT_EMPHASISMARK_DISC:   eFontEmphasisMark = EMPHASISMARK_DISC; break;
+                            case primitive2d::FONT_EMPHASISMARK_ACCENT: eFontEmphasisMark = EMPHASISMARK_ACCENT; break;
+                        }
+
+                        if( eFontEmphasisMark != EMPHASISMARK_NONE )
+                        {
+                            DBG_ASSERT( (pTCPP->getEmphasisMarkAbove() != pTCPP->getEmphasisMarkBelow()),
+                                "DrawingLayer: Bad EmphasisMark position!" );
+                            if( pTCPP->getEmphasisMarkAbove() )
+                                eFontEmphasisMark |= EMPHASISMARK_POS_ABOVE;
+                            else
+                                eFontEmphasisMark |= EMPHASISMARK_POS_BELOW;
+                            aFont.SetEmphasisMark( eFontEmphasisMark );
+                        }
+
+                        // set Relief attribute
+                        FontRelief eFontRelief = RELIEF_NONE;
+                        switch( pTCPP->getFontRelief() )
+                        {
+                            default:
+                                DBG_WARNING1( "DrawingLayer: Unknown Relief style (%d)!", pTCPP->getFontRelief() );
+                                // fall through
+                            case primitive2d::FONT_RELIEF_NONE:     eFontRelief = RELIEF_NONE; break;
+                            case primitive2d::FONT_RELIEF_EMBOSSED: eFontRelief = RELIEF_EMBOSSED; break;
+                            case primitive2d::FONT_RELIEF_ENGRAVED: eFontRelief = RELIEF_ENGRAVED; break;
+                        }
+
+                        if( eFontRelief != RELIEF_NONE )
+                            aFont.SetRelief( eFontRelief );
+
+                        // set Shadow attribute
+                        if( pTCPP->getShadow() )
+                            aFont.SetShadow( true );
+
+                        // set Outline attribute
+                        if( pTCPP->getOutline() )
+                            aFont.SetOutline( true );
                     }
 
-                    // set parameters and paint
-                    const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
                     mpOutputDevice->SetFont(aFont);
-                    mpOutputDevice->SetTextColor(Color(aRGBFontColor));
-                    mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
-                        aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
                 }
+
+                // create transformed integer DXArray in view coordinate system
+                ::std::vector< sal_Int32 > aTransformedDXArray;
+
+                if(rTextCandidate.getDXArray().size())
+                {
+                    aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
+                    const basegfx::B2DVector aPixelVector(aLocalTransform * basegfx::B2DVector(1.0, 0.0));
+                    const double fPixelVectorLength(aPixelVector.getLength());
+
+                    for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin()); aStart != rTextCandidate.getDXArray().end(); aStart++)
+                    {
+                        aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorLength));
+                    }
+                }
+
+                // set parameters and paint
+                const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+                mpOutputDevice->SetTextColor(Color(aRGBFontColor));
+                const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
+                const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+                mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
+                    aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
             }
 
             if(!bPrimitiveAccepted)
@@ -1573,6 +1695,7 @@ namespace drawinglayer
                             switch(pBasePrimitive->getPrimitiveID())
                             {
                                 case Create2DPrimitiveID('2','T','S','i') :
+                                case Create2DPrimitiveID('2','T','C','o') :
                                 {
                                     // directdraw of text simple portion
                                     RenderTextSimplePortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(*pBasePrimitive));
