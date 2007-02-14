@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:51:57 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ protected:
     sal_Bool                    ImplHasProperty( sal_uInt16 nProp );
     sal_Bool                    ImplHasProperty( const ::rtl::OUString& aPropertyName );
     void                        ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis );
+    void                        ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis );
     ::com::sun::star::uno::Any  ImplGetPropertyValue( const ::rtl::OUString& aPropertyName );
 
     sal_Bool        ImplGetPropertyValue_BOOL( sal_uInt16 nProp );
