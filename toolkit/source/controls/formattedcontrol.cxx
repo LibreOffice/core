@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:42:06 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@ namespace toolkit
     // -------------------------------------------------------------------
     UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
         :m_bRevokedAsClient( false )
+        ,m_bSettingValueAndText( false )
     {
         ImplRegisterProperty( BASEPROPERTY_ALIGN );
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -189,7 +190,8 @@ namespace toolkit
         switch ( nHandle )
         {
         case BASEPROPERTY_EFFECTIVE_VALUE:
-            impl_updateTextFromValue_nothrow();
+            if ( !m_bSettingValueAndText )
+                impl_updateTextFromValue_nothrow();
             break;
         case BASEPROPERTY_FORMATSSUPPLIER:
             impl_updateCachedFormatter_nothrow();
@@ -268,7 +270,7 @@ namespace toolkit
     {
         Any aFormatKey;
         getFastPropertyValue( aFormatKey, BASEPROPERTY_FORMATKEY );
-        m_aCachedFormat = m_aCachedFormat;
+        m_aCachedFormat = aFormatKey;
     }
 
     // -------------------------------------------------------------------
@@ -282,6 +284,54 @@ namespace toolkit
             lcl_revokeDefaultFormatsClient();
             m_bRevokedAsClient = true;
         }
+    }
+
+    // -------------------------------------------------------------------
+    void UnoControlFormattedFieldModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
+        Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
+    {
+        ImplEnsureHandleOrder( _nCount, _pHandles, _pValues, BASEPROPERTY_EFFECTIVE_VALUE, BASEPROPERTY_TEXT );
+
+        UnoControlModel::ImplNormalizePropertySequence( _nCount, _pHandles, _pValues, _pValidHandles );
+    }
+
+    // -------------------------------------------------------------------
+    namespace
+    {
+        class ResetFlagOnExit
+        {
+        private:
+            bool&   m_rFlag;
+
+        public:
+            ResetFlagOnExit( bool& _rFlag )
+                :m_rFlag( _rFlag )
+            {
+            }
+            ~ResetFlagOnExit()
+            {
+                m_rFlag = false;
+            }
+        };
+    }
+
+    // -------------------------------------------------------------------
+    void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< ::rtl::OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    {
+        bool bSettingValue = false;
+        bool bSettingText = false;
+        for (   const ::rtl::OUString* pPropertyNames = _rPropertyNames.getConstArray();
+                pPropertyNames != _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
+                ++pPropertyNames
+            )
+        {
+            bSettingValue = ( BASEPROPERTY_EFFECTIVE_VALUE == GetPropertyId( *pPropertyNames ) );
+            bSettingText = ( BASEPROPERTY_TEXT == GetPropertyId( *pPropertyNames ) );
+        }
+
+        m_bSettingValueAndText = ( bSettingValue && bSettingText );
+        ResetFlagOnExit aResetFlag( m_bSettingValueAndText );
+        UnoControlModel::setPropertyValues( _rPropertyNames, _rValues );
     }
 
     // -------------------------------------------------------------------
@@ -398,11 +448,15 @@ namespace toolkit
         Reference< XVclWindowPeer >  xPeer(getPeer(), UNO_QUERY);
         OSL_ENSURE(xPeer.is(), "UnoFormattedFieldControl::textChanged : what kind of peer do I have ?");
 
-        ::rtl::OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
-        ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
+        Sequence< ::rtl::OUString > aNames( 2 );
+        aNames[0] = GetPropertyName( BASEPROPERTY_EFFECTIVE_VALUE );
+        aNames[1] = GetPropertyName( BASEPROPERTY_TEXT );
 
-        ::rtl::OUString sEffectiveValue = GetPropertyName( BASEPROPERTY_EFFECTIVE_VALUE );
-        ImplSetPropertyValue( sEffectiveValue, xPeer->getProperty( sEffectiveValue ), sal_False );
+        Sequence< Any > aValues( 2 );
+        aValues[0] = xPeer->getProperty( aNames[0] );
+        aValues[1] = xPeer->getProperty( aNames[1] );
+
+        ImplSetPropertyValues( aNames, aValues, FALSE );
 
         if ( GetTextListeners().getLength() )
             GetTextListeners().textChanged( e );
