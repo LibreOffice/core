@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formattedcontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:40:12 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         ::com::sun::star::uno::Any      m_aCachedFormat;
         bool                            m_bRevokedAsClient;
+        bool                            m_bSettingValueAndText;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
                                         m_xCachedFormatter;
 
@@ -101,6 +102,16 @@ namespace toolkit
         // XComponent
         void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
+        // XPropertySet
+        void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+        // UnoControlModel
+        virtual void ImplNormalizePropertySequence(
+                        const sal_Int32                 _nCount,        /// the number of entries in the arrays
+                        sal_Int32*                      _pHandles,      /// the handles of the properties to set
+                        ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
+                        sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
+                    )   const SAL_THROW(());
     private:
         void    impl_updateTextFromValue_nothrow();
         void    impl_updateCachedFormatter_nothrow();
