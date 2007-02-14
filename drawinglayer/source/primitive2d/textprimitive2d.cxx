@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2007-01-25 12:15:23 $
+ *  last change: $Author: hdu $ $Date: 2007-02-14 14:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,47 +151,30 @@ namespace drawinglayer
             ::std::vector< sal_Int32 > aNewIntegerDXArray;
             getIntegerDXArray(aNewIntegerDXArray);
 
-            // get outlines
-            TextLayouterDevice aTextLayouter;
-            aTextLayouter.setFontAttributes(getFontAttributes(), getTextTransform());
+            // prepare transformation matrices
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+            basegfx::B2DHomMatrix aUnscaledTransform;
+            aUnscaledTransform.rotate( fRotate );
+            aUnscaledTransform.shearX( fShearX );
+            aUnscaledTransform.translate( aTranslate.getX(), aTranslate.getY() );
+            basegfx::B2DHomMatrix aUnrotatedTransform = getTextTransform();
+            aUnrotatedTransform.rotate( -fRotate );
 
+            // prepare textlayoutdevice
+            TextLayouterDevice aTextLayouter;
+            aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
+
+            // get the text outlines
             basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
             aTextLayouter.getTextOutlines( aB2DPolyPolyVector,
                 getText(), 0L, getText().Len(), aNewIntegerDXArray);
 
-            // get result count
+            // create primitives for the outlines
             const sal_uInt32 nCount = aB2DPolyPolyVector.size();
             if( nCount )
             {
-                // outlines already have scale and rotate included, so build new transformation
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-                basegfx::B2DHomMatrix aNewTransform;
-                const bool bShearUsed(!basegfx::fTools::equalZero(fShearX));
-                const bool bRotateUsed(!basegfx::fTools::equalZero(fRotate));
-
-                if(bShearUsed)
-                {
-                    // The order would be wrong when just adding shear,
-                    // so rotate back, apply shear, rotate again
-                    if(bRotateUsed)
-                    {
-                        aNewTransform.rotate(-fRotate);
-                    }
-
-                    // add shear (before rotate)
-                    aNewTransform.shearX(fShearX);
-
-                    if(bRotateUsed)
-                    {
-                        aNewTransform.rotate(+fRotate);
-                    }
-                }
-
-                // add translation
-                aNewTransform.translate(aTranslate.getX(), aTranslate.getY());
-
                 // prepare retval
                 Primitive2DSequence aRetval(nCount);
 
@@ -199,7 +182,7 @@ namespace drawinglayer
                 {
                     // prepare polygon
                     basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
-                    rPolyPolygon.transform(aNewTransform);
+                    rPolyPolygon.transform(aUnscaledTransform);
 
                     // create primitive
                     const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor()));
