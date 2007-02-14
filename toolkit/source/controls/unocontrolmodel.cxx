@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:03:42 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1497,4 +1497,36 @@ void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32, sal_Int32*
     uno::Any*, sal_Int32* ) const SAL_THROW(())
 {
     // nothing to do here
+}
+
+void UnoControlModel::ImplEnsureHandleOrder( const sal_Int32 _nCount, sal_Int32* _pHandles,
+        uno::Any* _pValues, sal_Int32 _nFirstHandle, sal_Int32 _nSecondHandle ) const
+{
+    for ( sal_Int32 i=0; i < _nCount; ++_pHandles, ++_pValues, ++i )
+    {
+        if ( _nSecondHandle  == *_pHandles )
+        {
+            sal_Int32* pLaterHandles = _pHandles + 1;
+            uno::Any* pLaterValues = _pValues + 1;
+            for ( sal_Int32 j = i + 1; j < _nCount; ++j, ++pLaterHandles, ++pLaterValues )
+            {
+                if ( _nFirstHandle == *pLaterHandles )
+                {
+                    // indeed it is -> exchange the both places in the sequences
+                    sal_Int32 nHandle( *_pHandles );
+                    *_pHandles = *pLaterHandles;
+                    *pLaterHandles = nHandle;
+
+                    uno::Any aValue( *_pValues );
+                    *_pValues = *pLaterValues;
+                    *pLaterValues = aValue;
+
+                    break;
+                    // this will leave the inner loop, and continue with the outer loop.
+                    // Note that this means we will encounter the _nSecondHandle handle, again, once we reached
+                    // (in the outer loop) the place where we just put it.
+                }
+            }
+        }
+    }
 }
