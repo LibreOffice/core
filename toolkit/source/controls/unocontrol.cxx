@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:48:46 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@
 #endif
 
 #include <algorithm>
+#include <set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -217,6 +218,11 @@ private:
     VclListenerLock& operator=( const VclListenerLock& );   // never implemented
 };
 
+struct UnoControl_Data
+{
+    ::std::set< ::rtl::OUString >   aPropertyNotificationFilter;
+};
+
 //  ----------------------------------------------------
 //  class UnoControl
 //  ----------------------------------------------------
@@ -230,6 +236,7 @@ UnoControl::UnoControl()
     , maMouseMotionListeners( *this )
     , maPaintListeners( *this )
     , maModeChangeListeners( GetMutex() )
+    , mpData( new UnoControl_Data )
 {
     DBG_CTOR( UnoControl, NULL );
     mbDisposePeer = sal_True;
@@ -241,6 +248,7 @@ UnoControl::UnoControl()
 
 UnoControl::~UnoControl()
 {
+    DELETEZ( mpData );
     DBG_DTOR( UnoControl, NULL );
 }
 
@@ -511,18 +519,20 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        if ( msPropertyCurrentlyUpdating.getLength() )
+        if ( !mpData->aPropertyNotificationFilter.empty() )
         {
             // strip the property which we are currently updating (somewhere up the stack)
             PropertyChangeEvent* pEvents = aEvents.getArray();
             PropertyChangeEvent* pEventsEnd = pEvents + aEvents.getLength();
-            for ( ; pEvents < pEventsEnd; ++pEvents )
-                if ( pEvents->PropertyName == msPropertyCurrentlyUpdating )
+            for ( ; pEvents < pEventsEnd; )
+                if ( mpData->aPropertyNotificationFilter.find( pEvents->PropertyName ) != mpData->aPropertyNotificationFilter.end() )
                 {
                     if ( pEvents != pEventsEnd )
                         ::std::copy( pEvents + 1, pEventsEnd, pEvents );
                     --pEventsEnd;
                 }
+                else
+                    ++pEvents;
             aEvents.realloc( pEventsEnd - aEvents.getConstArray() );
 
             if ( !aEvents.getLength() )
@@ -531,6 +541,31 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
     }
 
     ImplModelPropertiesChanged( aEvents );
+}
+
+void UnoControl::ImplLockPropertyChangeNotification( const ::rtl::OUString& rPropertyName, bool bLock )
+{
+    if ( bLock )
+    {
+        OSL_PRECOND( mpData->aPropertyNotificationFilter.find( rPropertyName ) == mpData->aPropertyNotificationFilter.end(),
+            "UnoControl::ImplLockPropertyChangeNotification: already locked!" );
+        mpData->aPropertyNotificationFilter.insert( rPropertyName );
+    }
+    else
+    {
+        OSL_PRECOND( mpData->aPropertyNotificationFilter.find( rPropertyName ) != mpData->aPropertyNotificationFilter.end(),
+            "UnoControl::ImplLockPropertyChangeNotification: not locked!" );
+        mpData->aPropertyNotificationFilter.erase( rPropertyName );
+    }
+}
+
+void UnoControl::ImplLockPropertyChangeNotifications( const Sequence< ::rtl::OUString >& rPropertyNames, bool bLock )
+{
+    for (   const ::rtl::OUString* pPropertyName = rPropertyNames.getConstArray();
+            pPropertyName != rPropertyNames.getConstArray() + rPropertyNames.getLength();
+            ++pPropertyName
+        )
+        ImplLockPropertyChangeNotification( *pPropertyName, bLock );
 }
 
 void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents )
