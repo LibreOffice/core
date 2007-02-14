@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:42:53 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,9 @@ SAXHelper::SAXHelper( )
 #ifndef XMLSEC_NO_XSLT
         xsltCleanupGlobals() ;
 #endif
-        xmlCleanupParser() ;
+//      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
+//      in other parts of the office.
+//      xmlCleanupParser() ;
         throw cssu::RuntimeException() ;
     }
     else if( m_pParserCtxt->sax == NULL )
@@ -202,7 +204,9 @@ SAXHelper::SAXHelper( )
 #ifndef XMLSEC_NO_XSLT
         xsltCleanupGlobals() ;
 #endif
-        xmlCleanupParser() ;
+//      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
+//      in other parts of the office.
+//      xmlCleanupParser() ;
         m_pParserCtxt = NULL ;
         throw cssu::RuntimeException() ;
     }
@@ -244,8 +248,9 @@ SAXHelper::~SAXHelper() {
         xmlFree( m_pSaxHandler ) ;
         m_pSaxHandler = NULL ;
     }
-
-    xmlCleanupParser() ;
+//      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
+//      in other parts of the office.
+//  xmlCleanupParser() ;
 }
 
 xmlNodePtr SAXHelper::getCurrentNode()
