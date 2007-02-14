@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:30:20 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,15 @@ protected:
                     ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
                     sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
                 )   const SAL_THROW(());
+
+    /// ensures that two property values in a sequence have a certain order
+    void    ImplEnsureHandleOrder(
+                const sal_Int32 _nCount,                /// number of entries in the array
+                sal_Int32* _pHandles,                   /// pointer to the handles
+                ::com::sun::star::uno::Any* _pValues,   /// pointer to the values
+                sal_Int32 _nFirstHandle,                /// first handle, which should precede _nSecondHandle in the sequence
+                sal_Int32 _nSecondHandle                /// second handle, which should supersede _nFirstHandle in the sequence
+            ) const;
 
 public:
                 UnoControlModel();
