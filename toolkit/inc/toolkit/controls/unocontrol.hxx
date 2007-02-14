@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:34:27 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@ struct UnoControlComponentInfos
     }
 };
 
+struct UnoControl_Data;
 //  ----------------------------------------------------
 //  class UnoControl
 //  ----------------------------------------------------
@@ -163,7 +164,7 @@ protected:
     sal_Bool                            mbDesignMode;
 
     UnoControlComponentInfos            maComponentInfos;
-    ::rtl::OUString                     msPropertyCurrentlyUpdating;
+    UnoControl_Data*                    mpData;
 
     ::osl::Mutex&                                                               GetMutex() { return maMutex; }
 
@@ -175,6 +176,9 @@ protected:
     virtual void                                                                ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
     virtual void                                                                ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents );
+
+    void                                                                        ImplLockPropertyChangeNotification( const ::rtl::OUString& rPropertyName, bool bLock );
+    void                                                                        ImplLockPropertyChangeNotifications( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames, bool bLock );
 
     void                                                                        disposeAccessibleContext();
 
