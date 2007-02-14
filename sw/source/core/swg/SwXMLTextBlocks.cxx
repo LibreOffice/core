@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:28:56 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,9 +198,8 @@ void SwXMLTextBlocks::ClearDoc()
     pDocShell->InvalidateModel();
     pDocShell->ReactivateModel();
 
-    // TODO/MBA: testing
-    pDocShell->ClearEmbeddedObjects();
     pDoc->ClearDoc();
+    pDocShell->ClearEmbeddedObjects();
 }
 void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, BOOL bOnlyTxt )
 {
