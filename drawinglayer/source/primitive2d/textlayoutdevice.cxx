@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-13 08:07:43 $
+ *  last change: $Author: hdu $ $Date: 2007-02-14 14:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
+#endif
+
+#ifndef _SV_METRIC_HXX
+#include <vcl/metric.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
@@ -180,12 +184,33 @@ namespace drawinglayer
             setFont( getVclFontFromFontAttributes(rFontAttributes, rTransform) );
         }
 
-        double TextLayouterDevice::getTextHeight()
+        double TextLayouterDevice::getUnderlineOffset() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            double fRet = rMetric.GetDescent() / 2.0;
+            return fRet;
+        }
+
+        double TextLayouterDevice::getStrikeoutOffset() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            double fRet = (rMetric.GetAscent() - rMetric.GetIntLeading()) / 3.0;
+            return fRet;
+        }
+
+        double TextLayouterDevice::getUnderlineHeight() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            double fRet = rMetric.GetDescent() / 4.0;
+            return fRet;
+        }
+
+        double TextLayouterDevice::getTextHeight() const
         {
             return mrDevice.GetTextHeight();
         }
 
-        double TextLayouterDevice::getTextWidth(const String& rText, xub_StrLen nIndex, xub_StrLen nLength)
+        double TextLayouterDevice::getTextWidth(const String& rText, xub_StrLen nIndex, xub_StrLen nLength) const
         {
             return mrDevice.GetTextWidth(rText, nIndex, nLength);
         }
@@ -196,7 +221,7 @@ namespace drawinglayer
             return mrDevice.GetTextOutlines( rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, true, 0, pDXArray);
         }
 
-        basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength)
+        basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength) const
         {
             if(rText.Len() && nLength)
             {

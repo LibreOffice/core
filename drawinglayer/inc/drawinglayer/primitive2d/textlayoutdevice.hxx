@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-02 15:13:57 $
+ *  last change: $Author: hdu $ $Date: 2007-02-14 14:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,12 +87,17 @@ namespace drawinglayer
 
             void setFont(const Font& rFont);
             void setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform);
-            double getTextHeight();
-            double getTextWidth(const String& rText, xub_StrLen nIndex, xub_StrLen nLength);
+
+            double getTextHeight() const;
+            double getUnderlineHeight() const;
+            double getUnderlineOffset() const;
+            double getStrikeoutOffset() const;
+
+            double getTextWidth(const String& rText, xub_StrLen nIndex, xub_StrLen nLength) const;
             bool getTextOutlines( basegfx::B2DPolyPolygonVector&,
                 const String&, xub_StrLen nIndex, xub_StrLen nLength,
                 const ::std::vector< sal_Int32 >& rDXArray );
-            basegfx::B2DRange getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength);
+            basegfx::B2DRange getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
