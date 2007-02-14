@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:35:43 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1860,36 +1860,7 @@ void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCo
 {
     // dependencies we know:
     // BASEPROPERTY_STRINGITEMLIST->BASEPROPERTY_SELECTEDITEMS
-    // a more generic approach when it is needed would be nice ....
-
-    for ( sal_Int32 i=0; i < _nCount; ++_pHandles, ++_pValues, ++i )
-    {
-        if ( BASEPROPERTY_SELECTEDITEMS  == *_pHandles )
-        {
-            // look if the property SelectedItems depends on is _behind_ SelectedItems
-            sal_Int32* pLaterHandles = _pHandles + 1;
-            uno::Any* pLaterValues = _pValues + 1;
-            for ( sal_Int32 j = i + 1; j < _nCount; ++j, ++pLaterHandles, ++pLaterValues )
-            {
-                if ( BASEPROPERTY_STRINGITEMLIST == *pLaterHandles )
-                {
-                    // indeed it is -> exchange the both places in the sequences
-                    sal_Int32 nHandle( *_pHandles );
-                    *_pHandles = *pLaterHandles;
-                    *pLaterHandles = nHandle;
-
-                    uno::Any aValue( *_pValues );
-                    *_pValues = *pLaterValues;
-                    *pLaterValues = aValue;
-
-                    break;
-                    // this will leave the inner loop, and continue with the outer loop.
-                    // Note that this means we will encounter the SelectedItems handle, again, once we reached
-                    // (in the outer loop) the place where we just put it.
-                }
-            }
-        }
-    }
+    ImplEnsureHandleOrder( _nCount, _pHandles, _pValues, BASEPROPERTY_STRINGITEMLIST, BASEPROPERTY_SELECTEDITEMS );
 
     UnoControlModel::ImplNormalizePropertySequence( _nCount, _pHandles, _pValues, _pValidHandles );
 }
