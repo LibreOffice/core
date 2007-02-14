@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolbase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:35:18 $
+ *  last change: $Author: kz $ $Date: 2007-02-14 15:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,37 @@ sal_Bool UnoControlBase::ImplHasProperty( const ::rtl::OUString& aPropertyName )
     return xInfo->hasPropertyByName( aPropertyName );
 }
 
+void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > xMPS( mxModel, ::com::sun::star::uno::UNO_QUERY );
+    if ( !mxModel.is() )
+        return;
+
+    DBG_ASSERT( xMPS.is(), "UnoControlBase::ImplSetPropertyValues: no multi property set interface!" );
+    if ( xMPS.is() )
+    {
+        if ( !bUpdateThis )
+            ImplLockPropertyChangeNotifications( aPropertyNames, true );
+
+        try
+        {
+            xMPS->setPropertyValues( aPropertyNames, aValues );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+            if ( !bUpdateThis )
+                ImplLockPropertyChangeNotifications( aPropertyNames, false );
+        }
+        if ( !bUpdateThis )
+            ImplLockPropertyChangeNotifications( aPropertyNames, false );
+    }
+    else
+    {
+        int dummy = 0;
+        (void)dummy;
+    }
+}
+
 void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis )
 {
     // Model ggf. schon abgemeldet, aber ein Event schlaegt noch zu...
@@ -77,10 +108,8 @@ void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName,
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
         if ( !bUpdateThis )
-        {
-            DBG_ASSERT( msPropertyCurrentlyUpdating.getLength() == 0, "UnoControlBase::ImplSetPropertyValue: recursive calls not allowed!" );
-            msPropertyCurrentlyUpdating = aPropertyName;
-        }
+            ImplLockPropertyChangeNotification( aPropertyName, true );
+
         try
         {
             xPSet->setPropertyValue( aPropertyName, aValue );
@@ -88,11 +117,11 @@ void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName,
         catch( const com::sun::star::uno::Exception& )
         {
             if ( !bUpdateThis )
-                msPropertyCurrentlyUpdating = ::rtl::OUString();
+                ImplLockPropertyChangeNotification( aPropertyName, false );
             throw;
         }
         if ( !bUpdateThis )
-            msPropertyCurrentlyUpdating = ::rtl::OUString();
+            ImplLockPropertyChangeNotification( aPropertyName, false );
     }
 }
 
