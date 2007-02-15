@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:33:23 $
+#   last change: $Author: kz $ $Date: 2007-02-15 16:44:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,6 @@ DEBFILE=$(PKGDIR)/$(PKGNAME)_$(PKGVERSION)-$(PKGREV)_all.deb
 DEBDEPN = \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/unopkg_gui \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/unopkg \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME)-printeradmin \
@@ -247,10 +246,6 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/p
 $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice : 
     @$(MKDIRHIER) $(@:d)
     @ln -sf /etc/$(UNIXFILENAME)/program/soffice $@
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/unopkg_gui : 
-    @$(MKDIRHIER) $(@:d)
-    @ln -sf /etc/$(UNIXFILENAME)/program/unopkg_gui $@
 
 $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/unopkg : 
     @$(MKDIRHIER) $(@:d)
