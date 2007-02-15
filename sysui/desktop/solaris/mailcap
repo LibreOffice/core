@@ -69,7 +69,7 @@ application/wordperfect5.1; %PREFIX -view %s
 application/x-wordperfect; %PREFIX -view %s
 application/wordperfect; %PREFIX -view %s
 application/wpwin; %PREFIX -view %s
-application/vnd.openofficeorg.extension; unopkg_gui %s
+application/vnd.openofficeorg.extension; unopkg gui %s
 END
 else
 # backing all entries pointing to our binary
