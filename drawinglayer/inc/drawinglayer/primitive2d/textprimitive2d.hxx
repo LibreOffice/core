@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-02 15:13:57 $
+ *  last change: $Author: hdu $ $Date: 2007-02-15 13:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@ namespace drawinglayer
             unsigned                                    mbSymbol : 1;
             unsigned                                    mbVertical : 1;
             unsigned                                    mbItalic : 1;
+            unsigned                                    mbOutline : 1;
+            // TODO: pair kerning and CJK kerning
 
             // compare operator
             bool operator==(const FontAttributes& rCompare) const
@@ -83,6 +85,7 @@ namespace drawinglayer
                     && mnWeight == rCompare.mnWeight
                     && mbSymbol == rCompare.mbSymbol
                     && mbVertical == rCompare.mbVertical
+                    && mbOutline == rCompare.mbOutline
                     && mbItalic == rCompare.mbItalic);
             }
         };
