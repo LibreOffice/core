@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:34:00 $
+#   last change: $Author: kz $ $Date: 2007-02-15 16:46:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,6 @@ RPMFILE=$(PKGDIR)$/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
 RPMDEPN = \
     $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/soffice \
-    $(MISC)/$(TARGET)/usr/bin/unopkg_gui \
     $(MISC)/$(TARGET)/usr/bin/unopkg \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
@@ -224,17 +223,6 @@ $(MISC)/$(TARGET)/usr/bin/soffice :
     @$(MKDIRHIER) $(@:d)
     @ln -svf /etc/$(UNIXFILENAME)/program/soffice $@
 
-
-#Create the unopkg wrapper
-$(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui :
-    @$(MKDIRHIER) $(@:d)
-    echo \#\!\/bin\/sh > $@
-    echo exec unopkg gui \$$@  >> $@
-
-$(MISC)/$(TARGET)/usr/bin/unopkg_gui : $(MISC)/$(TARGET)/opt/$(UNIXFILENAME)/program/unopkg_gui
-    @$(MKDIRHIER) $(@:d)
-    @ln -sf /etc/$(UNIXFILENAME)/program/unopkg_gui $@
-            
 $(MISC)/$(TARGET)/usr/bin/unopkg : 
     @$(MKDIRHIER) $(@:d)
     @ln -svf /etc/$(UNIXFILENAME)/program/unopkg $@
