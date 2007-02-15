@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 11:28:11 $
+#   last change: $Author: kz $ $Date: 2007-02-15 16:49:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@ LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
 MIMEINFO = $(COMMONMISC)/$(TARGET)/openoffice.org.xml
-#UNOPKGWRAPPER = $(COMMONMISC)/$(TARGET)/unopkg_gui
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 SPECFILES = \
@@ -116,9 +115,6 @@ $(MIMEINFO) : $(ULFDIR)$/documents.ulf
     @$(PERL) create_mime_xml.pl $< > $(@).$(INPATH)
     @mv -f $(@).$(INPATH) $@
 
-#$(UNOPKGWRAPPER) : unopkg_gui
-#	@cp -f unopkg_gui $(COMMONMISC)/$(TARGET)/unopkg_gui
-    
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 $(SPECFILES) : add_specfile_triggers.sed symlink_triggers
 $(SPECFILES) : ../$$(@:b:s/-menus//)/$$(@:f)
