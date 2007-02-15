@@ -267,7 +267,7 @@ application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
 application/vnd.oasis.opendocument.database; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
-application/vnd.openofficeorg.extension; unopkg_gui %s
+application/vnd.openofficeorg.extension; unopkg gui %s
 END
 
   # and replace the original file
