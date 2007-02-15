@@ -11,8 +11,6 @@ s none usr/bin/soffice=../../etc/%PREFIX/program/soffice
 s none usr/bin/unopkg=../../etc/%PREFIX/program/unopkg
 f none usr/bin/%PREFIX=%SOURCE/openoffice.sh 0755 root bin
 f none usr/bin/%PREFIX-printeradmin=%SOURCE/printeradmin.sh 0755 root bin
-f none usr/bin/unopkg_gui=%SOURCE/etc/%PREFIX/program/unopkg_gui 0755 root bin
-f none etc/%PREFIX/program/unopkg_gui=%SOURCE/etc/%PREFIX/program/unopkg_gui 0755 root bin
 d none usr/dt 0755 root bin
 d none usr/dt/appconfig 0755 root bin
 d none usr/dt/appconfig/icons 0755 root bin
