@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-14 14:41:13 $
+ *  last change: $Author: hdu $ $Date: 2007-02-15 13:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,12 +53,24 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#include <drawinglayer/attribute/strokeattribute.hxx>
+#endif
+
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DLINEGEOMETRY_HXX
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #endif
 
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
@@ -110,6 +122,7 @@ namespace drawinglayer
             aRetval.SetVertical(rFontAttributes.mbVertical ? TRUE : FALSE);
             aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.mnWeight));
             aRetval.SetItalic(rFontAttributes.mbItalic ? ITALIC_NORMAL : ITALIC_NONE);
+            aRetval.SetOutline(rFontAttributes.mbOutline);
 
             return aRetval;
         }
@@ -124,6 +137,8 @@ namespace drawinglayer
             aRetval.mbVertical = rFont.IsVertical();
             aRetval.mnWeight = static_cast<sal_uInt16>(rFont.GetWeight());
             aRetval.mbItalic = (rFont.GetItalic() != ITALIC_NONE);
+            aRetval.mbOutline = rFont.IsOutline();
+            // TODO: eKerning
 
             const sal_Int32 nWidth(rFont.GetSize().getWidth());
             const sal_Int32 nHeight(rFont.GetSize().getHeight());
@@ -173,28 +188,57 @@ namespace drawinglayer
 
             // create primitives for the outlines
             const sal_uInt32 nCount = aB2DPolyPolyVector.size();
-            if( nCount )
-            {
-                // prepare retval
-                Primitive2DSequence aRetval(nCount);
+            Primitive2DSequence aRetval;
 
+            if( !nCount )
+            {
+                // for invisible glyphs
+                return aRetval;
+            }
+            else if( !getFontAttributes().mbOutline )
+            {
+                aRetval.realloc(nCount);
+                // for the glyph shapes as color-filled polypolygons
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
-                    // prepare polygon
+                    // prepare polypolygon
                     basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
                     rPolyPolygon.transform(aUnscaledTransform);
 
-                    // create primitive
                     const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor()));
                     aRetval[a] = xRef;
                 }
-
-                return aRetval;
             }
             else
             {
-                return Primitive2DSequence();
+                // for the glyph outlines as stroked polygons
+                // since there is no primitive for stroked polypolygons
+                int nPolyCount = 0;
+                for(sal_uInt32 a(0L); a < nCount; a++)
+                    nPolyCount += aB2DPolyPolyVector[a].count();
+                aRetval.realloc(nPolyCount);
+
+                double fStrokeWidth = 1.0 + aScale.getY() * 0.02;
+                if( getFontAttributes().mnWeight > WEIGHT_SEMIBOLD )
+                    fStrokeWidth *= 1.4;
+                else if( getFontAttributes().mnWeight < WEIGHT_SEMILIGHT )
+                    fStrokeWidth *= 0.7;
+                const drawinglayer::attribute::StrokeAttribute aStrokeAttr( getFontColor(),
+                    fStrokeWidth, basegfx::tools::B2DLINEJOIN_NONE );
+                for(sal_uInt32 a(0L), b(0L); a < nCount; a++)
+                {
+                    basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
+                    rPolyPolygon.transform(aUnscaledTransform);
+                    for( unsigned i(0L); i < rPolyPolygon.count(); ++i )
+                    {
+                        const basegfx::B2DPolygon& rPolygon = rPolyPolygon.getB2DPolygon(i);
+                        const Primitive2DReference xRef(new PolygonStrokePrimitive2D(rPolygon, aStrokeAttr));
+                        aRetval[b++] = xRef;
+                    }
+                }
             }
+
+            return aRetval;
         }
 
         TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
@@ -287,17 +331,20 @@ namespace drawinglayer
     {
         Primitive2DSequence TextComplexPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // TODO: need to take care of
-            // -underline
-            // -strikethrough
-            // -emphasis mark
-            // -relief (embosses/engraved)
-            // -shadow
-            // -outline
+            Primitive2DSequence aRetval(1);
 
-            // ATM: Just create a simple text primitive and ignore other attributes
-            const Primitive2DReference xRef(new TextSimplePortionPrimitive2D(getTextTransform(), getText(), getDXArray(), getFontAttributes(), getFontColor()));
-            return Primitive2DSequence(&xRef, 1L);
+            // First create a simple text primitive and ignore other attributes
+            aRetval[0] = new TextSimplePortionPrimitive2D(getTextTransform(), getText(), getDXArray(), getFontAttributes(), getFontColor());
+
+                // TODO: need to take care of
+                // -underline
+                // -strikethrough
+                // -emphasis mark
+                // -relief (embosses/engraved)
+                // -shadow
+                // -outline
+
+            return aRetval;
         }
 
         TextComplexPortionPrimitive2D::TextComplexPortionPrimitive2D(
