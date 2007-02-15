@@ -1,9 +1,9 @@
 application/vnd.openofficeorg.extension
 	description=Extension
 	default_action_type=application
-	short_list_application_ids_for_novice_user_level=unopkg_gui
-	short_list_application_ids_for_intermediate_user_level=unopkg_gui
-	short_list_application_ids_for_advanced_user_level=unopkg_gui
+	short_list_application_ids_for_novice_user_level=unopkg
+	short_list_application_ids_for_intermediate_user_level=unopkg
+	short_list_application_ids_for_advanced_user_level=unopkg
 	category=Documents/Word Processor
 	use_category_default=no
 	icon_filename=extension
