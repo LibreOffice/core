@@ -53,7 +53,6 @@ USERDIR=\`sed -n -e 's/UserInstallation=//p' /etc/%PREFIX/program/bootstraprc | 
 if [ ! -d \$USERDIR ]
 then
   /etc/%PREFIX/program/gnome-set-default-application '%PREFIX' 'application/vnd.oasis.opendocument' 'application/vnd.sun.xml' 'application/vnd.stardivision'
-  /etc/%PREFIX/program/gnome-set-default-application 'unopkg_gui' 'application/vnd.openofficeorg.extension'
 fi
 EOF
   sed -n -e '2,$ p' ${CLIENT_BASEDIR}/usr/bin/%PREFIX >> ${CLIENT_BASEDIR}/usr/bin/%PREFIX.tmp$$
