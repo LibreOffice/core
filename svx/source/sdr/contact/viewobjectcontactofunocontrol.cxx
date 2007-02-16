@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:15:29 $
+ *  last change: $Author: kz $ $Date: 2007-02-16 10:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,7 +528,7 @@ namespace sdr { namespace contact {
             return initPaint( _rDisplayInfo, _out_rpObject, xUnused );
         }
 
-        /** ensures that we have an ->XControl
+        /** ensures that we have an XControl which can be painted onto the given display
         */
         bool    ensureControl( const DisplayInfo& _rDisplayInfo );
 
@@ -551,18 +551,6 @@ namespace sdr { namespace contact {
         inline Reference< XControl >
                 getExistentControl() const { return m_xControl; }
 
-        /** returns our XControl, and creates it if necessary
-
-            @return <TRUE/> if and only if the returned control is not <NULL/>
-        */
-        bool    getCreateControl( const DisplayInfo& _rDisplayInfo, Reference< XView >& _out_rxControlView )
-        {
-            ensureControl( _rDisplayInfo );
-            _out_rxControlView = _out_rxControlView.query( m_xControl );
-            DBG_ASSERT( _out_rxControlView.is(), "ViewObjectContactOfUnoControl_Impl::getCreateControl: no control!" );
-            return _out_rxControlView.is();
-        }
-
         /** positions our XControl according to the geometry settings in the SdrUnoObj,
             and sets proper zoom settings according to our device
 
@@ -573,16 +561,14 @@ namespace sdr { namespace contact {
         */
         void    positionAndZoomControl() const;
 
-        /** prepares drawing the control for print preview
+        /** prepares drawing the control for print or print preview
 
-            @precond
-                ->m_pOutputDeviceForWindow and ->m_xControl are not <NULL/>
-            @tolerant
-                If the preconditions are not met, nothing is done at all
+            @param _rDevice
+                the device onto which the control is going to be painted
             @return <TRUE/>
                 if and only if drawing should continue
         */
-        bool    preparePrintOrPrintPreview() const;
+        bool    preparePrintOrPrintPreview( OutputDevice& _rDevice ) const;
 
         /** determines whether or not our control is printable
 
@@ -599,11 +585,6 @@ namespace sdr { namespace contact {
         bool    preparePaintOnDevice( OutputDevice& _rDevice ) const;
 
         /** paints the control
-
-            @precond
-                ->m_pOutputDeviceForWindow and ->m_xControl are not <NULL/>
-            @tolerant
-                If the preconditions are not met, nothing is done at all
         */
         void    paintControl( const DisplayInfo& _rDisplayInfo ) const;
 
@@ -921,11 +902,11 @@ namespace sdr { namespace contact {
         if ( !getUnoObject( _out_rpObject ) )
             return false;
 
-        _out_rxControlView.clear();
-        if ( !getCreateControl( _rDisplayInfo, _out_rxControlView ) )
-            return false;
+        ensureControl( _rDisplayInfo );
 
-        return true;
+        _out_rxControlView = _out_rxControlView.query( m_xControl );
+        DBG_ASSERT( _out_rxControlView.is(), "ViewObjectContactOfUnoControl_Impl::initPaint: no control!" );
+        return _out_rxControlView.is();
     }
 
 
@@ -945,14 +926,14 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::ensureControl( const DisplayInfo& _rDisplayInfo )
     {
-        const OutputDevice* pDevice( NULL );
+        const OutputDevice* pDeviceForControl( NULL );
 
         // if we're working for a page view, use the respective OutputDevice at the proper
         // PaintWindow. The DisplayInfo might only contain a temporary (virtual) device, which
@@ -960,20 +941,23 @@ namespace sdr { namespace contact {
         // 2006-10-24 / #i70604# / frank.schoenheit@sun.com
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
         if ( pPageViewContact )
-            pDevice = &pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice();
+            pDeviceForControl = &pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice();
 
-        if ( !pDevice )
-            pDevice = _rDisplayInfo.GetOutputDevice();
+        if ( !pDeviceForControl )
+            pDeviceForControl = _rDisplayInfo.GetOutputDevice();
 
-        DBG_ASSERT( pDevice, "ViewObjectContactOfUnoControl_Impl::ensureControl: no output device!" );
-        if ( !pDevice )
+        DBG_ASSERT( pDeviceForControl, "ViewObjectContactOfUnoControl_Impl::ensureControl: no output device!" );
+        if ( !pDeviceForControl )
             return false;
 
-        SdrPageView* pPageView = _rDisplayInfo.GetPageView();
+        SdrPageView* pPageView = pPageViewContact ? &pPageViewContact->GetPageWindow().GetPageView() : _rDisplayInfo.GetPageView();
+
+        OSL_TRACE( "control for: %p\n", pDeviceForControl );
+        OSL_TRACE( "  page view: %s\n", pPageViewContact ? "yes" : "no" );
 
         ::std::auto_ptr< IPageViewAccess > pPVAccess;
         pPVAccess.reset( pPageView ? (IPageViewAccess*)new SdrPageViewAccess( *pPageView ) : (IPageViewAccess*)new DummyPageViewAccess() );
-        return impl_ensureControl_nothrow( *pPVAccess, *pDevice );
+        return impl_ensureControl_nothrow( *pPVAccess, *pDeviceForControl );
     }
 
     //--------------------------------------------------------------------
@@ -996,11 +980,20 @@ namespace sdr { namespace contact {
     {
         if ( m_xControl.is() )
         {
-            DBG_ASSERT( m_pOutputDeviceForWindow == &_rDevice,
-                "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: how can this be invoked for two different devices?" );
-                // Shouldn't a different device imply a different ViewObjectContact instance?
+            if ( m_pOutputDeviceForWindow == &_rDevice )
+                return true;
 
-            return true;
+            // Somebody requested a control for a new device, which means either of
+            // - our PageView's paint window changed since we were last here
+            // - we don't belong to a page view, and are simply painted onto different devices
+            // The first sounds strange (doens't  it?), the second means we could perhaps
+            // optimize this in the future - there is no need to re-create the control every time,
+            // is it?
+            // #i74523# / 2007-02-15 / frank.schoenheit@sun.com
+            if ( m_xContainer.is() )
+                impl_switchContainerListening_nothrow( false );
+            impl_switchControlListening_nothrow( false );
+            UnoControlContactHelper::disposeControl_nothrow( m_xControl );
         }
 
         SdrUnoObj* pUnoObject( NULL );
@@ -1013,6 +1006,8 @@ namespace sdr { namespace contact {
 
         // listen for changes in the control container
 
+        OSL_TRACE( "control for: %p\n", &_rDevice );
+        OSL_TRACE( "       type: %i\n", _rDevice.GetOutDevType() );
         m_pOutputDeviceForWindow = &_rDevice;
         m_xControl = xControl;
         m_xContainer = m_xContainer.query( _rPageView.getControlContainer( _rDevice ) );
@@ -1098,7 +1093,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::createControlForDevice: caught an exception while creating the control!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if ( !bSuccess )
@@ -1274,20 +1269,16 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::preparePrintOrPrintPreview() const
+    bool ViewObjectContactOfUnoControl_Impl::preparePrintOrPrintPreview( OutputDevice& _rDevice ) const
     {
-        OSL_PRECOND( m_pOutputDeviceForWindow && m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::preparePrintOrPrintPreview: no output device or no control!" );
-        if ( !m_pOutputDeviceForWindow || !m_xControl.is() )
-            return false;
-
         try
         {
             if ( isPrintableControl() )
-                return preparePaintOnDevice( *const_cast< OutputDevice* >( m_pOutputDeviceForWindow ) );
+                return preparePaintOnDevice( _rDevice );
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::preparePrintOrPrintPreview: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return false;
     }
@@ -1835,7 +1826,9 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void UnoControlPrintOrPreviewContact::doPaintObject( const DisplayInfo& _rDisplayInfo, const SdrUnoObj* /*_pUnoObject*/ ) const
     {
-        if ( m_pImpl->preparePrintOrPrintPreview() )
+        OutputDevice* pDevice = _rDisplayInfo.GetOutputDevice();
+        OSL_ENSURE( pDevice, "UnoControlPrintOrPreviewContact::doPaintObject: invalid device!" );
+        if ( pDevice && m_pImpl->preparePrintOrPrintPreview( *pDevice ) )
             m_pImpl->paintControl( _rDisplayInfo );
     }
 
