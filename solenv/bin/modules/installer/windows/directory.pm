@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 11:21:41 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:49:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,11 @@ sub add_root_directories
         $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
-        $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$installer::globals::templatefoldername\n";
+        my $localtemplatefoldername = $installer::globals::templatefoldername;
+        my $directorytableentry = $localtemplatefoldername;
+        my $shorttemplatefoldername = installer::windows::idtglobal::make_eight_three_conform($localtemplatefoldername, "dir");
+        if ( $shorttemplatefoldername ne $localtemplatefoldername ) { $directorytableentry = "$shorttemplatefoldername|$localtemplatefoldername"; }
+        $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$directorytableentry\n";
         push(@{$directorytableref}, $oneline);
 
         if ( $installer::globals::fontsdirname )
