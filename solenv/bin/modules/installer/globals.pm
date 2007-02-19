@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:23:41 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:48:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,8 @@ BEGIN
 
     $ismultilingual = 0;
     @multilanguagemodules = ();
+    $languagemodulesparent = "gid_Module_Langpack_Base";
+    $languagemodulesbase = "gid_Module_Root_";
     %alluniquefilenames = ();
     %alllcuniquefilenames = ();
     %uniquefilenamesequence = ();
@@ -190,6 +192,7 @@ BEGIN
     # @emptyxpdparents = ();
     @createdxpdfiles = ();
     @allxpdfiles = ();
+    $isxpdplatform = 0;
     $javalanguagepath = "";
     $javasettozero = 0;
     $addlicensefile = 1;
@@ -222,6 +225,8 @@ BEGIN
     $patchfilelistname = "patchfilelist.txt";
     @patchfilecollector = ();
     $nopatchfilecollector = "";
+    @userregistrycollector = ();
+    $addeduserregitrykeys = 0;
 
     $unomaxservices = 25;
     $javamaxservices = 15;
@@ -237,6 +242,9 @@ BEGIN
     $updatepack = 0;
 
     $saveinstalldir = "";
+    $csp_installdir = "";       # global installdir of createsimplepackage() in simplepackage.pm
+    $csp_installlogdir = "";    # global installlogdir of createsimplepackage() in simplepackage.pm
+    $csp_languagestring = "";   # global languagestring of createsimplepackage() in simplepackage.pm
 
     $adafilename = "";
     $javafilename = "";
@@ -262,7 +270,6 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis.mlf";
-    $langpackfilename = "Langpack.mlf";
     $linuxlinkrpms = "gid_Module_Root_Files_3,gid_Module_Root_Files_4,gid_Module_Root_Files_5";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
