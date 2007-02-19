@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 16:23:23 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:48:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1028,26 +1028,6 @@ sub set_solaris_parameter_in_pkginfo
     $newline = "EMAIL=\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
-}
-
-#####################################################################
-# epm uses as archtecture for Solaris x86 "i86pc". This has to be
-# changed to "i386".
-#####################################################################
-
-sub fix_architecture_setting
-{
-    my ($changefile) = @_;
-
-    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
-    {
-        if ( ${$changefile}[$i] =~ /^\s*ARCH=i86pc\s*$/ )
-        {
-            ${$changefile}[$i] =~ s/i86pc/i386/;
-            last;
-        }
-
-    }
 }
 
 #####################################################################
@@ -2344,7 +2324,11 @@ sub copy_childproject_files
         installer::systemactions::copy_one_file($sourcefile, $destdir);
         # Solaris: unpacking tar.gz files and setting new packagename
         if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $destdir); }
-        if ( $allvariables->{'XPDINSTALLER'} ) { installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $destdir, $packagename, $allvariableshashref, $modulesarrayref); }
+
+        if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
+        {
+            installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $destdir, $packagename, $allvariableshashref, $modulesarrayref);
+        }
     }
 
 }
@@ -2505,7 +2489,10 @@ sub put_systemintegration_into_installset
         my $subdir = "";
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
 
-        if ( $allvariables->{'XPDINSTALLER'} ) { installer::xpdinstaller::create_xpd_file_for_systemintegration($onemodule, $newcontent, $modulesarrayref, $subdir); }
+        if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
+        {
+            installer::xpdinstaller::create_xpd_file_for_systemintegration($onemodule, $newcontent, $modulesarrayref, $subdir);
+        }
 
     }
 }
