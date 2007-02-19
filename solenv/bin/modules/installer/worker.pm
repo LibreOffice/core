@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 16:28:25 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:49:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2323,6 +2323,33 @@ sub find_file_by_id
     if (! $foundfile ) { $onefile  = ""; }
 
     return $onefile;
+}
+
+##############################################
+# Searching for an item with the gid
+##############################################
+
+sub find_item_by_gid
+{
+    my ( $itemsref, $gid ) = @_;
+
+    my $founditem = 0;
+    my $oneitem = "";
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $localitem = ${$itemsref}[$i];
+        my $itemgid = $localitem->{'gid'};
+
+        if ( $itemgid eq $gid )
+        {
+            $oneitem = $localitem;
+            $founditem = 1;
+            last;
+        }
+    }
+
+    return $oneitem;
 }
 
 #########################################################
