@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:24:03 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:52:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ ULFFILES = \
     Control.ulf  \
     CustomAc.ulf \
     Error.ulf    \
-    Langpack.ulf \
     LaunchCo.ulf \
     Property.ulf \
     RadioBut.ulf \
