@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:24:06 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:48:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -304,6 +304,7 @@ sub setglobalvariables
         {
             $installer::globals::issolarispkgbuild = 1;
             $installer::globals::epmoutpath = "packages";
+            $installer::globals::isxpdplatform = 1;
         }
     }
     if ( $installer::globals::compiler =~ /unxfbsd/ )
@@ -326,6 +327,7 @@ sub setglobalvariables
         if ( $installer::globals::packageformat eq "rpm" )
         {
             $installer::globals::islinuxrpmbuild = 1;
+            $installer::globals::isxpdplatform = 1;
             $installer::globals::epmoutpath = "RPMS";
             if ( $installer::globals::compiler =~ /unxlngi/ )
             {
