@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:30:36 $
+ *  last change: $Author: rt $ $Date: 2007-02-19 13:53:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ Module gid_Module_Langpack_Base
     Sortkey = "300";
     MOD_NAME_DESC(MODULE_ROOT_LANGPACK);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -52,7 +52,7 @@ Module gid_Module_Root_en_US
     Sortkey = "100";
     MOD_NAME_DESC(MODULE_LANGPACK_EN_US);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -93,7 +93,7 @@ Module gid_Module_Root_de
     Sortkey = "200";
     MOD_NAME_DESC(MODULE_LANGPACK_DE);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -134,7 +134,7 @@ Module gid_Module_Root_fr
     Sortkey = "300";
     MOD_NAME_DESC(MODULE_LANGPACK_FR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -175,7 +175,7 @@ Module gid_Module_Root_it
     Sortkey = "400";
     MOD_NAME_DESC(MODULE_LANGPACK_IT);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -216,7 +216,7 @@ Module gid_Module_Root_es
     Sortkey = "500";
     MOD_NAME_DESC(MODULE_LANGPACK_ES);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -257,7 +257,7 @@ Module gid_Module_Root_sv
     Sortkey = "600";
     MOD_NAME_DESC(MODULE_LANGPACK_SV);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -298,7 +298,7 @@ Module gid_Module_Root_pt
     Sortkey = "700";
     MOD_NAME_DESC(MODULE_LANGPACK_PT);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -339,7 +339,7 @@ Module gid_Module_Root_pt_BR
     Sortkey = "700";
     MOD_NAME_DESC(MODULE_LANGPACK_PT_BR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -380,7 +380,7 @@ Module gid_Module_Root_ja
     Sortkey = "800";
     MOD_NAME_DESC(MODULE_LANGPACK_JA);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -421,7 +421,7 @@ Module gid_Module_Root_ko
     Sortkey = "900";
     MOD_NAME_DESC(MODULE_LANGPACK_KO);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -462,7 +462,7 @@ Module gid_Module_Root_zh_CN
     Sortkey = "1000";
     MOD_NAME_DESC(MODULE_LANGPACK_ZH_CN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -503,7 +503,7 @@ Module gid_Module_Root_zh_TW
     Sortkey = "1100";
     MOD_NAME_DESC(MODULE_LANGPACK_ZH_TW);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -544,7 +544,7 @@ Module gid_Module_Root_nl
     Sortkey = "1200";
     MOD_NAME_DESC(MODULE_LANGPACK_NL);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -585,7 +585,7 @@ Module gid_Module_Root_hu
     Sortkey = "1300";
     MOD_NAME_DESC(MODULE_LANGPACK_HU);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -626,7 +626,7 @@ Module gid_Module_Root_pl
     Sortkey = "1400";
     MOD_NAME_DESC(MODULE_LANGPACK_PL);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -667,7 +667,7 @@ Module gid_Module_Root_ru
     Sortkey = "1500";
     MOD_NAME_DESC(MODULE_LANGPACK_RU);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -708,7 +708,7 @@ Module gid_Module_Root_tr
     Sortkey = "1600";
     MOD_NAME_DESC(MODULE_LANGPACK_TR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -749,7 +749,7 @@ Module gid_Module_Root_el
     Sortkey = "1700";
     MOD_NAME_DESC(MODULE_LANGPACK_EL);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -790,7 +790,7 @@ Module gid_Module_Root_th
     Sortkey = "1800";
     MOD_NAME_DESC(MODULE_LANGPACK_TH);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -831,7 +831,7 @@ Module gid_Module_Root_cs
     Sortkey = "1900";
     MOD_NAME_DESC(MODULE_LANGPACK_CS);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -872,7 +872,7 @@ Module gid_Module_Root_sk
     Sortkey = "2000";
     MOD_NAME_DESC(MODULE_LANGPACK_SK);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -913,7 +913,7 @@ Module gid_Module_Root_hr
     Sortkey = "2100";
     MOD_NAME_DESC(MODULE_LANGPACK_HR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -954,7 +954,7 @@ Module gid_Module_Root_et
     Sortkey = "2200";
     MOD_NAME_DESC(MODULE_LANGPACK_ET);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -995,7 +995,7 @@ Module gid_Module_Root_vi
     Sortkey = "2300";
     MOD_NAME_DESC(MODULE_LANGPACK_VI);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1036,7 +1036,7 @@ Module gid_Module_Root_bg
     Sortkey = "2400";
     MOD_NAME_DESC(MODULE_LANGPACK_BG);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1077,7 +1077,7 @@ Module gid_Module_Root_km
     Sortkey = "2500";
     MOD_NAME_DESC(MODULE_LANGPACK_KM);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1118,7 +1118,7 @@ Module gid_Module_Root_pa_IN
     Sortkey = "2600";
     MOD_NAME_DESC(MODULE_LANGPACK_PA_IN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1159,7 +1159,7 @@ Module gid_Module_Root_gu_IN
     Sortkey = "2700";
     MOD_NAME_DESC(MODULE_LANGPACK_GU_IN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1200,7 +1200,7 @@ Module gid_Module_Root_ta
     Sortkey = "2800";
     MOD_NAME_DESC(MODULE_LANGPACK_TA);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1241,7 +1241,7 @@ Module gid_Module_Root_ta_IN
     Sortkey = "2900";
     MOD_NAME_DESC(MODULE_LANGPACK_TA_IN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1282,7 +1282,7 @@ Module gid_Module_Root_hi
     Sortkey = "3000";
     MOD_NAME_DESC(MODULE_LANGPACK_HI);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1323,7 +1323,7 @@ Module gid_Module_Root_hi_IN
     Sortkey = "3100";
     MOD_NAME_DESC(MODULE_LANGPACK_HI_IN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1364,7 +1364,7 @@ Module gid_Module_Root_st
     Sortkey = "3200";
     MOD_NAME_DESC(MODULE_LANGPACK_ST);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1405,7 +1405,7 @@ Module gid_Module_Root_tn
     Sortkey = "3300";
     MOD_NAME_DESC(MODULE_LANGPACK_TN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1446,7 +1446,7 @@ Module gid_Module_Root_xh
     Sortkey = "3400";
     MOD_NAME_DESC(MODULE_LANGPACK_XH);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1487,7 +1487,7 @@ Module gid_Module_Root_zu
     Sortkey = "3500";
     MOD_NAME_DESC(MODULE_LANGPACK_ZU);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1528,7 +1528,7 @@ Module gid_Module_Root_af
     Sortkey = "3600";
     MOD_NAME_DESC(MODULE_LANGPACK_AF);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1569,7 +1569,7 @@ Module gid_Module_Root_sw
     Sortkey = "3700";
     MOD_NAME_DESC(MODULE_LANGPACK_SW);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1610,7 +1610,7 @@ Module gid_Module_Root_sw_TZ
     Sortkey = "3800";
     MOD_NAME_DESC(MODULE_LANGPACK_SW_TZ);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1651,7 +1651,7 @@ Module gid_Module_Root_lo
     Sortkey = "3900";
     MOD_NAME_DESC(MODULE_LANGPACK_LO);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1692,7 +1692,7 @@ Module gid_Module_Root_ns
     Sortkey = "4000";
     MOD_NAME_DESC(MODULE_LANGPACK_NS);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1733,7 +1733,7 @@ Module gid_Module_Root_bn
     Sortkey = "4100";
     MOD_NAME_DESC(MODULE_LANGPACK_BN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1774,7 +1774,7 @@ Module gid_Module_Root_bn_BD
     Sortkey = "4200";
     MOD_NAME_DESC(MODULE_LANGPACK_BN_BD);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1815,7 +1815,7 @@ Module gid_Module_Root_bn_IN
     Sortkey = "4300";
     MOD_NAME_DESC(MODULE_LANGPACK_BN_IN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1856,7 +1856,7 @@ Module gid_Module_Root_or
     Sortkey = "4400";
     MOD_NAME_DESC(MODULE_LANGPACK_OR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1897,7 +1897,7 @@ Module gid_Module_Root_or_IN
     Sortkey = "4500";
     MOD_NAME_DESC(MODULE_LANGPACK_OR_IN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1938,7 +1938,7 @@ Module gid_Module_Root_mr
     Sortkey = "4600";
     MOD_NAME_DESC(MODULE_LANGPACK_MR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -1979,7 +1979,7 @@ Module gid_Module_Root_mr_IN
     Sortkey = "4700";
     MOD_NAME_DESC(MODULE_LANGPACK_MR_IN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2020,7 +2020,7 @@ Module gid_Module_Root_ne
     Sortkey = "4800";
     MOD_NAME_DESC(MODULE_LANGPACK_NE);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2061,7 +2061,7 @@ Module gid_Module_Root_ar
     Sortkey = "4900";
     MOD_NAME_DESC(MODULE_LANGPACK_AR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2102,7 +2102,7 @@ Module gid_Module_Root_ar_SA
     Sortkey = "5000";
     MOD_NAME_DESC(MODULE_LANGPACK_AR_SA);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2143,7 +2143,7 @@ Module gid_Module_Root_ca
     Sortkey = "5100";
     MOD_NAME_DESC(MODULE_LANGPACK_CA);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2184,7 +2184,7 @@ Module gid_Module_Root_da
     Sortkey = "5200";
     MOD_NAME_DESC(MODULE_LANGPACK_DA);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2225,7 +2225,7 @@ Module gid_Module_Root_fi
     Sortkey = "5300";
     MOD_NAME_DESC(MODULE_LANGPACK_FI);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2266,7 +2266,7 @@ Module gid_Module_Root_he
     Sortkey = "5400";
     MOD_NAME_DESC(MODULE_LANGPACK_HE);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2307,7 +2307,7 @@ Module gid_Module_Root_is
     Sortkey = "5500";
     MOD_NAME_DESC(MODULE_LANGPACK_IS);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2348,7 +2348,7 @@ Module gid_Module_Root_nb
     Sortkey = "5600";
     MOD_NAME_DESC(MODULE_LANGPACK_NB);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2389,7 +2389,7 @@ Module gid_Module_Root_nn
     Sortkey = "5700";
     MOD_NAME_DESC(MODULE_LANGPACK_NN);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2430,7 +2430,7 @@ Module gid_Module_Root_rm
     Sortkey = "5800";
     MOD_NAME_DESC(MODULE_LANGPACK_RM);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2471,7 +2471,7 @@ Module gid_Module_Root_ro
     Sortkey = "5900";
     MOD_NAME_DESC(MODULE_LANGPACK_RO);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2512,7 +2512,7 @@ Module gid_Module_Root_sq
     Sortkey = "6000";
     MOD_NAME_DESC(MODULE_LANGPACK_SQ);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2553,7 +2553,7 @@ Module gid_Module_Root_ur
     Sortkey = "6100";
     MOD_NAME_DESC(MODULE_LANGPACK_UR);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2594,7 +2594,7 @@ Module gid_Module_Root_id
     Sortkey = "6200";
     MOD_NAME_DESC(MODULE_LANGPACK_ID);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2635,7 +2635,7 @@ Module gid_Module_Root_uk
     Sortkey = "6300";
     MOD_NAME_DESC(MODULE_LANGPACK_UK);
   #ifdef WNT
-    Styles = (HIDDEN_ROOT);
+    Styles = (LANGUAGEMODULE);
   #endif
 End
 
@@ -2665,6 +2665,1277 @@ Module gid_Module_Langpack_Fonts_uk
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_uk";
     Description = "gid_Module_Langpack_Fonts_uk";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Belarusian (be-BY)
+
+Module gid_Module_Root_be_BY
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "6400";
+    MOD_NAME_DESC(MODULE_LANGPACK_BE_BY);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_be_BY
+    ParentID = gid_Module_Root_be_BY;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_be_BY";
+    Description = "gid_Module_Langpack_Resource_be_BY";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_be_BY
+    ParentID = gid_Module_Root_be_BY;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_be_BY";
+    Description = "gid_Module_Langpack_Help_be_BY";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_be_BY
+    ParentID = gid_Module_Root_be_BY;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_be_BY";
+    Description = "gid_Module_Langpack_Fonts_be_BY";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Slovenian (sl)
+
+Module gid_Module_Root_sl
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "6500";
+    MOD_NAME_DESC(MODULE_LANGPACK_SL);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_sl
+    ParentID = gid_Module_Root_sl;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_sl";
+    Description = "gid_Module_Langpack_Resource_sl";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_sl
+    ParentID = gid_Module_Root_sl;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_sl";
+    Description = "gid_Module_Langpack_Help_sl";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_sl
+    ParentID = gid_Module_Root_sl;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_sl";
+    Description = "gid_Module_Langpack_Fonts_sl";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Latvian (lv)
+
+Module gid_Module_Root_lv
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "6600";
+    MOD_NAME_DESC(MODULE_LANGPACK_LV);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_lv
+    ParentID = gid_Module_Root_lv;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_lv";
+    Description = "gid_Module_Langpack_Resource_lv";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_lv
+    ParentID = gid_Module_Root_lv;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_lv";
+    Description = "gid_Module_Langpack_Help_lv";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_lv
+    ParentID = gid_Module_Root_lv;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_lv";
+    Description = "gid_Module_Langpack_Fonts_lv";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Lithuanian (lt)
+
+Module gid_Module_Root_lt
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "6700";
+    MOD_NAME_DESC(MODULE_LANGPACK_LT);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_lt
+    ParentID = gid_Module_Root_lt;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_lt";
+    Description = "gid_Module_Langpack_Resource_lt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_lt
+    ParentID = gid_Module_Root_lt;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_lt";
+    Description = "gid_Module_Langpack_Help_lt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_lt
+    ParentID = gid_Module_Root_lt;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_lt";
+    Description = "gid_Module_Langpack_Fonts_lt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Armenian (hy)
+
+Module gid_Module_Root_hy
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "6800";
+    MOD_NAME_DESC(MODULE_LANGPACK_HY);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_hy
+    ParentID = gid_Module_Root_hy;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_hy";
+    Description = "gid_Module_Langpack_Resource_hy";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_hy
+    ParentID = gid_Module_Root_hy;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_hy";
+    Description = "gid_Module_Langpack_Help_hy";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_hy
+    ParentID = gid_Module_Root_hy;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_hy";
+    Description = "gid_Module_Langpack_Fonts_hy";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Basque (eu)
+
+Module gid_Module_Root_eu
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "6900";
+    MOD_NAME_DESC(MODULE_LANGPACK_EU);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_eu
+    ParentID = gid_Module_Root_eu;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_eu";
+    Description = "gid_Module_Langpack_Resource_eu";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_eu
+    ParentID = gid_Module_Root_eu;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_eu";
+    Description = "gid_Module_Langpack_Help_eu";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_eu
+    ParentID = gid_Module_Root_eu;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_eu";
+    Description = "gid_Module_Langpack_Fonts_eu";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Macedonian (mk)
+
+Module gid_Module_Root_mk
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7000";
+    MOD_NAME_DESC(MODULE_LANGPACK_MK);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_mk
+    ParentID = gid_Module_Root_mk;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_mk";
+    Description = "gid_Module_Langpack_Resource_mk";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_mk
+    ParentID = gid_Module_Root_mk;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_mk";
+    Description = "gid_Module_Langpack_Help_mk";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_mk
+    ParentID = gid_Module_Root_mk;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_mk";
+    Description = "gid_Module_Langpack_Fonts_mk";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Maltese (mt)
+
+Module gid_Module_Root_mt
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7100";
+    MOD_NAME_DESC(MODULE_LANGPACK_MT);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_mt
+    ParentID = gid_Module_Root_mt;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_mt";
+    Description = "gid_Module_Langpack_Resource_mt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_mt
+    ParentID = gid_Module_Root_mt;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_mt";
+    Description = "gid_Module_Langpack_Help_mt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_mt
+    ParentID = gid_Module_Root_mt;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_mt";
+    Description = "gid_Module_Langpack_Fonts_mt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Welsh (cy)
+
+Module gid_Module_Root_cy
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7200";
+    MOD_NAME_DESC(MODULE_LANGPACK_CY);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_cy
+    ParentID = gid_Module_Root_cy;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_cy";
+    Description = "gid_Module_Langpack_Resource_cy";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_cy
+    ParentID = gid_Module_Root_cy;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_cy";
+    Description = "gid_Module_Langpack_Help_cy";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_cy
+    ParentID = gid_Module_Root_cy;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_cy";
+    Description = "gid_Module_Langpack_Fonts_cy";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Galician (gl)
+
+Module gid_Module_Root_gl
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7300";
+    MOD_NAME_DESC(MODULE_LANGPACK_GL);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_gl
+    ParentID = gid_Module_Root_gl;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_gl";
+    Description = "gid_Module_Langpack_Resource_gl";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_gl
+    ParentID = gid_Module_Root_gl;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_gl";
+    Description = "gid_Module_Langpack_Help_gl";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_gl
+    ParentID = gid_Module_Root_gl;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_gl";
+    Description = "gid_Module_Langpack_Fonts_gl";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Serbian (Latin) (sh-YU)
+
+Module gid_Module_Root_sh_YU
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7400";
+    MOD_NAME_DESC(MODULE_LANGPACK_SH_YU);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_sh_YU
+    ParentID = gid_Module_Root_sh_YU;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_sh_YU";
+    Description = "gid_Module_Langpack_Resource_sh_YU";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_sh_YU
+    ParentID = gid_Module_Root_sh_YU;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_sh_YU";
+    Description = "gid_Module_Langpack_Help_sh_YU";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_sh_YU
+    ParentID = gid_Module_Root_sh_YU;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_sh_YU";
+    Description = "gid_Module_Langpack_Fonts_sh_YU";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Irish (ga)
+
+Module gid_Module_Root_ga
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7500";
+    MOD_NAME_DESC(MODULE_LANGPACK_GA);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ga
+    ParentID = gid_Module_Root_ga;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ga";
+    Description = "gid_Module_Langpack_Resource_ga";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ga
+    ParentID = gid_Module_Root_ga;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ga";
+    Description = "gid_Module_Langpack_Help_ga";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ga
+    ParentID = gid_Module_Root_ga;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ga";
+    Description = "gid_Module_Langpack_Fonts_ga";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Serbian (Cyrillic) (sr-CS)
+
+Module gid_Module_Root_sr_CS
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7600";
+    MOD_NAME_DESC(MODULE_LANGPACK_SR_CS);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_sr_CS
+    ParentID = gid_Module_Root_sr_CS;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_sr_CS";
+    Description = "gid_Module_Langpack_Resource_sr_CS";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_sr_CS
+    ParentID = gid_Module_Root_sr_CS;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_sr_CS";
+    Description = "gid_Module_Langpack_Help_sr_CS";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_sr_CS
+    ParentID = gid_Module_Root_sr_CS;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_sr_CS";
+    Description = "gid_Module_Langpack_Fonts_sr_CS";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Bosnian (bs)
+
+Module gid_Module_Root_bs
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7700";
+    MOD_NAME_DESC(MODULE_LANGPACK_BS);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_bs
+    ParentID = gid_Module_Root_bs;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_bs";
+    Description = "gid_Module_Langpack_Resource_bs";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_bs
+    ParentID = gid_Module_Root_bs;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_bs";
+    Description = "gid_Module_Langpack_Help_bs";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_bs
+    ParentID = gid_Module_Root_bs;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_bs";
+    Description = "gid_Module_Langpack_Fonts_bs";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Assamese (as-IN)
+
+Module gid_Module_Root_as_IN
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7800";
+    MOD_NAME_DESC(MODULE_LANGPACK_AS_IN);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_as_IN
+    ParentID = gid_Module_Root_as_IN;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_as_IN";
+    Description = "gid_Module_Langpack_Resource_as_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_as_IN
+    ParentID = gid_Module_Root_as_IN;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_as_IN";
+    Description = "gid_Module_Langpack_Help_as_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_as_IN
+    ParentID = gid_Module_Root_as_IN;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_as_IN";
+    Description = "gid_Module_Langpack_Fonts_as_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Kinyarwanda (rw)
+
+Module gid_Module_Root_rw
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "7900";
+    MOD_NAME_DESC(MODULE_LANGPACK_RW);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_rw
+    ParentID = gid_Module_Root_rw;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_rw";
+    Description = "gid_Module_Langpack_Resource_rw";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_rw
+    ParentID = gid_Module_Root_rw;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_rw";
+    Description = "gid_Module_Langpack_Help_rw";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_rw
+    ParentID = gid_Module_Root_rw;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_rw";
+    Description = "gid_Module_Langpack_Fonts_rw";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Sanskrit (sa)
+
+Module gid_Module_Root_sa
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8000";
+    MOD_NAME_DESC(MODULE_LANGPACK_SA);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_sa
+    ParentID = gid_Module_Root_sa;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_sa";
+    Description = "gid_Module_Langpack_Resource_sa";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_sa
+    ParentID = gid_Module_Root_sa;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_sa";
+    Description = "gid_Module_Langpack_Help_sa";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_sa
+    ParentID = gid_Module_Root_sa;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_sa";
+    Description = "gid_Module_Langpack_Fonts_sa";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Farsi (fa)
+
+Module gid_Module_Root_fa
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8100";
+    MOD_NAME_DESC(MODULE_LANGPACK_FA);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_fa
+    ParentID = gid_Module_Root_fa;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_fa";
+    Description = "gid_Module_Langpack_Resource_fa";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_fa
+    ParentID = gid_Module_Root_fa;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_fa";
+    Description = "gid_Module_Langpack_Help_fa";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_fa
+    ParentID = gid_Module_Root_fa;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_fa";
+    Description = "gid_Module_Langpack_Fonts_fa";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Faroese (fo)
+
+Module gid_Module_Root_fo
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8200";
+    MOD_NAME_DESC(MODULE_LANGPACK_FO);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_fo
+    ParentID = gid_Module_Root_fo;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_fo";
+    Description = "gid_Module_Langpack_Resource_fo";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_fo
+    ParentID = gid_Module_Root_fo;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_fo";
+    Description = "gid_Module_Langpack_Help_fo";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_fo
+    ParentID = gid_Module_Root_fo;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_fo";
+    Description = "gid_Module_Langpack_Fonts_fo";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Sorbian (sb)
+
+Module gid_Module_Root_sb
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8300";
+    MOD_NAME_DESC(MODULE_LANGPACK_SB);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_sb
+    ParentID = gid_Module_Root_sb;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_sb";
+    Description = "gid_Module_Langpack_Resource_sb";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_sb
+    ParentID = gid_Module_Root_sb;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_sb";
+    Description = "gid_Module_Langpack_Help_sb";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_sb
+    ParentID = gid_Module_Root_sb;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_sb";
+    Description = "gid_Module_Langpack_Fonts_sb";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Tatar (tt)
+
+Module gid_Module_Root_tt
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8400";
+    MOD_NAME_DESC(MODULE_LANGPACK_TT);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_tt
+    ParentID = gid_Module_Root_tt;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_tt";
+    Description = "gid_Module_Langpack_Resource_tt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_tt
+    ParentID = gid_Module_Root_tt;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_tt";
+    Description = "gid_Module_Langpack_Help_tt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_tt
+    ParentID = gid_Module_Root_tt;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_tt";
+    Description = "gid_Module_Langpack_Fonts_tt";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Tsonga (ts)
+
+Module gid_Module_Root_ts
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8500";
+    MOD_NAME_DESC(MODULE_LANGPACK_TS);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ts
+    ParentID = gid_Module_Root_ts;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ts";
+    Description = "gid_Module_Langpack_Resource_ts";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ts
+    ParentID = gid_Module_Root_ts;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ts";
+    Description = "gid_Module_Langpack_Help_ts";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ts
+    ParentID = gid_Module_Root_ts;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ts";
+    Description = "gid_Module_Langpack_Fonts_ts";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Yiddish (yi)
+
+Module gid_Module_Root_yi
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8600";
+    MOD_NAME_DESC(MODULE_LANGPACK_YI);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_yi
+    ParentID = gid_Module_Root_yi;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_yi";
+    Description = "gid_Module_Langpack_Resource_yi";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_yi
+    ParentID = gid_Module_Root_yi;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_yi";
+    Description = "gid_Module_Langpack_Help_yi";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_yi
+    ParentID = gid_Module_Root_yi;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_yi";
+    Description = "gid_Module_Langpack_Fonts_yi";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Breton (br)
+
+Module gid_Module_Root_br
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8700";
+    MOD_NAME_DESC(MODULE_LANGPACK_BR);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_br
+    ParentID = gid_Module_Root_br;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_br";
+    Description = "gid_Module_Langpack_Resource_br";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_br
+    ParentID = gid_Module_Root_br;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_br";
+    Description = "gid_Module_Langpack_Help_br";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_br
+    ParentID = gid_Module_Root_br;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_br";
+    Description = "gid_Module_Langpack_Fonts_br";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Ndebele South (nr)
+
+Module gid_Module_Root_nr
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8800";
+    MOD_NAME_DESC(MODULE_LANGPACK_NR);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_nr
+    ParentID = gid_Module_Root_nr;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_nr";
+    Description = "gid_Module_Langpack_Resource_nr";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_nr
+    ParentID = gid_Module_Root_nr;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_nr";
+    Description = "gid_Module_Langpack_Help_nr";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_nr
+    ParentID = gid_Module_Root_nr;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_nr";
+    Description = "gid_Module_Langpack_Fonts_nr";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Swazi (ss)
+
+Module gid_Module_Root_ss
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "8900";
+    MOD_NAME_DESC(MODULE_LANGPACK_SS);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ss
+    ParentID = gid_Module_Root_ss;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ss";
+    Description = "gid_Module_Langpack_Resource_ss";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ss
+    ParentID = gid_Module_Root_ss;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ss";
+    Description = "gid_Module_Langpack_Help_ss";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ss
+    ParentID = gid_Module_Root_ss;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ss";
+    Description = "gid_Module_Langpack_Fonts_ss";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Venda (ve)
+
+Module gid_Module_Root_ve
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9000";
+    MOD_NAME_DESC(MODULE_LANGPACK_VE);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ve
+    ParentID = gid_Module_Root_ve;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ve";
+    Description = "gid_Module_Langpack_Resource_ve";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ve
+    ParentID = gid_Module_Root_ve;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ve";
+    Description = "gid_Module_Langpack_Help_ve";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ve
+    ParentID = gid_Module_Root_ve;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ve";
+    Description = "gid_Module_Langpack_Fonts_ve";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Kannada (kn)
+
+Module gid_Module_Root_kn
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9100";
+    MOD_NAME_DESC(MODULE_LANGPACK_KN);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_kn
+    ParentID = gid_Module_Root_kn;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_kn";
+    Description = "gid_Module_Langpack_Resource_kn";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_kn
+    ParentID = gid_Module_Root_kn;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_kn";
+    Description = "gid_Module_Langpack_Help_kn";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_kn
+    ParentID = gid_Module_Root_kn;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_kn";
+    Description = "gid_Module_Langpack_Fonts_kn";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Malay (Malaysian) (ms)
+
+Module gid_Module_Root_ms
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9200";
+    MOD_NAME_DESC(MODULE_LANGPACK_MS);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ms
+    ParentID = gid_Module_Root_ms;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ms";
+    Description = "gid_Module_Langpack_Resource_ms";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ms
+    ParentID = gid_Module_Root_ms;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ms";
+    Description = "gid_Module_Langpack_Help_ms";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ms
+    ParentID = gid_Module_Root_ms;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ms";
+    Description = "gid_Module_Langpack_Fonts_ms";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Tajik (tg)
+
+Module gid_Module_Root_tg
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9300";
+    MOD_NAME_DESC(MODULE_LANGPACK_TG);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_tg
+    ParentID = gid_Module_Root_tg;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_tg";
+    Description = "gid_Module_Langpack_Resource_tg";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_tg
+    ParentID = gid_Module_Root_tg;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_tg";
+    Description = "gid_Module_Langpack_Help_tg";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_tg
+    ParentID = gid_Module_Root_tg;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_tg";
+    Description = "gid_Module_Langpack_Fonts_tg";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Kurdish (ku)
+
+Module gid_Module_Root_ku
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9400";
+    MOD_NAME_DESC(MODULE_LANGPACK_KU);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ku
+    ParentID = gid_Module_Root_ku;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ku";
+    Description = "gid_Module_Langpack_Resource_ku";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ku
+    ParentID = gid_Module_Root_ku;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ku";
+    Description = "gid_Module_Langpack_Help_ku";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ku
+    ParentID = gid_Module_Root_ku;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ku";
+    Description = "gid_Module_Langpack_Fonts_ku";
     Styles = (HIDDEN_ROOT);
 End
 #endif

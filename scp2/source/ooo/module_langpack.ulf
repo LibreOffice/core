@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:30:45 $
+ *  last change: $Author: rt $ $Date: 2007-02-19 13:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,3 +553,250 @@ de = "Ukrainisch"
 en-US = "Installs Ukrainian support in %PRODUCTNAME %PRODUCTVERSION"
 de = "Installiert Unterstützung für Ukrainisch in %PRODUCTNAME %PRODUCTVERSION"
 
+[STR_NAME_MODULE_LANGPACK_BE_BY]
+en-US = "Belarusian"
+de = "Belarussisch"
+
+[STR_DESC_MODULE_LANGPACK_BE_BY]
+en-US = "Installs Belarusian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Belarusian"
+
+[STR_NAME_MODULE_LANGPACK_SL]
+en-US = "Slovenian"
+de = "Slowenisch"
+
+[STR_DESC_MODULE_LANGPACK_SL]
+en-US = "Installs Slovenian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Slowenisch"
+
+[STR_NAME_MODULE_LANGPACK_LV]
+en-US = "Latvian"
+de = "Lettisch"
+
+[STR_DESC_MODULE_LANGPACK_LV]
+en-US = "Installs Latvian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Lettisch"
+
+[STR_NAME_MODULE_LANGPACK_LT]
+en-US = "Lithuanian"
+de = "Litauisch"
+
+[STR_DESC_MODULE_LANGPACK_LT]
+en-US = "Installs Lithuanian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Litauisch"
+
+[STR_NAME_MODULE_LANGPACK_HY]
+en-US = "Armenian"
+de = "Armenisch"
+
+[STR_DESC_MODULE_LANGPACK_HY]
+en-US = "Installs Armenian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Armenisch"
+
+[STR_NAME_MODULE_LANGPACK_EU]
+en-US = "Basque"
+de = "Baskisch"
+
+[STR_DESC_MODULE_LANGPACK_EU]
+en-US = "Installs Basque support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Baskisch"
+
+[STR_NAME_MODULE_LANGPACK_MK]
+en-US = "Macedonian"
+de = "Mazedonisch"
+
+[STR_DESC_MODULE_LANGPACK_MK]
+en-US = "Installs Macedonian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Mazedonisch"
+
+[STR_NAME_MODULE_LANGPACK_MT]
+en-US = "Maltese"
+de = "Maltesisch"
+
+[STR_DESC_MODULE_LANGPACK_MT]
+en-US = "Installs Maltese support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Maltesisch"
+
+[STR_NAME_MODULE_LANGPACK_CY]
+en-US = "Welsh"
+de = "Walisisch"
+
+[STR_DESC_MODULE_LANGPACK_CY]
+en-US = "Installs Welsh support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Walisisch"
+
+[STR_NAME_MODULE_LANGPACK_GL]
+en-US = "Galician"
+de = "Galicisch"
+
+[STR_DESC_MODULE_LANGPACK_GL]
+en-US = "Installs Galician support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Galicisch"
+
+[STR_NAME_MODULE_LANGPACK_SH_YU]
+en-US = "Serbian (Latin)"
+de = "Serbisch (Latinisch)"
+
+[STR_DESC_MODULE_LANGPACK_SH_YU]
+en-US = "Installs Serbian (Latin) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Serbisch (Latinisch)"
+
+[STR_NAME_MODULE_LANGPACK_GA]
+en-US = "Irish"
+de = "Irisch"
+
+[STR_DESC_MODULE_LANGPACK_GA]
+en-US = "Installs Irish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Irisch"
+
+[STR_NAME_MODULE_LANGPACK_SR_CS]
+en-US = "Serbian (Cyrillic)"
+de = "Serbisch (Kyrillisch)"
+
+[STR_DESC_MODULE_LANGPACK_SR_CS]
+en-US = "Installs Serbian (Cyrillic) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Serbisch (Kyrillisch)"
+
+[STR_NAME_MODULE_LANGPACK_BS]
+en-US = "Bosnian"
+de = "Bosnisch"
+
+[STR_DESC_MODULE_LANGPACK_BS]
+en-US = "Installs Bosnian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Bosnisch"
+
+[STR_NAME_MODULE_LANGPACK_AS_IN]
+en-US = "Assamese"
+de = "Assamese"
+
+[STR_DESC_MODULE_LANGPACK_AS_IN]
+en-US = "Installs Assamese support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Assamese"
+
+[STR_NAME_MODULE_LANGPACK_RW]
+en-US = "Kinyarwanda"
+de = "Kinyarwanda"
+
+[STR_DESC_MODULE_LANGPACK_RW]
+en-US = "Installs Kinyarwanda support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Kinyarwanda"
+
+[STR_NAME_MODULE_LANGPACK_SA]
+en-US = "Sanskrit"
+de = "Sanskrit"
+
+[STR_DESC_MODULE_LANGPACK_SA]
+en-US = "Installs Sanskrit support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Sanskrit"
+
+[STR_NAME_MODULE_LANGPACK_FA]
+en-US = "Farsi"
+de = "Farsi"
+
+[STR_DESC_MODULE_LANGPACK_FA]
+en-US = "Installs Farsi support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Farsi"
+
+[STR_NAME_MODULE_LANGPACK_FO]
+en-US = "Faroese"
+de = "Faroese"
+
+[STR_DESC_MODULE_LANGPACK_FO]
+en-US = "Installs Faroese support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Faroese"
+
+[STR_NAME_MODULE_LANGPACK_SB]
+en-US = "Sorbian"
+de = "Sorbisch"
+
+[STR_DESC_MODULE_LANGPACK_SB]
+en-US = "Installs Sorbian support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Sorbisch"
+
+[STR_NAME_MODULE_LANGPACK_TT]
+en-US = "Tatar"
+de = "Tatar"
+
+[STR_DESC_MODULE_LANGPACK_TT]
+en-US = "Installs Tatar support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Tatar"
+
+[STR_NAME_MODULE_LANGPACK_TS]
+en-US = "Tsonga"
+de = "Tsonga"
+
+[STR_DESC_MODULE_LANGPACK_TS]
+en-US = "Installs Tsonga support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Tsonga"
+
+[STR_NAME_MODULE_LANGPACK_YI]
+en-US = "Yiddish"
+de = "Jiddisch"
+
+[STR_DESC_MODULE_LANGPACK_YI]
+en-US = "Installs Yiddish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Jiddisch"
+
+[STR_NAME_MODULE_LANGPACK_BR]
+en-US = "Breton"
+de = "Bretonisch"
+
+[STR_DESC_MODULE_LANGPACK_BR]
+en-US = "Installs Breton support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Bretonisch"
+
+[STR_NAME_MODULE_LANGPACK_NR]
+en-US = "Ndebele South"
+de = "Ndebele South"
+
+[STR_DESC_MODULE_LANGPACK_NR]
+en-US = "Installs Ndebele South support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Ndebele South"
+
+[STR_NAME_MODULE_LANGPACK_SS]
+en-US = "Swazi"
+de = "Swazi"
+
+[STR_DESC_MODULE_LANGPACK_SS]
+en-US = "Installs Swazi support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Swazi"
+
+[STR_NAME_MODULE_LANGPACK_VE]
+en-US = "Venda"
+de = "Venda"
+
+[STR_DESC_MODULE_LANGPACK_VE]
+en-US = "Installs Venda support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Venda"
+
+[STR_NAME_MODULE_LANGPACK_KN]
+en-US = "Kannada"
+de = "Kannada"
+
+[STR_DESC_MODULE_LANGPACK_KN]
+en-US = "Installs Kannada support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Kannada"
+
+[STR_NAME_MODULE_LANGPACK_MS]
+en-US = "Malay (Malaysian)"
+de = "Malaiisch (Malaysia)"
+
+[STR_DESC_MODULE_LANGPACK_MS]
+en-US = "Installs Malay (Malaysian) support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Malaiisch (Malaysia)"
+
+[STR_NAME_MODULE_LANGPACK_TG]
+en-US = "Tajik"
+de = "Tadschikisch"
+
+[STR_DESC_MODULE_LANGPACK_TG]
+en-US = "Installs Tajik support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Tadschikisch"
+
+[STR_NAME_MODULE_LANGPACK_KU]
+en-US = "Kurdish"
+de = "Kurdisch"
+
+[STR_DESC_MODULE_LANGPACK_KU]
+en-US = "Installs Kurdish support in %PRODUCTNAME %PRODUCTVERSION"
+de = "Kurdisch"
